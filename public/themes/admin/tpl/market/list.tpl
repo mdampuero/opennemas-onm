@@ -44,7 +44,7 @@
                   <div class="shopping-cart-placeholder" ng-if="cart.length > 0">
                     <scrollable>
                       <ul class="cart-list">
-                        <li class="clearfix" ng-repeat="item in cart">
+                        <li class="clearfix" ng-repeat="item in cart | orderBy: name">
                           <img ng-if="item.type == 'module'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-modules.jpg">
                           <img ng-if="item.type == 'pack'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.jpg">
                           <img ng-if="item.type == 'service'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-service-support.jpg">
@@ -133,7 +133,7 @@
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
                 </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search">
+                <ui-select-choices repeat="item in views  | filter: $select.search | orderBy: name">
                   <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
@@ -156,7 +156,7 @@
       </div>
       <h3 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type })" ng-if="!isActivated(item)" ng-include="'item'">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
@@ -164,7 +164,7 @@
       </div>
       <h3 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type })" ng-if="isActivated(item)" ng-include="'item'">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
@@ -174,17 +174,30 @@
     <script type="text/ng-template" id="item">
       <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
         <div class="grid-body no-padding">
-          <div ng-if="item.type == 'module'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-modules.jpg);"></div>
-          <div ng-if="item.type == 'pack'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);"></div>
-          <div ng-if="item.type == 'service'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-service-support.jpg);"></div>
-          <div ng-if="item.type == 'theme'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);"></div>
+          <div ng-if="item.type == 'module'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-modules.jpg);">
+            <h5 class="name pointer" ng-click="showDetails(item)">
+              <strong>[% item.name %]</strong>
+            </h5>
+          </div>
+          <div ng-if="item.type == 'pack'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);">
+            <h5 class="name pointer" ng-click="showDetails(item)">
+              <strong>[% item.name %]</strong>
+            </h5>
+          </div>
+          <div ng-if="item.type == 'service'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-service-support.jpg);">
+            <h5 class="name pointer" ng-click="showDetails(item)">
+              <strong>[% item.name %]</strong>
+            </h5>
+          </div>
+          <div ng-if="item.type == 'theme'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);">
+            <h5 class="name pointer" ng-click="showDetails(item)">
+              <strong>[% item.name %]</strong>
+            </h5>
+          </div>
           <div class="module-body">
             <div class="module-icon">
               <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
             </div>
-            <h5 class="name pointer" ng-click="showDetails(item)">
-              <strong>[% item.name %]</strong>
-            </h5>
             <p class="description">
               [% item.description | limitTo: 140 %]
               [% item.description.length > 140 ? '...' : '' %]
@@ -192,7 +205,8 @@
             <div class="text-right p-t-15">
               <div class="price">
                 <h3 class="no-margin" ng-show="item.price">
-                  <strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small>
+                  <span ng-if="item.price.month > 0"><strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small></span>
+                  <span ng-if="item.price.month == 0"><strong><strong>{t}Free{/t}</strong></span>
                 </h3>
               </div>
             </div>
