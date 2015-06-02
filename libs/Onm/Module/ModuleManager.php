@@ -180,6 +180,337 @@ class ModuleManager
     }
 
     /**
+     * Returns an array with all available packs.
+     *
+     * @return array The array of packs.
+     */
+    public static function getAvailablePacks()
+    {
+        return [
+            [
+                'id'               => 'BASIC',
+                'name'             => _('Basic pack'),
+                'description'      => _('Features the basic functionality for your newspaper for free.'),
+                'long_description' => _('<p>Publishing your news is <strong>FREE!</strong></p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Support via tickets</li>
+                        <li>Media storage: 500MB</li>
+                        <li>Page views: 50.000</li>
+                    </ul>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 0
+                ]
+            ],
+            [
+                'id'               => 'PROFESSIONAL',
+                'name'             => _('Professional pack'),
+                'description'      => _('Move your newspaper to the next level. Enables you to start to raise money with it.'),
+                'long_description' => _('<p>Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!</p>
+                        <p>This offer gives you more than 40% discount (if purchased separately modules have a value of 85EUR/month)</p>
+                        This pack includes:
+                        <ul>
+                            <li>Frontpage manager</li>
+                            <li>Widget manager</li>
+                            <li>Opinion articles manager</li>
+                            <li>Comments manager</li>
+                            <li>Images and files uploading</li>
+                            <li>Utilities: Trash, Search Advanced...</li>
+                            <li>Advertisement manager</li>
+                            <li>Polls manager</li>
+                            <li>Galleries manager</li>
+                            <li>Video manager</li>
+                            <li>1 user license</li>
+                            <li>Support via tickets</li>
+                            <li>Media storage: 1GB</li>
+                            <li>Page views: 100.000</li>
+                        </ul>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 50
+                ]
+            ],
+            [
+                'id'               => 'SILVER',
+                'name'             => _('Silver pack'),
+                'description'      => _('Silver pack'),
+                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                    to your readers and let them know what they have missed!</p>
+                    <p>This offer gives you more than 30% discount on modules (if purchased
+                    separately modules have a value of 145EUR/month).</p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Advertisement manager</li>
+                        <li>Polls manager</li>
+                        <li>Galleries manager</li>
+                        <li>Video manager</li>
+                        <li>Frontpage customization</li>
+                        <li>Newsletter manager (*)</li>
+                        <li>2 user license</li>
+                        <li>Support via tickets</li>
+                        <li>Support via phone: 4h (10am-2pm M-F)</li>
+                        <li>Media storage: 1.5GB</li>
+                        <li>Page views: 250.000</li>
+                    </ul>
+                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 250
+                ]
+            ],
+            [
+                'id'               => 'GOLD',
+                'name'             => _('Gold pack'),
+                'description'      => _('Gold pack'),
+                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                    to your readers and let them know what they have missed!</p>
+                    <p>This offer gives you more than 30% discount on modules (if purchased
+                    separately modules have a value of 145EUR/month).</p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Advertisement manager</li>
+                        <li>Polls manager</li>
+                        <li>Galleries manager</li>
+                        <li>Video manager</li>
+                        <li>Frontpage customization</li>
+                        <li>Newsletter manager (*)</li>
+                        <li>5 user license</li>
+                        <li>Support via tickets</li>
+                        <li>Support via phone: 8h (10am-6pm M-F)</li>
+                        <li>Media storage: 2.5GB</li>
+                        <li>Page views: 500.000</li>
+                    </ul>
+                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 500
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Returns an array with all available themes for market.
+     *
+     * @return array The array of themes for market.
+     */
+    public static function getAvailableThemes()
+    {
+        return [
+            [
+                'id'               => 'FREE_TEMPLATE',
+                'name'             => _('Free Basic Template'),
+                'description'      => _('Opennemas templates completely free'),
+                'long_description' => _('
+                    <ul>
+                        <li>
+                            Widgets: No widgets included. To add a widget please contact us at
+                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
+                        </li>
+                        <li>Exclusivity: This template is not exclusive</li>
+                        <li>Delivery time: On the spot</li>
+                    </ul>'),
+                'type'             => 'theme',
+                'price' => [
+                    'month' => 0
+                ]
+            ],
+            [
+                'id'               => 'STANDARD_TEMPLATE',
+                'name'             => _('Standard Template'),
+                'description'      => _('Standard Opennemas templates based on a basic design like <a href="http://basic.test.opennemas.com/">http://basic.test.opennemas.com/</a>'),
+                'long_description' => _('
+                    <ul>
+                        <li>
+                            Widgets: Standard widgets included. To add a widget please contact us at
+                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
+                        </li>
+                        <li>Exclusivity: This template is not exclusive</li>
+                        <li>Delivery time: 1 week</li>
+                        <li>Change request BEFORE launch: No change included</li>
+                        <li>Change request AFTER launch: No change included</li>
+                        <li>Add on:
+                            <ul>
+                                <li>New widgets: 120€ each</li>
+                            </ul>
+                        </li>
+                    </ul>'),
+                'type'             => 'theme',
+                'price' => [
+                    'single' => 350
+                ]
+            ],
+            [
+                'id'               => 'CUSTOM_TEMPLATE',
+                'name'             => _('Custom Template'),
+                'description'      => _('Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences'),
+                'long_description' => _('
+                    <ul>
+                        <li>
+                            Widgets: Standard widgets included. To add a widget please contact us at
+                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
+                        </li>
+                        <li>Exclusivity: This template is not exclusive</li>
+                        <li>Delivery time: From 2 weeks up to 1 month depending on customization work</li>
+                        <li>Change request BEFORE launch
+                            <ul>
+                                <li>Changes included: typography, newspaper colours and style</li>
+                                <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, Inner Article Disposition, Images Size, Headers and footers</li>
+                                <li>1 iteration of feedback and change request included before production</li>
+                            </ul>
+                        </li>
+                        <li>Change request AFTER launch
+                            <ul>
+                                <li>1 iteration of feedback and change request only included in 30 days post production</li>
+                                <li>Monitoring and Bug fixing (if any) included 30 days post production</li>
+                            </ul>
+                        </li>
+                        <li>Add On:
+                            <ul>
+                                <li>New widgets: 120€ each</li>
+                                <li>Get newspaper one week in advance: 500€</li>
+                                <li>Support cost after launch</li>
+                            </ul>
+                        </li>
+                    </ul>'),
+                'type'             => 'theme',
+                'price' => [
+                    'single' => 1450,
+                    'month' => 135
+                ]
+            ],
+            [
+                'id'               => 'EXCLUSIVE_TEMPLATE',
+                'name'             => _('Exclusive Template'),
+                'description'      => _('Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences'),
+                'long_description' => _('
+                    <ul>
+                        <li>Type of exclusive templates:
+                            <ul>
+                                <li>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences</li>
+                                <li>The template will be developed following mockups submitted by customer</li>
+                                <li>Customer requires that new web site looks like previous newspaper (migration)</li>
+                            </ul>
+                        </li>
+                        <li>Widgets
+                            <ul>
+                                <li>
+                                    Standard widgets included. To add a widget please contact us at
+                                    <a href="mailto:sales@openhost.es">sales@openhost.es</a>
+                                </li>
+                                <li>
+                                    Up to 5 more widgets included
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li>Exclusivity: This template is exclusive. The template will not be available for any other newspapers.</li>
+                        <li>Delivery time: 2 months</li>
+                        <li>Change request BEFORE launch
+                            <ul>
+                                <li>Changes included: typography, newspaper colours and style</li>
+                                <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, Inner Article Disposition, Images Size, Headers and footers</li>
+                                <li>Pages available: Frontpages, Opinions, Authors, Inner Article, Inner Media( Images, Gallery, Video), Inner Polls</li>
+                                <li>NOTE: 2 iterations of feedback and change request included before production</li>
+                            </ul>
+                        </li>
+                        <li>Change request AFTER launch
+                            <ul>
+                                <li>2 iteration of feedback and change request only included in 30 days post production</li>
+                                <li>Monitoring and Bug fixing (if any) included 30 days post production</li>
+                            </ul>
+                        </li>
+                        <li>Add On:
+                            <ul>
+                                <li>New widgets: 120€ each</li>
+                                <li>Get newspaper one week in advance: 500€</li>
+                                <li>Creation of new page over included or over time 1500€</li>
+                                <li>
+                                    Support cost after launch
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                        http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>'),
+                'type'             => 'theme',
+                'price' => [
+                    'single' => 3500,
+                    'month' => 350
+                ]
+            ],
+            [
+                'id'               => 'CUSTOM_EXCLUSIVE_TEMPLATE',
+                'name'             => _('Custom Exclusive Template'),
+                'description'      => _('Newspaper Web Site Developed from Scratch'),
+                'long_description' => _('
+                    <ul>
+                        <li>Widgets: all required widgets included</li>
+                        <li>Exclusivity: This template is exclusive. The template will not be available for any other newspapers.</li>
+                        <li>Delivery time: To establish at the beginning of the project depending on requirements</li>
+                        <li>Change request BEFORE launch
+                            <ul>
+                                <li>Changes included: typography, newspaper colors and style, menus, openings and grids, inner pages</li>
+                                <li>Pages available: all pages supported by opennemas modules</li>
+                                <li>3 iterations of feedback and change request included before production</li>
+                            </ul>
+                        </li>
+                        <li>Change request AFTER launch
+                            <ul>
+                                <li>3 iteration of feedback and change request only included in 30 days post production</li>
+                                <li>Monitoring and Bug fixing (if any) included 30 days post production</li>
+                            </ul>
+                        </li>
+                        <li>Cost:
+                            <ul>
+                                <li>Design: from 3,000€ to 15,000€ (each month of design work)</li>
+                                <li>Development: from 3,000€ to 6,000€ (each moth of development) </li>
+                                <li>Opennemas Template Creation: from 3,000€ to 6,000€ (each month of templating work)</li>
+                            </ul>
+                        <li>Add On:
+                            <ul>
+                                <li>New widgets: 120€ each</li>
+                                <li>Get newspaper one week in advance: 500€</li>
+                                <li>Creation of new page over included or over time 1500€</li>
+                                <li>
+                                    Support cost after launch
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                        http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>'),
+                'type'             => 'theme',
+                'price' => [
+                    'single' => 3500,
+                    'month' => 350
+                ]
+            ],
+        ];
+    }
+
+    /**
      * Returns the list of available modules in Onm instance.
      *
      * @return array the list of available modules
@@ -746,7 +1077,7 @@ class ModuleManager
         }
     }
 
-     /**
+    /**
      * Returns true if a given module is activated or
      * forward  if is not activated
      *
