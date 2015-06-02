@@ -192,8 +192,36 @@ class ModuleManager
                     'id'               => 'ADS_MANAGER',
                     'plan'             => 'Profesional',
                     'name'             => _('Advertisement'),
-                    'description'      => _('You can add images or script tags to publish advertising banners'),
-                    'long_description' => _('<p>Gain money with your Opennemas newspaper.</p><p>Thanks to this module all opennemas journals will be able to create, add and manage ads on any pages: Frontpage Home/Sections, Inner Articles, Opinions, Gallery, Media.</p><p>There are more than 15 types of ads.</p><p>Once this module is activated, the administrator of the newspaper will be able to upload all ads he/she wants and start to make money with the newspaper</p><p>n all Opennemas newspapers there are 2 kind of advertisements </p><ul><li>Static: images jpg, gif, flash (swf)<ul><li>This kind of ads needs to be uploaded to the manager and then select it into the campaigns</li><li>A date range can be selected to schedule advertising that we want to display only in certain days</li><li>All static ads need to be assigned to a position. At the bottom of the ad/campaign creation form a list of possible spots is displayed.</li><li>The adverts manager only shows total ads publications information. There are no reports per day, week, month and year.</li><li>Another way to manage static advertisements is through external adservers: <a href="http://help.opennemas.com/knowledgebase/articles/220705-como-gestionar-publicidad-desde-openx-opennemas/" target="_blank">OpenX</a> y <a href="http://help.opennemas.com/knowledgebase/articles/220701-como-gestionar-publicidad-google-doubleclick/" target="_blank">Google DFP</a>.</li></ul></li><li>Dynamic: javascript<ul><li>These banners come from agencies/advertisement pr/li><li>The agencies own ads servers that will send banners to Opennemas newspape/li><li>The agencies usually provide users with daily, weekly or monthly /li><li>Opennemas newspapers would be publishers of ad spaces for agencies.</li><li>This means that the newspapers has to be considered as a reseller of banners and should receive a benefit for it.</li><li>This benefit has to be agreed with the agencies and has nothing to do with Opennemas and/or Openhost</li></ul></li></ul>'),
+                    'description'      => _('Gain money by inserting ads in your site. Images, scripts and external services integration'),
+                    'long_description' => _('<p><strong>Gain money</strong> with your Opennemas newspaper.</p>
+                        <p>Thanks to this module all opennemas journals will be able to create, add
+                        and manage ads on any pages: Frontpage Home/Sections, Inner Articles, Opinions, Gallery, Media.</p>
+                        <p>There are more than 15 types of ads.</p>
+                        <p>Once this module is activated, the administrator of the newspaper will be able to
+                        upload all ads he/she wants and start to make money with the newspaper</p>
+                        <p>n all Opennemas newspapers there are 2 kind of advertisements </p>
+                        <ul>
+                            <li>Static: images jpg, gif, flash (swf)
+                                <ul>
+                                <li>This kind of ads needs to be uploaded to the manager and then select it into the campaigns</li>
+                                <li>A date range can be selected to schedule advertising that we want to display only in certain days</li>
+                                <li>All static ads need to be assigned to a position. At the bottom of the ad/campaign creation form a list of possible spots is displayed.</li>
+                                <li>The adverts manager only shows total ads publications information. There are no reports per day, week, month and year.</li>
+                                <li>Another way to manage static advertisements is through external adservers: <a href="http://help.opennemas.com/knowledgebase/articles/220705-como-gestionar-publicidad-desde-openx-opennemas/" target="_blank">OpenX</a>
+                                y <a href="http://help.opennemas.com/knowledgebase/articles/220701-como-gestionar-publicidad-google-doubleclick/" target="_blank">Google DFP</a>.</li>
+                                </ul>
+                            </li>
+                            <li>Dynamic: javascript
+                                <ul>
+                                    <li>These banners come from agencies/advertisement </li>
+                                    <li>The agencies own ads servers that will send banners to Opennemas newspaper</li>
+                                    <li>The agencies usually provide users with daily, weekly or monthly </li>
+                                    <li>Opennemas newspapers would be publishers of ad spaces for agencies.</li>
+                                    <li>This means that the newspapers has to be considered as a reseller of banners and should receive a benefit for it.</li>
+                                    <li>This benefit has to be agreed with the agencies and has nothing to do with Opennemas and/or Openhost</li>
+                                </ul>
+                            </li>
+                        </ul>'),
                     'type'             => 'module',
                     'price'            => [
                         'month' => 35
@@ -204,7 +232,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Advanced search'),
                     'description' => _('It allows you to search for contents directly inside the manager'),
-                    'type'        => 'module',
+                    'type'        => 'internal',
                     'price'            => [
                         'month' => 0
                     ]
@@ -213,8 +241,12 @@ class ModuleManager
                     'id'               => 'ALBUM_MANAGER',
                     'plan'             => 'Profesional',
                     'name'             => _('Albums'),
-                    'description'      => _('Module to manage albums and galleries'),
-                    'long_description' => _('<p>Add Video and Image Galleries to your content.</p><p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion, MarcaTV, etc</p><p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
+                    'description'      => _('Allow you to create photo galleries and use them in your site.'),
+                    'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
+                        <p>This module will allow you to create Photo Galleries, add video from YouTube,
+                        Vimeo, Dailymotion, MarcaTV, etc</p>
+                        <p>And the most interesting fact is that the video manager is the
+                        same as youtube one, perfect consistency and performance.</p>'),
                     'type'             => 'module'
                 ],
                 [
@@ -232,7 +264,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Advanced article options'),
                     'description' => _('Module to allow the second article signature'),
-                    'type'        => 'module'
+                    'type'        => 'internal'
                 ],
                 [
                     'id'               => 'AVANCED_FRONTPAGE_MANAGER',
@@ -250,14 +282,17 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Blog'),
                     'description' => _('Module to manage reviews with blog format'),
-                    'type'        => 'module'
+                    'type'        => 'internal'
                 ],
                 [
                     'id'          => 'BOOK_MANAGER',
                     'plan'        => 'Other',
                     'name'        => _('Books'),
                     'description' => _('Module for managing book pages'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'          => 'CACHE_MANAGER',
@@ -371,20 +406,34 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Letters'),
                     'description' => _('Allows user to publish letters sent to the director'),
-                    'type'        => 'module'
+                    'description' => _('Missed long description'),
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'          => 'LIBRARY_MANAGER',
                     'plan'        => 'Other',
                     'name'        => _('Library'),
                     'description' => _('With this module users can access all contents by date'),
+                    'description' => _('Missed long description'),
                     'type'        => 'module'
                 ],
                 [
                     'id'          => 'MENU_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Menus'),
-                    'description' => _('Allows user to manage the menús'),
+                    'description' => _('Control your site navegation with menus and custom elements.'),
+                    'long_description' => _('<p>This module enables you to control your site navigation menus.</p>
+                        <p>Add different kinds of elements into menus:</p>
+                        <ul>
+                            <li>Internal links</li>
+                            <li>Frontages</li>
+                            <li>Static pages</li>
+                            <li>External links</li>
+                            <li>...</li>
+                        </ul>'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -418,10 +467,15 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'   => 'OPINION_MANAGER',
-                    'plan' => 'Base',
-                    'name' => _('Opinion'),
-                    'type' => 'module'
+                    'id'               => 'OPINION_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Opinion'),
+                    'description'      => _('Add description...'),
+                    'long_description' => _('Create and manage your polls, engage your audience and collect useful information.'),
+                    'type'             => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'POLL_MANAGER',
@@ -547,7 +601,7 @@ class ModuleManager
                     'id'               => 'PAYWALL',
                     'plan'             => 'Other',
                     'name'             => _('Paywall'),
-                    'description'      => _('Earn money '),
+                    'description'      => _('PayWall is a way to make money on your website\'s content by user subscriptions.'),
                     'long_description' => _('<p>Make money while doing what you love.</p><p>The News business is a very challenging business and advertising alone often does not allow to newspapers to keep going. Add paywall to your newspaper and you will be able to select articles that you want to sell. This way in order to access this news users will need to register. </p><p>You will be able to set the payment/subscription the way you want (weekly, monthly, annual, etc) and also add currency and % of taxes that the item is subject to.</p>'),
                     'type'             => 'module',
                     'price'            => [
@@ -569,7 +623,10 @@ class ModuleManager
                     'plan'        => 'Support',
                     'name'        => _('Profesional Support'),
                     'description' => _('Get 10 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul><li>Modification and creation of widgets.</li><li>Ticket based support (SLA 24 hours max)</li></ul>'),
+                    'long_description' => _('<ul>
+                            <li>Modification and creation of widgets.</li>
+                            <li>Ticket based support (SLA 24 hours max)</li>
+                        </ul>'),
                     'type'        => 'service',
                     'price'            => [
                         'month' => 100
