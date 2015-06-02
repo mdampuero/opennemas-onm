@@ -429,6 +429,8 @@
       @Common/components/angular-nanoscroller/scrollable.js,
       @Common/components/angular-loading-bar/build/loading-bar.min.js,
       @Common/components/angular-sanitize/angular-sanitize.min.js,
+      @Common/components/angulartics/dist/angulartics.min.js,
+      @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/ngQuickDate/dist/ng-quick-date.min.js,
       @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
       @Common/components/angular-route/angular-route.min.js,
