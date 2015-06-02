@@ -6,7 +6,7 @@
         <img ng-if="template.item.type == 'service'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-service-support.jpg">
         <img ng-if="template.item.type == 'theme'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-pack.jpg">
         <div class="module-icon">
-          <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+          <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
         </div>
       </div>
       <div class="col-xs-8">
