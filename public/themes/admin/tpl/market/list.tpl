@@ -153,39 +153,7 @@
       </div>
       <h3 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type })" ng-if="!isActivated(item)">
-          <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
-            <div class="grid-body no-padding">
-              <div class="overlay" ng-if="isActivated(item)">
-                <div class="block pull-bottom p-b-15 p-l-15 p-r-15">
-                  <div class="btn btn-block btn-default" ng-disabled="true">
-                    {t}Purchased{/t}
-                  </div>
-                </div>
-              </div>
-              <div class="module-header" style="background-image: url(http://placehold.it/500x500);"></div>
-              <div class="module-body">
-                <div class="module-icon">
-                  <i class="fa fa-dropbox fa-lg"></i>
-                </div>
-                <h5 class="name">
-                  <strong>[% item.name %]</strong>
-                </h5>
-                <p class="description">
-                  [% item.description | limitTo: 140 %]
-                  [% item.description.length > 140 ? '...' : '' %]
-                </p>
-                <hr class="hidden-xs">
-                  <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
-                    {t}More info{/t}
-                  </button>
-                <button class="btn btn-block btn-default hidden-xs" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-                  <i class="fa fa-plus m-r-5"></i>
-                  {t}Add to cart{/t}
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type })" ng-if="!isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
@@ -193,45 +161,41 @@
       </div>
       <h3 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type })" ng-if="isActivated(item)">
-          <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
-            <div class="grid-body no-padding">
-              <div class="overlay" ng-if="isActivated(item)">
-                <div class="block pull-bottom p-b-15 p-l-15 p-r-15">
-                  <div class="btn btn-block btn-default" ng-disabled="true">
-                    {t}Purchased{/t}
-                  </div>
-                </div>
-              </div>
-              <div class="module-header" style="background-image: url(http://placehold.it/500x500);"></div>
-              <div class="module-body">
-                <div class="module-icon">
-                  <i class="fa fa-dropbox fa-lg"></i>
-                </div>
-                <h5 class="name">
-                  <strong>[% item.name %]</strong>
-                </h5>
-                <p class="description">
-                  [% item.description | limitTo: 140 %]
-                  [% item.description.length > 140 ? '...' : '' %]
-                </p>
-                <hr class="hidden-xs">
-                  <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
-                    {t}More info{/t}
-                  </button>
-                <button class="btn btn-block btn-default hidden-xs" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-                  <i class="fa fa-plus m-r-5"></i>
-                  {t}Add to cart{/t}
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type })" ng-if="isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
         <h4>{t}No items purchased{/t}</h4>
       </div>
     </div>
+    <script type="text/ng-template" id="item">
+      <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
+        <div class="grid-body no-padding">
+          <div class="module-header pointer" ng-click="showDetails(item)" style="background-image: url(http://placehold.it/500x500);"></div>
+          <div class="module-body">
+            <div class="module-icon">
+              <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+            </div>
+            <h5 class="name pointer" ng-click="showDetails(item)">
+              <strong>[% item.name %]</strong>
+            </h5>
+            <p class="description">
+              [% item.description | limitTo: 140 %]
+              [% item.description.length > 140 ? '...' : '' %]
+            </p>
+            <hr class="hidden-xs">
+            <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
+              {t}More info{/t}
+            </button>
+            <button class="btn btn-block hidden-xs" ng-class="{ 'btn-default': !isActivated(item), 'btn-success': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+              <i class="fa fa-plus m-r-5" ng-if="!isActivated(item)"></i>
+              <span ng-if="!isActivated(item)">{t}Add to cart{/t}</span>
+              <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </script>
     <script type="text/ng-template" id="modal-checkout">
       {include file="market/modal/_checkout.tpl"}
     </script>
