@@ -102,7 +102,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            {*<li class="quicklinks module-filter">
+            <li class="quicklinks module-filter">
               <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'theme', 'btn-white': type != 'theme' }" ng-click="type = 'theme'">
                 <i class="fa fa-lg fa-eye"></i>
                 {t}Themes{/t}
@@ -110,7 +110,7 @@
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
-            </li>*}
+            </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
                 <i class="fa fa-lg fa-support"></i>
@@ -199,13 +199,18 @@
               <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
             </div>
             <p class="description">
-              [% item.description | limitTo: 140 %]
+              <span ng-bind-html="item.description | limitTo: 140"></span>
               [% item.description.length > 140 ? '...' : '' %]
             </p>
             <div class="text-right p-t-5">
               <div class="price">
                 <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month !== 0"><strong>[% item.price.month %]</strong><small> € / {t}month{/t}</small></span>
+                  <span ng-if="item.price.month">
+                    <strong>[% item.price.month %]</strong><small> € / {t}month{/t}</small>
+                  </span>
+                  <span ng-if="!item.price.month && item.price.single">
+                    <strong>[% item.price.single %]</strong><small> €
+                  </span>
                   <span ng-if="item.price.month == 0"><strong><strong>{t}Free{/t}</strong></span>
                 </h3>
               </div>
