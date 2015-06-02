@@ -189,7 +189,7 @@
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
-        <h4>{t}No modules available to purchase{/t}</h4>
+        <h4>{t}No items available to purchase{/t}</h4>
       </div>
       <h3 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
@@ -229,7 +229,7 @@
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
-        <h4>{t}No modules purchased{/t}</h4>
+        <h4>{t}No items purchased{/t}</h4>
       </div>
     </div>
     <script type="text/ng-template" id="modal-checkout">
