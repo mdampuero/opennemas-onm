@@ -386,7 +386,7 @@ class ModuleManager
                         'usage' => [
                             'price' => 0.3,
                             'items' => 1000,
-                            'type' => 'emails'
+                            'type' => _('emails')
                         ]
                     ]
                 ],
