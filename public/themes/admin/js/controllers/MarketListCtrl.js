@@ -129,6 +129,10 @@
           });
 
           modal.result.then(function(response) {
+            if (!response) {
+              return;
+            }
+
             var message = response.data;
             var type    = response.status === 200 ? 'success' : 'error';
 
