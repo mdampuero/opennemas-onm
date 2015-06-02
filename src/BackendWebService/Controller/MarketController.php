@@ -61,23 +61,48 @@ class MarketController extends Controller
             return true;
         });
 
-        // Non-purchased modules first
-        usort($modules, function ($a, $b) use ($activated) {
-            if (in_array($a['id'], $activated)
-                && in_array($b['id'], $activated)
-            ) {
-                return 0;
-            }
-
-            if (in_array($a['id'], $activated)) {
-                return 1;
-            }
-
-            return -1;
-        });
+        $packs = [
+            [
+                'id'               => 'BASIC',
+                'name'             => _('Basic'),
+                'description'      => _('Basic pack'),
+                'long_description' => _('<p>Frontpage manager</p><p>Widget manager</p><p>Opinion manager</p><p>Comments manager</p><p>Media: photos/videos</p><p>Trash</p><p>Advanced search</p><p>1 user license</p><p>Support via tickets</p><p>Media storage: 500MB</p><p>Page views: 50.000</p>'),
+                'type'             => 'pack',
+            ],
+            [
+                'id'               => 'PROFESSIONAL',
+                'name'             => _('Professional'),
+                'description'      => _('Professional pack'),
+                'long_description' => _('<p>Opennemas basic</p><p>Advertisement</p><p>Poll manager</p><p>Media: videos</p><p>1 user license</p><p>Support via tickets</p><p>Media storage: 1GB</p><p>Page views: 100.000</p>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 50
+                ]
+            ],
+            [
+                'id'               => 'SILVER',
+                'name'             => _('Silver'),
+                'description'      => _('Silver pack'),
+                'long_description' => _('<p>Opennemas professional</p><p>Frontpage customization</p><p>Layout manager</p><p>Conecta plan</p><p>Newsletter: 0.3€ / 1000 email</p><p>News agency</p><p>2 user license</p><p>Support via tickets</p><p>Support via phone: 4h (10am-2pm M-F)</p><p>Media storage: 1.5GB</p><p>Page views: 250.000</p>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 250
+                ]
+            ],
+            [
+                'id'               => 'GOLD',
+                'name'             => _('Gold'),
+                'description'      => _('Gold pack'),
+                'long_description' => _('<p>Opennemas silver</p><p>Synchronization</p><p>Opennemas agency</p><p>Kiosko: PDF view & sell</p><p>Indesign/Quark import</p><p>2 newspapers</p><p>5 user license</p><p>Support via tickets</p><p>Support via phone: 8h (10am-6pm M-F)</p><p>Media storage: 2.5GB</p><p>Page views: 500.000</p>'),
+                'type'             => 'pack',
+                'price' => [
+                    'month' => 500
+                ]
+            ]
+        ];
 
         return new JsonResponse(
-            [ 'results' => $modules, 'activated' => $activated ]
+            [ 'results' => array_merge($modules, $packs), 'activated' => $activated ]
         );
     }
 

@@ -84,15 +84,15 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            {*<li class="quicklinks module-filter" ng-class="{ 'btn-primary': type == 'pack', 'btn-white': type != 'pack' }" ng-click="type = 'pack'">
-              <button class="btn btn-block">
+            <li class="quicklinks module-filter" ng-click="type = 'pack'">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'pack', 'btn-white': type != 'pack' }">
                 <i class="fa fa-lg fa-dropbox"></i>
                 {t}Packs{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
-            </li>*}
+            </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
                 <i class="fa fa-lg fa-cube"></i>
