@@ -2,7 +2,7 @@
     <h4 class="no-margin text-center uppercase">
       {t}Items in your cart{/t}
     </h4>
-    <div class="p-t-15" style="height: 400px;">
+    <div class="p-t-15" style="height: 360px;">
       <scrollable>
         <ul class="cart-list">
           <li class="clearfix" ng-repeat="item in template.cart">
@@ -13,8 +13,7 @@
               <div class="text-right p-r-15">
                 <div class="price">
                   <h3 class="no-margin">
-                    <strong>35</strong>
-                    <small>€/{t}month{/t}</small>
+                    <strong>35</strong><small>€ / {t}month{/t}</small>
                   </h3>
                 </div>
               </div>
@@ -23,6 +22,13 @@
           </li>
         </ul>
       </scrollable>
+    </div>
+    <hr class="m-r-15">
+    <div class="p-r-15 text-right">
+      <h3 class="no-margin">
+        <span class="p-r-15 uppercase">{t}Total{/t}:</span>
+        <strong>[% template.total %]</strong><small>€ / {t}month{/t}</small>
+      </h3>
     </div>
   </div>
   <div class="modal-footer">

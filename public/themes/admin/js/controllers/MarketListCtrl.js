@@ -110,8 +110,17 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
+                var total = 0;
+
+                for (var i = 0; i < $scope.cart.length; i++) {
+                  if ($scope.cart[i].price && $scope.cart[i].price.month) {
+                    total += $scope.cart[i].price.month;
+                  }
+                }
+
                 return {
-                  cart: $scope.cart
+                  cart: $scope.cart,
+                  total: total
                 };
               },
               success: function() {
