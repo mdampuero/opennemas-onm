@@ -559,14 +559,12 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'          => 'ADVANCED_SEARCH',
-                    'plan'        => 'Base',
-                    'name'        => _('Advanced search'),
-                    'description' => _('It allows you to search for contents directly inside the manager'),
-                    'type'        => 'internal',
-                    'price'            => [
-                        'month' => 0
-                    ]
+                    'id'               => 'ADVANCED_SEARCH',
+                    'plan'             => 'Base',
+                    'name'             => _('Advanced search'),
+                    'description'      => _('It allows you to search for contents directly inside the manager'),
+                    'long_description' => _('Missed long description...'),
+                    'type'             => 'internal',
                 ],
                 [
                     'id'               => 'ALBUM_MANAGER',
@@ -581,20 +579,22 @@ class ModuleManager
                     'type'             => 'module'
                 ],
                 [
-                    'id'          => 'ARTICLE_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Articles'),
-                    'description' => _('Module for managing articles'),
+                    'id'               => 'ARTICLE_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Articles'),
+                    'description'      => _('Module for managing articles'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
                     ]
                 ],
                 [
-                    'id'          => 'AVANCED_ARTICLE_MANAGER',
-                    'plan'        => 'Other',
-                    'name'        => _('Advanced article options'),
-                    'description' => _('Module to allow the second article signature'),
+                    'id'               => 'AVANCED_ARTICLE_MANAGER',
+                    'plan'             => 'Other',
+                    'name'             => _('Advanced article options'),
+                    'description'      => _('Module to allow the second article signature'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
@@ -609,65 +609,75 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'          => 'BLOG_MANAGER',
-                    'plan'        => 'Other',
-                    'name'        => _('Blog'),
-                    'description' => _('Module to manage reviews with blog format'),
+                    'id'               => 'BLOG_MANAGER',
+                    'plan'             => 'Other',
+                    'name'             => _('Blog'),
+                    'description'      => _('Module to manage reviews with blog format'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
-                    'id'          => 'BOOK_MANAGER',
-                    'plan'        => 'Other',
-                    'name'        => _('Books'),
-                    'description' => _('Module for managing book pages'),
+                    'id'               => 'BOOK_MANAGER',
+                    'plan'             => 'Other',
+                    'name'             => _('Books'),
+                    'description'      => _('Module for managing book pages'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 'xxx'
                     ]
                 ],
                 [
-                    'id'          => 'CACHE_MANAGER',
-                    'plan'        => 'Other',
-                    'name'        => _('Cache manager'),
-                    'description' => _('Module for managing the cache of pages'),
+                    'id'               => 'CACHE_MANAGER',
+                    'plan'             => 'Other',
+                    'name'             => _('Cache manager'),
+                    'description'      => _('Module for managing the cache of pages'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
-                    'id'          => 'CATEGORY_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Category'),
-                    'description' => _('Module for managing categories'),
+                    'id'               => 'CATEGORY_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Category'),
+                    'description'      => _('Module for managing categories'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
                     ]
                 ],
                 [
-                    'id'          => 'COMMENT_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Comments'),
-                    'description' => _('Module for managing comments'),
+                    'id'               => 'COMMENT_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Comments'),
+                    'description'      => _('Module for managing comments'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
                     ]
                 ],
                 [
-                    'id'          => 'CRONICAS_MODULES',
-                    'plan'        => 'Other',
-                    'name'        => _('Cronicas customizations'),
-                    'description' => _('Module for managing Cronicas customizations'),
+                    'id'               => 'CRONICAS_MODULES',
+                    'plan'             => 'Other',
+                    'name'             => _('Cronicas customizations'),
+                    'description'      => _('Module for managing Cronicas customizations'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal',
                     'price'            => [
                         'month' => 0
                     ]
                 ],
                 [
-                    'id'          => 'FILE_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Files'),
-                    'description' => _('Allows the user to upload files'),
-                    'type'        => 'module'
+                    'id'               => 'FILE_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Files'),
+                    'description'      => _('Allows the user to upload files'),
+                    'long_description' => _('Missed long description...'),
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'               => 'FORM_MANAGER',
@@ -681,10 +691,11 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'          => 'FRONTPAGE_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Frontpages'),
-                    'description' => _('Module for managing elements in frontpages'),
+                    'id'               => 'FRONTPAGE_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Frontpages'),
+                    'description'      => _('Module for managing elements in frontpages'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -706,6 +717,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Images'),
                     'description' => _('Allows user to upload images'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -716,6 +728,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Keywords'),
                     'description' => _('Allows user to define keywords associated with url, mails and internal searches'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -737,7 +750,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Letters'),
                     'description' => _('Allows user to publish letters sent to the director'),
-                    'description' => _('Missed long description'),
+                    'long_description' => _('Missed long description'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 'xxx'
@@ -749,7 +762,10 @@ class ModuleManager
                     'name'        => _('Library'),
                     'description' => _('With this module users can access all contents by date'),
                     'description' => _('Missed long description'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'          => 'MENU_MANAGER',
@@ -824,6 +840,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Promotional bar'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
@@ -831,6 +848,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Schedules'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
@@ -838,6 +856,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('System wide settings'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
@@ -845,20 +864,29 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Specials'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'long_description' => _('Missed long description...'),
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'          => 'STATIC_LIBRARY',
                     'plan'        => 'Other',
                     'name'        => _('Static library'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'long_description' => _('Missed long description...'),
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 'xxx'
+                    ]
                 ],
                 [
                     'id'          => 'STATIC_PAGES_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Static pages'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -876,11 +904,12 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'          => 'TRASH_MANAGER',
-                    'plan'        => 'Base',
-                    'name'        => _('Trash'),
-                    'description' => _('Add description...'),
-                    'type'        => 'module',
+                    'id'               => 'TRASH_MANAGER',
+                    'plan'             => 'Base',
+                    'name'             => _('Trash'),
+                    'description'      => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
+                    'type'             => 'module',
                     'price'            => [
                         'month' => 0
                     ]
@@ -890,6 +919,7 @@ class ModuleManager
                     'plan'        => 'Silver',
                     'name'        => _('User groups'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -900,6 +930,7 @@ class ModuleManager
                     'plan'        => 'Silver',
                     'name'        => _('Users'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -910,12 +941,15 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('UserVoice integration'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal'
                 ],
                 [
                     'id'   => 'VIDEO_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Videos'),
+                    'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type' => 'module'
                 ],
                 [
@@ -923,6 +957,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Widgets'),
                     'description' => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'module',
                     'price'            => [
                         'month' => 0
@@ -944,6 +979,7 @@ class ModuleManager
                     'plan'        => 'Support',
                     'name'        => _('No support'),
                     'description' => '',
+                    'long_description' => _('Missed long description...'),
                     'type'        => 'internal',
                     'price'            => [
                         'month' => 0
