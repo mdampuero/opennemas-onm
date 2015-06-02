@@ -64,16 +64,49 @@ class MarketController extends Controller
         $packs = [
             [
                 'id'               => 'BASIC',
-                'name'             => _('Basic'),
-                'description'      => _('Basic pack'),
-                'long_description' => _('<p>Frontpage manager</p><p>Widget manager</p><p>Opinion manager</p><p>Comments manager</p><p>Media: photos/videos</p><p>Trash</p><p>Advanced search</p><p>1 user license</p><p>Support via tickets</p><p>Media storage: 500MB</p><p>Page views: 50.000</p>'),
+                'name'             => _('Basic pack'),
+                'description'      => _('Features the basic functionality for your newspaper for free.'),
+                'long_description' => _('<p>Publishing your news is <strong>FREE!</strong></p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Support via tickets</li>
+                        <li>Media storage: 500MB</li>
+                        <li>Page views: 50.000</li>
+                    </ul>'),
                 'type'             => 'pack',
+                'price' => [
+                    'month' => 0
+                ]
             ],
             [
                 'id'               => 'PROFESSIONAL',
-                'name'             => _('Professional'),
-                'description'      => _('Professional pack'),
-                'long_description' => _('<p>Opennemas basic</p><p>Advertisement</p><p>Poll manager</p><p>Media: videos</p><p>1 user license</p><p>Support via tickets</p><p>Media storage: 1GB</p><p>Page views: 100.000</p>'),
+                'name'             => _('Professional pack'),
+                'description'      => _('Move your newspaper to the next level. Enables you to start to raise money with it.'),
+                'long_description' => _('<p>Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!</p>
+                        <p>This offer gives you more than 40% discount (if purchased separately modules have a value of 85EUR/month)</p>
+                        This pack includes:
+                        <ul>
+                            <li>Frontpage manager</li>
+                            <li>Widget manager</li>
+                            <li>Opinion articles manager</li>
+                            <li>Comments manager</li>
+                            <li>Images and files uploading</li>
+                            <li>Utilities: Trash, Search Advanced...</li>
+                            <li>Advertisement manager</li>
+                            <li>Polls manager</li>
+                            <li>Galleries manager</li>
+                            <li>Video manager</li>
+                            <li>1 user license</li>
+                            <li>Support via tickets</li>
+                            <li>Media storage: 1GB</li>
+                            <li>Page views: 100.000</li>
+                        </ul>'),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 50
@@ -81,9 +114,33 @@ class MarketController extends Controller
             ],
             [
                 'id'               => 'SILVER',
-                'name'             => _('Silver'),
+                'name'             => _('Silver pack'),
                 'description'      => _('Silver pack'),
-                'long_description' => _('<p>Opennemas professional</p><p>Frontpage customization</p><p>Layout manager</p><p>Conecta plan</p><p>Newsletter: 0.3€ / 1000 email</p><p>News agency</p><p>2 user license</p><p>Support via tickets</p><p>Support via phone: 4h (10am-2pm M-F)</p><p>Media storage: 1.5GB</p><p>Page views: 250.000</p>'),
+                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                    to your readers and let them know what they have missed!</p>
+                    <p>This offer gives you more than 30% discount on modules (if purchased
+                    separately modules have a value of 145EUR/month).</p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Advertisement manager</li>
+                        <li>Polls manager</li>
+                        <li>Galleries manager</li>
+                        <li>Video manager</li>
+                        <li>Frontpage customization</li>
+                        <li>Newsletter manager (*)</li>
+                        <li>2 user license</li>
+                        <li>Support via tickets</li>
+                        <li>Support via phone: 4h (10am-2pm M-F)</li>
+                        <li>Media storage: 1.5GB</li>
+                        <li>Page views: 250.000</li>
+                    </ul>
+                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 250
@@ -91,9 +148,33 @@ class MarketController extends Controller
             ],
             [
                 'id'               => 'GOLD',
-                'name'             => _('Gold'),
+                'name'             => _('Gold pack'),
                 'description'      => _('Gold pack'),
-                'long_description' => _('<p>Opennemas silver</p><p>Synchronization</p><p>Opennemas agency</p><p>Kiosko: PDF view & sell</p><p>Indesign/Quark import</p><p>2 newspapers</p><p>5 user license</p><p>Support via tickets</p><p>Support via phone: 8h (10am-6pm M-F)</p><p>Media storage: 2.5GB</p><p>Page views: 500.000</p>'),
+                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                    to your readers and let them know what they have missed!</p>
+                    <p>This offer gives you more than 30% discount on modules (if purchased
+                    separately modules have a value of 145EUR/month).</p>
+                    This pack includes:
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Advertisement manager</li>
+                        <li>Polls manager</li>
+                        <li>Galleries manager</li>
+                        <li>Video manager</li>
+                        <li>Frontpage customization</li>
+                        <li>Newsletter manager (*)</li>
+                        <li>5 user license</li>
+                        <li>Support via tickets</li>
+                        <li>Support via phone: 8h (10am-6pm M-F)</li>
+                        <li>Media storage: 2.5GB</li>
+                        <li>Page views: 500.000</li>
+                    </ul>
+                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 500
