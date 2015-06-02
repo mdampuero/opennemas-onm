@@ -480,7 +480,7 @@ class InstanceManager extends BaseManager
 
         // Delete cache for domains
         foreach ($instance->domains as $domain) {
-            $this->cache->delete($domain);
+            $this->cache->delete($domain, 'instance');
         }
 
         // Delete instance from cache
