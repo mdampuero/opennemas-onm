@@ -19,8 +19,8 @@
      *   Handles actions for market.
      */
     .controller('MarketListCtrl', [
-      '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($http, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * @function addToCart
          * @memberOf MarketListCtrl
@@ -140,18 +140,20 @@
               $scope.cart = [];
             }
 
+            $analytics.pageTrack('/market/checkout/done');
+
             $modal.open({
               templateUrl: 'modal-success',
               backdrop: 'static',
               controller: 'modalCtrl',
               resolve: {
-              template: function() {
-                return null;
-              },
-              success: function() {
-                return null;
+                template: function() {
+                  return null;
+                },
+                success: function() {
+                  return null;
+                }
               }
-            }
             });
           });
         };
