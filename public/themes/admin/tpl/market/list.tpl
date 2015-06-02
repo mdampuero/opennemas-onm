@@ -183,6 +183,13 @@
               [% item.description | limitTo: 140 %]
               [% item.description.length > 140 ? '...' : '' %]
             </p>
+            <div class="text-right p-t-15">
+              <div class="price">
+                <h3 class="no-margin" ng-show="item.price">
+                  <strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small>
+                </h3>
+              </div>
+            </div>
             <hr class="hidden-xs">
             <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
               {t}More info{/t}
