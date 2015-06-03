@@ -20,6 +20,36 @@
                 {t}Market{/t}
               </h4>
             </li>
+            <li class="quicklinks ng-cloak visible-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks dropdown ng-cloak visible-xs">
+              <div data-toggle="dropdown">
+                <span ng-if="!type">{t}All{/t}</span>
+                <span ng-if="type == 'module'">{t}Modules{/t}</span>
+                <span ng-if="type == 'pack'">{t}Packs{/t}</span>
+                <span ng-if="type == 'service'">{t}Services{/t}</span>
+                <span ng-if="type == 'theme'">{t}Themes{/t}</span>
+                <span class="caret"></span>
+              </div>
+              <ul class="dropdown-menu">
+                <li ng-click="type = undefined">
+                  <a href="#">{t}All{/t}</a>
+                </li>
+                <li ng-click="type = 'module'">
+                  <a href="#">{t}Modules{/t}</a>
+                </li>
+                <li ng-click="type = 'pack'">
+                  <a href="#">{t}Packs{/t}</a>
+                </li>
+                <li ng-click="type = 'service'">
+                  <a href="#">{t}Services{/t}</a>
+                </li>
+                <li ng-click="type = 'theme'">
+                  <a href="#">{t}Themes{/t}</a>
+                </li>
+              </ul>
+            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -71,7 +101,7 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar filters-navbar">
+    <div class="page-navbar filters-navbar hidden-xs">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
