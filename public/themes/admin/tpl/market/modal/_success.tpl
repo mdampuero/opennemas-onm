@@ -18,9 +18,21 @@
       {/t}
     </p>
     <div>
-      <i class="fa fa-lg fa-facebook m-r-10"></i>
-      <i class="fa fa-lg fa-twitter m-r-10"></i>
-      <i class="fa fa-lg fa-google-plus m-r-10"></i>
-      <i class="fa fa-lg fa-linkedin"></i>
+      <a href="http://www.facebook.com" target="_blank">
+        <i class="fa fa-lg fa-facebook m-r-30"></i>
+      </a>
+      <a href="http://twitter.com" target="_blank">
+        <i class="fa fa-lg fa-twitter m-r-30"></i>
+      </a>
+      <a href="https://plus.google.com/" target="_blank">
+        <i class="fa fa-lg fa-google-plus m-r-30"></i>
+      </a>
+      <a href="https://www.linkedin.com/" target="_blank">
+        <i class="fa fa-lg fa-linkedin"></i>
+      </a>
+
+
+
+
     </div>
   </div>
