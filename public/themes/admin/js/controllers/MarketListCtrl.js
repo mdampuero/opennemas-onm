@@ -180,6 +180,12 @@
          *                   returns false.
          */
         $scope.isActivated = function(item) {
+          if (item.id === 'MEDIA_MANAGER') {
+            return $scope.activated.indexOf('ALBUM_MANAGER') !== -1 &&
+              $scope.activated.indexOf('IMAGE_MANAGER') !== -1 &&
+              $scope.activated.indexOf('VIDEO_MANAGER') !== -1;
+          }
+
           return $scope.activated.indexOf(item.id) !== -1;
         };
 

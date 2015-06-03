@@ -58,8 +58,33 @@ class MarketController extends Controller
                 return false;
             }
 
+            // Remove ALBUM_MANAGER, PHOTO_MANAGER and VIDEO_MANAGER
+            if (array_key_exists('id', $a)
+                && ($a['id'] === 'ALBUM_MANAGER'
+                    || $a['id'] === 'IMAGE_MANAGER'
+                    || $a['id'] === 'VIDEO_MANAGER')
+            ) {
+                return false;
+            }
+
             return true;
         });
+
+        array_push(
+            $modules,
+            [
+                'id'               => 'MEDIA_MANAGER',
+                'plan'             => 'Profesional',
+                'name'             => _('Media'),
+                'description'      => _('Allow you to create photo galleries and use them in your site.'),
+                'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
+                    <p>This module will allow you to create Photo Galleries, add video from YouTube,
+                    Vimeo, Dailymotion, MarcaTV, etc</p>
+                    <p>And the most interesting fact is that the video manager is the
+                    same as youtube one, perfect consistency and performance.</p>'),
+                'type'             => 'module'
+            ]
+        );
 
         $packs = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes = \Onm\Module\ModuleManager::getAvailableThemes();
