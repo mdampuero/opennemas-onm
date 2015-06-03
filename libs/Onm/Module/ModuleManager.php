@@ -191,7 +191,8 @@ class ModuleManager
                 'id'               => 'BASIC',
                 'name'             => _('Basic pack'),
                 'description'      => _('Features the basic functionality for your newspaper for free.'),
-                'long_description' => _('<p>Publishing your news is <strong>FREE!</strong></p>
+                'long_description' => _(
+                    '<p>Publishing your news is <strong>FREE!</strong></p>
                     This pack includes:
                     <ul>
                         <li>Frontpage manager</li>
@@ -203,7 +204,8 @@ class ModuleManager
                         <li>Support via tickets</li>
                         <li>Media storage: 500MB</li>
                         <li>Page views: 50.000</li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 0
@@ -213,25 +215,29 @@ class ModuleManager
                 'id'               => 'PROFESSIONAL',
                 'name'             => _('Professional pack'),
                 'description'      => _('Move your newspaper to the next level. Enables you to start to raise money with it.'),
-                'long_description' => _('<p>Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!</p>
-                        <p>This offer gives you more than 40% discount (if purchased separately modules have a value of 85EUR/month)</p>
-                        This pack includes:
-                        <ul>
-                            <li>Frontpage manager</li>
-                            <li>Widget manager</li>
-                            <li>Opinion articles manager</li>
-                            <li>Comments manager</li>
-                            <li>Images and files uploading</li>
-                            <li>Utilities: Trash, Search Advanced...</li>
-                            <li>Advertisement manager</li>
-                            <li>Polls manager</li>
-                            <li>Galleries manager</li>
-                            <li>Video manager</li>
-                            <li>1 user license</li>
-                            <li>Support via tickets</li>
-                            <li>Media storage: 1GB</li>
-                            <li>Page views: 100.000</li>
-                        </ul>'),
+                'long_description' => _(
+                    '<p>Our best selling solution, it allows to manage a professional newspaper and
+                    start gaining money with it!</p>
+                    <p>This offer gives you more than 40% discount (if purchased separately modules
+                    have a value of 85EUR/month)</p>
+                    <p>This pack includes:</p>
+                    <ul>
+                        <li>Frontpage manager</li>
+                        <li>Widget manager</li>
+                        <li>Opinion articles manager</li>
+                        <li>Comments manager</li>
+                        <li>Images and files uploading</li>
+                        <li>Utilities: Trash, Search Advanced...</li>
+                        <li>Advertisement manager</li>
+                        <li>Polls manager</li>
+                        <li>Galleries manager</li>
+                        <li>Video manager</li>
+                        <li>1 user license</li>
+                        <li>Support via tickets</li>
+                        <li>Media storage: 1GB</li>
+                        <li>Page views: 100.000</li>
+                    </ul>'
+                ),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 50
@@ -239,9 +245,11 @@ class ModuleManager
             ],
             [
                 'id'               => 'SILVER',
+                'type'             => 'pack',
                 'name'             => _('Silver pack'),
                 'description'      => _('Silver pack'),
-                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                'long_description' => _(
+                    '<p>Personalize your frontpages and start sending newsletters
                     to your readers and let them know what they have missed!</p>
                     <p>This offer gives you more than 30% discount on modules (if purchased
                     separately modules have a value of 145EUR/month).</p>
@@ -265,8 +273,9 @@ class ModuleManager
                         <li>Media storage: 1.5GB</li>
                         <li>Page views: 250.000</li>
                     </ul>
-                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
-                'type'             => 'pack',
+                    <p><small>*  Newsletter manager: email sendings are charged with
+                        0.3€ each block of 1000 sent emails</small></p>'
+                ),
                 'price' => [
                     'month' => 250
                 ]
@@ -275,7 +284,8 @@ class ModuleManager
                 'id'               => 'GOLD',
                 'name'             => _('Gold pack'),
                 'description'      => _('Gold pack'),
-                'long_description' => _('<p>Personalize your frontpages and start sending newsletters
+                'long_description' => _(
+                    '<p>Personalize your frontpages and start sending newsletters
                     to your readers and let them know what they have missed!</p>
                     <p>This offer gives you more than 30% discount on modules (if purchased
                     separately modules have a value of 145EUR/month).</p>
@@ -299,7 +309,9 @@ class ModuleManager
                         <li>Media storage: 2.5GB</li>
                         <li>Page views: 500.000</li>
                     </ul>
-                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€ each block of 1000 sent emails</small></p>'),
+                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€
+                    each block of 1000 sent emails</small></p>'
+                ),
                 'type'             => 'pack',
                 'price' => [
                     'month' => 500
@@ -321,15 +333,16 @@ class ModuleManager
                 'type'             => 'theme',
                 'name'             => _('Free Basic Template'),
                 'description'      => _('Opennemas templates completely free'),
-                'long_description' => _('
-                    <ul>
+                'long_description' => _(
+                    '<ul>
                         <li>
                             Widgets: No widgets included. To add a widget please contact us at
                             <a href="mailto:sales@openhost.es">sales@openhost.es</a>
                         </li>
                         <li>Exclusivity: This template is not exclusive</li>
                         <li>Delivery time: On the spot</li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'price' => [
                     'month' => 0
                 ]
@@ -339,8 +352,8 @@ class ModuleManager
                 'type'             => 'theme',
                 'name'             => _('Standard Template'),
                 'description'      => _('Standard Opennemas templates based on a basic design like <a href="http://basic.test.opennemas.com/">http://basic.test.opennemas.com/</a>'),
-                'long_description' => _('
-                    <ul>
+                'long_description' => _(
+                    '<ul>
                         <li>
                             Widgets: Standard widgets included. To add a widget please contact us at
                             <a href="mailto:sales@openhost.es">sales@openhost.es</a>
@@ -354,7 +367,8 @@ class ModuleManager
                                 <li>New widgets: 120€ each</li>
                             </ul>
                         </li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'price' => [
                     'single' => 350
                 ]
@@ -364,8 +378,8 @@ class ModuleManager
                 'type'             => 'theme',
                 'name'             => _('Custom Template'),
                 'description'      => _('Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences'),
-                'long_description' => _('
-                    <ul>
+                'long_description' => _(
+                    '<ul>
                         <li>
                             Widgets: Standard widgets included. To add a widget please contact us at
                             <a href="mailto:sales@openhost.es">sales@openhost.es</a>
@@ -375,13 +389,15 @@ class ModuleManager
                         <li>Change request BEFORE launch
                             <ul>
                                 <li>Changes included: typography, newspaper colours and style</li>
-                                <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, Inner Article Disposition, Images Size, Headers and footers</li>
+                                <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, Inner Article
+                                    Disposition, Images Size, Headers and footers</li>
                                 <li>1 iteration of feedback and change request included before production</li>
                             </ul>
                         </li>
                         <li>Change request AFTER launch
                             <ul>
-                                <li>1 iteration of feedback and change request only included in 30 days post production</li>
+                                <li>1 iteration of feedback and change request only included
+                                    in 30 days post production</li>
                                 <li>Monitoring and Bug fixing (if any) included 30 days post production</li>
                             </ul>
                         </li>
@@ -392,7 +408,8 @@ class ModuleManager
                                 <li>Support cost after launch</li>
                             </ul>
                         </li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'price' => [
                     'single' => 1450,
                     'month' => 135
@@ -402,9 +419,12 @@ class ModuleManager
                 'id'               => 'EXCLUSIVE_TEMPLATE',
                 'type'             => 'theme',
                 'name'             => _('Exclusive Template'),
-                'description'      => _('Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences'),
-                'long_description' => _('
-                    <ul>
+                'description'      => _(
+                    'Newspaper Web Site Template that can be customized to reflect '
+                    .'better brand guidelines and customer preferences'
+                ),
+                'long_description' => _(
+                    '<ul>
                         <li>Type of exclusive templates:
                             <ul>
                                 <li>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences</li>
@@ -453,7 +473,8 @@ class ModuleManager
                                 </li>
                             </ul>
                         </li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'price' => [
                     'single' => 3500,
                     'month' => 350
@@ -464,8 +485,8 @@ class ModuleManager
                 'type'             => 'theme',
                 'name'             => _('Custom Exclusive Template'),
                 'description'      => _('Newspaper Web Site Developed from Scratch'),
-                'long_description' => _('
-                    <ul>
+                'long_description' => _(
+                    '<ul>
                         <li>Widgets: all required widgets included</li>
                         <li>Exclusivity: This template is exclusive. The template will not be available for any other newspapers.</li>
                         <li>Delivery time: To establish at the beginning of the project depending on requirements</li>
@@ -501,7 +522,8 @@ class ModuleManager
                                 </li>
                             </ul>
                         </li>
-                    </ul>'),
+                    </ul>'
+                ),
                 'price' => [
                     'single' => 3500,
                     'month'  => 350
@@ -525,7 +547,9 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Advertisement'),
                     'description'      => _('Gain money by inserting ads in your site. Images, scripts and external services integration'),
-                    'long_description' => _('<p>Thanks to this module all opennemas journals will be able to create, add and manage ads on any pages:</p>
+                    'long_description' => _(
+                        '<p>Thanks to this module all opennemas journals will be able to
+                        create, add and manage ads on any pages:</p>
                         <ul>
                             <li>Frontpage Home/Sections</li>
                             <li>Inner Articles</li>
@@ -533,7 +557,8 @@ class ModuleManager
                             <li>Gallery</li>
                             <li>Media</li>
                         </ul>
-                        <p>There are more than 15 types of ads.</p>'),
+                        <p>There are more than 15 types of ads.</p>'
+                    ),
                     'price'            => [
                         'month' => 35
                     ]
@@ -552,11 +577,13 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Albums'),
                     'description'      => _('Allow you to create photo galleries and use them in your site.'),
-                    'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
+                    'long_description' => _(
+                        '<p>Add Video and Image Galleries to your content.</p>
                         <p>This module will allow you to create Photo Galleries, add video from YouTube,
                         Vimeo, Dailymotion, MarcaTV, etc</p>
                         <p>And the most interesting fact is that the video manager is the
-                        same as youtube one, perfect consistency and performance.</p>'),
+                        same as youtube one, perfect consistency and performance.</p>'
+                    ),
                 ],
                 [
                     'id'               => 'ARTICLE_MANAGER',
@@ -581,9 +608,20 @@ class ModuleManager
                     'id'               => 'AVANCED_FRONTPAGE_MANAGER',
                     'plan'             => 'Other',
                     'type'             => 'module',
-                    'name'             => _('Advanced frontpage managers'),
-                    'description'      => _('Module for content personalization on frontpages'),
-                    'long_description' => _('<p>Change your Frontpage every time you want.</p><p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p><p>By activating this module you will be allowed to:<ul><li>Change background colour of the news, so that a column can gain a different style from others.</li><li>Change font size, so that you can give more weight to a title in the page.</li><li>Change colour of titles fonts, so that you can combine it with the different background.</li><li>Change of style: font, bold, italic, etc</li><li>Change the disposition of the image with respect to the text: right, left, above/below of the title, etc</li></ul></p>'),
+                    'name'             => _('Frontpage advanced personalization'),
+                    'description'      => _('Change your Frontpage every time you want.'),
+                    'long_description' => _(
+                        '
+                        <p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
+                        <p>By activating this module you will be allowed to:</p>
+                        <ul>
+                            <li>Change background colour of the news, so that a column can gain a different style from others.</li>
+                            <li>Change font size, so that you can give more weight to a title in the page.</li>
+                            <li>Change colour of titles fonts, so that you can combine it with the different background.</li>
+                            <li>Change of style: font, bold, italic, etc</li>
+                            <li>Change the disposition of the image with respect to the text: right, left, above/below of the title, etc</li>
+                        </ul>'
+                    ),
                     'price'            => [
                         'month' => 30
                     ]
@@ -618,10 +656,10 @@ class ModuleManager
                 [
                     'id'               => 'CATEGORY_MANAGER',
                     'plan'             => 'Base',
+                    'type'             => 'module',
                     'name'             => _('Category'),
                     'description'      => _('Module for managing categories'),
                     'long_description' => _('Missed long description...'),
-                    'type'        => 'module',
                     'price'            => [
                         'month' => 0
                     ]
@@ -665,7 +703,13 @@ class ModuleManager
                     'type'             => 'internal',
                     'name'             => _('Forms'),
                     'description'      => _('Allows to create new custom forms'),
-                    'long_description' => _('<p>Let your readers be contributors.</p><p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper can become the "voice of people/Internet".</p><p>You will be able to create custom submission forms for your contributors so that they can share daily in the easiest way.</p><p>All contributions can be moderated.</p>'),
+                    'long_description' => _(
+                        '<p>Let your readers be contributors.</p>
+                        <p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper
+                        can become the "voice of people/Internet".</p><p>You will be able to create custom submission
+                        forms for your contributors so that they can share daily in the easiest way.</p>
+                        <p>All contributions can be moderated.</p>'
+                    ),
                     'price'            => [
                         'month' => 15
                     ]
@@ -685,9 +729,19 @@ class ModuleManager
                     'id'               => 'FRONTPAGES_LAYOUT',
                     'plan'             => 'Silver',
                     'type'             => 'module',
-                    'name'             => _('Frontpages layout'),
-                    'description'      => _('Allows to select different models for the frontpages'),
-                    'long_description' => _('<p>Create and ManageFrontpageLayouts made by you, every time you want! Price 45EUR/month</p><p>This module has two distinct parts: Manual or Automatic Personal Frontpages Management.</p><h3>MANUAL</h3><p>Management Personal Frontpages/Frontpages Organization</p><p>You can change the appearance of Opennemas newspaper is a matter of seconds with this module. In this way you can select a different frontpage model on each of the sections frontpages.</p><p>The features of this manager are:</p><ul><li>Select different models in each of the frontpages.</li><li>Choice between 2 preset layouts: format frontpage and blog format.</li><li>Ability to create up to 5 different layout models (layout model price 50EUR)</li></ul><p>NOTE: The composition of these layouts will be managed/created by a user. The composition will not be automatic</p><h3>AUTOMATIC</h3><p>If you do not want to have to create layouts, the system can do it for you.</p><p>The advantages of this management are:<ul><li>Blog Format: automation of frontpages in blog style. Last 10 articles will be displayed.</li><li>Tagging: frontpages will be created by searching for news according to a tag/metakeyword/KeywordName</li><li>Topics/Themes/Special: tagging-like functionality with ability to customise the frontpage with a different logo/styles  (i.e. Special Olympic Games)</li></ul></p>'),
+                    'name'             => _('Frontpages layouts & custom layouts'),
+                    'description'      => _('Create and ManageFrontpageLayouts made by you, every time you want!'),
+                    'long_description' => _(
+                        '<p>This module has two distinct parts: Manual or Automatic Personal Frontpages Management.</p>
+
+                        <h3>MANUAL</h3>
+                        <p>Management Personal Frontpages/Frontpages Organization</p>
+                        <p>You can change the appearance of Opennemas newspaper is a matter of seconds with this module.
+                        In this way you can select a different frontpage model on each of the sections frontpages.</p>
+
+                        <h3>AUTOMATIC</h3>
+                        <p>If you do not want to have to create layouts, the system can do it for you.</p>'
+                    ),
                     'price'            => [
                         'month' => 45
                     ]
@@ -719,31 +773,35 @@ class ModuleManager
                     'plan'             => 'Gold',
                     'type'             => 'module',
                     'name'             => _('Kiosko'),
-                    'description'      => _('Create your own newsstand for publishing e-papers, magazines and others'),
-                    'long_description' => _('<p>Let your readers download the pdf copy of your print newspaper.</p><p>If you would like to keep the print version of your newspaper in a newsstand like <a href="http://kiosko.net/" target="_blank">kiosko.net</a>, you just need to upload the full version or the frontpage and your users will be able to download it whenever they want.</p>'),
+                    'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
+                    'long_description' => _(
+                        '<p>If you would like to keep the print version of your newspaper in a newsstand like
+                        <a href="http://kiosko.net/" target="_blank">kiosko.net</a>, you just need to upload the full
+                        version or the frontpage and your users will be able to download it whenever they want.</p>'
+                    ),
                     'price'            => [
                         'month' => 40
                     ]
                 ],
                 [
-                    'id'          => 'LETTER_MANAGER',
-                    'plan'        => 'Other',
-                    'name'        => _('Letters'),
-                    'description' => _('Allows user to publish letters sent to the director'),
+                    'id'               => 'LETTER_MANAGER',
+                    'plan'             => 'Other',
+                    'name'             => _('Letters'),
+                    'description'      => _('Allows user to publish letters sent to the director'),
                     'long_description' => _('Missed long description'),
-                    'type'        => 'module',
+                    'type'             => 'module',
                     'price'            => [
                         'month' => 'xxx'
                     ]
                 ],
                 [
-                    'id'          => 'LIBRARY_MANAGER',
-                    'plan'        => 'Other',
-                    'type'        => 'module',
-                    'name'        => _('Library'),
-                    'description' => _('With this module users can access all contents by date'),
-                    'description' => _('Missed long description'),
-                    'price'       => [
+                    'id'               => 'LIBRARY_MANAGER',
+                    'plan'             => 'Other',
+                    'type'             => 'module',
+                    'name'             => _('Library'),
+                    'description'      => _('With this module users can access all contents by date'),
+                    'long_description' => _('Missed long description'),
+                    'price'            => [
                         'month' => 'xxx'
                     ]
                 ],
@@ -772,7 +830,15 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('News Agency importer'),
                     'description'      => _('Keeping your digital news up to date with agencies is already a reality!'),
-                    'long_description' => _('<p>Keeping your digital news up to date with agencies is already a reality!</p><p><a href="http://www.efe.com/" target="_blank">Agencia EFE</a>, <a href="http://www.europapress.es/" target="_blank">agencia Europa press</a>, <a href="http://www.reuters.com/" target="_blank">Reuters</a>, etc Every and each of this channels will be available for opennemas newspapers. With just few clicks the administrator will be able to add any news from agencies in the frontpage of the newspaper together with any image or media attached.</p>'),
+                    'long_description' => _(
+                        '<p>Keeping your digital news up to date with agencies is already a reality!</p>
+                        <p><a href="http://www.efe.com/" target="_blank">Agencia EFE</a>,
+                        <a href="http://www.europapress.es/" target="_blank">agencia Europa press</a>,
+                        <a href="http://www.reuters.com/" target="_blank">Reuters</a>, etc Every and each of this
+                        channels will be available for opennemas newspapers. With just few clicks the administrator
+                        will be able to add any news from agencies in the frontpage of the newspaper together with
+                        any image or media attached.</p>'
+                    ),
                     'price'            => [
                         'month' => 40
                     ]
@@ -783,7 +849,13 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Newsletter'),
                     'description'      => _('Engage your readers with your own personalized newsletter.'),
-                    'long_description' => _('<p>Engage your readers with your own personalized newsletter.</p><p>It is more and more frequent that newspapers send bulletins with a selection of the most interesting news of the day/week/month.</p><p>This module allows administrators to create personal layouts of the bulletin and to edit the style before sending it.</p><p>This way you will be able to create the newsletter your style.</p>'),
+                    'long_description' => _(
+                        '<p>It is more and more frequent that newspapers send bulletins with a selection
+                        of the most interesting news of the day/week/month.</p>
+                        <p>This module allows administrators to create personal layouts of the
+                        bulletin and to edit the style before sending it.</p>
+                        <p>This way you will be able to create the newsletter your style.</p>'
+                    ),
                     'price'            => [
                         'month' => 30,
                         'usage' => [
@@ -809,8 +881,15 @@ class ModuleManager
                     'plan'             => 'Profesional',
                     'type'             => 'module',
                     'name'             => _('Polls'),
-                    'description'      => _('Create and manage your polls, engage your audience and collect useful information.'),
-                    'long_description' => _('<p>Create and manage your polls, engage your audience and collect useful information.</p><p>Pools can be bars, pie charts, multiple response, etc</p><p>And the most beautiful aspect is that they are compatible and completely available on any browsers in the world.</p>'),
+                    'description'      => _(
+                        'Create and manage your polls, <strong>engage</strong> '
+                        .'your audience and <strong>collect</strong> useful information.'
+                    ),
+                    'long_description' => _(
+                        '<p>Pools can be bars, pie charts, multiple response, etc</p>
+                        <p>And the most beautiful aspect is that they are compatible and completely
+                        available on any browsers in the world.</p>'
+                    ),
                     'price'            => [
                         'month' => 15
                     ]
@@ -886,7 +965,7 @@ class ModuleManager
                 [
                     'id'               => 'TRASH_MANAGER',
                     'plan'             => 'Base',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Trash'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -948,8 +1027,17 @@ class ModuleManager
                     'plan'             => 'Other',
                     'type'             => 'module',
                     'name'             => _('Paywall'),
-                    'description'      => _('PayWall is a way to make money on your website\'s content by user subscriptions.'),
-                    'long_description' => _('<p>Make money while doing what you love.</p><p>The News business is a very challenging business and advertising alone often does not allow to newspapers to keep going. Add paywall to your newspaper and you will be able to select articles that you want to sell. This way in order to access this news users will need to register. </p><p>You will be able to set the payment/subscription the way you want (weekly, monthly, annual, etc) and also add currency and % of taxes that the item is subject to.</p>'),
+                    'description'      => _('Make money while doing what you love.'),
+                    'long_description' => _(
+                        '<p>PayWall is a way to make money on your website\'s content by user subscriptions.</p>
+                        <p>The News business is a very challenging business and advertising
+                        alone often does not allow to newspapers to keep going. Add paywall to your
+                        newspaper and you will be able to select articles that you want to sell. This way in
+                        order to access this news users will need to register. </p>
+                        <p>You will be able to set the payment/subscription the way you want
+                        (weekly, monthly, annual, etc) and also add currency and % of taxes that
+                        the item is subject to.</p>'
+                    ),
                     'price'            => [
                         'month' => 95
                     ]
