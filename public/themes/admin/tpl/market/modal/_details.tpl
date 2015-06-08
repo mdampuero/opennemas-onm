@@ -1,4 +1,4 @@
-  <div class="error-body modal-body">
+  <div class="error-body modal-body module-dialog">
     <div class="row">
       <div class="col-xs-4">
         <img ng-if="template.item.type == 'module'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
@@ -13,11 +13,11 @@
         <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">
           <i class="fa fa-times"></i>
         </button>
-        <h3 class="no-margin">
+        <h3 class="no-margin module-name">
           <strong>[% template.item.name %]</strong>
         </h3>
-        <p class="p-t-15">{t}Creator:{/t} [% template.item.author ? template.item.author : 'Opennemas' %]</p>
-        <div class="text-right p-t-15">
+        <p class="p-t-15 pull-left">{t}by{/t} <span ng-bind-html="template.item.author"></span></p>
+        <div class="text-right pull-right p-t-15">
           <div class="price" ng-if="template.item.price.month">
             <h3 class="no-margin">
               <strong>[% template.item.price.month %]</strong>
@@ -53,14 +53,14 @@
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
     </div>*}
     <div class="row p-t-15">
-      <div class="col-xs-4 text-left">
+      <div class="col-xs-4 text-left hidden">
         <i class="fa fa-star"></i>
         <i class="fa fa-star"></i>
         <i class="fa fa-star"></i>
         <i class="fa fa-star-half-o"></i>
         <i class="fa fa-star-o"></i>
       </div>
-      <div class="col-xs-8 text-right">
+      <div class="pull-right p-r-15 text-right">
         {t}Last updated{/t}: [% template.item.updated | moment %]
       </div>
     </div>

@@ -180,21 +180,21 @@
       </div>
       <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
         <div class="center">
-          <h4>{t}Unable to find any menu that matches your search.{/t}</h4>
+          <h4>{t}Unable to find any module that matches your search.{/t}</h4>
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <h3 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h3>
+      <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
         <h4>{t}No items available to purchase{/t}</h4>
       </div>
-      <h3 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h3>
+      <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
       <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
         </div>
       </div>
       <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
@@ -204,57 +204,53 @@
     <script type="text/ng-template" id="item">
       <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
         <div class="grid-body no-padding">
-          <div ng-if="item.type == 'module'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg);">
-            <h5 class="name pointer" ng-click="showDetails(item)">
-              <strong>[% item.name %]</strong>
-            </h5>
-          </div>
-          <div ng-if="item.type == 'pack'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg);">
-            <h5 class="name pointer" ng-click="showDetails(item)">
-              <strong>[% item.name %]</strong>
-            </h5>
-          </div>
-          <div ng-if="item.type == 'service'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg);">
-            <h5 class="name pointer" ng-click="showDetails(item)">
-              <strong>[% item.name %]</strong>
-            </h5>
-          </div>
-          <div ng-if="item.type == 'theme'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg);">
-            <h5 class="name pointer" ng-click="showDetails(item)">
-              <strong>[% item.name %]</strong>
-            </h5>
-          </div>
-          <div class="module-body">
-            <div class="module-icon">
-              <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+          <div class="clearfix">
+            <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
+              <img ng-if="item.type == 'module'" class="module-image pull-left" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
+              <img ng-if="item.type == 'pack'" class="module-image pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+              <img ng-if="item.type == 'service'" class="module-image pull-left" ng-src="/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg">
+              <img ng-if="item.type == 'theme'" class="module-image pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+              <div class="module-icon">
+                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+              </div>
             </div>
-            <p class="description">
-              <span ng-bind-html="item.description | limitTo: 140"></span>
-              [% item.description.length > 140 ? '...' : '' %]
-            </p>
-            <div class="text-right p-t-5">
-              <div class="price">
+            <div class="module-body col-xs-8 col-sm-8">
+              <div class="module-info-wrapper">
+                <h5 class="name pointer" ng-click="showDetails(item)">
+                  <strong>[% item.name %]</strong>
+                </h5>
+                <div class="description" ng-click="showDetails(item)">
+                  [% item.description %]
+                </div>
+              </div>
+              <div class="text-right price">
                 <h3 class="no-margin" ng-show="item.price">
                   <span ng-if="item.price.month">
-                    <strong>[% item.price.month %]</strong><small> € / {t}month{/t}</small>
+                    <strong>[% item.price.month %]</strong>
+                    <small> € / {t}month{/t}</small>
                   </span>
                   <span ng-if="!item.price.month && item.price.single">
-                    <strong>[% item.price.single %]</strong><small> €
+                    <strong>[% item.price.single %]</strong>
+                    <small> € </small>
                   </span>
-                  <span ng-if="item.price.month == 0"><strong><strong>{t}Free{/t}</strong></span>
+                  <span ng-if="item.price.month == 0"><strong>{t}Free{/t}</strong></span>
                 </h3>
               </div>
             </div>
-            <hr class="hidden-xs">
-            <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
-              {t}More info{/t}
-            </button>
-            <button class="btn btn-block hidden-xs" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-              <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
-              <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
-              <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
-              <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
-            </button>
+          </div>
+          <div class="module-tools clearfix">
+            <div class="col-xs-12 col-sm-6">
+              <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
+                {t}More info{/t}
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+                <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
+                <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
+                <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
+                <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

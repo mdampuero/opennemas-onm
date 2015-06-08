@@ -1,4 +1,5 @@
 @import "../../../assets/src/opennemas-webarch/less/helpers/_variables.less";
+@background-cart-section:     #E4F3D9;
 
 .cart-orb {
   background-color: @info-color;
@@ -79,6 +80,17 @@
   background: #fff;
 }
 
+
+
+.module-icon {
+  background: #fff;
+  border-radius: 100%;
+  border: 1px solid #ccc;
+  height: 30px;
+  width: 30px;
+  padding: 4px 6px;
+}
+
 .modal {
   .cart-list {
     & > li {
@@ -90,10 +102,8 @@
       h5,
       .description {
         width: 100%;
-      }
 
-      .description {
-        font-size: @font-size;
+        // font-size: @font-size;
       }
     }
   }
@@ -105,15 +115,6 @@
   }
 }
 
-.module-icon {
-  background: #fff;
-  border-radius: 100%;
-  border: 1px solid #ccc;
-  height: 30px;
-  padding: 5px;
-  width: 30px;
-}
-
 .module-grid {
   overflow: hidden;
   position: relative;
@@ -122,57 +123,77 @@
     text-transform: uppercase;
   }
 
-  .grid-body {
-    min-height: 220px;
-  }
 
-  .img-responsive {
-    margin: 0 auto;
+  .module-image-wrapper {
+    padding:15px;
+    position:relative;
+
+    .module-image {
+      width:100%;
+      cursor:pointer;
+    }
+
+    .module-icon {
+        position: absolute;
+        top: 8px;
+        right: 5px;
+    }
+
   }
 
   .module-body {
     position: relative;
-    padding: 0 15px 15px;
+    padding: 15px 15px 0 0;
+
+    .module-info-wrapper {
+      min-height:90px;
+
+      .name {
+        margin-top: 15px;
+        margin:0;
+        font-size:1.3em;
+      }
+
+      .description {
+        margin-top:5px;
+        cursor:pointer;
+      }
+    }
+
+    .more-info {
+      border-top: 1px solid @border-color;
+      padding: 15px 0;
+    }
+
+    .price {
+      height: 30px;
+    }
   }
 
+  .module-tools {
+    border-top:1px solid @border-color;
+    padding:10px 0;
+    // box-shadow: inset 0px 0px 0px 5px @background-cart-section;
+
+    .add-to-cart,
+    .more-info {
+      padding:4px 12px;
+    }
+    .more-info {
+      color:Gray
+    }
+  }
+}
+
+.module-dialog {
+  .img-responsive {
+    border:1px solid #ccc;
+  }
+  .module-name > * {
+    color:#333; // Requirement from david
+  }
   .description {
-    margin-bottom: 0px;
-    margin-top:15px;
-    min-height: 57px;
-  }
-
-  .module-icon {
-    position: absolute;
-    right: 15px;
-    top: -30px;
-  }
-
-  .module-header {
-    padding-bottom: 100%;
-    background-size: cover;
-    position:relative;
-  }
-
-  .more-info {
-    border-top: 1px solid @border-color;
-    padding: 15px 0;
-  }
-
-  .name {
-    margin-top: 15px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin:0;
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(255,255,255,0.6);
-    padding:15px;
-    font-size:1.3em;
-  }
-
-  .price {
-    height: 30px;
+    font-size:1.1em;
   }
 }
 
@@ -208,6 +229,14 @@
       padding-right: 0 !important;
     }
   }
+  .module-grid{
+    .module-image-wrapper {
+      padding:0
+    }
+    .module-body {
+      padding:15px;
+    }
+  }
 
   .page-content .content, .pinned .page-content .content {
     padding: 15px;
@@ -215,19 +244,17 @@
 }
 
 @media (min-width: @tablet-width) and (max-width: (@desktop-width - 1)) {
+
+}
+
+@media (min-width: 1500px) {
   .module-wrapper {
-    width: 25%;
+    width: 33%;
   }
 }
 
-@media (min-width: 1366px) {
-  .module-wrapper {
-    width: 20%;
-  }
-}
-
-@media (min-width: 1680px) {
-  .module-wrapper {
-    width: 16.666666667%;
-  }
-}
+// @media (min-width: 1680px) {
+//   .module-wrapper {
+//     width: 16.666666667%;
+//   }
+// }
