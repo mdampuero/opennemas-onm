@@ -30,7 +30,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="dfpDetected = '{t}Google DFP detected{/t}'">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -391,5 +391,8 @@
       </div>
     </div>
   </div>
+  <script type="text/ng-template" id="modal-dfp-detected">
+    {include file="advertisement/modal/dfp_detected.tpl"}
+  </script>
 </form>
 {/block}

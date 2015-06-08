@@ -31,15 +31,33 @@
         var pattern = /googletag\.defineSlot\('([^\']*)\',\s*\[(\d*),\s*(\d*)\]/;
 
         if (pattern.test(str)) {
-          var matches = str.match(pattern);
-          messenger.post($scope.dfpDetected);
+          var modal = $modal.open({
+            templateUrl: 'modal-dfp-detected',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {};
+              },
+              success: function() {
+                return false;
+              }
+            }
+          });
 
-          $scope.with_script = 3;
-          $scope.googledfp_unit_id = matches[1];
-          $scope.params_width = parseInt(matches[2]);
-          $scope.params_height = parseInt(matches[3]);
+          modal.result.then(function(response) {
+            if (!response) {
+              return;
+            }
 
-          $scope.script = null;
+            var matches = str.match(pattern);
+
+            $scope.with_script = 3;
+            $scope.googledfp_unit_id = matches[1];
+            $scope.params_width = parseInt(matches[2]);
+            $scope.params_height = parseInt(matches[3]);
+
+            $scope.script = null;
+          });
         }
       };
 
