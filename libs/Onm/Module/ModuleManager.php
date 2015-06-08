@@ -644,7 +644,7 @@ class ModuleManager
                 [
                     'id'               => 'BOOK_MANAGER',
                     'plan'             => 'Other',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Books'),
                     'description'      => _('Module for managing book pages'),
                     'long_description' => _('Missed long description...'),
@@ -701,15 +701,15 @@ class ModuleManager
                     'description'      => _('Allows the user to upload files'),
                     'long_description' => _('Missed long description...'),
                     'price'            => [
-                        'month' => 'xxx'
+                        'month' => 0
                     ]
                 ],
                 [
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'Other',
                     'type'             => 'internal',
-                    'name'             => _('Forms'),
-                    'description'      => _('Allows to create new custom forms'),
+                    'name'             => _('Opennemas Connect'),
+                    'description'      => _('Allows to create to new custom forms'),
                     'long_description' => _(
                         '<p>Let your readers be contributors.</p>
                         <p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper
@@ -804,7 +804,7 @@ class ModuleManager
                 [
                     'id'               => 'LIBRARY_MANAGER',
                     'plan'             => 'Other',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Library'),
                     'description'      => _('With this module users can access all contents by date'),
                     'long_description' => _('Missed long description'),
@@ -928,7 +928,7 @@ class ModuleManager
                 [
                     'id'               => 'SPECIAL_MANAGER',
                     'plan'             => 'Other',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Specials'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -939,7 +939,7 @@ class ModuleManager
                 [
                     'id'               => 'STATIC_LIBRARY',
                     'plan'             => 'Other',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Static library'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -962,7 +962,7 @@ class ModuleManager
                     'id'               => 'SYNC_MANAGER',
                     'plan'             => 'Silver',
                     'type'             => 'module',
-                    'name'             => _('Instance synchronization'),
+                    'name'             => _('Frontpage synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage'),
                     'long_description' => _(
                         '<p>Update your local frontpages by updating 1 frontpage!</p>

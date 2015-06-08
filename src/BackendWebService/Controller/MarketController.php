@@ -82,7 +82,10 @@ class MarketController extends Controller
                     Vimeo, Dailymotion, MarcaTV, etc</p>
                     <p>And the most interesting fact is that the video manager is the
                     same as youtube one, perfect consistency and performance.</p>'),
-                'type'             => 'module'
+                'type'             => 'module',
+                'price' => [
+                    'month' => 35
+                ]
             ]
         );
 
