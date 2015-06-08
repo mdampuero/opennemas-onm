@@ -89,8 +89,15 @@ class MarketController extends Controller
         $packs = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes = \Onm\Module\ModuleManager::getAvailableThemes();
 
+        $results = array_merge($modules, $packs, $themes);
+        foreach ($results as &$result) {
+            if (empty($result['author'])) {
+                $result['author'] = '<a href="https://www.opennemas.com/about" target="_blank">Opennemas</a>';
+            }
+        }
+
         return new JsonResponse(
-            [ 'results' => array_merge($modules, $packs, $themes), 'activated' => $activated ]
+            [ 'results' => $results, 'activated' => $activated ]
         );
     }
 
