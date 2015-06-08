@@ -30,7 +30,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="InnerCtrl">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="dfpDetected = '{t}Google DFP detected{/t}'">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -120,7 +120,7 @@
                 {include file="advertisement/partials/advertisement_images.tpl"}
               </div>
               <div class="ng-cloak" ng-show="with_script == 1">
-                <textarea name="script" id="script" class="form-control" rows="10" >{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                <textarea name="script" id="script" class="form-control" rows="10" ng-model="script">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
               </div>
               <div class="ng-cloak" ng-show="'{$server_url}' && with_script == 2">
                 <label for="openx_zone">{t}Open X zone id{/t}</label>
@@ -131,7 +131,7 @@
                 <label for="googledfp_zone_id">
                   {t}Google DFP unit id{/t}
                 </label>
-                <input type="text" name="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
+                <input type="text" name="googledfp_unit_id" ng-model="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
                 <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
               </div>
             </div>
@@ -142,7 +142,7 @@
                     {t}Width{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="params_width" name="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script != 2" min="0">
+                    <input class="form-control" id="params_width" name="params_width" ng-model="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script != 2" min="0">
                   </div>
                 </div>
               </div>
@@ -150,7 +150,7 @@
                 <div class="form-group">
                   <label for="params_height" class="form-label">{t}Height{/t}</label>
                   <div class="controls">
-                    <input class="form-control" id="params_height" name="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script != 2" min="0">
+                    <input class="form-control" id="params_height" name="params_height" ng-model="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script != 2" min="0">
                   </div>
                 </div>
               </div>
