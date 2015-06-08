@@ -162,6 +162,7 @@ class ModuleManager
                 'SUPPORT_NONE'              => _('Basic support'),
                 'SUPPORT_PRO'               => _('Profesional support'),
                 'SUPPORT_2'                 => _('Support 2'),
+                'SUPPORT_3'                 => _('Support 3'),
                 'SUPPORT_4'                 => _('Support 4'),
                 'SUPPORT_8'                 => _('Support 8'),
                 'SUPPORT_8_PLUS'            => _('Support 8+'),
@@ -1066,12 +1067,16 @@ class ModuleManager
                     'id'               => 'SUPPORT_PRO',
                     'plan'             => 'Support',
                     'type'             => 'service',
-                    'name'             => _('Profesional Support'),
-                    'description'      => _('Get 10 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul>
-                            <li>Modification and creation of widgets.</li>
-                            <li>Ticket based support (SLA 24 hours max)</li>
-                        </ul>'),
+                    'name'             => _('Support 1'),
+                    'description'      => _('This support plan is thought for changes and creation of new widgets.'),
+                    'long_description' => _(
+                        '<p>10 hours (2h day/1week).</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Creation and change of widgets</li>
+                        </ul>
+                        <p>Support provided by emails/tickets</p>'
+                    ),
                     'price'            => [
                         'month' => 100
                     ]
@@ -1081,15 +1086,36 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'service',
                     'name'             => _('Support 2'),
-                    'description'      => _('Get 40 hours of development per month to tune your site.'),
+                    'description'      => _('This support plan is ideal for updating your theme if you have had it for a long time.'),
                     'long_description' => _(
-                        '<ul>
-                            <li>Cambios básicos en maquetas HTML/CSS</li>
-                            <li>Soporte via tickets/e-mail  y hangout/skype</li>
-                        </ul>'
+                        '<p>40 hours (2h per day during 1 month)</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Standard changes of HTML/CSS in templates</li>
+                        </ul>
+                        <p>Support provided by emails/tickets and hangouts/skype</p>'
                     ),
                     'price'            => [
                         'month' => 300
+                    ]
+                ],
+
+                [
+                    'id'               => 'SUPPORT_3',
+                    'plan'             => 'Support',
+                    'type'             => 'service',
+                    'name'             => _('Support 3'),
+                    'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
+                    'long_description' => _(
+                        '<p>60 hours (3h day/1month)</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Standard changes of HTML/CSS in templates</li>
+                        </ul>
+                        <p>Support provided by emails/tickets and hangouts/skype</p>'
+                    ),
+                    'price'            => [
+                        'month' => 450
                     ]
                 ],
                 [
@@ -1097,8 +1123,16 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'service',
                     'name'             => _('Support 4'),
-                    'description'      => _('Get 80 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Cambio en disposición de plantillas de home, Portadillas de categorías, Nuevas distribuciones en noticia interior</li><li>Soporte via tickets/e-mail y hangout/skype</li></ul>'),
+                    'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
+                    'long_description' => _(
+                        '<p>60 hours (3h day/1month)</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Examples of usage of support:
+                            <li>Standard changes of HTML/CSS in templates</li>
+                        </ul>
+                        <p>Support provided by emails/tickets and hangouts/skype</p>'
+                    ),
                     'price'            => [
                         'month' => 600
                     ]
@@ -1108,8 +1142,20 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'service',
                     'name'             => _('Support 8'),
-                    'description'      => _('Get 160 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Creación de nuevas plantillas, estilos, maqueteros, Creación/modificación de plantillas para eventos, ocasiones, especiales, otras ediciones, etc.</li><li>Soporte via tickets/email, hangout/skype y Teléfono agente</li></ul>'),
+                    'description'      => _('This support plan fits the purpose of a restyling of newspapers by redefining spaces, disegn and style.'),
+                    'long_description' => _(
+                        '<p>160 hours (8h day/1month)</p>
+                        <p>This support is all about customization and having one of our resources dedicated to a newsaper full time.</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Creation and change requests of widgets
+                            <li>Standard changes of HTML/CSS in templates</li>
+                            <li>Change Requests of the disposition of frontpage templates</li>
+                            <li>Category Titles</li>
+                            <li>New structure of inner articles.</li>
+                        </ul>
+                        <p>Support provided by emails/tickets, hangouts/skype and phone</p>'
+                    ),
                     'price'            => [
                         'month' => 1200
                     ]
@@ -1118,9 +1164,20 @@ class ModuleManager
                     'id'               => 'SUPPORT_8_PLUS',
                     'plan'             => 'Support',
                     'type'             => 'service',
-                    'name'             => _('Support 8+'),
-                    'description'      => _('Get 240 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul><li>This Support is designed for all newspapers that need may need help including during the weekend.</li><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Creación de nuevas plantillas, estilos, maqueteros, Creación/modificación de plantillas para eventos, ocasiones, especiales, otras ediciones, etc.</li></ul>'),
+                    'name'             => _('Support 8 Plus'),
+                    'description'      => _('This Support is designed for all newspapers that need may need help including during the weekend.'),
+                    'long_description' => _(
+                        '<p>8h day/7 days/ 1month</p>
+                        <p>Examples of usage of support:</p>
+                        <ul>
+                            <li>Creation and change requests of widgets</li>
+                            <li>Standard changes of HTML/CSS in templates</li>
+                            <li>Change Requests of the disposition of frontpage templates</li>
+                            <li>Category Titles</li>
+                            <li>New structure of inner articles.</li>
+                        </ul>
+                        <p>Support provided by emails/tickets, hangouts/skype and phone</p>'
+                    ),
                     'price'            => [
                         'month' => 3000
                     ]
