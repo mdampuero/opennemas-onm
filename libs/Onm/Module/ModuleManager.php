@@ -214,11 +214,9 @@ class ModuleManager
             [
                 'id'               => 'PROFESSIONAL',
                 'name'             => _('Professional pack'),
-                'description'      => _('Move your newspaper to the next level. Enables you to start to raise money with it.'),
+                'description'      => _('Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!'),
                 'long_description' => _(
-                    '<p>Our best selling solution, it allows to manage a professional newspaper and
-                    start gaining money with it!</p>
-                    <p>This offer gives you more than 40% discount (if purchased separately modules
+                    '<p>This offer gives you more than 40% discount (if purchased separately modules
                     have a value of 85EUR/month)</p>
                     <p>This pack includes:</p>
                     <ul>
@@ -246,8 +244,8 @@ class ModuleManager
             [
                 'id'               => 'SILVER',
                 'type'             => 'pack',
-                'name'             => _('Silver pack'),
-                'description'      => _('Silver pack'),
+                'name'             => _('Advanced pack'),
+                'description'      => _('Provides advanced features to personalize your site and add more kind of contents.'),
                 'long_description' => _(
                     '<p>Personalize your frontpages and start sending newsletters
                     to your readers and let them know what they have missed!</p>
@@ -282,8 +280,8 @@ class ModuleManager
             ],
             [
                 'id'               => 'GOLD',
-                'name'             => _('Gold pack'),
-                'description'      => _('Gold pack'),
+                'name'             => _('Expert pack'),
+                'description'      => _('Contains all the major features of Opennemas.'),
                 'long_description' => _(
                     '<p>Personalize your frontpages and start sending newsletters
                     to your readers and let them know what they have missed!</p>
@@ -332,7 +330,7 @@ class ModuleManager
                 'id'               => 'FREE_TEMPLATE',
                 'type'             => 'theme',
                 'name'             => _('Free Basic Template'),
-                'description'      => _('Opennemas templates completely free'),
+                'description'      => _('Change your site design with our free available templates.'),
                 'long_description' => _(
                     '<ul>
                         <li>
@@ -351,7 +349,10 @@ class ModuleManager
                 'id'               => 'STANDARD_TEMPLATE',
                 'type'             => 'theme',
                 'name'             => _('Standard Template'),
-                'description'      => _('Standard Opennemas templates based on a basic design like <a href="http://basic.test.opennemas.com/">http://basic.test.opennemas.com/</a>'),
+                'description'      => _(
+                    'Standard newspaper web site design with prebuild widgets '
+                    .'developed by Opennemas team. No customization available'
+                ),
                 'long_description' => _(
                     '<ul>
                         <li>
@@ -377,7 +378,10 @@ class ModuleManager
                 'id'               => 'CUSTOM_TEMPLATE',
                 'type'             => 'theme',
                 'name'             => _('Custom Template'),
-                'description'      => _('Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences'),
+                'description'      => _(
+                    'Newspaper web site template developed by Opennemas team.'
+                    .' Customizable to make a better git to customer brand guidelines and image'
+                ),
                 'long_description' => _(
                     '<ul>
                         <li>
@@ -484,22 +488,25 @@ class ModuleManager
                 'id'               => 'CUSTOM_EXCLUSIVE_TEMPLATE',
                 'type'             => 'theme',
                 'name'             => _('Custom Exclusive Template'),
-                'description'      => _('Newspaper Web Site Developed from Scratch'),
+                'description'      => _('Newspaper web site developed from scratch by Opennemas team.'),
                 'long_description' => _(
                     '<ul>
                         <li>Widgets: all required widgets included</li>
-                        <li>Exclusivity: This template is exclusive. The template will not be available for any other newspapers.</li>
+                        <li>Exclusivity: This template is exclusive. The template will
+                            not be available for any other newspapers.</li>
                         <li>Delivery time: To establish at the beginning of the project depending on requirements</li>
                         <li>Change request BEFORE launch
                             <ul>
-                                <li>Changes included: typography, newspaper colors and style, menus, openings and grids, inner pages</li>
+                                <li>Changes included: typography, newspaper colors and
+                                    style, menus, openings and grids, inner pages</li>
                                 <li>Pages available: all pages supported by opennemas modules</li>
                                 <li>3 iterations of feedback and change request included before production</li>
                             </ul>
                         </li>
                         <li>Change request AFTER launch
                             <ul>
-                                <li>3 iteration of feedback and change request only included in 30 days post production</li>
+                                <li>3 iteration of feedback and change request only included
+                                    in 30 days post production</li>
                                 <li>Monitoring and Bug fixing (if any) included 30 days post production</li>
                             </ul>
                         </li>
@@ -957,7 +964,9 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Instance synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage'),
-                    'long_description' => _('<p>Update your local frontpages by updating 1 frontpage!</p><p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronised?</p><p>No problem. By activating this module you will have all your news synchronised, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
+                    'long_description' => _(
+                        '<p>Update your local frontpages by updating 1 frontpage!</p>
+                        <p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronised?</p><p>No problem. By activating this module you will have all your news synchronised, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
                     'price'            => [
                         'month' => 65
                     ]
@@ -976,7 +985,7 @@ class ModuleManager
                 [
                     'id'               => 'USER_GROUP_MANAGER',
                     'plan'             => 'Silver',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('User groups'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -987,7 +996,7 @@ class ModuleManager
                 [
                     'id'               => 'USER_MANAGER',
                     'plan'             => 'Silver',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Users'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -1014,7 +1023,7 @@ class ModuleManager
                 [
                     'id'               => 'WIDGET_MANAGER',
                     'plan'             => 'Base',
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'name'             => _('Widgets'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -1073,7 +1082,12 @@ class ModuleManager
                     'type'             => 'service',
                     'name'             => _('Support 2'),
                     'description'      => _('Get 40 hours of development per month to tune your site.'),
-                    'long_description' => _('<ul><li>Cambios básicos en maquetas HTML/CSS</li><li>Soporte via tickets/e-mail  y hangout/skype</li></ul>'),
+                    'long_description' => _(
+                        '<ul>
+                            <li>Cambios básicos en maquetas HTML/CSS</li>
+                            <li>Soporte via tickets/e-mail  y hangout/skype</li>
+                        </ul>'
+                    ),
                     'price'            => [
                         'month' => 300
                     ]
