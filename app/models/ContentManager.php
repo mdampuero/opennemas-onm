@@ -2199,21 +2199,19 @@ class ContentManager
                 return ($a['content_id'] > $b['content_id']) ? -1 : 1;
             });
 
-            $contentIds = array_filter(
-                $contentIds,
-                function ($content) use (&$elementsToRemove) {
-                    if ($elementsToRemove > 0
-                        && $content['placeholder'] === 'placeholder_0_0'
-                        && ($content['content_type'] === 'Article'
-                            || $content['content_type'] === 'Opinion')
-                    ) {
-                        $elementsToRemove--;
-                        return false;
-                    }
+            $i = count($contentIds) - 1;
 
-                    return true;
+            while ($i > 0 && $elementsToRemove > 0) {
+                if ($contentIds[$i]['placeholder'] === 'placeholder_0_0'
+                    && ($contentIds[$i]['content_type'] === 'Article'
+                    || $contentIds[$i]['content_type'] === 'Opinion')
+                ) {
+                    unset($contentIds[$i]);
+                    $elementsToRemove--;
                 }
-            );
+
+                $i--;
+            }
         }
 
         // Remove contents from the end of the array
