@@ -27,6 +27,13 @@ class ContentManager
     public $content_type = null;
 
     /**
+     * The maximum number of element to show in a frontpage.
+     *
+     * @var integer
+     */
+    public static $frontpage_limit = 100;
+
+    /**
      * When working with an specific content type, this contains the table
      * that contains that specific content type
      *
@@ -321,6 +328,8 @@ class ContentManager
                 return ($content['frontpage_id'] == $categoryID);
             }
         );
+
+        $contentIds = $this->checkAndCleanFrontpageSize($contentIds);
 
         if (is_array($contentIds) && count($contentIds) > 0) {
 
@@ -2160,5 +2169,56 @@ class ContentManager
         }
 
         return $contentID;
+    }
+
+    public function checkAndCleanFrontpageSize($contentIds)
+    {
+        $elementsToRemove = count($contentIds) - self::$frontpage_limit;
+
+        // Remove first from placeholder_0_0
+        if ($elementsToRemove > 0) {
+            getService('session')->getFlashBag()->add(
+                'error',
+                _('Some elements were removed because this frontpage had too many contents.')
+            );
+
+            $contentIds = array_filter(
+                $contentIds,
+                function ($content) use (&$elementsToRemove) {
+                    if ($elementsToRemove > 0
+                        && $content['placeholder'] === 'placeholder_0_0'
+                        && ($content['content_type'] === 'Article'
+                            || $content['content_type'] === 'Opinion')
+                    ) {
+                        $elementsToRemove--;
+                        return false;
+                    }
+
+                    return true;
+                }
+            );
+        }
+
+        // Remove contents from the end of the array
+        if ($elementsToRemove > 0) {
+            // Sort by placeholder
+            usort($contentIds, function ($a, $b) {
+                return strcmp($a['content_id'], $b['content_id']);
+            });
+
+            $i = count($contentIds) - 1;
+            while ($i > 0 && $elementsToRemove > 0) {
+                if ($contentIds[$i]['content_type'] === 'Article'
+                    || $contentIds[$i]['content_type'] === 'Opinion'
+                ) {
+                    unset($contentIds[$i]);
+                    $elementsToRemove--;
+                }
+
+                $i--;
+            }
+        }
+
+        return $contentIds;
     }
 }
