@@ -20,7 +20,8 @@
   <script type="text/javascript">
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
-      error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
+      error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}",
+      frontpage_too_long: "{t}Unable to save this frontpage. It contains too many elements{/t}"
     };
 
     var frontpage_urls = {
