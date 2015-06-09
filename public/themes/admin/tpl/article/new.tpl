@@ -253,16 +253,6 @@
                       </div>
                     </div>
                   {/is_module_activated}
-                  {acl isAllowed="ARTICLE_FRONTPAGE"}
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <input {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} id="promoted" name="promoted_to_category_frontpage" type="checkbox" value="1"/>
-                        <label class="form-label" for="promoted">
-                          {t}Put in category frontpage{/t}
-                        </label>
-                      </div>
-                    </div>
-                  {/acl}
                   {acl isAllowed="ARTICLE_HOME"}
                     <div class="form-group">
                       <div class="checkbox">
