@@ -2171,6 +2171,14 @@ class ContentManager
         return $contentID;
     }
 
+    /**
+     * Checks and cleans articles and opinions from frontpage when the frontpage
+     * limit is reached.
+     *
+     * @param  array $contentIds The array of contents to check.
+     *
+     * @return array The array of cleaned contents.
+     */
     public function checkAndCleanFrontpageSize($contentIds)
     {
         $elementsToRemove = count($contentIds) - self::$frontpage_limit;
@@ -2203,7 +2211,7 @@ class ContentManager
         if ($elementsToRemove > 0) {
             // Sort by placeholder
             usort($contentIds, function ($a, $b) {
-                return strcmp($a['content_id'], $b['content_id']);
+                return strcmp($b['content_id'], $a['content_id']);
             });
 
             $i = count($contentIds) - 1;
