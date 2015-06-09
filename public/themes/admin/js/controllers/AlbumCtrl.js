@@ -37,11 +37,17 @@ angular.module('BackendApp.controllers')
         return false;
       }
 
-      $scope.footers = [];
-      $scope.ids     = [];
+      if (!$scope.footers) {
+        $scope.footers = [];
+      }
+
+      $scope.ids = [];
 
       for (var i = 0; i < nv.length; i++) {
-        $scope.footers.push(nv[i].description);
+        if (!$scope.footers[i]) {
+          $scope.footers.push(nv[i].description);
+        }
+
         $scope.ids.push(nv[i].id);
       }
     }, true);
