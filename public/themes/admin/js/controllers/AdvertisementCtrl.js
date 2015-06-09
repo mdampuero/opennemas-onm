@@ -29,6 +29,7 @@
        */
       $scope.checkGoogleDFP = function(str) {
         var pattern = /googletag\.defineSlot\('([^\']*)\',\s*\[(\d*),\s*(\d*)\]/;
+        var matches = str.match(pattern);
 
         if (pattern.test(str)) {
           var modal = $modal.open({
@@ -36,7 +37,11 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {};
+                return {
+                  googledfp_unit_id: matches[1],
+                  params_width: parseInt(matches[2]),
+                  params_height: parseInt(matches[3])
+                };
               },
               success: function() {
                 return false;
