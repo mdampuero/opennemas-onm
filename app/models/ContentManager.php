@@ -2211,7 +2211,12 @@ class ContentManager
         if ($elementsToRemove > 0) {
             // Sort by placeholder
             usort($contentIds, function ($a, $b) {
-                return strcmp($b['content_id'], $a['content_id']);
+                if ($a['content_id'] == $b['content_id']) {
+                    return 0;
+                }
+
+                return ($a['content_id'] > $b['content_id']) ? -1 : 1;
+
             });
 
             $i = count($contentIds) - 1;
