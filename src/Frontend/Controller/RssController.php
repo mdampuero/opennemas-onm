@@ -90,7 +90,7 @@ class RssController extends Controller
             $er = getService('entity_repository');
 
             // Set total number of contents and order for sql's
-            $totalContents = 50;
+            $totalContents = 10;
             $order = array('created' => 'DESC');
             $rssTitle = '';
             if ($categoryName == 'opinion') {
@@ -104,7 +104,7 @@ class RssController extends Controller
                         'in_litter'      => array(array('value' => 1, 'operator' => '!='))
                     );
 
-                    // Fetch last 50 opinions
+                    // Fetch last 10 opinions
                     $contents = $or->findBy($filters, $order, $totalContents, 1);
 
                     // Set RSS title
@@ -117,7 +117,7 @@ class RssController extends Controller
                         'in_litter'      => array(array('value' => 1, 'operator' => '!='))
                     );
 
-                    // Fetch last 50 opinions of author
+                    // Fetch last 10 opinions of author
                     $contents = $or->findBy($filters, $order, $totalContents, 1);
 
                     // Set RSS title
@@ -135,7 +135,7 @@ class RssController extends Controller
                     'in_litter'         => array(array('value' => 1, 'operator' => '!='))
                 );
 
-                // Fetch last 50 articles
+                // Fetch last 10 articles
                 $contents = $er->findBy($filters, $order, $totalContents, 1);
 
                 // Set RSS title
@@ -215,7 +215,7 @@ class RssController extends Controller
     public function authorRSSAction(Request $request)
     {
         $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $itemsPerPage = 50;
+        $itemsPerPage = 10;
         $page         = 1;
 
         $this->view = new \Template(TEMPLATE_USER);
