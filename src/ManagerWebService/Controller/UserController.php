@@ -370,7 +370,6 @@ class UserController extends Controller
 
         $user->eraseCredentials();
 
-
         return new JsonResponse(
             array(
                 'data'     => $user,
@@ -393,6 +392,8 @@ class UserController extends Controller
         if (!$user) {
             return new JsonResponse(_('Unable to find the current user'), 404);
         }
+
+        $user->eraseCredentials();
 
         return new JsonResponse(
             array(

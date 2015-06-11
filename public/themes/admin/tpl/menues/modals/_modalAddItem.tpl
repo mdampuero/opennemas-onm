@@ -38,15 +38,13 @@
             <option value="syncCategory">{t}Sync Categories{/t}</option>
           {/if}
         {/is_module_activated}
-        {is_module_activated name="FRONTPAGES_LAYOUT"}
-          {if count($categories) > 0}
-            <option value="blog-category">{t}Automatic Categories{/t}</option>
+        {if count($categories) > 0}
+          <option value="blog-category">{t}Automatic Categories{/t}</option>
+        {/if}
+        {is_module_activated name="SYNC_MANAGER"}
+          {if count($elements) > 0}
+            <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
           {/if}
-          {is_module_activated name="SYNC_MANAGER"}
-            {if count($elements) > 0}
-              <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
-            {/if}
-          {/is_module_activated}
         {/is_module_activated}
       </select>
     </div>

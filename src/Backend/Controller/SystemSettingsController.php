@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles all the request for Welcome actions
@@ -39,9 +38,7 @@ class SystemSettingsController extends Controller
      **/
     public function defaultAction()
     {
-        $configurations = array();
-
-        $configurationsKeys = [
+        $keys = [
             'site_title', 'site_logo', 'site_description','site_keywords',
             'site_agency', 'site_footer', 'mobile_logo', 'favico',
             'youtube_page', 'contact_email', 'site_color', 'site_name',
@@ -56,9 +53,7 @@ class SystemSettingsController extends Controller
             'cookies_hint_enabled', 'cookies_hint_url', 'linkedin_page'
         ];
 
-        foreach ($configurationsKeys as $value) {
-            $configurations[$value] = s::get($value);
-        }
+        $configurations = $this->get('setting_repository')->get($keys);
 
         return $this->render(
             'system_settings/system_settings.tpl',
@@ -94,6 +89,8 @@ class SystemSettingsController extends Controller
         // Generate upload path
         $uploadDirectory = MEDIA_PATH.'/sections/';
 
+        $sm = $this->get('setting_repository');
+
         // Check if upload directory is already created
         if (array_key_exists('allowLogo', $sectionSettings) &&
             $sectionSettings['allowLogo'] == 1 &&
@@ -101,7 +98,7 @@ class SystemSettingsController extends Controller
         ) {
             \Onm\FilesManager::createDirectory($uploadDirectory);
         } else {
-            s::set('section_settings', array('allowLogo' => 0));
+            $sm->set('section_settings', array('allowLogo' => 0));
         }
 
         if (!is_null($siteLogo)) {
@@ -123,7 +120,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $siteLogo->move($uploadDirectory, $siteLogoName);
             // Save name on settings
-            s::set('site_logo', $siteLogoName);
+            $sm->set('site_logo', $siteLogoName);
         }
 
 
@@ -133,7 +130,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $favico->move($uploadDirectory, $favicoName);
             // Save name on settings
-            s::set('favico', $favicoName);
+            $sm->set('favico', $favicoName);
         }
 
         if (!is_null($mobileLogo)) {
@@ -142,7 +139,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $mobileLogo->move($uploadDirectory, $mobileLogoName);
             // Save name on settings
-            s::set('mobile_logo', $mobileLogoName);
+            $sm->set('mobile_logo', $mobileLogoName);
         }
 
 
@@ -160,7 +157,7 @@ class SystemSettingsController extends Controller
             }
 
             // Save settings
-            s::set($key, $value);
+            $sm->set($key, $value);
         }
 
         // Delete caches for custom_css and frontpages
