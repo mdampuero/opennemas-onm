@@ -83,9 +83,6 @@ EOF
 
         define('CACHE_PREFIX', $instance);
 
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
-
         // Get all categories
         $allcategorys  = getService('category_repository')->findBy(
             ['internal_category' => [['value' => '1']]],
@@ -94,6 +91,8 @@ EOF
 
         $cm = new \ContentManager();
         foreach ($allcategorys as $category) {
+            $_SESSION['username'] = 'console';
+            $_SESSION['userid'] = '0';
             $cache = getService('cache');
             $cache->delete('frontpage_elements_map_' . $category->id);
 
@@ -115,6 +114,9 @@ EOF
                 ];
             }
 
+            $_SESSION['username'] = 'console';
+            $_SESSION['userid'] = '0';
+
             // Save contents
             $savedProperly = \ContentManager::saveContentPositionsForHomePage(
                 $category->id,
@@ -122,8 +124,8 @@ EOF
             );
 
             $output->writeln(
-                'Total contents removed on '.$category->title.' were '.
-                (count($contentsIds) - count($contents))
+                'Category '. $category->title . ': Total ' . count($contentsIds)
+                . ' : Removed ' . (count($contentsIds) - count($contents))
             );
 
             $cache->delete('frontpage_elements_map_' . $category->id);
