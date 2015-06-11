@@ -54,9 +54,9 @@ class TagsController extends Controller
                 'in_litter'       => array(array('value' => 0)),
                 'fk_content_type' => array(
                     array('value' => 1),
-                    array('value' => 4),
-                    array('value' => 7),
-                    array('value' => 9),
+                    // array('value' => 4),
+                    // array('value' => 7),
+                    // array('value' => 9),
                     'union' => 'OR'
                 ),
                 'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
@@ -65,6 +65,7 @@ class TagsController extends Controller
             $er = $this->get('entity_repository');
             $contents = $er->findBy($criteria, 'starttime DESC', 20, 1);
 
+            // TODO: review this piece of CRAP
             $filteredContents = array();
             $tag = strtolower($tag);
             foreach ($contents as &$item) {
