@@ -98,12 +98,12 @@ class Redis extends AbstractCache
             return $newData;
         } else {
             $data = $this->getRedis()->get($id);
-
             $dataUnserialized = @unserialize($data);
-            if ($data !== false || $data === 'b:0;') {
+
+            if ($dataUnserialized !== false || $data === 'b:0;') {
                 return $dataUnserialized;
             } else {
-                return $dataUnserialized;
+                return $data;
             }
         }
 
