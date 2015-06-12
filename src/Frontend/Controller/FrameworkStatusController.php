@@ -15,12 +15,13 @@ class FrameworkStatusController extends Controller
      */
     public function checkCacheAction()
     {
+        $cacheId = 'framework.cache.check';
         $cache = $this->get('cache');
 
-        $cache->save('foo', 'bar');
+        $cache->save($cacheId, 'bar');
 
-        if ($cache->fetch('foo') !== 'bar'
-            || $cache->delete('foo') !== 1
+        if ($cache->fetch($cacheId) !== 'bar'
+            || $cache->delete($cacheId) !== 1
         ) {
             return new JsonResponse('FAILURE', 500);
         }
@@ -90,9 +91,16 @@ class FrameworkStatusController extends Controller
      */
     public function checkNFSAction()
     {
-        $filename = MEDIA_PATH . '/' . 'foo';
+        $dir      = APPLICATION_PATH . '/tmp/cache/common';
+        $filename = $dir . '/framework.nfs.check';
 
-        if (file_put_contents($filename, 'bar') === false) {
+        if (!file_exists($dir)) {
+            if (mkdir($dir, 0777, true) === false) {
+                return new JsonResponse('FAILURE', 500);
+            }
+        }
+
+        if (!file_put_contents($filename, 'bar', true)) {
             return new JsonResponse('FAILURE', 500);
         }
 
