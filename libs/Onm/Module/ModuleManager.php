@@ -191,6 +191,7 @@ class ModuleManager
             [
                 'id'               => 'BASIC',
                 'name'             => _('Basic pack'),
+                'thumbnail'        => 'pack-basic.jpg',
                 'description'      => _('Features the basic functionality for your newspaper for free.'),
                 'long_description' => _(
                     '<p>Publishing your news is <strong>FREE!</strong></p>
@@ -215,6 +216,7 @@ class ModuleManager
             [
                 'id'               => 'PROFESSIONAL',
                 'name'             => _('Professional pack'),
+                'thumbnail'        => 'pack-pro.jpg',
                 'description'      => _('Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!'),
                 'long_description' => _(
                     '<p>This offer gives you more than 40% discount (if purchased separately modules
@@ -245,6 +247,7 @@ class ModuleManager
             [
                 'id'               => 'SILVER',
                 'type'             => 'pack',
+                'thumbnail'        => 'pack-advanced.jpg',
                 'name'             => _('Advanced pack'),
                 'description'      => _('Provides advanced features to personalize your site and add more kind of contents.'),
                 'long_description' => _(
@@ -282,6 +285,7 @@ class ModuleManager
             [
                 'id'               => 'GOLD',
                 'name'             => _('Expert pack'),
+                'thumbnail'        => 'pack-expert.jpg',
                 'description'      => _('Contains all the major features of Opennemas.'),
                 'long_description' => _(
                     '<p>Personalize your frontpages and start sending newsletters
@@ -330,6 +334,7 @@ class ModuleManager
             [
                 'id'               => 'FREE_TEMPLATE',
                 'type'             => 'theme',
+                'thumbnail'        => 'theme-basic.jpg',
                 'name'             => _('Free Basic Template'),
                 'description'      => _('Change your site design with our free available templates.'),
                 'long_description' => _(
@@ -349,6 +354,7 @@ class ModuleManager
             [
                 'id'               => 'STANDARD_TEMPLATE',
                 'type'             => 'theme',
+                'thumbnail'        => 'theme-standard.jpg',
                 'name'             => _('Standard Template'),
                 'description'      => _(
                     'Standard newspaper web site design with prebuild widgets '
@@ -378,6 +384,7 @@ class ModuleManager
             [
                 'id'               => 'CUSTOM_TEMPLATE',
                 'type'             => 'theme',
+                'thumbnail'        => 'theme-custom.jpg',
                 'name'             => _('Custom Template'),
                 'description'      => _(
                     'Newspaper web site template developed by Opennemas team.'
@@ -423,6 +430,7 @@ class ModuleManager
             [
                 'id'               => 'EXCLUSIVE_TEMPLATE',
                 'type'             => 'theme',
+                'thumbnail'        => 'theme-exclusive.jpg',
                 'name'             => _('Exclusive Template'),
                 'description'      => _(
                     'Newspaper Web Site Template that can be customized to reflect '
@@ -488,6 +496,7 @@ class ModuleManager
             [
                 'id'               => 'CUSTOM_EXCLUSIVE_TEMPLATE',
                 'type'             => 'theme',
+                'thumbnail'        => 'theme-exclusiveplus.jpg',
                 'name'             => _('Custom Exclusive Template'),
                 'description'      => _('Newspaper web site developed from scratch by Opennemas team.'),
                 'long_description' => _(
@@ -552,6 +561,7 @@ class ModuleManager
                 [
                     'id'               => 'ADS_MANAGER',
                     'plan'             => 'Profesional',
+                    'thumbnail'        => 'module-ads.jpg',
                     'type'             => 'module',
                     'name'             => _('Advertisement'),
                     'description'      => _('Gain money by inserting ads in your site. Images, scripts and external services integration'),
@@ -582,6 +592,7 @@ class ModuleManager
                 [
                     'id'               => 'ALBUM_MANAGER',
                     'plan'             => 'Profesional',
+                    'thumbnail'        => 'module-albums.jpg',
                     'type'             => 'module',
                     'name'             => _('Albums'),
                     'description'      => _('Allow you to create photo galleries and use them in your site.'),
@@ -597,6 +608,7 @@ class ModuleManager
                     'id'               => 'ARTICLE_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-articles.jpg',
                     'name'             => _('Articles'),
                     'description'      => _('Module for managing articles'),
                     'long_description' => _('Missed long description...'),
@@ -615,6 +627,7 @@ class ModuleManager
                 [
                     'id'               => 'AVANCED_FRONTPAGE_MANAGER',
                     'plan'             => 'Other',
+                    'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
                     'name'             => _('Frontpage advanced personalization'),
                     'description'      => _('Change your Frontpage every time you want.'),
@@ -638,6 +651,7 @@ class ModuleManager
                     'id'               => 'BLOG_MANAGER',
                     'plan'             => 'Other',
                     'type'             => 'internal',
+                    'thumbnail'        => 'module-blog.jpg',
                     'name'             => _('Blog'),
                     'description'      => _('Module to manage reviews with blog format'),
                     'long_description' => _('Missed long description...'),
@@ -665,6 +679,7 @@ class ModuleManager
                     'id'               => 'CATEGORY_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-categories.jpg',
                     'name'             => _('Category'),
                     'description'      => _('Module for managing categories'),
                     'long_description' => _('Missed long description...'),
@@ -676,6 +691,7 @@ class ModuleManager
                     'id'               => 'COMMENT_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-comments.jpg',
                     'name'             => _('Comments'),
                     'description'      => _('Module for managing comments'),
                     'long_description' => _('Missed long description...'),
@@ -698,6 +714,7 @@ class ModuleManager
                     'id'               => 'FILE_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-files.jpg',
                     'name'             => _('Files'),
                     'description'      => _('Allows the user to upload files'),
                     'long_description' => _('Missed long description...'),
@@ -726,6 +743,7 @@ class ModuleManager
                     'id'               => 'FRONTPAGE_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-frontpages.jpg',
                     'name'             => _('Frontpages'),
                     'description'      => _('Module for managing elements in frontpages'),
                     'long_description' => _('Missed long description...'),
@@ -737,6 +755,7 @@ class ModuleManager
                     'id'               => 'FRONTPAGES_LAYOUT',
                     'plan'             => 'Silver',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpages layouts & custom layouts'),
                     'description'      => _('Create and ManageFrontpageLayouts made by you, every time you want!'),
                     'long_description' => _(
@@ -794,10 +813,10 @@ class ModuleManager
                 [
                     'id'               => 'LETTER_MANAGER',
                     'plan'             => 'Other',
+                    'type'             => 'module',
                     'name'             => _('Letters'),
                     'description'      => _('Allows user to publish letters sent to the director'),
                     'long_description' => _('Missed long description'),
-                    'type'             => 'module',
                     'price'            => [
                         'month' => 'xxx'
                     ]
@@ -817,6 +836,7 @@ class ModuleManager
                     'id'               => 'MENU_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-menus.jpg',
                     'name'             => _('Menus'),
                     'description'      => _('Control your site navegation with menus and custom elements.'),
                     'long_description' => _('<p>This module enables you to control your site navigation menus.</p>
@@ -836,6 +856,7 @@ class ModuleManager
                     'id'               => 'NEWS_AGENCY_IMPORTER',
                     'plan'             => 'Gold',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-agencies.jpg',
                     'name'             => _('News Agency importer'),
                     'description'      => _('Keeping your digital news up to date with agencies is already a reality!'),
                     'long_description' => _(
@@ -855,6 +876,7 @@ class ModuleManager
                     'id'               => 'NEWSLETTER_MANAGER',
                     'plan'             => 'Silver',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-newsletters.jpg',
                     'name'             => _('Newsletter'),
                     'description'      => _('Engage your readers with your own personalized newsletter.'),
                     'long_description' => _(
@@ -877,6 +899,7 @@ class ModuleManager
                     'id'               => 'OPINION_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Opinion'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Create and manage your polls, engage your audience and collect useful information.'),
@@ -888,6 +911,7 @@ class ModuleManager
                     'id'               => 'POLL_MANAGER',
                     'plan'             => 'Profesional',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-polls.jpg',
                     'name'             => _('Polls'),
                     'description'      => _(
                         'Create and manage your polls, <strong>engage</strong> '
@@ -952,6 +976,7 @@ class ModuleManager
                     'id'               => 'STATIC_PAGES_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-static-page.jpg',
                     'name'             => _('Static pages'),
                     'description'      => _('Add description...'),
                     'long_description' => _('Missed long description...'),
@@ -963,6 +988,7 @@ class ModuleManager
                     'id'               => 'SYNC_MANAGER',
                     'plan'             => 'Silver',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Frontpage synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage'),
                     'long_description' => _(
@@ -1036,6 +1062,7 @@ class ModuleManager
                     'id'               => 'PAYWALL',
                     'plan'             => 'Other',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-paywall.jpg',
                     'name'             => _('Paywall'),
                     'description'      => _('Make money while doing what you love.'),
                     'long_description' => _(
@@ -1067,6 +1094,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_PRO',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-1.jpg',
                     'name'             => _('Support 1'),
                     'description'      => _('This support plan is thought for changes and creation of new widgets.'),
                     'long_description' => _(
@@ -1085,6 +1113,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_2',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-2.jpg',
                     'name'             => _('Support 2'),
                     'description'      => _('This support plan is ideal for updating your theme if you have had it for a long time.'),
                     'long_description' => _(
@@ -1104,6 +1133,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_3',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-3.jpg',
                     'name'             => _('Support 3'),
                     'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
                     'long_description' => _(
@@ -1122,6 +1152,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_4',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-4.jpg',
                     'name'             => _('Support 4'),
                     'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
                     'long_description' => _(
@@ -1141,6 +1172,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_8',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-8.jpg',
                     'name'             => _('Support 8'),
                     'description'      => _('This support plan fits the purpose of a restyling of newspapers by redefining spaces, disegn and style.'),
                     'long_description' => _(
@@ -1164,6 +1196,7 @@ class ModuleManager
                     'id'               => 'SUPPORT_8_PLUS',
                     'plan'             => 'Support',
                     'type'             => 'service',
+                    'thumbnail'        => 'service-8plus.jpg',
                     'name'             => _('Support 8 Plus'),
                     'description'      => _('This Support is designed for all newspapers that need may need help including during the weekend.'),
                     'long_description' => _(

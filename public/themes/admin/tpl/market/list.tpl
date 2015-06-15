@@ -1,4 +1,4 @@
-{extends file="base/admin.tpl"}
+-{extends file="base/admin.tpl"}
 
 {block name="header-css" append}
   {stylesheets src="
@@ -75,10 +75,7 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                          <img ng-if="item.type == 'module'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
-                          <img ng-if="item.type == 'pack'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
-                          <img ng-if="item.type == 'service'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg">
-                          <img ng-if="item.type == 'theme'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+                          <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
                             <p class="description">[% item.description %]</p>
@@ -206,10 +203,7 @@
         <div class="grid-body no-padding">
           <div class="clearfix">
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img ng-if="item.type == 'module'" class="module-image pull-left" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'pack'" class="module-image pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'service'" class="module-image pull-left" ng-src="/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'theme'" class="module-image pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+              <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
               <div class="module-icon">
                 <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>

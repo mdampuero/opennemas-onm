@@ -76,6 +76,7 @@ class MarketController extends Controller
                 'id'               => 'MEDIA_MANAGER',
                 'plan'             => 'Profesional',
                 'name'             => _('Media'),
+                'thumbnail'        => 'module-multimedia.jpg',
                 'description'      => _('Allow you to create photo galleries and use them in your site.'),
                 'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
                     <p>This module will allow you to create Photo Galleries, add video from YouTube,
