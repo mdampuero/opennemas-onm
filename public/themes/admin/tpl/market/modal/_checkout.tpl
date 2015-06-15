@@ -11,10 +11,7 @@
         <scrollable>
           <ul class="cart-list">
             <li class="clearfix" ng-repeat="item in template.cart">
-              <img ng-if="item.type == 'module'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'pack'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'service'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg">
-              <img ng-if="item.type == 'theme'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+              <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
               <div class="p-l-100">
                 <h5>[% item.name %]</h5>
                 <p class="description">[% item.description %]</p>

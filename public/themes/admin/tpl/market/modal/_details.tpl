@@ -1,10 +1,7 @@
   <div class="error-body modal-body module-dialog">
     <div class="row">
       <div class="col-xs-4">
-        <img ng-if="template.item.type == 'module'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-modules.{$smarty.const.DEPLOYED_AT}.jpg">
-        <img ng-if="template.item.type == 'pack'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
-        <img ng-if="template.item.type == 'service'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-service-support.{$smarty.const.DEPLOYED_AT}.jpg">
-        <img ng-if="template.item.type == 'theme'" class="img-responsive m-b-15" ng-src="/assets/images/market/generic-pack.{$smarty.const.DEPLOYED_AT}.jpg">
+        <img class="img-responsive m-b-15" ng-src="/assets/images/market/[%item.thumbnail%]">
         <div class="module-icon">
           <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
         </div>
