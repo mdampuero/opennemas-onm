@@ -1,11 +1,11 @@
   <div class="modal-body" ng-class="{ 'p-r-3': step == 1 }">
-    <h4 class="no-margin uppercase" ng-if="step != 3">
+    <h5 class="no-margin text-center uppercase" ng-if="step != 3">
      <strong ng-class="{ 'muted': step != 1 }">{t}Cart review{/t}</strong>
      <i class="fa fa-angle-right p-l-5 p-r-5"></i>
      <strong ng-class="{ 'muted': step != 2 }">{t}Checkout{/t}</strong>
      <i class="fa fa-angle-right p-l-5 p-r-5"></i>
      <strong ng-class="{ 'muted': step != 3 }">{t}Success{/t}</strong>
-    </h4>
+    </h5>
     <div ng-show="!step || step == 1">
       <div class="p-t-15" style="height: 360px;">
         <scrollable>
@@ -42,7 +42,7 @@
     <div class="p-t-30 p-b-30" ng-if="step == 2">
       <p class="p-b-15">{t}To confirm your purchase press the button below.{/t}</p>
       <p class="p-b-15">{t}Our sales department will receive an email with the new features you want to include in your newspaper.{/t}</p>
-      <p class="p-b-15">{t}You will receive an email with the list of features you are purchasing.{/t}</p>
+      <p>{t}You will receive an email with the list of features you are purchasing.{/t}</p>
     </div>
     <div class="text-center" ng-if="step == 3">
       <div class="p-b-30">
@@ -82,7 +82,7 @@
   <div class="modal-footer" ng-if="step != 3">
     <button class="btn btn-default uppercase pull-left" ng-click="dismiss()" type="button">{t}Save for later{/t}</button>
     <button class="btn btn-success uppercase" ng-click="next()" ng-if="step == 1" type="button">
-      {t}Checkout{/t}
+      {t}Next{/t}
     </button>
     <button class="btn btn-success uppercase" ng-click="confirm()" ng-if="step  == 2" type="button">
       <i class="fa fa-circle-o-notch fa-spin" ng-show="saving"></i>
