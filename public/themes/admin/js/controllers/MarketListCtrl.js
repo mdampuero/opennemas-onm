@@ -105,9 +105,10 @@
          */
         $scope.checkout = function() {
           var modal = $modal.open({
+            keyboard: false,
             templateUrl: 'modal-checkout',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'MarketModalCtrl',
             resolve: {
               template: function() {
                 var total = 0;
@@ -122,17 +123,6 @@
                   cart: $scope.cart,
                   total: total
                 };
-              },
-              success: function() {
-                return function() {
-                  $scope.saving = true;
-                  var url = routing.generate('backend_ws_market_checkout');
-                  var data = $scope.cart.map(function(e) {
-                    return e.id;
-                  });
-
-                  return $http.post(url, { modules: data });
-                };
               }
             }
           });
@@ -142,28 +132,8 @@
               return;
             }
 
-            var message = response.data;
-            var type    = response.status === 200 ? 'success' : 'error';
-
-            if (response.status === 200) {
-              $scope.cart = [];
-            }
-
+            $scope.cart = [];
             $analytics.pageTrack('/market/checkout/done');
-
-            $modal.open({
-              templateUrl: 'modal-success',
-              backdrop: 'static',
-              controller: 'modalCtrl',
-              resolve: {
-                template: function() {
-                  return null;
-                },
-                success: function() {
-                  return null;
-                }
-              }
-            });
           });
         };
 
@@ -293,6 +263,8 @@
             webStorage.local.remove('cart');
             return;
           }
+
+          webStorage.local.add('cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {

@@ -261,8 +261,5 @@
     <script type="text/ng-template" id="modal-details">
       {include file="market/modal/_details.tpl"}
     </script>
-    <script type="text/ng-template" id="modal-success">
-      {include file="market/modal/_success.tpl"}
-    </script>
   </div>
 {/block}
