@@ -188,7 +188,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.list = function(route) {
       // Enable spinner
-      $scope.loading = 1;
+      if ($scope.mode === 'grid') {
+        $scope.loadingMore = true;
+      } else {
+        $scope.loading = 1;
+      }
 
       var url = routing.generate(route, {
         contentType: $scope.criteria.content_type_name
@@ -214,8 +218,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, postData).then(function(response) {
         $scope.pagination.total = parseInt(response.data.total);
-        $scope.contents         = response.data.results;
-        $scope.map              = response.data.map;
+        if ($scope.mode === 'grid') {
+          $scope.contents = $scope.contents.concat(response.data.results);
+        } else {
+          $scope.contents = response.data.results;
+        }
+
+        $scope.map = response.data.map;
 
         if (response.data.hasOwnProperty('extra')) {
           $scope.extra = response.data.extra;
@@ -223,6 +232,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
         // Disable spinner
         $scope.loading = 0;
+        $scope.loadingMore = false;
       });
     };
 
@@ -281,6 +291,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }).error(function() {});
     };
 
+    $scope.scroll = function(route) {
+      if ($scope.total === $scope.contents.length) {
+        return false;
+      }
+
+      $scope.pagination.page++;
+    };
+
     /**
      * Selects/unselects all instances.
      */
@@ -306,6 +324,27 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.list(route);
       }
     };
+
+    $scope.setMode = function(mode) {
+      $scope.mode = mode;
+      $scope.contents = [];
+      $scope.pagination.page = 1;
+      $scope.pagination.epp = 10;
+
+      if (mode === 'grid') {
+        var maxHeight = $(window).height() - $('.header').height() -
+            $('.actions-navbar').height();
+        var maxWidth = $(window).width() - $('.sidebar').width();
+
+        var height = $('.infinite-col').width() + 15;
+        var width = $('.infinite-col').width() + 15;
+
+        var rows = Math.ceil(maxHeight / height);
+        var cols = Math.floor(maxWidth / width);
+
+        $scope.pagination.epp = rows * cols;
+      }
+    }
 
     /**
      * Reloads the list on keypress.
@@ -951,38 +990,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.getNumberOfPages = function() {
       return Math.ceil($scope.pagination.total / $scope.pagination.epp);
-    };
-
-    /**
-     * Moves the list to the previous page
-     */
-    $scope.goToPrevPage = function() {
-      $scope.pagination.page = $scope.pagination.page - 1;
-
-      return $scope.pagination.page;
-    };
-
-    /**
-     * Moves the list to the next page
-     */
-    $scope.goToNextPage = function() {
-      $scope.pagination.page = $scope.pagination.page + 1;
-
-      return $scope.pagination.page;
-    };
-
-    /**
-     * Checks if the list is in the first page
-     */
-    $scope.isFirstPage = function() {
-      return $scope.pagination.page - 1 < 1;
-    };
-
-    /**
-     * Checks if the list is in the last pages
-     */
-    $scope.isLastPage = function() {
-      return $scope.pagination.page === $scope.pagination.pages;
     };
 
     /**

@@ -12,6 +12,30 @@
               {t}Images{/t}
             </h4>
           </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks dropdown ng-cloak">
+              <div data-toggle="dropdown">
+                <span ng-if="!mode || mode == 'list'">{t}List{/t}</span>
+                <span ng-if="mode == 'grid'">{t}Mosaic{/t}</span>
+                <span class="caret"></span>
+              </div>
+              <ul class="dropdown-menu">
+                <li ng-click="setMode('list')">
+                  <a href="#">
+                    <i class="fa fa-lg fa-list"></i>
+                    {t}List{/t}
+                  </a>
+                </li>
+                <li ng-click="setMode('grid')">
+                  <a href="#">
+                    <i class="fa fa-lg fa-th"></i>
+                    {t}Mosaic{/t}
+                  </a>
+                </li>
+              </ul>
+            </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
@@ -57,7 +81,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar">
+  <div class="page-navbar filters-navbar" ng-if="mode !== 'grid'">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
@@ -90,9 +114,9 @@
       </div>
     </div>
   </div>
-  <div class="content">
+  <div class="content clearfix">
     {render_messages}
-    <div class="grid simple">
+    <div class="grid simple ng-cloak" ng-if="mode !== 'grid'">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
           <div class="loading-spinner"></div>
@@ -177,6 +201,37 @@
         <div class="pull-right">
           <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </div>
+      </div>
+    </div>
+    <div class="clearfix infinite-row ng-cloak" ng-if="mode == 'grid'">
+      <div class="col-md-2 col-sm-4 m-b-15 infinite-col" ng-repeat="content in contents">
+        <div class="dynamic-image-placeholder">
+          <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,400,400">
+            <div class="thumbnail-actions ng-cloak">
+              {acl isAllowed="PHOTO_DELETE"}
+                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+                  <i class="fa fa-trash-o fa-2x"></i>
+                </div>
+              {/acl}
+              {acl isAllowed="PHOTO_UPDATE"}
+                <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]">
+                  <i class="fa fa-pencil fa-2x"></i>
+                </a>
+              {/acl}
+            </div>
+          </dynamic-image>
+        </div>
+      </div>
+    </div>
+    <div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
+      <h5>
+        <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+        <span ng-if="!loadingMore">{t}Load more{/t}</span>
+        <span ng-if="loadingMore">{t}Loading{/t}</span>
+      </h5>
+    </div>
+    <div class="infinite-row master-row ng-cloak">
+      <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
       </div>
     </div>
   </div>
