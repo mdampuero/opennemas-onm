@@ -22,6 +22,13 @@
       '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
       function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
+         * The type of the modules to list.
+         * 
+         * @type String
+         */
+        $scope.type = 'pack'
+         
+        /**
          * @function addToCart
          * @memberOf MarketListCtrl
          *
