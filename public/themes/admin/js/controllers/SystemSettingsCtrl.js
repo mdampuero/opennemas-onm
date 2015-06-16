@@ -28,7 +28,7 @@
          * @param Object others The list of other ga account codes.
          */
         $scope.init = function(others) {
-          if (others !== undefined) {
+          if (angular.isArray(others)) {
             $scope.others = others;
           } else {
             $scope.others = [];

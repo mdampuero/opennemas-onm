@@ -481,7 +481,7 @@
                                 </div>
                               </div>
                             </div>
-                            {if $configs['google_analytics']['api_key']}
+                            {if !empty($configs['google_analytics']['api_key'])}
                             <div class="form-group">
                               <div class="input-group">
                                 <div class="input-group-btn">
