@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -146,6 +146,10 @@
                   <div class="description">
                     <span ng-if="content.description != ''">[% content.description %]</span>
                     <span ng-if="content.description == ''">{t}No available description{/t}</span>
+                  </div>
+                  <div class="small-text">
+                    <span ng-if="content.metadata != ''"><i class="fa fa-tags"></i> [% content.metadata %]</span>
+                    <span ng-if="content.metadata == ''"><i class="fa fa-tags"></i> {t}No tags{/t}</span>
                   </div>
                   <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
