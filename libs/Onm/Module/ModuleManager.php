@@ -788,6 +788,7 @@ class ModuleManager
                     'id'               => 'KEYWORD_MANAGER',
                     'plan'             => 'Base',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-tags.jpg',
                     'name'             => _('Keywords'),
                     'description'      => _('Allows user to define keywords associated with url, mails and internal searches'),
                     'long_description' => _('Missed long description...'),
@@ -799,6 +800,7 @@ class ModuleManager
                     'id'               => 'KIOSKO_MANAGER',
                     'plan'             => 'Gold',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('Kiosko'),
                     'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
                     'long_description' => _(
@@ -814,6 +816,7 @@ class ModuleManager
                     'id'               => 'LETTER_MANAGER',
                     'plan'             => 'Other',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-letters.jpg',
                     'name'             => _('Letters'),
                     'description'      => _('Allows user to publish letters sent to the director'),
                     'long_description' => _('Missed long description'),
