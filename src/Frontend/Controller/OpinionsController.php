@@ -689,15 +689,14 @@ class OpinionsController extends Controller
         $dirtyID   = $request->query->getDigits('opinion_id');
 
         // Resolve article ID
-        $er = $this->get('entity_repository');
-        $opinionID = $er->resolveID($dirtyID);
-
+        $opinionID = \ContentManager::resolveID($dirtyID);
 
         // Redirect to opinion frontpage if opinion_id wasn't provided
         if (empty($opinionID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
 
+        $er = $this->get('entity_repository');
         $opinion = $er->find('Opinion', $opinionID);
 
         // TODO: Think that this comments related code can be deleted.

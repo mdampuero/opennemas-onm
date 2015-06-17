@@ -44,12 +44,12 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         // Resolve article ID
-        $er = $this->get('entity_repository');
-        $articleID = $er->resolveID($dirtyID);
+        $articleID = \ContentManager::resolveID($dirtyID);
         if (empty($articleID)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $er = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
 
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
