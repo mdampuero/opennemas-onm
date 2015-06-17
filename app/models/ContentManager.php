@@ -2156,16 +2156,19 @@ class ContentManager
     public static function resolveID($dirtyID)
     {
         $contentID = 0;
-        if (!empty($dirtyID)) {
-            if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
-                || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
-                || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
-            ) {
-                $contentID = self::searchInRefactorID($dirtyID);
-            }
 
+        $cache      = getService('cache');
+        $resolvedID = $cache->fetch('content_resolve_id_'.$dirtyID);
+
+        if (!empty($resolvedID)) {
+            return $resolvedID;
+        }
+
+        if (!empty($dirtyID)) {
             preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
             $contentID = self::searchContentID((int) $matches["digit"]);
+
+            $cache->save('content_resolve_id_'.$dirtyID, $contentID);
         }
 
         return $contentID;
