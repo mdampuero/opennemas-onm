@@ -232,7 +232,7 @@
               </div>
             </div>
           </div>
-          <div class="module-tools clearfix">
+          <div class="module-tools clearfix row">
             <div class="col-xs-12 col-sm-6">
               <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
                 {t}More info{/t}
