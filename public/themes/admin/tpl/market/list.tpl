@@ -187,16 +187,10 @@
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
           </div>
         </div>
-        <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
-          <h4>{t}No items available to purchase{/t}</h4>
-        </div>
-        <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
+        <h4 class="ng-cloak" ng-show="!loading && !allDeactivated(purchased)">{t}Purchased{/t}</h4>
         <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
           </div>
-        </div>
-        <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
-          <h4>{t}No items purchased{/t}</h4>
         </div>
       </div>
       <div ng-if="type == 'module'">
@@ -207,13 +201,10 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
             </div>
           </div>
-          <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
+          <h4 class="ng-cloak" ng-show="!loading  && !allDeactivated(purchased[plan.id])">{t}Purchased{/t}</h4>
           <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
             </div>
-          </div>
-          <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased[plan.id])">
-            <h4>{t}No items purchased{/t}</h4>
           </div>
         </div>
       </div>
