@@ -201,7 +201,7 @@
       </div>
       <div ng-if="type == 'module'">
         <div ng-repeat="plan in plans">
-          <h3>[% plan.name %]</h3>
+          <h3 class="ng-cloak">[% plan.name %]</h3>
           <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
           <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
