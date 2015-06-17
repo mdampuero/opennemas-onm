@@ -181,7 +181,7 @@
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <div ng-if="type != 'module'">
+      <div class="infinite-row" ng-if="type != 'module'">
         <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
         <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
@@ -200,15 +200,12 @@
         </div>
       </div>
       <div ng-if="type == 'module'">
-        <div ng-repeat="plan in plans">
+        <div class="infinite-row" ng-repeat="plan in plans">
           <h3 class="ng-cloak">[% plan.name %]</h3>
-          <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
+          <h4 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">{t}Available{/t}</h4>
           <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
             </div>
-          </div>
-          <div class="text-center ng-cloak" ng-show="!loading && allActivated(available[plan.id])">
-            <h4>{t}No items available to purchase{/t}</h4>
           </div>
           <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
           <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
@@ -260,110 +257,7 @@
                 {t}More info{/t}
             </div>
             <div class="col-xs-12 col-sm-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-                <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
-                <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
-                <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
-                <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <script type="text/ng-template" id="item">
-      <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
-        <div class="grid-body no-padding">
-          <div class="clearfix">
-            <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
-              <div class="module-icon">
-                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
-              </div>
-            </div>
-            <div class="module-body col-xs-8 col-sm-8">
-              <div class="module-info-wrapper">
-                <h5 class="name pointer" ng-click="showDetails(item)">
-                  <strong>[% item.name %]</strong>
-                </h5>
-                <div class="description" ng-click="showDetails(item)">
-                  [% item.description %]
-                </div>
-              </div>
-              <div class="text-right price">
-                <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month">
-                    <strong>[% item.price.month %]</strong>
-                    <small> € / {t}month{/t}</small>
-                  </span>
-                  <span ng-if="!item.price.month && item.price.single">
-                    <strong>[% item.price.single %]</strong>
-                    <small> € </small>
-                  </span>
-                  <span ng-if="item.price.month == 0"><strong>{t}Free{/t}</strong></span>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div class="module-tools clearfix">
-            <div class="col-xs-12 col-sm-6">
-              <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
-                {t}More info{/t}
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-                <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
-                <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
-                <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
-                <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script type="text/ng-template" id="item">
-      <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
-        <div class="grid-body no-padding">
-          <div class="clearfix">
-            <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
-              <div class="module-icon">
-                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
-              </div>
-            </div>
-            <div class="module-body col-xs-8 col-sm-8">
-              <div class="module-info-wrapper">
-                <h5 class="name pointer" ng-click="showDetails(item)">
-                  <strong>[% item.name %]</strong>
-                </h5>
-                <div class="description" ng-click="showDetails(item)">
-                  [% item.description %]
-                </div>
-              </div>
-              <div class="text-right price">
-                <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month">
-                    <strong>[% item.price.month %]</strong>
-                    <small> € / {t}month{/t}</small>
-                  </span>
-                  <span ng-if="!item.price.month && item.price.single">
-                    <strong>[% item.price.single %]</strong>
-                    <small> € </small>
-                  </span>
-                  <span ng-if="item.price.month == 0"><strong>{t}Free{/t}</strong></span>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div class="module-tools clearfix">
-            <div class="col-xs-12 col-sm-6">
-              <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
-                {t}More info{/t}
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
                 <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
                 <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
                 <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
