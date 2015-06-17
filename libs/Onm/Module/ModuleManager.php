@@ -560,7 +560,7 @@ class ModuleManager
             self::$availableModulesGrouped = [
                 [
                     'id'               => 'ADS_MANAGER',
-                    'plan'             => 'Profesional',
+                    'plan'             => 'PROFESSIONAL',
                     'thumbnail'        => 'module-ads.jpg',
                     'type'             => 'module',
                     'name'             => _('Advertisement'),
@@ -583,7 +583,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'ADVANCED_SEARCH',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Advanced search'),
                     'description'      => _('Allows searching for content directly inside the manager'),
@@ -591,7 +591,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'ALBUM_MANAGER',
-                    'plan'             => 'Profesional',
+                    'plan'             => 'PROFESSIONAL',
                     'thumbnail'        => 'module-albums.jpg',
                     'type'             => 'module',
                     'name'             => _('Albums'),
@@ -606,7 +606,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'ARTICLE_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-articles.jpg',
                     'name'             => _('Articles'),
@@ -618,7 +618,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'AVANCED_ARTICLE_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Advanced article options'),
                     'description'      => _('Module to allow the second article signature'),
@@ -626,7 +626,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'AVANCED_FRONTPAGE_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
                     'name'             => _('Frontpage advanced personalization'),
@@ -649,7 +649,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'BLOG_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'thumbnail'        => 'module-blog.jpg',
                     'name'             => _('Blog'),
@@ -658,7 +658,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'BOOK_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Books'),
                     'description'      => _('Module for managing book pages'),
@@ -669,7 +669,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'CACHE_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Cache manager'),
                     'description'      => _('Module for managing the cache of pages'),
@@ -677,7 +677,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'CATEGORY_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-categories.jpg',
                     'name'             => _('Category'),
@@ -689,7 +689,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'COMMENT_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-comments.jpg',
                     'name'             => _('Comments'),
@@ -701,7 +701,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'CRONICAS_MODULES',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Cronicas customizations'),
                     'description'      => _('Module for managing Cronicas customizations'),
@@ -712,7 +712,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FILE_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-files.jpg',
                     'name'             => _('Files'),
@@ -724,7 +724,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FORM_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Opennemas Connect'),
                     'description'      => _('Allows to create to new custom forms'),
@@ -741,7 +741,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FRONTPAGE_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpages.jpg',
                     'name'             => _('Frontpages'),
@@ -775,7 +775,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'IMAGE_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
@@ -786,9 +786,8 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'KEYWORD_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
-                    'thumbnail'        => 'module-tags.jpg',
                     'name'             => _('Keywords'),
                     'description'      => _('Allows user to define keywords associated with url, mails and internal searches'),
                     'long_description' => _('Missed long description...'),
@@ -800,7 +799,6 @@ class ModuleManager
                     'id'               => 'KIOSKO_MANAGER',
                     'plan'             => 'Gold',
                     'type'             => 'module',
-                    'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('Kiosko'),
                     'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
                     'long_description' => _(
@@ -814,9 +812,8 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'LETTER_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'module',
-                    'thumbnail'        => 'module-letters.jpg',
                     'name'             => _('Letters'),
                     'description'      => _('Allows user to publish letters sent to the director'),
                     'long_description' => _('Missed long description'),
@@ -826,7 +823,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'LIBRARY_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Library'),
                     'description'      => _('With this module users can access all contents by date'),
@@ -837,7 +834,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'MENU_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-menus.jpg',
                     'name'             => _('Menus'),
@@ -900,7 +897,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'OPINION_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Opinion'),
@@ -912,7 +909,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'POLL_MANAGER',
-                    'plan'             => 'Profesional',
+                    'plan'             => 'PROFESSIONAL',
                     'type'             => 'module',
                     'thumbnail'        => 'module-polls.jpg',
                     'name'             => _('Polls'),
@@ -931,7 +928,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'PROMOTIONAL_BAR',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Promotional bar'),
                     'description'      => _('Add description...'),
@@ -939,7 +936,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SCHEDULE_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Schedules'),
                     'description'      => _('Add description...'),
@@ -947,7 +944,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SETTINGS_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('System wide settings'),
                     'description'      => _('Add description...'),
@@ -955,7 +952,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SPECIAL_MANAGER',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Specials'),
                     'description'      => _('Add description...'),
@@ -966,7 +963,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'STATIC_LIBRARY',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Static library'),
                     'description'      => _('Add description...'),
@@ -977,7 +974,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'STATIC_PAGES_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'module',
                     'thumbnail'        => 'module-static-page.jpg',
                     'name'             => _('Static pages'),
@@ -1003,7 +1000,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'TRASH_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Trash'),
                     'description'      => _('Add description...'),
@@ -1036,7 +1033,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USERVOICE_SUPPORT',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('UserVoice integration'),
                     'description'      => _('Add description...'),
@@ -1044,7 +1041,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'VIDEO_MANAGER',
-                    'plan'             => 'Profesional',
+                    'plan'             => 'PROFESSIONAL',
                     'type'             => 'module',
                     'name'             => _('Videos'),
                     'description'      => _('Add description...'),
@@ -1052,7 +1049,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'WIDGET_MANAGER',
-                    'plan'             => 'Base',
+                    'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Widgets'),
                     'description'      => _('Add description...'),
@@ -1063,7 +1060,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'PAYWALL',
-                    'plan'             => 'Other',
+                    'plan'             => 'OTHER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
                     'name'             => _('Paywall'),

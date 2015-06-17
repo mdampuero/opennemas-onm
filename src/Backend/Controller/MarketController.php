@@ -9,6 +9,7 @@ class MarketController extends Controller
 {
     public function listAction()
     {
-        return $this->render('market/list.tpl');
+        $plans = \Onm\Module\ModuleManager::getAvailablePacks();
+        return $this->render('market/list.tpl', [ 'plans' => $plans ]);
     }
 }
