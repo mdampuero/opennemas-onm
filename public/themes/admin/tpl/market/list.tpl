@@ -207,7 +207,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
             </div>
           </div>
-          {*<div class="text-center ng-cloak" ng-show="!loading && allActivated(available[plan.id])">
+          <div class="text-center ng-cloak" ng-show="!loading && allActivated(available[plan.id])">
             <h4>{t}No items available to purchase{/t}</h4>
           </div>
           <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
@@ -217,7 +217,7 @@
           </div>
           <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased[plan.id])">
             <h4>{t}No items purchased{/t}</h4>
-          </div>*}
+          </div>
         </div>
       </div>
     </div>
@@ -270,7 +270,7 @@
           </div>
         </div>
       </div>
- 
+
     </div>
     <script type="text/ng-template" id="item">
       <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
