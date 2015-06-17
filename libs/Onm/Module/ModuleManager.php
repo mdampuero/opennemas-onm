@@ -208,7 +208,7 @@ class ModuleManager
                         <li>Page views: 50.000</li>
                     </ul>'
                 ),
-                'type'             => 'pack',
+                'type'             => 'internal',
                 'price' => [
                     'month' => 0
                 ]
