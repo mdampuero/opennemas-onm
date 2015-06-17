@@ -95,10 +95,36 @@
           $scope.step++;
         }
 
+        /**
+         * @function removeFromCart
+         * @memberOf MarketModalCtrl
+         *
+         * @description
+         *   Removes an item from cart.
+         *
+         * @param {Object} item  The item to remove.
+         * @param {Object} event The click event object.
+         */
+        $scope.removeFromCart = function(item) {
+          $scope.template.cart.splice($scope.template.cart.indexOf(item), 1);
+        };
+
         // Frees up memory before controller destroy event
         $scope.$on('$destroy', function() {
           $scope.template = null;
         });
+
+        // Updates the total when the cart changes
+        $scope.$watch('template.cart', function() {
+          $scope.template.total = 0;
+
+          for (var i = 0; i < $scope.template.cart.length; i++) {
+            if ($scope.template.cart[i].price &&
+                $scope.template.cart[i].price.month) {
+              $scope.template.total += $scope.template.cart[i].price.month;
+            }
+          }
+        }, true);
       }
     ]);
 })();

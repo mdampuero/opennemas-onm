@@ -23,7 +23,7 @@
                   </div>
                 </div>
               </div>
-              <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
+              <i class="fa fa-times pull-left" ng-click="removeFromCart(item)"></i>
             </li>
           </ul>
         </scrollable>
@@ -77,8 +77,11 @@
     </div>
   </div>
   <div class="modal-footer" ng-if="step != 3">
-    <button class="btn btn-default uppercase pull-left" ng-click="dismiss()" type="button">{t}Save for later{/t}</button>
-    <button class="btn btn-success uppercase" ng-click="next()" ng-if="step == 1" type="button">
+    <button class="btn btn-default uppercase pull-left" ng-click="dismiss()" type="button">
+      <span ng-if="template.cart.length == 0">{t}Close{/t}</span> 
+      <span ng-if="template.cart.length > 0">{t}Save for later{/t}</span> 
+    </button>
+    <button class="btn btn-success uppercase" ng-click="next()" ng-disabled="template.cart.length == 0" ng-if="step == 1" type="button">
       {t}Next{/t}
     </button>
     <button class="btn btn-success uppercase" ng-click="confirm()" ng-if="step  == 2" type="button">
