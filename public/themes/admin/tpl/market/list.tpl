@@ -182,7 +182,7 @@
         </div>
       </div>
       <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
-      <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
+      <div class="infinite-row modules-not-purchased clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
         </div>
       </div>
@@ -190,7 +190,7 @@
         <h4>{t}No items available to purchase{/t}</h4>
       </div>
       <h4 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h4>
-      <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
+      <div class="infinite-row modules-purchased clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
         </div>
       </div>
