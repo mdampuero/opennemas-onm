@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-17 12:31+0200\n"
-"PO-Revision-Date: 2015-06-18 10:13+0200\n"
+"POT-Creation-Date: 2015-06-18 17:08+0200\n"
+"PO-Revision-Date: 2015-06-18 16:26+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -938,6 +938,9 @@ msgstr "Carta actualizada con éxito."
 msgid "Unable to update the letter."
 msgstr "No se pudo actualizar la carta."
 
+msgid "Others"
+msgstr "Otros"
+
 msgid "Bloggers"
 msgstr "Autor de blog"
 
@@ -1710,24 +1713,23 @@ msgstr "Tu solicitud no pudo guardarse"
 msgid "Your request has been registered"
 msgstr "Tu solicitud se ha guardado"
 
-msgid "Allow you to create photo galleries and use them in your site."
-msgstr "Te permite creare fotogalerías y usarlas en tu sitio web."
+msgid "Add Video and Image Galleries to your content. "
+msgstr "Añade vídeo y galerías de imágenes a tu contenido."
 
 msgid ""
 "<p>Add Video and Image Galleries to your content.</p>\n"
 "                    <p>This module will allow you to create Photo Galleries, "
-"add video from YouTube,\n"
-"                    Vimeo, Dailymotion, MarcaTV, etc</p>\n"
+"add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</"
+"p>\n"
 "                    <p>And the most interesting fact is that the video "
-"manager is the\n"
-"                    same as youtube one, perfect consistency and performance."
-"</p>"
+"manager is the same as youtube one, perfect consistency and performance.</p>"
 msgstr ""
-"<p>Añade vídeos y foto galerías a tu contenido.</p>\n"
-"                    <p>Este módulo le permitirá crear fotogalerías y añadir "
-"vídeos desde Youtube, Vimeo, Dailymotion, MarcaTV, etc</p>\n"
-"                    <p>Y lo más interesante de este módulo es que el gestor "
-"de vídeo es el mismo que youtube, consistencia y rendimientos perfectos.</p>"
+"<p>Añade vídeos y galerías a tu contenido!</p>\n"
+"                    <p>Gracias a este módulo el usuario podrá crear galerias "
+"de fotos, enlazar videos de los sitios más importantes de internet (youtube, "
+"vimeo, dailymotion y de otras 10 fuentes más)</p>\n"
+"                    <p>Lo interesante del gestor de videos, es que la "
+"apariencia al usuario es igual que la de youtube.</p>"
 
 msgid "Newsletter deleted successfully."
 msgstr "Boletín de noticias eliminado correctamente."
@@ -2302,9 +2304,6 @@ msgstr "Hemeroteca"
 msgid "News Agency importer"
 msgstr "Importador de noticias agencias"
 
-msgid "Paper import"
-msgstr "Importador desde papel"
-
 msgid "Promotional bar"
 msgstr "Barra promocional"
 
@@ -2350,37 +2349,71 @@ msgstr "Integración con Uservoice"
 msgid "Basic pack"
 msgstr "Pack base"
 
-msgid "Features the basic functionality for your newspaper for free."
-msgstr "Características da funcionalidade base para tu periódico gratuíto."
+msgid "Publishing your news is FREE!"
+msgstr "Publicar tus noticias es GRATIS!"
 
 msgid ""
-"<p>Publishing your news is <strong>FREE!</strong></p>\n"
-"                    This pack includes:\n"
-"                    <ul>\n"
+"<p>This pack does not require any payment information and it allows you to "
+"access our platform to test it as much as to publish your newspaper for free "
+"and on the spot!</p>"
+msgstr ""
+"<p>ESte pack no requiere ninguna información de pago y te permite acceder a "
+"nuestra plataforma para probarla y publicar tu periódico de forma gratuíta y "
+"rápidamente!</p>"
+
+msgid ""
+"<p>Includes:</p>\n"
+"                        <ul>\n"
 "                        <li>Frontpage manager</li>\n"
 "                        <li>Widget manager</li>\n"
 "                        <li>Opinion articles manager</li>\n"
 "                        <li>Comments manager</li>\n"
 "                        <li>Images and files uploading</li>\n"
-"                        <li>Utilities: Trash, Search Advanced...</li>\n"
-"                        <li>Support via tickets</li>\n"
-"                        <li>Media storage: 500MB</li>\n"
-"                        <li>Page views: 50.000</li>\n"
-"                    </ul>"
+"                        <li>Utilities: Trash, Search Advanced...</li>"
 msgstr ""
-"<p>Publica tu periódico completamente <strong>GRATUITO!</strong></p>\n"
-"                    Este pack contiene:\n"
+"<p>Incluye</p>\n"
 "                    <ul>\n"
 "                        <li>Gestor de portadas</li>\n"
 "                        <li>Gestor de widgetsr</li>\n"
 "                        <li>Gestor de artículos opinión</li>\n"
 "                        <li>Gestor de comentarios</li>\n"
 "                        <li>Subida de imagenes y archivos</li>\n"
-"                        <li>Utilidades: Papelera, búsqueda avanzada...</li>\n"
-"                        <li>Asistencia técnica mediante tickets</li>\n"
-"                        <li>Almacenamiento multimedia: 500MB</li>\n"
-"                        <li>Páginas vistas: 50.000</li>\n"
-"                    </ul>"
+"                        <li>Utilidades: Papelera, búsqueda avanzada...</li>"
+
+#, php-format
+msgid ""
+"<ul>\n"
+"                            <li>%d x  User (1)</li>\n"
+"                            <li>%s Storage (2)</li>\n"
+"                            <li>%s Items (Articles, Opinions, Comments) (2)</"
+"li>\n"
+"                            <li>%s page views/month</li>\n"
+"                            <li>Online Support (Tickets SLA %d business "
+"days)</li></ul>"
+msgstr ""
+"<ul>\n"
+"                            <li>%d x  usuarios (1)</li>\n"
+"                            <li>%s de almacenamiento (2)</li>\n"
+"                            <li>%s elementos (artículos, opiniones, "
+"comentarios) (2)</li>\n"
+"                            <li>%s páginas vistas/mes</li>\n"
+"                            <li>Asistencia online (Tickets SLA %d días "
+"laborales)</li></ul>"
+
+msgid ""
+"<p><small>1.- To add more users refer to User Licence Page</small></"
+"p><p><small>2.- For more information about storage or page views please go "
+"to our page <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/227476-precios-opennemas-page-views-y-espacio-ocupado\">Page Views "
+"and Storage Space</a></small></p><p><small>All prices above do not include "
+"VAT (21%)</small></p>"
+msgstr ""
+"<p><small>1.- Para añadir más usuarios consulta nuestra página de Licencias "
+"de Usuarios</small></p><p><small>2.- Para más información sobre páginas "
+"vistas o almacenamiento consulta nuestra página <a href=\"http://help."
+"opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-"
+"espacio-ocupado\">Paginas Vistas y Espacio Ocupado</a></small></"
+"p><p><small>Todos los precios de arriba no incluyen IVA (21%)</small></p>"
 
 msgid "Professional pack"
 msgstr "Pack profesional"
@@ -2394,153 +2427,89 @@ msgstr ""
 
 #, php-format
 msgid ""
-"<p>This offer gives you more than 40% discount (if purchased separately "
-"modules\n"
-"                    have a value of 85EUR/month)</p>\n"
-"                    <p>This pack includes:</p>\n"
-"                    <ul>\n"
-"                        <li>Frontpage manager</li>\n"
-"                        <li>Widget manager</li>\n"
-"                        <li>Opinion articles manager</li>\n"
-"                        <li>Comments manager</li>\n"
-"                        <li>Images and files uploading</li>\n"
-"                        <li>Utilities: Trash, Search Advanced...</li>\n"
-"                        <li>Advertisement manager</li>\n"
+"<p>This pack is thought for professional that are starting their indipendent "
+"newspaper and need to manage advertising to grow and to publish polls to "
+"engage with their audience.</p>\n"
+"                        <p>This offer gives you more than 40% discount (if "
+"purchased separately modules have a value of 85EUR/month).</p>"
+msgstr ""
+"<p>Este pack está pensado para todos los profesionales que están empezando "
+"su periódico independiente y necesitan gestionar la publicidad para crecer y "
+"conectar con los lectores.</p>\n"
+"<p>Esta oferta te da más del 40% de descuento (si comprados por separados "
+"los módulos tienen un valor de 85EUR/mes).</p>"
+
+msgid ""
+"<li>Advertisement manager</li>\n"
 "                        <li>Polls manager</li>\n"
 "                        <li>Galleries manager</li>\n"
-"                        <li>Video manager</li>\n"
-"                        <li>1 user license</li>\n"
-"                        <li>Support via tickets</li>\n"
-"                        <li>Media storage: 1GB</li>\n"
-"                        <li>Page views: 100.000</li>\n"
-"                    </ul>"
+"                        <li>Video manager</li>"
 msgstr ""
-"<p>Esta oferta te proporciona un 40% de descuento (frente a los 85€/mes si "
-"compras los módulos de forma independiente)</p>\n"
-"                    <p>Este pack incluye:</p>\n"
-"                    <ul>\n"
-"                        <li>Gestor de portadas</li>\n"
-"                        <li>Gestor de widgets</li>\n"
-"                        <li>Gestor de artículos de opinión</li>\n"
-"                        <li>Gestor de comentarios</li>\n"
-"                        <li>Subida de imagenes y archivos</li>\n"
-"                        <li>Utilidades: papelera, búsqueda avanzada...</li>\n"
-"                        <li>Gestor de publicidad</li>\n"
+"<li>Gestor de publicidad</li>\n"
 "                        <li>Gestor de encuestas</li>\n"
 "                        <li>Gestor de galerías</li>\n"
-"                        <li>Gestor de vídeo</li>\n"
-"                        <li>1 licencia de usuario</li>\n"
-"                        <li>Asistencia técnica mediante tickets</li>\n"
-"                        <li>Almacenamiento multimedia: 1GB</li>\n"
-"                        <li>Páginas vistas: 100.000</li>\n"
-"                    </ul>"
+"                        <li>Gestor de vídeo</li>"
 
 msgid "Advanced pack"
 msgstr "Pack avanzado"
 
 msgid ""
-"Provides advanced features to personalize your site and add more kind of "
-"contents."
+"Personalize your frontpages and start sending newsletters to your readers "
+"and let them know what they have missed!."
 msgstr ""
-"Proporciona características avanzadas para personalizar tu sitio y añade "
-"nuevos tipos de contenido."
+"Personaliza las portadas y empieza a enviar boletines a tus lectores para "
+"que sepan lo que se han perdido!"
 
 #, php-format
 msgid ""
-"<p>Personalize your frontpages and start sending newsletters\n"
-"                    to your readers and let them know what they have missed!"
+"<p>A step further into the engagement path we add in this pack the "
+"possibility of sending newsletters and customize frontpage anytime you want."
 "</p>\n"
-"                    <p>This offer gives you more than 30% discount on "
-"modules (if purchased\n"
-"                    separately modules have a value of 145EUR/month).</p>\n"
-"                    This pack includes:\n"
-"                    <ul>\n"
-"                        <li>Frontpage manager</li>\n"
-"                        <li>Widget manager</li>\n"
-"                        <li>Opinion articles manager</li>\n"
-"                        <li>Comments manager</li>\n"
-"                        <li>Images and files uploading</li>\n"
-"                        <li>Utilities: Trash, Search Advanced...</li>\n"
-"                        <li>Advertisement manager</li>\n"
-"                        <li>Polls manager</li>\n"
-"                        <li>Galleries manager</li>\n"
-"                        <li>Video manager</li>\n"
-"                        <li>Frontpage customization</li>\n"
-"                        <li>Newsletter manager (*)</li>\n"
-"                        <li>2 user license</li>\n"
-"                        <li>Support via tickets</li>\n"
-"                        <li>Support via phone: 4h (10am-2pm M-F)</li>\n"
-"                        <li>Media storage: 1.5GB</li>\n"
-"                        <li>Page views: 250.000</li>\n"
-"                    </ul>\n"
-"                    <p><small>*  Newsletter manager: email sendings are "
-"charged with\n"
-"                        0.3€ each block of 1000 sent emails</small></p>"
+"                        <p>This offer gives you more than 30% discount on "
+"modules (if purchased separately modules have a value of 145EUR/month).</p>"
 msgstr ""
-"<p>Personaliza tus portadas, envía boletines de noticias a tus lectores y "
-"haz que conozcan lo que se han perdido.</p>\n"
-"<p>Esta oferta te proporciona un descuento del 30% en los módulos  (frente a "
-"los 145€/mes si compras los módulos de forma independiente)</p>\n"
-"                    <p>Este pack incluye:</p>\n"
-"                    <ul>\n"
-"                        <li>Gestor de portadas</li>\n"
-"                        <li>Gestor de widgets</li>\n"
-"                        <li>Gestor de artículos de opinión</li>\n"
-"                        <li>Gestor de comentarios</li>\n"
-"                        <li>Subida de imagenes y archivos</li>\n"
-"                        <li>Utilidades: papelera, búsqueda avanzada...</li>\n"
-"                        <li>Gestor de publicidad</li>\n"
-"                        <li>Gestor de encuestas</li>\n"
-"                        <li>Gestor de galerías</li>\n"
-"                        <li>Gestor de vídeo</li>\n"
-"                        <li>Personalización de portadas</li>\n"
-"                        <li>Gestor de boletines de noticias(*)</li>\n"
-"                        <li>2 licencias de usuario</li>\n"
-"                        <li>Asistencia técnica mediante tickets</li>\n"
-"                        <li>Almacenamiento multimedia: 1GB</li>\n"
-"                        <li>Páginas vistas: 250.000</li>\n"
-"                    </ul>\n"
-"<p><small>*  Gestor de portadas: el envío de correos electrónicos se cobrará "
-"a 0.3€ cada bloque de 1000 correos enviados</small></p>"
+"<p>Un paso más en la trayectoria de compromiso con los lectores añadimos en "
+"este paquete la posibilidad de envío de boletines informativos y de "
+"personalizar las portadas en cualquier momento que desees.</p>\n"
+"<p>Esta oferta te da más del 30% de descuento (si comprados por separados "
+"los módulos tienen un valor de 145EUR/mes).</p>"
+
+msgid ""
+"<li>Frontpage customization</li>\n"
+"                        <li>Newsletter manager (<a href=\"http://opennemas."
+"com/pricing?language=en_US#newsletter\">0</a>)</li>"
+msgstr ""
+"<li>Personalización de portadas</li>\n"
+"                        <li>Gestor de boletines (<a href=\"http://opennemas."
+"com/pricing?language=en_US#newsletter\">0</a>)</li>"
 
 msgid "Expert pack"
 msgstr "Pack experto"
 
-msgid "Contains all the major features of Opennemas."
-msgstr "Contiene todas las funcionalidades principales de Opennemas."
+msgid ""
+"Add news from your favourites agencies, manage multiple personalized "
+"frontpages and let your readers to become contributors to your newspaper!"
+msgstr ""
+"Añade las noticias de tus agencias favoritas, gestiona múltiples portadas "
+"personalizadas y deja que tus lectores contribuyan publicando en el "
+"periódico!"
 
 #, php-format
 msgid ""
-"<p>Personalize your frontpages and start sending newsletters\n"
-"                    to your readers and let them know what they have missed!"
-"</p>\n"
-"                    <p>This offer gives you more than 30% discount on "
-"modules (if purchased\n"
-"                    separately modules have a value of 145EUR/month).</p>\n"
-"                    This pack includes:\n"
-"                    <ul>\n"
-"                        <li>Frontpage manager</li>\n"
-"                        <li>Widget manager</li>\n"
-"                        <li>Opinion articles manager</li>\n"
-"                        <li>Comments manager</li>\n"
-"                        <li>Images and files uploading</li>\n"
-"                        <li>Utilities: Trash, Search Advanced...</li>\n"
-"                        <li>Advertisement manager</li>\n"
-"                        <li>Polls manager</li>\n"
-"                        <li>Galleries manager</li>\n"
-"                        <li>Video manager</li>\n"
-"                        <li>Frontpage customization</li>\n"
-"                        <li>Newsletter manager (*)</li>\n"
-"                        <li>5 user license</li>\n"
-"                        <li>Support via tickets</li>\n"
-"                        <li>Support via phone: 8h (10am-6pm M-F)</li>\n"
-"                        <li>Media storage: 2.5GB</li>\n"
-"                        <li>Page views: 500.000</li>\n"
-"                    </ul>\n"
-"                    <p><small>*  Newsletter manager: email sendings are "
-"charged with 0.3€\n"
-"                    each block of 1000 sent emails</small></p>"
+"<p>This offer gives you more than 25% discount on modules (if purchased "
+"separately modules have a value of 260EUR/month). </p>"
 msgstr ""
+"<p>Esta oferta te da más del 25% de descuento (si comprados por separados "
+"los módulos tienen un valor de 260EUR/mes).</p>"
+
+msgid ""
+"<li>Multiple Frontpage Management</li>\n"
+"                        <li>News Agency</li>\n"
+"                        <li>Opennemas Connect</li>"
+msgstr ""
+"<li>Gestión de Multiple Portadas</li>\n"
+"                        <li>Agencias de Noticias</li>\n"
+"                        <li>Opennemas Conecta</li>"
 
 msgid "Free Basic Template"
 msgstr "Plantillas gratuitas"
@@ -2558,18 +2527,18 @@ msgid ""
 "                        </li>\n"
 "                        <li>Exclusivity: This template is not exclusive</"
 "li>\n"
-"                        <li>Delivery time: On the spot</li>\n"
+"                        <li>Delivery time: Inmediate</li>\n"
 "                    </ul>"
 msgstr ""
 "<ul>\n"
 "                        <li>\n"
 "                            Widgets: no incluidos. Para añadir nuevos "
 "widgets contacta con\n"
-"                            <a href=\"mailto:sales@openhost.es\""
-">sales@openhost.es</a>\n"
+"                            <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a>\n"
 "                        </li>\n"
-"                        <li>Exclusividad: Esta plantilla no es exclusiva</li>"
-"\n"
+"                        <li>Exclusividad: Esta plantilla no es exclusiva</"
+"li>\n"
 "                        <li>Entrega: inmediata</li>\n"
 "                    </ul>"
 
@@ -2610,20 +2579,20 @@ msgid "Custom Template"
 msgstr "Plantilla personalizada"
 
 msgid ""
-"Newspaper web site template developed by Opennemas team. Customizable to "
-"make a better git to customer brand guidelines and image"
+"Get a customized newspaper Web Site, with widgets included, so that everyone "
+"will recognize your brand and image."
 msgstr ""
 "Pide un sitio Web del periódico personalizado, con widgets incluidos, por lo "
 "que todo el mundo reconocerá tu marca e imagen."
 
+#, fuzzy
 msgid ""
-"<ul>\n"
-"                        <li>\n"
-"                            Widgets: Standard widgets included. To add a "
-"widget please contact us at\n"
-"                            <a href=\"mailto:sales@openhost.es"
-"\">sales@openhost.es</a>\n"
-"                        </li>\n"
+"<p>Newspaper Web Site Template that can be customized to reflect better "
+"brand guidelines and customer preferences</p>\n"
+"                    <ul>\n"
+"                        <li>Widgets: Standard widgets included. To add a "
+"widget please contact us at <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a></li>\n"
 "                        <li>Exclusivity: This template is not exclusive</"
 "li>\n"
 "                        <li>Delivery time: From 2 weeks up to 1 month "
@@ -2659,17 +2628,54 @@ msgid ""
 "                        </li>\n"
 "                    </ul>"
 msgstr ""
+"<p>Diseños basados en plantillas Standard con widgets ya desarrollados donde "
+"SI es posible realizar cambios para hacerlo customizado.</p>\n"
+"                    <ul>\n"
+"                        <li>Widgets: Standard widgets included. To add a "
+"widget please contact us at <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a></li>\n"
+"                        <li>Exclusivity: This template is not exclusive</"
+"li>\n"
+"                        <li>Delivery time: From 2 weeks up to 1 month "
+"depending on customization work</li>\n"
+"                        <li>Change request BEFORE launch\n"
+"                            <ul>\n"
+"                                <li>Changes included: typography, newspaper "
+"colours and style</li>\n"
+"                                <li>Changes NOT included: Widgets, Menus, "
+"Titles, Pretitle, Inner Article\n"
+"                                    Disposition, Images Size, Headers and "
+"footers</li>\n"
+"                                <li>1 iteration of feedback and change "
+"request included before production</li>\n"
+"                            </ul>\n"
+"                        </li>\n"
+"                        <li>Change request AFTER launch\n"
+"                            <ul>\n"
+"                                <li>1 iteration of feedback and change "
+"request only included\n"
+"                                    in 30 days post production</li>\n"
+"                                <li>Monitoring and Bug fixing (if any) "
+"included 30 days post production</li>\n"
+"                            </ul>\n"
+"                        </li>\n"
+"                        <li>Add On:\n"
+"                            <ul>\n"
+"                                <li>New widgets: 120€ each</li>\n"
+"                                <li>Get newspaper one week in advance: 500€</"
+"li>\n"
+"                                <li>Support cost after launch</li>\n"
+"                            </ul>\n"
+"                        </li>\n"
+"                    </ul>"
 
 msgid "Exclusive Template"
 msgstr "Plantilla exclusiva"
 
 msgid ""
-"Newspaper Web Site Template that can be customized to reflect better brand "
-"guidelines and customer preferences"
+"Unique Newspaper Web Site  with many widgets, completely customizable and in "
+"exclusive development for the customer."
 msgstr ""
-"Templates con multitud de widgets donde el cliente SI podrá personalizar el "
-"tema y además esta plantilla solo será usada por un cliente  por lo que será "
-"completamente exclusivo."
 
 msgid ""
 "<ul>\n"
@@ -2745,10 +2751,12 @@ msgstr ""
 msgid "Custom Exclusive Template"
 msgstr "Plantilla exclusiva personalizada"
 
-msgid "Newspaper web site developed from scratch by Opennemas team."
+msgid ""
+"Newspaper web site developed from scratch by Opennemas team exclusively for "
+"you."
 msgstr ""
-"Plantillas modernas y actuales con un diseño creado por un creativo "
-"profesional desde 0. "
+"Sitio web de periódico desarrallado dese cero por el equipo de Opennemas "
+"exclusivamente para ti."
 
 msgid ""
 "<ul>\n"
@@ -2808,12 +2816,8 @@ msgid ""
 "                    </ul>"
 msgstr ""
 
-msgid ""
-"Gain money by inserting ads in your site. Images, scripts and external "
-"services integration"
-msgstr ""
-"Gana dinero insertando publicidad en tu sitio. Imagenes, código JS e "
-"integración de servicios externos"
+msgid "Gain money by inserting ads in your site"
+msgstr "Gana dinero insertando publicidad en tu sitio"
 
 msgid ""
 "<p>Thanks to this module all opennemas journals will be able to\n"
@@ -2827,9 +2831,22 @@ msgid ""
 "                        </ul>\n"
 "                        <p>There are more than 15 types of ads.</p>"
 msgstr ""
+"<p>Gracias a este módulo todos los diarios Opennemas podrán crear, añadir y "
+"gestionar anuncios en cualquier página:</p>\n"
+"                        <ul>\n"
+"                            <li>Portada principal y de secciones</li>\n"
+"                            <li>Artículos</li>\n"
+"                            <li>Opiniones</li>\n"
+"                            <li>Galerías</li>\n"
+"                            <li>Multimedia</li>\n"
+"                        </ul>\n"
+"                        <p>Hay más de 15 tipos de publicidad.</p>"
 
 msgid "Allows searching for content directly inside the manager"
 msgstr "Te permite buscar contenidos directamente desde el gestor"
+
+msgid "Allow you to create photo galleries and use them in your site."
+msgstr "Te permite creare fotogalerías y usarlas en tu sitio web."
 
 msgid ""
 "<p>Add Video and Image Galleries to your content.</p>\n"
@@ -2842,14 +2859,21 @@ msgid ""
 "performance.</p>"
 msgstr ""
 
-msgid "Module for managing articles"
-msgstr "Módulo para gestionar artículos"
+msgid "Create your article and publish it with SEO included."
+msgstr "Crea tus artículos y publícalos con SEO incluído."
 
-msgid "Missed long description..."
+msgid ""
+"<p>Publish articles including Title, Subtitle, Summary, Comment, Image, "
+"whenever you want and from wherever you want for free.</p>"
 msgstr ""
+"<p>Publica artículos que incluyen título, subtítulo, resumen, comentarios, "
+"imagenes o cualquier cosa que quieras de forma gratuíta.</p>"
 
 msgid "Module to allow the second article signature"
 msgstr "Módulo que permite una firma de artículo secundaria"
+
+msgid "Missed long description..."
+msgstr ""
 
 msgid "Frontpage advanced personalization"
 msgstr "Personalización avanzada de portada"
@@ -2889,74 +2913,105 @@ msgstr "Módulo para gestionar la caché de las páginas"
 msgid "Module for managing categories"
 msgstr "Módulo para gestionar categorías"
 
-msgid "Module for managing comments"
-msgstr "Módulo para gestionar comentarios"
+msgid "<p>Module included in the Basic pack (FREE) of opennemas.</p>"
+msgstr "<p>Módulo incluído en el Pack Básico (Gratuito) de Opennemas.</p>"
+
+msgid "<p>It allows users to create and manage categories of content.</p>"
+msgstr ""
+"<p>Le permite a tus usuarios crear y gestionar categorías de contenido.</p>"
+
+msgid ""
+"Allow your readers to leave comments wether through our comment system or "
+"connecting with Facebook or Disqus."
+msgstr ""
+"Permite a tus lectores dejar comentarios usando nuestro sistema de "
+"comentarios o conectándo tu sitio a Facebook o Disqus."
+
+msgid ""
+"It allows users to publish comments to any content generated by newspaper. "
+"It can be through comment form provided by us or through integration with "
+"facebook or disqus comment system."
+msgstr ""
+"Le permite a tus usuarios publicar comentarios en cualquier contenido "
+"generado por su periódico. Pueden realizarse comentarios usando nuestro "
+"formulario o mediante la integración de sistemas de comentarios como "
+"Facebook o Disqus."
 
 msgid "Module for managing Cronicas customizations"
 msgstr "Módulo para gestionar personalizaciones de Cronicas"
 
-msgid "Allows the user to upload files"
-msgstr "Permite al usuario subir archivos"
+msgid "Upload your files and share them on your newspaper."
+msgstr "Sube tus archivos y compártelos en tu periódico."
 
-msgid "Opennemas Connect"
-msgstr "Opennemas Connect"
+msgid ""
+"It allows users to upload files to the system and share them with a url in "
+"the newspaper articles."
+msgstr ""
+"Permite a los usuarios subir archivos al sistema y compartirlos con una url "
+"en artículos de tu periódico."
+
+msgid "Opennemas Contact"
+msgstr "Opennemas Contact"
 
 msgid "Allows to create to new custom forms"
 msgstr "Te permite crear formularios personalizados"
 
 msgid ""
-"<p>Let your readers be contributors.</p>\n"
-"                        <p>Our feature Opennemas Connect will allow readers "
-"to submit their news, so that the newspaper\n"
-"                        can become the \"voice of people/Internet\".</"
-"p><p>You will be able to create custom submission\n"
-"                        forms for your contributors so that they can share "
-"daily in the easiest way.</p>\n"
-"                        <p>All contributions can be moderated.</p>"
+"<p>Our feature Opennemas Contact will allow readers to submit their opinions "
+"with or without attachment, so that they can communicate with the newspapers."
+"</p>"
 msgstr ""
-"<p>Permite a tus lectores colaborar contigo.</p>\n"
-"                        <p>Opennemas Connect permite a tus lectores enviarte "
-"noticias, de esta forma tu periódico se puede convertir en \"la voz de la "
-"gente/Internet\".</p><p>Podrás crear formularios de envío personalizados "
-"para que tus colaborades de esta forma podrá compartir de forma fácil sus "
-"noticias..</p>\n"
-"                        <p>Todas las contribuciones se pueden moderar.</p>"
 
-msgid "Module for managing elements in frontpages"
-msgstr "Módulo para gestionar elementos en portadas"
+msgid ""
+"Most important asset of a newspaper, the frontpage manager allows live "
+"update of frontpages content."
+msgstr ""
+"El valor más importante en un periódico, el gestor de portadas le permite "
+"actualizar en vivo los contenidos de las portadas."
+
+msgid ""
+"The frontpage manager will allow you to add articles and modify "
+"visualization of your frontpages instantly."
+msgstr ""
+"El gestor de portadas le permite añadir artículos y modificar la "
+"visualización de tus portadas instáneamente."
 
 msgid "Frontpages layouts & custom layouts"
 msgstr "Disposición personalizadas de portadas"
 
-msgid "Create and ManageFrontpageLayouts made by you, every time you want!"
+msgid "Create and Manage Frontpage Layouts made by you, every time you want! "
 msgstr ""
+"Crea y gestiona el diseño de las portadas como quieras, cuando quieras."
 
 msgid ""
-"<p>This module has two distinct parts: Manual or Automatic Personal "
-"Frontpages Management.</p>\n"
-"\n"
-"                        <h3>MANUAL</h3>\n"
-"                        <p>Management Personal Frontpages/Frontpages "
-"Organization</p>\n"
+"<p>Management Personal Frontpages/Frontpages Organization</p>\n"
 "                        <p>You can change the appearance of Opennemas "
-"newspaper is a matter of seconds with this module.\n"
-"                        In this way you can select a different frontpage "
-"model on each of the sections frontpages.</p>\n"
-"\n"
-"                        <h3>AUTOMATIC</h3>\n"
-"                        <p>If you do not want to have to create layouts, the "
-"system can do it for you.</p>"
+"newspaper is a matter of seconds with this module. In this way you can "
+"select a different frontpage model on each of the sections frontpages.</p>"
 msgstr ""
+"<p>Gestión MANUAL de maquetero / Disposiciones de portadas</p>\n"
+"<p>Poder cambiar la apariencia del periódico Opennemas es cosa de segundos "
+"con este módulo. De esta forma se puede seleccionar una maqueta diferente en "
+"cada una de las portadas.</p>"
 
 msgid "Allows user to upload images"
 msgstr "Permite al usuario subir imágenes"
 
 msgid ""
-"Allows user to define keywords associated with url, mails and internal "
-"searches"
+"List your keywords and choose if you want to link it to something or assign "
+"an action to it."
 msgstr ""
-"Permite al usuario definir palabras clave asociadas con un url, correos "
-"electrónicos o búsquedas internas"
+"Gestiona tus palabras clave y elige si quieres enlazar cualquier texto a una "
+"web automáticamente o asignar una accción al mismo."
+
+msgid ""
+"<p>Allows you to create a list of keywords and assign each of them a landing "
+"page, or mail_to, and automatically every time that this keyword will be "
+"used the system will tag it for you.</p>"
+msgstr ""
+"<p>Le permite crear una lista de palabras clave a las que asignar una "
+"dirección web, o un correo, y cada vez que use esta palabra clave el sistema "
+"la etiquetará por ti.</p>"
 
 msgid "Let your readers download the pdf copy of your print newspaper."
 msgstr ""
@@ -2970,15 +3025,42 @@ msgid ""
 "                        version or the frontpage and your users will be able "
 "to download it whenever they want.</p>"
 msgstr ""
+"<p>Quieres tener la versión de papel de tu periódico en un gestor de kiosko "
+"como <a href=\"http://kiosko.net/\" target=\"_blank\">kiosko.net</a>, con "
+"este módulo es posible.</p><p>Sube la versión completa o solo la portada. El "
+"lector se descargará el pdf subido.\n"
+"</p>"
+
+msgid "Opennemas Connect"
+msgstr "Opennemas Connect"
 
 msgid "Allows user to publish letters sent to the director"
 msgstr "Permite al usuario publicar cartas de usuarios"
 
-msgid "Missed long description"
+#, fuzzy
+msgid ""
+"<p>Our feature Opennemas Connect will allow readers to submit their news, so "
+"that the newspaper can become the \"voice of people/Internet\". </p>\n"
+"                        <p>You will be able to create custom submission "
+"forms for your contributors so that they can share daily in the easiest way."
+"</p>\n"
+"                        <p>All contributions can be moderated.</p>"
 msgstr ""
+"<p>Permite a tus lectores colaborar contigo.</p>\n"
+"                        <p>Opennemas Connect permite a tus lectores enviarte "
+"noticias, de esta forma tu periódico se puede convertir en \"la voz de la "
+"gente/Internet\".</p><p>Podrás crear formularios de envío personalizados "
+"para que tus colaborades de esta forma podrá compartir de forma fácil sus "
+"noticias..</p>\n"
+"                        <p>Todas las contribuciones se pueden moderar.</p>"
 
 msgid "With this module users can access all contents by date"
 msgstr "Con este módulo los usuarios pueden acceder a contenidos por fechas"
+
+msgid ""
+"<p>Allows you to create a page that list contents and classify them by "
+"section created on a given day.</p>"
+msgstr ""
 
 msgid "Control your site navegation with menus and custom elements."
 msgstr ""
@@ -2995,10 +3077,22 @@ msgid ""
 "                            <li>...</li>\n"
 "                        </ul>"
 msgstr ""
+"<p>Este módulo te permite controlar los menús de navegación de tu sitio.</"
+"p>\n"
+"                        <p>Añade varios tipos de elementos en los menús:</"
+"p>\n"
+"                        <ul>\n"
+"                            <li>Enlaces internos</li>\n"
+"                            <li>Portadas</li>\n"
+"                            <li>Páginas estáticas</li>\n"
+"                            <li>Enlaces externos</li>\n"
+"                            <li>...</li>\n"
+"                        </ul>"
 
 msgid ""
 "Keeping your digital news up to date with agencies is already a reality!"
-msgstr "¡Mantener tu noticias actualizadas con las agencias ya es una realidad!"
+msgstr ""
+"¡Mantener tu noticias actualizadas con las agencias ya es una realidad!"
 
 msgid ""
 "<p>Keeping your digital news up to date with agencies is already a reality!</"
@@ -3015,6 +3109,19 @@ msgid ""
 "frontpage of the newspaper together with\n"
 "                        any image or media attached.</p>"
 msgstr ""
+"<p>Mantener tu publicación digital al día con las agencias ya es una "
+"realidad gracias a este módulo!</p>\n"
+"                        <p><a href=\"http://www.efe.com/\" target=\"_blank"
+"\">Agencia EFE</a>,\n"
+"                        <a href=\"http://www.europapress.es/\" target="
+"\"_blank\">agencia Europa press</a>,\n"
+"                        <a href=\"http://www.reuters.com/\" target=\"_blank"
+"\">Reuters</a>, etc Cualquiera de estos canales estarán disponibles para los "
+"periódicos Opennemas. Con unos cuantos clics el usuario podrá insertar "
+"cualquier noticia de estas agencias en la portada de su diario con la foto, "
+"video o elemento adjunto.</p>\n"
+"<small>Nota: No se incluye el alta de las agencias. Eso es gestión del "
+"cliente.</small>"
 
 msgid "Engage your readers with your own personalized newsletter."
 msgstr "Atrae a tus lectores con tu propio boletín personalizado."
@@ -3031,25 +3138,29 @@ msgid ""
 "                        <p>This way you will be able to create the "
 "newsletter your style.</p>"
 msgstr ""
+"<p>Cada vez es más común enviar boletines a los clientes con las noticias "
+"más interesantes del diario.</p>\n"
+"                        <p>Este módulo contiene un gestor para maquetar el "
+"boletín al igual que poder editar los estilos este antes de enviarlo.</p>\n"
+"                        <p>De esta forma podrás crear el Newsletter a tu "
+"forma y estilo</p>"
 
 msgid "emails"
 msgstr "correos"
 
-msgid "Add description..."
+msgid "Have your opinionist publishing on your newspaper."
+msgstr "Permite a articulistas de opinión publicar en tu periódico."
+
+msgid ""
+"<p>Allows all newspapers to have a section dedicated to opinions organized "
+"by author and with author frontpage too.</p>"
 msgstr ""
 
 msgid ""
 "Create and manage your polls, engage your audience and collect useful "
-"information."
+"information. "
 msgstr ""
 "Crea y gestiona tus encuestas, atrae a tu audiencia y obtén información útil."
-
-msgid ""
-"Create and manage your polls, <strong>engage</strong> your audience and "
-"<strong>collect</strong> useful information."
-msgstr ""
-"Crea y gestiona tus encuestas, <strong>atrae</strong> a tu audiencia y "
-"<strong>obtén información útil</strong>."
 
 msgid ""
 "<p>Pools can be bars, pie charts, multiple response, etc</p>\n"
@@ -3057,6 +3168,23 @@ msgid ""
 "compatible and completely\n"
 "                        available on any browsers in the world.</p>"
 msgstr ""
+"<p>Multiples opciones son posibles en este módulo, desde encuestas de tipo "
+"barras, de tipo tarta, multiple respuesta, etc.</p>\n"
+"                        <p>Lo más importante es que son visibles en todos "
+"los navegadores del mercado"
+
+msgid "Add description..."
+msgstr ""
+
+msgid "Manage your internal information in a static page."
+msgstr "Gestiona tu información interna con una página estática."
+
+msgid ""
+"Allows newspapers to have static pages if needed for legal information and "
+"or \"about us\" information."
+msgstr ""
+"Permite incluír páginas estáticas en tu periódico. Normalmente se usan para "
+"información legal y páginas \"Sobre nosotros\"."
 
 msgid "Frontpage synchronization"
 msgstr "Sincronización de portadas"
@@ -3076,16 +3204,27 @@ msgid ""
 "newspapers need to belong to the same group, so that the frontpage is stored "
 "in the one place.</p>"
 msgstr ""
+"<p>Do you have more than 1 newspaper and you would like for the \"home\" "
+"pages to be synchronised?</p>\n"
+"<p>No problem. By activating this module you will have all your news "
+"synchronised, if you have many local newspapers for instance and one main "
+"one, you can update the frontpage of all locals with news of the general "
+"newspaper.</p>\n"
+"<p>If you modify a frontpage in the main newspaper the frontpage of local "
+"newspapers will update automatically too.</p>\n"
+"<p>The only requirement is that all newspapers need to belong to the same "
+"group, so that the frontpage is stored in the one place.</p>"
 
-msgid "Make money while doing what you love."
-msgstr "Gana dinero haciendo lo que te gusta."
+msgid ""
+"PayWall is a way to make money on your website's content by user "
+"subscriptions."
+msgstr ""
+"El Paywall es una forma de ganar dinero con el contenido de tu sitio web "
+"mediante subscripciones de usuarios."
 
 #, php-format
 msgid ""
-"<p>PayWall is a way to make money on your website's content by user "
-"subscriptions.</p>\n"
-"                        <p>The News business is a very challenging business "
-"and advertising\n"
+"<p>The News business is a very challenging business and advertising\n"
 "                        alone often does not allow to newspapers to keep "
 "going. Add paywall to your\n"
 "                        newspaper and you will be able to select articles "
@@ -3098,6 +3237,13 @@ msgid ""
 "and % of taxes that\n"
 "                        the item is subject to.</p>"
 msgstr ""
+"<p>Es la mejor forma de ganar dinero con Opennemas. Selecciona que artículos "
+"son de pago. De esta forma, las informaciones configuradas \"de pago\" no "
+"podrán ser leídas sin que el usuario no esté registrado.</p>\n"
+"<p>Se puden crear/configurar los tipos de suscripción que se necesiten "
+"(semanal, mensual, anual, etc.), la moneda y el % de tasas/impuestos que el "
+"producto lleve.\n"
+"</p>"
 
 msgid "No support"
 msgstr "Sin soporte"
@@ -3107,7 +3253,7 @@ msgstr "Soporte 1"
 
 msgid "This support plan is thought for changes and creation of new widgets."
 msgstr ""
-"Est plan de soporte está pensada para cambios y creación de nuevos widgets."
+"Este plan de soporte está pensada para cambios y creación de nuevos widgets."
 
 msgid ""
 "<p>10 hours (2h day/1week).</p>\n"
@@ -3117,6 +3263,12 @@ msgid ""
 "                        </ul>\n"
 "                        <p>Support provided by emails/tickets</p>"
 msgstr ""
+"<p>10 horas (2h día/1 semana).</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>\n"
+"                            <li>Creación y cambios en widgets</li>\n"
+"                        </ul>\n"
+"                        <p>Soporte proporcionado por correo/tickets</p>"
 
 msgid ""
 "This support plan is ideal for updating your theme if you have had it for a "
@@ -3135,6 +3287,13 @@ msgid ""
 "                        <p>Support provided by emails/tickets and hangouts/"
 "skype</p>"
 msgstr ""
+"<p>40 horas (2h día durante 1 mes).</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
+"                        </ul>\n"
+"<p>Soporte proporcionado por correo/tickets y Google Hangouts</p>"
 
 msgid ""
 "This support plan is ideal for updating your theme and at the same time "
@@ -3153,18 +3312,41 @@ msgid ""
 "                        <p>Support provided by emails/tickets and hangouts/"
 "skype</p>"
 msgstr ""
+"<p>60 horas (3h día durante 1 mes).</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
+"                        </ul>\n"
+"<p>Soporte proporcionado por correo/tickets y Google Hangouts</p>"
 
 msgid ""
-"<p>60 hours (3h day/1month)</p>\n"
+"<p>80 hours (4h day/1month)</p>\n"
 "                        <p>Examples of usage of support:</p>\n"
 "                        <ul>\n"
 "                            <li>Examples of usage of support:\n"
 "                            <li>Standard changes of HTML/CSS in templates</"
 "li>\n"
+"                            <li>Change Requests of the disposition of "
+"frontpage templates</li>\n"
+"                            <li>Category Titles, New structure of inner "
+"articles.</li>\n"
 "                        </ul>\n"
 "                        <p>Support provided by emails/tickets and hangouts/"
 "skype</p>"
 msgstr ""
+"<p>80 horas (4h día durante 1 mes)</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>                            \n"
+"                            <li>Cambios HTML/CSS estándar en plantillas</"
+"li>\n"
+"                            <li>Solicitud de cambio de disposicioens en "
+"plantillas de portadas</li>\n"
+"                            <li>Títulos de categoría, nueva estructura en "
+"artículos interiores.</li>\n"
+"                        </ul>\n"
+"                        <p>Soporte proporcionado por emails/tickets y Google "
+"Hangouts/Skype</p>"
 
 msgid ""
 "This support plan fits the purpose of a restyling of newspapers by "
@@ -3190,6 +3372,21 @@ msgid ""
 "                        <p>Support provided by emails/tickets, hangouts/"
 "skype and phone</p>"
 msgstr ""
+"<p>160 horas (8h día durante 1 mes)</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>                            \n"
+"                            <li>Creación y solicitud de cambio en widgets</"
+"li>\n"
+"                            <li>Cambios HTML/CSS estándar en plantillas</"
+"li>\n"
+"                            <li>Solicitud de cambio de disposicioens en "
+"plantillas de portadas</li>\n"
+"                            <li>Títulos de categoría</li>\n"
+"                            <li>nueva estructura en artículos interiores.</"
+"li>\n"
+"                        </ul>\n"
+"                        <p>Soporte proporcionado por emails/tickets, Google "
+"Hangouts/Skype y teléfono</p>"
 
 msgid "Support 8 Plus"
 msgstr "Soporte 8 Plus"
@@ -3217,6 +3414,21 @@ msgid ""
 "                        <p>Support provided by emails/tickets, hangouts/"
 "skype and phone</p>"
 msgstr ""
+"<p>8 horas los 7 días de la semana durante 1 mes</p>\n"
+"                        <p>Ejemplos de uso de este soporte:</p>\n"
+"                        <ul>                            \n"
+"                            <li>Creación y solicitud de cambio en widgets</"
+"li>\n"
+"                            <li>Cambios HTML/CSS estándar en plantillas</"
+"li>\n"
+"                            <li>Solicitud de cambio de disposicioens en "
+"plantillas de portadas</li>\n"
+"                            <li>Títulos de categoría</li>\n"
+"                            <li>nueva estructura en artículos interiores.</"
+"li>\n"
+"                        </ul>\n"
+"                        <p>Soporte proporcionado por emails/tickets, Google "
+"Hangouts/Skype y teléfono</p>"
 
 msgid "Get next page"
 msgstr "Ir a la página siguiente"
@@ -5633,10 +5845,10 @@ msgstr "¿Interesado en mas características?"
 
 msgid ""
 "We have two ways to add functionality to you site. Check our Opennemas "
-"market:"
+"Market:"
 msgstr ""
 "Tenemos dos formas de añadir funcionalidad a tu sitio. Comprueba nuestro "
-"Opennemas market:"
+"Opennemas Market:"
 
 msgid "Plans"
 msgstr "Planes"
@@ -5782,9 +5994,6 @@ msgstr "Álbum: interior"
 
 msgid "Poll Inner"
 msgstr "Encuesta interior"
-
-msgid "Others"
-msgstr "Otros"
 
 msgid "and inside the position"
 msgstr "y en la posición"
@@ -6190,14 +6399,14 @@ msgstr "No hay ninguna imagen disponible para esta búsqueda"
 msgid "No available description"
 msgstr "Descripción no disponible"
 
+msgid "No tags"
+msgstr "Sin etiquetas"
+
 msgid "Image preview"
 msgstr "Previsualización de imagen"
 
 msgid "Filename"
 msgstr "Nombre de archivo"
-
-msgid "No tags"
-msgstr "Sin etiquetas"
 
 msgid "Author:"
 msgstr "Autor:"
@@ -6778,8 +6987,8 @@ msgstr ""
 "tu periódico\n"
 "        "
 
-msgid "Save for later"
-msgstr "Guardar para despues"
+msgid "Continue shopping"
+msgstr "Continar comprando"
 
 msgid "Confirm"
 msgstr "Confirmar"
@@ -6801,12 +7010,6 @@ msgstr "Tu carrito de compra está vacío"
 
 msgid "Unable to find any module that matches your search."
 msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
-
-msgid "No items available to purchase"
-msgstr "No hay elementos disponibles para comprar"
-
-msgid "No items purchased"
-msgstr "No hay elementos comprados"
 
 msgid "Free"
 msgstr "Gratis"
@@ -8038,1293 +8241,171 @@ msgstr ""
 #~ msgid "Paper import"
 #~ msgstr "Importador desde papel"
 
-#~ msgid "You can add images or script tags to publish advertising banners"
-#~ msgstr ""
-#~ "Puedes añadir imagenes o etiquetas script para publicar anuncios de "
-#~ "publicidad"
-
-#~ msgid "Module to manage albums and galleries"
-#~ msgstr "Módulo para gesiontar álbums y galerías"
-
-#~ msgid "Module for content personalization on frontpages"
-#~ msgstr "Módulo para personalizar contenidos en portadas"
-
-#~ msgid "Allows to select different models for the frontpages"
-#~ msgstr "Permite seleccionar modelos diferentes para las portadas"
+#~ msgid "Features the basic functionality for your newspaper for free."
+#~ msgstr "Características da funcionalidade base para tu periódico gratuíto."
 
 #~ msgid ""
-#~ "Create your own newsstand for publishing e-papers, magazines and others"
+#~ "<p>This offer gives you more than 40% discount (if purchased separately "
+#~ "modules\n"
+#~ "                    have a value of 85EUR/month)</p>\n"
+#~ "                    <p>This pack includes:</p>\n"
+#~ "                    <ul>\n"
+#~ "                        <li>Frontpage manager</li>\n"
+#~ "                        <li>Widget manager</li>\n"
+#~ "                        <li>Opinion articles manager</li>\n"
+#~ "                        <li>Comments manager</li>\n"
+#~ "                        <li>Images and files uploading</li>\n"
+#~ "                        <li>Utilities: Trash, Search Advanced...</li>\n"
+#~ "                        <li>Advertisement manager</li>\n"
+#~ "                        <li>Polls manager</li>\n"
+#~ "                        <li>Galleries manager</li>\n"
+#~ "                        <li>Video manager</li>\n"
+#~ "                        <li>1 user license</li>\n"
+#~ "                        <li>Support via tickets</li>\n"
+#~ "                        <li>Media storage: 1GB</li>\n"
+#~ "                        <li>Page views: 100.000</li>\n"
+#~ "                    </ul>"
 #~ msgstr ""
-#~ "Cree su propio kiosko para publicar libros electrónicos, revistas y otros"
-
-#~ msgid "Allows user to manage the menús"
-#~ msgstr "Permite al usuario gestionar los menús"
-
-#~ msgid "Profesional Support"
-#~ msgstr "Soporte profesional"
-
-#~ msgid "10 hours/month"
-#~ msgstr "10 horas/mes"
-
-#~ msgid "40 hours/month"
-#~ msgstr "40 horas/mes"
-
-#~ msgid "80 hours/month"
-#~ msgstr "80 horas/mes"
-
-#~ msgid "160 hours/month"
-#~ msgstr "160 horas/mes"
-
-#~ msgid "240 hours/month"
-#~ msgstr "240 horas/mes"
-
-#~ msgid "Unable to save this frontpage. It contains too many elements"
-#~ msgstr "No fue posible guardar esta portada. Contiene demasiados elementos."
-
-#~ msgid "Put in category frontpage"
-#~ msgstr "Poner en portada de categoría"
-
-#~ msgid "Delete comments"
-#~ msgstr "Eliminar contenidos"
-
-#~ msgid "Delete comment"
-#~ msgstr "Eliminar comentario"
-
-#~ msgid "Are you sure you want to delete <span>%num%</span> comments?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar <span>%num%</span> comentarios?"
-
-#~ msgid "Editing user group"
-#~ msgstr "Editando grupo de usuario"
-
-#~ msgid "FLV"
-#~ msgstr "FLV"
-
-#~ msgid "Download Url"
-#~ msgstr "Url de descarga"
-
-#~ msgid "Suggest element to frontpage"
-#~ msgstr "Sugerir elemento a portada"
-
-#~ msgid "Drop suggestion to frontpage"
-#~ msgstr "Eliminar sugerencia a portada"
-
-#~ msgid "Are you sure that to suggest this element to frontpage?"
-#~ msgstr "¿Estás seguro de que quieres sugerir este elemento a la portada?"
-
-#~ msgid "Are you sure that to drop suggestion of this element of frontpage?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar la sugerencia de este elemento en "
-#~ "portada?"
-
-#~ msgid "Yes, Suggest"
-#~ msgstr "Si, sugerir"
-
-#~ msgid "Drop suggest"
-#~ msgstr "Quitar sugerencia"
-
-#~ msgid "Toggle suggest"
-#~ msgstr "Cambiar sugerido"
-
-#~ msgid "Terms of Service Agreement"
-#~ msgstr "Aceptación de términos del servicio"
+#~ "<p>Esta oferta te proporciona un 40% de descuento (frente a los 85€/mes "
+#~ "si compras los módulos de forma independiente)</p>\n"
+#~ "                    <p>Este pack incluye:</p>\n"
+#~ "                    <ul>\n"
+#~ "                        <li>Gestor de portadas</li>\n"
+#~ "                        <li>Gestor de widgets</li>\n"
+#~ "                        <li>Gestor de artículos de opinión</li>\n"
+#~ "                        <li>Gestor de comentarios</li>\n"
+#~ "                        <li>Subida de imagenes y archivos</li>\n"
+#~ "                        <li>Utilidades: papelera, búsqueda avanzada...</"
+#~ "li>\n"
+#~ "                        <li>Gestor de publicidad</li>\n"
+#~ "                        <li>Gestor de encuestas</li>\n"
+#~ "                        <li>Gestor de galerías</li>\n"
+#~ "                        <li>Gestor de vídeo</li>\n"
+#~ "                        <li>1 licencia de usuario</li>\n"
+#~ "                        <li>Asistencia técnica mediante tickets</li>\n"
+#~ "                        <li>Almacenamiento multimedia: 1GB</li>\n"
+#~ "                        <li>Páginas vistas: 100.000</li>\n"
+#~ "                    </ul>"
 
 #~ msgid ""
-#~ "In order to use the Opennemas platform you must read and accept our terms "
-#~ "of use. You can find these terms in the next link <a href=\"http://help."
-#~ "opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-#~ "\" title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>"
+#~ "Provides advanced features to personalize your site and add more kind of "
+#~ "contents."
 #~ msgstr ""
-#~ "Para usar la plataforma Opennemas debes leer y aceptar nuestros términos "
-#~ "del servicio. Puedes encontrar el texto íntegro en el siguiente enlace: "
-#~ "<a href=\"http://help.opennemas.com/knowledgebase/articles/235418-"
-#~ "terminos-de-uso-de-opennemas\" title=\"Terms of use in Opennemas"
-#~ "\">Términos de uso de Opennemas</a>"
+#~ "Proporciona características avanzadas para personalizar tu sitio y añade "
+#~ "nuevos tipos de contenido."
 
 #~ msgid ""
-#~ "I have read and accept the Opennemas <a href=\"http://help.opennemas.com/"
-#~ "knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title="
-#~ "\"Terms of use in Opennemas\">Terms of use</a> and <a href=\"http://help."
-#~ "opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-"
-#~ "privacidad\">Privacy policy</a>."
+#~ "<p>Personalize your frontpages and start sending newsletters\n"
+#~ "                    to your readers and let them know what they have "
+#~ "missed!</p>\n"
+#~ "                    <p>This offer gives you more than 30% discount on "
+#~ "modules (if purchased\n"
+#~ "                    separately modules have a value of 145EUR/month).</"
+#~ "p>\n"
+#~ "                    This pack includes:\n"
+#~ "                    <ul>\n"
+#~ "                        <li>Frontpage manager</li>\n"
+#~ "                        <li>Widget manager</li>\n"
+#~ "                        <li>Opinion articles manager</li>\n"
+#~ "                        <li>Comments manager</li>\n"
+#~ "                        <li>Images and files uploading</li>\n"
+#~ "                        <li>Utilities: Trash, Search Advanced...</li>\n"
+#~ "                        <li>Advertisement manager</li>\n"
+#~ "                        <li>Polls manager</li>\n"
+#~ "                        <li>Galleries manager</li>\n"
+#~ "                        <li>Video manager</li>\n"
+#~ "                        <li>Frontpage customization</li>\n"
+#~ "                        <li>Newsletter manager (*)</li>\n"
+#~ "                        <li>2 user license</li>\n"
+#~ "                        <li>Support via tickets</li>\n"
+#~ "                        <li>Support via phone: 4h (10am-2pm M-F)</li>\n"
+#~ "                        <li>Media storage: 1.5GB</li>\n"
+#~ "                        <li>Page views: 250.000</li>\n"
+#~ "                    </ul>\n"
+#~ "                    <p><small>*  Newsletter manager: email sendings are "
+#~ "charged with\n"
+#~ "                        0.3€ each block of 1000 sent emails</small></p>"
 #~ msgstr ""
-#~ "He leído y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
-#~ "articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in "
-#~ "Opennemas\">términos de uso</a> y la <a href=\"http://help.opennemas.com/"
-#~ "knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-#~ "\">política de privacidad</a>."
+#~ "<p>Personaliza tus portadas, envía boletines de noticias a tus lectores y "
+#~ "haz que conozcan lo que se han perdido.</p>\n"
+#~ "<p>Esta oferta te proporciona un descuento del 30% en los módulos  "
+#~ "(frente a los 145€/mes si compras los módulos de forma independiente)</"
+#~ "p>\n"
+#~ "                    <p>Este pack incluye:</p>\n"
+#~ "                    <ul>\n"
+#~ "                        <li>Gestor de portadas</li>\n"
+#~ "                        <li>Gestor de widgets</li>\n"
+#~ "                        <li>Gestor de artículos de opinión</li>\n"
+#~ "                        <li>Gestor de comentarios</li>\n"
+#~ "                        <li>Subida de imagenes y archivos</li>\n"
+#~ "                        <li>Utilidades: papelera, búsqueda avanzada...</"
+#~ "li>\n"
+#~ "                        <li>Gestor de publicidad</li>\n"
+#~ "                        <li>Gestor de encuestas</li>\n"
+#~ "                        <li>Gestor de galerías</li>\n"
+#~ "                        <li>Gestor de vídeo</li>\n"
+#~ "                        <li>Personalización de portadas</li>\n"
+#~ "                        <li>Gestor de boletines de noticias(*)</li>\n"
+#~ "                        <li>2 licencias de usuario</li>\n"
+#~ "                        <li>Asistencia técnica mediante tickets</li>\n"
+#~ "                        <li>Almacenamiento multimedia: 1GB</li>\n"
+#~ "                        <li>Páginas vistas: 250.000</li>\n"
+#~ "                    </ul>\n"
+#~ "<p><small>*  Gestor de portadas: el envío de correos electrónicos se "
+#~ "cobrará a 0.3€ cada bloque de 1000 correos enviados</small></p>"
 
-#~ msgid "Yes, accept"
-#~ msgstr "Si, aceptar"
-
-#~ msgid "Master"
-#~ msgstr "Maestro"
-
-#~ msgid "HOME"
-#~ msgstr "PORTADA"
+#~ msgid "Contains all the major features of Opennemas."
+#~ msgstr "Contiene todas las funcionalidades principales de Opennemas."
 
 #~ msgid ""
-#~ "In order to <strong>connect Opennemas with Paypal</strong> you have to "
-#~ "fill your Paypal API credentials below"
+#~ "Newspaper web site template developed by Opennemas team. Customizable to "
+#~ "make a better git to customer brand guidelines and image"
 #~ msgstr ""
-#~ "Para <strong>conectar Opennemas con Paypal</strong> debes completar tus "
-#~ "credenciales del API de PayPal a continuación:"
-
-#~ msgid "No available payment modes. Add a new one with the button below."
-#~ msgstr ""
-#~ "No hay formas de pago disponibles. Añadir una nueva con el botón de abajo."
+#~ "Pide un sitio Web del periódico personalizado, con widgets incluidos, por "
+#~ "lo que todo el mundo reconocerá tu marca e imagen."
 
 #~ msgid ""
-#~ "Could not connect to PayPal. Validate your API credentials and try again"
+#~ "Newspaper Web Site Template that can be customized to reflect better "
+#~ "brand guidelines and customer preferences"
 #~ msgstr ""
-#~ "No se pudo conectar a PayPal. Valida tus credenciales de API y vuelve a "
-#~ "intentarlo"
+#~ "Templates con multitud de widgets donde el cliente SI podrá personalizar "
+#~ "el tema y además esta plantilla solo será usada por un cliente  por lo "
+#~ "que será completamente exclusivo."
 
-#~ msgid "Paypal API authentication is correct."
-#~ msgstr "Autenticación del API de PayPal es correcta."
+#~ msgid "Module for managing articles"
+#~ msgstr "Módulo para gestionar artículos"
 
-#~ msgid "Paypal API authentication is incorrect. Please try again."
-#~ msgstr "La autenticación del API de PayPal es incorrecta."
+#~ msgid "Module for managing comments"
+#~ msgstr "Módulo para gestionar comentarios"
 
-#~ msgid "Allow coments"
-#~ msgstr "Permitir comentarios"
+#~ msgid "Allows the user to upload files"
+#~ msgstr "Permite al usuario subir archivos"
 
-#~ msgid "Basic information"
-#~ msgstr "Información básica"
-
-#~ msgid "Position in selected page type"
-#~ msgstr "Posición en el tipo de página seleccionado"
-
-#~ msgid "%1 not found - Opennemas"
-#~ msgstr "%1 no encontrada - Opennemas"
-
-#~ msgid "We already have being informed of this error: %1"
-#~ msgstr "Ya hemos sido informados de este error: %1"
-
-#~ msgid "Item "
-#~ msgstr "Elemento"
-
-#~ msgid "%d item(s) "
-#~ msgstr "%s elemento(s)"
-
-#~ msgid "Account settings"
-#~ msgstr "Preferencias de la cuenta"
-
-#~ msgid "Delete subscriptions"
-#~ msgstr "Eliminar suscripciones"
-
-#~ msgid "Delete subscriptor"
-#~ msgstr "Eliminar suscriptor"
+#~ msgid "Module for managing elements in frontpages"
+#~ msgstr "Módulo para gestionar elementos en portadas"
 
 #~ msgid ""
-#~ "Are you sure you want to delete those <span>%num%</span> subscriptors?"
+#~ "Allows user to define keywords associated with url, mails and internal "
+#~ "searches"
 #~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar estes <span>%num%</span> "
-#~ "suscriptores?"
+#~ "Permite al usuario definir palabras clave asociadas con un url, correos "
+#~ "electrónicos o búsquedas internas"
 
 #~ msgid ""
-#~ "You have reach the maximun users allowed. If you want to create more "
-#~ "users, please contact us."
+#~ "Create and manage your polls, <strong>engage</strong> your audience and "
+#~ "<strong>collect</strong> useful information."
 #~ msgstr ""
-#~ "Has alcanzado el máximo de usuario permitidos. Si quieres crear más "
-#~ "usuarios contacta con nosotros."
+#~ "Crea y gestiona tus encuestas, <strong>atrae</strong> a tu audiencia y "
+#~ "<strong>obtén información útil</strong>."
 
-#~ msgid "No Support"
-#~ msgstr "Sin soporte"
+#~ msgid "Make money while doing what you love."
+#~ msgstr "Gana dinero haciendo lo que te gusta."
 
-#~ msgid "Unable to update the user with the submitted information."
-#~ msgstr "No se pudo actualizar el usuario con la información proporcionada."
+#~ msgid "Save for later"
+#~ msgstr "Guardar para despues"
 
-#~ msgid ""
-#~ "Unable to send the email to recover your username. Please try it later."
-#~ msgstr ""
-#~ "No se pudo enviar el correo electrónico de recuperación de contraseña. "
-#~ "Por favor inténtalo más tarde."
+#~ msgid "No items available to purchase"
+#~ msgstr "No hay elementos disponibles para comprar"
 
-#~ msgid "FRONTPAGE"
-#~ msgstr "PORTADA"
-
-#~ msgid "Frontpage videos"
-#~ msgstr "Vídeo: portada"
-
-#~ msgid "Gallery frontpage"
-#~ msgstr "Álbum: portada"
-
-#~ msgid "You don't have permissions"
-#~ msgstr "No tienes permisos"
-
-#~ msgid "Image module settings saved successfully."
-#~ msgstr "Configuraciones del módulo «Imágenes» guardadas correctamente."
-
-#~ msgid "Please provide XML file schema"
-#~ msgstr "Debes proporcionar el esquema de archivo XML"
-
-#~ msgid "Form was sent in the wrong way."
-#~ msgstr "El formulario se ha enviado de forma incorrecta."
-
-#~ msgid ""
-#~ "There was an error while uploading «%s» - «%s». Check its size before "
-#~ "send it."
-#~ msgstr ""
-#~ "Se ha producido un error durante subiendo «%s» - «%s». Compruebe el "
-#~ "tamaño antes de enviarlo."
-
-#~ msgid "Can't read the file. Please check xml file."
-#~ msgstr "No se pudo leer el archivo. Compruebe el archivo xml."
-
-#~ msgid "Can't read file. Please check xml file."
-#~ msgstr "No se pudo leer el archivo. Compruebe el archivo xml."
-
-#~ msgid "Importer XML configuration saved successfully"
-#~ msgstr ""
-#~ "Configuración del módulo «Importación de XML» guardada correctamente"
-
-#~ msgid "There was an error while saving importer XML configuration"
-#~ msgstr ""
-#~ "Se ha producido un error al guardar la configuración del módulo de XML"
-
-#~ msgid "A long time ago from synchronization."
-#~ msgstr "La última sincronización fue hace cierto tiempo."
-
-#~ msgid ""
-#~ "Try syncing the news list from server by clicking in \"Sync with server\" "
-#~ "button above"
-#~ msgstr ""
-#~ "Intenta actualizar la lista desde el servidor pulsando el botón "
-#~ "«Sincronizar con servidor» de arriba."
-
-#~ msgid "Please fill the sender email address in the module configuration."
-#~ msgstr ""
-#~ "Debes completar la dirección de correo del emisor en la configuración del "
-#~ "módulo."
-
-#~ msgid "Can't get static page metadata."
-#~ msgstr "No se pudieron obtener los metadatos de la página estática."
-
-#~ msgid "Article opinions"
-#~ msgstr "Artículos de opinión"
-
-#~ msgid "XML Importer"
-#~ msgstr "Importador de XML"
-
-#~ msgid "Homepage for category %s cleaned successfully."
-#~ msgstr "Portada de la categoría %s limpiada correctamente."
-
-#~ msgid "Problem with IP verification!"
-#~ msgstr "Hubo un problema con la verificación de tu IP!"
-
-#~ msgid "You have voted this new previously."
-#~ msgstr "Ya has votado esta noticia anteriormente."
-
-#~ msgid "Instance Manager"
-#~ msgstr "Gestor de instancias"
-
-#~ msgid "Opcache status"
-#~ msgstr "Estado de Opcache"
-
-#~ msgid "Instance domains cannot be empty"
-#~ msgstr "Los dominios de la instancia no pueden estar vacíos"
-
-#~ msgid "Instance updated successfully."
-#~ msgstr "Instancia actualizada correctamente."
-
-#~ msgid "Error while updating instance with id \"%s\""
-#~ msgstr "No es posible actualizar la instancia con el identificador «%s»"
-
-#~ msgid "Error while updating the instance with id \"%s\""
-#~ msgstr ""
-#~ "Se ha producido un error al actualizar la instancia con el identificador "
-#~ "«%s»"
-
-#~ msgid "SQL Log"
-#~ msgstr "Log SQL"
-
-#~ msgid "Videos (local)"
-#~ msgstr "Vídeos (local)"
-
-#~ msgid "News agency importer"
-#~ msgstr "Importador de noticias de agencias"
-
-#~ msgid "Sync list  with server"
-#~ msgstr "Sincronizar lista con servidor"
-
-#~ msgid "Body:"
-#~ msgstr "Cuerpo:"
-
-#~ msgid "Photos:"
-#~ msgstr "Fotos:"
-
-#~ msgid "People:"
-#~ msgstr "Personas:"
-
-#~ msgid "Place:"
-#~ msgstr "Lugar:"
-
-#~ msgid "Associated Docs:"
-#~ msgstr "Documentos asociados:"
-
-#~ msgid "Categories:"
-#~ msgstr "Categorías:"
-
-#~ msgid "Level:"
-#~ msgstr "Nivel:"
-
-#~ msgid "Redactors:"
-#~ msgstr "Redactores:"
-
-#~ msgid "XML file importer"
-#~ msgstr "Importador de XML"
-
-#~ msgid "Module configuration"
-#~ msgstr "Configuración de módulo"
-
-#~ msgid "Title:"
-#~ msgstr "Título:"
-
-#~ msgid "Agency:"
-#~ msgstr "Agencia:"
-
-#~ msgid "Metadata:"
-#~ msgstr "Metadatos:"
-
-#~ msgid "Section:"
-#~ msgstr "Sección:"
-
-#~ msgid "Image:"
-#~ msgstr "Foto:"
-
-#~ msgid "Image Footer:"
-#~ msgstr "Píe de foto:"
-
-#~ msgid "Ignored labels:"
-#~ msgstr "Etiquetas ignoradas:"
-
-#~ msgid "Important labels:"
-#~ msgstr "Etiquetas importantes:"
-
-#~ msgid "Definition values"
-#~ msgstr "Definición de los valores"
-
-#~ msgid ""
-#~ "Define the names of labels in the xml files that you want to fill in "
-#~ "article fields"
-#~ msgstr ""
-#~ "Debes definir los nombres de las etiquetas en los archivos XML que "
-#~ "quieres completar en los campos de un artículo"
-
-#~ msgid "The name can be one attribute or one label in XML file"
-#~ msgstr ""
-#~ "El nombre puede ser tanto un atributo como una etiqueta de archivo XML"
-
-#~ msgid "Use ignored labels separated with commas"
-#~ msgstr "Usa las etiquetas a ignorar separadas por comas"
-
-#~ msgid "Check important labels for write with bolder font"
-#~ msgstr "Marque las etiquetas que quiere resaltar con negrita"
-
-#~ msgid "XML importer"
-#~ msgstr "Importador de XML"
-
-#~ msgid "Config XML Schema"
-#~ msgstr "Configuración de esquema XML"
-
-#~ msgid "Delete cache"
-#~ msgstr "Eliminar caché"
-
-#~ msgid "Get updated cache list"
-#~ msgstr "Obtener lista de cachés actualizada"
-
-#~ msgid "Configurar cachés"
-#~ msgstr "Configurar cachés"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
-
-#~ msgid "items/page with type"
-#~ msgstr "elementos/página con el tipo"
-
-#~ msgid "All types"
-#~ msgstr "Todos los tipos"
-
-#~ msgid "Video: frontpage"
-#~ msgstr "Vídeo: portadas"
-
-#~ msgid "Poll: frontpage"
-#~ msgstr "Encuestas: portada"
-
-#~ msgid "Poll: inner"
-#~ msgstr "Encuestas: interior"
-
-#~ msgid "and from"
-#~ msgstr "y de"
-
-#~ msgid "All sections"
-#~ msgstr "Todas las secciones"
-
-#~ msgid "Update list"
-#~ msgstr "Actualizar lista"
-
-#~ msgid "Article inner cache file"
-#~ msgstr "Archivo de caché de artículo interior"
-
-#~ msgid "Video inner cache file"
-#~ msgstr "Archivo de caché de vídeo interior"
-
-#~ msgid "Album cache file"
-#~ msgstr "Archivo de caché de álbum"
-
-#~ msgid "Opinion author index cache file"
-#~ msgstr "Archivo de caché de portada de autor de opinión"
-
-#~ msgid "Category frontpage cache file"
-#~ msgstr "Archivo de caché de portada de categoría"
-
-#~ msgid "RSS cache file"
-#~ msgstr "Archivo de caché de RSS"
-
-#~ msgid "RSS Opinion author cache file "
-#~ msgstr "Fichero de caché de RSS de autor de opinión"
-
-#~ msgid "Section Frontpage cache file"
-#~ msgstr "Fichero de caché de portada de sección"
-
-#~ msgid "Video: frontpage %1"
-#~ msgstr "Vídeo: portada %1"
-
-#~ msgid "Video: main frontpage"
-#~ msgstr "Vídeo: portada principal"
-
-#~ msgid "Frontpage %1"
-#~ msgstr "Portada %1"
-
-#~ msgid "Opinion of Author \"%1\""
-#~ msgstr "Opinión de autor «%1»"
-
-#~ msgid "Album %1"
-#~ msgstr "Álbum %1"
-
-#~ msgid "Album Frontpage"
-#~ msgstr "Álbum: portada"
-
-#~ msgid "Poll %1"
-#~ msgstr "Encuesta %1"
-
-#~ msgid "RSS:"
-#~ msgstr "RSS:"
-
-#~ msgid "Frontpage: "
-#~ msgstr "Portada: "
-
-#~ msgid ""
-#~ "Ohh, there is <strong>no cache file</strong>\n"
-#~ "                in the system."
-#~ msgstr ""
-#~ "Oh, parece que no hay <strong>ningún archivo de caché</strong>\n"
-#~ " en el sistema."
-
-#~ msgid "Delete caches"
-#~ msgstr "Eliminar caché"
-
-#~ msgid "Are you sure you want to delete <span>%num%</span> cache elements?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar <span>%num%</span> elementos de "
-#~ "caché?"
-
-#~ msgid "There is no cache configuration available"
-#~ msgstr "No hay ninguna configuración de caché disponible"
-
-#~ msgid "New"
-#~ msgstr "Nuevo"
-
-#~ msgid "There is no subscriptors yet"
-#~ msgstr "Non hay ningún suscriptor todavía."
-
-#~ msgid "Next step"
-#~ msgstr "Paso siguiente"
-
-#~ msgid ""
-#~ "Drag elements from the right column to include them into the newsletter"
-#~ msgstr ""
-#~ "Arrastre elementos desde la columna de la derecha para incluirlos en el "
-#~ "boletín"
-
-#~ msgid "In Frontpage"
-#~ msgstr "En portada"
-
-#~ msgid "Check All"
-#~ msgstr "Seleccionar todo"
-
-#~ msgid "Add Selected items"
-#~ msgstr "Añadir elementos seleccionados"
-
-#~ msgid "Add selected contents"
-#~ msgstr "Añadir elementos seleccionados"
-
-#~ msgid "Send newsletter"
-#~ msgstr "Enviar boletín"
-
-#~ msgid "Prev step"
-#~ msgstr "Paso anterior"
-
-#~ msgid "MailList"
-#~ msgstr "Cuenta de la lista de correo"
-
-#~ msgid "Database accounts"
-#~ msgstr "Cuentas de la base de datos"
-
-#~ msgid "Previous step"
-#~ msgstr "Paso anterior"
-
-#~ msgid "New newsletter"
-#~ msgstr "Nuevo boletín"
-
-#~ msgid " Since %1 you have sent %2 of %3 allowed"
-#~ msgstr "Desde %1 has enviado %2 de %3 permitidos"
-
-#~ msgid " Since %1 you have sent %2 emails"
-#~ msgstr "Desde %1 has enviado %2 emails "
-
-#~ msgid "There is no newsletters yet."
-#~ msgstr "No hay ningún boletín aún."
-
-#~ msgid "Search"
-#~ msgstr "Buscar"
-
-#~ msgid "Uploading files"
-#~ msgstr "Subiendo archivos"
-
-#~ msgid "Clear"
-#~ msgstr "Borrar"
-
-#~ msgid "Saving..."
-#~ msgstr "Gardando…"
-
-#~ msgid "Saved"
-#~ msgstr "Guardado"
-
-#~ msgid "Error saving"
-#~ msgstr "Error al guardar"
-
-#~ msgid "Alignment"
-#~ msgstr "Alineación"
-
-#~ msgid "Left"
-#~ msgstr "Izquierda"
-
-#~ msgid "Right"
-#~ msgstr "Derecha"
-
-#~ msgid "None"
-#~ msgstr "Ningunha"
-
-#~ msgid "Start"
-#~ msgstr "Iniciar"
-
-#~ msgid "Uploaded"
-#~ msgstr "Subido"
-
-#~ msgid "New ePaper"
-#~ msgstr "Nueo ePapel"
-
-#~ msgid "Save and exit"
-#~ msgstr "Guardar y salir"
-
-#~ msgid "Upload PDF"
-#~ msgstr "Subir PDF"
-
-#~ msgid "ePapers"
-#~ msgstr "ePapeles"
-
-#~ msgid "Batch actions"
-#~ msgstr "Acciones en lote"
-
-#~ msgid "FILTER:"
-#~ msgstr "FILTRAR:"
-
-#~ msgid "No available covers."
-#~ msgstr "No hay portadas diponibles"
-
-#~ msgid "Use this option only if you are avanced user"
-#~ msgstr "Use esta opción solo si eres un usuario avanzado"
-
-#~ msgid "New widget"
-#~ msgstr "Nuevo widget"
-
-#~ msgid "Search by title:"
-#~ msgstr "Buscar por título"
-
-#~ msgid "Search..."
-#~ msgstr "Buscar..."
-
-#~ msgid "Edit my profile"
-#~ msgstr "Editar mi perfíl"
-
-#~ msgid "Logout from control panel"
-#~ msgstr "Salir del panel de administración"
-
-#~ msgid "Metadata"
-#~ msgstr "Metadatos"
-
-#~ msgid "Frontpage image"
-#~ msgstr "Imagen de portada"
-
-#~ msgid "New letter"
-#~ msgstr "Nueva carta"
-
-#~ msgid "No available letters."
-#~ msgstr "No hay cartas disponibles."
-
-#~ msgid "This article was imported before. Take care of it."
-#~ msgstr "Este artículo fue importado con anterioridad."
-
-#~ msgid "Other attachments"
-#~ msgstr "Otros anexos"
-
-#~ msgid "and in"
-#~ msgstr "y en"
-
-#~ msgid "WIDGET HOME"
-#~ msgstr "WIDGET de PORTADA"
-
-#~ msgid "Upload file"
-#~ msgstr "Subir archivo"
-
-#~ msgid "No available files."
-#~ msgstr "No hay archivos disponibles."
-
-#~ msgid "[Link]"
-#~ msgstr "[Enlace]"
-
-#~ msgid "No available polls."
-#~ msgstr "No hay encuestas disponibles."
-
-#~ msgid "Delete item"
-#~ msgstr "Eliminar elemento"
-
-#~ msgid "New Privilege"
-#~ msgstr "Nuevo privilegio"
-
-#~ msgid "New User Group"
-#~ msgstr "Nuevo grupo de usuarios"
-
-#~ msgid ""
-#~ "There is no user groups created yet or <br/>results matching your "
-#~ "searching criteria."
-#~ msgstr ""
-#~ "No hay ningún grupo de usuarios creado aún <br/>o tu criterio de búsqueda "
-#~ "no coincide con ninguno."
-
-#~ msgid "Delete this user"
-#~ msgstr "Eliminar este usuario"
-
-#~ msgid "Remove image"
-#~ msgstr "Eliminar imagen"
-
-#~ msgid ""
-#~ "There is no user created yet or <br/>not results for your searching "
-#~ "criteria."
-#~ msgstr ""
-#~ "No hay ningún usuario creado aún <br/>o su criterio de búsqueda no "
-#~ "coincide con ningún usuario."
-
-#~ msgid "Please fill the form for searching contents"
-#~ msgstr "Completa el formulario para buscar contenidos"
-
-#~ msgid "Your search \"<b>%1</b>\" didn't return any element."
-#~ msgstr "Tu búsqueda «<b>%1</b>» no devolvió ningún elemento."
-
-#~ msgid "Suggestions:"
-#~ msgstr "Sugerencias:"
-
-#~ msgid "Use other words."
-#~ msgstr "Usa otras palabras."
-
-#~ msgid "Use more general search criteria."
-#~ msgstr "Usa un  criterio de búsqueda más general."
-
-#~ msgid "CONTENT TYPE:"
-#~ msgstr "TIPO DE CONTENIDO:"
-
-#~ msgid "Add an external link item."
-#~ msgstr "Añadir enlace externo."
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "Add element"
-#~ msgstr "Añadir elemento"
-
-#~ msgid "Please, remember save changes after finish."
-#~ msgstr "Por favor, recuerda guardar los cambios antes de terminar."
-
-#~ msgid ""
-#~ "Pick elements from the right column and drag them to the left column to "
-#~ "include them as elements of this menu."
-#~ msgstr ""
-#~ "Selecciona elementos desde la columna derecha y arrástralos a la "
-#~ "izquierda para incluirlos como elementos de este menú."
-
-#~ msgid "Video category"
-#~ msgstr "Categoría de vídeo"
-
-#~ msgid "Sync"
-#~ msgstr "Sincronizar"
-
-#~ msgid "Sync Automatic category"
-#~ msgstr "Sincronización automática de categoría"
-
-#~ msgid "Synchronized from %1"
-#~ msgstr "Sincronizado con %1"
-
-#~ msgid "Menu title..."
-#~ msgstr "Título del menú…"
-
-#~ msgid "Menu link..."
-#~ msgstr "Enlace del menú…"
-
-#~ msgid "New menu"
-#~ msgstr "Nuevo menú"
-
-#~ msgid "Edit page '[% content.name %]'"
-#~ msgstr "Editar página '[% content.name %]'"
-
-#~ msgid "New static page"
-#~ msgstr "Nueva página estática"
-
-#~ msgid "No available static pages."
-#~ msgstr "No hay páginas estáticas disponibles."
-
-#~ msgid "System settings"
-#~ msgstr "Opciones del sistema"
-
-#~ msgid "Site Mobile logo"
-#~ msgstr "Logotipo del sitio para móvil"
-
-#~ msgid "Sessions"
-#~ msgstr "Sesiones"
-
-#~ msgid "Max session lifetime"
-#~ msgstr "Tiempo de expiración máximo para las sesiones"
-
-#~ msgid "Minutes after a user session is considered as invalid."
-#~ msgstr ""
-#~ "Minutos despues de los cuales una sesión de usuario se considera como no "
-#~ "válida."
-
-#~ msgid "Page ID"
-#~ msgstr "Identificador del sitio"
-
-#~ msgid "Server URL"
-#~ msgstr "Server URL"
-
-#~ msgid "User token auth"
-#~ msgstr "Token-auth del usuario"
-
-#~ msgid "Upload file from my computer"
-#~ msgstr "Subir un archivo desde mi ordenador"
-
-#~ msgid "Pick a file to upload"
-#~ msgstr "Seleccione un archivo para subir"
-
-#~ msgid "Service:"
-#~ msgstr "Servicio:"
-
-#~ msgid "New video"
-#~ msgstr "Nuevo vídeo"
-
-#~ msgid "No available videos."
-#~ msgstr "No hay vídeos disponibles"
-
-#~ msgid "Terms of use"
-#~ msgstr "Términos de uso"
-
-#~ msgid "Skip tour"
-#~ msgstr "Saltar guía inicial"
-
-#~ msgid "or dismiss"
-#~ msgstr "o omitir"
-
-#~ msgid "Need Help?"
-#~ msgstr "¿Necesitas ayuda?"
-
-#~ msgid ""
-#~ "We have created a lot of videos that will teach you to perform from easy "
-#~ "tasks to the advanced ones."
-#~ msgstr ""
-#~ "Hemos creado muchos vídeos que te enseñarán a llevar a cabo tanto tareas "
-#~ "sencillas como las más avanzadas."
-
-#~ msgid ""
-#~ "If you prefer you can read our online documentation or if you have any "
-#~ "doubt ask us."
-#~ msgstr ""
-#~ "Si lo prefieres puedes leer nuestra documentación en línea o preguntarnos "
-#~ "en el caso de que tengas otra duda."
-
-#~ msgid "General information"
-#~ msgstr "Información general"
-
-#~ msgid "Select image"
-#~ msgstr "Seleccionar imagen"
-
-#~ msgid "Ads :: Configuration"
-#~ msgstr "Publicidad :: Configuración"
-
-#~ msgid "Config ads module"
-#~ msgstr "Configuración del módulo «Publicidad»"
-
-#~ msgid "Banner type"
-#~ msgstr "Tipo de publicidad"
-
-#~ msgid "There is no advertisement stored in this section"
-#~ msgstr "No hay ninguna publicidad almacenada en esta sección"
-
-#~ msgid "Undefined"
-#~ msgstr "No definido"
-
-#~ msgid "Adding site to synchronization"
-#~ msgstr "Añadiendo sitio web a la sincronización"
-
-#~ msgid "Clients list"
-#~ msgstr "Lista de clientes"
-
-#~ msgid "There is no elements to sync"
-#~ msgstr "No hay ningún elemento a sincronizar"
-
-#~ msgid "Check if the given site url is correct."
-#~ msgstr "Compruebe si la url proporcionada es correcta."
-
-#~ msgid "Search images"
-#~ msgstr "Buscar imágenes"
-
-#~ msgid "Search result"
-#~ msgstr "Resultado de la búsqueda"
-
-#~ msgid "Please fill the form of<br> the side to search images"
-#~ msgstr "Completa el formulario<br> para buscar imágenes"
-
-#~ msgid "Image name"
-#~ msgstr "Nombre de la imagen"
-
-#~ msgid "Date period:"
-#~ msgstr "Período de tiempo:"
-
-#~ msgid "To"
-#~ msgstr "Hasta"
-
-#~ msgid "Width (px.)"
-#~ msgstr "Ancho (px.)"
-
-#~ msgid "Min"
-#~ msgstr "Mínimo"
-
-#~ msgid "Height (px.)"
-#~ msgstr "Alto (px.)"
-
-#~ msgid "Weight (kB)"
-#~ msgstr "Peso (kB)"
-
-#~ msgid "Type:"
-#~ msgstr "Tipo:"
-
-#~ msgid "Color:"
-#~ msgstr "Color:"
-
-#~ msgid " - All types - "
-#~ msgstr " - Todos los tipos - "
-
-#~ msgid "Black and white"
-#~ msgstr "Blanco y negro"
-
-#~ msgid "Main image thumbnails"
-#~ msgstr "Miniatura principal de las imagenes"
-
-#~ msgid "Frontpage image thumbnails"
-#~ msgstr "Miniatura de las imagenes para portada"
-
-#~ msgid "Width:"
-#~ msgstr "Ancho:"
-
-#~ msgid "Height:"
-#~ msgstr "Alto:"
-
-#~ msgid "Inner article image thumbnails"
-#~ msgstr "Miniatura de artículo interior de las imagenes"
-
-#~ msgid "Content type"
-#~ msgstr "Tipo de contenido"
-
-#~ msgid "There is no elements in the trash"
-#~ msgstr "Non hay ningún elemento en la papelera"
-
-#~ msgid "Inner image"
-#~ msgstr "Imagen para interior"
-
-#~ msgid "Image footer text"
-#~ msgstr "Pie de la imagen"
-
-#~ msgid "Image or video for frontpage:"
-#~ msgstr "Imagen o vídeo para portada:"
-
-#~ msgid "Image for inner article page:"
-#~ msgstr "Imagen para artículo interior:"
-
-#~ msgid "Drop a video to here"
-#~ msgstr "Arrastre un vídeo aquí"
-
-#~ msgid "Available videos"
-#~ msgstr "Vídeos disponibles"
-
-#~ msgid "Search videos by title..."
-#~ msgstr "Buscar vídeos por título…"
-
-#~ msgid "New special"
-#~ msgstr "Nuevo especial"
-
-#~ msgid "New category"
-#~ msgstr "Nueva categoría"
-
-#~ msgid "Change system"
-#~ msgstr "Cambiar sistema"
-
-#~ msgid "Change manager"
-#~ msgstr "Cambiar gestor"
-
-#~ msgid "facebook module configuration"
-#~ msgstr "Configuración de módulo «Facebook»"
-
-#~ msgid "No comments matched your criteria."
-#~ msgstr "No hay ningún comentario que coincida con tu búsqueda."
-
-#~ msgid "New author"
-#~ msgstr "Nuevo autor"
-
-#~ msgid "-- Pick an author --"
-#~ msgstr "-- Seleccione un autor --"
-
-#~ msgid "-- All authors --"
-#~ msgstr "-- Todos los autores --"
-
-#~ msgid "Author name"
-#~ msgstr "Nombre del autor"
-
-#~ msgid "Invalid image: the filename name contains spaces or special chars."
-#~ msgstr ""
-#~ "Imágen no válida: el nombre del archivo contiene espacios o caracteres "
-#~ "especiales."
-
-#~ msgid "Upload photo"
-#~ msgstr "Subir foto"
-
-#~ msgid "Save and continue"
-#~ msgstr "Guardar y continuar"
-
-#~ msgid "Search keyworks containing "
-#~ msgstr "Buscar palabras clave que contienen"
-
-#~ msgid "Replacement value"
-#~ msgstr "Valor de reemplazo"
-
-#~ msgid "No available keywords yet."
-#~ msgstr "No hay ninguna palabra clave todavía."
-
-#~ msgid "Edit image properties"
-#~ msgstr "Editar propiedades de la imagen"
-
-#~ msgid "No available albums."
-#~ msgstr "No hay álbums disponibles."
-
-#~ msgid "Pick layout"
-#~ msgstr "Seleccionar disposición"
-
-#~ msgid "Order by"
-#~ msgstr "Ordenar por"
-
-#~ msgid "Purchases listing"
-#~ msgstr "Listado de compras"
-
-#~ msgid "If you don't have these identification params click on the next link"
-#~ msgstr ""
-#~ "Si no tienes estos parametros de identificación, haz clic en el siguiente "
-#~ "enlace"
-
-#~ msgid "No users with paywall"
-#~ msgstr "No hay usuarios del Paywall"
-
-#~ msgid "or use"
-#~ msgstr "o use"
-
-#~ msgid "Separated by coma"
-#~ msgstr "Separadas por comas"
-
-#~ msgid "No available books."
-#~ msgstr "No hay libros disponibles"
-
-#~ msgid "Deselect"
-#~ msgstr "Deselecccionar"
-
-#~ msgid "All groups"
-#~ msgstr "Todos los grupos"
-
-#~ msgid "You must put %d opinions %s in the frontpage"
-#~ msgstr "Debes seleccionar %d opiniones %s para la portada"
-
-#~ msgid "Sorry, you don't have enought privileges"
-#~ msgstr "No tienes suficientes permisos para realizar esta acción"
-
-#~ msgid "Sync Blog Categories"
-#~ msgstr "Categorías sincronizadas tipo blog"
-
-#~ msgid "Sync blog category"
-#~ msgstr "Categoría sincronizada tipo blog"
-
-#~ msgid "Footer text for frontpage image:"
-#~ msgstr "Pie de la foto de portada:"
-
-#~ msgid "Unable to find a poll with the id \"%d\""
-#~ msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
-
-#~ msgid "Successfully changed availability for the poll \"%s\""
-#~ msgstr ""
-#~ "Estado de disponibilidad cambiado correctamente para la encuesta «%s»"
-
-#~ msgid "Successfully changed suggested flag for the poll \"%s\""
-#~ msgstr "Estado de sugerido cambiado correctamente para la encuesta «%s»"
-
-#~ msgid "Successfully deleted %d polls."
-#~ msgstr "Se han eliminado %d encuestas correctamente."
-
-#~ msgid "Successfully changed the available status of %d polls."
-#~ msgstr "Estado de disponibilidad cambiado correctamente para %d encuestas."
-
-#~ msgid "YOU ARE HERE"
-#~ msgstr "ESTAS AQUI"
-
-#~ msgid "Filter:"
-#~ msgstr "Filtrar:"
-
-#~ msgid "Export current list"
-#~ msgstr "Exportar listado actual"
-
-#~ msgid "Doman expire"
-#~ msgstr "Expiración del dominio"
-
-#~ msgid "There is no available groups yet"
-#~ msgstr "Non hay ningún grupo dispoñíbel"
-
-#~ msgid "Search Dashboard"
-#~ msgstr "Buscar en el tablero"
-
-#~ msgid "My Account"
-#~ msgstr "Mi cuenta"
-
-#~ msgid "Log Out"
-#~ msgstr "Salir"
-
-#~ msgid "The application has been upgraded. Please reload your page"
-#~ msgstr "La aplicación se actualizó. Por favor recarga tu página."
-
-#~ msgid "Reload"
-#~ msgstr "Recargar"
-
-#~ msgid "Here you can manage global settings about this onm-multiinstance."
-#~ msgstr ""
-#~ "Aquí puede gestionar las preferencias globales sobre opennemas "
-#~ "multiinstancia."
-
-#~ msgid "Unable to find the album with the id \"%d\""
-#~ msgstr "No se pudo encontrar un álbum con el identificador «%d»"
-
-#~ msgid "No author assigned"
-#~ msgstr "Ningún autor asignado"
-
-#~ msgid "Preview:"
-#~ msgstr "Previsualización:"
-
-#~ msgid "\"Album\""
-#~ msgstr "\"Álbumes\""
-
-#~ msgid "author"
-#~ msgstr "autor"
-
-#~ msgid "editorial"
-#~ msgstr "editorial"
-
-#~ msgid "Available:"
-#~ msgstr "Disponible:"
-
-#~ msgid "Keywords:"
-#~ msgstr "Palabras clave:"
-
-#~ msgid "The address that you entered is already in use"
-#~ msgstr "La dirección de correo electrónico que escribiste ya está en uso"
-
-#~ msgid "Presets"
-#~ msgstr "Predefiniciones"
-
-#~ msgid "Admin"
-#~ msgstr "Administrador"
-
-#~ msgid "Cerrar"
-#~ msgstr "Cerrar"
-
-#~ msgid " Contents are added with comments activated"
-#~ msgstr "Permitir comentarios en los contenidos "
-
-#~ msgid "Unable to find an instance with the id \"%d\""
-#~ msgstr "No se pudo encontrar la instancia con el identificador «%d»"
-
-#~ msgid "Logout from manager"
-#~ msgstr "Salir del gestor"
-
-#~ msgid "There is no groups created yet."
-#~ msgstr "No hay ningún grupo creado todavía."
-
-#~ msgid "Session expire time:"
-#~ msgstr "Tiempo de expiración de sesión:"
-
-#~ msgid "or"
-#~ msgstr "o"
-
-#~ msgid "username"
-#~ msgstr "nombre de usuario"
-
-#~ msgid "and group:"
-#~ msgstr "y grupo:"
-
-#~ msgid "Framework status"
-#~ msgstr "Estado del framework"
-
-#~ msgid "Deploy"
-#~ msgstr "Desplegar"
-
-#~ msgid "Delete instances"
-#~ msgstr "Eliminar instancias"
-
-#~ msgid "You must select some instances."
-#~ msgstr "Debe seleccionar algúna instancia."
-
-#~ msgid "Batch activate"
-#~ msgstr "Activar en lote"
-
-#~ msgid "Batch desactivate"
-#~ msgstr "Desactivar en lote"
-
-#~ msgid "Filter by instance name"
-#~ msgstr "Filtrar por nombre de instancia"
-
-#~ msgid "Creating new intance"
-#~ msgstr "Creando nueva instancia"
-
-#~ msgid "Used for cache prefixes and internal ONM operations"
-#~ msgstr "Usado para los prefijos de caché y operaciones internas de ONM"
-
-#~ msgid ""
-#~ "Please provide your EFE auth credentials to start to use your EFE "
-#~ "Importer module"
-#~ msgstr ""
-#~ "Por favor configura las credenciales de EFE para comenzar a usar el "
-#~ "módulo «Importación de EFE»"
-
-#~ msgid "There was an error while updating the user data."
-#~ msgstr "Se ha producido un error al actualizar los datos de usuario"
-
-#~ msgid "Config disqus module"
-#~ msgstr "Configuración del módulo «Disqus»"
-
-#~ msgid ""
-#~ "There was a problem while converting your video. Please contact with your "
-#~ "administrator."
-#~ msgstr "Se ha producido un error al convertir el video."
-
-#~ msgid "EuropaPress importer"
-#~ msgstr "Importador de EuropaPress"
-
-#~ msgid "EFE importer"
-#~ msgstr "Importador de EFE"
-
-#~ msgid "Dates grouped"
-#~ msgstr "Agrupado por fecha"
-
-#~ msgid "Sync category blog"
-#~ msgstr "Categoría sincronizada tipo blog"
-
-#~ msgid "Url Thumbnail"
-#~ msgstr "Url de la miniatura"
-
-#~ msgid "No hemos podido encontrar la página que buscas."
-#~ msgstr "No hemos podido encontrar la página que buscas."
-
-#~ msgid "Error: Uri::generate should get $contentType and parameters"
-#~ msgstr "Erro: Uri::generate debe obtener $contentType y sus parámetros"
-
-#~ msgid ""
-#~ "No valid operation (%s) for image transform. All operation string is %s"
-#~ msgstr ""
-#~ "«%s» no es una operación de transformación de imagen válida. Las "
-#~ "operaciones válidas son %s"
-
-#~ msgid "Please initialize the image before get its width."
-#~ msgstr "Por favor inicializa la imagen antes de obtener su ancho."
-
-#~ msgid "Please initialize the image before get its height."
-#~ msgstr "Por favor inicialice la imagen antes de obtener su alto."
-
-#~ msgid "DB error."
-#~ msgstr "Error de base de datos"
-
-#~ msgid "Unable to save the cover data into the database."
-#~ msgstr "No fue posible guardar los datos de la portada."
-
-#~ msgid "Letter not available"
-#~ msgstr "Carta no disponible"
-
-#~ msgid "Not valid photo data"
-#~ msgstr "Los datos de la foto no son válido"
-
-#~ msgid ""
-#~ "Upload directory doesn't exists or you don't have enough privileges to "
-#~ "write files there"
-#~ msgstr ""
-#~ "El directorio de subida no existe o usted no tiene suficientes permisos "
-#~ "para escribir ficheros en el"
-
-#~ msgid "Unable to register the photo object %s (destination: %s)."
-#~ msgstr "No se pudo registrar el objeto foto %s (destino: %s)."
-
-#~ msgid "The image type is GIF </br>"
-#~ msgstr "La imagen es de tipo GIF </br>"
-
-#~ msgid "The image type is PNG </br>"
-#~ msgstr "La imagen es de tipo PNG </br>"
-
-#~ msgid "The image type is BMP </br>"
-#~ msgstr "La imagen es de tipo BMP </br>"
-
-#~ msgid "No available EXIF data</br>"
-#~ msgstr "No está disponible ningún dato EXIF.</br>"
-
-#~ msgid "No availabel IPTC data</br>"
-#~ msgstr "No está disponible ningún dato IPTC.</br>"
-
-#~ msgid "There was a problem with the cover data. Try again"
-#~ msgstr ""
-#~ "Se ha producido un problema al analizar los datos de la portada. "
-#~ "Inténtalo de nuevo."
-
-#~ msgid "File information updated successfully."
-#~ msgstr "Información del archivo actualizada correctamente."
-
-#~ msgid "Instance sync module configuration saved successfully"
-#~ msgstr ""
-#~ "Configuración del módulo «Sincronización de instancias» guardada "
-#~ "correctamente"
-
-#~ msgid ""
-#~ "There was an error while saving the Instance sync module configuration"
-#~ msgstr ""
-#~ "Se ha producido un error al guardar la configuración del módulo "
-#~ "«Sincronización de instancias»"
-
-#~ msgid "d-m-Y"
-#~ msgstr "d-m-Y"
+#~ msgid "No items purchased"
+#~ msgstr "No hay elementos comprados"
