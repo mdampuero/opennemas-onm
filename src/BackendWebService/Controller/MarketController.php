@@ -77,12 +77,10 @@ class MarketController extends Controller
                 'plan'             => 'Profesional',
                 'name'             => _('Media'),
                 'thumbnail'        => 'module-multimedia.jpg',
-                'description'      => _('Allow you to create photo galleries and use them in your site.'),
+                'description'      => _('Add Video and Image Galleries to your content. '),
                 'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
-                    <p>This module will allow you to create Photo Galleries, add video from YouTube,
-                    Vimeo, Dailymotion, MarcaTV, etc</p>
-                    <p>And the most interesting fact is that the video manager is the
-                    same as youtube one, perfect consistency and performance.</p>'),
+                    <p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
+                    <p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
                 'type'             => 'module',
                 'price' => [
                     'month' => 35

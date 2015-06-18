@@ -192,23 +192,43 @@ class ModuleManager
                 'id'               => 'BASIC',
                 'name'             => _('Basic pack'),
                 'thumbnail'        => 'pack-basic.jpg',
-                'description'      => _('Features the basic functionality for your newspaper for free.'),
-                'long_description' => _(
-                    '<p>Publishing your news is <strong>FREE!</strong></p>
-                    This pack includes:
-                    <ul>
+                'description'      => _('Publishing your news is FREE!'),
+                'long_description' => (
+                    _(
+                        '<p>This pack does not require any payment information and it allows you to access our platform to test it as much as to publish your newspaper for free and on the spot!</p>'
+                    )
+                    ._(
+                        '<p>Includes:</p>
+                        <ul>
                         <li>Frontpage manager</li>
                         <li>Widget manager</li>
                         <li>Opinion articles manager</li>
                         <li>Comments manager</li>
                         <li>Images and files uploading</li>
-                        <li>Utilities: Trash, Search Advanced...</li>
-                        <li>Support via tickets</li>
-                        <li>Media storage: 500MB</li>
-                        <li>Page views: 50.000</li>
-                    </ul>'
+                        <li>Utilities: Trash, Search Advanced...</li>'
+                    ).'</ul>'
+                    .sprintf(
+                        _(
+                            '<ul>
+                            <li>%d x  User (1)</li>
+                            <li>%s Storage (2)</li>
+                            <li>%s Items (Articles, Opinions, Comments) (2)</li>
+                            <li>%s page views/month</li>
+                            <li>Online Support (Tickets SLA %d business days)</li></ul>'
+                        ),
+                        1,
+                        '500MB',
+                        '50.000',
+                        '50.000',
+                        4
+                    )
+                    ._(
+                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
+                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
+                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                    )
                 ),
-                'type'             => 'internal',
+                'type' => 'pack',
                 'price' => [
                     'month' => 0
                 ]
@@ -218,26 +238,47 @@ class ModuleManager
                 'name'             => _('Professional pack'),
                 'thumbnail'        => 'pack-pro.jpg',
                 'description'      => _('Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!'),
-                'long_description' => _(
-                    '<p>This offer gives you more than 40% discount (if purchased separately modules
-                    have a value of 85EUR/month)</p>
-                    <p>This pack includes:</p>
-                    <ul>
+                'long_description' => (
+                    _(
+                        '<p>This pack is thought for professional that are starting their indipendent newspaper and need to manage advertising to grow and to publish polls to engage with their audience.</p>
+                        <p>This offer gives you more than 40% discount (if purchased separately modules have a value of 85EUR/month).</p>'
+                    )
+                    ._(
+                        '<p>Includes:</p>
+                        <ul>
                         <li>Frontpage manager</li>
                         <li>Widget manager</li>
                         <li>Opinion articles manager</li>
                         <li>Comments manager</li>
                         <li>Images and files uploading</li>
-                        <li>Utilities: Trash, Search Advanced...</li>
-                        <li>Advertisement manager</li>
+                        <li>Utilities: Trash, Search Advanced...</li>'
+                    )
+                    ._(
+                        '<li>Advertisement manager</li>
                         <li>Polls manager</li>
                         <li>Galleries manager</li>
-                        <li>Video manager</li>
-                        <li>1 user license</li>
-                        <li>Support via tickets</li>
-                        <li>Media storage: 1GB</li>
-                        <li>Page views: 100.000</li>
-                    </ul>'
+                        <li>Video manager</li>'
+                    ).'</ul>'
+                    .sprintf(
+                        _(
+                            '<ul>
+                            <li>%d x  User (1)</li>
+                            <li>%s Storage (2)</li>
+                            <li>%s Items (Articles, Opinions, Comments) (2)</li>
+                            <li>%s page views/month</li>
+                            <li>Online Support (Tickets SLA %d business days)</li></ul>'
+                        ),
+                        1,
+                        '1GB',
+                        '100.000',
+                        '100.000',
+                        2
+                    )
+                    ._(
+                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
+                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
+                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                    )
                 ),
                 'type'             => 'pack',
                 'price' => [
@@ -249,75 +290,116 @@ class ModuleManager
                 'type'             => 'pack',
                 'thumbnail'        => 'pack-advanced.jpg',
                 'name'             => _('Advanced pack'),
-                'description'      => _('Provides advanced features to personalize your site and add more kind of contents.'),
-                'long_description' => _(
-                    '<p>Personalize your frontpages and start sending newsletters
-                    to your readers and let them know what they have missed!</p>
-                    <p>This offer gives you more than 30% discount on modules (if purchased
-                    separately modules have a value of 145EUR/month).</p>
-                    This pack includes:
-                    <ul>
+                'description'      => _('Personalize your frontpages and start sending newsletters to your readers and let them know what they have missed!.'),
+                'long_description' => (
+                    _(
+                        '<p>A step further into the engagement path we add in this pack the possibility of sending newsletters and customize frontpage anytime you want.</p>
+                        <p>This offer gives you more than 30% discount on modules (if purchased separately modules have a value of 145EUR/month).</p>'
+                    )
+                    ._(
+                        '<p>Includes:</p>
+                        <ul>
                         <li>Frontpage manager</li>
                         <li>Widget manager</li>
                         <li>Opinion articles manager</li>
                         <li>Comments manager</li>
                         <li>Images and files uploading</li>
-                        <li>Utilities: Trash, Search Advanced...</li>
-                        <li>Advertisement manager</li>
+                        <li>Utilities: Trash, Search Advanced...</li>'
+                    )
+                    ._(
+                        '<li>Advertisement manager</li>
                         <li>Polls manager</li>
                         <li>Galleries manager</li>
-                        <li>Video manager</li>
-                        <li>Frontpage customization</li>
-                        <li>Newsletter manager (*)</li>
-                        <li>2 user license</li>
-                        <li>Support via tickets</li>
-                        <li>Support via phone: 4h (10am-2pm M-F)</li>
-                        <li>Media storage: 1.5GB</li>
-                        <li>Page views: 250.000</li>
-                    </ul>
-                    <p><small>*  Newsletter manager: email sendings are charged with
-                        0.3€ each block of 1000 sent emails</small></p>'
+                        <li>Video manager</li>'
+                    )
+                    ._(
+                        '<li>Frontpage customization</li>
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                    ).'</ul>'
+                    .sprintf(
+                        _(
+                            '<ul>
+                            <li>%d x  User (1)</li>
+                            <li>%s Storage (2)</li>
+                            <li>%s Items (Articles, Opinions, Comments) (2)</li>
+                            <li>%s page views/month</li>
+                            <li>Online Support (Tickets SLA %d business days)</li></ul>'
+                        ),
+                        1,
+                        '1GB',
+                        '100.000',
+                        '100.000',
+                        4
+                    )
+                    ._(
+                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
+                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
+                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                    )
                 ),
                 'price' => [
-                    'month' => 250
+                    'month' => 100
                 ]
             ],
             [
                 'id'               => 'GOLD',
                 'name'             => _('Expert pack'),
                 'thumbnail'        => 'pack-expert.jpg',
-                'description'      => _('Contains all the major features of Opennemas.'),
-                'long_description' => _(
-                    '<p>Personalize your frontpages and start sending newsletters
-                    to your readers and let them know what they have missed!</p>
-                    <p>This offer gives you more than 30% discount on modules (if purchased
-                    separately modules have a value of 145EUR/month).</p>
-                    This pack includes:
-                    <ul>
+                'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!'),
+                'long_description' => (
+                    _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!')
+                    ._(
+                        '<p>This offer gives you more than 25% discount on modules (if purchased separately modules have a value of 260EUR/month). </p>'
+                    )
+                    ._(
+                        '<p>Includes:</p>
+                        <ul>
                         <li>Frontpage manager</li>
                         <li>Widget manager</li>
                         <li>Opinion articles manager</li>
                         <li>Comments manager</li>
                         <li>Images and files uploading</li>
-                        <li>Utilities: Trash, Search Advanced...</li>
-                        <li>Advertisement manager</li>
+                        <li>Utilities: Trash, Search Advanced...</li>'
+                    )
+                    ._(
+                        '<li>Advertisement manager</li>
                         <li>Polls manager</li>
                         <li>Galleries manager</li>
-                        <li>Video manager</li>
-                        <li>Frontpage customization</li>
-                        <li>Newsletter manager (*)</li>
-                        <li>5 user license</li>
-                        <li>Support via tickets</li>
-                        <li>Support via phone: 8h (10am-6pm M-F)</li>
-                        <li>Media storage: 2.5GB</li>
-                        <li>Page views: 500.000</li>
-                    </ul>
-                    <p><small>*  Newsletter manager: email sendings are charged with 0.3€
-                    each block of 1000 sent emails</small></p>'
+                        <li>Video manager</li>'
+                    )
+                    ._(
+                        '<li>Frontpage customization</li>
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                    )
+                    ._(
+                        '<li>Multiple Frontpage Management</li>
+                        <li>News Agency</li>
+                        <li>Opennemas Connect</li>'
+                    ).'</ul>'
+                    .sprintf(
+                        _(
+                            '<ul>
+                            <li>%d x  User (1)</li>
+                            <li>%s Storage (2)</li>
+                            <li>%s Items (Articles, Opinions, Comments) (2)</li>
+                            <li>%s page views/month</li>
+                            <li>Online Support (Tickets SLA %d business days)</li></ul>'
+                        ),
+                        1,
+                        '1GB',
+                        '100.000',
+                        '100.000',
+                        4
+                    )
+                    ._(
+                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
+                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
+                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                    )
                 ),
-                'type'             => 'pack',
+                'type'  => 'pack',
                 'price' => [
-                    'month' => 500
+                    'month' => 200
                 ]
             ]
         ];
@@ -344,7 +426,7 @@ class ModuleManager
                             <a href="mailto:sales@openhost.es">sales@openhost.es</a>
                         </li>
                         <li>Exclusivity: This template is not exclusive</li>
-                        <li>Delivery time: On the spot</li>
+                        <li>Delivery time: Inmediate</li>
                     </ul>'
                 ),
                 'price' => [
@@ -387,15 +469,12 @@ class ModuleManager
                 'thumbnail'        => 'theme-custom.jpg',
                 'name'             => _('Custom Template'),
                 'description'      => _(
-                    'Newspaper web site template developed by Opennemas team.'
-                    .' Customizable to make a better git to customer brand guidelines and image'
+                    'Get a customized newspaper Web Site, with widgets included, so that everyone will recognize your brand and image.'
                 ),
                 'long_description' => _(
-                    '<ul>
-                        <li>
-                            Widgets: Standard widgets included. To add a widget please contact us at
-                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
-                        </li>
+                    '<p>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences</p>
+                    <ul>
+                        <li>Widgets: Standard widgets included. To add a widget please contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a></li>
                         <li>Exclusivity: This template is not exclusive</li>
                         <li>Delivery time: From 2 weeks up to 1 month depending on customization work</li>
                         <li>Change request BEFORE launch
@@ -433,8 +512,7 @@ class ModuleManager
                 'thumbnail'        => 'theme-exclusive.jpg',
                 'name'             => _('Exclusive Template'),
                 'description'      => _(
-                    'Newspaper Web Site Template that can be customized to reflect '
-                    .'better brand guidelines and customer preferences'
+                    'Unique Newspaper Web Site  with many widgets, completely customizable and in exclusive development for the customer.'
                 ),
                 'long_description' => _(
                     '<ul>
@@ -498,7 +576,7 @@ class ModuleManager
                 'type'             => 'theme',
                 'thumbnail'        => 'theme-exclusiveplus.jpg',
                 'name'             => _('Custom Exclusive Template'),
-                'description'      => _('Newspaper web site developed from scratch by Opennemas team.'),
+                'description'      => _('Newspaper web site developed from scratch by Opennemas team exclusively for you.'),
                 'long_description' => _(
                     '<ul>
                         <li>Widgets: all required widgets included</li>
@@ -564,7 +642,7 @@ class ModuleManager
                     'thumbnail'        => 'module-ads.jpg',
                     'type'             => 'module',
                     'name'             => _('Advertisement'),
-                    'description'      => _('Gain money by inserting ads in your site. Images, scripts and external services integration'),
+                    'description'      => _('Gain money by inserting ads in your site'),
                     'long_description' => _(
                         '<p>Thanks to this module all opennemas journals will be able to
                         create, add and manage ads on any pages:</p>
@@ -610,8 +688,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-articles.jpg',
                     'name'             => _('Articles'),
-                    'description'      => _('Module for managing articles'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('Create your article and publish it with SEO included.'),
+                    'long_description' => _('<p>Publish articles including Title, Subtitle, Summary, Comment, Image, whenever you want and from wherever you want for free.</p>'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -682,7 +760,7 @@ class ModuleManager
                     'thumbnail'        => 'module-categories.jpg',
                     'name'             => _('Category'),
                     'description'      => _('Module for managing categories'),
-                    'long_description' => _('Missed long description...'),
+                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas, it allows users to create and manage categories of content.</p>'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -693,8 +771,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-comments.jpg',
                     'name'             => _('Comments'),
-                    'description'      => _('Module for managing comments'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('Allow your readers to leave comments wether through our comment system or connecting with Facebook or Disqus.'),
+                    'long_description' => _('Module included in the Basic pack (FREE) of opennemas, it allows users to publish comments to any content generated by newspaper. It can be through comment form provided by us or through integration with facebook or disqus comment system.'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -716,8 +794,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-files.jpg',
                     'name'             => _('Files'),
-                    'description'      => _('Allows the user to upload files'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('Upload your files and share them on your newspaper.'),
+                    'long_description' => _('Module included in the Basic pack (FREE) of opennemas, it allows users to upload files to the system and share them with a url in the newspaper articles.'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -726,17 +804,13 @@ class ModuleManager
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
-                    'name'             => _('Opennemas Connect'),
+                    'name'             => _('Opennemas Contact'),
                     'description'      => _('Allows to create to new custom forms'),
                     'long_description' => _(
-                        '<p>Let your readers be contributors.</p>
-                        <p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper
-                        can become the "voice of people/Internet".</p><p>You will be able to create custom submission
-                        forms for your contributors so that they can share daily in the easiest way.</p>
-                        <p>All contributions can be moderated.</p>'
+                        '<p>Our feature Opennemas Comunica will allow readers to submit their opinions with or without attachment, so that they can communicate with the newspapers.</p>'
                     ),
                     'price'            => [
-                        'month' => 15
+                        'month' => 25
                     ]
                 ],
                 [
@@ -745,8 +819,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpages.jpg',
                     'name'             => _('Frontpages'),
-                    'description'      => _('Module for managing elements in frontpages'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('Most important asset of a newspaper, the frontpage manager allows live update of frontpages content.'),
+                    'long_description' => _('Module included in the Basic pack (FREE) of opennemas, the frontpage manager will allow you to add articles and modify visualization of your frontpages instantly.'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -757,17 +831,10 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpages layouts & custom layouts'),
-                    'description'      => _('Create and ManageFrontpageLayouts made by you, every time you want!'),
+                    'description'      => _('Create and Manage Frontpage Layouts made by you, every time you want! '),
                     'long_description' => _(
-                        '<p>This module has two distinct parts: Manual or Automatic Personal Frontpages Management.</p>
-
-                        <h3>MANUAL</h3>
-                        <p>Management Personal Frontpages/Frontpages Organization</p>
-                        <p>You can change the appearance of Opennemas newspaper is a matter of seconds with this module.
-                        In this way you can select a different frontpage model on each of the sections frontpages.</p>
-
-                        <h3>AUTOMATIC</h3>
-                        <p>If you do not want to have to create layouts, the system can do it for you.</p>'
+                        '<p>Management Personal Frontpages/Frontpages Organization</p>
+                        <p>You can change the appearance of Opennemas newspaper is a matter of seconds with this module. In this way you can select a different frontpage model on each of the sections frontpages.</p>'
                     ),
                     'price'            => [
                         'month' => 45
@@ -790,8 +857,8 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Keywords'),
                     'thumbnail'        => 'module-tags.jpg',
-                    'description'      => _('Allows user to define keywords associated with url, mails and internal searches'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('List your keywords and choose if you want to link it to something or assign an action to it.'),
+                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas in order to create your list of keywords and assign each of them a landing page, or mail_to, and automatically every time that this keyword will be used the system will tag it for you.</p>'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -817,11 +884,15 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-letters.jpg',
-                    'name'             => _('Letters'),
+                    'name'             => _('Opennemas Connect'),
                     'description'      => _('Allows user to publish letters sent to the director'),
-                    'long_description' => _('Missed long description'),
+                    'long_description' => _(
+                        '<p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper can become the "voice of people/Internet". </p>
+                        <p>You will be able to create custom submission forms for your contributors so that they can share daily in the easiest way.</p>
+                        <p>All contributions can be moderated.</p>'
+                    ),
                     'price'            => [
-                        'month' => 'xxx'
+                        'month' => '25'
                     ]
                 ],
                 [
@@ -830,9 +901,9 @@ class ModuleManager
                     'type'             => 'internal',
                     'name'             => _('Library'),
                     'description'      => _('With this module users can access all contents by date'),
-                    'long_description' => _('Missed long description'),
+                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas in order to process in a page the list of the contents and classify it by section created on a given day.</p>'),
                     'price'            => [
-                        'month' => 'xxx'
+                        'month' => '0'
                     ]
                 ],
                 [
@@ -904,8 +975,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Opinion'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Create and manage your polls, engage your audience and collect useful information.'),
+                    'description'      => _('Have your opinionist publishing on your newspaper.'),
+                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas, it allows all newspapers to have a section dedicated to opinions organized by author and with author frontpage too.</p>'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -917,8 +988,7 @@ class ModuleManager
                     'thumbnail'        => 'module-polls.jpg',
                     'name'             => _('Polls'),
                     'description'      => _(
-                        'Create and manage your polls, <strong>engage</strong> '
-                        .'your audience and <strong>collect</strong> useful information.'
+                        'Create and manage your polls, engage your audience and collect useful information. '
                     ),
                     'long_description' => _(
                         '<p>Pools can be bars, pie charts, multiple response, etc</p>
@@ -981,8 +1051,8 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-static-page.jpg',
                     'name'             => _('Static pages'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
+                    'description'      => _('Manage your internal information in a static page.'),
+                    'long_description' => _('Module included in the Basic pack (FREE) of opennemas, it allows newspapers to have static pages if needed for legal information and or "about us" information.'),
                     'price'            => [
                         'month' => 0
                     ]
@@ -1067,10 +1137,9 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
                     'name'             => _('Paywall'),
-                    'description'      => _('Make money while doing what you love.'),
+                    'description'      => _('PayWall is a way to make money on your website\'s content by user subscriptions.'),
                     'long_description' => _(
-                        '<p>PayWall is a way to make money on your website\'s content by user subscriptions.</p>
-                        <p>The News business is a very challenging business and advertising
+                        '<p>The News business is a very challenging business and advertising
                         alone often does not allow to newspapers to keep going. Add paywall to your
                         newspaper and you will be able to select articles that you want to sell. This way in
                         order to access this news users will need to register. </p>
@@ -1159,11 +1228,13 @@ class ModuleManager
                     'name'             => _('Support 4'),
                     'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
                     'long_description' => _(
-                        '<p>60 hours (3h day/1month)</p>
+                        '<p>80 hours (4h day/1month)</p>
                         <p>Examples of usage of support:</p>
                         <ul>
                             <li>Examples of usage of support:
                             <li>Standard changes of HTML/CSS in templates</li>
+                            <li>Change Requests of the disposition of frontpage templates</li>
+                            <li>Category Titles, New structure of inner articles.</li>
                         </ul>
                         <p>Support provided by emails/tickets and hangouts/skype</p>'
                     ),
