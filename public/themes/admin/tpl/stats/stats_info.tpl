@@ -159,7 +159,7 @@
               <div>
                 <div class="more-plans clearfix">
                   <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                  <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                  <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
                     {t}Check out our modules{/t}
                   </a>
                 </div>
@@ -216,7 +216,7 @@
                 </button>
               </div>*}
             </div>
-            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {$plans};modules = {$available_modules}">
+            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
               <div class="plans-wrapper">
                 <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
                   <h5 class="plan-title">

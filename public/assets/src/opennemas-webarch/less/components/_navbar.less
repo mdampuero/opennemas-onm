@@ -2,12 +2,13 @@
   background: #fff;
   box-shadow: 0px 1px 3px @background-color;
   left: 0;
-  min-height: navbar-height;
+  min-height: @navbar-height;
   padding-left: @sidebar-width-collapsed;
   position: fixed;
   top: @header-height;
   transition: all .25s;
   width: 100%;
+  -webkit-transform: translateZ(0); // Fix nanoscroller
 
   h4 {
     line-height: 14px;
@@ -45,6 +46,10 @@
   .btn-primary:hover,
   .btn-primary:focus {
     color: #fff;
+  }
+
+  .dropdown-menu {
+    margin-top: 10px !important;
   }
 
   .h-seperate {
@@ -138,11 +143,12 @@
 .filters-navbar {
   background: @background-color;
   box-shadow: none;
-  min-height: navbar-height;
+  min-height: @navbar-height;
   padding: 7px 15px;
   position: relative;
   top: 0;
   width: 100%;
+  z-index: 10;
 }
 
 .selected-navbar {
@@ -200,6 +206,19 @@ div[ng-view].ng-leave-active .selected-navbar {
 
   .title {
     padding: 0px 30px;
+  }
+}
+
+.shopping-cart {
+
+  .dropdown-menu {
+    padding-right: 2px;
+  }
+
+  .shopping-cart-placeholder  {
+    height: 254px;
+    overflow: hidden;
+    width: 250px;
   }
 }
 

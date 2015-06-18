@@ -177,6 +177,16 @@ class InstanceLoaderListener implements EventSubscriberInterface
     }
 
     /**
+     * Returns the current instance.
+     *
+     * @return Instance The current instance.
+     */
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
+    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * @return array The event names to listen to.

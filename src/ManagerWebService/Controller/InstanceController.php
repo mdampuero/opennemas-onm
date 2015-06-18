@@ -628,8 +628,8 @@ class InstanceController extends Controller
                 'gl_ES' => _("Galician")
             ],
             'plans'     => [
-                'Base',
-                'Profesional',
+                'Basic',
+                'Professional',
                 'Silver',
                 'Gold',
                 'Other',
