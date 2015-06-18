@@ -102,7 +102,7 @@
           <h4>{t}Want more features?{/t}</h4>
         </div>
         <div class="grid-body">
-          <p>{t}We have two ways to add functionality to you site. Check our Opennemas market:{/t}</p>
+          <p>{t}We have two ways to add functionality to you site. Check our Opennemas Market:{/t}</p>
 
           <div class="row">
             <div class="col-sm-6 plans">
