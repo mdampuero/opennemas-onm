@@ -60,7 +60,7 @@
   </div>
 </div>
 
-<div class="page-navbar filters-navbar">
+<div class="page-navbar filters-navbar" ng-if="mode !== 'grid'">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
@@ -113,7 +113,7 @@
 
 <div class="content" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {render_messages}
-  <div class="grid simple">
+  <div class="grid simple" ng-if="!mode || mode === 'list'">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
         <div class="loading-spinner"></div>
@@ -186,39 +186,70 @@
                [% extra.categories[content.category_name] %]
               </td>
               {/if}
-            <td class="center hidden-xs">[% extra.views[content.id] %]</td>
+              <td class="center hidden-xs">[% extra.views[content.id] %]</td>
 
-            {acl isAllowed="ALBUM_AVAILABLE"}
-            <td class="center">
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
-              </button>
-            </td>
-            {/acl}
-            {acl isAllowed="ALBUM_FAVORITE"}
-            <td class="center hidden-xs">
-              <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
-              </button>
-            </td>
-            {/acl}
-            {acl isAllowed="ALBUM_HOME"}
-            <td class="right hidden-xs">
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
-                <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
-              </button>
-            </td>
-            {/acl}
-
-          </tr>
-        </tbody>
-      </table>
+              {acl isAllowed="ALBUM_AVAILABLE"}
+              <td class="center">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
+                </button>
+              </td>
+              {/acl}
+              {acl isAllowed="ALBUM_FAVORITE"}
+              <td class="center hidden-xs">
+                <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
+                </button>
+              </td>
+              {/acl}
+              {acl isAllowed="ALBUM_HOME"}
+              <td class="right hidden-xs">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
+                </button>
+              </td>
+              {/acl}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="pull-right">
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+      </div>
     </div>
   </div>
-  <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-    <div class="pull-right">
-      <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+  <div class="clearfix infinite-row ng-cloak" ng-if="mode == 'grid'">
+    <div class="col-md-2 col-sm-4 m-b-15 infinite-col" ng-repeat="content in contents">
+      <div class="dynamic-image-placeholder">
+        <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,400,400">
+          <div class="thumbnail-actions ng-cloak">
+            {acl isAllowed="ALBUM_DELETE"}
+              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+                <i class="fa fa-trash-o fa-2x"></i>
+              </div>
+            {/acl}
+            {acl isAllowed="ALBUM_UPDATE"}
+              <a class="thumbnail-action" href="[% edit(content.id, 'admin_album_show') %]">
+                <i class="fa fa-pencil fa-2x"></i>
+              </a>
+            {/acl}
+          </div>
+        </dynamic-image>
+      </div>
+    </div>
+  </div>
+  <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
+    <h5>
+      <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+      <span ng-if="!loadingMore">{t}Load more{/t}</span>
+      <span ng-if="loadingMore">{t}Loading{/t}</span>
+    </h5>
+  </div>
+  <div class="infinite-row master-row ng-cloak">
+    <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
     </div>
   </div>
 </div>

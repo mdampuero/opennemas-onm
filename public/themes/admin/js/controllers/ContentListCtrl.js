@@ -186,7 +186,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *
      * @param string route Route name.
      */
-    $scope.list = function(route) {
+    $scope.list = function(route, reset) {
       // Enable spinner
       if ($scope.mode === 'grid') {
         $scope.loadingMore = true;
@@ -218,7 +218,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, postData).then(function(response) {
         $scope.pagination.total = parseInt(response.data.total);
-        if ($scope.mode === 'grid') {
+        if ($scope.mode === 'grid' && !reset) {
           $scope.contents = $scope.contents.concat(response.data.results);
         } else {
           $scope.contents = response.data.results;
@@ -935,7 +935,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.renderMessages(response.data.messages);
 
           if (response.status === 200) {
-            $scope.list($scope.route);
+            $scope.list($scope.route, true);
           }
         }
       });
