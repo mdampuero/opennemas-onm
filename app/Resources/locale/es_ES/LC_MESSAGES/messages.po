@@ -2302,6 +2302,9 @@ msgstr "Hemeroteca"
 msgid "News Agency importer"
 msgstr "Importador de noticias agencias"
 
+msgid "Paper import"
+msgstr "Importador desde papel"
+
 msgid "Promotional bar"
 msgstr "Barra promocional"
 
