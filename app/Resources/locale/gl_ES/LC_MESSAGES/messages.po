@@ -5,13 +5,12 @@
 # sandra <sandra@openhost.es>, 2013.
 # Diego Blanco <diego@openhost.es>, 2014.
 # Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-18 17:08+0200\n"
-"PO-Revision-Date: 2015-06-12 11:37+0100\n"
+"PO-Revision-Date: 2015-06-18 17:56+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 msgid "Advertisement"
 msgstr "Publicidade"
@@ -1493,7 +1492,7 @@ msgid "SQL error log"
 msgstr "Rexistro de erros de SQL"
 
 msgid "Market"
-msgstr ""
+msgstr "Tenda"
 
 msgid "Help & Support"
 msgstr "Axuda e asistencia"
@@ -1693,14 +1692,13 @@ msgid "Positions saved successfully"
 msgstr "Posicións gardadas correctamente"
 
 msgid "Your request could not been registered"
-msgstr ""
+msgstr "A túa solicitude non foi enviada"
 
-#, fuzzy
 msgid "Your request has been registered"
-msgstr "A súa solicitude de actualización foi enviada."
+msgstr "A túa solicitude foi enviada"
 
 msgid "Add Video and Image Galleries to your content. "
-msgstr ""
+msgstr "Engade vídeos e galerías ao teu contido."
 
 msgid ""
 "<p>Add Video and Image Galleries to your content.</p>\n"
@@ -1710,6 +1708,11 @@ msgid ""
 "                    <p>And the most interesting fact is that the video "
 "manager is the same as youtube one, perfect consistency and performance.</p>"
 msgstr ""
+"<p>Engada vídeos e galerías ao teu contido</p>\n"
+"<p>Este módulo permítelle crear galerías, engade vídeos de Youtube, Vimeo, "
+"Dailymotion e 10 orixes máis</p>\n"
+"<p>E o máis interesante é que o xestor de vídeos é o mesmo que Youtube, "
+"consistencia e rendemento perfecto</p>"
 
 msgid "Newsletter deleted successfully."
 msgstr "Boletin de novas eliminado correctamente."
@@ -2299,9 +2302,8 @@ msgstr "Asistencia profesional"
 msgid "Support 2"
 msgstr "Asistencia 2"
 
-#, fuzzy
 msgid "Support 3"
-msgstr "Asistencia 2"
+msgstr "Asistencia 3"
 
 msgid "Support 4"
 msgstr "Asistencia 4"
@@ -2318,18 +2320,20 @@ msgstr "Sincronización de instancias"
 msgid "UserVoice integration"
 msgstr "Integración de UserVoice"
 
-#, fuzzy
 msgid "Basic pack"
-msgstr "Básica"
+msgstr "Pack básico"
 
 msgid "Publishing your news is FREE!"
-msgstr ""
+msgstr "Publica as túas novas DE BALDE!"
 
 msgid ""
 "<p>This pack does not require any payment information and it allows you to "
 "access our platform to test it as much as to publish your newspaper for free "
 "and on the spot!</p>"
 msgstr ""
+"<p>Este pack non require ningunha información de pago, permítelle acceder á "
+"nosa plataforma para probala e publicar o teu periódico de balde e "
+"rapidamente!</p>"
 
 msgid ""
 "<p>Includes:</p>\n"
@@ -2341,6 +2345,14 @@ msgid ""
 "                        <li>Images and files uploading</li>\n"
 "                        <li>Utilities: Trash, Search Advanced...</li>"
 msgstr ""
+"<p>Inclúe:</p>\n"
+"                        <ul>\n"
+"                        <li>Xestor de portadas</li>\n"
+"                        <li>Xestor de widgets</li>\n"
+"                        <li>Xestor de artigos de opinión</li>\n"
+"                        <li>Xestor de comentarios</li>\n"
+"                        <li>Subir imaxes e ficheiros</li>\n"
+"                        <li>Utilidades: Lixo, busca avanzada...</li>"
 
 #, php-format
 msgid ""
@@ -2353,6 +2365,14 @@ msgid ""
 "                            <li>Online Support (Tickets SLA %d business "
 "days)</li></ul>"
 msgstr ""
+"<ul>\n"
+"                            <li>%d x  usuario (1)</li>\n"
+"                            <li>%s de almacenamento (2)</li>\n"
+"                            <li>%s elementos (artigos, opinións, comentarios)"
+" (2)</li>\n"
+"                            <li>%s páxinas vistas/mes</li>\n"
+"                            <li>Asistencia en liña (tiques SLA %d días "
+"laborais)</li></ul>"
 
 msgid ""
 "<p><small>1.- To add more users refer to User Licence Page</small></"
@@ -2362,15 +2382,23 @@ msgid ""
 "and Storage Space</a></small></p><p><small>All prices above do not include "
 "VAT (21%)</small></p>"
 msgstr ""
+"<p><small>1.- Para engadir máis usuaris visita a nos Páxina de licenzas de "
+"usuario</small></p><p><small>2.- Para obter máis información sobre o "
+"almacenamento ou páxinas vistas visita a nosa páxina <a href=\""
+"http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-"
+"page-views-y-espacio-ocupado\">Páxinas vistas e "
+"almacenamento</a></small></p><p><small>Todos os prezos mostrados non teñen o "
+"IVE incluído (21%)</small></p>"
 
-#, fuzzy
 msgid "Professional pack"
-msgstr "Profesional"
+msgstr "Pack Profesional"
 
 msgid ""
 "Our best selling solution, it allows to manage a professional newspaper and "
 "start gaining money with it!"
 msgstr ""
+"A nosa solución máis vendida, permite xestionar un periódico de forma "
+"profesional e comezar a gañar diñeiro con el!"
 
 #, php-format
 msgid ""
@@ -2380,6 +2408,11 @@ msgid ""
 "                        <p>This offer gives you more than 40% discount (if "
 "purchased separately modules have a value of 85EUR/month).</p>"
 msgstr ""
+"<p>Este paquete está pensado para profesionais que comezan co seu periódico "
+"independente e precisan xestionar publicidade para medrar e publicar "
+"enquisas para atraer á súa audiencia</p>\n"
+"<p>Esta oferta ofréceche máis dun 40% de desconto fronte a mercar módulos "
+"separados (85 €/mes módulos separados)"
 
 msgid ""
 "<li>Advertisement manager</li>\n"
@@ -2387,15 +2420,20 @@ msgid ""
 "                        <li>Galleries manager</li>\n"
 "                        <li>Video manager</li>"
 msgstr ""
+"<li>Xestor de publicidade</li>\n"
+"                        <li>Xestor de enquisas</li>\n"
+"                        <li>Xestor de galerías</li>\n"
+"                        <li>Xestor de vídeos</li>"
 
-#, fuzzy
 msgid "Advanced pack"
-msgstr "Busca avanzada"
+msgstr "Pack avanzado"
 
 msgid ""
 "Personalize your frontpages and start sending newsletters to your readers "
 "and let them know what they have missed!."
 msgstr ""
+"Personaliza as túas portadas e comeza a enviar boletíns de novas aos teus "
+"lectores e infórmalles dos contidos que non leron!"
 
 #, php-format
 msgid ""
@@ -2411,14 +2449,20 @@ msgid ""
 "                        <li>Newsletter manager (<a href=\"http://opennemas."
 "com/pricing?language=en_US#newsletter\">0</a>)</li>"
 msgstr ""
+"<li>Personalización de portada</li>\n"
+"                        <li>Xestor de boletíns de novas (<a href=\""
+"http://opennemas.com/pricing?language=en_US#newsletter\">0</a>)</li>"
 
 msgid "Expert pack"
-msgstr ""
+msgstr "Pack experto"
 
 msgid ""
 "Add news from your favourites agencies, manage multiple personalized "
 "frontpages and let your readers to become contributors to your newspaper!"
 msgstr ""
+"Engade novas desde as túas axencias favoritas, xestiona varias portadas "
+"personalizadas e permítelle á túa audiencia convertirse nos teus "
+"contribuidores!"
 
 #, php-format
 msgid ""
@@ -2431,12 +2475,16 @@ msgid ""
 "                        <li>News Agency</li>\n"
 "                        <li>Opennemas Connect</li>"
 msgstr ""
+"<li>Xestor de portadas múltiples</li>\n"
+"                        <li>Axencias de novas</li>\n"
+"                        <li>Opennemas Connect</li>"
 
 msgid "Free Basic Template"
-msgstr ""
+msgstr "Plantilla básica de balde"
 
 msgid "Change your site design with our free available templates."
 msgstr ""
+"Cambia o deseño do teu sitio coas nosas plantillas de balde dispoñíbeis."
 
 msgid ""
 "<ul>\n"
@@ -2452,14 +2500,15 @@ msgid ""
 "                    </ul>"
 msgstr ""
 
-#, fuzzy
 msgid "Standard Template"
-msgstr "Plantilla"
+msgstr "Plantilla estándar"
 
 msgid ""
 "Standard newspaper web site design with prebuild widgets developed by "
 "Opennemas team. No customization available"
 msgstr ""
+"Deseño de sitio web de periódico estándar con widgets predeseñados "
+"desenvolvidos polo equipo de Opennemas. Sen personalización dispoñíbel"
 
 msgid ""
 "<ul>\n"
@@ -2484,14 +2533,15 @@ msgid ""
 "                    </ul>"
 msgstr ""
 
-#, fuzzy
 msgid "Custom Template"
-msgstr "Plantilla"
+msgstr "Plantilla personalizada"
 
 msgid ""
 "Get a customized newspaper Web Site, with widgets included, so that everyone "
 "will recognize your brand and image."
 msgstr ""
+"Obtén un sitio web de periódico personalizado, widgets incluídos, polo que "
+"calquera persoa recoñecerá a túa marca e imaxe."
 
 msgid ""
 "<p>Newspaper Web Site Template that can be customized to reflect better "
@@ -2536,14 +2586,15 @@ msgid ""
 "                    </ul>"
 msgstr ""
 
-#, fuzzy
 msgid "Exclusive Template"
-msgstr "Plantilla"
+msgstr "Plantilla exclusiva"
 
 msgid ""
 "Unique Newspaper Web Site  with many widgets, completely customizable and in "
 "exclusive development for the customer."
 msgstr ""
+"Sitio web de periódico único con varios widgets, completamente "
+"personalizábel e desenvolto en exclusiva para o cliente."
 
 msgid ""
 "<ul>\n"
@@ -2617,7 +2668,7 @@ msgid ""
 msgstr ""
 
 msgid "Custom Exclusive Template"
-msgstr ""
+msgstr "Plantilla personalizada exclusiva"
 
 msgid ""
 "Newspaper web site developed from scratch by Opennemas team exclusively for "
@@ -2683,7 +2734,7 @@ msgid ""
 msgstr ""
 
 msgid "Gain money by inserting ads in your site"
-msgstr ""
+msgstr "Gaña diñeiro insertando publicidade no teu sitio"
 
 msgid ""
 "<p>Thanks to this module all opennemas journals will be able to\n"
@@ -2731,12 +2782,11 @@ msgstr "Módulo que lle permite engadir unha segunda sinatura en artigos"
 msgid "Missed long description..."
 msgstr "Engadir descrición…"
 
-#, fuzzy
 msgid "Frontpage advanced personalization"
-msgstr "Móbil: portada"
+msgstr "Personalización avanzada de portadas"
 
 msgid "Change your Frontpage every time you want."
-msgstr ""
+msgstr "Cambia a túa portada cando queiras."
 
 msgid ""
 "\n"
@@ -2965,22 +3015,23 @@ msgid ""
 msgstr ""
 
 msgid "Add description..."
-msgstr "Engadir descrición…"
+msgstr ""
 
 msgid "Manage your internal information in a static page."
-msgstr ""
+msgstr "Xestiona a túa información interna nunha páxina estática."
 
 msgid ""
 "Allows newspapers to have static pages if needed for legal information and "
 "or \"about us\" information."
 msgstr ""
+"Permite incluír páxinas estáticas, usadas normalmente para conter "
+"información legal ou páxinas \"Sobre nós\"."
 
-#, fuzzy
 msgid "Frontpage synchronization"
-msgstr "Sincronización de instancias"
+msgstr "Sincronización de portadas"
 
 msgid "Update your local frontpages by updating 1 frontpage"
-msgstr ""
+msgstr "Actualizar as túas portadas locais actualizando unha portada"
 
 msgid ""
 "<p>Update your local frontpages by updating 1 frontpage!</p>\n"
@@ -2999,6 +3050,8 @@ msgid ""
 "PayWall is a way to make money on your website's content by user "
 "subscriptions."
 msgstr ""
+"Paywall é unha forma de facer diñeiro co contido do teu sitio usando "
+"suscricións de usuarios."
 
 #, php-format
 msgid ""
@@ -3019,12 +3072,13 @@ msgstr ""
 msgid "No support"
 msgstr "Sen asistencia"
 
-#, fuzzy
 msgid "Support 1"
-msgstr "Asistencia 2"
+msgstr "Asistencia 1"
 
 msgid "This support plan is thought for changes and creation of new widgets."
 msgstr ""
+"Este plan de asistencia está pensado para cambios e creación de novos "
+"widgets."
 
 msgid ""
 "<p>10 hours (2h day/1week).</p>\n"
@@ -3106,9 +3160,8 @@ msgid ""
 "skype and phone</p>"
 msgstr ""
 
-#, fuzzy
 msgid "Support 8 Plus"
-msgstr "Asistencia 8"
+msgstr "Asistencia 8 Plus"
 
 msgid ""
 "This Support is designed for all newspapers that need may need help "
@@ -5526,11 +5579,12 @@ msgstr "Subir vídeo"
 msgid "Want more features?"
 msgstr "¿Queres máis funcionalidades?"
 
-#, fuzzy
 msgid ""
 "We have two ways to add functionality to you site. Check our Opennemas "
 "Market:"
-msgstr "Hai dúas formas de engadir funcionalidade no teu sitio."
+msgstr ""
+"Hai dúas formas de engadir funcionalidade no teu sitio. Comproba a nosa "
+"Tenda de Opennemas:"
 
 msgid "Plans"
 msgstr "Plans"
@@ -6598,59 +6652,57 @@ msgid "Submitted on:"
 msgstr "Enviado o:"
 
 msgid "by"
-msgstr ""
+msgstr "por"
 
-#, fuzzy
 msgid "month"
-msgstr "Mes"
+msgstr "mes"
 
-#, fuzzy
 msgid "Purchased"
-msgstr "Compras"
+msgstr "Mercado"
 
-#, fuzzy
 msgid "Add to cart"
-msgstr "Engadir á lista"
+msgstr "Engadir ao carro"
 
 msgid "Screenshots and videos"
-msgstr ""
+msgstr "Imaxes e vídeos"
 
-#, fuzzy
 msgid "Last updated"
-msgstr "Actualizado"
+msgstr "Última actualización"
 
-#, fuzzy
 msgid "Cart review"
-msgstr "Previsualizar"
+msgstr "Revisión do carro"
 
-#, fuzzy
 msgid "Checkout"
-msgstr "Comprobar"
+msgstr "Mercar"
 
 msgid "Success"
-msgstr ""
+msgstr "Éxito"
 
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 msgid "To confirm your purchase press the button below."
-msgstr ""
+msgstr "Para confirmar a túa compra prema no botón de abaixo"
 
 msgid ""
 "Our sales department will receive an email with the new features you want to "
 "include in your newspaper."
 msgstr ""
+"O noso departamento de ventas recibirá un correo electrónico coas novas "
+"funcionalidades que quere incluír no seu periódico."
 
 msgid "You will receive an email with the list of features you are purchasing."
-msgstr ""
+msgstr "Recibirá un correo coa lista de características que mercou."
 
 msgid "Nice"
-msgstr ""
+msgstr "Xenial"
 
 msgid ""
 "Thank you! We have received your request and will get back to you as soon as "
 "possible. You will receive a confirmation e-mail too."
 msgstr ""
+"Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
+"pronto sexa posíbel. Debería recibir un correo de confirmación."
 
 msgid ""
 "\n"
@@ -6658,60 +6710,58 @@ msgid ""
 "newspaper's improvements\n"
 "        "
 msgstr ""
+"Oh! Este pode ser un momento perfecto para compartir as melloras do teu "
+"periódico cos teus amigos"
 
 msgid "Continue shopping"
-msgstr ""
+msgstr "Continuar mercando"
 
-#, fuzzy
 msgid "Confirm"
-msgstr "Configuración"
+msgstr "Confirmar"
 
 msgid "Packs"
-msgstr ""
+msgstr "Packs"
 
-#, fuzzy
 msgid "Services"
-msgstr "Servizo"
+msgstr "Servizos"
 
 msgid "Themes"
-msgstr ""
+msgstr "Plantilals"
 
 msgid "Cart"
-msgstr ""
+msgstr "Carro"
 
 msgid "Your shopping cart is empty"
-msgstr ""
+msgstr "O teu carro de compra está baleiro"
 
-#, fuzzy
 msgid "Unable to find any module that matches your search."
-msgstr "Non se puideron atopar ficheiros que coincidan coa súa busca."
+msgstr "Non se puideron atopar módulos que coincidan coa túa busca."
 
 msgid "Free"
-msgstr ""
+msgstr "Gratis"
 
-#, fuzzy
 msgid "More info"
 msgstr "Máis información"
 
-#, fuzzy
 msgid "Added to cart"
-msgstr "Engadir á lista"
+msgstr "No carro"
 
 msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr ""
+msgstr "Solicitaches os seguintes elementos para o teu periódico \"%1\""
 
 msgid "Modules requested"
-msgstr ""
+msgstr "Módulos solicitados"
 
 msgid "Our sales department will contact you to get further information"
 msgstr ""
+"O noso departamento de vendas porase en contacto contigo para obter máis "
+"información"
 
 msgid "%2 from instance \"%1\" has requested a purchase:"
-msgstr ""
+msgstr "%2 da instancia \"%s\" solicitou o seguinte:"
 
-#, fuzzy
 msgid "Modules to purchase"
-msgstr "Últimas compras"
+msgstr "Módulos a mercar"
 
 msgid "Delete opinions"
 msgstr "Eliminar opinións"
