@@ -35,8 +35,30 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $frameworkStatus = $this->getContainer()->get('framework.status');
-        var_dump($frameworkStatus);die();
+        $output->writeln("Framework status\n================\n");
+
+        $frameworkStatus = $this->getContainer()->get('onm.framework_status');
+
+        // Get services configurations
+        $dbConfig           = $this->getContainer()->getParameter('database');
+        $cacheHandler       = $this->getContainer()->getParameter('cache_handler');
+        $cacheHandlerConfig = $this->getContainer()->getParameter('cache_handler_params');
+
+        // Get services status
+        $nfsCheck   = $frameworkStatus->checkNfs();
+        $dbCheck    = $frameworkStatus->checkDatabaseConnection();
+        $cacheCheck = $frameworkStatus->checkCacheConnection();
+
+        $output->writeln("NFS   status: ".$nfsCheck ? "OK": "FAILED");
+        $output->writeln("DB    status: ".$dbCheck ? "OK": "FAILED");
+        $output->writeln("Cache status: ".$cacheCheck ? "OK": "FAILED");
+
+        $output->writeln("\nCurrent configuration\n================\n");
+        $output->writeln("Database:");
+        $output->writeln(var_export($dbConfig['dbal'], true));
+
+        $output->writeln("Cache: ".$cacheHandler);
+        $output->writeln(var_export($cacheHandlerConfig, true));
 
         return true;
     }
