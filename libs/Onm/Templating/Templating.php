@@ -106,7 +106,7 @@ class Templating
                 $this->managerTemplateEngine = new \TemplateManager();
             }
             $template = $this->managerTemplateEngine;
-        } elseif ($module == 'Backend') {
+        } elseif ($module == 'Backend' || $module == 'BackendWebService') {
             if (!isset($this->backendTemplateEngine)) {
                 $this->backendTemplateEngine = new \TemplateAdmin();
             }

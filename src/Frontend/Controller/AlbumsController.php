@@ -297,7 +297,6 @@ class AlbumsController extends Controller
                 'album'              => $album,
             )
         );
-
     }
 
     /**

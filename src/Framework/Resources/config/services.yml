@@ -163,6 +163,11 @@ services:
         class: Onm\Instance\InstanceManager
         arguments: [ @dbal_connection, @cache, @setting_repository ]
 
+    instance:
+        class: Onm\Instance\Instance
+        factory_service: kernel.listener.instanceloader
+        factory_method: getInstance
+
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ @service_container ]
@@ -201,3 +206,7 @@ services:
 
     paginator:
         class: Onm\Pager\Slider
+
+    onm.framework_status:
+        class: Onm\Framework\Status
+        arguments: [ @service_container ]
