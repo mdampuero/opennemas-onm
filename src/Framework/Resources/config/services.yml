@@ -206,3 +206,7 @@ services:
 
     paginator:
         class: Onm\Pager\Slider
+
+    onm.framework_status:
+        class: Onm\Framework\Status
+        arguments: [ @service_container ]
