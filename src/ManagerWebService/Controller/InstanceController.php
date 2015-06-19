@@ -628,11 +628,11 @@ class InstanceController extends Controller
                 'gl_ES' => _("Galician")
             ],
             'plans'     => [
-                'Basic',
-                'Professional',
-                'Silver',
-                'Gold',
-                'Other',
+                'BASIC',
+                'PROFESSIONAL',
+                'SILVER',
+                'GOLD',
+                'OTHER',
             ],
             'templates' => im::getAvailableTemplates(),
             'timezones' => \DateTimeZone::listIdentifiers(),

@@ -839,7 +839,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
-                    'plan'             => 'Silver',
+                    'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpages layouts & custom layouts'),
@@ -880,7 +880,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
-                    'plan'             => 'Gold',
+                    'plan'             => 'GOLD',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('Kiosko'),
@@ -946,7 +946,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
-                    'plan'             => 'Gold',
+                    'plan'             => 'GOLD',
                     'type'             => 'module',
                     'thumbnail'        => 'module-agencies.jpg',
                     'name'             => _('News Agency importer'),
@@ -966,7 +966,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWSLETTER_MANAGER',
-                    'plan'             => 'Silver',
+                    'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsletters.jpg',
                     'name'             => _('Newsletter'),
@@ -1083,7 +1083,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SYNC_MANAGER',
-                    'plan'             => 'Silver',
+                    'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Frontpage synchronization'),
@@ -1108,7 +1108,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_GROUP_MANAGER',
-                    'plan'             => 'Silver',
+                    'plan'             => 'SILVER',
                     'type'             => 'internal',
                     'name'             => _('User groups'),
                     'description'      => _('Add description...'),
@@ -1119,7 +1119,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_MANAGER',
-                    'plan'             => 'Silver',
+                    'plan'             => 'SILVER',
                     'type'             => 'internal',
                     'name'             => _('Users'),
                     'description'      => _('Add description...'),
