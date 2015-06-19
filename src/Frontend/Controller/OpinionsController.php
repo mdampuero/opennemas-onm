@@ -686,21 +686,13 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID   = $request->query->getDigits('opinion_id');
+        $dirtyID = $request->query->getDigits('opinion_id');
 
-        // Resolve article ID
+        // Resolve opinion ID, search in repository or redirect to 404
         $opinionID = \ContentManager::resolveID($dirtyID);
-
-        // Redirect to opinion frontpage if opinion_id wasn't provided
-        if (empty($opinionID)) {
-            return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
-        }
-
-        $er = $this->get('entity_repository');
-        $opinion = $er->find('Opinion', $opinionID);
-
-        // TODO: Think that this comments related code can be deleted.
-        if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
+        $er        = $this->get('entity_repository');
+        $opinion   = $er->find('Opinion', $opinionID);
+        if (is_null($opinion)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
@@ -713,6 +705,9 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
+            if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
             $this->view->assign('contentId', $opinionID);
 
             $author = $this->get('user_repository')->find($opinion->fk_author);

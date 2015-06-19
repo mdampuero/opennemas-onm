@@ -43,15 +43,15 @@ class ArticlesController extends Controller
 
         $this->ccm  = \ContentCategoryManager::get_instance();
 
-        // Resolve article ID
+        // Resolve article ID, search in repository or redirect to 404
         $articleID = \ContentManager::resolveID($dirtyID);
-        if (empty($articleID)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $er        = $this->get('entity_repository');
+        $article   = $er->find('Article', $articleID);
+        if (is_null($article)) {
+            throw new ResourceNotFoundException();
         }
 
-        $er = $this->get('entity_repository');
-        $article = $er->find('Article', $articleID);
-
+        // If external link is set, redirect
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
             return $this->redirect($article->params['bodyLink']);
         }
