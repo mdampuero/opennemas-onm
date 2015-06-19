@@ -25,6 +25,12 @@ class MarketController extends Controller
         }
 
         $available = \Onm\Module\ModuleManager::getAvailableModules();
+        $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
+
+        foreach ($packs as $pack) {
+            $available[$pack['id']] = $pack['name'];
+        }
+
         $instance  = $this->get('instance');
         $modules   = $request->request->get('modules');
 
@@ -36,8 +42,8 @@ class MarketController extends Controller
         // Get names for filtered modules to use in template
         $purchased = array_intersect_key($available, array_flip($modules));
 
-        $this->sendEmailToSales($instance, $purchased);
-        $this->sendEmailToCustomer($instance, $purchased);
+        $this->sendEmailToSales($instance, $modules);
+        $this->sendEmailToCustomer($instance, $modules);
 
         return new JsonResponse(_('Your request has been registered'));
     }
@@ -129,7 +135,7 @@ class MarketController extends Controller
                 ),
                 'text/html'
             );
-        var_dump($message->getBody());die(); 
+
         $this->get('mailer')->send($message);
     }
 
@@ -161,7 +167,6 @@ class MarketController extends Controller
                 'text/html'
             );
 
-        var_dump($message->getBody());die(); 
         $this->get('mailer')->send($message);
     }
 }
