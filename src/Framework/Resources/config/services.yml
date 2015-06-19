@@ -13,9 +13,20 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
+    kernel.listener.user_listener:
+        class: Framework\EventListener\UserListener
+        arguments: [ @security.context, @onm_user_provider, @router ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
         arguments: [ @service_container, @setting_repository ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    kernel.listener.application_listener:
+        class: Framework\EventListener\ApplicationListener
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -23,6 +34,12 @@ services:
         class: Framework\EventListener\ControllerListener
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
+        tags:
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
     kernel.listener.instance_exceptions:
         class: Framework\EventListener\InstanceExceptionsListener
@@ -50,21 +67,11 @@ services:
         arguments: [ @service_container, @cache, @logger ]
         tags:
             - { name: kernel.event_subscriber }
-    kernel.listener.user_listener:
-        class: Framework\EventListener\UserListener
-        arguments: [ @security.context, @onm_user_provider, @router ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     kernel.listener.news_agency:
         class: Framework\EventListener\NewsAgencyCronActionSubscriber
         tags:
             - {name: kernel.event_subscriber}
-
-    kernel.listener.application_listener:
-        class: Framework\EventListener\ApplicationListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     cache:
         class: %cache_handler%
@@ -145,12 +152,6 @@ services:
         class: Captcha\Captcha
         calls:
             - [setPrivateKey, [ %recaptcha_private_key% ]]
-
-    kernel.listener.varnish_cleaner:
-        class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
-        tags:
-            - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
     varnish_cleaner:
         class: Onm\Varnish\BanMessagePusher
