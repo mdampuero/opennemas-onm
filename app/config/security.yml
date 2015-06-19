@@ -52,6 +52,10 @@ security:
             pattern:  ^/user/(recover*|register|(activate/*))
             security: false
 
+        framework:
+            pattern:  ^/framework
+            security: false
+
         backend:
             pattern:    ^/admin/*
             form_login:
