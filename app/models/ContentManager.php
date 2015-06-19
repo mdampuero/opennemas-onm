@@ -2118,32 +2118,6 @@ class ContentManager
         return $contentID;
     }
 
-     /**
-     *  Search id in refactor_id table. (used for translate old format ids)
-     *
-     * @param string $oldID Old id created with mktime
-     *
-     * @return int id in table refactor_id or false
-     *
-     */
-
-    public static function searchInRefactorID($oldID)
-    {
-        $sql = "SELECT pk_content FROM `refactor_ids` "
-             . "WHERE pk_content_old = ?";
-        $value  = array($oldID);
-        $refactorID = $GLOBALS['application']->conn->GetOne($sql, $value);
-
-        if (!empty($refactorID)) {
-            $content = new Content($refactorID);
-            $content = $content->get($refactorID);
-
-            forward301('/'.$content->uri);
-        }
-
-        return $oldID;
-    }
-
     /**
      * Clean id and search if exist in content table.
      * If not found search in refactor_id table. (used for translate old format ids)
@@ -2165,8 +2139,8 @@ class ContentManager
         }
 
         if (!empty($dirtyID)) {
-            preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
-            $contentID = self::searchContentID((int) $matches["digit"]);
+            preg_match("@(?P<dirtythings>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
+            $contentID = (int) $matches['id'];
 
             $cache->save('content_resolve_id_'.$dirtyID, $contentID);
         }
