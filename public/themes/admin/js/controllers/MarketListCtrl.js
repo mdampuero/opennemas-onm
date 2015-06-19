@@ -22,9 +22,16 @@
       '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
       function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
+         * The available modules.
+         *
+         * @type {Array}
+         */
+        $scope.available = [];
+
+        /**
          * The type of the modules to list.
          * 
-         * @type String
+         * @type {String}
          */
         $scope.type = 'pack'
          
