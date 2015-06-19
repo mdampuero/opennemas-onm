@@ -111,10 +111,14 @@ class MarketController extends Controller
      */
     private function sendEmailToCustomer($instance, $modules)
     {
+        $params = $this->container
+            ->getParameter("manager_webservice");
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Market purchase request')
-            ->setFrom($this->container->getParameter('sales_email'))
-            ->setTo($instance->contact_mail)
+            ->setFrom($params['no_reply_from'])
+            ->setSender($params['no_reply_sender'])
+            ->setTo($this->getUser()->contact_mail)
             ->setBody(
                 $this->renderView(
                     'market/email/_purchaseToCustomer.tpl',
@@ -125,7 +129,7 @@ class MarketController extends Controller
                 ),
                 'text/html'
             );
-
+        var_dump($message->getBody());die(); 
         $this->get('mailer')->send($message);
     }
 
@@ -137,9 +141,13 @@ class MarketController extends Controller
      */
     private function sendEmailToSales($instance, $modules)
     {
+        $params = $this->container
+            ->getParameter("manager_webservice");
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Market purchase request')
-            ->setFrom($instance->contact_mail)
+            ->setFrom($params['no_reply_from'])
+            ->setSender($params['no_reply_sender'])
             ->setTo($this->container->getParameter('sales_email'))
             ->setBody(
                 $this->renderView(
@@ -153,6 +161,7 @@ class MarketController extends Controller
                 'text/html'
             );
 
+        var_dump($message->getBody());die(); 
         $this->get('mailer')->send($message);
     }
 }
