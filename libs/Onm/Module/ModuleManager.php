@@ -213,7 +213,7 @@ class ModuleManager
                             <li>%d x  User (1)</li>
                             <li>%s Storage (2)</li>
                             <li>%s Items (Articles, Opinions, Comments) (2)</li>
-                            <li>%s page views/month</li>
+                            <li>%s page views/month (2)</li>
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
@@ -223,9 +223,9 @@ class ModuleManager
                         4
                     )
                     ._(
-                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
-                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
-                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
                 'type' => 'pack',
@@ -265,7 +265,7 @@ class ModuleManager
                             <li>%d x  User (1)</li>
                             <li>%s Storage (2)</li>
                             <li>%s Items (Articles, Opinions, Comments) (2)</li>
-                            <li>%s page views/month</li>
+                            <li>%s page views/month (2)</li>
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
@@ -275,9 +275,9 @@ class ModuleManager
                         2
                     )
                     ._(
-                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
-                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
-                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
                 'type'             => 'pack',
@@ -322,7 +322,7 @@ class ModuleManager
                             <li>%d x  User (1)</li>
                             <li>%s Storage (2)</li>
                             <li>%s Items (Articles, Opinions, Comments) (2)</li>
-                            <li>%s page views/month</li>
+                            <li>%s page views/month (2)</li>
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
@@ -332,9 +332,9 @@ class ModuleManager
                         4
                     )
                     ._(
-                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
-                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
-                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
                 'price' => [
@@ -382,7 +382,7 @@ class ModuleManager
                             <li>%d x  User (1)</li>
                             <li>%s Storage (2)</li>
                             <li>%s Items (Articles, Opinions, Comments) (2)</li>
-                            <li>%s page views/month</li>
+                            <li>%s page views/month (2)</li>
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
@@ -392,11 +392,11 @@ class ModuleManager
                         4
                     )
                     ._(
-                        '<p><small>1.- To add more users refer to User Licence Page</small></p>'
-                        .'<p><small>2.- For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a></small></p>'
-                        .'<p><small>All prices above do not include VAT (21%)</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
-                ),
+               ),
                 'type'  => 'pack',
                 'price' => [
                     'month' => 200
