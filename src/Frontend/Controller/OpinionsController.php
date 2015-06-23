@@ -106,7 +106,13 @@ class OpinionsController extends Controller
             // Fetch last opinions from director
             $directorContents = array();
             if (!empty($configurations['total_director'])) {
+<<<<<<< HEAD
                 $ef = array_merge($filters, ['type_opinion' => [['value' => 2]]]);
+=======
+                $filters['type_opinion'] = [['value' => 2]];
+
+                $contents = $em->findBy($filters, $order, 2, $this->page);
+>>>>>>> hotfix/ONM-464-3
 
                 $directorContents = $em->findBy($ef, $order, $configurations['total_director'], $this->page);
                 if (count($directorContents) > 0) {
@@ -123,6 +129,7 @@ class OpinionsController extends Controller
                     }
                     $dir['name'] = $directorAuthor->name;
                 }
+<<<<<<< HEAD
                 var_dump($directorAuthor, $directorContents);die();
                 if (isset($item->img1) && ($item->img1 > 0)) {
                     $director[0]->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
@@ -135,6 +142,13 @@ class OpinionsController extends Controller
                         'opinionsDirector' => $directorContents
                     )
                 );
+=======
+
+                $this->view->assign([
+                    'director'         => $contents[0],
+                    'opinionsDirector' => $contents
+                ]);
+>>>>>>> hotfix/ONM-464-3
             }
 
             $numOpinions  = s::get('items_per_page');
@@ -199,6 +213,11 @@ class OpinionsController extends Controller
                 } else {
                     $author = $authors[$opinion->fk_author];
                 }
+<<<<<<< HEAD
+=======
+
+                $opinion->author = $authors[$opinion->fk_author];
+>>>>>>> hotfix/ONM-464-3
 
                 if (empty($author->meta)
                     || !array_key_exists('is_blog', $author->meta)
@@ -206,11 +225,17 @@ class OpinionsController extends Controller
                 ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
+<<<<<<< HEAD
                     $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                     $item = new \Content();
                     $item->loadAllContentProperties($opinion->pk_content);
                     $opinion->summary = $item->summary;
                     $opinion->img1_footer = $item->img1_footer;
+=======
+                    $opinion->author_name_slug =
+                        \Onm\StringUtils::getTitle($opinion->name);
+
+>>>>>>> hotfix/ONM-464-3
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $opinion->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
@@ -227,8 +252,13 @@ class OpinionsController extends Controller
             }
 
             $this->view->assign(
+<<<<<<< HEAD
                 array(
                     'opinions'   => $opinionsResult,
+=======
+                [
+                    'opinions'   => $opinions,
+>>>>>>> hotfix/ONM-464-3
                     'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $this->page
