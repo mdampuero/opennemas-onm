@@ -47,7 +47,7 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAction()
     {
         $this->page = $this->request->query->getDigits('page', 1);
@@ -63,98 +63,76 @@ class OpinionsController extends Controller
                 'content_status' => [['value' => 1]],
                 'in_litter'      => [['value' => 0]],
             ];
+
+            $order = [ 'in_home' => 'DESC', 'starttime' => 'DESC' ];
+
             $em = $this->get('opinion_repository');
+            $sm = $this->get('setting_repository');
 
             if ($this->page == 1) {
-                $order['in_home']   = 'DESC';
                 $order['position']  = 'ASC';
-                $order['starttime'] = 'DESC';
                 $filters['in_home'] = [['value' => 1]];
-            } else {
-                $order['in_home']   = 'DESC';
-                $order['starttime'] = 'DESC';
             }
 
             // Fetch configurations for this frontpage
-            $configurations = $this->get('setting_repository')
-                ->get(
-                    'opinion_settings',
-                    [
-                        'total_editorial' => 2,
-                        'total_director'  => 1,
-                    ]
-                );
+            $configurations = $sm->get(
+                'opinion_settings',
+                [
+                    'total_editorial' => 2,
+                    'total_director'  => 1,
+                ]
+            );
 
             // Fetch last editorial opinions from editorial
-            $editorial = array();
+            $editorial = [];
             if ($configurations['total_editorial'] > 0) {
-                $ef = array_merge(
-                    $filters,
-                    ['type_opinion' => [['value' => 1]]]
-                );
+                $filters['type_opinion'] = [['value' => 1]];
 
-                $editorialContents = $em->findBy($ef, $order, $configurations['total_editorial'], $this->page);
+                $editorialContents = $em->findBy($filters, $order, $configurations['total_editorial'], $this->page);
 
                 foreach ($editorialContents as &$opinion) {
                     if (isset($opinion->img1) && ($opinion->img1 > 0)) {
-                        $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
+                        $opinion->img1 = $this->get('entity_repository')
+                            ->find('Photo', $opinion->img1);
                     }
                 }
+
                 $this->view->assign('editorial', $editorialContents);
             }
 
             // Fetch last opinions from director
-            $directorContents = array();
+            $contents = [];
             if (!empty($configurations['total_director'])) {
-<<<<<<< HEAD
-                $ef = array_merge($filters, ['type_opinion' => [['value' => 2]]]);
-=======
                 $filters['type_opinion'] = [['value' => 2]];
 
                 $contents = $em->findBy($filters, $order, 2, $this->page);
->>>>>>> hotfix/ONM-464-3
 
-                $directorContents = $em->findBy($ef, $order, $configurations['total_director'], $this->page);
-                if (count($directorContents) > 0) {
-                    $directorAuthor = $this->get('user_repository')->find($directorContents[0]->fk_author);
+                if (count($contents) > 0) {
+                    $directorAuthor = $this->get('user_repository')
+                        ->find($contents[0]->fk_author);
                 }
-            }
 
-            foreach ($directorContents as &$opinion) {
-                // Fetch the photo image of the director
-                if (!empty($directorAuthor)) {
-                    $director[0]->img1 = $this->get('entity_repository')->find('Photo', $directorContents[0]->img1);
-                    if (isset($directorAuthor->photo->path_file)) {
-                        $dir['photo'] = $directorAuthor->photo->path_file;
+                foreach ($contents as &$opinion) {
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $contents[0]->img1 = $this
+                            ->get('entity_repository')
+                            ->find('Photo', $item->img1);
                     }
-                    $dir['name'] = $directorAuthor->name;
                 }
-<<<<<<< HEAD
-                var_dump($directorAuthor, $directorContents);die();
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $director[0]->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
-                }
-
-                $this->view->assign(
-                    array(
-                        'dir'              => $dir,
-                        'director'         => $directorContents[0],
-                        'opinionsDirector' => $directorContents
-                    )
-                );
-=======
 
                 $this->view->assign([
                     'director'         => $contents[0],
                     'opinionsDirector' => $contents
                 ]);
->>>>>>> hotfix/ONM-464-3
             }
 
-            $numOpinions  = s::get('items_per_page');
-            if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+            $numOpinions  = $sm->get('items_per_page');
+            if (!empty($configurations)
+                && array_key_exists('total_opinions', $configurations)
+            ) {
                 $numOpinions = $configurations['total_opinions'];
             }
+
              // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -165,6 +143,7 @@ class OpinionsController extends Controller
                 }
             }
 
+            $filters['type_opinion'] = [['value' => 0]];
             if (!empty($authorsBlog)) {
                 // Must drop the blogs
                 $filters = array_merge(
@@ -175,22 +154,13 @@ class OpinionsController extends Controller
                 );
             }
 
-            $of = array_merge(
-                $filters,
-                array('type_opinion' => array(array('value' => 0)))
-            );
-
-            $opinions  = $em->findBy($of, $order, $numOpinions, $this->page);
-
+            // Make pagination using all opinions. Overwriting filter
             if ($this->page == 1) {
-                // Make pagination using all opinions. Overwriting filter
-                $of = array_merge(
-                    $of,
-                    array('in_home' => array(array('value' => array(0,1), 'operator' => 'IN' )))
-                );
-
+                unset($filters['in_home']);
             }
-            $countOpinions = $em->countBy($of);
+
+            $opinions      = $em->findBy($filters, $order, $numOpinions, $this->page);
+            $countOpinions = $em->countBy($filters);
 
             $pagination = $this->get('paginator')->create([
                 'elements_per_page' => $numOpinions,
@@ -199,70 +169,45 @@ class OpinionsController extends Controller
                 'base_url'          => $this->generateUrl('frontend_opinion_frontpage'),
             ]);
 
-            $authors = array();
-            $opinionsResult = array();
-            foreach ($opinions as $opinion) {
+            $authors = [];
+            $ur = $this->get('user_repository');
+            foreach ($opinions as &$opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
-                    $author = $this->get('user_repository')->find($opinion->fk_author);
-
-                    if (!is_object($author)) {
-                        $author = new \User();
-                    }
-
-                    $authors[$opinion->fk_author] = $author;
-                } else {
-                    $author = $authors[$opinion->fk_author];
+                    $authors[$opinion->fk_author] = $ur->find($opinion->fk_author);
                 }
-<<<<<<< HEAD
-=======
 
                 $opinion->author = $authors[$opinion->fk_author];
->>>>>>> hotfix/ONM-464-3
 
-                if (empty($author->meta)
-                    || !array_key_exists('is_blog', $author->meta)
-                    || $author->meta['is_blog'] == 0
+                if (empty($opinion->author->meta)
+                    || !array_key_exists('is_blog', $opinion->author->meta)
+                    || $opinion->author->meta['is_blog'] == 0
                 ) {
-                    $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
-<<<<<<< HEAD
-                    $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
-                    $item = new \Content();
-                    $item->loadAllContentProperties($opinion->pk_content);
-                    $opinion->summary = $item->summary;
-                    $opinion->img1_footer = $item->img1_footer;
-=======
                     $opinion->author_name_slug =
                         \Onm\StringUtils::getTitle($opinion->name);
 
->>>>>>> hotfix/ONM-464-3
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $opinion->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
+                        $opinion->img1 = $this->get('entity_repository')
+                            ->find('Photo', $item->img1);
                     }
 
                     $opinion->author->uri = \Uri::generate(
                         'opinion_author_frontpage',
-                        array(
+                        [
                             'slug' => $opinion->author->username,
                             'id'   => sprintf('%06d', $opinion->author->id)
-                        )
+                        ]
                     );
-                    $opinionsResult[] = $opinion;
                 }
             }
 
             $this->view->assign(
-<<<<<<< HEAD
-                array(
-                    'opinions'   => $opinionsResult,
-=======
                 [
                     'opinions'   => $opinions,
->>>>>>> hotfix/ONM-464-3
                     'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $this->page
-                )
+                ]
             );
         }
 
