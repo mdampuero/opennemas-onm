@@ -47,7 +47,7 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAction()
     {
         $this->page = $this->request->query->getDigits('page', 1);
@@ -123,7 +123,7 @@ class OpinionsController extends Controller
                     }
                     $dir['name'] = $directorAuthor->name;
                 }
-
+                var_dump($directorAuthor, $directorContents);die();
                 if (isset($item->img1) && ($item->img1 > 0)) {
                     $director[0]->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
