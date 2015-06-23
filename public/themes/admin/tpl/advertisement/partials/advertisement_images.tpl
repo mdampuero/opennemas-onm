@@ -49,7 +49,7 @@
               {t}Flash based{/t}
             </h5>
             <div class="checkbox">
-              <input id="overlap" name="overlap" ng-model="overlap" type="checkbox" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
+              <input id="overlap" name="overlap" type="checkbox" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
               <label for="overlap" class="overlap-message">
                   {t}Override default click handler{/t} <i class="fa fa-question-circle" title="{t}When you click in some Flash-based advertisements they redirect you to another web site. If you want to overlap that address with that specified by you above you should mark this.{/t}"> </i>
               </label>
