@@ -26,9 +26,14 @@ class MarketController extends Controller
 
         $available = \Onm\Module\ModuleManager::getAvailableModules();
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
+        $themes    = \Onm\Module\ModuleManager::getAvailableThemes();
 
         foreach ($packs as $pack) {
             $available[$pack['id']] = $pack['name'];
+        }
+
+        foreach ($themes as $theme) {
+            $available[$theme['id']] = $theme['name'];
         }
 
         $instance  = $this->get('instance');
@@ -42,8 +47,14 @@ class MarketController extends Controller
         // Get names for filtered modules to use in template
         $purchased = array_intersect_key($available, array_flip($modules));
 
-        $this->sendEmailToSales($instance, $modules);
-        $this->sendEmailToCustomer($instance, $modules);
+        $this->sendEmailToSales($instance, $purchased);
+        $this->sendEmailToCustomer($instance, $purchased);
+
+        $this->get('application.log')->info(
+            'The user ' . $this->getUser()->username
+            . '(' . $this->getUser()->id  .') has purchased '
+            . implode(', ', $modules)
+        );
 
         return new JsonResponse(_('Your request has been registered'));
     }
