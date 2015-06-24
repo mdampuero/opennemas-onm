@@ -17,6 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -359,63 +360,59 @@ class OpinionsController extends Controller
     {
         // Index author's frontpage
         $authorID = $request->query->getDigits('author_id', null);
-
         if (empty($authorID)) {
-            return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+            throw new ResourceNotFoundException();
         }
 
-        // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
-
         // Don't execute the app logic if there are caches available
+        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
             $author = $this->get('user_repository')->find($authorID);
             if (is_null($author)) {
-                 return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+                throw new ResourceNotFoundException();
             }
 
-            // WTF is this!!!!?
-            $author->params = $author->meta;
-            $author->slug   = $author->username;
-
-            if (array_key_exists('is_blog', $author->params) && $author->params['is_blog'] == 1) {
+            if (array_key_exists('is_blog', $author->meta)
+                && $author->params['is_blog'] == 1
+            ) {
                 return new RedirectResponse(
-                    $this->generateUrl('frontend_blog_author_frontpage', array('author_slug' => $author->username))
+                    $this->generateUrl(
+                        'frontend_blog_author_frontpage',
+                        ['author_slug' => $author->username]
+                    )
                 );
             }
 
             // Setting filters for the further SQLs
-            if ($author->id == 1 && $author->slug == 'editorial') {
+            $filters = [
+                'content_status'    => [['value' => 1]],
+                'content_type_name' => [['value' => 'opinion']],
+            ];
+            if ($author->id == 1 && $author->username == 'editorial') {
                 // Editorial
-                $filter = [ 'type_opinion' => [['value' => 1]] ];
+                $filters['type_opinion'] = [['value' => 1]];
+                $author->slug = 'editorial';
                 $this->view->assign('actual_category', 'editorial');
-            } elseif ($author->id == 2 && $author->slug == 'director') {
+            } elseif ($author->id == 2 && $author->username == 'director') {
                 // Director
-                $filter = [ 'type_opinion' => [['value' => 2]] ];
+                $filters['type_opinion'] = [['value' => 2]];
+                $author->slug = 'director';
             } else {
                 // Regular authors
-                $filter = [
-                    'type_opinion' => [['value' => 0]],
-                    'opinions`.`fk_author' => [['value' => $author->id]]
-                ];
-
+                $filters['type_opinion']         = [['value' => 0]];
+                $filters['opinions`.`fk_author'] = [['value' => $author->id]];
                 $author->slug = \Onm\StringUtils::getTitle($author->name);
-                $this->view->assign('actual_category', 'opinion');
             }
 
-            $filters      = array_merge([ 'content_status' => [['value' => 1]], ], $filter);
             $orderBy      = ['created' => 'DESC'];
             $itemsPerPage = s::get('items_per_page');
 
             // Get the number of total opinions for this author for pagination purpouses
-            $countOpinions = $this->get('opinion_repository')->countBy(
-                array_merge([ 'content_type_name' => [['value' => 'opinion']]], $filters)
-            );
-
-            $opinions = $this->get('opinion_repository')->findBy($filters, $orderBy, $itemsPerPage);
+            $countOpinions = $this->get('opinion_repository')->countBy($filters);
+            $opinions      = $this->get('opinion_repository')->findBy($filters, $orderBy, $itemsPerPage);
 
             foreach ($opinions as &$opinion) {
                 $item = array (
