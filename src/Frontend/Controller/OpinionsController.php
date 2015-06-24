@@ -648,37 +648,24 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction(Request $request)
+    public function showAction(Request $request, $opinion_id)
     {
-        $dirtyID   = $request->query->getDigits('opinion_id');
-
         // Resolve article ID
-        $er = $this->get('entity_repository');
-        $opinionID = $er->resolveID($dirtyID);
+        $er = $this->get('opinion_repository');
+        $id = $er->resolveID($opinion_id);
 
+        $opinion = $er->find('Opinion', $id);
 
-        // Redirect to opinion frontpage if opinion_id wasn't provided
-        if (empty($opinionID)) {
-            return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+        if (!$opinion || $opinion->content_status != 1 || $opinion->in_litter != 0) {
+            throw new ResourceNotFoundException();
         }
-
-        $opinion = $er->find('Opinion', $opinionID);
-
-        // TODO: Think that this comments related code can be deleted.
-        if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-        }
-
-        //Fetch information for Advertisements
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
 
         // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $opinionID);
+        $cacheId = $this->view->generateCacheId($this->category_name, '', $id);
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
-            $this->view->assign('contentId', $opinionID);
+            $this->view->assign('contentId', $id);
 
             $author = $this->get('user_repository')->find($opinion->fk_author);
             $opinion->author = $author;
@@ -731,27 +718,28 @@ class OpinionsController extends Controller
             }
 
             // Fetch the other opinions for this author
+            $criteria = [];
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
                 $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
+                $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 1]] ];
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
                 $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
+                $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 2]] ];
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);
+                $criteria = [ 'opinions`.`fk_author' => [[ 'value' => $opinion->fk_author ]] ];
             }
 
-            $this->cm = new \ContentManager();
+            $criteria['pk_opinion'] = [[ 'operator' => '<>', 'value' => $id ]];
+            $criteria['content_status'] = [[ 'value' => 1 ]];
+            $order = ['created' => 'desc'];
 
-            $otherOpinions = $this->cm->find(
-                'Opinion',
-                $where.' AND `pk_opinion` <>' .$opinionID
-                .' AND content_status=1',
-                ' ORDER BY created DESC LIMIT 0,9'
-            );
+            $otherOpinions = $er->findBy($criteria, $order, 10, 1);
 
             foreach ($otherOpinions as &$otOpinion) {
                 $otOpinion->author = $author;
@@ -767,16 +755,19 @@ class OpinionsController extends Controller
                     'author'          => $author,
                 )
             );
-
         } // End if isCached
+
+        //Fetch information for Advertisements
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
             array(
-                'cache_id'        => $cacheID,
+                'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinionID,
+                'x-tags'          => 'opinion,'.$id,
                 'x-cache-for' => '1d'
             )
         );
