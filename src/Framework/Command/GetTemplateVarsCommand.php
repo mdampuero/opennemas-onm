@@ -27,6 +27,13 @@ class GetTemplateVarsCommand extends ContainerAwareCommand
                 InputOption::VALUE_NONE,
                 'If set, return all variables grouped by template'
             )
+            ->addOption(
+                'usage',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, find variables by usage'
+            )
+
             ->setHelp(
                 <<<EOF
 The <info>theme:vars</info> finds all variables used in theme templates.
@@ -37,12 +44,13 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $group = $input->getOption('group');
+        $usage = $input->getOption('usage');
         $source = $input->getArgument('source');
 
         $files = $this->getFiles($source);
 
-        $vars = $this->getVars($files); 
- 
+        $vars = $this->getVars($files, $usage);
+
         if (!$group) {
             $flat = [];
 
@@ -101,19 +109,25 @@ EOF
     /**
      * Get all variables from files.
      *
-     * @param array $files The array of files where extract variables from.
+     * @param array  $files The array of files where extract variables from.
+     * @param string $usage Whether to check variable usage.
      *
      * @return array The array of variables.
      */
-    protected function getVars($files)
+    protected function getVars($files, $usage)
     {
+        $pattern = '/(\$[a-zA-Z]\w*)/';
+
+        if ($usage) {
+            $pattern = '/\$[a-zA-Z_]\w*\s*(\.|->|\[|\')*\s*\$*\w*(\]|\')*/';
+        }
+
         $vars = [];
         foreach ($files as $file) {
             $path = $file;
 
             if (!is_dir($path)) {
                 $content = file_get_contents($path);
-                $pattern = '/(\$[a-zA-Z]\w*)/';
 
                 preg_match_all($pattern, $content, $matches);
 
