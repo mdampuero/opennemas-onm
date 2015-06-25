@@ -976,16 +976,14 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      *
      * @return array multidimensional array with information about authors
      */
-    public static function getAllUsersAuthors($filter = null)
+    public static function getAllUsersAuthors($filter = '')
     {
-        if (!is_null($filter)) {
-            $_where = $filter;
-        } else {
-            $_where = '';
+        if (!empty($filter)) {
+            $filter = ' '.$filter.' AND ';
         }
 
         $authors = getService('user_repository')->findBy(
-            ' fk_user_group '.$_where.' LIKE "%3%" ',
+            ' '.$filter.' fk_user_group LIKE "%3%" ',
             [ 'name' => 'ASC' ]
         );
 
