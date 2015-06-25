@@ -984,25 +984,16 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $_where = '';
         }
 
-        $sql = 'SELECT `id` FROM users WHERE fk_user_group '.$_where.' LIKE "%3%" ORDER BY `name`';
+        $authors = getService('user_repository')->findBy(
+            ' fk_user_group '.$_where.' LIKE "%3%" ',
+            [ 'name' => 'ASC' ]
+        );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return array();
-        }
-
-        $i = 0;
-        $authors = array();
-        while (!$rs->EOF) {
-            $authors[$i]         = new \User($rs->fields['id']);
-            $authors[$i]->params = $authors[$i]->getMeta();
-            if (array_key_exists('is_blog', $authors[$i]->params)) {
-                $authors[$i]->is_blog = $authors[$i]->params['is_blog'];
+        foreach ($authors as &$author) {
+            $author->params  = $author->meta;
+            if (array_key_exists('is_blog', $author->params)) {
+                $author->is_blog = $author->meta['is_blog'];
             }
-
-            $rs->MoveNext();
-            $i++;
         }
 
         // Order names with accents
