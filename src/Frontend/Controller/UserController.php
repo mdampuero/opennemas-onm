@@ -682,7 +682,9 @@ class UserController extends Controller
         return $this->render(
             'user/author_frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'author_user_frontpage,'.$page,
+                'x-cache-for' => '1d'
             )
         );
     }
@@ -785,7 +787,9 @@ class UserController extends Controller
         return $this->render(
             'user/frontpage_authors.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'authors_users_frontpage,'.$page,
+                'x-cache-for' => '1d'
             )
         );
     }
