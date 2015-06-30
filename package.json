@@ -9,7 +9,14 @@
   },
   "devDependencies": {
     "angular-jsdoc": "git://github.com/openhost/angular-jsdoc.git",
+    "jasmine-core": "~2.3.*",
     "jsdoc": "~3.3.*",
-    "jshint": "~2.5.*"
+    "jshint": "~2.5.*",
+    "karma": "~0.12.*",
+    "karma-cli": "~0.0.*",
+    "karma-jasmine": "~0.3.*",
+    "karma-junit-reporter": "~0.2.*",
+    "karma-phantomjs-launcher": "~0.1.*",
+    "karma-html-reporter": "~0.2.*"
   }
 }
