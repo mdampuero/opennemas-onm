@@ -21,7 +21,8 @@
       loginConfirmed: function(data, configUpdater) {
         var updater = configUpdater || function(config) { return config; };
         $rootScope.$broadcast('auth-login-confirmed', data);
-        httpBuffer.retryAll(updater);
+
+        httpBuffer.retryAll(updater, data.token);
       },
 
       /**
@@ -117,8 +118,12 @@
       /**
        * Retries all the buffered requests clears the buffer.
        */
-      retryAll: function(updater) {
+      retryAll: function(updater, token) {
         for (var i = 0; i < buffer.length; ++i) {
+          if (token) {
+            buffer[i].config.headers.Authorization = 'Bearer ' + token;
+          }
+
           retryHttpRequest(updater(buffer[i].config), buffer[i].deferred);
         }
         buffer = [];

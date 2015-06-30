@@ -158,7 +158,8 @@
                       </label>
                       <div class="controls">
                         <textarea class="form-control" name="params[imageHomeFooter]" ng-model="imageHomeFooter">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
-                        <input type="hidden" name="params[imageHome]" ng-value="imageHome" class="related-element-id"/>
+                        <input type="hidden" name="params[imageHome]" ng-value="imageHome"/>
+                        <input type="hidden" name="params[imageHomeFooter]" ng-value="imageHomeFooter"/>
                       </div>
                     </div>
                   </div>

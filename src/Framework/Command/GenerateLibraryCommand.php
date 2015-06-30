@@ -193,7 +193,7 @@ EOF
         $item->link = 'andalucia';
         array_push($menu->items, $item);
         $item       = new \stdClass();
-        $item->link = 'catabria';
+        $item->link = 'cantabria';
         array_push($menu->items, $item);
         $item       = new \stdClass();
         $item->link = 'paisvasco';

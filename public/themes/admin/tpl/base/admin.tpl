@@ -43,7 +43,7 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/select2/select2.css,
-      @Common/src/webarch/css/animate.min.css,
+      @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
@@ -117,17 +117,19 @@
           {block name="header_links"}
             <div class="pull-left">
               <ul class="nav quick-section">
-                <li class="quicklinks">
-                  <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                    <i class="fa fa-bullseye"></i>
-                    {t}My newspaper{/t}
-                  </a>
-                </li>
+                {acl isAllowed="ROLE_ADMIN"}
+                  <li class="quicklinks">
+                    <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                      <i class="fa fa-bullseye"></i>
+                      {t}My newspaper{/t}
+                    </a>
+                  </li>
+                {/acl}
                 {block name="quick-create"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>
-                  <li class="quicklinks quick-items dropdown">
+                  <li class="quicklinks create-items quick-items dropdown">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-plus"></i>
                       {t}Create{/t}
@@ -427,6 +429,8 @@
       @Common/components/angular-nanoscroller/scrollable.js,
       @Common/components/angular-loading-bar/build/loading-bar.min.js,
       @Common/components/angular-sanitize/angular-sanitize.min.js,
+      @Common/components/angulartics/dist/angulartics.min.js,
+      @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/ngQuickDate/dist/ng-quick-date.min.js,
       @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
       @Common/components/angular-route/angular-route.min.js,

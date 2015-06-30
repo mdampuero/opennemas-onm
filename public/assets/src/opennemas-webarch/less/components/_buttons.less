@@ -1,10 +1,7 @@
+.btn-default,
+.btn-default:hover,
 .btn-white,
 .btn-white:hover {
-  border: 1px solid #d1dade;
-}
-
-.btn-default,
-.btn-default:hover {
   border: 1px solid #d1dade;
 }
 
@@ -15,21 +12,30 @@
 
 .btn-danger,
 .btn-danger:hover {
-  border: 1px solid #f35958;
+  border: 1px solid @error-color;
 }
 
 .btn-primary,
 .btn-primary:hover {
-  background-color: #376092 !important;
-  border: 1px solid #376092 !important;
+  background-color: @primary-color !important;
+  border: 1px solid @primary-color !important;
 }
 
 .btn-success,
 .btn-success:hover {
-  border: 1px solid #1285d1;
+  background-color: @success-color !important;
+  border: 1px solid @success-color !important;
 }
 
 .btn-warning,
 .btn-warning:hover {
-  border: 1px solid #fbb05e;
+  border: 1px solid @warning-color;
+}
+
+.btn-white {
+  background-color: #fff !important;
+}
+
+.btn-white:hover {
+  background-color: @background-color !important;
 }

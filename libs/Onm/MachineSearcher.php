@@ -107,7 +107,7 @@ class MachineSearcher
                 $content['uri'] = \Uri::generate(
                     'article',
                     array(
-                        'id'       => $content['pk_content'],
+                        'id'       => sprintf('%06d', $content['pk_content']),
                         'date'     => date('YmdHis', strtotime($content['created'])),
                         'category' => $content['catName'],
                         'slug'     => StringUtils::getTitle($content['title']),

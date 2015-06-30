@@ -550,6 +550,8 @@ jQuery(function($) {
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
+        } else if(els.length > 100) {
+            showMessage(frontpage_messages.frontpage_too_long, 'error');
         } else {
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,

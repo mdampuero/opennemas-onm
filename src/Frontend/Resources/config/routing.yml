@@ -687,3 +687,7 @@ frontend_externalfrontpage_category:
     defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
         category : "[a-z0-9\-]+"
+
+frontend_framework:
+    resource: @FrontendBundle/Resources/config/routing/framework.yml
+    prefix: /

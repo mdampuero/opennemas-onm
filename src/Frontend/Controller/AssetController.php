@@ -203,21 +203,21 @@ class AssetController extends Controller
                       ." **********************************************************/\n";
 
             $response .= "@media(min-width:768px) {\n";
-            foreach ($contentsInHomepage as $content) {
+            foreach ($contentsInHomepage as $item) {
                 // Background color
-                if (!empty($content->bgcolor)) {
-                    $response .= "#content-{$content->pk_content}.onm-new { "
-                            ."background-color:{$content->bgcolor} !important; }\n";
+                if (!empty($item->bgcolor)) {
+                    $response .= "#content-{$item->pk_content}.onm-new { "
+                            ."background-color:{$item->bgcolor} !important; }\n";
 
-                    $response .= "#content-{$content->pk_content}.colorize { "
+                    $response .= "#content-{$item->pk_content}.colorize { "
                             ."padding:10px !important; border-radius:5px !important; }\n";
                 }
-                if (!empty($content->title_props)) {
-                    $response .= "#content-{$content->pk_content} .custom-text, "
-                                ."#content-{$content->pk_content} .title a, "
-                                ."#content-{$content->pk_content} .nw-title a { ";
+                if (!empty($item->title_props)) {
+                    $response .= "#content-{$item->pk_content} .custom-text, "
+                                ."#content-{$item->pk_content} .title a, "
+                                ."#content-{$item->pk_content} .nw-title a { ";
 
-                    foreach ($content->title_props as $property => $value) {
+                    foreach ($item->title_props as $property => $value) {
                         if (!empty($value)) {
                             $response .= "{$property}:{$value}!important;";
                         }

@@ -15,11 +15,11 @@ function smarty_function_render_favico($params, &$smarty)
     }
 
     // Check if is allowed logo and favico exists
-    $favicoPath = MEDIA_URL.'/'.MEDIA_DIR.'/sections/';
+    $favicoPath = MEDIA_URL.MEDIA_DIR.'/sections/';
     if ($allowLogo && $favico = s::get('favico')) {
-        $output = '<link rel="shortcut icon" href="'.$favicoPath.$favico.'"/>
-    <link rel="apple-touch-icon" href="'.$favicoPath.$favico.'"/>
-    <link rel="apple-touch-icon-precomposed" href="'.$favicoPath.$favico.'"/>';
+        $output = '<link rel="shortcut icon" href="'.$favicoPath.rawurlencode($favico).'"/>
+    <link rel="apple-touch-icon" href="'.$favicoPath.rawurlencode($favico).'"/>
+    <link rel="apple-touch-icon-precomposed" href="'.$favicoPath.rawurlencode($favico).'"/>';
     }
 
     // Render favico code

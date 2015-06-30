@@ -200,7 +200,8 @@
             for (var module in $scope.template.available_modules) {
               module = $scope.template.available_modules[module];
 
-              if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
+              if (module.plan !== 'Support' &&
+                  $scope.instance.activated_modules.indexOf(module.id) === -1) {
                 $scope.instance.activated_modules.push(module.id);
               }
             }
@@ -214,6 +215,8 @@
             $scope.selected.plan = {};
             $scope.instance.activated_modules = [];
           }
+
+          $scope.updateSupport($scope.instance.support_plan);
         };
 
         /**
@@ -322,6 +325,32 @@
             $scope.selected = null;
           });
 
+        /**
+         * @function updateSupport
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Updates activated modules when support plan changes.
+         *
+         * @param {String} id The support plan id.
+         *
+         */
+        $scope.updateSupport = function(id) {
+          for (var i = 0; i < data.template.available_modules.length; i++) {
+            var module = data.template.available_modules[i];
+
+            if (module.plan === 'Support') {
+              var index = $scope.instance.activated_modules.indexOf(module.id);
+
+              if (index !== -1) {
+                $scope.instance.activated_modules.splice(index, 1);
+              }
+            }
+          }
+
+          $scope.instance.activated_modules.push(id);
+        };
+
         // Forces values to be integer.
         $scope.$watch(
           '[instance.external.max_users, instance.external.max_mailing]',
@@ -330,7 +359,7 @@
             $scope.instance.external.max_mailing = parseInt($scope.instance.external.max_mailing);
           },
           true
-          );
+        );
 
         // Copy of changed_in_modules array
         if (data.instance) {
