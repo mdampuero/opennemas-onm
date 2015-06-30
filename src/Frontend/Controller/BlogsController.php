@@ -250,20 +250,15 @@ class BlogsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('blog_id');
-        $blogID  = \ContentManager::resolveID($dirtyID);
 
-        // Redirect to blog frontpage if blog_id wasn't provided
-        if (empty($blogID)) {
-            return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
-        }
-
-        $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
-
-        // Check if the content is ready to be published
-        if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
+        // Resolve blog ID, search in repository or redirect to 404
+        $blogID = \ContentManager::resolveID($dirtyID);
+        $blog   = $this->get('opinion_repository')->find('Opinion', $blogID);
+        if (is_null($blog)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        // Setup view
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
@@ -272,6 +267,10 @@ class BlogsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
+            // Check if the content is ready to be published
+            if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
             $this->view->assign('contentId', $blogID);
 
             $author = $this->get('user_repository')->find($blog->fk_author);

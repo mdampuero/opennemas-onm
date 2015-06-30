@@ -32,16 +32,17 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles-mobile');
 
-
         define('BASE_PATH', '/mobile');
 
         $dirtyID = $request->query->getDigits('article_id');
 
+        // Resolve article ID, search in repository or redirect to 404
         $articleID = \ContentManager::resolveID($dirtyID);
-
-        // Search in the entity repository for an article
-        $er      = $this->get('entity_repository');
-        $article = $er->find('Article', $articleID);
+        $er        = $this->get('entity_repository');
+        $article   = $er->find('Article', $articleID);
+        if (is_null($article)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
 
         // Check for paywall
         $this->paywallHook($article);
@@ -155,7 +156,6 @@ class ArticlesController extends Controller
         $menuMobile = $cache->fetch(CACHE_PREFIX.'_mobileMenu');
 
         if (empty($menuMobile)) {
-
             $menu = new \Menu();
             $menuMobile = $menu->getMenu('mobile');
 

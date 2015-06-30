@@ -37,7 +37,7 @@
     <target name="build" depends="prepare,phplint,jshint,jsdoc,phpunit-ci,tools-parallel"/>
 
     <target name="build-sequential"
-            depends="prepare,phplint,jshint,jsdoc,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
+            depends="prepare,phplint,jshint,karma,jsdoc,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="4">
@@ -235,6 +235,12 @@
 
             <arg line="--log-junit" />
             <arg value="${basedir}/build/logs/junit.xml" />
+        </exec>
+    </target>
+
+    <target name="karma" description="Run karma test suites">
+        <exec executable="${node_modules_bin_dir}/karma" failonerror="false">
+            <arg value="start" />
         </exec>
     </target>
 

@@ -2,6 +2,11 @@
 ::selection { background: #357AE8; color: #fff; text-shadow: none; }
 :focus { -moz-outline-style: none; }
 
+.block {
+  display: block;
+  width: 100%;
+}
+
 .nowrap {white-space: nowrap;}
 
 .left { text-align:left !important; }
@@ -22,4 +27,25 @@
 
 .pointer {
   cursor:pointer !important;
+}
+
+.p-r-3 {
+  padding-right: 3px;
+}
+
+.pull-bottom {
+  bottom: 0;
+  position: absolute;
+
+  &.pull-left {
+    left: 0;
+  }
+
+  &.pull-right {
+    right: 0;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

@@ -37,12 +37,12 @@ class BooksController extends Controller
     public function frontpageAction(Request $request)
     {
         $this->page = $request->query->getDigits('page', 1);
-        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
+        $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
 
         // Setup caching system
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
+        $cacheID = $this->view->generateCacheId($categoryName, null, $this->page);
 
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
@@ -95,22 +95,21 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
+        $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
+        $dirtyID      = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
-        $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $id      = \ContentManager::resolveID($dirtyID);
-
-        if (empty($id)) {
+        // Resolve book ID, search in repository or redirect to 404
+        $id   = \ContentManager::resolveID($dirtyID);
+        $er   = $this->get('entity_repository');
+        $book = $er->find('Book', $id);
+        if (is_null($book)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
-
-        $er = $this->get('entity_repository');
-        $book = $er->find('Book', $id);
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-inner');
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $book->id);
+        $cacheID = $this->view->generateCacheId($categoryName, null, $book->id);
         if ($this->view->caching == 0
             || (!$this->view->isCached('books/book_viewer.tpl', $cacheID))
         ) {

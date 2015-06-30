@@ -55,7 +55,7 @@ class AlbumsController extends Controller
             );
 
             if (empty($category)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+                throw new ResourceNotFoundException();
             }
 
             $category         = $category[0];
@@ -174,16 +174,17 @@ class AlbumsController extends Controller
     public function showAction(Request $request)
     {
         $this->page = $request->query->getDigits('page', 1);
+        $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+
+        // Resolve album ID, search in repository or redirect to 404
+        $albumID = \ContentManager::resolveID($dirtyID);
+        $album   = $this->get('entity_repository')->find('Album', $albumID);
+        if (is_null($album)) {
+            throw new ResourceNotFoundException();
+        }
 
         // Items_page refers to the widget
-        $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $albumID    = \ContentManager::resolveID($dirtyID);
         $itemsPerPage = 8;
-
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($albumID)) {
-            return new RedirectResponse($this->generateUrl('frontend_album_frontpage'));
-        }
 
         $this->view->setConfig('gallery-inner');
 
@@ -191,9 +192,6 @@ class AlbumsController extends Controller
         if (($this->view->caching == 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
-            // Get the album from the id
-            $album = $this->get('entity_repository')->find('Album', $albumID);
-
             // Show the album only if it is properly published
             if (($album->content_status == 1) && ($album->in_litter == 0)) {
                 $this->view->assign('album', $album);
@@ -299,7 +297,6 @@ class AlbumsController extends Controller
                 'album'              => $album,
             )
         );
-
     }
 
     /**

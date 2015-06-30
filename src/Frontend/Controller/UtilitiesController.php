@@ -107,14 +107,14 @@ class UtilitiesController extends Controller
 
         $options = array(
             CURLOPT_RETURNTRANSFER => true, // return web page
-            CURLOPT_HEADER => false, // don't return headers
+            CURLOPT_HEADER         => false, // don't return headers
             CURLOPT_FOLLOWLOCATION => true, // follow redirects
-            CURLOPT_ENCODING => "", // handle all encodings
-            CURLOPT_USERAGENT => 'sharrre', // who am i
-            CURLOPT_AUTOREFERER => true, // set referer on redirect
+            CURLOPT_ENCODING       => "", // handle all encodings
+            CURLOPT_USERAGENT      => 'sharrre', // who am i
+            CURLOPT_AUTOREFERER    => true, // set referer on redirect
             CURLOPT_CONNECTTIMEOUT => 5, // timeout on connect
-            CURLOPT_TIMEOUT => 10, // timeout on response
-            CURLOPT_MAXREDIRS => 3, // stop after 10 redirects
+            CURLOPT_TIMEOUT        => 10, // timeout on response
+            CURLOPT_MAXREDIRS      => 3, // stop after 10 redirects
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_SSL_VERIFYPEER => false,
         );
@@ -133,7 +133,6 @@ class UtilitiesController extends Controller
             /*print_r($errmsg);
             print_r($errmsg);*/
         }
-
         $cache->save($encUrl, $content, $cacheTimeout);
 
         return $content;
