@@ -49,9 +49,9 @@ EOF
         $dbCheck    = $frameworkStatus->checkDatabaseConnection();
         $cacheCheck = $frameworkStatus->checkCacheConnection();
 
-        $output->writeln("NFS   status: ".$nfsCheck ? "OK": "FAILED");
-        $output->writeln("DB    status: ".$dbCheck ? "OK": "FAILED");
-        $output->writeln("Cache status: ".$cacheCheck ? "OK": "FAILED");
+        $output->writeln("NFS   status: ". ($nfsCheck ? "OK": "FAILED"));
+        $output->writeln("DB    status: ". ($dbCheck ? "OK": "FAILED"));
+        $output->writeln("Cache status: ". ($cacheCheck ? "OK": "FAILED"));
 
         $output->writeln("\nCurrent configuration\n================\n");
         $output->writeln("Database:");
