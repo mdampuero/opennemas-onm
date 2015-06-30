@@ -52,8 +52,34 @@ function addGoogleAnalyticsCode($output)
         $code .= "_gaq.push(['_setDomainName', '". $config['base_domain'] ."']);\n";
     }
 
-    $code .= "_gaq.push(['_trackPageview']);\n"
-        . "(function() {\n"
+    // Push trackPageview for main account
+    $code .= "_gaq.push(['_trackPageview']);\n";
+
+    // Check for other ganalytics accounts and append it to the final output
+    $otherAccounts = getService('setting_repository')->get('google_analytics_others');
+
+    if (is_array($otherAccounts)
+        && !empty($otherAccounts)
+    ) {
+        foreach ($otherAccounts as $key => $account) {
+            if (is_array($account)
+                && array_key_exists('api_key', $account)
+                && !empty(trim($account['api_key']))
+            ) {
+                $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
+                if (array_key_exists('base_domain', $account)
+                    && !empty($account['base_domain'])
+                    && !empty(trim($account['base_domain']))
+                ) {
+                    $code .= "_gaq.push(['account{$key}._setDomainName', '". trim($account['base_domain']) ."']);\n";
+                }
+                $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
+            }
+        }
+    }
+
+    // Load ga.js script
+    $code .= "(function() {\n"
         . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
         . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n"
         . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);\n"
