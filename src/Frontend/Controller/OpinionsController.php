@@ -627,11 +627,10 @@ class OpinionsController extends Controller
     public function showAction(Request $request, $opinion_id)
     {
         // Resolve article ID
+        $id = \ContentManager::resolveID($dirtyID);
+
         $er = $this->get('opinion_repository');
-        $id = $er->resolveID($opinion_id);
-
         $opinion = $er->find('Opinion', $id);
-
         if (!$opinion || $opinion->content_status != 1 || $opinion->in_litter != 0) {
             throw new ResourceNotFoundException();
         }
