@@ -45,21 +45,10 @@ angular.module('BackendApp')
     $httpProvider.defaults.transformRequest = [function(data) {
       return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
-  }).config(function ($translateProvider, paginationConfig) {
-    $translateProvider.translations('en', {
-      Next:     'Next',
-      Previous: 'Previous',
-    });
-    $translateProvider.translations('es', {
-      Next:     'Siguiente',
-      Previous: 'Anterior',
-    });
-    $translateProvider.translations('gl', {
-      Next:     'Seguinte',
-      Previous: 'Anterior',
-    });
-
+  }).config(function ($translateProvider) {
     $translateProvider.preferredLanguage('en');
+  }).config(function ($analyticsProvider) {
+    $analyticsProvider.virtualPageviews(false);
   }).config(function (EditorProvider) {
     // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');

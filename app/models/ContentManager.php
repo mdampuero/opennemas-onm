@@ -2190,7 +2190,7 @@ class ContentManager
                 _('Some elements were removed because this frontpage had too many contents.')
             );
 
-            // Sort by placeholder
+            // Sort by content_id
             usort($contentIds, function ($a, $b) {
                 if ($a['content_id'] == $b['content_id']) {
                     return 0;
@@ -2201,22 +2201,6 @@ class ContentManager
 
             $i = count($contentIds) - 1;
 
-            while ($i > 0 && $elementsToRemove > 0) {
-                if ($contentIds[$i]['placeholder'] === 'placeholder_0_0'
-                    && ($contentIds[$i]['content_type'] === 'Article'
-                    || $contentIds[$i]['content_type'] === 'Opinion')
-                ) {
-                    unset($contentIds[$i]);
-                    $elementsToRemove--;
-                }
-
-                $i--;
-            }
-        }
-
-        // Remove contents from the end of the array
-        if ($elementsToRemove > 0) {
-            $i = count($contentIds) - 1;
             while ($i > 0 && $elementsToRemove > 0) {
                 if ($contentIds[$i]['content_type'] === 'Article'
                     || $contentIds[$i]['content_type'] === 'Opinion'

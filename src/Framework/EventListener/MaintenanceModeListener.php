@@ -35,41 +35,32 @@ class MaintenanceModeListener implements EventSubscriberInterface
             return;
         }
 
-        $request    = $event->getRequest();
+        $request = $event->getRequest();
 
-        if (strpos($request->getRequestUri(), '/admin') === 0) {
-            $maintenanceFile = APP_PATH.'/../.maintenance';
+        if (strpos($request->getRequestUri(), '/admin') !== 0) {
+            return;
+        }
 
-            if (file_exists($maintenanceFile)) {
-                $request = $event->getRequest();
+        $maintenanceFile = APP_PATH.'/../.maintenance';
 
-                $attributes = array(
-                    '_controller' => 'OnmFrameworkBundle:Maintenance:default',
-                    // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
-                    // keep for BC -- as $format can be an argument of the controller callable
-                    // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
-                    // @deprecated in 2.4, to be removed in 3.0
-                    'format'      => $request->getRequestFormat(),
-                );
+        if (file_exists($maintenanceFile)) {
+            $request = $event->getRequest();
 
-                $request = $request->duplicate(null, null, $attributes);
-                $request->setMethod('GET');
+            $attributes = array(
+                '_controller' => 'OnmFrameworkBundle:Maintenance:default',
+                'format'      => $request->getRequestFormat(),
+            );
 
-                try {
-                    $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
-                } catch (\Exception $e) {
-                    // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)',
-                    //       get_class($e), $e->getMessage()), false);
+            $request = $request->duplicate(null, null, $attributes);
+            $request->setMethod('GET');
 
-                    // set handling to false otherwise it wont be able to handle further more
-                    // $handling = false;
-
-                    // re-throw the exception from within HttpKernel as this is a catch-all
-                    return;
-                }
-
-                $event->setResponse($response);
+            try {
+                $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+            } catch (\Exception $e) {
+                return;
             }
+
+            $event->setResponse($response);
         }
     }
 
