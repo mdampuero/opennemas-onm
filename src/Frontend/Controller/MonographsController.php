@@ -84,7 +84,6 @@ class MonographsController extends Controller
         if (($this->view->caching == 0)
            || (!$this->view->isCached('special/special_frontpage.tpl', $cacheID))
         ) {
-
             if (isset($this->category) && !empty($this->category)) {
                 $monographs = $this->cm->find_by_category(
                     'Special',
@@ -140,17 +139,21 @@ class MonographsController extends Controller
     {
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
+        // Resolve special ID, search in repository or redirect to 404
         $specialID = \ContentManager::resolveID($dirtyID);
-
-        $cacheID   = $this->view->generateCacheId($this->categoryName, null, $specialID);
         $special   = $this->get('entity_repository')->find('Special', $specialID);
+        if (is_null($special)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $specialID);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
             if ($special->content_status != 1
                 || $special->in_litter != 0
             ) {
-                return new RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
 
             $contents = $special->getContents($specialID);

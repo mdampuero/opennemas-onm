@@ -108,43 +108,42 @@ class LetterController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->setConfig('letter-inner');
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
+        // Resolve letter ID, search in repository or redirect to 404
         $letterId = \ContentManager::resolveID($dirtyID);
-
-        if (empty($letterId)) {
+        $letter   = $this->get('entity_repository')->find('Letter', $letterId);
+        if (is_null($letter)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
+        // Setup view
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letterId);
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $letter = $this->get('entity_repository')->find('Letter', $letterId);
-            $letter->with_comment = 1;
-
-            if (empty($letter)
-                && ($letter->content_status != 1 || $letter->in_litter != 0)
-            ) {
+            if ($letter->content_status != 1 || $letter->in_litter != 0) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
 
-            $cm = new \ContentManager();
+            $letter->with_comment = 1;
 
+            $cm = new \ContentManager();
             $otherLetters = $cm->find(
                 'Letter',
                 'content_status=1 ',
                 'ORDER BY created DESC LIMIT 5'
             );
 
-            $this->view->assign('contentId', $letterId); // Used on module_comments.tpl
             $this->view->assign(
                 array(
                     'letter'       => $letter,
                     'content'      => $letter,
                     'otherLetters' => $otherLetters,
+                    'contentId'    => $letterId, // Used on module_comments.tpl
                 )
             );
         }

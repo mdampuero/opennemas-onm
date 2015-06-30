@@ -195,20 +195,17 @@ class NewStandController extends Controller
     {
         $dirtyID = $request->query->getDigits('id', null);
 
+        // Resolve epaper ID, search in repository or redirect to 404
         $epaperId = \ContentManager::resolveID($dirtyID);
-
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($epaperId)) {
-            return new RedirectResponse($this->generateUrl('frontend_newstand_frontpage'));
+        $epaper   = $this->get('entity_repository')->find('Kiosko', $epaperId);
+        if (is_null($epaper)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
-
-            $epaper = $this->get('entity_repository')->find('Kiosko', $epaperId);
-
             $format_date = strtotime($epaper->date);
             $month       = date('m', $format_date);
             $year        = date('Y', $format_date);

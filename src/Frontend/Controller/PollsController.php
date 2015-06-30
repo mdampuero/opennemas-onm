@@ -161,25 +161,17 @@ class PollsController extends Controller
     public function showAction(Request $request)
     {
         $this->page = $request->query->getDigits('page', 1);
+        $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+
+        // Resolve poll ID, search in repository or redirect to 404
+        $pollId = \ContentManager::resolveID($dirtyID);
+        $poll   = $this->get('entity_repository')->find('Poll', $pollId);
+        if (is_null($poll)) {
+            throw new ResourceNotFoundException();
+        }
 
         $this->view->setConfig('poll-inner');
-
-        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        $pollId  = \ContentManager::resolveID($dirtyID);
-
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($pollId)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $poll = $this->get('entity_repository')->find('Poll', $pollId);
-
-        if (empty($poll->id)) {
-            throw new ResourceNotFoundException();
-        }
-
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $pollId);
-
         if ($this->view->caching == 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
@@ -202,6 +194,8 @@ class PollsController extends Controller
                     'items'      => $items,
                     'otherPolls' => $otherPolls,
                 ]);
+            } else {
+                throw new ResourceNotFoundException();
             }
 
             // Used on module_comments.tpl
@@ -256,24 +250,18 @@ class PollsController extends Controller
      **/
     public function addVoteAction(Request $request)
     {
-        $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
+        if (empty($dirtyID)) {
+            $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        }
+
+        // Resolve poll ID, search in repository or redirect to 404
         $pollId = \ContentManager::resolveID($dirtyID);
-
-        if (empty($pollId) || is_null($pollId)) {
-            $pollId = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        }
-
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($pollId)) {
+        $poll   = $this->get('entity_repository')->find('Poll', $pollId);
+        if (is_null($poll)) {
             throw new ResourceNotFoundException();
         }
-        $poll = $this->get('entity_repository')->find('Poll', $pollId);
-
-        if (empty($poll->id)) {
-            throw new ResourceNotFoundException();
-        }
-
 
         $cookieName = "poll-".$pollId;
         $cookie = $request->cookies->get($cookieName);

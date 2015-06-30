@@ -44,7 +44,6 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('mobile/opinion-index.tpl', $cacheID)
         ) {
-
             $this->view->assign('menuMobile', $this->getMobileMenu());
 
             $cm  = new \ContentManager();
@@ -97,22 +96,24 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $dirtyID = $request->query->getDigits('opinion_id');
+
+        // Resolve opinion ID, search in repository or redirect to 404
+        $opinionID = \ContentManager::resolveID($dirtyID);
+        $er        = getService('entity_repository');
+        $opinion   = $er->find('Opinion', $opinionID);
+        if (is_null($opinion)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        // Setup view
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpage-mobile');
-
-        // Fetch vars from http
-        $dirtyID = $request->query->getDigits('opinion_id');
-        // Clean dirty id
-        $opinionID = \ContentManager::resolveID($dirtyID);
 
         $cacheID = $this->view->generateCacheId('opinion-mobile', '', $opinionID);
         if (($this->view->caching == 0)
             || !$this->view->isCached('mobile/opinion-inner.tpl', $cacheID)
         ) {
-            $er = getService('entity_repository');
-
-            // Fetch opinion
-            $opinion = $er->find('Opinion', $opinionID);
             // Get author photo
             $photo = $er->find('Photo', $opinion->fk_author_img);
 
@@ -150,7 +151,6 @@ class OpinionsController extends Controller
         $menuMobile = $cache->fetch(CACHE_PREFIX.'_mobileMenu');
 
         if (empty($menuMobile)) {
-
             $menu = new \Menu();
             $menuMobile = $menu->getMenu('mobile');
 
