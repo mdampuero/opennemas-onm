@@ -333,6 +333,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     $scope.setMode = function(mode) {
       $scope.mode = mode;
       $scope.contents = [];
+      $scope.pagination.page = 1;
 
       if (mode === 'grid') {
         var maxHeight = $(window).height() - $('.header').height() -
@@ -347,7 +348,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
         $scope.pagination.epp = rows * cols;
       } else {
-        $scope.pagination.page = 1;
         $scope.pagination.epp = 10;
       }
     }
