@@ -325,11 +325,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }
     };
 
+    /**
+     * Changes the list mode.
+     *
+     * @param {String} mode The new list mode.
+     */
     $scope.setMode = function(mode) {
       $scope.mode = mode;
       $scope.contents = [];
-      $scope.pagination.page = 1;
-      $scope.pagination.epp = 10;
 
       if (mode === 'grid') {
         var maxHeight = $(window).height() - $('.header').height() -
@@ -343,6 +346,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         var cols = Math.floor(maxWidth / width);
 
         $scope.pagination.epp = rows * cols;
+      } else {
+        $scope.pagination.page = 1;
+        $scope.pagination.epp = 10;
       }
     }
 
@@ -387,6 +393,20 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $scope.list($scope.route);
     };
+
+    /**
+     * Selects/deselects an item.
+     *
+     * @param {Integer} id The item id.
+     */
+    $scope.toggle = function(id) {
+      if ($scope.selected.contents.indexOf(id) === -1) {
+        $scope.selected.contents.push(id);
+      } else {
+        $scope.selected.contents.splice(
+            $scope.selected.contents.indexOf(id), 1);
+      }
+    }
 
     /**
      * Updates an item.
