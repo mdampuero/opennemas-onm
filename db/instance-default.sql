@@ -584,7 +584,7 @@ CREATE TABLE `menu_items` (
 
 LOCK TABLES `menu_items` WRITE;
 /*!40000 ALTER TABLE `menu_items` DISABLE KEYS */;
-INSERT INTO `menu_items` VALUES (6, 1, 'Deportes', 'deportes', 'category', 7, 0),(1, 1, 'Sociedad', 'sociedad', 'category', 6, 0),(3, 1, 'EconomÃ­a', 'economia', 'category', 5, 0),(4, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),(2, 1, 'OpiniÃ³n', 'opinion', 'internal', 3, 0),(5, 1, 'Portada', 'home', 'internal', 1, 0),(7, 1, 'Cultura', 'cultura', 'category', 8, 0);
+INSERT INTO `menu_items` VALUES (6, 1, 'Deportes', 'deportes', 'category', 7, 0),(1, 1, 'Sociedad', 'sociedad', 'category', 6, 0),(3, 1, 'EconomÃ­a', 'economia', 'category', 5, 0),(4, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),(2, 1, 'OpiniÃ³n', 'opinion', 'internal', 3, 0),(5, 1, 'Portada', '/', 'internal', 1, 0),(7, 1, 'Cultura', 'cultura', 'category', 8, 0);
 /*!40000 ALTER TABLE `menu_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
