@@ -1,6 +1,8 @@
 parameters:
     framework.trusted_proxies: ~
     framework.secret: test
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
     locale: en
     # environment:       production
     environment:       development
