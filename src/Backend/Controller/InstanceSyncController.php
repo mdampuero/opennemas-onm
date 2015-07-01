@@ -122,7 +122,7 @@ class InstanceSyncController extends Controller
         $element = $categories = [];
         $authError = false;
         if (!empty($siteUrl)) {
-            $url = $siteUrl.'ws/categories/lists.xml';
+            $url = $siteUrl.'/ws/categories/lists.xml';
             // Fetch content using digest authentication
             $xmlString = $this->getContentFromUrlWithDigestAuth($url, $username, $password);
 
@@ -271,6 +271,10 @@ class InstanceSyncController extends Controller
 
             $response = explode("\r\n\r\n", $content);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($httpCode == 404) {
+                return false;
+            }
 
             $content = $response[count($response) -1];
 
