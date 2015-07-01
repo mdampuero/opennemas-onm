@@ -1,0 +1,5 @@
+backend_ws_image_list:
+    path:     /images
+    defaults: { _controller: BackendWebServiceBundle:Images:list }
+    options:
+        expose: true

@@ -172,6 +172,10 @@
                     <span ng-if="content.description == ''">{t}No available description{/t}</span>
                   </div>
                   <div class="small-text">
+                    <span ng-if="content.metadata != ''"><i class="fa fa-tags"></i> [% content.metadata %]</span>
+                    <span ng-if="content.metadata == ''"><i class="fa fa-tags"></i> {t}No tags{/t}</span>
+                  </div>
+                  <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div>

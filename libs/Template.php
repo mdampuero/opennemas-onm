@@ -50,7 +50,10 @@ class Template extends Smarty
 
         $this->setTemplateVars($theme);
 
-        $this->assign('app', getService('templating.globals'));
+        // Fran: I have to comment this line cause templating.globals is no
+        // longer available. We need to know if this don't have any drawback in
+        // current template files.
+        // $this->assign('app', getService('templating.globals'));
 
         // Load filters
         foreach ($this->filters as $filterSectionName => $filters) {

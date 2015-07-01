@@ -17,7 +17,7 @@ security:
             id: onm_user_provider
     firewalls:
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
             security: false
 
         backend_login:
@@ -50,6 +50,10 @@ security:
 
         frontend_recover:
             pattern:  ^/user/(recover*|register|(activate/*))
+            security: false
+
+        framework:
+            pattern:  ^/framework
             security: false
 
         backend:

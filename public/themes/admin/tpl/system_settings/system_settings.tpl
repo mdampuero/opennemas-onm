@@ -78,7 +78,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
+  <form ng-app="BackendApp" ng-controller="SystemSettingsCtrl" action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -430,30 +430,71 @@
                       </div>
                       <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
-                          <div class="form-group">
-                            <div class="form-group">
-                              <label class="form-label" for="google_analytics_api_key">
-                                {t}Google Analytics API key{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                                <span class="help">
-                                  {t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                                </span>
+                          <div ng-init="init({json_encode($configs['google_analytics_others'])|clear_json})">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics API key{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics Base domain{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="form-label" for="google_analytics_domain">
-                                {t}Google Analytics Base domain{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                            <div class="form-group other-analytics" ng-repeat="other in others track by $index">
+                              <div class="row" ng-model="others[$index]">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics API key{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" name="google_analytics_others[[% $index %]][api_key]" type="text" ng-model="other.api_key" ng-value="[% other.api_key %]" required>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics Base domain{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="input-group">
+                                        <input class="form-control" name="google_analytics_others[[% $index %]][base_domain]" type="text" ng-model="other.base_domain" ng-value="[% other.base_domain %]">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" ng-click="removeGanalytics(others, [% $index %])" type="button">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-
+                            {if !empty($configs['google_analytics']['api_key'])}
                             <div class="form-group">
-                              <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                              <div class="input-group">
+                                <div class="input-group-btn">
+                                  <button class="btn btn-default" ng-click="addGanalytics();" type="button">{t}Add another{/t}</button>
+                                </div>
+                              </div>
                             </div>
+                            {/if}
+                            <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
+                            <p><i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}</p>
                           </div>
                         </div>
                       </div>
@@ -779,7 +820,7 @@
                             <div class="controls">
                               <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you also have a <stron>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                                {t escape=off}If you also have a <strong>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
                               </span>
                             </div>
                           </div>

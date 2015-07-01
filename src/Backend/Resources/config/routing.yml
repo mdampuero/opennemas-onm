@@ -1126,3 +1126,7 @@ admin_client_info_page:
 admin_client_send_upgrade_mail:
     path:     /my-account/upgrade-instance
     defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
+
+admin_market:
+    prefix: /
+    resource: @BackendBundle/Resources/config/routing/market.yml

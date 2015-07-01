@@ -63,6 +63,11 @@ class L10nSystemListener implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        if (strpos($request->getRequestUri(), '/framework') === 0) {
+            return;
+        }
+
         $session = $request->getSession();
 
         $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));

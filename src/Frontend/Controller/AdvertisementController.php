@@ -64,13 +64,15 @@ class AdvertisementController extends Controller
     public function redirectAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $id = \ContentManager::resolveID($id);
 
-        if (!isset($id)) {
+        // Resolve ad ID, search in repository or redirect to 404
+        $id = \ContentManager::resolveID($id);
+        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
+        if (is_null($advertisement)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
+        // Increase number of clicks
         $advertisement->setNumClics($id);
 
         if ($advertisement->url) {

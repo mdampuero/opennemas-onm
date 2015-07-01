@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opennemas fail page</title>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
+  <!-- Bootstrap CSS -->
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html,
+    body {
+      background-color: #1b1e24;
+      color: #fff;
+      font-family: 'Open Sans';
+      font-size: 16px;
+      font-weight: 300;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1, h2 {
+      text-transform: uppercase;
+      padding: 0 15px;
+    }
+
+    h1 {
+      background-color: #ccc;
+      color: #3C3F46;
+      font-weight: 700;
+      margin: 0;
+      padding-bottom: 10px;
+      padding-top: 250px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 300;
+      margin: 0;
+      padding: 15px;
+    }
+
+    p {
+      padding: 0 15px;
+    }
+
+    .spanish {
+      display: none;
+    }
+  </style>
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <h1 class="english">Nothing to see here</h1>
+  <h1 class="spanish">Aquí no hay nada que ver</h1>
+  <h3 class="english">There's a temporary problem but we're working to fix it right now.</h3>
+  <h3 class="spanish">Tenemos algunas dificultades pero ya estamos trabajando para solucionarlo.</h3>
+  <p class="english">If this issue continues, please contact our <a href="javascript:UserVoice.showPopupWidget();">support team.</a></p>
+  <p class="spanish">Si el problema persiste, por favor, contacta con nuestro <a href="javascript:UserVoice.showPopupWidget();">soporte técnico.</a></p>
+  <!-- jQuery -->
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script type="text/javascript">
+    var userLang = navigator.language || navigator.userLanguage;
+
+    if (userLang === 'es-ES') {
+      $('.spanish').show();
+      $('.english').hide();
+    }
+
+    var uvOptions = { custom_fields: { URL: 'system-down' } };
+
+    (function() {
+      var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+      uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/maJSnLqUlHw4D0gZDKP6w.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+    })();
+  </script>
+</body>
+</html>

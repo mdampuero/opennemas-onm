@@ -2,6 +2,8 @@ angular.module(
   'BackendApp',
   [
     'angularFileUpload',
+    'angulartics',
+    'angulartics.google.analytics',
     'checklist-model',
     'ngSanitize',
     'ngTouch',

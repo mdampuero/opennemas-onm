@@ -131,9 +131,9 @@ class ClientInformationController extends Controller
                 'instance'            => $instance,
                 'upgrade'             => $upgradeChanges,
                 'downgrade'           => $downgradeChanges,
-                'available_modules'   => str_replace('"', '\'', json_encode($availableModules)),
-                'plans'               => str_replace('"', '\'', json_encode(array_values($plans))),
-                'hasChanges'          => str_replace('"', '\'', json_encode($hasChanges)),
+                'available_modules'   => $availableModules,
+                'plans'               => array_values($plans),
+                'hasChanges'          => $hasChanges,
                 'support_description' => $supportDescription,
                 'max_users'           => ($maxUsers == 'NaN' || empty($maxUsers)) ? _('Unlimited') : $maxUsers,
             )

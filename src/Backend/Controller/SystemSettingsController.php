@@ -44,9 +44,9 @@ class SystemSettingsController extends Controller
             'youtube_page', 'contact_email', 'site_color', 'site_name',
             'time_zone','site_language','site_footer', 'recaptcha',
             'google_maps_api_key','google_custom_search_api_key', 'vimeo_page',
-            'facebook','facebook_page','facebook_id','twitter_page',
-            'googleplus_page', 'google_analytics','piwik', 'ojd', 'comscore',
-            'section_settings', 'paypal_mail', 'items_per_page',
+            'facebook','facebook_page','facebook_id','twitter_page','comscore',
+            'googleplus_page', 'google_analytics', 'google_analytics_others',
+            'piwik', 'ojd', 'section_settings', 'paypal_mail', 'items_per_page',
             'refresh_interval','items_in_blog', 'google_news_name',
             'google_page', 'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
@@ -145,6 +145,10 @@ class SystemSettingsController extends Controller
 
         if (!$request->request->getDigits('cookies_hint_enabled', 0)) {
             $request->request->set('cookies_hint_enabled', 0);
+        }
+
+        if (!$request->request->getDigits('google_analytics_others', '')) {
+            $request->request->set('google_analytics_others', '');
         }
 
         foreach ($request->request as $key => $value) {

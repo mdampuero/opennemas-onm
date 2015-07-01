@@ -6,8 +6,18 @@
   visibility: hidden;
 
   &.on-right {
-    right: 0;
+    right: -12px;
     left: auto;
+
+    &:before {
+      left: auto !important;
+      right: 10px !important;
+    }
+
+    &:after {
+      right: 10px !important;
+      left: auto !important;
+    }
   }
 
   & > li {
@@ -28,7 +38,6 @@
 
 div.dropdown-menu {
   padding: 15px;
-  margin-top: 6px !important;
 
   &:after {
     left: 50%;

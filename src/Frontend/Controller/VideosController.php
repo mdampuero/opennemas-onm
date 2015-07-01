@@ -232,31 +232,30 @@ class VideosController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('video_id', '');
-        $videoID = \ContentManager::resolveID($dirtyID);
 
-        // Redirect to album frontpage if id_album wasn't provide
-        if (is_null($videoID)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        // Resolve video ID, search in repository or redirect to 404
+        $videoID = \ContentManager::resolveID($dirtyID);
+        $video   = $this->get('entity_repository')->find('Video', $videoID);
+        if (is_null($video)) {
+            throw new ResourceNotFoundException();
         }
 
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
-        # If is not cached process this action
+        // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
         if ($this->view->caching == 0
             || !$this->view->isCached('video/video_inner.tpl', $videoID)
         ) {
-
-            // Load Video and categories
-            $video = $this->get('entity_repository')->find('Video', $videoID);
-            $video->category_name = $video->loadCategoryName($video->id);
-            $video->category_title = $video->loadCategoryTitle($video->id);
-            $video->with_comment = 1;
-
             if ($video->content_status == 0 || $video->in_litter == 1) {
                 throw new ResourceNotFoundException();
             }
+
+            // Load Video and categories
+            $video->category_name = $video->loadCategoryName($video->id);
+            $video->category_title = $video->loadCategoryTitle($video->id);
+            $video->with_comment = 1;
 
             // Fetch video author
             $ur = getService('user_repository');
