@@ -58,9 +58,21 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
+            $date = date('Y-m-d H:i:s');
             $filters = [
                 'content_status' => [['value' => 1]],
                 'in_litter'      => [['value' => 0]],
+                'starttime' => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS' ],
+                    [ 'value' => $date, 'operator' => '<' ]
+                ],
+                'endtime' => [
+                    'union'   => 'OR',
+                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
+                    [ 'value' => $date, 'operator' => '>' ]
+                ],
             ];
 
             $order = [ 'in_home' => 'DESC', 'starttime' => 'DESC' ];
@@ -381,9 +393,21 @@ class OpinionsController extends Controller
             }
 
             // Setting filters for the further SQLs
+            $date = date('Y-m-d H:i:s');
             $filters = [
                 'content_status'    => [['value' => 1]],
                 'content_type_name' => [['value' => 'opinion']],
+                'starttime' => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS' ],
+                    [ 'value' => $date, 'operator' => '<' ]
+                ],
+                'endtime' => [
+                    'union'   => 'OR',
+                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
+                    [ 'value' => $date, 'operator' => '>' ]
+                ],
             ];
             if ($author->id == 1 && $author->username == 'editorial') {
                 // Editorial
@@ -627,7 +651,7 @@ class OpinionsController extends Controller
 
         $er = $this->get('opinion_repository');
         $opinion = $er->find('Opinion', $id);
-        if (!$opinion || $opinion->content_status != 1 || $opinion->in_litter != 0) {
+        if (is_null($opinion)) {
             throw new ResourceNotFoundException();
         }
 
@@ -636,6 +660,11 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
+            if ($opinion->content_status != 1 || $opinion->in_litter != 0
+                || !$opinion->isStarted()
+            ) {
+                throw new ResourceNotFoundException();
+            }
             $this->view->assign('contentId', $id);
 
             $author = $this->get('user_repository')->find($opinion->fk_author);
