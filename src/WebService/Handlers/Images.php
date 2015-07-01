@@ -8,6 +8,8 @@
  **/
 namespace WebService\Handlers;
 
+use Luracast\Restler\RestException;
+
 /**
  * Handles REST actions for images.
  *
@@ -34,10 +36,10 @@ class Images
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
-                throw new \RestException(400, 'parameter is not a number');
+                throw new RestException(400, 'parameter is not a number');
             }
             if (is_infinite($value)) {
-                throw new \RestException(400, 'parameter is not finite');
+                throw new RestException(400, 'parameter is not finite');
             }
         }
     }

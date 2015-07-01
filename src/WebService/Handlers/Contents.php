@@ -8,6 +8,8 @@
  **/
 namespace WebService\Handlers;
 
+use Luracast\Restler\RestException;
+
 /**
  * Handles REST actions for contents.
  *
@@ -188,10 +190,10 @@ class Contents
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new \RestException(400, 'parameter is not a number');
+            throw new RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new \RestException(400, 'parameter is not finite');
+            throw new RestException(400, 'parameter is not finite');
         }
     }
 }

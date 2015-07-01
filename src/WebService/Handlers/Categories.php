@@ -9,6 +9,7 @@
 namespace WebService\Handlers;
 
 use Onm\Settings as s;
+use Luracast\Restler\RestException;
 
 /**
  * Handles REST actions for categories.
@@ -76,7 +77,7 @@ class Categories
         );
 
         if (empty($category)) {
-            throw new \RestException(404, 'category not found');
+            throw new RestException(404, 'category not found');
         }
         $category = $category[0];
 
@@ -129,10 +130,10 @@ class Categories
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
-                throw new \RestException(400, 'parameter is not a number');
+                throw new RestException(400, 'parameter is not a number');
             }
             if (is_infinite($value)) {
-                throw new \RestException(400, 'parameter is not finite');
+                throw new RestException(400, 'parameter is not finite');
             }
         }
     }
