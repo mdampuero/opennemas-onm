@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -17,8 +17,8 @@
           </li>
           <li class="quicklinks dropdown ng-cloak">
               <div data-toggle="dropdown">
-                <span ng-if="!mode || mode == 'list'">{t}List{/t}</span>
-                <span ng-if="mode == 'grid'">{t}Mosaic{/t}</span>
+                <span ng-if="mode === 'list'">{t}List{/t}</span>
+                <span ng-if="!mode || mode === 'grid'">{t}Mosaic{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
@@ -81,7 +81,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar" ng-if="mode !== 'grid'">
+  <div class="page-navbar filters-navbar ng-cloak" ng-if="mode === 'list'">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
@@ -116,7 +116,7 @@
   </div>
   <div class="content clearfix">
     {render_messages}
-    <div class="grid simple ng-cloak" ng-if="mode !== 'grid'">
+    <div class="grid simple ng-cloak" ng-if="mode === 'list'">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
           <div class="loading-spinner"></div>
@@ -203,9 +203,9 @@
         </div>
       </div>
     </div>
-    <div class="clearfix infinite-row ng-cloak" ng-if="mode == 'grid'">
-      <div class="col-md-2 col-sm-4 m-b-15 infinite-col" ng-repeat="content in contents">
-        <div class="dynamic-image-placeholder">
+    <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+      <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+        <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id)" }">
           <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,400,400">
             <div class="thumbnail-actions ng-cloak">
               {acl isAllowed="PHOTO_DELETE"}

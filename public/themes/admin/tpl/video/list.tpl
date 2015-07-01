@@ -46,8 +46,8 @@
             </li>
             <li class="quicklinks dropdown ng-cloak">
               <div data-toggle="dropdown">
-                <span ng-if="!mode || mode == 'list'">{t}List{/t}</span>
-                <span ng-if="mode == 'grid'">{t}Mosaic{/t}</span>
+                <span ng-if="mode === 'list'">{t}List{/t}</span>
+                <span ng-if="!mode || mode === 'grid'">{t}Mosaic{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">

@@ -60,7 +60,7 @@
   </div>
 </div>
 
-<div class="page-navbar filters-navbar" ng-if="mode !== 'grid'">
+<div class="page-navbar filters-navbar ng-cloak" ng-if="mode === 'list'">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
@@ -113,7 +113,7 @@
   </div>
 </div>
 
-<div class="content" ng-init="init('video', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-init="setMode('grid');init('video', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {render_messages}
 
   {if $category == 'widget'}
@@ -125,7 +125,7 @@
   </div>
   {/if}
 
-  <div class="grid simple" ng-if="!mode || mode === 'list'">
+  <div class="grid simple ng-cloak" ng-if="mode === 'list'">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
         <div class="loading-spinner"></div>
@@ -240,9 +240,9 @@
       </div>
     </div>
   </div>
-  <div class="clearfix infinite-row ng-cloak" ng-if="mode == 'grid'">
-    <div class="col-md-2 col-sm-4 m-b-15 infinite-col" ng-repeat="content in contents">
-      <div class="dynamic-image-placeholder" style="height: 250px;">
+  <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode == 'grid'">
+    <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+      <div class="dynamic-image-placeholder" style="height: 250px;" ng-click="toggle(content.id)">
         <dynamic-image ng-if="content.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image">
           <div class="thumbnail-actions ng-cloak">
             {acl isAllowed="VIDEO_DELETE"}
@@ -271,7 +271,7 @@
             {/acl}
           </div>
         </dynamic-image>
- 
+
       </div>
     </div>
   </div>
