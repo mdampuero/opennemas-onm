@@ -233,8 +233,8 @@
                 <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
                   <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                 </div>
-                <div class="selected">
-                  <span class="badge" ng-repeat="group in selectedGroups">
+                <div class="m-t-10 m-b-10">
+                  <span class="badge m-r-5" ng-repeat="group in selectedGroups">
                     [% group.name %]
                     <input type="hidden" name="id_user_group[]" value="[% group.id %]">
                   </span>
@@ -247,8 +247,8 @@
                 <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
                   <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                 </div>
-                <div class="selected">
-                  <span class="badge" ng-repeat="category in selectedCategories">
+                <div class="m-t-10 m-b-10">
+                  <span class="badge m-r-5" ng-repeat="category in selectedCategories">
                     [% category.title %]
                     <input type="hidden" name="ids_category[]" value="[% category.id %]">
                   </span>
