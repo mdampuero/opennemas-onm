@@ -33,7 +33,7 @@
     "autoNumeric": "~1.9.*",
     "blockui": "2.70",
     "blueimp-file-upload": "9.9.4",
-    "bootstrap": "~3.3.*",
+    "bootstrap": "3.3.4",
     "bootstrap-checkbox": "https://github.com/extremeFE/bootstrap-checkbox.git",
     "bootstrap-tabdrop": "~1.*",
     "bootstrap-tagsinput": "#8c55be627caa229ff79a0a3224b231886a81c8c6",
