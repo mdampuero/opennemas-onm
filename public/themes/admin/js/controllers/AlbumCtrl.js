@@ -15,13 +15,10 @@ angular.module('BackendApp.controllers')
      * @param Object photos The album photos.
      */
     $scope.parsePhotos = function(photos) {
-      $scope.footers = [];
-      $scope.ids     = [];
       $scope.photos  = [];
 
       for (var i = 0; i < photos.length; i++) {
         photos[i].photo.footer = photos[i].description;
-        $scope.ids.push(photos[i].id);
         $scope.photos.push(photos[i].photo);
       }
     };
@@ -37,19 +34,10 @@ angular.module('BackendApp.controllers')
         return false;
       }
 
-      if (!$scope.footers) {
-        $scope.footers = [];
-      }
-
-      $scope.ids = [];
-
       for (var i = 0; i < nv.length; i++) {
         if (!nv[i].footer) {
           nv[i].footer = nv[i].description;
         }
-
-        $scope.ids.push(nv[i].id);
-        $scope.footers.push(nv[i].footer);
       }
     }, true);
 
