@@ -20,7 +20,7 @@ angular.module('BackendApp.controllers')
       $scope.photos  = [];
 
       for (var i = 0; i < photos.length; i++) {
-        $scope.footers.push(photos[i].description);
+        photos[i].photo.footer = photos[i].description;
         $scope.ids.push(photos[i].id);
         $scope.photos.push(photos[i].photo);
       }
@@ -44,11 +44,12 @@ angular.module('BackendApp.controllers')
       $scope.ids = [];
 
       for (var i = 0; i < nv.length; i++) {
-        if (!$scope.footers[i]) {
-          $scope.footers.push(nv[i].description);
+        if (!nv[i].footer) {
+          nv[i].footer = nv[i].description;
         }
 
         $scope.ids.push(nv[i].id);
+        $scope.footers.push(nv[i].footer);
       }
     }, true);
 
