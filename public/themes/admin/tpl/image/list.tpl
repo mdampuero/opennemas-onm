@@ -95,7 +95,7 @@
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak">
+          <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -106,7 +106,7 @@
             </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && contents.length > 0">
           <li class="quicklinks hidden-xs">
             <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </li>
@@ -159,8 +159,8 @@
                   </div>
                 </td>
                 <td class="hidden-xs">
-                  <div ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
+                  <div class="dynamic-image-placeholder" ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,220,220"></dynamic-image>
                   </div>
                 </td>
                 <td>
@@ -210,15 +210,15 @@
     <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
       <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
         <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id)" }">
-          <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,400,400">
+          <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,800,800">
             <div class="thumbnail-actions ng-cloak">
               {acl isAllowed="PHOTO_DELETE"}
-                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
                   <i class="fa fa-trash-o fa-2x"></i>
                 </div>
               {/acl}
               {acl isAllowed="PHOTO_UPDATE"}
-                <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]">
+                <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
                   <i class="fa fa-pencil fa-2x"></i>
                 </a>
               {/acl}

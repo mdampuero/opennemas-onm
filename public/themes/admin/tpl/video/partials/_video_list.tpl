@@ -147,7 +147,7 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="hidden-xs hidden-sm"></th>
+              <th class="hidden-xs hidden-sm" style="width: 150px;"></th>
               <th>{t}Title{/t}</th>
               <th class="center hidden-xs">{t}Section{/t}</th>
               <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
@@ -242,16 +242,16 @@
   </div>
   <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode == 'grid'">
     <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
-      <div class="dynamic-image-placeholder" style="height: 250px;" ng-click="toggle(content.id)">
+      <div class="dynamic-image-placeholder" style="min-height: 250px;" ng-click="toggle(content.id)">
         <dynamic-image ng-if="content.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image">
           <div class="thumbnail-actions ng-cloak">
             {acl isAllowed="VIDEO_DELETE"}
-              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
                 <i class="fa fa-trash-o fa-2x"></i>
               </div>
             {/acl}
             {acl isAllowed="VIDEO_UPDATE"}
-              <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]">
+              <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]" ng-click="$event.stopPropagation()">
                 <i class="fa fa-pencil fa-2x"></i>
               </a>
             {/acl}
@@ -260,12 +260,12 @@
         <dynamic-image ng-if="!content.thumb_image" class="img-thumbnail" ng-model="content.thumb">
            <div class="thumbnail-actions ng-cloak">
             {acl isAllowed="VIDEO_DELETE"}
-              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
                 <i class="fa fa-trash-o fa-2x"></i>
               </div>
             {/acl}
             {acl isAllowed="VIDEO_UPDATE"}
-              <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]">
+              <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]" ng-click="$event.stopPropagation()">
                 <i class="fa fa-pencil fa-2x"></i>
               </a>
             {/acl}

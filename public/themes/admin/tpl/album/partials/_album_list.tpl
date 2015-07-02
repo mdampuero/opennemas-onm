@@ -111,7 +111,7 @@
   </div>
 </div>
 
-<div class="content" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-init="setMode('grid');init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {render_messages}
   <div class="grid simple ng-cloak" ng-if="mode === 'list'">
     <div class="grid-body no-padding">
@@ -135,9 +135,9 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="hidden-xs hidden-sm"></th>
+              <th class="hidden-xs hidden-sm" style="width: 150px;"></th>
               <th class="title">{t}Information{/t}</th>
-              {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left hidden-xs">{t}Section{/t}</th>{/if}
+              {if $category=='widget' || $category=='all'}<th class="left hidden-xs">{t}Section{/t}</th>{/if}
               <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
               <th class="center" style="width:35px;">{t}Published{/t}</th>
               <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
@@ -154,7 +154,7 @@
               </td>
               <td class="hidden-xs hidden-sm">
                 <div ng-if="content.cover != ''" style="height: 120px; width: 120px;">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
+                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,220,220"></dynamic-image>
                 </span>
                 <div ng-if="content.cover == ''">
                   <img ng-src="http://placehold.it/80x60" class="thumbnail" />
@@ -224,15 +224,15 @@
   <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
     <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
       <div class="dynamic-image-placeholder" ng-click="toggle(content.id)">
-        <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,400,400">
+        <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,800,800">
           <div class="thumbnail-actions ng-cloak">
             {acl isAllowed="ALBUM_DELETE"}
-              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)">
+              <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
                 <i class="fa fa-trash-o fa-2x"></i>
               </div>
             {/acl}
             {acl isAllowed="ALBUM_UPDATE"}
-              <a class="thumbnail-action" href="[% edit(content.id, 'admin_album_show') %]">
+              <a class="thumbnail-action" href="[% edit(content.id, 'admin_album_show') %]" ng-click="$event.stopPropagation()">
                 <i class="fa fa-pencil fa-2x"></i>
               </a>
             {/acl}
