@@ -74,7 +74,7 @@ angular.module('onm.picker')
                           </div>\
                         </div>\
                       </div>\
-                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
+                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\" style=\"width: 120px;\">\
                         <dynamic-image class=\"img-thumbnail\" instance=\""
                           + instanceMedia
                           + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
