@@ -68,7 +68,8 @@ class InstanceValidator extends Validator
         foreach ($class->domains as $domain) {
             $criteria['domains']['union'] = 'OR';
             $criteria['domains'][] = array(
-                'value' => "^$domain|,[ ]*$domain|$domain$",
+                'value' => '^' . $domain . '|,[ ]*' . $domain
+                    . '[ ]*,|,[ ]*' . $domain . '$',
                 'operator' => 'REGEXP'
             );
         }
