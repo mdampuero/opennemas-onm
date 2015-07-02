@@ -29,8 +29,8 @@
          *
          * @type {String}
          */
-        var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
-          '<img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>' +
+        var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]" ng-class="{ \'loading\': loading }">' +
+          '<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
           '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
             '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
           '</div>' +
@@ -56,6 +56,15 @@
          * @type     {Array}
          */
         this.allowedAttributes = ['class', 'height', 'width'];
+
+        /**
+         * Path to the default image.
+         *
+         * @memeberof DynamicImage
+         * @name      brokenImage
+         * @type      {String}
+         */
+        this.brokenImage = 'http://www.websitenetworth.com/images/not-available.png';
 
         /**
          * Property with the path to the image.
@@ -93,7 +102,7 @@
           var prefix = '';
 
           if (!image) {
-            return '';
+            return this.brokenImage;
           }
 
           if (typeof image === 'object') {
@@ -124,6 +133,13 @@
             }
           );
         };
+
+        this.getDefaultSize = function(element) {
+          return {
+            height: element.parent().width(),
+            width: element.parent().width()
+          };
+        }
 
         /**
          * @function getSettings
@@ -291,6 +307,10 @@
             'ngModel': '='
           },
           link: function ($scope, element, attrs) {
+            var defaults = DynamicImage.getDefaultSize(element);
+            $scope.height = defaults.height;
+            $scope.width = defaults.width;
+
             var maxHeight = element.height();
             var maxWidth  = element.width();
 
@@ -298,6 +318,8 @@
               maxHeight = element.parent().height();
               maxWidth  = element.parent().width();
             }
+
+            $scope.width  = element.parent().width();
 
             var children  = element.children();
             var html      = DynamicImage.render(attrs, $scope.ngModel);
@@ -355,6 +377,10 @@
               }
 
               $scope.$apply();
+            });
+
+            e.find('img').bind('error', function() {
+              $scope.loading = false;
             });
 
             e.append(children);
