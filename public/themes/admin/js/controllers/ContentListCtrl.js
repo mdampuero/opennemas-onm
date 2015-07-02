@@ -331,11 +331,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param {String} mode The new list mode.
      */
     $scope.setMode = function(mode) {
+      if ($scope.mode === mode) {
+        return;
+      }
+
       $scope.mode = mode;
-      $scope.contents = [];
       $scope.pagination.page = 1;
 
       if (mode === 'grid') {
+
         var maxHeight = $(window).height() - $('.header').height() -
             $('.actions-navbar').height();
         var maxWidth = $(window).width() - $('.sidebar').width();
@@ -346,9 +350,19 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         var rows = Math.ceil(maxHeight / height);
         var cols = Math.floor(maxWidth / width);
 
+        if (rows === 0) {
+          rows = 1;
+        }
+
+        if (cols === 0) {
+          cols = 1;
+        }
+
+        if ($scope.pagination.epp != rows * cols) {
+          $scope.contents = [];
+        }
+
         $scope.pagination.epp = rows * cols;
-      } else {
-        $scope.pagination.epp = 10;
       }
     }
 
