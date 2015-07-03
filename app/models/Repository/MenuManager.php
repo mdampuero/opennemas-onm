@@ -82,6 +82,7 @@ class MenuManager extends BaseManager
             || !is_object($entity)
         ) {
             $entity = new \Menu($id);
+            $entity->items = $entity->getMenuItems($entity->pk_menu);
 
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $entity);
