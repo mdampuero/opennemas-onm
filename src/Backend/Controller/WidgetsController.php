@@ -192,7 +192,7 @@ class WidgetsController extends Controller
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
-            'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
+            'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),
         );
 
@@ -204,9 +204,12 @@ class WidgetsController extends Controller
             $widgetData['params'] = $newParams;
         }
 
-        if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
+        if ($widgetData['renderlet'] == 'intelligentwidget'
+            && !empty($widgetData['intelligentType'])
+        ) {
             $widgetData['content'] = $widgetData['intelligentType'];
         }
+
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
             $this->get('session')->getFlashBag()->add(
