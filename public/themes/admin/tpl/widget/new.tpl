@@ -95,7 +95,7 @@
                       </div>
 
                       <div ng-show="renderlet == 'intelligentwidget'">
-                          <select name="intelligent_type" id="all-widgets" {if isset($widget)}disabled="disabled"{/if} ng-model="intelligent_type">
+                          <select name="intelligent_type" id="intelligent_type" ng-model="intelligent_type">
                               {foreach from=$all_widgets item=w}
                               <option value="{$w}" {if isset($widget) && trim($widget->content) == $w}selected="selected"{/if}>{$w}</option>
                               {/foreach}
