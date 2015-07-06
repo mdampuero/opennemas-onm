@@ -676,7 +676,7 @@ class InstanceManager extends BaseManager
         $this->cache->setNamespace($instance->internal_name);
         $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
 
-        $settings = array('pass_level', 'piwik', 'max_mailing', 'max_users');
+        $settings = ['pass_level', 'piwik', 'max_mailing', 'max_users', 'last_invoice'];
 
         foreach ($settings as $key) {
             $this->sm->invalidate($key);
