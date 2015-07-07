@@ -343,7 +343,7 @@ class ArticlesController extends Controller
             $article->promoted_to_category_frontpage = true;
         }
 
-        $relationsHandler= new \RelatedContent();
+        $relationsHandler= getService('related_contents');
 
         $orderFront = array();
         $relations = $relationsHandler->getRelations($id);//de portada

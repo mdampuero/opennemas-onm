@@ -190,7 +190,7 @@ class AlbumsController extends Controller
             );
         }
 
-        $rel= new \RelatedContent();
+        $rel= getService('related_contents');
         $rel->deleteAll($id);
         $album->delete($id, $_SESSION['userid']);
 

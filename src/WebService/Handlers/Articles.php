@@ -76,7 +76,7 @@ class Articles
         }
 
         // Get Related contents
-        $relContent      = new \RelatedContent();
+        $relContent      = getService('related_contents');
         $relatedContents = array();
 
         $relationIDs     = $relContent->getRelationsForInner($articleId);

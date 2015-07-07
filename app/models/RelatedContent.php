@@ -369,7 +369,7 @@ class RelatedContent
 
         if ($relations) {
             foreach ($relations as $related) {
-                $relations = new RelatedContent();
+                $relations = getService('related_contents');
                 $relations->create($contentID, $related);
             }
 

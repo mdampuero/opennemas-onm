@@ -367,7 +367,7 @@ class VideosController extends Controller
         if (!empty($id)) {
             $video = new \Video($id);
             // Delete relations
-            $rel= new \RelatedContent();
+            $rel= getService('related_contents');
             $rel->deleteAll($id);
 
             $video->delete($id, $_SESSION['userid']);

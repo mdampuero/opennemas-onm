@@ -361,7 +361,7 @@ class CoversController extends Controller
         if (!empty($id)) {
             $cover = new \Kiosko($id);
             // Delete relations
-            $rel= new \RelatedContent();
+            $rel= getService('related_contents');
             $rel->deleteAll($id);
 
             $cover->delete($id, $_SESSION['userid']);
