@@ -10,6 +10,10 @@
  *
  * @package    Model
  */
+use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
+use Repository\EntityManager;
+
 /**
  * Handles all the CRUD actions over Related contents.
  *
@@ -81,18 +85,23 @@ class RelatedContent
     public $verinterior  = null;
 
     /**
-     * Gets the relations for a given id.
+     * Initializes the MachineSearcher.
      *
-     * @param string $contentID the element id.
-     *
-     * @return void
-     **/
-    public function __construct($contentID = null)
-    {
-        if (!is_null($contentID)) {
-            $this->read($contentID);
-        }
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+     * @param DbalWrapper    $databaseConnection The database connection.
+     * @param EntityManager  $entityManager      The entity manager.
+     * @param CacheInterface $cacheHandler       The cache service.
+     * @param string         $cachePrefix        The cache prefix.
+     */
+    public function __construct(
+        DbalWrapper $databaseConnection,
+        EntityManager $entityManager,
+        CacheInterface $cacheHandler,
+        $cachePrefix
+    ) {
+        $this->cache       = $cacheHandler;
+        $this->dbConn      = $databaseConnection;
+        $this->cachePrefix = $cachePrefix;
+        $this->er          = $entityManager;
     }
 
     /**
@@ -145,7 +154,6 @@ class RelatedContent
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -153,7 +161,6 @@ class RelatedContent
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }

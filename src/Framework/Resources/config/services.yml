@@ -211,3 +211,7 @@ services:
     onm.framework_status:
         class: Onm\Framework\Status
         arguments: [ @service_container ]
+
+    related_contents:
+        class: RelatedContent
+        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
