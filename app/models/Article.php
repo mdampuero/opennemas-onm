@@ -327,7 +327,7 @@ class Article extends Content
         }
 
         // articulos ordenArti y attaches ordenAtt
-        $rel = new RelatedContent();
+        $rel = getService('related_contents');
 
         //Eliminamos para volver a insertar por si borraron.
         $rel->delete($data['id']);
@@ -373,7 +373,7 @@ class Article extends Content
 
         $sql = 'DELETE FROM articles WHERE pk_article=?';
 
-        $rel = new RelatedContent();
+        $rel = getService('related_contents');
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
         self::deleteComments($id); //Eliminamos  los comentarios.
@@ -423,11 +423,10 @@ class Article extends Content
      **/
     public function saveRelated($data, $id, $method)
     {
-        $rel = new RelatedContent();
+        $rel = getService('related_contents');
 
         if (is_array($data) && count($data) > 0) {
             foreach ($data as $content) {
-
                 $rel->{$method}($id, $content->position, $content->id);
             }
         }

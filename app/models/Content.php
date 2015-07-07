@@ -1730,7 +1730,7 @@ class Content
      **/
     public function loadRelatedContents($categoryName = '')
     {
-        $relationsHandler  = new RelatedContent();
+        $relationsHandler  = getService('related_contents');
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
         if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
