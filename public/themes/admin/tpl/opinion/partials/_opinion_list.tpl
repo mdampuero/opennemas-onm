@@ -189,7 +189,7 @@
               </td>
               <td class="hidden-xs nowrap">
                 <span ng-if="content.fk_author">
-                  [% extra.authors[content.fk_author].name %] <span ng-if="extra.authors[content.fk_author].meta.is_blog">(Blog)</span>
+                  [% extra.authors[content.fk_author].name %] <span ng-if="extra.authors[content.fk_author].meta.is_blog == 1">(Blog)</span>
                 </span>
                 <span ng-if="!content.fk_author || content.fk_author == 0">
                   [% content.author %]
