@@ -44,7 +44,7 @@
 {/block}
 
 {block name="content"}
-<form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario"ng-controller="ArticleCtrl">
+<form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="ArticleCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -194,7 +194,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group" id="author">
+                                <div class="form-group" id="author" {if $opinion->type_opinion neq 0}style="display:none"{/if}>
                                     <label class="form-label" for="fk_author">
                                         {t}Author{/t}
                                     </label>

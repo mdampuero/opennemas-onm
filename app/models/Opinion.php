@@ -89,11 +89,17 @@ class Opinion extends Content
                     }
 
                 } else {
-                    $author     = new \User($this->fk_author);
+                    $author = $this->author;
+
+                    if (!is_object($author)) {
+                        $author = new \User($this->fk_author);
+                    }
+
                     $authorName = $author->name;
                     if (empty($authorName)) {
                         $authorName = 'author';
                     }
+
                     if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
                         $type = 'blog';
                     }
