@@ -327,7 +327,7 @@
     @Common/src/angular-history/*,
     @Common/src/angular-http-interceptor/*,
     @Common/src/angular-item-service/*,
-    @Common/src/angular-messenger/*,
+    @Common/src/angular-messenger/messenger.js,
     @Common/src/angular-resizable/*,
     @Common/src/angular-routing/*,
     @Common/src/sidebar/js/sidebar.js,
