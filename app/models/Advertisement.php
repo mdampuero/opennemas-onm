@@ -483,7 +483,8 @@ class Advertisement extends Content
 
         foreach ($advertisements as $advertisement) {
             // Dont use this ad if is not in time
-            if (!$advertisement->isInTime()
+            if ((!$advertisement->isInTime()
+                && $advertisement->type_medida == 'DATE')
                 || $advertisement->content_status != 1
                 || $advertisement->in_litter != 0) {
                 continue;
