@@ -79,7 +79,6 @@ class Opinion extends Content
             case 'uri':
                 $type ='opinion';
                 if ($this->fk_author == 0) {
-
                     if ((int) $this->type_opinion == 1) {
                         $authorName = 'Editorial';
                     } elseif ((int) $this->type_opinion == 2) {
@@ -122,11 +121,9 @@ class Opinion extends Content
                 break;
             case 'author_object':
                 if ((int) $this->type_opinion == 1) {
-                    $authorObj = new Stdclass();
-                    $authorObj->name = 'Editorial';
+                    $authorObj = new \User(1);
                 } elseif ((int) $this->type_opinion == 2) {
-                    $authorObj = new Stdclass();
-                    $authorObj->name = 'Director';
+                    $authorObj = new \User(2);
                 } else {
                     $authorObj = new \User($this->fk_author);
                 }
