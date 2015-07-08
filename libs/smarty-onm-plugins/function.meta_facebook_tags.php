@@ -36,12 +36,12 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         if (array_key_exists('photoInt', $smarty->tpl_vars)) {
             // Articles
             $photoInt = $smarty->tpl_vars['photoInt']->value;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photoInt->path_file.'/'.$photoInt->name;
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
             // Opinions
             $photo = $smarty->tpl_vars['photo']->value;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photo->path_file.'/'.$photo->name;
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (isset($content->author->photo->path_img) &&
                 !empty($content->author->photo->path_img) &&
