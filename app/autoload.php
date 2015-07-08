@@ -96,30 +96,10 @@ mb_internal_encoding('UTF-8');
  */
 $loader = require __DIR__.'/../vendor/autoload.php';
 
-$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-// Registering namespaces
-$loader->registerNamespaces(
-    array(
-        'Onm' => __DIR__.'/../libs',
-    )
-);
-
-// SessionHandlerInterface
-if (!interface_exists('SessionHandlerInterface')) {
-    $loader->registerPrefixFallback(
-        realpath(
-            __DIR__.'/../vendor/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs'
-        )
-    );
-}
-
-// Registering fallbacks and include path usage
-$loader->registerNamespaceFallback(SITE_WS_API_PATH);
-$loader->useIncludePath(true);
-
+$loader->add('Onm', SITE_LIBS_PATH);
+$loader->setUseIncludePath(true);
 $loader->register();
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-require_once __DIR__.'/../vendor/sensio/framework-extra-bundle/Sensio/Bundle/FrameworkExtraBundle/Configuration/Security.php';
 
 return $loader;

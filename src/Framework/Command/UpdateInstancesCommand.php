@@ -221,6 +221,16 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             }
         }
 
+        // Get the creation date of the last created content
+        $sql = 'SELECT created FROM contents ORDER BY created desc LIMIT 1 ';
+        $rs  = $this->im->getConnection()->fetchAll($sql);
+
+        if ($rs !== false && !empty($rs)) {
+            if ($rs[0]['created'] > $i->last_login) {
+                $i->last_login = $rs[0]['created'];
+            }
+        }
+
         $this->im->getConnection()->close();
 
         // Get the page views from Piwik

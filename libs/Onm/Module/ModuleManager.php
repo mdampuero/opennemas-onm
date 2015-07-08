@@ -1180,7 +1180,7 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'internal',
                     'name'             => _('No support'),
-                    'description'      => _(''),
+                    'description'      => '',
                     'long_description' => _('Missed long description...'),
                     'price'            => [
                         'month' => 0

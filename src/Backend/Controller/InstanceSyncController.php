@@ -125,10 +125,12 @@ class InstanceSyncController extends Controller
             $url = $siteUrl.'/ws/categories/lists.xml';
             // Fetch content using digest authentication
             $xmlString = $this->getContentFromUrlWithDigestAuth($url, $username, $password);
+
             // Load xml object
-            $categories = simplexml_load_string($xmlString);
+            $result = simplexml_load_string($xmlString);
+
             // Check for bad authentication
-            if (isset($categories->error)) {
+            if (isset($result->error)) {
                 $authError = true;
             }
             // Fetch params from db
@@ -147,7 +149,7 @@ class InstanceSyncController extends Controller
             'instance_sync/partials/_list_categories.tpl',
             [
                 'site'           => $element,
-                'all_categories' => $categories,
+                'all_categories' => $result,
                 'has_auth_error' => $authError,
             ]
         );
@@ -261,12 +263,18 @@ class InstanceSyncController extends Controller
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-            curl_setopt($ch, CURLOPT_USERPWD, "{$username}:{$password}");
+            if (!empty($username) && !empty($password)) {
+                curl_setopt($ch, CURLOPT_USERPWD, "{$username}:{$password}");
+            }
             curl_setopt($ch, CURLOPT_HEADER, 1);
             $content = curl_exec($ch);
 
             $response = explode("\r\n\r\n", $content);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($httpCode == 404) {
+                return false;
+            }
 
             $content = $response[count($response) -1];
 

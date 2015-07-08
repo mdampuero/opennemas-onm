@@ -73,7 +73,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks toggle-columns">
-          <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
+          <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html="'{t}Columns{/t}'" tooltip-placement="left">
             <i class="fa fa-columns"></i>
           </div>
         </li>
@@ -503,7 +503,7 @@
                 [% item.settings.BD_DATABASE %]
               </td>
               <td class="text-center" ng-show="isEnabled('contents')">
-                <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + item.articles + '<br>{t}Ads{/t}: ' + item.advertisements + '<br>{t}Files{/t}: ' + item.attachments + '<br>{t}Opinions{/t}: ' + item.opinions + '<br>{t}Albums{/t}: ' + item.albums + '<br>{t}Images{/t}: ' + item.photos + '<br>{t}Videos{/t}: ' + item.videos + '<br>{t}Polls{/t}: ' + item.polls + '<br>{t}Widgets{/t}: ' + item.widgets + '<br>{t}Static pages{/t}: ' + item.static_pages + '<br>{t}Letters{/t}: ' + item.letters %]">
+                <span tooltip-html="'{t}Articles{/t}: [% item.articles %]<br>{t}Ads{/t}: [% item.advertisements %]<br>{t}Files{/t}: [% item.attachments %]<br>{t}Opinions{/t}:  [% item.opinions %]<br>{t}Albums{/t}:  [% item.albums %]<br>{t}Images{/t}:  [% item.photos %]<br>{t}Videos{/t}:  [% item.videos %]<br>{t}Polls{/t}:  [% item.polls %]<br>{t}Widgets{/t}:  [% item.widgets %]<br>{t}Static pages{/t}:  [% item.static_pages %]<br>{t}Letters{/t}:  [% item.letters %]'">
                   [% item.contents %]
                 </span>
               </td>

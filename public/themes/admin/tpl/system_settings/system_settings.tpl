@@ -78,7 +78,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
+  <form ng-app="BackendApp" ng-controller="SystemSettingsCtrl" action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -163,7 +163,7 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
+                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']|default:"fff"}">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
                           <input class="form-control" id="site_color" name="site_color" type="text" value="{$configs['site_color']|default:""}">
@@ -430,30 +430,69 @@
                       </div>
                       <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
-                          <div class="form-group">
-                            <div class="form-group">
-                              <label class="form-label" for="google_analytics_api_key">
-                                {t}Google Analytics API key{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                                <span class="help">
-                                  {t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                                </span>
+                          <div ng-init="init({json_encode($configs['google_analytics'])|clear_json})">
+                             <div class="row" ng-if="gaCodes.length <= 1">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics API key{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" name="google_analytics[0][api_key]" type="text"  ng-model="gaCodes[0].api_key" value="[% gaCodes[0].api_key %]">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics Base domain{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" name="google_analytics[0][base_domain]" type="text"  ng-model="gaCodes[0].base_domain" value="[% gaCodes[0].base_domain %]">
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="form-label" for="google_analytics_domain">
-                                {t}Google Analytics Base domain{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                            <div class="form-group other-analytics" ng-if="gaCodes.length > 1" ng-repeat="code in gaCodes track by $index">
+                              <div class="row" ng-model="gaCodes[$index]">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics API key{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" name="google_analytics[[% $index %]][api_key]" type="text" ng-model="code.api_key" ng-value="[% code.api_key %]" required>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics Base domain{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="input-group">
+                                        <input class="form-control" name="google_analytics[[% $index %]][base_domain]" type="text" ng-model="code.base_domain" ng-value="[% code.base_domain %]">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, [% $index %])" type="button">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-
-                            <div class="form-group">
-                              <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                            <div class="form-group" ng-if="gaCodes[0].api_key">
+                              <div class="input-group">
+                                <div class="input-group-btn">
+                                  <button class="btn btn-default" ng-click="addGanalytics();" type="button">{t}Add another{/t}</button>
+                                </div>
+                              </div>
                             </div>
+                            <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
+                            <p><i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}</p>
                           </div>
                         </div>
                       </div>
@@ -779,7 +818,7 @@
                             <div class="controls">
                               <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you also have a <stron>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                                {t escape=off}If you also have a <strong>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
                               </span>
                             </div>
                           </div>

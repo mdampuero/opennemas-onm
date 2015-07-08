@@ -44,9 +44,9 @@ class SystemSettingsController extends Controller
             'youtube_page', 'contact_email', 'site_color', 'site_name',
             'time_zone','site_language','site_footer', 'recaptcha',
             'google_maps_api_key','google_custom_search_api_key', 'vimeo_page',
-            'facebook','facebook_page','facebook_id','twitter_page',
-            'googleplus_page', 'google_analytics','piwik', 'ojd', 'comscore',
-            'section_settings', 'paypal_mail', 'items_per_page',
+            'facebook','facebook_page','facebook_id','twitter_page','comscore',
+            'googleplus_page', 'google_analytics', 'google_analytics_others',
+            'piwik', 'ojd', 'section_settings', 'paypal_mail', 'items_per_page',
             'refresh_interval','items_in_blog', 'google_news_name',
             'google_page', 'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
@@ -54,6 +54,15 @@ class SystemSettingsController extends Controller
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
+
+        // Keep compatibility with old analytics store format
+        if (array_key_exists('google_analytics', $configurations) &&
+            array_key_exists('api_key', $configurations['google_analytics'])
+        ) {
+            $oldConfig = $configurations['google_analytics'];
+            $configurations['google_analytics'] = [];
+            $configurations['google_analytics'][]= $oldConfig;
+        }
 
         return $this->render(
             'system_settings/system_settings.tpl',
@@ -68,7 +77,7 @@ class SystemSettingsController extends Controller
     /**
      * Performs the action of saving the configuration settings
      *
-     * @param Request $request the resquest object
+     * @param Request $request the request object
      *
      * @return Response the response object
      *
