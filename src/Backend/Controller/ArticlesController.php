@@ -343,25 +343,27 @@ class ArticlesController extends Controller
             $article->promoted_to_category_frontpage = true;
         }
 
-        $relationsHandler= getService('related_contents');
+        // Get related contents service
+        $relationsHandler = getService('related_contents');
 
-        $orderFront = array();
-        $relations = $relationsHandler->getRelations($id);//de portada
+        // Get frontpage related
+        $orderFront = [];
+        $relations = $relationsHandler->getRelations($id);
         foreach ($relations as $aret) {
             $orderFront[] =  new \Content($aret);
         }
-
         $this->view->assign('orderFront', \Onm\StringUtils::convertToUtf8($orderFront));
 
-        $orderInner = array();
-        $relations = $relationsHandler->getRelationsForInner($id);//de interor
+        // Get inner related
+        $orderInner = [];
+        $relations = $relationsHandler->getRelationsForInner($id);
         foreach ($relations as $aret) {
             $orderInner[] = new \Content($aret);
         }
         $this->view->assign('orderInner', \Onm\StringUtils::convertToUtf8($orderInner));
 
         if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
-            $galleries = array();
+            $galleries = [];
             if (array_key_exists('withGalleryHome', $article->params)) {
                 $galleries['home'] = new \Album($article->params['withGalleryHome']);
             } else {
@@ -383,7 +385,7 @@ class ArticlesController extends Controller
             \Onm\StringUtils::convertToUtf8($galleries);
             $this->view->assign('galleries', $galleries);
 
-            $orderHome = array();
+            $orderHome = [];
             $relations = $relationsHandler->getHomeRelations($id);//de portada
             if (!empty($relations)) {
                 foreach ($relations as $aret) {

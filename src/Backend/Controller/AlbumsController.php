@@ -190,8 +190,9 @@ class AlbumsController extends Controller
             );
         }
 
-        $rel= getService('related_contents');
-        $rel->deleteAll($id);
+        // Delete all related and relations
+        getService('related_contents')->deleteAll($id);
+
         $album->delete($id, $_SESSION['userid']);
 
         $this->get('session')->getFlashBag()->add(

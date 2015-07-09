@@ -1855,10 +1855,9 @@ class ContentManager
      **/
     public function getRelatedContentFromContentID($contentID)
     {
-        $rc  = getService('related_contents');
         $ccm = new ContentCategoryManager();
 
-        $relatedContentIDs = $rc->getRelations($contentID);
+        $relatedContentIDs = getService('related_contents')->getRelations($contentID);
         $relatedContent = array();
         foreach ($relatedContentIDs as $contentID) {
             $content = new Content($contentID);

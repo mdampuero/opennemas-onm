@@ -76,10 +76,8 @@ class Articles
         }
 
         // Get Related contents
-        $relContent      = getService('related_contents');
-        $relatedContents = array();
-
-        $relationIDs     = $relContent->getRelationsForInner($articleId);
+        $relationIDs     = getService('related_contents')->getRelationsForInner($articleId);
+        $relatedContents = [];
         if (count($relationIDs) > 0) {
             $relatedContents = $this->cm->getContents($relationIDs);
 
