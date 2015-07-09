@@ -126,12 +126,19 @@ class Opinion extends Content
 
                 break;
             case 'author_object':
+                $ur = getService('user_repository');
                 if ((int) $this->type_opinion == 1) {
-                    $authorObj = new \User(1);
+                    $authorObj = $ur->findBy("username='editorial'", 1);
+                    if (is_array($authorObj) && array_key_exists(0, $authorObj)) {
+                        $authorObj = $authorObj[0];
+                    }
                 } elseif ((int) $this->type_opinion == 2) {
-                    $authorObj = new \User(2);
+                    $authorObj = $ur->findBy("username='director'", 1);
+                    if (is_array($authorObj) && array_key_exists(0, $authorObj)) {
+                        $authorObj = $authorObj[0];
+                    }
                 } else {
-                    $authorObj = new \User($this->fk_author);
+                    $authorObj = $ur->find($this->fk_author);
                 }
 
                 return $authorObj;
