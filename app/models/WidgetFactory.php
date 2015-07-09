@@ -54,7 +54,8 @@ class WidgetFactory
     /**
      * Returns a parameter given its name.
      *
-     * @param string $name The parameter name.
+     * @param string $name   The parameter name.
+     * @param string $defaul The default value.
      *
      * @return mixed The parameter value.
      */
