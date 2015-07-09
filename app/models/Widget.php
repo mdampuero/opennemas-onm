@@ -364,11 +364,12 @@ class Widget extends Content
                 $class = new $className($widget);
             } else {
                 throw new Exception('', 1);
-
             }
         } catch (Exception $e) {
             return sprintf(_("Widget %s not available"), $this->content);
         }
+
+        $class->parseParams($params);
 
         return $class->render($params);
     }
