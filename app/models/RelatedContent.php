@@ -50,13 +50,6 @@ class RelatedContent
     public $text         = null;
 
     /**
-     * Proxy property for cache purpouses
-     *
-     * @var MethodCacheManager
-     **/
-    public $cache        = null;
-
-    /**
      * Position in the list when multiple relations of the same type
      *
      * @var int
@@ -85,7 +78,7 @@ class RelatedContent
     public $verinterior  = null;
 
     /**
-     * Initializes the MachineSearcher.
+     * Initializes the RelatedContent.
      *
      * @param DbalWrapper    $databaseConnection The database connection.
      * @param EntityManager  $entityManager      The entity manager.
@@ -127,73 +120,21 @@ class RelatedContent
         $relation = null
     ) {
 
-        $sql = "INSERT INTO related_contents
-                (`pk_content1`, `pk_content2`, `position`,  `posinterior`,
-                `verportada`, `verinterior`, `relationship`) " . "
-                VALUES (?,?,?,?,?,?,?)";
-        $values = array(
+        $sql = "INSERT INTO related_contents ".
+               "(`pk_content1`, `pk_content2`, `position`, ".
+               "`posinterior`, `verportada`, `verinterior`, `relationship`) ".
+               "VALUES (?,?,?,?,?,?,?)";
+
+        $values = [
             $contentID, $contentID2, $position,
             $posint, $verport, $verint, $relation
-        );
+        ];
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($this->dbConn->executeUpdate($sql, $values) === false) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Magic method for loading data from array and inject it in the object.
-     *
-     * @param array $properties the properties to inject inside the object.
-     *
-     * @return RelationContent the overloaded related content object instance
-     **/
-    public function load($properties)
-    {
-        if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get all the relations for a given element.
-     *
-     * @param string $contentID the id of the element.
-     *
-     * @return RelatedContent the related content object instance
-     **/
-    public function read($contentID)
-    {
-        $sql = 'SELECT * FROM related_contents WHERE pk_content1=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($contentID));
-
-        if (!$rs) {
-            return false;
-        }
-
-        $this->pk_content1 = $rs->fields['pk_content1'];
-        $this->pk_content2 = $rs->fields['pk_content2'];
-        $this->position    = $rs->fields['position'];
-        $this->posinterior = $rs->fields['posinterior'];
-        $this->verportada  = $rs->fields['verportada'];
-        $this->verinterior = $rs->fields['verinterior'];
-
-        return $this;
     }
 
     /**
@@ -203,10 +144,9 @@ class RelatedContent
      **/
     public function update($data)
     {
-        $sql = "UPDATE related_contents"
-                ."   SET `pk_content2`=?, `relationship`=?,"
-                ."       `text`=?, `position`=?"
-                . "WHERE pk_content1=?";
+        $sql = "UPDATE related_contents SET `pk_content2`=?, `relationship`=?,".
+               " `text`=?, `position`=? WHERE pk_content1=?";
+
         $values = array(
             $data['pk_content2'],
             $data['relationship'],
@@ -215,7 +155,7 @@ class RelatedContent
             $data['id'],
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($this->dbConn->executeUpdate($sql, $values) === false) {
             return false;
         }
 
@@ -233,7 +173,7 @@ class RelatedContent
     {
         $sql = 'DELETE FROM related_contents WHERE pk_content1=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($contentID)) === false) {
+        if ($this->dbConn->executeUpdate($sql, [$contentID]) === false) {
             return false;
         }
 
@@ -250,12 +190,10 @@ class RelatedContent
      **/
     public function deleteAll($contentID)
     {
-        $sql = "DELETE FROM related_contents"
-               ." WHERE pk_content1=? OR pk_content2=?";
-
+        $sql = "DELETE FROM related_contents WHERE pk_content1=? OR pk_content2=?";
         $values = array($contentID, $contentID);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($this->dbConn->executeUpdate($sql, $values) === false) {
             return false;
         }
 
@@ -271,25 +209,20 @@ class RelatedContent
      */
     public function getRelations($contentID)
     {
-        $related = array();
+        $sql = "SELECT pk_content2 FROM related_contents ".
+               "WHERE verportada=\"1\" AND pk_content1=? ".
+               "ORDER BY position ASC";
 
-        if ($contentID) {
-            $sql = "SELECT pk_content2 FROM related_contents"
-                   ." WHERE verportada=\"1\" AND pk_content1=?"
-                   ." ORDER BY position ASC";
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $this->dbConn->fetchAll($sql, [$contentID]);
 
-            if ($rs === false) {
-                return (array());
-            } else {
-                while (!$rs->EOF) {
-                    $related[] = $rs->fields['pk_content2'];
-                    $rs->MoveNext();
-                }
-            }
+        if (!$rs) {
+            return [];
         }
-        $related = array_unique($related);
+
+        $related = [];
+        foreach ($rs as $key => $value) {
+            $related[] = $value['pk_content2'];
+        }
 
         return $related;
     }
@@ -303,80 +236,48 @@ class RelatedContent
      */
     public function getRelationsForInner($contentID)
     {
-        $related = array();
+        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+               "WHERE verinterior=\"1\" AND pk_content1=? ".
+               "ORDER BY posinterior ASC";
 
-        if ($contentID) {
-            $sql = "SELECT DISTINCT pk_content2 FROM related_contents"
-                   ." WHERE verinterior=\"1\" AND pk_content1=? "
-                   . "ORDER BY posinterior ASC";
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $this->dbConn->fetchAll($sql, [$contentID]);
 
-            if ($rs === false) {
-                return (array());
-            } else {
-                while (!$rs->EOF) {
-                    $related[] = $rs->fields['pk_content2'];
-                    $rs->MoveNext();
-                }
-            }
+        if (!$rs) {
+            return [];
         }
-        $related = array_unique($related);
+
+        $related = [];
+        foreach ($rs as $key => $value) {
+            $related[] = $value['pk_content2'];
+        }
 
         return $related;
     }
 
     /**
-     * Returns all the relations for a given content
+     * Returns the frontpage relations for a content given its id
      *
-     * @param int $contentID the content where search related contents from
+     * @param int $contentID the content ID to fetch relations from
      *
-     * @return array Array of content ids
+     * @return boolean true if the relations were saved
      **/
-    public static function getContentRelations($contentID)
+    public function getHomeRelations($contentID)
     {
-        $related = array();
+        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+               "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
 
-        if ($contentID) {
-            $sql = "SELECT pk_content1 FROM related_contents"
-                   ." WHERE  pk_content2=? ORDER BY position ASC";
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $this->dbConn->fetchAll($sql, [$contentID]);
 
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $related[] = $rs->fields['pk_content1'];
-                    $rs->MoveNext();
-                }
-            }
+        if (!$rs) {
+            return [];
         }
-        $related = array_unique($related);
+
+        $related = [];
+        foreach ($rs as $key => $value) {
+            $related[] = $value['pk_content2'];
+        }
 
         return $related;
-    }
-
-    /**
-     * Creates relations between one content and a list of content id
-     *
-     * @param int $contentID the content ID to relate with others
-     * @param array $relations the list of contents to relate with
-     *
-     * @return boolean true if all went well
-     **/
-    public function setRelations($contentID, $relations)
-    {
-        $relations->delete($contentID);
-
-        if ($relations) {
-            foreach ($relations as $related) {
-                $relations = getService('related_contents');
-                $relations->create($contentID, $related);
-            }
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -391,25 +292,16 @@ class RelatedContent
      **/
     public function setRelationPosition($contentID, $position, $relationID)
     {
-        $sql =  "SELECT position FROM related_contents"
-                ." WHERE pk_content1=? AND pk_content2 =?  WHERE verportada=1";
-        $values = array($contentID, intval($relationID));
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $sql = "INSERT INTO related_contents ".
+               "(`pk_content1`, `pk_content2`, `position`, `verportada`) ".
+               "VALUES (?,?,?,?)";
 
-        if (isset($rs->fields['position'])) {
-            $sql = "UPDATE related_contents "
-                    ."SET `verportada`=?, `position`=?"
-                    ." WHERE pk_content1=? AND pk_content2=?";
-            $values = array(1, $position, $contentID, $relationID);
-        } else {
-            $sql =  "INSERT INTO related_contents
-                    (`pk_content1`, `pk_content2`,
-                    `position`,`verportada`) "
-                    . " VALUES (?,?,?,?)";
-            $values = array($contentID, $relationID, $position, 1);
-        }
+        $rs = $this->dbConn->executeUpdate(
+            $sql,
+            [$contentID, $relationID, $position, 1]
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if (!$rs) {
             return false;
         }
 
@@ -428,24 +320,16 @@ class RelatedContent
      **/
     public function setRelationPositionForInner($contentID, $position, $relationID)
     {
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT position FROM related_contents WHERE pk_content1=? AND pk_content2 =?",
-            array($contentID, intval($relationID))
+        $sql = "INSERT INTO related_contents ".
+               "(`pk_content1`, `pk_content2`, `posinterior`,`verinterior`) ".
+               " VALUES (?,?,?,?)";
+
+        $rs = $this->dbConn->executeUpdate(
+            $sql,
+            [$contentID, $relationID, $position, 1]
         );
 
-        if (isset($rs->fields['position'])) {
-            $sql =  "UPDATE related_contents "
-                    ."SET  `verinterior`=?, `posinterior`=? "
-                    ."WHERE pk_content1=? AND pk_content2=?";
-            $values = array(1, $position, $contentID, $relationID);
-        } else {
-            $sql = "INSERT INTO related_contents
-                    (`pk_content1`, `pk_content2`, `posinterior`,`verinterior`) "
-                    ." VALUES (?,?,?,?)";
-            $values = array($contentID, $relationID, $position, 1);
-        }
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if (!$rs) {
             return false;
         }
 
@@ -464,58 +348,19 @@ class RelatedContent
      **/
     public function setHomeRelations($contentID, $position, $relationID)
     {
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT position FROM related_contents"
-            ." WHERE pk_content1=? AND pk_content2 =? AND verportada=2",
-            array($contentID, intval($relationID))
+        $sql = "INSERT INTO related_contents ".
+               "(`pk_content1`, `pk_content2`, `position`,`verportada`) ".
+               " VALUES (?,?,?,?)";
+
+        $rs = $this->dbConn->executeUpdate(
+            $sql,
+            [$contentID, $relationID, $position, 2]
         );
 
-        if (isset($rs->fields['position'])) {
-            $sql = "UPDATE related_contents "
-                    ."SET `verportada`=?, `position`=?"
-                    ." WHERE pk_content1=? AND pk_content2=?";
-            $values = array(2, $position, $contentID, $relationID);
-        } else {
-            $sql =  "INSERT INTO related_contents (`pk_content1`, `pk_content2`,
-                                                  `position`,`verportada`) "
-                    . " VALUES (?,?,?,?)";
-            $values = array($contentID, $relationID, $position, 2);
-        }
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if (!$rs) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Returns the frontpage relations for a content given its id
-     *
-     * @param int $contentID the content ID to fetch relations from
-     *
-     * @return boolean true if the relations were saved
-     **/
-    public function getHomeRelations($contentID)
-    {
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT DISTINCT pk_content2 FROM related_contents "
-            ."WHERE pk_content1=? AND verportada=2 ORDER BY position ASC",
-            array($contentID)
-        );
-
-        if ($rs === false) {
-            return false;
-        }
-
-        $related = array();
-        while (!$rs->EOF) {
-            $related[] = $rs->fields['pk_content2'];
-            $rs->MoveNext();
-        }
-
-        $related = array_unique($related);
-
-        return $related;
     }
 }
