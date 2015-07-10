@@ -57,8 +57,6 @@
     </div>
 
     <div class="content">
-        {render_messages}
-
         <div class="grid simple">
             <div class="grid-body">
                 <p>{t escape=off}To be able to moderate comments of your site in Facebook you must create and set here your <strong>Facebook App Id</strong>.{/t}</p>

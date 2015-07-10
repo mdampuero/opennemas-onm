@@ -42,7 +42,6 @@
     </div>
 
     <div class="content">
-        {render_messages}
         <div class="row">
             <div class="col-md-12">
                 <div class="grid simple">

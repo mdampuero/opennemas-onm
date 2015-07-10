@@ -170,7 +170,6 @@
       </div>
     </div>
     <div class="content">
-      {render_messages}
       <div class="spinner-wrapper" ng-if="loading">
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>

@@ -96,9 +96,6 @@
   </div>
 
   <div id="caches" class="content">
-
-    {render_messages}
-
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">

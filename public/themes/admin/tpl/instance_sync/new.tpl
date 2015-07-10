@@ -121,7 +121,6 @@ jQuery(document).ready(function($) {
   </div>
 
   <div class="content">
-    {render_messages}
     <div class="grid simple ">
       <div class="grid-body">
         <div class="form-group">

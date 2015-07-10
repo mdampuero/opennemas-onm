@@ -23,7 +23,6 @@
     </div>
 
     <div class="content">
-        {render_messages}
         <script>
         $(function() {
             jQuery("#modal-comment-change").modal('show');
