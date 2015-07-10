@@ -121,10 +121,6 @@ services:
         class: Repository\AdvertisementManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
-    article_repository:
-        class: Repository\ArticleManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
-
     opinion_repository:
         class: Repository\OpinionManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]

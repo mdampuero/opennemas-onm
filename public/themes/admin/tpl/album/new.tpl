@@ -172,8 +172,8 @@
             <div class="grid-body no-padding">
               <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable' }" ng-model="photos">
                 <div class="album-thumbnail-sortable" ng-repeat="photo in photos">
-                  <input type="hidden" name="album_photos_id[]" ng-value="ids[$index]"/>
-                  <input type="hidden" name="album_photos_footer[]" ng-value="footers[$index]"/>
+                  <input type="hidden" name="album_photos_id[]" ng-value="photo.id"/>
+                  <input type="hidden" name="album_photos_footer[]" ng-value="photo.footer"/>
                   <div class="thumbnail-wrapper">
                     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }">
@@ -199,7 +199,7 @@
                       </dynamic-image>
                     </div>
                     <div class="form-group">
-                      <textarea class="album-thumbnail-description form-control" ng-model="footers[$index]"></textarea>
+                      <textarea class="album-thumbnail-description form-control" ng-model="photo.footer"></textarea>
                     </div>
                   </div>
                 </div>

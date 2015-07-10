@@ -25,13 +25,13 @@
          * @description
          *   Initialize list of other ga account codes.
          *
-         * @param Object others The list of other ga account codes.
+         * @param Object gaCodes The list of other ga account codes.
          */
-        $scope.init = function(others) {
-          if (angular.isArray(others)) {
-            $scope.others = others;
+        $scope.init = function(gaCodes) {
+          if (angular.isArray(gaCodes)) {
+            $scope.gaCodes = gaCodes;
           } else {
-            $scope.others = [];
+            $scope.gaCodes = [];
           }
         };
 
@@ -45,7 +45,7 @@
          * @param integer index The index of the domain to remove.
          */
         $scope.addGanalytics = function() {
-          $scope.others.push({
+          $scope.gaCodes.push({
             apiKey:'',
             baseDomain:''
           });
@@ -61,8 +61,8 @@
          *
          * @param integer index The index of the input to remove.
          */
-        $scope.removeGanalytics = function(others, index) {
-          $scope.others.splice(index, 1);
+        $scope.removeGanalytics = function(gaCodes, index) {
+          $scope.gaCodes.splice(index, 1);
         };
       }
     ]);

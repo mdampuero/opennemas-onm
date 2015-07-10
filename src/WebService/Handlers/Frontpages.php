@@ -9,7 +9,7 @@
 namespace WebService\Handlers;
 
 use Onm\Settings as s;
-
+use Luracast\Restler\RestException;
 /**
  * Handles REST actions for frontpages.
  *
@@ -35,7 +35,7 @@ class Frontpages
 
         if (!$existsCategory) {
             // throw RestException bad category
-            throw new \RestException(404, 'parameter is not valid');
+            throw new RestException(404, 'parameter is not valid');
         } else {
             // Run entire logic
             $actualCategoryId = $ccm->get_id($category);

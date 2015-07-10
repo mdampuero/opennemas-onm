@@ -163,7 +163,7 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
+                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']|default:"fff"}">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
                           <input class="form-control" id="site_color" name="site_color" type="text" value="{$configs['site_color']|default:""}">
@@ -430,15 +430,15 @@
                       </div>
                       <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
-                          <div ng-init="init({json_encode($configs['google_analytics_others'])|clear_json})">
-                            <div class="row">
+                          <div ng-init="init({json_encode($configs['google_analytics'])|clear_json})">
+                             <div class="row" ng-if="gaCodes.length <= 1">
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label class="form-label">
                                     {t}Google Analytics API key{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                                    <input class="form-control" name="google_analytics[0][api_key]" type="text"  ng-model="gaCodes[0].api_key" value="[% gaCodes[0].api_key %]">
                                   </div>
                                 </div>
                               </div>
@@ -448,20 +448,20 @@
                                     {t}Google Analytics Base domain{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                                    <input class="form-control" name="google_analytics[0][base_domain]" type="text"  ng-model="gaCodes[0].base_domain" value="[% gaCodes[0].base_domain %]">
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <div class="form-group other-analytics" ng-repeat="other in others track by $index">
-                              <div class="row" ng-model="others[$index]">
+                            <div class="form-group other-analytics" ng-if="gaCodes.length > 1" ng-repeat="code in gaCodes track by $index">
+                              <div class="row" ng-model="gaCodes[$index]">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label class="form-label">
                                       {t}Google Analytics API key{/t}
                                     </label>
                                     <div class="controls">
-                                      <input class="form-control" name="google_analytics_others[[% $index %]][api_key]" type="text" ng-model="other.api_key" ng-value="[% other.api_key %]" required>
+                                      <input class="form-control" name="google_analytics[[% $index %]][api_key]" type="text" ng-model="code.api_key" ng-value="[% code.api_key %]" required>
                                     </div>
                                   </div>
                                 </div>
@@ -472,9 +472,9 @@
                                     </label>
                                     <div class="controls">
                                       <div class="input-group">
-                                        <input class="form-control" name="google_analytics_others[[% $index %]][base_domain]" type="text" ng-model="other.base_domain" ng-value="[% other.base_domain %]">
+                                        <input class="form-control" name="google_analytics[[% $index %]][base_domain]" type="text" ng-model="code.base_domain" ng-value="[% code.base_domain %]">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-danger" ng-click="removeGanalytics(others, [% $index %])" type="button">
+                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, [% $index %])" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </span>
@@ -484,15 +484,13 @@
                                 </div>
                               </div>
                             </div>
-                            {if !empty($configs['google_analytics']['api_key'])}
-                            <div class="form-group">
+                            <div class="form-group" ng-if="gaCodes[0].api_key">
                               <div class="input-group">
                                 <div class="input-group-btn">
                                   <button class="btn btn-default" ng-click="addGanalytics();" type="button">{t}Add another{/t}</button>
                                 </div>
                               </div>
                             </div>
-                            {/if}
                             <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
                             <p><i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}</p>
                           </div>

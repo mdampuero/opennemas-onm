@@ -55,6 +55,15 @@ class SystemSettingsController extends Controller
 
         $configurations = $this->get('setting_repository')->get($keys);
 
+        // Keep compatibility with old analytics store format
+        if (array_key_exists('google_analytics', $configurations) &&
+            array_key_exists('api_key', $configurations['google_analytics'])
+        ) {
+            $oldConfig = $configurations['google_analytics'];
+            $configurations['google_analytics'] = [];
+            $configurations['google_analytics'][]= $oldConfig;
+        }
+
         return $this->render(
             'system_settings/system_settings.tpl',
             array(
@@ -68,7 +77,7 @@ class SystemSettingsController extends Controller
     /**
      * Performs the action of saving the configuration settings
      *
-     * @param Request $request the resquest object
+     * @param Request $request the request object
      *
      * @return Response the response object
      *
@@ -145,10 +154,6 @@ class SystemSettingsController extends Controller
 
         if (!$request->request->getDigits('cookies_hint_enabled', 0)) {
             $request->request->set('cookies_hint_enabled', 0);
-        }
-
-        if (!$request->request->getDigits('google_analytics_others', '')) {
-            $request->request->set('google_analytics_others', '');
         }
 
         foreach ($request->request as $key => $value) {

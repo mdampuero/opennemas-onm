@@ -376,6 +376,13 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $authorId = $event->getArgument('id');
 
+        // Delete cache for author profile
+        $this->cacheHandler->delete('user-' . $authorId);
+
+        // Delete caches for all author opinions and frontpages
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+
         // Get the list articles for this author
         $cm = new \ContentManager();
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
@@ -383,13 +390,6 @@ class HooksSubscriber implements EventSubscriberInterface
             .' AND contents.available=1 and contents.content_status=1',
             'ORDER BY created DESC '
         );
-
-        // Delete cache for author profile
-        $this->cacheHandler->delete('user-' . $authorId);
-
-        // Delete caches for all author opinions and frontpages
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         if (!empty($opinions)) {
             foreach ($opinions as &$opinion) {

@@ -168,12 +168,6 @@ class OpinionManager extends EntityManager
                         $filterSQL[] = 'opinions.type_opinion=1';
                     }
                 } else {
-                    $valueUnion = ' AND ';
-                    if (array_key_exists('union', $filters)) {
-                        $valueUnion = ' ' . trim($filters['union']) . ' ';
-                        unset($filters['union']);
-                    }
-
                     $fieldFilters = array();
                     foreach ($filters as $filter) {
                         $operator = "=";
@@ -197,6 +191,9 @@ class OpinionManager extends EntityManager
                                 $fieldFilters[] = "`$field` $operator " .
                                     implode(' ', $value);
                             }
+                        } elseif (is_null($value)) {
+                            // NULL value
+                            $fieldFilters[] = "$field $operator NULL";
                         } else {
                             $fieldFilters[] = "`$field` $operator '$value'";
                         }

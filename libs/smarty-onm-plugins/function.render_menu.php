@@ -9,7 +9,7 @@ function smarty_function_render_menu($params, &$smarty) {
     // Initializing parameters
     $menuName = (isset($params['name']) ? $params['name'] : null);
     $position = (isset($params['position']) ? $params['position'] : null);
-    $tpl = (isset($params['tpl']) ? $params['tpl'] : null);
+    $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
 
     $output = '';
     if (empty($menuName) && empty($position)) {
@@ -17,12 +17,19 @@ function smarty_function_render_menu($params, &$smarty) {
         return $output;
     }
 
-    $menu = new Menu();
+    $menuManager = getService('menu_repository');
+
     if (!empty($menuName)) {
-        $menu->getMenu($menuName);
+        $criteria = [
+            'name'              => [ [ 'value' => $menuName ] ],
+        ];
+        $menu = $menuManager->findOneBy($criteria, null, 1, 1);
     } else {
         // Get the menu by its position name
-        $menu->getMenuFromPosition($position);
+        $criteria = [
+            'position'          => [ [ 'value' => $position ] ],
+        ];
+        $menu = $menuManager->findOneBy($criteria, null, 1, 1);
     }
 
     if (!empty($menu->items)) {

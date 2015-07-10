@@ -157,6 +157,9 @@ class ContentsController extends Controller
                 $content = unserialize($content);
             } else {
                 $content = new \Content($contentID);
+                if ($content->content_type == '4') { // Opinion
+                    $content = getService('opinion_repository')->find('Opinion', $contentID);
+                }
             }
 
             // Check if the content exists
