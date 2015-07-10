@@ -99,8 +99,7 @@
         </div>
     </div>
     <div class="content">
-        {render_messages}
-        <div class="row">
+                <div class="row">
             <div class="col-md-8">
                 <div class="grid simple">
                     <div class="grid-body">

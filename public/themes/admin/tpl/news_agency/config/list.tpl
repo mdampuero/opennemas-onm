@@ -41,7 +41,6 @@
       </div>
     </div>
     <div class="content">
-      {render_messages}
       <div class="grid simple">
         <div class="grid-body no-padding">
           <table id="source-list" class="table table-hover no-margin">

@@ -39,8 +39,6 @@
 </div>
 
 <div class="content panel">
-    {render_messages}
-
     <div class="grid simple">
         <div class="grid-body">
             <div class="form-group">

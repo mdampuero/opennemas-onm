@@ -91,7 +91,6 @@
 </div>
 <div class="content paywall">
 
-    {render_messages}
 
     <div class="grid simple">
 

@@ -42,7 +42,6 @@
 </div>
 
 <div class="content">
-  {render_messages}
   <div class="grid simple">
     <div class="grid-body {if count($elements) >0}no-padding{/if}">
       {if count($elements) >0}

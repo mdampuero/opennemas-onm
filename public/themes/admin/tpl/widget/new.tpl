@@ -46,7 +46,6 @@
       </div>
     </div>
     <div class="content">
-      {render_messages}
       <div class="row">
       <div class="col-sm-8">
         <div class="grid simple">

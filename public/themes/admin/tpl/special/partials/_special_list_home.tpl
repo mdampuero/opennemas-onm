@@ -1,5 +1,4 @@
 <div class="content" ng-init="init('special', {}, null, null, 'backend_ws_contents_list_home', '{{$smarty.const.CURRENT_LANGUAGE}}', null)">
-  {render_messages}
   <div class="grid simple">
     <div class="grid-title">
       <h4>{t}Sort elements{/t}</h4>

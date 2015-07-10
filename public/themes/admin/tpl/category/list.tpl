@@ -34,7 +34,6 @@
     </div>
   </div>
   <div class="content">
-    {render_messages}
     <div class="grid simple">
       <div class="grid-body no-padding">
         <ul class="nav nav-tabs" role="tablist">

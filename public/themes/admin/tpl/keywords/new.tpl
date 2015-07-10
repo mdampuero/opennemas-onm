@@ -42,11 +42,7 @@
 </div>
 
 <div class="content">
-
-    {render_messages}
-
     <div class="grid simple">
-
         <div class="grid-body">
             <div class="col-md-7">
                 <div class="form-group">

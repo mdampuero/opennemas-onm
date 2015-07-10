@@ -104,7 +104,6 @@
       </div>
     </div>
     <div class="content">
-      {render_messages}
 
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">

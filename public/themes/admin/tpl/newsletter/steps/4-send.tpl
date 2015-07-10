@@ -30,7 +30,6 @@
     </div>
   </div>
   <div class="content newsletter-manager">
-    {render_messages}
     <div class="grid simple">
       <div class="grid-title">
         <h4>{t}Newsletter sending report{/t}</h4>
