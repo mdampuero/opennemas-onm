@@ -25,7 +25,6 @@ function smarty_outputfilter_backend_analytics($output, &$smarty)
 
 function addBackendCodes($output)
 {
-    $internal = getService('instance_manager')->current_instance->internal_name;
     $code = '<!-- Piwik -->'
         . '<script type="text/javascript">'
         . 'var _paq = _paq || [];'
