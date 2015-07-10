@@ -22,7 +22,6 @@
         </div>
       </div>
     </div>
-    {render_messages}
     <div class="row" id="info-page" >
       <div class="col-xs-12 col-sm-7">
         <div class="row instance-info">

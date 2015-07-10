@@ -112,7 +112,6 @@
 </div>
 
 <div class="content" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-  {render_messages}
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">

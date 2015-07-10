@@ -55,7 +55,6 @@
         </div>
     </div>
     <div class="content">
-        {render_messages}
         <div class="grid simple">
             <div class="grid-title">
                 <h4>{t}Set your Disqus configuration{/t}</h4>

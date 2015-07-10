@@ -41,7 +41,6 @@
     </div>
   </div>
   <div class="content newsletter-manager">
-    {render_messages}
     <div class="grid simple">
       <div class="grid-title">
         {t}Please select your desired persons to sent the newsletter to.{/t}

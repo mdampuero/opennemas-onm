@@ -1,5 +1,4 @@
 <div class="content">
-  {render_messages}
   <div class="grid simple">
     <div class="grid-title">
       <h4>{t}Director Articles{/t}</h4>

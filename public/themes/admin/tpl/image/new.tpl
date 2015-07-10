@@ -52,7 +52,6 @@
       </div>
     </div>
     <div class="content">
-      {render_messages}
       {foreach from=$photos item=photo name=photo_show}
         <div class="grid simple">
           <div class="grid-body">

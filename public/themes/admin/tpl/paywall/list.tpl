@@ -38,7 +38,6 @@
     </div>
     <div class="content paywall">
 
-      {render_messages}
 
       <div class="well">
         {t}The paywall allows you to monetize your contents by enabling a subscription enabled model access to your contents.{/t}
