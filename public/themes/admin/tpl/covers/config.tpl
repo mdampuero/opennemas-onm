@@ -40,7 +40,6 @@
 
 <div class="content">
 
-    {render_messages}
 
     <div class="grid simple">
         <div class="grid-body">

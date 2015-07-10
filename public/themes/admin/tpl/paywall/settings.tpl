@@ -60,7 +60,6 @@
     </div>
   </div>
   <div class="content">
-    {render_messages}
     <div class="grid simple">
       <div class="grid-title">
         <h4><div class="step-number">1</div> {t}Paypal API authentication{/t}</h4>

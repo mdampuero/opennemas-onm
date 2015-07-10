@@ -92,7 +92,6 @@
   </div>
   <div class="content clearfix">
 
-    {render_messages}
 
     <div class="grid simple">
       <div class="grid-body">

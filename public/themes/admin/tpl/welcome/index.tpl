@@ -27,7 +27,6 @@
 </div>
 
 <div class="content welcome-page">
-  {render_messages}
   <div class="row">
     <div class="col-sm-6">
       <div class="grid simple add-contents">

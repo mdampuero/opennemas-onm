@@ -81,7 +81,6 @@ var image_uploader ={
     </div>
 <div class="content">
 
-    {render_messages}
     <div class="alert alert-info edit-uploaded" style="display:none">
         {t}Please click in the "Edit uploaded" button from above to edit latest upload photo's data{/t}
     </div><!-- / -->

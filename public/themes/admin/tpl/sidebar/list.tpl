@@ -16,7 +16,6 @@
     </div>
 </div>
 <div class="content">
-    {render_messages}
     <div>
         Nothing here for now
     </div>
