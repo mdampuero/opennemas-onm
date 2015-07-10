@@ -15,7 +15,6 @@ function smarty_outputfilter_backend_analytics($output, &$smarty)
     $referer = $request->headers->get('referer');
 
     if (preg_match('/\/admin/', $uri)
-        && !preg_match('/\/admin\/frontpages/', $referer)
         && getService('service_container')->getParameter('backend_analytics.enabled')
     ) {
         return addBackendCodes($output);
@@ -26,6 +25,7 @@ function smarty_outputfilter_backend_analytics($output, &$smarty)
 
 function addBackendCodes($output)
 {
+    $internal = getService('instance_manager')->current_instance->internal_name;
     $code = '<!-- Piwik -->'
         . '<script type="text/javascript">'
         . 'var _paq = _paq || [];'
@@ -49,7 +49,7 @@ function addBackendCodes($output)
         . '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),'
         . 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)'
         . '})(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');'
-        . 'ga(\'create\', \'UA-40838799-4\', \'auto\');'
+        . 'ga(\'create\', \'UA-40838799-4\', { cookieDomain: \''.$internal.'\' });'
         . 'ga(\'send\', \'pageview\');'
         . '</script>'
         . '<!-- End Google Analytics -->';
