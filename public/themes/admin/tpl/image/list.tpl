@@ -140,6 +140,8 @@
                 </th>
                 <th style="width:80px">&nbsp;</th>
                 <th class="hidden-xs">{t}Information{/t}</th>
+                <th class="hidden-xs">{t}Resolution{/t}</th>
+                <th class="hidden-xs">{t}Size{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -196,6 +198,8 @@
                     </div>
                   </div>
                 </td>
+                <td>[% content.width %]x[% content.height %]</td>
+                <td>[% content.size %]</td>
               </tr>
             </tbody>
           </table>
@@ -207,38 +211,80 @@
         </div>
       </div>
     </div>
-    <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
-      <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
-        <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id)" }">
-          <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,800,800">
-            <div class="thumbnail-actions ng-cloak">
-              {acl isAllowed="PHOTO_DELETE"}
-                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
-                  <i class="fa fa-trash-o fa-2x"></i>
-                </div>
-              {/acl}
-              {acl isAllowed="PHOTO_UPDATE"}
-                <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
-                  <i class="fa fa-pencil fa-2x"></i>
-                </a>
-              {/acl}
-            </div>
-          </dynamic-image>
+    <div class="content-wrapper">
+      <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+          <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id);select(content)">
+            <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,800,800">
+              <div class="thumbnail-actions ng-cloak">
+                {acl isAllowed="PHOTO_DELETE"}
+                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
+                    <i class="fa fa-trash-o fa-2x"></i>
+                  </div>
+                {/acl}
+                {acl isAllowed="PHOTO_UPDATE"}
+                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
+                    <i class="fa fa-pencil fa-2x"></i>
+                  </a>
+                {/acl}
+              </div>
+            </dynamic-image>
+          </div>
+        </div>
+      </div>
+      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
+        <h5>
+          <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+          <span ng-if="!loadingMore">{t}Load more{/t}</span>
+          <span ng-if="loadingMore">{t}Loading{/t}</span>
+        </h5>
+      </div>
+      <div class="infinite-row master-row ng-cloak">
+        <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
         </div>
       </div>
     </div>
-    <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
-      <h5>
-        <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
-        <span ng-if="!loadingMore">{t}Load more{/t}</span>
-        <span ng-if="loadingMore">{t}Loading{/t}</span>
-      </h5>
-    </div>
-    <div class="infinite-row master-row ng-cloak">
-      <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
+    <div class="content-sidebar">
+      <h3>{t}Image details{/t}</h3>
+      <div ng-if="selected.lastSelected">
+        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" transform="thumbnail,220,220"></dynamic-image>
+        </div>
+        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
+          <dynamic-image autoscale="true" ng-model="selected.lastSelected" property="thumb"></dynamic-image>
+        </div>
+        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'video' && selected.lastSelected.thumb_image">
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected.thumb_image"></dynamic-image>
+        </div>
+        <div class="thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected"></dynamic-image>
+        </div>
+        <ul class="media-information">
+          <li>
+            <a ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]" target="_blank">
+              <strong>
+                [% selected.lastSelected.name %]
+                <i class="fa fa-edit"></i>
+              </strong>
+            </a>
+          </li>
+          <li>[% selected.lastSelected.created | moment %]</li>
+          <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.size %] KB</li>
+          <li><strong>{t}Resolution:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>
+          <li>
+            <div class="form-group">
+              <label for="description">
+                <strong>{t}Description{/t}</strong>
+                <div class="pull-right">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }"></i>
+                </div>
+              </label>
+              <textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
   </script>
