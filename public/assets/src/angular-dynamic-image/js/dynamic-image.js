@@ -388,6 +388,11 @@
                   w = $scope.ngModel.width;
                 }
 
+                if ($scope.src === DynamicImage.brokenImage) {
+                  h = 800;
+                  w = 800;
+                }
+
                 var settings = DynamicImage.getSettings(h, w, maxHeight, maxWidth);
 
                 $scope.height = settings.height;
