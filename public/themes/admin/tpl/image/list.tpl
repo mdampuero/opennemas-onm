@@ -244,7 +244,7 @@
         </div>
       </div>
     </div>
-    <div class="content-sidebar">
+    <div class="content-sidebar" ng-if="mode === 'grid'">
       <h3>{t}Image details{/t}</h3>
       <div ng-if="selected.lastSelected">
         <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
@@ -299,30 +299,11 @@
     <div class="modal-body">
       <div class="resource">
         <span ng-if="template.selected.type_img == 'swf'">
-          <object ng-data="'{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]'" ng-param="{ 'vmode': 'opaque' }"></object>
+          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
         </span>
         <span ng-if="template.selected.type_img !== 'swf'">
           <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
         </span>
-      </div>
-      <div class="details">
-        <h4 class="description">
-          <span ng-if="template.selected.description != ''">[% template.selected.description %]</span>
-          <span ng-if="template.selected.description == ''">{t}No available description{/t}</span>
-        </h4>
-        <div><strong>{t}Filename{/t}</strong> [% template.selected.title %]</div>
-        <div class="tags">
-          <img src="{$params.IMAGE_DIR}tag_red.png" />
-          <span ng-if="template.selected.metadata != ''">[% template.selected.metadata %]</span>
-          <span ng-if="template.selected.metadata == ''">{t}No tags{/t}</span>
-        </div>
-        <span class="author" ng-if="template.selected.author != ''">
-          <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
-        </span>
-        <div><strong>{t}Created on{/t}</strong> [% template.selected.created %]</div>
-
-        <div><strong>{t}Resolution:{/t}</strong> [% template.selected.width %] x [% template.selected.height %] (px)</div>
-        <div><strong>{t}Size:{/t}</strong> [% template.selected.size %] Kb</div>
       </div>
     </div>
   </script>
