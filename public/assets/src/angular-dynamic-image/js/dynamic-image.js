@@ -220,7 +220,7 @@
         this.render = function(options, model) {
           var html = dynamicImageTpl;
 
-          if (this.isFlash(model)) {
+          if (this.isFlash(model) && !this.onlyImage) {
             html = dynamicSwfTpl;
           }
 
@@ -342,7 +342,8 @@
             var html      = DynamicImage.render(attrs, $scope.ngModel);
 
             // Try to calculate height and width before compiling for flash
-            if ($scope.ngModel && DynamicImage.isFlash($scope.ngModel) &&
+            if ($scope.ngModel && !DynamicImage.onlyImage &&
+                DynamicImage.isFlash($scope.ngModel) &&
                 $scope.ngModel.height && $scope.ngModel.width) {
 
               var settings = DynamicImage.getSettings($scope.ngModel.height,
