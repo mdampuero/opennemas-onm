@@ -162,12 +162,12 @@
                 </td>
                 <td class="hidden-xs">
                   <div class="dynamic-image-placeholder" ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,220,220"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
                   </div>
                 </td>
                 <td>
                   <div ng-click="open('modal-image', content)" class="visible-xs center" style="height: 200px; width: 200px; margin: 0 auto 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="thumbnail,220,220"></dynamic-image>
                   </div>
                   <div class="description">
                     <span ng-if="content.description != ''">[% content.description %]</span>
@@ -215,7 +215,7 @@
       <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
           <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id);select(content)">
-            <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="zoomcrop,800,800">
+            <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
               <div class="thumbnail-actions ng-cloak">
                 {acl isAllowed="PHOTO_DELETE"}
                   <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
@@ -248,16 +248,13 @@
       <h3>{t}Image details{/t}</h3>
       <div ng-if="selected.lastSelected">
         <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
-          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" transform="thumbnail,220,220"></dynamic-image>
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
         </div>
         <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
-          <dynamic-image autoscale="true" ng-model="selected.lastSelected" property="thumb"></dynamic-image>
-        </div>
-        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'video' && selected.lastSelected.thumb_image">
-          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected.thumb_image"></dynamic-image>
+          <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
         </div>
         <div class="thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">
-          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected"></dynamic-image>
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
         </div>
         <ul class="media-information">
           <li>
