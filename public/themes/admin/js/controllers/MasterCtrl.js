@@ -133,11 +133,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       $http.put(routing.generate('admin_menu_sidebar_set'), {pinned: nv});
     });
 
-    /**
-     * Updates the sidebar status basing on the current window width.
-     *
-     * @param integer nv The new values.
-     */
+    // Updates the sidebar status basing on the current window width
     $scope.$watch('windowWidth', function(nv) {
       $timeout(function() {
         if (nv < 992) {
@@ -152,6 +148,15 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         $('body').removeClass('unpinned-on-server');
         $('body').removeClass('server-sidebar');
       }, 100);
+    });
+
+    // Update style for actions-navbar on window scroll
+    $(window).bind('scroll', function() {
+      $('.actions-navbar').removeClass('scrolled');
+
+      if ($(window).scrollTop() > 0) {
+        $('.actions-navbar').addClass('scrolled');
+      }
     });
   }
 ]);
