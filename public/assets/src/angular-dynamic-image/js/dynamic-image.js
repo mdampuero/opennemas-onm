@@ -64,7 +64,16 @@
          * @name      brokenImage
          * @type      {String}
          */
-        this.brokenImage = 'http://www.websitenetworth.com/images/not-available.png';
+        this.brokenImage = '/themes/admin/images/img-not-found.jpg';
+
+        /**
+         * Whether to process only images.
+         *
+         * @memberof DynamicImage
+         * @name     onlyImage
+         * @type     {Boolean}
+         */
+        this.onlyImage = false;
 
         /**
          * Property with the path to the image.
@@ -119,6 +128,10 @@
             }
 
             prefix = instanceMedia + this.imageFolder;
+          }
+
+          if (this.onlyImage && /.*\.(swf|gif)$/.test(image)) {
+            return this.brokenImage;
           }
 
           if (!transform || /.*\.swf/.test(image)) {
@@ -307,6 +320,10 @@
             'ngModel': '='
           },
           link: function ($scope, element, attrs) {
+            if (attrs.onlyImage) {
+              DynamicImage.onlyImage = true;
+            }
+
             var defaults = DynamicImage.getDefaultSize(element);
             $scope.height = defaults.height;
             $scope.width = defaults.width;
