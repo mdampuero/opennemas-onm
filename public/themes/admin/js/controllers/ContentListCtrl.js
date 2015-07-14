@@ -188,9 +188,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.list = function(route, reset) {
       // Enable spinner
-      if ($scope.mode === 'grid') {
+      if ($scope.mode === 'grid' && !reset) {
         $scope.loadingMore = true;
       } else {
+        $scope.contents = [];
         $scope.loading = 1;
       }
 
