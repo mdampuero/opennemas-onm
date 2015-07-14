@@ -153,9 +153,17 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     // Update style for actions-navbar on window scroll
     $(window).bind('scroll', function() {
       $('.actions-navbar').removeClass('scrolled');
+      $('.content-sidebar').removeClass('scrolled');
 
       if ($(window).scrollTop() > 0) {
         $('.actions-navbar').addClass('scrolled');
+      }
+
+      var scroll = $(window).scrollTop();
+      var offset = $('.content-sidebar').offset().top;
+
+      if (offset - scroll < 85) {
+        $('.content-sidebar').addClass('scrolled');
       }
     });
   }

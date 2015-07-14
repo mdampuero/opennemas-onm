@@ -6,10 +6,15 @@
   height: 500px;
   left: auto;
   padding-right: 15px;
-  position: fixed;
+  position: absolute;
   right: 0;
-  top: 135px;
+  top: 100px;
   width: 250px;
+}
+
+.content .content-sidebar.scrolled {
+  position: fixed;
+  top: 85px;
 }
 
 .content-sidebar .thumbnail-wrapper {
