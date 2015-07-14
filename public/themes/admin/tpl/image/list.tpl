@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, description_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -81,7 +81,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar ng-cloak" ng-if="mode === 'list'">
+  <div class="page-navbar filters-navbar ng-cloak">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
@@ -89,7 +89,7 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.description_like" placeholder="{t}Search by description{/t}" type="text"/>
             <input type="hidden" name="in_home" ng-model="criteria.in_home">
           </li>
           <li class="quicklinks">
@@ -213,6 +213,12 @@
     </div>
     <div class="content-wrapper">
       <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any image that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Upload" button above.{/t}</h6>
+          </div>
+        </div>
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
           <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id);select(content)">
             <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">

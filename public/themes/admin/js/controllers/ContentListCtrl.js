@@ -1163,7 +1163,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.pagination.page = 1;
 
         searchTimeout = $timeout(function() {
-          $scope.list($scope.route);
+          $scope.list($scope.route, true);
         }, 500);
       }
     }, true);
