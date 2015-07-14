@@ -60,7 +60,7 @@
   </div>
 </div>
 
-<div class="page-navbar filters-navbar ng-cloak" ng-if="mode === 'list'">
+<div class="page-navbar filters-navbar ng-cloak">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
