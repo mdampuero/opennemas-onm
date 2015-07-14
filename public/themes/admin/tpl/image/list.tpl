@@ -212,6 +212,10 @@
       </div>
     </div>
     <div class="content-wrapper">
+      <div class="ng-cloak spinner-wrapper" ng-if="loading">
+        <div class="loading-spinner"></div>
+        <div class="spinner-text">{t}Loading{/t}...</div>
+      </div>
       <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
         <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
           <div class="center">
@@ -238,7 +242,7 @@
           </div>
         </div>
       </div>
-      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
+      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && !loadingMore && mode == 'grid' && pagination.total != contents.length">
         <h5>
           <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
           <span ng-if="!loadingMore">{t}Load more{/t}</span>

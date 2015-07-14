@@ -240,8 +240,12 @@
       </div>
     </div>
   </div>
+  <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading">
+    <div class="loading-spinner"></div>
+    <div class="spinner-text">{t}Loading{/t}...</div>
+  </div>
   <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode == 'grid'">
-    <div class="col-md-2 col-sm-4 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
       <div class="dynamic-image-placeholder" style="min-height: 250px;" ng-click="toggle(content.id)">
         <dynamic-image ng-if="content.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image">
           <div class="thumbnail-actions ng-cloak">
@@ -271,11 +275,10 @@
             {/acl}
           </div>
         </dynamic-image>
-
       </div>
     </div>
   </div>
-  <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!searchLoading && mode == 'grid' && pagination.total != contents.length">
+  <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && !loadingMore  && mode == 'grid' && pagination.total != contents.length">
     <h5>
       <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
       <span ng-if="!loadingMore">{t}Load more{/t}</span>
@@ -283,7 +286,7 @@
     </h5>
   </div>
   <div class="infinite-row master-row ng-cloak">
-    <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
+    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
     </div>
   </div>
 </div>
