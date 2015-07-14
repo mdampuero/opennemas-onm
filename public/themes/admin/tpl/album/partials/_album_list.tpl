@@ -91,7 +91,7 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak">
+        <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
