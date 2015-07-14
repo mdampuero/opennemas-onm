@@ -167,7 +167,7 @@
                 </td>
                 <td>
                   <div ng-click="open('modal-image', content)" class="visible-xs center" style="height: 200px; width: 200px; margin: 0 auto 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="thumbnail,220,220"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
                   </div>
                   <div class="description">
                     <span ng-if="content.description != ''">[% content.description %]</span>
@@ -179,6 +179,14 @@
                   </div>
                   <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
+                  <div class="small-text">
+                    <strong>{t}Resolution{/t}:</strong>
+                    <span>[% content.width %]x[% content.height %]</span>
+                  </div>
+                  <div class="small-text">
+                    <strong>{t}Size{/t}:</strong>
+                    <span>[% content.size %] KB</span>
                   </div>
                   <div>
                     <div class="listing-inline-actions">
@@ -198,8 +206,8 @@
                     </div>
                   </div>
                 </td>
-                <td>[% content.width %]x[% content.height %]</td>
-                <td>[% content.size %]</td>
+                <td class="hidden-xs">[% content.width %]x[% content.height %]</td>
+                <td class="hidden-xs">[% content.size %] KB</td>
               </tr>
             </tbody>
           </table>
