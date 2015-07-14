@@ -378,9 +378,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $scope.pagination.page = 1;
 
       if (mode === 'grid') {
-
         var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height();
+          $('.actions-navbar').height();
         var maxWidth = $(window).width() - $('.sidebar').width();
 
         var height = $('.infinite-col').width() + 15;

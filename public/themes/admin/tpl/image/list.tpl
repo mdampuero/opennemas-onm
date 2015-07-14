@@ -258,7 +258,7 @@
         </h5>
       </div>
       <div class="infinite-row master-row ng-cloak">
-        <div class="col-md-2 col-sm-4 m-b-15 infinite-col">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
         </div>
       </div>
     </div>
