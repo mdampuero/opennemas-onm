@@ -159,11 +159,13 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         $('.actions-navbar').addClass('scrolled');
       }
 
-      var scroll = $(window).scrollTop();
-      var offset = $('.content-sidebar').offset().top;
+      if ($('.content-sidebar').length > 0) {
+        var scroll = $(window).scrollTop();
+        var offset = $('.content-sidebar').offset().top;
 
-      if (offset - scroll < 85) {
-        $('.content-sidebar').addClass('scrolled');
+        if (offset - scroll < 85) {
+          $('.content-sidebar').addClass('scrolled');
+        }
       }
     });
   }
