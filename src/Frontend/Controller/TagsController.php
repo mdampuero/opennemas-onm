@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -32,6 +33,11 @@ class TagsController extends Controller
      **/
     public function tagsAction(Request $request)
     {
+        $isBingBot = \Onm\Utils\BotDetector::isSpecificBot($request->headers->get('user-agent'), 'bingbot');
+        if ($isBingBot) {
+            return new RedirectResponse('/');
+        }
+
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $tagName = \StringUtils::normalize($tagName);
         $page    =  1; //$request->query->getDigits('page', 1);
