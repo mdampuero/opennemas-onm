@@ -420,4 +420,23 @@ class BotDetector
         //If it gets this far then no bot was found!
         return false;
     }
+
+    /**
+     * Checks if a provided user agent string matches a specific bot string
+     *
+     * @param string $userAgentString the user agent that we will search in
+     * @param string $spider the substring of the spider name that we will search for
+     *
+     * @return boolean true if the spider string matches
+     **/
+    public static function isSpecificBot($userAgentString, $spider)
+    {
+        // If the spider string is inside the user agent string then
+        // the user agent is a bot
+        if (stripos($userAgentString, $spider) !== false) {
+            return true;
+        }
+
+        return false;
+    }
 }
