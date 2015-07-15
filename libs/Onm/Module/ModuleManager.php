@@ -907,7 +907,7 @@ class ModuleManager
                         <p>All contributions can be moderated.</p>'
                     ),
                     'price'            => [
-                        'month' => '25'
+                        'month' => '30'
                     ]
                 ],
                 [
