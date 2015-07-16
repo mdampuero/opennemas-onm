@@ -162,36 +162,34 @@
         </div>
       {/if}
     {/is_module_activated}
-    {is_module_activated name="FRONTPAGES_LAYOUT"}
-      {if count($categories) > 0}
-        <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
-          <div class="form-group" ng-repeat="category in automaticCategories">
+    {if count($categories) > 0}
+      <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
+        <div class="form-group" ng-repeat="category in automaticCategories">
+          <div class="checkbox col-md-6">
+            <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
+            <label for="checkbox-poll-[% $index %]">
+              [% category.title %]
+            </label>
+          </div>
+        </div>
+      </div>
+    {/if}
+    {is_module_activated name="SYNC_MANAGER"}
+     {if count($elements) > 0}
+      <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
+        <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
+          <h5>[% site %]</h5>
+          <div class="form-group" ng-repeat="category in params.categories">
             <div class="checkbox col-md-6">
-              <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-              <label for="checkbox-poll-[% $index %]">
-                [% category.title %]
+              <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
+              <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
+                [% category %]
               </label>
             </div>
           </div>
         </div>
-      {/if}
-      {is_module_activated name="SYNC_MANAGER"}
-       {if count($elements) > 0}
-        <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
-          <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
-            <h5>[% site %]</h5>
-            <div class="form-group" ng-repeat="category in params.categories">
-              <div class="checkbox col-md-6">
-                <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-                <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
-                  [% category %]
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-       {/if}
-      {/is_module_activated}
+      </div>
+     {/if}
     {/is_module_activated}
   </div>
   <div class="modal-footer">
