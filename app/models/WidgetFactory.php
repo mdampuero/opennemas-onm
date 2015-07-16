@@ -97,5 +97,11 @@ class WidgetFactory
         if (is_array($params)) {
             $this->params = array_merge($this->params, $params);
         }
+
+        foreach ($this->params as $key => $param) {
+            if (is_string($param) && strpos($param, ',') !== false) {
+                $this->params[$key] = explode(',', $param);
+            }
+        }
     }
 }
