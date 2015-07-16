@@ -4,6 +4,11 @@
   {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
+  {if $master}
+  <style>
+    .wizard-step { width: 230px; }
+  </style>
+  {/if}
 {/block}
 
 {block name="body"}
@@ -93,6 +98,25 @@
         </div>
       </div>
     </div>
+    {if $master}
+    <div class="wizard-container ready" ng-class="{ 'active': step == 4 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}That's it!{/t}</h1>
+        </div>
+        <h4>{t}You can start to use your newspaper.{/t}</h4>
+        <p>
+          {t}Hope you will enjoy opennemas!{/t}
+        </p>
+        <div class="wizard-button">
+          <a class="btn btn-block btn-success" href="{url name='admin_getting_started_finish'}">
+            <h4>{t}Finish{/t}</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+    {else}
     <div class="wizard-container social-networks" ng-class="{ 'active': step == 4 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
@@ -132,6 +156,7 @@
         </div>
       </div>
     </div>
+    {/if}
     <div class="wizard-footer">
       <div class="wizard-footer-wrapper">
         <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
@@ -152,6 +177,14 @@
           </div>
           <h5>{t}Getting help{/t}</h5>
         </button>
+        {if $master}
+        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
+          <div class="wizard-orb">
+            <h4>4</h4>
+          </div>
+          <h5>{t}Ready!{/t}</h5>
+        </button>
+        {else}
         <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>4</h4>
@@ -164,6 +197,7 @@
           </div>
           <h5>{t}Ready!{/t}</h5>
         </button>
+        {/if}
       </div>
     </div>
   </div>
