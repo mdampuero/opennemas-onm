@@ -86,12 +86,12 @@ class Opinion extends Content
                     } else {
                         $authorName = 'author';
                     }
-
                 } else {
                     $author = $this->author;
 
                     if (!is_object($author)) {
-                        $author = new \User($this->fk_author);
+                        $author = getService('user_repository')
+                            ->find($this->fk_author);
                     }
 
                     $authorName = $author->name;
