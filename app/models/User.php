@@ -414,7 +414,12 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function getPhoto()
     {
-        return new \Photo($this->avatar_img_id);
+        if (!is_object($this->photo)) {
+            $this->photo = getService('entity_repository')
+                ->find('Photo', $this->avatar_img_id);
+        }
+
+        return $this->photo;
     }
 
     /**
