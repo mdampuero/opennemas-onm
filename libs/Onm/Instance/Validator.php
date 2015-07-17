@@ -147,19 +147,19 @@ class Validator
                 || $percent > 70 ) {
                 switch ($field) {
                     case 'instance_name':
-                        $this->errors []= _('Your newspaper name cointains disallowed words.');
+                        $this->errors[$field][] = _('Your newspaper name cointains disallowed words.');
                         break;
 
                     case 'subdomain':
-                        $this->errors []= _('Your desired address contains disallowed words.');
+                        $this->errors[$field][] = _('Your desired address contains disallowed words.');
                         break;
 
                     case 'user_email':
-                        $this->errors []= _('Your user name contains disallowed words.');
+                        $this->errors[$field][] = _('Your user name contains disallowed words.');
                         break;
 
                     default:
-                        $this->errors []= _('There was an error while validating your data against disallowed words.');
+                        $this->errors[$field][] = _('There was an error while validating your data against disallowed words.');
                         break;
                 }
                 return false;
@@ -173,7 +173,7 @@ class Validator
         $exists = $this->instanceManager->emailExists($this->data[$field]);
 
         if ($exists) {
-            $this->errors []= _('The email that you entered is already in use');
+            $this->errors['user_email'][] = _('The email that you entered is already in use');
             return false;
         }
 
@@ -185,7 +185,7 @@ class Validator
         $exists = $this->instanceManager->instanceExists($this->data[$field]);
 
         if ($exists) {
-            $this->errors []= _('The url that you entered is already in use');
+            $this->errors['subdomain'][] = _('The url that you entered is already in use');
             return false;
         }
 
