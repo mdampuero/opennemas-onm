@@ -41,8 +41,8 @@ class CategoryController extends Controller
 
         $categoryManager = $this->get('category_repository');
         $category = $categoryManager->findOneBy(
-            array('name' => array(array('value' => $categoryName))),
-            array('name' => 'ASC')
+            [ 'name' => [ [ 'value' => $categoryName ] ] ],
+            [ 'name' => 'ASC' ]
         );
 
         if (empty($category)) {
@@ -51,46 +51,45 @@ class CategoryController extends Controller
 
         $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $itemsPerPage = s::get('items_in_blog');
-            if (empty($itemsPerPage )) {
-                $itemsPerPage = 8;
-            }
+            $itemsPerPage = (empty(s::get('items_in_blog'))) ? s::get('items_in_blog') : 8;
 
             $em = $this->get('entity_repository');
-
-            $filters = array(
-                'category_name'     => array(array('value' => $category->name)),
-                'content_status'    => array(array('value' => 1)),
-                'content_type_name' => array(array('value' => 'article')),
-                'in_litter'         => array(array('value' => 0)),
-                'starttime'         => array(
+            $filters = [
+                'category_name'     => [ [ 'value' => $category->name ] ],
+                'content_status'    => [ [ 'value' => 1 ] ],
+                'fk_content_type'   => [ [ 'value' => [1,7,9], 'operator' => 'IN' ] ],
+                'in_litter'         => [ [ 'value' => 0 ] ],
+                'starttime'         => [
                     'union' => 'OR',
-                    array('value' => '0000-00-00 00:00:00'),
-                    array('value' => date('Y-m-d H:i:s'), 'operator' => '<='),
-                )
-            );
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ]
+            ];
 
-            $order = array('starttime' => 'DESC');
+            $order = [ 'starttime' => 'DESC' ];
 
             $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
 
-            $imageIdsList = array();
-            foreach ($articles as $content) {
+            $imageIdsList = [];
+            foreach ($articles as &$content) {
                 if (isset($content->img1) && !empty($content->img1)) {
                     $imageIdsList []= $content->img1;
+                } elseif (!empty($content->fk_video)) {
+                    $content->video = $er->find('Video', $content->fk_video);
                 }
             }
-            $imageIdsList = array_unique($imageIdsList);
 
+            // Fetch images
+            $imageIdsList = array_unique($imageIdsList);
             if (count($imageIdsList) > 0) {
                 $imageList = $em->findBy(
-                    array(
-                        'content_type_name' => array(array('value' => 'photo')),
-                        'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN'))
-                    )
+                    [
+                        'content_type_name' => [ [ 'value' => 'photo' ] ],
+                        'pk_content'        => [ [ 'value' => $imageIdsList, 'operator' => 'IN' ] ]
+                    ]
                 );
             } else {
-                $imageList = array();
+                $imageList = [];
             }
 
             // Overloading information for contents
@@ -114,37 +113,37 @@ class CategoryController extends Controller
             $total = count($articles)+1;
 
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                array(
+                [
                     'page'  => $page,
                     'items' => $itemsPerPage,
                     'total' => $total,
                     'url'   => $this->generateUrl(
                         'category_frontpage',
-                        array(
+                        [
                             'category_name' => $categoryName,
-                        )
+                        ]
                     )
-                )
+                ]
             );
 
             $this->view->assign(
-                array(
+                [
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
                     'actual_category_title' => $category->title
-                )
+                ]
             );
         }
 
         return $this->render(
             'blog/blog.tpl',
-            array(
+            [
                 'cache_id'        => $cacheId,
                 'actual_category' => $categoryName,
                 'advertisements'  => $this->getInnerAds($category->id),
                 'x-tags'          => "category-frontpage,$categoryName,$page"
-            )
+            ]
         );
     }
 
