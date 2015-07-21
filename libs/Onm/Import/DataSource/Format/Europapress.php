@@ -11,6 +11,7 @@ namespace Onm\Import\DataSource\Format;
 
 use Onm\Import\DataSource\FormatInterface;
 use Onm\Import\DataSource\FormatAbstract;
+use Onm\Import\DataSource\Format\EuropaPress\Component\MultimediaResource;
 use Onm\Settings as s;
 
 /**
@@ -437,7 +438,11 @@ class Europapress extends FormatAbstract implements FormatInterface
     public function getPhotos()
     {
         if (!isset($this->photos)) {
-            $this->photos = array();
+            if (!empty($this->data->FOTO)) {
+                $this->photos = [ new MultimediaResource($this->data) ];
+            } else {
+                $this->photos = [];
+            }
         }
 
         return $this->photos;
