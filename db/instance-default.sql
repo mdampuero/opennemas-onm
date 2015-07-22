@@ -65,7 +65,7 @@ CREATE TABLE `advertisements` (
   PRIMARY KEY (`pk_advertisement`),
   KEY `type_advertisement` (`type_advertisement`),
   KEY `fk_content_categories` (`fk_content_categories`)
-) ENGINE=MyISAM AUTO_INCREMENT=240 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `albums` (
   PRIMARY KEY (`pk_album`),
   UNIQUE KEY `pk_album` (`pk_album`),
   KEY `pk_album_2` (`pk_album`)
-) ENGINE=MyISAM AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +119,7 @@ CREATE TABLE `albums_photos` (
   `position` int(10) DEFAULT '1',
   `description` varchar(250) DEFAULT NULL,
   KEY `pk_album_2` (`pk_album`,`pk_photo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ CREATE TABLE `articles` (
   `footer_video1` varchar(150) DEFAULT NULL,
   `title_int` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pk_article`)
-) ENGINE=MyISAM AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +180,7 @@ CREATE TABLE `attachments` (
   `path` varchar(200) NOT NULL,
   `category` int(10) NOT NULL DEFAULT '1',
   PRIMARY KEY (`pk_attachment`)
-) ENGINE=MyISAM AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,7 +204,7 @@ CREATE TABLE `books` (
   `author` varchar(250) DEFAULT NULL,
   `cover_id` bigint(255) DEFAULT NULL,
   `editorial` varchar(250) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,7 +243,7 @@ CREATE TABLE `comments` (
   KEY `comment_status_date` (`status`,`date`),
   KEY `comment_parent_id` (`parent_id`),
   KEY `comment_date` (`date`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +300,7 @@ CREATE TABLE `content_categories` (
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT '#638F38',
   PRIMARY KEY (`pk_content_category`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -436,7 +436,7 @@ CREATE TABLE `contents` (
   KEY `created` (`created`),
   KEY `urn_source` (`urn_source`),
   FULLTEXT KEY `metadata` (`metadata`)
-) ENGINE=MyISAM AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -463,7 +463,7 @@ CREATE TABLE `contents_categories` (
   PRIMARY KEY (`pk_fk_content`,`pk_fk_content_category`),
   KEY `pk_fk_content_category` (`pk_fk_content_category`),
   KEY `catName` (`catName`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,7 +493,7 @@ CREATE TABLE `frontpages` (
   `day_frontpage` tinyint(1) DEFAULT NULL,
   `params` text NOT NULL COMMENT 'serialized params',
   PRIMARY KEY (`date`,`category`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -520,7 +520,7 @@ CREATE TABLE `kioskos` (
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription',
   `price` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_kiosko`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -544,7 +544,7 @@ CREATE TABLE `letters` (
   `author` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pk_letter`)
-) ENGINE=MyISAM AUTO_INCREMENT=229 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,7 +575,7 @@ CREATE TABLE `menu_items` (
   PRIMARY KEY (`pk_item`,`pk_menu`),
   KEY `pk_item` (`pk_item`),
   KEY `pk_menu` (`pk_menu`)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -604,7 +604,7 @@ CREATE TABLE `menues` (
   PRIMARY KEY (`pk_menu`),
   UNIQUE KEY `name` (`name`),
   KEY `position` (`position`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -633,7 +633,7 @@ CREATE TABLE `newsletter_archive` (
   `updated` datetime NOT NULL,
   `sent` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_newsletter`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -661,7 +661,7 @@ CREATE TABLE `opinions` (
   PRIMARY KEY (`pk_opinion`),
   KEY `type_opinion` (`type_opinion`),
   KEY `fk_author` (`fk_author`)
-) ENGINE=MyISAM AUTO_INCREMENT=185 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -693,7 +693,7 @@ CREATE TABLE `orders` (
   `type` varchar(50) NOT NULL,
   `params` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -721,7 +721,7 @@ CREATE TABLE `pc_users` (
   `status` int(11) NOT NULL,
   `subscription` int(11) NOT NULL,
   PRIMARY KEY (`pk_pc_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -746,7 +746,7 @@ CREATE TABLE `pclave` (
   `value` varchar(240) DEFAULT NULL,
   `tipo` varchar(20) NOT NULL DEFAULT 'intsearch',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -776,7 +776,7 @@ CREATE TABLE `photos` (
   `author_name` varchar(200) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pk_photo`)
-) ENGINE=MyISAM AUTO_INCREMENT=215 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=215 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -803,7 +803,7 @@ CREATE TABLE `poll_items` (
   `metadata` varchar(250) DEFAULT NULL,
   `votes` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`pk_item`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -830,7 +830,7 @@ CREATE TABLE `polls` (
   `subtitle` varchar(150) DEFAULT NULL,
   `visualization` smallint(1) DEFAULT '0',
   PRIMARY KEY (`pk_poll`)
-) ENGINE=MyISAM AUTO_INCREMENT=167 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -856,7 +856,7 @@ CREATE TABLE `ratings` (
   `total_value` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `ips_count_rating` text,
   PRIMARY KEY (`pk_rating`)
-) ENGINE=MyISAM AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -886,7 +886,7 @@ CREATE TABLE `related_contents` (
   `verinterior` int(2) NOT NULL DEFAULT '0',
   KEY `pk_content1` (`pk_content1`),
   KEY `verportada` (`verportada`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -910,7 +910,7 @@ CREATE TABLE `settings` (
   `name` varchar(128) NOT NULL DEFAULT '',
   `value` text NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -937,7 +937,7 @@ CREATE TABLE `special_contents` (
   `position` int(10) DEFAULT '10',
   `visible` smallint(1) DEFAULT '1',
   `type_content` varchar(100) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -962,7 +962,7 @@ CREATE TABLE `specials` (
   `pdf_path` varchar(250) DEFAULT '0',
   `img1` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`pk_special`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -984,7 +984,7 @@ DROP TABLE IF EXISTS `static_pages`;
 CREATE TABLE `static_pages` (
   `pk_static_page` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'BIGINT(20)',
   PRIMARY KEY (`pk_static_page`)
-) ENGINE=MyISAM AUTO_INCREMENT=226 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1011,7 +1011,7 @@ CREATE TABLE `translation_ids` (
   `slug` varchar(200) DEFAULT '',
   PRIMARY KEY (`pk_content_old`,`pk_content`),
   KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1034,7 +1034,7 @@ CREATE TABLE `user_groups` (
   `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`pk_user_group`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1058,7 +1058,7 @@ CREATE TABLE `user_groups_privileges` (
   `pk_fk_user_group` int(10) unsigned NOT NULL,
   `pk_fk_privilege` int(10) unsigned NOT NULL,
   PRIMARY KEY (`pk_fk_user_group`,`pk_fk_privilege`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1085,7 +1085,7 @@ CREATE TABLE `usermeta` (
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1122,7 +1122,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `user_username` (`username`),
   KEY `user_email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1146,7 +1146,7 @@ CREATE TABLE `users_content_categories` (
   `pk_fk_user` int(10) unsigned NOT NULL,
   `pk_fk_content_category` int(10) unsigned NOT NULL,
   PRIMARY KEY (`pk_fk_user`,`pk_fk_content_category`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1171,7 +1171,7 @@ CREATE TABLE `videos` (
   `information` text,
   `author_name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`pk_video`)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1198,7 +1198,7 @@ CREATE TABLE `votes` (
   `ips_count_vote` text,
   `karma` int(10) unsigned DEFAULT '100',
   PRIMARY KEY (`pk_vote`)
-) ENGINE=MyISAM AUTO_INCREMENT=224 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1222,7 +1222,7 @@ CREATE TABLE `widgets` (
   `content` text NOT NULL,
   `renderlet` varchar(50) DEFAULT 'html',
   PRIMARY KEY (`pk_widget`)
-) ENGINE=MyISAM AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
