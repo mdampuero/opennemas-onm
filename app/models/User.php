@@ -417,9 +417,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $photo = null;
 
         if (!property_exists($this, 'photo')
-            && (property_exists($this, 'photo')
-            && !is_object($this->photo))
-            && $this->avatar_img_id != 0
+            || ((property_exists($this, 'photo')
+            && !is_object($this->photo)
+            && $this->avatar_img_id != 0))
         ) {
           $this->photo = $photo = getService('entity_repository')
             ->find('Photo', $this->avatar_img_id);
