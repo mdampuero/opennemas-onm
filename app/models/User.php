@@ -150,13 +150,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public $meta = array();
 
     /**
-     * User photo
-     *
-     * @var integer
-     */
-    public $photo = null;
-
-    /**
      * Initializes the object instance
      *
      * @param int $id User Id
@@ -421,12 +414,17 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function getPhoto()
     {
-        if (!is_object($this->photo) && $this->avatar_img_id != 0) {
-            $this->photo = getService('entity_repository')
-                ->find('Photo', $this->avatar_img_id);
+        $photo = null;
+
+        if (!property_exists($this, 'photo')
+            && !is_object($this->photo)
+            && $this->avatar_img_id != 0
+        ) {
+          $this->photo = $photo = getService('entity_repository')
+            ->find('Photo', $this->avatar_img_id);
         }
 
-        return $this->photo;
+        return $photo;
     }
 
     /**
