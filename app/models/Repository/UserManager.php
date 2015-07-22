@@ -78,7 +78,8 @@ class UserManager extends BaseManager
 
         $cacheId = "user" . $this->cacheSeparator . $id;
 
-        if (!$this->hasCache()
+        if (!empty($id)
+            && !$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity)
         ) {
