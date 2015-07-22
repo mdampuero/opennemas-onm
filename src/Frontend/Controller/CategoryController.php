@@ -75,7 +75,7 @@ class CategoryController extends Controller
                 if (isset($content->img1) && !empty($content->img1)) {
                     $imageIdsList []= $content->img1;
                 } elseif (!empty($content->fk_video)) {
-                    $content->video = $er->find('Video', $content->fk_video);
+                    $content->video = $em->find('Video', $content->fk_video);
                 }
             }
 
