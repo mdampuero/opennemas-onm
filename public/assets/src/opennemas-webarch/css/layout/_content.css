@@ -3,13 +3,15 @@
 }
 
 .content .content-sidebar {
-  height: 500px;
+  border-left: 1px solid #ccc;
+  height: 100%;
   left: auto;
-  padding-right: 15px;
+  padding: 0 15px 15px;
   position: absolute;
   right: 0;
   top: 100px;
   width: 250px;
+  z-index: 260;
 }
 
 .content .content-sidebar.scrolled {
@@ -18,7 +20,7 @@
 }
 
 .content-sidebar .thumbnail-wrapper {
-  height: 230px;
+  height: 200px;
   text-align: center;
 }
 
