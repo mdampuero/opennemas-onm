@@ -34,7 +34,9 @@
           {t}In order to use Opennemas you must accept the terms of use{/t}
         </p>
         <div class="terms-wrapper">
-          <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
+          <div class="terms-container">
+            <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
+          </div>
           <div class="checkbox">
             <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" ng-value="termsAccepted" type="checkbox">
             <label for="accept-terms">
@@ -50,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="wizard-container help" ng-class="{ 'active': step == 3 }">
+    <div class="wizard-container help" ng-class="{ 'active': step == 4 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
