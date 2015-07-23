@@ -12,30 +12,6 @@
               {t}Images{/t}
             </h4>
           </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks dropdown ng-cloak">
-              <div data-toggle="dropdown">
-                <span ng-if="mode === 'list'">{t}List{/t}</span>
-                <span ng-if="!mode || mode === 'grid'">{t}Mosaic{/t}</span>
-                <span class="caret"></span>
-              </div>
-              <ul class="dropdown-menu">
-                <li ng-click="setMode('list')">
-                  <a href="#">
-                    <i class="fa fa-lg fa-list"></i>
-                    {t}List{/t}
-                  </a>
-                </li>
-                <li ng-click="setMode('grid')">
-                  <a href="#">
-                    <i class="fa fa-lg fa-th"></i>
-                    {t}Mosaic{/t}
-                  </a>
-                </li>
-              </ul>
-            </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
@@ -85,6 +61,19 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
+          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" tooltip="{t}List{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('list')">
+              <i class="fa fa-lg fa-list"></i>
+            </button>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('grid')">
+              <i class="fa fa-lg fa-th"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
           <li class="m-r-10 input-prepend inside search-input no-boarder">
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
@@ -106,8 +95,8 @@
             </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && contents.length > 0">
-          <li class="quicklinks hidden-xs">
+        <ul class="nav quick-section pull-right ng-cloak">
+          <li class="quicklinks hidden-xs" ng-if="mode === 'list' && contents.length > 0">
             <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </li>
         </ul>
@@ -200,7 +189,7 @@
                         <i class="fa fa-trash-o"></i> {t}Remove{/t}
                       </button>
                       {/acl}
-                      <a class="link" href="{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]" target="_blank">
+                      <a class="link" href="{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
                         <i class="fa fa-external-link"></i> {t}Link{/t}
                       </a>
                     </div>
@@ -232,7 +221,7 @@
           </div>
         </div>
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
-          <div class="dynamic-image-placeholder no-margin" ng-click="toggle(content.id);select(content)">
+          <div class="dynamic-image-placeholder no-margin pointer" ng-click="toggle(content)">
             <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
               <div class="thumbnail-actions ng-cloak">
                 {acl isAllowed="PHOTO_DELETE"}
@@ -263,29 +252,31 @@
       </div>
     </div>
     <div class="content-sidebar" ng-if="mode === 'grid'">
-      <h3>{t}Image details{/t}</h3>
+      <h3 ng-show="selected.lastSelected">{t}Image details{/t}</h3>
       <div ng-if="selected.lastSelected">
-        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
           <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
         </div>
-        <div class="thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
           <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
         </div>
-        <div class="thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="isFlash(selected.lastSelected)">
           <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
         </div>
         <ul class="media-information">
           <li>
-            <a ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]" target="_blank">
+            <strong>[% selected.lastSelected.name %]</strong>
+          </li>
+          <li>
+            <a class="btn btn-default" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
               <strong>
-                [% selected.lastSelected.name %]
                 <i class="fa fa-edit"></i>
+                {t}Edit{/t}
               </strong>
             </a>
           </li>
           <li>[% selected.lastSelected.created | moment %]</li>
-          <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.size %] KB</li>
-          <li><strong>{t}Resolution:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>
+          <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
           <li>
             <div class="form-group">
               <label for="description">
