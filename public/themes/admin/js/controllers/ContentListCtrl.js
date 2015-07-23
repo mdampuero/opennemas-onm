@@ -383,8 +383,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       if (mode === 'grid') {
         var maxHeight = $(window).height() - $('.header').height() -
           $('.actions-navbar').height();
-        var maxWidth = $(window).width() - $('.sidebar').width() -
-          parseInt($('.content-wrapper').css('padding-right'));
+        var maxWidth = $(window).width() - $('.sidebar').width();
+
+        if ($('.content-wrapper').length > 0) {
+          maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
+        }
 
         var height = $('.infinite-col').width() + 15;
         var width = $('.infinite-col').width() + 15;
