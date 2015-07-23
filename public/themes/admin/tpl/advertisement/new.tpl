@@ -134,7 +134,7 @@
                 <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
               </div>
             </div>
-            <div class="row" id="ad_dimensions" ng-if="with_script != 2">
+            <div class="row" id="ad_dimensions" ng-show="with_script != 2">
               <div class="col-sm-3">
                 <div class="form-group">
                   <label class="form-label" for="params_width">
@@ -147,7 +147,9 @@
               </div>
               <div class="col-sm-3 col-sm-offset-1">
                 <div class="form-group">
-                  <label for="params_height" class="form-label">{t}Height{/t}</label>
+                  <label for="params_height" class="form-label">
+                    {t}Height{/t}
+                  </label>
                   <div class="controls">
                     <input class="form-control" id="params_height" name="params_height" ng-model="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script != 2" min="0">
                   </div>

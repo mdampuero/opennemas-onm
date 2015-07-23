@@ -67,8 +67,8 @@
       };
 
       // Watch script to detect Google DFP advertisement.
-      $scope.$watch('script', function(nv) {
-        if (!nv) {
+      $scope.$watch('script', function(nv, ov) {
+        if (nv === ov) {
           return;
         }
 
