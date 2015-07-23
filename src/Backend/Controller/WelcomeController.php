@@ -36,7 +36,10 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
-        if (!$this->getUser()->getMeta('terms_accepted')
+        $termsAccepted = $this->getUser()->getMeta('terms_accepted');
+
+        if ((!$termsAccepted
+            || $termsAccepted && $termsAccepted < '2015-07-23 15:24:15')
             && !$this->getUser()->isMaster()
         ) {
             return $this->redirect($this->generateUrl('admin_getting_started'));
