@@ -77,8 +77,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     $scope.union = 'AND';
 
     $scope.deselectAll = function() {
-      $scope.selected.contents = [];
       $scope.selected.all = 0
+      $scope.selected.contents = [];
+      $scope.selected.lastSelected = null;
     };
 
     /**
@@ -348,6 +349,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         });
       } else {
         $scope.selected.contents = [];
+        $scope.selected.lastSelected = null;
       }
     };
 
@@ -380,10 +382,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       if (mode === 'grid') {
         var maxHeight = $(window).height() - $('.header').height() -
           $('.actions-navbar').height();
-        var maxWidth = $(window).width() - $('.sidebar').width();
+        var maxWidth = $(window).width() - $('.sidebar').width() -
+          parseInt($('.content-wrapper').css('padding-right'));
 
         var height = $('.infinite-col').width() + 15;
         var width = $('.infinite-col').width() + 15;
+
 
         var rows = Math.ceil(maxHeight / height);
         var cols = Math.floor(maxWidth / width);
