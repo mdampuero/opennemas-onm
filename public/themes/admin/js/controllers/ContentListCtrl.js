@@ -455,12 +455,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *
      * @param {Integer} id The item id.
      */
-    $scope.toggle = function(id) {
-      if ($scope.selected.contents.indexOf(id) === -1) {
-        $scope.selected.contents.push(id);
+    $scope.toggle = function(content) {
+      if ($scope.selected.contents.indexOf(content.id) === -1) {
+        $scope.selected.contents.push(content.id);
+
+        $scope.selected.lastSelected = content;
       } else {
+        $scope.selected.lastSelected = null;
+
         $scope.selected.contents.splice(
-            $scope.selected.contents.indexOf(id), 1);
+            $scope.selected.contents.indexOf(content.id), 1);
       }
     }
 
