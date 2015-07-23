@@ -18,6 +18,10 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $scope.preview = function(previewUrl, getPreviewUrl) {
       $scope.loading = true;
 
+      // Force ckeditor
+      CKEDITOR.instances.body.updateElement();
+      CKEDITOR.instances.summary.updateElement();
+
       var data = {'contents': $('#formulario').serializeArray()};
       var url  = routing.generate(previewUrl);
 
