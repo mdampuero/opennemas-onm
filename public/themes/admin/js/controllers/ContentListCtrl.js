@@ -372,6 +372,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param {String} mode The new list mode.
      */
     $scope.setMode = function(mode) {
+      step = 0;
       if ($scope.mode === mode) {
         return;
       }
@@ -1163,6 +1164,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     var searchTimeout;
     $scope.$watch('criteria', function(newValues, oldValues) {
+      // Change page when scrolling in grid mode
       if (searchTimeout) {
         $timeout.cancel(searchTimeout);
       }
@@ -1175,5 +1177,30 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         }, 500);
       }
     }, true);
+
+    // Change page when scrolling in grid mode
+    var step = 0;
+    $(window).scroll(function() {
+      if ($scope.mode === 'list'
+          || $scope.contents.length == $scope.pagination.total) {
+        return;
+      }
+
+      var top = $(window).scrollTop();
+
+      if (top != step && top - step > 120) {
+        step = top;
+      } else {
+        return;
+      }
+
+      var height = $(window).height();
+      var maxHeight = $('.page-container').height();
+
+      if (maxHeight - height - top < 100) {
+        $scope.pagination.page++;
+        $scope.$apply();
+      }
+    });
   }
 ]);
