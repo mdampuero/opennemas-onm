@@ -37,32 +37,6 @@
               </li>
             </ul>
           </li>
-          {if $category != 'widget'}
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks dropdown ng-cloak">
-              <div data-toggle="dropdown">
-                <span ng-if="mode == 'list'">{t}List{/t}</span>
-                <span ng-if="!mode || mode == 'grid'">{t}Mosaic{/t}</span>
-                <span class="caret"></span>
-              </div>
-              <ul class="dropdown-menu">
-                <li ng-click="setMode('list')">
-                  <a href="#">
-                    <i class="fa fa-lg fa-list"></i>
-                    {t}List{/t}
-                  </a>
-                </li>
-                <li ng-click="setMode('grid')">
-                  <a href="#">
-                    <i class="fa fa-lg fa-th"></i>
-                    {t}Mosaic{/t}
-                  </a>
-                </li>
-              </ul>
-            </li>
-          {/if}
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">

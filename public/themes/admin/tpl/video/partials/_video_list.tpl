@@ -59,11 +59,23 @@
     </div>
   </div>
 </div>
-
 <div class="page-navbar filters-navbar ng-cloak">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
+          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" tooltip="{t}List{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('list')">
+              <i class="fa fa-lg fa-list"></i>
+            </button>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('grid')">
+              <i class="fa fa-lg fa-th"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
         <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
@@ -112,10 +124,8 @@
     </div>
   </div>
 </div>
-
 <div class="content" ng-init="setMode('grid');init('video', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {render_messages}
-
   {if $category == 'widget'}
   <div class="messages" ng-if="{$total_elements_widget} > 0 && pagination.total != {$total_elements_widget}">
     <div class="alert alert-info">
@@ -124,7 +134,6 @@
     </div>
   </div>
   {/if}
-
   <div class="grid simple ng-cloak" ng-if="mode === 'list'">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
@@ -191,7 +200,6 @@
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                   </a>
                   {/acl}
-
                   {acl isAllowed="VIDEO_DELETE"}
                   <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
                     <i class="fa fa-trash-o"></i> {t}Remove{/t}

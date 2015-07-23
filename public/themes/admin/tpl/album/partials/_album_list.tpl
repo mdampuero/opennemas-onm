@@ -59,11 +59,23 @@
     </div>
   </div>
 </div>
-
 <div class="page-navbar filters-navbar ng-cloak">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
+        <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" tooltip="{t}List{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="setMode('list')">
+            <i class="fa fa-lg fa-list"></i>
+          </button>
+        </li>
+        <li class="quicklinks ng-cloak" ng-if="mode === 'list'" tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="setMode('grid')">
+            <i class="fa fa-lg fa-th"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
         <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
@@ -110,7 +122,6 @@
     </div>
   </div>
 </div>
-
 <div class="content" ng-init="setMode('grid');init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {render_messages}
   <div class="grid simple ng-cloak" ng-if="mode === 'list'">
@@ -187,7 +198,6 @@
               </td>
               {/if}
               <td class="center hidden-xs">[% extra.views[content.id] %]</td>
-
               {acl isAllowed="ALBUM_AVAILABLE"}
               <td class="center">
                 <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
