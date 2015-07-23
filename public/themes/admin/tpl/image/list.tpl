@@ -209,7 +209,7 @@
       </div>
     </div>
     <div class="content-wrapper">
-      <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading">
+      <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading && contents.length < pagination.total">
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
