@@ -435,7 +435,7 @@ CREATE TABLE `contents` (
   KEY `starttime` (`starttime`,`endtime`),
   KEY `created` (`created`),
   KEY `urn_source` (`urn_source`),
-  FULLTEXT KEY `metadata` (`metadata`)
+  KEY `metadata` (`metadata`)
 ) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
