@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="wizard-container help" ng-class="{ 'active': step == 4 }">
+    <div class="wizard-container help" ng-class="{ 'active': step == 3 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
