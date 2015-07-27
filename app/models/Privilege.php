@@ -1221,7 +1221,7 @@ class Privilege
             ),
             188 => array(
                 'pk_privilege' => '188',
-                'name'         => 'USER_EDIT_PROFILE',
+                'name'         => 'USER_EDIT_OWN_PROFILE',
                 'description'  => _('Edit user own profile'),
                 'module'       => 'USER',
             ),
