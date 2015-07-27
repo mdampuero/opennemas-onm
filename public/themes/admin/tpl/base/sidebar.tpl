@@ -51,10 +51,12 @@
         <span class="title">{$smarty.session.realname}</span>
       </li>
       <li>
+        {acl isAllowed="USER_UPDATE"}
         <a href="{url name=admin_acl_user_show id=me}">
           <i class="fa fa-user"></i>
           <span class="title">{t}Profile{/t}</span>
         </a>
+        {/acl}
       </li>
       <li>
         <a href="{url name=admin_getting_started}">
