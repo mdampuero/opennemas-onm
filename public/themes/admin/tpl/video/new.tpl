@@ -94,6 +94,7 @@
           <div class="grid-title">{t}Attributes{/t}</div>
           <div class="grid-body">
 
+            {acl isAllowed="VIDEO_AVAILABLE"}
             <div class="form-group">
               <div class="checkbox">
                 <input id="content_status" name="content_status" {if $video->content_status eq 1}checked="checked"{/if}  value="1" type="checkbox"/>
@@ -102,6 +103,7 @@
                 </label>
               </div>
             </div>
+            {/acl}
 
             {is_module_activated name="COMMENT_MANAGER"}
             <div class="form-group">
