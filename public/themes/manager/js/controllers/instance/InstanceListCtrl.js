@@ -232,19 +232,14 @@
 
           modal.result.then(function(response) {
             if (response.messages) {
-              // TODO: Remove when merging feature/ONM-352
-              for (var i = 0; i < response.messages.length; i++) {
-                messenger.post(response.messages[i]);
-              }
+              messenger.post(response.messages);
 
               $scope.selected = { all: false, items: [] };
             } else {
               messenger.post(response);
             }
 
-            if (response.success.length > 0) {
-              list();
-            }
+            list();
           });
         };
 
