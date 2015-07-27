@@ -344,7 +344,7 @@
                           {t}Profile{/t}
                         </a>
                       {else}
-                        {acl isAllowed="USER_UPDATE"}
+                        {acl isAllowed="USER_EDIT_PROFILE"}
                         <a href="{url name=admin_acl_user_show id=me}">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
