@@ -221,6 +221,7 @@
             </div>
           </div>
         </div>
+        {acl isAllowed="USER_ADMIN"}
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Privileges{/t}</h4>
@@ -256,6 +257,7 @@
             </div>
           </div>
         </div>
+        {/acl}
       </div>
       <div class="col-md-4">
         <div class="row">
@@ -265,6 +267,7 @@
                 <h4>{t}Settings{/t}</h4>
               </div>
               <div class="grid-body">
+                {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <label class="form-label" for="usertype">
                     {t}User type{/t}
@@ -276,6 +279,7 @@
                     </select>
                   </div>
                 </div>
+                {/acl}
                 <div class="form-group">
                   <label class="form-label" for="meta">
                     {t}User language{/t}
@@ -285,6 +289,7 @@
                     <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                   </div>
                 </div>
+                {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <label class="form-label" for="activated">
                     {t}Status{/t}
@@ -297,6 +302,7 @@
                     <div class="help-block">{t}Used to enable or disable user access to control panel.{/t}</div>
                   </div>
                 </div>
+                {/acl}
               </div>
             </div>
           </div>
