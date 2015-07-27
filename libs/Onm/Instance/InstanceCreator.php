@@ -9,10 +9,9 @@
  */
 namespace Onm\Instance;
 
-use Onm\FilesManager as fm;
+use Symfony\Component\Filesystem\Filesystem;
+
 use Onm\Database\DbalWrapper;
-use Onm\Exception\AssetsNotCopiedException;
-use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\AssetsNotRestoredException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotCreatedException;
@@ -26,11 +25,25 @@ use Onm\Exception\InstanceNotRestoredException;
 class InstanceCreator
 {
     /**
+     * The path to backup directory.
+     *
+     * @var string
+     */
+    private $backupPath;
+
+    /**
      * The database connection.
      *
      * @var DbalWrapper
      */
     private $conn;
+
+    /**
+     * The filesystem manager.
+     *
+     * @var Filesystem
+     */
+    private $fs;
 
     /**
      * Initializes the database connection.
@@ -40,31 +53,25 @@ class InstanceCreator
     public function __construct(DbalWrapper $conn)
     {
         $this->conn = $conn;
+        $this->fs   = new Filesystem();
     }
 
     /**
      * Backup assets data of a particular instance.
      *
      * @param  string $mediaPath  Assets directory
-     * @param  string $backupPath Backups directory
-     * @return boolean            True if the backup was successful. Otherwise,
-     *                            returns false.
      *
      * @throws BackupException In case of error.
      */
-    public function backupAssets($mediaPath, $backupPath)
+    public function backupAssets($mediaPath)
     {
-        $tgzFile = $backupPath . DS . "media.tar.gz";
+        $tgzFile = $this->getBackupPath() . DS . 'media.tar.gz';
 
-        if (!fm::createDirectory($backupPath)) {
+        if ($this->fs->exists($mediaPath)
+            && !\Onm\Compress\Compress::compressTgz($tgzFile, $mediaPath)
+        ) {
             throw new BackupException(
-                "The directory for backup could not be created"
-            );
-        }
-
-        if (!\Onm\Compress\Compress::compressTgz($tgzFile, $mediaPath)) {
-            throw new BackupException(
-                "Could not create a backup of the directory"
+                'Could not create a backup of the directory'
             );
         }
     }
@@ -72,107 +79,84 @@ class InstanceCreator
     /**
      * Backup database of a particular instance.
      *
-     * @param  string  $user     Database user.
-     * @param  string  $password Database password.
-     * @param  string  $database Database name.
-     * @param  string  $path     Path where place the backup.
-     * @return boolean           True if the backup was successful. Otherwise,
-     *                           returns false.
+     * @param  string $database Database name.
      *
      * @throws BackupException In case of error.
      */
-    public function backupDatabase($database, $path)
+    public function backupDatabase($database)
     {
-        if (!fm::createDirectory($path)) {
-            throw new BackupException(
-                "The directory for backup could not be created"
-            );
+        $this->conn->selectDatabase($database);
+
+        // Skip if no database
+        try {
+            $this->conn->executeQuery('SHOW variables');
+        } catch (\Exception $e) {
+            return;
         }
 
-        $dump = "mysqldump -u" . $this->conn->connectionParams['user']
-            . " -p" . $this->conn->connectionParams['password']
-            . " --databases '$database'  > " . $path . DS . "database.sql";
+        $target = $this->getBackupPath() . 'database.sql';
 
-        exec($dump, $output, $result);
+        $cmd = "mysqldump -u{$this->conn->connectionParams['user']}"
+            . " -p{$this->conn->connectionParams['password']}"
+            . " --databases $database  > $target";
+
+        exec($cmd, $output, $result);
 
         if ($result != 0) {
-            throw new BackupException($output);
+            throw new BackupException("Cannot backup the database $database");
         }
     }
 
     /**
      * Backup data of a particular instance from the instances table.
      *
-     * @param  integer $user     The database user.
-     * @param  integer $password The database password.
-     * @param  integer $database The database name.
-     * @param  integer $id       The id of the instance.
-     * @param  string  $path     Backups directory
+     * @param integer $id The id of the instance.
      *
      * @throws BackupException In case of error.
      */
-    public function backupInstance($database, $id, $path)
+    public function backupInstance($id)
     {
-        if (!fm::createDirectory($path)) {
-            throw new BackupException(
-                "The directory for backup could not be created"
-            );
-        }
+        $target = $this->getBackupPath() . "instance.sql";
 
-        // Manager database
         $database = 'onm-instances';
 
-        $dump = "mysqldump -u" . $this->conn->connectionParams['user']
-            . " -p" . $this->conn->connectionParams['password']
+        $cmd = "mysqldump -u{$this->conn->connectionParams['user']}"
+            . " -p{$this->conn->connectionParams['password']}"
             . " --no-create-info --where 'id=" . $id . "' "
-            . " ".$database." instances > " . $path . DS . "instance.sql";
+            . ' onm-instances instances > ' . $target;
 
-        exec($dump, $output, $result);
+        exec($cmd, $output, $result);
 
         if ($result != 0) {
-            throw new BackupException($output);
+            throw new BackupException("Cannot backup the instance with id $id");
         }
     }
 
     /**
      * Copies the default assets for the new instance given its internal name.
      *
-     * @param  string $name The instance internal name.
-     * @return mixed        True if the assets where copied successfully.
-     *
-     * @throws AssetsNotCopiedException If copy fails.
+     * @param string $instance The instance internal name.
      */
-    public function copyDefaultAssets($name)
+    public function copyDefaultAssets($instance)
     {
-        $mediaPath   = SITE_PATH . DS . 'media' . DS . $name;
-        $defaultPath = SITE_PATH . DS . 'media' . DS . 'default';
+        $mediaPath   = SITE_PATH . 'media' . DS . $instance;
+        $defaultPath = SITE_PATH . 'media' . DS . 'default';
 
-        if (file_exists($mediaPath)) {
-            throw new AssetsNotCopiedException(
-                "The media folder {$name} already exists."
-            );
-        }
-
-        if (!fm::recursiveCopy($defaultPath, $mediaPath)) {
-            throw new AssetsNotCopiedException(
-                "Could not copy default assets for the instance"
-            );
-        }
+        $this->fs->mirror($defaultPath, $mediaPath);
     }
 
     /**
      * Creates and imports default database for the new instance.
      *
-     * @param  array   $database The database name.
-     * @return boolean           True if the database is created successfully.
+     * @param array $database The database name.
      *
-     * @throws DatabaseForInstanceNotCreatedException If creation fails.
+     * @throws DatabaseNotCreatedException If creation fails.
      */
     public function createDatabase($database)
     {
         // Create instance database
-        $sql = "CREATE DATABASE `$database`";
-        $rs = $this->conn->executeQuery($sql);
+        $sql = "CREATE DATABASE IF NOT EXISTS `$database`";
+        $rs  = $this->conn->executeQuery($sql);
 
         if (!$rs) {
             throw new DatabaseNotCreatedException(
@@ -191,25 +175,13 @@ class InstanceCreator
     /*
      * Deletes the default assets for the instance given its internal name.
      *
-     * @param  string  $name The instance internal name.
-     * @return boolean       True it assets were deleted successfully.
-     *                       Otherwise, returns false.
+     * @param string $name The instance internal name.
      */
     public function deleteAssets($name)
     {
         $target = SITE_PATH . DS . 'media' . DS . $name;
-        if (!is_dir($target)) {
-            throw new AssetsNotDeletedException(
-                "The assets directory for $name doesn't exist"
-            );
 
-        }
-
-        if (!fm::deleteDirectoryRecursively($target)) {
-            throw new AssetsNotDeletedException(
-                "Could not delete assets for instance $name"
-            );
-        }
+        $this->fs->remove($target);
     }
 
     /**
@@ -219,55 +191,70 @@ class InstanceCreator
      */
     public function deleteBackup($path)
     {
-        fm::deleteDirectoryRecursively($path);
+        $this->fs->remove($path);
     }
 
     /**
      * Deletes the database given its name.
      *
-     * @param  string  $database The database name.
-     * @return boolean           True, if the database is deleted successfully.
+     * @param string $database The database name.
      *
      * @throws DatabaseNotDeletedException If the database couldn't be deleted.
      */
     public function deleteDatabase($database)
     {
-        $sql = "DROP DATABASE `$database`";
+        $this->conn->selectDatabase('onm-instances');
+
+        $sql = "DROP DATABASE IF EXISTS `$database`";
 
         if (!$this->conn->executeQuery($sql)) {
             throw new DatabaseNotDeletedException(
-                "Could not drop the database"
+                "Could not drop the database $database"
             );
         }
+    }
+
+    /**
+     * Return the current backup direcotry and creates it if not exists.
+     *
+     * @return string The backup path.
+     */
+    public function getBackupPath()
+    {
+        if (!empty($this->backupPath)
+            && !$this->fs->exists($this->backupPath)
+        ) {
+            $this->fs->mkdir($this->backupPath);
+        }
+
+        return $this->backupPath;
     }
 
     /**
      * Restores the assets for an instance.
      *
-     * @param  string  $path The path where extract the assets.
-     * @return boolean       True, if assets were extracted successfully.
+     * @param string $path The path where extract the assets.
      *
-     * @throws DefaultAssetsForInstanceNotDeletedException If assets not found.
+     * @throws AssetsNotRestoredException If assets not found.
      */
     public function restoreAssets($path)
     {
         $tgzFile = $path . DS . "media.tar.gz";
-        if (!\Onm\Compress\Compress::decompressTgz($tgzFile, "/")) {
+
+        if (!$this->fs->exists($tgzFile)
+            || !\Onm\Compress\Compress::decompressTgz($tgzFile, "/")
+        ) {
             throw new AssetsNotRestoredException(
                 "Could not restore the assets directory."
             );
         }
-
-        return true;
     }
 
     /**
      * Restores an instance database from a source.
      *
-     * @param  string  $source The path to the source.
-     * @param  string  $target The target database.
-     * @return boolean         True if the command was executed successfully.
-     *                         Otherwise, returns false.
+     * @param string $source The path to the source.
+     * @param string $target The target database.
      */
     public function restoreDatabase($source, $target = null)
     {
@@ -281,7 +268,8 @@ class InstanceCreator
 
         if ($result != 0) {
             throw new DatabaseNotRestoredException(
-                'Could not import the default database for the instance '.$output
+                'Could not import the default database for the instance '
+                . print_r($output)
             );
         }
     }
@@ -289,12 +277,16 @@ class InstanceCreator
     /**
      * Restores instance reference data to the instances table.
      *
-     * @param  string  $path Backup directory.
-     * @return boolean       True, if instance was restored successfully.
-     *                       Otherwise, returns false.
+     * @param string $path Backup directory.
      */
     public function restoreInstance($path)
     {
+        if (!$this->fs->exists($path)) {
+            throw new InstanceNotRestoredException(
+                'Could not import the default database for the instance'
+            );
+        }
+
         $dump = "mysql -u". $this->conn->connectionParams['user'] .
                 " -p" . $this->conn->connectionParams['password'] .
                 " " . $this->conn->connectionParams['dbname'] .
@@ -302,10 +294,20 @@ class InstanceCreator
 
         exec($dump, $output, $result);
 
-        if ($result!=0) {
+        if ($result != 0) {
             throw new InstanceNotRestoredException(
-                "The instance could not be restored ".$output
+                "The instance could not be restored (" . print_r($output) . ")"
             );
         }
+    }
+
+    /**
+     * Changes the backup path.
+     *
+     * @param string $path The new backup path.
+     */
+    public function setBackupPath($path)
+    {
+        $this->backupPath = rtrim($path, DS) . DS;
     }
 }
