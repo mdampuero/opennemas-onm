@@ -344,10 +344,12 @@
                           {t}Profile{/t}
                         </a>
                       {else}
+                        {acl isAllowed="USER_UPDATE"}
                         <a href="{url name=admin_acl_user_show id=me}">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
+                        {/acl}
                       {/if}
                     </li>
                     <li class="divider"></li>
