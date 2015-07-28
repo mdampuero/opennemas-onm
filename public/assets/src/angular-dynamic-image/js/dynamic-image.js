@@ -29,8 +29,8 @@
          *
          * @type {String}
          */
-        var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
-          '<img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>' +
+        var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]" ng-class="{ \'loading\': loading }">' +
+          '<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
           '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
             '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
           '</div>' +
@@ -56,6 +56,24 @@
          * @type     {Array}
          */
         this.allowedAttributes = ['class', 'height', 'width'];
+
+        /**
+         * Path to the default image.
+         *
+         * @memeberof DynamicImage
+         * @name      brokenImage
+         * @type      {String}
+         */
+        this.brokenImage = '/themes/admin/images/img-not-found.jpg';
+
+        /**
+         * Whether to process only images.
+         *
+         * @memberof DynamicImage
+         * @name     onlyImage
+         * @type     {Boolean}
+         */
+        this.onlyImage = false;
 
         /**
          * Property with the path to the image.
@@ -93,7 +111,7 @@
           var prefix = '';
 
           if (!image) {
-            return '';
+            return this.brokenImage;
           }
 
           if (typeof image === 'object') {
@@ -112,6 +130,10 @@
             prefix = instanceMedia + this.imageFolder;
           }
 
+          if (this.onlyImage && /.*\.(swf|gif)$/.test(image)) {
+            return this.brokenImage;
+          }
+
           if (!transform || /.*\.swf/.test(image)) {
             return prefix + image;
           }
@@ -124,6 +146,13 @@
             }
           );
         };
+
+        this.getDefaultSize = function(element) {
+          return {
+            height: element.parent().width(),
+            width: element.parent().width()
+          };
+        }
 
         /**
          * @function getSettings
@@ -191,7 +220,7 @@
         this.render = function(options, model) {
           var html = dynamicImageTpl;
 
-          if (this.isFlash(model)) {
+          if (this.isFlash(model) && !this.onlyImage) {
             html = dynamicSwfTpl;
           }
 
@@ -291,6 +320,14 @@
             'ngModel': '='
           },
           link: function ($scope, element, attrs) {
+            if (attrs.onlyImage) {
+              DynamicImage.onlyImage = true;
+            }
+
+            var defaults = DynamicImage.getDefaultSize(element);
+            $scope.height = defaults.height;
+            $scope.width = defaults.width;
+
             var maxHeight = element.height();
             var maxWidth  = element.width();
 
@@ -299,11 +336,14 @@
               maxWidth  = element.parent().width();
             }
 
+            $scope.width  = element.parent().width();
+
             var children  = element.children();
             var html      = DynamicImage.render(attrs, $scope.ngModel);
 
             // Try to calculate height and width before compiling for flash
-            if ($scope.ngModel && DynamicImage.isFlash($scope.ngModel) &&
+            if ($scope.ngModel && !DynamicImage.onlyImage &&
+                DynamicImage.isFlash($scope.ngModel) &&
                 $scope.ngModel.height && $scope.ngModel.width) {
 
               var settings = DynamicImage.getSettings($scope.ngModel.height,
@@ -348,6 +388,11 @@
                   w = $scope.ngModel.width;
                 }
 
+                if ($scope.src === DynamicImage.brokenImage) {
+                  h = 800;
+                  w = 800;
+                }
+
                 var settings = DynamicImage.getSettings(h, w, maxHeight, maxWidth);
 
                 $scope.height = settings.height;
@@ -355,6 +400,10 @@
               }
 
               $scope.$apply();
+            });
+
+            e.find('img').bind('error', function() {
+              $scope.loading = false;
             });
 
             e.append(children);

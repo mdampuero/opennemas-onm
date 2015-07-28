@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, description_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -57,21 +57,34 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar">
+  <div class="page-navbar filters-navbar ng-cloak">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
+          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" tooltip="{t}List{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('list')">
+              <i class="fa fa-lg fa-list"></i>
+            </button>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('grid')">
+              <i class="fa fa-lg fa-th"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
           <li class="m-r-10 input-prepend inside search-input no-boarder">
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.description_like" placeholder="{t}Search by description{/t}" type="text"/>
             <input type="hidden" name="in_home" ng-model="criteria.in_home">
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak">
+          <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -82,16 +95,16 @@
             </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <li class="quicklinks hidden-xs">
+        <ul class="nav quick-section pull-right ng-cloak">
+          <li class="quicklinks hidden-xs" ng-if="mode === 'list' && contents.length > 0">
             <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="content">
-    <div class="grid simple">
+  <div class="content clearfix">
+    <div class="grid simple ng-cloak" ng-if="mode === 'list'">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
           <div class="loading-spinner"></div>
@@ -115,6 +128,8 @@
                 </th>
                 <th style="width:80px">&nbsp;</th>
                 <th class="hidden-xs">{t}Information{/t}</th>
+                <th class="hidden-xs">{t}Resolution{/t}</th>
+                <th class="hidden-xs">{t}Size{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -134,13 +149,13 @@
                   </div>
                 </td>
                 <td class="hidden-xs">
-                  <div ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
+                  <div class="dynamic-image-placeholder" ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
                   </div>
                 </td>
                 <td>
                   <div ng-click="open('modal-image', content)" class="visible-xs center" style="height: 200px; width: 200px; margin: 0 auto 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
                   </div>
                   <div class="description">
                     <span ng-if="content.description != ''">[% content.description %]</span>
@@ -152,6 +167,14 @@
                   </div>
                   <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
+                  <div class="small-text">
+                    <strong>{t}Resolution{/t}:</strong>
+                    <span>[% content.width %]x[% content.height %]</span>
+                  </div>
+                  <div class="small-text">
+                    <strong>{t}Size{/t}:</strong>
+                    <span>[% content.size %] KB</span>
                   </div>
                   <div>
                     <div class="listing-inline-actions">
@@ -165,12 +188,14 @@
                         <i class="fa fa-trash-o"></i> {t}Remove{/t}
                       </button>
                       {/acl}
-                      <a class="link" href="{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]" target="_blank">
+                      <a class="link" href="{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
                         <i class="fa fa-external-link"></i> {t}Link{/t}
                       </a>
                     </div>
                   </div>
                 </td>
+                <td class="hidden-xs">[% content.width %]x[% content.height %]</td>
+                <td class="hidden-xs">[% content.size %] KB</td>
               </tr>
             </tbody>
           </table>
@@ -182,7 +207,89 @@
         </div>
       </div>
     </div>
-  </div>
+    <div class="content-wrapper">
+      <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading && contents.length < pagination.total">
+        <div class="loading-spinner"></div>
+        <div class="spinner-text">{t}Loading{/t}...</div>
+      </div>
+      <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && !loadingMore && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any image that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Upload" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+          <div class="dynamic-image-placeholder no-margin pointer" ng-click="toggle(content)">
+            <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
+              <div class="thumbnail-actions ng-cloak">
+                {acl isAllowed="PHOTO_DELETE"}
+                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
+                    <i class="fa fa-trash-o fa-2x"></i>
+                  </div>
+                {/acl}
+                {acl isAllowed="PHOTO_UPDATE"}
+                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
+                    <i class="fa fa-pencil fa-2x"></i>
+                  </a>
+                {/acl}
+              </div>
+            </dynamic-image>
+          </div>
+        </div>
+      </div>
+      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && mode == 'grid' && pagination.total != contents.length">
+        <h5>
+          <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+          <span ng-if="!loadingMore">{t}Load more{/t}</span>
+          <span ng-if="loadingMore">{t}Loading{/t}</span>
+        </h5>
+      </div>
+      <div class="infinite-row master-row ng-cloak">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
+        </div>
+      </div>
+    </div>
+    <div class="content-sidebar" ng-if="mode === 'grid'">
+      <h3 ng-show="selected.lastSelected">{t}Image details{/t}</h3>
+      <div ng-if="selected.lastSelected">
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
+        </div>
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
+          <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
+        </div>
+        <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="isFlash(selected.lastSelected)">
+          <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
+        </div>
+        <ul class="media-information">
+          <li>
+            <strong>[% selected.lastSelected.name %]</strong>
+          </li>
+          <li>
+            <a class="btn btn-default" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
+              <strong>
+                <i class="fa fa-edit"></i>
+                {t}Edit{/t}
+              </strong>
+            </a>
+          </li>
+          <li>[% selected.lastSelected.created | moment %]</li>
+          <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
+          <li>
+            <div class="form-group">
+              <label for="description">
+                <strong>{t}Description{/t}</strong>
+                <div class="pull-right">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }"></i>
+                </div>
+              </label>
+              <textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
   </script>
@@ -200,30 +307,11 @@
     <div class="modal-body">
       <div class="resource">
         <span ng-if="template.selected.type_img == 'swf'">
-          <object ng-data="'{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]'" ng-param="{ 'vmode': 'opaque' }"></object>
+          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
         </span>
         <span ng-if="template.selected.type_img !== 'swf'">
           <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
         </span>
-      </div>
-      <div class="details">
-        <h4 class="description">
-          <span ng-if="template.selected.description != ''">[% template.selected.description %]</span>
-          <span ng-if="template.selected.description == ''">{t}No available description{/t}</span>
-        </h4>
-        <div><strong>{t}Filename{/t}</strong> [% template.selected.title %]</div>
-        <div class="tags">
-          <img src="{$params.IMAGE_DIR}tag_red.png" />
-          <span ng-if="template.selected.metadata != ''">[% template.selected.metadata %]</span>
-          <span ng-if="template.selected.metadata == ''">{t}No tags{/t}</span>
-        </div>
-        <span class="author" ng-if="template.selected.author != ''">
-          <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
-        </span>
-        <div><strong>{t}Created on{/t}</strong> [% template.selected.created %]</div>
-
-        <div><strong>{t}Resolution:{/t}</strong> [% template.selected.width %] x [% template.selected.height %] (px)</div>
-        <div><strong>{t}Size:{/t}</strong> [% template.selected.size %] Kb</div>
       </div>
     </div>
   </script>
