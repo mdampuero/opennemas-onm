@@ -453,8 +453,6 @@ class OpinionsController extends Controller
                 // Get opinion image
                 if (isset($opinion->img1) && ($opinion->img1 > 0)) {
                     $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
-                } elseif (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                    $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img2);
                 }
             }
 
