@@ -326,11 +326,8 @@ class Article extends Content
             return;
         }
 
-        // articulos ordenArti y attaches ordenAtt
-        $rel = new RelatedContent();
-
-        //Eliminamos para volver a insertar por si borraron.
-        $rel->delete($data['id']);
+        // Drop related and insert new ones
+        getService('related_contents')->delete($data['id']);
 
         if (!empty($data['relatedFront'])) {
             $this->saveRelated(
@@ -373,14 +370,16 @@ class Article extends Content
 
         $sql = 'DELETE FROM articles WHERE pk_article=?';
 
-        $rel = new RelatedContent();
-        $rel->delete($id); //Eliminamos con los que esta relacionados.
-
-        self::deleteComments($id); //Eliminamos  los comentarios.
-
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return false;
         }
+
+        // Delete related
+        getService('related_contents')->delete($id);
+
+        // Delete comments
+        self::deleteComments($id);
+
         return true;
     }
 
@@ -423,11 +422,10 @@ class Article extends Content
      **/
     public function saveRelated($data, $id, $method)
     {
-        $rel = new RelatedContent();
+        $rel = getService('related_contents');
 
         if (is_array($data) && count($data) > 0) {
             foreach ($data as $content) {
-
                 $rel->{$method}($id, $content->position, $content->id);
             }
         }

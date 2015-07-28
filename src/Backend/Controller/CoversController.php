@@ -360,14 +360,21 @@ class CoversController extends Controller
 
         if (!empty($id)) {
             $cover = new \Kiosko($id);
-            // Delete relations
-            $rel= new \RelatedContent();
-            $rel->deleteAll($id);
+
+            // Delete related and relations
+            getService('related_contents')->deleteAll($id);
 
             $cover->delete($id, $_SESSION['userid']);
-            $this->get('session')->getFlashBag()->add('successs', sprintf(_("Cover %s deleted successfully."), $cover->title));
+
+            $this->get('session')->getFlashBag()->add(
+                'successs',
+                sprintf(_("Cover %s deleted successfully."), $cover->title)
+            );
         } else {
-            $this->get('session')->getFlashBag()->add('error', _('You must give an id to delete the cover.'));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id to delete the cover.')
+            );
         }
 
         return $this->redirect(

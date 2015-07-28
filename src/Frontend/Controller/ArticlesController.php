@@ -115,10 +115,8 @@ class ArticlesController extends Controller
                 }
 
                 // Related contents code ---------------------------------------
-                $relContent      = new \RelatedContent();
-                $relatedContents = array();
-
-                $relationIDs     = $relContent->getRelationsForInner($articleID);
+                $relationIDs = getService('related_contents')->getRelationsForInner($articleID);
+                $relatedContents = [];
                 if (count($relationIDs) > 0) {
                     $cm = new \ContentManager;
                     $relatedContents = $cm->getContents($relationIDs);

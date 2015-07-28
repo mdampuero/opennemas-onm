@@ -65,7 +65,7 @@ class ArticlesController extends Controller
                 $this->view->assign('photo', $photo->path_file.$photo->name);
             }
 
-            $relContentManager = new \RelatedContent();
+            $relContentManager = getService('related_contents');
             $relatedContentIds = $relContentManager->getRelationsForInner($articleID);
 
             $relatedContents = $cm->getContents($relatedContentIds);
