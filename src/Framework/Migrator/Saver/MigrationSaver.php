@@ -1256,6 +1256,18 @@ class MigrationSaver
                 case 'utf8':
                     $field = $this->convertToUtf8($field);
                     break;
+                case 'md5':
+                    $field = md5($field);
+
+                    if ($params['string']) {
+                        if ($params['string']['position'] == 'before') {
+                            $field = md5($params['string']['value'].$field);
+                        } else {
+                            $field = md5($field.$params['string']['value']);
+                        }
+                    }
+
+                    break;
                 case 'youtube':
                     $field = $this->convertToYoutube($field);
                     break;
