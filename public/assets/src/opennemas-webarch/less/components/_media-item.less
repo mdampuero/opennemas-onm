@@ -44,6 +44,16 @@
         background-color: @selected-color;
       }
     }
+
+    .hidden-select {
+      cursor: pointer;
+      height: 24px;
+      position: absolute;
+      right: -8px;
+      top: -7px;
+      width: 24px;
+      z-index: 20;
+    }
   }
 }
 
@@ -65,5 +75,11 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: (@tablet-width - 1px)) {
+  .media-item {
+    cursor: pointer;
   }
 }

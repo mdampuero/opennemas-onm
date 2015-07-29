@@ -111,6 +111,12 @@
   }
 }
 
+@media (max-width: 991px) {
+  .content .content-wrapper {
+    padding-right: 0;
+  }
+}
+
 @media (min-width: 1200px) {
   .infinite-row .col-lg-1-25 {
     width: 12.5%;

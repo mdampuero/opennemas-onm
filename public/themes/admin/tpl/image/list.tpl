@@ -220,8 +220,9 @@
           </div>
         </div>
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
-          <div class="dynamic-image-placeholder no-margin pointer" ng-click="toggle(content)">
+          <div class="dynamic-image-placeholder no-margin" ng-click="select(content);xsOnly($event, toggle, content)">
             <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
+              <div class="hidden-select" ng-click="toggle(content)"></div>
               <div class="thumbnail-actions ng-cloak">
                 {acl isAllowed="PHOTO_DELETE"}
                   <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
@@ -250,8 +251,12 @@
         </div>
       </div>
     </div>
-    <div class="content-sidebar" ng-if="mode === 'grid'">
-      <h3 ng-show="selected.lastSelected">{t}Image details{/t}</h3>
+    <div class="content-sidebar hidden-sm ng-cloak" ng-if="mode === 'grid'">
+      <div class="center p-t-15" ng-if="!selected.lastSelected">
+        <h4>{t}No item selected{/t}</h4>
+        <h6>{t}Click in one item to show information about it{/t}</h6>
+      </div>
+      <h3 class="ng-cloak" ng-show="selected.lastSelected">{t}Image details{/t}</h3>
       <div ng-if="selected.lastSelected">
         <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
           <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
@@ -290,30 +295,30 @@
         </ul>
       </div>
     </div>
-  <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-delete-selected">
-    {include file="common/modals/_modalBatchDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-update-selected">
-    {include file="common/modals/_modalBatchUpdate.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-image">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
-      <h4 class="modal-title">{t}Image preview{/t}</h4>
-    </div>
-    <div class="modal-body">
-      <div class="resource">
-        <span ng-if="template.selected.type_img == 'swf'">
-          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
-        </span>
-        <span ng-if="template.selected.type_img !== 'swf'">
-          <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
-        </span>
+    <script type="text/ng-template" id="modal-delete">
+      {include file="common/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-selected">
+      {include file="common/modals/_modalBatchDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-update-selected">
+      {include file="common/modals/_modalBatchUpdate.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-image">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+        <h4 class="modal-title">{t}Image preview{/t}</h4>
       </div>
-    </div>
-  </script>
-</div>
+      <div class="modal-body">
+        <div class="resource">
+          <span ng-if="template.selected.type_img == 'swf'">
+            <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
+          </span>
+          <span ng-if="template.selected.type_img !== 'swf'">
+            <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
+          </span>
+        </div>
+      </div>
+    </script>
+  </div>
 {/block}
