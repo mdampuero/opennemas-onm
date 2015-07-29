@@ -272,7 +272,7 @@
         <h4>{t}No item selected{/t}</h4>
         <h6>{t}Click in one item to show information about it{/t}</h6>
       </div>
-      <h3 class="ng-cloak" ng-show="selected.lastSelected">{t}Album details{/t}</h3>
+      <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Album details{/t}</h4>
       <div ng-if="selected.lastSelected">
         <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected.cover_image)" ng-if="selected.lastSelected.cover_image.content_type_name == 'photo' && !isFlash(selected.lastSelected.cover_image)">
           <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected.cover_image" only-image="true" transform="thumbnail,220,220"></dynamic-image>
