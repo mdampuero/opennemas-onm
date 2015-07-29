@@ -1035,7 +1035,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         $values = array();
         foreach ($userMeta as $key => $value) {
-            $values []= array($this->id, $key, $value);
+            $this->meta[$key] = $value;
+            $values[] = array($this->id, $key, $value);
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);

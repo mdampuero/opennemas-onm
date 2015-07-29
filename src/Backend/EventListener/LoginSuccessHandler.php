@@ -80,6 +80,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $request->get('recaptcha_challenge_field'),
                 $request->get('recaptcha_response_field')
             );
+
             $valid = $valid->isValid();
         }
 
@@ -88,15 +89,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['realname']         = $user->name;
         $_SESSION['username']         = $user->username;
         $_SESSION['email']            = $user->email;
-        $_SESSION['deposit']          = $user->deposit;
-        $_SESSION['type']             = $user->type;
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
-        $_SESSION['updated']          = time();
-        $_SESSION['user_language']    = $user->getMeta('user_language');
-        $_SESSION['valid']            = $valid;
-        $_SESSION['meta']             = $user->getMeta();
-        $_SESSION['isAdmin']          = $user->isAdmin();
-        $_SESSION['isMaster']         = $user->isMaster();
+
+        $this->session->set('user_language', $user->getMeta('user_language'));
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
             $this->session->get('intention'),
