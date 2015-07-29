@@ -205,8 +205,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       delete filtersToEncode.content_type_name;
 
-      queryManager.setParams(filtersToEncode, $scope.orderBy,
-        $scope.pagination.epp, $scope.pagination.page);
+      if ($scope.mode !== 'grid') {
+        queryManager.setParams(filtersToEncode, $scope.orderBy,
+            $scope.pagination.epp, $scope.pagination.page);
+      }
 
       var postData = {
         elements_per_page: $scope.pagination.epp,
@@ -1191,7 +1193,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       var top = $(window).scrollTop();
 
-      if (top != step && top - step > 120) {
+      if (top != step && top - step > 50) {
         step = top;
       } else {
         return;
