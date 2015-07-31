@@ -96,13 +96,14 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->getDigits('opinion_id');
+        $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
 
-        // Resolve opinion ID, search in repository or redirect to 404
-        $opinionID = \ContentManager::resolveID($dirtyID);
-        $er        = getService('entity_repository');
-        $opinion   = $er->find('Opinion', $opinionID);
-        if (is_null($opinion)) {
+        // Resolve epaper ID, search in repository or redirect to 404
+        list($opinionID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $er = $this->get('opinion_repository');
+        $opinion = $er->find('Opinion', $opinionID);
+        if (!\ContentManager::checkContentAndUrl($opinion, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
