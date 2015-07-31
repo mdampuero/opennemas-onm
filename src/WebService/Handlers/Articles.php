@@ -35,15 +35,16 @@ class Articles
         $ccm      = \ContentCategoryManager::get_instance();
 
         // Resolve dirty Id
-        $articleId = \ContentManager::resolveID($id);
-
-        // Fetch the content to work with
-        $article = $er->find('Article', $articleId);
+        list($articleID, $urlDate) = \ContentManager::resolveID($id);
+        $article = $er->find('Article', $articleID);
+        if (!\ContentManager::checkContentAndUrl($article, $urlDate)) {
+            throw new RestException(404, 'Page not found');
+        }
 
         // Get category title used on tpl's
         $article->category_title   = $ccm->getTitle($article->category_name);
         $article->actualCategoryId = $ccm->get_id($article->category_name);
-        //assigned media_url used with author photo & related or machine articles with photo
+        // Assigned media_url used with author photo & related or machine articles with photo
         $article->media_url        = MEDIA_IMG_ABSOLUTE_URL;
 
         // Get inner image for this article
@@ -76,7 +77,7 @@ class Articles
         }
 
         // Get Related contents
-        $relationIDs     = getService('related_contents')->getRelationsForInner($articleId);
+        $relationIDs     = getService('related_contents')->getRelationsForInner($articleID);
         $relatedContents = [];
         if (count($relationIDs) > 0) {
             $relatedContents = $this->cm->getContents($relationIDs);

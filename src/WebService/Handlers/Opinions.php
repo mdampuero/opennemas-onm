@@ -26,13 +26,12 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $er = getService('entity_repository');
-
-        // Resolve dirty Id
-        $opinionId = \ContentManager::resolveID($id);
-
-        // Load opinion
-        $opinion = $er->find('Opinion', $opinionId);
+        // Resolve epaper ID, search in repository or redirect to 404
+        list($opinionID, $urlDate) = \ContentManager::resolveID($id);
+        $opinion = getService('opinion_repository')->find('Opinion', $opinionID);
+        if (!\ContentManager::checkContentAndUrl($opinion, $urlDate)) {
+            throw new RestException(404, 'Page not found');
+        }
 
         // Get author information
         $ur = getService('user_repository');
@@ -43,10 +42,10 @@ class Opinions
         $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
 
         // Get machine related contents
-        $opinion->machineRelated = $this->machineRelated($opinionId);
+        $opinion->machineRelated = $this->machineRelated($opinionID);
 
         //Fetch the other opinions for this author
-        $opinion->otherOpinions = $this->others($opinionId);
+        $opinion->otherOpinions = $this->others($opinionID);
 
         // Get external media url
         $opinion->externalMediaUrl = MEDIA_IMG_ABSOLUTE_URL;
@@ -61,9 +60,7 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $er = getService('entity_repository');
-
-        $opinion = $er->find('Opinion', $id);
+        $opinion = getService('opinion_repository')->find('Opinion', $id);
 
         return $opinion;
     }
@@ -363,8 +360,8 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $er = getService('entity_repository');
-        $opinion = $er->find('Opinion', $id);
+        $or = getService('opinion_repository');
+        $opinion = $or->find('Opinion', $id);
 
         $filters = array();
         if ($opinion->type_opinion == 1) {
@@ -373,10 +370,11 @@ class Opinions
             $filters['type_opinion'] = array(array('value' => 2));
         } else {
             $filters['type_opinion'] = array(array('value' => 0));
-            $filters['fk_author'] = array(array('value' => $opinion->fk_author));
+            $filters['opinions`.`fk_author'] = array(
+                array('value' => $opinion->fk_author)
+            );
         }
 
-        $or = getService('opinion_repository');
         $filters['pk_opinion']     = array(array('value' => $id, 'operator' => '<>'));
         $filters['content_status'] = array(array('value' => 1));
 
@@ -401,10 +399,10 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $er = getService('entity_repository');
+        $or = getService('opinion_repository');
 
         // Load opinion
-        $opinion = $er->find('Opinion', $id);
+        $opinion = $or->find('Opinion', $id);
 
         $machineSuggestedContents = getService('automatic_contents')->searchSuggestedContents(
             'opinion',
@@ -415,14 +413,14 @@ class Opinions
         foreach ($machineSuggestedContents as &$element) {
             $origElem = $element;
             // Load opinion
-            $element = $er->find('Opinion', $origElem['pk_content']);
+            $element = $or->find('Opinion', $origElem['pk_content']);
             if (!empty($element->author)) {
                 $origElem['author_name'] = $element->author;
                 $origElem['author_name_slug'] = \StringUtils::getTitle($element->author);
             } else {
                 $origElem['author_name_slug'] = "author";
             }
-            $origElem['uri'] = 'ext'.Uri::generate(
+            $origElem['uri'] = 'ext'.\Uri::generate(
                 'opinion',
                 array(
                     'id'       => $origElem['pk_content'],
