@@ -148,6 +148,10 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    google_recaptcha:
+        class: Onm\Recaptcha
+        arguments: [ %recaptcha_private_key% ]
+
     recaptcha:
         class: Captcha\Captcha
         calls:

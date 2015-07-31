@@ -117,7 +117,7 @@ parameters:
     shared_key_algorithm: HS512
     shared_key:           yoursharedkey
 
-    recaptcha_private_key: 6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs
+    recaptcha_private_key: 6LeMYAkTAAAAAFpxGah5BY2Svm01npk8iCwKAf1X
 
     sales_email: sales@openhost.es
 
