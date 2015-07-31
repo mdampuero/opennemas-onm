@@ -231,12 +231,13 @@ class VideosController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->getDigits('video_id', '');
+        $dirtyID = $request->query->filter('video_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve video ID, search in repository or redirect to 404
-        $videoID = \ContentManager::resolveID($dirtyID);
-        $video   = $this->get('entity_repository')->find('Video', $videoID);
-        if (is_null($video)) {
+        list($videoID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $video = $this->get('entity_repository')->find('Video', $videoID);
+        if (!\ContentManager::checkContentAndUrl($video, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 

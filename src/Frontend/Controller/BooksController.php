@@ -97,12 +97,13 @@ class BooksController extends Controller
     {
         $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
         $dirtyID      = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve book ID, search in repository or redirect to 404
-        $id   = \ContentManager::resolveID($dirtyID);
+        list($bookID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er   = $this->get('entity_repository');
-        $book = $er->find('Book', $id);
-        if (is_null($book)) {
+        $book = $er->find('Book', $bookID);
+        if (!\ContentManager::checkContentAndUrl($book, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
@@ -133,7 +134,7 @@ class BooksController extends Controller
                     'book'        => $book,
                     'content'     => $book,
                     'libros'      => $books,
-                    'contentId'   => $id,
+                    'contentId'   => $bookID,
                     'category'    => $book->category,
                     'cache_id'    => $cacheID,
                 )

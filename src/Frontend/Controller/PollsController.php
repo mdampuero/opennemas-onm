@@ -162,16 +162,17 @@ class PollsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
         $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve poll ID, search in repository or redirect to 404
-        $pollId = \ContentManager::resolveID($dirtyID);
-        $poll   = $this->get('entity_repository')->find('Poll', $pollId);
-        if (is_null($poll)) {
+        list($pollID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $poll = $this->get('entity_repository')->find('Poll', $pollID);
+        if (!\ContentManager::checkContentAndUrl($poll, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 
         $this->view->setConfig('poll-inner');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $pollId);
+        $cacheID = $this->view->generateCacheId($this->categoryName, '', $pollID);
         if ($this->view->caching == 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
@@ -190,7 +191,7 @@ class PollsController extends Controller
                 $this->view->assign([
                     'poll'       => $poll,
                     'content'    => $poll,
-                    'contentId'  => $pollId,
+                    'contentId'  => $pollID,
                     'items'      => $items,
                     'otherPolls' => $otherPolls,
                 ]);
@@ -199,7 +200,7 @@ class PollsController extends Controller
             }
 
             // Used on module_comments.tpl
-            $this->view->assign('contentId', $pollId);
+            $this->view->assign('contentId', $pollID);
         }
 
         $cookieName = "poll-".$poll->id;
@@ -250,20 +251,15 @@ class PollsController extends Controller
      **/
     public function addVoteAction(Request $request)
     {
-        $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
-        $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
-        if (empty($dirtyID)) {
-            $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        }
+        $answer  = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
+        $pollID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
-        // Resolve poll ID, search in repository or redirect to 404
-        $pollId = \ContentManager::resolveID($dirtyID);
-        $poll   = $this->get('entity_repository')->find('Poll', $pollId);
+        $poll = $this->get('entity_repository')->find('Poll', $pollID);
         if (is_null($poll)) {
             throw new ResourceNotFoundException();
         }
 
-        $cookieName = "poll-".$pollId;
+        $cookieName = "poll-".$pollID;
         $cookie = $request->cookies->get($cookieName);
 
         $valid = 0;
@@ -278,8 +274,8 @@ class PollsController extends Controller
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
             // Clear all caches
-            $this->cleanCache($poll->category_name, $pollId);
-            $this->cleanCache('home', $pollId);
+            $this->cleanCache($poll->category_name, $pollID);
+            $this->cleanCache('home', $pollID);
             dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;
@@ -318,17 +314,17 @@ class PollsController extends Controller
      * Clean the cache for a given poll
      *
      * @param string $categoryName the category where the clean has to be done
-     * @param int $pollId the poll id where the clean has to be done
+     * @param int $pollID the poll id where the clean has to be done
      *
      * @return void
      **/
-    protected function cleanCache($categoryName, $pollId)
+    protected function cleanCache($categoryName, $pollID)
     {
 
         $cacheManager = $this->get('template_cache_manager');
         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
-        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollId);
+        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollID);
         $cacheManager->delete($cacheID, 'poll.tpl');
 
         $cacheID      = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);

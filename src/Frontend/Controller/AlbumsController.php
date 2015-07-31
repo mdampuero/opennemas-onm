@@ -175,11 +175,12 @@ class AlbumsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve album ID, search in repository or redirect to 404
-        $albumID = \ContentManager::resolveID($dirtyID);
-        $album   = $this->get('entity_repository')->find('Album', $albumID);
-        if (is_null($album)) {
+        list($albumID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $album = $this->get('entity_repository')->find('Album', $albumID);
+        if (!\ContentManager::checkContentAndUrl($album, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 

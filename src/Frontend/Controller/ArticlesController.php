@@ -44,9 +44,9 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         // Resolve article ID, search in repository or redirect to 404
-        $articleID = \ContentManager::resolveID($dirtyID);
-        $er        = $this->get('entity_repository');
-        $article   = $er->find('Article', $articleID);
+        list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
         if (is_null($article)) {
             throw new ResourceNotFoundException();
         }

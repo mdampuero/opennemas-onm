@@ -38,15 +38,22 @@ class ContentsController extends Controller
      **/
     public function printAction(Request $request)
     {
-        $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
-        $contentID = \ContentManager::resolveID($dirtyID);
+        preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
+        $dirtyID = $matches['date'].sprintf('%06d', $matches['id']);
+        list($contentID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         $content = new \Content($contentID);
         $content = $content->get($contentID);
+
+        if (!\ContentManager::checkContentAndUrl($content, $urlDate, $urlSlug)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
 
         // Check for paywall
         if (!is_null($content)) {
