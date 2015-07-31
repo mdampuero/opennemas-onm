@@ -70,18 +70,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user  = $token->getUser();
         $valid = true;
 
-        if ($request->get('recaptcha_challenge_field')) {
-            // New captcha instance
-            $captcha = getService('recaptcha')
-                ->setRemoteIp($request->getClientIp());
-
-            // Get reCaptcha validate response
-            $valid = $captcha->check(
-                $request->get('recaptcha_challenge_field'),
-                $request->get('recaptcha_response_field')
+        if ($request->get('g-recaptcha-response')) {
+            $recaptcha = getService('google_recaptcha')->getOnmRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
             );
-
-            $valid = $valid->isValid();
+            $valid = $resp->isSuccess();
         }
 
         // Set session array
