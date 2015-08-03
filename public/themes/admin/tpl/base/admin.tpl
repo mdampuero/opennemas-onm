@@ -329,7 +329,7 @@
                     <i class="fa fa-angle-down"></i>
                   </span>
                   <ul class="dropdown-menu on-right" role="menu">
-                    {if $smarty.session.isMaster}
+                    {if $smarty.session._sf2_attributes.user->isMaster()}
                       <li class="text-danger">
                         <span class="dropdown-static-item">
                           {t}This user is a master{/t}
@@ -338,7 +338,7 @@
                       <li class="divider"></li>
                     {/if}
                     <li>
-                      {if $smarty.session.isMaster}
+                      {if $smarty.session._sf2_attributes.user->isMaster()}
                         <a ng-href="/manager#/user/{$smarty.session.userid}/show">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
