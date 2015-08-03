@@ -134,7 +134,7 @@
                                 <div class="form-group">
                                     <label for="template" class="form-label">{t}Activated{/t}</label>
                                     <div class="controls">
-                                        <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0" />
+                                        <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
                                         <div><div></div></div>
                                     </div>
                                 </div>
