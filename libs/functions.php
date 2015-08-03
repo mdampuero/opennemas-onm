@@ -80,20 +80,23 @@ function logUserEvent($action = null, $id = null, $data = null)
     $logger = getService('application.log');
 
     $activatedUsers = \User::getTotalActivatedUsersRemaining(1, 1);
-    $currentUser = getService('security.context')->getToken()->getUser();
 
-    $message =  'User '.$currentUser->username.'(ID:'.$currentUser->id.') '.
-                'exectuted action '.$action.': user ID '.$id;
+    if(!is_null(getService('security.context')->getToken())) {
+        $currentUser = getService('security.context')->getToken()->getUser();
 
-    if (!is_null($data)) {
-        $message .= ' - username ('.$data['username'].')'.
-                    ' - user group ('.$data['id_user_group'].')'.
-                    ' - activated flag ('.$data['activated'].')';
+        $message =  'User '.$currentUser->username.'(ID:'.$currentUser->id.') '.
+                    'exectuted action '.$action.': user ID '.$id;
+
+        if (!is_null($data)) {
+            $message .= ' - username ('.$data['username'].')'.
+                        ' - user group ('.$data['id_user_group'].')'.
+                        ' - activated flag ('.$data['activated'].')';
+        }
+
+        $message .= ' - total users activated ('.$activatedUsers.')';
+
+        $logger->info($message);
     }
-
-    $message .= ' - total users activated ('.$activatedUsers.')';
-
-    $logger->info($message);
 }
 
 /**
