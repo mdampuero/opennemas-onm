@@ -26,9 +26,10 @@ class Recaptcha
      * @param SettingManager $sm       The setting service.
      * @param string         $key      The default private key.
      */
-    public function __construct($key)
+    public function __construct($sm, $key)
     {
         $this->key = $key;
+        $this->sm  = $sm;
     }
 
 
@@ -49,9 +50,9 @@ class Recaptcha
      */
     public function getPublicRecaptcha()
     {
-        $recaptcha = getService('setting_repository')->get('recaptcha');
+        $recaptcha = $this->sm->get('recaptcha');
 
-        if (!is_array($recaptcha) || !array_key_exists('public_key', $recaptcha)) {
+        if (!is_array($recaptcha) || !array_key_exists('private_key', $recaptcha)) {
             return false;
         }
 

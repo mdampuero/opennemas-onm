@@ -150,7 +150,7 @@ services:
 
     google_recaptcha:
         class: Onm\Recaptcha
-        arguments: [ %recaptcha_private_key% ]
+        arguments: [ @setting_repository, %recaptcha_private_key% ]
 
     recaptcha:
         class: Captcha\Captcha
