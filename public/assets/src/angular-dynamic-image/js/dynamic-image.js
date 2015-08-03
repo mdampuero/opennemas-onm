@@ -29,8 +29,11 @@
          *
          * @type {String}
          */
-        var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]" ng-class="{ \'loading\': loading }">' +
-          '<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
+          //'<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
+        var dynamicImageTpl = '<div class="dynamic-image-wrapper">' +
+          '<div [attributes]>' +
+            '<div class="dynamic-image-thumbnail[autoscaleClass]" ng-style="{ \'background-image\': \'url(\' + bg + \')\' }"></div>' +
+          '</div>' +
           '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
             '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
           '</div>' +
@@ -227,9 +230,14 @@
           var attributes = [];
           for (var i = 0; i < this.allowedAttributes.length; i++) {
             var name = this.allowedAttributes[i];
+            var value = '';
+
+            if (name === 'class') {
+              value += 'dynamic-image-thumbnail-wrapper ';
+            }
 
             if (options[name]) {
-              attributes.push(name + '="' + options[name] + '"');
+              attributes.push(name + '="' + value + options[name] + '"');
             }
           }
 
@@ -324,33 +332,33 @@
               DynamicImage.onlyImage = true;
             }
 
-            var defaults = DynamicImage.getDefaultSize(element);
-            $scope.height = defaults.height;
-            $scope.width = defaults.width;
-
-            var maxHeight = element.height();
-            var maxWidth  = element.width();
-
-            if (!maxWidth || !maxHeight) {
-              maxHeight = element.parent().height();
-              maxWidth  = element.parent().width();
-            }
-
-            $scope.width  = element.parent().width();
-
             var children  = element.children();
             var html      = DynamicImage.render(attrs, $scope.ngModel);
 
-            // Try to calculate height and width before compiling for flash
-            if ($scope.ngModel && !DynamicImage.onlyImage &&
-                DynamicImage.isFlash($scope.ngModel) &&
-                $scope.ngModel.height && $scope.ngModel.width) {
+            if (DynamicImage.isFlash && !DynamicImage.onlyImage) {
+              var defaults = DynamicImage.getDefaultSize(element);
 
-              var settings = DynamicImage.getSettings($scope.ngModel.height,
-                $scope.ngModel.width, maxHeight, maxWidth);
+              $scope.height = defaults.height;
+              $scope.width = defaults.width;
 
-              $scope.height = settings.height;
-              $scope.width  = settings.width;
+              var maxHeight = element.height();
+              var maxWidth  = element.width();
+
+              if (!maxWidth || !maxHeight) {
+                maxHeight = element.parent().height();
+                maxWidth  = element.parent().width();
+              }
+
+              // Try to calculate height and width before compiling for flash
+              if ($scope.ngModel && $scope.ngModel.height &&
+                  $scope.ngModel.width) {
+
+                var settings = DynamicImage.getSettings($scope.ngModel.height,
+                  $scope.ngModel.width, maxHeight, maxWidth);
+
+                $scope.height = settings.height;
+                $scope.width  = settings.width;
+              }
             }
 
             if (attrs.ngModel) {
@@ -366,45 +374,22 @@
 
             $scope.$watch('src', function(nv) {
               if (!DynamicImage.isFlash(nv)) {
+                //$scope.loading = true;
                 $scope.loading = true;
+
+                var img = new Image();
+                img.onload = function() {
+                  $scope.bg = nv;
+                  $scope.loading = false;
+
+                  $scope.$apply();
+                }
+
+                img.src = nv;
               }
             });
 
             var e = $compile(html)($scope);
-
-            // Remove loading spinner and scale image on load
-            e.find('img').bind('load', function() {
-              $scope.loading = false;
-
-              if (attrs.autoscale && attrs.autoscale === 'true') {
-                var image = new Image();
-                image.src = $scope.src;
-
-                var h = image.height;
-                var w = image.width;
-
-                if ($scope.ngModel.height && $scope.ngModel.width) {
-                  h = $scope.ngModel.height;
-                  w = $scope.ngModel.width;
-                }
-
-                if ($scope.src === DynamicImage.brokenImage) {
-                  h = 800;
-                  w = 800;
-                }
-
-                var settings = DynamicImage.getSettings(h, w, maxHeight, maxWidth);
-
-                $scope.height = settings.height;
-                $scope.width  = settings.width;
-              }
-
-              $scope.$apply();
-            });
-
-            e.find('img').bind('error', function() {
-              $scope.loading = false;
-            });
 
             e.append(children);
             element.replaceWith(e);
