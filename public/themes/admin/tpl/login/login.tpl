@@ -83,7 +83,7 @@
                                                 </div>
                                             </div>
                                             {if $failed_login_attempts >= 3}
-                                              {getRecaptchaHtml public_key=6LeMYAkTAAAAADP0NncqOUIydMymokSI91gFxdJL}
+                                              {getRecaptchaHtml onm=1}
                                             {/if}
                                             <div class="form-group text-right">
                                                 <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>

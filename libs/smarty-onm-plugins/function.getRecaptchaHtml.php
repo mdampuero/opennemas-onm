@@ -11,14 +11,14 @@ function smarty_function_getRecaptchaHtml($params, &$smarty)
     $lang = CURRENT_LANGUAGE;
 
     // Get publicKey if is not in params
-    if (empty($params['public_key'])) {
+    if (!isset($params['onm'])) {
         $recaptcha = $sm->get('recaptcha');
         // If not set public key, show a message
         if (!is_array($recaptcha) || !array_key_exists('public_key', $recaptcha)) {
             return _('reCaptcha public key is not set');
         }
     } else {
-        $recaptcha['public_key'] = $params['public_key'];
+        $recaptcha['public_key'] = getContainerParameter('recaptcha_public_key');
     }
 
     // Generate reCaptcha html

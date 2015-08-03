@@ -118,6 +118,7 @@ parameters:
     shared_key:           yoursharedkey
 
     recaptcha_private_key: 6LeMYAkTAAAAAFpxGah5BY2Svm01npk8iCwKAf1X
+    recaptcha_public_key:  6LeMYAkTAAAAADP0NncqOUIydMymokSI91gFxdJL
 
     sales_email: sales@openhost.es
 
