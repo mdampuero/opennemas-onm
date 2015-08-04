@@ -202,23 +202,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Billing{/t}</h4>
-          </div>
-          <div class="grid-body">
-            <div class="form-group">
-              <label class="form-label">{t}Last invoice date{/t}</label>
-              <div class="controls">
-                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -242,6 +225,47 @@
                   <span class="help muted" ng-if="support.description">( [% support.description %] )</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Billing{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="form-group">
+              <label class="form-label">{t}Last invoice date{/t}</label>
+              <div class="controls">
+                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-name">{t}Contact name{/t}</label>
+              <input class="form-control" id="contact-name" ng-model="instance.metas.billing.contact_name" required="required" type="text">
+            </div>
+            <div class="form-group">
+              <label for="company-name">{t}Company name{/t}</label>
+              <input class="form-control" id="company-name" ng-model="instance.metas.billing.company_name" required="required" type="text">
+            </div>
+            <div class="form-group">
+              <label for="contact-email">{t}Email{/t}</label>
+              <input class="form-control" id="contact-email" ng-model="instance.metas.billing.contact_email" required="required" type="text">
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <label for="nif">NIF/CIF</label>
+                <input class="form-control" id="nif" ng-model="instance.metas.billing.nif" required="required" type="text">
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="phone">{t}Phone number{/t}</label>
+                <input class="form-control" id="phone" ng-model="instance.metas.billing.phone" required="required" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address">{t}Address{/t}</label>
+              <input class="form-control" id="address" ng-model="instance.metas.billing.address" required="required" type="text">
             </div>
           </div>
         </div>
