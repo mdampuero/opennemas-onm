@@ -151,7 +151,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 m-b-15">
+      <div class="col-sm-6 col-xs-12 m-b-15">
         <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
           <div class="tiles white">
             <div class="tiles-body clearfix">
@@ -201,6 +201,33 @@
           <input name="modules" ng-value="activatedModules" type="hidden">
         </form>
       </div>
+      {if !empty($instance->metas) && array_key_exists('billing', $instance->metas)}
+        <div class="col-sm-6">
+          <div class="tiles white m-b-15">
+            <div class="tiles-body">
+              <div class="tiles-title text-uppercase text-black">
+                {t}Billing information{/t}
+              </div>
+              <div class="m-t-15">
+                <p>
+                <strong>{t}Company{/t}:</strong> {$instance->metas['billing']['company_name']}
+                </p>
+                <p>
+                <strong>{t}Name{/t}:</strong> {$instance->metas['billing']['contact_name']}
+                </p>
+                <p>
+                <strong>NIF/CIF:</strong> {$instance->metas['billing']['nif']}
+                </p>
+                <p>
+                <strong>{t}Address{/t}:</strong> {$instance->metas['billing']['address']}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+    </div>
+    <div class="row">
       <div class="col-xs-12 m-b-15 ng-cloak">
         <div class="tiles white">
             <div class="clearfix b-grey b-b tiles-body">
