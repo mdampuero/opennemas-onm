@@ -86,10 +86,10 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <button class="btn btn-block btn-white" ng-click="checkout()" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
-                    </button>
+                    </a>
                   </div>
                 </div>
               </li>
@@ -259,9 +259,6 @@
           </div>
         </div>
       </div>
-    </script>
-    <script type="text/ng-template" id="modal-checkout">
-      {include file="market/modal/_checkout.tpl"}
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="market/modal/_details.tpl"}
