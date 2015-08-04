@@ -36,8 +36,8 @@ class ClientInformationController extends Controller
      **/
     public function defaultAction()
     {
-        // Fetch instance information
-        $instance = $this->container->get('instance_manager')->current_instance;
+        $instance = $this->get('instance');
+
         // Get all modules grouped
         $availableModules = mm::getAvailableModulesGrouped();
 
@@ -125,10 +125,19 @@ class ClientInformationController extends Controller
 
         $instance->activated_modules = array_values($instance->activated_modules);
 
+        $billing = [];
+
+        if (!empty($instance->metas)
+            && array_key_exists('billing', $instance->metas)
+        ) {
+            $billing = $instace->metas['billing'];
+        }
+
         return $this->render(
             'stats/stats_info.tpl',
             array(
                 'instance'            => $instance,
+                'billing'             => $billing,
                 'upgrade'             => $upgradeChanges,
                 'downgrade'           => $downgradeChanges,
                 'available_modules'   => $availableModules,
