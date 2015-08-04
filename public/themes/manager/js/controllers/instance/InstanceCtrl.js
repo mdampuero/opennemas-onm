@@ -43,6 +43,9 @@
             max_mailing:   0,
             max_users:   0,
             time_zone:     '335'
+          },
+          metas: {
+            billing: []
           }
         };
 
