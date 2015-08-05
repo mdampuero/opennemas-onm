@@ -205,11 +205,21 @@
           <div class="grid-body">
             <div class="grid-body-wrapper" ng-show="!edit_billing">
               <ul class="no-style" ng-if="instance.metas.billing">
-                <li>{t}Company{/t}: [% instance.metas.billing.company_name %]</li>
-                <li>{t}Name{/t}: [% instance.metas.billing.contact_name %]</li>
-                <li>{t}Email{/t}: [% instance.metas.billing.contact_email %]</li>
-                <li>{t}Phone{/t}: [% instance.metas.billing.phone %]</li>
-                <li>{t}Address{/t}: [% instance.metas.billing.address %]</li>
+                <li ng-show="instance.metas.billing.company">
+                  <strong>{t}Company{/t}:</strong> [% instance.metas.billing.company_name %]
+                </li>
+                <li>
+                  <strong>{t}Name{/t}:</strong> [% instance.metas.billing.contact_name %]
+                </li>
+                <li>
+                 <strong>{t}Email{/t}:</strong> [% instance.metas.billing.contact_email %]
+                </li>
+                <li>
+                  <strong>{t}Phone{/t}:</strong> [% instance.metas.billing.phone %]
+                </li>
+                <li>
+                  <strong>{t}Address{/t}:</strong> [% instance.metas.billing.address %]
+                </li>
               </ul>
               <div class="text-center" ng-if="!instance.metas.billing">
                 <h4 class="pointer" ng-click="editBilling()">
@@ -219,31 +229,42 @@
               </div>
             </div>
             <div class="grid-body-wrapper" ng-animate="'animate'" ng-show="edit_billing">
-              <div class="form-group">
-                <label class="form-label">{t}Last invoice date{/t}</label>
-                <div class="controls">
-                  <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label class="form-label">{t}Type{/t}</label>
+                  <div class="controls">
+                    <div class="btn-group">
+                      <button class="btn" ng-class="{ 'btn-primary': !instance.metas.billing.company, 'btn-white': instance.metas.billing.company }" ng-click="instance.metas.billing.company = 0">
+                        Person
+                      </button>
+                      <button class="btn" ng-class="{ 'btn-primary': instance.metas.billing.company, 'btn-white': !instance.metas.billing.company }" ng-click="instance.metas.billing.company = 1">
+                        Company
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label class="form-label">{t}Last invoice date{/t}</label>
+                  <div class="controls">
+                    <quick-datepicker icon-class="fa fa-clock-o" label-format="d" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                  </div>
                 </div>
               </div>
-              <div class="btn-group form-group">
-                <button class="btn" ng-class="{ 'btn-primary': !instance.metas.billing.company, 'btn-white': instance.metas.billing.company }" ng-click="instance.metas.billing.company = 0">
-                  Person
-                </button>
-                <button class="btn" ng-class="{ 'btn-primary': instance.metas.billing.company, 'btn-white': !instance.metas.billing.company }" ng-click="instance.metas.billing.company = 1">
-                  Company
-                </button>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label for="contact-name">{t}Contact name{/t}</label>
+                  <input class="form-control" id="contact-name" ng-model="instance.metas.billing.contact_name" type="text">
+                </div>
+                <div class="col-md-6 form-group" ng-show="instance.metas.billing.company">
+                  <label for="company-name">{t}Company name{/t}</label>
+                  <input class="form-control" id="company-name" ng-model="instance.metas.billing.company_name" type="text">
+                </div>
               </div>
-              <div class="form-group">
-                <label for="contact-name">{t}Contact name{/t}</label>
-                <input class="form-control" id="contact-name" ng-model="instance.metas.billing.contact_name" required="required" type="text">
-              </div>
-              <div class="form-group" ng-show="instance.metas.billing.company">
-                <label for="company-name">{t}Company name{/t}</label>
-                <input class="form-control" id="company-name" ng-model="instance.metas.billing.company_name" required="required" type="text">
-              </div>
-              <div class="form-group">
-                <label for="contact-email">{t}Email{/t}</label>
-                <input class="form-control" id="contact-email" ng-model="instance.metas.billing.contact_email" required="required" type="text">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label for="contact-email">{t}Email{/t}</label>
+                  <input class="form-control" id="contact-email" ng-model="instance.metas.billing.contact_email" type="text">
+                </div>
               </div>
               <div class="row">
                 <div class="form-group col-sm-6">
@@ -251,16 +272,16 @@
                     <span ng-if="instance.metas.billing.type != 'company'">NIF</span>
                     <span ng-if="instance.metas.billing.type == 'company'">CIF</span>
                   </label>
-                  <input class="form-control" id="nif" ng-model="instance.metas.billing.nif" required="required" type="text">
+                  <input class="form-control" id="nif" ng-model="instance.metas.billing.nif" type="text">
                 </div>
                 <div class="form-group col-sm-6">
                   <label for="phone">{t}Phone number{/t}</label>
-                  <input class="form-control" id="phone" ng-model="instance.metas.billing.phone" required="required" type="text">
+                  <input class="form-control" id="phone" ng-model="instance.metas.billing.phone" type="text">
                 </div>
               </div>
               <div class="form-group">
                 <label for="address">{t}Address{/t}</label>
-                <input class="form-control" id="address" ng-model="instance.metas.billing.address" required="required" type="text">
+                <input class="form-control" id="address" ng-model="instance.metas.billing.address" type="text">
               </div>
               <div class="text-center">
                 <button class="btn btn-white" ng-click="edit_billing = false" type="button">{t}Save{/t}</button>
@@ -419,45 +440,59 @@
     <h4 class="modal-title">{t}Billing{/t}</h4>
   </div>
   <div class="modal-body">
-    <div class="form-group">
-      <label class="form-label">{t}Last invoice date{/t}</label>
-      <div class="controls">
-        <quick-datepicker icon-class="fa fa-clock-o" ng-model="template.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <label class="form-label">{t}Type{/t}</label>
+        <div class="controls">
+          <div class="btn-group">
+            <button class="btn" ng-class="{ 'btn-primary': !template.billing.company, 'btn-white': template.billing.company }" ng-click="template.billing.company = 0">
+              Person
+            </button>
+            <button class="btn" ng-class="{ 'btn-primary': template.billing.company, 'btn-white': !template.billing.company }" ng-click="template.billing.company = 1">
+              Company
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 form-group">
+        <label class="form-label">{t}Last invoice date{/t}</label>
+        <div class="controls">
+          <quick-datepicker icon-class="fa fa-clock-o" label-format="d" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+        </div>
       </div>
     </div>
-    <div class="btn-group form-group">
-      <button class="btn" ng-class="{ 'btn-primary': !template.billing.company, 'btn-white': template.billing.company }" ng-click="template.billing.company = 0">
-        Person
-      </button>
-      <button class="btn" ng-class="{ 'btn-primary': template.billing.company, 'btn-white': !template.billing.company }" ng-click="template.billing.company = 1">
-        Company
-      </button>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <label for="contact-name">{t}Contact name{/t}</label>
+        <input class="form-control" id="contact-name" ng-model="template.billing.contact_name" type="text">
+      </div>
+      <div class="col-md-6 form-group" ng-show="template.billing.company">
+        <label for="company-name">{t}Company name{/t}</label>
+        <input class="form-control" id="company-name" ng-model="template.billing.company_name" type="text">
+      </div>
     </div>
-    <div class="form-group">
-      <label for="contact-name">{t}Contact name{/t}</label>
-      <input class="form-control" id="contact-name" ng-model="template.billing.contact_name" required="required" type="text">
-    </div>
-    <div class="form-group" ng-show="template.billing.company">
-      <label for="company-name">{t}Company name{/t}</label>
-      <input class="form-control" id="company-name" ng-model="template.billing.company_name" required="required" type="text">
-    </div>
-    <div class="form-group">
-      <label for="contact-email">{t}Email{/t}</label>
-      <input class="form-control" id="contact-email" ng-model="template.billing.contact_email" required="required" type="text">
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <label for="contact-email">{t}Email{/t}</label>
+        <input class="form-control" id="contact-email" ng-model="template.billing.contact_email" type="text">
+      </div>
     </div>
     <div class="row">
       <div class="form-group col-sm-6">
-        <label for="nif">NIF/CIF</label>
-        <input class="form-control" id="nif" ng-model="template.billing.nif" required="required" type="text">
+        <label for="nif">
+          <span ng-if="template.billing.type != 'company'">NIF</span>
+          <span ng-if="template.billing.type == 'company'">CIF</span>
+        </label>
+        <input class="form-control" id="nif" ng-model="template.billing.nif" type="text">
       </div>
       <div class="form-group col-sm-6">
         <label for="phone">{t}Phone number{/t}</label>
-        <input class="form-control" id="phone" ng-model="template.billing.phone" required="required" type="text">
+        <input class="form-control" id="phone" ng-model="template.billing.phone" type="text">
       </div>
     </div>
     <div class="form-group">
       <label for="address">{t}Address{/t}</label>
-      <input class="form-control" id="address" ng-model="template.billing.address" required="required" type="text">
+      <input class="form-control" id="address" ng-model="template.billing.address" type="text">
     </div>
   </div>
   <div class="modal-footer">
