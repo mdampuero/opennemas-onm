@@ -142,7 +142,7 @@ class CategoryController extends Controller
                 'cache_id'        => $cacheId,
                 'actual_category' => $categoryName,
                 'advertisements'  => $this->getInnerAds($category->id),
-                'x-tags'          => "category-frontpage,$categoryName,$page"
+                'x-tags'          => 'category-frontpage,'.$categoryName.','.$page
             ]
         );
     }
@@ -218,7 +218,7 @@ class CategoryController extends Controller
             array(
                 'cache_id'       => $cacheId,
                 'advertisements' => $ads,
-                'x-tags'         => "ext-category,$categoryName,$page",
+                'x-tags'         => 'ext-category,'.$categoryName.','.$page
             )
         );
     }

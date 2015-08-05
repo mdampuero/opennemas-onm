@@ -114,7 +114,7 @@ class BlogsController extends Controller
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds(),
                 'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => "blog-frontpage,$page"
+                'x-tags'          => 'blog-frontpage,'.$page
             )
         );
     }
@@ -234,7 +234,7 @@ class BlogsController extends Controller
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds(),
                 'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => "blog-author-frontpage,$slug,$page",
+                'x-tags'          => 'blog-author-frontpage,'.$slug.','.$page
             ]
         );
 
@@ -312,7 +312,7 @@ class BlogsController extends Controller
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds('inner'),
                 'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => "blog-inner,$blogID",
+                'x-tags'          => 'blog-inner,'.$blogID
             ]
         );
     }

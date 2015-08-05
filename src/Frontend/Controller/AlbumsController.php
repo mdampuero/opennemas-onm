@@ -159,7 +159,7 @@ class AlbumsController extends Controller
             array(
                 'cache_id'       => $cacheID,
                 'advertisements' => $this->getAds(),
-                'x-tags'         => "album-frontpage,{$this->page}"
+                'x-tags'         => 'album-frontpage,'.$this->page
             )
         );
     }
@@ -251,7 +251,7 @@ class AlbumsController extends Controller
                 'cache_id'       => $cacheID,
                 'contentId'      => $albumID,
                 'advertisements' => $this->getAds('inner'),
-                'x-tags'         => "album,$albumID"
+                'x-tags'         => 'album,'.$albumID
             )
         );
     }
