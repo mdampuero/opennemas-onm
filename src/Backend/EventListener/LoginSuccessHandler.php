@@ -48,11 +48,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Router          $router  The router service.
      * @param Session         $session The session.
      */
-    public function __construct($context, $router, $session)
+    public function __construct($context, $router, $session, $recaptcha)
     {
-        $this->context = $context;
-        $this->router  = $router;
-        $this->session = $session;
+        $this->context   = $context;
+        $this->router    = $router;
+        $this->session   = $session;
+        $this->recaptcha = $recaptcha;
     }
 
     /**
@@ -71,7 +72,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $valid = true;
 
         if ($request->get('g-recaptcha-response')) {
-            $recaptcha = getService('google_recaptcha')->getOnmRecaptcha();
+            $recaptcha = $this->recaptcha->getOnmRecaptcha();
             $resp = $recaptcha->verify(
                 $request->get('g-recaptcha-response'),
                 $request->getClientIp()
