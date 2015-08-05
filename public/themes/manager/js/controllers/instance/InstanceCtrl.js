@@ -93,7 +93,11 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { billing: $scope.instance.metas.billing };
+                if ($scope.instance.metas && $scope.instance.metas.billing) {
+                  return { billing: $scope.instance.metas.billing };
+                } else {
+                  return { billing: {} };
+                }
               },
               success: function() {
                 return function(m, t) {
