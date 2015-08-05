@@ -94,7 +94,7 @@
             resolve: {
               template: function() {
                 if ($scope.instance.metas && $scope.instance.metas.billing) {
-                  return { billing: $scope.instance.metas.billing };
+                  return { billing: angular.copy($scope.instance.metas.billing) };
                 } else {
                   return { billing: {} };
                 }
@@ -109,7 +109,6 @@
 
           modal.result.then(function(response) {
             $scope.instance.metas.billing = response.billing;
-            console.log(response);
           });
         }
 
