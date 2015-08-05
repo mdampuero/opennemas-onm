@@ -683,7 +683,7 @@ class UserController extends Controller
             'user/author_frontpage.tpl',
             array(
                 'cache_id'    => $cacheID,
-                'x-tags'      => 'author_user_frontpage,'.$page,
+                'x-tags'      => 'author_user_frontpage,'.$slug.','.$page,
                 'x-cache-for' => '1d'
             )
         );

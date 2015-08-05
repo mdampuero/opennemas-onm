@@ -65,7 +65,7 @@ class ContentsController extends Controller
                 'cache_id' => $cacheID,
                 'content'  => $content,
                 'article'  => $content,
-                'x-tags'   => "content-print,$contentID",
+                'x-tags'   => 'content-print,'.$contentID
             )
         );
     }
@@ -116,7 +116,7 @@ class ContentsController extends Controller
                 'cache_id' => $cacheID,
                 'content'  => $content,
                 'article'  => $content,
-                'x-tags'   => "content-print,$contentID",
+                'x-tags'   => 'ext-content-print,'.$contentID
             )
         );
     }
