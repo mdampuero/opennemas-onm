@@ -48,7 +48,8 @@
 
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less"
+      @Common/src/opennemas-webarch/less/main.less,
+      @ManagerTheme/less/main.less"
 
     filters="cssrewrite,less"}
       <link rel="stylesheet" type="text/css" href="{$asset_url}">

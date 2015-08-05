@@ -87,6 +87,28 @@
           }
         };
 
+        $scope.editBilling = function() {
+          var modal = $modal.open({
+            templateUrl: 'modal-billing',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return { billing: $scope.instance.metas.billing };
+              },
+              success: function() {
+                return function(m, t) {
+                  m.close(t);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            $scope.instance.metas.billing = response.billing;
+            console.log(response);
+          });
+        }
+
         /**
          * @function initializeSupportPlan
          * @memberOf InstanceCtrl

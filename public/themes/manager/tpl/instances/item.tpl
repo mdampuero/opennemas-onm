@@ -46,62 +46,52 @@
 <div class="content">
   <form name="instanceForm" novalidate>
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <span class="semi-bold" ng-if="instance.id">
-                [% instance.name %]
-              </span>
-              <span class="semi-bold" ng-if="!instance.id">
-                {t}New instance{/t}
-              </span>
-            </h4>
-          </div>
           <div class="grid-body instance-form">
             <div class="row">
-              <div ng-class="{ 'col-sm-4': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
+              <div class="col-lg-2 col-md-3 col-sm-4" ng-if="instance.id">
                 <dl ng-if="instance.id">
                   <dt>
-                  <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
+                    <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
                   </dt>
                   <dd>
-                  <a href="mailto:[% instance.contact_mail %]">[% instance.contact_mail %]</a>
+                    <a href="mailto:[% instance.contact_mail %]">[% instance.contact_mail %]</a>
                   </dd>
                   <dt>
-                  <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
+                    <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
                   </dt>
                   <dd>
-                  [% instance.created %]
+                    [% instance.created %]
                   </dd>
                   <dt>
-                  <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
+                    <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
                   </dt>
                   <dd>
-                  <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
-                  <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
+                    <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
+                    <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
                   </dd>
                   <dt>
-                  <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
+                    <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
                   </dt>
                   <dd>
-                  [% instance.media_size | number: 2 %] MB
+                    [% instance.media_size | number: 2 %] MB
                   </dd>
                   <dt>
-                  <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
+                    <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
                   </dt>
                   <dd>
-                  [% template.languages[instance.external.site_language] %]
+                    [% template.languages[instance.external.site_language] %]
                   </dd>
                   <dt>
-                  <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
+                    <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
                   </dt>
                   <dd>
-                  [% template.timezones[instance.external.time_zone] %]
+                    [% template.timezones[instance.external.time_zone] %]
                   </dd>
                 </dl>
               </div>
-              <div ng-class="{ 'col-sm-8': instance.id, 'col-sm-12': !instance.id }">
+              <div ng-class="{ 'col-lg-10 col-md-9 col-sm-8': instance.id, 'col-sm-12': !instance.id }">
                 <div class="form-group">
                   <label class="form-label">
                     {t}Site name{/t}
@@ -145,7 +135,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -154,29 +144,25 @@
             </h4>
           </div>
           <div class="grid-body instance-domain-list">
-            <div class="row form-group" ng-if="instance.domains.length > 0">
-              <div class="col-sm-12">
-                <div class="radio">
-                  <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
-                  <label for="domain0">{t}No main domain{/t}</label>
-                </div>
+            <div class="form-group" ng-if="instance.domains.length > 0">
+              <div class="radio">
+                <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
+                <label for="domain0">{t}No main domain{/t}</label>
               </div>
             </div>
-            <div class="row form-group" ng-repeat="domain in instance.domains track by $index">
-              <div class="col-sm-12">
-                <div class="radio radio-input radio-primary">
-                  <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]" class="blue">
-                  <label for="domain[% $index + 1 %]">
-                    <div class="input-group">
-                      <input class="form-control" ng-model="instance.domains[$index]" type="text">
-                      <span class="input-group-btn">
-                        <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
-                          <i class="fa fa-trash-o"></i>
-                        </button>
-                      </span>
-                    </div>
-                  </label>
-                </div>
+            <div class="form-group" ng-repeat="domain in instance.domains track by $index">
+              <div class="radio radio-input radio-primary">
+                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]" class="blue">
+                <label for="domain[% $index + 1 %]">
+                  <div class="input-group">
+                    <input class="form-control" ng-model="instance.domains[$index]" type="text">
+                    <span class="input-group-btn">
+                      <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </span>
+                  </div>
+                </label>
               </div>
             </div>
             <div class="form-group">
@@ -202,77 +188,90 @@
             </div>
           </div>
         </div>
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              {t}Support{/t}
-              <i>
-                <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
-                  &nbsp;&nbsp;+ info
-                </a>
-              </i>
-            </h4>
-          </div>
-          <div class="grid-body support-list">
-            <div class="form-group">
-              <label class="form-label">{t}Development plan{/t}</label>
-              <div class="controls" ng-init="initializeSupportPlan()">
-                <div class="radio col-sm-6" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}" >
-                  <input id="[% support.id %]" ng-change="updateSupport(support.id)" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
-                  <label for="[% support.id %]">
-                    [% support.name %]
-                  </label>
-                  <span class="help muted" ng-if="support.description">( [% support.description %] )</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-6 col-xs-12">
         <div class="grid simple">
+          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="edit_billing = !edit_billing" type="button">
+            <i class="fa fa-edit"></i>
+            {t}Edit{/t}
+          </button>
+          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="editBilling()" type="button">
+            <i class="fa fa-edit"></i>
+            Modal
+          </button>
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
           </div>
           <div class="grid-body">
-            <div class="form-group">
-              <label class="form-label">{t}Last invoice date{/t}</label>
-              <div class="controls">
-                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+            <div class="grid-body-wrapper" ng-show="!edit_billing">
+              <ul class="no-style" ng-if="instance.metas.billing">
+                <li>{t}Company{/t}: [% instance.metas.billing.company_name %]</li>
+                <li>{t}Name{/t}: [% instance.metas.billing.contact_name %]</li>
+                <li>{t}Email{/t}: [% instance.metas.billing.contact_email %]</li>
+                <li>{t}Phone{/t}: [% instance.metas.billing.phone %]</li>
+                <li>{t}Address{/t}: [% instance.metas.billing.address %]</li>
+              </ul>
+              <div class="text-center" ng-if="!instance.metas.billing">
+                <h4 class="pointer" ng-click="editBilling()">
+                  <i class="fa fa-plus"></i>
+                  {t}Add billing information{/t}
+                </h4>
               </div>
             </div>
-            <div class="form-group">
-              <label for="contact-name">{t}Contact name{/t}</label>
-              <input class="form-control" id="contact-name" ng-model="instance.metas.billing.contact_name" required="required" type="text">
-            </div>
-            <div class="form-group">
-              <label for="company-name">{t}Company name{/t}</label>
-              <input class="form-control" id="company-name" ng-model="instance.metas.billing.company_name" required="required" type="text">
-            </div>
-            <div class="form-group">
-              <label for="contact-email">{t}Email{/t}</label>
-              <input class="form-control" id="contact-email" ng-model="instance.metas.billing.contact_email" required="required" type="text">
-            </div>
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label for="nif">NIF/CIF</label>
-                <input class="form-control" id="nif" ng-model="instance.metas.billing.nif" required="required" type="text">
+            <div class="grid-body-wrapper" ng-animate="'animate'" ng-show="edit_billing">
+              <div class="form-group">
+                <label class="form-label">{t}Last invoice date{/t}</label>
+                <div class="controls">
+                  <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                </div>
               </div>
-              <div class="form-group col-sm-6">
-                <label for="phone">{t}Phone number{/t}</label>
-                <input class="form-control" id="phone" ng-model="instance.metas.billing.phone" required="required" type="text">
+              <div class="btn-group form-group">
+                <button class="btn" ng-class="{ 'btn-primary': !instance.metas.billing.company, 'btn-white': instance.metas.billing.company }" ng-click="instance.metas.billing.company = 0">
+                  Person
+                </button>
+                <button class="btn" ng-class="{ 'btn-primary': instance.metas.billing.company, 'btn-white': !instance.metas.billing.company }" ng-click="instance.metas.billing.company = 1">
+                  Company
+                </button>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="address">{t}Address{/t}</label>
-              <input class="form-control" id="address" ng-model="instance.metas.billing.address" required="required" type="text">
+              <div class="form-group">
+                <label for="contact-name">{t}Contact name{/t}</label>
+                <input class="form-control" id="contact-name" ng-model="instance.metas.billing.contact_name" required="required" type="text">
+              </div>
+              <div class="form-group" ng-show="instance.metas.billing.company">
+                <label for="company-name">{t}Company name{/t}</label>
+                <input class="form-control" id="company-name" ng-model="instance.metas.billing.company_name" required="required" type="text">
+              </div>
+              <div class="form-group">
+                <label for="contact-email">{t}Email{/t}</label>
+                <input class="form-control" id="contact-email" ng-model="instance.metas.billing.contact_email" required="required" type="text">
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="nif">
+                    <span ng-if="instance.metas.billing.type != 'company'">NIF</span>
+                    <span ng-if="instance.metas.billing.type == 'company'">CIF</span>
+                  </label>
+                  <input class="form-control" id="nif" ng-model="instance.metas.billing.nif" required="required" type="text">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="phone">{t}Phone number{/t}</label>
+                  <input class="form-control" id="phone" ng-model="instance.metas.billing.phone" required="required" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="address">{t}Address{/t}</label>
+                <input class="form-control" id="address" ng-model="instance.metas.billing.address" required="required" type="text">
+              </div>
+              <div class="text-center">
+                <button class="btn btn-white" ng-click="edit_billing = false" type="button">{t}Save{/t}</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-12">
+    <div class="infinite-row">
+      <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Modules{/t}</h4>
@@ -285,17 +284,15 @@
                 </div>
               </div>
             </div>
-            <div class="row" ng-repeat="planName in template.plans">
-              <div class="col-sm-12 instance-plan-block">
-                <div class="col-sm-12 m-b-10 m-t-10">
-                  <div class="checkbox check-default check-title col-sm-12">
-                    <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
-                    <label for="checkbox-[% planName %]">
-                      <h5>Plan [% planName %]</h5>
-                    </label>
-                  </div>
+            <div class="infinite-row">
+              <div class="instance-plan" ng-repeat="planName in template.plans">
+                <div class="checkbox check-default check-title">
+                  <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
+                  <label for="checkbox-[% planName %]">
+                    <h5>Plan [% planName %]</h5>
+                  </label>
                 </div>
-                <div class="col-sm-4 m-b-5" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                <div class="m-b-5" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
                   <div class="checkbox check-default">
                     <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
                     <label for="checkbox-[% module.id %]">
@@ -314,9 +311,31 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
+      <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>
+              {t}Support{/t}
+              <i>
+                <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
+                  &nbsp;&nbsp;+ info
+                </a>
+              </i>
+            </h4>
+          </div>
+          <div class="grid-body support-list">
+            <div class="form-group" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}">
+              <div class="radio" ng-init="initializeSupportPlan()">
+                <input id="[% support.id %]" ng-change="updateSupport(support.id)" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
+                <label for="[% support.id %]" tooltip="[% support.description %]" tooltip-placement="right">
+                  [% support.name %]
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Internal settings{/t}</h4>
@@ -368,7 +387,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-lg-6 col-md-4 col-sm-122 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>External services</h4>
@@ -395,3 +414,53 @@
     </div>
   </form>
 </div>
+<script type="text/ng-template" id="modal-billing">
+  <div class="modal-header">
+    <h4 class="modal-title">{t}Billing{/t}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">{t}Last invoice date{/t}</label>
+      <div class="controls">
+        <quick-datepicker icon-class="fa fa-clock-o" ng-model="template.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+      </div>
+    </div>
+    <div class="btn-group form-group">
+      <button class="btn" ng-class="{ 'btn-primary': !template.billing.company, 'btn-white': template.billing.company }" ng-click="template.billing.company = 0">
+        Person
+      </button>
+      <button class="btn" ng-class="{ 'btn-primary': template.billing.company, 'btn-white': !template.billing.company }" ng-click="template.billing.company = 1">
+        Company
+      </button>
+    </div>
+    <div class="form-group">
+      <label for="contact-name">{t}Contact name{/t}</label>
+      <input class="form-control" id="contact-name" ng-model="template.billing.contact_name" required="required" type="text">
+    </div>
+    <div class="form-group" ng-show="template.billing.company">
+      <label for="company-name">{t}Company name{/t}</label>
+      <input class="form-control" id="company-name" ng-model="template.billing.company_name" required="required" type="text">
+    </div>
+    <div class="form-group">
+      <label for="contact-email">{t}Email{/t}</label>
+      <input class="form-control" id="contact-email" ng-model="template.billing.contact_email" required="required" type="text">
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label for="nif">NIF/CIF</label>
+        <input class="form-control" id="nif" ng-model="template.billing.nif" required="required" type="text">
+      </div>
+      <div class="form-group col-sm-6">
+        <label for="phone">{t}Phone number{/t}</label>
+        <input class="form-control" id="phone" ng-model="template.billing.phone" required="required" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="address">{t}Address{/t}</label>
+      <input class="form-control" id="address" ng-model="template.billing.address" required="required" type="text">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="confirm()" type="button">{t}Save{/t}</button>
+  </div>
+</script>
