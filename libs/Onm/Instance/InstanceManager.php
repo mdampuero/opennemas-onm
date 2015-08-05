@@ -480,8 +480,8 @@ class InstanceManager extends BaseManager
 
         // Delete metas
         $delete = array_diff(
-            array_keys($instance->_metas),
-            array_keys($instance->metas)
+            !empty($instance->_metas) ? array_keys($instance->_metas) : [],
+            !empty($instance->metas) ? array_keys($instance->metas) : []
         );
 
         if (!empty($delete)) {
