@@ -47,6 +47,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param SecurityContext $context The security context.
      * @param Router          $router  The router service.
      * @param Session         $session The session.
+     * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
     public function __construct($context, $router, $session, $recaptcha)
     {
