@@ -15,7 +15,7 @@ services:
 
     kernel.listener.user_listener:
         class: Framework\EventListener\UserListener
-        arguments: [ @security.context, @onm_user_provider, @router ]
+        arguments: [ @security.context, @onm_user_provider, @router, @session ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 

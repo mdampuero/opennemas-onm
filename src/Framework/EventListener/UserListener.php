@@ -23,16 +23,32 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class UserListener implements EventSubscriberInterface
 {
     /**
+     * The security context.
+     *
      * @var SecurityContextInterface
      */
     private $context;
 
     /**
-     * The user provider
+     * The user provider.
      *
      * @var OnmUserProvider
      */
     private $provider;
+
+    /**
+     * The router service.
+     *
+     * @var OnmUserProvider
+     */
+    private $router;
+
+    /**
+     * The current session.
+     *
+     * @var Session
+     */
+    private $session;
 
     /**
      * Initializes the listener.
@@ -40,12 +56,14 @@ class UserListener implements EventSubscriberInterface
      * @param SecurityContext $context  The security context service.
      * @param OnmUserProvider $provider The user provider.
      * @param Router          $router   The router service.
+     * @param Session         $session  The current session.
      */
-    public function __construct($context, $provider, $router)
+    public function __construct($context, $provider, $router, $session)
     {
         $this->context  = $context;
         $this->provider = $provider;
         $this->router   = $router;
+        $this->session  = $session;
     }
 
     /**
@@ -75,6 +93,11 @@ class UserListener implements EventSubscriberInterface
             getService('dbal_connection')->selectDatabase($database);
             getService('cache')->setNamespace($namespace);
             $GLOBALS['application']->conn->selectDatabase($database);
+
+            // TODO: Remove 1-2 days after deploy
+            if (empty($this->session->get('user'))) {
+                $this->session->set('user', $user);
+            }
 
             if ($user->isMaster() || $user->isEnabled()) {
                 return;
