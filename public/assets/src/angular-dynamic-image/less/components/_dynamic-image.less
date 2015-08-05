@@ -48,6 +48,23 @@
     }
   }
 
+  .dynamic-image-thumbnail {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    padding-bottom: 100%;
+
+    &.autoscale {
+      background-size: contain;
+    }
+  }
+
+  .dynamic-image-thumbnail-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+
   .swf-overlay {
     bottom: 0;
     left: 0;

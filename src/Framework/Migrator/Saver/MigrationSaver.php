@@ -731,6 +731,30 @@ class MigrationSaver
                             );
                         }
 
+                        // Update opinion img2 and img2_footer
+                        if (isset($values['opinion'])
+                            && $values['opinion'] !== false
+                            && array_key_exists('img2_footer', $values)
+                        ) {
+                            $this->updateOpinionPhoto(
+                                $values['opinion'],
+                                $id,
+                                $values['img2_footer']
+                            );
+                        }
+
+                        // Update opinion img1 and img1_footer
+                        if (isset($values['opinion'])
+                            && $values['opinion'] !== false
+                            && array_key_exists('img1_footer', $values)
+                        ) {
+                            $this->updateOpinionFrontpagePhoto(
+                                $values['opinion'],
+                                $id,
+                                $values['img1_footer']
+                            );
+                        }
+
                         $this->createTranslation(
                             $values[$schema['translation']['field']],
                             $id,
@@ -1206,13 +1230,11 @@ class MigrationSaver
                     $field = $this->convertToSlug($field);
                     break;
                 case 'substr':
-                    $offset = array_key_exists('offset', $params['substr']) ?
-                        $params['substr']['offset'] : 0;
-                    $delimiter = $params['substr']['delimiter'];
-                    $start = array_key_exists('start', $params['substr']) ?
-                        $params['substr']['start'] : 0;
-                    $pos = (array_key_exists('strrpos', $params['substr'])
-                        && $params['substr']['strrpos']) ?
+                    $offset = array_key_exists('offset', $params) ? $params['offset'] : 0;
+                    $delimiter = $params['delimiter'];
+                    $start = array_key_exists('start', $params) ? $params['start'] : 0;
+                    $pos = (array_key_exists('strrpos', $params)
+                        && $params['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
 
@@ -1223,11 +1245,10 @@ class MigrationSaver
                     }
                     break;
                 case 'substrr':
-                    $offset = array_key_exists('offset', $params['substrr']) ?
-                        $params['substrr']['offset'] : 0;
-                    $delimiter = $params['substrr']['delimiter'];
-                    $pos = (array_key_exists('strrpos', $params['substrr'])
-                        && $params['substrr']['strrpos']) ?
+                    $offset = array_key_exists('offset', $params) ? $params['offset'] : 0;
+                    $delimiter = $params['delimiter'];
+                    $pos = (array_key_exists('strrpos', $params)
+                        && $params['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
 
@@ -1333,6 +1354,54 @@ class MigrationSaver
             ."WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
+    }
+
+    /**
+     * Updates img1 and im1_footer fields from an opinion.
+     *
+     * @param integer $id     Opinion id.
+     * @param integer $photo  Photo id.
+     * @param string  $footer Footer value for the photo.
+     */
+    protected function updateOpinionFrontpagePhoto($id, $photo, $footer)
+    {
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img1', $photo, $photo);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
+
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img1_footer', $footer, $footer);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
+    }
+
+    /**
+     * Updates img2 and img2_footer fields from an opinion.
+     *
+     * @param integer $id     Opinin id.
+     * @param integer $photo  Photo id.
+     * @param string  $footer Footer value for the photo.
+     */
+    protected function updateOpinionPhoto($id, $photo, $footer)
+    {
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img2', $photo, $photo);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
+
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img2_footer', $footer, $footer);
 
         $stmt = $this->targetConnection->Prepare($sql);
         $this->targetConnection->Execute($stmt, $values);

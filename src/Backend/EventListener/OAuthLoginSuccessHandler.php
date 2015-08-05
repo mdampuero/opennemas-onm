@@ -79,6 +79,7 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['email']            = $user->email;
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
+        $this->session->set('user', $user);
         $this->session->set('user_language', $user->getMeta('user_language'));
 
         if ($this->session->get('_security.backend.target_path')) {

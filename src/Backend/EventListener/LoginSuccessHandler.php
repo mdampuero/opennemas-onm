@@ -91,6 +91,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['email']            = $user->email;
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
+        $this->session->set('user', $user);
         $this->session->set('user_language', $user->getMeta('user_language'));
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
