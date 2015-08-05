@@ -167,7 +167,7 @@ class PollsController extends Controller
         // Resolve poll ID, search in repository or redirect to 404
         list($pollID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $poll = $this->get('entity_repository')->find('Poll', $pollID);
-        if (!\ContentManager::checkContentAndUrl($poll, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($poll, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 

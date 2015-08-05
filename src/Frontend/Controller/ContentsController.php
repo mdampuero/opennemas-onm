@@ -51,7 +51,7 @@ class ContentsController extends Controller
         $content = new \Content($contentID);
         $content = $content->get($contentID);
 
-        if (!\ContentManager::checkContentAndUrl($content, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($content, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

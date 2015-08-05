@@ -29,7 +29,7 @@ class Opinions
         // Resolve epaper ID, search in repository or redirect to 404
         list($opinionID, $urlDate) = \ContentManager::resolveID($id);
         $opinion = getService('opinion_repository')->find('Opinion', $opinionID);
-        if (!\ContentManager::checkContentAndUrl($opinion, $urlDate)) {
+        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate)) {
             throw new RestException(404, 'Page not found');
         }
 

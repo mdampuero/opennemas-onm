@@ -180,7 +180,7 @@ class AlbumsController extends Controller
         // Resolve album ID, search in repository or redirect to 404
         list($albumID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $album = $this->get('entity_repository')->find('Album', $albumID);
-        if (!\ContentManager::checkContentAndUrl($album, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($album, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 

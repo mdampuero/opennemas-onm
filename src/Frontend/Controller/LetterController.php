@@ -114,7 +114,7 @@ class LetterController extends Controller
         // Resolve letter ID, search in repository or redirect to 404
         list($letterID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $letter = $this->get('entity_repository')->find('Letter', $letterID);
-        if (!\ContentManager::checkContentAndUrl($letter, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($letter, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

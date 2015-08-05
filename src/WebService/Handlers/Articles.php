@@ -37,7 +37,7 @@ class Articles
         // Resolve dirty Id
         list($articleID, $urlDate) = \ContentManager::resolveID($id);
         $article = $er->find('Article', $articleID);
-        if (!\ContentManager::checkContentAndUrl($article, $urlDate)) {
+        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate)) {
             throw new RestException(404, 'Page not found');
         }
 

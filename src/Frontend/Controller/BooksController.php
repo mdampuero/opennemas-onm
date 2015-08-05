@@ -103,7 +103,7 @@ class BooksController extends Controller
         list($bookID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er   = $this->get('entity_repository');
         $book = $er->find('Book', $bookID);
-        if (!\ContentManager::checkContentAndUrl($book, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($book, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

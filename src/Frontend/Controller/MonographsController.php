@@ -143,7 +143,7 @@ class MonographsController extends Controller
         // Resolve special ID, search in repository or redirect to 404
         list($specialID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $special = $this->get('entity_repository')->find('Special', $specialID);
-        if (!\ContentManager::checkContentAndUrl($special, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($special, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

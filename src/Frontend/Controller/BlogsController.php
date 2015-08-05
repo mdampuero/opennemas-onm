@@ -255,7 +255,7 @@ class BlogsController extends Controller
         // Resolve blog ID, search in repository or redirect to 404
         list($blogID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
-        if (!\ContentManager::checkContentAndUrl($blog, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($blog, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

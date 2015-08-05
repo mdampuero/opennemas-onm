@@ -651,7 +651,7 @@ class OpinionsController extends Controller
         list($opinionID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er = $this->get('opinion_repository');
         $opinion = $er->find('Opinion', $opinionID);
-        if (!\ContentManager::checkContentAndUrl($opinion, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 

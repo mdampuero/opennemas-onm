@@ -199,7 +199,7 @@ class NewStandController extends Controller
         // Resolve epaper ID, search in repository or redirect to 404
         list($epaperID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $epaper = $this->get('entity_repository')->find('Kiosko', $epaperID);
-        if (!\ContentManager::checkContentAndUrl($epaper, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($epaper, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

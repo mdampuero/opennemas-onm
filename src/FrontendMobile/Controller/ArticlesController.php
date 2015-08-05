@@ -41,7 +41,7 @@ class ArticlesController extends Controller
         list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
-        if (!\ContentManager::checkContentAndUrl($article, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

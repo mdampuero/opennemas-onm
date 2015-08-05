@@ -2169,7 +2169,7 @@ class ContentManager
      * @return bool true if all checks are correct
      *
      */
-    public static function checkContentAndUrl($content, $urlDate, $urlSlug = '')
+    public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
     {
         if (is_null($content) ||
             strtotime($content->created) != $urlDate ||

@@ -237,7 +237,7 @@ class VideosController extends Controller
         // Resolve video ID, search in repository or redirect to 404
         list($videoID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $video = $this->get('entity_repository')->find('Video', $videoID);
-        if (!\ContentManager::checkContentAndUrl($video, $urlDate, $urlSlug)) {
+        if (!\ContentManager::checkValidContentAndUrl($video, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 
