@@ -1,29 +1,67 @@
-angular.module('BackendApp.controllers')
-  /**
-   * Handle actions for article inner.
-  */
-  .controller('GettingStartedCtrl', ['$http', '$scope', '$timeout', 'routing',
-  function($http, $scope, $timeout, routing) {
-    'use strict';
+(function () {
+  'use strict';
 
-    $scope.step = 1;
-
+  angular.module('BackendApp.controllers')
     /**
-     * Sends a request to accepts/reject terms and conditions.
+     * @ngdoc controller
+     * @name  GettingStartedCtrl
+     *
+     * @requires $http
+     * @requires $scope
+     * @requires $timeout
+     * @requires routing
+     *
+     * @description
+     *   Handle actions for getting started.
      */
-    $scope.acceptTerms = function() {
-      var url = routing.generate('admin_getting_started_accept_terms');
+    .controller('GettingStartedCtrl', ['$http', '$scope', '$timeout', 'routing',
+      function($http, $scope, $timeout, routing) {
+        $scope.step = 1;
 
-      $http.post(url, { accept : $scope.termsAccepted }).error(function() {
-        $scope.termsAccepted = false;
-      });
-    };
+        /**
+         * @function acceptTerms
+         * @memberOf GettingStartedCtrl
+         *
+         * @description
+         *   Accepts/rejects the terms and conditions.
+         */
+        $scope.acceptTerms = function() {
+          var url = routing.generate('backend_ws_getting_started_accept_terms');
 
-    $scope.goToStep = function(step) {
-      $scope.step = step;
-      $timeout(function() {
-        $('body').scrollTop(0);
-      }, 250);
-    };
-  }
-]);
+          $http.put(url, { accept : $scope.termsAccepted }).error(function() {
+            $scope.termsAccepted = false;
+          });
+        };
+
+        /**
+         * @function goToStep
+         * @memberOf GettingStartedCtrl
+         *
+         * @description
+         *   Jumps to the given step
+         *
+         * @param {integer} step The step to jump to.
+         */
+        $scope.goToStep = function(step) {
+          $scope.step = step;
+          $timeout(function() {
+            $('body').scrollTop(0);
+          }, 250);
+        };
+
+        /**
+         * @function savePaymentInfo
+         * @memberOf GettingStartedCtrl
+         *
+         * @description
+         *   Saves the payment information.
+         */
+        $scope.savePaymentInfo = function() {
+          var url = routing.generate('backend_ws_getting_started_save_payment_info');
+
+          $http.put(url, { billing : $scope.billing });
+        };
+
+      }
+  ]);
+})();
