@@ -1089,21 +1089,6 @@ admin_media_uploader_months:
     path:     /media-uploader/months
     defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
-# Getting started routes
-admin_getting_started:
-    path:     /getting-started
-    defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
-
-admin_getting_started_accept_terms:
-    path:     /getting-started/accept-terms
-    defaults: { _controller  : BackendBundle:GettingStarted:acceptTerms }
-    options:
-        expose: true
-
-admin_getting_started_finish:
-    path:     /getting-started/finish
-    defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }
-
 admin_menu_sidebar_set:
     path: /sidebar
     defaults: { _controller  : BackendBundle:MenuSidebar:set }
@@ -1126,6 +1111,10 @@ admin_client_info_page:
 admin_client_send_upgrade_mail:
     path:     /my-account/upgrade-instance
     defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
+
+admin_getting_started:
+    prefix: /
+    resource: @BackendBundle/Resources/config/routing/getting_started.yml
 
 admin_market:
     prefix: /
