@@ -154,14 +154,14 @@
             </div>
           </div>
           <div class="wizard-button">
-            <button class="btn btn-block btn-success" ng-click="savePaymentInfo();goToStep(5)">
+            <button class="btn btn-block btn-success" ng-click="savePaymentInfo();goToStep({if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if})">
               <h4>{t}Next{/t}</h4>
             </button>
           </div>
         </div>
       </div>
     {/if}
-    <div class="wizard-container ready" ng-class="{ 'active': step == 5 }">
+    <div class="wizard-container ready" ng-class="{ 'active': step == {if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if} }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
@@ -193,7 +193,7 @@
       </div>
     </div>
     <div class="wizard-footer">
-      <div class="wizard-footer-wrapper">
+      <div class="wizard-footer-wrapper"{if !$smarty.session._sf2_attributes.user->isAdmin()} style="width: 780px;"{/if}>
         <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
           <div class="wizard-orb">
             <h4>1</h4>
@@ -220,9 +220,9 @@
             <h5>{t}Payment info{/t}</h5>
           </button>
         {/if}
-        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="goToStep(5)" ng-disabled="!termsAccepted">
+        <button class="wizard-step"  ng-class="{ 'active': step > {if $smarty.session._sf2_attributes.user->isAdmin()}4{else}3{/if} }" ng-click="goToStep({if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if})" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
-            <h4>5</h4>
+            <h4>{if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if}</h4>
           </div>
           <h5>{t}Ready!{/t}</h5>
         </button>
