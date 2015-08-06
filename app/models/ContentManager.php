@@ -2128,25 +2128,61 @@ class ContentManager
      */
     public static function resolveID($dirtyID)
     {
-        $contentID = 0;
-
-        $cache      = getService('cache');
+        // Fetch in repository
+        $cache = getService('cache');
         $resolvedID = $cache->fetch('content_resolve_id_'.$dirtyID);
-
         if (!empty($resolvedID)) {
             return $resolvedID;
         }
 
+        // Check for valid Id
         if (!empty($dirtyID)) {
-            preg_match("@(?P<dirtythings>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-            $contentID = (int) $matches['id'];
+            preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyID, $matches);
 
-            $cache->save('content_resolve_id_'.$dirtyID, $contentID);
+            if (array_key_exists('id', $matches) &&
+                array_key_exists('date', $matches) &&
+                (
+                    substr($matches['id'], 0, -6) === '' ||
+                    substr((int)$matches['id'], 0, -6) > 0
+                )
+            ) {
+                $contentID = (int) $matches['id'];
+                $urlDate = strtotime($matches['date']);
+                $cache->save(
+                    'content_resolve_id_'.$dirtyID,
+                    [ $contentID, $urlDate ]
+                );
+
+                return [ $contentID, $urlDate ];
+            }
         }
 
-        return $contentID;
+        return 0;
     }
 
+    /**
+     * Check if a content exists and also check date and slug from url
+     * with content properties.
+     *
+     * @param object $content The content object
+     *
+     * @return bool true if all checks are correct
+     *
+     */
+    public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
+    {
+        if (is_null($content) ||
+            strtotime($content->created) != $urlDate ||
+            (
+                !empty($urlSlug) &&
+                $content->slug != $urlSlug
+            )
+        ) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Checks and cleans articles and opinions from frontpage when the frontpage
      * limit is reached.
