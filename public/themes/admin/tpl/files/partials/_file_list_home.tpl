@@ -37,7 +37,7 @@
     <span class="item-category">
       [% extra.categories[item.category_name] %]
     </span>
-    {acl isAllowed="VIDEO_HOME"}
+    {acl isAllowed="ATTACHMENT_HOME"}
       <button data-nodrag class="btn btn-white pull-right" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', 0, 'home_loading', true)" type="button">
         <i data-nodrag class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.home_loading == 1, 'fa-home text-info': !item.home_loading && item.in_home == 1, 'fa-home': !item.home_loading && item.in_home == 0 }"></i>
         <i data-nodrag class="fa fa-times fa-sub text-danger" ng-if="!item.home_loading && item.in_home == 0"></i>

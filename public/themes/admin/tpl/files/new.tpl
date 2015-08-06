@@ -58,7 +58,7 @@
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
 
-            {acl isAllowed="BOOK_CREATE"}
+            {acl isAllowed="ATTACHMENT_CREATE"}
             <li class="quicklinks">
               <button class="btn btn-primary" type="submit">
                 <span class="fa fa-save"></span>
