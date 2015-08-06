@@ -114,12 +114,21 @@
                     <input class="form-control" id="contact-name" ng-model="billing.contact_name" required="required" type="text">
                   </div>
                   <div class="form-group">
-                    <label for="company-name">{t}Company name{/t}</label>
-                    <input class="form-control" id="company-name" ng-model="billing.company_name" required="required" type="text">
-                  </div>
-                  <div class="form-group">
                     <label for="contact-email">{t}Email{/t}</label>
                     <input class="form-control" id="contact-email" ng-model="billing.contact_email" required="required" type="text">
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 form-group p-b-10">
+                      <label class="p-b-10">{t}Are you a company?{/t}</label>
+                      <div class="checkbox">
+                        <input id="company" ng-checked="billing.company === '1'" ng-false-value="'0'" ng-model="billing.company" ng-true-value="'1'" type="checkbox"/>
+                        <label for="company">{t}Yes, I am a company{/t}</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group" ng-show="billing.company === '1'">
+                      <label for="company-name">{t}Company name{/t}</label>
+                      <input class="form-control" id="company-name" ng-model="billing.company_name" type="text">
+                    </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6">
