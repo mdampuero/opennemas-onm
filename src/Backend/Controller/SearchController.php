@@ -102,8 +102,8 @@ class SearchController extends Controller
 
             $order    = [ 'starttime' => 'desc' ];
 
-            $results = $er->findBy($criteria, $order, null, null);
-
+            $results = $er->findBy($criteria, $order, 8, $page);
+            $total = $er->countBy($criteria);
 
             foreach ($results as $content) {
                 $content->content_partial_path =
@@ -127,7 +127,7 @@ class SearchController extends Controller
                 'prevImg'               => _('Previous'),
                 'nextImg'               => _('Next'),
                 'elements_per_page'     => 8,
-                'total_items'           => count($results),
+                'total_items'           => $total,
                 'delta'                 => 1,
                 'base_url'              => $this->generateUrl(
                     'admin_search_content_provider',
