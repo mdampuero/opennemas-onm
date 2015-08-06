@@ -1,5 +1,5 @@
 body {
-    background-color: #555 !important;
+  background-color: #555 !important;
 }
 
 .grid-wrapper {
@@ -249,7 +249,6 @@ body {
   width: 100%;
 }
 
-
 .wizard-step {
   background: none;
   border: 0;
@@ -314,7 +313,6 @@ body {
           float: none;
           width: 100%;
         }
-
       }
 
       .wizard-button {
@@ -349,7 +347,6 @@ body {
       }
 
       .arrow  {
-
         margin-left: 9px;
         margin-top: 7px;
         transform: rotate(180deg);
@@ -367,6 +364,11 @@ body {
 }
 
 @media (max-width: 767px) {
+  .grid-wrapper {
+    position: relative;
+    left: 0;
+  }
+
   .wizard-container {
     &.help {
       .help-items-wrapper {
@@ -388,12 +390,21 @@ body {
       }
     }
 
-    &.social-networks {
+    &.payment-info {
       &.active {
         height: auto;
         overflow: initial;
       }
 
+      .wizard-button {
+        bottom: 0;
+        left: 0;
+        margin: 25px auto 0;
+        position: relative;
+      }
+    }
+
+    &.ready {
       .social-items-wrapper {
         width: 100%;
 
@@ -432,6 +443,7 @@ body {
         margin-left: 9px;
         margin-top: 7px;
         transform: rotate(180deg);
+      }
     }
   }
 
