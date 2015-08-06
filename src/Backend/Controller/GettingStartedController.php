@@ -40,7 +40,8 @@ class GettingStartedController extends Controller
 
         $params = array();
 
-        $database  = $this->get('instance')->getDatabaseName();
+        $instance = $this->get('instance');
+        $database  = $instance->getDatabaseName();
         $namespace = $this->get('cache')->getNamespace();
 
         $user = $this->get('onm_user_provider')->loadUserByUsername(
@@ -66,7 +67,7 @@ class GettingStartedController extends Controller
         if (!empty($instance->metas)
             && array_key_exists('billing', $instance->metas)
         ) {
-            $instance-->isMaster();
+            $params['billing'] = $instance->metas['billing'];
         }
 
         return $this->render('gstarted/getting_started.tpl', $params);
