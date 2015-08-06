@@ -2,6 +2,13 @@ body {
     background-color: #555 !important;
 }
 
+.grid-wrapper {
+  left: 25%;
+  position: absolute;
+  right: 25%;
+  text-align: left;
+}
+
 .wizard-title {
   display: inline-block;
   margin: 0 auto 50px;
@@ -149,8 +156,16 @@ body {
     }
   }
 
-  &.social-networks {
-    background-image: url(/themes/admin/images/social-networks.jpg);
+  &.payment-info {
+    background-image: url(/themes/admin/images/payment.jpg);
+
+    .checkbox {
+      margin-top: 12px;
+    }
+  }
+
+  &.ready {
+    background-image: url(/themes/admin/images/finish.jpg);
 
     .social-items-wrapper {
       margin: 0 auto;
@@ -173,10 +188,6 @@ body {
         }
       }
     }
-  }
-
-  &.ready {
-    background-image: url(/themes/admin/images/finish.jpg);
   }
 }
 
