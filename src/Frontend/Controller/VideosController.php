@@ -208,7 +208,7 @@ class VideosController extends Controller
                 array(
                     'cache_id'     => $cacheID,
                     'categoryName' => $this->category_name,
-                    'x-tags'       => "video-frontpage,{$this->category_name},{$this->page}"
+                    'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
                 )
             );
         } else {
@@ -216,7 +216,7 @@ class VideosController extends Controller
                 'video/video_main_frontpage.tpl',
                 array(
                     'cache_id' => $cacheID,
-                    'x-tags'   => "video-frontpage,{$this->category_name},{$this->page}"
+                    'x-tags'   => 'video-frontpage,'.$this->category_name.','.$this->page
                 )
             );
         }
@@ -294,7 +294,7 @@ class VideosController extends Controller
             'video/video_inner.tpl',
             array(
                 'cache_id' => $cacheID,
-                'x-tags'   => "video,$videoID"
+                'x-tags'   => 'video,'.$videoID
             )
         );
     }

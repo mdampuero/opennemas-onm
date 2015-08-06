@@ -82,7 +82,7 @@ class UtilitiesController extends Controller
             $content,
             200,
             [
-                'x-tags'       => "sharre,$type,$url",
+                'x-tags'       => 'sharre,'.$type.','.$url,
                 'x-cache-for'  => $cacheFor.'s',
                 'Content-Type' => 'application/json',
             ]

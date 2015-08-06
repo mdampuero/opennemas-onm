@@ -151,7 +151,7 @@ class ArchiveController extends Controller
                 'category_name'   => $categoryName,
                 'actual_category' => 'archive',
                 'newslibraryDate' => $date,
-                'x-tags'          => 'archive-page,'.$date.$categoryName,
+                'x-tags'          => 'archive-page,'.$date.','.$categoryName,
             )
         );
     }

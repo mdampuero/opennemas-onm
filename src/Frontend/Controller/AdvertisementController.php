@@ -49,7 +49,7 @@ class AdvertisementController extends Controller
             [
                 'banner'  => $advertisement,
                 'content' => $advertisement,
-                'x-tags' => "ad,$id"
+                'x-tags' => 'ad,'.$id
             ]
         );
     }
