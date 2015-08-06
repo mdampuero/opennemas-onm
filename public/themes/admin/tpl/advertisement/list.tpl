@@ -171,7 +171,7 @@
                 <th>{t}Title{/t}</th>
                 <th class="hidden-xs hidden-sm" style="width:250px">{t}Type{/t}</th>
                 <th class="center hidden-xs" style="width:30px">{t}Permanence{/t}</th>
-                <th class="center hidden-xs" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
+                <th class="center hidden-xs" style="width:40px"><i class="fa fa-mouse-pointer"></i></th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <th class="center" style="width:40px;">{t}Published{/t}</th>
                 {/acl}
@@ -187,9 +187,9 @@
                 </td>
                 <td style="">
                   <span class="visible-xs visible-sm">
-                    <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
-                    <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                    <img ng-if="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
+                    <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
+                    <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script != 1 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
+                    <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script != 1 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
                     [% map[content.type_advertisement].name %]
                   </span>
                   [% content.title %]
@@ -207,9 +207,9 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
-                  <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                  <img ng-if="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
+                  <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
+                  <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script != 1 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
+                  <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script != 1 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
                   [% map[content.type_advertisement].name %]
                 </td>
                 <td class="center hidden-xs">
