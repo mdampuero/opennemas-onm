@@ -170,8 +170,6 @@
 .scheduled-state.dued  { color: Red !important; font-weight:bold;}
 .scheduled-state.postponed { color: Blue !important; font-weight:bold;}
 
-span.in_frontpage {background:url(../images/frontpagemanager/home.png) top right no-repeat;height:20px;width:20px;display:inline-block;vertical-align:middle;}
-
 [class*="span"] {margin-left:0 !important;}
 
 #frontpage-settings {display:inline-block;}
