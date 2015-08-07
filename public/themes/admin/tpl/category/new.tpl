@@ -149,12 +149,18 @@
                       {$subcategorys[s]->name}
                     </td>
                     <td class="left">
-                      {if $subcategorys[s]->internal_category eq 3}
-                      <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" alt="Sección de Album" />
-                      {elseif $subcategorys[s]->internal_category eq 5}
-                      <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" alt="Sección de Videos" />
-                      {else}
-                      <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" alt="Sección Global" />
+                      {if $subcategorys[s]->internal_category eq 7}
+                        <i class="fa fa-stack-overflow" tooltip="{t}Albums{/t}"></i>
+                      {elseif $subcategorys[s]->internal_category eq 9}
+                        <i class="fa fa-film" tooltip="{t}Videos{/t}"></i>
+                      {elseif $subcategorys[s]->internal_category eq 11}
+                        <i class="fa fa-pie-chart" tooltip="{t}Polls{/t}"></i>
+                      {elseif $subcategorys[s]->internal_category eq 10}
+                        <i class="fa fa-star" tooltip="{t}Specials{/t}"></i>
+                      {elseif $subcategorys[s]->internal_category eq 14}
+                        <i class="fa fa-newspaper-o" tooltip="{t}News Stand{/t}"></i>
+                      {elseif $subcategorys[s]->internal_category eq 15}
+                        <i class="fa fa-book" tooltip="{t}Books{/t}"></i>
                       {/if}
                     </td>
                     <td class="left">
