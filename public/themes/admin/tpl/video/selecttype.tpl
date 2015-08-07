@@ -38,20 +38,27 @@
             <ul class="video-type-selector">
                 <li class="web">
                     <a href="{url name=admin_videos_create type="web-source" category=$category}" class="clearfix btn btn-white">
-                        <img src="{$params.IMAGE_DIR}video/video-web-source.png" alt="" />
-                        {t}Link video from other web video services{/t}
+                        <i class="fa fa-vimeo fa-lg"></i>
+                        <i class="fa fa-youtube fa-lg"></i>
+                        <div class="p-t-10">
+                          {t}Link video from other web video services{/t}
+                        </div>
                     </a>
                 </li>
                 <li class="web">
                     <a href="{url name=admin_videos_create type="script" category=$category}" class="clearfix btn btn-white">
-                        <img src="{$params.IMAGE_DIR}video/script-code-48.png" alt="" />
-                        {t}Use HTML code{/t}
+                        <i class="fa fa-file-code-o fa-3x"></i>
+                        <div class="p-t-10">
+                          {t}Use HTML code{/t}
+                        </div>
                     </a>
                 </li>
                 <li class="web">
                     <a href="{url name=admin_videos_create type="external" category=$category}" class="clearfix btn btn-white">
-                        <img src="{$params.IMAGE_DIR}video.png" alt="" />
-                        {t}Use file video URLs (External HTML5/FLV){/t}
+                        <i class="fa fa-film fa-3x"></i>
+                        <div class="p-t-10">
+                          {t}Use file video URLs (External HTML5/FLV){/t}
+                        </div>
                     </a>
                 </li>
             </ul>
