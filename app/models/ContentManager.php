@@ -1877,64 +1877,6 @@ class ContentManager
     }
 
     /**
-    * Fetches all the contents (articles, widgets, etc) for one specific
-    * category with its placeholder and position
-    *
-    * This is used for HomePages, fetches all the contents assigned for it and
-    * allows to render an entire homepage
-    *
-    * @param string $date the date to fetch contents when
-    * @param int $categoryID category id we want to get contents from
-    *
-    * @return null|array array of contents
-    */
-    public function getContentsForLibrary($date, $categoryID = 0)
-    {
-        if (empty($date)) {
-            return false;
-        }
-
-        $where ='';
-        if (!empty($categoryID)) {
-            $where = ' AND pk_fk_content_category = '.$categoryID;
-        }
-
-        $sql = 'SELECT content_type_name, pk_content FROM contents, contents_categories '
-              .'WHERE fk_content_type IN (1,4,7,9) '
-              .'AND DATE(starttime) = "'.$date.'" '
-              .'AND content_status=1 AND in_litter=0 '
-              .'AND pk_fk_content = pk_content '.$where
-              .' ORDER BY  fk_content_type ASC, starttime DESC ';
-
-        $rs = $GLOBALS['application']->conn->GetAll($sql);
-
-        if ($rs == false) {
-            return false;
-        }
-
-        $ids = array();
-        foreach ($rs as $item) {
-            $ids[] = array($item['content_type_name'], $item['pk_content']);
-        }
-
-        // Get contents from repository
-        $er = getService('entity_repository');
-        $contents = $er->findMulti($ids);
-
-        // Fetch video or image for article and opinions
-        foreach ($contents as $content) {
-            if (!empty($content->fk_video)) {
-                $content->video = $er->find('Video', $content->fk_video);
-            } elseif (!empty($content->img1)) {
-                $content->image = $er->find('Photo', $content->img1);
-            }
-        }
-
-        return $contents;
-
-    }
-
-    /**
     * Fetches the content for one specific url
     *
     * This is used for getting information from Onm Rest Api
