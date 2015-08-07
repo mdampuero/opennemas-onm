@@ -182,12 +182,6 @@ div.menu-categories {max-width:70%;}
 
 #categories {margin-bottom:0;}
 
-.settings-panel {display:none;vertical-align: top;}
-.settings-panel a {    color: black;}
-.settings-panel .close {color: white;opacity: .8;}
-.settings-panel .thumbnail {display: inline-block;margin:0 10px 10px 0;width:100px;vertical-align: top;border-color: black;}
-.settings-panel .thumbnail.active {color: white;border-color: white;}
-
 /* Frontpage manager grid for multiple devices */
 @media screen  and (min-width: 768px) {
   .container {width:865px;margin:0 auto;}

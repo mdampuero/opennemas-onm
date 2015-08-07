@@ -1854,15 +1854,6 @@ progress {
   margin-bottom:10px;
 }
 
-.settings-panel {
-    background: url(../images/backgrounds/settings-panel-background.png) top left;
-    padding:30px 0;
-    margin-top:-5px;
-    box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-}
-
 /* =============================================================================
    Section picker
    ========================================================================== */
