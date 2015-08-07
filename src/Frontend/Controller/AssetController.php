@@ -210,7 +210,7 @@ class AssetController extends Controller
                             ."background-color:{$item->bgcolor} !important; }\n";
 
                     $response .= "#content-{$item->pk_content}.colorize { "
-                            ."padding:10px !important; border-radius:5px !important; }\n";
+                            ."padding:10px !important; border-radius:5px; }\n";
                 }
                 if (!empty($item->title_props)) {
                     $response .= "#content-{$item->pk_content} .custom-text, "
