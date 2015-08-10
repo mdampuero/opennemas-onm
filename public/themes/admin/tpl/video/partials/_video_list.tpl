@@ -254,7 +254,7 @@
     </div>
     <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode == 'grid'">
       <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
-        <div class="dynamic-image-placeholder" style="min-height: 250px;" ng-click="select(content); xsOnly($event, toggle, content)">
+        <div class="dynamic-image-placeholder" ng-click="select(content); xsOnly($event, toggle, content)">
           <dynamic-image ng-if="content.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image">
             <div class="hidden-select" ng-click="toggle(content)"></div>
             <div class="thumbnail-actions ng-cloak">
