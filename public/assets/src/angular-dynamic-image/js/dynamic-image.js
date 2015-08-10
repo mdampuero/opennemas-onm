@@ -30,8 +30,8 @@
          * @type {String}
          */
           //'<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
-        var dynamicImageTpl = '<div class="dynamic-image-wrapper">' +
-          '<div [attributes]>' +
+        var dynamicImageTpl = '<div class="dynamic-image-wrapper"[autoscale]>' +
+          '<div [attributes][autoscale]>' +
             '<div class="dynamic-image-thumbnail[autoscaleClass]" ng-style="{ \'background-image\': \'url(\' + bg + \')\' }"></div>' +
           '</div>' +
           '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
@@ -70,15 +70,6 @@
         this.brokenImage = '/themes/admin/images/img-not-found.jpg';
 
         /**
-         * Whether to process only images.
-         *
-         * @memberof DynamicImage
-         * @name     onlyImage
-         * @type     {Boolean}
-         */
-        this.onlyImage = false;
-
-        /**
          * Property with the path to the image.
          *
          * @memberof DynamicImage
@@ -103,14 +94,15 @@
          * @description
          *   Generates an URL for a given image.
          *
-         * @param {Object} image         The image to generate URL from.
-         * @param {String} transform     The transform parameters.
-         * @param {String} instanceMedia The instance media folder path.
-         * @param {String} property      The object property name.
+         * @param {Object}  image         The image to generate URL from.
+         * @param {String}  transform     The transform parameters.
+         * @param {String}  instanceMedia The instance media folder path.
+         * @param {String}  property      The object property name.
+         * @param {Boolean} onlyImage     Whether to generate only for images.
          *
          * @return {String} The generated URL.
          */
-        this.generateUrl = function(image, transform, instanceMedia, property) {
+        this.generateUrl = function(image, transform, instanceMedia, property, onlyImage) {
           var prefix = '';
 
           if (!image) {
@@ -133,7 +125,7 @@
             prefix = instanceMedia + this.imageFolder;
           }
 
-          if (this.onlyImage && /.*\.(swf|gif)$/.test(image)) {
+          if (onlyImage && /.*\.(swf|gif)$/.test(image)) {
             return this.brokenImage;
           }
 
@@ -223,7 +215,7 @@
         this.render = function(options, model) {
           var html = dynamicImageTpl;
 
-          if (this.isFlash(model) && !this.onlyImage) {
+          if (this.isFlash(model) && options.onlyImage !== 'true') {
             html = dynamicSwfTpl;
           }
 
@@ -244,7 +236,7 @@
           var autoscale = '';
           var autoscaleClass = '';
           if (options.ngModel && options.autoscale && options.autoscale === 'true') {
-            autoscale      = 'style="height: [% height %]px; width: [% width %]px;"';
+            autoscale      = 'ng-style="{ \'height\': + settings.height, \'width\': + settings.width }"';
             autoscaleClass = ' autoscale';
           }
 
@@ -328,27 +320,24 @@
             'ngModel': '='
           },
           link: function ($scope, element, attrs) {
-            if (attrs.onlyImage) {
-              DynamicImage.onlyImage = true;
-            }
-
             var children  = element.children();
             var html      = DynamicImage.render(attrs, $scope.ngModel);
 
-            if (DynamicImage.isFlash && !DynamicImage.onlyImage) {
-              var defaults = DynamicImage.getDefaultSize(element);
+            var defaults = DynamicImage.getDefaultSize(element);
 
-              $scope.height = defaults.height;
-              $scope.width = defaults.width;
+            $scope.onlyImage = attrs.onlyImage === 'true';
+            $scope.height = defaults.height;
+            $scope.width = defaults.width;
 
-              var maxHeight = element.height();
-              var maxWidth  = element.width();
+            var maxHeight = element.height();
+            var maxWidth  = element.width();
 
-              if (!maxWidth || !maxHeight) {
-                maxHeight = element.parent().height();
-                maxWidth  = element.parent().width();
-              }
+            if (!maxWidth || !maxHeight) {
+              maxHeight = element.parent().height();
+              maxWidth  = element.parent().width();
+            }
 
+            if (DynamicImage.isFlash && $scope.onlyImage) {
               // Try to calculate height and width before compiling for flash
               if ($scope.ngModel && $scope.ngModel.height &&
                   $scope.ngModel.width) {
@@ -365,22 +354,24 @@
               // Add watcher to update src when scope changes
               $scope.$watch('ngModel', function(nv) {
                 $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
-                  attrs.instance, attrs.property);
+                  attrs.instance, attrs.property, $scope.onlyImage);
               });
             } else {
               $scope.src = DynamicImage.generateUrl(attrs.path, attrs.transform,
-                attrs.instance, attrs.property);
+                attrs.instance, attrs.property, $scope.onlyImage);
             }
 
             $scope.$watch('src', function(nv) {
-              if (!DynamicImage.isFlash(nv)) {
-                //$scope.loading = true;
+              if (!DynamicImage.isFlash(nv) || $scope.onlyImage) {
                 $scope.loading = true;
 
                 var img = new Image();
                 img.onload = function() {
                   $scope.bg = nv;
                   $scope.loading = false;
+
+                  $scope.settings = DynamicImage.getSettings(img.height,
+                      img.width, maxHeight, maxWidth);
 
                   $scope.$apply();
                 }
