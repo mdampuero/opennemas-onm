@@ -325,7 +325,7 @@ class ArticlesController extends Controller
     public function registeredHook(&$content)
     {
         $restrictedContent = $this->renderView(
-            'paywall/partials/content_only_for_subscribers.tpl',
+            'article/partials/content_only_for_registered.tpl',
             array('id' => $content->id)
         );
 
