@@ -359,22 +359,12 @@ frontend_poll_show:
 
 
 frontend_archive_content:
-    path: /archive/content/{year}/{month}/{day}
-    defaults: { _controller: FrontendBundle:Archive:archive, page: 1 }
+    path: /archive/content/{year}/{month}/{day}/{category_name}
+    defaults: { _controller: FrontendBundle:Archive:archive, category_name: home }
     requirements:
         year      : "[0-9]+"
         month     : "[0-9]+"
         day       : "[0-9]+"
-
-frontend_archive_category:
-    path: /archive/content/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: FrontendBundle:Archive:archiveCategory, _format: html, page: 1 }
-    requirements:
-        category_name : "[a-z0-9\-]+"
-        year      : "([0-9]+)"
-        month     : "([0-9]+)"
-        day       : "([0-9]+)"
-
 
 frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}

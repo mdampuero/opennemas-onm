@@ -317,7 +317,7 @@
                 </li>
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
-                    {if $smarty.session.isMaster}
+                    {if $smarty.session._sf2_attributes.user->isMaster()}
                       <i class="fa fa-rebel text-danger master-user"></i>
                     {/if}
                     <span class="title">
@@ -337,6 +337,13 @@
                       </li>
                       <li class="divider"></li>
                     {/if}
+                    <li>
+                      <a href="http://{$smarty.session._sf2_attributes.instance->getMainDomain()}">
+                        <i class="fa fa-globe"></i>
+                        {t}Go to newspaper{/t}
+                      </a>
+                    </li>
+                    <li class="divider"></li>
                     <li>
                       {if $smarty.session._sf2_attributes.user->isMaster()}
                         <a ng-href="/manager#/user/{$smarty.session.userid}/show">
