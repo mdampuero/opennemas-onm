@@ -1824,6 +1824,24 @@ class Content
     }
 
     /**
+     * Checks if the content is only available for registered users.
+     *
+     * @return boolean True if content is only available for registered users.
+     */
+    public function isOnlyAvailableForRegistered()
+    {
+        $available = false;
+
+        if (is_array($this->params)
+            && array_key_exists('only_registered', $this->params)
+        ) {
+            $available = ($this->params['only_registered'] == true);
+        }
+
+        return $available;
+    }
+
+    /**
      * Loads the attached video's information for the content.
      * If force param is true don't take care of attached images.
      *
