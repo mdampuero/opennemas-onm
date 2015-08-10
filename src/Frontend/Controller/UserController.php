@@ -236,18 +236,6 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the user box
-     *
-     * @return void
-     **/
-    public function userBoxAction()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        return $this->render('user/user_box.tpl');
-    }
-
-    /**
      * Activates an user account given an token
      *
      * @param Request $request the request object
