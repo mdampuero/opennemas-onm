@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2dedb9c227585484165a470fa426cb52",
+    "hash": "f368fdf78feb6ce0617a1ce4f0dbe0db",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -576,7 +576,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/861d3564c03b3867845ffd87d9b19f49dc673c69",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/238aaa5fa04b5755a9957715e269d542cd0f8e39",
                 "reference": "861d3564c03b3867845ffd87d9b19f49dc673c69",
                 "shasum": ""
             },
@@ -755,7 +755,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/70c580174e4e16a79296a02256fb40a34192731c",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ed26638d87b8d4f726e97536689c8fe8d9a10f14",
                 "reference": "70c580174e4e16a79296a02256fb40a34192731c",
                 "shasum": ""
             },
@@ -890,14 +890,8 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/drak/NativeSession.git",
-                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/drak/NativeSession/zipball/f2b14ad483605a8d4b898c260bec7512347ca600",
-                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600",
-                "shasum": ""
+                "url": "https://github.com/zikula/NativeSession",
+                "reference": "81653296944b00be03364a6ccc111ccafa52f087"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -909,7 +903,6 @@
                     "Drak": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -920,7 +913,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2013-03-11 11:07:59"
+            "time": "2015-03-31 17:40:46"
         },
         {
             "name": "drexarj/disqus-php",
@@ -1081,7 +1074,7 @@
                     "homepage": "https://github.com/friendsofsymfony/FOSJsRoutingBundle/contributors"
                 },
                 {
-                    "name": "William DURAND",
+                    "name": "William Durand",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -1145,7 +1138,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/7a1e41685642d8866509cdca8af9077a3c5f0b10",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2b934a2029905f22e8fd7478c9e463e8fea0af13",
                 "reference": "7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "shasum": ""
             },
@@ -1666,7 +1659,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler/zipball/e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/1dcf910c1e1fd1ea565a537b053a66971d818e42",
                 "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5",
                 "shasum": ""
             },
@@ -2113,12 +2106,12 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/log",
+                "url": "https://github.com/php-fig/log.git",
                 "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/php-fig/log/archive/1.0.0.zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "reference": "1.0.0",
                 "shasum": ""
             },
@@ -2191,6 +2184,55 @@
                 "recaptcha"
             ],
             "time": "2014-07-07 17:21:13"
+        },
+        {
+            "name": "rtconner/freshbooks-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rtconner/freshbooks-api.git",
+                "reference": "07201bee4729498950a04caefbe9c0ce071242c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rtconner/freshbooks-api/zipball/07201bee4729498950a04caefbe9c0ce071242c0",
+                "reference": "07201bee4729498950a04caefbe9c0ce071242c0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Freshbooks\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jboesch",
+                    "homepage": "https://github.com/jboesch/FreshBooksRequest-PHP-API"
+                },
+                {
+                    "name": "JasonReading",
+                    "homepage": "http://jasonreading.com"
+                },
+                {
+                    "name": "Robert Conner",
+                    "homepage": "http://smartersoftware.net"
+                }
+            ],
+            "description": "Wrapper to the FreshBooks API",
+            "keywords": [
+                "api",
+                "freshbooks"
+            ],
+            "time": "2014-11-23 22:14:47"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -4278,6 +4320,7 @@
         "friendsofsymfony/jsrouting-bundle": 0,
         "php-ffmpeg/php-ffmpeg": 20,
         "hwi/oauth-bundle": 20,
+        "rtconner/freshbooks-api": 20,
         "smarty-gettext/smarty-gettext": 0,
         "lexik/jwt-authentication-bundle": 20
     },
