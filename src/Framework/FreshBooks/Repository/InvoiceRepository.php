@@ -1,0 +1,86 @@
+<?php
+
+namespace Framework\FreshBooks\Repository;
+
+use Framework\FreshBooks\Entity\Invoice;
+use Framework\FreshBooks\Exception\InvoiceNotFoundException;
+use Framework\FreshBooks\Exception\InvalidCriteriaException;
+
+class InvoiceRepository extends Repository
+{
+    /**
+     * Find a invoice by id.
+     *
+     * @param integer $id The invoice id.
+     *
+     * @return array The invoice.
+     *
+     * @throws InvoiceNotFoundException When the invoice id is invalid.
+     */
+    public function find($id)
+    {
+        $this->api->setMethod('invoice.get');
+        $this->api->post([ 'invoice_id' => $id ]);
+        $this->api->request();
+
+        if ($this->api->success()) {
+            $response = $this->api->getResponse();
+
+            return new Invoice($response['invoice']);
+        }
+
+        throw new InvoiceNotFoundException($this->api->getError());
+    }
+
+    /**
+     * Finds a list of invoices basing on a criteria.
+     *
+     * @param array $criteria The criteria.
+     *
+     * @return array The list of invoices.
+     */
+    public function findBy($criteria)
+    {
+        $this->api->setMethod('invoice.list');
+        $this->api->post($criteria);
+        $this->api->request();
+
+        $response = [];
+
+        if ($this->api->success()) {
+            $response = $this->api->getResponse();
+            $response = $response['invoices'];
+
+            $invoices = [];
+            foreach($response as $data) {
+                $invoices[] = new Invoice($data);
+            }
+
+            return $invoices;
+
+            return array_values($response);
+        }
+
+        throw new InvalidCriteriaException($this->api->getError());
+    }
+
+    /**
+     * Return the PDF content for an invoice by id.
+     *
+     * @param integer $id The invoice id.
+     *
+     * @return string The PDF content as string.
+     */
+    public function getPDF($id)
+    {
+        $this->api->setMethod('invoice.getPDF');
+        $this->api->post([ 'invoice_id' => $id ]);
+        $this->api->request();
+
+        if ($this->api->success()) {
+            return $this->api->getResponse();
+        }
+
+        throw new InvoiceNotFoundException($this->api->getError());
+    }
+}
