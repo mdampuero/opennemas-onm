@@ -44,7 +44,8 @@ class FormController extends Controller
         return $this->render(
             'static_pages/form.tpl',
             array(
-                'advertisements' => $this->getAds()
+                'advertisements' => $this->getAds(),
+                'x-tags'         => 'frontpage-form',
             )
         );
     }
