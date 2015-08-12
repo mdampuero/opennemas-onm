@@ -19,4 +19,21 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         }
 
     }
+
+    public function testExistsWithUnexistingInvoice()
+    {
+        $data   = [ 'foo' => 'bar' ];
+        $entity = new Invoice($data);
+
+        $this->assertFalse($entity->exists());
+    }
+
+    public function testExistsWithExistingInvoice()
+    {
+        $data   = [ 'invoice_id' => '1' ];
+        $entity = new Invoice($data);
+
+        $this->assertTrue($entity->exists());
+    }
+
 }

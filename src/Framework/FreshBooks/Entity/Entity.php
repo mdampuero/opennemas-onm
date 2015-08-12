@@ -2,7 +2,7 @@
 
 namespace Framework\FreshBooks\Entity;
 
-class Entity
+abstract class Entity
 {
     private $_data = [];
 
@@ -52,4 +52,12 @@ class Entity
     {
         return $this->_data;
     }
+
+    /**
+     * Checks if the entity already exists in FreshBooks.
+     *
+     * @return boolean True if the entity exists in FreshBooks. Otherwise,
+     *                 returns false.
+     */
+    public abstract function exists();
 }
