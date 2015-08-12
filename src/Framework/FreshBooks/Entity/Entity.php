@@ -11,7 +11,7 @@ abstract class Entity
      *
      * @param array $data The entity data.
      */
-    public function __construct($data)
+    public function __construct($data = null)
     {
         if (!empty($data)) {
             $this->_data = $data;
