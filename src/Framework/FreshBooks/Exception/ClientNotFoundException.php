@@ -4,16 +4,4 @@ namespace Framework\FreshBooks\Exception;
 
 class ClientNotFoundException extends EntityNotFoundException
 {
-    /**
-     * Initializes the exception with a custom message.
-     *
-     * @param string $id The client id.
-     */
-    public function __construct($id)
-    {
-        $message = "The client with id \"$id\" not found.";
-
-        parent::__construct($message);
-    }
-
 }
