@@ -48,12 +48,18 @@ class ClientRepository extends Repository
         $response = [];
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-            $response = $response['clients'];
-
             $clients = [];
-            foreach($response as $data) {
-                $clients[] = new Client($data);
+
+            $response = $this->api->getResponse();
+
+            if (array_key_exists('clients', $response)
+                && array_key_exists('client', $response['clients'])
+            ) {
+                $response = $response['clients']['client'];
+
+                foreach($response as $data) {
+                    $clients[] = new Client($data);
+                }
             }
 
             return $clients;
