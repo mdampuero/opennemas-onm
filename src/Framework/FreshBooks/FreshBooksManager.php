@@ -3,6 +3,8 @@
 namespace Framework\FreshBooks;
 
 use Freshbooks\FreshBooksApi;
+use Framework\FreshBooks\Entity\Entity;
+use Framework\FreshBooks\Exception\InvalidPersisterException;
 use Framework\FreshBooks\Exception\InvalidRepositoryException;
 
 class FreshBooksManager
@@ -36,11 +38,36 @@ class FreshBooksManager
     }
 
     /**
+     * Returns a new persister to persit an entity.
+     *
+     * @param string $name The entity to persist.
+     *
+     * @return Persister The persister.
+     *
+     * @throws InvalidPersisterException If the persister does not exist.
+     */
+    public function getPersister(Entity $entity)
+    {
+        $class = get_class($entity);
+        $class = substr($class, strrpos($class, '\\') + 1);
+
+        $persister = __NAMESPACE__ . '\\Persister\\' . $class . 'Persister';
+
+        if (class_exists($persister)) {
+            return new $persister($this->api);
+        } else {
+            throw new InvalidPersisterException($persister);
+        }
+    }
+
+    /**
      * Returns a new repository by name.
      *
      * @param string $name The repository name.
      *
      * @return Repository The repository.
+     *
+     * @throws InvalidRepositoryException If the repository does not exist.
      */
     public function getRepository($name)
     {
@@ -50,7 +77,37 @@ class FreshBooksManager
         if (class_exists($repository)) {
             return new $repository($this->api);
         } else {
-            throw new InvalidRepositoryException();
+            throw new InvalidRepositoryException($repository);
+        }
+    }
+
+    /**
+     * Persists an entity in FreshBooks.
+     *
+     * @param Entity $entity The entity to remove.
+     */
+    public function persist(Entity $entity)
+    {
+       $persister = $this->getPersister($entity);
+
+        if ($entity->exists()) {
+            $persister->update($entity);
+        } else {
+            $persister->create($entity);
+        }
+    }
+
+    /**
+     * Removes an entity from FreshBooks.
+     *
+     * @param Entity $entity The entity to remove.
+     */
+    public function remove(Entity $entity)
+    {
+       $persister = $this->getPersister($entity);
+
+       if ($entity->exists()) {
+            $persister->remove($entity);
         }
     }
 }
