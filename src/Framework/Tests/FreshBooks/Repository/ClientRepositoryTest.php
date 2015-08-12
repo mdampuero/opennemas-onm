@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests\FreshBooks;
+namespace Framework\Tests\FreshBooks\Repository;
 
 use Framework\FreshBooks\Repository\ClientRepository;
 use Freshbooks\FreshBooksApi;
@@ -22,18 +22,17 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Framework\FreshBooks\Exception\ClientNotFoundException
      */
-    public function testFindClientWithInvalidId()
+    public function testFindWithInvalidId()
     {
-        // Configure stub for unexisting client
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
             ->with('client.get');
 
-        $this->repository->findClient('1');
+        $this->repository->find('1');
     }
 
-    public function testFindClientWithValidId()
+    public function testFindWithValidId()
     {
         $client = [
             'client_id'  => '1',
@@ -43,7 +42,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'client' => $client,
+            'client'      => $client,
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -56,13 +55,13 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($client, $this->repository->findClient('1'));
+        $this->assertEquals($client, $this->repository->find('1')->getData());
     }
 
     /**
      * @expectedException Framework\FreshBooks\Exception\InvalidCriteriaException
      */
-    public function testFindClientsWithInvalidCriteria()
+    public function testFindByWithInvalidCriteria()
     {
         $criteria = [ 'invalid_field' => 'johndoe@example.org' ];
 
@@ -74,10 +73,10 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
 
-        $this->repository->findClients($criteria);
+        $this->repository->findBy($criteria);
     }
 
-    public function testFindClientsWithValidCriteria()
+    public function testFindByWithValidCriteria()
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
@@ -92,7 +91,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'clients' => $clients
+            'clients'     => $clients
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -106,7 +105,13 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($clients, $this->repository->findClients($criteria));
+        $response = $this->repository->findBy($criteria);
+
+        $this->assertEquals(count($clients), count($response));
+
+        for ($i = 0; $i < count($response); $i++) {
+            $this->assertEquals($clients[$i], $response[$i]->getData());
+        }
     }
 
 }

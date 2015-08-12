@@ -2,6 +2,7 @@
 
 namespace Framework\FreshBooks\Repository;
 
+use Framework\FreshBooks\Entity\Client;
 use Framework\FreshBooks\Exception\ClientNotFoundException;
 use Framework\FreshBooks\Exception\InvalidCriteriaException;
 
@@ -12,11 +13,11 @@ class ClientRepository extends Repository
      *
      * @param integer $id The client id.
      *
-     * @return array The client.
+     * @return Client The client.
      *
      * @throws ClientNotFoundException When the client id is invalid.
      */
-    public function findClient($id)
+    public function find($id)
     {
         $this->api->setMethod('client.get');
         $this->api->post([ 'client_id' => $id ]);
@@ -25,9 +26,7 @@ class ClientRepository extends Repository
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            unset($response['@attributes']);
-
-            return $response = $response['client'];
+            return new Client($response['client']);
         }
 
         throw new ClientNotFoundException($this->api->getError());
@@ -40,7 +39,7 @@ class ClientRepository extends Repository
      *
      * @return array The list of clients.
      */
-    public function findClients($criteria)
+    public function findBy($criteria = null)
     {
         $this->api->setMethod('client.list');
         $this->api->post($criteria);
@@ -52,9 +51,12 @@ class ClientRepository extends Repository
             $response = $this->api->getResponse();
             $response = $response['clients'];
 
-            unset($response['@attributes']);
+            $clients = [];
+            foreach($response as $data) {
+                $clients[] = new Client($data);
+            }
 
-            return array_values($response);
+            return $clients;
         }
 
         throw new InvalidCriteriaException($this->api->getError());
