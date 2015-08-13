@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-13 14:51+0000\n"
-"PO-Revision-Date: 2015-08-13 17:02+0200\n"
+"POT-Creation-Date: 2015-08-13 15:14+0000\n"
+"PO-Revision-Date: 2015-08-13 17:27+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -2285,7 +2285,7 @@ msgstr "Búsqueda avanzada"
 msgid "Advanced article options"
 msgstr "Opciones avanzadas de artículo"
 
-msgid "Frontpage customization"
+msgid "Frontpage Customization"
 msgstr "Personalizar portadas"
 
 msgid "Authors Blog"
@@ -2297,13 +2297,14 @@ msgstr "Personalizaciones para Cronicas"
 msgid "Contact"
 msgstr "Contacto"
 
-#, fuzzy
 msgid "Frontpages Manager"
 msgstr "Gestor de portadas"
 
-#, fuzzy
 msgid "Import XMLs"
-msgstr "Importado de archivos XML"
+msgstr "Importación de XMLs"
+
+msgid "NewsStand"
+msgstr "Kiosko"
 
 msgid "Letters"
 msgstr "Cartas"
@@ -2314,9 +2315,8 @@ msgstr "Hemeroteca"
 msgid "News Agency importer"
 msgstr "Importador de noticias agencias"
 
-#, fuzzy
-msgid "Articles synchronization"
-msgstr "Sincronización de instancias"
+msgid "Articles Synchronization"
+msgstr "Sincronización de artículos"
 
 msgid "Promotional bar"
 msgstr "Barra promocional"
@@ -2940,8 +2940,8 @@ msgstr ""
 "<ul>\n"
 "<li>Cambio de color el fondo de la noticia, haciendo posible que toda una "
 "columna tenga un estilo diferente.</li>\n"
-"<li>Tamaño de la fuente. De esta forma se puede dar más fuerza a un titular."
-"</li>\n"
+"<li>Tamaño de la fuente. De esta forma se puede dar más fuerza a un "
+"titular.</li>\n"
 "<li>Color de los titulares para combinar con el fondo de color de la "
 "noticia</li>\n"
 "<li>Estilos del titular: fuente de letra, negrita, cursiva, etc.</li>\n"
@@ -3097,10 +3097,6 @@ msgstr ""
 "dirección web, o un correo, y cada vez que use esta palabra clave el sistema "
 "la etiquetará por ti.</p>"
 
-#, fuzzy
-msgid "NewsStand"
-msgstr "Portadas de papel"
-
 msgid "Let your readers download the pdf copy of your print newspaper."
 msgstr "Deja que tus lectores disfruten de tu periódico de papel en PDF."
 
@@ -3234,9 +3230,6 @@ msgstr ""
 msgid "emails"
 msgstr "correos"
 
-msgid "Articles Synchronization"
-msgstr "Sincronización de portadas"
-
 msgid "Update more newspapers at once by syncing articles."
 msgstr "Actualiza más periódicos sincronizando artículos."
 
@@ -3298,12 +3291,11 @@ msgstr ""
 "Permite incluír páginas estáticas en tu periódico. Normalmente se usan para "
 "información legal y páginas \"Sobre nosotros\"."
 
-msgid "Frontpage synchronization"
+msgid "Frontpage Synchronization"
 msgstr "Sincronización de portadas"
 
-#, fuzzy
 msgid "Update your local frontpages by updating 1 frontpage!"
-msgstr "Actualiza tus portadas locales actualizando solo una"
+msgstr "¡Actualiza tus portadas locales actualizando solo una!"
 
 msgid ""
 "p>Do you have more than 1 newspaper and you would like for the \"home\" "
@@ -8041,25 +8033,22 @@ msgstr "Módulos seleccionados"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#, fuzzy
 msgid "There was an error while creating an instance with the following data:"
-msgstr "Se ha producido un error al actualizar el widget."
+msgstr ""
+"Se ha producido un error al actualizar una instancia con los siguientes "
+"datos:"
 
-#, fuzzy
 msgid "Instance name"
-msgstr "Instancia"
+msgstr "Nombre de instancia"
 
-#, fuzzy
 msgid "Instance internal_name"
-msgstr "Nombre interno"
+msgstr "Nombre interno de la instancia"
 
-#, fuzzy
 msgid "Instance contact_mail"
-msgstr "Instancia no activada"
+msgstr "Email de contacto de la instancia"
 
-#, fuzzy
 msgid "Instance domains"
-msgstr "Información de la instancia"
+msgstr "Dominios de la instancia"
 
 msgid "Welcome to OpenNemas"
 msgstr "Bienvenido a Opennemas"
@@ -8378,6 +8367,9 @@ msgid ""
 msgstr ""
 "No hay ningún infome creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún informe."
+
+#~ msgid "Articles synchronization"
+#~ msgstr "Sincronización de artículos"
 
 #~ msgid "Advanced frontpage managers"
 #~ msgstr "Gestor de portadas avanzado"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-13 14:51+0000\n"
-"PO-Revision-Date: 2015-08-13 17:02+0200\n"
+"POT-Creation-Date: 2015-08-13 15:14+0000\n"
+"PO-Revision-Date: 2015-08-13 17:24+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -2259,7 +2259,7 @@ msgstr "Busca avanzada"
 msgid "Advanced article options"
 msgstr "Opcións avanzadas de artigo"
 
-msgid "Frontpage customization"
+msgid "Frontpage Customization"
 msgstr "Personalizar portadas"
 
 msgid "Authors Blog"
@@ -2271,13 +2271,14 @@ msgstr "Personalizacións para Crónicas"
 msgid "Contact"
 msgstr "Contacto"
 
-#, fuzzy
 msgid "Frontpages Manager"
-msgstr "Xestor de portada"
+msgstr "Xestor de portadas"
 
-#, fuzzy
 msgid "Import XMLs"
-msgstr "Importación de ficheiros XML"
+msgstr "Importación de XMLs"
+
+msgid "NewsStand"
+msgstr "Kiosko"
 
 msgid "Letters"
 msgstr "Cartas"
@@ -2288,9 +2289,8 @@ msgstr "Hemeroteca"
 msgid "News Agency importer"
 msgstr "Importador de novas de axencias"
 
-#, fuzzy
-msgid "Articles synchronization"
-msgstr "Sincronización de portadas"
+msgid "Articles Synchronization"
+msgstr "Sincronización de artigos"
 
 msgid "Promotional bar"
 msgstr "Barra promocional"
@@ -2398,7 +2398,7 @@ msgid ""
 "\">Page Views and Storage Space</a>.</small></p><p><small>All prices above "
 "do not include VAT (21%).</small></p>"
 msgstr ""
-"<p><small>1. Para engadir máis usuaris visita a nosa páxina de <a href=\""
+"<p><small>1. Para engadir máis usuarios visita a nosa páxina de <a href=\""
 "http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
 "licencias-de-usuario\">licenzas de usuario</a>.</small></p><p><small>2. Para "
 "obter máis información sobre o almacenamento ou páxinas vistas visita a nosa "
@@ -3073,10 +3073,6 @@ msgstr ""
 "un enderezo web, ou a un correo, e cada vez que use unha palabra chave o "
 "sistema etiquetaráa.</p>"
 
-#, fuzzy
-msgid "NewsStand"
-msgstr "Portadas de papel"
-
 msgid "Let your readers download the pdf copy of your print newspaper."
 msgstr ""
 "Permítelle aos teus lectors descargar unha copia en PDF do teu periódico "
@@ -3207,10 +3203,6 @@ msgstr ""
 msgid "emails"
 msgstr "correos"
 
-#, fuzzy
-msgid "Articles Synchronization"
-msgstr "Sincronización de portadas"
-
 msgid "Update more newspapers at once by syncing articles."
 msgstr "Actualiza máis periódicos sincronizando artigos."
 
@@ -3271,7 +3263,7 @@ msgstr ""
 "Permite incluír páxinas estáticas, usadas normalmente para conter "
 "información legal ou páxinas \"Sobre nós\"."
 
-msgid "Frontpage synchronization"
+msgid "Frontpage Synchronization"
 msgstr "Sincronización de portadas"
 
 #, fuzzy
@@ -4195,9 +4187,8 @@ msgstr "Mercar"
 msgid "Unable to find any module that matches your search."
 msgstr "Non se puideron atopar módulos que coincidan coa túa busca."
 
-#, fuzzy
 msgid "No items available to purchase"
-msgstr "Non hai especiais dispoñibeis."
+msgstr "Non hai elementos dispoñibles para comprar"
 
 msgid "Available"
 msgstr "Dispoñibel"
@@ -7970,24 +7961,21 @@ msgstr "Módulos seleccionados"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#, fuzzy
 msgid "There was an error while creating an instance with the following data:"
-msgstr "Produciuse un erro ao actualizar o widget."
+msgstr "Produciuse un erro ao crear unha instancia cos seguintes datos:"
 
 msgid "Instance name"
 msgstr "Nome da instancia"
 
-#, fuzzy
 msgid "Instance internal_name"
-msgstr "Nome da instancia"
+msgstr "Nome interno da instancia"
 
 #, fuzzy
 msgid "Instance contact_mail"
 msgstr "Correo-e do usuario de contacto"
 
-#, fuzzy
 msgid "Instance domains"
-msgstr "Información da instancia"
+msgstr "Dominios da instancia"
 
 msgid "Welcome to OpenNemas"
 msgstr "Benvido a Opennemas"
@@ -8304,6 +8292,10 @@ msgid ""
 msgstr ""
 "Non hai ningún informe creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún."
+
+#, fuzzy
+#~ msgid "Articles synchronization"
+#~ msgstr "Sincronización de artigos"
 
 #~ msgid "Advanced frontpage managers"
 #~ msgstr "Xestor avanzado de portadas"

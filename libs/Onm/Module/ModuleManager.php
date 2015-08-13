@@ -132,7 +132,7 @@ class ModuleManager
                 'ALBUM_MANAGER'              => _('Albums'),
                 'ARTICLE_MANAGER'            => _('Articles'),
                 'ADVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
-                'ADVANCED_FRONTPAGE_MANAGER' => _('Frontpage customization'),
+                'ADVANCED_FRONTPAGE_MANAGER' => _('Frontpage Customization'),
                 'BLOG_MANAGER'               => _('Authors Blog'),
                 'BOOK_MANAGER'               => _('Books'),
                 'CACHE_MANAGER'              => _('Cache manager'),
@@ -146,13 +146,13 @@ class ModuleManager
                 'IMAGE_MANAGER'              => _('Images'),
                 'XML_IMPORT'                 => _('Import XMLs'),
                 'KEYWORD_MANAGER'            => _('Keywords'),
-                'KIOSKO_MANAGER'             => _('Kiosko'),
+                'KIOSKO_MANAGER'             => _('NewsStand'),
                 'LETTER_MANAGER'             => _('Letters'),
                 'LIBRARY_MANAGER'            => _('Library'),
                 'MENU_MANAGER'               => _('Menus'),
                 'NEWS_AGENCY_IMPORTER'       => _('News Agency importer'),
                 'NEWSLETTER_MANAGER'         => _('Newsletter'),
-                'OPENNEMAS_AGENCY'           => _('Articles synchronization'),
+                'OPENNEMAS_AGENCY'           => _('Articles Synchronization'),
                 'OPINION_MANAGER'            => _('Opinion'),
                 'POLL_MANAGER'               => _('Polls'),
                 'PROMOTIONAL_BAR'            => _('Promotional bar'),
@@ -709,7 +709,7 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
-                    'name'             => _('Frontpage customization'),
+                    'name'             => _('Frontpage Customization'),
                     'description'      => _('Change your Frontpage every time you want.'),
                     'long_description' => _(
                         '<p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
@@ -729,7 +729,7 @@ class ModuleManager
                 [
                     'id'               => 'BLOG_MANAGER',
                     'plan'             => 'OTHER',
-                    'type'             => 'internal',
+                    'type'             => 'module',
                     'thumbnail'        => 'module-blog.jpg',
                     'name'             => _('Authors Blog'),
                     'description'      => _('Would you like to give to your Opinion authors a Blog Space, this is the feature you were looking for.'),
@@ -815,7 +815,7 @@ class ModuleManager
                 [
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'OTHER',
-                    'type'             => 'internal',
+                    'type'             => 'module',
                     'name'             => _('Contact'),
                     'description'      => _('Let your readers send you content with or without attachments.'),
                     'long_description' => _(
@@ -1117,7 +1117,7 @@ class ModuleManager
                     'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
-                    'name'             => _('Frontpage synchronization'),
+                    'name'             => _('Frontpage Synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage!'),
                     'long_description' => _(
                         'p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronized?</p><p>No problem. By activating this module you will have all your news synchronized, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
