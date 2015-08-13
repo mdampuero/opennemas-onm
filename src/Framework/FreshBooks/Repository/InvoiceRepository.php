@@ -39,7 +39,7 @@ class InvoiceRepository extends Repository
      *
      * @return array The list of invoices.
      */
-    public function findBy($criteria)
+    public function findBy($criteria = null)
     {
         $this->api->setMethod('invoice.list');
         $this->api->post($criteria);
@@ -48,17 +48,21 @@ class InvoiceRepository extends Repository
         $response = [];
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-            $response = $response['invoices'];
-
             $invoices = [];
-            foreach($response as $data) {
-                $invoices[] = new Invoice($data);
+
+            $response = $this->api->getResponse();
+
+            if (array_key_exists('invoices', $response)
+                && array_key_exists('invoice', $response['invoices'])
+            ) {
+                $response = $response['invoices']['invoice'];
+
+                foreach($response as $data) {
+                    $invoices[] = new Invoice($data);
+                }
             }
 
             return $invoices;
-
-            return array_values($response);
         }
 
         throw new InvalidCriteriaException($this->api->getError());

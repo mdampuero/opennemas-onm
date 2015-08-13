@@ -94,7 +94,11 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'invoices'    => $invoices
+            'invoices'    => [
+                '@attributes' => [ 'page' => 1, 'total' => 1 ],
+                'invoice'     => $invoices
+            ]
+
         ];
 
         $this->api->method('success')->willReturn(true);
