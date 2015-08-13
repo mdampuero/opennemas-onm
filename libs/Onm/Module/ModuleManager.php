@@ -730,7 +730,7 @@ class ModuleManager
                     'id'               => 'BLOG_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'module',
-                    'thumbnail'        => 'module-blog.jpg',
+                    'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Authors Blog'),
                     'description'      => _('Would you like to give to your Opinion authors a Blog Space, this is the feature you were looking for.'),
                     'long_description' => _('
@@ -816,6 +816,7 @@ class ModuleManager
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-letters.jpg',
                     'name'             => _('Contact'),
                     'description'      => _('Let your readers send you content with or without attachments.'),
                     'long_description' => _(
