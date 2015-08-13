@@ -870,7 +870,7 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'module',
                     'name'             => _('Import XMLs'),
-                    'thumbnail'        => '',
+                    'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'description'      => _('Do you have your articles in Adobe InDesign or QuarkXPress'),
                     'long_description' => _('<p>By activating this module you will be able to import XML from Adobe InDesign and QuarkXPress, so that you print articles will become digital. This automatization is one of the most popular because it saves so much time.</p>'),
                     'price'            => [
@@ -1005,7 +1005,7 @@ class ModuleManager
                     'id'               => 'OPENNEMAS_AGENCY',
                     'plan'             => 'OTHER',
                     'type'             => 'module',
-                    'thumbnail'        => '',
+                    'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Articles Synchronization'),
                     'description'      => _('Update more newspapers at once by syncing articles.'),
                     'long_description' => _('
