@@ -55,10 +55,14 @@ class ClientRepository extends Repository
             if (array_key_exists('clients', $response)
                 && array_key_exists('client', $response['clients'])
             ) {
-                $response = $response['clients']['client'];
+                if ($response['clients']['@attributes']['total'] == 1) {
+                    $clients[] = new Client($response['clients']['client']);
+                } else {
+                    $response = $response['clients']['client'];
 
-                foreach($response as $data) {
-                    $clients[] = new Client($data);
+                    foreach($response as $data) {
+                        $clients[] = new Client($data);
+                    }
                 }
             }
 

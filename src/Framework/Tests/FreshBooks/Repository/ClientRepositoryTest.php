@@ -76,7 +76,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->findBy($criteria);
     }
 
-    public function testFindByWithValidCriteria()
+    public function testFindByWithValidCriteriaMultipleResults()
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
@@ -86,13 +86,20 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
                 'email'      => 'johndoe@example.org'
+            ],
+            [
+                'client_id'  => '2',
+                'first_name' => 'Jane',
+                'last_name'  => 'Doe',
+                'email'      => 'janedoe@example.org'
             ]
+
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'clients'     => [
-                '@attributes' => [ 'page' => 1, 'total' => 1 ],
+                '@attributes' => [ 'page' => 1, 'total' => 2 ],
                 'client'      => $clients
             ]
         ];
@@ -117,4 +124,39 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testFindByWithValidCriteriaOneResult()
+    {
+        $criteria = [ 'email' => 'johndoe@example.org' ];
+
+        $clients = [
+            'client_id'  => '1',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'johndoe@example.org'
+        ];
+
+        $response = [
+            '@attributes' => [ 'status' => 'ok' ],
+            'clients'     => [
+                '@attributes' => [ 'page' => 1, 'total' => 1 ],
+                'client'      => $clients
+            ]
+        ];
+
+        $this->api->method('success')->willReturn(true);
+        $this->api->method('getResponse')->willReturn($response);
+
+
+        $this->api->expects($this->once())->method('setMethod')
+            ->with('client.list');
+
+        $this->api->expects($this->once())->method('post');
+        $this->api->expects($this->once())->method('success');
+        $this->api->expects($this->once())->method('getResponse');
+
+        $response = $this->repository->findBy($criteria);
+
+        $this->assertEquals(1, count($response));
+        $this->assertEquals($clients, $response[0]->getData());
+    }
 }

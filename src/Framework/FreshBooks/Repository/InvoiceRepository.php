@@ -55,10 +55,14 @@ class InvoiceRepository extends Repository
             if (array_key_exists('invoices', $response)
                 && array_key_exists('invoice', $response['invoices'])
             ) {
-                $response = $response['invoices']['invoice'];
+                if ($response['invoices']['@attributes']['total'] == 1) {
+                    $invoices[] = new Invoice($response['invoices']['invoice']);
+                } else {
+                    $response = $response['invoices']['invoice'];
 
-                foreach($response as $data) {
-                    $invoices[] = new Invoice($data);
+                    foreach($response as $data) {
+                        $invoices[] = new Invoice($data);
+                    }
                 }
             }
 

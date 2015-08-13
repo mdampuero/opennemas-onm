@@ -78,7 +78,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->findBy($criteria);
     }
 
-    public function testFindByWithValidCriteria()
+    public function testFindByWithValidCriteriaMultipleResults()
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
@@ -89,13 +89,20 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
                 'client_id'  => '1',
                 'first_name' => 'John',
                 'last_name'  => 'Doe'
+            ],
+            [
+                'invoice_id' => '2',
+                'number'     => '2',
+                'client_id'  => '1',
+                'first_name' => 'John',
+                'last_name'  => 'Doe'
             ]
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'invoices'    => [
-                '@attributes' => [ 'page' => 1, 'total' => 1 ],
+                '@attributes' => [ 'page' => 1, 'total' => 2 ],
                 'invoice'     => $invoices
             ]
 
@@ -119,6 +126,42 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         for ($i = 0; $i < count($response); $i++) {
             $this->assertEquals($invoices[$i], $response[$i]->getData());
         }
+    }
+
+    public function testFindByWithValidCriteriaOneResult()
+    {
+        $criteria = [ 'email' => 'johndoe@example.org' ];
+
+        $invoices = [
+            'invoice_id' => '1',
+            'number'     => '1',
+            'client_id'  => '1',
+            'first_name' => 'John',
+            'last_name'  => 'Doe'
+        ];
+
+        $response = [
+            '@attributes' => [ 'status' => 'ok' ],
+            'invoices'    => [
+                '@attributes' => [ 'page' => 1, 'total' => 1 ],
+                'invoice'     => $invoices
+            ]
+        ];
+
+        $this->api->method('success')->willReturn(true);
+        $this->api->method('getResponse')->willReturn($response);
+
+        $this->api->expects($this->once())->method('setMethod')
+            ->with('invoice.list');
+
+        $this->api->expects($this->once())->method('post');
+        $this->api->expects($this->once())->method('success');
+        $this->api->expects($this->once())->method('getResponse');
+
+        $response = $this->repository->findBy($criteria);
+
+        $this->assertEquals(1, count($response));
+        $this->assertEquals($invoices, $response[0]->getData());
     }
 
     /**
