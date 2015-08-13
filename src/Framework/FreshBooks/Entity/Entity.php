@@ -4,7 +4,12 @@ namespace Framework\FreshBooks\Entity;
 
 abstract class Entity
 {
-    private $_data = [];
+    /**
+     * Array of RAW data.
+     *
+     * @var array
+     */
+    protected $_data = [];
 
     /**
      * Initializes the entity.
