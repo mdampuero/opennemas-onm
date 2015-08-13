@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-13 10:54+0000\n"
-"PO-Revision-Date: 2015-08-13 13:12+0200\n"
+"POT-Creation-Date: 2015-08-13 14:51+0000\n"
+"PO-Revision-Date: 2015-08-13 17:02+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -2285,20 +2285,21 @@ msgstr "Búsqueda avanzada"
 msgid "Advanced article options"
 msgstr "Opciones avanzadas de artículo"
 
-msgid "Advanced frontpage managers"
-msgstr "Gestor de portadas avanzado"
+msgid "Frontpage customization"
+msgstr "Personalizar portadas"
 
-msgid "Blog"
-msgstr "Blog"
+msgid "Authors Blog"
+msgstr "Blogs de Autores"
 
 msgid "Cronicas customizations"
 msgstr "Personalizaciones para Cronicas"
 
-msgid "Forms"
-msgstr "Formularios"
+msgid "Contact"
+msgstr "Contacto"
 
-msgid "Frontpages layout"
-msgstr "Disposición de Portadas"
+#, fuzzy
+msgid "Frontpages Manager"
+msgstr "Gestor de portadas"
 
 #, fuzzy
 msgid "Import XMLs"
@@ -2911,9 +2912,6 @@ msgstr "Módulo que permite una firma de artículo secundaria"
 msgid "Missed long description..."
 msgstr ""
 
-msgid "Frontpage advanced personalization"
-msgstr "Personalización avanzada de portada"
-
 msgid "Change your Frontpage every time you want."
 msgstr "Cambia tus portadas en el momento que quieras."
 
@@ -3019,9 +3017,6 @@ msgstr ""
 "Permite a los usuarios subir archivos al sistema y compartirlos con una url "
 "en artículos de tu periódico."
 
-msgid "Opennemas Contact"
-msgstr "Opennemas Contact"
-
 msgid "Let your readers send you content with or without attachments."
 msgstr "Deja que tus lectores te envíen contenido con o sin archivos adjuntos."
 
@@ -3051,9 +3046,6 @@ msgid ""
 msgstr ""
 "El gestor de portadas le permite añadir artículos y modificar la "
 "visualización de tus portadas instáneamente."
-
-msgid "Frontpages layouts & custom layouts"
-msgstr "Disposición personalizadas de portadas"
 
 msgid "Create and Manage Frontpage Layouts made by you, every time you want! "
 msgstr ""
@@ -3104,6 +3096,10 @@ msgstr ""
 "<p>Le permite crear una lista de palabras clave a las que asignar una "
 "dirección web, o un correo, y cada vez que use esta palabra clave el sistema "
 "la etiquetará por ti.</p>"
+
+#, fuzzy
+msgid "NewsStand"
+msgstr "Portadas de papel"
 
 msgid "Let your readers download the pdf copy of your print newspaper."
 msgstr "Deja que tus lectores disfruten de tu periódico de papel en PDF."
@@ -3268,6 +3264,9 @@ msgid ""
 "<p>Allows all newspapers to have a section dedicated to opinions organized "
 "by author and with author frontpage too.</p>"
 msgstr ""
+
+msgid "Polls Manager"
+msgstr "Gestor de encuestas"
 
 msgid ""
 "Create and manage your polls, engage your audience and collect useful "
@@ -4973,6 +4972,9 @@ msgstr "Configuración del módulo «Opinión»"
 
 msgid "New opinion"
 msgstr "Nueva opinión"
+
+msgid "Blog"
+msgstr "Blog"
 
 msgid "Director Articles"
 msgstr "Artículos del director"
@@ -7997,9 +7999,6 @@ msgstr "Dominios"
 msgid "Domain expire"
 msgstr "Expiración del dominio:"
 
-msgid "Contact"
-msgstr "Contacto"
-
 msgid "Last access"
 msgstr "Último acceso"
 
@@ -8379,6 +8378,24 @@ msgid ""
 msgstr ""
 "No hay ningún infome creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún informe."
+
+#~ msgid "Advanced frontpage managers"
+#~ msgstr "Gestor de portadas avanzado"
+
+#~ msgid "Forms"
+#~ msgstr "Formularios"
+
+#~ msgid "Frontpages layout"
+#~ msgstr "Disposición de Portadas"
+
+#~ msgid "Frontpage advanced personalization"
+#~ msgstr "Personalización avanzada de portada"
+
+#~ msgid "Opennemas Contact"
+#~ msgstr "Opennemas Contact"
+
+#~ msgid "Frontpages layouts & custom layouts"
+#~ msgstr "Disposición personalizadas de portadas"
 
 #~ msgid "Unable to copy default assets for the instance"
 #~ msgstr "No se pudieron copiar los estáticos por omisión de la instancia"

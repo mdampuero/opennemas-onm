@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-13 10:54+0000\n"
-"PO-Revision-Date: 2015-08-13 13:12+0200\n"
+"POT-Creation-Date: 2015-08-13 14:51+0000\n"
+"PO-Revision-Date: 2015-08-13 17:02+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -2259,20 +2259,21 @@ msgstr "Busca avanzada"
 msgid "Advanced article options"
 msgstr "Opcións avanzadas de artigo"
 
-msgid "Advanced frontpage managers"
-msgstr "Xestor avanzado de portadas"
+msgid "Frontpage customization"
+msgstr "Personalizar portadas"
 
-msgid "Blog"
-msgstr "Blog"
+msgid "Authors Blog"
+msgstr "Blogs de Autores"
 
 msgid "Cronicas customizations"
 msgstr "Personalizacións para Crónicas"
 
-msgid "Forms"
-msgstr "Formularios"
+msgid "Contact"
+msgstr "Contacto"
 
-msgid "Frontpages layout"
-msgstr "Disposicion de portadas"
+#, fuzzy
+msgid "Frontpages Manager"
+msgstr "Xestor de portada"
 
 #, fuzzy
 msgid "Import XMLs"
@@ -2893,9 +2894,6 @@ msgstr "Módulo que lle permite engadir unha segunda sinatura en artigos"
 msgid "Missed long description..."
 msgstr ""
 
-msgid "Frontpage advanced personalization"
-msgstr "Personalización avanzada de portadas"
-
 msgid "Change your Frontpage every time you want."
 msgstr "Cambia a túa portada cando queiras."
 
@@ -2994,11 +2992,9 @@ msgstr ""
 "Permítelle aos susuarios subir ficheiros ao sistema e compartilos con unha "
 "url nos artigos do periódico."
 
-msgid "Opennemas Contact"
-msgstr "Opennemas Contact"
-
 msgid "Let your readers send you content with or without attachments."
-msgstr "Deixa que os teus lectores envíen contido con ou sen arquivos adxuntos."
+msgstr ""
+"Deixa que os teus lectores envíen contido con ou sen arquivos adxuntos."
 
 msgid ""
 "<p>Our feature Opennemas Contact will allow readers to submit their opinions "
@@ -3026,9 +3022,6 @@ msgid ""
 msgstr ""
 "<p>O xestor de portadas permítelle engadir artigos e modificar a "
 "visualización das túas portadas de forma instantánea.</p>"
-
-msgid "Frontpages layouts & custom layouts"
-msgstr "Disposicion de portadas e disposicións personalizadas"
 
 msgid "Create and Manage Frontpage Layouts made by you, every time you want! "
 msgstr ""
@@ -3079,6 +3072,10 @@ msgstr ""
 "<p>Permítelle crear unha lista de palabras chave e asigne cada unha delas a "
 "un enderezo web, ou a un correo, e cada vez que use unha palabra chave o "
 "sistema etiquetaráa.</p>"
+
+#, fuzzy
+msgid "NewsStand"
+msgstr "Portadas de papel"
 
 msgid "Let your readers download the pdf copy of your print newspaper."
 msgstr ""
@@ -3210,6 +3207,7 @@ msgstr ""
 msgid "emails"
 msgstr "correos"
 
+#, fuzzy
 msgid "Articles Synchronization"
 msgstr "Sincronización de portadas"
 
@@ -3240,6 +3238,9 @@ msgid ""
 msgstr ""
 "<p>Permítelle aos periódicos ter unha sección adicada a opinións organizado "
 "por autor e con portadas de autor.</p>"
+
+msgid "Polls Manager"
+msgstr "Xestor de enquisas"
 
 msgid ""
 "Create and manage your polls, engage your audience and collect useful "
@@ -4925,6 +4926,9 @@ msgstr "Configuración do módulo de opinión"
 
 msgid "New opinion"
 msgstr "Nova opinión"
+
+msgid "Blog"
+msgstr "Blog"
 
 msgid "Director Articles"
 msgstr "Artigos do director"
@@ -7924,9 +7928,6 @@ msgstr "Dominios"
 msgid "Domain expire"
 msgstr "Expiración do dominio:"
 
-msgid "Contact"
-msgstr "Contacto"
-
 msgid "Last access"
 msgstr "Último accesso"
 
@@ -8303,6 +8304,24 @@ msgid ""
 msgstr ""
 "Non hai ningún informe creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún."
+
+#~ msgid "Advanced frontpage managers"
+#~ msgstr "Xestor avanzado de portadas"
+
+#~ msgid "Forms"
+#~ msgstr "Formularios"
+
+#~ msgid "Frontpages layout"
+#~ msgstr "Disposicion de portadas"
+
+#~ msgid "Frontpage advanced personalization"
+#~ msgstr "Personalización avanzada de portadas"
+
+#~ msgid "Opennemas Contact"
+#~ msgstr "Opennemas Contact"
+
+#~ msgid "Frontpages layouts & custom layouts"
+#~ msgstr "Disposicion de portadas e disposicións personalizadas"
 
 #~ msgid "Unable to copy default assets for the instance"
 #~ msgstr "Non se puideron copiar os assets por omisión para a instancia"

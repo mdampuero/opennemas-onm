@@ -132,17 +132,17 @@ class ModuleManager
                 'ALBUM_MANAGER'              => _('Albums'),
                 'ARTICLE_MANAGER'            => _('Articles'),
                 'ADVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
-                'ADVANCED_FRONTPAGE_MANAGER' => _('Advanced frontpage managers'),
-                'BLOG_MANAGER'               => _('Blog'),
+                'ADVANCED_FRONTPAGE_MANAGER' => _('Frontpage customization'),
+                'BLOG_MANAGER'               => _('Authors Blog'),
                 'BOOK_MANAGER'               => _('Books'),
                 'CACHE_MANAGER'              => _('Cache manager'),
                 'CATEGORY_MANAGER'           => _('Category'),
                 'COMMENT_MANAGER'            => _('Comments'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
                 'FILE_MANAGER'               => _('Files'),
-                'FORM_MANAGER'               => _('Forms'),
+                'FORM_MANAGER'               => _('Contact'),
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
-                'FRONTPAGES_LAYOUT'          => _('Frontpages layout'),
+                'FRONTPAGES_LAYOUT'          => _('Frontpages Manager'),
                 'IMAGE_MANAGER'              => _('Images'),
                 'XML_IMPORT'                 => _('Import XMLs'),
                 'KEYWORD_MANAGER'            => _('Keywords'),
@@ -709,7 +709,7 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
-                    'name'             => _('Frontpage advanced personalization'),
+                    'name'             => _('Frontpage customization'),
                     'description'      => _('Change your Frontpage every time you want.'),
                     'long_description' => _(
                         '<p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
@@ -731,7 +731,7 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'thumbnail'        => 'module-blog.jpg',
-                    'name'             => _('Blog'),
+                    'name'             => _('Authors Blog'),
                     'description'      => _('Would you like to give to your Opinion authors a Blog Space, this is the feature you were looking for.'),
                     'long_description' => _('
                         <p>Authors will have a dedicated space where all their contributions will appear in chronological order and readers alse set a RSS notification to receive the latest articles posted by a particular author.</p>
@@ -816,7 +816,7 @@ class ModuleManager
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
-                    'name'             => _('Opennemas Contact'),
+                    'name'             => _('Contact'),
                     'description'      => _('Let your readers send you content with or without attachments.'),
                     'long_description' => _(
                         '<p>Our feature Opennemas Contact will allow readers to submit their opinions with or without attachment, so that they can communicate with the newspapers.</p>'
@@ -844,7 +844,7 @@ class ModuleManager
                     'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
-                    'name'             => _('Frontpages layouts & custom layouts'),
+                    'name'             => _('Frontpage Manager'),
                     'description'      => _('Create and Manage Frontpage Layouts made by you, every time you want! '),
                     'long_description' => (
                         _('<p>Management Personal Frontpages/Frontpages Organization</p>')
@@ -897,7 +897,7 @@ class ModuleManager
                     'plan'             => 'GOLD',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
-                    'name'             => _('Kiosko'),
+                    'name'             => _('NewsStand'),
                     'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
                     'long_description' => _(
                         '<p>If you would like to keep the print version of your newspaper in a newsstand like
@@ -1038,7 +1038,7 @@ class ModuleManager
                     'plan'             => 'PROFESSIONAL',
                     'type'             => 'module',
                     'thumbnail'        => 'module-polls.jpg',
-                    'name'             => _('Polls'),
+                    'name'             => _('Polls Manager'),
                     'description'      => _(
                         'Create and manage your polls, engage your audience and collect useful information. '
                     ),
