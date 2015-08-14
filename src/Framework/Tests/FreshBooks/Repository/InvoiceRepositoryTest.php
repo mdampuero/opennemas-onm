@@ -38,8 +38,9 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             'invoice_id' => '1',
             'number'     => '1',
             'client_id'  => '1',
-            'first_name' => 'John',
-            'last_name'  => 'Doe'
+            'lines' => [
+                'line' => []
+            ]
         ];
 
         $response = [
@@ -87,15 +88,17 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
                 'invoice_id' => '1',
                 'number'     => '1',
                 'client_id'  => '1',
-                'first_name' => 'John',
-                'last_name'  => 'Doe'
+                'lines' => [
+                    'line' => []
+                ]
             ],
             [
                 'invoice_id' => '2',
                 'number'     => '2',
                 'client_id'  => '1',
-                'first_name' => 'John',
-                'last_name'  => 'Doe'
+                'lines' => [
+                    'line' => []
+                ]
             ]
         ];
 
@@ -136,8 +139,9 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             'invoice_id' => '1',
             'number'     => '1',
             'client_id'  => '1',
-            'first_name' => 'John',
-            'last_name'  => 'Doe'
+            'lines' => [
+                'line' => []
+            ]
         ];
 
         $response = [
