@@ -78,7 +78,6 @@ class MarketController extends Controller
             // Remove ALBUM_MANAGER, PHOTO_MANAGER and VIDEO_MANAGER
             if (array_key_exists('id', $a)
                 && ($a['id'] === 'ALBUM_MANAGER'
-                    || $a['id'] === 'IMAGE_MANAGER'
                     || $a['id'] === 'VIDEO_MANAGER')
             ) {
                 return false;
