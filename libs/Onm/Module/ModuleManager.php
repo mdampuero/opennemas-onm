@@ -859,6 +859,7 @@ class ModuleManager
                     'id'               => 'IMAGE_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-multimedia.jpg',
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
                     'long_description' => _('Missed long description...'),
