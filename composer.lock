@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f368fdf78feb6ce0617a1ce4f0dbe0db",
+    "hash": "c7e6976fc044daaebdaf2a4be769ad9f",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -62,6 +62,100 @@
                 "driver"
             ],
             "time": "2013-06-21 15:51:20"
+        },
+        {
+            "name": "braintree/braintree_php",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/braintree/braintree_php.git",
+                "reference": "c7e0e2d1ae21d659cddb5507fb0bf181813b5733"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/c7e0e2d1ae21d659cddb5507fb0bf181813b5733",
+                "reference": "c7e0e2d1ae21d659cddb5507fb0bf181813b5733",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Braintree": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Braintree",
+                    "homepage": "http://www.braintreepayments.com"
+                }
+            ],
+            "description": "Braintree PHP Client Library",
+            "time": "2015-07-15 15:07:13"
+        },
+        {
+            "name": "cometcult/braintree-bundle",
+            "version": "dev-master",
+            "target-dir": "CometCult/BraintreeBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cometcult/CometCultBraintreeBundle.git",
+                "reference": "9259e13b2cc34b718315e9caac13326a85c75370"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cometcult/CometCultBraintreeBundle/zipball/9259e13b2cc34b718315e9caac13326a85c75370",
+                "reference": "9259e13b2cc34b718315e9caac13326a85c75370",
+                "shasum": ""
+            },
+            "require": {
+                "braintree/braintree_php": "*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "dev-master",
+                "symfony/framework-bundle": ">=2.2,<2.3-dev"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "CometCult\\BraintreeBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Karol Sójko",
+                    "email": "zoja87@gmail.com"
+                }
+            ],
+            "description": "Symfony 2 Bundle for Braintree's PHP client library",
+            "homepage": "http://github.com/cometcult/CometCultBraintreeBundle",
+            "keywords": [
+                "braintree",
+                "bundle",
+                "card",
+                "credit",
+                "payment"
+            ],
+            "time": "2014-02-05 22:05:43"
         },
         {
             "name": "doctrine/annotations",
@@ -2186,55 +2280,6 @@
             "time": "2014-07-07 17:21:13"
         },
         {
-            "name": "rtconner/freshbooks-api",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rtconner/freshbooks-api.git",
-                "reference": "07201bee4729498950a04caefbe9c0ce071242c0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rtconner/freshbooks-api/zipball/07201bee4729498950a04caefbe9c0ce071242c0",
-                "reference": "07201bee4729498950a04caefbe9c0ce071242c0",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Freshbooks\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "jboesch",
-                    "homepage": "https://github.com/jboesch/FreshBooksRequest-PHP-API"
-                },
-                {
-                    "name": "JasonReading",
-                    "homepage": "http://jasonreading.com"
-                },
-                {
-                    "name": "Robert Conner",
-                    "homepage": "http://smartersoftware.net"
-                }
-            ],
-            "description": "Wrapper to the FreshBooks API",
-            "keywords": [
-                "api",
-                "freshbooks"
-            ],
-            "time": "2014-11-23 22:14:47"
-        },
-        {
             "name": "sensio/distribution-bundle",
             "version": "v4.0.0",
             "target-dir": "Sensio/Bundle/DistributionBundle",
@@ -4314,6 +4359,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "cometcult/braintree-bundle": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "doctrine/migrations": 20,
         "drexarj/disqus-php": 20,
