@@ -88,7 +88,7 @@ class FreshBooksManager
      */
     public function persist(Entity $entity)
     {
-       $persister = $this->getPersister($entity);
+        $persister = $this->getPersister($entity);
 
         if ($entity->exists()) {
             $persister->update($entity);
@@ -104,9 +104,9 @@ class FreshBooksManager
      */
     public function remove(Entity $entity)
     {
-       $persister = $this->getPersister($entity);
+        $persister = $this->getPersister($entity);
 
-       if ($entity->exists()) {
+        if ($entity->exists()) {
             $persister->remove($entity);
         }
     }

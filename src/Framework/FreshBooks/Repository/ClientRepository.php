@@ -60,7 +60,7 @@ class ClientRepository extends Repository
                 } else {
                     $response = $response['clients']['client'];
 
-                    foreach($response as $data) {
+                    foreach ($response as $data) {
                         $clients[] = new Client($data);
                     }
                 }

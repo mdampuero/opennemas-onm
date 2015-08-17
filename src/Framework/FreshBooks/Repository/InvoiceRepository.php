@@ -60,7 +60,7 @@ class InvoiceRepository extends Repository
                 } else {
                     $response = $response['invoices']['invoice'];
 
-                    foreach($response as $data) {
+                    foreach ($response as $data) {
                         $invoices[] = new Invoice($data);
                     }
                 }

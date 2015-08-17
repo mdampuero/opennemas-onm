@@ -60,7 +60,7 @@ class PaymentRepository extends Repository
                 } else {
                     $response = $response['payments']['payment'];
 
-                    foreach($response as $data) {
+                    foreach ($response as $data) {
                         $payments[] = new Payment($data);
                     }
                 }
