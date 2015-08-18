@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\FreshBooks\Exception;
+namespace Framework\ORM\Exception;
 
 class EntityNotFoundException extends \Exception
 {
