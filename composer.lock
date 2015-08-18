@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c7e6976fc044daaebdaf2a4be769ad9f",
+    "hash": "47d61eb263a6fe274461f3cc1b2ec164",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -849,7 +849,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ed26638d87b8d4f726e97536689c8fe8d9a10f14",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/c36e249aa59e8be98c0ee3889fd4ae8000dd856f",
                 "reference": "70c580174e4e16a79296a02256fb40a34192731c",
                 "shasum": ""
             },
@@ -2278,6 +2278,55 @@
                 "recaptcha"
             ],
             "time": "2014-07-07 17:21:13"
+        },
+        {
+            "name": "rtconner/freshbooks-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rtconner/freshbooks-api.git",
+                "reference": "07201bee4729498950a04caefbe9c0ce071242c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rtconner/freshbooks-api/zipball/07201bee4729498950a04caefbe9c0ce071242c0",
+                "reference": "07201bee4729498950a04caefbe9c0ce071242c0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Freshbooks\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jboesch",
+                    "homepage": "https://github.com/jboesch/FreshBooksRequest-PHP-API"
+                },
+                {
+                    "name": "JasonReading",
+                    "homepage": "http://jasonreading.com"
+                },
+                {
+                    "name": "Robert Conner",
+                    "homepage": "http://smartersoftware.net"
+                }
+            ],
+            "description": "Wrapper to the FreshBooks API",
+            "keywords": [
+                "api",
+                "freshbooks"
+            ],
+            "time": "2014-11-23 22:14:47"
         },
         {
             "name": "sensio/distribution-bundle",
