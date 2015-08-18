@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Entity;
+namespace Framework\Tests\ORM\Entity;
 
-use Framework\FreshBooks\Entity\Payment;
+use Framework\ORM\Entity\Payment;
 use Freshbooks\FreshBooksApi;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase

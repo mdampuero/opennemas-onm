@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\FreshBooks\Entity;
+namespace Framework\ORM\Entity;
 
 class Client extends Entity
 {

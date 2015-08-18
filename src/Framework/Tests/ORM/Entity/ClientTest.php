@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Entity;
+namespace Framework\Tests\ORM\Entity;
 
-use Framework\FreshBooks\Entity\Client;
+use Framework\ORM\Entity\Client;
 use Freshbooks\FreshBooksApi;
 
 class ClientTest extends \PHPUnit_Framework_TestCase

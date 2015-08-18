@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\FreshBooks\Entity;
+namespace Framework\ORM\Entity;
 
 abstract class Entity
 {
@@ -30,6 +30,8 @@ abstract class Entity
      */
     public function __get($property)
     {
+        $property = \underscore($property);
+
         if (array_key_exists($property, $this->_data)) {
             return $this->_data[$property];
         }
@@ -45,6 +47,8 @@ abstract class Entity
      */
     public function __set($property, $value)
     {
+        $property = \underscore($property);
+
         $this->_data[$property] = $value;
     }
 
@@ -56,6 +60,24 @@ abstract class Entity
     public function getData()
     {
         return $this->_data;
+    }
+
+    /**
+     * Merge the current entity data with the given data.
+     *
+     * @return array The data to merge.
+     */
+    public function merge($data)
+    {
+        if (!is_array($data)) {
+            return false;
+        }
+
+        foreach ($data as $key => $value) {
+            $property = \underscore($key);
+
+            $this->_data[$property] = $value;
+        }
     }
 
     /**

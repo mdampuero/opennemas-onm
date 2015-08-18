@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Entity;
+namespace Framework\Tests\ORM\Entity;
 
-use Framework\FreshBooks\Entity\Invoice;
+use Framework\ORM\Entity\Invoice;
 use Freshbooks\FreshBooksApi;
 
 class InvoiceTest extends \PHPUnit_Framework_TestCase

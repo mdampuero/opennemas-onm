@@ -1,15 +1,29 @@
 <?php
 
-namespace Framework\FreshBooks\Entity;
+namespace Framework\ORM\Entity;
 
-class Payment extends Entity
+class Invoice extends Entity
 {
     /**
      * Array of invalid fields to send in requests
      *
      * @var array
      */
-    protected $_invalid = [ 'from_credit', 'updated' ];
+    protected $_invalid = [
+        'auth_url',
+        'amount_outstanding',
+        'estimate_id',
+        'folder',
+        'gateways',
+        'links',
+        'order',
+        'paid',
+        'po_number',
+        'recurring_id',
+        'staff_id',
+        'updated',
+        'url'
+    ];
 
     /**
      * Cleans invalid fields from the invoice.
@@ -36,7 +50,7 @@ class Payment extends Entity
      */
     public function exists()
     {
-        $id = $this->payment_id;
+        $id = $this->invoice_id;
 
         return !empty($id);
     }
