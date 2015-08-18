@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\Tests\FreshBooks;
+namespace Framework\Tests\ORM\FreshBooks;
 
-use Framework\FreshBooks\FreshBooksManager;
-use Framework\FreshBooks\Entity\Client;
+use Framework\ORM\FreshBooks\FreshBooksManager;
+use Framework\ORM\Entity\Client;
 use Freshbooks\FreshBooksApi;
 
 class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +19,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\InvalidRepositoryException
+     * @expectedException Framework\ORM\Exception\InvalidRepositoryException
      */
     public function tesGetRepositoryInvalid()
     {
@@ -29,13 +29,13 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetRepositoryValid()
     {
         $cp = $this->manager->getRepository('client');
-        $this->assertInstanceOf('Framework\FreshBooks\Repository\Repository', $cp);
+        $this->assertInstanceOf('Framework\ORM\FreshBooks\Repository\FreshBooksRepository', $cp);
     }
 
     public function testGetPersisterValid()
     {
         $entity = new Client();
         $cp = $this->manager->getPersister($entity);
-        $this->assertInstanceOf('Framework\FreshBooks\Persister\Persister', $cp);
+        $this->assertInstanceOf('Framework\ORM\FreshBooks\Persister\FreshBooksPersister', $cp);
     }
 }
