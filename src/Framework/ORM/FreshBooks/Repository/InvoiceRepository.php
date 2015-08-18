@@ -1,12 +1,12 @@
 <?php
 
-namespace Framework\FreshBooks\Repository;
+namespace Framework\ORM\FreshBooks\Repository;
 
-use Framework\FreshBooks\Entity\Invoice;
-use Framework\FreshBooks\Exception\InvoiceNotFoundException;
-use Framework\FreshBooks\Exception\InvalidCriteriaException;
+use Framework\ORM\Entity\Invoice;
+use Framework\ORM\Exception\InvoiceNotFoundException;
+use Framework\ORM\Exception\InvalidCriteriaException;
 
-class InvoiceRepository extends Repository
+class InvoiceRepository extends FreshBooksRepository
 {
     /**
      * Find a invoice by id.

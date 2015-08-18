@@ -1,8 +1,11 @@
 <?php
 
-namespace Framework\FreshBooks\Repository;
+namespace Framework\ORM\FreshBooks\Repository;
 
-class Repository
+use Framework\ORM\Repository\Repository;
+use Freshbooks\FreshBooksApi;
+
+abstract class FreshBooksRepository extends Repository
 {
     /**
      * The FreshBooks api.
@@ -16,7 +19,7 @@ class Repository
      *
      * @param FreshBooksApi $api The FreshBooks api.
      */
-    public function __construct($api)
+    public function __construct(FreshBooksApi $api)
     {
         $this->api = $api;
     }

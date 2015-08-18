@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Repository;
+namespace Framework\Tests\ORM\FreshBooks\Repository;
 
-use Framework\FreshBooks\Repository\ClientRepository;
+use Framework\ORM\FreshBooks\Repository\InvoiceRepository;
 use Freshbooks\FreshBooksApi;
 
-class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
+class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -16,50 +16,58 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new ClientRepository($this->api);
+        $this->repository = new InvoiceRepository($this->api);
+    }
+
+    public function testContructor()
+    {
+        $this->assertEquals($this->repository->getApi(), $this->api);
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\ClientNotFoundException
+     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
      */
     public function testFindWithInvalidId()
     {
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('client.get');
+            ->with('invoice.get');
 
         $this->repository->find('1');
     }
 
     public function testFindWithValidId()
     {
-        $client = [
+        $invoice = [
+            'invoice_id' => '1',
+            'number'     => '1',
             'client_id'  => '1',
-            'first_name' => 'John',
-            'last_name'  => 'Doe'
+            'lines' => [
+                'line' => []
+            ]
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'client'      => $client,
+            'invoice'     => $invoice,
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('client.get');
+            ->with('invoice.get');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($client, $this->repository->find('1')->getData());
+        $this->assertEquals($invoice, $this->repository->find('1')->getData());
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\InvalidCriteriaException
+     * @expectedException Framework\ORM\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {
@@ -68,7 +76,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('client.list');
+            ->with('invoice.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -80,28 +88,32 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $clients = [
+        $invoices = [
             [
+                'invoice_id' => '1',
+                'number'     => '1',
                 'client_id'  => '1',
-                'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'email'      => 'johndoe@example.org'
+                'lines' => [
+                    'line' => []
+                ]
             ],
             [
-                'client_id'  => '2',
-                'first_name' => 'Jane',
-                'last_name'  => 'Doe',
-                'email'      => 'janedoe@example.org'
+                'invoice_id' => '2',
+                'number'     => '2',
+                'client_id'  => '1',
+                'lines' => [
+                    'line' => []
+                ]
             ]
-
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'clients'     => [
+            'invoices'    => [
                 '@attributes' => [ 'page' => 1, 'total' => 2 ],
-                'client'      => $clients
+                'invoice'     => $invoices
             ]
+
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -109,7 +121,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('client.list');
+            ->with('invoice.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -117,10 +129,10 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->repository->findBy($criteria);
 
-        $this->assertEquals(count($clients), count($response));
+        $this->assertEquals(count($invoices), count($response));
 
         for ($i = 0; $i < count($response); $i++) {
-            $this->assertEquals($clients[$i], $response[$i]->getData());
+            $this->assertEquals($invoices[$i], $response[$i]->getData());
         }
     }
 
@@ -128,27 +140,28 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $clients = [
+        $invoices = [
+            'invoice_id' => '1',
+            'number'     => '1',
             'client_id'  => '1',
-            'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'email'      => 'johndoe@example.org'
+            'lines' => [
+                'line' => []
+            ]
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'clients'     => [
+            'invoices'    => [
                 '@attributes' => [ 'page' => 1, 'total' => 1 ],
-                'client'      => $clients
+                'invoice'     => $invoices
             ]
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
 
-
         $this->api->expects($this->once())->method('setMethod')
-            ->with('client.list');
+            ->with('invoice.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -157,6 +170,36 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $response = $this->repository->findBy($criteria);
 
         $this->assertEquals(1, count($response));
-        $this->assertEquals($clients, $response[0]->getData());
+        $this->assertEquals($invoices, $response[0]->getData());
+    }
+
+    /**
+     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
+     */
+    public function testGetPDFWithInvalidId()
+    {
+        $this->api->method('success')->willReturn(false);
+
+        $this->api->expects($this->once())->method('setMethod')
+            ->with('invoice.getPDF');
+
+        $this->repository->getPDF('1');
+    }
+
+    public function testGetPDFWithValidId()
+    {
+        $response = '%PDF-1.4....';
+
+        $this->api->method('success')->willReturn(true);
+        $this->api->method('getResponse')->willReturn($response);
+
+        $this->api->expects($this->once())->method('setMethod')
+            ->with('invoice.getPDF');
+
+        $this->api->expects($this->once())->method('post');
+        $this->api->expects($this->once())->method('success');
+        $this->api->expects($this->once())->method('getResponse');
+
+        $this->assertEquals(strpos($this->repository->getPDF('1'), '%PDF-1.4'), 0);
     }
 }

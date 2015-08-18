@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Repository;
+namespace Framework\Tests\ORM\FreshBooks\Repository;
 
-use Framework\FreshBooks\Repository\PaymentRepository;
+use Framework\ORM\FreshBooks\Repository\ClientRepository;
 use Freshbooks\FreshBooksApi;
 
-class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
+class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -16,51 +16,55 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new PaymentRepository($this->api);
+        $this->repository = new ClientRepository($this->api);
+    }
+
+    public function testContructor()
+    {
+        $this->assertEquals($this->repository->getApi(), $this->api);
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\PaymentNotFoundException
+     * @expectedException Framework\ORM\Exception\ClientNotFoundException
      */
     public function testFindWithInvalidId()
     {
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.get');
+            ->with('client.get');
 
         $this->repository->find('1');
     }
 
     public function testFindWithValidId()
     {
-        $payment = [
-            'payment_id' => '1',
-            'invoice_id'  => '1',
+        $client = [
             'client_id'  => '1',
-            'Organization' => 'John Doe, Inc.',
+            'first_name' => 'John',
+            'last_name'  => 'Doe'
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'payment'     => $payment,
+            'client'      => $client,
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.get');
+            ->with('client.get');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($payment, $this->repository->find('1')->getData());
+        $this->assertEquals($client, $this->repository->find('1')->getData());
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\InvalidCriteriaException
+     * @expectedException Framework\ORM\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {
@@ -69,7 +73,7 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.list');
+            ->with('client.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -79,28 +83,30 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindByWithValidCriteriaMultipleResults()
     {
-        $criteria = [ 'client_id' => '1' ];
+        $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $payments = [
+        $clients = [
             [
-                'payment_id' => '1',
-                'invoice_id'  => '1',
-                'amount'  => '13.25'
+                'client_id'  => '1',
+                'first_name' => 'John',
+                'last_name'  => 'Doe',
+                'email'      => 'johndoe@example.org'
             ],
             [
-                'payment_id' => '2',
-                'invoice_id'  => '1',
-                'amount'  => '20.95'
+                'client_id'  => '2',
+                'first_name' => 'Jane',
+                'last_name'  => 'Doe',
+                'email'      => 'janedoe@example.org'
             ]
+
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'payments'    => [
+            'clients'     => [
                 '@attributes' => [ 'page' => 1, 'total' => 2 ],
-                'payment'     => $payments
+                'client'      => $clients
             ]
-
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -108,7 +114,7 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
 
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.list');
+            ->with('client.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -116,10 +122,11 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->repository->findBy($criteria);
 
-        $this->assertEquals(count($payments), count($response));
+        $this->assertEquals(count($clients), count($response));
 
+        $response = array_values($response);
         for ($i = 0; $i < count($response); $i++) {
-            $this->assertEquals($payments[$i], $response[$i]->getData());
+            $this->assertEquals($clients[$i], $response[$i]->getData());
         }
     }
 
@@ -127,25 +134,27 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $payments = [
-            'payment_id' => '1',
-            'invoice_id'  => '1',
-            'amount'  => '13.25'
+        $clients = [
+            'client_id'  => '1',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'johndoe@example.org'
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'payments'    => [
+            'clients'     => [
                 '@attributes' => [ 'page' => 1, 'total' => 1 ],
-                'payment'     => $payments
+                'client'      => $clients
             ]
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
 
+
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.list');
+            ->with('client.list');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
@@ -154,6 +163,7 @@ class PaymentRepositoryTest extends \PHPUnit_Framework_TestCase
         $response = $this->repository->findBy($criteria);
 
         $this->assertEquals(1, count($response));
-        $this->assertEquals($payments, $response[0]->getData());
+        $response = array_pop($response);
+        $this->assertEquals($clients, $response->getData());
     }
 }
