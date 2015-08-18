@@ -1,12 +1,12 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Repository;
+namespace Framework\Tests\ORM\FreshBooks\Repository;
 
-use Framework\FreshBooks\Entity\Payment;
-use Framework\FreshBooks\Persister\PaymentPersister;
+use Framework\ORM\Entity\Invoice;
+use Framework\ORM\FreshBooks\Persister\InvoicePersister;
 use Freshbooks\FreshBooksApi;
 
-class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
+class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -17,19 +17,35 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->persister = new PaymentPersister($this->api);
+        $this->persister = new InvoicePersister($this->api);
 
-        $this->existingPayment = new Payment([
-            'payment_id' => '123',
-            'invoice_id' => '1',
-            'amount'     => '20.5',
-            'type'       => 'Check'
+        $this->existingInvoice = new Invoice([
+            'invoice_id' => '123',
+            'client_id'  => '1',
+            'lines' => [
+                'line' => [
+                    [
+                        'order'    => 1,
+                        'name'     => 'test',
+                        'cost'     => 2,
+                        'quantity' => 3
+                    ]
+                ]
+            ],
         ]);
 
-        $this->unexistingPayment = new Payment([
-            'invoice_id' => '1',
-            'amount'     => '20.5',
-            'type'       => 'Check'
+        $this->unexistingInvoice = new Invoice([
+            'client_id'  => '1',
+            'lines' => [
+                'line' => [
+                    [
+                        'order'    => 1,
+                        'name'     => 'test',
+                        'cost'     => 2,
+                        'quantity' => 3
+                    ]
+                ]
+            ],
         ]);
     }
 
@@ -41,46 +57,46 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.create');
+            ->with('invoice.create');
 
-        $this->persister->create($this->existingPayment);
+        $this->persister->create($this->existingInvoice);
     }
 
     public function testCreateWithoutErrors()
     {
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'payment_id'  => '123',
+            'invoice_id'  => '123',
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.create');
+            ->with('invoice.create');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->persister->create($this->unexistingPayment);
+        $this->persister->create($this->unexistingInvoice);
         $this->assertEquals(
-            $response['payment_id'],
-            $this->unexistingPayment->payment_id
+            $response['invoice_id'],
+            $this->unexistingInvoice->invoice_id
         );
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\PaymentNotFoundException
+     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
      */
     public function testRemoveWithError()
     {
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.delete');
+            ->with('invoice.delete');
 
-        $this->persister->remove($this->unexistingPayment);
+        $this->persister->remove($this->unexistingInvoice);
     }
 
     public function testRemoveWithoutErrors()
@@ -91,27 +107,27 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.delete');
+            ->with('invoice.delete');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $r = $this->persister->remove($this->existingPayment);
-        $this->assertEquals($response, $r);
+        $r = $this->persister->remove($this->existingInvoice);
+        $this->assertEquals($this->persister, $r);
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\PaymentNotFoundException
+     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
      */
     public function testUpdateWithError()
     {
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.update');
+            ->with('invoice.update');
 
-        $this->persister->update($this->unexistingPayment);
+        $this->persister->update($this->unexistingInvoice);
     }
 
     public function testUpdateWithoutErrors()
@@ -122,13 +138,13 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.update');
+            ->with('invoice.update');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $r = $this->persister->update($this->existingPayment);
-        $this->assertEquals($response, $r);
+        $r = $this->persister->update($this->existingInvoice);
+        $this->assertEquals($this->persister, $r);
     }
 }

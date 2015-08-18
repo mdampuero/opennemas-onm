@@ -1,18 +1,16 @@
 <?php
 
-namespace Framework\FreshBooks\Persister;
+namespace Framework\ORM\FreshBooks\Persister;
 
-use Framework\FreshBooks\Entity\Entity;
-use Framework\FreshBooks\Exception\ClientNotFoundException;
+use Framework\ORM\Entity\Entity;
+use Framework\ORM\Exception\ClientNotFoundException;
 
-class ClientPersister extends Persister
+class ClientPersister extends FreshBooksPersister
 {
     /**
      * Saves a new client in FreshBooks.
      *
      * @param Entity $entity The client to save.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws RuntimeException If the the client can not be saved.
      */
@@ -27,7 +25,11 @@ class ClientPersister extends Persister
 
             $entity->client_id = $response['client_id'];
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->create($entity);
+            }
+
+            return $this;
         }
 
         throw new \RuntimeException($this->api->getError());
@@ -37,8 +39,6 @@ class ClientPersister extends Persister
      * Removes the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
@@ -51,7 +51,11 @@ class ClientPersister extends Persister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->remove($entity);
+            }
+
+            return $this;
         }
 
         throw new ClientNotFoundException($this->api->getError());
@@ -61,8 +65,6 @@ class ClientPersister extends Persister
      * Updates the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
@@ -75,7 +77,11 @@ class ClientPersister extends Persister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->update($entity);
+            }
+
+            return $this;
         }
 
         throw new ClientNotFoundException($this->api->getError());

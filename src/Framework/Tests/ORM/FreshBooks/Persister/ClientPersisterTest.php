@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\Tests\FreshBooks\Repository;
+namespace Framework\Tests\ORM\FreshBooks\Repository;
 
-use Framework\FreshBooks\Entity\Client;
-use Framework\FreshBooks\Persister\ClientPersister;
+use Framework\ORM\Entity\Client;
+use Framework\ORM\FreshBooks\Persister\ClientPersister;
 use Freshbooks\FreshBooksApi;
 
 class ClientPersisterTest extends \PHPUnit_Framework_TestCase
@@ -69,7 +69,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\ClientNotFoundException
+     * @expectedException Framework\ORM\Exception\ClientNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -96,11 +96,11 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('getResponse');
 
         $r = $this->persister->remove($this->existingClient);
-        $this->assertEquals($response, $r);
+        $this->assertEquals($this->persister, $r);
     }
 
     /**
-     * @expectedException Framework\FreshBooks\Exception\ClientNotFoundException
+     * @expectedException Framework\ORM\Exception\ClientNotFoundException
      */
     public function testUpdateWithError()
     {
@@ -127,6 +127,6 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('getResponse');
 
         $r = $this->persister->update($this->existingClient);
-        $this->assertEquals($response, $r);
+        $this->assertEquals($this->persister, $r);
     }
 }

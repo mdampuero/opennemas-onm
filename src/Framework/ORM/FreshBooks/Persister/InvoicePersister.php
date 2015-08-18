@@ -1,18 +1,16 @@
 <?php
 
-namespace Framework\FreshBooks\Persister;
+namespace Framework\ORM\FreshBooks\Persister;
 
-use Framework\FreshBooks\Entity\Entity;
-use Framework\FreshBooks\Exception\InvoiceNotFoundException;
+use Framework\ORM\Entity\Entity;
+use Framework\ORM\Exception\InvoiceNotFoundException;
 
-class InvoicePersister extends Persister
+class InvoicePersister extends FreshBooksPersister
 {
     /**
      * Saves a new invoice in FreshBooks.
      *
      * @param Entity $entity The invoice to save.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws RuntimeException If the the invoice can not be saved.
      */
@@ -28,7 +26,11 @@ class InvoicePersister extends Persister
 
             $entity->invoice_id = $response['invoice_id'];
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->create($entity);
+            }
+
+            return $this;
         }
 
         throw new \RuntimeException($this->api->getError());
@@ -38,8 +40,6 @@ class InvoicePersister extends Persister
      * Removes the invoice in FreshBooks.
      *
      * @param Entity $entity The invoice to update.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws InvoiceNotFoundException If the invoice does not exist.
      */
@@ -52,7 +52,11 @@ class InvoicePersister extends Persister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->remove($entity);
+            }
+
+            return $this;
         }
 
         throw new InvoiceNotFoundException($this->api->getError());
@@ -62,8 +66,6 @@ class InvoicePersister extends Persister
      * Updates the invoice in FreshBooks.
      *
      * @param Entity $entity The invoice to update.
-     *
-     * @return mixed The response from FreshBooks.
      *
      * @throws InvoiceNotFoundException If the invoice does not exist.
      */
@@ -78,7 +80,11 @@ class InvoicePersister extends Persister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return $response;
+            if ($this->hasNext()) {
+                $this->next()->update($entity);
+            }
+
+            return $this;
         }
 
         throw new InvoiceNotFoundException($this->api->getError());
