@@ -39,10 +39,10 @@ class ClientRepository extends BraintreeRepository
 
             return $client;
         } catch (\Exception $e) {
-            throw new ClientNotFoundException($e->getMessage());
+            throw new ClientNotFoundException($id, $this->source, $e->getMessage());
         }
 
-        throw new ClientNotFoundException();
+        throw new ClientNotFoundException($id, $this->source);
     }
 
     /**
@@ -83,7 +83,7 @@ class ClientRepository extends BraintreeRepository
             throw new InvalidCriteriaException($e->getMessage());
         }
 
-        throw new InvalidCriteriaException();
+        throw new InvalidCriteriaException($criteria, $this->source);
     }
 
     /**

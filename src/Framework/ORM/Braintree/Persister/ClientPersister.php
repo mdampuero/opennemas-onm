@@ -10,74 +10,99 @@ class ClientPersister extends BraintreePersister
     /**
      * Saves a new client in FreshBooks.
      *
-     * @param Entity $entity The client to save.
-     *
-     * @return mixed The response from FreshBooks.
+     * @param Entity  $entity The client to save.
+     * @param boolean $next   Whether to continue to the next persister.
      *
      * @throws RuntimeException If the the client can not be saved.
      */
-    public function create(Entity &$entity)
+    public function create(Entity &$entity, $next = true)
     {
-        $this->api->setMethod('client.create');
-        $this->api->post([ 'client' => $entity->getData() ]);
-        $this->api->request();
+        $cr   = $this->factory->get('customer');
+        $data = $this->entityToArray($entity);
 
-        if ($this->api->success()) {
-            $response = $this->api->getResponse();
+        $response = $cr::create($data);
 
-            $entity->client_id = $response['client_id'];
+        if ($response->success) {
+            $entity->client_id = $response->customer->id;
 
-            return $response;
+            if ($next && $this->hasNext()) {
+                $this->next()->create($entity);
+            }
+
+            return $this;
         }
 
-        throw new \RuntimeException($this->api->getError());
+        throw new \RuntimeException();
     }
 
     /**
      * Removes the client in FreshBooks.
      *
-     * @param Entity $entity The client to update.
-     *
-     * @return mixed The response from FreshBooks.
+     * @param Entity  $entity The client to update.
+     * @param boolean $next   Whether to continue to the next persister.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
-    public function remove(Entity $entity)
+    public function remove(Entity $entity, $next = true)
     {
-        $this->api->setMethod('client.delete');
-        $this->api->post([ 'client_id' => $entity->client_id ]);
-        $this->api->request();
+        $cr       = $this->factory->get('customer');
+        $response = $cr::delete($entity->client_id);
 
-        if ($this->api->success()) {
-            $response = $this->api->getResponse();
+        if ($response->success) {
+            if ($next && $this->hasNext()) {
+                $this->next()->remove($entity);
+            }
 
-            return $response;
+            return $this;
         }
 
-        throw new ClientNotFoundException($this->api->getError());
+        throw new ClientNotFoundException($entity->client_id, $this->source);
     }
 
     /**
      * Updates the client in FreshBooks.
      *
-     * @param Entity $entity The client to update.
-     *
-     * @return mixed The response from FreshBooks.
+     * @param Entity  $entity The client to update.
+     * @param boolean $next   Whether to continue to the next persister.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
-    public function update(Entity $entity)
+    public function update(Entity $entity, $next = true)
     {
-        $this->api->setMethod('client.update');
-        $this->api->post([ 'client' => $entity->getData() ]);
-        $this->api->request();
+        $cr   = $this->factory->get('customer');
+        $data = $this->entityToArray($entity);
 
-        if ($this->api->success()) {
-            $response = $this->api->getResponse();
+        $response = $cr::create($entity->client_id, $data);
 
-            return $response;
+        if ($response->success) {
+            if ($next && $this->hasNext()) {
+                $this->next()->remove($entity);
+            }
+
+            return $this;
         }
 
-        throw new ClientNotFoundException($this->api->getError());
+        throw new ClientNotFoundException($entity->client_id, $this->source);
+    }
+
+    /**
+     * Converts an entity to an array to send to Braintree.
+     *
+     * @param Entity $entity The entity to convert.
+     *
+     * @return array The array.
+     */
+    private function entityToArray($entity)
+    {
+        $data = [
+            'id'        => $entity->client_id,
+            'firstName' => $entity->first_name,
+            'lastName'  => $entity->last_name,
+            'email'     => $entity->email,
+            'company'   => $entity->organization,
+            'phone'     => $entity->phone,
+        ];
+
+        return $data;
     }
 }
