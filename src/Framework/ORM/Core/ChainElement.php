@@ -48,6 +48,11 @@ class ChainElement
         $last->setNext($element);
     }
 
+    /**
+     * Changes the next element in chain.
+     *
+     * @param ChainElement $next The next element.
+     */
     public function setNext(ChainElement $element)
     {
         $this->_next = $element;
