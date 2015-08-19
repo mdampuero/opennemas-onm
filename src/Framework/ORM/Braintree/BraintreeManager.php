@@ -17,6 +17,13 @@ class BraintreeManager
     protected $factory;
 
     /**
+     * The source name.
+     *
+     * @var string
+     */
+    protected $source = 'Braintree';
+
+    /**
      * Initializes the Braintree factory.
      *
      * @param BraintreeFactory $factory The Braintree factory.
@@ -53,9 +60,9 @@ class BraintreeManager
         $persister = __NAMESPACE__ . '\\Persister\\' . $class . 'Persister';
 
         if (class_exists($persister)) {
-            return new $persister($this->factory);
+            return new $persister($this->factory, $this->source);
         } else {
-            throw new InvalidPersisterException($persister);
+            throw new InvalidPersisterException($persister, $this->source);
         }
     }
 
@@ -74,9 +81,9 @@ class BraintreeManager
             . ucfirst($name) . 'Repository';
 
         if (class_exists($repository)) {
-            return new $repository($this->factory);
+            return new $repository($this->factory, $this->source);
         } else {
-            throw new InvalidRepositoryException($repository);
+            throw new InvalidRepositoryException($repository, $this->source);
         }
     }
 

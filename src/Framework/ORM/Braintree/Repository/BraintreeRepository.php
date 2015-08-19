@@ -15,13 +15,22 @@ abstract class BraintreeRepository extends Repository
     protected $factory;
 
     /**
+     * The source name.
+     *
+     * @var source
+     */
+    protected $source;
+
+    /**
      * Initializes the Braintree factory.
      *
      * @param Braintree_Base $factory The Braintree factory.
+     * @param string         $source  The source name.
      */
-    public function __construct($factory)
+    public function __construct($factory, $source)
     {
         $this->factory = $factory;
+        $this->source  = $source;
     }
 
     /**
