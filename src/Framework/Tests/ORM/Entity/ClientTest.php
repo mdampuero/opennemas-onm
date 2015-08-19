@@ -19,12 +19,23 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testExistsWithUnexistingClient()
+    public function testMergeWithInvalidData()
     {
         $data   = [ 'foo' => 'bar' ];
         $entity = new Client($data);
 
-        $this->assertFalse($entity->exists());
+        $this->assertFalse($entity->merge(null));
+        $this->assertFalse($entity->merge(1));
+        $this->assertFalse($entity->merge('foo'));
+    }
+
+    public function testMergewithValidData()
+    {
+        $data   = [ 'foo' => 'bar' ];
+        $entity = new Client($data);
+
+        $entity->merge([ 'foo' => 'xyz' ]);
+        $this->assertEquals('xyz', $entity->foo);
     }
 
     public function testExistsWithExistingClient()
@@ -33,5 +44,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $entity = new Client($data);
 
         $this->assertTrue($entity->exists());
+    }
+
+    public function testExistsWithUnexistingClient()
+    {
+        $data   = [ 'foo' => 'bar' ];
+        $entity = new Client($data);
+
+        $this->assertFalse($entity->exists());
     }
 }
