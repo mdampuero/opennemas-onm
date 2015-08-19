@@ -12,13 +12,19 @@ class ChainElement
     private $_next;
 
     /**
-     * Returns the next element in chain.
+     * Sets the next element in chain.
      *
-     * @return ChainElement The next element in chain.
+     * @param ChainElement $element The next element.
      */
-    public function next()
+    public function add(ChainElement $element)
     {
-        return $this->_next;
+        $last = $this;
+
+        while($this->hasNext()) {
+            $last = $this->next();
+        }
+
+        $last->setNext($element);
     }
 
     /**
@@ -33,19 +39,13 @@ class ChainElement
     }
 
     /**
-     * Sets the next element in chain.
+     * Returns the next element in chain.
      *
-     * @param ChainElement $element The next element.
+     * @return ChainElement The next element in chain.
      */
-    public function add(ChainElement $element)
+    public function next()
     {
-        $last = $this;
-
-        while($this->hasNext()) {
-            $last = $this->next();
-        }
-
-        $last->setNext($element);
+        return $this->_next;
     }
 
     /**
