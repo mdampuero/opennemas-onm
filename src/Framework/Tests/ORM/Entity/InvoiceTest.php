@@ -19,49 +19,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testCleanWithEmptyData()
-    {
-        $entity = new Invoice();
-
-        $this->assertEquals([], $entity->clean());
-    }
-
-    public function testCleanWithData()
-    {
-        $data = [
-            'foo'   => 'bar',
-            'lines' => [
-                'line' => [
-                    [
-                        'order'    => 1,
-                        'name'     => 'test',
-                        'cost'     => 2,
-                        'quantity' => 3
-                    ]
-                ]
-            ],
-            'url'   => 'http://example.org'
-        ];
-
-        $entity = new Invoice($data);
-
-        $this->assertEquals(
-            [
-                'foo'   => 'bar',
-                'lines' => [
-                    'line' => [
-                        [
-                            'name' => 'test',
-                            'cost' => 2,
-                            'quantity' => 3
-                        ]
-                    ]
-                ]
-            ],
-            $entity->clean()
-        );
-    }
-
     public function testExistsWithUnexistingInvoice()
     {
         $data   = [ 'foo' => 'bar' ];

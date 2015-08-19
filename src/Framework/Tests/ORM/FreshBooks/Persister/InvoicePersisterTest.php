@@ -147,4 +147,47 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $r = $this->persister->update($this->existingInvoice);
         $this->assertEquals($this->persister, $r);
     }
+
+    public function testCleanWithEmptyData()
+    {
+        $entity = new Invoice();
+
+        $this->assertEquals([], $this->persister->clean($entity));
+    }
+
+    public function testCleanWithData()
+    {
+        $data = [
+            'foo'   => 'bar',
+            'lines' => [
+                'line' => [
+                    [
+                        'order'    => 1,
+                        'name'     => 'test',
+                        'cost'     => 2,
+                        'quantity' => 3
+                    ]
+                ]
+            ],
+            'url'   => 'http://example.org'
+        ];
+
+        $entity = new Invoice($data);
+
+        $this->assertEquals(
+            [
+                'foo'   => 'bar',
+                'lines' => [
+                    'line' => [
+                        [
+                            'name' => 'test',
+                            'cost' => 2,
+                            'quantity' => 3
+                        ]
+                    ]
+                ]
+            ],
+            $this->persister->clean($entity)
+        );
+    }
 }

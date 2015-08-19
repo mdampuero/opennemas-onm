@@ -8,6 +8,27 @@ use Framework\ORM\Exception\InvoiceNotFoundException;
 class InvoicePersister extends FreshBooksPersister
 {
     /**
+     * Array of invalid fields to send in requests
+     *
+     * @var array
+     */
+    protected $_invalid = [
+        'auth_url',
+        'amount_outstanding',
+        'estimate_id',
+        'folder',
+        'gateways',
+        'links',
+        'order',
+        'paid',
+        'po_number',
+        'recurring_id',
+        'staff_id',
+        'updated',
+        'url'
+    ];
+
+    /**
      * Saves a new invoice in FreshBooks.
      *
      * @param Entity $entity The invoice to save.
@@ -17,7 +38,7 @@ class InvoicePersister extends FreshBooksPersister
     public function create(Entity &$entity)
     {
         $this->api->setMethod('invoice.create');
-        $this->api->post([ 'invoice' => $entity->getData() ]);
+        $this->api->post([ 'invoice' => $this->clean($entity) ]);
 
         $this->api->request();
 
@@ -71,10 +92,8 @@ class InvoicePersister extends FreshBooksPersister
      */
     public function update(Entity $entity)
     {
-        $data = $entity->getData();
-
         $this->api->setMethod('invoice.update');
-        $this->api->post([ 'invoice' => $data ]);
+        $this->api->post([ 'invoice' => $this->clean($entity) ]);
         $this->api->request();
 
         if ($this->api->success()) {
@@ -88,5 +107,28 @@ class InvoicePersister extends FreshBooksPersister
         }
 
         throw new InvoiceNotFoundException($this->api->getError());
+    }
+
+    /**
+     * Cleans invalid fields from the invoice.
+     *
+     * @param Entity $data The data to clean.
+     *
+     * @return array The cleaned RAW data array.
+     */
+    public function clean(Entity $entity)
+    {
+        $cleaned =
+            array_diff_key($entity->getData(), array_flip($this->_invalid));
+
+        if (array_key_exists('lines', $cleaned)
+            && array_key_exists('line', $cleaned['lines'])
+        ) {
+            foreach ($cleaned['lines']['line'] as &$line) {
+                unset($line['order']);
+            }
+        }
+
+        return $cleaned;
     }
 }
