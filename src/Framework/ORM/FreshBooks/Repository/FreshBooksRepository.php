@@ -15,6 +15,13 @@ abstract class FreshBooksRepository extends Repository
     protected $api;
 
     /**
+     * The source name.
+     *
+     * @var string
+     */
+    protected $source = 'FreshBooks';
+
+    /**
      * Initializes the FreshBooks api.
      *
      * @param FreshBooksApi $api The FreshBooks api.
