@@ -41,7 +41,7 @@ class ClientRepository extends FreshBooksRepository
             return $client;
         }
 
-        throw new ClientNotFoundException($this->api->getError());
+        throw new ClientNotFoundException($id, $this->source, $this->api->getError());
     }
 
     /**
@@ -100,6 +100,6 @@ class ClientRepository extends FreshBooksRepository
             return $clients;
         }
 
-        throw new InvalidCriteriaException($this->api->getError());
+        throw new InvalidCriteriaException($criteria, $this->source, $this->api->getError());
     }
 }

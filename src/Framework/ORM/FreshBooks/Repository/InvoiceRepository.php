@@ -29,7 +29,7 @@ class InvoiceRepository extends FreshBooksRepository
             return new Invoice($response['invoice']);
         }
 
-        throw new InvoiceNotFoundException($this->api->getError());
+        throw new InvoiceNotFoundException($id, $this->source, $this->api->getError());
     }
 
     /**
@@ -69,7 +69,7 @@ class InvoiceRepository extends FreshBooksRepository
             return $invoices;
         }
 
-        throw new InvalidCriteriaException($this->api->getError());
+        throw new InvalidCriteriaException($criteria, $this->source, $this->api->getError());
     }
 
     /**
@@ -89,6 +89,6 @@ class InvoiceRepository extends FreshBooksRepository
             return $this->api->getResponse();
         }
 
-        throw new InvoiceNotFoundException($this->api->getError());
+        throw new InvoiceNotFoundException($id, $this->source, $this->api->getError());
     }
 }
