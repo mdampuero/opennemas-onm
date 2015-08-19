@@ -1,0 +1,50 @@
+<?php
+
+namespace Framework\Tests\ORM\Core;
+
+use Framework\ORM\Core\ChainElement;
+
+class ClientTest extends \PHPUnit_Framework_TestCase
+{
+    public function setUp()
+    {
+        $this->first = new ChainElement();
+        $this->last =  new ChainElement();
+
+        $this->first->add($this->last);
+    }
+
+    public function testAdd()
+    {
+        $this->assertTrue($this->first->hasNext());
+        $this->assertEquals($this->last, $this->first->next());
+    }
+
+    public function testHasNextOnFirstElement()
+    {
+        $this->assertTrue($this->first->hasNext());
+    }
+
+    public function testHasNextOnLastElement()
+    {
+        $this->assertFalse($this->last->hasNext());
+    }
+
+    public function testNextOnFirstElement()
+    {
+        $this->assertEquals($this->last, $this->first->next());
+    }
+
+    public function testNextOLastElement()
+    {
+        $this->assertEquals(null, $this->last->next());
+    }
+
+    public function testSetNext()
+    {
+        $element = new ChainElement();
+
+        $this->first->setNext($element);
+        $this->assertEquals($element, $this->first->next());
+    }
+}
