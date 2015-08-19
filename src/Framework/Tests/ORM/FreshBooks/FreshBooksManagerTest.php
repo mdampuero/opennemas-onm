@@ -16,7 +16,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testContructor()
     {
-        $this->assertTrue($this->manager->getApi() instanceof FreshBooksApi);
+        $this->assertInstanceOf('Freshbooks\FreshBooksApi', $this->manager->getApi());
     }
 
     /**
