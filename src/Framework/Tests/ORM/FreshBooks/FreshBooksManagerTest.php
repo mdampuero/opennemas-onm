@@ -4,6 +4,7 @@ namespace Framework\Tests\ORM\FreshBooks;
 
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Entity\Client;
+use Framework\ORM\Entity\Payment;
 use Freshbooks\FreshBooksApi;
 
 class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
@@ -30,6 +31,16 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     {
         $cp = $this->manager->getRepository('client');
         $this->assertInstanceOf('Framework\ORM\FreshBooks\Repository\FreshBooksRepository', $cp);
+    }
+
+    /**
+     * @expectedException Framework\ORM\Exception\InvalidPersisterException
+     */
+    public function testGetPersisterInvalid()
+    {
+        $entity = new Payment();
+        $cp = $this->manager->getPersister($entity);
+        $this->assertInstanceOf('Framework\ORM\FreshBooks\Persister\FreshBooksPersister', $cp);
     }
 
     public function testGetPersisterValid()

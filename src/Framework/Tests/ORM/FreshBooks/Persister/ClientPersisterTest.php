@@ -17,7 +17,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->persister = new ClientPersister($this->api);
+        $this->persister = new ClientPersister($this->api, 'FreshBooks');
 
         $this->existingClient = new Client([
             'client_id'  => 1,

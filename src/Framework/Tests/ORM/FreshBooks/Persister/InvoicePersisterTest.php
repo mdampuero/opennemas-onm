@@ -17,7 +17,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->persister = new InvoicePersister($this->api);
+        $this->persister = new InvoicePersister($this->api, 'FreshBooks');
 
         $this->existingInvoice = new Invoice([
             'invoice_id' => '123',

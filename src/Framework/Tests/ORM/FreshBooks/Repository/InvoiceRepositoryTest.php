@@ -16,7 +16,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new InvoiceRepository($this->api);
+        $this->repository = new InvoiceRepository($this->api, 'FreshBooks');
     }
 
     public function testContructor()

@@ -17,6 +17,13 @@ class FreshBooksManager
     protected $api;
 
     /**
+     * The source name.
+     *
+     * @var string
+     */
+    protected $source;
+
+    /**
      * Initializes the FreshBooks api.
      *
      * @param string $domain The FreshBooks domain.
@@ -54,9 +61,9 @@ class FreshBooksManager
         $persister = __NAMESPACE__ . '\\Persister\\' . $class . 'Persister';
 
         if (class_exists($persister)) {
-            return new $persister($this->api);
+            return new $persister($this->api, $this->source);
         } else {
-            throw new InvalidPersisterException($persister);
+            throw new InvalidPersisterException($persister, $this->source);
         }
     }
 
@@ -75,9 +82,9 @@ class FreshBooksManager
             . ucfirst($name) . 'Repository';
 
         if (class_exists($repository)) {
-            return new $repository($this->api);
+            return new $repository($this->api, $this->source);
         } else {
-            throw new InvalidRepositoryException($repository);
+            throw new InvalidRepositoryException($repository, $this->source);
         }
     }
 
