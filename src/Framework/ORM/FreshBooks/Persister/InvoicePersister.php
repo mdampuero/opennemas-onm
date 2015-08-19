@@ -80,7 +80,11 @@ class InvoicePersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new InvoiceNotFoundException($this->api->getError());
+        throw new InvoiceNotFoundException(
+            $entity->invoice_id,
+            $this->source,
+            $this->api->getError()
+        );
     }
 
     /**
@@ -106,7 +110,11 @@ class InvoicePersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new InvoiceNotFoundException($this->api->getError());
+        throw new InvoiceNotFoundException(
+            $entity->invoice_id,
+            $this->source,
+            $this->api->getError()
+        );
     }
 
     /**
