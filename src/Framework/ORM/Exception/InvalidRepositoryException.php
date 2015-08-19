@@ -7,12 +7,13 @@ class InvalidRepositoryException extends \Exception
     /**
      * Initializes the exception with a custom message.
      *
-     * @param string $class The classname of the invalid repository.
+     * @param string $class  The classname of the invalid repository.
+     * @param string $source The source name.
      */
-    public function __construct($class)
+    public function __construct($class, $source)
     {
-        $message = "The repository \"$class\" does not exist.";
+        $message = _('The repository \'%s\' does not exist in %s');
 
-        parent::__construct($message);
+        parent::__construct(sprintf($message, $class, $source));
     }
 }

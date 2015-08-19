@@ -7,12 +7,13 @@ class InvalidPersisterException extends \Exception
     /**
      * Initializes the exception with a custom message.
      *
-     * @param string $class The classname of the invalid persister.
+     * @param string $class  The classname of the invalid persister.
+     * @param string $source The source name.
      */
-    public function __construct($class)
+    public function __construct($class, $source)
     {
-        $message = "The persister \"$class\" does not exist.";
+        $message = _('The persister \'%s\' does not exist in %s');
 
-        parent::__construct($message);
+        parent::__construct(sprintf($message, $class, $source));
     }
 }
