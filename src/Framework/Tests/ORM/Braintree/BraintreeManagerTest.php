@@ -57,4 +57,89 @@ class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
         $cp = $this->manager->getPersister($entity);
         $this->assertInstanceOf('Framework\ORM\Braintree\Persister\BraintreePersister', $cp);
     }
+
+    public function testPersistWithExistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\Braintree\PersisterBraintreePersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'update', 'create' ])
+            ->getMock();
+
+        $p->expects($this->once())->method('update')->willReturn(true);
+
+        $bm = $this
+            ->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $bm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $bm->persist(new Client([ 'client_id' => 1]));
+    }
+
+    public function testPersistWithUnexistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\Braintree\PersisterBraintreePersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'update', 'create' ])
+            ->getMock();
+
+        $p->expects($this->once())->method('create')->willReturn(true);
+
+        $bm = $this
+            ->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $bm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $bm->persist(new Client());
+    }
+
+    public function testRemoveWithExistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\Braintree\PersisterBraintreePersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $p->method('remove')->willReturn(true);
+
+        $bm = $this
+            ->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $bm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $bm->remove(new Client());
+    }
+
+    /**
+     * @expectedException \Framework\ORM\Exception\EntityNotFoundException
+     */
+    public function testRemoveWithUnexistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\Braintree\PersisterBraintreePersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $p->method('remove')->will(
+            $this->throwException(new \Framework\ORM\Exception\EntityNotFoundException())
+        );
+
+        $bm = $this
+            ->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $bm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $bm->remove(new Client());
+    }
 }

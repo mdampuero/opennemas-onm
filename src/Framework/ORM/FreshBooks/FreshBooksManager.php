@@ -108,13 +108,13 @@ class FreshBooksManager
      * Removes an entity from FreshBooks.
      *
      * @param Entity $entity The entity to remove.
+     *
+     * @throws EntityNotFoundException If entity does not exist.
      */
     public function remove(Entity $entity)
     {
         $persister = $this->getPersister($entity);
 
-        if ($entity->exists()) {
-            $persister->remove($entity);
-        }
+        $persister->remove($entity);
     }
 }

@@ -49,4 +49,89 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
         $cp = $this->manager->getPersister($entity);
         $this->assertInstanceOf('Framework\ORM\FreshBooks\Persister\FreshBooksPersister', $cp);
     }
+
+    public function testPersistWithExistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\FreshBooks\PersisterFreshBooksPersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'update', 'create' ])
+            ->getMock();
+
+        $p->expects($this->once())->method('update')->willReturn(true);
+
+        $fm = $this
+            ->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $fm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $fm->persist(new Client([ 'client_id' => 1]));
+    }
+
+    public function testPersistWithUnexistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\FreshBooks\PersisterFreshBooksPersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'update', 'create' ])
+            ->getMock();
+
+        $p->expects($this->once())->method('create')->willReturn(true);
+
+        $fm = $this
+            ->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $fm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $fm->persist(new Client());
+    }
+
+    public function testRemoveWithExistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\FreshBooks\PersisterFreshBooksPersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $p->method('remove')->willReturn(true);
+
+        $fm = $this
+            ->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $fm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $fm->remove(new Client());
+    }
+
+    /**
+     * @expectedException \Framework\ORM\Exception\EntityNotFoundException
+     */
+    public function testRemoveWithUnexistingEntity()
+    {
+        $p = $this->getMockBuilder('Framework\ORM\FreshBooks\PersisterFreshBooksPersister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $p->method('remove')->will(
+            $this->throwException(new \Framework\ORM\Exception\EntityNotFoundException())
+        );
+
+        $fm = $this
+            ->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $fm->expects($this->once())->method('getPersister')->willReturn($p);
+
+        $fm->remove(new Client());
+    }
 }
