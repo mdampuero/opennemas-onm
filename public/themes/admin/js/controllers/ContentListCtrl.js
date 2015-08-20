@@ -77,8 +77,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     $scope.union = 'AND';
 
     $scope.deselectAll = function() {
-      $scope.selected.contents = [];
       $scope.selected.all = 0
+      $scope.selected.contents = [];
+      $scope.selected.lastSelected = null;
     };
 
     /**
@@ -186,9 +187,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *
      * @param string route Route name.
      */
-    $scope.list = function(route) {
+    $scope.list = function(route, reset) {
       // Enable spinner
-      $scope.loading = 1;
+      if ($scope.mode === 'grid' && !reset) {
+        $scope.loadingMore = true;
+      } else {
+        $scope.contents = [];
+        $scope.loading = 1;
+      }
 
       var url = routing.generate(route, {
         contentType: $scope.criteria.content_type_name
@@ -199,8 +205,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       delete filtersToEncode.content_type_name;
 
-      queryManager.setParams(filtersToEncode, $scope.orderBy,
-        $scope.pagination.epp, $scope.pagination.page);
+      if ($scope.mode !== 'grid') {
+        queryManager.setParams(filtersToEncode, $scope.orderBy,
+            $scope.pagination.epp, $scope.pagination.page);
+      }
 
       var postData = {
         elements_per_page: $scope.pagination.epp,
@@ -214,8 +222,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, postData).then(function(response) {
         $scope.pagination.total = parseInt(response.data.total);
-        $scope.contents         = response.data.results;
-        $scope.map              = response.data.map;
+        if ($scope.mode === 'grid' && !reset) {
+          $scope.contents = $scope.contents.concat(response.data.results);
+        } else {
+          $scope.contents = response.data.results;
+        }
+
+        $scope.map = response.data.map;
 
         if (response.data.hasOwnProperty('extra')) {
           $scope.extra = response.data.extra;
@@ -223,6 +236,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
         // Disable spinner
         $scope.loading = 0;
+        $scope.loadingMore = false;
       });
     };
 
@@ -281,6 +295,52 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }).error(function() {});
     };
 
+    $scope.scroll = function(route) {
+      if ($scope.total === $scope.contents.length) {
+        return false;
+      }
+
+      $scope.pagination.page++;
+    };
+
+    /**
+     * Saves the last selected item description.
+     */
+    $scope.saveDescription = function() {
+      $scope.saving = true;
+
+      var data = { description: $scope.selected.lastSelected.description };
+      var url  = routing.generate(
+        'backend_ws_picker_save_description',
+        { id: $scope.selected.lastSelected.id }
+      );
+
+      $http.post(url, data).then(function(response) {
+        $scope.saving = false;
+        $scope.saved = true;
+
+        if (response.status === 200) {
+          $timeout(function() {
+            $scope.saved = false;
+          }, 2000);
+
+          return true;
+        }
+
+        if (response.status !== 200) {
+          $scope.saved = false;
+          $scope.error = true;
+
+          $timeout(function() {
+            $scope.error = false;
+          }, 2000);
+
+          return false;
+        }
+      });
+    };
+
+
     /**
      * Selects/unselects all instances.
      */
@@ -291,6 +351,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         });
       } else {
         $scope.selected.contents = [];
+        $scope.selected.lastSelected = null;
       }
     };
 
@@ -306,6 +367,52 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.list(route);
       }
     };
+
+    /**
+     * Changes the list mode.
+     *
+     * @param {String} mode The new list mode.
+     */
+    $scope.setMode = function(mode) {
+      step = 0;
+      if ($scope.mode === mode) {
+        return;
+      }
+
+      $scope.mode = mode;
+      $scope.pagination.page = 1;
+
+      if (mode === 'grid') {
+        var maxHeight = $(window).height() - $('.header').height() -
+          $('.actions-navbar').height();
+        var maxWidth = $(window).width() - $('.sidebar').width();
+
+        if ($('.content-wrapper').length > 0) {
+          maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
+        }
+
+        var height = $('.infinite-col').width() + 15;
+        var width = $('.infinite-col').width() + 15;
+
+
+        var rows = Math.ceil(maxHeight / height);
+        var cols = Math.floor(maxWidth / width);
+
+        if (rows === 0) {
+          rows = 1;
+        }
+
+        if (cols === 0) {
+          cols = 1;
+        }
+
+        if ($scope.pagination.epp != rows * cols) {
+          $scope.contents = [];
+        }
+
+        $scope.pagination.epp = rows * cols;
+      }
+    }
 
     /**
      * Reloads the list on keypress.
@@ -329,6 +436,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $window.location.reload();
     }
 
+    $scope.select = function(item) {
+      $scope.selected.lastSelected = item;
+    }
+
     /**
      * Sort by function
      *
@@ -348,6 +459,24 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $scope.list($scope.route);
     };
+
+    /**
+     * Selects/deselects an item.
+     *
+     * @param {Integer} id The item id.
+     */
+    $scope.toggle = function(content) {
+      if ($scope.selected.contents.indexOf(content.id) === -1) {
+        $scope.selected.contents.push(content.id);
+
+        $scope.selected.lastSelected = content;
+      } else {
+        $scope.selected.lastSelected = null;
+
+        $scope.selected.contents.splice(
+            $scope.selected.contents.indexOf(content.id), 1);
+      }
+    }
 
     /**
      * Updates an item.
@@ -896,7 +1025,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.renderMessages(response.data.messages);
 
           if (response.status === 200) {
-            $scope.list($scope.route);
+            $scope.list($scope.route, true);
           }
         }
       });
@@ -951,38 +1080,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.getNumberOfPages = function() {
       return Math.ceil($scope.pagination.total / $scope.pagination.epp);
-    };
-
-    /**
-     * Moves the list to the previous page
-     */
-    $scope.goToPrevPage = function() {
-      $scope.pagination.page = $scope.pagination.page - 1;
-
-      return $scope.pagination.page;
-    };
-
-    /**
-     * Moves the list to the next page
-     */
-    $scope.goToNextPage = function() {
-      $scope.pagination.page = $scope.pagination.page + 1;
-
-      return $scope.pagination.page;
-    };
-
-    /**
-     * Checks if the list is in the first page
-     */
-    $scope.isFirstPage = function() {
-      return $scope.pagination.page - 1 < 1;
-    };
-
-    /**
-     * Checks if the list is in the last pages
-     */
-    $scope.isLastPage = function() {
-      return $scope.pagination.page === $scope.pagination.pages;
     };
 
     /**
@@ -1072,6 +1169,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     var searchTimeout;
     $scope.$watch('criteria', function(newValues, oldValues) {
+      // Change page when scrolling in grid mode
       if (searchTimeout) {
         $timeout.cancel(searchTimeout);
       }
@@ -1080,9 +1178,34 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.pagination.page = 1;
 
         searchTimeout = $timeout(function() {
-          $scope.list($scope.route);
+          $scope.list($scope.route, true);
         }, 500);
       }
     }, true);
+
+    // Change page when scrolling in grid mode
+    var step = 0;
+    $(window).scroll(function() {
+      if (!$scope.mode || $scope.mode === 'list'
+          || $scope.contents.length == $scope.pagination.total) {
+        return;
+      }
+
+      var top = $(window).scrollTop();
+
+      if (top != step && top - step > 50) {
+        step = top;
+      } else {
+        return;
+      }
+
+      var height = $(window).height();
+      var maxHeight = $('.page-container').height();
+
+      if (maxHeight - height - top < 100) {
+        $scope.pagination.page++;
+        $scope.$apply();
+      }
+    });
   }
 ]);

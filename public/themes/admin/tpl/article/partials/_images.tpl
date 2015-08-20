@@ -34,7 +34,7 @@
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-if="photo1">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                               <i class="fa fa-trash-o fa-2x"></i>
@@ -85,7 +85,7 @@
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-if="photo2">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
                               <i class="fa fa-trash-o fa-2x"></i>
@@ -138,7 +138,7 @@
                           </div>
                         </div>
                         <div class="dynamic-image-placeholder" ng-if="photo3">
-                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3">
+                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" only-image="true">
                             <div class="thumbnail-actions ng-cloak">
                               <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
                                 <i class="fa fa-trash-o fa-2x"></i>

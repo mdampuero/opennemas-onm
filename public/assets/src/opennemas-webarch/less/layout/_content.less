@@ -12,7 +12,7 @@
   left: 0;
   margin: 0;
   margin-top: @header-height;
-  min-height: 500px;
+  min-height: 620px;
   overflow: hidden;
   padding: 0;
   padding-left: @sidebar-width-collapsed;
@@ -43,19 +43,11 @@
 
 
 @media (max-width: (@phone-width - 1)) {
-  .page-content .filters-navbar ~ .content {
-    margin-top: 0px;
-  }
-
   .page-content,
   .pinned .page-content {
     margin-top: 0;
     padding-left: 0;
     left: @sidebar-width;
-
-    .content {
-      padding: 0;
-    }
   }
 
   .collapsed .page-content,

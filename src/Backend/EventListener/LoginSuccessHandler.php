@@ -47,12 +47,14 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param SecurityContext $context The security context.
      * @param Router          $router  The router service.
      * @param Session         $session The session.
+     * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
-    public function __construct($context, $router, $session)
+    public function __construct($context, $router, $session, $recaptcha)
     {
-        $this->context = $context;
-        $this->router  = $router;
-        $this->session = $session;
+        $this->context   = $context;
+        $this->router    = $router;
+        $this->session   = $session;
+        $this->recaptcha = $recaptcha;
     }
 
     /**
@@ -70,18 +72,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user  = $token->getUser();
         $valid = true;
 
-        if ($request->get('recaptcha_challenge_field')) {
-            // New captcha instance
-            $captcha = getService('recaptcha')
-                ->setRemoteIp($request->getClientIp());
-
-            // Get reCaptcha validate response
-            $valid = $captcha->check(
-                $request->get('recaptcha_challenge_field'),
-                $request->get('recaptcha_response_field')
+        if ($request->get('g-recaptcha-response')) {
+            $recaptcha = $this->recaptcha->getOnmRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
             );
-
-            $valid = $valid->isValid();
+            $valid = $resp->isSuccess();
         }
 
         // Set session array
@@ -91,6 +88,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['email']            = $user->email;
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
+        $this->session->set('user', $user);
         $this->session->set('user_language', $user->getMeta('user_language'));
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(

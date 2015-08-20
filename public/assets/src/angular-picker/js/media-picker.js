@@ -74,12 +74,12 @@ angular.module('onm.picker')
                           </div>\
                         </div>\
                       </div>\
-                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
-                        <dynamic-image class=\"img-thumbnail\" instance=\""
+                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\" style=\"width: 120px;\">\
+                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" instance=\""
                           + instanceMedia
                           + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                        <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && !content.thumb_image\" path=\"[% content.thumb %]\"></dynamic-image>\
-                        <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && content.thumb_image\" instance=\""+instanceMedia+"\" ng-model=\"content.thumb_image\"></dynamic-image>\
+                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && !content.thumb_image\" path=\"[% content.thumb %]\"></dynamic-image>\
+                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && content.thumb_image\" instance=\""+instanceMedia+"\" ng-model=\"content.thumb_image\"></dynamic-image>\
                       </div>\
                     </div>\
                     <div class=\"text-center m-b-30 p-t-15 p-b-30 pointer\" ng-click=\"scroll()\" ng-if=\"!searchLoading && total != contents.length\">\

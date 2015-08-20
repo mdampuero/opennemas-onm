@@ -1,7 +1,12 @@
 .dynamic-image-wrapper {
-  display: table;
+  display: block;
   margin: 0 auto !important;
   position: relative;
+  width: 100%;
+
+  &.loading {
+    padding-bottom: 100%;
+  }
 
   .dynamic-image-dimensions-label {
     font-size: 12px;
@@ -35,14 +40,30 @@
 
     i {
       color: @text-color;
-      height: 26px;
       left: 50%;
       margin-left: -13px;
       margin-top: -13px;
       position: absolute;
       top: 50%;
-      width: 26px;
     }
+  }
+
+  .dynamic-image-thumbnail {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    padding-bottom: 100%;
+
+    &.autoscale {
+      height: 100%;
+      padding-bottom: 0;
+    }
+  }
+
+  .dynamic-image-thumbnail-wrapper {
+    height: 100%;
+    width: 100%;
   }
 
   .swf-overlay {

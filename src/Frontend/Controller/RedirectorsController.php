@@ -50,10 +50,6 @@ class RedirectorsController extends Controller
             list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
         }
 
-        if ($oldVersion == 'editmaker') {
-            $newContentID = \ContentManager::resolveID($newContentID);
-        }
-
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = $this->get('entity_repository')->find('Article', $newContentID);
 

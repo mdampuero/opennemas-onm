@@ -59,11 +59,23 @@
     </div>
   </div>
 </div>
-
-<div class="page-navbar filters-navbar">
+<div class="page-navbar filters-navbar ng-cloak">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
+          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" tooltip="{t}List{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('list')">
+              <i class="fa fa-lg fa-list"></i>
+            </button>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('grid')">
+              <i class="fa fa-lg fa-th"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
         <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
@@ -93,7 +105,7 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak">
+        <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -104,7 +116,7 @@
           </ui-select>
         </li>
       </ul>
-      <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+      <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && contents.length > 0">
         <li class="quicklinks hidden-xs">
           <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </li>
@@ -112,8 +124,7 @@
     </div>
   </div>
 </div>
-
-<div class="content" ng-init="init('video', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-init="setMode('grid');init('video', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   {if $category == 'widget'}
   <div class="messages" ng-if="{$total_elements_widget} > 0 && pagination.total != {$total_elements_widget}">
     <div class="alert alert-info">
@@ -122,8 +133,7 @@
     </div>
   </div>
   {/if}
-
-  <div class="grid simple">
+  <div class="grid simple ng-cloak" ng-if="mode === 'list'">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
         <div class="loading-spinner"></div>
@@ -131,110 +141,200 @@
       </div>
       <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
         <div class="center">
-          <h4>{t}Unable to find any album that matches your search.{/t}</h4>
+          <h4>{t}Unable to find any video that matches your search.{/t}</h4>
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
       <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
         <table class="table table-hover no-margin">
-         <thead>
-          <tr>
-            <th class="checkbox-cell">
-              <div class="checkbox checkbox-default">
-                <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
-                <label for="select-all"></label>
-              </div>
-            </th>
-            <th class="hidden-xs hidden-sm"></th>
-            <th>{t}Title{/t}</th>
-            <th class="center hidden-xs">{t}Section{/t}</th>
-            <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
-            {acl isAllowed="VIDEO_AVAILABLE"}
-            <th class="center" style="width:35px;">{t}Published{/t}</th>
-            {/acl}
-            {acl isAllowed="VIDEO_FAVORITE"}
-            <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
-            {/acl}
-            {acl isAllowed="VIDEO_HOME"}
-            <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
-            {/acl}
-          </tr>
-        </thead>
-        <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
-          <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
-            <td class="checkbox-cell">
-              <div class="checkbox check-default">
-                <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
-                <label for="checkbox[%$index%]"></label>
-              </div>
-            </td>
-            <td class="hidden-sm hidden-xs">
-              <div style="height: 120px; width: 120px;">
-                <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
-                <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
-              </div>
-            </td>
-            <td>
-              <div class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
-                <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
-                <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
-              </div>
-              [% content.title %]
-              <div class="small-text">
-                <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-              </div>
-              <div class="listing-inline-actions">
-                {acl isAllowed="VIDEO_UPDATE"}
-                <a class="link" href="[% edit(content.id, 'admin_video_show') %]">
-                  <i class="fa fa-pencil"></i> {t}Edit{/t}
-                </a>
-                {/acl}
-
-                {acl isAllowed="VIDEO_DELETE"}
-                <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                  <i class="fa fa-trash-o"></i> {t}Remove{/t}
+          <thead>
+            <tr>
+              <th class="checkbox-cell">
+                <div class="checkbox checkbox-default">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                  <label for="select-all"></label>
+                </div>
+              </th>
+              <th class="hidden-xs hidden-sm" style="width: 150px;"></th>
+              <th>{t}Title{/t}</th>
+              <th class="center hidden-xs">{t}Section{/t}</th>
+              <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
+              {acl isAllowed="VIDEO_AVAILABLE"}
+              <th class="center" style="width:35px;">{t}Published{/t}</th>
+              {/acl}
+              {acl isAllowed="VIDEO_FAVORITE"}
+              <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
+              {/acl}
+              {acl isAllowed="VIDEO_HOME"}
+              <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
+              {/acl}
+            </tr>
+          </thead>
+          <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
+            <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+              <td class="checkbox-cell">
+                <div class="checkbox check-default">
+                  <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                  <label for="checkbox[%$index%]"></label>
+                </div>
+              </td>
+              <td class="hidden-sm hidden-xs">
+                <div style="height: 120px; width: 120px;">
+                  <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
+                  <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
+                </div>
+              </td>
+              <td>
+                <div class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
+                  <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
+                  <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
+                </div>
+                [% content.title %]
+                <div class="small-text">
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                </div>
+                <div class="listing-inline-actions">
+                  {acl isAllowed="VIDEO_UPDATE"}
+                  <a class="link" href="[% edit(content.id, 'admin_video_show') %]">
+                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                  </a>
+                  {/acl}
+                  {acl isAllowed="VIDEO_DELETE"}
+                  <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                    <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                  </button>
+                  {/acl}
+                </div>
+              </td>
+              {if $category=='widget' || $category=='all'}
+              <td class="center hidden-xs hidden-sm">
+                [% extra.categories[content.category_name] %]
+              </td>
+              {/if}
+              <td class="center nowrap hidden-xs hidden-sm">
+                [% content.author_name %]
+              </td>
+              {acl isAllowed="VIDEO_AVAILABLE"}
+              <td class="center">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-info': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
                 </button>
-                {/acl}
-              </div>
-            </td>
-            {if $category=='widget' || $category=='all'}
-            <td class="center hidden-xs hidden-sm">
-              [% extra.categories[content.category_name] %]
-            </td>
-            {/if}
-            <td class="center nowrap hidden-xs hidden-sm">
-              [% content.author_name %]
-            </td>
-            {acl isAllowed="VIDEO_AVAILABLE"}
-            <td class="center">
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-info': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
-              </button>
-            </td>
-            {/acl}
-            {acl isAllowed="VIDEO_FAVORITE"}
-            <td class="center hidden-xs">
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
-              </button>
-            </td>
-            {/acl}
-            {acl isAllowed="VIDEO_HOME"}
-            <td class="right hidden-xs">
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
-                <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
-              </button>
-            </td>
-            {/acl}
-          </tr>
-        </tbody>
-      </table>
+              </td>
+              {/acl}
+              {acl isAllowed="VIDEO_FAVORITE"}
+              <td class="center hidden-xs">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
+                </button>
+              </td>
+              {/acl}
+              {acl isAllowed="VIDEO_HOME"}
+              <td class="right hidden-xs">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
+                </button>
+              </td>
+              {/acl}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="pull-right">
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+      </div>
     </div>
   </div>
-  <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-    <div class="pull-right">
-      <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+  <div class="content-wrapper">
+    <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading">
+      <div class="loading-spinner"></div>
+      <div class="spinner-text">{t}Loading{/t}...</div>
+    </div>
+    <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode == 'grid'">
+      <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+        <div class="dynamic-image-placeholder" ng-click="select(content); xsOnly($event, toggle, content)">
+          <dynamic-image ng-if="content.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image">
+            <div class="hidden-select" ng-click="toggle(content)"></div>
+            <div class="thumbnail-actions ng-cloak">
+              {acl isAllowed="VIDEO_DELETE"}
+                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
+                  <i class="fa fa-trash-o fa-2x"></i>
+                </div>
+              {/acl}
+              {acl isAllowed="VIDEO_UPDATE"}
+                <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]" ng-click="$event.stopPropagation()">
+                  <i class="fa fa-pencil fa-2x"></i>
+                </a>
+              {/acl}
+            </div>
+          </dynamic-image>
+          <dynamic-image ng-if="!content.thumb_image" class="img-thumbnail" ng-model="content.thumb">
+            <div class="hidden-select" ng-click="toggle(content)"></div>
+             <div class="thumbnail-actions ng-cloak">
+              {acl isAllowed="VIDEO_DELETE"}
+                <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
+                  <i class="fa fa-trash-o fa-2x"></i>
+                </div>
+              {/acl}
+              {acl isAllowed="VIDEO_UPDATE"}
+                <a class="thumbnail-action" href="[% edit(content.id, 'admin_video_show') %]" ng-click="$event.stopPropagation()">
+                  <i class="fa fa-pencil fa-2x"></i>
+                </a>
+              {/acl}
+            </div>
+          </dynamic-image>
+        </div>
+      </div>
+    </div>
+    <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && mode == 'grid' && pagination.total != contents.length">
+      <h5>
+        <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+        <span ng-if="!loadingMore">{t}Load more{/t}</span>
+        <span ng-if="loadingMore">{t}Loading{/t}</span>
+      </h5>
+    </div>
+    <div class="infinite-row master-row ng-cloak">
+      <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
+      </div>
+    </div>
+  </div>
+  <div class="content-sidebar hidden-sm ng-cloak" ng-if="mode === 'grid'">
+    <div class="center p-t-15" ng-if="!selected.lastSelected">
+      <h4>{t}No item selected{/t}</h4>
+      <h6>{t}Click in one item to show information about it{/t}</h6>
+    </div>
+    <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Video details{/t}</h4>
+    <div ng-if="selected.lastSelected">
+      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="!selected.lastSelected.thumb_image">
+        <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
+      </div>
+      <ul class="media-information">
+        <li>
+          <strong>[% selected.lastSelected.name %]</strong>
+        </li>
+        <li>
+          <a class="btn btn-default" ng-href="[% routing.generate('admin_video_show', { id: selected.lastSelected.id}) %]">
+            <strong>
+              <i class="fa fa-edit"></i>
+              {t}Edit{/t}
+            </strong>
+          </a>
+        </li>
+        <li>[% selected.lastSelected.created | moment %]</li>
+        <li>
+          <div class="form-group">
+            <label for="description">
+              <strong>{t}Description{/t}</strong>
+              <div class="pull-right">
+                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }"></i>
+              </div>
+            </label>
+            <textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

@@ -66,9 +66,9 @@ class AdvertisementController extends Controller
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         // Resolve ad ID, search in repository or redirect to 404
-        $id = \ContentManager::resolveID($id);
+        list($id, $urlDate) = \ContentManager::resolveID($id);
         $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
-        if (is_null($advertisement)) {
+        if (!\ContentManager::checkValidContentAndUrl($advertisement, $urlDate)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

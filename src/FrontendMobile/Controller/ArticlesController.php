@@ -34,13 +34,14 @@ class ArticlesController extends Controller
 
         define('BASE_PATH', '/mobile');
 
-        $dirtyID = $request->query->getDigits('article_id');
+        $dirtyID = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID, search in repository or redirect to 404
-        $articleID = \ContentManager::resolveID($dirtyID);
-        $er        = $this->get('entity_repository');
-        $article   = $er->find('Article', $articleID);
-        if (is_null($article)) {
+        list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
+        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
@@ -65,7 +66,7 @@ class ArticlesController extends Controller
                 $this->view->assign('photo', $photo->path_file.$photo->name);
             }
 
-            $relContentManager = new \RelatedContent();
+            $relContentManager = getService('related_contents');
             $relatedContentIds = $relContentManager->getRelationsForInner($articleID);
 
             $relatedContents = $cm->getContents($relatedContentIds);

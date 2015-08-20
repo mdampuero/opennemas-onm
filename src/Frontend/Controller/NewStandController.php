@@ -194,15 +194,16 @@ class NewStandController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('id', null);
+        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve epaper ID, search in repository or redirect to 404
-        $epaperId = \ContentManager::resolveID($dirtyID);
-        $epaper   = $this->get('entity_repository')->find('Kiosko', $epaperId);
-        if (is_null($epaper)) {
+        list($epaperID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $epaper = $this->get('entity_repository')->find('Kiosko', $epaperID);
+        if (!\ContentManager::checkValidContentAndUrl($epaper, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);
+        $cacheID = $this->view->generateCacheId('newsstand', null, $epaperID);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {

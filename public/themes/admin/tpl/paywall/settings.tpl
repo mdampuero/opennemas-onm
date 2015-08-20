@@ -130,7 +130,6 @@
               <i class="fa fa-circle-o-notch fa-spin" ng-if="validatingCredentials"></i>
               {t}Validate{/t}
             </button>
-            <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image">
           </div>
         </div>
       </div>

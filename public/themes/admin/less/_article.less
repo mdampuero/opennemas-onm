@@ -170,8 +170,24 @@
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 992px) {
   .dynamic-image-wrapper .thumbnail-actions {
     opacity: 1;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1320px) {
+  .dynamic-image-wrapper {
+    .thumbnail-actions {
+      .thumbnail-action {
+        height: 40px;
+        line-height: 3.4em;
+        width: 40px;
+
+        i {
+          font-size: 1.5em;
+        }
+      }
+    }
   }
 }

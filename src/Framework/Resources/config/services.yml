@@ -15,7 +15,7 @@ services:
 
     kernel.listener.user_listener:
         class: Framework\EventListener\UserListener
-        arguments: [ @security.context, @onm_user_provider, @router ]
+        arguments: [ @security.context, @onm_user_provider, @router, @session ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -148,6 +148,10 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    google_recaptcha:
+        class: Onm\Recaptcha
+        arguments: [ @setting_repository, %recaptcha_private_key% ]
+
     recaptcha:
         class: Captcha\Captcha
         calls:
@@ -211,3 +215,7 @@ services:
     onm.framework_status:
         class: Onm\Framework\Status
         arguments: [ @service_container ]
+
+    related_contents:
+        class: RelatedContent
+        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]

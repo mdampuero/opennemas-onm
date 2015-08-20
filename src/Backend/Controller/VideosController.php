@@ -366,9 +366,9 @@ class VideosController extends Controller
 
         if (!empty($id)) {
             $video = new \Video($id);
-            // Delete relations
-            $rel= new \RelatedContent();
-            $rel->deleteAll($id);
+
+            // Delete related and relations
+            getService('related_contents')->deleteAll($id);
 
             $video->delete($id, $_SESSION['userid']);
 
@@ -517,38 +517,6 @@ class VideosController extends Controller
                 array('configs' => $configurations,)
             );
         }
-    }
-
-
-    /**
-     * Returns the relations for a given video.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('VIDEO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="VIDEO_MANAGER")
-     */
-    public function relationsAction(Request $request)
-    {
-        $id = $request->query->filter('id', null, FILTER_DEFAULT);
-
-        $relations = array();
-        $msg ='';
-        $relations = \RelatedContent::getContentRelations($id);
-
-        if (!empty($relations)) {
-            $msg = sprintf(_("The video has some relations"));
-            $cm  = new \ContentManager();
-            $relat = $cm->getContents($relations);
-            foreach ($relat as $contents) {
-                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
-            }
-            $msg.="<br> "._("Caution! Are you sure that you want to delete this video and its relations?");
-        }
-
-        return new Response($msg);
     }
 
     /**

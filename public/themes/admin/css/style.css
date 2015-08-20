@@ -222,96 +222,6 @@ div.overlay {
   clear:both;
 }
 
-
-a.go_home {
-  background-image: url("../images/home_no.png");
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-a.go_home:hover {
-  text-decoration:none;
-  background-image: url("../images/gohome.png");
-}
-
-a.no_home {
-  background-image: url("../images/gohome.png");
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-a.no_home:hover {
-  text-decoration:none;
-  background-image: url("../images/home_no.png");
-}
-
-a.no_suggest {
-  background-image: url("../images/gosuggesthome.png");
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-}
-
-a.no_suggest:hover {
-  text-decoration:none;
-  background-image: url("../images/home_no.png");
-}
-
-
-a.favourite_on {
-  background-image: url("../images/selected.png");
-  display: inline-block;
-  width: 17px;
-  height: 17px;
-  display:inline-block;
-  text-indent:-9999px;
-}
-
-a.favourite_on:hover {
-  text-decoration:none;
-  background-image: url("../images/no_selected.png");
-}
-
-a.favourite_off {
-  background-image: url("../images/no_selected.png");
-  display:inline-block;
-  width: 17px;
-  height: 17px;
-}
-
-a.favourite_off:hover {
-  text-decoration:none;
-  background-image: url("../images/selected.png");
-}
-
-a.publishing {
-  background-image: url("../images/publish_g.png");
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-a.publishing:hover {
-  text-decoration:none;
-  background-image: url("../images/publish_r.png");
-}
-
-
-a.unpublishing {
-  background-image: url("../images/publish_r.png");
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-a.unpublishing:hover {
-  text-decoration:none;
-  background-image: url("../images/publish_g.png");
-}
-
-
 #warnings-validation {
   margin:5px 0;
 }
@@ -441,51 +351,12 @@ div.utilities-conf input[type="text"]{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
-/* -------------------------------------------------------------
-  Global user tools inside Global nav
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.global-search .string-search {
-  background:url(../images/global-search-box.png) 5px 3px no-repeat; padding-left:25px; width:110px; border-radius:13px; line-height:1.25em;
-  -webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;
-  display:block; margin-top:0px; background-color:#444;
-}
-.global-search .string-search:focus { background:url(../images/global-search-box-blur.png) 5px 3px no-repeat; padding-left:25px; background-color:#ffffff; }
-
-@media (min-width:1060px) {
-  .global-search .string-search:focus {
-    width:250px;
-  }
-}
-
-.usermenu .usericon { background: url(../images/topbar-admin-usermenu.png) 0px -20px no-repeat !important; width:20px; height:20px; padding: 9px 10px !important; margin:0px; }
-.usermenu .links li a{ background:none; color:White; padding:3px 10px; }
 @media (max-width:891px) {
   .wrapper-content { width:95%;}
-  .usermenu .avatar { float:left; box-shadow: 0 0px 3px rgba(0, 0, 0, 0.6); padding:1px; width:50px; height:50px; }
-  .usermenu .user-info {
-    padding-left:70px;
-  }
-  .usermenu .links { margin-bottom:15px; }
-    .usermenu a, .comments-available a{ color:White; }
-      .usermenu .logout { padding:5px 0 4px 0; display:block; }
+  .comments-available a{ color:White; }
   .navbar-inverse .nav-collapse .nav > li > a, .navbar-inverse .nav-collapse .dropdown-menu a { color:white }
 }
 @media (min-width:900px) {
-  .usermenu .avatar { position:absolute; top:10px; left:20px; width:50px; height:50px; }
-  .usermenu li a:hover { text-decoration:underline !important; }
-  .usermenu .dropdown-menu {
-    background: #222;
-    border-radius:0 0 3px 3px;
-    margin-top:0px;
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  .usermenu .dropdown-menu:after,
-  .usermenu .dropdown-menu:before { display:none; }
-  .usermenu .user-info { padding-left:70px; margin:5px 10px 5px 10px; }
-    .usermenu .user-info ul { width:100%; margin:0; padding:0; }
-      .usermenu .user-info li { display:block !important; clear:both; width:100%; }
-         .usermenu .complete-name { color: White; font-size:1.2em; font-weight:bold; }
-         .usermenu .login-name { font-size:.95em; color:#999; margin-bottom:0px; }
   .longtext {
     display: none;
   }
@@ -583,153 +454,6 @@ ul#menu ul li:first-child a { padding-top:6px; }
   ul#menu ul li.divider { padding:0; height:1px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 1px; margin: 5px 0; overflow: hidden; height: 1px; padding: 0; }
 
 ul#menu.manager a { color:White !important; }
-
-/* -------------------------------------------------------------
-  Botonera old definitions: This should be deleted
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-  .old-button {
-    list-style: none;
-    margin: 0 0 0 5px;
-    padding: 0px;
-    display:inline-block;
-    vertical-align: middle;
-    float:right;
-  }
-
-    .old-button > li {
-        vertical-align:bottom;
-        display:inline-block;
-        padding-left: 0px;
-        padding-right: 0px;
-        float: right;
-        text-align: center;
-        white-space: nowrap;
-        position:relative;
-    }
-
-      .old-button > li a ,
-      .old-button > li button {
-        display: block;
-        padding: 2px 4px;
-        text-decoration: none;
-        font-weight: bold;
-        color:#464646;
-        background: transparent;
-        width: auto;
-        border:1px solid transparent;
-        padding:5px;
-        font-family:Arial;
-        font-size:11px;
-      }
-
-        .old-button > li a img,
-        .old-button > li a button {
-          height:35px !important;
-        }
-        .old-button ul {
-          display:none;
-          position:absolute;
-          top:99%;
-          right:0%;
-        }
-
-        .old-button > li:hover ul {
-          display:block;
-        }
-
-        .old-button > li a:hover,
-        .old-button > button:hover,
-        .old-button > li:hover > a {
-            color:Black;
-            background:#e4e4e4;
-            border: 1px solid #D9D9D9;
-            cursor: pointer;
-            outline: medium none;
-            position: relative;
-            text-align: center;
-            text-decoration: none;
-            border-radius:0px;
-        }
-
-        .old-button > li.separator{
-            background:url(../images/separator.png) center center no-repeat;
-            border:0 none;
-            height:57px;
-            margin:0 2px;
-            width:4px;
-            vertical-align:middle
-        }
-        .old-button img{
-          height:35px !important;
-        }
-        .old-button li ul {
-            z-index:88;
-        }
-        .old-button li ul li {
-            list-style:none;
-        }
-
-        .old-button .batch-actions {
-            display:none;
-        }
-        .old-button .batch-actions:hover > a {
-            z-index:89;
-            background:White;
-            border-bottom:0 none;
-            border-color: rgba(0, 0, 0, 0.2);
-            border-radius:5px 5px 0 0;
-        }
-        .old-button .dropdown-menu {
-            right:0px !important;
-            left:auto;
-        }
-
-
-h2.disqus {
-    background: url(../images/disqus.png) center left no-repeat;
-    padding-left:150px !important;
-}
-/* -------------------------------------------------------------
-  Help blocks
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.onm-help-block {
-  background:White;
-  border:1px solid #bfbfbf;
-  position:relative;
-  width:100%;
-  width:90%
-}
-  .onm-help-block.warning { border-color: #FBC2C4; }
-  .onm-help-block .title {
-    position:absolute;
-    background: #D2D2D2 url(../images/backgrounds/back-help.png) bottom right no-repeat;
-    top:0px;
-    left:0px;
-    display:block;
-    width:100%
-  }
-    .onm-help-block.warning .title { background-color: #FBE3E4; color: #8A1F11; }
-    .onm-help-block .title h4 {
-      margin:7px 10px;
-      padding:0 !important;
-      margin-bottom:20px;
-      color:#444;
-      text-transform:uppercase;
-      font-size:13px;
-      background:url(../images/backgrounds/bullet-help.png) bottom right no-repeat;
-      margin-right:24px;
-            height: 30px;
-    }
-      .onm-help-block.warning .title h4 { color: #8A1F11; }
-  .onm-help-block .content {
-    margin-top:50px;
-    padding:15px;
-    color:#333;
-    font-size:1.0em;
-  }
-  .onm-help-block dl { margin-top:0; }
-  .onm-help-block dd { margin:10px 0 10px 20px; }
 
 /* -------------------------------------------------------------
   Footer
@@ -855,54 +579,6 @@ div.ui-blocker-message img {
 /* -------------------------------------------------------------
   media-browser
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.simple_overlay {
-    display:none;
-    z-index:10000;
-    background-color:#333;
-
-    width:650px;
-    min-height:200px;
-    border:1px solid #666;
-
-    /* CSS3 styling for latest browsers */
-    -moz-box-shadow:0 0 90px 5px #000;
-    -webkit-box-shadow: 0 0 90px #000;
-}
-
-.simple_overlay .resource {
-    width:450px;
-    overflow:hidden;
-}
-
-.simple_overlay .resource > * {
-    max-width:450px;
-}
-
-/* close button positioned on upper right corner */
-.simple_overlay .close {
-    background-image:url(../images/close.png);
-    position:absolute;
-    right:-15px;
-    top:-15px;
-    cursor:pointer;
-    height:35px;
-    width:35px;
-}
-  /* styling for elements inside overlay */
-.simple_overlay .details {
-    position:absolute;
-    top:0;
-    right:0;
-    font-size:11px;
-    color:#fff;
-    width:180px;
-}
-
-.simple_overlay .details h3 {
-    line-height:18px;
-    font-size:15px !important;
-    margin-top:40px;
-}
 img[src="non"] { display:none !important; }
 
 .image-preview {
@@ -1532,12 +1208,6 @@ div.upload {
     clear: both;
 }
 
-.spinner {
-    background:url(../images/throbber.svg) top right no-repeat;
-    width:16px;
-    height:16px;
-}
-
 .content-action-buttons .btn .caret { margin-top: 5px; margin-left: 0; }
 .modal-header h3 {
     line-height:1.5em;
@@ -1852,15 +1522,6 @@ progress {
    ========================================================================== */
 .settings-header {
   margin-bottom:10px;
-}
-
-.settings-panel {
-    background: url(../images/backgrounds/settings-panel-background.png) top left;
-    padding:30px 0;
-    margin-top:-5px;
-    box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
 }
 
 /* =============================================================================

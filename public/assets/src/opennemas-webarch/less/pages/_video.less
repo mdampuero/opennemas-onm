@@ -6,16 +6,40 @@
 
   li {
     padding: 0;
+    position: relative;
     margin-bottom: 10px;
+
+    a {
+      height: 60px;
+      padding-left: 70px;
+    }
+
+    .btn {
+      width: 100%;
+      word-wrap: word;
+      text-align: left;
+    }
   }
 
-  li .btn {
-    width: 100%;
-    word-wrap: word;
-    text-align: left;
+  .fa {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+
+    &.fa-file-code-o {
+      margin-left: 4px;
+    }
+
+    &.fa-vimeo {
+      margin-top: 8px;
+    }
+
+    &.fa-youtube {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
   }
 }
-
 @media (max-width: 767px) {
   .video-type-selector {
     width: 100%;
