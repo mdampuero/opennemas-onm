@@ -72,7 +72,7 @@ class ClientPersister extends BraintreePersister
         $cr   = $this->factory->get('customer');
         $data = $this->entityToArray($entity);
 
-        $response = $cr::create($entity->client_id, $data);
+        $response = $cr::update($entity->client_id, $data);
 
         if ($response->success) {
             if ($next && $this->hasNext()) {
