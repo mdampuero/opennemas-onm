@@ -8,12 +8,12 @@ use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;
 
-class MarketManager
+class EntityManager
 {
     protected $_sources = [
-        'Braintree'  => 2,
-        'Database'   => 0,
-        'FreshBooks' => 1,
+        'Braintree'  => 1,
+        'Database'   => 2,
+        'FreshBooks' => 0,
     ];
 
     /**
@@ -93,7 +93,7 @@ class MarketManager
             return $this->buildChain($persisters);
         }
 
-        throw new InvalidPersisterException($class);
+        throw new InvalidPersisterException($class, 'any source');
     }
 
     /**
@@ -124,7 +124,7 @@ class MarketManager
             return $this->buildChain($repositories);
         }
 
-        throw new InvalidRepositoryException($name);
+        throw new InvalidRepositoryException($name, 'any source');
     }
 
     /**
@@ -135,16 +135,12 @@ class MarketManager
     public function persist(Entity $entity)
     {
         $chain = null;
-        $persisters = $this->getPersister($entity);
+        $persister = $this->getPersister($entity);
 
         if ($entity->exists()) {
-            foreach ($persisters as $persister) {
-                $persister->update($entity);
-            }
+            $persister->update($entity);
         } else {
-            foreach ($persisters as $persister) {
-                $persister->create($entity);
-            }
+            $persister->create($entity);
         }
     }
 
@@ -152,16 +148,14 @@ class MarketManager
      * Removes an entity from FreshBooks.
      *
      * @param Entity $entity The entity to remove.
+     *
+     * @throws EntityNotFoundException If entity does not exist
      */
     public function remove(Entity $entity)
     {
-        $persisters = $this->getPersister($entity);
+        $persister = $this->getPersister($entity);
 
-        if ($entity->exists()) {
-            foreach ($persisters as $persister) {
-                $persister->remove($entity);
-            }
-        }
+        $persister->remove($entity);
     }
 
     /**
