@@ -80,7 +80,7 @@ class ClientRepository extends BraintreeRepository
 
             return $clients;
         } catch (\Exception $e) {
-            throw new InvalidCriteriaException($e->getMessage());
+            throw new InvalidCriteriaException($criteria, $this->source, $e->getMessage());
         }
 
         throw new InvalidCriteriaException($criteria, $this->source);
@@ -97,9 +97,11 @@ class ClientRepository extends BraintreeRepository
     {
         $criteria = [];
 
-        foreach ($array as $key => $value) {
-            $key = \classify($key);
-            $criteria[] = \Braintree_CustomerSearch::{$key}()->is($value);
+        if (is_array($array)) {
+            foreach ($array as $key => $value) {
+                $key = \classify($key);
+                $criteria[] = \Braintree_CustomerSearch::{$key}()->is($value);
+            }
         }
 
         return $criteria;
@@ -114,6 +116,10 @@ class ClientRepository extends BraintreeRepository
      */
     private function responseToData($response)
     {
+        if (empty($response)) {
+            return null;
+        }
+
         $data = [
             'client_id'    => $response->id,
             'first_name'   => $response->firstName,
