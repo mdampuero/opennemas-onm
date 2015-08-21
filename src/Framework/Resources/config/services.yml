@@ -226,8 +226,8 @@ services:
 
     orm.manager.freshbooks:
         class: Framework\ORM\FreshBooks\FreshBooksManager
-        arguments: [ %onm.freshbooks.domain%, %onm.freshbooks.token% ]
+        arguments: [ %freshbooks.domain%, %freshbooks.token% ]
 
     orm.manager:
         class: Framework\ORM\EntityManager
-        arguments: [ @onm.manager.braintree, @onm.manager.freshbooks ]
+        arguments: [ @orm.manager.braintree, @orm.manager.freshbooks ]
