@@ -127,53 +127,55 @@ class ModuleManager
     {
         if (!isset(self::$availableModules)) {
             self::$availableModules = array(
-                'ADS_MANAGER'               => _('Advertisement'),
-                'ADVANCED_SEARCH'           => _('Advanced search'),
-                'ALBUM_MANAGER'             => _('Albums'),
-                'ARTICLE_MANAGER'           => _('Articles'),
-                'AVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
-                'AVANCED_FRONTPAGE_MANAGER' => _('Advanced frontpage managers'),
-                'BLOG_MANAGER'              => _('Blog'),
-                'BOOK_MANAGER'              => _('Books'),
-                'CACHE_MANAGER'             => _('Cache manager'),
-                'CATEGORY_MANAGER'          => _('Category'),
-                'COMMENT_MANAGER'           => _('Comments'),
-                'CRONICAS_MODULES'          => _('Cronicas customizations'),
-                'FILE_MANAGER'              => _('Files'),
-                'FORM_MANAGER'              => _('Forms'),
-                'FRONTPAGE_MANAGER'         => _('Frontpages'),
-                'FRONTPAGES_LAYOUT'         => _('Frontpages layout'),
-                'IMAGE_MANAGER'             => _('Images'),
-                'KEYWORD_MANAGER'           => _('Keywords'),
-                'KIOSKO_MANAGER'            => _('Kiosko'),
-                'LETTER_MANAGER'            => _('Letters'),
-                'LIBRARY_MANAGER'           => _('Library'),
-                'MENU_MANAGER'              => _('Menus'),
-                'NEWS_AGENCY_IMPORTER'      => _('News Agency importer'),
-                'NEWSLETTER_MANAGER'        => _('Newsletter'),
-                'OPINION_MANAGER'           => _('Opinion'),
-                'POLL_MANAGER'              => _('Polls'),
-                'PROMOTIONAL_BAR'           => _('Promotional bar'),
-                'SCHEDULE_MANAGER'          => _('Schedules'),
-                'SETTINGS_MANAGER'          => _('System wide settings'),
-                'SPECIAL_MANAGER'           => _('Specials'),
-                'STATIC_LIBRARY'            => _('Static library'),
-                'STATIC_PAGES_MANAGER'      => _('Static pages'),
-                'SUPPORT_NONE'              => _('Basic support'),
-                'SUPPORT_PRO'               => _('Profesional support'),
-                'SUPPORT_2'                 => _('Support 2'),
-                'SUPPORT_3'                 => _('Support 3'),
-                'SUPPORT_4'                 => _('Support 4'),
-                'SUPPORT_8'                 => _('Support 8'),
-                'SUPPORT_8_PLUS'            => _('Support 8+'),
-                'SYNC_MANAGER'              => _('Instance synchronization'),
-                'TRASH_MANAGER'             => _('Trash'),
-                'USER_GROUP_MANAGER'        => _('User groups'),
-                'USER_MANAGER'              => _('Users'),
-                'USERVOICE_SUPPORT'         => _('UserVoice integration'),
-                'VIDEO_MANAGER'             => _('Videos'),
-                'WIDGET_MANAGER'            => _('Widgets'),
-                'PAYWALL'                   => _('Paywall'),
+                'ADS_MANAGER'                => _('Advertisement'),
+                'ADVANCED_SEARCH'            => _('Advanced search'),
+                'ALBUM_MANAGER'              => _('Albums'),
+                'ARTICLE_MANAGER'            => _('Articles'),
+                'ADVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
+                'ADVANCED_FRONTPAGE_MANAGER' => _('Frontpage Customization'),
+                'BLOG_MANAGER'               => _('Authors Blog'),
+                'BOOK_MANAGER'               => _('Books'),
+                'CACHE_MANAGER'              => _('Cache manager'),
+                'CATEGORY_MANAGER'           => _('Category'),
+                'COMMENT_MANAGER'            => _('Comments'),
+                'CRONICAS_MODULES'           => _('Cronicas customizations'),
+                'FILE_MANAGER'               => _('Files'),
+                'FORM_MANAGER'               => _('Contact'),
+                'FRONTPAGE_MANAGER'          => _('Frontpages'),
+                'FRONTPAGES_LAYOUT'          => _('Frontpages Manager'),
+                'IMAGE_MANAGER'              => _('Images'),
+                'XML_IMPORT'                 => _('Import XMLs'),
+                'KEYWORD_MANAGER'            => _('Keywords'),
+                'KIOSKO_MANAGER'             => _('NewsStand'),
+                'LETTER_MANAGER'             => _('Letters'),
+                'LIBRARY_MANAGER'            => _('Library'),
+                'MENU_MANAGER'               => _('Menus'),
+                'NEWS_AGENCY_IMPORTER'       => _('News Agency importer'),
+                'NEWSLETTER_MANAGER'         => _('Newsletter'),
+                'OPENNEMAS_AGENCY'           => _('Articles Synchronization'),
+                'OPINION_MANAGER'            => _('Opinion'),
+                'POLL_MANAGER'               => _('Polls'),
+                'PROMOTIONAL_BAR'            => _('Promotional bar'),
+                'SCHEDULE_MANAGER'           => _('Schedules'),
+                'SETTINGS_MANAGER'           => _('System wide settings'),
+                'SPECIAL_MANAGER'            => _('Specials'),
+                'STATIC_LIBRARY'             => _('Static library'),
+                'STATIC_PAGES_MANAGER'       => _('Static pages'),
+                'SUPPORT_NONE'               => _('Basic support'),
+                'SUPPORT_PRO'                => _('Profesional support'),
+                'SUPPORT_2'                  => _('Support 2'),
+                'SUPPORT_3'                  => _('Support 3'),
+                'SUPPORT_4'                  => _('Support 4'),
+                'SUPPORT_8'                  => _('Support 8'),
+                'SUPPORT_8_PLUS'             => _('Support 8+'),
+                'SYNC_MANAGER'               => _('Instance synchronization'),
+                'TRASH_MANAGER'              => _('Trash'),
+                'USER_GROUP_MANAGER'         => _('User groups'),
+                'USER_MANAGER'               => _('Users'),
+                'USERVOICE_SUPPORT'          => _('UserVoice integration'),
+                'VIDEO_MANAGER'              => _('Videos'),
+                'WIDGET_MANAGER'             => _('Widgets'),
+                'PAYWALL'                    => _('Paywall'),
             );
         }
 
@@ -695,7 +697,7 @@ class ModuleManager
                     ]
                 ],
                 [
-                    'id'               => 'AVANCED_ARTICLE_MANAGER',
+                    'id'               => 'ADVANCED_ARTICLE_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Advanced article options'),
@@ -703,22 +705,21 @@ class ModuleManager
                     'long_description' => _('Missed long description...'),
                 ],
                 [
-                    'id'               => 'AVANCED_FRONTPAGE_MANAGER',
+                    'id'               => 'ADVANCED_FRONTPAGE_MANAGER',
                     'plan'             => 'OTHER',
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
-                    'name'             => _('Frontpage advanced personalization'),
+                    'name'             => _('Frontpage Customization'),
                     'description'      => _('Change your Frontpage every time you want.'),
                     'long_description' => _(
-                        '
-                        <p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
+                        '<p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
                         <p>By activating this module you will be allowed to:</p>
                         <ul>
-                            <li>Change background colour of the news, so that a column can gain a different style from others.</li>
+                            <li>Change background color of the news, so that a column can gain a different style from others.</li>
                             <li>Change font size, so that you can give more weight to a title in the page.</li>
                             <li>Change colour of titles fonts, so that you can combine it with the different background.</li>
-                            <li>Change of style: font, bold, italic, etc</li>
-                            <li>Change the disposition of the image with respect to the text: right, left, above/below of the title, etc</li>
+                            <li>Change of style: font, bold, italic, etc.</li>
+                            <li>Change the disposition of the image with respect to the text: right, left, above/below of the title, etc.</li>
                         </ul>'
                     ),
                     'price'            => [
@@ -728,11 +729,13 @@ class ModuleManager
                 [
                     'id'               => 'BLOG_MANAGER',
                     'plan'             => 'OTHER',
-                    'type'             => 'internal',
-                    'thumbnail'        => 'module-blog.jpg',
-                    'name'             => _('Blog'),
-                    'description'      => _('Module to manage reviews with blog format'),
-                    'long_description' => _('Missed long description...'),
+                    'type'             => 'module',
+                    'thumbnail'        => 'module-opinion.jpg',
+                    'name'             => _('Authors Blog'),
+                    'description'      => _('Would you like to give to your Opinion authors a Blog Space, this is the feature you were looking for.'),
+                    'long_description' => _('
+                        <p>Authors will have a dedicated space where all their contributions will appear in chronological order and readers alse set a RSS notification to receive the latest articles posted by a particular author.</p>
+                    '),
                 ],
                 [
                     'id'               => 'BOOK_MANAGER',
@@ -812,9 +815,10 @@ class ModuleManager
                 [
                     'id'               => 'FORM_MANAGER',
                     'plan'             => 'OTHER',
-                    'type'             => 'internal',
-                    'name'             => _('Opennemas Contact'),
-                    'description'      => _('Allows to create to new custom forms'),
+                    'type'             => 'module',
+                    'thumbnail'        => 'module-letters.jpg',
+                    'name'             => _('Contact'),
+                    'description'      => _('Let your readers send you content with or without attachments.'),
                     'long_description' => _(
                         '<p>Our feature Opennemas Contact will allow readers to submit their opinions with or without attachment, so that they can communicate with the newspapers.</p>'
                     ),
@@ -829,9 +833,8 @@ class ModuleManager
                     'thumbnail'        => 'module-frontpages.jpg',
                     'name'             => _('Frontpages'),
                     'description'      => _('Most important asset of a newspaper, the frontpage manager allows live update of frontpages content.'),
-                    'long_description' => (
-                        _('<p>Module included in the Basic pack (FREE) of opennemas.</p>')
-                        ._('The frontpage manager will allow you to add articles and modify visualization of your frontpages instantly.')
+                    'long_description' => _(
+                        _('<p>Module included in the Basic pack (FREE) of opennemas, the frontpage manager will allow you to add articles and modify visualization of your frontpages instantly.<p>')
                     ),
                     'price'            => [
                         'month' => 0
@@ -842,11 +845,11 @@ class ModuleManager
                     'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
-                    'name'             => _('Frontpages layouts & custom layouts'),
+                    'name'             => _('Frontpage Manager'),
                     'description'      => _('Create and Manage Frontpage Layouts made by you, every time you want! '),
-                    'long_description' => _(
-                        '<p>Management Personal Frontpages/Frontpages Organization</p>
-                        <p>You can change the appearance of Opennemas newspaper is a matter of seconds with this module. In this way you can select a different frontpage model on each of the sections frontpages.</p>'
+                    'long_description' => (
+                        _('<p>Management Personal Frontpages/Frontpages Organization</p>')
+                        . _('<p>You can change the appearance of Opennemas newspaper in a matter of seconds with this module. In this way you can select a different frontpage model on each of the sections frontpages.</p>')
                     ),
                     'price'            => [
                         'month' => 45
@@ -856,11 +859,24 @@ class ModuleManager
                     'id'               => 'IMAGE_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'module',
+                    'thumbnail'        => 'module-multimedia.jpg',
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
                     'long_description' => _('Missed long description...'),
                     'price'            => [
                         'month' => 0
+                    ]
+                ],
+                [
+                    'id'               => 'XML_IMPORT',
+                    'plan'             => 'OTHER',
+                    'type'             => 'module',
+                    'name'             => _('Import XMLs'),
+                    'thumbnail'        => 'module-frontpage-adv-custom.jpg',
+                    'description'      => _('Do you have your articles in Adobe InDesign or QuarkXPress'),
+                    'long_description' => _('<p>By activating this module you will be able to import XML from Adobe InDesign and QuarkXPress, so that you print articles will become digital. This automatization is one of the most popular because it saves so much time.</p>'),
+                    'price'            => [
+                        'month' => 75
                     ]
                 ],
                 [
@@ -883,7 +899,7 @@ class ModuleManager
                     'plan'             => 'GOLD',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
-                    'name'             => _('Kiosko'),
+                    'name'             => _('NewsStand'),
                     'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
                     'long_description' => _(
                         '<p>If you would like to keep the print version of your newspaper in a newsstand like
@@ -899,15 +915,15 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-letters.jpg',
-                    'name'             => _('Opennemas Connect'),
-                    'description'      => _('Allows user to publish letters sent to the director'),
+                    'name'             => _('Connect'),
+                    'description'      => _('Let your readers be contributors.'),
                     'long_description' => _(
                         '<p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper can become the "voice of people/Internet". </p>
                         <p>You will be able to create custom submission forms for your contributors so that they can share daily in the easiest way.</p>
                         <p>All contributions can be moderated.</p>'
                     ),
                     'price'            => [
-                        'month' => '30'
+                        'month' => '25'
                     ]
                 ],
                 [
@@ -988,6 +1004,23 @@ class ModuleManager
                     ]
                 ],
                 [
+                    'id'               => 'OPENNEMAS_AGENCY',
+                    'plan'             => 'OTHER',
+                    'type'             => 'module',
+                    'thumbnail'        => 'module-frontpage-sync.jpg',
+                    'name'             => _('Articles Synchronization'),
+                    'description'      => _('Update more newspapers at once by syncing articles.'),
+                    'long_description' => _('
+                        <p>Similarly to the frontpage synchronization feature you will be able to update multiple newspapers by adding or editing articles in the main one.</p>
+                        <p>If you have many local newspapers you can import all the articles you want from the main one.</p>
+                    '),
+                    'price'            => [
+                        'month' => 55
+                    ]
+                ],
+
+
+                [
                     'id'               => 'OPINION_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'module',
@@ -1007,7 +1040,7 @@ class ModuleManager
                     'plan'             => 'PROFESSIONAL',
                     'type'             => 'module',
                     'thumbnail'        => 'module-polls.jpg',
-                    'name'             => _('Polls'),
+                    'name'             => _('Polls Manager'),
                     'description'      => _(
                         'Create and manage your polls, engage your audience and collect useful information. '
                     ),
@@ -1086,11 +1119,10 @@ class ModuleManager
                     'plan'             => 'SILVER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
-                    'name'             => _('Frontpage synchronization'),
-                    'description'      => _('Update your local frontpages by updating 1 frontpage'),
+                    'name'             => _('Frontpage Synchronization'),
+                    'description'      => _('Update your local frontpages by updating 1 frontpage!'),
                     'long_description' => _(
-                        '<p>Update your local frontpages by updating 1 frontpage!</p>
-                        <p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronised?</p><p>No problem. By activating this module you will have all your news synchronised, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
+                        'p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronized?</p><p>No problem. By activating this module you will have all your news synchronized, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
                     'price'            => [
                         'month' => 65
                     ]
