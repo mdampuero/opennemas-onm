@@ -94,11 +94,6 @@ class UserListener implements EventSubscriberInterface
             getService('cache')->setNamespace($namespace);
             $GLOBALS['application']->conn->selectDatabase($database);
 
-            // TODO: Remove 1-2 days after deploy
-            if (empty($this->session->get('user'))) {
-                $this->session->set('user', $user);
-            }
-
             if ($user->isMaster() || $user->isEnabled()) {
                 return;
             }
