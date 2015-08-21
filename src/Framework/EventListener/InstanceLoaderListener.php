@@ -109,8 +109,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             throw new \Onm\Instance\NotActivatedException($message);
         }
 
-        $request->getSession()->set('instance', $this->instance);
-
         $this->instance->boot();
         $this->cache->setNamespace($this->instance->internal_name);
 

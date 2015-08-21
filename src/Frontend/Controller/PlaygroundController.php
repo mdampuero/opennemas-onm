@@ -62,4 +62,16 @@ class PlaygroundController extends Controller
             echo "<div class='flash-notice'>$message</div>";
         }
     }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function test()
+    {
+        var_dump('PlaygroundController.php init');
+        die();
+    }
 }
