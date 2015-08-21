@@ -298,7 +298,7 @@
   {include file="frontpagemanager/modals/_modal_archive.tpl"}
   {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 
-  {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+  {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
   {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
   {/is_module_activated}
 {/block}
