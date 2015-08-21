@@ -98,7 +98,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
         }
 
         $this->im->current_instance = $this->instance;
-        $request->getSession()->set('instance', $this->instance);
 
         if (!$this->instance && !is_object($this->instance)) {
             throw new InstanceNotRegisteredException(_('Instance not found'));
@@ -109,8 +108,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             $message =_('Instance not activated');
             throw new \Onm\Instance\NotActivatedException($message);
         }
-
-        $request->getSession()->set('instance', $this->instance);
 
         $this->instance->boot();
         $this->cache->setNamespace($this->instance->internal_name);
