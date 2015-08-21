@@ -72,7 +72,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user  = $token->getUser();
         $valid = true;
 
-        if ($request->get('g-recaptcha-response')) {
+        // Check reCaptcha if is set
+        $response = $request->get('g-recaptcha-response');
+        if (!is_null($response)) {
             $recaptcha = $this->recaptcha->getOnmRecaptcha();
             $resp = $recaptcha->verify(
                 $request->get('g-recaptcha-response'),
