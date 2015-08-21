@@ -236,18 +236,6 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the user box
-     *
-     * @return void
-     **/
-    public function userBoxAction()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        return $this->render('user/user_box.tpl');
-    }
-
-    /**
      * Activates an user account given an token
      *
      * @param Request $request the request object
@@ -563,34 +551,8 @@ class UserController extends Controller
      **/
     public function getUserMenuAction()
     {
-        $login     = $this->generateUrl('frontend_auth_login');
-        $logout    = $this->generateUrl('frontend_auth_logout');
-        $register  = $this->generateUrl('frontend_user_register');
-        $myAccount = $this->generateUrl('frontend_user_show');
-
-        if (isset($_SESSION['userid'])) {
-            $output =
-                '<ul>
-                    <li>
-                        <a href="'.$logout.'">'._("Logout").'</a>
-                    </li>
-                    <li>
-                        <a href="'.$myAccount.'">'._("My account").'</a>
-                    </li>
-                </ul>';
-        } else {
-            $output =
-                '<ul>
-                    <li>
-                        <a href="'.$register.'">'._("Register").'</a>
-                    </li>
-                    <li>
-                        <a href="'.$login.'">'._("Login").'</a>
-                    </li>
-                </ul>';
-        }
-
-        return new Response($output);
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render('user/menu.tpl');
     }
 
     /**

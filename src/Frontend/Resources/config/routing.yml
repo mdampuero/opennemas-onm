@@ -117,10 +117,6 @@ frontend_user_menu:
     path: /user/get/menu
     defaults: { _controller: FrontendBundle:User:getUserMenu }
 
-frontend_user_user_box:
-    path: /user/user_box
-    defaults: { _controller: FrontendBundle:User:userBox }
-
 frontend_author_frontpage:
     path: /author/{slug}
     defaults: { _controller: FrontendBundle:User:authorFrontpage }
