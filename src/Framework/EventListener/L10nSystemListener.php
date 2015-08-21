@@ -68,8 +68,6 @@ class L10nSystemListener implements EventSubscriberInterface
             return;
         }
 
-        $session = $request->getSession();
-
         $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));
 
         $language = $settings['site_language'];
@@ -87,7 +85,10 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            $userLanguage = $session->get('user_language', 'default');
+            $userLanguage = 'default';
+            if ($request->hasPreviousSession()) {
+                $userLanguage = $request->getSession()->get('user_language', 'default');
+            }
 
             if ($userLanguage != 'default') {
                 $language = $userLanguage;
