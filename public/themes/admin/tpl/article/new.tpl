@@ -161,7 +161,7 @@
                     {/if} />
                   </div>
                 </div>
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
                 <div class="form-group col-sm-4">
                   <label class="form-label" for="agency_bulletin">
                     {t}Signature{/t} #2
