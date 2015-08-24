@@ -338,7 +338,7 @@
                       <li class="divider"></li>
                     {/if}
                     <li>
-                      <a href="http://{$smarty.session._sf2_attributes.instance->getMainDomain()}">
+                      <a href="/">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>
