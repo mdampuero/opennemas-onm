@@ -284,7 +284,7 @@ class ContentsController extends Controller
                 array(
                     'content'    => $content,
                     'content_id' => $contentID,
-                    'token'      => $token,
+                    // 'token'      => $token,
                     'ext'        => $ext,
                 )
             );
