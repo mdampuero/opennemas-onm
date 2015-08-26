@@ -80,8 +80,27 @@ class UserController extends Controller
 
         $errors = array();
 
-        // What happens when the CAPTCHA was entered incorrectly
-        if ('POST' == $request->getMethod()) {
+        // Check reCAPTCHA
+        $valid = true;
+        $response = $request->get('g-recaptcha-response');
+        if (!is_null($response)) {
+            $rs = getService('google_recaptcha');
+            $recaptcha = $rs->getOnmRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
+            );
+            $valid = $resp->isSuccess();
+        }
+
+        if (!$valid) {
+            $errors []= _(
+                'The reCAPTCHA wasn\'t entered correctly.'.
+                ' Try to authenticate again.'
+            );
+        }
+
+        if ('POST' == $request->getMethod() && $valid) {
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
@@ -202,6 +221,7 @@ class UserController extends Controller
         $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
         $data['sessionexpire']   = 15;
         $data['type']            = 1;
+        $data['activated']       = 0;
         $data['bio']             = '';
         $data['url']             = '';
         $data['avatar_img_id']   = 0;
@@ -217,7 +237,7 @@ class UserController extends Controller
         // Fetch user data and update
         $user = $this->get('user_repository')->find($_SESSION['userid']);
 
-        if ($user->id > 0) {
+        if (!is_null($user) && $user->id > 0) {
             if ($user->update($data)) {
                 // Clear caches
                 $this->dispatchEvent('author.update', array('id' => $data['id']));
@@ -410,89 +430,6 @@ class UserController extends Controller
         return $this->render('user/recover_pass.tpl');
     }
 
-    /**
-     * Shows the form for recovering the username of a user and
-     * sends the mail to the user
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function recoverUsernameAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            return $this->render('user/recover_username.tpl');
-        }
-
-        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
-        // Get user by email
-        $user = new \User();
-        $user->findByEmail($email);
-
-        // If e-mail exists in DB
-        if (!is_null($user->id)) {
-            // Generate and update user with new token
-            $token = md5(uniqid(mt_rand(), true));
-            $user->updateUserToken($user->id, $token);
-
-            $url = $this->generateUrl('frontend_auth_login', array(), true);
-
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
-
-            $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
-            $mailBody = $tplMail->fetch(
-                'user/emails/recoverusername.tpl',
-                array(
-                    'user' => $user,
-                    'url' => $url
-                )
-            );
-
-            //  Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/plain')
-                ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($message);
-
-                $this->view->assign(
-                    array(
-                        'mailSent' => true,
-                        'user' => $user,
-                        'url' => $url
-                    )
-                );
-            } catch (\Exception $e) {
-                // Log this error
-                $this->get('application.log')->notice(
-                    "Unable to send the recover password email for the "
-                    ."user {$user->id}: ".$e->getMessage()
-                );
-
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to send your recover password email. Please try it later.')
-                );
-            }
-
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to find an user with that email.')
-            );
-        }
-
-        // Display form
-        $this->view = new \Template(TEMPLATE_USER);
-        return $this->render('user/recover_username.tpl');
-    }
     /**
      * Regenerates the pass for a user
      *

@@ -346,7 +346,8 @@ class ArticlesController extends Controller
     {
         $cacheable = true;
 
-        if ($content->isOnlyAvailableForRegistered()) {
+        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
+            && $content->isOnlyAvailableForRegistered()) {
             $cacheable = false;
 
             $this->registeredHook($content);
