@@ -40,6 +40,7 @@ class ArchiveController extends Controller
         $today = new \DateTime();
         $today->modify('-1 day');
 
+        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
@@ -48,98 +49,65 @@ class ArchiveController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('newslibrary');
 
+        $itemsPerPage = 20;
         $date = "{$year}-{$month}-{$day}";
 
         $cacheID = $this->view->generateCacheId($date, '', $page);
         if (($this->view->caching == 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-            $cm = new \ContentManager();
-            $ccm = new \ContentCategoryManager();
-            $allCategories = $ccm->categories;
+            $er = getService('entity_repository');
+            $order = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
+            $criteria = [
+                'in_litter'       => [[ 'value' => 0 ]],
+                'fk_content_type' => [[ 'value' => [1,4,7,9], 'operator' => 'IN' ]],
+                'DATE(starttime)' => [[ 'value' => '"'.$date.'"', 'field' => true ]]
+            ];
 
-            $library  = array();
-            $contents = $cm->getContentsForLibrary($date);
+            if ($categoryName != 'home') {
+                $criteria['category_name'] = [[ 'value' => $categoryName ]];
+            }
 
+            $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
+            $total = $er->countBy($criteria);
+
+            $library  = [];
             if (!empty($contents)) {
+                $cr = getService('category_repository');
                 foreach ($contents as $content) {
+                    // Create category group
                     if (!isset($library[$content->category])) {
-                        $library[$content->category] = new \stdClass();
+                        $library[$content->category] = $cr->find($content->category);
                     }
-                    $library[$content->category]->id = $content->category;
-                    if ($content->fk_content_type == 4) {
-                        $library[$content->category]->title = _('Opinion');
-                    } else {
-                        $library[$content->category]->title = $allCategories[$content->category]->title;
+                    // Fetch video or image for article and opinions
+                    if (!empty($content->fk_video)) {
+                        $content->video = $er->find('Video', $content->fk_video);
+                    } elseif (!empty($content->img1)) {
+                        $content->image = $er->find('Photo', $content->img1);
                     }
+                    // Add contents to category group
                     $library[$content->category]->contents[] = $content;
                 }
             }
-
             $this->view->assign('library', $library);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render(
-            'archive/archive.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'newslibraryDate' => $date,
-                'actual_category' => 'archive',
-                'x-tags'          => 'archive-page,'.$date,
-            )
+        // Pager
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            [
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $total,
+                'url'   => $this->generateUrl(
+                    'frontend_archive_content',
+                    [
+                        'day'   => $day,
+                        'month' => $month,
+                        'year'  => $year,
+                    ]
+                )
+            ]
         );
-    }
-
-    /**
-     * Get newslibrary from content table in database
-     *
-     * @return Response the response object
-     **/
-    public function archiveCategoryAction(Request $request)
-    {
-        $today = new \DateTime();
-        $today->modify('-1 day');
-        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
-        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
-        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $page          = $request->query->getDigits('page', 1);
-        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-
-        $this->ccm = new \ContentCategoryManager();
-        if (empty($categoryName) || ($categoryName == 'home')) {
-            $categoryID = 0;
-        } else {
-            $categoryID = $this->ccm->get_id($categoryName);
-        }
-
-        $date = "{$year}-{$month}-{$day}";
-
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->setConfig('newslibrary');
-
-        $cacheID = $this->view->generateCacheId($date.'_'.$categoryName, '', $page);
-        if (($this->view->caching == 0)
-           || (!$this->view->isCached('archive/archive.tpl', $cacheID))
-        ) {
-            $cm = new \ContentManager();
-
-            $library  = array();
-            $library[$categoryID] = new \stdClass();
-            $contents = $cm->getContentsForLibrary($date, $categoryID);
-
-            if (!empty($contents)) {
-                foreach ($contents as $content) {
-                    $library[$categoryID]->id         = $categoryID;
-                    $library[$categoryID]->title      = $categoryName;
-                    $library[$categoryID]->contents[] = $content;
-                }
-            }
-
-            $this->view->assign('library', $library);
-        }
 
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
@@ -147,11 +115,11 @@ class ArchiveController extends Controller
         return $this->render(
             'archive/archive.tpl',
             array(
-                'cache_id' => $cacheID,
-                'category_name'   => $categoryName,
-                'actual_category' => 'archive',
+                'cache_id'        => $cacheID,
                 'newslibraryDate' => $date,
-                'x-tags'          => 'archive-page,'.$date.','.$categoryName,
+                'pagination'      => $pagination,
+                'actual_category' => 'archive',
+                'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
             )
         );
     }

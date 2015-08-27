@@ -32,7 +32,7 @@
                     <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
                 </a>
             </li>
-            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
             <li>
                 <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
                     <i class="fa fa-cog"></i> {t}Customize content{/t}

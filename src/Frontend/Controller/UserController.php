@@ -33,36 +33,40 @@ class UserController extends Controller
      **/
     public function showAction()
     {
-        if (is_array($_SESSION)
-            && array_key_exists('userid', $_SESSION)
-            && !empty($_SESSION['userid'])
+        if (!is_array($_SESSION)
+            || (is_array($_SESSION) && !array_key_exists('userid', $_SESSION))
+            && (
+                is_array($_SESSION)
+                && !array_key_exists('userid', $_SESSION)
+                && empty($_SESSION['userid'])
+            )
         ) {
-            $user = new \User($_SESSION['userid']);
-            $user->getMeta();
-
-            // Get current time
-            $currentTime = new \DateTime();
-
-            // Get user orders
-            $order = new \Order();
-            $userOrders = $order->find('user_id = '.$_SESSION['userid']);
-
-            // Fetch paywall settings
-            $paywallSettings = s::get('paywall_settings');
-
-            $this->view = new \Template(TEMPLATE_USER);
-            return $this->render(
-                'user/show.tpl',
-                array(
-                    'user'             => $user,
-                    'current_time'     => $currentTime,
-                    'paywall_settings' => $paywallSettings,
-                    'user_orders'      => $userOrders
-                )
-            );
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        return $this->redirect($this->generateUrl('frontend_auth_login'));
+        $user = new \User($_SESSION['userid']);
+        $user->getMeta();
+
+        // Get current time
+        $currentTime = new \DateTime();
+
+        // Get user orders
+        $order = new \Order();
+        $userOrders = $order->find('user_id = '.$_SESSION['userid']);
+
+        // Fetch paywall settings
+        $paywallSettings = s::get('paywall_settings');
+
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render(
+            'user/show.tpl',
+            array(
+                'user'             => $user,
+                'current_time'     => $currentTime,
+                'paywall_settings' => $paywallSettings,
+                'user_orders'      => $userOrders
+            )
+        );
     }
 
 
@@ -78,10 +82,29 @@ class UserController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        $errors = array();
-
-        // What happens when the CAPTCHA was entered incorrectly
+        $errors = [];
         if ('POST' == $request->getMethod()) {
+
+            // Check reCAPTCHA
+            $valid = false;
+            $response = $request->get('g-recaptcha-response');
+            if (!is_null($response)) {
+                $rs = getService('google_recaptcha');
+                $recaptcha = $rs->getPublicRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
+
+                $valid = $resp->isSuccess();
+                if (!$valid) {
+                    $errors []= _(
+                        'The reCAPTCHA wasn\'t entered correctly.'.
+                        ' Try to authenticate again.'
+                    );
+                }
+            }
+
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
@@ -96,6 +119,7 @@ class UserController extends Controller
                 'bio'           => '',
                 'url'           => '',
                 'avatar_img_id' => 0,
+                'meta'          => $request->request->get('meta'),
             );
 
             // Before send mail and create user on DB, do some checks
@@ -131,28 +155,28 @@ class UserController extends Controller
                     )
                 );
 
-                // Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($data['email'])
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
                 // If user is successfully created, send an email
                 if (!$user->create($data)) {
                     $errors []=_('An error has occurred. Try to complete the form with valid data.');
                 } else {
+                    $user->setMeta($request->request->get('meta'));
+
                     try {
+                        // Build the message
+                        $message = \Swift_Message::newInstance();
+                        $message
+                            ->setSubject($mailSubject)
+                            ->setBody($mailBody, 'text/plain')
+                            ->setTo($data['email'])
+                            ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
-                        $this->view->assign(
-                            array(
-                                'mailSent' => true,
-                                'email'    => $data['email'],
-                            )
-                        );
+                        $this->view->assign([
+                            'mailSent' => true,
+                            'email'    => $data['email'],
+                        ]);
                     } catch (\Exception $e) {
                         // Log this error
                         $this->get('application.log')->notice(
@@ -202,6 +226,7 @@ class UserController extends Controller
         $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
         $data['sessionexpire']   = 15;
         $data['type']            = 1;
+        $data['activated']       = 0;
         $data['bio']             = '';
         $data['url']             = '';
         $data['avatar_img_id']   = 0;
@@ -217,7 +242,7 @@ class UserController extends Controller
         // Fetch user data and update
         $user = $this->get('user_repository')->find($_SESSION['userid']);
 
-        if ($user->id > 0) {
+        if (!is_null($user) && $user->id > 0) {
             if ($user->update($data)) {
                 // Clear caches
                 $this->dispatchEvent('author.update', array('id' => $data['id']));
@@ -233,18 +258,6 @@ class UserController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
 
         return $this->redirect($this->generateUrl('frontend_user_show'));
-    }
-
-    /**
-     * Shows the user box
-     *
-     * @return void
-     **/
-    public function userBoxAction()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        return $this->render('user/user_box.tpl');
     }
 
     /**
@@ -423,89 +436,6 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the form for recovering the username of a user and
-     * sends the mail to the user
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function recoverUsernameAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            return $this->render('user/recover_username.tpl');
-        }
-
-        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
-        // Get user by email
-        $user = new \User();
-        $user->findByEmail($email);
-
-        // If e-mail exists in DB
-        if (!is_null($user->id)) {
-            // Generate and update user with new token
-            $token = md5(uniqid(mt_rand(), true));
-            $user->updateUserToken($user->id, $token);
-
-            $url = $this->generateUrl('frontend_auth_login', array(), true);
-
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
-
-            $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
-            $mailBody = $tplMail->fetch(
-                'user/emails/recoverusername.tpl',
-                array(
-                    'user' => $user,
-                    'url' => $url
-                )
-            );
-
-            //  Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/plain')
-                ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($message);
-
-                $this->view->assign(
-                    array(
-                        'mailSent' => true,
-                        'user' => $user,
-                        'url' => $url
-                    )
-                );
-            } catch (\Exception $e) {
-                // Log this error
-                $this->get('application.log')->notice(
-                    "Unable to send the recover password email for the "
-                    ."user {$user->id}: ".$e->getMessage()
-                );
-
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to send your recover password email. Please try it later.')
-                );
-            }
-
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to find an user with that email.')
-            );
-        }
-
-        // Display form
-        $this->view = new \Template(TEMPLATE_USER);
-        return $this->render('user/recover_username.tpl');
-    }
-    /**
      * Regenerates the pass for a user
      *
      * @param Request $request the request object
@@ -563,34 +493,8 @@ class UserController extends Controller
      **/
     public function getUserMenuAction()
     {
-        $login     = $this->generateUrl('frontend_auth_login');
-        $logout    = $this->generateUrl('frontend_auth_logout');
-        $register  = $this->generateUrl('frontend_user_register');
-        $myAccount = $this->generateUrl('frontend_user_show');
-
-        if (isset($_SESSION['userid'])) {
-            $output =
-                '<ul>
-                    <li>
-                        <a href="'.$logout.'">'._("Logout").'</a>
-                    </li>
-                    <li>
-                        <a href="'.$myAccount.'">'._("My account").'</a>
-                    </li>
-                </ul>';
-        } else {
-            $output =
-                '<ul>
-                    <li>
-                        <a href="'.$register.'">'._("Register").'</a>
-                    </li>
-                    <li>
-                        <a href="'.$login.'">'._("Login").'</a>
-                    </li>
-                </ul>';
-        }
-
-        return new Response($output);
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render('user/menu.tpl');
     }
 
     /**

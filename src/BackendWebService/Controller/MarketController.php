@@ -86,7 +86,6 @@ class MarketController extends Controller
             // Remove ALBUM_MANAGER, PHOTO_MANAGER and VIDEO_MANAGER
             if (array_key_exists('id', $a)
                 && ($a['id'] === 'ALBUM_MANAGER'
-                    || $a['id'] === 'IMAGE_MANAGER'
                     || $a['id'] === 'VIDEO_MANAGER')
             ) {
                 return false;
@@ -103,9 +102,7 @@ class MarketController extends Controller
                 'name'             => _('Media'),
                 'thumbnail'        => 'module-multimedia.jpg',
                 'description'      => _('Add Video and Image Galleries to your content. '),
-                'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
-                    <p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
-                    <p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
+                'long_description' => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
                 'type'             => 'module',
                 'price' => [
                     'month' => 35

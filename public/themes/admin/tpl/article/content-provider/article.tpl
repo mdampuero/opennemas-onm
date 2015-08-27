@@ -2,14 +2,16 @@
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
-    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
+    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
         <div class="checkbox check-default">
           <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
+            {if $content->in_frontpage && ($params['home'] != true)}
+              <i class="fa fa-home"></i>
+            {/if}
             {if !($content->in_frontpage) && ($params['home'] != true)}<i class="fa fa-star content-icon-suggested"></i>{/if}
             <span class="type">{t}Article{/t}</span>
             {$content->title}
@@ -35,7 +37,7 @@
                     <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
                 </a>
             </li>
-            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
             <li>
                 <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
                     <i class="fa fa-cog"></i> {t}Customize content{/t}

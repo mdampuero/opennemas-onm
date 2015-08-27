@@ -32,6 +32,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     private $context;
 
     /**
+     * @var Instance
+     */
+    private $instance;
+
+    /**
      * @var Router
      */
     protected $router;
@@ -44,15 +49,19 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     /**
      * Constructs a new handler.
      *
-     * @param SecurityContext $context The security context.
-     * @param Router          $router  The router service.
-     * @param Session         $session The session.
+     * @param SecurityContext $context   The security context.
+     * @param Router          $router    The router service.
+     * @param Instance        $instance  The current instance.
+     * @param Session         $session   The session.
+     * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
-    public function __construct($context, $router, $session)
+    public function __construct($context, $instance, $router, $session, $recaptcha)
     {
-        $this->context = $context;
-        $this->router  = $router;
-        $this->session = $session;
+        $this->context   = $context;
+        $this->instance  = $instance;
+        $this->router    = $router;
+        $this->session   = $session;
+        $this->recaptcha = $recaptcha;
     }
 
     /**
@@ -70,18 +79,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user  = $token->getUser();
         $valid = true;
 
-        if ($request->get('recaptcha_challenge_field')) {
-            // New captcha instance
-            $captcha = getService('recaptcha')
-                ->setRemoteIp($request->getClientIp());
-
-            // Get reCaptcha validate response
-            $valid = $captcha->check(
-                $request->get('recaptcha_challenge_field'),
-                $request->get('recaptcha_response_field')
+        // Check reCaptcha if is set
+        $response = $request->get('g-recaptcha-response');
+        if (!is_null($response)) {
+            $recaptcha = $this->recaptcha->getOnmRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
             );
-
-            $valid = $valid->isValid();
+            $valid = $resp->isSuccess();
         }
 
         // Set session array
@@ -93,6 +99,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $this->session->set('user', $user);
         $this->session->set('user_language', $user->getMeta('user_language'));
+        $this->session->set('instance', $this->instance);
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
             $this->session->get('intention'),

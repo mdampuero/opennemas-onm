@@ -136,13 +136,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public $fk_user_group = null;
 
     /**
-     * User login token
-     *
-     * @var string
-     **/
-    public $clientLoginToken = null;
-
-    /**
      * Meta information for the user
      *
      * @var string
@@ -166,12 +159,12 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->cache = null;
         }
 
-        // Use MethodCacheManager
-        if (is_null($this->cache)) {
-            $this->cache = new MethodCacheManager($this, array('ttl' => 60));
-        } else {
-            $this->cache->setCacheLife(60); // 60 seconds
-        }
+        // // Use MethodCacheManager
+        // if (is_null($this->cache)) {
+        //     $this->cache = new MethodCacheManager($this, array('ttl' => 60));
+        // } else {
+        //     $this->cache->setCacheLife(60); // 60 seconds
+        // }
     }
 
     /**

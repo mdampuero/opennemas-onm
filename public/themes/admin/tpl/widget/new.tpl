@@ -51,7 +51,7 @@
         <div class="grid simple">
         <div class="grid-body">
           <div class="form-group">
-            <label for="metadata" class="form-label">{t}Widget name{/t}</label>
+            <label for="title" class="form-label">{t}Widget name{/t}</label>
             <div class="controls">
               <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" class="form-control"/>
             </div>
@@ -62,7 +62,6 @@
               <select name="renderlet" id="renderlet" ng-model="renderlet">
                 <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
                 <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
-                <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
               </select>
             </div>
           </div>
@@ -116,21 +115,44 @@
       </div>
       <div class="col-sm-4">
         <div class="grid simple">
-        <div class="grid-title">
-          {t}Parameters{/t}
-        </div>
-        <div class="grid-body">
-          <div class="form-group">
-            <div class="checkbox">
-              <input id="content_status" name="content_status" {if (isset($widget) && $widget->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
-              <label for="content_status">
-              {t}Published{/t}
+          <div class="grid-title">
+            {t}Parameters{/t}
+          </div>
+          <div class="grid-body">
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="content_status" name="content_status" {if (isset($widget) && $widget->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                <label for="content_status">
+                {t}Published{/t}
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="metadata">
+                {t}Tags{/t}
               </label>
+              <div class="controls">
+                <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$widget->metadata|clearslash|escape:"html"}"/>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
   </form>
+{/block}
+
+{block name="footer-js" append}
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    var tags = $('#metadata');
+    var title = $('#title');
+    title.on('change', function() {
+      // Fill tags from title
+      if (!tags.val()) {
+        fill_tags(title.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+      }
+    });
+  });
+</script>
 {/block}

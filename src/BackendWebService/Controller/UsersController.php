@@ -12,6 +12,7 @@ namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -482,5 +483,67 @@ class UsersController extends ContentController
         }
 
         return $extra;
+    }
+
+    /**
+     * Downloads the list of users with metas.
+     *
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
+    public function downloadListAction(Request $request)
+    {
+        $users = $this->get('user_repository')->findBy('', null);
+
+        $csvHeaders = [
+            _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
+            _('Date Birth'),  _('Postal Code'),  _('Registration date'),
+        ];
+        $output = implode(",", $csvHeaders);
+
+        foreach ($users as &$user) {
+            if (array_key_exists('gender', $user->meta)) {
+                switch ($user->meta['gender']) {
+                    case 'male':
+                        $gender = _('Male');
+                        break;
+                    case 'female':
+                        $gender = _('Female');
+                        break;
+
+                    default:
+                        $gender = _('Other');
+                        break;
+                }
+            } else {
+                $gender = _('Not defined');
+            }
+
+            $row = [
+                $user->name,
+                $user->username,
+                $user->activated,
+                $user->email,
+                $gender,
+                array_key_exists('birth_date', $user->meta) ? $user->meta['birth_date'] : '',
+                array_key_exists('postal_code', $user->meta) ? $user->meta['postal_code'] : '',
+                array_key_exists('register_date', $user->meta) ? $user->meta['register_date'] : '',
+            ];
+            $output .= "\n".implode(",", $row);
+        }
+
+        $response = new Response($output, 200);
+
+        $fileName = 'users_export-'.date('Y-m-d').'.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'User list Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 }

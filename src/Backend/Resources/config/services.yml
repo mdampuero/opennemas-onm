@@ -5,7 +5,7 @@ parameters:
 services:
     login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
-        arguments: [ @security.context, @router, @session ]
+        arguments: [ @security.context, @instance, @router, @session, @google_recaptcha ]
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
         arguments: [ @security.context, @router, @session ]

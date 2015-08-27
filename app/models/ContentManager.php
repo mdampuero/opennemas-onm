@@ -1876,64 +1876,6 @@ class ContentManager
     }
 
     /**
-    * Fetches all the contents (articles, widgets, etc) for one specific
-    * category with its placeholder and position
-    *
-    * This is used for HomePages, fetches all the contents assigned for it and
-    * allows to render an entire homepage
-    *
-    * @param string $date the date to fetch contents when
-    * @param int $categoryID category id we want to get contents from
-    *
-    * @return null|array array of contents
-    */
-    public function getContentsForLibrary($date, $categoryID = 0)
-    {
-        if (empty($date)) {
-            return false;
-        }
-
-        $where ='';
-        if (!empty($categoryID)) {
-            $where = ' AND pk_fk_content_category = '.$categoryID;
-        }
-
-        $sql = 'SELECT content_type_name, pk_content FROM contents, contents_categories '
-              .'WHERE fk_content_type IN (1,4,7,9) '
-              .'AND DATE(starttime) = "'.$date.'" '
-              .'AND content_status=1 AND in_litter=0 '
-              .'AND pk_fk_content = pk_content '.$where
-              .' ORDER BY  fk_content_type ASC, starttime DESC ';
-
-        $rs = $GLOBALS['application']->conn->GetAll($sql);
-
-        if ($rs == false) {
-            return false;
-        }
-
-        $ids = array();
-        foreach ($rs as $item) {
-            $ids[] = array($item['content_type_name'], $item['pk_content']);
-        }
-
-        // Get contents from repository
-        $er = getService('entity_repository');
-        $contents = $er->findMulti($ids);
-
-        // Fetch video or image for article and opinions
-        foreach ($contents as $content) {
-            if (!empty($content->fk_video)) {
-                $content->video = $er->find('Video', $content->fk_video);
-            } elseif (!empty($content->img1)) {
-                $content->image = $er->find('Photo', $content->img1);
-            }
-        }
-
-        return $contents;
-
-    }
-
-    /**
     * Fetches the content for one specific url
     *
     * This is used for getting information from Onm Rest Api
@@ -2128,25 +2070,61 @@ class ContentManager
      */
     public static function resolveID($dirtyID)
     {
-        $contentID = 0;
-
-        $cache      = getService('cache');
+        // Fetch in repository
+        $cache = getService('cache');
         $resolvedID = $cache->fetch('content_resolve_id_'.$dirtyID);
-
         if (!empty($resolvedID)) {
             return $resolvedID;
         }
 
+        // Check for valid Id
         if (!empty($dirtyID)) {
-            preg_match("@(?P<dirtythings>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-            $contentID = (int) $matches['id'];
+            preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyID, $matches);
 
-            $cache->save('content_resolve_id_'.$dirtyID, $contentID);
+            if (array_key_exists('id', $matches) &&
+                array_key_exists('date', $matches) &&
+                (
+                    substr($matches['id'], 0, -6) === '' ||
+                    substr((int)$matches['id'], 0, -6) > 0
+                )
+            ) {
+                $contentID = (int) $matches['id'];
+                $urlDate = strtotime($matches['date']);
+                $cache->save(
+                    'content_resolve_id_'.$dirtyID,
+                    [ $contentID, $urlDate ]
+                );
+
+                return [ $contentID, $urlDate ];
+            }
         }
 
-        return $contentID;
+        return 0;
     }
 
+    /**
+     * Check if a content exists and also check date and slug from url
+     * with content properties.
+     *
+     * @param object $content The content object
+     *
+     * @return bool true if all checks are correct
+     *
+     */
+    public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
+    {
+        if (is_null($content) ||
+            strtotime($content->created) != $urlDate ||
+            (
+                !empty($urlSlug) &&
+                $content->slug != $urlSlug
+            )
+        ) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Checks and cleans articles and opinions from frontpage when the frontpage
      * limit is reached.

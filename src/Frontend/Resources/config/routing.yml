@@ -101,10 +101,6 @@ frontend_user_recoverpass:
     path: /user/recover-pass
     defaults: { _controller: FrontendBundle:User:recoverPassword }
 
-frontend_user_recoverusername:
-    path: /user/recover-user
-    defaults: { _controller: FrontendBundle:User:recoverUsername }
-
 frontend_user_resetpass:
     path: /user/reset-pass/{token}
     defaults: { _controller: FrontendBundle:User:regeneratePassword }
@@ -116,10 +112,6 @@ frontend_user_activate:
 frontend_user_menu:
     path: /user/get/menu
     defaults: { _controller: FrontendBundle:User:getUserMenu }
-
-frontend_user_user_box:
-    path: /user/user_box
-    defaults: { _controller: FrontendBundle:User:userBox }
 
 frontend_author_frontpage:
     path: /author/{slug}
@@ -363,22 +355,12 @@ frontend_poll_show:
 
 
 frontend_archive_content:
-    path: /archive/content/{year}/{month}/{day}
-    defaults: { _controller: FrontendBundle:Archive:archive, page: 1 }
+    path: /archive/content/{year}/{month}/{day}/{category_name}
+    defaults: { _controller: FrontendBundle:Archive:archive, category_name: home }
     requirements:
         year      : "[0-9]+"
         month     : "[0-9]+"
         day       : "[0-9]+"
-
-frontend_archive_category:
-    path: /archive/content/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: FrontendBundle:Archive:archiveCategory, _format: html, page: 1 }
-    requirements:
-        category_name : "[a-z0-9\-]+"
-        year      : "([0-9]+)"
-        month     : "([0-9]+)"
-        day       : "([0-9]+)"
-
 
 frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}

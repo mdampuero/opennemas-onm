@@ -26,7 +26,8 @@ class Contents
     {
         $this->validateInt($id);
 
-        $refactorID = \ContentManager::resolveID($id);
+        $params = \ContentManager::resolveID($id);
+        $refactorID = $params[0];
 
         return $refactorID;
     }

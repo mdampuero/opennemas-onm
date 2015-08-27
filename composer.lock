@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b63782fc6fe486061f6d6cc105769e0f",
+    "hash": "2dedb9c227585484165a470fa426cb52",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -890,8 +890,14 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zikula/NativeSession",
-                "reference": "81653296944b00be03364a6ccc111ccafa52f087"
+                "url": "https://github.com/drak/NativeSession.git",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/f2b14ad483605a8d4b898c260bec7512347ca600",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -903,6 +909,7 @@
                     "Drak": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -913,7 +920,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2015-03-31 17:40:46"
+            "time": "2013-03-11 11:07:59"
         },
         {
             "name": "drexarj/disqus-php",
@@ -1074,7 +1081,7 @@
                     "homepage": "https://github.com/friendsofsymfony/FOSJsRoutingBundle/contributors"
                 },
                 {
-                    "name": "William Durand",
+                    "name": "William DURAND",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -1086,6 +1093,46 @@
                 "routing"
             ],
             "time": "2015-01-23 02:44:26"
+        },
+        {
+            "name": "google/recaptcha",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/google/recaptcha.git",
+                "reference": "c800b38d17fdd932978e6c8a788d493810c01a76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/c800b38d17fdd932978e6c8a788d493810c01a76",
+                "reference": "c800b38d17fdd932978e6c8a788d493810c01a76",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ReCaptcha\\": "src/ReCaptcha"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Client library for reCAPTCHA, a free service that protect websites from spam and abuse.",
+            "homepage": "http://www.google.com/recaptcha/",
+            "keywords": [
+                "Abuse",
+                "captcha",
+                "recaptcha",
+                "spam"
+            ],
+            "time": "2015-03-12 10:56:37"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -1615,12 +1662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
-                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421"
+                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler/zipball/df35bb5e870b2fbf9ae57f533ea30ae9470d1421",
-                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5",
                 "shasum": ""
             },
             "require": {
@@ -1686,7 +1733,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2015-06-12 07:33:40"
+            "time": "2014-12-08 14:29:26"
         },
         {
             "name": "monolog/monolog",
@@ -2066,13 +2113,13 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "url": "https://github.com/php-fig/log",
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://github.com/php-fig/log/archive/1.0.0.zip",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "type": "library",

@@ -5,8 +5,7 @@
         {block name="header-css"}
             {stylesheets src="
                 @Common/components/font-awesome/css/font-awesome.min.css,
-                @Common/components/bootstrap/dist/css/bootstrap.min.css,
-                @Common/css/style.css" filters="cssrewrite"}
+                @Common/components/bootstrap/dist/css/bootstrap.min.css" filters="cssrewrite"}
                 <link rel="stylesheet" href="{$asset_url}">
             {/stylesheets}
         {/block}

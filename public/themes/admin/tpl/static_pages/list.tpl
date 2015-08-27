@@ -138,7 +138,6 @@
                 </th>
                 <th>{t}Title{/t}</th>
                 <th class="hidden-xs hidden-sm">{t}URL{/t}</th>
-                <!-- <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th> -->
                 <th class="center" style="width:20px;">{t}Published{/t}</th>
               </tr>
             </thead>

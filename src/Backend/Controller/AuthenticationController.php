@@ -61,6 +61,8 @@ class AuthenticationController extends Controller
 
             $securityContext = $this->get('security.context');
             $securityContext->setToken($token);
+            $session->set('user', $user);
+            $_SESSION['userid'] = $user->id;
 
             $request = $this->getRequest();
             $session->set('_security_backend', serialize($token));

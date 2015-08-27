@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Onm\Instance\Instance;
 use Onm\Instance\InstanceCreator;
 use Onm\Framework\Controller\Controller;
-use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
 
@@ -39,6 +38,13 @@ class WebServiceController extends Controller
         if (is_object($this->checkAuth($request))) {
             return new JsonResponse('Auth not valid', 403);
         }
+
+        $companyMail = array(
+            'company_mail' => $this->params["company_mail"],
+            'info_mail'    => $this->params["info_mail"],
+            'sender_mail'  => $this->params["no_reply_sender"],
+            'from_mail'    => $this->params["no_reply_from"],
+        );
 
         $instance = new Instance();
 
@@ -135,52 +141,55 @@ class WebServiceController extends Controller
             $im->configureInstance($instance);
             $im->createUser($instance->id, $user);
         } catch (DatabaseNotRestoredException $e) {
+            // Can not create database
             $errors[] = $e->getMessage();
 
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
 
-        } catch (AssetsNotCopiedException $e) {
-        } catch (InstanceNotConfigured $e) {
-            // Assets folder in use (wrong deletion) or permissions issue
+            $this->sendErrorMail($companyMail, $instance, $e);
+        } catch (IOException $e) {
+            // Can not copy default assets
+            $errors[] = $e->getMessage();
+
+            $creator->deleteDatabase($instance->id);
+
+            $this->sendErrorMail($companyMail, $instance, $e);
+        } catch (\Exception $e) {
+            // Can not save settings in instance database
             $errors[] = $e->getMessage();
 
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
+
+            $this->sendErrorMail($companyMail, $instance, $e);
         }
 
         if (is_array($errors) && count($errors) > 0) {
-            return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
+            return new JsonResponse(['success' => false, 'errors' => $errors], 400);
         }
 
-        $companyMail = array(
-            'company_mail' => $this->params["company_mail"],
-            'info_mail'    => $this->params["info_mail"],
-            'sender_mail'  => $this->params["no_reply_sender"],
-            'from_mail'    => $this->params["no_reply_from"],
-        );
-
-        $data = array(
+        $data = [
             'name'          => $instance->name,
             'internal_name' => $instance->internal_name,
             'user_mail'     => $instance->contact_mail,
             'user_name'     => $instance->contact_mail,
-        );
+        ];
 
         $language = $instance->external['site_language'];
-        $plan = $instance->plan;
+        $plan     = $instance->plan;
 
         $domain = $instanceCreator['base_domain'];
         $this->sendMails($data, $companyMail, $domain, $language, $plan);
 
         return new JsonResponse(
-            array(
+            [
                 'success'      => true,
                 'instance_url' => $instance->domains[0],
                 'enable_url'   => $instance->domains[0]
-                    . '/admin/login?token=' . $user['token']
-            ),
+                . '/admin/login?token=' . $user['token']
+            ],
             200
         );
     }
@@ -210,6 +219,30 @@ class WebServiceController extends Controller
         return false;
     }
 
+    private function sendErrorMail($emails, $instance, $exception)
+    {
+        $this->view = new \TemplateManager();
+
+        // Prepare message
+        $message = \Swift_Message::newInstance();
+        $message->setFrom($emails['from_mail'])
+            ->setTo($emails['company_mail'])
+            ->setSender($emails['sender_mail'], "Opennemas")
+            ->setSubject(_("Error when creating a new instance"))
+            ->setBody(
+                $this->renderView(
+                    'instances/mails/instanceCreationError.tpl',
+                    array(
+                        'instance'  => $instance,
+                        'exception' => $exception
+                    )
+                )
+            );
+
+        // Send message
+        $this->get('mailer')->send($message);
+    }
+
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
         $this->view = new \TemplateManager();
@@ -217,19 +250,19 @@ class WebServiceController extends Controller
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
-                ->setTo(array($companyMail['info_mail'] => $companyMail['info_mail']))
-                ->setSender($companyMail['sender_mail'], "Opennemas")
-                ->setSubject(_("A new opennemas instance has been created"))
-                ->setBody(
-                    $this->renderView(
-                        'instances/mails/newInstanceToCompany.tpl',
-                        array(
-                            'data'        => $data,
-                            'domain'      => $domain,
-                            'plan'        => $plan
-                        )
+            ->setTo(array($companyMail['info_mail'] => $companyMail['info_mail']))
+            ->setSender($companyMail['sender_mail'], "Opennemas")
+            ->setSubject(_("A new opennemas instance has been created"))
+            ->setBody(
+                $this->renderView(
+                    'instances/mails/newInstanceToCompany.tpl',
+                    array(
+                        'data'        => $data,
+                        'domain'      => $domain,
+                        'plan'        => $plan
                     )
-                );
+                )
+            );
 
         // Send message
         $this->get('mailer')->send($message);
@@ -243,19 +276,19 @@ class WebServiceController extends Controller
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
-                ->setTo(array($data['user_mail'] => $data['user_name']))
-                ->setSender($companyMail['sender_mail'], "Opennemas")
-                ->setSubject("{$data['name']} "._("is now on-line"))
-                ->setBody(
-                    $this->renderView(
-                        'instances/mails/newInstanceToUser.tpl',
-                        array(
-                            'data'        => $data,
-                            'companyMail' => $companyMail['company_mail'],
-                            'domain'      => $domain,
-                        )
+            ->setTo(array($data['user_mail'] => $data['user_name']))
+            ->setSender($companyMail['sender_mail'], "Opennemas")
+            ->setSubject("{$data['name']} "._("is now on-line"))
+            ->setBody(
+                $this->renderView(
+                    'instances/mails/newInstanceToUser.tpl',
+                    array(
+                        'data'        => $data,
+                        'companyMail' => $companyMail['company_mail'],
+                        'domain'      => $domain,
                     )
-                );
+                )
+            );
 
         // Send message
         $this->get('mailer')->send($message);

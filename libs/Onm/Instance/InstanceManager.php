@@ -15,8 +15,6 @@ use Repository\BaseManager;
 use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 use Onm\Instance\Instance;
-use Onm\Exception\AssetsNotCopiedException;
-use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\AssetsNotRestoredException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotCreatedException;

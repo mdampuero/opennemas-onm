@@ -488,7 +488,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'author_frontpage,'.$author->id.','.$page,
+                'x-tags'          => 'author_frontpage,'.$authorID.','.$page,
                 'x-cache-for'     => '1d'
             )
         );
@@ -642,19 +642,21 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction(Request $request, $opinion_id)
+    public function showAction(Request $request)
     {
-        // Resolve article ID
-        $id = \ContentManager::resolveID($opinion_id);
+        $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
 
+        // Resolve epaper ID, search in repository or redirect to 404
+        list($opinionID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er = $this->get('opinion_repository');
-        $opinion = $er->find('Opinion', $id);
-        if (is_null($opinion)) {
+        $opinion = $er->find('Opinion', $opinionID);
+        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 
         // Don't execute the app logic if there are caches available
-        $cacheId = $this->view->generateCacheId($this->category_name, '', $id);
+        $cacheId = $this->view->generateCacheId($this->category_name, '', $opinionID);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
@@ -663,7 +665,7 @@ class OpinionsController extends Controller
             ) {
                 throw new ResourceNotFoundException();
             }
-            $this->view->assign('contentId', $id);
+            $this->view->assign('contentId', $opinionID);
 
             $author = $this->get('user_repository')->find($opinion->fk_author);
             $opinion->author = $author;
@@ -733,7 +735,7 @@ class OpinionsController extends Controller
                 $criteria = [ 'opinions`.`fk_author' => [[ 'value' => $opinion->fk_author ]] ];
             }
 
-            $criteria['pk_opinion'] = [[ 'operator' => '<>', 'value' => $id ]];
+            $criteria['pk_opinion'] = [[ 'operator' => '<>', 'value' => $opinionID ]];
             $criteria['content_status'] = [[ 'value' => 1 ]];
             $order = ['created' => 'desc'];
 
@@ -765,7 +767,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$id,
+                'x-tags'          => 'opinion,'.$opinionID,
                 'x-cache-for' => '1d'
             )
         );

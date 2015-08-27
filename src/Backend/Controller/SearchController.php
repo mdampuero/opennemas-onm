@@ -79,61 +79,63 @@ class SearchController extends Controller
             $tokens = \Onm\StringUtils::getTags($searchString);
             $tokens = explode(', ', $tokens);
 
-            $szWhere = '';
-            if (count($tokens) > 0) {
-                foreach ($tokens as &$meta) {
-                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
+            $er = $this->get('entity_repository');
+
+            // Build field search with LIKE
+            $fields = ['metadata', 'title'];
+            $search = '';
+            foreach ($fields as $field) {
+                $searchChunk = '';
+                foreach ($tokens as $token) {
+                    $searchChunk []= $field." LIKE '%".trim($token)."%'";
                 }
-                $szWhere = "AND  (".implode(' AND ', $szWhere).") ";
+                $search []= "(".implode(' AND ', $searchChunk).") ";
             }
 
-            $sql = "SELECT pk_content, fk_content_type FROM contents"
-                  ." WHERE contents.content_status=1 "
-                  ." AND fk_content_type IN (1, 2, 4, 7, 9, 10, 11, 12) "
-                  .$szWhere
-                  ." ORDER BY starttime DESC";
+            // Final search
+            $search = "(".implode(' OR ', $search).")";
 
-            $rs  = $GLOBALS['application']->conn->GetArray($sql);
+            // Complete where clause
+            $criteria = ' in_litter = 0 AND content_status = 1 '.
+                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 10, 11, 12)'.
+                        ' AND '.$search;
 
-            $results = array();
-            if ($rs !== false) {
-                $resultSetSize = count($rs);
-                $rs            = array_splice($rs, ($page-1)*9, 9);
+            $order    = [ 'starttime' => 'desc' ];
 
-                foreach ($rs as $content) {
-                    $content = new \Content($content['pk_content']);
-                    $content->content_partial_path =
-                        $content->content_type_name.'/content-provider/'.
-                        $content->content_type_name.'.tpl';
-                    $results[] = $content;
-                }
+            $results = $er->findBy($criteria, $order, 8, $page);
+            $total = $er->countBy($criteria);
 
-                // Build the pager
-                $pagination = $this->get('paginator')->create([
-                    'spacesBeforeSeparator' => 0,
-                    'spacesAfterSeparator'  => 0,
-                    'firstLinkTitle'        => '',
-                    'lastLinkTitle'         => '',
-                    'separator'             => '',
-                    'firstPagePre'          => '',
-                    'firstPageText'         => '',
-                    'firstPagePost'         => '',
-                    'lastPagePre'           => '',
-                    'lastPageText'          => '',
-                    'lastPagePost'          => '',
-                    'prevImg'               => _('Previous'),
-                    'nextImg'               => _('Next'),
-                    'elements_per_page'     => 8,
-                    'total_items'           => $resultSetSize,
-                    'delta'                 => 1,
-                    'base_url'              => $this->generateUrl(
-                        'admin_search_content_provider',
-                        array('search_string' => $searchString, 'related' => $related)
-                    ).'&page=%d',
-                ]);
-
-                $this->view->assign('pagination', $pagination->links);
+            foreach ($results as $content) {
+                $content->content_partial_path =
+                    $content->content_type_name.'/content-provider/'.
+                    $content->content_type_name.'.tpl';
             }
+
+            // Build the pager
+            $pagination = $this->get('paginator')->create([
+                'spacesBeforeSeparator' => 0,
+                'spacesAfterSeparator'  => 0,
+                'firstLinkTitle'        => '',
+                'lastLinkTitle'         => '',
+                'separator'             => '',
+                'firstPagePre'          => '',
+                'firstPageText'         => '',
+                'firstPagePost'         => '',
+                'lastPagePre'           => '',
+                'lastPageText'          => '',
+                'lastPagePost'          => '',
+                'prevImg'               => _('Previous'),
+                'nextImg'               => _('Next'),
+                'elements_per_page'     => 8,
+                'total_items'           => $total,
+                'delta'                 => 1,
+                'base_url'              => $this->generateUrl(
+                    'admin_search_content_provider',
+                    array('search_string' => $searchString, 'related' => $related)
+                ).'&page=%d',
+            ]);
+
+            $this->view->assign('pagination', $pagination->links);
 
             $this->view->assign([
                 'results' => $results,

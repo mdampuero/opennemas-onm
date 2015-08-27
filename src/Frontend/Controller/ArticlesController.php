@@ -44,9 +44,9 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         // Resolve article ID, search in repository or redirect to 404
-        $articleID = \ContentManager::resolveID($dirtyID);
-        $er        = $this->get('entity_repository');
-        $article   = $er->find('Article', $articleID);
+        list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
         if (is_null($article)) {
             throw new ResourceNotFoundException();
         }
@@ -60,7 +60,7 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
-        $cacheable = $this->paywallHook($article);
+        $cacheable = $this->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
@@ -284,56 +284,81 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Alteres the article given the paywall module status
+     * Replaces article body for unsubscribed users.
      *
-     * @return Article the article
-     **/
+     * @return Article $content The article.
+     */
     public function paywallHook(&$content)
     {
-        $paywallActivated = ModuleManager::isActivated('PAYWALL');
-        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
+        $restrictedContent = $this->renderView(
+            'paywall/partials/content_only_for_subscribers.tpl',
+            array('id' => $content->id)
+        );
 
+        $user = $this->getUser();
+
+        if (empty($user) || empty($user->getMeta('paywall_time_limit'))) {
+            $content->body = $restrictedContent;
+            return;
+        }
+
+        $limit = \DateTime::createFromFormat(
+            'Y-m-d H:i:s',
+            $user->getMeta('paywall_time_limit'),
+            new \DateTimeZone('UTC')
+        );
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $hasSubscription = $userSubscriptionDate > $now;
+
+        if ($limit < $now) {
+            $content->body = $restrictedContent;
+        }
+    }
+
+    /**
+     * Replaces article body for unregistered users.
+     *
+     * @param Article $content The article.
+     */
+    public function registeredHook(&$content)
+    {
+        $restrictedContent = $this->renderView(
+            'article/partials/content_only_for_registered.tpl',
+            array('id' => $content->id)
+        );
+
+        if (empty($this->getUser())) {
+            $content->body = $restrictedContent;
+        }
+    }
+
+    /**
+     * Check and modify content if required basing on subscription constraints.
+     *
+     * @param Content $content The content to check.
+     *
+     * @return boolean True if the content is cacheable. Otherwise, returns
+     *                 false.
+     */
+    public function subscriptionHook(&$content)
+    {
         $cacheable = true;
 
-        if ($paywallActivated && $onlyAvailableSubscribers) {
-            $newContent = $this->renderView(
-                'paywall/partials/content_only_for_subscribers.tpl',
-                array('id' => $content->id)
-            );
-
-            $isLogged = isset($_SESSION) && is_array($_SESSION) && array_key_exists('userid', $_SESSION);
-            if ($isLogged) {
-                if (array_key_exists('meta', $_SESSION)
-                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
-                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
-                } else {
-                    $userSubscriptionDateString = '';
-                }
-                $userSubscriptionDate = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $userSubscriptionDateString,
-                    new \DateTimeZone('UTC')
-                );
-
-                $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-                $hasSubscription = $userSubscriptionDate > $now;
-
-                if (!$hasSubscription) {
-                    $newContent = $this->renderView(
-                        'paywall/partials/content_only_for_subscribers.tpl',
-                        array(
-                            'logged' => $isLogged,
-                            'id'     => $content->id
-                        )
-                    );
-                    $content->body = $newContent;
-                }
-            } else {
-                $content->body = $newContent;
-            }
-
+        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
+            && $content->isOnlyAvailableForRegistered()) {
             $cacheable = false;
+
+            $this->registeredHook($content);
+        }
+
+        if (ModuleManager::isActivated('PAYWALL')
+            && $content->isOnlyAvailableForSubscribers()
+        ) {
+            $cacheable = false;
+
+            $this->paywallHook($content);
         }
 
         return $cacheable;

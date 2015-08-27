@@ -250,11 +250,12 @@ class BlogsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('blog_id');
+        $urlSlug = $request->query->filter('blog_title', '', FILTER_SANITIZE_STRING);
 
         // Resolve blog ID, search in repository or redirect to 404
-        $blogID = \ContentManager::resolveID($dirtyID);
-        $blog   = $this->get('opinion_repository')->find('Opinion', $blogID);
-        if (is_null($blog)) {
+        list($blogID, $urlDate) = \ContentManager::resolveID($dirtyID);
+        $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
+        if (!\ContentManager::checkValidContentAndUrl($blog, $urlDate, $urlSlug)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
