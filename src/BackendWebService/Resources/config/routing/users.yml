@@ -45,3 +45,9 @@ backend_ws_users_batch_set_enabled:
     defaults: { _controller: BackendWebServiceBundle:Users:batchSetEnabled }
     options:
         expose: true
+
+backend_ws_users_download_list:
+    path:     /users/download-list
+    defaults: { _controller: BackendWebServiceBundle:Users:downloadList }
+    options:
+        expose: true
