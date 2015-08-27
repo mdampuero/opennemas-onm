@@ -16,6 +16,14 @@
         <div class="all-actions pull-right">
           <ul class="quick-section">
             <li class="quicklinks">
+              <a class="btn btn-white" href="{url name=backend_ws_users_download_list}">
+                {t}Download{/t}
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
               <a class="btn btn-primary" href="{url name=admin_acl_user_create}">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
