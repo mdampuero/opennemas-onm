@@ -138,6 +138,7 @@ class ModuleManager
                 'CACHE_MANAGER'              => _('Cache manager'),
                 'CATEGORY_MANAGER'           => _('Category'),
                 'COMMENT_MANAGER'            => _('Comments'),
+                'CONTENT_SUBSCRIPTIONS'      => _('Content subscriptions'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
