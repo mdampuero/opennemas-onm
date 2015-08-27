@@ -33,36 +33,40 @@ class UserController extends Controller
      **/
     public function showAction()
     {
-        if (is_array($_SESSION)
-            && array_key_exists('userid', $_SESSION)
-            && !empty($_SESSION['userid'])
+        if (!is_array($_SESSION)
+            || (is_array($_SESSION) && !array_key_exists('userid', $_SESSION))
+            && (
+                is_array($_SESSION)
+                && !array_key_exists('userid', $_SESSION)
+                && empty($_SESSION['userid'])
+            )
         ) {
-            $user = new \User($_SESSION['userid']);
-            $user->getMeta();
-
-            // Get current time
-            $currentTime = new \DateTime();
-
-            // Get user orders
-            $order = new \Order();
-            $userOrders = $order->find('user_id = '.$_SESSION['userid']);
-
-            // Fetch paywall settings
-            $paywallSettings = s::get('paywall_settings');
-
-            $this->view = new \Template(TEMPLATE_USER);
-            return $this->render(
-                'user/show.tpl',
-                array(
-                    'user'             => $user,
-                    'current_time'     => $currentTime,
-                    'paywall_settings' => $paywallSettings,
-                    'user_orders'      => $userOrders
-                )
-            );
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        return $this->redirect($this->generateUrl('frontend_auth_login'));
+        $user = new \User($_SESSION['userid']);
+        $user->getMeta();
+
+        // Get current time
+        $currentTime = new \DateTime();
+
+        // Get user orders
+        $order = new \Order();
+        $userOrders = $order->find('user_id = '.$_SESSION['userid']);
+
+        // Fetch paywall settings
+        $paywallSettings = s::get('paywall_settings');
+
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render(
+            'user/show.tpl',
+            array(
+                'user'             => $user,
+                'current_time'     => $currentTime,
+                'paywall_settings' => $paywallSettings,
+                'user_orders'      => $userOrders
+            )
+        );
     }
 
 
@@ -78,29 +82,29 @@ class UserController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        $errors = array();
+        $errors = [];
+        if ('POST' == $request->getMethod()) {
 
-        // Check reCAPTCHA
-        $valid = true;
-        $response = $request->get('g-recaptcha-response');
-        if (!is_null($response)) {
-            $rs = getService('google_recaptcha');
-            $recaptcha = $rs->getOnmRecaptcha();
-            $resp = $recaptcha->verify(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-            $valid = $resp->isSuccess();
-        }
+            // Check reCAPTCHA
+            $valid = false;
+            $response = $request->get('g-recaptcha-response');
+            if (!is_null($response)) {
+                $rs = getService('google_recaptcha');
+                $recaptcha = $rs->getPublicRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
 
-        if (!$valid) {
-            $errors []= _(
-                'The reCAPTCHA wasn\'t entered correctly.'.
-                ' Try to authenticate again.'
-            );
-        }
+                $valid = $resp->isSuccess();
+                if (!$valid) {
+                    $errors []= _(
+                        'The reCAPTCHA wasn\'t entered correctly.'.
+                        ' Try to authenticate again.'
+                    );
+                }
+            }
 
-        if ('POST' == $request->getMethod() && $valid) {
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
@@ -115,6 +119,7 @@ class UserController extends Controller
                 'bio'           => '',
                 'url'           => '',
                 'avatar_img_id' => 0,
+                'meta'          => $request->request->get('meta'),
             );
 
             // Before send mail and create user on DB, do some checks
@@ -150,28 +155,28 @@ class UserController extends Controller
                     )
                 );
 
-                // Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($data['email'])
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
                 // If user is successfully created, send an email
                 if (!$user->create($data)) {
                     $errors []=_('An error has occurred. Try to complete the form with valid data.');
                 } else {
+                    $user->setMeta($request->request->get('meta'));
+
                     try {
+                        // Build the message
+                        $message = \Swift_Message::newInstance();
+                        $message
+                            ->setSubject($mailSubject)
+                            ->setBody($mailBody, 'text/plain')
+                            ->setTo($data['email'])
+                            ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
-                        $this->view->assign(
-                            array(
-                                'mailSent' => true,
-                                'email'    => $data['email'],
-                            )
-                        );
+                        $this->view->assign([
+                            'mailSent' => true,
+                            'email'    => $data['email'],
+                        ]);
                     } catch (\Exception $e) {
                         // Log this error
                         $this->get('application.log')->notice(
