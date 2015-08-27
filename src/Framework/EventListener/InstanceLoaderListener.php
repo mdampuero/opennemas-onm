@@ -98,7 +98,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
         }
 
         $this->im->current_instance = $this->instance;
-        $request->getSession()->set('instance', $this->instance);
 
         if (!$this->instance && !is_object($this->instance)) {
             throw new InstanceNotRegisteredException(_('Instance not found'));

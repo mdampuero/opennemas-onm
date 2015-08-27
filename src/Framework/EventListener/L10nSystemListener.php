@@ -68,15 +68,16 @@ class L10nSystemListener implements EventSubscriberInterface
             return;
         }
 
-        $session = $request->getSession();
-
         $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));
 
         $language = $settings['site_language'];
 
-        if (isset($settings['time_zone'])) {
+        if (array_key_exists('time_zone', $settings) && !empty($settings['time_zone'])) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
             date_default_timezone_set($availableTimezones[$settings['time_zone']]);
+        } else {
+            // If time_zone is not defined, set it to Europe/Madrid
+            date_default_timezone_set("Europe/Madrid");
         }
 
         $availableLanguages = $this->container->getParameter('available_languages');
@@ -87,7 +88,10 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            $userLanguage = $session->get('user_language', 'default');
+            $userLanguage = 'default';
+            if ($request->hasPreviousSession()) {
+                $userLanguage = $request->getSession()->get('user_language', 'default');
+            }
 
             if ($userLanguage != 'default') {
                 $language = $userLanguage;

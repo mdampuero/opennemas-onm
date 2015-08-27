@@ -139,9 +139,9 @@ class ContentsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             // Check direct access
-            if ($this->get('session')->get('sendformtoken') != $request->request->get('token')) {
-                throw new ResourceNotFoundException();
-            }
+            // if ($this->get('session')->get('sendformtoken') != $request->request->get('token')) {
+            //     throw new ResourceNotFoundException();
+            // }
 
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
@@ -255,8 +255,8 @@ class ContentsController extends Controller
             $contentID    = $request->query->getDigits('content_id', null);
             $ext          = $request->query->getDigits('ext', 0);
 
-            $token = md5(uniqid('sendform'));
-            $this->get('session')->set('sendformtoken', $token);
+            // $token = md5(uniqid('sendform'));
+            // $this->get('session')->set('sendformtoken', $token);
 
             if ($ext == 1) {
                 // Getting Synchronize setting params
@@ -284,7 +284,7 @@ class ContentsController extends Controller
                 array(
                     'content'    => $content,
                     'content_id' => $contentID,
-                    'token'      => $token,
+                    // 'token'      => $token,
                     'ext'        => $ext,
                 )
             );

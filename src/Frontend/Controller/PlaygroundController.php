@@ -9,12 +9,12 @@ use Onm\Framework\Controller\Controller;
 class PlaygroundController extends Controller
 {
     /**
-     * Dispatches the actions through the rest of methods in this class.
+     * Dispatches the actions through the rest of methods in this class
      *
-     * @param Request $request The request object.
+     * @param Request $request the request object
      *
-     * @return Response The response object.
-     */
+     * @return Response the response object
+     **/
     public function defaultAction(Request $request)
     {
         $action = $request->query->get('action', null);
@@ -30,15 +30,16 @@ class PlaygroundController extends Controller
     /**
      * Tests for session in container
      *
-     * @return Response The response object
-     */
+     * @return Response the response object
+     **/
     public function session()
     {
-        $session = $this->get('session');
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 
-        $session->getFlashBag()->add( 'notice', 'Your changes were saved!');
-
-        foreach ($session->getFlashBag()->get('notice', array()) as $message) {
+        foreach ($this->get('session')->getFlashBag()->get('notice', array()) as $message) {
             echo "<div class='flash-notice'>$message</div>";
         }
     }

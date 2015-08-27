@@ -176,6 +176,9 @@ class AclUserController extends Controller
             $user->accesscategories[0]->pk_fk_content_category = 0;
         }
 
+        unset($user->password);
+        unset($user->token);
+
         return $this->render(
             'acl/user/new.tpl',
             array(
@@ -763,7 +766,7 @@ class AclUserController extends Controller
     }
 
     /**
-     * Disconnects the accounts.
+     * Disconnects from social account accounts.
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The user's id.

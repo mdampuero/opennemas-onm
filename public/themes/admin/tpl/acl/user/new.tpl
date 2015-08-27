@@ -64,7 +64,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-init="user ={json_encode($user)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -258,6 +258,23 @@
           </div>
         </div>
         {/acl}
+        {acl isAllowed="USER_ADMIN"}
+        {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+        <div class="grid simple" ng-if="user.type == 1">
+          <div class="grid-title">
+            <h4>{t}Additional data{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="col-md-12">
+              <p><strong>{t}Registered date:{/t}</strong> {$user->meta['register_date']|date_format}</p>
+              <p><strong>{t}Birth Date:{/t}</strong> {$user->meta['birth_date']|default:'-'}</p>
+              <p><strong>{t}Gender:{/t}</strong> {$user->meta['gender']|default:"-"}</p>
+              <p><strong>{t}Postal Code:{/t}</strong> {$user->meta['postal_code']|default:'-'}</p>
+            </div>
+          </div>
+        </div>
+        {/is_module_activated}
+        {/acl}
       </div>
       <div class="col-md-4">
         <div class="row">
@@ -307,7 +324,7 @@
             </div>
           </div>
         </div>
-        {if isset($user->id) && $user->id == $smarty.session.userid }
+        {if isset($user->id) && $user->id == $smarty.session.userid}
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">

@@ -1186,7 +1186,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     // Change page when scrolling in grid mode
     var step = 0;
     $(window).scroll(function() {
-      if ($scope.mode === 'list'
+      if (!$scope.mode || $scope.mode === 'list'
           || $scope.contents.length == $scope.pagination.total) {
         return;
       }

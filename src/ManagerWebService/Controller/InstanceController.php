@@ -44,6 +44,7 @@ class InstanceController extends Controller
             $this->get('onm.validator.instance')->validate($instance);
 
             $im->persist($instance);
+
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
@@ -74,16 +75,11 @@ class InstanceController extends Controller
                 _('Unable to create the database for the instance'),
                 409
             );
-        } catch (AssetsNotCopiedException $e) {
+        } catch (\Exception $e) {
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
 
-            return new JsonResponse(
-                _('Unable to copy default assets for the instance'),
-                409
-            );
-        } catch (\Exception $e) {
             return new JsonResponse(
                 _($e->getMessage()),
                 409
@@ -115,12 +111,13 @@ class InstanceController extends Controller
 
             $database = $instance->getDatabaseName();
 
-            $creator->backupAssets($assetFolder, $backupPath);
-            $creator->backupDatabase($database, $backupPath);
-            $creator->backupInstance($database, $instance->id, $backupPath);
-
-            $creator->deleteAssets($instance->internal_name);
+            $creator->setBackupPath($backupPath);
+            $creator->backupAssets($assetFolder);
+            $creator->backupDatabase($database);
+            $creator->backupInstance($instance->id);
             $creator->deleteDatabase($database);
+            $creator->deleteAssets($instance->internal_name);
+
             $im->remove($instance);
 
             return new JsonResponse(_('Instance deleted successfully.'));
@@ -135,20 +132,17 @@ class InstanceController extends Controller
             $creator->deleteBackup($backupPath);
 
             return new JsonResponse(sprintf(_($message), $id), 400);
-        } catch (AssetsNotDeletedException $e) {
-            $message = $e->getMessage();
-
-            $creator->restoreAssets($backupPath);
-
-            return new JsonResponse(sprintf(_($message), $id), 400);
         } catch (DatabaseNotDeletedException $e) {
             $message = $e->getMessage();
 
-            $creator->restoreAssets($backupPath);
-            $creator->restoreDatabase($backupPath . DS . 'database.sql');
+            $creator->deleteBackup($backupPath);
 
             return new JsonResponse(sprintf(_($message), $id), 400);
         } catch (\Exception $e) {
+            $creator->restoreAssets($backupPath);
+            $creator->restoreDatabase($backupPath . DS . 'database.sql');
+            $creator->deleteBackup($backupPath);
+
             return new JsonResponse(
                 sprintf(_('Error while deleting instance with id "%s"'), $id),
                 400
@@ -202,9 +196,10 @@ class InstanceController extends Controller
 
                 $database = $instance->getDatabaseName();
 
-                $creator->backupAssets($assetFolder, $backupPath);
-                $creator->backupDatabase($database, $backupPath);
-                $creator->backupInstance($database, $instance->id, $backupPath);
+                $creator->setBackupPath($backupPath);
+                $creator->backupAssets($assetFolder);
+                $creator->backupDatabase($database);
+                $creator->backupInstance($instance->id);
 
                 $creator->deleteAssets($instance->internal_name);
                 $creator->deleteDatabase($database);
@@ -265,14 +260,14 @@ class InstanceController extends Controller
         }
 
         // Return the proper status code
-        if (count($errors) > 0 && count($updated) > 0) {
+        if (count($error) > 0 && count($updated) > 0) {
             $statusCode = 207;
-        } elseif (count($errors) > 0) {
+        } elseif (count($error) > 0) {
             $statusCode = 409;
         }
 
         return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages, 'success' => $success ],
+            [ 'error' => $error, 'messages' => $messages ],
             $statusCode
         );
     }

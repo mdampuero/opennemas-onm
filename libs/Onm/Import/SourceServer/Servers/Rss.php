@@ -85,7 +85,11 @@ class Rss extends ServerAbstract implements ServerInterface
         $serverFiles = array();
 
         foreach ($this->contentList->channel->item as $content) {
-            $id = md5(urlencode($content->guid));
+            if (!empty($content->guid)) {
+                $id = md5(urlencode($content->guid));
+            } else {
+                $id = md5(urlencode($content->title));
+            }
             $files[] = $id.'.xml';
 
             if ($this->buildContentAndSave($id, $content)) {

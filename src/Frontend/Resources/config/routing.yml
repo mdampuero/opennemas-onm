@@ -101,10 +101,6 @@ frontend_user_recoverpass:
     path: /user/recover-pass
     defaults: { _controller: FrontendBundle:User:recoverPassword }
 
-frontend_user_recoverusername:
-    path: /user/recover-user
-    defaults: { _controller: FrontendBundle:User:recoverUsername }
-
 frontend_user_resetpass:
     path: /user/reset-pass/{token}
     defaults: { _controller: FrontendBundle:User:regeneratePassword }
@@ -116,10 +112,6 @@ frontend_user_activate:
 frontend_user_menu:
     path: /user/get/menu
     defaults: { _controller: FrontendBundle:User:getUserMenu }
-
-frontend_user_user_box:
-    path: /user/user_box
-    defaults: { _controller: FrontendBundle:User:userBox }
 
 frontend_author_frontpage:
     path: /author/{slug}

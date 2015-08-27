@@ -400,10 +400,6 @@ class NewsAgencyController extends Controller
 
         $ccm = \ContentCategoryManager::get_instance();
         $parentCategories = $ccm->getArraysMenu();
-        $categories = array();
-        foreach ($parentCategories[0] as $category) {
-            $categories [$category->pk_content_category] = $category->title;
-        }
 
         // If the element has a original category that matches an existing category
         // in the newspaper redirect it to the import action with that category
@@ -422,10 +418,11 @@ class NewsAgencyController extends Controller
         return $this->render(
             'news_agency/import_select_category.tpl',
             array(
-                'id'         => $id,
-                'source_id'  => $sourceId,
-                'article'    => $element,
-                'categories' => $categories,
+                'id'           => $id,
+                'source_id'    => $sourceId,
+                'article'      => $element,
+                'subcat'       => $parentCategories[1],
+                'allcategorys' => $parentCategories[0],
             )
         );
     }
