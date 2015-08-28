@@ -172,6 +172,7 @@
                 <th class="left">{t}Full name{/t}</th>
                 <th class="center nowrap hidden-xs" style="width:110px">{t}Username{/t}</th>
                 <th class="center hidden-xs hidden-sm" >{t}E-mail{/t}</th>
+                <th class="center hidden-xs" >{t}Type{/t}</th>
                 <th class="center hidden-xs" >{t}Group{/t}</th>
                 <th class="center hidden-xs" >{t}Activated{/t}</th>
               </tr>
@@ -212,6 +213,10 @@
 
                 <td class="center hidden-xs hidden-sm">
                   [% content.email %]
+                </td>
+                <td class="center hidden-xs hidden-sm">
+                  <span ng-if="content.type == 0">{t}Frontend{/t}</span>
+                  <span ng-if="content.type == 1">{t}Backend{/t}</span>
                 </td>
                 <td class="center hidden-xs">
                   <span ng-repeat="group in content.id_user_group">
