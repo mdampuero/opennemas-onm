@@ -265,11 +265,43 @@
             <h4>{t}Additional data{/t}</h4>
           </div>
           <div class="grid-body">
-            <div class="col-md-12">
-              <p><strong>{t}Registered date:{/t}</strong> {$user->meta['register_date']|date_format}</p>
-              <p><strong>{t}Birth Date:{/t}</strong> {$user->meta['birth_date']|default:'-'}</p>
-              <p><strong>{t}Gender:{/t}</strong> {$user->meta['gender']|default:"-"}</p>
-              <p><strong>{t}Postal Code:{/t}</strong> {$user->meta['postal_code']|default:'-'}</p>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  {t}Registered date:{/t}
+                </label>
+                <div class="controls">
+                  <input class="form-control" id="meta_register_date" type="datetime" name="meta[register_date]" value="{$user->meta['register_date']}"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  {t}Postal Code:{/t}
+                </label>
+                <div class="controls">
+                  <input class="form-control" id="meta_postal_code" type="text" name="meta[postal_code]" value="{$user->meta['postal_code']}"/>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  {t}Birth Date:{/t}
+                </label>
+                <div class="controls">
+                  <input class="form-control" id="meta_birth_date" type="datetime" name="meta[birth_date]" value="{$user->meta['birth_date']}"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  {t}Gender:{/t}
+                </label>
+                <div class="controls">
+                  <select name="meta[gender]" id="meta_gender" class="form-control">
+                    {html_options options=$gender_options selected=$user->meta['gender']}
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>

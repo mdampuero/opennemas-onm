@@ -189,6 +189,12 @@ class AclUserController extends Controller
                 'content_categories'        => $allcategorys,
                 'content_categories_select' => $user->accesscategories,
                 'min_pass_level'            => $minPassLevel,
+                'gender_options'            => [
+                    ''       => _('Undefined'),
+                    'male'   => _('Male'),
+                    'female' => _('Female'),
+                    'other'  => _('Other')
+                ],
             )
         );
     }
