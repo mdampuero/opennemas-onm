@@ -123,13 +123,11 @@ class Controller extends SymfonyController
             $response->headers->set('x-tags', $parameters['x-tags']);
             $response->headers->set('x-instance', $instanceName);
 
-            if (array_key_exists('cache_id', $parameters)) {
-                $expires = $this->getExpireDate();
-                if (!is_null($expires)) {
-                    $response->setDate($expires['creation_date']);
-                    $response->setExpires($expires['expire_date']);
-                    $response->setSharedMaxAge($expires['max_age']);
-                }
+            if (array_key_exists('x-cache-for', $parameters)
+                && !empty($parameters['x-cache-for'])
+            ) {
+                $expires = strtotime($parameters['x-cache-for']) - time() . 's';
+                $response->headers->set('x-cache-for', $expires);
             }
         }
 
