@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 13:35+0200\n"
-"PO-Revision-Date: 2015-08-21 14:06+0200\n"
+"POT-Creation-Date: 2015-09-01 10:41+0200\n"
+"PO-Revision-Date: 2015-09-01 10:45+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -342,6 +342,18 @@ msgstr "No se pudo encontrar el usuario con el identificador «%d»"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
+
+msgid "Undefined"
+msgstr "No definido"
+
+msgid "Male"
+msgstr "Hombre"
+
+msgid "Female"
+msgstr "Mujer"
+
+msgid "Other"
+msgstr "Otros"
 
 msgid "The data send by the user is not valid."
 msgstr "Los datos enviados del usuario no son válidos."
@@ -694,9 +706,6 @@ msgstr "Silver"
 
 msgid "Gold"
 msgstr "Gold"
-
-msgid "Other"
-msgstr "Otros"
 
 msgid "Unlimited"
 msgstr "Sin límite"
@@ -1865,6 +1874,30 @@ msgstr "No se pudo eliminar el elemento con el identificador «%d»"
 msgid "Unable to find the item with the id \"%d\""
 msgstr "No se pudo encontrar el elemento con el identificador «%d»"
 
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Activated"
+msgstr "Activado"
+
+msgid "Gender"
+msgstr "Sexo"
+
+msgid "Date Birth"
+msgstr "Fecha de nacimiento"
+
+msgid "Postal Code"
+msgstr "Código postal"
+
+msgid "Registration date"
+msgstr "Fecha de registro"
+
+msgid "Not defined"
+msgstr "No definido"
+
 msgid "Application upgraded"
 msgstr "Aplicación actualizada"
 
@@ -1936,9 +1969,6 @@ msgstr "El email es obligatorio aunque no se publicará"
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
 
-msgid "Name"
-msgstr "Nombre"
-
 msgid "Unable to save the letter."
 msgstr "No se pudo guardar la carta."
 
@@ -1991,6 +2021,9 @@ msgid "Sorry, that email is not in our database"
 msgstr ""
 "Lo sentimos, pero ese correo electrónico no esta en la lista de suscriptores"
 
+msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
+msgstr "El código de reCAPTCHA no fue escrito correctamente. Pruebe de nuevo."
+
 msgid "The email address is already in use."
 msgstr "La dirección de correo electrónico ya está en uso."
 
@@ -2032,28 +2065,12 @@ msgstr "No fue posible enviar tu correo-e de bienvenida."
 msgid "There was an error while creating your user account."
 msgstr "Se ha producido un error al crear su cuenta de usuario."
 
-#, php-format
-msgid "Username reminder for %s"
-msgstr "Recordatorio de nombre de usuario para %s"
-
 msgid ""
 "Unable to find the password reset request. Please check the url we sent you "
 "in the email."
 msgstr ""
 "No se pudo encontrar la solicitud de restablecimiento de contraseña. "
 "Comprueba la URL que te enviamos al correo electrónico."
-
-msgid "Logout"
-msgstr "Salir"
-
-msgid "My account"
-msgstr "Mi cuenta"
-
-msgid "Register"
-msgstr "Registrarse"
-
-msgid "Login"
-msgstr "Iniciar sesión"
 
 #, php-format
 msgid "%s - Premium subscription activated"
@@ -2276,6 +2293,9 @@ msgstr "Personalizar portadas"
 
 msgid "Authors Blog"
 msgstr "Blogs de Autores"
+
+msgid "Content subscriptions"
+msgstr "Suscripciones de contenido"
 
 msgid "Cronicas customizations"
 msgstr "Personalizaciones para Cronicas"
@@ -2785,8 +2805,8 @@ msgstr ""
 "                                <li>\n"
 "                                    Este tipo de temas tendrán algunos "
 "widgets ya creados y desarrollados.\n"
-"                                    <a href=\"mailto:sales@openhost.es\""
-">sales@openhost.es</a>\n"
+"                                    <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a>\n"
 "                                </li>\n"
 "                                <li>\n"
 "                                    El usuario tiene derecho a la creación "
@@ -2832,9 +2852,9 @@ msgstr ""
 "                                <li>Creación de nueva página fuera del tipo "
 "de plantilla o fuera de tiempo: 1500€</li>\n"
 "                                <li>\n"
-"                                    <a href=\""
-"http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-"
-"servicio-de-desarrollo\">Preco de desarrollo</a> después de la salida.\n"
+"                                    <a href=\"http://help.opennemas.com/"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo"
+"\">Preco de desarrollo</a> después de la salida.\n"
 "                                </li>\n"
 "                            </ul>\n"
 "                        </li>\n"
@@ -2951,9 +2971,9 @@ msgstr ""
 "                                <li>Creación de nueva página fuera del tipo "
 "de plantilla o fuera de tiempo: 1500€</li>\n"
 "                                <li>\n"
-"                                    <a href=\""
-"http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-"
-"servicio-de-desarrollo\">Preco de desarrollo</a> después de la salida.\n"
+"                                    <a href=\"http://help.opennemas.com/"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo"
+"\">Preco de desarrollo</a> después de la salida.\n"
 "\t\t\t\t\t</li>\n"
 "                            </ul>\n"
 "                        </li>\n"
@@ -3048,8 +3068,8 @@ msgstr ""
 "<ul>\n"
 "<li>Cambio de color el fondo de la noticia, haciendo posible que toda una "
 "columna tenga un estilo diferente.</li>\n"
-"<li>Tamaño de la fuente. De esta forma se puede dar más fuerza a un "
-"titular.</li>\n"
+"<li>Tamaño de la fuente. De esta forma se puede dar más fuerza a un titular."
+"</li>\n"
 "<li>Color de los titulares para combinar con el fondo de color de la "
 "noticia</li>\n"
 "<li>Estilos del titular: fuente de letra, negrita, cursiva, etc.</li>\n"
@@ -3363,6 +3383,8 @@ msgid ""
 "<p>Allows all newspapers to have a section dedicated to opinions organized "
 "by author and with author frontpage too.</p>"
 msgstr ""
+"<p>Le permite al periódico tener una sección dedicada para opiniones "
+"organizadas por autor y portadas de autor.</p>"
 
 msgid "Polls Manager"
 msgstr "Gestor de encuestas"
@@ -3421,6 +3443,9 @@ msgstr ""
 "modificará en los diarios \"anexos\".</p><p>Imprescindible para varios "
 "periódicos de un mismo grupo. Así no es necesario mantener la misma portada "
 "en varios sitios.</p>"
+
+msgid "Content Subscriptions"
+msgstr "Suscripciones de contenido"
 
 msgid ""
 "PayWall is a way to make money on your website's content by user "
@@ -3902,9 +3927,6 @@ msgstr ""
 
 msgid "Yes"
 msgstr "Sí"
-
-msgid "Activated"
-msgstr "Activado"
 
 msgid "If is activated means that the user is ready to receive newsletters"
 msgstr ""
@@ -4619,9 +4641,6 @@ msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr ""
 "La url del servidor para esta origen. Por ejemplo. ftp://servidor.com/ruta"
 
-msgid "Username"
-msgstr "Nombre de usuario"
-
 msgid "Password"
 msgstr "Contraseña"
 
@@ -5260,6 +5279,22 @@ msgstr "Seleccionar"
 msgid "selected"
 msgstr "seleccionados"
 
+msgid "Additional data"
+msgstr "Datos adicionales"
+
+msgid "Registered date:"
+msgstr "Fecha de registro:"
+
+msgid "Postal Code:"
+msgstr "Código postal:"
+
+#, fuzzy
+msgid "Birth Date:"
+msgstr "Fecha de nacimiento:"
+
+msgid "Gender:"
+msgstr "Sexo:"
+
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -5307,6 +5342,9 @@ msgstr "Nombre completo"
 
 msgid "E-mail"
 msgstr "Correo electrónico"
+
+msgid "Not assigned"
+msgstr "No asignado"
 
 msgid "Your account is connected to %1."
 msgstr "Tu cuenta está conectada a %1."
@@ -6292,9 +6330,6 @@ msgstr "Elemento multimedia (jpg, png gif)"
 msgid "Media flash element (swf)"
 msgstr "Elemento multimedia Flash (swf)"
 
-msgid "Not defined"
-msgstr "No definido"
-
 msgid "Clicks:"
 msgstr "Clics:"
 
@@ -6359,6 +6394,9 @@ msgstr "No hay ninguna configuración de sincronización disponible"
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
 "Intenta añadir un site para sincronizar utilizando el botón de configuración"
+
+msgid "My account"
+msgstr "Mi cuenta"
 
 msgid "This is the email used to create your newspaper"
 msgstr "Este es el correo-e usado para crear el periódico"
@@ -6691,6 +6729,9 @@ msgstr "Hora del sistema:"
 
 msgid "Publication end date"
 msgstr "Fecha de final de publicación"
+
+msgid "Only available for registered users"
+msgstr "Solo disponible para usuarios registrados"
 
 msgid "Only available for subscribers"
 msgstr "Solo disponible para subscriptores"
@@ -7830,6 +7871,9 @@ msgstr "Últimas compras"
 msgid "Purchases last month"
 msgstr "Compras en el último mes"
 
+msgid "Reset <strong>password</strong>"
+msgstr "Reiniciar <strong>contraseña</strong>"
+
 msgid "We've sent an e-mail to"
 msgstr "Te hemos enviado un e-mail a"
 
@@ -7846,9 +7890,6 @@ msgid ""
 msgstr ""
 "Si utilizas el filtrado de correo electrónico o un software anti-spam, por "
 "favor asegúrate de que nuestro e-mail no se filtra o se bloquea."
-
-msgid "Reset <strong>password</strong>"
-msgstr "Reiniciar <strong>contraseña</strong>"
 
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
@@ -8053,6 +8094,9 @@ msgstr "Gestor de opennemas"
 
 msgid "Use manager account to sign in."
 msgstr "Use una cuenta del gestor para iniciar sesión."
+
+msgid "Login"
+msgstr "Iniciar sesión"
 
 msgid "Download CSV of selected"
 msgstr "Descargar CSV con los seleccionados"
@@ -8401,6 +8445,15 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "Username reminder for %s"
+#~ msgstr "Recordatorio de nombre de usuario para %s"
+
+#~ msgid "Logout"
+#~ msgstr "Salir"
+
+#~ msgid "Register"
+#~ msgstr "Registrarse"
 
 #~ msgid "The video has some relations"
 #~ msgstr "El vídeo tiene relaciones"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 13:35+0200\n"
-"PO-Revision-Date: 2015-08-21 14:14+0200\n"
+"POT-Creation-Date: 2015-09-01 10:41+0200\n"
+"PO-Revision-Date: 2015-09-01 10:46+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -339,6 +339,18 @@ msgstr "Non se puido atopar unha foto con identificador «%d»"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado do sistema"
+
+msgid "Undefined"
+msgstr "Indefinida"
+
+msgid "Male"
+msgstr "Home"
+
+msgid "Female"
+msgstr "Muller"
+
+msgid "Other"
+msgstr "Outro"
 
 msgid "The data send by the user is not valid."
 msgstr "Os datos enviados do usuario non son válidos."
@@ -694,9 +706,6 @@ msgstr "Silver"
 
 msgid "Gold"
 msgstr "Gold"
-
-msgid "Other"
-msgstr "Outro"
 
 msgid "Unlimited"
 msgstr "Sen límite"
@@ -1845,6 +1854,30 @@ msgstr "Non se puido eliminar o elemento co identificador «%d»."
 msgid "Unable to find the item with the id \"%d\""
 msgstr "Non se puido atopar o elemento co identificador «%d»"
 
+msgid "Name"
+msgstr "Nome"
+
+msgid "Username"
+msgstr "Nome de usuario"
+
+msgid "Activated"
+msgstr "Activado"
+
+msgid "Gender"
+msgstr "Sexo"
+
+msgid "Date Birth"
+msgstr "Data de nacemento"
+
+msgid "Postal Code"
+msgstr "Código postal"
+
+msgid "Registration date"
+msgstr "Data de rexistro"
+
+msgid "Not defined"
+msgstr "Non definido"
+
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
 
@@ -1915,9 +1948,6 @@ msgstr "O campo de correo-e é obrigatorio porén non será publicado"
 msgid "The information has been sent"
 msgstr "A información foi enviada"
 
-msgid "Name"
-msgstr "Nome"
-
 msgid "Unable to save the letter."
 msgstr "Non se puido gardar a carta."
 
@@ -1970,6 +2000,9 @@ msgstr ""
 "Sentimolo, este correo electrónico non está rexistrado nas nosas base de "
 "datos"
 
+msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
+msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
+
 msgid "The email address is already in use."
 msgstr "O enderezo de correo electrónico xa está en uso."
 
@@ -2010,28 +2043,12 @@ msgstr ""
 msgid "There was an error while creating your user account."
 msgstr "Produciuse un erro ao crear a túa conta de usuario."
 
-#, php-format
-msgid "Username reminder for %s"
-msgstr "Recordatorio do nome de usuario para %s"
-
 msgid ""
 "Unable to find the password reset request. Please check the url we sent you "
 "in the email."
 msgstr ""
 "Non se atopou a solicitude de reinicio de contrasinal. Comprobe o URL que "
 "che enviamos ao correo electrónico."
-
-msgid "Logout"
-msgstr "Sair"
-
-msgid "My account"
-msgstr "A miña conta"
-
-msgid "Register"
-msgstr "Rexistrarse"
-
-msgid "Login"
-msgstr "Iniciar sesión"
 
 #, php-format
 msgid "%s - Premium subscription activated"
@@ -2249,6 +2266,9 @@ msgstr "Personalizar portadas"
 msgid "Authors Blog"
 msgstr "Blogs de Autores"
 
+msgid "Content subscriptions"
+msgstr "Subscrición de contidos"
+
 msgid "Cronicas customizations"
 msgstr "Personalizacións para Crónicas"
 
@@ -2366,8 +2386,8 @@ msgstr ""
 "<ul>\n"
 "                            <li>%d x  usuario (1)</li>\n"
 "                            <li>%s de almacenamento (2)</li>\n"
-"                            <li>%s elementos (artigos, opinións, comentarios)"
-" (2)</li>\n"
+"                            <li>%s elementos (artigos, opinións, "
+"comentarios) (2)</li>\n"
 "                            <li>%s páxinas vistas/mes</li>\n"
 "                            <li>Asistencia en liña (tiques SLA %d días "
 "laborais)</li></ul>"
@@ -2381,12 +2401,12 @@ msgid ""
 "\">Page Views and Storage Space</a>.</small></p><p><small>All prices above "
 "do not include VAT (21%).</small></p>"
 msgstr ""
-"<p><small>1. Para engadir máis usuarios visita a nosa páxina de <a href=\""
-"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
+"<p><small>1. Para engadir máis usuarios visita a nosa páxina de <a href="
+"\"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
 "licencias-de-usuario\">licenzas de usuario</a>.</small></p><p><small>2. Para "
 "obter máis información sobre o almacenamento ou páxinas vistas visita a nosa "
-"páxina <a href=\"http://help.opennemas.com/knowledgebase/articles/227476"
-"-precios-opennemas-page-views-y-espacio-ocupado\">Páxinas vistas e "
+"páxina <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
+"precios-opennemas-page-views-y-espacio-ocupado\">Páxinas vistas e "
 "almacenamento</a>.</small></p><p><small>Todos os prezos mostrados non teñen "
 "o IVE incluído (21%).</small></p>"
 
@@ -3269,6 +3289,9 @@ msgstr ""
 "<p>Imprescindible para varios periódicos dun mesmo grupo. Así nom é "
 "necesario manter a mesma portada en varios sitios.</p>"
 
+msgid "Content Subscriptions"
+msgstr "Subscrición de contidos"
+
 msgid ""
 "PayWall is a way to make money on your website's content by user "
 "subscriptions."
@@ -3749,9 +3772,6 @@ msgstr ""
 
 msgid "Yes"
 msgstr "Si"
-
-msgid "Activated"
-msgstr "Activado"
 
 msgid "If is activated means that the user is ready to receive newsletters"
 msgstr "Se está activado significa que o usuario recibirá boletins de novas"
@@ -4461,9 +4481,6 @@ msgstr "URL"
 msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
 
-msgid "Username"
-msgstr "Nome de usuario"
-
 msgid "Password"
 msgstr "Contrasinal"
 
@@ -5091,6 +5108,21 @@ msgstr "Seleccionar"
 msgid "selected"
 msgstr "seleccionados"
 
+msgid "Additional data"
+msgstr "Datos adicionais"
+
+msgid "Registered date:"
+msgstr "Data de rexistro:"
+
+msgid "Postal Code:"
+msgstr "Código postal:"
+
+msgid "Birth Date:"
+msgstr "Data de nacemento:"
+
+msgid "Gender:"
+msgstr "Sexo:"
+
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -5138,6 +5170,9 @@ msgstr "Nome completo"
 
 msgid "E-mail"
 msgstr "Correo electrónico"
+
+msgid "Not assigned"
+msgstr "Non asignado"
 
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
@@ -6120,9 +6155,6 @@ msgstr "Elemento multimedia (jpg, png, gif)"
 msgid "Media flash element (swf)"
 msgstr "Elemento multimedia Flash (swf)"
 
-msgid "Not defined"
-msgstr "Non definido"
-
 msgid "Clicks:"
 msgstr "Clics:"
 
@@ -6189,6 +6221,9 @@ msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
 "Engade un sitio para sincronizar empregando o botón de configuración de "
 "arriba."
+
+msgid "My account"
+msgstr "A miña conta"
 
 msgid "This is the email used to create your newspaper"
 msgstr "Este foi o correo-e usado para creare o seu periódico"
@@ -6518,6 +6553,9 @@ msgstr "Hora do servidor:"
 
 msgid "Publication end date"
 msgstr "Data de final de publicación"
+
+msgid "Only available for registered users"
+msgstr "Só dispoñíbel para usuarios rexistrados"
 
 msgid "Only available for subscribers"
 msgstr "Só dispoñíbel para subscritores"
@@ -7640,6 +7678,9 @@ msgstr "Últimas compras"
 msgid "Purchases last month"
 msgstr "Compras do mes pasado"
 
+msgid "Reset <strong>password</strong>"
+msgstr "Reiniciar <strong>contrasinal</strong>"
+
 msgid "We've sent an e-mail to"
 msgstr "Enviámosche un correo electrónico a"
 
@@ -7656,9 +7697,6 @@ msgid ""
 msgstr ""
 "Se usas filtrado de correo electrónico ou un software anti-spam, asegúrate "
 "de que o noso correo non está sendo filtrado ou bloqueado."
-
-msgid "Reset <strong>password</strong>"
-msgstr "Reiniciar <strong>contrasinal</strong>"
 
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
@@ -7860,6 +7898,9 @@ msgstr "Xestor de opennemas"
 
 msgid "Use manager account to sign in."
 msgstr "Use unha conta do xestor para iniciar sesión."
+
+msgid "Login"
+msgstr "Iniciar sesión"
 
 msgid "Download CSV of selected"
 msgstr "Descargar CSV dos seleccionados"
@@ -8206,6 +8247,15 @@ msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
 
+#~ msgid "Username reminder for %s"
+#~ msgstr "Recordatorio do nome de usuario para %s"
+
+#~ msgid "Logout"
+#~ msgstr "Sair"
+
+#~ msgid "Register"
+#~ msgstr "Rexistrarse"
+
 #~ msgid "The video has some relations"
 #~ msgstr "O vídeo ten relacións"
 
@@ -8551,9 +8601,6 @@ msgstr ""
 
 #~ msgid "Account settings"
 #~ msgstr "Preferencias da conta"
-
-#~ msgid "Delete subscriptions"
-#~ msgstr "Eliminar subscricións"
 
 #~ msgid "Delete subscriptor"
 #~ msgstr "Eliminar subscritor"
@@ -9221,9 +9268,6 @@ msgstr ""
 #~ msgid "There is no advertisement stored in this section"
 #~ msgstr "No hai ningunha publicidade almacenada nesta categoría"
 
-#~ msgid "Undefined"
-#~ msgstr "Indefinida"
-
 #~ msgid "Adding site to synchronization"
 #~ msgstr "Engadindo sitio á sincronización"
 
@@ -9476,9 +9520,6 @@ msgstr ""
 
 #~ msgid "Unable to find the album with the id \"%d\""
 #~ msgstr "Non se puido atopar o álbum co identificador «%d»"
-
-#~ msgid "No author assigned"
-#~ msgstr "Ningún autor asignado"
 
 #~ msgid "Preview:"
 #~ msgstr "Previsualización:"
@@ -9946,9 +9987,6 @@ msgstr ""
 #~ msgid "You must assign a section for \"%s\""
 #~ msgstr "Debe asignar unha sección para \"% s\""
 
-#~ msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
-#~ msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
-
 #~ msgid "This user was deactivated. Please ask your administrator."
 #~ msgstr "Este usuario está desactivado. Pregunta ao teu administrador."
 
@@ -10363,9 +10401,6 @@ msgstr ""
 
 #~ msgid "Mail server"
 #~ msgstr "Servidor de correo"
-
-#~ msgid "Sender"
-#~ msgstr "Remitente"
 
 #~ msgid "Enable Log:"
 #~ msgstr "Activar rexistro:"
