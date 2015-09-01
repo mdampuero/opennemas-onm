@@ -17,25 +17,39 @@ function smarty_function_cookie_hint($params, &$smarty)
             $url
         );
 
-        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'
-                ."<script type='text/javascript'>$(function() {
-
-                    if($.cookie('cookie_overlay_accepted') == null) {
-                        $('#cookies_overlay').css('display', 'block');
+        $html = "<div id='cookies_overlay' style='display: none;'>
+                <div class='cookies-overlay'>
+                    <p>$message</p>
+                    <button class='closeover' onclick='acceptCookies()' type='button'>Aceptar</button>
+                </div>
+            </div>
+            <script type='text/javascript'>
+                function getCookie(name) {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].replace(/^\s+/,'').replace(/\s+$/,'');
+                        if (cookie.indexOf(name) == 0) {
+                            return cookie.substring(name.length + 1, cookie.length);
+                        }
                     }
+                }
 
-                    $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
-                        $.cookie('cookie_overlay_accepted', 1, { expires: 365, path: '/' });
-                        $(this).closest('#cookies_overlay').hide();
-                    });
+                function acceptCookies() {
+                    var date = new Date();
+                    date.setTime(date.getTime() + 365*24*60*60*1000);
+                    document.cookie = 'cookie_overlay_accepted=1; expires=' +
+                        date.toGMTString() + ' ;path=/';
+                    var overlay = document.getElementById('cookies_overlay');
+                    overlay.parentElement.removeChild(overlay);
+                }
 
-                });
-                </script>"
-                ."<div id='cookies_overlay' style='display:none'><div class='cookies-overlay'>
-                  <p>$message</p>
-                  <button data-dismiss='alert' class='closeover' type='button'>Aceptar</button>
-                </div></div>";
+                (function() {
+                    if (getCookie('cookie_overlay_accepted') != 1) {
+                        document.getElementById('cookies_overlay').style.display = 'block';
+                    }
+                })();
+            </script>";
     }
 
-    return $html;
+    return str_replace("\n", '', $html);
 }
