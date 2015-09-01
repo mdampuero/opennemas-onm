@@ -59,6 +59,26 @@ class FrontpagesController extends Controller
         $cm = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
+        // Get min starttime
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contentsInHomepage as $content) {
+            if ($content->starttime > $current
+                && (empty($expire)
+                    || (!empty($expire) && $content->starttime < $expire))
+            ) {
+                $expires = $content->starttime;
+            }
+        }
+
+        if (!empty($expires)) {
+            $lifetime = strtotime($expires) - time();
+
+            if ($lifetime < $this->view->getCacheLifetime()) {
+                $this->view->setCacheLifetime($lifetime);
+            }
+        }
+
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
 
         // Fetch ads
@@ -133,8 +153,9 @@ class FrontpagesController extends Controller
         return $this->render(
             'frontpage/frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
-                'x-tags'   => 'frontpage-page,'.$categoryName,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'frontpage-page,'.$categoryName,
+                'x-cache-for' => $expires,
             )
         );
     }
