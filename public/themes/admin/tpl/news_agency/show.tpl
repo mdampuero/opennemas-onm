@@ -49,8 +49,9 @@
     <div class="grid simple">
         <div class="grid-body">
             <div class="row">
+
+                {if count($element->photos) > 0}
                 <div class="col-md-3">
-                    {if count($element->photos) > 0}
                         {foreach from=$element->photos item=photo}
                         <div class="photo" style="width:220px;display:block;">
                             <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail">
@@ -59,9 +60,9 @@
                             </small>
                         </div>
                         {/foreach}
-                    {/if}
                 </div>
-                <div class="col-md-9">
+                {/if}
+                <div class="{if count($element->photos) > 0}col-md-9{else}col-md-12{/if}">
                     {if $element->pretitle}
                     <p>
                         <strong>{t}Pretitle:{/t}</strong>

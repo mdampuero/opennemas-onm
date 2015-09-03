@@ -96,13 +96,13 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
+          <li class="quicklinks hidden-xs ng-cloak">
             <select id="source" name="source" ng-model="criteria.source" data-label="{t}Source{/t}" class="select2">
               <option value="*">{t}-- All --{/t}</option>
               {html_options options=$source_names}
             </select>
           </li>
-          <li class="quicklinks hidden-xs">
+          <li class="quicklinks hidden-xs ng-cloak">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
