@@ -10,7 +10,12 @@ use Framework\ORM\Exception\InvalidRepositoryException;
 
 class EntityManager
 {
-    protected $_sources = [
+    /**
+     * Entity manager sources.
+     *
+     * @var array
+     */
+    protected $sources = [
         'Braintree'  => 1,
         'Database'   => 2,
         'FreshBooks' => 0,
@@ -65,7 +70,7 @@ class EntityManager
     /**
      * Returns an array of available persisters for an entity.
      *
-     * @param string $name The entity to persist.
+     * @param string $entity The entity to persist.
      *
      * @return array Array of persisters.
      *
@@ -77,15 +82,14 @@ class EntityManager
         $class = substr($class, strrpos($class, '\\') + 1);
 
         $persisters = [];
-        foreach ($this->_sources as $source => $priority) {
+        foreach ($this->sources as $source => $priority) {
             $persister = __NAMESPACE__ . '\\' . $source . '\\Persister\\' .
                 ucfirst($class) . 'Persister';
 
             if (class_exists($persister)) {
                 $manager = strtolower($source[0]) . 'm';
 
-                $persisters[$priority] =
-                    $this->{$manager}->getPersister($entity);
+                $persisters[$priority] = $this->{$manager}->getPersister($entity);
             }
         }
 
@@ -108,7 +112,7 @@ class EntityManager
     public function getRepository($name)
     {
         $repositories = [];
-        foreach ($this->_sources as $source => $priority) {
+        foreach ($this->sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
                 ucfirst($name) . 'Repository';
 
@@ -134,7 +138,6 @@ class EntityManager
      */
     public function persist(Entity $entity)
     {
-        $chain = null;
         $persister = $this->getPersister($entity);
 
         if ($entity->exists()) {
@@ -177,8 +180,8 @@ class EntityManager
 
         $current = $first;
         foreach ($elements as $element) {
-           $current->add($element);
-           $current = $element;
+            $current->add($element);
+            $current = $element;
         }
 
         return $first;

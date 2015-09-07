@@ -111,7 +111,6 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
-        $this->api->expects($this->once())->method('getResponse');
 
         $r = $this->persister->remove($this->existingInvoice);
         $this->assertEquals($this->persister, $r);
@@ -142,7 +141,6 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
-        $this->api->expects($this->once())->method('getResponse');
 
         $r = $this->persister->update($this->existingInvoice);
         $this->assertEquals($this->persister, $r);

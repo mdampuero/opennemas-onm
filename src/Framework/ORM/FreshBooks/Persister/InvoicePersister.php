@@ -12,7 +12,7 @@ class InvoicePersister extends FreshBooksPersister
      *
      * @var array
      */
-    protected $_invalid = [
+    protected $invalid = [
         'auth_url',
         'amount_outstanding',
         'estimate_id',
@@ -71,8 +71,6 @@ class InvoicePersister extends FreshBooksPersister
         $this->api->request();
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
             if ($this->hasNext()) {
                 $this->next()->remove($entity);
             }
@@ -101,8 +99,6 @@ class InvoicePersister extends FreshBooksPersister
         $this->api->request();
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
             if ($this->hasNext()) {
                 $this->next()->update($entity);
             }
@@ -127,7 +123,7 @@ class InvoicePersister extends FreshBooksPersister
     public function clean(Entity $entity)
     {
         $cleaned =
-            array_diff_key($entity->getData(), array_flip($this->_invalid));
+            array_diff_key($entity->getData(), array_flip($this->invalid));
 
         if (array_key_exists('lines', $cleaned)
             && array_key_exists('line', $cleaned['lines'])

@@ -51,8 +51,6 @@ class ClientPersister extends FreshBooksPersister
         $this->api->request();
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
             if ($next && $this->hasNext()) {
                 $this->next()->remove($entity);
             }
@@ -82,8 +80,6 @@ class ClientPersister extends FreshBooksPersister
         $this->api->request();
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
             if ($next && $this->hasNext()) {
                 $this->next()->update($entity);
             }

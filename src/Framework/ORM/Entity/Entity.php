@@ -9,7 +9,7 @@ abstract class Entity
      *
      * @var array
      */
-    protected $_data = [];
+    protected $data = [];
 
     /**
      * Initializes the entity.
@@ -19,7 +19,7 @@ abstract class Entity
     public function __construct($data = null)
     {
         if (!empty($data)) {
-            $this->_data = $data;
+            $this->data = $data;
         }
     }
 
@@ -32,8 +32,8 @@ abstract class Entity
     {
         $property = \underscore($property);
 
-        if (array_key_exists($property, $this->_data)) {
-            return $this->_data[$property];
+        if (array_key_exists($property, $this->data)) {
+            return $this->data[$property];
         }
 
         return null;
@@ -49,7 +49,7 @@ abstract class Entity
     {
         $property = \underscore($property);
 
-        $this->_data[$property] = $value;
+        $this->data[$property] = $value;
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class Entity
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class Entity
         foreach ($data as $key => $value) {
             $property = \underscore($key);
 
-            $this->_data[$property] = $value;
+            $this->data[$property] = $value;
         }
     }
 
@@ -86,5 +86,5 @@ abstract class Entity
      * @return boolean True if the entity exists in FreshBooks. Otherwise,
      *                 returns false.
      */
-    public abstract function exists();
+    abstract public function exists();
 }

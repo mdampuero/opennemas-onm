@@ -33,5 +33,4 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($entity->exists());
     }
-
 }

@@ -9,7 +9,7 @@ class ChainElement
      *
      * @var ChainElement
      */
-    private $_next;
+    private $next;
 
     /**
      * Sets the next element in chain.
@@ -20,7 +20,7 @@ class ChainElement
     {
         $last = $this;
 
-        while($this->hasNext()) {
+        while ($this->hasNext()) {
             $last = $this->next();
         }
 
@@ -35,7 +35,7 @@ class ChainElement
      */
     public function hasNext()
     {
-        return !empty($this->_next);
+        return !empty($this->next);
     }
 
     /**
@@ -45,16 +45,16 @@ class ChainElement
      */
     public function next()
     {
-        return $this->_next;
+        return $this->next;
     }
 
     /**
      * Changes the next element in chain.
      *
-     * @param ChainElement $next The next element.
+     * @param ChainElement $element The next element.
      */
     public function setNext(ChainElement $element)
     {
-        $this->_next = $element;
+        $this->next = $element;
     }
 }

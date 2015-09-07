@@ -14,7 +14,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getData(), $data);
 
         foreach ($data as $key => $value) {
-           $this->assertEquals($value, $entity->{$key});
+            $this->assertEquals($value, $entity->{$key});
         }
     }
 
@@ -33,5 +33,4 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($entity->exists());
     }
-
 }
