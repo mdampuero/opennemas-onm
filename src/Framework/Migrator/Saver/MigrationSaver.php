@@ -13,8 +13,10 @@
 namespace Framework\Migrator\Saver;
 
 use Onm\DatabaseConnection;
+use Onm\Exception\UserAlreadyExistsException;
 use Onm\Settings as s;
 use Onm\StringUtils;
+use Symfony\Component\HttpFoundation\File\File;
 
 class MigrationSaver
 {
@@ -487,6 +489,11 @@ class MigrationSaver
                 );
 
                 $categoryId = $this->findCategory($categoryName);
+
+                if (empty($categoryId)) {
+                    $categoryId = $this->findCategory($values['title']);
+                }
+
                 $slug = array_key_exists('slug', $schema['translation']) ?
                         $values[$schema['translation']['slug']] : '';
 
@@ -504,6 +511,13 @@ class MigrationSaver
 
                     $this->stats[$name]['imported']++;
                 } else {
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $categoryId,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
                     $this->stats[$name]['already_imported']++;
                 }
 
@@ -699,6 +713,12 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $id = $this->findPhoto($values['title']);
+
+                    if ($id !== false) {
+                        throw new UserAlreadyExistsException();
+                    }
+
                     if (is_file($values['local_file'])) {
                         $id = $photo->createFromLocalFile(
                             $values,
@@ -707,7 +727,7 @@ class MigrationSaver
                         $slug = array_key_exists('slug', $schema['translation'])
                             ? $values[$schema['translation']['slug']] : '';
 
-                        // Update article img2 and img2_footer
+                        // Update article img3 and img2_footer
                         if (isset($values['article'])
                             && $values['article'] !== false
                             && array_key_exists('img2_footer', $values)
@@ -767,8 +787,20 @@ class MigrationSaver
                         $this->stats[$name]['not_found']++;
                     }
                 } else {
+
                     $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $id = $this->findPhoto($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $id,
+                    $schema['translation']['name'],
+                    $slug
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -847,10 +879,24 @@ class MigrationSaver
                 'id_user_group' => array('3'),
             );
 
+            if (array_key_exists('id_user_group', $item)) {
+                $item['id_user_group'] = explode(',', $item['id_user_group']);
+
+                foreach($item['id_user_group'] as $key => $group) {
+                    $newGroup = $this->matchTranslation(
+                        $group,
+                        $schema['fields']['id_user_group']['params']['translation']
+                    );
+
+                    if (!empty($newGroup)) {
+                        $item['id_user_group'][$key] = $newGroup;
+                    }
+                }
+            }
+
             $values = $this->merge($values, $item, $schema);
 
             try {
-                $userId = $this->findUser($values['username']);
                 $slug = array_key_exists('slug', $schema['translation']) ?
                         $values[$schema['translation']['slug']] : '';
 
@@ -859,12 +905,30 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $userId = $this->findUser($values['username']);
+
                     if ($userId === false) {
-                        $user = new \User();
-                        $user->create($values);
-                        $slug = array_key_exists('slug', $schema['translation'])
-                            ? $values[$schema['translation']['slug']] : '';
-                        $userId = $user->id;
+                        $userId = $this->findUser($values['email']);
+                    }
+
+                    if ($userId !== false) {
+                        throw new UserAlreadyExistsException();
+                    }
+
+                    $user = new \User();
+                    $user->create($values);
+                    $slug = array_key_exists('slug', $schema['translation'])
+                        ? $values[$schema['translation']['slug']] : '';
+                    $userId = $user->id;
+
+                    if (array_key_exists('path_img', $values)
+                        && file_exists($values['path_img'])
+                    ) {
+                        $file = new File($values['path_img'], $values['image']);
+                        $values['avatar_img_id'] = $user->uploadUserAvatar($file, $values['username']);
+                        $values['id'] = $userId;
+                        $values['passwordconfirm'] = $values['password'];
+                        $user->update($values);
                     }
 
                     $this->createTranslation(
@@ -875,9 +939,22 @@ class MigrationSaver
                     );
 
                     $this->stats[$name]['imported']++;
-                } else {
-                    $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $userId = $this->findUser($values['username']);
+
+                if (empty($userId)) {
+                    $userId = $this->findUser($values['email']);
+                }
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $userId,
+                    $schema['translation']['name'],
+                    $slug
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -966,9 +1043,13 @@ class MigrationSaver
         define('INSTANCE_UNIQUE_NAME', $this->settings['migration']['instance']);
 
         define(
-            'MEDIA_PATH',
+            'MEDIA_IMG_PATH',
             SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
+                . DIRECTORY_SEPARATOR . "images"
         );
+
+        define('MEDIA_PATH', SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
+                . DIRECTORY_SEPARATOR);
 
         // Initialize target database
         $this->targetConnection = getService('db_conn');
@@ -1481,7 +1562,7 @@ class MigrationSaver
     private function findCategory($name)
     {
         $sql = "SELECT pk_content_category FROM content_categories"
-            . " WHERE name='" . $name . "'";
+            . " WHERE name='$name' OR title='$name'";
 
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
@@ -1496,6 +1577,27 @@ class MigrationSaver
     }
 
     /**
+     * Finds the photo id for a given title.
+     *
+     * @param  string  $title Photo title.
+     * @return mixed          Photo id if photo was found. Otherwise, return
+     *                        false.
+     */
+    private function findPhoto($title)
+    {
+        $sql = "SELECT pk_content FROM contents WHERE title = '$title'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
+            return $rss[0]['id'];
+        }
+
+        return false;
+    }
+
+    /**
      * Finds the user's id for a given normalized name.
      *
      * @param  string  $name User's name.
@@ -1504,7 +1606,8 @@ class MigrationSaver
      */
     private function findUser($name)
     {
-        $sql = "SELECT id FROM users WHERE name LIKE '%" . $name . "%'";
+        $sql = "SELECT id FROM users WHERE name = '$name' OR username = '$name'"
+            . " OR email = '$name'";
 
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
