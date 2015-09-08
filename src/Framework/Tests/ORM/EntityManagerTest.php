@@ -2,11 +2,12 @@
 
 namespace Framework\Tests\ORM;
 
-use Framework\ORM\EntityManager;
 use Framework\ORM\Braintree\BraintreeManager;
+use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Entity\Invoice;
 use Framework\ORM\Entity\Payment;
+use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 
 class EntityManagerTest extends \PHPUnit_Framework_TestCase
@@ -164,5 +165,31 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $em = new EntityManager($bm, $fm);
 
         $em->remove(new Invoice());
+    }
+
+    public function testBuildChainWithoutElements()
+    {
+        $reflection = new \ReflectionClass(get_class($this->em));
+        $method = $reflection->getMethod('buildChain');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->em, [ [] ]));
+    }
+
+    public function testBuildChainWithElements()
+    {
+        $a = new ChainElement();
+        $b = new ChainElement();
+
+        $elements = [ $a, $b ];
+
+        $reflection = new \ReflectionClass(get_class($this->em));
+        $method = $reflection->getMethod('buildChain');
+        $method->setAccessible(true);
+
+        $chain = $method->invokeArgs($this->em, [ $elements ]);
+        $this->assertEquals($a, $chain);
+        $this->assertEquals($b, $a->next());
+        $this->assertFalse($b->hasNext());
     }
 }

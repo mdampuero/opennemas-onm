@@ -62,9 +62,9 @@ class FreshBooksManager
 
         if (class_exists($persister)) {
             return new $persister($this->api, $this->source);
-        } else {
-            throw new InvalidPersisterException($persister, $this->source);
         }
+
+        throw new InvalidPersisterException($persister, $this->source);
     }
 
     /**
@@ -83,9 +83,9 @@ class FreshBooksManager
 
         if (class_exists($repository)) {
             return new $repository($this->api, $this->source);
-        } else {
-            throw new InvalidRepositoryException($repository, $this->source);
         }
+
+        throw new InvalidRepositoryException($repository, $this->source);
     }
 
     /**

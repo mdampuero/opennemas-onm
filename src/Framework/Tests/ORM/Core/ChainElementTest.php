@@ -8,16 +8,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->first = new ChainElement();
-        $this->last =  new ChainElement();
+        $this->first  = new ChainElement();
+        $this->second = new ChainElement();
+        $this->last   = new ChainElement();
 
+        $this->first->add($this->second);
         $this->first->add($this->last);
     }
 
     public function testAdd()
     {
         $this->assertTrue($this->first->hasNext());
-        $this->assertEquals($this->last, $this->first->next());
+        $this->assertEquals($this->second, $this->first->next());
+        $this->assertEquals($this->last, $this->second->next());
     }
 
     public function testHasNextOnFirstElement()
@@ -32,7 +35,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testNextOnFirstElement()
     {
-        $this->assertEquals($this->last, $this->first->next());
+        $this->assertEquals($this->second, $this->first->next());
     }
 
     public function testNextOLastElement()

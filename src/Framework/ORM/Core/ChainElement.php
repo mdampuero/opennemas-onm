@@ -20,7 +20,7 @@ class ChainElement
     {
         $last = $this;
 
-        while ($this->hasNext()) {
+        while ($last->hasNext()) {
             $last = $this->next();
         }
 
