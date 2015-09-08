@@ -849,7 +849,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/27edc388296a3cffc7c30942a7613abb4998701c",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4e85ba638acf62e1afe735f94b0c51aa971f8773",
                 "reference": "70c580174e4e16a79296a02256fb40a34192731c",
                 "shasum": ""
             },
@@ -1277,7 +1277,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2b934a2029905f22e8fd7478c9e463e8fea0af13",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/e5995827e95cb6401f050010469f4c4f2e11bd93",
                 "reference": "7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "shasum": ""
             },
@@ -1794,12 +1794,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
-                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5"
+                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/Luracast/Restler/zipball/1dcf910c1e1fd1ea565a537b053a66971d818e42",
-                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421",
                 "shasum": ""
             },
             "require": {
@@ -1865,7 +1865,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2014-12-08 14:29:26"
+            "time": "2015-06-12 07:33:40"
         },
         {
             "name": "mockery/mockery",
@@ -2311,12 +2311,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "1.0.0"
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "1.0.0",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
             "type": "library",
@@ -2936,16 +2936,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.7.1",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "932b6e7499c670f4db6d0b871477a4a3ca161e74"
+                "reference": "a9af4708b4bb650c4897e9b8dfbfbdb2ea5f0486"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/932b6e7499c670f4db6d0b871477a4a3ca161e74",
-                "reference": "932b6e7499c670f4db6d0b871477a4a3ca161e74",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/a9af4708b4bb650c4897e9b8dfbfbdb2ea5f0486",
+                "reference": "a9af4708b4bb650c4897e9b8dfbfbdb2ea5f0486",
                 "shasum": ""
             },
             "require": {
@@ -3054,7 +3054,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-06-11 21:15:28"
+            "time": "2015-07-31 13:24:45"
         },
         {
             "name": "twig/twig",
@@ -4463,12 +4463,12 @@
             "version": "0.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/theseer/phpdox.git",
+                "url": "git@github.com:theseer/phpdox.git",
                 "reference": "18ca0c645c5980d08edf44f701b2108f241b0425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/phpdox/zipball/18ca0c645c5980d08edf44f701b2108f241b0425",
+                "url": "https://api.github.com/repos/theseer/phpdox/zipball/0dba73518ba9181dc6598fddf687eb4e21573cfa",
                 "reference": "18ca0c645c5980d08edf44f701b2108f241b0425",
                 "shasum": ""
             },
