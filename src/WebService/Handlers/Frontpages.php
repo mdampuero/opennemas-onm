@@ -10,6 +10,7 @@ namespace WebService\Handlers;
 
 use Onm\Settings as s;
 use Luracast\Restler\RestException;
+
 /**
  * Handles REST actions for frontpages.
  *
@@ -148,7 +149,7 @@ class Frontpages
         $category = $category[0];
 
         $itemsPerPage = s::get('items_in_blog');
-        if (empty($itemsPerPage )) {
+        if (empty($itemsPerPage)) {
             $itemsPerPage = 8;
         }
 

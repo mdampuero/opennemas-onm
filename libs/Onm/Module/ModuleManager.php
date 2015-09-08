@@ -1123,7 +1123,8 @@ class ModuleManager
                     'name'             => _('Frontpage Synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage!'),
                     'long_description' => _(
-                        'p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronized?</p><p>No problem. By activating this module you will have all your news synchronized, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
+                        'p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronized?</p><p>No problem. By activating this module you will have all your news synchronized, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'
+                    ),
                     'price'            => [
                         'month' => 65
                     ]

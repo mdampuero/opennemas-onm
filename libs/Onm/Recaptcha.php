@@ -58,5 +58,4 @@ class Recaptcha
 
         return new \ReCaptcha\ReCaptcha($recaptcha['private_key']);
     }
-
 }

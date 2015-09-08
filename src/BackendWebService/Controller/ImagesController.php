@@ -1,17 +1,5 @@
 <?php
-/**
- * Handles the actions for the keywords
- *
- * @package Backend_Controllers
- **/
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- **/
+
 namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -20,11 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
-/**
- * Handles the actions for the images
- *
- * @package Backend_Controllers
- **/
 class ImagesController extends ContentController
 {
     /**
@@ -37,7 +20,7 @@ class ImagesController extends ContentController
      * @Security("has_role('PHOTO_ADMIN')")
      *
      * @CheckModuleAccess(module="IMAGE_MANAGER")
-     **/
+     */
     public function listAction(Request $request, $contentType = null)
     {
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
@@ -82,7 +65,5 @@ class ImagesController extends ContentController
                 'total'             => $total,
             )
         );
-
     }
-
 }
