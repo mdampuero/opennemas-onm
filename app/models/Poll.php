@@ -156,8 +156,8 @@ class Poll extends Content
         if ($data['item']) {
             foreach ($data['item'] as $item) {
                 $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = StringUtils::getTags($item->item);
-                $values = array($this->id,$item->item, $tags);
+                $tags   = StringUtils::getTags($item['item']);
+                $values = array($this->id,$item['item'], $tags);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);
             }
@@ -193,15 +193,15 @@ class Poll extends Content
             // Insertamos
             $keys =  '';
             foreach ($data['item'] as $k => $item) {
-                if (!isset($item->pk_item)) {
-                    $item->pk_item = $k + 1;
+                if (!isset($item['pk_item'])) {
+                    $item['pk_item'] = $k + 1;
                 }
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
-                $values = array($item->pk_item, (int) $this->id, $item->item, $item->votes);
+                $values = array($item['pk_item'], (int) $this->id, $item['item'], $item['votes']);
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-                $keys .= $item->pk_item.', ';
-                $total += $item->votes;
+                $keys .= $item['pk_item'].', ';
+                $total += $item['votes'];
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
