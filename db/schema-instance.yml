@@ -1131,7 +1131,7 @@ translation_ids:
             options: { default: null }
         type:
             type: string
-            options: { default: null, length: 40 }
+            options: { default: null, length: 100 }
         slug:
             type: string
             options: { default: '', notnull: false, length: 200 }
