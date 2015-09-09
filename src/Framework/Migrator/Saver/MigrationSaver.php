@@ -882,7 +882,7 @@ class MigrationSaver
             if (array_key_exists('id_user_group', $item)) {
                 $item['id_user_group'] = explode(',', $item['id_user_group']);
 
-                foreach($item['id_user_group'] as $key => $group) {
+                foreach ($item['id_user_group'] as $key => $group) {
                     $newGroup = $this->matchTranslation(
                         $group,
                         $schema['fields']['id_user_group']['params']['translation']
@@ -1045,11 +1045,14 @@ class MigrationSaver
         define(
             'MEDIA_IMG_PATH',
             SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
-                . DIRECTORY_SEPARATOR . "images"
+            . DIRECTORY_SEPARATOR . "images"
         );
 
-        define('MEDIA_PATH', SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
-                . DIRECTORY_SEPARATOR);
+        define(
+            'MEDIA_PATH',
+            SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
+            . DIRECTORY_SEPARATOR
+        );
 
         // Initialize target database
         $this->targetConnection = getService('db_conn');
