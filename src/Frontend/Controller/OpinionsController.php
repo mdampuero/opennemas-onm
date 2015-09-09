@@ -95,7 +95,6 @@ class OpinionsController extends Controller
             );
 
             // Fetch last editorial opinions from editorial
-            $editorial = [];
             if ($configurations['total_editorial'] > 0) {
                 $filters['type_opinion'] = [['value' => 1]];
 
