@@ -390,6 +390,12 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $articleId = $this->findContent($values['title']);
+
+                    if (!empty($articleId)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
                     $article = new \Article();
                     $article->create($values);
                     $slug = array_key_exists('slug', $schema['translation']) ?
@@ -406,6 +412,17 @@ class MigrationSaver
                 } else {
                     $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $articleId = $this->findContent($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $articleId,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -585,6 +602,52 @@ class MigrationSaver
     }
 
     /**
+     * Save the content views.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Content views to save.
+     */
+    public function saveContentViews($name, $schema, $data)
+    {
+        $vm = getService('content_views_repository');
+
+        foreach ($data as $item) {
+            $values = [ 'pk_fk_content' => 0, 'views' => 0 ];
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                if ($this->matchTranslation(
+                    $values[$schema['translation']['field']],
+                    $schema['translation']['name']
+                ) === false
+                ) {
+                    if ($values['pk_fk_content'] !== false) {
+                        $views = $vm->getViews($values['pk_fk_content']);
+                        $vm->setViews($values['pk_fk_content'], $values['views'] + $views);
+
+                        $this->createTranslation(
+                            $values[$schema['translation']['field']],
+                            $values['pk_fk_content'],
+                            $schema['translation']['name'],
+                            ''
+                        );
+
+                        $this->stats[$name]['imported']++;
+                    } else {
+                        $this->stats[$name]['error']++;
+                    }
+                } else {
+                    $this->stats[$name]['already_imported']++;
+                }
+            } catch (\Exception $e) {
+                $this->stats[$name]['error']++;
+            }
+        }
+    }
+
+    /**
      * Save the opinions.
      *
      * @param string $name   Schema name.
@@ -644,6 +707,155 @@ class MigrationSaver
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
+        }
+    }
+
+    /**
+     * Saves the polls.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Polls to save.
+     */
+    public function savePolls($name, $schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'title'               => null,
+                'description'         => null,
+                'body'                => '',
+                'starttime'           => null,
+                'endtime'             => null,
+                'created'             => null,
+                'changed'             => null,
+                'metadata'            => null,
+                'content_status'      => 1,
+                'fk_category'         => 20,
+                'fk_user'             => null,
+                'fk_author'           => null,
+                'fk_user_last_editor' => null,
+                'posic'               => 0,
+                'frontpage'           => 0,
+                'slug'                => null,
+                'available'           => 1,
+                'category'            => 20,
+                'id'                  => 0,
+                'visualization'       => 0,
+                'subtitle'            => '',
+                'used_ips'            => null,
+                'total_votes'         => 0,
+                'item'                => []
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                if ($this->matchTranslation(
+                    $values[$schema['translation']['field']],
+                    $schema['translation']['name']
+                ) === false
+                ) {
+                    $pollId = $this->findContent($values['title']);
+
+                    if (!empty($pollId)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
+                    $poll = new \Poll();
+                    $poll->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
+
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $poll->id,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
+                    $this->stats[$name]['imported']++;
+                } else {
+                    $this->stats[$name]['already_imported']++;
+                }
+            } catch (UserAlreadyExistsException $e) {
+                $id = $this->findContent($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $id,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$name]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the poll items.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Polls to save.
+     */
+    public function savePollItems($name, $schema, $data)
+    {
+        $items = [];
+        foreach ($data as $item) {
+            $values = array(
+                'fk_pk_poll' => 0,
+                'item'       => '',
+                'metadata'   => '',
+                'votes'      => 0
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            if (empty($items[$values['fk_pk_poll']])) {
+                $items[$values['fk_pk_poll']] = [];
+            }
+
+            if (!empty($values['fk_pk_poll'])) {
+                $items[$values['fk_pk_poll']][] = $values;
+            }
+        }
+
+        foreach ($items as $id => $values) {
+            $poll = new \Poll($id);
+
+            $data = [
+                'title'               => $poll->title,
+                'description'         => $poll->description,
+                'body'                => $poll->body,
+                'starttime'           => $poll->starttime,
+                'endtime'             => $poll->endtime,
+                'created'             => $poll->created,
+                'changed'             => $poll->changed,
+                'metadata'            => $poll->metadata,
+                'content_status'      => $poll->content_status,
+                'fk_category'         => $poll->fk_category,
+                'fk_user'             => $poll->fk_user,
+                'fk_author'           => $poll->fk_author,
+                'fk_user_last_editor' => $poll->fk_user_last_editor,
+                'posic'               => $poll->posic,
+                'frontpage'           => $poll->frontpage,
+                'slug'                => $poll->slug,
+                'available'           => $poll->available,
+                'category'            => $poll->category,
+                'id'                  => $poll->id,
+                'visualization'       => $poll->visualization,
+                'subtitle'            => $poll->subtitle,
+                'used_ips'            => $poll->used_ips,
+                'total_votes'         => $poll->total_votes,
+                'item'                => $values,
+            ];
+
+            $poll->update($data);
+
+            $this->stats[$name]['imported'] += count($values);
         }
     }
 
@@ -787,7 +999,6 @@ class MigrationSaver
                         $this->stats[$name]['not_found']++;
                     }
                 } else {
-
                     $this->stats[$name]['already_imported']++;
                 }
             } catch (UserAlreadyExistsException $e) {
@@ -801,6 +1012,42 @@ class MigrationSaver
                 );
 
                 $this->stats[$name]['already_imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$name]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Save the related contents.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Related contents to save.
+     */
+    public function saveRelatedContents($name, $schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = [
+                'pk_content1'  => 0,
+                'pk_content2'  => 0,
+                'relationship' => '',
+                'text'         => '',
+                'position'     => 0,
+                'verportada'   => 0,
+                'verinterior'  => 0
+            ];
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                if ($values['pk_content1'] !== false && $values['pk_content2'] !== false) {
+                    $this->updateRelated($values);
+
+                    $this->stats[$name]['imported']++;
+                } else {
+                    $this->stats[$name]['error']++;
+                }
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -992,7 +1239,14 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
-                    $videoP = new \Panorama\Video($values['video_url']);
+                    $videoId = $this->findVideo($values['video_url']);
+
+                    if ($videoId !== false) {
+                        throw new UserAlreadyExistsException();
+                    }
+
+                    $params = getService('service_container')->getParameter('panorama');
+                    $videoP = new \Panorama\Video($values['video_url'], $params);
                     $values['information'] = $videoP->getVideoDetails();
 
                     foreach ($values['information'] as $key => $value) {
@@ -1026,13 +1280,115 @@ class MigrationSaver
 
                     $this->stats[$name]['imported']++;
                 } else {
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $videoId,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
                     $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $videoId = $this->findVideo($values['video_url']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $videoId,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
         }
     }
+
+    /**
+     * Saves the polls.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Polls to save.
+     */
+    public function saveWidgets($name, $schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'title'               => null,
+                'description'         => null,
+                'body'                => '',
+                'starttime'           => null,
+                'endtime'             => null,
+                'created'             => null,
+                'changed'             => null,
+                'metadata'            => null,
+                'content_status'      => 1,
+                'fk_category'         => 20,
+                'fk_user'             => null,
+                'fk_author'           => null,
+                'fk_user_last_editor' => null,
+                'posic'               => 0,
+                'frontpage'           => 0,
+                'slug'                => null,
+                'available'           => 1,
+                'category'            => 20,
+                'id'                  => 0,
+                'content'             => '',
+                'renderlet'           => ''
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                if ($this->matchTranslation(
+                    $values[$schema['translation']['field']],
+                    $schema['translation']['name']
+                ) === false
+                ) {
+                    $widgetId = $this->findContent($values['title']);
+
+                    if (!empty($widgetId)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
+                    $widget = new \Widget();
+                    $widget->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
+
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $widget->id,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
+                    $this->stats[$name]['imported']++;
+                } else {
+                    $this->stats[$name]['already_imported']++;
+                }
+            } catch (UserAlreadyExistsException $e) {
+                $id = $this->findContent($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $id,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$name]['error']++;
+            }
+        }
+    }
+
+
+
 
     /**
      * Configures the saver.
@@ -1048,17 +1404,17 @@ class MigrationSaver
             . DIRECTORY_SEPARATOR . "images"
         );
 
-        define(
-            'MEDIA_PATH',
-            SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
-            . DIRECTORY_SEPARATOR
-        );
+        define('MEDIA_PATH', SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
+                . DIRECTORY_SEPARATOR);
 
         // Initialize target database
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
             $this->settings['migration']['target']
         );
+
+        getService('dbal_connection')
+            ->selectDatabase($this->settings['migration']['target']);
 
         \Application::load();
         \Application::initDatabase($this->targetConnection);
@@ -1494,6 +1850,33 @@ class MigrationSaver
     /**
      * Updates fk_video2 and footer_video2 fields from an article.
      *
+     * @param array $values Values.
+     */
+    protected function updateRelated($values)
+    {
+        $sql = "REPLACE INTO related_contents SET `pk_content1`=?, `pk_content2`=?"
+            ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?"
+            ."`verinterior`=?";
+
+        $values = [
+            $values['pk_content1'],
+            $values['pk_content2'],
+            $values['relationship'],
+            $values['text'],
+            $values['position'],
+            $values['posinterior'],
+            $values['verportada'],
+            $values['verinterior'],
+        ];
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
+    }
+
+
+    /**
+     * Updates fk_video2 and footer_video2 fields from an article.
+     *
      * @param integer $id     Article id.
      * @param integer $video  Video id.
      * @param string  $footer Footer value for the photo.
@@ -1557,6 +1940,29 @@ class MigrationSaver
     }
 
     /**
+     * Finds the content id for a given title.
+     *
+     * @param  string  $title Content title.
+     * @return integer        Content id.
+     */
+    private function findContent($title)
+    {
+        $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
+        $sql = "SELECT pk_content FROM contents WHERE title='$title'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1
+            && array_key_exists('pk_content', $rss[0])
+        ) {
+            return $rss[0]['pk_content'];
+        }
+
+        return false;
+    }
+
+    /**
      * Finds the category id for a given normalized name.
      *
      * @param  string  $name Category name.
@@ -1588,12 +1994,12 @@ class MigrationSaver
      */
     private function findPhoto($title)
     {
-        $sql = "SELECT pk_content FROM contents WHERE title = '$title'";
+        $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
 
-        if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
+        if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
             return $rss[0]['id'];
         }
 
@@ -1617,6 +2023,27 @@ class MigrationSaver
 
         if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
             return $rss[0]['id'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds the video id for a given video url.
+     *
+     * @param  string  $url Video url.
+     * @return mixed        Video url if user was found. Otherwise, return
+     *                       false.
+     */
+    private function findVideo($url)
+    {
+        $sql = "SELECT pk_video FROM videos WHERE video_url = '$url'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1 && array_key_exists('pk_video', $rss[0])) {
+            return $rss[0]['pk_video'];
         }
 
         return false;
@@ -1697,104 +2124,4 @@ class MigrationSaver
 
         return $values;
     }
-
-/*    private function clearTags($body)
-    {
-        $result = array();
-
-        $newBody = $body;
-        $img     = '';
-        $gallery = '';
-        $footer  = '';
-        $photo     = new \Photo();
-        $allowed = '<i><b><p><a><br><ol><ul><li><strong><em>';
-        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
-        preg_match_all($patern, $body, $result);
-        if (!empty($result[1])) {
-            $guid    = $result[1][0];
-            $img     = $this->getOnmIdImage($guid);
-            $newBody = $body;
-            if (empty($img)) {
-
-
-                //-420x278.jpg
-                preg_match_all("@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
-                if (!empty($result[1])) {
-
-                    $newGuid = $result[1][0].".".$result[2][0];
-                    $img     = $this->getOnmIdImage($newGuid);
-
-                    if (empty($img)) {
-                        $this->output->writeln('- Image from Body '. $guid. ' fault');
-                    }
-                }
-                $date = new \DateTime();
-                $date = $date->format('Y-m-d H:i:s');
-                $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
-                $oldID = $this->elementIsImported('fotos', 'category');
-                if (empty($oldID)) {
-                    $oldID ='1';
-                }
-                $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
-
-                $imageData = array(
-                        'title'               => $this->convertoUTF8(strip_tags($guid)),
-                        'category'            => $IDCategory,
-                        'fk_category'         => $IDCategory,
-                        'category_name'       => '',
-                        'content_status'      => 1,
-                        'frontpage'           => 0,
-                        'in_home'             => 0,
-                        'metadata'            => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
-                        'description'         => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
-                        'id'                  => 0,
-                        'created'             => $rs->fields['post_date_gmt'],
-                        'starttime'           => $rs->fields['post_date_gmt'],
-                        'changed'             => $rs->fields['post_modified_gmt'],
-                        'fk_user'             => $this->elementIsImported(7, 'user'),
-                        'fk_author'           => $this->elementIsImported(7, 'user'),
-                        'fk_publisher'        => $this->elementIsImported(7, 'user'),
-                        'fk_user_last_editor' => $this->elementIsImported(7, 'user'),
-                        'local_file'          => $local_file,
-                        'author_name'         => '',
-                    );
-
-                $img  = $photo->createFromLocalFile($imageData);
-                $this->output->writeln('- Image from Body inserted'. $img. ' ');
-            }
-            $newBody = preg_replace($patern, '', $body);
-            // $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
-        }
-
-        if (empty($img)) {
-            preg_match_all(
-                '@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result
-            );
-            if (!empty($result[1])) {
-                $id      = $result[1][0];
-                $img     = $this->elementIsImported($id, 'image');
-                $footer  = $result[2][0];
-
-                $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
-                //  $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
-            }
-        }
-
-        preg_match_all('@\[gallery.*?ids="(.*)".*?\]@', $body, $result);
-        if (!empty($result[0])) {
-            $id      = $result[1][0];
-            $gallery = $this->elementIsImported($id, 'gallery');
-            $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $body);
-            // $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
-        }
-
-        $str = preg_replace(
-            array(
-                "/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
-                array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody
-        );
-        $newBody = '<p>'.($str).'</p>';
-
-        return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }*/
 }
