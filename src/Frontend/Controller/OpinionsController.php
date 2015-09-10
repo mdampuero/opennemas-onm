@@ -655,6 +655,9 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($opinion);
+
         // Don't execute the app logic if there are caches available
         $cacheId = $this->view->generateCacheId($this->category_name, '', $opinionID);
         if (($this->view->caching == 0)
@@ -761,15 +764,24 @@ class OpinionsController extends Controller
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
+        $renderParams = array(
+            'cache_id'        => $cacheId,
+            'actual_category' => 'opinion',
+        );
+        if ($cacheable) {
+            $renderParams = array_merge(
+                $renderParams,
+                [
+                    'x-tags'      => 'opinion,'.$opinionID,
+                    'x-cache-for' => '1d'
+                ]
+            );
+        }
+
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
-            array(
-                'cache_id'        => $cacheId,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinionID,
-                'x-cache-for' => '1d'
-            )
+            $renderParams
         );
     }
 
