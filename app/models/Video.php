@@ -128,8 +128,8 @@ class Video extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM videos WHERE pk_video = '.$id;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM videos WHERE pk_video = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$id]);
 
         if (!$rs) {
             return;
@@ -155,11 +155,12 @@ class Video extends Content
 
         $sql =  "UPDATE videos"
                 ." SET  `video_url`=?, `information`=?, `author_name`=?  "
-                ." WHERE pk_video=".$data['id'];
+                ." WHERE pk_video=?";
         $values = array(
             $data['video_url'],
             serialize($data['information']),
-            $data['author_name']
+            $data['author_name'],
+            $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -180,9 +181,10 @@ class Video extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM videos WHERE pk_video='.$id;
+        $sql = 'DELETE FROM videos WHERE pk_video=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$id]);
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($rs === false) {
             return false;
         }
 
