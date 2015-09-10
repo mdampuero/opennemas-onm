@@ -245,7 +245,6 @@ class PollsController extends Controller
             );
         }
 
-
         $data = array(
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
