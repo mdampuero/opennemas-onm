@@ -102,7 +102,6 @@ class SubscriptionFilter
     public function subscriptionHook(&$content)
     {
         $cacheable = true;
-            var_dump($content);die();
 
         if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
             && $content->isOnlyAvailableForRegistered()) {
