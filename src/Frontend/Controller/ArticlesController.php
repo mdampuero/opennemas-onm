@@ -60,7 +60,8 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
-        $cacheable = $this->subscriptionHook($article);
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
@@ -281,95 +282,5 @@ class ArticlesController extends Controller
         $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
-    }
-
-    /**
-     * Replaces article body for unsubscribed users.
-     *
-     * @return Article $content The article.
-     */
-    public function paywallHook(&$content)
-    {
-        $restrictedContent = $this->renderView(
-            'paywall/partials/content_only_for_subscribers.tpl',
-            array('id' => $content->id)
-        );
-
-        $user = $this->getUser();
-
-        if (empty($user) || empty($user->getMeta('paywall_time_limit'))) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $article->img2      = null;
-            $article->fk_video2 = null;
-            return;
-        }
-
-        $limit = \DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $user->getMeta('paywall_time_limit'),
-            new \DateTimeZone('UTC')
-        );
-
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        $hasSubscription = $userSubscriptionDate > $now;
-
-        if ($limit < $now) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $article->img2      = null;
-            $article->fk_video2 = null;
-        }
-    }
-
-    /**
-     * Replaces article body for unregistered users.
-     *
-     * @param Article $content The article.
-     */
-    public function registeredHook(&$content)
-    {
-        $restrictedContent = $this->renderView(
-            'article/partials/content_only_for_registered.tpl',
-            array('id' => $content->id)
-        );
-
-        if (empty($this->getUser())) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $article->img2      = null;
-            $article->fk_video2 = null;
-        }
-    }
-
-    /**
-     * Check and modify content if required basing on subscription constraints.
-     *
-     * @param Content $content The content to check.
-     *
-     * @return boolean True if the content is cacheable. Otherwise, returns
-     *                 false.
-     */
-    public function subscriptionHook(&$content)
-    {
-        $cacheable = true;
-
-        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
-            && $content->isOnlyAvailableForRegistered()) {
-            $cacheable = false;
-
-            $this->registeredHook($content);
-        }
-
-        if (ModuleManager::isActivated('PAYWALL')
-            && $content->isOnlyAvailableForSubscribers()
-        ) {
-            $cacheable = false;
-
-            $this->paywallHook($content);
-        }
-
-        return $cacheable;
     }
 }
