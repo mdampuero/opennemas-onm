@@ -216,8 +216,8 @@
                   [% content.email %]
                 </td>
                 <td class="center hidden-xs hidden-sm">
-                  <span ng-if="content.type == 1">{t}Frontend{/t}</span>
-                  <span ng-if="content.type == 0">{t}Backend{/t}</span>
+                  <span ng-if="content.type == 0">{t}Frontend{/t}</span>
+                  <span ng-if="content.type == 1">{t}Backend{/t}</span>
                 </td>
                 <td class="center hidden-xs">
                   <span ng-if="content.id_user_group == ''">{t}Not assigned{/t}</span>
