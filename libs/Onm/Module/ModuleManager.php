@@ -1142,6 +1142,18 @@ class ModuleManager
                     ]
                 ],
                 [
+                    'id'               => 'CONTENT_SUBSCRIPTIONS',
+                    'plan'             => 'OTHER',
+                    'type'             => 'module',
+                    'thumbnail'        => 'module-paywall.jpg',
+                    'name'             => _('Content Subscriptions'),
+                    'description'      => _('Add description...'),
+                    'long_description' => _('Missed long description...'),
+                    'price'            => [
+                        'month' => 65
+                    ]
+                ],
+                [
                     'id'               => 'TRASH_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'internal',

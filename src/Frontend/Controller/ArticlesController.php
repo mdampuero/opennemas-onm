@@ -299,6 +299,9 @@ class ArticlesController extends Controller
 
         if (empty($user) || empty($user->getMeta('paywall_time_limit'))) {
             $content->body = $restrictedContent;
+            $content->img       = null;
+            $article->img2      = null;
+            $article->fk_video2 = null;
             return;
         }
 
@@ -314,6 +317,9 @@ class ArticlesController extends Controller
 
         if ($limit < $now) {
             $content->body = $restrictedContent;
+            $content->img       = null;
+            $article->img2      = null;
+            $article->fk_video2 = null;
         }
     }
 
@@ -331,6 +337,9 @@ class ArticlesController extends Controller
 
         if (empty($this->getUser())) {
             $content->body = $restrictedContent;
+            $content->img       = null;
+            $article->img2      = null;
+            $article->fk_video2 = null;
         }
     }
 

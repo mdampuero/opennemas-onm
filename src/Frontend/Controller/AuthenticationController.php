@@ -37,7 +37,7 @@ class AuthenticationController extends Controller
     public function loginAction(Request $request)
     {
         $error   = null;
-        $referer = $this->generateUrl('frontend_user_show');
+        $referer = $this->generateUrl('frontend_frontpage');
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);

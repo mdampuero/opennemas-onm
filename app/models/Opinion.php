@@ -344,7 +344,6 @@ class Opinion extends Content
         } elseif ((int) $this->type_opinion == 2) {
             $this->author_name_slug = 'director';
         } else {
-
             $author = new \User($this->fk_author);
             $this->name = StringUtils::getTitle($author->name);
             $this->author_name_slug = $this->name;
