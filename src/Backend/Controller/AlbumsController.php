@@ -125,6 +125,7 @@ class AlbumsController extends Controller
         if ('POST' == $request->getMethod()) {
             $album = new \Album();
             $album->create($request->request->all());
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Album created successfully')
@@ -134,6 +135,7 @@ class AlbumsController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
             $categoryName = $ccm->getName($request->request->get('category'));
 
+            // TODO: remove cache cleaning actions
             // Clean cache album home and frontpage for category
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
@@ -324,6 +326,7 @@ class AlbumsController extends Controller
             'album_photos_footer'   => $request->request->get('album_photos_footer'),
             'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             'starttime'             => $album->starttime,
+            'params'         => $request->request->get('params', []),
         );
 
         $album->update($data);
@@ -332,6 +335,7 @@ class AlbumsController extends Controller
             _("Album updated successfully.")
         );
 
+        // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
