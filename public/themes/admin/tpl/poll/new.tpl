@@ -199,6 +199,25 @@
                         </div>
                     </div>
                 </div>
+                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="grid simple">
+                      <div class="grid-title">
+                        <h4>{t}Subscription{/t}</h4>
+                      </div>
+                      <div class="grid-body">
+                        <div class="checkbox">
+                          <input {if $poll->params["only_registered"] == "1"}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
+                          <label for="only_registered">
+                            {t}Only available for registered users{/t}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/is_module_activated}
             </div>
         </div>
     </div>

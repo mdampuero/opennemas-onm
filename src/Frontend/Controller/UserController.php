@@ -431,7 +431,6 @@ class UserController extends Controller
         }
 
         // Display form
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render('user/recover_pass.tpl');
     }
 
