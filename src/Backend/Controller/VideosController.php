@@ -166,6 +166,7 @@ class VideosController extends Controller
                     'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
                     'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                     'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                    'params'         => $request->request->get('params', []),
                 );
 
                 try {
@@ -288,6 +289,7 @@ class VideosController extends Controller
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
+
         $requestPost  = $request->request;
         $continue = $requestPost->filter('continue', false, FILTER_SANITIZE_STRING);
         $category = $requestPost->getDigits('category');
@@ -322,12 +324,15 @@ class VideosController extends Controller
                         'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
                         'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
                         'starttime'      => $video->starttime,
+                        'params'         => $request->request->get('params'. []),
                     );
-// var_dump($videoData);die();
 
                     $video->update($videoData);
                 } else {
                     $_POST['starttime'] = $video->starttime;
+                    $_POST['id']        = $id;
+                    $_POST['params']    = $request->request->get('params');
+
                     $video->update($_POST);
                 }
 
@@ -412,7 +417,7 @@ class VideosController extends Controller
     {
         $id = $request->query->getDigits('id', null);
 
-        $video = new \Video($id);
+        $video = $this->get('entity_repository')->find('Video', $id);
 
         if (is_null($video->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -422,9 +427,10 @@ class VideosController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos'));
         }
-        if (($video->author_name == 'external' || $video->author_name == 'script')
-            && is_array($video->information)) {
 
+        if (($video->author_name == 'external' || $video->author_name == 'script')
+            && is_array($video->information)
+        ) {
             if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
                 $video->thumb = $video->getThumb();
             }
