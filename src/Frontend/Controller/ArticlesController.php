@@ -150,29 +150,20 @@ class ArticlesController extends Controller
 
         } // end if $this->view->is_cached
 
-        $renderParams = [
-            'cache_id'        => $cacheID,
-            'contentId'       => $articleID,
-            'category_name'   => $categoryName,
-            'article'         => $article,
-            'content'         => $article,
-            'actual_category' => $categoryName,
-            'time'            => '12345',
-        ];
-
-        if ($cacheable) {
-            $renderParams = array_merge(
-                $renderParams,
-                [
-                    'x-tags'      => 'article,'.$article->id,
-                    'x-cache-for' => '1d'
-                ]
-            );
-        }
-
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
-            $renderParams
+            [
+                'cache_id'        => $cacheID,
+                'contentId'       => $articleID,
+                'category_name'   => $categoryName,
+                'article'         => $article,
+                'content'         => $article,
+                'actual_category' => $categoryName,
+                'time'            => '12345',
+                'x-tags'          => 'article,'.$article->id,
+                'x-cache-for'     => '+1 day',
+                'x-cacheable'     => $cacheable
+            ]
         );
     }
 

@@ -1,4 +1,4 @@
-<?php
+a<?php
 /**
  * Defines the subscription filter class
  *
@@ -23,7 +23,10 @@ class SubscriptionFilter
 {
 
     /**
-     * undocumented function
+     * Initializes the filter
+     *
+     * @param Template $template the template object to render views
+     * @param User $user the session user object
      *
      * @return void
      **/
@@ -31,6 +34,57 @@ class SubscriptionFilter
     {
         $this->template = $template;
         $this->user     = $user;
+    }
+
+    /**
+     * Check and modify content if required basing on subscription constraints.
+     *
+     * @param Content $content The content to check.
+     *
+     * @return boolean True if the content is cacheable. Otherwise, returns
+     *                 false.
+     */
+    public function subscriptionHook(&$content)
+    {
+        $cacheable = true;
+
+
+        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
+            && $content->isOnlyAvailableForRegistered()) {
+            $cacheable = false;
+
+            $this->registeredHook($content);
+        }
+
+        if (ModuleManager::isActivated('PAYWALL')
+            && $content->isOnlyAvailableForSubscribers()
+        ) {
+            $cacheable = false;
+
+            $this->paywallHook($content);
+        }
+
+        return $cacheable;
+    }
+
+    /**
+     * Replaces article body for unregistered users.
+     *
+     * @param Article $content The article.
+     */
+    public function registeredHook(&$content)
+    {
+        $restrictedContent = $this->template->fetch(
+            'article/partials/content_only_for_registered.tpl',
+            array('id' => $content->id)
+        );
+
+        if (empty($this->user)) {
+            $content->body = $restrictedContent;
+            $content->img       = null;
+            $content->img2      = null;
+            $content->fk_video2 = null;
+        }
     }
 
     /**
@@ -61,63 +115,11 @@ class SubscriptionFilter
 
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
-        $hasSubscription = $userSubscriptionDate > $now;
-
         if ($limit < $now) {
             $content->body = $restrictedContent;
             $content->img       = null;
             $content->img2      = null;
             $content->fk_video2 = null;
         }
-    }
-
-    /**
-     * Replaces article body for unregistered users.
-     *
-     * @param Article $content The article.
-     */
-    public function registeredHook(&$content)
-    {
-        $restrictedContent = $this->template->fetch(
-            'article/partials/content_only_for_registered.tpl',
-            array('id' => $content->id)
-        );
-
-        if (empty($this->user)) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $content->img2      = null;
-            $content->fk_video2 = null;
-        }
-    }
-
-    /**
-     * Check and modify content if required basing on subscription constraints.
-     *
-     * @param Content $content The content to check.
-     *
-     * @return boolean True if the content is cacheable. Otherwise, returns
-     *                 false.
-     */
-    public function subscriptionHook(&$content)
-    {
-        $cacheable = true;
-
-        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
-            && $content->isOnlyAvailableForRegistered()) {
-            $cacheable = false;
-
-            $this->registeredHook($content);
-        }
-
-        if (ModuleManager::isActivated('PAYWALL')
-            && $content->isOnlyAvailableForSubscribers()
-        ) {
-            $cacheable = false;
-
-            $this->paywallHook($content);
-        }
-
-        return $cacheable;
     }
 }

@@ -117,7 +117,13 @@ class Controller extends SymfonyController
             $response->setContent($contents);
         }
 
-        if (array_key_exists('x-tags', $parameters)) {
+        if (array_key_exists('x-tags', $parameters)
+            && (
+                !array_key_exists('x-cacheable', $parameters) ||
+                (array_key_exists('x-cacheable', $parameters)
+                && $parameters['x-cacheable'] !== false)
+            )
+        ) {
             $instanceName = getService('instance_manager')->current_instance->internal_name;
 
             $response->headers->set('x-tags', $parameters['x-tags']);
