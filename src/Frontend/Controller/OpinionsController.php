@@ -764,24 +764,16 @@ class OpinionsController extends Controller
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
-        $renderParams = array(
-            'cache_id'        => $cacheId,
-            'actual_category' => 'opinion',
-        );
-        if ($cacheable) {
-            $renderParams = array_merge(
-                $renderParams,
-                [
-                    'x-tags'      => 'opinion,'.$opinionID,
-                    'x-cache-for' => '1d'
-                ]
-            );
-        }
-
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
-            $renderParams
+            [
+                'cache_id'        => $cacheId,
+                'actual_category' => 'opinion',
+                'x-tags'          => 'opinion,'.$opinionID,
+                'x-cache-for'     => '1d',
+                'x-cacheable'     => $cacheable,
+            ]
         );
     }
 
