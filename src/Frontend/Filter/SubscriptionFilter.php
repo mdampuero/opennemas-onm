@@ -1,4 +1,4 @@
-a<?php
+<?php
 /**
  * Defines the subscription filter class
  *
