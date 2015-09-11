@@ -771,7 +771,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion,'.$opinionID,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable,
             ]
         );
