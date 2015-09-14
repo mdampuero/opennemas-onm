@@ -1970,6 +1970,7 @@ class MigrationSaver
      */
     private function findCategory($name)
     {
+        $name = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $name);
         $sql = "SELECT pk_content_category FROM content_categories"
             . " WHERE name='$name' OR title='$name'";
 
@@ -1994,13 +1995,14 @@ class MigrationSaver
      */
     private function findPhoto($title)
     {
+        $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
         $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
 
         if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
-            return $rss[0]['id'];
+            return $rss[0]['pk_content'];
         }
 
         return false;
