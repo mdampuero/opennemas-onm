@@ -1008,7 +1008,7 @@ class MigrationSaver
                     $values[$schema['translation']['field']],
                     $id,
                     $schema['translation']['name'],
-                    $slug
+                    ''
                 );
 
                 $this->stats[$name]['already_imported']++;
@@ -1198,7 +1198,7 @@ class MigrationSaver
                     $values[$schema['translation']['field']],
                     $userId,
                     $schema['translation']['name'],
-                    $slug
+                    ''
                 );
 
                 $this->stats[$name]['already_imported']++;
