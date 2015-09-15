@@ -506,7 +506,7 @@ class ModuleManager
                 ),
                 'price' => [
                     'single' => 1450,
-                    'month' => 135
+                    'month' => 130
                 ]
             ],
             [
