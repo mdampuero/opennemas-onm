@@ -93,11 +93,18 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                if ($scope.instance.metas && $scope.instance.metas.billing) {
-                  return { billing: angular.copy($scope.instance.metas.billing) };
-                } else {
-                  return { billing: {} };
+                if ($scope.instance.metas) {
+                  var billing = {};
+                  for (var key in $scope.instance.metas) {
+                    if (key.indexOf('billing') !== -1) {
+                      billing[key] = angular.copy($scope.instance.metas[key]);
+                    }
+                  }
+
+                  return billing;
                 }
+
+                return { billing: {} };
               },
               success: function() {
                 return function(m, t) {
@@ -108,9 +115,13 @@
           });
 
           modal.result.then(function(response) {
-            $scope.instance.metas.billing = response.billing;
+            for (var key in response) {
+              if (key.indexOf('billing') !== -1) {
+                $scope.instance.metas[key] = response[key];
+              }
+            }
           });
-        }
+        };
 
         /**
          * @function initializeSupportPlan
