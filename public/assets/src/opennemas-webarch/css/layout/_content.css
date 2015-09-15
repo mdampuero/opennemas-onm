@@ -109,7 +109,7 @@
 }
 
 @media (min-width: 1200px) {
-  .infinite-row .col-lg-1-25 {
+  .row .col-lg-1-25 {
     width: 12.5%;
   }
 }
