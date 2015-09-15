@@ -70,15 +70,6 @@
   padding-right: 15px;
 }
 
-.infinite-row {
-  margin-right: -15px;
-}
-
-.infinite-row [class^=col-] {
-  padding: 0;
-  padding-right: 15px;
-}
-
 .table-wrapper {
   overflow-x: auto;
 }
