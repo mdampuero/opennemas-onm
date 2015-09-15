@@ -1,27 +1,3 @@
-body {
-  background-color: #555 !important;
-}
-
-.grid-wrapper {
-  left: 25%;
-  position: absolute;
-  right: 25%;
-  text-align: left;
-}
-
-.wizard-title {
-  display: inline-block;
-  margin: 0 auto 50px;
-  padding-top: 50px;
-
-  h1 {
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-  }
-}
-
 .wizard-button {
   bottom: 140px;
   left: 50%;
@@ -37,27 +13,20 @@ body {
 .wizard-container {
   background-size: cover;
   height: 100%;
-  opacity: 0.00001;
+  opacity: 0;
   overflow: hidden;
   position: absolute;
-  transition: all .25s linear;
-  visibility: hidden;
+  transition: all .5s;
   width: 100%;
-  z-index: 0;
 
   &.active {
     opacity: 1;
-    visibility: visible;
-    z-index: 10;
+    z-index: 10
   }
 
-  &.welcome,
-  &.ready {
-    .wizard-button {
-      bottom: 0;
-      margin-top: 50px;
-      position: relative;
-    }
+  &.previous {
+    opacity: 0;
+    z-index: 5;
   }
 
   &.welcome {
@@ -71,7 +40,6 @@ body {
       background: #fff;
       bottom: 220px;
       left: 25%;
-      padding: 20px 20px 45px;
       position: absolute;
       right: 25%;
       text-align: left;
@@ -87,11 +55,17 @@ body {
       }
 
       .checkbox {
-        margin-top: 10px;
+        bottom: 0;
+        padding: 12px 25px;
+        position: absolute;
       }
 
       .terms-container {
-        height: 100%;
+        bottom: 45px;
+        left: 15px;
+        position: absolute;
+        right: 15px;
+        top: 15px;
       }
     }
 
@@ -103,65 +77,19 @@ body {
       width: 100px;
       margin-left: -110px;
       margin-top: -90px;
+
+      &.warning {
+        animation: warning 1s ease-in-out infinite;
+      }
     }
   }
 
   &.help {
     background-image: url(/themes/admin/images/help.jpg);
-
-    h3 {
-      color: #fff;
-      margin: 0;
-      padding-top: 50px;
-      text-align: center;
-    }
-
-    .help-items-wrapper {
-      margin: 0 auto;
-      width: 850px;
-
-      .help-item {
-        color: #fff;
-        float: left;
-        margin-right: 50px;
-        text-align: center;
-        width: 250px;
-
-        &:last-child {
-          margin-right: 0;
-        }
-
-        a {
-          color: #fff;
-          border-bottom: 1px dotted #fff;
-
-          &:hover {
-
-          }
-        }
-
-        .orb {
-          border: 1px solid #fff;
-          border-radius: 100%;
-          height: 100px;
-          margin: 25px auto 10px;
-          padding: 25px;
-          width: 100px;
-
-          i {
-            padding-top: 6px;
-          }
-        }
-      }
-    }
   }
 
-  &.payment-info {
+  &.market {
     background-image: url(/themes/admin/images/payment.jpg);
-
-    .checkbox {
-      margin-top: 12px;
-    }
   }
 
   &.ready {
@@ -212,33 +140,54 @@ body {
 }
 
 .wizard-footer {
-  background: #fff;
   bottom: 0;
-  height: 120px;
+  height: 80px;
   padding-top: 20px;
   position: absolute;
   width: 100%;
   z-index: 20;
+}
 
-  .wizard-footer-wrapper {
-    margin: 0 auto;
-    width: 980px;
+.wizard-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 850px;
+}
+
+.wizard-list-item {
+  color: #fff;
+  float: left;
+  margin-right: 50px;
+  padding: 0;
+  text-align: center;
+  width: 250px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  a {
+    color: #fff;
+    border-bottom: 1px dotted #fff;
   }
 }
 
-.wizard-orb {
-  background: #fff;
-  border: 1px solid lighten(#1b1e24, 10%);
+.wizard-list-item-icon {
+  border: 1px solid #fff;
   border-radius: 100%;
-  height: 50px;
-  margin: 0 auto 15px;
-  width: 50px;
+  height: 100px;
+  margin: 25px auto 10px;
+  padding: 25px;
+  width: 100px;
 
-  h4 {
-    color: lighten(#1b1e24, 10%);;
-    font-weight: 400;
-    padding-top: 2px;
+  i {
+    padding-top: 6px;
   }
+}
+
+.wizard-list-item-text {
+  font-size: 14px;
 }
 
 .wizard-overlay {
@@ -249,88 +198,111 @@ body {
   width: 100%;
 }
 
-.wizard-step {
-  background: none;
-  border: 0;
+.wizard-step-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 180px;
+}
+
+.wizard-step-list-item {
+  border: 1px solid #fff;
+  border-radius: 100%;
   cursor: pointer;
   float: left;
+  height: 20px;
   margin-right: 20px;
-  outline: none;
+  padding: 2px;
   position: relative;
   text-align: center;
-  width: 180px;
+  width: 20px;
 
   &:last-child {
     margin-right: 0;
   }
 
+  &:hover {
+    .wizard-step-list-item-text {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
   &.active {
-    .wizard-orb {
-      background: lighten(#1b1e24, 10%);
-
-      h4 {
-        color: #fff;
-      }
+    .wizard-step-list-item-fill {
+      background: #fff;
     }
+  }
+}
 
-    &:after {
-      background: lighten(#1b1e24, 10%);
-      border-radius: 4px;
-      border: 1px solid lighten(#1b1e24, 10%);
-      content: "";
-      height: 4px;
-      left: 0;
-      margin-left: -70px;
-      margin-top: -24px;
-      position: absolute;
-      top: 50%;
-      width: 120px;
-    }
+.wizard-step-list-item-fill {
+  border-radius: 100%;
+  height: 14px;
+  width: 14px;
+}
 
-    &:first-child:after {
-      content: none;
-    }
+.wizard-step-list-item-text {
+  color: #fff;
+  left: 50%;
+  margin-left: -110px;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  transition: opacity .25s;
+  width: 220px;
+  visibility: hidden;
+
+  &.bottom {
+    bottom: 0;
+    margin-bottom: -30px;
+  }
+
+  &.top {
+    margin-top: -30px;
+    top: 0;
+  }
+}
+
+.wizard-title {
+  display: inline-block;
+  margin: 0 auto 50px;
+  padding-top: 50px;
+
+  h1 {
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
   }
 }
 
 .wizard-wrapper {
   min-height: 100%;
+
+  &.active {
+    background-color: #000 !important;
+  }
 }
 
 @media (max-width: 991px) {
+  .wizard-button {
+    bottom: 0;
+    left: 0;
+    margin: 25px auto 0;
+    position: relative;
+  }
+
   .wizard-container {
-    &.help {
+    &.help,
+    &.market {
       &.active {
         height: auto;
         min-height: 100%;
         overflow: initial;
       }
-
-      .help-items-wrapper {
-        width: 100%;
-
-        .help-item {
-          float: none;
-          width: 100%;
-        }
-      }
-
-      .wizard-button {
-        bottom: 0;
-        left: 0;
-        margin: 25px auto 0;
-        position: relative;
-      }
     }
 
     &.terms-and-conditions {
-      .arrow {
-        margin-left: 7px;
-        margin-top: 4px;
-        transform: rotate(180deg);
-        display: none;
-      }
-
       .terms-wrapper {
         bottom: 90px;
         left: 15px;
@@ -338,18 +310,14 @@ body {
         left: 10%;
         right: 10%;
         top: 50px;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
       }
 
       .wizard-button {
         bottom: 15px;
-      }
-
-      .arrow  {
-        margin-left: 9px;
-        margin-top: 7px;
-        transform: rotate(180deg);
+        left: 50%;
+        margin-left: -100px;
+        position: absolute;
+        width: 200px;
       }
     }
   }
@@ -358,52 +326,21 @@ body {
     padding: 15px;
   }
 
+  .wizard-list {
+    width: 760px;
+  }
+
+  .wizard-list-item {
+    width: 220px;
+  }
+
   .wizard-footer {
     display: none;
   }
 }
 
 @media (max-width: 767px) {
-  .grid-wrapper {
-    position: relative;
-    left: 0;
-  }
-
   .wizard-container {
-    &.help {
-      .help-items-wrapper {
-        max-width: 480px;
-
-        .help-item {
-          margin: 20px 0;
-          min-height: 100px;
-
-          .orb {
-            margin: 0;
-            position: absolute;
-          }
-
-          .item-text {
-            padding-left: 120px;
-          }
-        }
-      }
-    }
-
-    &.payment-info {
-      &.active {
-        height: auto;
-        overflow: initial;
-      }
-
-      .wizard-button {
-        bottom: 0;
-        left: 0;
-        margin: 25px auto 0;
-        position: relative;
-      }
-    }
-
     &.ready {
       .social-items-wrapper {
         width: 100%;
@@ -427,24 +364,19 @@ body {
         padding-top: 0;
       }
 
-      .arrow {
-        height: 35.5px;
-        margin-left: 7px;
-        margin-top: 4px;
-        transform: rotate(180deg);
-        width: 50px;
-      }
-
       .terms-wrapper {
         top: 70px;
       }
-
-      .arrow {
-        margin-left: 9px;
-        margin-top: 7px;
-        transform: rotate(180deg);
-      }
     }
+  }
+
+  .wizard-list {
+    width: 75%;
+  }
+
+  .wizard-list-item {
+    margin-right: 0;
+    width: 100%;
   }
 
   .wizard-title {
@@ -456,4 +388,10 @@ body {
       font-size: 28px;
     }
   }
+}
+
+@keyframes warning {
+  0% { margin-left: -110px; margin-top: -90px; }
+  50% { margin-left: -130px; margin-top: -110px; }
+  100% { margin-left: -110px; margin-top: -90px; }
 }

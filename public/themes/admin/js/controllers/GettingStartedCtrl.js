@@ -17,6 +17,7 @@
     .controller('GettingStartedCtrl', ['$http', '$scope', '$timeout', 'routing',
       function($http, $scope, $timeout, routing) {
         $scope.step = 1;
+        $scope.previous = 0;
 
         /**
          * @function acceptTerms
@@ -43,25 +44,21 @@
          * @param {integer} step The step to jump to.
          */
         $scope.goToStep = function(step) {
-          $scope.step = step;
+          if (step > 2 && !$scope.termsAccepted) {
+            $scope.warning = true;
+
+            return;
+          }
+
+          $scope.previous = $scope.step;
+          $scope.step     = step;
+
+          $scope.termsWarning = false;
+
           $timeout(function() {
             $('body').scrollTop(0);
           }, 250);
         };
-
-        /**
-         * @function savePaymentInfo
-         * @memberOf GettingStartedCtrl
-         *
-         * @description
-         *   Saves the payment information.
-         */
-        $scope.savePaymentInfo = function() {
-          var url = routing.generate('backend_ws_getting_started_save_payment_info');
-
-          $http.put(url, { billing : $scope.billing });
-        };
-
       }
   ]);
 })();
