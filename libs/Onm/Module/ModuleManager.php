@@ -138,7 +138,7 @@ class ModuleManager
                 'CACHE_MANAGER'              => _('Cache manager'),
                 'CATEGORY_MANAGER'           => _('Category'),
                 'COMMENT_MANAGER'            => _('Comments'),
-                'CONTENT_SUBSCRIPTIONS'      => _('Content subscriptions'),
+                'CONTENT_SUBSCRIPTIONS'      => _('Subscription'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
@@ -399,7 +399,7 @@ class ModuleManager
                         .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
-               ),
+                ),
                 'type'  => 'pack',
                 'price' => [
                     'month' => 200
@@ -1133,9 +1133,19 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
-                    'name'             => _('Content Subscriptions'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
+                    'name'             => _("Subscription"),
+                    'description'      => _(
+                        "Would you like for your readers to be able to unlock premium content for free?\n"
+                        ."This is the module you should add to your newspaper!"
+                    ),
+                    'long_description' => _(
+                        "This module enables newspapers to add a customized subscription form to allow users to unlock premium content.<br>\n"
+                        ."The subscription form generates login details for the user.<br>\n"
+                        ."Newspapers will be able to mark content as \"premium\" and users will need to register in order to access the full extent of it.<br>"
+                        ."Note: if the newspaper needs to collect users data will have to provide certification of inscription "
+                        ."to \"Agencia Española de Protección de Datos\" or equivalent. Openhost, SL is not responsible of any "
+                        ."data saved or required by newspapers."
+                    ),
                     'price'            => [
                         'month' => 65
                     ]
