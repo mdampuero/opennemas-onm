@@ -31,9 +31,6 @@
                           @Common/plugins/webarch/css/magic_space.css,
                           @Common/plugins/webarch/css/tiles_responsive.css,
 
-                          @Common/plugins/angular-quickdate/css/ng-quick-date.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
                           @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
                           @Common/plugins/jquery-notifications/css/messenger.css,
                           @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
@@ -92,7 +89,6 @@
                           @Common/plugins/angular-recaptcha/directive.js,
                           @Common/plugins/angular-recaptcha/service.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
-                          @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
                           @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
                           @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
                           @Common/plugins/angular-ui/select2.js,
