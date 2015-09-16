@@ -152,75 +152,73 @@
     </div>
     <div class="row">
       <div class="col-sm-6 col-xs-12 m-b-15">
-        <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
-          <div class="tiles white">
-            <div class="tiles-body clearfix">
-              <div>
-                <div class="more-plans clearfix">
-                  <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                  <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
-                    {t}Check out our modules{/t}
-                  </a>
-                </div>
-                <div class="get-help clearfix">
-                  <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
-                  <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
-                    {t}Contact Us{/t}
-                  </a>
-                </div>
+        <div class="tiles white">
+          <div class="tiles-body clearfix">
+            <div>
+              <div class="more-plans clearfix">
+                <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
+                <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                  {t}Check out our modules{/t}
+                </a>
+              </div>
+              <div class="get-help clearfix">
+                <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
+                <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
+                  {t}Contact Us{/t}
+                </a>
               </div>
             </div>
-            {*
-            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {$plans};modules = {$available_modules}">
-              <div class="plans-wrapper">
-                <div class="inline p-r-30" ng-repeat="plan in plans">
-                  <div class="checkbox">
-                    <input id="select_[% plan.id %]" ng-model="selected[plan.id]" ng-change="togglePlan(plan.id)" ng-disabled="plan.id == 'Base' || isBlocked(plan.id)" type="checkbox">
-                    <label for="select_[% plan.id %]">
-                      <h5 class="no-margin p-b-15">
-                        <span id="{$plan}">[% plan.title %] ([% plan.total %])</span>
-                      </h5>
-                    </label>
-                  </div>
-                  <div ng-repeat="item in modules | filter: { plan: plan.id }">
-                    <div class="checkbox">
-                      <input checklist-model="changes" checklist-value="item" id="module_[% item.id %]" ng-disabled="plan.id == 'Base' || isUpgraded(item.id) || isDowngraded(item.id)" type="checkbox"/>
-                      <label for="module_[% item.id %]">
-                        [% item.name %]
-                        <span class="text-danger" ng-if="isUpgraded(item.id)">({t}pending activation{/t})</span>
-                        <span class="text-danger" ng-if="isDowngraded(item.id)">({t}pending deactivation{/t})</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            *}
           </div>
-          <input name="hasChanges" ng-value="hasChanges" type="hidden">
-          <input name="modules" ng-value="activatedModules" type="hidden">
-        </form>
+        </div>
+        <input name="hasChanges" ng-value="hasChanges" type="hidden">
+        <input name="modules" ng-value="activatedModules" type="hidden">
       </div>
-      {if !empty($instance->metas) && array_key_exists('billing', $instance->metas)}
+      {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas)}
         <div class="col-sm-6">
           <div class="tiles white m-b-15">
             <div class="tiles-body">
               <div class="tiles-title text-uppercase text-black">
                 {t}Billing information{/t}
               </div>
-              <div class="m-t-15">
-                <p>
-                <strong>{t}Company{/t}:</strong> {$instance->metas['billing']['company_name']}
-                </p>
-                <p>
-                <strong>{t}Name{/t}:</strong> {$instance->metas['billing']['contact_name']}
-                </p>
-                <p>
-                <strong>NIF/CIF:</strong> {$instance->metas['billing']['nif']}
-                </p>
-                <p>
-                <strong>{t}Address{/t}:</strong> {$instance->metas['billing']['address']}
-                </p>
+              <div class="row p-b-15 p-t-15">
+                <div class="col-sm-6">
+                  <strong>{t}Name{/t}:</strong> {$instance->metas['billing_name']}
+                </div>
+                <div class="col-sm-6" ng-if="billing_company_name">
+                  <strong>{t}Company{/t}:</strong> {$instance->metas['billing_company']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}VAT{/t}</strong> {$instance->metas['billing_vat']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}Email{/t}:</strong> {$instance->metas['billing_email']}
+                </div>
+                <div class="col-sm-6">
+                  <strong>{t}Phone{/t}:</strong> {$instance->metas['billing_phone']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-8">
+                  <strong>{t}Address{/t}:</strong> {$instance->metas['billing_address']}
+                </div>
+                <div class="col-sm-4">
+                  <strong>{t}Postal code{/t}:</strong> {$instance->metas['billing_postal_code']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-4">
+                  <strong>{t}City{/t}:</strong> {$instance->metas['billing_city']}
+                </div>
+                <div class="col-sm-4">
+                  <strong>{t}State{/t}:</strong> {$instance->metas['billing_state']}
+                </div>
+                <div class="col-sm-4">
+             <strong>{t}Country{/t}:</strong> {$instance->metas['billing_country']}
+                </div>
               </div>
             </div>
           </div>
