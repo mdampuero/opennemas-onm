@@ -41,9 +41,14 @@ function smarty_function_dynamic_image($params, &$smarty)
 
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
+    if (array_key_exists('site_url', $params)) {
+        $resource = $params['site_url'].$resource;
+    }
+
     unset($params['src']);
     unset($params['base_url']);
     unset($params['transform']);
+    unset($params['site_url']);
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
