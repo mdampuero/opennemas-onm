@@ -483,7 +483,7 @@ class InstanceManager extends BaseManager
         );
 
         if (!empty($delete)) {
-            foreach($delete as &$value) {
+            foreach ($delete as &$value) {
                 $value = '\'' . $value . '\'';
             }
 
@@ -496,9 +496,13 @@ class InstanceManager extends BaseManager
         // Update instance metas
         if (!empty($instance->metas)) {
             $values = [];
-            foreach($instance->metas as $key => $value) {
+            foreach ($instance->metas as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $value = serialize($value);
+                }
+
                 $values[] = '(\'' . $instance->id . '\',\'' . $key . '\',\''
-                    . serialize($value) . '\')';
+                    . $value . '\')';
             }
 
             $sql = 'REPLACE INTO instance_meta VALUES ' . implode(',', $values);
@@ -566,9 +570,14 @@ class InstanceManager extends BaseManager
         $rs = $this->conn->fetchAll($sql);
 
         $instance->metas = [];
-        foreach($rs as $r) {
-            $instance->metas[$r['meta_key']] =
-                @unserialize($r['meta_value']);
+        foreach ($rs as $r) {
+            $instance->metas[$r['meta_key']] = $r['meta_value'];
+
+            $data = @unserialize($r['meta_value']);
+
+            if ($data !== false) {
+                $instance->metas[$r['meta_key']] = $data;
+            }
         }
 
         $instance->_metas = $instance->metas;
