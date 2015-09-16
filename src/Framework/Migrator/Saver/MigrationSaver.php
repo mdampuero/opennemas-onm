@@ -1141,6 +1141,21 @@ class MigrationSaver
                 }
             }
 
+            if (array_key_exists('ids_category', $item)) {
+                $item['ids_category'] = explode(',', $item['ids_category']);
+
+                foreach ($item['ids_category'] as $key => $category) {
+                    $newCategory = $this->matchTranslation(
+                        $category,
+                        $schema['fields']['ids_category']['params']['translation']
+                    );
+
+                    if (!empty($category)) {
+                        $item['ids_category'][$key] = $newCategory;
+                    }
+                }
+            }
+
             $values = $this->merge($values, $item, $schema);
 
             try {
