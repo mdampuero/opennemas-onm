@@ -202,23 +202,48 @@
           </div>
           <div class="grid-body">
             <div class="grid-body-wrapper" ng-show="!edit_billing">
-              <ul class="no-style" ng-show="instance.metas.billing_contact_name">
-                <li ng-show="instance.metas.billing_contact_name">
-                  <strong>{t}Company{/t}:</strong> [% instance.metas.billing_company_name %]
-                </li>
-                <li>
-                  <strong>{t}Name{/t}:</strong> [% instance.metas.billing_contact_name %]
-                </li>
-                <li>
-                 <strong>{t}Email{/t}:</strong> [% instance.metas.billing_contact_email %]
-                </li>
-                <li>
-                  <strong>{t}Phone{/t}:</strong> [% instance.metas.billing_phone %]
-                </li>
-                <li>
-                  <strong>{t}Address{/t}:</strong> [% instance.metas.billing_address %]
-                </li>
-              </ul>
+              <div ng-show="instance.metas.billing_contact_name">
+                <div class="row p-b-15">
+                  <div class="col-sm-6">
+                    <strong>{t}Name{/t}:</strong> [% instance.metas.billing_name %]
+                  </div>
+                  <div class="col-sm-6" ng-if="instance.metas.billing_company_name">
+                    <strong>{t}Company{/t}:</strong> [% instance.metas.billing_company %]
+                  </div>
+                </div>
+                <div class="row p-b-15">
+                  <div class="col-sm-6">
+                    <strong>{t}VAT{/t}</strong> [% instance.metas.billing_vat %]
+                  </div>
+                </div>
+                <div class="row p-b-15">
+                  <div class="col-sm-6">
+                    <strong>{t}Email{/t}:</strong> [% instance.metas.billing_email %]
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>{t}Phone{/t}:</strong> [% instance.metas.billing_phone %]
+                  </div>
+                </div>
+                <div class="row p-b-15">
+                  <div class="col-sm-8">
+                    <strong>{t}Address{/t}:</strong> [% instance.metas.billing_address %]
+                  </div>
+                  <div class="col-sm-4">
+                    <strong>{t}Postal code{/t}:</strong> [% instance.metas.billing_postal_code %]
+                  </div>
+                </div>
+                <div class="row p-b-15">
+                  <div class="col-sm-4">
+                    <strong>{t}City{/t}:</strong> [% instance.metas.billing_city %]
+                  </div>
+                  <div class="col-sm-4">
+                    <strong>{t}State{/t}:</strong> [% instance.metas.billing_state %]
+                  </div>
+                  <div class="col-sm-4">
+                    <strong>{t}Country{/t}:</strong> [% instance.metas.billing_country %]
+                  </div>
+                </div>
+              </div>
               <div class="text-center" ng-if="!instance.metas.billing_contact_name">
                 <h4 class="pointer" ng-click="editBilling()">
                   <i class="fa fa-plus"></i>

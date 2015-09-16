@@ -106,61 +106,104 @@
               </div>
             </div>
             <div class="col-sm-6 p-l-30">
-              <h4>{t}Billing Info{/t}</h4>
-              {if empty($billing)}
-                <div class="ng-cloak p-b-30">
-                  <div class="form-group">
-                    <label for="contact-name">{t}Contact name{/t}</label>
-                    <input class="form-control" id="contact-name" ng-model="billing.contact_name" required="required" type="text">
-                  </div>
-                  <div class="form-group">
-                    <label for="contact-email">{t}Email{/t}</label>
-                    <input class="form-control" id="contact-email" ng-model="billing.contact_email" required="required" type="text">
-                  </div>
+              <h4>
+                {t}Billing Info{/t}
+                <button class="btn btn-link" ng-click="edit = 1" ng-show="!edit">({t}Edit{/t})</button>
+              </h4>
+                <div class="ng-cloak p-b-30" ng-show="edit || !billing">
                   <div class="row">
-                    <div class="col-md-6 form-group p-b-10">
-                      <label class="p-b-10">{t}Are you a company?{/t}</label>
-                      <div class="checkbox">
-                        <input id="company" ng-checked="billing.company === '1'" ng-false-value="'0'" ng-model="billing.company" ng-true-value="'1'" type="checkbox"/>
-                        <label for="company">{t}Yes, I am a company{/t}</label>
-                      </div>
+                    <div class="form-group col-sm-6">
+                      <label for="contact-name">{t}Contact name{/t}</label>
+                      <input class="form-control" id="contact-name" ng-model="billing.name" required="required" type="text">
                     </div>
-                    <div class="col-md-6 form-group" ng-show="billing.company === '1'">
-                      <label for="company-name">{t}Company name{/t}</label>
-                      <input class="form-control" id="company-name" ng-model="billing.company_name" type="text">
+                    <div class="form-group col-sm-6">
+                      <label for="contact-name">{t}Company name{/t}</label>
+                      <input class="form-control" id="company-name" ng-model="billing.company" required="required" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6">
-                      <label for="nif">NIF/CIF</label>
-                      <input class="form-control" id="nif" ng-model="billing.nif" required="required" type="text">
+                      <label for="contact-email">{t}Email{/t}</label>
+                      <input class="form-control" id="contact-email" ng-model="billing.email" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-6">
                       <label for="phone">{t}Phone number{/t}</label>
                       <input class="form-control" id="phone" ng-model="billing.phone" required="required" type="text">
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="address">{t}Address{/t}</label>
-                    <input class="form-control" id="address" ng-model="billing.address" required="required" type="text">
+                  <div class="row">
+                    <div class="form-group col-sm-6">
+                      <label for="vat">{t}VAT{/t}</label>
+                      <input class="form-control" id="vat" ng-model="billing.vat" required="required" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-sm-8">
+                      <label for="address">{t}Address{/t}</label>
+                      <input class="form-control" id="address" ng-model="billing.address" required="required" type="text">
+                    </div>
+                    <div class="form-group col-sm-4">
+                      <label for="postal-code">{t}Address{/t}</label>
+                      <input class="form-control" id="postal-code" ng-model="billing.postal_code" required="required" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-sm-4">
+                      <label for="city">{t}City{/t}</label>
+                      <input class="form-control" id="city" ng-model="billing.city" required="required" type="text">
+                    </div>
+                    <div class="form-group col-sm-4">
+                      <label for="state">{t}State{/t}</label>
+                      <input class="form-control" id="state" ng-model="billing.state" required="required" type="text">
+                    </div>
+                    <div class="form-group col-sm-4">
+                      <label for="country">{t}Country{/t}</label>
+                      <input class="form-control" id="country" ng-model="billing.country" required="required" type="text">
+                    </div>
                   </div>
                 </div>
-              {else}
-                <div class="ng-cloak p-b-30" ng-show="billing">
-                  <p ng-if="billing.company_name">
-                    <strong>{t}Company{/t}:</strong> [% billing.company_name %]
-                  </p>
-                  <p>
-                    <strong>{t}Name{/t}:</strong> [% billing.contact_name %]
-                  </p>
-                  <p>
-                    <strong>NIF/CIF:</strong> [% billing.nif %]
-                  </p>
-                  <p>
-                    <strong>{t}Address{/t}:</strong> [% billing.address %]
-                  </p>
+                <div class="ng-cloak p-b-30" ng-show="!edit">
+                  <div class="row p-b-15">
+                    <div class="col-sm-6">
+                      <strong>{t}Name{/t}:</strong> [% billing.name %]
+                    </div>
+                    <div class="col-sm-6" ng-if="billing.company_name">
+                      <strong>{t}Company{/t}:</strong> [% billing.company %]
+                    </div>
+                  </div>
+                  <div class="row p-b-15">
+                    <div class="col-sm-6">
+                      <strong>{t}VAT{/t}</strong> [% billing.vat %]
+                    </div>
+                  </div>
+                  <div class="row p-b-15">
+                    <div class="col-sm-6">
+                      <strong>{t}Email{/t}:</strong> [% billing.email %]
+                    </div>
+                    <div class="col-sm-6">
+                      <strong>{t}Phone{/t}:</strong> [% billing.phone %]
+                    </div>
+                  </div>
+                  <div class="row p-b-15">
+                    <div class="col-sm-8">
+                      <strong>{t}Address{/t}:</strong> [% billing.address %]
+                    </div>
+                    <div class="col-sm-4">
+                      <strong>{t}Postal code{/t}:</strong> [% billing.postal_code %]
+                    </div>
+                  </div>
+                  <div class="row p-b-15">
+                    <div class="col-sm-4">
+                      <strong>{t}City{/t}:</strong> [% billing.city %]
+                    </div>
+                    <div class="col-sm-4">
+                      <strong>{t}State{/t}:</strong> [% billing.state %]
+                    </div>
+                    <div class="col-sm-4">
+                      <strong>{t}Country{/t}:</strong> [% billing.country %]
+                    </div>
+                  </div>
                 </div>
-              {/if}
               {*<h4>{t}Payment Info{/t}</h4>
               <div class="form-group">
                 <label for="contact-name">{t}Card number{/t}</label>
@@ -214,9 +257,6 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default uppercase pull-left" ng-click="dismiss()" type="button">
-        {t}Close{/t}
-      </button>
       <button class="btn btn-success uppercase" ng-click="confirm()" type="button">
         <i class="fa fa-circle-o-notch fa-spin" ng-show="saving"></i>
         {t}Confirm{/t}

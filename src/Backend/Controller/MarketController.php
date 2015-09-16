@@ -13,10 +13,12 @@ class MarketController extends Controller
 
         $instance = $this->get('instance');
 
-        if (!empty($instance->metas)
-            && array_key_exists('billing', $instance->metas)
-        ) {
-            $billing = $instance->metas['billing'];
+        if (!empty($instance->metas)) {
+            foreach ($instance->metas as $key => $value) {
+                if (strpos($key, 'billing_') !== false) {
+                    $billing[str_replace('billing_', '', $key)] = $value;
+                }
+            }
         }
 
         return $this->render('market/checkout.tpl', [ 'billing' => $billing ]);

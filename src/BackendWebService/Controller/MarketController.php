@@ -42,10 +42,11 @@ class MarketController extends Controller
 
         $instance = $this->get('instance');
 
-        if (!array_key_exists('billing', $instance->metas)) {
-            $instance->metas['billing'] = $billing;
-            $this->get('instance_manager')->persist($instance);
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
         }
+
+        $this->get('instance_manager')->persist($instance);
 
         // Filter request to ignore invalid modules
         $modules = array_filter($modules, function ($e) use ($available) {
