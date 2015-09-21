@@ -184,6 +184,9 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($album);
+
         // Items_page refers to the widget
         $itemsPerPage = 8;
 
@@ -223,8 +226,13 @@ class AlbumsController extends Controller
                 // Load category and photos
                 $album->category_name  = $album->loadCategoryName($album->id);
                 $album->category_title = $album->loadCategoryTitle($album->id);
-                $_albumArray           = $album->_getAttachedPhotos($album->id);
-                $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $this->page);
+
+                // TODO: Improve this.
+                // In order to make subscription module to work remove the attached album photos when not cacheable
+                $_albumArray           = (!isset($album->album_content_replaced))
+                    ? $album->_getAttachedPhotos($album->id) : null;
+                $_albumArrayPaged      = (!isset($album->album_content_replaced))
+                    ? $album->getAttachedPhotosPaged($album->id, 8, $this->page) : null;
 
                 if (count($_albumArrayPaged) > $itemsPerPage) {
                     array_pop($_albumArrayPaged);
@@ -252,7 +260,9 @@ class AlbumsController extends Controller
                 'cache_id'       => $cacheID,
                 'contentId'      => $albumID,
                 'advertisements' => $this->getAds('inner'),
-                'x-tags'         => 'album,'.$albumID
+                'x-tags'         => 'album,'.$albumID,
+                'x-cache-for'    => '+1 day',
+                'x-cacheable'    => $cacheable
             )
         );
     }

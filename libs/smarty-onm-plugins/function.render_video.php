@@ -5,8 +5,9 @@ function smarty_function_render_video($params, &$smarty)
     $cssClass = (array_key_exists('css_class', $params) ? $params['css'] : null);
 
     $output ='';
-    if ($video->author_name == 'internal') {
-
+    if (isset($video->video_content_replaced)) {
+        $output = '';
+    } elseif ($video->author_name == 'internal') {
         $rand = rand();
         $output = '<a class="flashplayer" href="'.$params['base_url'].DS.$video->video_url.'" style="display:block;width:'
                   .$params['width'].'px;height:'.$params['height'].'px;background: url(\''.$video->thumb.'\')" id="flashplayer-'.$rand.'"></a>'."\n";

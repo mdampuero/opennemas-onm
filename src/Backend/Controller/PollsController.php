@@ -145,7 +145,7 @@ class PollsController extends Controller
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'item'           => json_decode($request->request->get('parsedAnswers')),
-                'params'         => $request->request->get('params'),
+                'params'         => $request->request->get('params', []),
             );
             $poll = $poll->create($data);
 

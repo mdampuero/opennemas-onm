@@ -240,9 +240,11 @@ class VideosController extends Controller
         if (!\ContentManager::checkValidContentAndUrl($video, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
-
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
+
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($video);
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
@@ -294,8 +296,10 @@ class VideosController extends Controller
         return $this->render(
             'video/video_inner.tpl',
             array(
-                'cache_id' => $cacheID,
-                'x-tags'   => 'video,'.$videoID
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'video,'.$videoID,
+                'x-cache-for' => '+1 day',
+                'x-cacheable' => $cacheable
             )
         );
     }
