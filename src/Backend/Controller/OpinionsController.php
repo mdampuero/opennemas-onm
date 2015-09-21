@@ -284,7 +284,7 @@ class OpinionsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $params = $request->request->get('params');
+            $params = $request->request->get('params', []);
             $opinion = new \Opinion();
 
             $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
