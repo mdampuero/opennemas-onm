@@ -17,11 +17,10 @@ namespace Frontend\Filter;
 use Onm\Module\ModuleManager;
 
 /**
-*
-*/
+ * Defines the subscription filter class
+ **/
 class SubscriptionFilter
 {
-
     /**
      * Initializes the filter
      *
@@ -80,10 +79,7 @@ class SubscriptionFilter
         );
 
         if (empty($this->user)) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $content->img2      = null;
-            $content->fk_video2 = null;
+            $this->replaceContent($content, $restrictedContent);
         }
     }
 
@@ -100,10 +96,9 @@ class SubscriptionFilter
         );
 
         if (empty($this->user) || empty($user->getMeta('paywall_time_limit'))) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $content->img2      = null;
-            $content->fk_video2 = null;
+            if ($limit < $now) {
+                $this->replaceContent($content, $restrictedContent);
+            }
             return;
         }
 
@@ -116,10 +111,31 @@ class SubscriptionFilter
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
         if ($limit < $now) {
-            $content->body = $restrictedContent;
-            $content->img       = null;
-            $content->img2      = null;
-            $content->fk_video2 = null;
+            $this->replaceContent($content, $restrictedContent);
+        }
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    private function replaceContent(&$content, $restrictedContent)
+    {
+        $content->body = $restrictedContent;
+        $content->img       = null;
+        $content->img2      = null;
+        $content->fk_video2 = null;
+
+        if ($content->content_type_name == 'video') {
+            $content->description = $restrictedContent;
+            $content->video_content_replaced = true;
+        }
+
+        if ($content->content_type_name == 'album') {
+            $content->description = $restrictedContent;
+            $content->album_content_replaced = true;
         }
     }
 }
