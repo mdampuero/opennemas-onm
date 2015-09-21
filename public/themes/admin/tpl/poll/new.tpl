@@ -199,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+                {*is_module_activated name="CONTENT_SUBSCRIPTIONS"}
                 <div class="row">
                   <div class="col-md-12">
                     <div class="grid simple">
@@ -217,7 +217,7 @@
                     </div>
                   </div>
                 </div>
-                {/is_module_activated}
+                {/is_module_activated*}
             </div>
         </div>
     </div>
