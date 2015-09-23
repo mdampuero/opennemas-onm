@@ -34,7 +34,21 @@ class WidgetsController extends Controller
      */
     public function listAction()
     {
-        return $this->render('widget/list.tpl');
+        $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+
+        $allInteligentWidgetsContents = [];
+        foreach ($allInteligentWidgets as $type) {
+            $allInteligentWidgetsContents[] = [ 'name' => $type, 'value' => $type ];
+        }
+
+        array_unshift($allInteligentWidgetsContents, [ 'name' => _('All'), 'value' => -1 ]);
+
+        return $this->render(
+            'widget/list.tpl',
+            [
+                'all_widgets' => $allInteligentWidgetsContents,
+            ]
+        );
     }
 
     /**
