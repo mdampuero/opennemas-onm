@@ -40,6 +40,7 @@ class ArticlesController extends Controller
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $this->ccm  = \ContentCategoryManager::get_instance();
 
@@ -47,7 +48,7 @@ class ArticlesController extends Controller
         list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
-        if (is_null($article)) {
+        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 
