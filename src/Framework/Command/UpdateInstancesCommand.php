@@ -255,10 +255,12 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Get media size
-        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$i->internal_name.'/'));
-        if (is_array($size)) {
-            $i->media_size = $size[0] / 1024;
+        $size = 0;
+        $mediaPath = realpath(SITE_PATH."media".DS.$i->internal_name);
+        if ($mediPath) {
+            $size = (int) shell_exec('du -s '.$mediaPath.'/ | awk \'{ print $1}\'');
         }
+        $i->media_size = $size / 1024;
     }
 
     /**
