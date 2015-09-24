@@ -80,9 +80,17 @@ class Template extends Smarty
         $baseTheme = '';
         if (property_exists($instanceManager, 'current_instance') && isset($instanceManager->current_instance->theme)) {
             $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
-
-            if (!empty($baseTheme)) {
-                $this->addTemplateDir(realpath(SITE_PATH."/themes/{$baseTheme}/tpl"));
+            if (is_array($baseTheme)) {
+                foreach ($baseTheme as $theme) {
+                    $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl");
+                    if (!empty($baseTheme) && $baseThemePath) {
+                        $this->addTemplateDir(realpath(SITE_PATH."/themes/{$theme}/tpl"));
+                    }
+                }
+            } else {
+                if (!empty($baseTheme)) {
+                    $this->addTemplateDir(realpath(SITE_PATH."/themes/{$baseTheme}/tpl"));
+                }
             }
         }
         $this->setupCachePath($baseTheme);
