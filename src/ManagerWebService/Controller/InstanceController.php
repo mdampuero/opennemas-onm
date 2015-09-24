@@ -365,6 +365,9 @@ class InstanceController extends Controller
         $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
 
+        // Put numbers in english format, avoids problem
+        setlocale(LC_NUMERIC, 'C');
+
         return new JsonResponse(
             array(
                 'epp'     => $epp,
