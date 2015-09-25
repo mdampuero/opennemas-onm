@@ -361,12 +361,12 @@ class InstanceController extends Controller
             $criteria['union'] = 'OR';
         }
 
+        // Put numbers in english format, avoids problem
+        setlocale(LC_NUMERIC, 'C');
+
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
-
-        // Put numbers in english format, avoids problem
-        setlocale(LC_NUMERIC, 'C');
 
         return new JsonResponse(
             array(
