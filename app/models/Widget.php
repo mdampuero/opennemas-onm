@@ -236,12 +236,13 @@ class Widget extends Content
             foreach ($baseTheme as $theme) {
                 $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl");
                 if (!empty($baseTheme) && $baseThemePath) {
-                    $this->addTemplateDir(realpath(SITE_PATH."/themes/{$theme}/tpl"));
+                    $paths[] = $baseThemePath;
                 }
             }
         } else {
-            if (!empty($baseTheme)) {
-                $this->addTemplateDir(realpath(SITE_PATH."/themes/{$baseTheme}/tpl"));
+            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl");
+            if (!empty($baseTheme) && $baseThemePath) {
+                $paths[] = $baseThemePath;
             }
         }
 
