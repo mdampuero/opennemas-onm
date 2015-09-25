@@ -12,7 +12,7 @@ namespace Onm\Import\DataSource\Parser;
 /**
  * Parses XML files in Europapress custom format.
  */
-class Europapress extends Parser
+class EuropaPress extends Parser
 {
     /**
      * {@inheritdoc}
