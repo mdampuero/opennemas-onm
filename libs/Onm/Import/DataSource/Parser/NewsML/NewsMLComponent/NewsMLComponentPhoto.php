@@ -1,0 +1,156 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Onm\Import\DataSource\Parser;
+
+class NewsMLComponentPhoto extends NewsML
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function checkFormat($data)
+    {
+        if (!is_object($data)) {
+            return false;
+        }
+
+        if ($this->checkPhoto($data)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBody($data)
+    {
+        $bodies = $data->xpath('//ContentItem');
+
+        $body = '';
+        if (is_array($bodies)
+            && !empty($bodies)
+            && !empty($bodies[0]->DataContent)
+            && !empty($bodies[0]->DataContent->p)
+        ) {
+            foreach ($bodies[0]->DataContent->p as $p) {
+                $body .= "<p>$p</p>";
+            }
+        }
+
+        return $body;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAgencyName($data)
+    {
+        $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Provider/Party');
+
+        if (is_array($agency) && count($agency) > 0) {
+            return (string) $agency[0]->attributes()->FormalName;
+        }
+
+        return '';
+    }
+
+    /**
+     * Return the file form the parsed data.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The file name.
+     */
+    public function getFile($data)
+    {
+        $components = $data->xpath('/NewsComponent/NewsComponent');
+
+        foreach ($components as $component) {
+            $component = simplexml_load_string($component->asXML());
+
+            if ($component->xpath('//Role[@FormalName="Preview"]')) {
+                $file = $component->xpath('//ContentItem');
+
+                if (!empty($file)) {
+                    return (string) $file[0]->attributes()->Href;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId($data)
+    {
+        $id = $data->xpath('/NewsComponent');
+
+        if (is_array($id) && !empty($id)) {
+            $id = (string) $id[0]->attributes()->Duid;
+            return iconv(mb_detect_encoding($id), "UTF-8", $id);
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSummary($data)
+    {
+        $summaries = $data->xpath('/NewsComponent//p');
+
+        $summary = '';
+        if (is_array($summaries) && !empty($summaries)) {
+            foreach ($summaries as $s) {
+                $summary .= '<p>' . (string) $s . '</p>';
+            }
+
+            $summary = iconv(mb_detect_encoding($summary), "UTF-8", $summary);
+        }
+
+        return $summary;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle($data)
+    {
+        $title = $data->xpath('/NewsComponent/NewsLines/HeadLine');
+
+        if (is_array($title) && !empty($title)) {
+            $title = (string) $title[0];
+            return iconv(mb_detect_encoding($title), "UTF-8", $title);
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parse($data)
+    {
+        $this->bag['agency_name'] = $this->getAgencyName($data);
+
+        return [
+            'agency_name'  => $this->bag['agency_name'],
+            'file'         => $this->getFile($data),
+            'id'           => $this->getId($data),
+            'summary'      => $this->getSummary($data),
+            'title'        => $this->getTitle($data),
+            'type'         => 'photo',
+        ];
+    }
+}
