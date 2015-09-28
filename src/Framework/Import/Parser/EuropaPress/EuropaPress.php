@@ -2,15 +2,18 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\EuropaPress;
+
+use Framework\Import\Parser\Parser;
+use Framework\Import\Resource\Resource;
 
 /**
- * Parses XML files in Europapress custom format.
+ * Parses XML files in custom Europapress format.
  */
 class EuropaPress extends Parser
 {
@@ -85,15 +88,17 @@ class EuropaPress extends Parser
      */
     public function getCategory($data)
     {
-        $category = (string) $data->SECCION;
-
-        if (!empty($category)) {
-            if (array_key_exists($category, $this->categories)) {
-                return $this->categories[$category];
-            }
+        if (empty($data->SECCION)) {
+            return '';
         }
 
-        return '';
+        $category = (string) $data->SECCION;
+
+        if (array_key_exists($category, $this->categories)) {
+            return $this->categories[$category];
+        }
+
+        return $category;
     }
 
     /**
@@ -105,18 +110,14 @@ class EuropaPress extends Parser
      */
     public function getCreatedTime($data)
     {
-        $dateFormat = 'd/m/Y H:i:s';
-        $originalDate = $data->FECHA.' '.$data->HORA;
+        if (empty($data->FECHA) || empty($data->HORA)) {
+            return null;
+        }
 
         $date = \DateTime::createFromFormat(
-            $dateFormat,
-            $originalDate,
+            'd/m/Y H:i:s',
+            $data->FECHA . ' ' . $data->HORA,
             new \DateTimeZone('Europe/Madrid')
-        );
-
-        $date = \DateTime::createFromFormat(
-            'd/m/Y H:i:s P',
-            $date->format('d/m/Y H:i:s P')
         );
 
         return $date;
@@ -157,15 +158,17 @@ class EuropaPress extends Parser
      */
     public function getPriority($data)
     {
-        $priority = (string) $data->PRIORIDAD;
-
-        if (!empty($priority)) {
-            if (array_key_exists($priority, $this->priorities)) {
-                return $this->priorities[$priority];
-            }
+        if (empty($data->PRIORIDAD)) {
+            return 1;
         }
 
-        return 1;
+        $priority = (string) $data->PRIORIDAD;
+
+        if (array_key_exists($priority, $this->priorities)) {
+            return $this->priorities[$priority];
+        }
+
+        return $priority;
     }
 
     /**
@@ -208,13 +211,17 @@ class EuropaPress extends Parser
         $classname = get_class($this);
         $classname = substr($classname, strrpos($classname, '\\') + 1);
 
-        $tokens = [
-            'europapress',
-            $this->getCreatedTime($data)->format('YmdHis'),
-            $this->getId($data)
-        ];
+        $resource = strtolower($classname);
+        $agency   = 'europapress';
 
-        return 'urn:' . implode(':', $tokens);
+        $date     = $this->getCreatedTime($data);
+        $id       = $this->getId($data);
+
+        if (!empty($date)) {
+            $date = $date->format('YmdHis');
+        }
+
+        return "urn:$resource:$agency:$date:$id";
     }
 
     /**
@@ -226,19 +233,22 @@ class EuropaPress extends Parser
      */
     public function getPhoto($data)
     {
-        if (!empty($data->FOTO)) {
-            return [
-                'id'           => $this->getId(),
-                'name'         => (string) $this->getData()->FOTO->NOMBRE,
-                'title'        => (string) $this->getData()->FOTO->PIE,
-                'created_time' => $this->getCreatedTime(),
-                'file_type'    => 'image/' . substr($this->getData()->FOTO->EXTENSION, 1),
-                'file_path'    => (string) $this->getData()->FOTO->NOMBRE,
-                'media_type'   => substr($this->getData()->FOTO->EXTENSION, 1)
-            ];
+        if (empty($data->FOTO)) {
+            return null;
         }
 
-        return null;
+        $resource = new Resource();
+
+        $resource->id           = $this->getId($data) . '.photo';
+        $resource->created_time = $this->getCreatedTime($data);
+        $resource->file_path    = (string) $data->FOTO->NOMBRE;
+        $resource->file_type    = 'image/' . substr($data->FOTO->EXTENSION, 1);
+        $resource->media_type   = substr($data->FOTO->EXTENSION, 1);
+        $resource->name         = (string) $data->FOTO->NOMBRE;
+        $resource->title        = (string) $data->FOTO->PIE;
+        $resource->type         = 'photo';
+
+        return $resource;
     }
 
     /**
@@ -246,27 +256,31 @@ class EuropaPress extends Parser
      */
     public function parse($data)
     {
-        $contents = [
-            [
-                'agency_name'  => 'Europapress',
-                'body'         => $this->getBody($data),
-                'category'     => $this->getCategory($data),
-                'created_time' => $this->getCreatedTime($data),
-                'id'           => $this->getId($data),
-                'pretitle'     => $this->getPretitle($data),
-                'priority'     => $this->getPriority($data),
-                'related'      => [],
-                'summary'      => $this->getSummary($data),
-                'tags'         => $this->getTags($data),
-                'title'        => $this->getTitle($data),
-                'urn'          => $this->getUrn($data)
-            ]
-        ];
+        $contents = [];
+
+        $resource = new Resource();
+
+        $resource->agency_name  = 'EuropaPress';
+        $resource->body         = $this->getBody($data);
+        $resource->category     = $this->getCategory($data);
+        $resource->created_time = $this->getCreatedTime($data);
+        $resource->id           = $this->getId($data);
+        $resource->pretitle     = $this->getPretitle($data);
+        $resource->priority     = $this->getPriority($data);
+        $resource->related      = [];
+        $resource->summary      = $this->getSummary($data);
+        $resource->tags         = $this->getTags($data);
+        $resource->title        = $this->getTitle($data);
+        $resource->type         = 'text';
+        $resource->urn          = $this->getUrn($data);
+
+        $contents[] = $resource;
 
         $photo = $this->getPhoto($data);
 
         if (!empty($photo)) {
-            $contents[0]['related'] = $photo['id'];
+            $resource->related[] = $photo->id;
+
             $contents[] = $photo;
         }
 
