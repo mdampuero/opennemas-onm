@@ -79,17 +79,17 @@ class ClientInformationController extends Controller
             ],
             'Profesional' => [
                 'id'    => 'Profesional',
-                'title' => _('Profesional'),
+                'title' => _('Professional'),
                 'total' => 0
             ],
             'Silver' => [
                 'id'    => 'Silver',
-                'title' => _('Silver'),
+                'title' => _('Advanced'),
                 'total' => 0
             ],
             'Gold' => [
                 'id'    => 'Gold',
-                'title' => _('Gold'),
+                'title' => _('Expert'),
                 'total' => 0
             ],
             'Other' => [
