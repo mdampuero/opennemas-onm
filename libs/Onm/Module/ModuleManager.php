@@ -737,6 +737,9 @@ class ModuleManager
                     'long_description' => _('
                         <p>Authors will have a dedicated space where all their contributions will appear in chronological order and readers alse set a RSS notification to receive the latest articles posted by a particular author.</p>
                     '),
+                    'price'            => [
+                        'month' => 20
+                    ]
                 ],
                 [
                     'id'               => 'BOOK_MANAGER',
