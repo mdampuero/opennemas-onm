@@ -1,0 +1,107 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Framework\Import\Resource;
+
+/**
+ * Represents a content ready to be imported.
+ */
+class Resource
+{
+    /**
+     * The agency name.
+     *
+     * @var string
+     */
+    public $agency_name = '';
+
+    /**
+     * The resource body.
+     *
+     * @var string
+     */
+    public $body = '';
+
+    /**
+     * The category name.
+     *
+     * @var string
+     */
+    public $category = '';
+
+    /**
+     * The created time.
+     *
+     * @var \Datetime
+     */
+    public $created_time = null;
+
+    /**
+     * The resource id.
+     *
+     * @var string
+     */
+    public $id = '';
+
+    /**
+     * The resource pretitle.
+     *
+     * @var string
+     */
+    public $pretitle = '';
+
+    /**
+     * The resource priority.
+     *
+     * @var integer
+     */
+    public $priority = 1;
+
+    /**
+     * List of related contents ids.
+     *
+     * @var array
+     */
+    public $related = [];
+
+    /**
+     * The resource summary.
+     *
+     * @var string
+     */
+    public $summary = '';
+
+    /**
+     * The resource tags.
+     *
+     * @var string
+     */
+    public $tags = '';
+
+    /**
+     * The resource title.
+     *
+     * @var string
+     */
+    public $title = '';
+
+    /**
+     * The resource type.
+     *
+     * @var string
+     */
+    public $type = 'text';
+
+    /**
+     * The resource URN.
+     *
+     * @var string
+     */
+    public $urn = 'urn:nitf:::';
+}
