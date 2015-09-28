@@ -350,8 +350,18 @@ class Widget extends Content
         $instanceManager = getService('instance_manager');
         $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
 
-        if (!empty($baseTheme)) {
-             $paths[] = SITE_PATH.DS.'themes'.DS.$baseTheme.DS.'tpl/widgets/';
+        if (is_array($baseTheme)) {
+            foreach ($baseTheme as $theme) {
+                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl/widgets");
+                if (!empty($baseTheme) && $baseThemePath) {
+                    $paths[] = $baseThemePath;
+                }
+            }
+        } else {
+            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl/widgets");
+            if (!empty($baseTheme) && $baseThemePath) {
+                $paths[] = $baseThemePath;
+            }
         }
         $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
 
