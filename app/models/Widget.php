@@ -228,28 +228,38 @@ class Widget extends Content
     public static function getAllInteligentWidgets()
     {
         $paths = array();
-        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $paths = [];
         $instanceManager = getService('instance_manager');
         $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
 
+        // Add current theme widgets/ path
+        $baseThemePath = realpath(TEMPLATE_USER_PATH . '/tpl/widgets');
+        if (!empty($baseThemePath)) {
+            $paths[] = $baseThemePath;
+        }
+
+        // If Theme has parents add their widgets/ path
         if (is_array($baseTheme)) {
             foreach ($baseTheme as $theme) {
-                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl");
+                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl/widgets");
                 if (!empty($baseTheme) && $baseThemePath) {
                     $paths[] = $baseThemePath;
                 }
             }
         } else {
-            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl");
+            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl/widgets");
             if (!empty($baseTheme) && $baseThemePath) {
                 $paths[] = $baseThemePath;
             }
         }
 
-        $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
+        // Add base theme widgets/ path
+        $baseThemePath = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
+        if (!empty($baseThemePath)) {
+            $paths[] = $baseThemePath;
+        }
 
         $allWidgets = array();
-
         foreach ($paths as $path) {
             if (is_dir($path) && $path != '/') {
                 $objects = scandir($path);
