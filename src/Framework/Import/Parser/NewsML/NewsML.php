@@ -7,8 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\NewsML;
 
+use Framework\Import\Parser\Parser;
+
+/**
+ * Parses XML files in NewsML format.
+ */
 class NewsML extends Parser
 {
     /**
@@ -33,43 +38,7 @@ class NewsML extends Parser
             return false;
         }
 
-        // Check if NewsML from EFE
-        $node = $data->xpath('//*[@Value="Agencia EFE"]');
-
-        if (count($node) > 0) {
-            return false;
-        }
-
-        // Check if NewsML from Europapress
-        $node = $data->xpath('//ProviderId');
-
-        if (empty($node) || $node[0] == 'Europa press') {
-            return false;
-        }
-
         return true;
-    }
-
-    /**
-     * Checks if the given data contains a photo.
-     *
-     * @param SimpleXMLObject $data The data to check.
-     *
-     * @return boolean True if the given data contains a photo. Otherwise,
-     * return false.
-     */
-    public function checkPhoto($data)
-    {
-        $q = '/NewsComponent/NewsComponent';
-
-        // Check if NewsMLComponentPhoto
-        $count = 0;
-        $count += count($data->xpath($q . '/Role[@FormalName="Caption"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Preview"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Quicklook"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Thumbnail"]'));
-
-        return $count > 0;
     }
 
     /**
@@ -81,7 +50,7 @@ class NewsML extends Parser
      */
     public function getAgencyName($data)
     {
-        $agency = $data->xpath('/Provider/Party');
+        $agency = $data->xpath('//AdministrativeMetadata/Provider/Party');
 
         if (is_array($agency) && count($agency) > 0) {
             return (string) $agency[0]->attributes()->FormalName;
@@ -111,9 +80,13 @@ class NewsML extends Parser
     {
         $bodies = $data->xpath('//p');
 
+        if (empty($bodies)) {
+            return '';
+        }
+
         $body = '';
-        foreach ($bodies[0]->children() as $child) {
-            $body .= "<p>$child</p>\n";
+        foreach ($bodies as $child) {
+            $body .= '<p>' . (string) $child . '</p>';
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
@@ -186,11 +159,17 @@ class NewsML extends Parser
     {
         $priority = $data->xpath("//NewsItem/NewsManagement/Urgency");
 
-        if (is_array($priority) && count($priority) > 0) {
-            return (integer) $priority[0]->attributes()->FormalName;
+        if (empty($priority)) {
+            return 1;
         }
 
-        return 1;
+        $priority = (string) $priority[0]->attributes()->FormalName;
+
+        if (array_key_exists($priority, $this->priorities)) {
+            return $this->priorities[$priority];
+        }
+
+        return $priority;
     }
 
     /**
@@ -231,7 +210,7 @@ class NewsML extends Parser
     }
 
     /**
-     * Returns the URN from the parsed data.
+     * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
      *
@@ -239,8 +218,24 @@ class NewsML extends Parser
      */
     public function getUrn($data)
     {
-        return '';
-        return (string) $data->NewsItem->Identification->NewsIdentifier->PublicIdentifier;
+        $classname = get_class($this);
+        $classname = substr($classname, strrpos($classname, '\\') + 1);
+
+        $resource = strtolower($classname);
+        $agency   = str_replace(
+            ' ',
+            '_',
+            strtolower($this->getAgencyName($data))
+        );
+
+        $date     = $this->getCreatedTime($data);
+        $id       = $this->getId($data);
+
+        if (!empty($date)) {
+            $date = $date->format('YmdHis');
+        }
+
+        return "urn:$resource:$agency:$date:$id";
     }
 
     /**
@@ -252,12 +247,10 @@ class NewsML extends Parser
      */
     public function getTags($data)
     {
-        $tags = $data->xpath('//DescriptiveMetadata//OfInterestTo');
+        $tags = $data->xpath('//DescriptiveMetadata/OfInterestTo');
 
         if (is_array($tags) && count($tags) > 0) {
-            $tags = $tags[0]->FormalName;
-
-            return explode('--', $tags);
+            return (string) $tags[0]->attributes()->FormalName;
         }
 
         return '';
@@ -295,6 +288,7 @@ class NewsML extends Parser
     public function parseComponent($data)
     {
         $parser = $this->factory->get($data);
+
         $parsed = $parser->parse($data);
 
         $this->bag = array_merge($this->bag, $parser->getBag());
@@ -314,7 +308,14 @@ class NewsML extends Parser
         $contents = [];
         foreach ($components as $component) {
             $component = simplexml_load_string($component->asXML());
-            $contents = array_merge($contents, $this->parseComponent($component));
+
+            $parsed = $this->parseComponent($component);
+
+            if (!is_object($parsed)) {
+                $parsed = [ $parsed ];
+            }
+
+            $contents = array_merge($contents, $parsed);
         }
 
         return $contents;
