@@ -2,16 +2,12 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
-
-use Onm\Import\DataSource\FormatInterface;
-use Onm\Import\DataSource\Format\NewsMLG1Component\Video;
-use Onm\Import\DataSource\Format\NewsMLG1Component\Photo;
+namespace Framework\Import\Parser;
 
 /**
  * Generic Parser class.
