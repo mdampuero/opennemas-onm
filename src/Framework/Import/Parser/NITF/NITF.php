@@ -2,12 +2,15 @@
 /*
  * This file is part of the Onm package.
  *
- * (c) OpenHost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\NITF;
+
+use Framework\Import\Parser\Parser;
+use Framework\Import\Resource\Resource;
 
 /**
  * Parses XML files in NITF format.
@@ -82,9 +85,13 @@ class NITF extends Parser
     {
         $bodies = $data->xpath('//body/body.content');
 
+        if (empty($bodies)) {
+            return '';
+        }
+
         $body = '';
         foreach ($bodies[0]->children() as $child) {
-            $body .= "<p>$child</p>\n";
+            $body .= '<p>' . str_replace("\n", '<br>', $child) . '</p>';
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
@@ -100,7 +107,12 @@ class NITF extends Parser
     public function getCreatedTime($data)
     {
         $date = $data->xpath('//body/body.head/dateline/story.date');
-        $date = $date[0];
+
+        if (empty($date)) {
+            return null;
+        }
+
+        $date = $date[0]->attributes()->norm[0];
         $date = \DateTime::createFromFormat('Ymd\THisP', $date);
 
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
@@ -117,11 +129,13 @@ class NITF extends Parser
      */
     public function getId($data)
     {
-        $docId = $data->xpath('//doc-id');
-        $docId = $docId[0];
-        $attributtes = $docId->attributes();
+        $id = $data->xpath('//doc-id');
 
-        return (string) $attributtes->{'id-string'};
+        if (empty($id)) {
+            return '';
+        }
+
+        return (string) $id[0]->attributes()->{'id-string'}[0];
     }
 
     /**
@@ -133,14 +147,10 @@ class NITF extends Parser
      */
     public function getPriority($data)
     {
-        $priority = $data->xpath('//head/meta[@name="prioridad"]');
+        $priority = $data->xpath('//head/docdata/urgency');
 
         if (!empty($priority)) {
-            $priority = (string) $priority[0]->attributes()->content;
-
-            if (array_key_exists($priority, $this->priorities)) {
-                return $this->priorities[$priority];
-            }
+            return (integer) $priority[0]->attributes()->{'ed-urg'};
         }
 
         return 1;
@@ -156,6 +166,10 @@ class NITF extends Parser
     public function getSummary($data)
     {
         $summaries = $data->xpath('//body/body.head/abstract');
+
+        if (empty($summaries)) {
+            return '';
+        }
 
         $summary = "";
         foreach ($summaries[0]->children() as $child) {
@@ -176,6 +190,10 @@ class NITF extends Parser
     {
         $title = $data->xpath('//head/title');
 
+        if (empty($title)) {
+            return '';
+        }
+
         $title = (string) $title[0];
 
         return iconv(mb_detect_encoding($title), "UTF-8", $title);
@@ -193,14 +211,21 @@ class NITF extends Parser
         $classname = get_class($this);
         $classname = substr($classname, strrpos($classname, '\\') + 1);
 
-        $tokens = [
-            strtolower($classname),
-            $this->getAgencyName($data),
-            $this->getCreatedTime($data)->format('YmdHis'),
-            $this->getId($data)
-        ];
+        $resource = strtolower($classname);
+        $agency   = str_replace(
+            ' ',
+            '_',
+            strtolower($this->getAgencyName($data))
+        );
 
-        return 'urn:' . implode(':', $tokens);
+        $date     = $this->getCreatedTime($data);
+        $id       = $this->getId($data);
+
+        if (!empty($date)) {
+            $date = $date->format('YmdHis');
+        }
+
+        return "urn:$resource:$agency:$date:$id";
     }
 
     /**
@@ -210,22 +235,21 @@ class NITF extends Parser
     {
         $data = $this->clean($data);
 
-        return [
-            [
-                'agency_name'  => $this->getAgencyName($data),
-                'body'         => $this->getBody($data),
-                'category'     => $this->getCategory($data),
-                'created_time' => $this->getCreatedTime($data),
-                'id'           => $this->getId($data),
-                'pretitle'     => $this->getPretitle($data),
-                'priority'     => $this->getPriority($data),
-                'related'      => [],
-                'summary'      => $this->getSummary($data),
-                'tags'         => $this->getTags($data),
-                'title'        => $this->getTitle($data),
-                'type'         => 'text',
-                'urn'          => $this->getUrn($data)
-            ]
-        ];
+        $content = new Resource();
+
+        $content->agency_name  = $this->getAgencyName($data);
+        $content->body         = $this->getBody($data);
+        $content->category     = $this->getCategory($data);
+        $content->created_time = $this->getCreatedTime($data);
+        $content->id           = $this->getId($data);
+        $content->pretitle     = $this->getPretitle($data);
+        $content->priority     = $this->getPriority($data);
+        $content->summary      = $this->getSummary($data);
+        $content->tags         = $this->getTags($data);
+        $content->title        = $this->getTitle($data);
+        $content->type         = 'text';
+        $content->urn          = $this->getUrn($data);
+
+        return $content;
     }
 }
