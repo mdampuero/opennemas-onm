@@ -22,15 +22,17 @@ class ServerFactory
      w
      * @return Server The Server.
      */
-    public function get($serverParams)
+    public function get($params)
     {
-        $servers = $this->getServers(__DIR__ . DS . 'Servers');
+        $directory = __DIR__ . DS . 'Server';
+        $servers   = $this->getServers($directory);
 
         foreach ($servers as $name) {
-            $class = __NAMESPACE__ . "\\Servers\\" . $name;
+            $class = __NAMESPACE__ . '\\Server'
+                . str_replace([$directory, DS ], [ '', '\\'], $name);
 
             try {
-                return new $class($serverParams);
+                return new $class($params);
             } catch (\Exception $e) {
             }
         }
@@ -41,9 +43,9 @@ class ServerFactory
     /**
      * Gets a list of available servers with its relative path.
      *
-     * @param string $directory The directory where search parsers.
+     * @param string $directory The directory where search servers.
      *
-     * @return array The list of available parsers.
+     * @return array The list of available servers.
      */
     private function getServers($directory)
     {
@@ -51,34 +53,26 @@ class ServerFactory
             return [];
         }
 
-        $path      = __DIR__ . DS . 'Servers';
-        $namespace = str_replace([ $path , DS ], [ '', '\\' ], $directory);
-
         $files = scandir($directory);
 
-        if (!empty($namespace)) {
-            $namespace .= '\\';
-        }
-
-        $parsers = [];
+        $servers = [];
         foreach ($files as $file) {
             if ($file !== '..' && $file !== '.' && $file !== 'Server.php') {
                 if (!is_file($directory . DS . $file)) {
-                    $parsers = array_merge(
-                        $parsers,
+                    $servers = array_merge(
+                        $servers,
                         $this->getServers($directory . DS . $file)
                     );
                 } else {
-                    $parsers[] = ltrim($namespace, '\\')
-                        . basename($file, '.php');
+                    $servers[] = $directory . DS . basename($file, '.php');
                 }
             }
         }
 
-        uasort($parsers, function ($a, $b) {
+        uasort($servers, function ($a, $b) {
             return strlen($a) >= strlen($b) ? -1 : 1;
         });
 
-        return $parsers;
+        return $servers;
     }
 }

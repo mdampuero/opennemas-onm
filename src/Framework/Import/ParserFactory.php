@@ -24,10 +24,12 @@ class ParserFactory
      */
     public function get($xml)
     {
-        $parsers = $this->getParsers(__DIR__ . DS . 'Parser');
+        $directory = __DIR__ . DS . 'Parser';
+        $parsers   = $this->getParsers($directory);
 
         foreach ($parsers as $name) {
-            $class = __NAMESPACE__ . '\\Parser\\' . $name;
+            $class = __NAMESPACE__ . '\\Parser'
+                . str_replace([$directory, DS ], [ '', '\\'], $name);
 
             $parser = new $class($this);
 
@@ -52,13 +54,6 @@ class ParserFactory
             return [];
         }
 
-        $path      = __DIR__ . DS . 'Parser' . DS;
-        $namespace = str_replace([ $path , DS ], [ '', '\\' ], $directory);
-
-        if (!empty($namespace)) {
-            $namespace .= '\\';
-        }
-
         $files = scandir($directory);
 
         $parsers = [];
@@ -70,8 +65,7 @@ class ParserFactory
                         $this->getParsers($directory . DS . $file)
                     );
                 } else {
-                    $parsers[] = ltrim($namespace, '\\')
-                        . basename($file, '.php');
+                    $parsers[] = $directory . DS . basename($file, '.php');
                 }
             }
         }
