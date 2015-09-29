@@ -27,7 +27,7 @@ class ParserFactory
         $parsers = $this->getParsers(__DIR__ . DS . 'Parser');
 
         foreach ($parsers as $name) {
-            $class = __NAMESPACE__ . "\\Parser\\" . $name;
+            $class = __NAMESPACE__ . '\\Parser\\' . $name;
 
             $parser = new $class($this);
 
@@ -55,6 +55,10 @@ class ParserFactory
         $path      = __DIR__ . DS . 'Parser' . DS;
         $namespace = str_replace([ $path , DS ], [ '', '\\' ], $directory);
 
+        if (!empty($namespace)) {
+            $namespace .= '\\';
+        }
+
         $files = scandir($directory);
 
         $parsers = [];
@@ -66,7 +70,8 @@ class ParserFactory
                         $this->getParsers($directory . DS . $file)
                     );
                 } else {
-                    $parsers[] = $namespace . '\\' . basename($file, '.php');
+                    $parsers[] = ltrim($namespace, '\\')
+                        . basename($file, '.php');
                 }
             }
         }
