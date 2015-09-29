@@ -112,7 +112,7 @@ class NITF extends Parser
             return null;
         }
 
-        $date = $date[0]->attributes()->norm[0];
+        $date = (string) $date[0]->attributes()->norm[0];
         $date = \DateTime::createFromFormat('Ymd\THisP', $date);
 
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
