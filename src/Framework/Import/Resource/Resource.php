@@ -104,4 +104,32 @@ class Resource
      * @var string
      */
     public $urn = 'urn:nitf:::';
+
+    /**
+     * Initializes a Resource.
+     *
+     * @param array $data The resource data.
+     */
+    public function __construct($data = [])
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+            }
+        }
+    }
+
+    /**
+     * Updates values from data if they are empty.
+     *
+     * @param array $data The data.
+     */
+    public function merge($data)
+    {
+        foreach ($this as $key => $value) {
+            if (empty($this->{$key}) && array_key_exists($key, $data)) {
+                $this->{$key} = $data[$key];
+            }
+        }
+    }
 }
