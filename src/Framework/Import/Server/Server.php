@@ -1,26 +1,131 @@
 <?php
 /**
- * Defines the ServerAbstract class
- *
  * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package Onm_Importer
- **/
-namespace Onm\Import\SourceServer;
+ */
+namespace Framework\Import\Server;
 
-use Onm\Import\DataSource\DataSourceFactory;
+use Framework\Import\ParserFactory;
 
 /**
  * Handles all the common methods in the servers
- *
- * @package Onm_Importer
- **/
-abstract class ServerAbstract
+ */
+abstract class Server
 {
+    /**
+     * The number of downloaded files.
+     *
+     * @var integer
+     */
+    public $downloaded = 0;
+
+    /**
+     * The number of deleted files.
+     *
+     * @var integer
+     */
+    public $deleted = 0;
+
+    /**
+     * Files donwloaded from server.
+     *
+     * @var array
+     */
+    public $localFiles = [];
+
+    /**
+     * Files in server.
+     *
+     * @var array
+     */
+    public $remoteFiles = [];
+
+    /**
+     * Initializes a new Server.
+     *
+     * @param array $params The server parameters.
+     *
+     * @throws \Exception If the server parameters are not valid.
+     */
+    public function __construct($params)
+    {
+        if (!$this->checkParameters($params)) {
+            throw new \Exception('Invalid parameters for server');
+        }
+
+        $this->params  = $params;
+        $this->factory = new ParserFactory();
+
+        if (array_key_exists('path', $this->params)) {
+            $this->localFiles = glob($this->params['path'] . DS . '*.xml');
+
+            $this->cleanFiles();
+        }
+    }
+
+    /**
+     * Clean local files that are not present in server.
+     */
+    public function cleanFiles()
+    {
+        $deleted = [];
+        foreach ($this->localFiles as $file) {
+            var_dump(filesize($file));
+            $modTime = filemtime($file);
+            $limit   = time() - $this->params['sync_from'];
+
+            if (filesize($file) < 2 || $modTime < $limit) {
+                unlink($file);
+                $deleted[] = $file;
+            }
+        }
+
+        $this->deleted += count($deleted);
+
+        $this->localFiles = array_diff($this->localFiles, $deleted);
+    }
+
+    /**
+     * Checks if the current server parameter.
+     *
+     * @param array $params Server parameters.
+     *
+     * @return boolean True if the parameters are valid. Otherwise, returns
+     *                 false.
+     */
+    abstract public function checkParameters($params);
+
+    /**
+     * Downloads the main files from server.
+     *
+     * @param array $files The list of missing files.
+     *
+     * @throws \Exception If the target directory is not writable.
+     */
+    abstract public function downloadFiles($files = null);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Downloads files from a HTTP server to a $cacheDir.
      *
@@ -44,6 +149,7 @@ abstract class ServerAbstract
             if ($this->fetchContentAndSave($id, $url)) {
                 $downloadedFiles++;
             }
+
             // Fetch all images name
             $imagesName = array_merge($imagesName, $this->getImagesNameFromLocalContent($id));
         }
@@ -94,36 +200,29 @@ abstract class ServerAbstract
         if (!file_exists($localFilePath)) {
             @file_put_contents($localFilePath, $content);
 
-            $element = DataSourceFactory::get($localFilePath);
-            if (is_object($element)) {
-                // Check for photos
-                if ($element->hasPhotos()) {
-                    foreach ($element->getPhotos() as $photo) {
-                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
-                        if (file_exists($localImagePath)) {
-                            unlink($localImagePath);
-                        }
-                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
-                        @file_put_contents($localImagePath, $rawImage);
+            $parser = $this->factory->get($localFilePath);
+
+            $elements = $parser->parse($localFilePath);
+
+            foreach ($elements as $element) {
+                if (is_object($element)
+                    && ($element->type === 'photo'
+                        || $element->type === 'video')
+                ) {
+                    $localPath = $this->params['sync_path'] . DS . $element->title;
+
+                    if (file_exists($localPath)) {
+                        unlink($localPath);
                     }
+
+                    $raw = $this->getContentFromUrlWithDigestAuth($element->file_path);
+
+                    @file_put_contents($localPath, $raw);
+
+                    $date = $element->getCreatedTime();
+
+                    touch($localFilePath, $date->getTimestamp());
                 }
-
-                // Check for videos
-                if ($element->hasVideos()) {
-                    foreach ($element->getVideos() as $video) {
-                        $localVideoPath = $this->params['sync_path'].DS.$video->name;
-                        if (file_exists($localVideoPath)) {
-                            unlink($localVideoPath);
-                        }
-
-                        $rawVideo = $this->getContentFromUrlWithDigestAuth($video->file_path);
-                        @file_put_contents($localVideoPath, $rawVideo);
-                    }
-                }
-
-                $date = $element->getCreatedTime();
-
-                touch($localFilePath, $date->getTimestamp());
             }
 
             return true;
@@ -140,77 +239,21 @@ abstract class ServerAbstract
     public function getImagesNameFromLocalContent($id)
     {
         $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
+
         if (file_exists($localFilePath)) {
             $imagesName = array();
-            $element = DataSourceFactory::get($localFilePath);
-            if (is_object($element)) {
-                if ($element->hasPhotos()) {
-                    $photos = $element->getPhotos();
-                    foreach ($photos as $photo) {
-                        if (!in_array($photo->name, $imagesName)) {
-                            $imagesName[] = $photo->name;
-                        }
-                    }
+            $parser = $this->factory->get($localFilePath);
+
+            $elements = $parser->parse($localFilePath);
+
+            foreach ($elements as $element) {
+                if (is_object($element) && $element->type === 'photo') {
+                    $imagesName[] = $element->title;
                 }
             }
 
             return $imagesName;
         }
-    }
-
-    /**
-     * Remove empty or invalid files from $cacheDir.
-     *
-     * @param string $cacheDir The directory where remove files from.
-     *
-     * @return array list of deleted files
-     **/
-    public function cleanWeirdFiles($cacheDir)
-    {
-        $fileListing = glob($cacheDir.DS.'*.xml');
-
-        $fileListingCleaned = array();
-
-        foreach ($fileListing as $file) {
-            if (filesize($file) < 2) {
-                unlink($file);
-                $fileListingCleaned []= basename($file);
-            }
-        }
-
-        return  $fileListingCleaned;
-    }
-
-    /**
-     * Clean downloaded files in cacheDir that are not present in server
-     *
-     * @param string $cacheDir    the directory where remove files
-     * @param string $serverFiles the list of files present in server
-     * @param string $localFiles  the list of local files
-     *
-     * @return int, number of total downloaded files
-    */
-    public static function cleanFiles($cacheDir, $serverFiles, $localFileList, $syncFrom)
-    {
-        $deletedFiles = 0;
-
-        if (count($localFileList) > 0) {
-            foreach ($localFileList as $file) {
-                $file = basename($file);
-                $filePath = $cacheDir.DIRECTORY_SEPARATOR.$file;
-
-                $fileModTime = filemtime($filePath);
-                $timeLimit = time() - $syncFrom;
-
-                if ($fileModTime < $timeLimit) {
-                    unlink($filePath);
-
-                    $deletedFiles++;
-                }
-            }
-        }
-
-        return $deletedFiles;
     }
 
     /**
@@ -223,16 +266,19 @@ abstract class ServerAbstract
     protected function filterOldFiles($files, $maxAge)
     {
         if (!empty($maxAge)) {
-            $files = array_filter(
-                $files,
-                function ($item) use ($maxAge) {
-                    if ($item['filename'] == '..' || $item['filename'] == '.') {
-                        return false;
-                    }
-                    return (time() - $maxAge) < $item['date']->getTimestamp();
-                }
-            );
+            return $files;
         }
+
+        $files = array_filter(
+            $files,
+            function ($item) use ($maxAge) {
+                if ($item['filename'] == '..' || $item['filename'] == '.') {
+                    return false;
+                }
+
+                return (time() - $maxAge) < $item['date']->getTimestamp();
+            }
+        );
 
         return $files;
     }
