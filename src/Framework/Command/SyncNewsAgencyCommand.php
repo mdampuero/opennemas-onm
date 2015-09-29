@@ -16,6 +16,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+use Framework\Import\Synchronizer\Synchronizer;
+
 class SyncNewsAgencyCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -25,16 +27,16 @@ class SyncNewsAgencyCommand extends ContainerAwareCommand
             ->setDescription('Cleans all the Symfony generated files')
             ->setDefinition(
                 array(
-                    new InputArgument('instance_internal_name', InputArgument::REQUIRED, 'internal_name'),
+                    new InputArgument('instance', InputArgument::REQUIRED, 'The instance internal name.'),
                 )
             )
             ->setHelp(
                 <<<EOF
-The <info>sync:newagency</info> command syncs the instance new agencies if setted up previously.
+The <info>sync:newagency</info> command synchronizes the instance new agencies.
 
-This is to put as a cron action
+Put this as a cron action:
 
-<info>php app/console sync:newagency instance_internal_name</info>
+<info>php app/console sync:newagency <instance></info>
 
 EOF
             );
@@ -42,39 +44,38 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger     = $this->getContainer()->get('logger');
-        $dbConn     = $this->getContainer()->get('db_conn');
-        $instanceManager = $this->getContainer()->get('instance_manager');
+        $logger = $this->getContainer()->get('logger');
+        $dbConn = $this->getContainer()->get('db_conn');
+        $im     = $this->getContainer()->get('instance_manager');
 
-        $instanceName = $input->getArgument('instance_internal_name');
+        $instanceName = $input->getArgument('instance');
 
-        $instance = $instanceManager->findOneBy(
-            array('internal_name' => array(array('value' => $instanceName)))
+        $instance = $im->findOneBy(
+            ['internal_name' => [ ['value' => $instanceName] ] ]
         );
 
-        //If found matching instance initialize its contants and return it
-        if (is_object($instance)) {
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
+        if (!is_object($instance)) {
             throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
         }
 
-        $instanceManager->current_instance = $instance;
-        $instanceManager->cache_prefix     = $instance->internal_name;
+        if ($instance->activated != '1') {
+            $message = _('Instance not activated');
+            throw new \Onm\Instance\NotActivatedException($message);
+        }
 
-        $cache = getService('cache');
+        $instance->boot();
+
+        $im->current_instance = $instance;
+        $im->cache_prefix     = $instance->internal_name;
+
+        $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);
 
         $database = $instance->settings['BD_DATABASE'];
         $dbConn->selectDatabase($database);
 
-        $logger->notice("Start syncing '{$instance->internal_name}' agencies elements.", array('cron'));
+        $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
+        $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
 
         // CRAP: take this out, Workaround
         \Application::load();
@@ -89,22 +90,36 @@ EOF
         $servers = $sm->get('news_agency_config');
 
         $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
-        try {
-            $messages = $synchronizer->syncMultiple($servers);
-            foreach ($messages as $message) {
-                $finalMessage = "Sync report for '{$instance->internal_name}': {$message}";
-                $logger->notice($finalMessage, array('cron'));
-            }
-        } catch (\Onm\Import\Synchronizer\LockException $e) {
-            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
-            $synchronizer->unlockSync();
-        } catch (\Exception $e) {
-            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
+        $synchronizer = new Synchronizer($syncParams);
+
+        if (!$synchronizer->isSyncEnvironmetReady()) {
+            $synchronizer->setupSyncEnvironment();
         }
 
+        $synchronizer->lockSync();
 
-        return false;
+        foreach ($servers as $server) {
+            if ($server['activated']) {
+                try {
+                    $output->writeln("==> Synchronizing files from {$server['name']}...");
+                    $synchronizer->sync($server);
+
+                    $output->writeln("<fg=red> ==> {$synchronizer->stats['deleted']} files deleted</>");
+                    $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</info>");
+                    $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</info>\n");
+
+                    $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
+                    $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
+                    $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
+
+                } catch (\Exception $e) {
+                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
+                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
+                }
+            }
+        }
+
+        $synchronizer->unlockSync();
     }
 }
