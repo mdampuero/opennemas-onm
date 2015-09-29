@@ -63,6 +63,11 @@ class SubscriptionFilter
             $this->paywallHook($content);
         }
 
+        // Disable smarty cache for content
+        if (!$cacheable) {
+            $this->template->caching = 0;
+        }
+
         return $cacheable;
     }
 

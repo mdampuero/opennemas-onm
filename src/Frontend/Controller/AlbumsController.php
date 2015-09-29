@@ -184,13 +184,13 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $this->view->setConfig('gallery-inner');
+
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($album);
 
         // Items_page refers to the widget
         $itemsPerPage = 8;
-
-        $this->view->setConfig('gallery-inner');
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
