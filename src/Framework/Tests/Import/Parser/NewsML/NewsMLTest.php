@@ -10,6 +10,7 @@
 namespace Framework\Tests\Import\Parser\NewsML;
 
 use Framework\Import\Parser\NewsML\NewsML;
+use Framework\Import\Resource\Resource;
 
 class NewsMLTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $parser->method('getBag')->willReturn([]);
-        $parser->method('parse')->willReturn([ [ 'foo' => 'bar' ] ]);
+        $parser->method('parse')->willReturn(new Resource([ 'foo' => 'bar' ]));
 
         $factory->method('get')->willReturn($parser);
 

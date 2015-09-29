@@ -1,30 +1,27 @@
 <?php
 /**
- * Defines the Onm\Import\DataSource\NewsMLEuropapress class
- *
  * This file is part of the Onm package.
- * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package Onm\Import\DataSource\Format
- **/
-namespace Onm\Import\DataSource\Parser;
+ */
+namespace Framework\Import\Parser\NewsML\EuropaPress;
+
+use Framework\Import\Parser\NewsML\NewsML;
 
 /**
- * Implements the handler for the Europapress NewsML format
- *
- * @package Onm\Import\DataSource
- **/
-class NewsMLEuropapress extends NewsMLG1
+ * Parses XML files in NewsML custom format for EuropaPress.
+ */
+class NewsMLEuropaPress extends NewsML
 {
     /**
      * Returns the title of the element
      *
      * @return string the title
      **/
-    public function getTitle()
+    public function getTitle($data)
     {
         $title = (string) $this->getData()->NewsItem->NewsComponent->NewsComponent->NewsLines->HeadLine;
 
@@ -36,7 +33,7 @@ class NewsMLEuropapress extends NewsMLG1
      *
      * @return DateTime the datetime of the element
      **/
-    public function getCreatedTime()
+    public function getCreatedTime($data)
     {
         $originalDate = (string) $this->getData()->NewsEnvelope->DateAndTime;
 
@@ -55,7 +52,7 @@ class NewsMLEuropapress extends NewsMLG1
      *
      * @return int the priority level
      **/
-    public function getTags()
+    public function getTags($data)
     {
 
         $topics = $this->getData()->NewsItem->NewsComponent->TopicSet->Topic;
@@ -79,7 +76,7 @@ class NewsMLEuropapress extends NewsMLG1
      *
      * @return string the body
      **/
-    public function getBody()
+    public function getBody($data)
     {
         $rawContent = (string) $this->getData()->NewsItem->NewsComponent
             ->NewsComponent->ContentItem->DataContent;
@@ -104,6 +101,7 @@ class NewsMLEuropapress extends NewsMLG1
      **/
     public function checkFormat($data, $xmlFile = null)
     {
+        return false;
         if ($data->NewsItem->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
         }

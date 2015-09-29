@@ -274,7 +274,7 @@ class NewsML extends Parser
         }
 
         foreach ($contents as &$content) {
-            $content = array_merge($content, $this->bag);
+            $content->merge($this->bag);
         }
 
         return $contents;
@@ -288,6 +288,7 @@ class NewsML extends Parser
     public function parseComponent($data)
     {
         $parser = $this->factory->get($data);
+        var_dump(get_class($parser));
 
         $parsed = $parser->parse($data);
 
@@ -311,7 +312,7 @@ class NewsML extends Parser
 
             $parsed = $this->parseComponent($component);
 
-            if (!is_object($parsed)) {
+            if (is_object($parsed)) {
                 $parsed = [ $parsed ];
             }
 

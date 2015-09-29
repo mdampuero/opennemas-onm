@@ -7,8 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\NewsML\NewsMLComponent;
 
+use Framework\Import\Parser\NewsML\NewsML;
+use Framework\Import\Resource\Resource;
+
+/**
+ * Parses NewsComponent that represent a photo resource from NewsML files.
+ */
 class NewsMLComponentPhoto extends NewsML
 {
     /**
@@ -25,6 +31,28 @@ class NewsMLComponentPhoto extends NewsML
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the given data contains a photo.
+     *
+     * @param SimpleXMLObject $data The data to check.
+     *
+     * @return boolean True if the given data contains a photo. Otherwise,
+     * return false.
+     */
+    public function checkPhoto($data)
+    {
+        $q = '/NewsComponent/NewsComponent';
+
+        // Check if NewsMLComponentPhoto
+        $count = 0;
+        $count += count($data->xpath($q . '/Role[@FormalName="Caption"]'));
+        $count += count($data->xpath($q . '/Role[@FormalName="Preview"]'));
+        $count += count($data->xpath($q . '/Role[@FormalName="Quicklook"]'));
+        $count += count($data->xpath($q . '/Role[@FormalName="Thumbnail"]'));
+
+        return $count > 1;
     }
 
     /**
@@ -144,13 +172,15 @@ class NewsMLComponentPhoto extends NewsML
     {
         $this->bag['agency_name'] = $this->getAgencyName($data);
 
-        return [
-            'agency_name'  => $this->bag['agency_name'],
-            'file'         => $this->getFile($data),
-            'id'           => $this->getId($data),
-            'summary'      => $this->getSummary($data),
-            'title'        => $this->getTitle($data),
-            'type'         => 'photo',
-        ];
+        $photo = new Resource();
+
+        $photo->agency_name  = $this->bag[agency_name];
+        $photo->file         = $this->getFile($data);
+        $photo->id           = $this->getId($data);
+        $photo->summary      = $this->getSummary($data);
+        $photo->title        = $this->getTitle($data);
+        $photo->type         = 'photo';
+
+        return $photo;
     }
 }

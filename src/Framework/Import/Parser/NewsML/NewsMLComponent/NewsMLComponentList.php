@@ -7,8 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\NewsML\NewsMLComponent;
 
+use Framework\Import\Parser\NewsML\NewsML;
+
+/**
+ * Parses NewsComponent container from NewsML files.
+ */
 class NewsMLComponentList extends NewsML
 {
     /**
@@ -26,10 +31,6 @@ class NewsMLComponentList extends NewsML
             return false;
         }
 
-        if ($this->checkPhoto($data)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -43,7 +44,31 @@ class NewsMLComponentList extends NewsML
         $contents = [];
         foreach ($list as $item) {
             $item = simplexml_load_string($item->asXML());
-            $contents[] = $this->parseComponent($item);
+
+            $content = $this->parseComponent($item);
+
+            if (is_array($content)) {
+                $contents = array_merge($contents, $content);
+            }
+
+            if (is_object($content)) {
+                $contents[] = $content;
+            }
+        }
+
+        // Get photo resources
+        $related  = [];
+        foreach ($contents as $content) {
+            if ($content->type === 'photo') {
+                $related[] = $content->id;
+            }
+        }
+
+        // Add related photos to texts resources
+        foreach ($contents as $content) {
+            if ($content->type === 'text') {
+                $content->related = $related;
+            }
         }
 
         return $contents;

@@ -7,7 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Parser;
+namespace Framework\Import\Parser\NewsML\NewsMLComponent;
+
+use Framework\Import\Parser\NewsML\NewsML;
+use Framework\Import\Resource\Resource;
 
 /**
  * Parses NewsComponent of text type from NewsML files.
@@ -32,11 +35,6 @@ class NewsMLComponentText extends NewsML
         $node = $data->xpath('/NewsComponent/ContentItem/MediaType[@FormalName="Text"]');
 
         if (empty($node)) {
-            return false;
-        }
-
-        $node = $data->xpath('/NewsComponent/ContentItem/Format[@FormalName="NITF"]');
-        if (!empty($node)) {
             return false;
         }
 
@@ -69,9 +67,11 @@ class NewsMLComponentText extends NewsML
      */
     public function parse($data)
     {
-        return [
-            'body' => $this->getBody($data),
-            'type' => 'text',
-        ];
+        $resource = new Resource();
+
+        $resource->body = $this->getBody($data);
+        $resource->type = 'text';
+
+        return $resource;
     }
 }
