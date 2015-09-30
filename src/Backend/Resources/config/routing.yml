@@ -875,12 +875,6 @@ admin_news_agency:
     path:     /news-agency
     defaults: { _controller  : BackendBundle:NewsAgency:list }
 
-admin_news_agency_ws:
-    path:     /news-agency/ws
-    defaults: { _controller  : BackendBundle:NewsAgency:webService }
-    options:
-        expose: true
-
 admin_news_agency_servers:
     path:     /news-agency/servers
     defaults: { _controller  : BackendBundle:NewsAgency:configListServers }
