@@ -109,7 +109,7 @@ class NITF extends Parser
         $date = $data->xpath('//body/body.head/dateline/story.date');
 
         if (empty($date)) {
-            return null;
+            return new \DateTime();
         }
 
         $date = (string) $date[0]->attributes()->norm[0];
@@ -218,12 +218,8 @@ class NITF extends Parser
             strtolower($this->getAgencyName($data))
         );
 
-        $date     = $this->getCreatedTime($data);
-        $id       = $this->getId($data);
-
-        if (!empty($date)) {
-            $date = $date->format('YmdHis');
-        }
+        $date = $this->getCreatedTime($data)->format('YmdHis');
+        $id   = $this->getId($data);
 
         return "urn:$resource:$agency:$date:$id";
     }
@@ -240,7 +236,8 @@ class NITF extends Parser
         $content->agency_name  = $this->getAgencyName($data);
         $content->body         = $this->getBody($data);
         $content->category     = $this->getCategory($data);
-        $content->created_time = $this->getCreatedTime($data);
+        $content->created_time = $this->getCreatedTime($data)
+            ->format('Y-m-d H:i:s');
         $content->id           = $this->getId($data);
         $content->pretitle     = $this->getPretitle($data);
         $content->priority     = $this->getPriority($data);

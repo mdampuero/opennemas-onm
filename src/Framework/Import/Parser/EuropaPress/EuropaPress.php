@@ -111,7 +111,7 @@ class EuropaPress extends Parser
     public function getCreatedTime($data)
     {
         if (empty($data->FECHA) || empty($data->HORA)) {
-            return null;
+            return new \DateTime();
         }
 
         $date = \DateTime::createFromFormat(
@@ -240,7 +240,8 @@ class EuropaPress extends Parser
         $resource = new Resource();
 
         $resource->id           = $this->getId($data) . '.photo';
-        $resource->created_time = $this->getCreatedTime($data);
+        $resource->created_time = $this->getCreatedTime($data)
+            ->format('Y-m-d H:i:s');
         $resource->file_path    = (string) $data->FOTO->NOMBRE;
         $resource->file_type    = 'image/' . substr($data->FOTO->EXTENSION, 1);
         $resource->media_type   = substr($data->FOTO->EXTENSION, 1);
@@ -263,7 +264,8 @@ class EuropaPress extends Parser
         $resource->agency_name  = 'EuropaPress';
         $resource->body         = $this->getBody($data);
         $resource->category     = $this->getCategory($data);
-        $resource->created_time = $this->getCreatedTime($data);
+        $resource->created_time = $this->getCreatedTime($data)
+            ->format('Y-m-d H:i:s');
         $resource->id           = $this->getId($data);
         $resource->pretitle     = $this->getPretitle($data);
         $resource->priority     = $this->getPriority($data);

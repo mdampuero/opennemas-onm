@@ -40,7 +40,7 @@ class NITFEFE extends NITF
         $date = $data->xpath('//body/body.head/dateline/story.date');
 
         if (empty($date)) {
-            return null;
+            return new \DateTime();
         }
 
         $date = str_replace('+0000', '', $date[0]->attributes()->norm[0]);

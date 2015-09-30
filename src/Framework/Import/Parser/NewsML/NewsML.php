@@ -107,7 +107,7 @@ class NewsML extends Parser
             return \DateTime::createFromFormat('Ymd\THisP', $date[0]);
         }
 
-        return null;
+        return new \DateTime();
     }
 
     /**
