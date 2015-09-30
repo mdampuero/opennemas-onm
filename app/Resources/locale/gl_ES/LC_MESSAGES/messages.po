@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-30 10:13+0200\n"
+"POT-Creation-Date: 2015-09-30 11:27+0200\n"
 "PO-Revision-Date: 2015-09-30 10:20+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -8032,37 +8032,73 @@ msgstr "URL do xornal"
 msgid "Sincerely"
 msgstr "Atentamente"
 
-msgid "Welcome to OpenNemas"
-msgstr "Benvido a Opennemas"
+#, fuzzy
+msgid "Hi"
+msgstr "Impactos"
 
-msgid "Your Opennemas Newspaper is now available"
+#, fuzzy
+msgid "Your newspaper is alreday live and available online at"
 msgstr "O teu xornal Opennemas está dispoñíbel"
 
-msgid "To enable your account go to:"
-msgstr "Para activar a túa conta vai a:"
+msgid ""
+"In order to be able to access your control panel please accept out Terms and "
+"Conditions at"
+msgstr ""
 
-msgid "You can access to newspaper with this link"
-msgstr "Podes acceder ao xornal con esta ligazón"
-
-msgid "You can also access the administrative area through this link"
-msgstr "Tamén podes acceder ao área de administración usando esta ligazón"
-
-msgid "using the username and password you provided when you have created it."
+#, fuzzy
+msgid ""
+"using the username and password you chose when creating your newspaper or "
+"via direct access to Terms and Conditions at"
 msgstr ""
 "usando o nome de usuario e contrasinal que lle fornecemos no correo "
 "electrónico."
 
 msgid ""
-"Please change your password on your first access to the administrative area "
-"to improve security."
+"For security reasons we advise all our users to change their password after "
+"first login. We also want for you to know that we do not store any password "
+"in our system"
 msgstr ""
-"Por favor, cambia o teu contrasinal ao acceder por primeira vez na área de "
-"administración para mellorar a seguranza."
 
-msgid "In case you have any problems, please contact us via e-mail %1."
+msgid ""
+"If you have doubts about frontpage management or need a quick walk through "
+"we have video demo 3 minutes long"
 msgstr ""
-"No caso de que atopes calquera problema, contacta connosco mediante correo "
-"electrónico %1."
+
+#, fuzzy
+msgid "How to create/edit articles and place them in a frontpage"
+msgstr "Permítelle crear galerías de fotos e usalas no seu sitio."
+
+msgid "How to upload and add images to your articles"
+msgstr ""
+
+#, fuzzy
+msgid "How to compose a frontpage"
+msgstr "Titulo para a portada principal"
+
+msgid "We also have help page \"First Steps in Opennemas\" that should help"
+msgstr ""
+
+msgid ""
+"Please do not hesitate to share feedback, questions or doubts with us via "
+"email at"
+msgstr ""
+
+msgid "or via our ticketing system"
+msgstr ""
+
+msgid "(also available from Control Panel on the top right)"
+msgstr ""
+
+msgid "Regards"
+msgstr ""
+
+#, fuzzy
+msgid "Opennemas Team"
+msgstr "Páxina web de Opennemas"
+
+#, fuzzy
+msgid "Powered by OpenHost SL."
+msgstr "creado por OpenHost S.L."
 
 msgid "Filter by name, domain or contact"
 msgstr "Filtrar por nome, dominio ou contacto"
@@ -8311,6 +8347,30 @@ msgstr "Memoria"
 
 msgid "Hits"
 msgstr "Impactos"
+
+#~ msgid "Welcome to OpenNemas"
+#~ msgstr "Benvido a Opennemas"
+
+#~ msgid "To enable your account go to:"
+#~ msgstr "Para activar a túa conta vai a:"
+
+#~ msgid "You can access to newspaper with this link"
+#~ msgstr "Podes acceder ao xornal con esta ligazón"
+
+#~ msgid "You can also access the administrative area through this link"
+#~ msgstr "Tamén podes acceder ao área de administración usando esta ligazón"
+
+#~ msgid ""
+#~ "Please change your password on your first access to the administrative "
+#~ "area to improve security."
+#~ msgstr ""
+#~ "Por favor, cambia o teu contrasinal ao acceder por primeira vez na área "
+#~ "de administración para mellorar a seguranza."
+
+#~ msgid "In case you have any problems, please contact us via e-mail %1."
+#~ msgstr ""
+#~ "No caso de que atopes calquera problema, contacta connosco mediante "
+#~ "correo electrónico %1."
 
 #~ msgid "Silver"
 #~ msgstr "Silver"
@@ -11037,9 +11097,6 @@ msgstr "Impactos"
 
 #~ msgid "You have logged in correctly. You will be redirect to the Home page"
 #~ msgstr "Iniciou sesión correctamente. Será redirixido á páxina principal."
-
-#~ msgid " made by OpenHost S.L."
-#~ msgstr "creado por OpenHost S.L."
 
 #~ msgid "All rights reserved &copy; 2008 - %1"
 #~ msgstr "Todos os dereitos reservados &copy; 2008 - %1"
