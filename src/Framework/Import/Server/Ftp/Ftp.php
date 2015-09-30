@@ -6,14 +6,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\FTP;
+namespace Framework\Import\Server\Ftp;
 
 use Framework\Import\Server\Server;
 
 /**
  * Synchronize local folders with an external FTP folder.
  */
-class FTP extends Server
+class Ftp extends Server
 {
     /**
      * Initializes a new FTP server and opens a conn.
@@ -112,14 +112,14 @@ class FTP extends Server
         }
 
         foreach ($this->remoteFiles as $file) {
-            $localFilePath = $this->params['path'] . DS
+            $localFile = $this->params['path'] . DS
                 . strtolower(basename($file['filename']));
 
-            if (!file_exists($localFilePath)) {
+            if (!file_exists($localFile)) {
                 ftp_pasv($this->conn, true);
+                @ftp_get($this->conn, $localFile, $file['filename'], FTP_BINARY);
 
-                @ftp_get($this->conn, $localFilePath, $file['filename'], FTP_BINARY);
-
+                $this->localFiles[] = $localFile;
                 $this->downloaded++;
             }
         }

@@ -114,7 +114,7 @@ class HttpRss extends Server
         foreach ($files as $value) {
             $this->remoteFiles[] = [
                 'content'  => $value,
-                'filename' => md5(urlencode((string) $value->guid[0])) . '.xml',
+                'filename' => md5(urlencode((string) $value->link[0])) . '.xml',
                 'url'      => (string) $value->link[0]
             ];
         }
@@ -135,7 +135,7 @@ class HttpRss extends Server
         $fullBody = (string) htmlentities($content->description) . '<br>'
             . htmlentities($content->children('content', true));
 
-        $article->id               = (string) $content->guid;
+        $article->id               = md5((string) $content->guid);
         $article->title            = (string) $content->title;
         $article->body             = $fullBody;
         $article->created_datetime = new \DateTime($content->pubDate);
