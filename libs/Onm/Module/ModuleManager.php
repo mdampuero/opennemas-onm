@@ -533,7 +533,7 @@ class ModuleManager
                                     <a href="mailto:sales@openhost.es">sales@openhost.es</a>
                                 </li>
                                 <li>
-                                    Up to 5 more widgets included
+                                    1 additional widget included
                                 </li>
                             </ul>
 
