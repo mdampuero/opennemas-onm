@@ -2,7 +2,7 @@
 
 {t}Welcome to Opennemas{/t}!
 
-{t}Your newspaper is alreday live and available online at{/t} http://{$data['internal_name']}.opennemas.com.
+{t}Your newspaper is already live and available online at{/t} http://{$data['internal_name']}.opennemas.com.
 
 {t}In order to be able to access your control panel please accept out Terms and Conditions at{/t} http://abc.opennemas.com/admin/ {t}using the username and password you chose when creating your newspaper or via direct access to Terms and Conditions at{/t} https://abc.opennemas.com/admin/getting-started
 
