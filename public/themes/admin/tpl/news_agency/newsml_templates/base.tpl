@@ -83,7 +83,7 @@
                     </rights>
                     {/if}
                     <dateline>
-                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
+                      <story.date norm="{$article->created_datetime->format('Ymd\THisP')}">
                         {$article->created_datetime->format('Ymd\THisP')}
                       </story.date>
                     </dateline>
