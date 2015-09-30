@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Backend\Controller;
+namespace BackendWebService\Controller;
 
 use Backend\Annotation\CheckModuleAccess;
 use Framework\Import\Synchronizer\Synchronizer;
@@ -27,54 +27,94 @@ use Onm\Settings as s;
 class NewsAgencyController extends Controller
 {
     /**
-     * Common code for all the actions
+     * Returns a list of contents ready to import.
      *
-     * @return void
-     **/
-    public function init()
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     */
+    public function listAction(Request $request)
     {
-        $this->syncFrom = array(
-            '3600'         => sprintf(_('%d hour'), '1'),
-            '10800'         => sprintf(_('%d hours'), '3'),
-            '21600'         => sprintf(_('%d hours'), '6'),
-            '43200'         => sprintf(_('%d hours'), '12'),
-            '86400'         => _('1 day'),
-            '172800'        => sprintf(_('%d days'), '2'),
-            '259200'        => sprintf(_('%d days'), '3'),
-            '345600'        => sprintf(_('%d days'), '4'),
-            '432000'        => sprintf(_('%d days'), '5'),
-            '518400'        => sprintf(_('%d days'), '6'),
-            '604800'        => sprintf(_('%d week'), '1'),
-            '1209600'       => sprintf(_('%d weeks'), '2'),
-            'no_limits'     => _('No limit'),
-        );
+        $page   = $request->request->getDigits('page', 1);
+        $search = $request->request->get('search');
+        $epp    = $request->request->getDigits('elements_per_page', 10);
 
-        ini_set('memory_limit', '128M');
-        ini_set('set_time_limit', '0');
+        $source = $title = '.*';
 
-        // Check if module is configured, if not redirect to configuration form
-        if (is_null(s::get('news_agency_config'))) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                _('Please provide your source server configuration to start to use your Importer module')
-            );
+        if (is_array($search)) {
+            if (array_key_exists('source', $search)) {
+                $source = $search['source'][0]['value'];
+            }
+            if (array_key_exists('title', $search)) {
+                $title = $search['title'][0]['value'];
+            }
         }
+
+        $criteria = [ 'source' => $source, 'title'  => $title ];
+
+        $repository = new LocalRepository();
+
+        $total    = $repository->countBy($criteria);
+        $elements = $repository->findBy($criteria, $epp, $page);
+
+        return new JsonResponse([
+            'elements_per_page' => $epp,
+            'page'              => $page,
+            'results'           => $elements,
+            'total'             => $total,
+            'extra'             => $this->getTemplateParams()
+        ]);
     }
 
     /**
-     * Shows the list of downloaded newsfiles from Efe service
+     * Returns a list of parameters for template.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function listAction()
+     * @return array The parameters for template.
+     */
+    private function getTemplateParams()
     {
-        return $this->render('news_agency/list.tpl');
+        $params = [];
+
+        // Check last synchronization
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new Synchronizer($syncParams);
+        $minutesFromLastSync = $synchronizer->minutesFromLastSync();
+
+        if ($minutesFromLastSync > 10) {
+            $params['last_sync'] = sprintf(
+                _('Last sync was %d minutes ago.'),
+                $minutesFromLastSync
+            );
+        }
+
+        // Get categories
+        $this->ccm  = \ContentCategoryManager::get_instance();
+        $categories = $this->ccm->findAll();
+
+        $params['categories'] = array_map(function ($category) {
+            return $category->title;
+        }, $categories);
+
+        // Get servers
+        $params['servers'] = s::get('news_agency_config');
+
+        if (!is_array($params['servers'])) {
+            $params['servers'] = array();
+        }
+
+        // Build sources select options
+        $params['sources'] = [ [ 'name' => _('All'), 'value' => '' ] ];
+
+        foreach ($params['servers'] as $server) {
+            $params['sources'][] = [
+                'name' => $server['name'],
+                'value' => $server['id']
+            ];
+        }
+
+        return $params;
     }
 
     /**
@@ -168,64 +208,6 @@ class NewsAgencyController extends Controller
                         'type'    => 'success'
                     )
                 )
-            )
-        );
-    }
-
-    /**
-     * Shows the category form to pick a category under where to import the new
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function selectCategoryWhereToImportAction(Request $request)
-    {
-        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $sourceId = $request->query->getDigits('source_id');
-
-        if (empty($id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('The article you want to import doesn\'t exists.')
-            );
-
-            $this->redirect($this->generateUrl('admin_news_agency'));
-        }
-
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $element    = $repository->findByFileName($sourceId, $id);
-
-        $ccm = \ContentCategoryManager::get_instance();
-        $parentCategories = $ccm->getArraysMenu();
-
-        // If the element has a original category that matches an existing category
-        // in the newspaper redirect it to the import action with that category
-        $targetCategory = $this->getSimilarCategoryIdForElement($element);
-        if (!empty($targetCategory)) {
-            return $this->redirect($this->generateUrl(
-                'admin_news_agency_import',
-                array(
-                    'source_id' => $sourceId,
-                    'id'        => $id,
-                    'category'  => $targetCategory,
-                )
-            ));
-        }
-
-        return $this->render(
-            'news_agency/import_select_category.tpl',
-            array(
-                'id'           => $id,
-                'source_id'    => $sourceId,
-                'article'      => $element,
-                'subcat'       => $parentCategories[1],
-                'allcategorys' => $parentCategories[0],
             )
         );
     }
@@ -606,34 +588,27 @@ class NewsAgencyController extends Controller
         $id = $request->query->getDigits('id');
 
         $servers = s::get('news_agency_config');
-        if (!array_key_exists($id, $servers)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Source identifier "%d" not valid'), $id)
-            );
 
-            return $this->redirect(
-                $this->generateUrl('admin_news_agency_config')
+        if (!array_key_exists($id, $servers)) {
+            return new JsonResponse(
+                sprintf(_('Source identifier "%d" not valid'), $id),
+                400
             );
         }
+
+        $message = sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']);
+        $code    = 200;
 
         try {
-            $repository = new \Onm\Import\Repository\LocalRepository();
-            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
+            $repository = new LocalRepository();
+            $compiler = new Compiler($repository->syncPath);
             $compiler->cleanCompileForSourceID($id, $servers);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name'])
-            );
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                $e->getMessage()
-            );
+            $message = $e->getMessage();
+            $code    = 400;
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
+        return new JsonResponse($message, $code);
     }
 
     /**
