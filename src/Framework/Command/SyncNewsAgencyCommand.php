@@ -100,6 +100,8 @@ EOF
         $synchronizer->lockSync();
 
         foreach ($servers as $server) {
+            $synchronizer->resetStats();
+
             if ($server['activated']) {
                 try {
                     $output->writeln("==> Synchronizing files from {$server['name']}...");

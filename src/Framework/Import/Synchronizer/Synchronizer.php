@@ -133,23 +133,44 @@ class Synchronizer
         return round($interval / 60);
     }
 
-    public function parseFiles($files)
+    /**
+     * Parses and returns the list of contents in the files.
+     *
+     * @param array $files  The files to parse.
+     * @param array $source The server id.
+     *
+     * @return array The list of contents.
+     */
+    public function parseFiles($files, $source)
     {
         $contents = [];
         foreach ($files as $file) {
             $xml = simplexml_load_file($file);
 
             $parser = $this->parserFactory->get($xml);
-            $parsed = $parser->parse($xml);
+            $parsed = $parser->parse($xml, $file);
 
             if (is_object($parsed)) {
                 $parsed = [ $parsed ];
+            }
+
+            foreach ($parsed as $p) {
+                $p->filename = basename($file);
+                $p->source   = $source;
             }
 
             $contents = array_merge($contents, $parsed);
         }
 
         return $contents;
+    }
+
+    /**
+     * Resets the synchronizer statistics.
+     */
+    public function resetStats()
+    {
+        $this->stats = [ 'contents' => 0, 'deleted' => 0, 'downloaded' => 0 ];
     }
 
     /**
@@ -172,7 +193,7 @@ class Synchronizer
         $source = $this->serverFactory->get($server);
         $source->downloadFiles();
 
-        $contents = $this->parseFiles($source->localFiles);
+        $contents = $this->parseFiles($source->localFiles, $server['id']);
 
         // Check for missing files (photos, videos, ...)
         $missing = $this->getMissingFiles($contents, $server['path']);
