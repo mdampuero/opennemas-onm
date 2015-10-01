@@ -105,5 +105,11 @@
 
           $scope._import(contents);
         };
+
+        $scope.$watch('extra', function(nv, ov) {
+          if (!ov && nv && nv.last_sync) {
+            messenger.post(nv.last_sync);
+          }
+        });
     }]);
 })();
