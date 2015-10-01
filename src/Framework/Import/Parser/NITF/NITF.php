@@ -90,8 +90,15 @@ class NITF extends Parser
         }
 
         $body = '';
-        foreach ($bodies[0]->children() as $child) {
-            $body .= '<p>' . str_replace("\n", '<br>', $child) . '</p>';
+
+        if (!empty($bodies[0]->children())) {
+            foreach ($bodies[0]->children() as $child) {
+                $body .= '<p>' . str_replace("\n", '<br>', $child) . '</p>';
+            }
+        }
+
+        if (empty($body) && !empty((string) $bodies[0])) {
+            $body = html_entity_decode((string) $bodies[0]);
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);

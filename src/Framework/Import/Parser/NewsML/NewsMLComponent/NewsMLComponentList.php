@@ -39,6 +39,9 @@ class NewsMLComponentList extends NewsML
      */
     public function parse($data)
     {
+        $this->bag['title']   = $this->getTitle($data);
+        $this->bag['created'] = $this->getCreatedTime($data);
+
         $list = $data->xpath('/NewsComponent/NewsComponent');
 
         $contents = [];
@@ -66,6 +69,8 @@ class NewsMLComponentList extends NewsML
 
         // Add related photos to texts resources
         foreach ($contents as $content) {
+            $content->merge($this->bag);
+
             if ($content->type === 'text') {
                 $content->related = $related;
             }

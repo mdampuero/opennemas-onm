@@ -101,10 +101,18 @@ class NewsMLComponentPhoto extends NewsML
     {
         $components = $data->xpath('/NewsComponent/NewsComponent');
 
+        $search = $this->getPhotoPath($data);
+
+        if (empty($search)) {
+            return '';
+        }
+
         foreach ($components as $component) {
             $component = simplexml_load_string($component->asXML());
 
-            if ($component->xpath('//Role[@FormalName="Preview"]')) {
+            $file = $component->xpath($search);
+
+            if (!empty($file)) {
                 $file = $component->xpath('//ContentItem');
 
                 if (!empty($file)) {
@@ -174,13 +182,41 @@ class NewsMLComponentPhoto extends NewsML
 
         $photo = new Resource();
 
-        $photo->agency_name  = $this->bag[agency_name];
-        $photo->file         = $this->getFile($data);
+        $file = $this->getFile($data);
+
+        $photo->agency_name  = $this->bag['agency_name'];
+        $photo->extension    = substr($file, strrpos($file, '.') + 1);
+        $photo->file         = $file;
         $photo->id           = $this->getId($data);
         $photo->summary      = $this->getSummary($data);
         $photo->title        = $this->getTitle($data);
         $photo->type         = 'photo';
 
         return $photo;
+    }
+
+    /**
+     * Checks possible photo xpaths.
+     *
+     * @param SimpleXMLObject The data to search in.
+     *
+     * @return string The photo xpath.
+     */
+    protected function getPhotoPath($data)
+    {
+        // Check order
+        $queries = [
+            '//Role[@FormalName="Preview"]',
+            '//Role[@FormalName="Quicklook"]',
+            '//Role[@FormalName="Thumbnail"]'
+        ];
+
+        foreach ($queries as $q) {
+            $file = $data->xpath($q);
+
+            if (!empty($file)) {
+                return $q;
+            }
+        }
     }
 }
