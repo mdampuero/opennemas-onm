@@ -48,18 +48,7 @@ class LocalRepository
      */
     public function countBy($criteria = [])
     {
-        $files = array_filter($this->contents, function ($a) use ($criteria) {
-            foreach ($criteria as $key => $value) {
-                if (!property_exists($a, $key)
-                    || (property_exists($a, $key)
-                        && !preg_match('@' . $value . '@', $a->{$key}))
-                ) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
+        $files = $this->filter($criteria);
 
         return count($files);
     }
@@ -74,7 +63,7 @@ class LocalRepository
      */
     public function find($source, $id)
     {
-        $files = array_filter($this->contents, function ($a) use ($criteria) {
+        $files = array_filter($this->contents, function ($a) use ($source, $id) {
             if ($a->source == $source && $a->id == $id) {
                 return true;
             }
@@ -92,15 +81,39 @@ class LocalRepository
     /**
      * Finds a list of resources given a criteria.
      *
+     * @param array   $criteria The criteria.
+     * @param integer $epp      The elements per page.
+     * @param integer $page     The page.
+     *
      * @return array The list of resources.
      */
     public function findBy($criteria = [], $epp = 10, $page = 1)
     {
-        $files = array_filter($this->contents, function ($a) use ($criteria) {
+        $files = $this->filter($criteria);
+
+        $files = array_slice($files, $epp * ($page - 1), $epp);
+
+        return $files;
+    }
+
+    /**
+     * Filters the list of contents given a criteria.
+     *
+     * @param array $criteria The criteria.
+     *
+     * @return array The list of contents that match the criteria.
+     */
+    protected function filter($criteria)
+    {
+        return array_filter($this->contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
                 if (!property_exists($a, $key)
                     || (property_exists($a, $key)
-                        && !preg_match('@' . $value . '@', $a->{$key}))
+                        && !preg_match(
+                            '@' . strtolower($value) . '@',
+                            strtolower($a->{$key})
+                        )
+                    )
                 ) {
                     return false;
                 }
@@ -108,9 +121,5 @@ class LocalRepository
 
             return true;
         });
-
-        $files = array_slice($files, $epp * ($page - 1), $epp);
-
-        return $files;
     }
 }
