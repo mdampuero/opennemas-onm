@@ -42,29 +42,45 @@ class NewsAgencyController extends Controller
         $epp    = $request->request->getDigits('elements_per_page', 10);
 
         $source = $title = '.*';
+        $type   = 'text';
 
         if (is_array($search)) {
             if (array_key_exists('source', $search)) {
                 $source = $search['source'][0]['value'];
             }
+
             if (array_key_exists('title', $search)) {
                 $title = $search['title'][0]['value'];
             }
+
+            if (array_key_exists('type', $search)) {
+                $type = $search['type'][0]['value'];
+            }
         }
 
-        $criteria = [ 'source' => $source, 'title'  => $title ];
+        $criteria = [ 'source' => $source, 'title'  => $title, 'type' => $type ];
 
         $repository = new LocalRepository();
 
         $total    = $repository->countBy($criteria);
         $elements = $repository->findBy($criteria, $epp, $page);
 
+        $related = [];
+        foreach ($elements as $element) {
+            foreach ($element->related as $id) {
+                if (!array_key_exists($id, $related)) {
+                    $related[$id] = $repository->find($element->source, $id);
+                }
+            }
+        }
+
+        $extra = array_merge([ 'related' => $related ], $this->getTemplateParams());
         return new JsonResponse([
-            'elements_per_page' => $epp,
-            'page'              => $page,
-            'results'           => $elements,
-            'total'             => $total,
-            'extra'             => $this->getTemplateParams()
+            'epp'     => $epp,
+            'page'    => $page,
+            'results' => $elements,
+            'total'   => $total,
+            'extra'   => $extra
         ]);
     }
 
@@ -113,6 +129,12 @@ class NewsAgencyController extends Controller
                 'value' => $server['id']
             ];
         }
+
+        $params['type'] = [
+            [ 'name' => _('Texto'), 'value' => 'text' ],
+            [ 'name' => _('Photo'), 'value' => 'photo' ],
+            [ 'name' => _('Video'), 'value' => 'video' ]
+        ];
 
         return $params;
     }
@@ -891,5 +913,50 @@ class NewsAgencyController extends Controller
         $_SESSION['desde'] = 'efe_press_import';
 
         return $newArticleID;
+    }
+
+
+    /**
+     * Returns the image file given a newsfile id and attached image id, if
+     * not found return an 404 response error.
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("has_role('IMPORT_ADMIN')")
+     */
+    public function showAttachmentAction(Request $request)
+    {
+        $id     = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $source = $request->query->getDigits('source_id');
+
+        $repository = new LocalRepository();
+        $element    = $repository->find($source, $id);
+
+        $content = null;
+        if (is_object($element) && $element->type === 'photo') {
+            $filePath = null;
+            // Get image from HTTP
+            if (strpos($photo->getFilePath(), 'http://') !== false) {
+                $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
+            }
+
+            // Get image from FTP
+            if (!$filePath) {
+                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+            }
+
+            $content = @file_get_contents($filePath);
+
+            return new Response(
+                $content,
+                200,
+                [ 'content-type' => $photo->getFileType() ]
+            );
+        }
+
+        return  new Response('Image not found', 404);
     }
 }

@@ -875,34 +875,6 @@ admin_news_agency:
     path:     /news-agency
     defaults: { _controller  : BackendBundle:NewsAgency:list }
 
-admin_news_agency_servers:
-    path:     /news-agency/servers
-    defaults: { _controller  : BackendBundle:NewsAgency:configListServers }
-
-admin_news_agency_server_toogle:
-    path:     /news-agency/servers/toggle
-    defaults: { _controller  : BackendBundle:NewsAgency:toogleEnabled }
-
-admin_news_agency_server_create:
-    path:     /news-agency/servers/create
-    defaults: { _controller  : BackendBundle:NewsAgency:configCreateServer }
-
-admin_news_agency_server_show:
-    path:     /news-agency/servers/{id}/show
-    defaults: { _controller  : BackendBundle:NewsAgency:configShowServer }
-
-admin_news_agency_server_update:
-    path:     /news-agency/servers/{id}/update
-    defaults: { _controller  : BackendBundle:NewsAgency:configUpdateServer }
-
-admin_news_agency_server_delete:
-    path:     /news-agency/servers/{id}/delete
-    defaults: { _controller  : BackendBundle:NewsAgency:configDeleteServer }
-
-admin_news_agency_server_clean_files:
-    path:     /news-agency/servers/{id}/clean
-    defaults: { _controller  : BackendBundle:NewsAgency:removeServerFiles }
-
 admin_news_agency_unlock:
     path:     /news-agency/unlock
     defaults: { _controller  : BackendBundle:NewsAgency:unlock }
@@ -920,18 +892,6 @@ admin_news_agency_batch_import:
     defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
     options:
         expose: true
-
-admin_news_agency_show:
-    path:     /news-agency/{source_id}/{id}/show
-    defaults: { _controller  : BackendBundle:NewsAgency:show }
-
-admin_news_agency_showattachment:
-    path:     /news-agency/{source_id}/{id}/attachment/{attachment_id}
-    defaults: { _controller  : BackendBundle:NewsAgency:showAttachment }
-
-admin_news_agency_pickcategory:
-    path:     /news-agency/{source_id}/{id}/pickcategory
-    defaults: { _controller  : BackendBundle:NewsAgency:selectCategoryWhereToImport }
 
 # Importer XML file controller routes
 admin_importer_xmlfile:
@@ -1121,6 +1081,10 @@ admin_client_send_upgrade_mail:
     path:     /my-account/upgrade-instance
     defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
 
-admin_market:
+backend_market:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/market.yml
+
+backend_news_agency_server:
+    prefix: /
+    resource: @BackendBundle/Resources/config/routing/news_agency_server.yml

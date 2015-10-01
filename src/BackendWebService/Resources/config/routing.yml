@@ -6,6 +6,10 @@ backend_ws_comments:
     resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
     prefix:   /
 
+backend_ws_content:
+    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
+    prefix:   /
+
 backend_ws_market:
     resource: @BackendWebServiceBundle/Resources/config/routing/market.yml
     prefix:   /
@@ -16,6 +20,10 @@ backend_ws_menus:
 
 backend_ws_news_agency:
     resource: @BackendWebServiceBundle/Resources/config/routing/news_agency.yml
+    prefix:   /
+
+backend_ws_news_agency_server:
+    resource: @BackendWebServiceBundle/Resources/config/routing/news_agency_server.yml
     prefix:   /
 
 backend_ws_opinions:
@@ -58,6 +66,4 @@ backend_ws_newsletter_subscriptor:
     resource: @BackendWebServiceBundle/Resources/config/routing/newsletter_subscriptors.yml
     prefix:   /
 
-backend_ws_content:
-    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
-    prefix:   /
+
