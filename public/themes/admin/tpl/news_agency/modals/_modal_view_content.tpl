@@ -8,7 +8,8 @@
   <strong class="pull-right">
     [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
   </strong>
-  <p ng-bind-html="template.selected.body"></p>
+  <div ng-bind-html="template.selected.body" ng-if="template.selected.type === 'text'"></div>
+  <img ng-src="[% template.selected.body %]" ng-if="template.selected.type === 'photo'"/>
 </div>
 <div class="modal-footer">
   <button class="btn btn-link" ng-click="close()" type="button">{t}Close{/t}</button>

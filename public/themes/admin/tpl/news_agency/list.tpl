@@ -11,7 +11,7 @@
 {/block}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="init('', { source: '', title_like: '' }, 'created', 'desc', 'backend_ws_news_agency_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="init('', { source: '', title: '', type: 'text' }, 'created', 'desc', 'backend_ws_news_agency_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -27,29 +27,23 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
-            <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_news_agency_servers}">
-                <i class="fa fa-cog fa-lg"></i>
-              </a>
-            </li>
+              <li class="quicklinks">
+                <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}">
+                  <i class="fa fa-cog fa-lg"></i>
+                </a>
+              </li>
             {/acl}
             {acl isAllowed="ONLY_MASTERS"}
-            <li>
-              <a class="btn btn-white" href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
-                <i class="fa fa-exchange"></i>
-                <span class="hidden-xs">{t}Sync with server{/t}</span>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks">
+                <a class="btn btn-primary" href="{url name=admin_news_agency_sync}">
+                  <i class="fa fa-retweet"></i>
+                  <span class="hidden-xs">{t}Sync{/t}</span>
+                </a>
+              </li>
             {/acl}
-            <li>
-              <button class="btn btn-primary" ng-click="list('admin_news_agency_ws')" title="{t}Reload list{/t}" type="button">
-                <span class="fa fa-refresh"></span>
-                <span class="hidden-xs">{t}Reload list{/t}</span>
-              </button>
-            </li>
           </ul>
         </div>
       </div>
@@ -90,7 +84,7 @@
               <span class="add-on">
                 <span class="fa fa-search fa-lg"></span>
               </span>
-              <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title or content{/t}" type="search"/>
+              <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="search"/>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
@@ -106,6 +100,16 @@
               </ui-select>
             </li>
             <li class="quicklinks hidden-xs ng-cloak">
+              <ui-select name="view" theme="select2" ng-model="criteria.type">
+                <ui-select-match>
+                  <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in extra.type | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="view" theme="select2" ng-model="pagination.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -115,9 +119,22 @@
                 </ui-select-choices>
               </ui-select>
             </li>
+            <li class="quicklinks">
+              <button class="btn btn-link" ng-click="list('backend_ws_news_agency_list')" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+                <i class="fa fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
+              </button>
+            </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-            <li class="quicklinks hidden-xs">
+          <ul class="nav quick-section pull-right ng-cloak">
+            <li class="quicklinks">
+              <span class="info">
+                [% extra.last_sync %]
+              </span>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks hidden-xs" ng-if="contents.length > 0">
               <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
             </li>
           </ul>
@@ -139,7 +156,7 @@
               {/acl}
             </div>
           </div>
-          <table class="table table-hover table-condensed ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover table-condensed no-margin ng-cloak" ng-if="!loading && contents.length > 0">
             <thead>
               <tr>
                 <th class="checkbox-cell">
@@ -149,9 +166,9 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="center hidden-xs hidden-sm">{t}Origin{/t}</th>
-                <th class="center hidden-xs hidden-sm" style='width:10px !important;'>{t}Date{/t}</th>
-                <th class="right hidden-xs" style="width:10px;">{t}Priority{/t}</th>
+                <th class="center hidden-xs hidden-sm" style="width: 140px;">{t}Origin{/t}</th>
+                <th class="center hidden-xs hidden-sm" style="width: 140px;">{t}Date{/t}</th>
+                <th class="right hidden-xs" style="width: 50px;">{t}Priority{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -163,7 +180,8 @@
                   </div>
                 </td>
                 <td >
-                  <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
+                  <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': content.type === 'text', 'fa-picture-o': content.type === 'photo', 'fa-film': content.type === 'video' }"></i>
+                  [% content.title %]
                   <p>
                     <div class="tags small-text">
                       <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
@@ -182,15 +200,34 @@
                   <div class="listing-inline-actions">
                     <button class="btn btn-link" ng-click="open('modal-view-content', content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
-                    </buttona>
+                    </button>
                     <button class="btn btn-link" ng-click="import(content)" title="{t}Import{/t}">
                       <span class="fa fa-cloud-download"></span> {t}Import{/t}
                     </button>
                     <span class="imported label label-success" ng-if="content.already_imported">{t}Already imported{/t}</span>
-                    <span class="btn btn-link" ng-if="content.related.length == 0">
-                      <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[content.id], 'fa-caret-right': !expanded[content.id] }"></i>
-                      [% content.related.length %] {t}Attachments{/t}
+                    <span class="btn btn-link" ng-if="content.related.length > 0" ng-click="content.expanded = !content.expanded">
+                      <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': content.expanded, 'fa-caret-right': !content.expanded }"></i>
+                      [% content.related.length %] {t}Related{/t}
                     </span>
+                  </div>
+                  <div class="attachments clearfix p-b-10 p-l-10 p-t-15" ng-show="content.expanded && content.related.length > 0">
+                    <div class="clearfix p-b-10" ng-repeat="id in content.related">
+                      <div class="checkbox check-default pull-left">
+                        <input id="checkbox-related-[% content.id %]-[% $index %]" checklist-model="content.import" checklist-value="extra.related[id].id" ng-disabled="!isSelected(content.id)" type="checkbox">
+                        <label for="checkbox-related-[% content.id %]-[% $index %]"></label>
+                      </div>
+                      <div class="m-l-10 pull-left">
+                        <label class="pointer" for="checkbox-related-[% content.id %]-[% $index %]">
+                          <i class="fa m-l-10 m-r-5" ng-class="{ 'fa-file-text-o': extra.related[id].type === 'text', 'fa-picture-o': extra.related[id].type === 'photo', 'fa-film': extra.related[i].type === 'video' }"></i>
+                          [% extra.related[id].title %]
+                        </label>
+                        <div class="listing-inline-actions">
+                          <button class="btn btn-link" ng-click="open('modal-view-content', extra.related[id])" title="{t}View{/t}">
+                            <i class="fa fa-eye"></i> {t}View content{/t}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
