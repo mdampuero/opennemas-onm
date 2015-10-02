@@ -275,8 +275,8 @@ class WebServiceController extends Controller
 
         // Prepare message
         $message = \Swift_Message::newInstance();
-        $message->setFrom($companyMail['from_mail'])
-            ->setTo(array($data['user_mail'] => $data['user_name']))
+        $message->setFrom([$companyMail['from_mail'] => 'Opennemas'])
+            ->setTo([$data['user_mail'] => $data['user_name']])
             ->setBody($htmlContent, 'text/html')
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject("{$data['name']} "._("is now on-line"))
