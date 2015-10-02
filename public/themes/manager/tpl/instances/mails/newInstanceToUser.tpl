@@ -4,7 +4,7 @@
 
 <p>{t}Your newspaper is already live:{/t}</p>
 <ul>
-  <li>{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/admin/">http://{$data['internal_name']}.opennemas.com/admin/</a></li>
+  <li>{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/">http://{$data['internal_name']}.opennemas.com/</a></li>
   <li>{t}Admin panel:{/t} <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a></li>
 </ul>
 
@@ -26,7 +26,8 @@
   </li>
 </ul>
 
-<p>{t}We also have help page "First Steps in Opennemas" that should help{/t}: <br>
+<p>
+  {t}We also have help page "First Steps in Opennemas" that should help{/t}: <br>
   <a href="http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps">http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps</a>
 </p>
 
