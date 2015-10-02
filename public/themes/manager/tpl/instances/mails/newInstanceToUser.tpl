@@ -4,8 +4,8 @@
 
 <p>{t}Your newspaper is already live:{/t}</p>
 <ul>
-  <li><strong>{t}Webpage:{/t}</strong> <a href="http://{$data['internal_name']}.opennemas.com/admin/">http://{$data['internal_name']}.opennemas.com/admin/</a></li>
-  <li><strong>{t}Admin panel:{/t}</strong> <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a></li>
+  <li>{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/admin/">http://{$data['internal_name']}.opennemas.com/admin/</a></li>
+  <li>{t}Admin panel:{/t} <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a></li>
 </ul>
 
 <p>{t}For security reasons we advise you to change your password after first login to Admin Panel.{/t}</p>
@@ -32,6 +32,6 @@
 
 <p>{t 1="support@opennemas.com" 2="http://help.opennemas.com/" escape=off}Please do not hesitate to share feedback, questions or doubts with us via email at %1 or via our <strong>ticketing system</strong> %2 (also available from Control Panel on the top right){/t}.</p>
 
-{t}Regards<br>
+{t escape=off}Regards<br>
 Opennemas Team<br>
 Powered by OpenHost SL.{/t}
