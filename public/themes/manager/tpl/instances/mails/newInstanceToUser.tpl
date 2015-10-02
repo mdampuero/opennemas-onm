@@ -5,7 +5,7 @@
 <p>{t}Your newspaper is already live:{/t}</p>
 <ul>
   <li><strong>{t}Webpage:{/t}</strong> <a href="http://{$data['internal_name']}.opennemas.com/admin/">http://{$data['internal_name']}.opennemas.com/admin/</a></li>
-  <li><strong>{t}Admin panel:{/t}</strong> <a href="https://{$data['internal_name']}.opennemas.com/admin/getting-started">https://{$data['internal_name']}.opennemas.com/admin/getting-started</a></li>
+  <li><strong>{t}Admin panel:{/t}</strong> <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a></li>
 </ul>
 
 <p>{t}For security reasons we advise you to change your password after first login to Admin Panel.{/t}</p>
