@@ -205,7 +205,7 @@ class NewsAgencyServerController extends Controller
         try {
             $repository = new LocalRepository();
             $compiler = new Compiler($repository->syncPath);
-            $compiler->cleanCompilesForServer($id);
+            $compiler->cleanCompileForServer($id);
             $compiler->cleanSourceFilesForServer($id);
 
             unset($servers[$id]);
