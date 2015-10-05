@@ -104,7 +104,10 @@ class NewsML extends Parser
         $date = $data->xpath('//FirstCreated');
 
         if (is_array($date) && !empty($date)) {
-            return \DateTime::createFromFormat('Ymd\THisP', $date[0]);
+            $date = \DateTime::createFromFormat('Ymd\THisP', $date[0]);
+            $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+
+            return $date;
         }
 
         return new \DateTime();
