@@ -68,10 +68,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
      * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("has_role('IMPORT_ADMIN')")
+     */
     public function listAction()
     {
         return $this->render('news_agency/list.tpl');
@@ -270,41 +269,15 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * Cleans the unlock file for Efe module
+     * Performs the files synchronization with the external server.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @return Response The response object.
      *
      * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function unlockAction(Request $request)
-    {
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
-        $synchronizer->unlockSync();
-        unset($_SESSION['error']);
-
-        $page = $request->query->filter('page', null, FILTER_VALIDATE_INT);
-
-        return $this->redirect(
-            $this->generateUrl('admin_news_agency', array('page' => $page))
-        );
-    }
-
-    /**
-     * Performs the files synchronization with the external server
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
      * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     */
     public function syncAction(Request $request)
     {
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
@@ -312,328 +285,17 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
 
         $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
+        $synchronizer = new Synchronizer($syncParams);
 
         try {
-            $messages = $synchronizer->syncMultiple($servers);
-            foreach ($messages as $message) {
-                $this->get('session')->getFlashBag()->add('success', $message);
-            }
-        } catch (\Onm\Import\Synchronizer\LockException $e) {
-            $errorMessage = $e->getMessage()
-                .sprintf(
-                    _('If you are sure <a href="%s">try to unlock it</a>'),
-                    $this->generateUrl('admin_news_agency_unlock')
-                );
-            $this->get('session')->getFlashBag()->add('error', $errorMessage);
+            $synchronizer->syncMultiple($servers);
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
-
 
         return $this->redirect(
             $this->generateUrl('admin_news_agency', array('page' => $page))
         );
-    }
-
-    /**
-     * Lists all the servers for the news agency
-     *
-     * @return void
-     *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function configListServersAction()
-    {
-        $servers = s::get('news_agency_config');
-
-        return $this->render(
-            'news_agency/config/list.tpl',
-            array(
-                'servers'   => $servers,
-                'sync_from' => $this->syncFrom
-            )
-        );
-    }
-
-    /**
-     * Shows and handles the configuration form for Efe module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function configUpdateServerAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $servers = s::get('news_agency_config');
-
-        $server = array(
-            'id'            => $id,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
-            'author'        => $request->request->getDigits('author', 0),
-        );
-
-        $servers[$id] = $server;
-
-        s::set('news_agency_config', $servers);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('News agency server updated.')
-        );
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_news_agency_server_show',
-                array('id' => $id)
-            )
-        );
-    }
-
-    /**
-     * Shows the news agency information
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function configShowServerAction(Request $request)
-    {
-        $servers = s::get('news_agency_config');
-
-        $id = $request->query->getDigits('id');
-
-        $server = $servers[$id];
-
-        $this->view->assign(
-            array(
-                'server'        => $server,
-                'sync_from'     => $this->syncFrom,
-            )
-        );
-
-        return $this->render('news_agency/config/new.tpl');
-    }
-
-    /**
-     * Toogle an server state to enabled/disabled
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function toogleEnabledAction(Request $request)
-    {
-        $serverId = $request->query->getDigits('id');
-
-        $servers = s::get('news_agency_config');
-
-        if ($servers[$serverId]['activated'] == '1') {
-            $servers[$serverId]['activated'] = '0';
-            $status = 'disabled';
-        } else {
-            $servers[$serverId]['activated'] = '1';
-            $status = 'enabled';
-        }
-
-        s::set('news_agency_config', $servers);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            sprintf(
-                'Server "%s" has been %s',
-                $servers[$serverId]['name'],
-                $status
-            )
-        );
-
-        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
-    }
-
-    /**
-     * Shows and handles the configuration form for Efe module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function configCreateServerAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            $this->view->assign(
-                array(
-                    'server'        => array(),
-                    'sync_from'     => $this->syncFrom,
-                )
-            );
-
-            return $this->render('news_agency/config/new.tpl');
-        }
-
-        $servers = s::get('news_agency_config');
-
-        if (!is_array($servers)) {
-            $servers = [];
-        }
-
-        if (count($servers) <= 0) {
-            $latestServerId = 0;
-        } else {
-            $latestServerId = max(array_keys($servers));
-        }
-
-        $server = array(
-            'id'            => $latestServerId + 1,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
-        );
-
-        $servers[$server['id']] = $server;
-
-        s::set('news_agency_config', $servers);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('News agency server added.')
-        );
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_news_agency_server_show',
-                array('id' => $server['id'])
-            )
-        );
-    }
-
-    /**
-     * Shows and handles the configuration form for Efe module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function configDeleteServerAction(Request $request)
-    {
-        $servers = s::get('news_agency_config');
-
-        $id = $request->query->getDigits('id');
-
-        if (!array_key_exists($id, $servers)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(
-                    _('Source identifier "%d" not valid'),
-                    $id
-                )
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_news_agency_config')
-            );
-        }
-
-        try {
-            $repository = new \Onm\Import\Repository\LocalRepository();
-            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
-            $compiler->cleanCompilesForServer($id);
-            $compiler->cleanSourceFilesForServer($id);
-
-            unset($servers[$id]);
-
-            s::set('news_agency_config', $servers);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('News agency server deleted.')
-            );
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
-        }
-
-        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
-    }
-
-    /**
-     * Removes the synchronized files for a given source
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
-    public function removeServerFilesAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $servers = s::get('news_agency_config');
-        if (!array_key_exists($id, $servers)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Source identifier "%d" not valid'), $id)
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_news_agency_config')
-            );
-        }
-
-        try {
-            $repository = new \Onm\Import\Repository\LocalRepository();
-            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
-            $compiler->cleanCompileForSourceID($id, $servers);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name'])
-            );
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                $e->getMessage()
-            );
-        }
-
-        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
     }
 
     /**

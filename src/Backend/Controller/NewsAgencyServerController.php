@@ -54,6 +54,61 @@ class NewsAgencyServerController extends Controller
     }
 
     /**
+     * Shows and handles the configuration form for Efe module
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     */
+    public function createAction(Request $request)
+    {
+        $sm = $this->get('setting_repository');
+
+        $servers = $sm->get('news_agency_config');
+
+        if (!is_array($servers)) {
+            $servers = [];
+        }
+
+        if (count($servers) <= 0) {
+            $latestServerId = 0;
+        } else {
+            $latestServerId = max(array_keys($servers));
+        }
+
+        $server = array(
+            'id'            => $latestServerId + 1,
+            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'     => $request->request->getDigits('activated', 0),
+        );
+
+        $servers[$server['id']] = $server;
+
+        $sm->set('news_agency_config', $servers);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('News agency server added.')
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'backend_news_agency_server_show',
+                array('id' => $server['id'])
+            )
+        );
+    }
+
+    /**
      * Shows the list of downloaded newsfiles from Efe service
      *
      * @param Request $request the request object
@@ -99,42 +154,25 @@ class NewsAgencyServerController extends Controller
     }
 
     /**
-     * Shows and handles the configuration form for Efe module
+     * Updates a news agency server.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      */
-    public function configCreateServerAction(Request $request)
+    public function updateAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            $this->view->assign(
-                array(
-                    'server'        => array(),
-                    'sync_from'     => $this->syncFrom,
-                )
-            );
+        $id = $request->query->getDigits('id');
 
-            return $this->render('news_agency/config/new.tpl');
-        }
+        $sm = $this->get('setting_repository');
 
-        $servers = s::get('news_agency_config');
-
-        if (!is_array($servers)) {
-            $servers = [];
-        }
-
-        if (count($servers) <= 0) {
-            $latestServerId = 0;
-        } else {
-            $latestServerId = max(array_keys($servers));
-        }
+        $servers = $sm->get('news_agency_config');
 
         $server = array(
-            'id'            => $latestServerId + 1,
+            'id'            => $id,
             'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
@@ -143,21 +181,22 @@ class NewsAgencyServerController extends Controller
             'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
             'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->getDigits('activated', 0),
+            'author'        => $request->request->getDigits('author', 0),
         );
 
-        $servers[$server['id']] = $server;
+        $servers[$id] = $server;
 
-        s::set('news_agency_config', $servers);
+        $sm->set('news_agency_config', $servers);
 
         $this->get('session')->getFlashBag()->add(
             'success',
-            _('News agency server added.')
+            _('News agency server updated.')
         );
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_news_agency_server_show',
-                array('id' => $server['id'])
+                'backend_news_agency_server_show',
+                array('id' => $id)
             )
         );
     }
