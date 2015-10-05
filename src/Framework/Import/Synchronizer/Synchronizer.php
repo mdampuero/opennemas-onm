@@ -85,10 +85,14 @@ class Synchronizer
      */
     public function getSyncParams()
     {
-        $params = [ 'lastimport' => '' ];
+        $params = null;
 
         if (file_exists($this->syncFilePath)) {
             $params = unserialize(file_get_contents($this->syncFilePath));
+        }
+
+        if (empty($params)) {
+            return [ 'last_import' => '' ];
         }
 
         return $params;
@@ -128,7 +132,7 @@ class Synchronizer
     {
         $params = $this->getSyncParams();
 
-        $interval = abs(strtotime($params['lastimport']) - time());
+        $interval = abs(strtotime($params['last_import']) - time());
 
         return round($interval / 60);
     }
@@ -222,7 +226,6 @@ class Synchronizer
 
         $this->lockSync();
 
-        $messages = array();
         foreach ($servers as $server) {
             if ($server['activated'] == '1') {
                 $this->sync($server);
@@ -230,10 +233,7 @@ class Synchronizer
         }
 
         $this->updateSyncFile();
-
         $this->unlockSync();
-
-        return $messages;
     }
 
     /**
@@ -269,11 +269,9 @@ class Synchronizer
      */
     public function updateSyncFile()
     {
-        $newSyncParams = [
-            'lastimport' => date('c'),
-        ];
+        $params = [ 'last_import' => date('c') ];
 
-        file_put_contents($this->syncFilePath, serialize($newSyncParams));
+        file_put_contents($this->syncFilePath, serialize($params));
 
         return $newSyncParams;
     }
