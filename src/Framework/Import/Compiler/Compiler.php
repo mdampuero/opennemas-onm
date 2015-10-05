@@ -39,6 +39,8 @@ class Compiler
      */
     public function compile($id, $contents)
     {
+        $this->cleanCompileForServer($id);
+
         // Sort contents by created
         usort($contents, function ($a, $b) {
             return $a->created_time < $b->created_time ? 1 : -1;
