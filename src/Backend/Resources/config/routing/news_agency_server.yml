@@ -15,3 +15,7 @@ backend_news_agency_server_show:
     defaults: { _controller  : BackendBundle:NewsAgencyServer:show }
     options:
         expose: true
+
+backend_news_agency_server_update:
+    path:     /news-agency/servers/{id}/update
+    defaults: { _controller  : BackendBundle:NewsAgencyServer:update }
