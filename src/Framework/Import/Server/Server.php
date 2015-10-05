@@ -88,79 +88,13 @@ abstract class Server
     }
 
     /**
-     * Checks if the current server parameter.
+     * Gets a content from a given url.
      *
-     * @param array $params Server parameters.
+     * @param $url The http server URL.
      *
-     * @return boolean True if the parameters are valid. Otherwise, returns
-     *                 false.
+     * @return $content The content from this url.
      */
-    abstract public function checkParameters($params);
-
-    /**
-     * Downloads the main files from server.
-     *
-     * @param array $files The list of missing files.
-     *
-     * @throws \Exception If the target directory is not writable.
-     */
-    abstract public function downloadFiles($files = null);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Filters files by its creation
-     *
-     * @param  array $files  the list of files for filtering
-     * @param  int   $maxAge timestamp of the max age allowed for files
-     * @return array the list of files without those with age > $magAge
-     **/
-    protected function filterOldFiles($files, $maxAge)
-    {
-        if (!empty($maxAge)) {
-            return $files;
-        }
-
-        $files = array_filter(
-            $files,
-            function ($item) use ($maxAge) {
-                if ($item['filename'] == '..' || $item['filename'] == '.') {
-                    return false;
-                }
-
-                return (time() - $maxAge) < $item['date']->getTimestamp();
-            }
-        );
-
-        return $files;
-    }
-
-    /**
-     * Get content from a given url using http digest auth and curl
-     *
-     * @param $url the http server url
-     *
-     * @return $content the content from this url
-     *
-     **/
-    public function getContentFromUrlWithDigestAuth($url)
+    public function getContentFromUrl($url)
     {
         $ch = curl_init();
 
@@ -195,4 +129,51 @@ abstract class Server
 
         return $content;
     }
+
+    /**
+     * Filters files by its creation time.
+     *
+     * @param array   $files  The list of files to filter.
+     * @param integer $maxAge The timestamp of the max age allowed.
+     *
+     * @return array The list of files.
+     */
+    protected function filterOldFiles($files, $maxAge)
+    {
+        if (!empty($maxAge)) {
+            return $files;
+        }
+
+        $files = array_filter(
+            $files,
+            function ($item) use ($maxAge) {
+                if ($item['filename'] == '..' || $item['filename'] == '.') {
+                    return false;
+                }
+
+                return (time() - $maxAge) < $item['date']->getTimestamp();
+            }
+        );
+
+        return $files;
+    }
+
+    /**
+     * Checks if the current server parameter.
+     *
+     * @param array $params Server parameters.
+     *
+     * @return boolean True if the parameters are valid. Otherwise, returns
+     *                 false.
+     */
+    abstract public function checkParameters($params);
+
+    /**
+     * Downloads the main files from server.
+     *
+     * @param array $files The list of missing files.
+     *
+     * @throws \Exception If the target directory is not writable.
+     */
+    abstract public function downloadFiles($files = null);
 }

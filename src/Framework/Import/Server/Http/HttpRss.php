@@ -80,7 +80,7 @@ class HttpRss extends Server
      *
      * @return string The content from the URL.
      */
-    public function getContentFromUrlWithDigestAuth($url)
+    public function getContentFromUrl($url)
     {
         $content = @file_get_contents($url);
 
@@ -94,7 +94,7 @@ class HttpRss extends Server
      */
     public function getRemoteFiles()
     {
-        $content = $this->getContentFromUrlWithDigestAuth($this->params['url']);
+        $content = $this->getContentFromUrl($this->params['url']);
 
         if (!$content) {
             throw new \Exception(

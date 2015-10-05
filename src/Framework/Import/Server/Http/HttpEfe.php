@@ -65,7 +65,7 @@ class HttpEfe extends Server
             $localFilePath = $this->params['path'] . DS . $file['filename'];
 
             if (!file_exists($localFilePath)) {
-                $content = $this->getContentFromUrlWithDigestAuth($file['url']);
+                $content = $this->getContentFromUrl($file['url']);
 
                 file_put_contents($localFilePath, $content);
 
@@ -81,7 +81,7 @@ class HttpEfe extends Server
      */
     public function getRemoteFiles()
     {
-        $content = $this->getContentFromUrlWithDigestAuth($this->params['url']);
+        $content = $this->getContentFromUrl($this->params['url']);
 
         if (!$content) {
             throw new \Exception(
