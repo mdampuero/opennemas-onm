@@ -7,24 +7,35 @@
 {/block}
 
 {block name="content"}
-<form action="{if array_key_exists('id', $server)}{url name=admin_news_agency_server_update id=$server['id']}{else}{url name=admin_news_agency_server_create}{/if}" method="POST" autocomplete="off">
-
+<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-home fa-lg"></i>
-              {t}News agency{/t} :: {if array_key_exists('id', $server)}{t}Update source{/t}{else}{t}Add source{/t}{/if}
+              <i class="fa fa-microphone fa-lg"></i>
+              {t}News agency{/t}
             </h4>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h5>
+              {if array_key_exists('id', $server)}
+                {t}Update source{/t}
+              {else}
+                {t}Add source{/t}
+              {/if}
+            </h5>
           </li>
         </ul>
       </div>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" href="{url name=admin_news_agency_servers}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+            <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
               <span class="fa fa-reply"></span>
             </a>
           </li>
