@@ -122,6 +122,7 @@ EOF
             }
         }
 
+        $synchronizer->updateSyncFile();
         $synchronizer->unlockSync();
     }
 }
