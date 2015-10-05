@@ -1,17 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  <script type="text/javascript">
-    jQuery(document).ready(function ($){
-      jQuery('.sync_with_server').on('click',function(e, ui) {
-        $('#modal-sync').modal('show');
-      });
-    });
-  </script>
-{/block}
-
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="init('', { source: '', title: '', type: 'text' }, 'created', 'desc', 'backend_ws_news_agency_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="init('', { source: '', title: '', type: 'text' }, '', '', 'backend_ws_news_agency_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -21,6 +11,13 @@
                 <i class="fa fa-microphone fa-lg"></i>
                 {t}News Agency{/t}
               </h4>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak">
+              <h5>
+                <small class="p-l-10">
+                  [% extra.last_sync %]
+                </small>
+              </h5>
             </li>
           </ul>
         </div>
@@ -90,7 +87,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.source">
+              <ui-select name="source" theme="select2" ng-model="criteria.source">
                 <ui-select-match>
                   <strong>{t}Source{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -100,7 +97,7 @@
               </ui-select>
             </li>
             <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.type">
+              <ui-select name="type" theme="select2" ng-model="criteria.type">
                 <ui-select-match>
                   <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -109,7 +106,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak">
+            <li class="quicklinks hidden-xs hidden-sm ng-cloak">
               <ui-select name="view" theme="select2" ng-model="pagination.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -125,15 +122,7 @@
               </button>
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak">
-            <li class="quicklinks">
-              <span class="info">
-                [% extra.last_sync %]
-              </span>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
+          <ul class="nav quick-section pull-right ng-cloak visible-md visible-lg" ng-if="contents.length > 1">
             <li class="quicklinks hidden-xs" ng-if="contents.length > 0">
               <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
             </li>
@@ -172,11 +161,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
+              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: extra.imported.indexOf(content.urn) !== -1 }">
                 <td class="checkbox-cell">
-                  <div class="checkbox check-default">
-                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
-                    <label for="checkbox[%$index%]"></label>
+                  <div class="checkbox check-default" ng-if="extra.imported.indexOf(content.urn) === -1">
+                    <input id="checkbox[% $index %]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                    <label for="checkbox[% $index %]"></label>
                   </div>
                 </td>
                 <td >
@@ -201,10 +190,10 @@
                     <button class="btn btn-link" ng-click="open('modal-view-content', content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
                     </button>
-                    <button class="btn btn-link" ng-click="import(content)" title="{t}Import{/t}">
+                    <span class="badge badge-success" ng-if="extra.imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>
+                    <button class="btn btn-link" ng-click="import(content)" ng-if="extra.imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
                       <span class="fa fa-cloud-download"></span> {t}Import{/t}
                     </button>
-                    <span class="imported label label-success" ng-if="content.already_imported">{t}Already imported{/t}</span>
                     <span class="btn btn-link" ng-if="content.related.length > 0" ng-click="content.expanded = !content.expanded">
                       <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': content.expanded, 'fa-caret-right': !content.expanded }"></i>
                       [% content.related.length %] {t}Related{/t}
@@ -231,7 +220,7 @@
                   </div>
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
-                  <span class="label label-important" style="background-color:[% extra.servers[content.source].color %];">
+                  <span class="badge badge-success" style="background-color:[% extra.servers[content.source].color %];">
                     [% extra.servers[content.source].agency_string %]
                   </span>
                 </td>
