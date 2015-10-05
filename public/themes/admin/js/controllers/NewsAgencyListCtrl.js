@@ -39,34 +39,22 @@
           var modal = $modal.open({
             templateUrl: 'modal-import-selected',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'NewsAgencyModalCtrl',
             resolve: {
               template: function() {
                 return {
-                  contents: contents
+                  authors:    $scope.extra.authors,
+                  categories: $scope.extra.categories,
+                  contents:   contents
                 };
               },
-              success: function() {
-                return function() {
-                  var url = routing.generate('');
-
-                  return $http.post(url, {
-                    contents: contents,
-                    type: $scope.type,
-                    category: $scope.category
-                  });
-                };
-              }
             }
           });
 
           modal.result.then(function(response) {
             if (response) {
-              $scope.renderMessages(response.data.messages);
-
-              if (response.status === 200) {
-                $scope.list($scope.route);
-              }
+              messenger.post(response.messages);
+              $scope.list($scope.route);
             }
           });
         };
@@ -97,8 +85,8 @@
           var contents = [];
 
           for (var i = 0; i < $scope.contents.length; i++) {
-            var id = $scope.contents[i].xml_id;
-            if ($scope.selected.contents.indexOf(id)) {
+            var id = $scope.contents[i].id;
+            if ($scope.selected.contents.indexOf(id) !== -1) {
               contents.push($scope.contents[i]);
             }
           }
@@ -106,9 +94,33 @@
           $scope._import(contents);
         };
 
+        /**
+         * @function selectAll
+         * @memberOf NewsAgencyListCtrl
+         *
+         * @description
+         *   Selects all items in list.
+         */
+        $scope.selectAll = function() {
+          $scope.selected.contents = [];
+          $scope.selected.lastSelected = null;
+
+          if ($scope.selected.all) {
+            $scope.selected.contents = [];
+
+            for (var i = 0; i < $scope.contents.length; i++) {
+              if ($scope.extra.imported.indexOf($scope.contents[i].urn) === -1) {
+                $scope.selected.contents.push($scope.contents[i].id);
+              }
+            }
+          }
+        };
+
         $scope.$watch('extra', function(nv, ov) {
           if (!ov && nv && nv.last_sync) {
-            messenger.post(nv.last_sync);
+            $scope.xsOnly(null, function() {
+              messenger.post(nv.last_sync);
+            }, null);
           }
         });
     }]);
