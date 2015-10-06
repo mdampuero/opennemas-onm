@@ -73,16 +73,31 @@ class SubscriptionsController extends Controller
         $class            = "";
 
         if (empty($verify)) {
-            // New captcha instance
-            $captcha = getService('recaptcha')
-                ->setPrivateKey($configRecaptcha['private_key'])
-                ->setRemoteIp($request->getClientIp());
+            // Check google reCAPTCHA
+            $valid = false;
+            $response = $request->get('g-recaptcha-response');
+            if (!is_null($response)) {
+                $rs = getService('google_recaptcha');
+                $recaptcha = $rs->getPublicRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
 
-            // Get reCaptcha validate response
-            $resp = $captcha->check($rcChallengeField, $rcResponseField);
+                $valid = $resp->isSuccess();
+            } else {
+                // Check old reCAPTCHA
+                $captcha = getService('recaptcha')
+                    ->setPrivateKey($configRecaptcha['private_key'])
+                    ->setRemoteIp($request->getClientIp());
+
+                // Validate response
+                $resp = $captcha->check($rcChallengeField, $rcResponseField);
+                $valid = $resp->isValid();
+            }
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (!$resp->isValid()) {
+            if (!$valid) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
