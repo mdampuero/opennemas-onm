@@ -2089,7 +2089,7 @@ class ContentManager
                 )
             ) {
                 $contentID = (int) $matches['id'];
-                $urlDate = strtotime($matches['date']);
+                $urlDate = $matches['date'];
                 $cache->save(
                     'content_resolve_id_'.$dirtyID,
                     [ $contentID, $urlDate ]
@@ -2114,7 +2114,7 @@ class ContentManager
     public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
     {
         if (is_null($content) ||
-            strtotime($content->created) != $urlDate ||
+            strtotime($content->created) != strtotime($urlDate) ||
             (
                 !empty($urlSlug) &&
                 $content->slug != $urlSlug
