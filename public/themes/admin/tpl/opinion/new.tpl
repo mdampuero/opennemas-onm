@@ -34,6 +34,7 @@
                 var selected = $(this).find('option:selected').val();
                 if (selected != 0) {
                     $('#author').hide();
+                    $('#fk_author').val(selected);
                 } else {
                     $('#author').show();
                 }
@@ -44,7 +45,7 @@
 {/block}
 
 {block name="content"}
-<form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="ArticleCtrl">
+<form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="ArticleCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
