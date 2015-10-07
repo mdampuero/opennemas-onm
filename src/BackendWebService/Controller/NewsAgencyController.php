@@ -27,6 +27,56 @@ use Onm\Settings as s;
 class NewsAgencyController extends Controller
 {
     /**
+     * Imports the article information given a newfile filename
+     *
+     * @param Request $request the request object
+     *
+     * @return Response The response object
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("has_role('IMPORT_ADMIN')")
+     */
+    public function importAction(Request $request)
+    {
+        $author   = $request->request->get('author', null, FILTER_SANITIZE_STRING);
+        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
+        $ids      = $request->request->get('ids');
+        $type     = $request->request->get('type', null, FILTER_SANITIZE_STRING);
+
+        $repository = new LocalRepository();
+
+        $imported = [];
+        foreach ($ids as $value) {
+            $resource = $repository->find($value['source'], $value['id']);
+
+            // Import related first
+            foreach ($resource->related as $id) {
+                if (in_array($id, $ids)) {
+                    $imported[] =
+                        $this->import($id, $value['source'], $category, $type, $author);
+                }
+            }
+
+            $imported[] =
+                $this->import($value['id'], $value['source'], $category, $type, $author);
+        }
+
+        $response = new JsonResponse([
+            'messages' => [
+                [
+                    'message' => sprintf(
+                        _('%d contents imported successfully'),
+                        count($imported)
+                    ),
+                    'type' => 'success'
+                ]
+            ]
+        ]);
+
+        return $response;
+    }
+
+    /**
      * Returns a list of contents ready to import.
      *
      * @param Request $request The request object.
@@ -108,6 +158,34 @@ class NewsAgencyController extends Controller
     }
 
     /**
+     * Returns the image content given an URL.
+     *
+     * @param string $source The source id.
+     * @param string $id     The resource id.
+     *
+     * @return Response The response object.
+     */
+    public function showImageAction($source, $id)
+    {
+        $repository = new LocalRepository();
+        $resource   = $repository->find($source, $id);
+
+        if (empty($resource) || $resource->type !== 'photo') {
+            return new Response('Image not found', 404);
+        }
+
+        $path = $repository->syncPath . DS . $source . DS . $resource->title;
+
+        $content = @file_get_contents($path);
+
+        return new Response(
+            $content,
+            200,
+            [ 'content-type' => $resource->image_type ]
+        );
+    }
+
+    /**
      * Returns a list of parameters for template.
      *
      * @return array The parameters for template.
@@ -172,56 +250,6 @@ class NewsAgencyController extends Controller
         }
 
         return $params;
-    }
-
-    /**
-     * Imports the article information given a newfile filename
-     *
-     * @param Request $request the request object
-     *
-     * @return Response The response object
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
-     */
-    public function importAction(Request $request)
-    {
-        $author   = $request->request->get('author', null, FILTER_SANITIZE_STRING);
-        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
-        $ids      = $request->request->get('ids');
-        $type     = $request->request->get('type', null, FILTER_SANITIZE_STRING);
-
-        $repository = new LocalRepository();
-
-        $imported = [];
-        foreach ($ids as $value) {
-            $resource = $repository->find($value['source'], $value['id']);
-
-            // Import related first
-            foreach ($resource->related as $id) {
-                if (in_array($id, $ids)) {
-                    $imported[] =
-                        $this->import($id, $value['source'], $category, $type, $author);
-                }
-            }
-
-            $imported[] =
-                $this->import($value['id'], $value['source'], $category, $type, $author);
-        }
-
-        $response = new JsonResponse([
-            'messages' => [
-                [
-                    'message' => sprintf(
-                        _('%d contents imported successfully'),
-                        count($imported)
-                    ),
-                    'type' => 'success'
-                ]
-            ]
-        ]);
-
-        return $response;
     }
 
     /**
