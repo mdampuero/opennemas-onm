@@ -322,6 +322,10 @@ class NewsML extends Parser
             $contents = array_merge($contents, $parsed);
         }
 
+        foreach ($contents as $content) {
+            $content->merge($this->bag);
+        }
+
         return $contents;
     }
 }
