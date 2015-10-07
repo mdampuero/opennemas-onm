@@ -37,9 +37,9 @@ class AuthenticationController extends Controller
     public function loginAction(Request $request)
     {
         $error     = null;
-        $referer = $request->query->filter('referer', null, FILTER_SANITIZE_STRING);
+        $referer = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
 
-        if (is_null($referer)) {
+        if (empty($referer)) {
             $referer = $this->generateUrl('frontend_frontpage');
         }
 
