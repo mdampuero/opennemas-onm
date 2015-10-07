@@ -39,6 +39,10 @@ class LocalRepository
         $this->compiler = new Compiler($this->syncPath);
 
         $this->contents = $this->compiler->getContentsFromCompiles();
+
+        usort($this->contents, function ($a, $b) {
+            return $a->created_time < $b->created_time;
+        });
     }
 
     /**
