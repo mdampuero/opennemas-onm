@@ -47,6 +47,7 @@ class NewsMLComponentPhoto extends NewsML
 
         // Check if NewsMLComponentPhoto
         $count = 0;
+        $count += count($data->xpath($q . '/Role[@FormalName="Main"]'));
         $count += count($data->xpath($q . '/Role[@FormalName="Caption"]'));
         $count += count($data->xpath($q . '/Role[@FormalName="Preview"]'));
         $count += count($data->xpath($q . '/Role[@FormalName="Quicklook"]'));
@@ -91,6 +92,38 @@ class NewsMLComponentPhoto extends NewsML
     }
 
     /**
+     * Returns the content from caption component.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return Resource The content.
+     */
+    public function getContent($data)
+    {
+        $files = $data->xpath('/NewsComponent/NewsComponent');
+
+        if (empty($files)) {
+            return null;
+        }
+
+        foreach ($files as $file) {
+            $file = simplexml_load_string($file->asXML());
+
+            // Ignore videos
+            $caption = $file->xpath('Role[@FormalName="Caption"]');
+
+            if (!empty($caption)) {
+                $caption = simplexml_load_string($file->asXML());
+
+                $parser = $this->factory->get($caption);
+                return $parser->parse($caption);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Return the file form the parsed data.
      *
      * @param SimpleXMLObject $data The parsed data.
@@ -99,26 +132,68 @@ class NewsMLComponentPhoto extends NewsML
      */
     public function getFile($data)
     {
-        $components = $data->xpath('/NewsComponent/NewsComponent');
+        $files = $data->xpath('/NewsComponent/NewsComponent/ContentItem');
 
-        $search = $this->getPhotoPath($data);
-
-        if (empty($search)) {
+        if (empty($files)) {
             return '';
         }
 
-        foreach ($components as $component) {
-            $component = simplexml_load_string($component->asXML());
+        $height = 0;
+        $i      = 0;
+        $index  = 0;
 
-            $file = $component->xpath($search);
+        foreach ($files as $file) {
+            $file = simplexml_load_string($file->asXML());
 
-            if (!empty($file)) {
-                $file = $component->xpath('//ContentItem');
+            // Ignore videos
+            $video = $file->xpath('/ContentItem/MediaType[@FormalName="Video"]');
 
-                if (!empty($file)) {
-                    return (string) $file[0]->attributes()->Href;
+            if (empty($video)) {
+                $h = $file->xpath('/ContentItem/Characteristics/Property[@FormalName="Height"]');
+
+                if (!empty($h) && (string) $h[0]->attributes()->Value >= $height) {
+                    $height   = (string) $h[0]->attributes()->Value;
+                    $index = $i;
                 }
             }
+
+            $i++;
+        }
+
+        return simplexml_load_string($files[$index]->asXML());
+    }
+
+    /**
+     * Returns the filename from the parsed data.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The file name.
+     */
+    public function getFilename($data)
+    {
+        $filename = $data->xpath('/ContentItem');
+
+        if (!empty($filename)) {
+            return (string) $filename[0]->attributes()->Href;
+        }
+
+        return '';
+    }
+
+    /**
+     * Returns the photo height.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The photo height.
+     */
+    public function getHeight($data)
+    {
+        $height = $data->xpath('/ContentItem/Characteristics/Property[@FormalName="Height"]');
+
+        if (!empty($height)) {
+            return (string) $height[0]->attributes()->Value;
         }
 
         return '';
@@ -174,6 +249,24 @@ class NewsMLComponentPhoto extends NewsML
     }
 
     /**
+     * Returns the photo width.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The photo width.
+     */
+    public function getWidth($data)
+    {
+        $width = $data->xpath('/ContentItem/Characteristics/Property[@FormalName="Width"]');
+
+        if (!empty($width)) {
+            return (string) $width[0]->attributes()->Value;
+        }
+
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function parse($data)
@@ -182,15 +275,28 @@ class NewsMLComponentPhoto extends NewsML
 
         $photo = new Resource();
 
-        $file = $this->getFile($data);
+        $file     = $this->getFile($data);
+        $filename = $this->getFilename($file);
+
+        $photo = new Resource();
 
         $photo->agency_name  = $this->bag['agency_name'];
-        $photo->extension    = substr($file, strrpos($file, '.') + 1);
-        $photo->file         = $file;
+        $photo->extension    = substr($filename, strrpos($filename, '.') + 1);
+        $photo->file_path    = $this->getUrl($file);
+        $photo->file_name    = $filename;
+        $photo->height       = $this->getHeight($file);
         $photo->id           = $this->getId($data);
+        $photo->image_type   = 'image/' . $photo->extension;
         $photo->summary      = $this->getSummary($data);
-        $photo->title        = $this->getTitle($data);
+        $photo->title        = $this->getTitle($file);
         $photo->type         = 'photo';
+        $photo->width        = $this->getWidth($file);
+
+        $content = $this->getContent($data);
+
+        if (is_object($content)) {
+            $photo->merge((array) $content);
+        }
 
         return $photo;
     }
