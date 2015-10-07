@@ -69,9 +69,12 @@ class Synchronizer
         foreach ($contents as $content) {
             if (($content->type === 'photo'
                     || $content->type === 'video')
-                && !file_exists($path . DS . $content->file_path)
+                && !file_exists($path . DS . $content->file_name)
             ) {
-                $missing[] = $content->file_path;
+                $missing[] = [
+                    'filename' => $content->file_name,
+                    'url'      => $content->file_path
+                ];
             }
         }
 
@@ -203,7 +206,7 @@ class Synchronizer
         $missing = $this->getMissingFiles($contents, $server['path']);
 
         if (!empty($missing)) {
-            $server->downloadFiles($missing);
+            $source->downloadFiles($missing);
         }
 
         $this->compiler->compile($server['id'], $contents);
@@ -273,6 +276,6 @@ class Synchronizer
 
         file_put_contents($this->syncFilePath, serialize($params));
 
-        return $newSyncParams;
+        return $params;
     }
 }

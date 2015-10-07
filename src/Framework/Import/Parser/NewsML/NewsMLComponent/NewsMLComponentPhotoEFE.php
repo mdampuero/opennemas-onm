@@ -25,12 +25,15 @@ class NewsMLComponentPhotoEFE extends NewsML
         if (!is_object($data)) {
             return false;
         }
+
         $node = $data->xpath(
             '/NewsComponent/ContentItem/MediaType[@FormalName="Photo"]'
         );
+
         if (!empty($node)) {
             return true;
         }
+
         return false;
     }
 
@@ -48,6 +51,38 @@ class NewsMLComponentPhotoEFE extends NewsML
     }
 
     /**
+     * Returns the content from caption component.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return Resource The content.
+     */
+    public function getContent($data)
+    {
+         $files = $data->xpath('/NewsComponent/ContentItem');
+
+        if (empty($files)) {
+            return null;
+        }
+
+        foreach ($files as $file) {
+            $file = simplexml_load_string($file->asXML());
+
+            // Ignore videos
+            $caption = $file->xpath('/ContentItem/MediaType[@FormalName="Caption"]');
+
+            if (!empty($caption)) {
+                $caption = simplexml_load_string($caption->asXML());
+
+                $parser = $this->factory->get($caption);
+                return $parser->parse($caption);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Return the file form the parsed data.
      *
      * @param SimpleXMLObject $data The parsed data.
@@ -56,18 +91,53 @@ class NewsMLComponentPhotoEFE extends NewsML
      */
     public function getFile($data)
     {
-        $file = $data->xpath('/NewsComponent/ContentItem/Characteristics/Property[@FormalName="EFE_Filename"]');
+        $files = $data->xpath('/NewsComponent/ContentItem');
 
-        if (!empty($file)) {
-            return (string) $file[0]->attributes()->Value;
-        }
-
-        $file = $data->xpath('/NewsComponent/ContentItem');
-        if (empty($file)) {
+        if (empty($files)) {
             return '';
         }
 
-        return (string) $file[0]->attributes()->Href;
+        $height = 0;
+        $i      = 0;
+        $index  = 0;
+
+        foreach ($files as $file) {
+            $file = simplexml_load_string($file->asXML());
+
+            // Ignore videos
+            $video = $file->xpath('/ContentItem/MediaType[@FormalName="Video"]');
+
+            if (empty($video)) {
+                $h = $file->xpath('/ContentItem/Characteristics/Property[@FormalName="Height"]');
+
+                if (!empty($h) && (string) $h[0]->attributes()->Value >= $height) {
+                    $height   = (string) $h[0]->attributes()->Value;
+                    $index = $i;
+                }
+            }
+
+            $i++;
+        }
+
+        return simplexml_load_string($files[$index]->asXML());
+    }
+
+    /**
+     * Returns the filename from the parsed data.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The file name.
+     */
+    public function getFilename($data)
+    {
+        $filename = $data->xpath('/ContentItem/Characteristics/Property[@FormalName="EFE_Filename"]');
+
+        if (!empty($filename)) {
+            return (string) $filename[0]->attributes()->Value;
+        }
+
+        return '';
     }
 
     /**
@@ -86,7 +156,7 @@ class NewsMLComponentPhotoEFE extends NewsML
     /**
      * {@inheritdoc}
      */
-    public function getTitle($data)
+    public function getSummary($data)
     {
         $title = $data->xpath('/NewsComponent/NewsLines/HeadLine');
         if (empty($title)) {
@@ -97,18 +167,50 @@ class NewsMLComponentPhotoEFE extends NewsML
     }
 
     /**
+     * Returns the URL from the parsed data.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The URL.
+     */
+    public function getUrl($data)
+    {
+        $url = $data->xpath('/ContentItem');
+
+        if (!empty($url)) {
+            return (string) $url[0]->attributes()->Href;
+        }
+
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function parse($data)
     {
         $this->bag['agency_name'] = $this->getAgencyName($data);
+
+        $file = $this->getFile($data);
+
         $photo = new Resource();
+
         $photo->agency_name  = $this->bag['agency_name'];
-        $photo->file         = $this->getFile($data);
+        $photo->extension    = substr($file, strrpos($file, '.') + 1);
+        $photo->file_path    = $this->getUrl($file);
+        $photo->file_name    = $this->getFilename($file);
         $photo->id           = $this->getId($data);
-        $photo->summary      = $this->getTitle($data);
-        $photo->title        = $this->getFile($data);
+        $photo->image_type   = 'image/' . $photo->extension;
+        $photo->summary      = $this->getSummary($data);
+        $photo->title        = $this->getTitle($file);
         $photo->type         = 'photo';
+
+        $content = $this->getContent($data);
+
+        if (is_object($content)) {
+            $photo->merge($content);
+        }
+
         return $photo;
     }
 }
