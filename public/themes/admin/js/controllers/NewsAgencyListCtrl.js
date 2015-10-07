@@ -17,7 +17,7 @@
      * @requires $http
      *
      * @description
-     *   description
+     *   Controller for News Agency listing.
      */
     .controller('NewsAgencyListCtrl', [
       '$controller', '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger',
@@ -116,6 +116,16 @@
           }
         };
 
+        // Updates expanded status when contents change
+        $scope.$watch('contents', function() {
+          $scope.expanded = [];
+
+          for (var i = 0; i < $scope.contents.length; i++) {
+            $scope.expanded[i] = false;
+          }
+        });
+
+        // Displays a message with last synchronization only for small devices
         $scope.$watch('extra', function(nv, ov) {
           if (!ov && nv && nv.last_sync) {
             $scope.xsOnly(null, function() {
@@ -123,5 +133,30 @@
             }, null);
           }
         });
+
+        // Updates selected related contents when selected contents change
+        $scope.$watch('selected.contents', function(nv, ov) {
+          // Check added
+          var added = nv.filter(function(a) {
+            return ov.indexOf(a) === -1;
+          });
+
+          var deleted = ov.filter(function(a) {
+            return nv.indexOf(a) === -1;
+          });
+
+          for (var i = 0; i < $scope.contents.length; i++) {
+            if (added.indexOf($scope.contents[i].id) !== -1 &&
+                (!$scope.contents[i].import ||
+                  $scope.contents[i].import.length < 2)) {
+              $scope.contents[i].import =
+                $scope.contents[i].related.slice(0, 2);
+            }
+
+            if (deleted.indexOf($scope.contents[i].id) !== -1) {
+              $scope.contents[i].import = [];
+            }
+          }
+        }, true);
     }]);
 })();

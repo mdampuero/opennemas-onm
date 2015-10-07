@@ -168,9 +168,11 @@
                     <label for="checkbox[% $index %]"></label>
                   </div>
                 </td>
-                <td >
-                  <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': content.type === 'text', 'fa-picture-o': content.type === 'photo', 'fa-film': content.type === 'video' }"></i>
-                  [% content.title %]
+                <td>
+                  <div class="pointer" ng-click="expanded[$index] = !expanded[$index]">
+                    <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[$index], 'fa-caret-right': !expanded[$index] }" ng-if="content.related.length > 0" style="width: 8px;"></i>
+                    [% content.title %]
+                  </div>
                   <p>
                     <div class="tags small-text">
                       <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
@@ -186,6 +188,30 @@
                       [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </span>
                   </p>
+                  <div ng-show="!expanded[$index]" >
+                    <span ng-repeat="id in content.related">
+                      <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-if="extra.related[id].type === 'photo'" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" style="height: 48px;" />
+                    </span>
+                  </div>
+                  <div class="attachments clearfix p-b-10" ng-show="expanded[$index] && content.related.length > 0">
+                    <div class="p-b-10" ng-class="{ 'col-xs-4': extra.related[id].type !== 'text' }" ng-repeat="id in content.related">
+                      <div class="checkbox check-default" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }">
+                        <input id="checkbox-related-[% content.id %]-related-[% $index %]" checklist-model="content.import" checklist-value="id" ng-disabled="!isSelected(content.id) || (content.import.length > 1 && content.import.indexOf(id) === -1)" type="checkbox">
+                        <label for="checkbox-related-[% content.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': extra.related[id].type !== 'text' }">
+                          <i class="fa m-l-30 m-r-5" ng-class="{ 'fa-file-text-o': extra.related[id].type === 'text', 'fa-picture-o': extra.related[id].type === 'photo', 'fa-film': extra.related[id].type === 'video' }" ng-show="extra.related[id].type === 'text'"></i>
+                          <span ng-if="extra.related[id].type === 'text'">[% extra.related[id].title %]</span>
+                          <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" />
+                        </label>
+                      </div>
+                      <div class="m-l-15" ng-show="extra.related[id].type === 'text'">
+                        <div class="listing-inline-actions">
+                          <button class="btn btn-link" ng-click="open('modal-view-content', extra.related[id])" title="{t}View{/t}">
+                            <i class="fa fa-eye"></i> {t}View content{/t}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="listing-inline-actions">
                     <button class="btn btn-link" ng-click="open('modal-view-content', content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
@@ -194,29 +220,6 @@
                     <button class="btn btn-link" ng-click="import(content)" ng-if="extra.imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
                       <span class="fa fa-cloud-download"></span> {t}Import{/t}
                     </button>
-                    <span class="btn btn-link" ng-if="content.related.length > 0" ng-click="content.expanded = !content.expanded">
-                      <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': content.expanded, 'fa-caret-right': !content.expanded }"></i>
-                      [% content.related.length %] {t}Related{/t}
-                    </span>
-                  </div>
-                  <div class="attachments clearfix p-b-10 p-l-10 p-t-15" ng-show="content.expanded && content.related.length > 0">
-                    <div class="clearfix p-b-10" ng-repeat="id in content.related">
-                      <div class="checkbox check-default pull-left">
-                        <input id="checkbox-related-[% content.id %]-[% $index %]" checklist-model="content.import" checklist-value="extra.related[id].id" ng-disabled="!isSelected(content.id)" type="checkbox">
-                        <label for="checkbox-related-[% content.id %]-[% $index %]"></label>
-                      </div>
-                      <div class="m-l-10 pull-left">
-                        <label class="pointer" for="checkbox-related-[% content.id %]-[% $index %]">
-                          <i class="fa m-l-10 m-r-5" ng-class="{ 'fa-file-text-o': extra.related[id].type === 'text', 'fa-picture-o': extra.related[id].type === 'photo', 'fa-film': extra.related[i].type === 'video' }"></i>
-                          [% extra.related[id].title %]
-                        </label>
-                        <div class="listing-inline-actions">
-                          <button class="btn btn-link" ng-click="open('modal-view-content', extra.related[id])" title="{t}View{/t}">
-                            <i class="fa fa-eye"></i> {t}View content{/t}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
