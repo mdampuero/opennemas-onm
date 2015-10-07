@@ -615,7 +615,7 @@ class Advertisement extends Content
                 // ]]> --></script>";
             }
         } elseif ($this->with_script == 3) {
-            $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'>"
+            $content = "<div id='zone_{$this->id}'>"
                        ."<script type='text/javascript' data-id='{$this->id}'>"
                        ."googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });"
                        ."</script></div>";
