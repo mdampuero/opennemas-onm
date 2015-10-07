@@ -77,7 +77,7 @@ class SubscriptionsController extends Controller
             $valid = false;
             $response = $request->get('g-recaptcha-response');
             if (!is_null($response)) {
-                $rs = getService('google_recaptcha');
+                $rs = $this->get('google_recaptcha');
                 $recaptcha = $rs->getPublicRecaptcha();
                 $resp = $recaptcha->verify(
                     $request->get('g-recaptcha-response'),
@@ -87,7 +87,7 @@ class SubscriptionsController extends Controller
                 $valid = $resp->isSuccess();
             } else {
                 // Check old reCAPTCHA
-                $captcha = getService('recaptcha')
+                $captcha = $this->get('recaptcha')
                     ->setPrivateKey($configRecaptcha['private_key'])
                     ->setRemoteIp($request->getClientIp());
 
