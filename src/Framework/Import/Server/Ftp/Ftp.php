@@ -119,7 +119,9 @@ class Ftp extends Server
                 ftp_pasv($this->conn, true);
                 @ftp_get($this->conn, $localFile, $file['filename'], FTP_BINARY);
 
-                $this->localFiles[] = $localFile;
+                if (preg_match('/\.xml$/', $localFile)) {
+                    $this->localFiles[] = $localFile;
+                }
                 $this->downloaded++;
             }
         }
