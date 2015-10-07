@@ -189,8 +189,6 @@ class Synchronizer
      */
     public function sync($server)
     {
-        $this->compiler->cleanCompileForServer($server['id']);
-
         $server['path'] = $this->syncPath . DS . $server['id'];
 
         if (!is_dir($server['path'])) {
@@ -209,6 +207,17 @@ class Synchronizer
             $source->downloadFiles($missing);
         }
 
+        foreach ($contents as $content) {
+            if ($content->type === 'photo') {
+                $path = $this->syncPath . DS . $server['id'] . DS . $content->file_name;
+
+                if (file_exists($path)) {
+                    $content->size = sprintf('%.2f', filesize($path) / 1024);
+                }
+            }
+        }
+
+        $this->compiler->cleanCompileForServer($server['id']);
         $this->compiler->compile($server['id'], $contents);
 
         $this->stats['contents']   += count($contents);
@@ -279,3 +288,4 @@ class Synchronizer
         return $params;
     }
 }
+
