@@ -174,7 +174,7 @@ class NewsAgencyController extends Controller
             return new Response('Image not found', 404);
         }
 
-        $path = $repository->syncPath . DS . $source . DS . $resource->title;
+        $path = $repository->syncPath . DS . $source . DS . $resource->file_name;
 
         $content = @file_get_contents($path);
 
