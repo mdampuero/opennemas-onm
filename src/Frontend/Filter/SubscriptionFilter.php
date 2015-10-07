@@ -79,8 +79,8 @@ class SubscriptionFilter
     public function registeredHook(&$content)
     {
         $restrictedContent = $this->template->fetch(
-            'article/partials/content_only_for_registered.tpl',
-            array('id' => $content->id)
+            'common/content_only_for_registered.tpl',
+            [ 'content' => $content ]
         );
 
         if (empty($this->user)) {
