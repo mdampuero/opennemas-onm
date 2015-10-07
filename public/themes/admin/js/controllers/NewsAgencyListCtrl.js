@@ -23,6 +23,8 @@
       '$controller', '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger',
       function($controller, $http, $modal, $scope, $timeout, itemService, routing, messenger) {
 
+        $scope.mode = 'list';
+
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));
 
@@ -95,6 +97,23 @@
         };
 
         /**
+         * @function
+         * @memberOf NewsAgencyListCtrl
+         *
+         * @description
+         *   Selects an item to show in sidebar.
+         *
+         * @param {Object} item Item to show in sidebar
+         */
+        $scope.select = function(item) {
+          item.url = routing.generate('backend_ws_news_agency_show_image', {
+            source: item.source, id: item.id
+          });
+
+          $scope.selected.lastSelected = item;
+        };
+
+        /**
          * @function selectAll
          * @memberOf NewsAgencyListCtrl
          *
@@ -122,6 +141,22 @@
 
           for (var i = 0; i < $scope.contents.length; i++) {
             $scope.expanded[i] = false;
+          }
+        });
+
+        // Updates the list mode when criteria changes.
+        $scope.$watch('criteria.type', function(nv, ov) {
+          if (ov === nv) {
+            return;
+          }
+
+          $scope.loading = true;
+          $scope.contents = [];
+
+          if (nv === 'photo') {
+            $scope.setMode('grid');
+          } else {
+            $scope.setMode('list');
           }
         });
 

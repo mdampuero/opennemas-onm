@@ -21,6 +21,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     $scope.contents = [];
 
     /**
+     * The search timeout function.
+     *
+     * @type function
+     */
+    $scope.searchTimeout;
+
+    /**
      * The list of selected elements.
      *
      * @type array
@@ -194,6 +201,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       } else {
         $scope.contents = [];
         $scope.loading = 1;
+
+        $scope.selected = { all: false, contents: [] };
       }
 
       var url = routing.generate(route, {
@@ -226,6 +235,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.contents = $scope.contents.concat(response.data.results);
         } else {
           $scope.contents = response.data.results;
+
         }
 
         $scope.map = response.data.map;
@@ -380,7 +390,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }
 
       $scope.mode = mode;
-      $scope.pagination.page = 1;
 
       if (mode === 'grid') {
         var maxHeight = $(window).height() - $('.header').height() -
@@ -406,13 +415,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           cols = 1;
         }
 
-        if ($scope.pagination.epp != rows * cols) {
+        if ($scope.pagination.epp !== rows * cols) {
           $scope.contents = [];
         }
 
         $scope.pagination.epp = rows * cols;
       }
-    }
+    };
 
     /**
      * Reloads the list on keypress.
@@ -434,11 +443,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.reloadPage = function() {
       $window.location.reload();
-    }
+    };
 
     $scope.select = function(item) {
+      console.log('select');
       $scope.selected.lastSelected = item;
-    }
+    };
 
     /**
      * Sort by function
@@ -1167,17 +1177,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param  object newValues New filters values.
      * @param  object oldValues Old filters values.
      */
-    var searchTimeout;
     $scope.$watch('criteria', function(newValues, oldValues) {
       // Change page when scrolling in grid mode
-      if (searchTimeout) {
-        $timeout.cancel(searchTimeout);
+      if ($scope.searchTimeout) {
+        $timeout.cancel($scope.searchTimeout);
       }
 
       if (newValues !== oldValues) {
         $scope.pagination.page = 1;
 
-        searchTimeout = $timeout(function() {
+        $scope.searchTimeout = $timeout(function() {
           $scope.list($scope.route, true);
         }, 500);
       }

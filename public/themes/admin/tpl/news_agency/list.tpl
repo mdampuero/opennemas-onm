@@ -106,7 +106,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs hidden-sm ng-cloak">
+            <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-if="mode !== 'grid'">
               <ui-select name="view" theme="select2" ng-model="pagination.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -116,13 +116,13 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks" ng-if="mode !== 'grid'">
               <button class="btn btn-link" ng-click="list('backend_ws_news_agency_list')" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
                 <i class="fa fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
               </button>
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak visible-md visible-lg" ng-if="contents.length > 1">
+          <ul class="nav quick-section pull-right ng-cloak visible-md visible-lg" ng-if="contents.length > 1 && mode !== 'grid'">
             <li class="quicklinks hidden-xs" ng-if="contents.length > 0">
               <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
             </li>
@@ -131,7 +131,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
+      <div class="grid simple" ng-if="criteria.type === 'text'">
         <div class="grid-body no-padding">
           <div class="spinner-wrapper" ng-if="loading">
             <div class="loading-spinner"></div>
@@ -250,12 +250,86 @@
           </div>
         </div>
       </div>
+      <div class="content-wrapper">
+        <div class="ng-cloak spinner-wrapper" ng-if="mode === 'grid' && loading && contents.length < pagination.total">
+          <div class="loading-spinner"></div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+        <div class="clearfix infinite-row ng-cloak" ng-if="mode === 'grid'">
+          <div class="listing-no-contents ng-cloak" ng-if="!loading && !loadingMore && contents.length == 0">
+            <div class="center">
+              <h4>{t}Unable to find any image that matches your search.{/t}</h4>
+              <h6>{t}Maybe changing any filter could help or add one using the "Upload" button above.{/t}</h6>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
+            <div class="dynamic-image-placeholder no-margin" ng-click="select(content);xsOnly($event, toggle, content)">
+              <dynamic-image class="img-thumbnail" path="[% routing.generate('backend_ws_news_agency_show_image', { source: content.source, id: content.id }) %]" raw="true">
+                <div class="hidden-select" ng-click="toggle(content)"></div>
+              </dynamic-image>
+            </div>
+          </div>
+        </div>
+        <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_news_agency_list')" ng-if="!loading && criteria.type === 'photo' && pagination.total != contents.length">
+          <h5>
+            <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
+            <span ng-if="!loadingMore">{t}Load more{/t}</span>
+            <span ng-if="loadingMore">{t}Loading{/t}</span>
+          </h5>
+        </div>
+        <div class="infinite-row master-row ng-cloak">
+          <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
+          </div>
+        </div>
+      </div>
+      <div class="content-sidebar hidden-sm ng-cloak" ng-if="criteria.type === 'photo'">
+        <div class="center p-t-15" ng-if="!selected.lastSelected">
+          <h4>{t}No item selected{/t}</h4>
+          <h6>{t}Click in one item to show information about it{/t}</h6>
+        </div>
+        <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Image details{/t}</h4>
+        <div ng-if="selected.lastSelected">
+          <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)">
+              <dynamic-image class="img-thumbnail" ng-model="selected.lastSelected.url" raw="true"></dynamic-image>
+          </div>
+          <ul class="media-information">
+            <li>
+              <strong>[% selected.lastSelected.name %]</strong>
+            </li>
+            <li>
+              <strong>{t}Agency{/t}:</strong>
+              [% selected.lastSelected.agency_name %]
+            </li>
+            <li>[% selected.lastSelected.created | moment %]</li>
+            <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
+            <li>
+              <div class="form-group">
+                <label for="description">
+                  <strong>{t}Description{/t}</strong>
+                </label>
+                <p>[% selected.lastSelected.title %]</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
       {include file="news_agency/modals/_modal_sync_dialog.tpl"}
       <script type="text/ng-template" id="modal-import-selected">
         {include file="news_agency/modals/_modal_batch_import.tpl"}
       </script>
       <script type="text/ng-template" id="modal-view-content">
         {include file="news_agency/modals/_modal_view_content.tpl"}
+      </script>
+      <script type="text/ng-template" id="modal-image">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+          <h4 class="modal-title">{t}Image preview{/t}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="resource">
+            <img class="img-responsive" ng-src="[% template.selected.url %]"/>
+          </div>
+        </div>
       </script>
     </div>
   </div>
