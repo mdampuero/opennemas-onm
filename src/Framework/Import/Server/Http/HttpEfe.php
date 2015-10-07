@@ -62,13 +62,14 @@ class HttpEfe extends Server
         }
 
         foreach ($files as $file) {
-            $localFilePath = $this->params['path'] . DS . $file['filename'];
+            $localFile = $this->params['path'] . DS . $file['filename'];
 
-            if (!file_exists($localFilePath)) {
+            if (!file_exists($localFile)) {
                 $content = $this->getContentFromUrl($file['url']);
 
-                file_put_contents($localFilePath, $content);
+                file_put_contents($localFile, $content);
 
+                $this->localFiles[] = $localFile;
                 $this->downloaded++;
             }
         }
