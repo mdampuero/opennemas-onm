@@ -157,6 +157,10 @@ class NewsAgencyServerController extends Controller
 
         $servers[$id]['activated'] = $status;
 
+        $repository = new LocalRepository();
+        $compiler   = new Compiler($repository->syncPath);
+        $compiler->cleanCompileForServer($id);
+
         $sm->set('news_agency_config', $servers);
 
         return new JsonResponse(
