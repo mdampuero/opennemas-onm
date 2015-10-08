@@ -841,7 +841,7 @@ class ArticlesController extends Controller
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
             if (isset($value['name']) && !empty($value['name'])) {
-                $article->$value['name'] = $value['value'];
+                $article->{$value['name']} = $value['value'];
             }
         }
 
