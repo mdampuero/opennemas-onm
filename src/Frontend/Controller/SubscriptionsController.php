@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for newsletter subscriptions
@@ -38,10 +37,10 @@ class SubscriptionsController extends Controller
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->assign(
-            array(
+            [
                 'advertisements'  => $ads,
                 'actual_category' => 'newsletter'
-            )
+            ]
         );
 
         return $this->render('static_pages/subscription.tpl');
@@ -59,189 +58,37 @@ class SubscriptionsController extends Controller
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_newsletter_subscribe_show'));
         }
-        //Get configuration params
-        $configRecaptcha = s::get('recaptcha');
-        $configSiteName  = s::get('site_name');
-        $configMailTo    = s::get('newsletter_maillist');
 
         // Get request params
-        $action           = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
-        $verify           = $request->request->filter('verify', "", FILTER_SANITIZE_STRING);
-        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
-        $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
-        $message          = null;
-        $class            = "";
+        $verify = $request->request->filter('verify', '', FILTER_SANITIZE_STRING);
+        $action = $request->request->filter('action', '', FILTER_SANITIZE_STRING);
+        $data = [
+            'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'subscription' => $request->request->filter('subscription', '', FILTER_SANITIZE_STRING),
+        ];
 
+        // Set default values to return
+        $message = null;
+        $class   = '';
+
+        // Check verify for bots
         if (empty($verify)) {
-            // Check google reCAPTCHA
-            $valid = false;
-            $response = $request->get('g-recaptcha-response');
-            if (!is_null($response)) {
-                $rs = $this->get('google_recaptcha');
-                $recaptcha = $rs->getPublicRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
+            // Check reCaptcha
+            $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
+            $class = 'error';
+            if ($this->checkRecaptcha($request)) {
+                $message = _(
+                    "Sorry, we were unable to complete your request.\n"
+                    ."Check the form and try again"
                 );
-
-                $valid = $resp->isSuccess();
-            } else {
-                // Check old reCAPTCHA
-                $captcha = $this->get('recaptcha')
-                    ->setPrivateKey($configRecaptcha['private_key'])
-                    ->setRemoteIp($request->getClientIp());
-
-                // Validate response
-                $resp = $captcha->check($rcChallengeField, $rcResponseField);
-                $valid = $resp->isValid();
-            }
-
-            // What happens when the CAPTCHA was entered incorrectly
-            if (!$valid) {
-                $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
-                $class = 'error';
-            } else {
-                // Correct CAPTCHA, bad mail and name empty
-                $email  = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
-                $name   = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
-                $type = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
-
-                if ($type == 'alta' && (empty($email) || empty($name))) {
-                    $message = _(
-                        "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
-                    );
-                    $class = 'error';
-                } elseif ($type == 'baja' && empty($email)) {
-                    $message = _(
-                        "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
-                    );
-                    $class = 'error';
-                } else {
-                    // Correct CAPTCHA, correct mail and name not empty
-
-                    //Filter $_POST vars from request
-                    $data['name']                = $name;
-                    $data['email']               = $email;
-                    $data['subscription']        = $type;
-                    $data['subscritorEntity']    = $request->request->filter('entity', null, FILTER_SANITIZE_STRING);
-                    $data['subscritorCountry']   = $request->request->filter('country', null, FILTER_SANITIZE_STRING);
-                    $data['subscritorCommunity'] = $request->request->filter('community', null, FILTER_SANITIZE_STRING);
-
-                    $user = new \Subscriptor();
-                    // Check for repeated e-mail
-
-                    switch ($action) {
-                        // Logic for subscription sending a mail to s::get('newsletter_maillist')
-                        case 'submit':
-                            // Build mail body
-                            $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
-                                "Email: ".$data['email']." \r\n";
-                            if (!empty($data['subscritorEntity'])) {
-                                $formulario.= "Entidad: ".$data['subscritorEntity']." \n";
-                            }
-                            if (!empty($data['subscritorCountry'])) {
-                                $formulario.= "País: ".$data['subscritorCountry']." \n";
-                            }
-                            if (!empty($data['subscritorCommunity'])) {
-                                $formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
-                            }
-
-                            // Checking the type of action to do (alta/baja)
-                            if ($data['subscription'] == 'alta') {
-                                $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
-                                $body    =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
-
-                                $message = _("You have been subscribed to the newsletter.");
-                                $class = 'success';
-                            } else {
-                                $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
-                                $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
-
-                                $message = _("You have been unsusbscribed from the newsletter.");
-                                $class = 'success';
-                            }
-
-                            //  Build the message
-                            $text = \Swift_Message::newInstance();
-                            $text
-                                ->setSubject($subject)
-                                ->setBody(utf8_decode($body), 'text/html')
-                                ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
-                                ->setTo(array($configMailTo['subscription'] => _('Subscription form')))
-                                ->setFrom(array($data['email'] => $data['name']))
-                                ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-                            try {
-                                $mailer = $this->get('mailer');
-                                $mailer->send($text);
-                                if ($data['subscription'] == 'alta') {
-                                    $message = _("You have been subscribed to our newsletter.");
-                                } else {
-                                    $message = _("You have been unsubscribed from our newsletter.");
-                                }
-                                $class   = 'success';
-
-                            } catch (\Swift_SwiftException $e) {
-                                $message = _(
-                                    "Sorry, we were unable to complete your request.\n"
-                                    ."Check the form and try again"
-                                );
-                                $class = 'error';
-                            }
-
-                            break;
-                        case 'create_subscriptor':
-                            if ($data['subscription'] == 'alta') {
-                                if ($user->existsEmail($data['email'])) {
-                                    $message = _("Sorry, that email is already subscribed to our newsletter");
-                                    $class = 'error';
-                                } else {
-                                    $data['subscription'] = 1;
-                                    $data['status'] = 2;
-
-                                    $user = new \Subscriptor();
-
-                                    if ($user->create($data)) {
-                                        $message = _("You have been subscribed to our newsletter.");
-                                        $class = 'success';
-                                    } else {
-                                        $message = _(
-                                            "Sorry, we were unable to complete your request.\n"
-                                            ."Check the form and try again"
-                                        );
-                                        $class = 'error';
-                                    }
-                                }
-                            } else {
-                                if ($user->existsEmail($data['email'])) {
-                                    $data['subscription'] = 0;
-                                    $data['status'] = 3;
-
-                                    $user = new \Subscriptor();
-                                    $user = $user->getUserByEmail($data['email']);
-                                    $data['id'] = $user->id;
-
-                                    if ($user->update($data)) {
-                                        $message = _("You have been unsubscribed from our newsletter");
-                                        $class = 'success';
-                                    } else {
-                                        $message = _(
-                                            "Sorry, we were unable to complete your request.\n"
-                                            ."Check the form and try again"
-                                        );
-                                        $class = 'error';
-                                    }
-                                } else {
-                                    $message = _("Sorry, that email is not in our database");
-                                    $class = 'error';
-                                }
-                            }
-
-                            break;
+                // Check name and email
+                if (!empty($data['email']) && !empty($data['name'])) {
+                    if ($action == 'create_subscriptor') {
+                        $rs = $this->createSubscription($data);
+                    } elseif ($action == 'submit') {
+                        $rs = $this->sendSubscriptionMail($request, $data);
                     }
-
                 }
             }
         }
@@ -249,12 +96,199 @@ class SubscriptionsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/subscription.tpl',
-            array(
-                'message' => $message,
+            [
+                'message'         => $rs['message'],
                 'actual_category' => 'newsletter',
-                'class'   => $class,
-            )
+                'class'           => $rs['class'],
+            ]
         );
+    }
+
+    /**
+     * Check if recaptcha is valid
+     *
+     * @return $valid bool
+     **/
+    public function checkRecaptcha($request)
+    {
+        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
+        $rcResponseField  = $request->request->filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
+        $configRecaptcha  = $this->get('setting_repository')->get('recaptcha');
+
+        // Check new and old reCAPTCHA
+        $valid = false;
+        $response = $request->get('g-recaptcha-response');
+        if (!is_null($response)) {
+            $rs = $this->get('google_recaptcha');
+            $recaptcha = $rs->getPublicRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
+            );
+
+            $valid = $resp->isSuccess();
+        } else {
+            $captcha = $this->get('recaptcha')
+                ->setPrivateKey($configRecaptcha['private_key'])
+                ->setRemoteIp($request->getClientIp());
+
+            $resp = $captcha->check($rcChallengeField, $rcResponseField);
+            $valid = $resp->isValid();
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Sends an email with the new subscription data
+     *
+     * @param Array $data Data for subscription
+     *
+     * @return Array Message and class to show the user
+     **/
+    public function sendSubscriptionMail($request, $data)
+    {
+        // Get extra parameters
+        $data['subscritorEntity']    = $request->request->filter('entity', '', FILTER_SANITIZE_STRING);
+        $data['subscritorCountry']   = $request->request->filter('country', '', FILTER_SANITIZE_STRING);
+        $data['subscritorCommunity'] = $request->request->filter('community', '', FILTER_SANITIZE_STRING);
+
+        // Build mail body
+        $text = "Nombre y Apellidos: ". $data['name']." \r\n".
+            "Email: ".$data['email']." \r\n";
+        if (!empty($data['subscritorEntity'])) {
+            $text.= "Entidad: ".$data['subscritorEntity']." \n";
+        }
+        if (!empty($data['subscritorCountry'])) {
+            $text.= "País: ".$data['subscritorCountry']." \n";
+        }
+        if (!empty($data['subscritorCommunity'])) {
+            $text.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
+        }
+
+        //Get configuration params
+        $sr = $this->get('setting_repository');
+        $configSiteName  = $sr->get('site_name');
+        $configMailTo    = $sr->get('newsletter_maillist');
+
+        // Checking the type of action to do (alta/baja)
+        if ($data['subscription'] == 'alta') {
+            $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
+            $body    =  "Solicitud de Alta en el boletín de: \r\n". $text;
+
+            $message = _("You have been subscribed to the newsletter.");
+        } else {
+            $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
+            $body    =  "Solicitud de Baja en el boletín de: \r\n". $text;
+
+            $message = _("You have been unsusbscribed from the newsletter.");
+        }
+
+        //  Build the message
+        $mail = \Swift_Message::newInstance();
+        $mail
+            ->setSubject($subject)
+            ->setBody(utf8_decode($body), 'text/html')
+            ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
+            ->setTo(array($configMailTo['subscription'] => _('Subscription form')))
+            ->setFrom(array($data['email'] => $data['name']))
+            ->setSender(array('no-reply@postman.opennemas.com' => $sr->get('site_name')));
+
+        try {
+            $mailer = $this->get('mailer');
+            $mailer->send($mail);
+            if ($data['subscription'] == 'alta') {
+                $message = _("You have been subscribed to our newsletter.");
+            } else {
+                $message = _("You have been unsubscribed from our newsletter.");
+            }
+            $class   = 'success';
+
+        } catch (\Swift_SwiftException $e) {
+            $message = _(
+                "Sorry, we were unable to complete your request.\n"
+                ."Check the form and try again"
+            );
+            $class = 'error';
+        }
+
+        return [
+            'message' => $message,
+            'class'   => $class
+        ];
+    }
+
+    /**
+     * Creates a new subscripcion
+     *
+     * @param Array $data Data for subscription
+     *
+     * @return Array Message and class to show the user
+     **/
+    public function createSubscription($data)
+    {
+        $user = new \Subscriptor();
+        if ($data['subscription'] == 'alta') {
+            if ($user->existsEmail($data['email'])) {
+                $data['subscription'] = 1;
+                $data['status'] = 2;
+
+                $user = $user->getUserByEmail($data['email']);
+                $data['id'] = $user->id;
+
+                if ($user->update($data)) {
+                    $message = _("You have been subscribed to our newsletter.");
+                    $class = 'success';
+                } else {
+                    $message = _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    );
+                    $class = 'error';
+                }
+            } else {
+                $data['subscription'] = 1;
+                $data['status'] = 2;
+
+                if ($user->create($data)) {
+                    $message = _("You have been subscribed to our newsletter.");
+                    $class = 'success';
+                } else {
+                    $message = _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    );
+                    $class = 'error';
+                }
+            }
+        } else {
+            if ($user->existsEmail($data['email'])) {
+                $data['subscription'] = 0;
+                $data['status'] = 3;
+
+                $user = $user->getUserByEmail($data['email']);
+                $data['id'] = $user->id;
+
+                if ($user->update($data)) {
+                    $message = _("You have been unsubscribed from our newsletter");
+                    $class = 'success';
+                } else {
+                    $message = _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    );
+                    $class = 'error';
+                }
+            } else {
+                $message = _("Sorry, that email is not in our database");
+                $class = 'error';
+            }
+        }
+
+        return [
+            'message' => $message,
+            'class'   => $class
+        ];
     }
 
     /**
