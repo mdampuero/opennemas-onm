@@ -17,13 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
- * Handles the actions for the news agency module
- *
- * @package Backend_Controllers
- **/
+ * Controller for News Agency listing
+ */
 class NewsAgencyController extends Controller
 {
     /**
@@ -38,27 +35,42 @@ class NewsAgencyController extends Controller
      */
     public function importAction(Request $request)
     {
-        $author   = $request->request->get('author', null, FILTER_SANITIZE_STRING);
-        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
-        $ids      = $request->request->get('ids');
-        $type     = $request->request->get('type', null, FILTER_SANITIZE_STRING);
+        $author    = $request->request->get('author', null, FILTER_SANITIZE_STRING);
+        $category  = $request->request->get('category', null, FILTER_SANITIZE_STRING);
+        $ids       = $request->request->get('ids');
+        $type      = $request->request->get('type', null, FILTER_SANITIZE_STRING);
+        $edit      = $request->request->get('edit');
+        $activated = 1;
 
+        if ($edit) {
+            $activated = 0;
+        }
+
+        $em         = $this->get('entity_repository');
         $repository = new LocalRepository();
 
         $imported = [];
         foreach ($ids as $value) {
             $resource = $repository->find($value['source'], $value['id']);
 
-            // Import related first
-            foreach ($resource->related as $id) {
-                if (in_array($id, $ids)) {
-                    $imported[] =
-                        $this->import($id, $value['source'], $category, $type, $author);
-                }
-            }
+            $criteria = [
+                'urn_source' => [
+                    [ 'value' => $resource->urn, 'operator' => '=' ]
+                ]
+            ];
 
-            $imported[] =
-                $this->import($value['id'], $value['source'], $category, $type, $author);
+            $content = $em->findOneBy($criteria, []);
+
+            if (empty($content)) {
+                $imported[] = $this->import(
+                    $value['id'],
+                    $value['source'],
+                    $category,
+                    $type,
+                    $author,
+                    $activated
+                );
+            }
         }
 
         $response = new JsonResponse([
@@ -71,7 +83,18 @@ class NewsAgencyController extends Controller
                     'type' => 'success'
                 ]
             ]
-        ]);
+        ], 201);
+
+        if (count($imported) === 1 && $edit) {
+            $response->headers->add(
+                [
+                    'location' => $this->generateUrl(
+                        'admin_article_show',
+                        [ 'id' => $imported[0] ]
+                    )
+                ]
+            );
+        }
 
         return $response;
     }
@@ -410,13 +433,14 @@ class NewsAgencyController extends Controller
     /**
      * Basic logic to import an element
      *
-     * @param string $id       The resource id.
-     * @param string $source   The resource source.
-     * @param string $category The category to import to.
-     * @param string $type     The type to import to.
-     * @param string $author   The author id.
+     * @param string $id        The resource id.
+     * @param string $source    The resource source.
+     * @param string $category  The category to import to.
+     * @param string $type      The type to import to.
+     * @param string $author    The author id.
+     * @param string $activated The activated flag value.
      */
-    private function import($id, $source, $category = null, $type = null, $author = null)
+    private function import($id, $source, $category = null, $type = null, $author = null, $activated = 0)
     {
         $repository = new LocalRepository();
         $resource   = $repository->find($source, $id);
@@ -445,7 +469,7 @@ class NewsAgencyController extends Controller
 
         $data = [
             'category'       => $category,
-            'content_status' => 0,
+            'content_status' => $activated,
             'frontpage'      => 0,
             'in_home'        => 0,
             'metadata'       => \Onm\StringUtils::getTags($resource->title),
@@ -474,25 +498,41 @@ class NewsAgencyController extends Controller
             $em = $this->get('entity_repository');
 
             foreach ($resource->related as $id) {
-                $content = $repository->find($resource->source, $id);
+                $related = $repository->find($source, $id);
 
-                if (!empty($content)) {
+                if (!empty($related)) {
                     $criteria = [
                         'urn_source' => [
-                            [ 'value' => $resource->urn, 'operator' => '=' ]
+                            [ 'value' => $related->urn, 'operator' => '=' ]
                         ]
                     ];
 
                     $content = $em->findOneBy($criteria, []);
 
+                    $imported = 0;
+                    if (empty($content)) {
+                        $imported = $this->import(
+                            $related->id,
+                            $related->source,
+                            $category,
+                            $type,
+                            $author
+                        );
+                    }
+
+                    $content = $em->find('Content', $imported);
+
                     if ($content->content_type_name === 'photo') {
-                        if (!array_key_exists('img1', $data)) {
+                        if (!array_key_exists('img1', $data)
+                            || empty($data['img1'])
+                        ) {
                             $data['img1']        = $content->pk_content;
                             $data['img1_footer'] = $content->description;
                         }
 
                         // Add as inner image if no image or if it is equals to img1
                         if (!array_key_exists('img2', $data)
+                            || empty($data['img2'])
                             || $data['img1'] == $data['img2']
                         ) {
                             $data['img2']        = $content->pk_content;
@@ -521,16 +561,19 @@ class NewsAgencyController extends Controller
         }
 
         if ($resource->type === 'photo') {
-            $filePath = realpath($repository->syncPath . DS . $source . DS . $resource->file);
+            $filePath = realpath(
+                $repository->syncPath . DS . $source . DS . $resource->file_name
+            );
 
             $data = [
                 'title'             => $resource->title,
                 'description'       => $resource->title,
                 'local_file'        => $filePath,
-                'fk_category'       => $category,
+                'fk_category'       => 0,
+                'category_name'     => '',
                 'metadata'          => \Onm\StringUtils::getTags($resource->title),
                 'author_name'       => '&copy; EFE '.date('Y'),
-                'original_filename' => $resource->title,
+                'original_filename' => $resource->file_name,
             ];
         }
 
@@ -552,7 +595,10 @@ class NewsAgencyController extends Controller
         }
 
         if ($resource->type === 'photo') {
-            $target = 'Photo';
+            $photo = new \Photo();
+            $id = $photo->createFromLocalFile($data);
+
+            return $id;
         }
 
         $content = new $target();
