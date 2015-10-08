@@ -22,12 +22,6 @@ class NewsMLComponentTextEFETest extends \PHPUnit_Framework_TestCase
                 <ContentItem>
                     <MediaType FormalName=\"Text\"/>
                 </ContentItem>
-            </NewsComponent>"),
-            simplexml_load_string("<NewsComponent>
-                <ContentItem>
-                    <MediaType FormalName=\"Text\"/>
-                    <Format FormalName=\"NITF\"/>
-                </ContentItem>
             </NewsComponent>")
         ];
 

@@ -110,7 +110,7 @@ class NewsML extends Parser
             return $date;
         }
 
-        return new \DateTime();
+        return new \DateTime('now');
     }
 
     /**
@@ -295,7 +295,13 @@ class NewsML extends Parser
 
         $parsed = $parser->parse($data);
 
-        $this->bag = array_merge($this->bag, $parser->getBag());
+        foreach ($parser->getBag() as $key => $value) {
+            if (!array_key_exists($key, $this->bag)
+                || empty($this->bag[$key])
+            ) {
+                $this->bag[$key] = $value;
+            }
+        }
 
         return $parsed;
     }

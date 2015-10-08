@@ -64,7 +64,8 @@ class NITFEFETest extends \PHPUnit_Framework_TestCase
 
     public function testGetCreatedTime()
     {
-        $this->assertEmpty($this->parser->getCreatedTime($this->invalid));
+        $date = new \DateTime('now');
+        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
 
         $date = \DateTime::createFromFormat('Ymd\THis', '20150921T080200');
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));

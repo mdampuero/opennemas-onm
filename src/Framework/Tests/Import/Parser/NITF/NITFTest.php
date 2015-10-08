@@ -87,7 +87,9 @@ class NITFTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCreatedTime()
     {
-        $this->assertEmpty($this->parser->getCreatedTime($this->invalid));
+        $date = new \DateTime('now');
+        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
+
 
         $date = \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
@@ -131,10 +133,10 @@ class NITFTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrn()
     {
-        $this->assertEquals(
-            'urn:nitf:::',
+        $this->assertEquals(1, preg_match(
+            '/urn:nitf::\d{14}:/',
             $this->parser->getUrn($this->invalid)
-        );
+        ));
 
         $this->assertEquals(
             'urn:nitf:foobar_agency:20150921100200:21155709',
@@ -144,7 +146,13 @@ class NITFTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $this->assertEquals(new Resource(), $this->parser->parse($this->invalid));
+        $parsed = $this->parser->parse($this->invalid);
+
+        $this->assertEquals('text', $parsed->type);
+        $this->assertEquals(1, preg_match(
+            '/urn:nitf::\d{14}:/',
+            $parsed->urn
+        ));
 
         $resource = new Resource();
         $resource->agency_name = 'Foobar Agency';
@@ -153,6 +161,8 @@ class NITFTest extends \PHPUnit_Framework_TestCase
         $resource->created_time =
             \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');
         $resource->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
+
+        $resource->created_time = $resource->created_time->format('Y-m-d H:i:s');
 
         $resource->id       = '21155709';
         $resource->priority = 3;

@@ -110,7 +110,8 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCreatedTime()
     {
-        $this->assertEmpty($this->parser->getCreatedTime($this->invalid));
+        $date = new \DateTime('now');
+        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
 
         $date = \DateTime::createFromFormat('Ymd\THisP', '20040729T054956Z');
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
@@ -170,13 +171,13 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrn()
     {
-        $this->assertEquals(
-            'urn:newsml:::',
+        $this->assertEquals(1, preg_match(
+            '/urn:newsml::\d{14}:/',
             $this->parser->getUrn($this->invalid)
-        );
+        ));
 
         $this->assertEquals(
-            'urn:newsml:foobar_agency:20040729054956:040729054956.xm61wen7',
+            'urn:newsml:foobar_agency:20040729074956:040729054956.xm61wen7',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -187,19 +188,19 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
 
         $this->parser->parse($this->invalid);
+        $bag = $this->parser->getBag();
 
-        $this->assertEquals(
-            [ 'agency_name' => '', 'created_time' => null, 'id' => '' ],
-            $this->parser->getBag()
-        );
+        $this->assertEmpty($bag['agency_name']);
+        $this->assertTrue($date->format('Y-m-d H:i:s') < $bag['created_time']);
+        $this->assertEmpty($bag['id']);
 
         $this->parser->parse($this->valid);
 
         $this->assertEquals(
             [
                 'agency_name'  => 'Foobar Agency',
-                'created_time' => $date,
-                'id' => '040729054956.xm61wen7'
+                'created_time' => $date->format('Y-m-d H:i:s'),
+                'id'           => '040729054956.xm61wen7'
             ],
             $this->parser->getBag()
         );

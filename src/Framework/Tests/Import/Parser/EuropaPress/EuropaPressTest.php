@@ -53,13 +53,18 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
             \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
         $this->photo->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
 
+        $this->photo->created_time =
+            $this->photo->created_time->format('Y-m-d H:i:s');
+
         $this->photo->id         = '20150921181604.photo';
         $this->photo->file_path  = 'photo1.jpg';
         $this->photo->file_type  = 'image/jpg';
-        $this->photo->media_type = 'jpg';
+        $this->photo->extension  = 'jpg';
         $this->photo->name       = 'photo1.jpg';
         $this->photo->title      = 'Photo description';
         $this->photo->type       = 'photo';
+        $this->photo->urn        =
+            'urn:europapress:europapress:20150921181604:20150921181604.photo';
 
         $this->text = new Resource();
 
@@ -69,6 +74,9 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->created_time =
             \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
         $this->text->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
+
+        $this->text->created_time =
+            $this->text->created_time->format('Y-m-d H:i:s');
 
         $this->text->id       = '20150921181604';
         $this->text->pretitle = 'Sample pretitle';
@@ -108,7 +116,8 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCreatedTime()
     {
-        $this->assertEmpty($this->parser->getCreatedTime($this->invalid));
+        $date = new \DateTime('now');
+        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
 
         $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
         $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
@@ -128,7 +137,6 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->parser->getPhoto($this->invalid));
 
         $this->assertEquals($this->photo, $this->parser->getPhoto($this->valid));
-
     }
 
     public function testGetPriority()
@@ -162,10 +170,10 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrn()
     {
-        $this->assertEquals(
-            'urn:europapress:europapress::',
+        $this->assertEquals(1, preg_match(
+            '/urn:europapress:europapress:\d{14}:/',
             $this->parser->getUrn($this->invalid)
-        );
+        ));
 
         $this->assertEquals(
             'urn:europapress:europapress:20150921181604:20150921181604',
@@ -184,7 +192,17 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $resource->type         = 'text';
         $resource->urn          = 'urn:europapress:europapress::';
 
-        $this->assertEquals([ $resource ], $this->parser->parse($this->invalid));
+        $resources = $this->parser->parse($this->invalid);
+
+        foreach ($resources as $resource) {
+            $this->assertEquals('EuropaPress', $resource->agency_name);
+            $this->assertEquals('text', $resource->type);
+
+            $this->assertEquals(1, preg_match(
+                '/urn:europapress:europapress:\d{14}:/',
+                $resource->urn
+            ));
+        }
 
         $this->assertEquals(
             [ $this->text, $this->photo ],
