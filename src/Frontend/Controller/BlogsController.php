@@ -259,12 +259,12 @@ class BlogsController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
-        $cacheable = $subscriptionFilter->subscriptionHook($blog);
-
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
+
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($blog);
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $blogID);
