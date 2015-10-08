@@ -663,7 +663,7 @@ class OpinionsController extends Controller
         // Fetch all opinion properties and generate a new object
         foreach ($opinionContents as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
-                $opinion->$value['name'] = $value['value'];
+                $opinion->{$value['name']} = $value['value'];
             }
         }
 
