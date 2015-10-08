@@ -15,8 +15,8 @@
      * @description
      *   description
      */
-    .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$modalInstance', '$scope', 'routing', 'template',
-      function ($controller, $http, $modalInstance, $scope, routing, template) {
+    .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$modalInstance', '$scope', '$window', 'routing', 'template',
+      function ($controller, $http, $modalInstance, $scope, $window, routing, template) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('modalCtrl', {
@@ -32,8 +32,10 @@
          *
          * @description
          *   Confirms and executes the confirmed action.
+         *
+         * @param {Boolean} edit Whether to edit after importing.
          */
-        $scope.confirm = function() {
+        $scope.confirm = function(edit) {
           $scope.saving = true;
 
           var ids = [];
@@ -52,9 +54,17 @@
             type:     $scope.type
           };
 
-          $http.post(url, data).success(function(response) {
-            $modalInstance.close(response);
-          }).error(function() {
+          if (edit) {
+            data.edit = 1;
+          }
+
+          $http.post(url, data).then(function(response) {
+            if (response.status === 201 && response.headers('location')) {
+              $window.location.href = response.headers('location');
+            } else {
+              $modalInstance.close(response.data);
+            }
+          }, function() {
             $modalInstance.close(false);
           });
         };
