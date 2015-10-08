@@ -98,11 +98,12 @@
          * @param {String}  transform     The transform parameters.
          * @param {String}  instanceMedia The instance media folder path.
          * @param {String}  property      The object property name.
+         * @param {Boolean} raw           Whether to use image without prefix.
          * @param {Boolean} onlyImage     Whether to generate only for images.
          *
          * @return {String} The generated URL.
          */
-        this.generateUrl = function(image, transform, instanceMedia, property, onlyImage) {
+        this.generateUrl = function(image, transform, instanceMedia, property, raw, onlyImage) {
           var prefix = '';
 
           if (!image) {
@@ -117,7 +118,7 @@
             }
           }
 
-          if (!/^http/.test(image)) {
+          if (!/^http/.test(image) && !raw) {
             if (!instanceMedia) {
               throw 'Invalid instance media folder path';
             }
@@ -142,12 +143,23 @@
           );
         };
 
+        /**
+         * @function getDefaultSize
+         * @memberOf DynamicImage
+         *
+         * @description
+         *   Returns the default width and height for the element.
+         *
+         * @param {Object} element The element.
+         *
+         * @return {Object} The width and height for element.
+         */
         this.getDefaultSize = function(element) {
           return {
             height: element.parent().width(),
             width: element.parent().width()
           };
-        }
+        };
 
         /**
          * @function getSettings
@@ -354,11 +366,11 @@
               // Add watcher to update src when scope changes
               $scope.$watch('ngModel', function(nv) {
                 $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
-                  attrs.instance, attrs.property, $scope.onlyImage);
+                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               });
             } else {
               $scope.src = DynamicImage.generateUrl(attrs.path, attrs.transform,
-                attrs.instance, attrs.property, $scope.onlyImage);
+                attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
             }
 
             $scope.$watch('src', function(nv) {
