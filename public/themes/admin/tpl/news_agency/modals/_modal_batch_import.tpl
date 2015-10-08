@@ -4,13 +4,13 @@
 </div>
 <div class="modal-body">
   <p>{t escape=off}Are you sure you want to import [% template.contents.length %] elements?{/t}</p>
-  <ul>
+  <ul class="no-style p-l-7">
     <li ng-repeat="content in template.contents">
       <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': content.type === 'text', 'fa-picture-o': content.type === 'photo', 'fa-film': content.type === 'video' }"></i>
       [% content.title %]
     </li>
   </ul>
-  <div class="p-t-15">
+  <div class="p-t-30">
     <span ng-show="template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text')">
       {t}Import{/t}
     </span>
@@ -43,5 +43,6 @@
 </div>
 <div class="modal-footer">
   <button class="btn btn-link" ng-click="close()" type="button">{t}No{/t}</button>
-  <button class="btn btn-success" ng-click="confirm()" type="button">{t}Yes, import them{/t}</button>
+  <button class="btn btn-white" ng-click="confirm(1)" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
+  <button class="btn btn-success" ng-click="confirm()" type="button">{t}Yes, import and publish{/t}</button>
 </div>
