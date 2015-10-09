@@ -15,7 +15,7 @@ use Framework\Import\Resource\Resource;
 /**
  * Parses NewsComponent that represent a photo resource from NewsML files.
  */
-class NewsMLComponentPhotoEFE extends NewsMLComponentPhoto
+class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
 {
     /**
      * {@inheritdoc}

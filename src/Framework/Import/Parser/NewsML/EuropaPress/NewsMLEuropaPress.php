@@ -10,6 +10,7 @@
 namespace Framework\Import\Parser\NewsML\EuropaPress;
 
 use Framework\Import\Parser\NewsML\NewsML;
+use Framework\Import\Resource\Resource;
 
 /**
  * Parses XML files in NewsML custom format for EuropaPress.
@@ -17,71 +18,39 @@ use Framework\Import\Parser\NewsML\NewsML;
 class NewsMLEuropaPress extends NewsML
 {
     /**
-     * Returns the title of the element
-     *
-     * @return string the title
-     **/
-    public function getTitle($data)
+     * {@inheritdoc}
+     */
+    public function checkFormat($data)
     {
-        $title = (string) $this->getData()->NewsItem->NewsComponent->NewsComponent->NewsLines->HeadLine;
-
-        return iconv(mb_detect_encoding($title), "UTF-8", $title);
-    }
-
-    /**
-     * Returns the creation datetime of this element
-     *
-     * @return DateTime the datetime of the element
-     **/
-    public function getCreatedTime($data)
-    {
-        $originalDate = (string) $this->getData()->NewsEnvelope->DateAndTime;
-
-        // ISO 8601 doesn't match this date 20111211T103900+0000
-        $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
-
-        return \DateTime::createFromFormat(
-            'Y-m-d\TH:i:s',
-            $originalDate,
-            new \DateTimeZone('UTC')
-        );
-    }
-
-    /**
-     * Returns the list of tags of this element
-     *
-     * @return int the priority level
-     **/
-    public function getTags($data)
-    {
-
-        $topics = $this->getData()->NewsItem->NewsComponent->TopicSet->Topic;
-
-        $tags = array();
-        foreach ($topics as $topic) {
-            $tag = (string) $topic->Description;
-            $tag = ucwords(strtolower($tag));
-
-            if (stripos($tag, 'Servicio') !== 0) {
-                $tags []= $tag;
-            }
+        if (!parent::checkFormat($data)) {
+            return false;
         }
-        $tags = array_unique($tags);
 
-        return $tags;
+        if ($this->getAgencyName($data) === 'Europa Press') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Returns the body of the element
+     * Returns the body from the parsed data.
      *
-     * @return string the body
-     **/
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The body.
+     */
     public function getBody($data)
     {
-        $rawContent = (string) $this->getData()->NewsItem->NewsComponent
-            ->NewsComponent->ContentItem->DataContent;
+        $body = $data->xpath('//DataContent');
 
-        preg_match('@<body[^>]*>(.*?)<\/body>@is', $rawContent, $matches);
+        if (empty($body)) {
+            return '';
+        }
+
+        $body = $body[0];
+
+        preg_match('@<body[^>]*>(.*?)<\/body>@is', $body, $matches);
 
         $body = '';
         if (array_key_exists(1, $matches)) {
@@ -92,25 +61,72 @@ class NewsMLEuropaPress extends NewsML
     }
 
     /**
-     * Checks if a XML file could be handled by this class
+     * Returns the created time from the parsed data.
      *
-     * @param SimpleXmlElement $data the XML file to parse
-     * @param string $xmlFile the path to the xml file
+     * @param SimpleXMLObject The parsed data.
      *
-     * @return boolean true if the file could be handle by this class
-     **/
-    public function checkFormat($data, $xmlFile = null)
+     * @return \DateTime The created time.
+     */
+    public function getCreatedTime($data)
     {
-        return false;
-        if ($data->NewsItem->count() <= 0) {
-            throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
-        }
-        $provider = (string) $data->NewsItem->Identification->NewsIdentifier->ProviderId;
+        $date = (string) $data->NewsEnvelope->DateAndTime;
 
-        if ($provider != 'Europa Press') {
-            throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
+        // ISO 8601 doesn't match this date 20111211T103900+0000
+        $date = preg_replace('@\+(\d){4}$@', '', $date);
+
+        return \DateTime::createFromFormat(
+            'Y-m-d\TH:i:s',
+            $date,
+            new \DateTimeZone('UTC')
+        );
+    }
+
+    /**
+     * Returns the list of tags from teh parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The tag list.
+     */
+    public function getTags($data)
+    {
+        $topics = $data->xpath('//NewsItem/NewsComponent/TopicSet/Topic');
+
+        $tags = array();
+        foreach ($topics as $topic) {
+            $tag = ucwords(strtolower((string) $topic->Description));
+
+            if (stripos($tag, 'Servicio') !== 0) {
+                $tags[] = $tag;
+            }
         }
 
-        return true;
+        $tags = array_unique($tags);
+
+        return implode(',', $tags);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parse($data)
+    {
+        $content = new Resource();
+
+        $content->agency_name  = $this->getAgencyName($data);
+        $content->body         = $this->getBody($data);
+        $content->category     = $this->getCategory($data);
+        $content->created_time = $this->getCreatedTime($data)
+            ->format('Y-m-d H:i:s');
+        $content->id           = $this->getId($data);
+        $content->pretitle     = $this->getPretitle($data);
+        $content->priority     = $this->getPriority($data);
+        $content->summary      = $this->getSummary($data);
+        $content->tags         = $this->getTags($data);
+        $content->title        = $this->getTitle($data);
+        $content->type         = 'text';
+        $content->urn          = $this->getUrn($data);
+
+        return $content;
     }
 }

@@ -12,7 +12,7 @@ namespace Framework\Import\Parser\NewsML\NewsMLComponent;
 /**
  * Parses NewsComponent of text type from NewsML custom format for EFE.
  */
-class NewsMLComponentTextEFE extends NewsMLComponentText
+class NewsMLComponentTextEfe extends NewsMLComponentText
 {
     /**
      * {@inheritdoc}
