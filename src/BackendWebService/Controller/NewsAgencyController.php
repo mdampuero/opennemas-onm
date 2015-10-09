@@ -249,10 +249,12 @@ class NewsAgencyController extends Controller
         $params['sources'] = [ [ 'name' => _('All'), 'value' => '' ] ];
 
         foreach ($params['servers'] as $server) {
-            $params['sources'][] = [
-                'name' => $server['name'],
-                'value' => $server['id']
-            ];
+            if ($server['activated']) {
+                $params['sources'][] = [
+                    'name' => $server['name'],
+                    'value' => $server['id']
+                ];
+            }
         }
 
         $params['type'] = [
