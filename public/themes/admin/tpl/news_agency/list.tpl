@@ -65,8 +65,11 @@
           </ul>
           <ul class="nav quick-section pull-right">
             <li>
-              <a href="#" class="btn btn-link" ng-click="importSelected()" tooltip="{t}Import{/t}" tooltip-placement="left">
+              <a href="#" class="btn btn-link" ng-click="importSelected()" tooltip="{t}Import{/t}" tooltip-placement="bottom">
                 <i class="fa fa-cloud-download"></i>
+                <span class="hidden-xs hidden-sm">
+                  {t}Import{/t}
+                </span>
               </a>
             </li>
           </ul>
@@ -213,7 +216,7 @@
                     </div>
                   </div>
                   <div class="listing-inline-actions">
-                    <button class="btn btn-link" ng-click="open('modal-view-content', content)" title="{t}View{/t}">
+                    <button class="btn btn-link" ng-click="preview(content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
                     </button>
                     <span class="badge badge-success" ng-if="extra.imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>

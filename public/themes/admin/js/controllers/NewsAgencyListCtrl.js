@@ -96,6 +96,39 @@
         };
 
         /**
+         * @function preview
+         * @memberOf NewsAgencyListCtrl
+         *
+         * @description
+         *   Displays a modal window with the content preview.
+         *
+         * @param {Object} content The content to preview.
+         */
+        $scope.preview = function(content) {
+          var related = [];
+
+          for (var i = 0; i < content.related.length; i++) {
+            related.push($scope.extra.related[content.related[i]]);
+          }
+
+          var modal = $modal.open({
+            templateUrl: 'modal-view-content',
+            windowClass: 'modal-news-agency-preview',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  content: content,
+                  related: related,
+                  routing: routing
+                };
+              },
+              success: null
+            }
+          });
+        }
+
+        /**
          * @function
          * @memberOf NewsAgencyListCtrl
          *
