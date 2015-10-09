@@ -9,10 +9,10 @@
  */
 namespace Framework\Tests\Import\Parser\NewsML;
 
-use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentTextEFE;
+use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentTextEfe;
 use Framework\Import\Resource\Resource;
 
-class NewsMLComponentTextEFETest extends \PHPUnit_Framework_TestCase
+class NewsMLComponentTextEfeTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
