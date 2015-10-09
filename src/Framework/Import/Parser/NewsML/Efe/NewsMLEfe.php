@@ -53,23 +53,23 @@ class NewsMLEfe extends NewsML
     {
         $tags = $data->xpath("//Property[@FormalName=\"Tesauro\"]");
 
-        if (is_array($tags) && count($tags) > 0) {
-            $tags = (string) $tags[0]->attributes()->Value;
-
-            $groups = explode(";", $tags);
-            $tags = array();
-            foreach ($groups as $group) {
-                preg_match('@(.*):(.*)@', $group, $matches);
-
-                if (!empty($matches)) {
-                    $tags[] = $matches[2];
-                }
-            }
-
-            return implode(',', $tags);
+        if (empty($tags)) {
+            return '';
         }
 
-        return '';
+        $tags = (string) $tags[0]->attributes()->Value;
+
+        $groups = explode(";", $tags);
+        $tags   = [];
+        foreach ($groups as $group) {
+            preg_match('@(.*):(.*)@', $group, $matches);
+
+            if (!empty($matches)) {
+                $tags = array_merge($tags, explode(',', $matches[2]));
+            }
+        }
+
+        return implode(',', array_unique($tags));
     }
 
     /**
