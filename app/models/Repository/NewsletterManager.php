@@ -116,13 +116,18 @@ class NewsletterManager extends BaseManager
                         $item->image        = (isset($content->cover))?$content->cover:'';
 
                         // Fetch images of articles if exists
-                        if (isset($content->img1)) {
+                        if (!empty($content->img1)) {
                             $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
+                        } elseif (!empty($content->fk_video)) {
+                            $item->video = $er->find('Video', $content->fk_video);
                         }
                         if (isset($content->summary)) {
                             $item->summary  = $content->summary;
                         } else {
                             $item->summary = substr($content->body, 0, 250).'...';
+                        }
+                        if (isset($content->description)) {
+                            $item->description  = $content->description;
                         }
                         //Fetch opinion author photos
                         if ($content->content_type == '4') {
