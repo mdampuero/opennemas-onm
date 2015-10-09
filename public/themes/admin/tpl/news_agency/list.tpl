@@ -177,8 +177,10 @@
                     [% content.title %]
                   </div>
                   <p>
-                    <div class="tags small-text">
-                      <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
+                    <div class="small-text" ng-if="content.tags">
+                      <span class="label m-l-5 uppercase" ng-repeat="tag in content.tags.split(',')">
+                        [% tag %]
+                      </span>
                     </div>
                   </p>
                   <p class="visible-xs-block visible-sm-block">
