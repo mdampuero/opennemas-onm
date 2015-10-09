@@ -257,8 +257,7 @@ class NewsAgencyController extends Controller
 
         $params['type'] = [
             [ 'name' => _('Text'), 'value' => 'text' ],
-            [ 'name' => _('Photo'), 'value' => 'photo' ],
-            [ 'name' => _('Video'), 'value' => 'video' ]
+            [ 'name' => _('Photo'), 'value' => 'photo' ]
         ];
 
         $authors = \User::getAllUsersAuthors();
