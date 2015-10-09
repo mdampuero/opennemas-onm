@@ -122,6 +122,7 @@ class Ftp extends Server
                 if (preg_match('/\.xml$/', $localFile)) {
                     $this->localFiles[] = $localFile;
                 }
+
                 $this->downloaded++;
             }
         }

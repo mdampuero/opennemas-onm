@@ -140,7 +140,7 @@ abstract class Server
      */
     protected function filterOldFiles($files, $maxAge)
     {
-        if (!empty($maxAge)) {
+        if (empty($maxAge)) {
             return $files;
         }
 
