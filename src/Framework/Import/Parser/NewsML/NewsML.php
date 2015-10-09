@@ -163,7 +163,7 @@ class NewsML extends Parser
         $priority = $data->xpath("//NewsItem/NewsManagement/Urgency");
 
         if (empty($priority)) {
-            return 1;
+            return 5;
         }
 
         $priority = (string) $priority[0]->attributes()->FormalName;

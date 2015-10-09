@@ -159,13 +159,17 @@ class EuropaPress extends Parser
     public function getPriority($data)
     {
         if (empty($data->PRIORIDAD)) {
-            return 1;
+            return 5;
         }
 
         $priority = (string) $data->PRIORIDAD;
 
         if (array_key_exists($priority, $this->priorities)) {
             return $this->priorities[$priority];
+        }
+
+        if ($priority > 5) {
+            return 5;
         }
 
         return $priority;

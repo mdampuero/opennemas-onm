@@ -138,7 +138,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPriority()
     {
-        $this->assertEquals(1, $this->parser->getPriority($this->invalid));
+        $this->assertEquals(5, $this->parser->getPriority($this->invalid));
 
         $this->assertEquals(4, $this->parser->getPriority($this->valid));
 

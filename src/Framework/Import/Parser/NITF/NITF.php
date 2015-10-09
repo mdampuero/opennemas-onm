@@ -164,7 +164,7 @@ class NITF extends Parser
             return (integer) $priority[0]->attributes()->{'ed-urg'};
         }
 
-        return 1;
+        return 5;
     }
 
     /**

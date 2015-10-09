@@ -63,13 +63,17 @@ class NITFEFE extends NITF
         $priority = $data->xpath('//head/meta[@name="prioridad"]');
 
         if (empty($priority)) {
-            return 1;
+            return 5;
         }
 
         $priority = (string) $priority[0]->attributes()->content;
 
         if (array_key_exists($priority, $this->priorities)) {
             return $this->priorities[$priority];
+        }
+
+        if ($priority > 5) {
+            return 5;
         }
 
         return $priority;

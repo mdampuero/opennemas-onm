@@ -141,11 +141,11 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPriority()
     {
-        $this->assertEquals(1, $this->parser->getPriority($this->invalid));
+        $this->assertEquals(5, $this->parser->getPriority($this->invalid));
 
         $this->assertEquals(4, $this->parser->getPriority($this->valid));
 
-        $this->assertEquals(400, $this->parser->getPriority($this->miss));
+        $this->assertEquals(5, $this->parser->getPriority($this->miss));
     }
 
     public function testGetSummary()
