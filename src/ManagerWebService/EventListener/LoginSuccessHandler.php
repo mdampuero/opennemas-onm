@@ -118,6 +118,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
             $this->session->set('failed_login_attempts', $attempts);
 
+            $this->context->setToken(null);
+
             return new RedirectResponse(
                 $this->router->generate('manager_ws_auth_login')
             );
