@@ -10,7 +10,7 @@
       [% content.title %]
     </li>
   </ul>
-  <div class="p-t-30">
+  <div class="p-t-30" ng-if="!onlyPhotos()">
     <span ng-show="template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text')">
       {t}Import{/t}
     </span>

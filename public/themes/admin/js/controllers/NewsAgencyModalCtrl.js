@@ -68,6 +68,26 @@
             $modalInstance.close(false);
           });
         };
+
+        /**
+         * @function onlyPhotos
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   Checks if all selected contents are photos.
+         *
+         * @return {Boolean} True if all selected contents are photos.
+         *                   Otherwise, returns false.
+         */
+        $scope.onlyPhotos = function() {
+          for (var i = 0; i < $scope.template.contents.length;  i++) {
+            if ($scope.template.contents[i].type !== 'photo') {
+              return false;
+            }
+          }
+
+          return true;
+        };
       }
     ]);
 })();
