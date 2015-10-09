@@ -40,7 +40,6 @@
         $scope._import = function(contents) {
           var modal = $modal.open({
             templateUrl: 'modal-import-selected',
-            backdrop: 'static',
             controller: 'NewsAgencyModalCtrl',
             resolve: {
               template: function() {
