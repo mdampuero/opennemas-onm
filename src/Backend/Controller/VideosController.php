@@ -324,7 +324,7 @@ class VideosController extends Controller
                         'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
                         'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
                         'starttime'      => $video->starttime,
-                        'params'         => $request->request->get('params'. []),
+                        'params'         => $request->request->get('params', []),
                     );
 
                     $video->update($videoData);
