@@ -182,7 +182,7 @@
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = { id: '{$video1->id}', fk_video: '{$video1->id}', description: '{$video1->description}', thumb: '{$video1->thumb}', created: '{$video1->created}', metadata: '{$video1->metadata}', thumb_image: {json_encode($video1->thumb_image)|clear_json} }"{/if}>
+                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = {json_encode($video1)|clear_json}"{/if}>
                     <h5>{t}Video for frontpage{/t}</h5>
                     <div class="thumbnail-wrapper">
                       <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video1 }"></div>
@@ -250,7 +250,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video2 = { id: '{$video2->id}', fk_video: '{$video2->id}', description: '{$video2->description}', thumb: '{$video2->thumb}', created: '{$video2->created}', metadata: '{$video1->metadata}', thumb_image: {json_encode($video2->thumb_image)|clear_json} }"{/if}>
+                  <div class="col-md-4" {if isset($video2) && $video2->title}ng-init="video2 = {json_encode($video2)|clear_json}"{/if}>
                     <h5>{t}Video for inner article page{/t}</h5>
                     <div class="thumbnail-wrapper">
                       <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video2 }"></div>
