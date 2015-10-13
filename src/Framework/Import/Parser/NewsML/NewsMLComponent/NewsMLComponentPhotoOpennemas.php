@@ -15,7 +15,7 @@ use Framework\Import\Resource\Resource;
 /**
  * Parses NewsComponent that represent a photo resource from NewsML files.
  */
-class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
+class NewsMLComponentPhotoOpennemas extends NewsMLComponentPhoto
 {
     /**
      * {@inheritdoc}
@@ -27,14 +27,18 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
         }
 
         $node = $data->xpath(
-            '/NewsComponent/NewsComponent/ContentItem/MediaType[@FormalName="Photo"]'
+            '/NewsComponent/NewsComponent/ContentItem/MediaType[@FormalName="PhotoFront"]'
         );
 
-        if (empty($node)) {
-            return false;
+        if (!empty($node)) {
+            return true;
         }
 
-        if (preg_match('/EFE/', $this->getAgencyName($data))) {
+        $node = $data->xpath(
+            '/NewsComponent/NewsComponent/ContentItem/MediaType[@FormalName="PhotoInner"]'
+        );
+
+        if (!empty($node)) {
             return true;
         }
 
@@ -50,7 +54,7 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
      */
     public function getFilename($data)
     {
-        $filename = $data->xpath('/ContentItem/Characteristics/Property[@FormalName="EFE_Filename"]');
+        $filename = $data->xpath('/ContentItem/Characteristics/Property[@FormalName="Onm_Filename"]');
 
         if (!empty($filename)) {
             return (string) $filename[0]->attributes()->Value;
@@ -62,13 +66,12 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
     /**
      * {@inheritdoc}
      */
-    public function getSummary($data)
+    public function parse($data)
     {
-        $title = $data->xpath('/NewsComponent/NewsLines/HeadLine');
-        if (empty($title)) {
-            return $this->getFromBag('summary');
-        }
-        $title = (string) $title[0];
-        return iconv(mb_detect_encoding($title), "UTF-8", $title);
+        $resource =  parent::parse($data);
+
+        $resource->agency_name = 'Opennemas';
+
+        return $resource;
     }
 }

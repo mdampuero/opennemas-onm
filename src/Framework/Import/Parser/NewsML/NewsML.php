@@ -17,13 +17,6 @@ use Framework\Import\Parser\Parser;
 class NewsML extends Parser
 {
     /**
-     * Array of parsed parameters.
-     *
-     * @var array
-     */
-    protected $bag = [];
-
-    /**
      * {@inheritdoc}
      */
     public function checkFormat($data)
@@ -57,16 +50,6 @@ class NewsML extends Parser
         }
 
         return '';
-    }
-
-    /**
-     * Returns the bag of the current parser.
-     *
-     * @return array The parser bag.
-     */
-    public function getBag()
-    {
-        return $this->bag;
     }
 
     /**
@@ -128,7 +111,13 @@ class NewsML extends Parser
             return (string) $id[0];
         }
 
-        return '';
+        $id = $this->getFromBag('id');
+
+        if (!empty($id)) {
+            return $id;
+        }
+
+        return uniqid();
     }
 
     /**
@@ -216,10 +205,11 @@ class NewsML extends Parser
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
+     * @param string          The resource type.
      *
      * @return string The URN.
      */
-    public function getUrn($data)
+    public function getUrn($data, $type = 'text')
     {
         $classname = get_class($this);
         $classname = substr($classname, strrpos($classname, '\\') + 1);
@@ -231,14 +221,14 @@ class NewsML extends Parser
             strtolower($this->getAgencyName($data))
         );
 
-        $date     = $this->getCreatedTime($data);
-        $id       = $this->getId($data);
+        $date = $this->getCreatedTime($data);
+        $id   = $this->getId($data);
 
         if (!empty($date)) {
             $date = $date->format('YmdHis');
         }
 
-        return "urn:$resource:$agency:$date:$id";
+        return "urn:$resource:$agency:$date:$type:$id";
     }
 
     /**
@@ -264,10 +254,10 @@ class NewsML extends Parser
      */
     public function parse($data)
     {
+        $this->bag['agency_name']  = $this->getAgencyName($data);
         $this->bag['id']           = $this->getId($data);
         $this->bag['created_time'] = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
-        $this->bag['agency_name']  = $this->getAgencyName($data);
 
         $items = $data->xpath('/NewsML/NewsItem');
 
@@ -292,6 +282,7 @@ class NewsML extends Parser
     public function parseComponent($data)
     {
         $parser = $this->factory->get($data);
+        $parser->setBag($this->bag);
 
         $parsed = $parser->parse($data);
 

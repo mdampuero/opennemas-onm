@@ -45,7 +45,7 @@ class NewsMLEuropaPress extends NewsML
         $body = $data->xpath('//DataContent');
 
         if (empty($body)) {
-            return '';
+            return $this->getFromBag('body');
         }
 
         $body = $body[0];

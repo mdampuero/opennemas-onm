@@ -207,10 +207,11 @@ class EuropaPress extends Parser
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
+     * @param string          The resource type.
      *
      * @return string The resource URN.
      */
-    public function getUrn($data)
+    public function getUrn($data, $type = 'text')
     {
         $classname = get_class($this);
         $classname = substr($classname, strrpos($classname, '\\') + 1);
@@ -225,7 +226,7 @@ class EuropaPress extends Parser
             $date = $date->format('YmdHis');
         }
 
-        return "urn:$resource:$agency:$date:$id";
+        return "urn:$resource:$agency:$date:$type:$id";
     }
 
     /**
@@ -252,7 +253,7 @@ class EuropaPress extends Parser
         $resource->name         = (string) $data->FOTO->NOMBRE;
         $resource->title        = (string) $data->FOTO->PIE;
         $resource->type         = 'photo';
-        $resource->urn          = $this->getUrn($data) . '.photo';
+        $resource->urn          = $this->getUrn($data, 'photo');
 
         return $resource;
     }

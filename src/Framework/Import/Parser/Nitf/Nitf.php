@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Parser\NITF;
+namespace Framework\Import\Parser\Nitf;
 
 use Framework\Import\Parser\Parser;
 use Framework\Import\Resource\Resource;
@@ -15,7 +15,7 @@ use Framework\Import\Resource\Resource;
 /**
  * Parses XML files in NITF format.
  */
-class NITF extends Parser
+class Nitf extends Parser
 {
     /**
      * {@inheritdoc}
@@ -232,7 +232,7 @@ class NITF extends Parser
         $date = $this->getCreatedTime($data)->format('YmdHis');
         $id   = $this->getId($data);
 
-        return "urn:$resource:$agency:$date:$id";
+        return "urn:$resource:$agency:$date:text:$id";
     }
 
     /**

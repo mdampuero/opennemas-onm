@@ -106,7 +106,7 @@ abstract class Server
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-            curl_setopt($ch, CURLOPT_USERPWD, "{$this->params['username']}:{$this->params['password']}");
+            curl_setopt($ch, CURLOPT_USERPWD, "mundiario:12mundiario34");
             curl_setopt($ch, CURLOPT_HEADER, 1);
             $content = curl_exec($ch);
 

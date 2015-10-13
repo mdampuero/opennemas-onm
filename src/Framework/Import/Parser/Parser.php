@@ -15,6 +15,13 @@ namespace Framework\Import\Parser;
 abstract class Parser
 {
     /**
+     * The array of common parsed values.
+     *
+     * @var array
+     */
+    protected $bag = [];
+
+    /**
      * The DataSourceFactory object.
      *
      * @var DataSourceFactory
@@ -58,6 +65,42 @@ abstract class Parser
     public function __call($method, $args)
     {
         return '';
+    }
+
+    /**
+     * Returns the bag of the current parser.
+     *
+     * @return array The parser bag.
+     */
+    public function getBag()
+    {
+        return $this->bag;
+    }
+
+    /**
+     * Returns a property from bag.
+     *
+     * @param string $property The property name.
+     *
+     * @return mixed The property value.
+     */
+    public function getFromBag($property)
+    {
+        if (array_key_exists($property, $this->bag)) {
+            return $this->bag[$property];
+        }
+
+        return '';
+    }
+
+    /**
+     * Sets the bag for the current parsed.
+     *
+     * @param array $bag The parser bag.
+     */
+    public function setBag($bag)
+    {
+        $this->bag = $bag;
     }
 
     /**

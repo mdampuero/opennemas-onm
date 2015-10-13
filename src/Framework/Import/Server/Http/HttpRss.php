@@ -1,6 +1,7 @@
 <?php
 /*
  * This file is part of the onm package.
+ *
  * (c) Openhost, S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -8,27 +9,11 @@
  */
 namespace Framework\Import\Server\Http;
 
-use Framework\Import\Server\Server;
-
 /**
  * Synchronize local folders with an external RSS-based source server.
  */
-class HttpRss extends Server
+class HttpRss extends Http
 {
-    /**
-     * Opens an HTTP connection basing on the server parameters.
-     *
-     * @param array $params The server parameters.
-     *
-     * @throws \Exception If the server parameters are not valid.
-     */
-    public function __construct($params = null)
-    {
-        parent::__construct($params);
-
-        $this->getRemoteFiles();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -71,20 +56,6 @@ class HttpRss extends Server
                 $this->downloaded++;
             }
         }
-    }
-
-    /**
-     * Get content from a given url.
-     *
-     * @param string $url The URL.
-     *
-     * @return string The content from the URL.
-     */
-    public function getContentFromUrl($url)
-    {
-        $content = @file_get_contents($url);
-
-        return $content;
     }
 
     /**

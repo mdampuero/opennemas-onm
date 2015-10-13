@@ -88,7 +88,7 @@ class NewsMLComponentPhoto extends NewsML
             return (string) $agency[0]->attributes()->FormalName;
         }
 
-        return '';
+        return $this->getFromBag('agency_name');
     }
 
     /**
@@ -178,7 +178,7 @@ class NewsMLComponentPhoto extends NewsML
             return (string) $filename[0]->attributes()->Href;
         }
 
-        return '';
+        return $this->getFromBag('filename');
     }
 
     /**
@@ -196,7 +196,7 @@ class NewsMLComponentPhoto extends NewsML
             return (string) $height[0]->attributes()->Value;
         }
 
-        return '';
+        return $this->getFromBag('height');
     }
 
     /**
@@ -211,7 +211,7 @@ class NewsMLComponentPhoto extends NewsML
             return iconv(mb_detect_encoding($id), "UTF-8", $id);
         }
 
-        return '';
+        return $this->getFromBag('id');
     }
 
     /**
@@ -245,7 +245,25 @@ class NewsMLComponentPhoto extends NewsML
             return iconv(mb_detect_encoding($title), "UTF-8", $title);
         }
 
-        return '';
+        return $this->getFromBag('title');
+    }
+
+    /**
+     * Returns the URL from the parsed data.
+     *
+     * @param SimpleXMLObject $data The parsed data.
+     *
+     * @return string The URL.
+     */
+    public function getUrl($data)
+    {
+        $url = $data->xpath('/ContentItem');
+
+        if (!empty($url)) {
+            return (string) $url[0]->attributes()->Href;
+        }
+
+        return $this->getFromBag('url');
     }
 
     /**
@@ -263,7 +281,7 @@ class NewsMLComponentPhoto extends NewsML
             return (string) $width[0]->attributes()->Value;
         }
 
-        return '';
+        return $this->getFromBag('width');
     }
 
     /**
@@ -272,8 +290,7 @@ class NewsMLComponentPhoto extends NewsML
     public function parse($data)
     {
         $this->bag['agency_name'] = $this->getAgencyName($data);
-
-        $photo = new Resource();
+        $this->bag['id']          = $this->getId($data);
 
         $file     = $this->getFile($data);
         $filename = $this->getFilename($file);
@@ -290,6 +307,7 @@ class NewsMLComponentPhoto extends NewsML
         $photo->summary      = $this->getSummary($data);
         $photo->title        = $this->getTitle($file);
         $photo->type         = 'photo';
+        $photo->urn          = $this->getUrn($file, 'photo');
         $photo->width        = $this->getWidth($file);
 
         $content = $this->getContent($data);
@@ -297,6 +315,8 @@ class NewsMLComponentPhoto extends NewsML
         if (is_object($content)) {
             $photo->merge((array) $content);
         }
+
+        $photo->merge($this->bag);
 
         return $photo;
     }

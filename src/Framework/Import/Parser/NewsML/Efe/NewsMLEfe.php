@@ -43,7 +43,7 @@ class NewsMLEfe extends NewsML
             return (string) $agency[0]->attributes()->Value;
         }
 
-        return '';
+        return $this->getFromBag('agency_name');
     }
 
     /**
@@ -54,7 +54,7 @@ class NewsMLEfe extends NewsML
         $tags = $data->xpath("//Property[@FormalName=\"Tesauro\"]");
 
         if (empty($tags)) {
-            return '';
+            return $this->getFromBag('tags');
         }
 
         $tags = (string) $tags[0]->attributes()->Value;
