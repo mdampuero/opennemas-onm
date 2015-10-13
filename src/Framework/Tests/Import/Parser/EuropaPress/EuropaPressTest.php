@@ -64,7 +64,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->photo->title      = 'Photo description';
         $this->photo->type       = 'photo';
         $this->photo->urn        =
-            'urn:europapress:europapress:20150921181604:20150921181604.photo';
+            'urn:europapress:europapress:20150921181604:photo:20150921181604';
 
         $this->text = new Resource();
 
@@ -86,7 +86,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->tags     = '';
         $this->text->title    = 'Sample title';
         $this->text->type     = 'text';
-        $this->text->urn      = 'urn:europapress:europapress:20150921181604:20150921181604';
+        $this->text->urn      = 'urn:europapress:europapress:20150921181604:text:20150921181604';
     }
 
     public function testCheckFormat()
@@ -176,7 +176,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:europapress:europapress:20150921181604:20150921181604',
+            'urn:europapress:europapress:20150921181604:text:20150921181604',
             $this->parser->getUrn($this->valid)
         );
     }

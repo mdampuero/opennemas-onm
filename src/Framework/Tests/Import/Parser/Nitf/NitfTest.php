@@ -7,18 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\NITF;
+namespace Framework\Tests\Import\Parser\Nitf;
 
-use Framework\Import\Parser\NITF\NITF;
+use Framework\Import\Parser\Nitf\Nitf;
 use Framework\Import\Resource\Resource;
 
-class NITFTest extends \PHPUnit_Framework_TestCase
+class NitfTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $factory = $this->getMock('Framework\Import\ParserFactory');
 
-        $this->parser = new NITF($factory);
+        $this->parser = new Nitf($factory);
 
         $this->invalid = simplexml_load_string('<foo><nitf></nitf></foo>');
         $this->valid   = simplexml_load_string("<nitf>
@@ -139,7 +139,7 @@ class NITFTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:nitf:foobar_agency:20150921100200:21155709',
+            'urn:nitf:foobar_agency:20150921100200:text:21155709',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -169,7 +169,7 @@ class NITFTest extends \PHPUnit_Framework_TestCase
         $resource->summary  = '<p>Sample summary</p>';
         $resource->title    = 'Sample title';
         $resource->type     = 'text';
-        $resource->urn      = 'urn:nitf:foobar_agency:20150921100200:21155709';
+        $resource->urn      = 'urn:nitf:foobar_agency:20150921100200:text:21155709';
 
         $this->assertEquals($resource, $this->parser->parse($this->valid));
     }

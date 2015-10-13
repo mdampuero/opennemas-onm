@@ -7,17 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\NITF;
+namespace Framework\Tests\Import\Parser\Nitf;
 
-use Framework\Import\Parser\NITF\NITFEFE;
+use Framework\Import\Parser\Nitf\NitfEfe;
 
-class NITFEFETest extends \PHPUnit_Framework_TestCase
+class NitfEfeTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $factory = $this->getMock('Framework\Import\ParserFactory');
 
-        $this->parser = new NITFEFE($factory);
+        $this->parser = new NitfEfe($factory);
 
         $this->invalid = simplexml_load_string('<foo><nitf></nitf></foo>');
         $this->valid   = simplexml_load_string("<nitf>

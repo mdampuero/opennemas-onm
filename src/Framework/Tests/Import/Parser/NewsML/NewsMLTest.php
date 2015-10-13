@@ -121,7 +121,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
     public function testGetId()
     {
-        $this->assertEmpty($this->parser->getId($this->invalid));
+        $this->assertNotEmpty($this->parser->getId($this->invalid));
 
         $this->assertEquals('040729054956.xm61wen7', $this->parser->getId($this->valid));
     }
@@ -177,7 +177,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:newsml:foobar_agency:20040729074956:040729054956.xm61wen7',
+            'urn:newsml:foobar_agency:20040729074956:text:040729054956.xm61wen7',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -192,7 +192,6 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($bag['agency_name']);
         $this->assertTrue($date->format('Y-m-d H:i:s') < $bag['created_time']);
-        $this->assertEmpty($bag['id']);
 
         $this->parser->parse($this->valid);
 
