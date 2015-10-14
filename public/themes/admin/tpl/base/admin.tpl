@@ -253,35 +253,40 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                {*
-                <li class="quicklinks notifications dropdown">
+                <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl">
                   <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
                     <i class="fa fa-bell"></i>
+                    <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notifications.length > 0">
+                      [% notifications.length %]
+                    </span>
                   </a>
                   <div class="dropdown-menu">
                     <div class="dropdown-title">
                       {t}Notifications{/t}
                     </div>
                     <ul class="notification-list">
-                      <li class="notification-success">
-                        <div class="title">Success!</div>
-                        <p>{t}This is a notification for a success{/t}</p>
+                      <scrollable>
+                      <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
+                        <div class="notification-title">
+                          [% notification.title%]
+                          <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)">
+                            <i class="fa fa-times"></i>
+                          </span>
+                        </div>
+                        <div class="notification-icon">
+                          <i class="fa fa-users fa-2x"></i>
+                        </div>
+                        <div class="notification-body">
+                          [% notification.body %]
+                        </div>
                       </li>
-                      <li class="notification-error">
-                        <div class="title">Error!</div>
-                        <p>{t}This notification is an error{/t}</p>
-                      </li>
-                      <li class="notification-warning">
-                        <div class="title">Warning!</div>
-                        <p>{t}This notification is a warning{/t}</p>
-                      </li>
+                      </scrollable>
                     </ul>
                   </div>
                 </li>
                 <li class="quicklinks">
                   <span class="h-seperate"></span>
                 </li>
-                *}
                 <li class="quicklinks quick-items help-items dropdown">
                   <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
                     <i class="fa fa-support"></i>

@@ -5,6 +5,7 @@ angular.module(
     'angulartics',
     'angulartics.google.analytics',
     'checklist-model',
+    'ngAnimate',
     'ngSanitize',
     'ngTouch',
     'onm.gravatar',
