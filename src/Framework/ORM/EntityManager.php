@@ -3,6 +3,7 @@
 namespace Framework\ORM;
 
 use Framework\ORM\Braintree\BraintreeManager;
+use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Entity\Entity;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Exception\InvalidPersisterException;
@@ -29,6 +30,13 @@ class EntityManager
     protected $bm;
 
     /**
+     * The Database manager.
+     *
+     * @var DatabaseManager
+     */
+    protected $dm;
+
+    /**
      * The FreshBooks manager.
      *
      * @var FreshBooksManager
@@ -39,11 +47,13 @@ class EntityManager
      * Initializes the FreshBooks api.
      *
      * @param BraintreeManager  $bm The Braintree manager.
+     * @param DatabaseManager   $dm The Database manager.
      * @param FreshBooksManager $fm The FreshBooks manager.
      */
-    public function __construct(BraintreeManager $bm, FreshBooksManager $fm)
+    public function __construct(BraintreeManager $bm, DatabaseManager $dm, FreshBooksManager $fm)
     {
         $this->bm = $bm;
+        $this->dm = $dm;
         $this->fm = $fm;
     }
 
@@ -111,13 +121,20 @@ class EntityManager
      */
     public function getRepository($name)
     {
+        $entity = explode('.', $name);
+        $entity = $entity[count($entity) - 1];
+
         $repositories = [];
         foreach ($this->sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
-                ucfirst($name) . 'Repository';
+                ucfirst($entity) . 'Repository';
 
             if (class_exists($repository)) {
                 $manager = strtolower($source[0]) . 'm';
+
+                if ($source === 'database') {
+                    $name = $entity;
+                }
 
                 $repositories[$priority] =
                     $this->{$manager}->getRepository($name);
