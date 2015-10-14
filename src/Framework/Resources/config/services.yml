@@ -77,11 +77,19 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
+    cache_manager:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
     db_conn:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]
 
     dbal_connection:
+        class: Onm\Database\DbalWrapper
+        arguments: [ %database% ]
+
+    dbal_connection_manager:
         class: Onm\Database\DbalWrapper
         arguments: [ %database% ]
 
@@ -228,6 +236,10 @@ services:
         class: Framework\ORM\FreshBooks\FreshBooksManager
         arguments: [ %freshbooks.domain%, %freshbooks.token% ]
 
+    orm.manager.database:
+        class: Framework\ORM\Database\DatabaseManager
+        arguments: [ @cache, @dbal_connection, @cache_manager, @dbal_connection_manager ]
+
     orm.manager:
         class: Framework\ORM\EntityManager
-        arguments: [ @orm.manager.braintree, @orm.manager.freshbooks ]
+        arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
