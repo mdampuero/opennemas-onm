@@ -54,6 +54,10 @@ backend_ws_newsletter:
     resource: @BackendWebServiceBundle/Resources/config/routing/newsletter.yml
     prefix:   /
 
+backend_ws_notification:
+    resource: @BackendWebServiceBundle/Resources/config/routing/notification.yml
+    prefix:   /
+
 backend_ws_image:
     resource: @BackendWebServiceBundle/Resources/config/routing/image.yml
     prefix:   /
