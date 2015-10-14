@@ -26,6 +26,8 @@ abstract class Entity
     /**
      * Gets the value of the property from the RAW data array.
      *
+     * @param string $property The property name.
+     *
      * @return mixed The property value.
      */
     public function __get($property)
@@ -37,6 +39,23 @@ abstract class Entity
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the value of the property is in the RAW data array.
+     *
+     * @param string $property The property name.
+     *
+     * @return boolean True if the property has a value. Otherwise, returns
+     *                 false.
+     */
+    public function __isset($property)
+    {
+        if (array_key_exists($property, $this->data)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
