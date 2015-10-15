@@ -1,38 +1,81 @@
-<p>{t}Hi{/t} <strong>{$data['internal_name']}</strong>,</p>
+{extends file="emails/base.tpl"}
 
-<p>{t}Welcome to Opennemas{/t}!</p>
+{block name="image"}
+{$smarty.const.CURRENT_LANGUAGE}
+<img align="left" alt="" src="https://gallery.mailchimp.com/532c91fc27005e0841f345011/images/6adfaef8-fd38-41b8-a476-4f55d4650626.png" width="564" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+{/block}
 
-<p>{t}Your newspaper is already live:{/t}</p>
-<ul>
-  <li>{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/">http://{$data['internal_name']}.opennemas.com/</a></li>
-  <li>{t}Admin panel:{/t} <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a></li>
-</ul>
+{block name="content"}
+<h1 class="null" style="text-align: center;"><span style="font-size:31px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color: #222222;line-height: normal;">{t}Welcome to Opennemas{/t}!</span></span></span></h1>
 
-<p>{t}For security reasons we advise you to change your password after first login to Admin Panel.{/t}</p>
-
-<p>{t escape=off}If you have doubts about frontpage management or need a quick walk through we have <strong>video demo</strong> 3 minutes long{/t}:</p>
-
-<ul>
-  <li>
-    {t escape=off}How to create/edit <strong>articles</strong> and place them in a frontpage{/t} <br>
-    <a href="https://youtu.be/UUNlwGeFgL0">https://youtu.be/UUNlwGeFgL0</a></li>
-  <li>
-    {t escape=off}How to upload and add <strong>images</strong> to your articles{/t} <br>
-    <a href="https://youtu.be/PDYiS_mdx6k">https://youtu.be/PDYiS_mdx6k</a>
-  </li>
-  <li>
-    {t escape=off}How to compose a <strong>frontpage</strong>{/t} <br>
-    <a href="https://youtu.be/N40x_kPXLdU">https://youtu.be/N40x_kPXLdU</a>
-  </li>
-</ul>
-
-<p>
-  {t}We also have help page "First Steps in Opennemas" that should help{/t}: <br>
-  <a href="http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps">http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps</a>
+<p style="margin: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 18.1818180084229px;">
+  <br>
+  <span style="color:#000000"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span data-mce-style="line-height: 1.4285715;" style="line-height:1.4285715">{t}Hi{/t} <strong>{$data['internal_name']}</strong><span data-mce-style="line-height: 1.4285715;" style="line-height:1.4285715">:</span></span>
+  </span>
+  </span>
 </p>
 
-<p>{t 1="support@opennemas.com" 2="http://help.opennemas.com/" escape=off}Please do not hesitate to share feedback, questions or doubts with us via email at %1 or via our <strong>ticketing system</strong> %2 (also available from Control Panel on the top right){/t}.</p>
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
+  <br>
+  <span style="color:#000000"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">{t}Your newspaper is already live:{/t}</span></span>
+  </span>
+</div>
 
-{t escape=off}Regards<br>
-Opennemas Team<br>
-Powered by OpenHost SL.{/t}
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
+  <ul style="margin: 0px;">
+    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/">http://{$data['internal_name']}.opennemas.com/</a>
+      </span>
+      </span>
+      </span>
+    </li>
+    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Admin panel:{/t} <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a>
+      </span>
+      </span>
+      </span>
+    </li>
+  </ul>
+</div>
+
+<p style="margin: 10px 0px 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;"><span style="color:#000000"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">{t}For security reasons we advise you to change your password after first login to Admin Panel.{/t}&nbsp;</span></span>
+  </span>
+</p>
+
+<p style="margin: 10px 0px 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
+  <br>
+
+  <span style="color: #000000;font-family: trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif;line-height: 22.2222px;">{t escape=off}If you have doubts about frontpage management or need a quick walk through we have <strong>video demo</strong> 3 minutes long{/t}:</span>
+</p>
+
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
+  <ul style="color: #222222;font-family: arial, sans-serif;font-size: 12.8px;line-height: normal;">
+    <li style="margin-left: 15px;"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">{t escape=off}How to create/edit <strong>articles</strong> and place them in a frontpage{/t} <br>
+<a href="https://youtu.be/UUNlwGeFgL0" style="word-wrap: break-word;" target="_blank">https://youtu.be/UUNlwGeFgL0</a></span></span>
+    </li>
+  </ul>
+
+  <ul style="color: #222222;font-family: arial, sans-serif;font-size: 12.8px;line-height: normal;">
+    <li style="margin-left: 15px;"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">{t escape=off}How to upload and add&nbsp;<strong>images</strong>&nbsp;to your articles&nbsp;{/t}<br>
+<a href="https://youtu.be/PDYiS_mdx6k" style="word-wrap: break-word;" target="_blank">https://youtu.be/PDYiS_mdx6k</a></span></span>
+    </li>
+  </ul>
+
+  <ul style="color: #222222;font-family: arial, sans-serif;font-size: 12.8px;line-height: normal;">
+    <li style="margin-left: 15px;"><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">{t escape=off}How to compose a&nbsp;<strong>frontpage</strong>{/t}<br>
+<a href="https://youtu.be/N40x_kPXLdU" style="word-wrap: break-word;" target="_blank">https://youtu.be/N40x_kPXLdU</a></span></span>
+    </li>
+  </ul>
+
+  <p style="margin: 0px 0px 0px 30px; padding: 0px;">&nbsp;</p>
+
+  <p style="margin: 10px 0px 0px; padding: 0px;"><span style="color: #000000;line-height: 22.2222px;">{t}We also have help page "First Steps in Opennemas" that should help{/t}:</span><span style="line-height:22.2222px">&nbsp;</span>
+  </p>
+</div>
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
+  <ul style="margin: 0px;">
+    <li><a class="external-link" href="http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps" rel="nofollow" style="text-decoration: none;">http://help.opennemas.com/knowledgebase/articles/578289-opennemas-first-steps</a>
+    </li>
+  </ul>
+
+  <p style="margin: 10px 0px 0px; padding: 0px;">&nbsp;</p>
+</div>
+{/block}
