@@ -13,6 +13,7 @@ angular.module(
     'ngTagsInput',
     'ngTouch',
     'onm.auth',
+    'onm.editor',
     'onm.form-autofill-fix',
     'onm.gravatar',
     'onm.history',

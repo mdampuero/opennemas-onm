@@ -75,4 +75,15 @@ angular.module('ManagerApp')
     }
   }).config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
-  }]);;
+  }]).config(['EditorProvider', function (EditorProvider) {
+    // Add external plugins
+    EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
+    EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
+
+    // Add custom plugins
+    EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
+    EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
+
+    // Enable CKEditor for all environments (browsers)
+    EditorProvider.setCompatible(true);
+  }]);

@@ -324,6 +324,7 @@
     @Common/src/angular-authentication/authService.js,
     @Common/src/angular-form-autofill/formAutoFill.js,
     @Common/src/angular-gravatar/gravatar.js,
+    @Common/src/angular-onm-editor/onm-editor.js,
     @Common/src/angular-history/history.js,
     @Common/src/angular-http-interceptor/http-interceptor.js,
     @Common/src/angular-item-service/itemService.js,
