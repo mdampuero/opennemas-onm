@@ -81,12 +81,38 @@
                         <select id="style" ng-model="notification.type" ng-options="value.value as value.name for (key, value) in extra.types"></select>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-lg-6">
                     <div class="form-group">
                       <label for="template" class="form-label">{t}Style{/t}</label>
                       <div class="controls">
                         <select id="style" ng-model="notification.style" ng-options="value.value as value.name for (key, value) in extra.styles"></select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="template" class="form-label">{t}Instance{/t}</label>
+                      <div class="controls">
+                        <select id="style" ng-model="notification.instance_id" ng-options="value.value as value.name for (key, value) in extra.instances"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <div class="controls">
+                        <div class="checkbox">
+                          <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
+                          <label for="fixed">{t}Fixed{/t} ({t}Notification always visible{/t})</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-if="notification.fixed == 0">
+                      <label class="form-label">{t}Starts{/t}</label>
+                      <div class="controls">
+                        <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.start" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-if="notification.fixed == 0">
+                      <label class="form-label">{t}Ends{/t}</label>
+                      <div class="controls">
+                        <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.end" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                       </div>
                     </div>
                   </div>
@@ -108,34 +134,52 @@
         <div class="grid simple">
           <div class="grid-title">
             <h4>
-              {t}Options{/t}
+              {t}Preview{/t}
             </h4>
           </div>
-          <div class="grid-body">
-            <div class="form-group">
-              <label for="template" class="form-label">{t}Instance{/t}</label>
-              <div class="controls">
-                <select id="style" ng-model="notification.instance_id" ng-options="value.value as value.name for (key, value) in extra.instances"></select>
-              </div>
+          <div class="grid-body no-padding">
+            <div class="notifications">
+              <ul class="notification-list notification-list-preview">
+                <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]">
+                  <div class="notification-title">
+                    [% notification.title%]
+                    <span class="notification-list-item-close pull-right pointer" ng-if="notification.fixed == 0">
+                      <i class="fa fa-times"></i>
+                    </span>
+                  </div>
+                  <div class="notification-icon">
+                    <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help','fa-info': notification.type === 'info', 'fa-users': notification.type === 'users' }"></i>
+                  </div>
+                  <div class="notification-body">
+                    <div ng-bind-html="notification.body"></div>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <div class="form-group">
-              <div class="controls">
-                <div class="checkbox">
-                  <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
-                  <label for="fixed">{t}Fixed{/t} ({t}Notification always visible{/t})</label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group" ng-if="notification.fixed == 0">
-              <label class="form-label">{t}Starts{/t}</label>
-              <div class="controls">
-                <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.start" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-              </div>
-            </div>
-            <div class="form-group" ng-if="notification.fixed == 0">
-              <label class="form-label">{t}Ends{/t}</label>
-              <div class="controls">
-                <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.end" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+            <div class="tiles grey">
+              <div class="tiles-body p-t-15 p-r-30 p-b-15">
+                <ul class="cbp_tmtimeline">
+                  <li>
+                    <time class="cbp_tmtime">
+                      <span class="date">[% notification.day %]</span>
+                      <span class="time">
+                        [% notification.time %]
+                        <strong>[% notification.am %]</strong>
+                      </span>
+                    </time>
+                    <div class="cbp_tmicon animated bounceIn" ng-class="{ 'danger': notification.style === 'error', 'primary': notification.style === 'success','success': notification.style === 'info','warning': notification.style === 'warning' }">
+                      <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help','fa-info': notification.type === 'info', 'fa-users': notification.type === 'users' }"></i>
+                    </div>
+                    <div class="cbp_tmlabel">
+                      <div class="p-t-15 p-l-30 p-r-30 p-b-30">
+                        <h4>
+                          [% notification.title %]
+                        </h4>
+                        <div class="text-default" ng-bind-html="notification.body"></div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
