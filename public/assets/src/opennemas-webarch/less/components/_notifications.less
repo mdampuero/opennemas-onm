@@ -38,27 +38,55 @@
       margin-left: 100px;
     }
   }
+}
 
-  .notification-list-item-error {
-    background-color: fade(@error-color, 15%);
-  }
+.notification-content-error,
+.notification-list-item-error {
+  background-color: fade(@error-color, 15%);
+}
 
-  .notification-list-item-info {
-    background-color: fade(@info-color, 15%);
-  }
+.notification-content-info,
+.notification-list-item-info {
+  background-color: fade(@info-color, 15%);
+}
 
-  .notification-list-item-success {
-    background-color: fade(@success-color, 15%);
-  }
+.notification-content-success,
+.notification-list-item-success {
+  background-color: fade(@success-color, 15%);
+}
 
-  .notification-list-item-warning {
-    background-color: fade(@warning-color, 15%);
+.notification-content-warning,
+.notification-list-item-warning {
+  background-color: fade(@warning-color, 15%);
+}
+
+.notification-body {
+  font-size: 90%;
+  margin: 0;
+  padding-left: 50px;
+}
+
+.notification-icon {
+  background: #fff;
+  border-radius: 100%;
+  float: left;
+  height: 40px;
+  padding: 10px;
+  position: relative;
+  width: 40px;
+
+  .fa {
+    font-size: 18px !important;
+    height: 20px;
+    left: 50%;
+    margin: -10px 0 0 -10px !important;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 20px;
   }
 }
 
-.notification-list > .notification-list-item > .title .notification-list-item-close:hover i {
-  color: #000 !important;
-}
 
 .notifications-orb {
   background-color: @info-color;
@@ -74,27 +102,12 @@
   width: 18px;
 }
 
-.notification-body {
-  font-size: 90%;
-  margin: 0;
-  padding-left: 50px;
-}
-
-.notification-icon {
-  background: #fff;
-  border-radius: 100%;
-  float: left;
-  height: 40px;
-  padding: 10px;
-  width: 40px;
-
-  .fa {
-    font-size: 18px !important;
-  }
-}
-
 .notification-title {
   font-weight: bold;
   padding-bottom: 10px;
 }
 
+// Force hover state
+.notification-list > .notification-list-item > .title .notification-list-item-close:hover i {
+  color: #000 !important;
+}
