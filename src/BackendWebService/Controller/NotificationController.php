@@ -31,7 +31,9 @@ class NotificationController extends Controller
 
         $id = $this->get('instance')->id;
 
-        $criteria['instance_id'] = [ [ 'value' => $id ] ];
+        $criteria['instance_id'] = [
+            [ 'value' => [ 0, $id ], 'operator' => 'IN' ]
+        ];
 
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
@@ -57,7 +59,8 @@ class NotificationController extends Controller
                 $notification['day'] = _('Today');
             }
 
-            $notification['time'] = $date->format('H:ia');
+            $notification['time'] = $date->format('H:i');
+            $notification['am'] = $date->format('a');
         }
 
         $total = $nr->countBy($criteria);

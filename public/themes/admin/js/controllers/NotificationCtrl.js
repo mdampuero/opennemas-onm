@@ -14,20 +14,38 @@
      * @description
      *   Controller to implement common actions.
      */
-    .controller('NotificationCtrl', [ '$http', '$scope', '$timeout', 'routing',
-      function ($http, $scope, $timeout, routing) {
+    .controller('NotificationCtrl', [ '$http', '$scope', '$timeout', 'routing', 'oqlEncoder', 'queryManager',
+      function ($http, $scope, $timeout, routing, oqlEncoder, queryManager) {
         /**
-         * @function getLatests
+         * The criteria to search.
+         *
+         * @type Object
+         */
+        $scope.criteria = { type: '' };
+
+        /**
+         * The current pagination status.
+         *
+         * @type Object
+         */
+        $scope.pagination = {
+          epp: 10,
+          page: 1,
+          total: 0
+        };
+
+        /**
+         * @function getLatest
          * @memberOf NotificationCtrl
          *
          * @description
          *   Gets a list of notifications to display in dropdown.
          */
-        $scope.getLatests = function() {
+        $scope.getLatest = function() {
           var data = {
             epp: 10,
             page: 1,
-            criteria: {
+            search: {
               is_read: [ { value: 0 } ]
             }
           };
@@ -39,6 +57,37 @@
 
             $scope.bounce = true;
             $timeout(function() { $scope.bounce = false; }, 1000);
+          });
+        };
+
+        /**
+         * @function getLatest
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Gets a list of notifications to display in dropdown.
+         */
+        $scope.list = function() {
+          $scope.loading = true;
+
+          var processedFilters = oqlEncoder.encode($scope.criteria);
+          var filtersToEncode = angular.copy($scope.criteria);
+
+          queryManager.setParams(filtersToEncode, {}, 100,
+              $scope.pagination.page);
+
+          var data = {
+            epp: 100,
+            page: $scope.pagination.page,
+            search: processedFilters
+          };
+
+          var url = routing.generate('backend_ws_notifications_list', data);
+
+          $http.get(url).success(function(response) {
+            $scope.loading = false;
+            $scope.notifications = response.results;
+            $scope.extra = response.extra;
           });
         };
 
@@ -64,8 +113,20 @@
           });
         };
 
-        // List all notifications on init
-        $scope.getLatests();
+        var search;
+        $scope.$watch('criteria', function(nv, ov) {
+          if (ov === nv) {
+            return;
+          }
+
+          search = $timeout(function() {
+            if (search) {
+              $timeout.cancel(search);
+            }
+
+            $scope.list();
+          },500);
+        }, true);
 
         // Prevent dropdown to close on click
         $('.dropdown-menu .notification-list').click(function(e) {
