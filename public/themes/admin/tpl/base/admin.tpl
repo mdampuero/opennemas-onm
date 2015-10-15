@@ -253,7 +253,7 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl">
+                <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
                   <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
                     <i class="fa fa-bell"></i>
                     <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notifications.length > 0">
@@ -262,7 +262,9 @@
                   </a>
                   <div class="dropdown-menu">
                     <div class="dropdown-title">
-                      {t}Notifications{/t}
+                      <a href="{url name=backend_notifications_list}">
+                        {t}Notifications{/t}
+                      </a>
                     </div>
                     <ul class="notification-list">
                       <scrollable>
