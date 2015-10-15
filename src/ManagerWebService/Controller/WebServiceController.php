@@ -273,6 +273,9 @@ class WebServiceController extends Controller
     {
         $this->view = new \TemplateManager();
 
+        $baseDomain = $this->container->getParameter('instance_creator.base_domain');
+        $instanceBaseURL = "http://".$data['internal_name'].$baseDomain;
+
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom([$companyMail['from_mail'] => 'Opennemas'])
@@ -287,6 +290,7 @@ class WebServiceController extends Controller
                         'data'        => $data,
                         'companyMail' => $companyMail['company_mail'],
                         'domain'      => $domain,
+                        'instance_base_url' => $instanceBaseURL,
                     )
                 )
             );

@@ -24,12 +24,12 @@
 
 <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
   <ul style="margin: 0px;">
-    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Webpage:{/t} <a href="http://{$data['internal_name']}.opennemas.com/">http://{$data['internal_name']}.opennemas.com/</a>
+    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Webpage:{/t} <a href="{$instance_base_url}/">{$instance_base_url}/</a>
       </span>
       </span>
       </span>
     </li>
-    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Admin panel:{/t} <a href="https://{$data['internal_name']}.opennemas.com/admin/">https://{$data['internal_name']}.opennemas.com/admin/</a>
+    <li><span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">{t}Admin panel:{/t} <a href="{$instance_base_url}/admin/">{$instance_base_url}/admin/</a>
       </span>
       </span>
       </span>
