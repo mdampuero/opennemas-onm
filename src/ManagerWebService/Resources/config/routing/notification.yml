@@ -1,0 +1,56 @@
+manager_ws_notification_create:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:create }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_notification_delete:
+    path:     /notifications/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Notification:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_notification_patch:
+    path:     /notifications/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Notification:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_notification_show:
+    path:     /notifications/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Notification:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_notification_update:
+    path:     /notifications/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Notification:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    methods:  [ GET ]
+
+manager_ws_notifications_delete:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_notifications_list:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_notifications_patch:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
