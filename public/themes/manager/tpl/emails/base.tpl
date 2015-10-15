@@ -460,7 +460,7 @@
                                 <tbody>
                                   <tr>
                                     <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-left:18px; padding-bottom:9px; padding-right:0;">
-                                      WELCOME TO OPENNEMAS
+                                      {block name="title"}{/block}
                                     </td>
                                   </tr>
                                 </tbody>
@@ -548,7 +548,8 @@
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-youtube-96.png" alt="Our Videos" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-youtube-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Youtube" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -571,7 +572,8 @@
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="http://www.openhost.es/news" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-link-96.png" alt="Our News" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="http://www.openhost.es/news" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-link-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our News" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -586,15 +588,13 @@
                                                         </tbody>
                                                       </table>
 
-
-
-
                                                       <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
 
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="http://www.twitter.com/opennemas" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-twitter-96.png" alt="Our Twitter" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="http://www.twitter.com/opennemas" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-twitter-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Twitter" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -617,7 +617,8 @@
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://www.facebook.com/opennemas" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-96.png" alt="Our Facebook" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="https://www.facebook.com/opennemas" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-facebook-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Facebook" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -640,7 +641,8 @@
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-googleplus-96.png" alt="Our Google Plus" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Google Plus" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -663,7 +665,8 @@
                                                         <tbody>
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:0; padding-bottom:5px;">
-                                                              <a href="https://www.linkedin.com/company/openhost" target="_blank"><img src="http://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-96.png" alt="Our Company" class="mcnFollowBlockIcon" width="48" style="width:48px; max-width:48px; display:block;">
+                                                              <a href="https://www.linkedin.com/company/openhost" target="_blank">
+                                                              {image_tag src="assets/images/email/common/color-linkedin-96.png" base_url="`$smarty.const.SITE_URL`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our LinkedIn" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -735,7 +738,8 @@
 
                                       <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
                                         <br>
-                                        <a href="http://www.openhost.es/news/" target="_blank"><img align="left" height="70" src="https://gallery.mailchimp.com/532c91fc27005e0841f345011/images/fbe2dc39-ba35-491e-87f5-7e851b046164.jpg" style="opacity: 0.9; line-height: 22.2222px; width: 200px; height: 70px; margin: 0px;" width="200">
+                                        <a href="http://www.openhost.es/news/" target="_blank">
+{image_tag src="assets/images/email/common/signature_image.jpg" base_url="`$smarty.const.SITE_URL`" style="opacity: 0.9; line-height: 22.2222px; width: 200px; height: 70px; margin: 0px;" width="200"}
                                         </a>
                                       </div>
 
@@ -772,7 +776,7 @@
                                     <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
                                       <span style="color: #222222;font-family: arial,sans-serif;font-size: small;line-height: normal;">
                                         _________________________________
-                                        <br>Openhost, SL, Trading address: Amoeiro, Ourense; CIF Registration number B32389389; Registered Office: Calle del Progreso 64, 4º A, Ourense.
+                                        <br>Openhost, SL, {t}Trading address:{/t} Amoeiro, Ourense; CIF {t}Registration number{/t} B32389389; {t}Registered Office{/t}: Calle del Progreso 64, 4º A, Ourense.
                                       </span>
                                     </td>
                                   </tr>

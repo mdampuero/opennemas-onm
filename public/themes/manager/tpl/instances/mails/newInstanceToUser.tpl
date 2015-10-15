@@ -1,8 +1,9 @@
 {extends file="emails/base.tpl"}
 
+{block name="title"}{t}WELCOME TO OPENNEMAS{/t}{/block}
+
 {block name="image"}
-{$smarty.const.CURRENT_LANGUAGE}
-<img align="left" alt="" src="https://gallery.mailchimp.com/532c91fc27005e0841f345011/images/6adfaef8-fd38-41b8-a476-4f55d4650626.png" width="564" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+{image_tag src="assets/images/email/welcome/header_`$smarty.const.CURRENT_LANGUAGE`.jpg" base_url="`$smarty.const.SITE_URL`" align="left" alt="" width="564" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"}
 {/block}
 
 {block name="content"}
