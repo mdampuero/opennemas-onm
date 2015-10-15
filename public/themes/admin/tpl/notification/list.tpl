@@ -62,8 +62,8 @@
                   <strong>[% notification.am %]</strong>
                 </span>
               </time>
-              <div class="cbp_tmicon animated bounceIn" ng-class="{ 'danger': notification.style === 'error', 'primary': notification.style === 'info','success': notification.style === 'success','warning': notification.style === 'warning' }">
-                <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help','fa-info': notification.type === 'info', 'fa-users': notification.type === 'user' }"></i>
+              <div class="cbp_tmicon animated bounceIn" ng-class="{ 'danger': notification.style === 'error', 'primary': notification.style === 'success','success': notification.style === 'info','warning': notification.style === 'warning' }">
+                <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help','fa-info': notification.type === 'info', 'fa-users': notification.type === 'users' }"></i>
               </div>
               <div class="cbp_tmlabel">
                 <div class="p-t-15 p-l-30 p-r-30 p-b-30">
