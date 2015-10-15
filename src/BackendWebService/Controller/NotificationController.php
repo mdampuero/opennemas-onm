@@ -25,7 +25,7 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $criteria = $request->query->filter('criteria') ? : [];
+        $criteria = $request->query->filter('search') ? : [];
         $epp      = $request->query->getDigits('epp', 10);
         $page     = $request->query->getDigits('page', 1);
 
@@ -35,10 +35,29 @@ class NotificationController extends Controller
 
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
-        $notifications = $nr->findBy($criteria, [], $epp, $page);
+        $notifications = $nr->findBy($criteria, [ 'start' => 'desc' ], $epp, $page);
 
         foreach ($notifications as &$notification) {
             $notification = $notification->getData();
+
+            $date = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $notification['start']
+            );
+
+            $notification['day'] = $date->format('l');
+            $time = $date->getTimeStamp();
+
+            $notification['day'] = $date->format('M, d');
+            if (time() - $time < 172800) {
+                $notification['day'] = _('Yesterday');
+            }
+
+            if (time() - $time < 86400) {
+                $notification['day'] = _('Today');
+            }
+
+            $notification['time'] = $date->format('H:ia');
         }
 
         $total = $nr->countBy($criteria);
@@ -48,6 +67,7 @@ class NotificationController extends Controller
             'page'    => $page,
             'results' => $notifications,
             'total'   => $total,
+            'extra'   => $this->getTemplateParams()
         ]);
     }
 
@@ -77,5 +97,25 @@ class NotificationController extends Controller
         } catch (\Exception $e) {
             return new JsonResponse(_($e->getMessage()), 400);
         }
+    }
+
+    /**
+     * Returns an array of parameters to use in template.
+     *
+     * @return array The array of parameters.
+     */
+    private function getTemplateParams()
+    {
+        $params = [
+            'types' => [
+                [ 'name' => 'All', 'value' => '' ],
+                [ 'name' => 'Email', 'value' => 'email' ],
+                [ 'name' => 'Help', 'value' => 'help' ],
+                [ 'name' => 'Media', 'value' => 'media' ],
+                [ 'name' => 'User', 'value' => 'user' ]
+            ]
+        ];
+
+        return $params;
     }
 }
