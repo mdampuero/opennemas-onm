@@ -278,7 +278,7 @@ class WebServiceController extends Controller
     {
         $this->view = new \TemplateManager();
 
-        $instanceBaseURL = "http://".$data['internal_name'].$domain;
+        $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
 
         // Prepare message
         $message = \Swift_Message::newInstance();
