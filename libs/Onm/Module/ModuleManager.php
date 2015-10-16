@@ -272,9 +272,9 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
+                        '500MB',
+                        '50.000',
+                        '50.000',
                         2
                     )
                     ._(
@@ -329,10 +329,10 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
-                        4
+                        '500MB',
+                        '50.000',
+                        '50.000',
+                        2
                     )
                     ._(
                         '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
@@ -389,10 +389,10 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
-                        4
+                        '500MB',
+                        '50.000',
+                        '50.000',
+                        2
                     )
                     ._(
                         '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
