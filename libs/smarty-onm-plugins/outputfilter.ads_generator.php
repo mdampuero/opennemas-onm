@@ -32,7 +32,21 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
                 && array_key_exists('googledfp_unit_id', $advertisement->params)
                 && !empty($advertisement->params['googledfp_unit_id'])
             ) {
-                $dfpZonesInformation []= "googletag.defineSlot('{$advertisement->params['googledfp_unit_id']}', [{$advertisement->params['width']}, {$advertisement->params['height']}], 'zone_{$advertisement->id}').addService(googletag.pubads());";
+                if (is_array($advertisement->params['width'])
+                    && is_array($advertisement->params['height'])
+                ) {
+                    $sizes = "[";
+                    $comma = '';
+                    foreach ($advertisement->params['width'] as $key => $value) {
+                        $sizes .= $comma."[".$value.",".$advertisement->params['height'][$key]."]";
+                        $comma = ', ';
+                    }
+                    $sizes .= "]";
+                } else {
+                    $sizes = " [{$advertisement->params['width']}, {$advertisement->params['height']}]";
+                }
+                $dfpZonesInformation []= "googletag.defineSlot('{$advertisement->params['googledfp_unit_id']}',".$sizes.
+                    ", 'zone_{$advertisement->id}').addService(googletag.pubads());";
             }
         }
 
