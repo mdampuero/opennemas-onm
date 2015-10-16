@@ -642,7 +642,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="https://plus.google.com/102922388479219778478/posts" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Google Plus" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Google+" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -650,7 +650,7 @@
 
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Google Plus{/t}</a>
+                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Google+{/t}</a>
                                                             </td>
                                                           </tr>
 
