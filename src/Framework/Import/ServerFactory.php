@@ -19,7 +19,7 @@ class ServerFactory
      * Returns an instance of the server where to sync from
      *
      * @param array $params The server paramameters.
-     w
+     *
      * @return Server The Server.
      */
     public function get($params)
