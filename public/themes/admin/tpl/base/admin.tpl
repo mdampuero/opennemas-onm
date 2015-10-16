@@ -271,7 +271,7 @@
                       <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
                         <div class="notification-title">
                           [% notification.title%]
-                          <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)">
+                          <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
                             <i class="fa fa-times"></i>
                           </span>
                         </div>
