@@ -5,10 +5,22 @@
 <div class="modal-body">
   <div class="content-body" ng-class="{ 'content-body-related': template.related.length > 0 }">
     <h5><strong>[% template.content.title %]</strong></h5>
-    <p ng-bind-html="template.content.summary"></p>
-    <div class="p-b-15 p-t-15 text-right">
-      [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+    <div class="p-b-10 p-t-5 clearfix">
+      <div class="pull-left">
+        <strong>{t}Date{/t}:</strong> [% template.content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+      </div>
+      <div class="pull-right">
+      <strong>{t}Priority{/t}:</strong>
+        <span class="priority">
+          <span ng-if="template.content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>
+          <span ng-if="template.content.priority == 2" class="badge badge-warning">{t}Important{/t}</span>
+          <span ng-if="template.content.priority == 3" class="badge badge-info">{t}Normal{/t}</span>
+          <span ng-if="template.content.priority < 1 || template.content.priority > 3" class="badge">{t}Basic{/t}</span>
+        </span>
+      </div>
     </div>
+    <p ng-bind-html="template.content.summary"></p>
+    <hr>
     <div ng-bind-html="template.content.body" ng-if="template.content.type === 'text'"></div>
     <img ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: template.content.source, id: template.content.id }) %]" ng-if="template.content.type === 'photo'"/>
   </div>
