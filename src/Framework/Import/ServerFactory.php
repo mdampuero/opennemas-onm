@@ -57,7 +57,11 @@ class ServerFactory
 
         $servers = [];
         foreach ($files as $file) {
-            if ($file !== '..' && $file !== '.' && $file !== 'Server.php') {
+            if ($file !== '..'
+                && $file !== '.'
+                && $file !== 'Server.php'
+                && $file !== 'Http.php'
+            ) {
                 if (!is_file($directory . DS . $file)) {
                     $servers = array_merge(
                         $servers,

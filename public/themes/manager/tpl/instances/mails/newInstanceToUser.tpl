@@ -3,7 +3,7 @@
 {block name="title"}{t}WELCOME TO OPENNEMAS{/t}{/block}
 
 {block name="image"}
-{image_tag src="assets/images/email/welcome/header_`$smarty.const.CURRENT_LANGUAGE`.jpg" base_url="`$instance_base_url`" align="left" alt="" width="564" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"}
+{image_tag src="assets/images/email/welcome/header_`$smarty.const.CURRENT_LANGUAGE_SHORT`.jpg" base_url="`$instance_base_url`" align="left" alt="" width="564" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"}
 {/block}
 
 {block name="content"}
