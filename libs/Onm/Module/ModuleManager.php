@@ -272,9 +272,9 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
+                        '500MB',
+                        '50.000',
+                        '50.000',
                         2
                     )
                     ._(
@@ -329,9 +329,9 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
+                        '500MB',
+                        '50.000',
+                        '50.000',
                         4
                     )
                     ._(
@@ -389,9 +389,9 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
+                        '500MB',
+                        '50.000',
+                        '50.000',
                         4
                     )
                     ._(
