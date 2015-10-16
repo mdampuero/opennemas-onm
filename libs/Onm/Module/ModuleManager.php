@@ -226,8 +226,8 @@ class ModuleManager
                         4
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -278,8 +278,8 @@ class ModuleManager
                         2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -317,7 +317,7 @@ class ModuleManager
                     )
                     ._(
                         '<li>Frontpage customization</li>
-                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter" target="_blank">0</a>)</li>'
                     ).'</ul>'
                     .sprintf(
                         _(
@@ -335,8 +335,8 @@ class ModuleManager
                         2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -372,7 +372,7 @@ class ModuleManager
                     )
                     ._(
                         '<li>Frontpage customization</li>
-                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter" target="_blank">0</a>)</li>'
                     )
                     ._(
                         '<li>Multiple Frontpage Management</li>
@@ -395,8 +395,8 @@ class ModuleManager
                         2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -561,7 +561,7 @@ class ModuleManager
                                 <li>Creation of new page over included or over time 1500€</li>
                                 <li>
                                     Support cost after launch
-                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
                                         http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
                                     </a>
                                 </li>
@@ -614,7 +614,7 @@ class ModuleManager
                                 <li>Creation of new page over included or over time 1500€</li>
                                 <li>
                                     Support cost after launch
-                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
                                         http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
                                     </a>
                                 </li>
