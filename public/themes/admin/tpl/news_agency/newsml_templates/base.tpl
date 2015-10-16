@@ -87,7 +87,6 @@
                         {$article->created_datetime->format('Ymd\THisP')}
                       </story.date>
                     </dateline>
-                    <distributor>Opennemas</distributor>
                     <abstract>
                       <p><![CDATA[{$article->summary|trim|substr:3:-4|unescape:"htmlall"}]]></p>
                     </abstract>
