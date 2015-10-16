@@ -19,6 +19,71 @@
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       /**
+       * @function init
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Initialize list of other DFP ads sizes.
+       *
+       * @param Object params The advertisement params
+       */
+      $scope.init = function(params) {
+        if (params == null) {
+          $scope.params_width = [];
+          $scope.params_height = [];
+        } else {
+          if (angular.isArray(params.width)) {
+            $scope.params_width = params.width;
+          } else if (params.width != '') {
+            $scope.params_width = [ params.width ];
+          } else {
+            $scope.params_width = [];
+          }
+
+          if (angular.isArray(params.height)) {
+            $scope.params_height = params.height;
+          } else if (params.height != '')  {
+            $scope.params_height = [ params.height ];
+          } else {
+            $scope.params_height = [];
+          }
+        }
+
+        $scope.sizes = [];
+        for (var i = 0; i < $scope.params_width.length; i++) {
+          $scope.sizes.push({
+            width: parseInt($scope.params_width[i]),
+            height: parseInt($scope.params_height[i])}
+          );
+        }
+      };
+
+      /**
+       * @function addSize
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Add new input for advertisement size
+       */
+      $scope.addSize = function() {
+        $scope.sizes.push({width: '', height: ''});
+      };
+
+
+      /**
+       * @function removeInput
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Removes an advertisement size input.
+       *
+       * @param integer index The index of the input to remove.
+       */
+      $scope.removeInput = function(sizes, index) {
+        $scope.sizes.splice(index, 1);
+      };
+
+      /**
        * @function checkGoogleDFP
        * @memberOf AdvertisementCtrl
        *
