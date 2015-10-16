@@ -332,7 +332,7 @@ class ModuleManager
                         '500MB',
                         '50.000',
                         '50.000',
-                        4
+                        2
                     )
                     ._(
                         '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
@@ -392,7 +392,7 @@ class ModuleManager
                         '500MB',
                         '50.000',
                         '50.000',
-                        4
+                        2
                     )
                     ._(
                         '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
