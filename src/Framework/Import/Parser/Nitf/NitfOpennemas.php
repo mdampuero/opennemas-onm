@@ -62,6 +62,10 @@ class NitfOpennemas extends Nitf
         if (!empty($author)) {
             $author = json_decode((string) $author[0]);
 
+            if (!$author) {
+                return null;
+            }
+
             $author->photo = $this->getAuthorPhoto($data);
 
             return $author;
