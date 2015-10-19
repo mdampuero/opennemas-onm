@@ -176,7 +176,12 @@ class Photo extends Content
         $finalPhotoFileName = $date->format("YmdHis"). $micro . "." . strtolower($filePathInfo['extension']);
         $fileInformation    = new MediaItem($filePath);
 
-        $urn = "urn:newsml:".SITE.":".$date->format("Ymd\THisO").":".StringUtils::cleanFileName($originalFileName).":2";
+        if (!array_key_exists('urn_source', $data)
+            || empty($data['urn_source'])
+        ) {
+            $data['urn_source'] = "urn:newsml:" . SITE . ":" . $date->format("YmdHis")
+                . ":" . StringUtils::cleanFileName($originalFileName).":2";
+        }
 
         $date = new \DateTime();
         $date->setTimeStamp($fileInformation->mtime);
@@ -205,7 +210,7 @@ class Photo extends Content
             'content_status' => $data['content_status'],
             'description'    => $data['description'],
             'metadata'       => $data["metadata"],
-            'urn_source'     => $urn,
+            'urn_source'     => $data['urn_source'],
             'size'           => round($fileInformation->size/1024, 2),
             'date'           => $dateString,
             'width'          => $fileInformation->width,
