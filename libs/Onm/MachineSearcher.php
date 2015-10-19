@@ -87,6 +87,7 @@ class MachineSearcher
                 // TODO: nasty hack to convert content objects to the old array way
                 $result = array();
                 foreach ($contents as $content) {
+                    $content->uri = $content->uri;
                     $result []= get_object_vars($content);
                 }
             } catch (Exception $e) {
@@ -103,16 +104,6 @@ class MachineSearcher
                 } elseif (array_key_exists('img1', $content) && $content['img1'] != '0') {
                     $content['image'] = $er->find('Photo', $content['img1']);
                 }
-
-                $content['uri'] = \Uri::generate(
-                    'article',
-                    array(
-                        'id'       => sprintf('%06d', $content['pk_content']),
-                        'date'     => date('YmdHis', strtotime($content['created'])),
-                        'category' => $content['catName'],
-                        'slug'     => StringUtils::getTitle($content['title']),
-                    )
-                );
             }
 
             $this->cache->save($cacheKey, $result, 300);

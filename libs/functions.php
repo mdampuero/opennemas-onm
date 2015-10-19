@@ -162,7 +162,7 @@ function getUserRealIP()
         // una dirección ip que no sea del rango privado. En caso de no
         // encontrarse ninguna se toma como valor el REMOTE_ADDR
 
-        $entries = split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $entries = preg_split('@[, ]@', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
         reset($entries);
         while (list(, $entry) = each($entries)) {

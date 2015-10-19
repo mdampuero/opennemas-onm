@@ -2070,13 +2070,6 @@ class ContentManager
      */
     public static function resolveID($dirtyID)
     {
-        // Fetch in repository
-        $cache = getService('cache');
-        $resolvedID = $cache->fetch('content_resolve_id_'.$dirtyID);
-        if (!empty($resolvedID)) {
-            return $resolvedID;
-        }
-
         // Check for valid Id
         if (!empty($dirtyID)) {
             preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyID, $matches);
@@ -2089,11 +2082,7 @@ class ContentManager
                 )
             ) {
                 $contentID = (int) $matches['id'];
-                $urlDate = strtotime($matches['date']);
-                $cache->save(
-                    'content_resolve_id_'.$dirtyID,
-                    [ $contentID, $urlDate ]
-                );
+                $urlDate = $matches['date'];
 
                 return [ $contentID, $urlDate ];
             }
@@ -2114,7 +2103,7 @@ class ContentManager
     public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
     {
         if (is_null($content) ||
-            strtotime($content->created) != $urlDate ||
+            strtotime($content->created) != strtotime($urlDate) ||
             (
                 !empty($urlSlug) &&
                 $content->slug != $urlSlug

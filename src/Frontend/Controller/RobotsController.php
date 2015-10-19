@@ -48,6 +48,9 @@ Disallow: /harming/humans
 Disallow: /ignoring/human/orders
 Disallow: /harm/to/self
 
+Disallow: /tag
+Disallow: /archive
+
 Sitemap: ".SITE_URL."sitemapnews.xml.gz
 Sitemap: ".SITE_URL."sitemapweb.xml.gz
 Sitemap: ".SITE_URL."sitemapvideo.xml.gz

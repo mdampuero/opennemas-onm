@@ -124,6 +124,13 @@ parameters:
 
     backend_analytics.enabled: false
 
+    freshbooks.domain: company_name
+    freshbooks.token: long_alphanum_token
+    braintree.environment: sandbox
+    braintree.merchant_id: numeric_id
+    braintree.public_key: short_alphanum_token
+    braintree.private_key: long_alphanum_token
+
     panorama:
         youtube:
             api_key: your api_key here

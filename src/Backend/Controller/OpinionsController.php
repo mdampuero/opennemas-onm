@@ -215,7 +215,7 @@ class OpinionsController extends Controller
     {
         $id = $request->query->getDigits('id', null);
 
-        $opinion = new \Opinion($id);
+        $opinion = $this->get('entity_repository')->find('Opinion', $id);
 
         // Check if opinion id exists
         if (is_null($opinion->id)) {
@@ -241,22 +241,22 @@ class OpinionsController extends Controller
         }
 
         // Fetch author data and allAuthors
-        $author = new \User($opinion->fk_author);
+        $author = $this->get('user_repository')->find($opinion->fk_author);
         $allAuthors = \User::getAllUsersAuthors();
 
         // Fetch associated photos with opinion
         if (!empty($opinion->image)) {
-            $image = new \Photo($opinion->image);
+            $image = $this->get('entity_repository')->find('Photo', $opinion->image);
             $this->view->assign('image', $image);
         }
 
         if (!empty($opinion->img1)) {
-            $photo1 = new \Photo($opinion->img1);
+            $photo1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
             $this->view->assign('photo1', $photo1);
         }
 
         if (!empty($opinion->img2)) {
-            $photo2 = new \Photo($opinion->img2);
+            $photo2 = $this->get('entity_repository')->find('Photo', $opinion->img2);
             $this->view->assign('photo2', $photo2);
         }
 
@@ -284,6 +284,7 @@ class OpinionsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $params = $request->request->get('params', []);
             $opinion = new \Opinion();
 
             $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
@@ -310,6 +311,9 @@ class OpinionsController extends Controller
                 'fk_publisher'        => $_SESSION['userid'],
                 'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'params'              => [
+                    'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                ]
             );
 
             if ($opinion->create($data)) {
@@ -357,6 +361,7 @@ class OpinionsController extends Controller
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
+        $params = $request->request->get('params', []);
 
         $opinion = new \Opinion($id);
 
@@ -408,6 +413,9 @@ class OpinionsController extends Controller
                 'fk_publisher'        => $_SESSION['userid'],
                 'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'params'              => [
+                    'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                ]
             );
 
             if ($opinion->update($data)) {
@@ -655,7 +663,7 @@ class OpinionsController extends Controller
         // Fetch all opinion properties and generate a new object
         foreach ($opinionContents as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
-                $opinion->$value['name'] = $value['value'];
+                $opinion->{$value['name']} = $value['value'];
             }
         }
 

@@ -84,7 +84,6 @@ class UserController extends Controller
 
         $errors = [];
         if ('POST' == $request->getMethod()) {
-
             // Check reCAPTCHA
             $valid = false;
             $response = $request->get('g-recaptcha-response');
@@ -217,6 +216,9 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
+        // Fetch user data and update
+        $user = $this->get('user_repository')->find($_SESSION['userid']);
+
         // Get variables from the user FORM an set some manually
         $data['id']              = $_SESSION['userid'];
         $data['username']        = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
@@ -224,12 +226,12 @@ class UserController extends Controller
         $data['email']           = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
         $data['password']        = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
         $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
-        $data['sessionexpire']   = 15;
-        $data['type']            = 1;
-        $data['activated']       = 0;
-        $data['bio']             = '';
-        $data['url']             = '';
-        $data['avatar_img_id']   = 0;
+        $data['sessionexpire']   = $user->sessionexpire;
+        $data['type']            = $user->type;
+        $data['activated']       = $user->activated;
+        $data['bio']             = $user->bio;
+        $data['url']             = $user->url;
+        $data['avatar_img_id']   = $user->avatar_img_id;
 
         if ($data['password'] != $data['passwordconfirm']) {
             $this->get('session')->getFlashBag()->add(
@@ -239,11 +241,13 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_user_show'));
         }
 
-        // Fetch user data and update
-        $user = $this->get('user_repository')->find($_SESSION['userid']);
-
         if (!is_null($user) && $user->id > 0) {
             if ($user->update($data)) {
+                // Set usermeta information
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
                 // Clear caches
                 $this->dispatchEvent('author.update', array('id' => $data['id']));
 
@@ -344,7 +348,7 @@ class UserController extends Controller
                 $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
             }
 
-            return $this->redirect($this->generateUrl('frontend_user_show'));
+            return $this->redirect($this->generateUrl('frontend_frontpage'));
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -431,7 +435,6 @@ class UserController extends Controller
         }
 
         // Display form
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render('user/recover_pass.tpl');
     }
 

@@ -204,13 +204,13 @@ class AuthorsController extends Controller
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'type'            => $user->type,
             'sessionexpire'   => 60,
             'id_user_group'   => $user->id_user_group,
             'ids_category'    => $accessCategories,
-            'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
+            'activated'       => $user->activated,
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
-            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
+            'username'        => $user->username,
         );
 
         $file = $request->files->get('avatar');

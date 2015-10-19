@@ -81,6 +81,7 @@
     "metrojs": "https://github.com/drewgreenwell/MetroJS.git#0.9.6",
     "mixitup": "2.1.8",
     "mjolnic-bootstrap-colorpicker": "2.2.0",
+    "modernizr": "2.8.3",
     "moment": "2.9.0",
     "moment-timezone": "0.3.1",
     "morris.js": "0.5.1",

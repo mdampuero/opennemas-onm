@@ -99,7 +99,7 @@ class MarketController extends Controller
             $modules,
             [
                 'id'               => 'MEDIA_MANAGER',
-                'plan'             => 'Profesional',
+                'plan'             => 'PROFESSIONAL',
                 'name'             => _('Media'),
                 'thumbnail'        => 'module-multimedia.jpg',
                 'description'      => _('Add Video and Image Galleries to your content. '),

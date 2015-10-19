@@ -95,7 +95,6 @@ class OpinionsController extends Controller
             );
 
             // Fetch last editorial opinions from editorial
-            $editorial = [];
             if ($configurations['total_editorial'] > 0) {
                 $filters['type_opinion'] = [['value' => 1]];
 
@@ -655,6 +654,9 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($opinion);
+
         // Don't execute the app logic if there are caches available
         $cacheId = $this->view->generateCacheId($this->category_name, '', $opinionID);
         if (($this->view->caching == 0)
@@ -764,12 +766,13 @@ class OpinionsController extends Controller
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
-            array(
+            [
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion,'.$opinionID,
-                'x-cache-for' => '1d'
-            )
+                'x-cache-for'     => '+1 day',
+                'x-cacheable'     => $cacheable,
+            ]
         );
     }
 

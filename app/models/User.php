@@ -12,6 +12,7 @@
  **/
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
+use Onm\Exception\UserAlreadyExistsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -177,7 +178,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function create($data)
     {
         if ($this->checkIfUserExists($data)) {
-            throw new \Exception(_('Already exists one user with that information'));
+            throw new UserAlreadyExistsException(
+                _('Already exists one user with that information')
+            );
         }
 
         // Transform groups array to a string separated by comma
@@ -1508,7 +1511,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
 
         // Get original information of the uploaded image
-        $originalFileName = $file->getClientOriginalName();
+        $originalFileName = $file->getBaseName();
         $originalFileData = pathinfo($originalFileName);
         $fileExtension    = strtolower($originalFileData['extension']);
 

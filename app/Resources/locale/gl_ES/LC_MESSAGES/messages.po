@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 13:35+0200\n"
-"PO-Revision-Date: 2015-08-21 14:14+0200\n"
+"POT-Creation-Date: 2015-10-16 15:31+0200\n"
+"PO-Revision-Date: 2015-10-16 15:31+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -339,6 +339,18 @@ msgstr "Non se puido atopar unha foto con identificador «%d»"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado do sistema"
+
+msgid "Undefined"
+msgstr "Indefinida"
+
+msgid "Male"
+msgstr "Home"
+
+msgid "Female"
+msgstr "Muller"
+
+msgid "Other"
+msgstr "Outro"
 
 msgid "The data send by the user is not valid."
 msgstr "Os datos enviados do usuario non son válidos."
@@ -686,17 +698,14 @@ msgstr "Opcións gardadas."
 msgid "Base"
 msgstr "Base"
 
-msgid "Profesional"
+msgid "Professional"
 msgstr "Profesional"
 
-msgid "Silver"
-msgstr "Silver"
+msgid "Advanced"
+msgstr "Avanzado"
 
-msgid "Gold"
-msgstr "Gold"
-
-msgid "Other"
-msgstr "Outro"
+msgid "Expert"
+msgstr "Experto"
 
 msgid "Unlimited"
 msgstr "Sen límite"
@@ -1013,47 +1022,11 @@ msgstr ""
 "Completa a configuración para comenzar a usar o módulo de Boletín de novas"
 
 #, php-format
-msgid "Last sync was %d minutes ago."
-msgstr "A última sincronización foi fai %d minuto/s."
-
-#, php-format
-msgid "Unable to find an element with the id \"%d\""
-msgstr "Non se puido atopar o elemento co identificador «%d»"
-
-msgid ""
-"This content was imported before. You may cause a content duplication while "
-"importing it."
-msgstr ""
-"Este contido xa foi importando anteriormente. Se o importa pode causar o "
-"duplicado de contidos."
-
-#, php-format
 msgid "%s item(s) imported successfully"
 msgstr "%s elemento(s) importados(s) correctamente"
 
 msgid "The article you want to import doesn't exists."
 msgstr "O artigo que queres importar non existe."
-
-#, php-format
-msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
-msgstr "Se estás seguro,  <a href=\"%s?action=unlock\">desbloquealo</a>."
-
-msgid "News agency server updated."
-msgstr "Servidor de axencia de novas actualizado."
-
-msgid "News agency server added."
-msgstr "Servidor de axencia de novas engadido."
-
-#, php-format
-msgid "Source identifier \"%d\" not valid"
-msgstr "Identificador de orixe «%d» non válido"
-
-msgid "News agency server deleted."
-msgstr "Servidor de axencia de novas eliminado."
-
-#, php-format
-msgid "Files for \"%s\" cleaned."
-msgstr "Os ficheiros de «%s» foron limpiados."
 
 msgid "Please specify the article to import."
 msgstr "Especifique o artigo a importar."
@@ -1063,6 +1036,12 @@ msgstr "A categoría seleccionada non existe."
 
 msgid "Please assign the category where import this article"
 msgstr "Asigna a categoría onde queres importar este artigo"
+
+msgid "News agency server added."
+msgstr "Servidor de axencia de novas engadido."
+
+msgid "News agency server updated."
+msgstr "Servidor de axencia de novas actualizado."
 
 msgid "Y-m-d"
 msgstr "d-m-Y"
@@ -1703,6 +1682,33 @@ msgstr ""
 "Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o xestor de "
 "vídeos é o mesmo que Youtube, consistencia e rendemento perfecto</p>"
 
+#, php-format
+msgid "%d contents imported successfully"
+msgstr "%d elemento(s) importados(s) correctamente"
+
+#, php-format
+msgid "Last sync was %d minutes ago."
+msgstr "A última sincronización foi fai %d minuto/s."
+
+msgid "Text"
+msgstr "Texto"
+
+msgid "Photo"
+msgstr "Foto"
+
+#, php-format
+msgid "Source identifier \"%d\" not valid"
+msgstr "Identificador de orixe «%d» non válido"
+
+msgid "Files for server deleted successfully."
+msgstr "Elimináronse os ficheiros do servidor correctamente."
+
+msgid "Server updated successfully"
+msgstr "Servidor actualizado correctamente."
+
+msgid "News agency server deleted."
+msgstr "Servidor de axencia de novas eliminado."
+
 msgid "Newsletter deleted successfully."
 msgstr "Boletin de novas eliminado correctamente."
 
@@ -1845,8 +1851,38 @@ msgstr "Non se puido eliminar o elemento co identificador «%d»."
 msgid "Unable to find the item with the id \"%d\""
 msgstr "Non se puido atopar o elemento co identificador «%d»"
 
+msgid "Name"
+msgstr "Nome"
+
+msgid "Username"
+msgstr "Nome de usuario"
+
+msgid "Activated"
+msgstr "Activado"
+
+msgid "Gender"
+msgstr "Sexo"
+
+msgid "Date Birth"
+msgstr "Data de nacemento"
+
+msgid "Postal Code"
+msgstr "Código postal"
+
+msgid "Registration date"
+msgstr "Data de rexistro"
+
+msgid "Not defined"
+msgstr "Non definido"
+
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
+
+msgid "The XML could not be parsed"
+msgstr "Non foi posíbel analizar o XML"
+
+msgid "Unable to create a server"
+msgstr "Non foi posíbel crear un servidor"
 
 msgid "Already voted."
 msgstr "Xa votaches antes."
@@ -1915,9 +1951,6 @@ msgstr "O campo de correo-e é obrigatorio porén non será publicado"
 msgid "The information has been sent"
 msgstr "A información foi enviada"
 
-msgid "Name"
-msgstr "Nome"
-
 msgid "Unable to save the letter."
 msgstr "Non se puido gardar a carta."
 
@@ -1958,10 +1991,6 @@ msgstr "Subscribicheste ao boletin de novas."
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Desubscribicheste do boletin de novas. "
 
-msgid "Sorry, that email is already subscribed to our newsletter"
-msgstr ""
-"Sentimolo, este correo electrónico xa está rexistrado na nosa newsletter"
-
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Eliminaches a subscrición ao boletin de novas."
 
@@ -1969,6 +1998,9 @@ msgid "Sorry, that email is not in our database"
 msgstr ""
 "Sentimolo, este correo electrónico non está rexistrado nas nosas base de "
 "datos"
+
+msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
+msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
 
 msgid "The email address is already in use."
 msgstr "O enderezo de correo electrónico xa está en uso."
@@ -2010,28 +2042,12 @@ msgstr ""
 msgid "There was an error while creating your user account."
 msgstr "Produciuse un erro ao crear a túa conta de usuario."
 
-#, php-format
-msgid "Username reminder for %s"
-msgstr "Recordatorio do nome de usuario para %s"
-
 msgid ""
 "Unable to find the password reset request. Please check the url we sent you "
 "in the email."
 msgstr ""
 "Non se atopou a solicitude de reinicio de contrasinal. Comprobe o URL que "
 "che enviamos ao correo electrónico."
-
-msgid "Logout"
-msgstr "Sair"
-
-msgid "My account"
-msgstr "A miña conta"
-
-msgid "Register"
-msgstr "Rexistrarse"
-
-msgid "Login"
-msgstr "Iniciar sesión"
 
 #, php-format
 msgid "%s - Premium subscription activated"
@@ -2181,16 +2197,9 @@ msgstr "Erro ao crear unha nova instancia"
 msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
 
-msgid "is now on-line"
-msgstr "está agora dispoñíbel"
-
 #, php-format
-msgid "Seems that the server configuration for %s is not correct."
-msgstr "Semella que a configuración do servidor para %s non é correcta."
-
-#, php-format
-msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
-msgstr "Descargáronse %d artigos novos e elimináronse %d antigos desde «%s»."
+msgid "%s is now on-line"
+msgstr "%s está agora dispoñible"
 
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
@@ -2248,6 +2257,9 @@ msgstr "Personalizar portadas"
 
 msgid "Authors Blog"
 msgstr "Blogs de Autores"
+
+msgid "Subscription"
+msgstr "Suscrición"
 
 msgid "Cronicas customizations"
 msgstr "Personalizacións para Crónicas"
@@ -2366,29 +2378,31 @@ msgstr ""
 "<ul>\n"
 "                            <li>%d x  usuario (1)</li>\n"
 "                            <li>%s de almacenamento (2)</li>\n"
-"                            <li>%s elementos (artigos, opinións, comentarios)"
-" (2)</li>\n"
+"                            <li>%s elementos (artigos, opinións, "
+"comentarios) (2)</li>\n"
 "                            <li>%s páxinas vistas/mes</li>\n"
 "                            <li>Asistencia en liña (tiques SLA %d días "
 "laborais)</li></ul>"
 
 msgid ""
 "<p><small>1. To add more users refer to <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario\">User "
-"Licence Page</a>.</small></p><p><small>2. For more information about storage "
-"or page views please go to our page <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado"
-"\">Page Views and Storage Space</a>.</small></p><p><small>All prices above "
-"do not include VAT (21%).</small></p>"
+"knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario\" "
+"target=\"_blank\">User Licence Page</a>.</small></p><p><small>2. For more "
+"information about storage or page views please go to our page <a href="
+"\"http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-"
+"page-views-y-espacio-ocupado\" target=\"_blank\">Page Views and Storage "
+"Space</a>.</small></p><p><small>All prices above do not include VAT (21%).</"
+"small></p>"
 msgstr ""
-"<p><small>1. Para engadir máis usuarios visita a nosa páxina de <a href=\""
-"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
-"licencias-de-usuario\">licenzas de usuario</a>.</small></p><p><small>2. Para "
-"obter máis información sobre o almacenamento ou páxinas vistas visita a nosa "
-"páxina <a href=\"http://help.opennemas.com/knowledgebase/articles/227476"
-"-precios-opennemas-page-views-y-espacio-ocupado\">Páxinas vistas e "
-"almacenamento</a>.</small></p><p><small>Todos os prezos mostrados non teñen "
-"o IVE incluído (21%).</small></p>"
+"<p><small>1. Para engadir máis usuarios visita a nosa páxina de <a href="
+"\"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
+"licencias-de-usuario\" target=\"_blank\">licenzas de usuario</a>.</small></"
+"p><p><small>2. Para obter máis información sobre o almacenamento ou páxinas "
+"vistas visita a nosa páxina <a href=\"http://help.opennemas.com/"
+"knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado"
+"\" target=\"_blank\">Páxinas vistas e almacenamento</a>.</small></"
+"p><p><small>Todos os prezos mostrados non teñen o IVE incluído (21%).</"
+"small></p>"
 
 msgid "Professional pack"
 msgstr "Pack Profesional"
@@ -2452,11 +2466,12 @@ msgstr ""
 msgid ""
 "<li>Frontpage customization</li>\n"
 "                        <li>Newsletter manager (<a href=\"http://opennemas."
-"com/pricing?language=en_US#newsletter\">0</a>)</li>"
+"com/pricing?language=en_US#newsletter\" target=\"_blank\">0</a>)</li>"
 msgstr ""
 "<li>Personalización de portada</li>\n"
 "                        <li>Xestor de boletíns de novas (<a href=\"http://"
-"opennemas.com/pricing?language=en_US#newsletter\">0</a>)</li>"
+"opennemas.com/pricing?language=en_US#newsletter\" target=\"_blank\">0</a>)</"
+"li>"
 
 msgid "Expert pack"
 msgstr "Pack experto"
@@ -2695,7 +2710,7 @@ msgid ""
 "\">sales@openhost.es</a>\n"
 "                                </li>\n"
 "                                <li>\n"
-"                                    Up to 5 more widgets included\n"
+"                                    1 additional widget included\n"
 "                                </li>\n"
 "                            </ul>\n"
 "\n"
@@ -2735,7 +2750,8 @@ msgid ""
 "                                <li>\n"
 "                                    Support cost after launch\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\">\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">\n"
 "                                        http://help.opennemas.com/"
 "knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\n"
 "                                    </a>\n"
@@ -2744,6 +2760,58 @@ msgid ""
 "                        </li>\n"
 "                    </ul>"
 msgstr ""
+"<p>A plantilla de sitio web de periódico pode personalizarse para reflexar "
+"mellor a túa guía de estilo de marca e as túas preferencias</p>\n"
+"<ul>\n"
+"    <li>\n"
+"        Widgets: Widgets estándar incluídos. Para engaidr un widget contacte "
+"connosco en\n"
+"        <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>\n"
+"    </li>\n"
+"    <li>\n"
+"        O usuario ten dereito a creación de 1 novo widget.\n"
+"    </li>\n"
+"    <li>Exclusividade: Esta plantilla non é exclusiva</li>\n"
+"    <li>Entrega: Desde 2 semanas até 1 mes dependendo do traballo de "
+"personalización</li>\n"
+"    <li>\n"
+"        Solicitudes de cambio ANTES do lanzamento: \n"
+"        <ul>\n"
+"            <li>Cambios incluídos: tipo de letra, cores e estilo do "
+"periódico</li>\n"
+"            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
+"artigo interior\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de páxina</"
+"li>\n"
+"            <li>1 iteración de comentarios e solicitudes de cambios "
+"incluídos antes da saída</li>\n"
+"        </ul>\n"
+"    </li>\n"
+"    <li>\n"
+"        Solicitudes de cambio DESPOIS do lanzamento: \n"
+"        <ul>\n"
+"            <li>1 iteración de comentarios e solicitudes de cambio só "
+"incluídas até 30 días despois da saída</li>\n"
+"            <li>Monitorización e arranxo de erros (se houbera) incluídos 30 "
+"days despois da saída</li>\n"
+"        </ul>\n"
+"    </li>\n"
+"    <li>Engadidos:\n"
+"        <ul>\n"
+"            <li>Novos widgets: 120€ cada un</li>\n"
+"            <li>Reducir unha semana o tempo de entrega: 500€</li>\n"
+"            <li>\n"
+"                Custo de asistencia despois do lanzamento\n"
+"                    <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/463594-precios-opennemas-servicio-de-desarrollo\" target=\"_blank"
+"\">\n"
+"                    http://help.opennemas.com/knowledgebase/articles/463594-"
+"precios-opennemas-servicio-de-desarrollo\n"
+"                    </a>\n"
+"            </li>\n"
+"        </ul>\n"
+"    </li>\n"
+"</ul>"
 
 msgid "Custom Exclusive Template"
 msgstr "Plantilla personalizada exclusiva"
@@ -2803,7 +2871,8 @@ msgid ""
 "                                <li>\n"
 "                                    Support cost after launch\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\">\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">\n"
 "                                        http://help.opennemas.com/"
 "knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\n"
 "                                    </a>\n"
@@ -2812,6 +2881,58 @@ msgid ""
 "                        </li>\n"
 "                    </ul>"
 msgstr ""
+"<p>A plantilla de sitio web de periódico pode personalizarse para reflexar "
+"mellor a túa guía de estilo de marca e as túas preferencias</p>\n"
+"<ul>\n"
+"    <li>\n"
+"        Widgets: Widgets estándar incluídos. Para engaidr un widget contacte "
+"connosco en\n"
+"        <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>\n"
+"    </li>\n"
+"    <li>\n"
+"        O usuario ten dereito a creación de 1 novo widget.\n"
+"    </li>\n"
+"    <li>Exclusividade: Esta plantilla non é exclusiva</li>\n"
+"    <li>Entrega: Desde 2 semanas até 1 mes dependendo do traballo de "
+"personalización</li>\n"
+"    <li>\n"
+"        Solicitudes de cambio ANTES do lanzamento: \n"
+"        <ul>\n"
+"            <li>Cambios incluídos: tipo de letra, cores e estilo do "
+"periódico</li>\n"
+"            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
+"artigo interior\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de páxina</"
+"li>\n"
+"            <li>1 iteración de comentarios e solicitudes de cambios "
+"incluídos antes da saída</li>\n"
+"        </ul>\n"
+"    </li>\n"
+"    <li>\n"
+"        Solicitudes de cambio DESPOIS do lanzamento: \n"
+"        <ul>\n"
+"            <li>1 iteración de comentarios e solicitudes de cambio só "
+"incluídas até 30 días despois da saída</li>\n"
+"            <li>Monitorización e arranxo de erros (se houbera) incluídos 30 "
+"days despois da saída</li>\n"
+"        </ul>\n"
+"    </li>\n"
+"    <li>Engadidos:\n"
+"        <ul>\n"
+"            <li>Novos widgets: 120€ cada un</li>\n"
+"            <li>Reducir unha semana o tempo de entrega: 500€</li>\n"
+"            <li>\n"
+"                Custo de asistencia despois do lanzamento\n"
+"                <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/463594-precios-opennemas-servicio-de-desarrollo\" target=\"_blank"
+"\">\n"
+"                    http://help.opennemas.com/knowledgebase/articles/463594-"
+"precios-opennemas-servicio-de-desarrollo\n"
+"                </a>\n"
+"            </li>\n"
+"        </ul>\n"
+"    </li>\n"
+"</ul>"
 
 msgid "Gain money by inserting ads in your site"
 msgstr "Gaña diñeiro insertando publicidade no teu sitio"
@@ -2875,7 +2996,7 @@ msgid "Module to allow the second article signature"
 msgstr "Módulo que lle permite engadir unha segunda sinatura en artigos"
 
 msgid "Missed long description..."
-msgstr ""
+msgstr "Descripción larga omitida..."
 
 msgid "Change your Frontpage every time you want."
 msgstr "Cambia a túa portada cando queiras."
@@ -3232,7 +3353,7 @@ msgstr ""
 "<p>E o aspecto máis importante é que é compatíbel e completamente"
 
 msgid "Add description..."
-msgstr ""
+msgstr "Engadir descripción..."
 
 msgid "Manage your internal information in a static page."
 msgstr "Xestiona a túa información interna nunha páxina estática."
@@ -3251,7 +3372,7 @@ msgid "Update your local frontpages by updating 1 frontpage!"
 msgstr "Actualizar as túas portadas locais actualizando só unha portada"
 
 msgid ""
-"p>Do you have more than 1 newspaper and you would like for the \"home\" "
+"<p>Do you have more than 1 newspaper and you would like for the \"home\" "
 "pages to be synchronized?</p><p>No problem. By activating this module you "
 "will have all your news synchronized, if you have many local newspapers for "
 "instance and one main one, you can update the frontpage of all locals with "
@@ -3268,6 +3389,35 @@ msgstr ""
 "diarios \"anexos\".</p>\n"
 "<p>Imprescindible para varios periódicos dun mesmo grupo. Así nom é "
 "necesario manter a mesma portada en varios sitios.</p>"
+
+msgid ""
+"Would you like for your readers to be able to unlock premium content for "
+"free?\n"
+"This is the module you should add to your newspaper!"
+msgstr ""
+"Gustaríache que os teus lectores puidesen ler contido Premium de forma "
+"gratuita, mediante unha simple suscripción?\n"
+"Este é o módulo que deberías engadir ao teu xornal"
+
+msgid ""
+"This module enables newspapers to add a customized subscription form to "
+"allow users to unlock premium content.<br>\n"
+"The subscription form generates login details for the user.<br>\n"
+"Newspapers will be able to mark content as \"premium\" and users will need "
+"to register in order to access the full extent of it.<br>Note: if the "
+"newspaper needs to collect users data will have to provide certification of "
+"inscription to \"Agencia Española de Protección de Datos\" or equivalent. "
+"Openhost, SL is not responsible of any data saved or required by newspapers."
+msgstr ""
+"Este módulo permite marcar que contidos dun xornal son Premium e, desta "
+"forma, facer que os seus lectores teñan que realizar unha subscripción "
+"mediante un formulario via web. Unha vez subscrito, o usuario terá acceso a "
+"ler calquera contido marcado como Premium.\n"
+"NOTA: Se un xornal precisa almacenar datos dos seus lectores precisará "
+"entregar a certificación de que está dado de alta na \"Axencia Española de "
+"Protección de Datos\" ou algún outro organismo equivalente en cada país. "
+"Openhost,SL non é responsábel de calquera dato gardado ou requirido polos "
+"xornais."
 
 msgid ""
 "PayWall is a way to make money on your website's content by user "
@@ -3750,9 +3900,6 @@ msgstr ""
 msgid "Yes"
 msgstr "Si"
 
-msgid "Activated"
-msgstr "Activado"
-
 msgid "If is activated means that the user is ready to receive newsletters"
 msgstr "Se está activado significa que o usuario recibirá boletins de novas"
 
@@ -4097,9 +4244,6 @@ msgstr "Divide os decimais con un punto"
 msgid "Item"
 msgstr "Elemento"
 
-msgid "Subscription"
-msgstr "Suscrición"
-
 msgid "Add new photo"
 msgstr "Engadir nova foto"
 
@@ -4250,9 +4394,6 @@ msgstr "Activado"
 
 msgid "IntelligentWidget"
 msgstr "IntelligentWidget"
-
-msgid "Smarty"
-msgstr "Smarty"
 
 msgid "Unable to find any widget that matches your search."
 msgstr "Non se puideron atopar widgets que coincidan coa súa busca."
@@ -4461,9 +4602,6 @@ msgstr "URL"
 msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
 
-msgid "Username"
-msgstr "Nome de usuario"
-
 msgid "Password"
 msgstr "Contrasinal"
 
@@ -4504,17 +4642,14 @@ msgstr "Ocultar contrasinal"
 msgid "Add server"
 msgstr "Engadir servidor"
 
+msgid "No servers available"
+msgstr "Non hai servidores dispoñíbeis"
+
 msgid "Sync from"
 msgstr "Sincronizar desde"
 
-msgid "Removes the synchronized files for this source"
-msgstr "Elimina os ficheiros sincronizados para esta orixe"
-
 msgid "Remove local files"
 msgstr "Eliminar ficheiros locais"
-
-msgid "Activate server"
-msgstr "Activar servidor"
 
 msgid "Import"
 msgstr "Importar"
@@ -4570,14 +4705,37 @@ msgid "Are you sure that you want to delete the selected server configuration?"
 msgstr ""
 "Tes certeza que queres eliminar a configuración do servidor seleccionado?"
 
-msgid "Import selected items"
-msgstr "Importar os elementos seleccionados"
+msgid "Yes, delete it"
+msgstr "Si, eliminalo"
 
-msgid "Are you sure you want to import [% selected %] elemets?"
-msgstr "Tes certeza que queres importar [% selected %] elementos?"
+msgid "Import items"
+msgstr "Importar elementos"
 
-msgid "Yes, import them"
-msgstr "Si, importalos"
+msgid ""
+"Are you sure you want to import [% template.contents.length %] elements?"
+msgstr ""
+"Tes certeza que queres importar [% template.contents.length %] elementos?"
+
+msgid "as"
+msgstr "como"
+
+msgid "in"
+msgstr "en"
+
+msgid "Choose a category..."
+msgstr "Escolle unha categoría…"
+
+msgid "by"
+msgstr "por"
+
+msgid "Choose an author..."
+msgstr "Escolle un autor…"
+
+msgid "Yes, import and publish"
+msgstr "Si, importar e publicar"
+
+msgid "Yes, import and edit"
+msgstr "Si, importar e editar"
 
 msgid "Syncing from sources"
 msgstr "Sincronizando desde as orixes"
@@ -4588,23 +4746,17 @@ msgstr "Descargando artigos desde as axencias de novas, por favor agarde…"
 msgid "Stop sync"
 msgstr "Deter sincronización"
 
-msgid "Sync with server"
-msgstr "Sincronizar co servidor"
+msgid "Content preview"
+msgstr "Previsualización de contido"
 
-msgid "Reload list"
-msgstr "Recargar listado"
-
-msgid "Batch import"
-msgstr "Importar en lote"
-
-msgid "Search by title or content"
-msgstr "Buscar por titulo ou contido"
+msgid "Sync"
+msgstr "Sincronizar"
 
 msgid "Source"
 msgstr "Orixe"
 
-msgid "-- All --"
-msgstr "-- Todos --"
+msgid "Reload"
+msgstr "Recargar"
 
 msgid "There is no elements to import"
 msgstr "Non hai elementos para importar"
@@ -4618,20 +4770,36 @@ msgstr ""
 msgid "Origin"
 msgstr "Orixe"
 
-msgid "With image"
-msgstr "Con imaxes"
-
-msgid "This new has attached images"
-msgstr "Esta nova ten imaxes asociadas"
-
-msgid "With video"
-msgstr "Con vídeos"
-
-msgid "View contents"
-msgstr "Ver contidos"
+msgid "View content"
+msgstr "Ver contido"
 
 msgid "Already imported"
 msgstr "Xa importado"
+
+msgid "Unable to find any image that matches your search."
+msgstr "Non se puideron atopar imaxes que coincidan coa súa busca."
+
+msgid ""
+"Maybe changing any filter could help or add one using the \"Upload\" button "
+"above."
+msgstr ""
+"Pode que ao cambiar un filtro axude ou pode engadir usando o botón «Subir» "
+"de enriba."
+
+msgid "No item selected"
+msgstr "Non se seleccionaron elementos"
+
+msgid "Click in one item to show information about it"
+msgstr "Prema nun elemento para mostrar información sobre el"
+
+msgid "Image details"
+msgstr "Detalles da imaxe"
+
+msgid "Size:"
+msgstr "Tamaño:"
+
+msgid "Image preview"
+msgstr "Tamaño da imaxe"
 
 msgid "Importing element"
 msgstr "Importando elemento"
@@ -4735,6 +4903,9 @@ msgstr "Permitir comentarios"
 
 msgid "Publication closed date"
 msgstr "Data de final de publicación"
+
+msgid "Only available for registered users"
+msgstr "Só dispoñíbel para usuarios rexistrados"
 
 msgid "Unable to find any poll that matches your search."
 msgstr "Non se puideron atopar enquisas que coincidan coa súa busca."
@@ -5058,9 +5229,6 @@ msgstr "Nome en pantalla"
 msgid "User name"
 msgstr "Nome do usuario"
 
-msgid "Photo"
-msgstr "Foto"
-
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
@@ -5090,6 +5258,21 @@ msgstr "Seleccionar"
 
 msgid "selected"
 msgstr "seleccionados"
+
+msgid "Additional data"
+msgstr "Datos adicionais"
+
+msgid "Registered date:"
+msgstr "Data de rexistro:"
+
+msgid "Postal Code:"
+msgstr "Código postal:"
+
+msgid "Birth Date:"
+msgstr "Data de nacemento:"
+
+msgid "Gender:"
+msgstr "Sexo:"
 
 msgid "User type"
 msgstr "Tipo de usuario"
@@ -5138,6 +5321,9 @@ msgstr "Nome completo"
 
 msgid "E-mail"
 msgstr "Correo electrónico"
+
+msgid "Not assigned"
+msgstr "Non asignado"
 
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
@@ -5742,12 +5928,6 @@ msgstr "Debes ter %d vídeos na portada"
 msgid "Mosaic"
 msgstr "Mosaico"
 
-msgid "No item selected"
-msgstr "Non se seleccionaron elementos"
-
-msgid "Click in one item to show information about it"
-msgstr "Prema nun elemento para mostrar información sobre el"
-
 msgid "Video details"
 msgstr "Detalles do vídeo"
 
@@ -6120,9 +6300,6 @@ msgstr "Elemento multimedia (jpg, png, gif)"
 msgid "Media flash element (swf)"
 msgstr "Elemento multimedia Flash (swf)"
 
-msgid "Not defined"
-msgstr "Non definido"
-
 msgid "Clicks:"
 msgstr "Clics:"
 
@@ -6189,6 +6366,9 @@ msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
 "Engade un sitio para sincronizar empregando o botón de configuración de "
 "arriba."
+
+msgid "My account"
+msgstr "A miña conta"
 
 msgid "This is the email used to create your newspaper"
 msgstr "Este foi o correo-e usado para creare o seu periódico"
@@ -6397,9 +6577,6 @@ msgstr "Nome do ficheiro orixinal:"
 msgid "Resolution:"
 msgstr "Resolución:"
 
-msgid "Size:"
-msgstr "Tamaño:"
-
 msgid "Used for searches and automated suggestions."
 msgstr "Usado para as buscas e suxestións automáticas."
 
@@ -6427,16 +6604,6 @@ msgstr "Non hai datos IPTC dispoñibeis"
 msgid "Search by description"
 msgstr "Buscar por descrición"
 
-msgid "Unable to find any image that matches your search."
-msgstr "Non se puideron atopar imaxes que coincidan coa súa busca."
-
-msgid ""
-"Maybe changing any filter could help or add one using the \"Upload\" button "
-"above."
-msgstr ""
-"Pode que ao cambiar un filtro axude ou pode engadir usando o botón «Subir» "
-"de enriba."
-
 msgid "Information"
 msgstr "Información"
 
@@ -6452,17 +6619,14 @@ msgstr "Descrición non dispoñíbel"
 msgid "No tags"
 msgstr "Sen etiquetas"
 
-msgid "Image details"
-msgstr "Detalles da imaxe"
-
-msgid "Image preview"
-msgstr "Tamaño da imaxe"
-
 msgid "Restore"
 msgstr "Restaurar"
 
 msgid "Content Type"
 msgstr "Tipo de contido"
+
+msgid "-- All --"
+msgstr "-- Todos --"
 
 msgid "No contents in the trash that matches your search."
 msgstr "Non se puideron atopar contidos no lixo que coincidan coa súa busca."
@@ -6932,9 +7096,6 @@ msgstr "Autor:"
 
 msgid "Submitted on:"
 msgstr "Enviado o:"
-
-msgid "by"
-msgstr "por"
 
 msgid "month"
 msgstr "mes"
@@ -7640,6 +7801,9 @@ msgstr "Últimas compras"
 msgid "Purchases last month"
 msgstr "Compras do mes pasado"
 
+msgid "Reset <strong>password</strong>"
+msgstr "Reiniciar <strong>contrasinal</strong>"
+
 msgid "We've sent an e-mail to"
 msgstr "Enviámosche un correo electrónico a"
 
@@ -7656,9 +7820,6 @@ msgid ""
 msgstr ""
 "Se usas filtrado de correo electrónico ou un software anti-spam, asegúrate "
 "de que o noso correo non está sendo filtrado ou bloqueado."
-
-msgid "Reset <strong>password</strong>"
-msgstr "Reiniciar <strong>contrasinal</strong>"
 
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
@@ -7861,6 +8022,9 @@ msgstr "Xestor de opennemas"
 msgid "Use manager account to sign in."
 msgstr "Use unha conta do xestor para iniciar sesión."
 
+msgid "Login"
+msgstr "Iniciar sesión"
+
 msgid "Download CSV of selected"
 msgstr "Descargar CSV dos seleccionados"
 
@@ -7983,6 +8147,50 @@ msgid ""
 msgstr ""
 "Aquí pode eliminar en lote ficheiros de cache, compiles, sesións e outras "
 "cousas<br> dunha instancia específica"
+
+msgid "Our Videos"
+msgstr "Os nosos vídeos"
+
+msgid "Our News"
+msgstr "As nosas novas"
+
+msgid "Our Twitter"
+msgstr "O noso Twitter"
+
+msgid "Our Facebook"
+msgstr "O noso Facebook"
+
+msgid "Our Google+"
+msgstr "O noso Google+"
+
+msgid "Our Company"
+msgstr "A nosa empresa"
+
+msgid "Please do not hesitate to share feedback, questions or doubts with us"
+msgstr ""
+"Por favor no dubides en poñerte en contacto connosco se tes calquera dúbida "
+"ou pregunta mediante:"
+
+msgid "<strong>ticketing system"
+msgstr "<strong>servizo de incidencias"
+
+msgid "(also available from Control Panel on the top right);"
+msgstr ""
+"(tamén dispoñible desde o panel de control na esquina superior dereita)"
+
+msgid "Regards,"
+msgstr "Atentamente,"
+
+msgid ""
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Team</span>"
+msgstr ""
+"<span style=\"color:#000000\">O equipo de </span> <a href=\"http://www."
+"opennemas.com/\" style=\"font-family: 'trebuchet ms', 'lucida grande', "
+"'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
+"line-height: normal;\" target=\"_blank\">Opennemas</a>"
 
 msgid "New instance"
 msgstr "Nova instancia"
@@ -8123,40 +8331,52 @@ msgstr "#"
 msgid "No rank"
 msgstr "Sen calificar"
 
-msgid "Welcome to OpenNemas"
-msgstr "Benvido a Opennemas"
+msgid "WELCOME TO OPENNEMAS"
+msgstr "BENVIDO A OPENNEMAS"
 
-msgid "Your Opennemas Newspaper is now available"
-msgstr "O teu xornal Opennemas está dispoñíbel"
+msgid "Hi"
+msgstr "Ola"
 
-msgid "To enable your account go to:"
-msgstr "Para activar a túa conta vai a:"
+msgid "Your newspaper is already live:"
+msgstr "O teu xornal Opennemas xa está dispoñíble:"
 
-msgid "You can access to newspaper with this link"
-msgstr "Podes acceder ao xornal con esta ligazón"
+msgid "Webpage:"
+msgstr "Páxina Web:"
 
-msgid "You can also access the administrative area through this link"
-msgstr "Tamén podes acceder ao área de administración usando esta ligazón"
-
-msgid "using the username and password you provided when you have created it."
-msgstr ""
-"usando o nome de usuario e contrasinal que lle fornecemos no correo "
-"electrónico."
+msgid "Admin panel:"
+msgstr "Panel de administración:"
 
 msgid ""
-"Please change your password on your first access to the administrative area "
-"to improve security."
+"For security reasons we advise you to change your password after first login "
+"to Admin Panel."
 msgstr ""
-"Por favor, cambia o teu contrasinal ao acceder por primeira vez na área de "
-"administración para mellorar a seguranza."
+"Por razóns de seguridade aconsellamosche que cambies o teu contrasinal ao "
+"acceder por primeira vez ao panel de control."
 
-msgid "In case you have any problems, please contact us via e-mail %1."
+msgid ""
+"If you have doubts about frontpage management or need a quick walk through "
+"we have <strong>video demo</strong> 3 minutes long"
 msgstr ""
-"No caso de que atopes calquera problema, contacta connosco mediante correo "
-"electrónico %1."
+"Se tés algunha dúbida acerca de cómo xestionar as Portadas ou queres "
+"aprender de maneira rápida e eficiente cómo funciona a plataforma, por "
+"favor, mira os nosos <strong>vídeos de exemplo</strong>"
 
-msgid "Sincerely"
-msgstr "Atentamente"
+msgid ""
+"How to create/edit <strong>articles</strong> and place them in a frontpage"
+msgstr "Cómo crear/modificar <strong>artigos</strong> e colocalos en Portada"
+
+msgid ""
+"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
+"articles&nbsp;"
+msgstr "Cómo subir engadir&nbsp;<strong>imaxes</strong> aos artigos"
+
+msgid "How to compose a&nbsp;<strong>frontpage</strong>"
+msgstr "Cómo compoñer unha&nbsp;<strong>Portada</strong>"
+
+msgid "We also have help page \"First Steps in Opennemas\" that should help"
+msgstr ""
+"Tamén dispoñemos dun artigo \"Primeiros pasos en Opennemas\" que podería "
+"axudarche"
 
 msgid "A new instance has been created"
 msgstr "Creouse unha nova instancia"
@@ -8166,6 +8386,9 @@ msgstr "Podes acceder ao teu xornal con a información de embaixo"
 
 msgid "Newspaper URL"
 msgstr "URL do xornal"
+
+msgid "Sincerely"
+msgstr "Atentamente"
 
 msgid "There was an error while creating an instance with the following data:"
 msgstr "Produciuse un erro ao crear unha instancia cos seguintes datos:"
@@ -8205,6 +8428,168 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Editar"
+#~ msgstr "Editar"
+
+#~ msgid "Import selected items"
+#~ msgstr "Importar os elementos seleccionados"
+
+#~ msgid "Are you sure you want to import [% selected %] elemets?"
+#~ msgstr "Tes certeza que queres importar [% selected %] elementos?"
+
+#~ msgid "Yes, import them"
+#~ msgstr "Si, importalos"
+
+#~ msgid "Activate server"
+#~ msgstr "Activar servidor"
+
+#~ msgid "Sync with server"
+#~ msgstr "Sincronizar co servidor"
+
+#~ msgid "Reload list"
+#~ msgstr "Recargar listado"
+
+#~ msgid ""
+#~ "Please do not hesitate to share feedback, questions or doubts with us via "
+#~ "email at %1 or via our <strong>ticketing system</strong> %2 (also "
+#~ "available from Control Panel on the top right)"
+#~ msgstr ""
+#~ "Non dubides en poñerte en contacto con nós se tés calquera dúbida ou "
+#~ "pregunta mediante o correo electrónico ou mediante o noso <strong>servizo "
+#~ "de incidencias</strong> http://help.opennemas.com/ (tamén dispoñíbel "
+#~ "desde o panel de control)."
+
+#~ msgid ""
+#~ "Regards<br>\n"
+#~ "Opennemas Team<br>\n"
+#~ "Powered by OpenHost SL."
+#~ msgstr ""
+#~ "Atentamente,<br>\n"
+#~ "El equipo de Opennemas<br>\n"
+#~ "Powered by OpenHost SL."
+
+#, fuzzy
+#~ msgid "Trading address:"
+#~ msgstr "Enderezo da rolda de correo"
+
+#, fuzzy
+#~ msgid "Registration number"
+#~ msgstr "Data de rexistro"
+
+#, fuzzy
+#~ msgid "Registered Office"
+#~ msgstr "Rexistrado"
+
+#~ msgid "Unable to find an element with the id \"%d\""
+#~ msgstr "Non se puido atopar o elemento co identificador «%d»"
+
+#~ msgid ""
+#~ "This content was imported before. You may cause a content duplication "
+#~ "while importing it."
+#~ msgstr ""
+#~ "Este contido xa foi importando anteriormente. Se o importa pode causar o "
+#~ "duplicado de contidos."
+
+#~ msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
+#~ msgstr "Se estás seguro,  <a href=\"%s?action=unlock\">desbloquealo</a>."
+
+#~ msgid "Files for \"%s\" cleaned."
+#~ msgstr "Os ficheiros de «%s» foron limpiados."
+
+#~ msgid "Sorry, that email is already subscribed to our newsletter"
+#~ msgstr ""
+#~ "Sentimolo, este correo electrónico xa está rexistrado na nosa newsletter"
+
+#~ msgid "Seems that the server configuration for %s is not correct."
+#~ msgstr "Semella que a configuración do servidor para %s non é correcta."
+
+#~ msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
+#~ msgstr ""
+#~ "Descargáronse %d artigos novos e elimináronse %d antigos desde «%s»."
+
+#~ msgid "Removes the synchronized files for this source"
+#~ msgstr "Elimina os ficheiros sincronizados para esta orixe"
+
+#~ msgid "Batch import"
+#~ msgstr "Importar en lote"
+
+#~ msgid "Search by title or content"
+#~ msgstr "Buscar por titulo ou contido"
+
+#~ msgid "With image"
+#~ msgstr "Con imaxes"
+
+#~ msgid "This new has attached images"
+#~ msgstr "Esta nova ten imaxes asociadas"
+
+#~ msgid "With video"
+#~ msgstr "Con vídeos"
+
+#~ msgid ""
+#~ "In order to be able to access your control panel please <strong>accept "
+#~ "out Terms and Conditions</strong> at"
+#~ msgstr ""
+#~ "Para acceder ao panel de control, por favor, <strong>acepta os Termos de "
+#~ "Servizo</strong> en"
+
+#~ msgid ""
+#~ "using the username and password you chose when creating your newspaper or "
+#~ "via direct access to Terms and Conditions at"
+#~ msgstr ""
+#~ "usando o nombre de usuario e contraseña que puxeches al crear o periódico "
+#~ "ou a través do acceso directo aos termos de servizo"
+
+#~ msgid "Opennemas Team"
+#~ msgstr "O equipo de Opennemas"
+
+#~ msgid "Welcome to OpenNemas"
+#~ msgstr "Benvido a Opennemas"
+
+#~ msgid "To enable your account go to:"
+#~ msgstr "Para activar a túa conta vai a:"
+
+#~ msgid "You can access to newspaper with this link"
+#~ msgstr "Podes acceder ao xornal con esta ligazón"
+
+#~ msgid "You can also access the administrative area through this link"
+#~ msgstr "Tamén podes acceder ao área de administración usando esta ligazón"
+
+#~ msgid ""
+#~ "Please change your password on your first access to the administrative "
+#~ "area to improve security."
+#~ msgstr ""
+#~ "Por favor, cambia o teu contrasinal ao acceder por primeira vez na área "
+#~ "de administración para mellorar a seguranza."
+
+#~ msgid "In case you have any problems, please contact us via e-mail %1."
+#~ msgstr ""
+#~ "No caso de que atopes calquera problema, contacta connosco mediante "
+#~ "correo electrónico %1."
+
+#~ msgid "Silver"
+#~ msgstr "Silver"
+
+#~ msgid "Gold"
+#~ msgstr "Gold"
+
+#~ msgid "Smarty"
+#~ msgstr "Smarty"
+
+#~ msgid "Content subscriptions"
+#~ msgstr "Subscrición de contidos"
+
+#~ msgid "Content Subscriptions"
+#~ msgstr "Subscrición de contidos"
+
+#~ msgid "Username reminder for %s"
+#~ msgstr "Recordatorio do nome de usuario para %s"
+
+#~ msgid "Logout"
+#~ msgstr "Sair"
+
+#~ msgid "Register"
+#~ msgstr "Rexistrarse"
 
 #~ msgid "The video has some relations"
 #~ msgstr "O vídeo ten relacións"
@@ -8551,9 +8936,6 @@ msgstr ""
 
 #~ msgid "Account settings"
 #~ msgstr "Preferencias da conta"
-
-#~ msgid "Delete subscriptions"
-#~ msgstr "Eliminar subscricións"
 
 #~ msgid "Delete subscriptor"
 #~ msgstr "Eliminar subscritor"
@@ -9109,9 +9491,6 @@ msgstr ""
 #~ msgid "Video category"
 #~ msgstr "Categoria de vídeo"
 
-#~ msgid "Sync"
-#~ msgstr "Sincronizar"
-
 #~ msgid "Sync Automatic category"
 #~ msgstr "Sincronización automática de categoría"
 
@@ -9221,9 +9600,6 @@ msgstr ""
 #~ msgid "There is no advertisement stored in this section"
 #~ msgstr "No hai ningunha publicidade almacenada nesta categoría"
 
-#~ msgid "Undefined"
-#~ msgstr "Indefinida"
-
 #~ msgid "Adding site to synchronization"
 #~ msgstr "Engadindo sitio á sincronización"
 
@@ -9259,9 +9635,6 @@ msgstr ""
 
 #~ msgid "Width (px.)"
 #~ msgstr "Ancho (px.)"
-
-#~ msgid "Min"
-#~ msgstr "Minimo"
 
 #~ msgid "Height (px.)"
 #~ msgstr "Alto (px.)"
@@ -9468,17 +9841,11 @@ msgstr ""
 #~ msgid "The application has been upgraded. Please reload your page"
 #~ msgstr "O aplicativo foi actualizado. Por favor recargua a túa páxina"
 
-#~ msgid "Reload"
-#~ msgstr "Recargar"
-
 #~ msgid "Here you can manage global settings about this onm-multiinstance."
 #~ msgstr "Aquí pode xestionar as preferencias globais de onm multiinstancia."
 
 #~ msgid "Unable to find the album with the id \"%d\""
 #~ msgstr "Non se puido atopar o álbum co identificador «%d»"
-
-#~ msgid "No author assigned"
-#~ msgstr "Ningún autor asignado"
 
 #~ msgid "Preview:"
 #~ msgstr "Previsualización:"
@@ -9946,9 +10313,6 @@ msgstr ""
 #~ msgid "You must assign a section for \"%s\""
 #~ msgstr "Debe asignar unha sección para \"% s\""
 
-#~ msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
-#~ msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
-
 #~ msgid "This user was deactivated. Please ask your administrator."
 #~ msgstr "Este usuario está desactivado. Pregunta ao teu administrador."
 
@@ -10016,9 +10380,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Este ficheiro non está publicado polo que non pode definilo como contido "
 #~ "do widget de portada."
-
-#~ msgid "Files \"%s\" deleted successfully."
-#~ msgstr "Ficheiro «%s» eliminado correctamente."
 
 #~ msgid "Image \"%s\" deleted successfully."
 #~ msgstr "Imaxe «%s» eliminada correctamente."
@@ -10363,9 +10724,6 @@ msgstr ""
 
 #~ msgid "Mail server"
 #~ msgstr "Servidor de correo"
-
-#~ msgid "Sender"
-#~ msgstr "Remitente"
 
 #~ msgid "Enable Log:"
 #~ msgstr "Activar rexistro:"
@@ -10922,9 +11280,6 @@ msgstr ""
 
 #~ msgid "You have logged in correctly. You will be redirect to the Home page"
 #~ msgstr "Iniciou sesión correctamente. Será redirixido á páxina principal."
-
-#~ msgid " made by OpenHost S.L."
-#~ msgstr "creado por OpenHost S.L."
 
 #~ msgid "All rights reserved &copy; 2008 - %1"
 #~ msgstr "Todos os dereitos reservados &copy; 2008 - %1"

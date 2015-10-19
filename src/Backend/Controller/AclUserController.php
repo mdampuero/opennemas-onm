@@ -140,7 +140,11 @@ class AclUserController extends Controller
         }
 
         // Get all categories
-        $allcategorys = $this->get('category_repository')->findBy('internal_category = 1', 'name ASC');
+        $allcategorys = $this->get('category_repository')->findBy(
+            'internal_category <> 0',
+            'name ASC'
+        );
+
         // Add Frontpage to available categories
         $frontpage = new \ContentCategory();
         $frontpage->id = 0;
@@ -189,6 +193,12 @@ class AclUserController extends Controller
                 'content_categories'        => $allcategorys,
                 'content_categories_select' => $user->accesscategories,
                 'min_pass_level'            => $minPassLevel,
+                'gender_options'            => [
+                    ''       => _('Undefined'),
+                    'male'   => _('Male'),
+                    'female' => _('Female'),
+                    'other'  => _('Other')
+                ],
             )
         );
     }

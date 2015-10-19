@@ -138,7 +138,7 @@ class ModuleManager
                 'CACHE_MANAGER'              => _('Cache manager'),
                 'CATEGORY_MANAGER'           => _('Category'),
                 'COMMENT_MANAGER'            => _('Comments'),
-                'CONTENT_SUBSCRIPTIONS'      => _('Content subscriptions'),
+                'CONTENT_SUBSCRIPTIONS'      => _('Subscription'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
@@ -226,8 +226,8 @@ class ModuleManager
                         4
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -272,14 +272,14 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
+                        '500MB',
+                        '50.000',
+                        '50.000',
                         2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -317,7 +317,7 @@ class ModuleManager
                     )
                     ._(
                         '<li>Frontpage customization</li>
-                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter" target="_blank">0</a>)</li>'
                     ).'</ul>'
                     .sprintf(
                         _(
@@ -329,14 +329,14 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
-                        4
+                        '500MB',
+                        '50.000',
+                        '50.000',
+                        2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
                 ),
@@ -372,7 +372,7 @@ class ModuleManager
                     )
                     ._(
                         '<li>Frontpage customization</li>
-                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter">0</a>)</li>'
+                        <li>Newsletter manager (<a href="http://opennemas.com/pricing?language=en_US#newsletter" target="_blank">0</a>)</li>'
                     )
                     ._(
                         '<li>Multiple Frontpage Management</li>
@@ -389,17 +389,17 @@ class ModuleManager
                             <li>Online Support (Tickets SLA %d business days)</li></ul>'
                         ),
                         1,
-                        '1GB',
-                        '100.000',
-                        '100.000',
-                        4
+                        '500MB',
+                        '50.000',
+                        '50.000',
+                        2
                     )
                     ._(
-                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario">User Licence Page</a>.</small></p>'
-                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado">Page Views and Storage Space</a>.</small></p>'
+                        '<p><small>1. To add more users refer to <a href="http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario" target="_blank">User Licence Page</a>.</small></p>'
+                        .'<p><small>2. For more information about storage or page views please go to our page <a href="http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado" target="_blank">Page Views and Storage Space</a>.</small></p>'
                         .'<p><small>All prices above do not include VAT (21%).</small></p>'
                     )
-               ),
+                ),
                 'type'  => 'pack',
                 'price' => [
                     'month' => 200
@@ -506,7 +506,7 @@ class ModuleManager
                 ),
                 'price' => [
                     'single' => 1450,
-                    'month' => 135
+                    'month' => 130
                 ]
             ],
             [
@@ -533,7 +533,7 @@ class ModuleManager
                                     <a href="mailto:sales@openhost.es">sales@openhost.es</a>
                                 </li>
                                 <li>
-                                    Up to 5 more widgets included
+                                    1 additional widget included
                                 </li>
                             </ul>
 
@@ -561,7 +561,7 @@ class ModuleManager
                                 <li>Creation of new page over included or over time 1500€</li>
                                 <li>
                                     Support cost after launch
-                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
                                         http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
                                     </a>
                                 </li>
@@ -614,7 +614,7 @@ class ModuleManager
                                 <li>Creation of new page over included or over time 1500€</li>
                                 <li>
                                     Support cost after launch
-                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo">
+                                    <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
                                         http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo
                                     </a>
                                 </li>
@@ -737,6 +737,9 @@ class ModuleManager
                     'long_description' => _('
                         <p>Authors will have a dedicated space where all their contributions will appear in chronological order and readers alse set a RSS notification to receive the latest articles posted by a particular author.</p>
                     '),
+                    'price'            => [
+                        'month' => 20
+                    ]
                 ],
                 [
                     'id'               => 'BOOK_MANAGER',
@@ -1123,7 +1126,14 @@ class ModuleManager
                     'name'             => _('Frontpage Synchronization'),
                     'description'      => _('Update your local frontpages by updating 1 frontpage!'),
                     'long_description' => _(
-                        'p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronized?</p><p>No problem. By activating this module you will have all your news synchronized, if you have many local newspapers for instance and one main one, you can update the frontpage of all locals with news of the general newspaper.</p><p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p><p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
+                        '<p>Do you have more than 1 newspaper and you would like for the "home" pages to be '
+                        .'synchronized?</p><p>No problem. By activating this module you will have all your news '
+                        .'synchronized, if you have many local newspapers for instance and one main one, you '
+                        .'can update the frontpage of all locals with news of the general newspaper.</p><p>If '
+                        .'you modify a frontpage in the main newspaper the frontpage of local newspapers will '
+                        .'update automatically too.</p><p>The only requirement is that all newspapers need to '
+                        .'belong to the same group, so that the frontpage is stored in the one place.</p>'
+                    ),
                     'price'            => [
                         'month' => 65
                     ]
@@ -1133,9 +1143,19 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
-                    'name'             => _('Content Subscriptions'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
+                    'name'             => _("Subscription"),
+                    'description'      => _(
+                        "Would you like for your readers to be able to unlock premium content for free?\n"
+                        ."This is the module you should add to your newspaper!"
+                    ),
+                    'long_description' => _(
+                        "This module enables newspapers to add a customized subscription form to allow users to unlock premium content.<br>\n"
+                        ."The subscription form generates login details for the user.<br>\n"
+                        ."Newspapers will be able to mark content as \"premium\" and users will need to register in order to access the full extent of it.<br>"
+                        ."Note: if the newspaper needs to collect users data will have to provide certification of inscription "
+                        ."to \"Agencia Española de Protección de Datos\" or equivalent. Openhost, SL is not responsible of any "
+                        ."data saved or required by newspapers."
+                    ),
                     'price'            => [
                         'month' => 65
                     ]

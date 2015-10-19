@@ -106,17 +106,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $request->get('_token')
         );
 
-        $im = getService('instance_manager');
-        $um = getService('user_repository');
-        $cache = getService('cache');
-
-        $database = $im->current_instance->getDatabaseName();
-        $namespace = $im->current_instance->internal_name;
-
-        $um->selectDatabase($database);
-        $cache->setNamespace($namespace);
-        $GLOBALS['application']->conn->selectDatabase($database);
-
         if (!$isTokenValid || $valid === false) {
             if (isset($_SESSION['failed_login_attempts'])) {
                 $_SESSION['failed_login_attempts']++;
@@ -139,8 +128,21 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 );
             }
 
+            $this->context->setToken(null);
+
             return new RedirectResponse($request->headers->get('referer'));
         } else {
+            $im = getService('instance_manager');
+            $um = getService('user_repository');
+            $cache = getService('cache');
+
+            $database = $im->current_instance->getDatabaseName();
+            $namespace = $im->current_instance->internal_name;
+
+            $um->selectDatabase($database);
+            $cache->setNamespace($namespace);
+            $GLOBALS['application']->conn->selectDatabase($database);
+
             unset($_SESSION['failed_login_attempts']);
 
             // Set last_login date

@@ -263,6 +263,9 @@ class BlogsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($blog);
+
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $blogID);
         if (($this->view->caching == 0)
@@ -313,7 +316,9 @@ class BlogsController extends Controller
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds('inner'),
                 'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => 'blog-inner,'.$blogID
+                'x-tags'          => 'blog-inner,'.$blogID,
+                'x-cache-for'     => '+1 day',
+                'x-cacheable'     => $cacheable
             ]
         );
     }

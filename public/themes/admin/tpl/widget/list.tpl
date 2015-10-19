@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0,  content: -1}, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -89,7 +89,7 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}IntelligentWidget{/t}', value: 'intelligentwidget' }, { name: '{t}HTML{/t}', value: 'html' }, { name: '{t}Smarty{/t}', value: 'smarty' } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}IntelligentWidget{/t}', value: 'intelligentwidget' }, { name: '{t}HTML{/t}', value: 'html' }]">
             <ui-select name="status" theme="select2" ng-model="criteria.renderlet">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -105,6 +105,16 @@
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="widget_contents = {json_encode($all_widgets)|clear_json}">
+            <ui-select name="status" theme="select2" ng-model="criteria.content">
+              <ui-select-match>
+                <strong>{t}Content{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in widget_contents | filter: { name: $select.search }">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -152,6 +162,7 @@
                 </div>
               </th>
               <th>{t}Name{/t}</th>
+              <th style="width:300px" class="hidden-xs">{t}Content{/t}</th>
               <th style="width:70px" class="hidden-xs">{t}Type{/t}</th>
               <th class="center" style="width:20px">{t}Published{/t}</th>
             </thead>
@@ -182,6 +193,12 @@
                     </button>
                     {/acl}
                   </div>
+                </td>
+                <td class="hidden-xs" ng-if="content.renderlet != 'html'">
+                  [% content.content %]
+                </td>
+                <td class="hidden-xs" ng-if="content.renderlet == 'html'">
+                  HTML
                 </td>
                 <td class="hidden-xs">
                   [% content.renderlet %]

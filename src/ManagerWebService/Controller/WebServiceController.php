@@ -166,22 +166,27 @@ class WebServiceController extends Controller
             $this->sendErrorMail($companyMail, $instance, $e);
         }
 
+        try {
+            $data = [
+                'name'          => $instance->name,
+                'internal_name' => $instance->internal_name,
+                'user_mail'     => $instance->contact_mail,
+                'user_name'     => $instance->contact_mail,
+            ];
+
+            $language = $instance->external['site_language'];
+            $plan     = $instance->plan;
+
+            $domain = $instanceCreator['base_domain'];
+            $this->sendMails($data, $companyMail, $domain, $language, $plan);
+        } catch (\Exception $e) {
+            $errors['all'] = ['Unable to send emails'];
+            error_log($e->getMessage());
+        }
+
         if (is_array($errors) && count($errors) > 0) {
             return new JsonResponse(['success' => false, 'errors' => $errors], 400);
         }
-
-        $data = [
-            'name'          => $instance->name,
-            'internal_name' => $instance->internal_name,
-            'user_mail'     => $instance->contact_mail,
-            'user_name'     => $instance->contact_mail,
-        ];
-
-        $language = $instance->external['site_language'];
-        $plan     = $instance->plan;
-
-        $domain = $instanceCreator['base_domain'];
-        $this->sendMails($data, $companyMail, $domain, $language, $plan);
 
         return new JsonResponse(
             [
@@ -266,26 +271,30 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']}- new instance - {$data['name']}");
+        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
         $this->view = new \TemplateManager();
 
+        $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
+
         // Prepare message
         $message = \Swift_Message::newInstance();
-        $message->setFrom($companyMail['from_mail'])
-            ->setTo(array($data['user_mail'] => $data['user_name']))
+        $message->setFrom([$companyMail['from_mail'] => 'Opennemas'])
+            ->setTo([$data['user_mail'] => $data['user_name']])
+            ->setBody($htmlContent, 'text/html')
             ->setSender($companyMail['sender_mail'], "Opennemas")
-            ->setSubject("{$data['name']} "._("is now on-line"))
+            ->setSubject(sprintf(_("%s is now on-line"), $data['name']))
             ->setBody(
                 $this->renderView(
                     'instances/mails/newInstanceToUser.tpl',
                     array(
-                        'data'        => $data,
-                        'companyMail' => $companyMail['company_mail'],
-                        'domain'      => $domain,
+                        'data'              => $data,
+                        'domain'            => $domain,
+                        'companyMail'       => $companyMail['company_mail'],
+                        'instance_base_url' => $instanceBaseURL,
                     )
                 )
             );

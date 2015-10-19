@@ -134,14 +134,14 @@
                 <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
               </div>
             </div>
-            <div class="row" id="ad_dimensions" ng-show="with_script != 2">
+            <div class="row ng-cloak" id="ad_dimensions" ng-show="with_script <= 1">
               <div class="col-sm-3">
                 <div class="form-group">
                   <label class="form-label" for="params_width">
                     {t}Width{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="params_width" name="params_width" ng-model="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script != 2" min="0">
+                    <input class="form-control" id="params_width" name="params_width" ng-model="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script <= 1" min="0">
                   </div>
                 </div>
               </div>
@@ -151,7 +151,7 @@
                     {t}Height{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="params_height" name="params_height" ng-model="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script != 2" min="0">
+                    <input class="form-control" id="params_height" name="params_height" ng-model="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script <= 1" min="0">
                   </div>
                 </div>
               </div>
@@ -295,28 +295,28 @@
               </label>
               <div class="controls">
                 <select name="position" id="position" ng-model="position">
-                  <option value="publi-frontpage">{t}Frontpage{/t}</option>
-                  <option value="publi-inner">{t}Inner article{/t}</option>
+                  <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
+                  <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
                   {is_module_activated name="VIDEO_MANAGER"}
-                  <option value="publi-video">{t}Video frontpage{/t}</option>
-                  <option value="publi-video-inner">{t}Inner video{/t}</option>
+                  <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
+                  <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
                   {/is_module_activated}
                   {is_module_activated name="OPINION_MANAGER"}
-                  <option value="publi-opinion">{t}Opinion frontpage{/t}</option>
-                  <option value="publi-opinion-inner">{t}Inner opinion{/t}</option>
+                  <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
+                  <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
                   {/is_module_activated}
                   {is_module_activated name="ALBUM_MANAGER"}
-                  <option value="publi-gallery">{t}Galleries{/t}</option>
-                  <option value="publi-gallery-inner">{t}Gallery Inner{/t}</option>
+                  <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
+                  <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
                   {/is_module_activated}
                   {is_module_activated name="POLL_MANAGER"}
-                  <option value="publi-poll">{t}Poll{/t}</option>
-                  <option value="publi-poll-inner">{t}Poll Inner{/t}</option>
+                  <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
+                  <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
                   {/is_module_activated}
                   {is_module_activated name="NEWSLETTER_MANAGER"}
-                  <option value="publi-newsletter">{t}Newsletter{/t}</option>
+                  <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Newsletter{/t}</option>
                   {/is_module_activated}
-                  <option value="publi-others">{t}Others{/t}</option>
+                  <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                 </select>
               </div>
             </div>

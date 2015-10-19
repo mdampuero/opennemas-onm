@@ -1,4 +1,7 @@
-
+/***********************************************************
+    Cookies overlay
+************************************************************/
+#cookies_overlay{background:rgba(0,0,0,0.85);position:fixed;left:0;top:0;color:#fff;width:100%;z-index:9999;font-size:12px;text-align:left;padding:10px 0}.cookies-overlay{margin:0 auto;max-width:960px}.cookies-overlay p{margin:0;padding-left:10px;float:left;width:90%}.cookies-overlay button{background:rgba(255,255,255,0.75);border:0;border-radius:10%;margin:0 10px;padding:3px 5px;color:#000;font-size:12px;font-weight:bold}.cookies-overlay button:hover{background:#fff}.cookies-overlay a{color:#fff;text-decoration:underline}
 /***********************************************************
     Frontpage content disposition
 ************************************************************/

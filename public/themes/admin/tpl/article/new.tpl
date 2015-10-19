@@ -324,7 +324,7 @@
                       {t}Slug{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}">
+                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id)}disabled{/if}>
                       {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
                       <span class="help-block">
@@ -387,6 +387,7 @@
               </div>
             </div>
           </div>
+          {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
           <div class="row">
             <div class="col-md-12">
               <div class="grid simple">
@@ -404,24 +405,25 @@
               </div>
             </div>
           </div>
+          {/is_module_activated}
           {is_module_activated name="PAYWALL"}
-            <div class="row">
-              <div class="col-md-12">
-                <div class="grid simple">
-                  <div class="grid-title">
-                    <h4>{t}Paywall{/t}</h4>
-                  </div>
-                  <div class="grid-body">
-                    <div class="checkbox">
-                      <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" type="checkbox" value="1">
-                      <label for="only_subscribers">
-                        {t}Only available for subscribers{/t}
-                      </label>
-                    </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="grid simple">
+                <div class="grid-title">
+                  <h4>{t}Paywall{/t}</h4>
+                </div>
+                <div class="grid-body">
+                  <div class="checkbox">
+                    <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" type="checkbox" value="1">
+                    <label for="only_subscribers">
+                      {t}Only available for subscribers{/t}
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
           {/is_module_activated}
         </div>
       </div>

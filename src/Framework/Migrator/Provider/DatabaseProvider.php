@@ -113,8 +113,8 @@ class DatabaseProvider extends MigrationProvider
                             in_array('subselect', $field['type'])) {
                         $params = $field['params']['subselect'];
 
-                        $sql .= '(SELECT ' . $params['table'] . '.'
-                            . $params['field'] . ' FROM ' . $params['table']
+                        $sql .= '(SELECT group_concat(' . $params['table'] . '.'
+                            . $params['field'] . ') FROM ' . $params['table']
                             . ' WHERE ' . $params['table'] . '.' . $params['id']
                             . '=' . $id[$schema['source']['id']];
 

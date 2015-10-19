@@ -40,6 +40,7 @@ class ArticlesController extends Controller
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $this->ccm  = \ContentCategoryManager::get_instance();
 
@@ -47,7 +48,7 @@ class ArticlesController extends Controller
         list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
         $er = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
-        if (is_null($article)) {
+        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
             throw new ResourceNotFoundException();
         }
 
@@ -60,7 +61,8 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
-        $cacheable = $this->subscriptionHook($article);
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $cacheable = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
@@ -149,29 +151,20 @@ class ArticlesController extends Controller
 
         } // end if $this->view->is_cached
 
-        $renderParams = [
-            'cache_id'        => $cacheID,
-            'contentId'       => $articleID,
-            'category_name'   => $categoryName,
-            'article'         => $article,
-            'content'         => $article,
-            'actual_category' => $categoryName,
-            'time'            => '12345',
-        ];
-
-        if ($cacheable) {
-            $renderParams = array_merge(
-                $renderParams,
-                [
-                    'x-tags'      => 'article,'.$article->id,
-                    'x-cache-for' => '1d'
-                ]
-            );
-        }
-
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
-            $renderParams
+            [
+                'cache_id'        => $cacheID,
+                'contentId'       => $articleID,
+                'category_name'   => $categoryName,
+                'article'         => $article,
+                'content'         => $article,
+                'actual_category' => $categoryName,
+                'time'            => '12345',
+                'x-tags'          => 'article,'.$article->id,
+                'x-cache-for'     => '+1 day',
+                'x-cacheable'     => $cacheable
+            ]
         );
     }
 
@@ -281,86 +274,5 @@ class ArticlesController extends Controller
         $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
-    }
-
-    /**
-     * Replaces article body for unsubscribed users.
-     *
-     * @return Article $content The article.
-     */
-    public function paywallHook(&$content)
-    {
-        $restrictedContent = $this->renderView(
-            'paywall/partials/content_only_for_subscribers.tpl',
-            array('id' => $content->id)
-        );
-
-        $user = $this->getUser();
-
-        if (empty($user) || empty($user->getMeta('paywall_time_limit'))) {
-            $content->body = $restrictedContent;
-            return;
-        }
-
-        $limit = \DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $user->getMeta('paywall_time_limit'),
-            new \DateTimeZone('UTC')
-        );
-
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        $hasSubscription = $userSubscriptionDate > $now;
-
-        if ($limit < $now) {
-            $content->body = $restrictedContent;
-        }
-    }
-
-    /**
-     * Replaces article body for unregistered users.
-     *
-     * @param Article $content The article.
-     */
-    public function registeredHook(&$content)
-    {
-        $restrictedContent = $this->renderView(
-            'article/partials/content_only_for_registered.tpl',
-            array('id' => $content->id)
-        );
-
-        if (empty($this->getUser())) {
-            $content->body = $restrictedContent;
-        }
-    }
-
-    /**
-     * Check and modify content if required basing on subscription constraints.
-     *
-     * @param Content $content The content to check.
-     *
-     * @return boolean True if the content is cacheable. Otherwise, returns
-     *                 false.
-     */
-    public function subscriptionHook(&$content)
-    {
-        $cacheable = true;
-
-        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
-            && $content->isOnlyAvailableForRegistered()) {
-            $cacheable = false;
-
-            $this->registeredHook($content);
-        }
-
-        if (ModuleManager::isActivated('PAYWALL')
-            && $content->isOnlyAvailableForSubscribers()
-        ) {
-            $cacheable = false;
-
-            $this->paywallHook($content);
-        }
-
-        return $cacheable;
     }
 }

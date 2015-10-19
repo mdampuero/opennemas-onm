@@ -71,7 +71,7 @@ abstract class BaseManager
      * @param  integer $offset          The offset to start with.
      * @return Object                   The object searched.
      */
-    public function findOneBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findOneBy($criteria, $order = null, $elementsPerPage = 1, $page = 1, $offset = 0)
     {
         $elements = $this->findBy($criteria, $order, $elementsPerPage, $page, $offset);
         $element  = null;
@@ -263,7 +263,7 @@ abstract class BaseManager
                 || strtoupper($operator) == 'NOT IN'
             ) {
                 // Value (not) in array
-                $sql = "$field $operator (" . implode(', ', $value) . ")";
+                $sql = "$field $operator ('" . implode('\', \'', $value) . "')";
             } else {
                 // Array of values
                 $value = $this->parseValues($value, $operator);

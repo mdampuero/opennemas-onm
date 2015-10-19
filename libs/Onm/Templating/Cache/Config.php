@@ -138,10 +138,8 @@ class Config
     public function save($config)
     {
         $filename = $this->configDir . 'cache.conf';
-        $fp = @fopen($filename, 'w');
 
         $iniContents = '';
-
         foreach ($config as $section => $entry) {
             $iniContents .= '[' . $section . ']' . "\n"
                          .'caching = ' . $entry['caching'] . "\n"

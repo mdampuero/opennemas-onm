@@ -37,6 +37,12 @@ class ArchiveController extends Controller
      **/
     public function archiveAction(Request $request)
     {
+        # Avoid Bing bot to crawl archive page
+        $isBingBot = \Onm\Utils\BotDetector::isSpecificBot($request->headers->get('user-agent'), 'bingbot');
+        if ($isBingBot) {
+            return new RedirectResponse('/');
+        }
+
         $today = new \DateTime();
         $today->modify('-1 day');
 
@@ -89,12 +95,9 @@ class ArchiveController extends Controller
                     $library[$content->category]->contents[] = $content;
                 }
             }
-            $this->view->assign('library', $library);
-        }
 
-        // Pager
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            [
+            // Pager
+            $pagination = \Onm\Pager\SimplePager::getPagerUrl([
                 'page'  => $page,
                 'items' => $itemsPerPage,
                 'total' => $total,
@@ -106,8 +109,18 @@ class ArchiveController extends Controller
                         'year'  => $year,
                     ]
                 )
-            ]
-        );
+            ]);
+
+            # Only allow user to see 2 pages of archive
+            if ($page > 1) {
+                $pagination = null;
+            }
+
+            $this->view->assign([
+                'library'    => $library,
+                'pagination' => $pagination,
+            ]);
+        }
 
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
@@ -117,7 +130,6 @@ class ArchiveController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'newslibraryDate' => $date,
-                'pagination'      => $pagination,
                 'actual_category' => 'archive',
                 'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
             )

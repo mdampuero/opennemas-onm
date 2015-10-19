@@ -66,6 +66,11 @@ class UpdateInstancesCommand extends ContainerAwareCommand
                 false,
                 InputOption::VALUE_NONE,
                 'If set, the command will be run in debug mode.'
+            )->addOption(
+                'offset',
+                0,
+                InputOption::VALUE_OPTIONAL,
+                'If set, this command will only be run in 30 instances from page [offset].'
             );
     }
 
@@ -77,15 +82,26 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $alexa = $input->getOption('alexa');
-        $views = $input->getOption('views');
+        $alexa   = $input->getOption('alexa');
+        $offset  = $input->getOption('offset');
         $created = $input->getOption('created');
+        $views   = $input->getOption('views');
+        $verbose   = $input->getOption('verbose');
 
-        $this->im = $this->getContainer()->get('instance_manager');
+        $amount = ($offset) ? 30: null;
 
-        $instances = $this->im->findBy(null, array('id', 'asc'));
+        $this->im  = $this->getContainer()->get('instance_manager');
+        $instances = $this->im->findBy(null, array('id', 'asc'), $amount, $offset);
+
+        if (count($instances) == 0) {
+            $output->writeln('No instances');
+            exit(1);
+        }
 
         foreach ($instances as $instance) {
+            if ($output->isVerbose()) {
+                $output->writeln('Getting info about \''.$instance->internal_name.'\'');
+            }
             $this->getInstanceInfo($instance, $alexa, $views, $created);
             $this->im->persist($instance);
         }
@@ -239,10 +255,12 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Get media size
-        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$i->internal_name.'/'));
-        if (is_array($size)) {
-            $i->media_size = $size[0] / 1024;
+        $size = 0;
+        $mediaPath = realpath(SITE_PATH."media".DS.$i->internal_name);
+        if ($mediaPath) {
+            $size = (int) shell_exec('du -s '.$mediaPath.'/ | awk \'{ print $1}\'');
         }
+        $i->media_size = $size / 1024;
     }
 
     /**

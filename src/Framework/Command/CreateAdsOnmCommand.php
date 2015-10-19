@@ -89,8 +89,16 @@ EOF
         $_SESSION['userid'] = '0';
 
         $path = $input->getArgument('config-file');
+        if (!file_exists($path)) {
+            throw new \Exception("Can't access the file or doesn't exists");
+        }
+
         $yaml = new Parser();
         $ads  = $yaml->parse(file_get_contents($path));
+
+        if (is_null($ads) || empty($ads)) {
+            throw new \Exception("File content is not valid");
+        }
 
         $am = new \Advertisement();
         foreach ($ads as $ad) {
@@ -108,7 +116,7 @@ EOF
                 'num_view' => '',
                 'starttime' => '2015-08-14 00:00:00',
                 'endtime' => '',
-                'timeout' => '4',
+                'timeout' => '15',
                 'url' => 'http://www.opennemas.com',
                 'img' => '',
                 'script' => $ad['script'],

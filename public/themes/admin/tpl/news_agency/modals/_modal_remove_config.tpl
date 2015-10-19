@@ -10,6 +10,6 @@
   </p>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
-  <button type="button" class="btn btn-primary" ng-click="confirm()">Save changes</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal" ng-click="close()">{t}No{/t}</button>
+  <button type="button" class="btn btn-primary" ng-click="confirm()">{t}Yes, delete it{/t}</button>
 </div>

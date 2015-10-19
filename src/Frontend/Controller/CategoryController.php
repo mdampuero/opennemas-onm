@@ -16,7 +16,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Shows a paginated page for contents that share a property
@@ -51,7 +50,8 @@ class CategoryController extends Controller
 
         $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $itemsPerPage = (empty(s::get('items_in_blog'))) ? s::get('items_in_blog') : 8;
+            $sm = $this->get('setting_repository');
+            $itemsPerPage = $sm->get('items_in_blog', 8);
 
             $em = $this->get('entity_repository');
             $filters = [
@@ -163,7 +163,7 @@ class CategoryController extends Controller
 
         // Get sync params
         $wsUrl = '';
-        $syncParams = s::get('sync_params');
+        $syncParams = $this->get('setting_repository')->get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
                 if (in_array($categoryName, $values['categories'])) {
