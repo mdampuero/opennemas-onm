@@ -29,6 +29,17 @@ class HttpEfe extends Http
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getContentFromUrl($url)
+    {
+        $auth = $this->params['username'] . ':' . $this->params['password'];
+        $url  = str_replace('http://', 'http://' . $auth . '@', $url);
+
+        return @file_get_contents($url);
+    }
+
+    /**
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
