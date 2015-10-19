@@ -70,6 +70,24 @@
         };
 
         /**
+         * @function isEditable
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   Checks if you can edit the content after importing.
+         *
+         * @return {Boolean} True if content could be editable after importing.
+         *                   Otherwise, returns false.
+         */
+        $scope.isEditable = function() {
+          var texts = $scope.template.contents.filter(function(a) {
+            return a.type === 'text';
+          });
+
+          return texts.length === 1;
+        };
+
+        /**
          * @function onlyPhotos
          * @memberOf NewsAgencyModalCtrl
          *

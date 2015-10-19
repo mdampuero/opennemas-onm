@@ -44,5 +44,5 @@
 <div class="modal-footer">
   <button class="btn btn-link" ng-click="close()" type="button">{t}No{/t}</button>
   <button class="btn btn-white" ng-click="confirm()" type="button">{t}Yes, import and publish{/t}</button>
-  <button class="btn btn-success" ng-click="confirm(1)" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
+  <button class="btn btn-success" ng-click="confirm(1)" type="button" ng-if="isEditable()">{t}Yes, import and edit{/t}</button>
 </div>
