@@ -1001,7 +1001,7 @@ class ModuleManager
                     'price'            => [
                         'month' => 30,
                         'usage' => [
-                            'price' => 0.3,
+                            'price' => 2,
                             'items' => 1000,
                             'type' => _('emails')
                         ]
