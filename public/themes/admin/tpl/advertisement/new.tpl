@@ -135,7 +135,6 @@
               </div>
             </div>
             <div ng-init="init({json_encode($advertisement->params)|clear_json})" id="ad_dimensions">
-              [% sizes %] - [% sizes.length %]
               <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length < 1">
                 <div class="col-sm-3">
                   <div class="form-group">
