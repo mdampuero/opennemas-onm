@@ -136,7 +136,7 @@
             related.push($scope.extra.related[content.related[i]]);
           }
 
-          var modal = $modal.open({
+          $modal.open({
             templateUrl: 'modal-view-content',
             windowClass: 'modal-news-agency-preview',
             controller: 'modalCtrl',
@@ -151,7 +151,7 @@
               success: null
             }
           });
-        }
+        };
 
         /**
          * @function
