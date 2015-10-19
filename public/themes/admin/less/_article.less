@@ -6,14 +6,13 @@
 .dynamic-image-wrapper {
   .thumbnail-actions {
     bottom: 0;
-    margin-top: -25px;
     opacity: 0;
-    padding-bottom: 8px;
+    padding: 14px 8px;
     padding-left: 8px;
     position: absolute;
-    z-index: 100;
-
     transition: all .25s;
+    width: 100%;
+    z-index: 100;
 
     .thumbnail-action {
       background: rgba(0,0,0,.75);
@@ -34,6 +33,10 @@
     .remove-action {
       background-color: #f35958;
     }
+  }
+
+  .thumbnail-actions-fixed {
+    opacity: 1;
   }
 
   .thumbnail-hidden-action {
