@@ -67,10 +67,15 @@
          * @description
          *   Opens a modal window to import one item.
          *
-         * @param {Object} content The content to import
+         * @param {Object} content The content to import.
          */
         $scope.import = function(content) {
           var contents = [ content ];
+
+          // Add related contents
+          for (var i = 0; i < content.related.length && i < 2; i++) {
+            contents.push($scope.extra.related[content.related[i]]);
+          }
 
           $scope._import(contents);
         };
