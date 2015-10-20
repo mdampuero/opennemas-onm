@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-  <div class="content my-account-page" ng-app="BackendApp" ng-controller="MyAccountCtrl">
+<div class="content my-account-page" ng-app="BackendApp" ng-controller="AccountCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -173,7 +173,7 @@
         <input name="hasChanges" ng-value="hasChanges" type="hidden">
         <input name="modules" ng-value="activatedModules" type="hidden">
       </div>
-      {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas)}
+      {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas) && !empty($instance->metas['billing_name'])}
         <div class="col-sm-6">
           <div class="tiles white m-b-15">
             <div class="tiles-body">
@@ -217,7 +217,12 @@
                   <strong>{t}State{/t}:</strong> {$instance->metas['billing_state']}
                 </div>
                 <div class="col-sm-4">
-             <strong>{t}Country{/t}:</strong> {$instance->metas['billing_country']}
+                  <strong>{t}Country{/t}:</strong> {$instance->metas['billing_country']}
+                </div>
+              </div>
+              <div class="row p-t-15">
+                <div class="col-md-12">
+                  <h5>{t escape=off}Something wrong? Contact our <a href="javascript:UserVoice.showPopupWidget();">support system</a>.{/t}</h5>
                 </div>
               </div>
             </div>

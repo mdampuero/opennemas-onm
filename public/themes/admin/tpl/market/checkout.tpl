@@ -75,10 +75,10 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
-        <div class="grid-body">
-          <div class="row">
-            <div class="col-sm-6 p-r-30">
+      <div class="row ng-cloak">
+        <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 p-r-30">
+          <div class="grid simple">
+            <div class="grid-body">
               <h4>{t}Cart{/t}</h4>
               <ul class="cart-list">
                 <li class="clearfix" ng-repeat="item in cart">
@@ -104,121 +104,92 @@
                   <strong>[% total %]</strong><small>€ / {t}month{/t}</small>
                 </h3>
               </div>
-            </div>
-            <div class="col-sm-6 p-l-30">
-              <h4>
-                {t}Billing Info{/t}
-                <button class="btn btn-link" ng-click="edit = 1" ng-show="!edit">({t}Edit{/t})</button>
-              </h4>
+              <div class="billing-info">
+                <h4>
+                  {t}Billing Info{/t}
+                  <button class="btn btn-link" ng-click="edit = 1" ng-show="!edit">({t}Edit{/t})</button>
+                </h4>
                 <div class="ng-cloak p-b-30" ng-show="edit || !billing">
+                  <h5 class="m-t-20">{t}Contact information{/t}</h5>
                   <div class="row">
                     <div class="form-group col-sm-6">
-                      <label for="contact-name">{t}Contact name{/t}</label>
-                      <input class="form-control" id="contact-name" ng-model="billing.name" required="required" type="text">
+                      <input class="form-control" id="contact-name" ng-model="billing.name" placeholder="{t}Contact name{/t}" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-6">
-                      <label for="contact-name">{t}Company name{/t}</label>
-                      <input class="form-control" id="company-name" ng-model="billing.company" required="required" type="text">
+                      <input class="form-control" id="company-name" ng-model="billing.company" placeholder="{t}Company name{/t}" required="required" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6">
-                      <label for="contact-email">{t}Email{/t}</label>
-                      <input class="form-control" id="contact-email" ng-model="billing.email" required="required" type="text">
+                      <input class="form-control" id="contact-email" ng-model="billing.email" placeholder="{t}Email{/t}" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-6">
-                      <label for="phone">{t}Phone number{/t}</label>
-                      <input class="form-control" id="phone" ng-model="billing.phone" required="required" type="text">
+                      <input class="form-control" id="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" required="required" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6">
-                      <label for="vat">{t}VAT{/t}</label>
-                      <input class="form-control" id="vat" ng-model="billing.vat" required="required" type="text">
+                      <label for="vat"></label>
+                      <input class="form-control" id="vat" ng-model="billing.vat" placeholder="{t}VAT{/t}" required="required" type="text">
                     </div>
                   </div>
+                  <h5 class="m-t-20">{t}Address{/t}</h5>
                   <div class="row">
                     <div class="form-group col-sm-8">
-                      <label for="address">{t}Address{/t}</label>
-                      <input class="form-control" id="address" ng-model="billing.address" required="required" type="text">
+                      <input class="form-control" id="address" ng-model="billing.address" placeholder="{t}Address{/t}" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-4">
-                      <label for="postal-code">{t}Address{/t}</label>
-                      <input class="form-control" id="postal-code" ng-model="billing.postal_code" required="required" type="text">
+                      <input class="form-control" id="postal-code" ng-model="billing.postal_code" placeholder="{t}Postal code{/t}" required="required" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-4">
-                      <label for="city">{t}City{/t}</label>
-                      <input class="form-control" id="city" ng-model="billing.city" required="required" type="text">
+                      <input class="form-control" id="city" ng-model="billing.city" placeholder="{t}City{/t}" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-4">
-                      <label for="state">{t}State{/t}</label>
-                      <input class="form-control" id="state" ng-model="billing.state" required="required" type="text">
+                      <input class="form-control" id="state" ng-model="billing.state" placeholder="{t}State{/t}" required="required" type="text">
                     </div>
                     <div class="form-group col-sm-4">
-                      <label for="country">{t}Country{/t}</label>
-                      <input class="form-control" id="country" ng-model="billing.country" required="required" type="text">
+                      <input class="form-control" id="country" ng-model="billing.country" placeholder="{t}Country{/t}" required="required" type="text">
                     </div>
                   </div>
                 </div>
                 <div class="ng-cloak p-b-30" ng-show="!edit">
-                  <div class="row p-b-15">
-                    <div class="col-sm-6">
-                      <strong>{t}Name{/t}:</strong> [% billing.name %]
-                    </div>
-                    <div class="col-sm-6" ng-if="billing.company_name">
-                      <strong>{t}Company{/t}:</strong> [% billing.company %]
-                    </div>
+                  <div class="p-b-10">
+                    <h5 class="m-t-20">{t}Contact information{/t}</h5>
+                    <p>
+                      [% billing.name %]
+                      <span ng-if="billing.company_name">
+                        ([% billing.company %])
+                      </span>
+                    </p>
+                    <p>[% billing.vat %]</p>
+                    <p>[% billing.email %]</p>
+                    <p>[% billing.phone %]</p>
                   </div>
-                  <div class="row p-b-15">
-                    <div class="col-sm-6">
-                      <strong>{t}VAT{/t}</strong> [% billing.vat %]
-                    </div>
-                  </div>
-                  <div class="row p-b-15">
-                    <div class="col-sm-6">
-                      <strong>{t}Email{/t}:</strong> [% billing.email %]
-                    </div>
-                    <div class="col-sm-6">
-                      <strong>{t}Phone{/t}:</strong> [% billing.phone %]
-                    </div>
-                  </div>
-                  <div class="row p-b-15">
-                    <div class="col-sm-8">
-                      <strong>{t}Address{/t}:</strong> [% billing.address %]
-                    </div>
-                    <div class="col-sm-4">
-                      <strong>{t}Postal code{/t}:</strong> [% billing.postal_code %]
-                    </div>
-                  </div>
-                  <div class="row p-b-15">
-                    <div class="col-sm-4">
-                      <strong>{t}City{/t}:</strong> [% billing.city %]
-                    </div>
-                    <div class="col-sm-4">
-                      <strong>{t}State{/t}:</strong> [% billing.state %]
-                    </div>
-                    <div class="col-sm-4">
-                      <strong>{t}Country{/t}:</strong> [% billing.country %]
-                    </div>
+                  <div>
+                    <h5 class="m-t-20">{t}Address{/t}</h5>
+                    <p>[% billing.address %]</p>
+                    <p>[% billing.postal_code %], [% billing.city %], [% billing.state %]</p>
+                    <p>[% billing.country %]</p>
                   </div>
                 </div>
-              {*<h4>{t}Payment Info{/t}</h4>
-              <div class="form-group">
-                <label for="contact-name">{t}Card number{/t}</label>
-                <input class="form-control" id="contact-name" required="required" type="text">
+                {*<h4>{t}Payment Info{/t}</h4>
+                <div class="form-group">
+                  <label for="contact-name">{t}Card number{/t}</label>
+                  <input class="form-control" id="contact-name" required="required" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="expire-date">{t}Expire date{/t}</label>
+                  <input class="form-control" id="expire-date" required="required" type="text">
+                </div>*}
               </div>
-              <div class="form-group">
-                <label for="expire-date">{t}Expire date{/t}</label>
-                <input class="form-control" id="expire-date" required="required" type="text">
-              </div>*}
+              <div class="text-center p-t-50">
+                <button class="btn btn-large btn-success text-center" ng-click="confirm()">
+                  {t}Confirm{/t}
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="text-center p-t-50">
-            <button class="btn btn-large btn-success text-center" ng-click="confirm()">
-              {t}Confirm{/t}
-            </button>
           </div>
         </div>
       </div>
