@@ -262,6 +262,7 @@ class CategoriesController extends Controller
             'inmenu'              => $request->request->getDigits('inmenu', 0),
             'subcategory'         => $request->request->getDigits('subcategory', 0),
             'internal_category'   => $request->request->getDigits('internal_category'),
+            'logo_path'           => $request->request->filter('logo_path', '', FILTER_SANITIZE_STRING),
             'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
             'params'  => array(
                 'inrss' => $inrss,
@@ -279,9 +280,7 @@ class CategoriesController extends Controller
         }
 
         $category = new \ContentCategory($id);
-
         if ($category->update($data)) {
-
             dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
