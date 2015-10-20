@@ -549,7 +549,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-youtube-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Youtube" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-youtube-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our Youtube" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -573,7 +573,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="http://www.openhost.es/news" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-link-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our News" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-link-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our News" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -594,7 +594,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="http://www.twitter.com/opennemas" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-twitter-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Twitter" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-twitter-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our Twitter" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -618,7 +618,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="https://www.facebook.com/opennemas" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-facebook-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Facebook" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-facebook-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our Facebook" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -642,7 +642,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
                                                               <a href="https://plus.google.com/102922388479219778478/posts" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Google+" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our Google+" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
@@ -664,7 +664,7 @@
                                                           <tr>
                                                             <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:0; padding-bottom:5px;">
                                                               <a href="https://www.linkedin.com/company/openhost" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-linkedin-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our LinkedIn" class="mcnFollowBlockIcon"}
+                                                              {image_tag src="assets/images/email/common/color-linkedin-96.png" base_url="`$instance_base_url`" width=30 style="width:30px; max-width:30px; display:block;" alt="Our LinkedIn" class="mcnFollowBlockIcon"}
                                                               </a>
                                                             </td>
                                                           </tr>
