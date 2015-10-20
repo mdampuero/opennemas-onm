@@ -35,6 +35,16 @@ class NotificationController extends Controller
             [ 'value' => [ 0, $id ], 'operator' => 'IN' ]
         ];
 
+        // Filter to get latest notifications
+        if (is_array($criteria)
+            && array_key_exists('fixed', $criteria)
+            && array_key_exists('is_read', $criteria)
+        ) {
+            $criteria = 'instance_id IN (0, ' . $id . ')AND (fixed = '
+                . $criteria['fixed'][0]['value'] . ' OR is_read = '
+                . $criteria['is_read'][0]['value'] .')';
+        }
+
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
         $notifications = $nr->findBy($criteria, [ 'start' => 'desc' ], $epp, $page);
@@ -97,6 +107,45 @@ class NotificationController extends Controller
                 sprintf(_('Unable to find the notification with id "%s"'), $id),
                 404
             );
+        } catch (\Exception $e) {
+            return new JsonResponse(_($e->getMessage()), 400);
+        }
+    }
+
+    /**
+     * Updates some instance properties.
+     *
+     * @param Request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+
+        if (empty($ids) || !is_array($ids)) {
+            return new JsonResponse(_('Invalid notifications'), 400);
+        }
+
+        $em      = $this->get('orm.manager');
+        $updated = 0;
+
+        try {
+            $criteria = [ 'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ] ];
+
+            $notifications = $em->getRepository('manager.notification')
+                ->findBy($criteria);
+
+            foreach ($notifications as $notification) {
+                $notification->is_read = true;
+                $em->persist($notification);
+                $updated++;
+            }
+
+            return new JsonResponse(sprintf(
+                _('%d notifications marked as read successfully'),
+                $updated
+            ));
         } catch (\Exception $e) {
             return new JsonResponse(_($e->getMessage()), 400);
         }

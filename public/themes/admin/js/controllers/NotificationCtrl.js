@@ -24,6 +24,13 @@
         $scope.criteria = { type: '' };
 
         /**
+         * The notifications dropdown status.
+         *
+         * @type Object
+         */
+        $scope.isOpen = false;
+
+        /**
          * The current pagination status.
          *
          * @type Object
@@ -46,7 +53,8 @@
             epp: 10,
             page: 1,
             search: {
-              is_read: [ { value: 0 } ]
+              is_read: [ { value: 0 } ],
+              fixed: [ { value: 1 } ]
             }
           };
 
@@ -113,19 +121,71 @@
           });
         };
 
+        $scope.markFixedAsRead = function() {
+          if ($scope.isOpen) {
+            return;
+          }
+
+          var data = {
+            ids: $scope.fixed.map(function(a) {
+              return a.id;
+            })
+          };
+
+          var url = routing.generate('backend_ws_notifications_patch');
+
+          $http.patch(url, data).success(function() {
+            for (var i = 0; i < $scope.notifications.length; i++) {
+              if ($scope.notifications[i].fixed == 1) {
+                $scope.notifications[i].is_read = 1;
+              }
+            }
+
+            $scope.pulse = true;
+            $timeout(function() { $scope.pulse = false; }, 1000);
+          });
+        };
+
+        // Updates the notification dropdown status
+        $scope.$watch(function() {
+          return $('.notifications.dropdown').attr('class');
+        }, function(nv, ov){
+          $scope.isOpen = false;
+          if (nv.indexOf('open') !== -1) {
+            $scope.isOpen = true;
+          }
+        });
+
         var search;
+        // Reloads the notification list when criteria changes
         $scope.$watch('criteria', function(nv, ov) {
           if (ov === nv) {
             return;
           }
 
           search = $timeout(function() {
+
             if (search) {
               $timeout.cancel(search);
             }
 
             $scope.list();
-          },500);
+          }, 500);
+        }, true);
+
+        // Get unread notifications
+        $scope.$watch('notifications', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          $scope.unread = nv.filter(function(a) {
+            return a.is_read == 0;
+          });
+
+          $scope.fixed = nv.filter(function(a) {
+            return a.fixed == 1;
+          });
         }, true);
 
         // Prevent dropdown to close on click

@@ -253,42 +253,44 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
-                  <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
-                    <i class="fa fa-bell"></i>
-                    <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notifications.length > 0">
-                      [% notifications.length %]
-                    </span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <div class="dropdown-title">
-                      <a href="{url name=backend_notifications_list}">
-                        {t}Notifications{/t}
-                      </a>
+                {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
+                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()" ng-click="markFixedAsRead()">
+                    <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
+                      <i class="fa fa-bell"></i>
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
+                        [% unread.length %]
+                      </span>
+                    </a>
+                    <div class="dropdown-menu ng-cloak">
+                      <div class="dropdown-title">
+                        <a href="{url name=backend_notifications_list}">
+                          {t}Notifications{/t}
+                        </a>
+                      </div>
+                      <ul class="notification-list">
+                        <scrollable>
+                        <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
+                          <div class="notification-title">
+                            [% notification.title%]
+                            <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
+                              <i class="fa fa-times"></i>
+                            </span>
+                          </div>
+                          <div class="notification-icon">
+                            <i class="fa fa-users fa-2x"></i>
+                          </div>
+                          <div class="notification-body">
+                            [% notification.body %]
+                          </div>
+                        </li>
+                        </scrollable>
+                      </ul>
                     </div>
-                    <ul class="notification-list">
-                      <scrollable>
-                      <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
-                        <div class="notification-title">
-                          [% notification.title%]
-                          <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
-                            <i class="fa fa-times"></i>
-                          </span>
-                        </div>
-                        <div class="notification-icon">
-                          <i class="fa fa-users fa-2x"></i>
-                        </div>
-                        <div class="notification-body">
-                          [% notification.body %]
-                        </div>
-                      </li>
-                      </scrollable>
-                    </ul>
-                  </div>
-                </li>
-                <li class="quicklinks">
-                  <span class="h-seperate"></span>
-                </li>
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/if}
                 <li class="quicklinks quick-items help-items dropdown">
                   <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
                     <i class="fa fa-support"></i>
