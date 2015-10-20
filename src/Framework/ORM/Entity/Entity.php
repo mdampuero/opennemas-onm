@@ -72,6 +72,20 @@ abstract class Entity
     }
 
     /**
+     * Returns the cached id.
+     *
+     * @return string The cached id.
+     */
+    public function getCachedId()
+    {
+        $id = get_class($this);
+        $id = substr($id, strrpos($id, '\\') + 1);
+        $id = preg_replace('/([a-z])([A-Z])/', '$1_$2', $id);
+
+        return strtolower($id) . '-' . $this->id;
+    }
+
+    /**
      * Returns the entity RAW data.
      *
      * @return array The RAW data.

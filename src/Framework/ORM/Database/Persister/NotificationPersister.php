@@ -29,6 +29,7 @@ class NotificationPersister extends DatabasePersister
     public function remove(Entity $entity)
     {
         $this->mconn->delete('notification', [ 'id' => $entity->id ]);
+        $this->mcache->delete($entity->getCachedId());
     }
 
     /**
@@ -40,5 +41,6 @@ class NotificationPersister extends DatabasePersister
         unset($data['id']);
 
         $this->mconn->update('notification', $data, [ 'id' => $entity->id ]);
+        $this->mcache->delete($entity->getCachedId());
     }
 }
