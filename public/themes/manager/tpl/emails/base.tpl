@@ -1,802 +1,247 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*|MC:SUBJECT|*</title>
+    <style type="text/css">
+#outlook a{ padding:0;}
+body{ width:100%!important;min-width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;}
+img{ outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;width:auto;max-width:100%;float:left;clear:both;display:block;}
+a img{ border:none;}
+p{ margin:0 0 0 10px;}
+table{ border-spacing:0;border-collapse:collapse;}
+td{ word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;hyphens:auto;border-collapse:collapse!important;}
+table,tr,td{ padding:0;vertical-align:top;text-align:left;}
+hr{ color:#d9d9d9;background-color:#d9d9d9;height:1px;border:none;}
+table.center,td.center{ text-align:center;}
+h1.center,h2.center,h3.center,h4.center,h5.center,h6.center{ text-align:center;}
+span.center{ display:block;width:100%;text-align:center;}
+img.center{ margin:0 auto;float:none;}
+.show-for-small,.hide-for-desktop{ display:none;}
+body,table.body,h1,h2,h3,h4,h5,h6,p,td{ color:#222222;font-family: 'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;font-weight:normal;padding:0;margin:0;text-align:left;line-height:1.3;}
+h1,h2,h3,h4,h5,h6{ word-break:normal;}
+h1{ font-size:40px;font-weight: bold}
+h2{ font-size:36px;}
+h3{ font-size:32px;}
+h4{ font-size:28px;}
+h5{ font-size:24px;}
+h6{ font-size:20px;}
+body,table.body,p,td{ font-size:15px;line-height:19px;}
+p.lead,p.lede,p.leed{ font-size:18px;line-height:21px;}
+p{ margin-bottom:15px; margin-top:5px;}
+small{ font-size:10px;}
+a{ color:#0066AB;text-decoration:none;}
+a:hover{  color:#0066AB!important;}
+a:active{  color:#0066AB!important;}
+a:visited{  color:#0066AB!important;}
+.ExternalClass{ width:100%;}
+.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{ line-height:100%;}
+.ReadMsgBody { width: 100%}
+table.center,td.center{ text-align:center;}
+h1.center,h2.center,h3.center,h4.center,h5.center,h6.center{ text-align:center;}
+span.center{ display:block;width:100%;text-align:center;}
+img.center{ margin:0 auto;float:none;}
+.show-for-small,.hide-for-desktop{ display:none;}
+h1 a,h2 a,h3 a,h4 a,h5 a,h6 a{ color:#2ba6cb;}
+h1 a:active,h2 a:active,h3 a:active,h4 a:active,h5 a:active,h6 a:active{ color:#2ba6cb!important;}
+h1 a:visited,h2 a:visited,h3 a:visited,h4 a:visited,h5 a:visited,h6 a:visited{ color:#2ba6cb!important;}
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>*|MC:SUBJECT|*</title>
-
-  <style type="text/css">
-    body,
-    #bodyTable,
-    #bodyCell {
-      height: 100% !important;
-      margin: 0;
-      padding: 0;
-      width: 100% !important
-    }
-    table {
-      border-collapse: collapse
-    }
-    img,
-    a img {
-      border: 0;
-      outline: none;
-      text-decoration: none
-    }
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin: 0;
-      padding: 0
-    }
-    p {
-      margin: 1em 0;
-      padding: 0
-    }
-    a {
-      word-wrap: break-word
-    }
-    .ReadMsgBody {
-      width: 100%
-    }
-    .ExternalClass {
-      width: 100%
-    }
-    .ExternalClass,
-    .ExternalClass p,
-    .ExternalClass span,
-    .ExternalClass font,
-    .ExternalClass td,
-    .ExternalClass div {
-      line-height: 100%
-    }
     table,
     td {
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt
-    }
-    #outlook a {
-      padding: 0
-    }
-    img {
-      -ms-interpolation-mode: bicubic
-    }
-    body,
-    table,
-    td,
-    p,
-    a,
-    li,
-    blockquote {
-      -ms-text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%
-    }
-    #bodyCell {
-      padding: 20px
-    }
-    .mcnImage {
-      vertical-align: bottom
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt
     }
     .mcnTextContent img {
-      height: auto !important
+    height: auto !important
     }
-    body,
-    #bodyTable {
-      background-color: #F2F2F2
+    body { background-color: #F2F2F2; }
+    #templateHeader a{
+      text-decoration: none;
+      font-size:95%;
     }
-    #bodyCell {
-      border-top: 0
+
+    a {
+    color: #0066AB;
+    font-weight: normal;
+    text-decoration: underline
     }
-    #templateContainer {
-      border: 0
+    .template-container {
+    max-width:600px;
+    background-color:#ffffff;
+    line-height:1.3em;
     }
-    h1 {
-      color: #606060 !important;
-      display: block;
-      font-family: Helvetica;
-      font-size: 40px;
-      font-style: normal;
-      font-weight: bold;
-      line-height: 125%;
-      letter-spacing: -1px;
-      margin: 0;
-      text-align: left
+    #templatePreheader div {
+      color:#606060;
+      margin:5px 12px;
+      margin-bottom:0px;
     }
-    h2 {
-      color: #404040 !important;
-      display: block;
-      font-family: Helvetica;
-      font-size: 26px;
-      font-style: normal;
-      font-weight: bold;
-      line-height: 125%;
-      letter-spacing: -.75px;
-      margin: 0;
-      text-align: left
-    }
-    h3 {
-      color: #606060 !important;
-      display: block;
-      font-family: Helvetica;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: bold;
-      line-height: 125%;
-      letter-spacing: -.5px;
-      margin: 0;
-      text-align: left
-    }
-    h4 {
-      color: #808080 !important;
-      display: block;
-      font-family: Helvetica;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: bold;
-      line-height: 125%;
-      letter-spacing: normal;
-      margin: 0;
-      text-align: left
-    }
-    #templatePreheader {
-      background-color: #FFFFFF;
-      border-top: 0;
-      border-bottom: 0
-    }
-    .preheaderContainer .mcnTextContent,
-    .preheaderContainer .mcnTextContent p {
-      color: #606060;
-      font-family: Helvetica;
-      font-size: 11px;
-      line-height: 125%;
-      text-align: left
-    }
-    .preheaderContainer .mcnTextContent a {
-      color: #606060;
-      font-weight: normal;
-      text-decoration: underline
-    }
+
     #templateHeader {
-      background-color: #FFFFFF;
-      border-top: 0;
-      border-bottom: 0
+      margin:0 auto;
     }
-    .headerContainer .mcnTextContent,
-    .headerContainer .mcnTextContent p {
-      color: #606060;
-      font-family: Helvetica;
-      font-size: 15px;
-      line-height: 150%;
-      text-align: left
+    .mcnFollowBlockIcon {
+      width:45px;
+      margin:2px;
+      margint-bottom:5px;
     }
-    .headerContainer .mcnTextContent a {
-      color: #0066AB;
-      font-weight: normal;
-      text-decoration: underline
+    .mcnFollowBlockOuter {
+      text-align:center;
     }
-    #templateBody {
-      background-color: #FFFFFF;
-      border-top: 0;
-      border-bottom: 0
-    }
-    .bodyContainer .mcnTextContent,
-    .bodyContainer .mcnTextContent p {
-      color: #606060;
-      font-family: Helvetica;
-      font-size: 15px;
-      line-height: 150%;
-      text-align: left
-    }
-    .bodyContainer .mcnTextContent a {
-      color: #0066AB;
-      font-weight: normal;
-      text-decoration: underline
-    }
-    #templateFooter {
-      background-color: #FFFFFF;
-      border-top: 0;
-      border-bottom: 0
-    }
-    .footerContainer .mcnTextContent,
-    .footerContainer .mcnTextContent p {
-      color: #606060;
-      font-family: Helvetica;
-      font-size: 11px;
-      line-height: 125%;
-      text-align: left
-    }
-    .footerContainer .mcnTextContent a {
-      color: #606060;
-      font-weight: normal;
-      text-decoration: underline
-    }
-    @media only screen and (max-width: 480px) {
-      body,
-      table,
-      td,
-      p,
-      a,
-      li,
-      blockquote {
-        -webkit-text-size-adjust: none !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      body {
-        width: 100% !important;
-        min-width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[id=bodyCell] {
-        padding: 10px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnTextContentContainer] {
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      .mcnBoxedTextContentContainer {
-        max-width: 100% !important;
-        min-width: 100% !important;
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcpreview-image-uploader] {
-        width: 100% !important;
-        display: none !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      img[class=mcnImage] {
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnImageGroupContentContainer] {
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageGroupContent] {
-        padding: 9px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageGroupBlockInner] {
-        padding-bottom: 0 !important;
-        padding-top: 0 !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      tbody[class=mcnImageGroupBlockOuter] {
-        padding-bottom: 9px !important;
-        padding-top: 9px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnCaptionTopContent],
-      table[class=mcnCaptionBottomContent] {
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnCaptionLeftTextContentContainer],
-      table[class=mcnCaptionRightTextContentContainer],
-      table[class=mcnCaptionLeftImageContentContainer],
-      table[class=mcnCaptionRightImageContentContainer],
-      table[class=mcnImageCardLeftTextContentContainer],
-      table[class=mcnImageCardRightTextContentContainer] {
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardLeftImageContent],
-      td[class=mcnImageCardRightImageContent] {
-        padding-right: 18px !important;
-        padding-left: 18px !important;
-        padding-bottom: 0 !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardBottomImageContent] {
-        padding-bottom: 9px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardTopImageContent] {
-        padding-top: 18px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardLeftImageContent],
-      td[class=mcnImageCardRightImageContent] {
-        padding-right: 18px !important;
-        padding-left: 18px !important;
-        padding-bottom: 0 !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardBottomImageContent] {
-        padding-bottom: 9px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnImageCardTopImageContent] {
-        padding-top: 18px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnCaptionLeftContentOuter] td[class=mcnTextContent],
-      table[class=mcnCaptionRightContentOuter] td[class=mcnTextContent] {
-        padding-top: 9px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnCaptionBlockInner] table[class=mcnCaptionTopContent]:last-child td[class=mcnTextContent] {
-        padding-top: 18px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnBoxedTextContentColumn] {
-        padding-left: 18px !important;
-        padding-right: 18px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=mcnTextContent] {
-        padding-right: 18px !important;
-        padding-left: 18px !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[id=templateContainer],
-      table[id=templatePreheader],
-      table[id=templateHeader],
-      table[id=templateBody],
-      table[id=templateFooter] {
-        max-width: 600px !important;
-        width: 100% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      h1 {
-        font-size: 24px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      h2 {
-        font-size: 20px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      h3 {
-        font-size: 18px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      h4 {
-        font-size: 16px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[class=mcnBoxedTextContentContainer] td[class=mcnTextContent],
-      td[class=mcnBoxedTextContentContainer] td[class=mcnTextContent] p {
-        font-size: 18px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      table[id=templatePreheader] {
-        display: block !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=preheaderContainer] td[class=mcnTextContent],
-      td[class=preheaderContainer] td[class=mcnTextContent] p {
-        font-size: 14px !important;
-        line-height: 115% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=headerContainer] td[class=mcnTextContent],
-      td[class=headerContainer] td[class=mcnTextContent] p {
-        font-size: 18px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=bodyContainer] td[class=mcnTextContent],
-      td[class=bodyContainer] td[class=mcnTextContent] p {
-        font-size: 18px !important;
-        line-height: 125% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=footerContainer] td[class=mcnTextContent],
-      td[class=footerContainer] td[class=mcnTextContent] p {
-        font-size: 14px !important;
-        line-height: 115% !important
-      }
-    }
-    @media only screen and (max-width: 480px) {
-      td[class=footerContainer] a[class=utilityLink] {
-        display: block !important
-      }
-    }
-  </style>
-</head>
 
-<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
-  <center>
-    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+    .mcnFollowIconContent {
+      font-size:12px;
+      padding:5px !important;
+    }
+    .mcnFollowText {
+      margin-top:10px;
+    }
+    .mcnFollowIconContent img, .mcnFollowText{
+      display:block;
+      float:none;
+    }
+    .mcnFollowText {
+      color:#606060;
+    }
+    @media only screen and (max-width: 480px) {
+      .mcnFollowBlockIcon {
+        width:30px;
+      }
+      .mcnFollowIconContent {
+        font-size:11px;
+      }
+      .mcnFollowText {
+        display:none;
+      }
+    }
+    </style>
+  </head>
+  <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+    <center>
+    <!-- BEGIN TEMPLATE // -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="template-container">
       <tr>
-        <td align="center" valign="top" id="bodyCell">
-          <!-- BEGIN TEMPLATE // -->
-          <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+        <td align="left" valign="top">
+          <!-- BEGIN PREHEADER // -->
+          <table id="templatePreheader">
             <tr>
-              <td align="center" valign="top">
-                <!-- BEGIN PREHEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader">
-                  <tr>
-                    <td valign="top" class="preheaderContainer" style="padding-top:9px;">
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
-                        <tbody class="mcnTextBlockOuter">
-                          <tr>
-                            <td valign="top" class="mcnTextBlockInner">
-
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="366" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-left:18px; padding-bottom:9px; padding-right:0;">
-                                      {block name="title"}{/block}
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                              <table align="right" border="0" cellpadding="0" cellspacing="0" width="197" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:0;">
-                                      <!-- <a href="*|ARCHIVE|*" target="_blank">View this email in your browser</a> -->
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <!-- // END PREHEADER -->
-              </td>
-            </tr>
-            <tr>
-              <td align="center" valign="top">
-                <!-- BEGIN HEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
-                  <tr>
-                    <td valign="top" class="headerContainer">
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
-                        <tbody class="mcnImageBlockOuter">
-                          <tr>
-                            <td valign="top" style="padding:9px" class="mcnImageBlockInner">
-                              <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
-                                <tbody>
-                                  <tr>
-                                    <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0;">
-                                    {block name="image"}{/block}
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <!-- // END HEADER -->
-              </td>
-            </tr>
-            <tr>
-              <td align="center" valign="top">
-                <!-- BEGIN BODY // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
-                  <tr>
-                    <td valign="top" class="bodyContainer">
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock">
-                        <tbody class="mcnFollowBlockOuter">
-                          <tr>
-                            <td align="center" valign="top" style="padding:9px" class="mcnFollowBlockInner">
-                              <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer">
-                                <tbody>
-                                  <tr>
-                                    <td align="center" style="padding-left:9px;padding-right:9px;">
-                                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContent" style="border: 1px solid #EEEEEE;background-color: #FAFAFA;">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" valign="top" style="padding-top:9px; padding-right:9px; padding-left:9px;">
-                                              <table border="0" cellpadding="0" cellspacing="0">
-                                                <tbody>
-                                                  <tr>
-                                                    <td valign="top">
-                                                      <!--[if mso]>
-                                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="524">
-                                    <tr>
-                                    <td align="left" valign="top" width="524">
-                                    <![endif]-->
-
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-youtube-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Youtube" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Videos{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-
-
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="http://www.openhost.es/news" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-link-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our News" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="http://www.openhost.es/news" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our News{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="http://www.twitter.com/opennemas" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-twitter-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Twitter" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="http://www.twitter.com/opennemas" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Twitter{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-
-
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://www.facebook.com/opennemas" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-facebook-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Facebook" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="https://www.facebook.com/opennemas" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Facebook{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-
-
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:10px; padding-bottom:5px;">
-                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our Google+" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:10px; padding-bottom:9px;">
-                                                              <a href="https://plus.google.com/102922388479219778478/posts" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Google+{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-
-                                                      <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnFollowStacked">
-
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowIconContent" style="padding-right:0; padding-bottom:5px;">
-                                                              <a href="https://www.linkedin.com/company/openhost" target="_blank">
-                                                              {image_tag src="assets/images/email/common/color-linkedin-96.png" base_url="`$instance_base_url`" width=48 style="width:48px; max-width:48px; display:block;" alt="Our LinkedIn" class="mcnFollowBlockIcon"}
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-
-
-                                                          <tr>
-                                                            <td align="center" valign="top" class="mcnFollowTextContent" style="padding-right:0; padding-bottom:9px;">
-                                                              <a href="https://www.linkedin.com/company/openhost" target="_blank" style="color: #606060;font-family: Arial;font-size: 11px;font-weight: normal;text-decoration: none;line-height: 100%;text-align: center;">{t}Our Company{/t}</a>
-                                                            </td>
-                                                          </tr>
-
-                                                        </tbody>
-                                                      </table>
-
-
-
-                                                      <!--[if mso]>
-                                    </td>
-                                    </tr>
-                                    </table>
-                                    <![endif]-->
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
-                        <tbody class="mcnTextBlockOuter">
-                          <tr>
-                            <td valign="top" class="mcnTextBlockInner">
-
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
-
-                                      {block name="content"}{/block}
-
-                                      <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;"><span style="color:#000000">{t}Please do not hesitate to share feedback, questions or doubts with us{/t}</span>
-                                      </div>
-
-                                      <ul>
-                                        <li style="color:#000000; margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;"><span style="">{t escape=off}<strong>ticketing system{/t}</strong>&nbsp;</span><a class="external-link" href="http://help.opennemas.com/" rel="nofollow" style="text-decoration: none;">http://help.opennemas.com/</a>&nbsp;<span style="color:#000000">{t}(also available from Control Panel on the top right);{/t}</span>
-                                        </li>
-                                        <li style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;"><span style="base.tpl"><span style="font-family:arial,sans-serif; line-height:22.2222px;color:#000000">email&nbsp;</span></span><a class="external-link" href="mailto:support@opennemas.com" rel="nofollow" style="font-family: Arial, sans-serif;font-size: 14px;line-height: 22.2222px;text-decoration: none;">support@opennemas.com</a><span style="font-family:arial,sans-serif; line-height:22.2222px">&nbsp;.</span>
-                                        </li>
-                                      </ul>
-
-                                      <div>&nbsp;</div>
-
-                                      <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;"><span style="color:#000000">{t}Regards,{/t}</span>
-                                      </div>
-
-                                      <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">{t escape=off}<a href="http://www.opennemas.com/" style="font-family: 'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; line-height: normal;" target="_blank">Opennemas</a> <span style="color:#000000">Team</span>{/t}
-                                      </div>
-
-                                      <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22.2222px;">
-                                        <br>
-                                        <a href="http://www.openhost.es/news/" target="_blank">
-{image_tag src="assets/images/email/common/signature_image.jpg" base_url="`$instance_base_url`" style="opacity: 0.9; line-height: 22.2222px; width: 200px; height: 70px; margin: 0px;" width="200"}
-                                        </a>
-                                      </div>
-
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <!-- // END BODY -->
-              </td>
-            </tr>
-            <tr>
-              <td align="center" valign="top">
-                <!-- BEGIN FOOTER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateFooter">
-                  <tr>
-                    <td valign="top" class="footerContainer" style="padding-bottom:9px;">
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
-                        <tbody class="mcnTextBlockOuter">
-                          <tr>
-                            <td valign="top" class="mcnTextBlockInner">
-
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
-                                      <span style="color: #222222;font-family: arial,sans-serif;font-size: small;line-height: normal;">
-                                        _________________________________
-                                        <br>Openhost, SL, Trading address: Amoeiro, Ourense; CIF Registration number B32389389; Registered Office: Calle del Progreso 64, 4º A, Ourense.
-                                      </span>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <!-- // END FOOTER -->
+              <td>
+                <div>{block name="title"}{/block}</div>
               </td>
             </tr>
           </table>
-          <!-- // END TEMPLATE -->
+          <!-- // END PREHEADER -->
         </td>
       </tr>
-    </table>
-  </center>
+      <tr>
+        <td align="center" valign="top">
+          <!-- BEGIN HEADER // -->
+          <table style="margin:12px">
+            <tr>
+              <td>{block name="image"}{/block}</td>
+            </tr>
+          </table>
+          <table id="templateHeader" style="padding:12px;">
+            <tr>
+              <td>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock">
+                  <tbody class="mcnFollowBlockOuter">
+                    <tr>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="https://www.youtube.com/user/OpennemasPublishing" target="_blank">
+                          {image_tag src="assets/images/email/common/color-youtube-96.png" base_url="`$instance_base_url`" alt="Our Youtube" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                            {t}Our Videos{/t}
+                          </div>
+                        </a>
+                      </td>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="http://www.openhost.es/news" target="_blank">
+                          {image_tag src="assets/images/email/common/color-link-96.png" base_url="`$instance_base_url`" alt="Our News" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                            {t}Our News{/t}
+                          </div>
+                        </a>
+                      </td>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="http://www.twitter.com/opennemas" target="_blank">
+                          {image_tag src="assets/images/email/common/color-twitter-96.png" base_url="`$instance_base_url`" alt="Our Twitter" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                            {t}Our Twitter{/t}
+                          </div>
+                        </a>
+                      </td>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="https://www.facebook.com/opennemas" target="_blank">
+                          {image_tag src="assets/images/email/common/color-facebook-96.png" base_url="`$instance_base_url`" alt="Our Facebook" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                            {t}Our Facebook{/t}
+                          </div>
+                        </a>
+                      </td>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="https://plus.google.com/102922388479219778478/posts" target="_blank">
+                          {image_tag src="assets/images/email/common/color-googleplus-96.png" base_url="`$instance_base_url`" alt="Our Google+" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                            {t}Our Google+{/t}
+                          </div>
+                        </a>
+                      <td align="center" valign="top" class="mcnFollowIconContent">
+                        <a href="https://www.linkedin.com/company/openhost" target="_blank">
+                          {image_tag src="assets/images/email/common/color-linkedin-96.png" base_url="`$instance_base_url`" alt="Our LinkedIn" class="mcnFollowBlockIcon center"}
+                          <div class="mcnFollowText">
+                              {t}Our Company{/t}
+                          </div>
+                        </a>
+                      </td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!-- // END HEADER -->
+        </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" style="padding:12px">
+          <!-- BEGIN BODY // -->
+          <div class="body-content">
+            <br />
+            {block name="content"}{/block}
+            <p>{t}Please do not hesitate to share feedback, questions or doubts with us{/t}</p>
+            <ul>
+              <li>
+                <strong>{t escape=off}ticketing system{/t}</strong> <a class="external-link" href="http://help.opennemas.com/" rel="nofollow" style="text-decoration: none;">http://help.opennemas.com/</a> {t}(also available from Control Panel on the top right){/t}
+              </li>
+              <li>email&nbsp;<a class="external-link" href="mailto:support@opennemas.com" rel="nofollow">support@opennemas.com</a>.
+            </li>
+          </ul>
+          <p>{t}Regards,{/t}
+          <br />
+           {t escape=off}<a href="http://www.opennemas.com/"target="_blank">Opennemas</a> <span>Team</span>{/t}
+          </p>
+          <p>
+          <a href="http://www.openhost.es/news/" target="_blank">
+            {image_tag src="assets/images/email/common/signature_image.jpg" base_url="`$instance_base_url`" style="opacity: 0.9; max-width: 250px; margin: 0px;"}
+          </a>
+        </p>
+      </div>
+      <!-- // END BODY -->
+    </td>
+  </tr>
+  <tr>
+    <td border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter"  style="padding:12px">
+      <hr />
+      <small style="line-height:13px">
+        Openhost, SL, Trading address: Amoeiro, Ourense; CIF Registration number B32389389; Registered Office: Calle del Progreso 64, 4º A, Ourense.
+      </small>
+      <!-- // END FOOTER -->
+    </td>
+  </tr>
+</table>
+<!-- // END TEMPLATE -->
+</center>
 </body>
-
 </html>
