@@ -52,13 +52,13 @@
     <p class="text-[% message.type %]" ng-bind-html="message.message"></p>
   </div>
   <span ng-show="template.type == 'article'">
-    {t}Check the imported articles in the <a href="{url name=admin_articles}">article list</a>{/t}
+    {t escape=off}Check the imported articles in the <a href="{url name=admin_articles}">article list</a>{/t}
   </span>
   <span ng-show="template.type == 'opinion'">
-    {t}Check the imported opinions in the <a href="{url name=admin_opinions}">opinions list</a>{/t}
+    {t escape=off}Check the imported opinions in the <a href="{url name=admin_opinions}">opinions list</a>{/t}
   </span>
   <span ng-show="!template.type">
-    {t}Check the imported photos in the <a href="{url name=admin_photos}">photos list</a>{/t}
+    {t escape=off}Check the imported photos in the <a href="{url name=admin_photos}">photos list</a>{/t}
   </span>
 </div>
 <div class="modal-footer">
