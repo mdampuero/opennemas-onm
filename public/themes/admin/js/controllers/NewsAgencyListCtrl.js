@@ -65,7 +65,10 @@
 
           modal.result.then(function(response) {
             if (response) {
-              messenger.post(response.messages);
+              if (response.messages) {
+                messenger.post(response.messages);
+              }
+
               $scope.list($scope.route);
             }
           });

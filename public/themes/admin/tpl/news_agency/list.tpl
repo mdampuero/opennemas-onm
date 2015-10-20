@@ -172,17 +172,10 @@
                   </div>
                 </td>
                 <td>
-                  <div class="pointer" ng-click="expanded[$index] = !expanded[$index]">
+                  <div class="pointer p-b-10" ng-click="expanded[$index] = !expanded[$index]">
                     <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[$index], 'fa-caret-right': !expanded[$index] }" ng-if="content.related.length > 0" style="width: 8px;"></i>
                     [% content.title %]
                   </div>
-                  <p>
-                    <div class="small-text" ng-if="content.tags">
-                      <span class="label m-l-5 uppercase" ng-repeat="tag in content.tags.split(',')">
-                        [% tag %]
-                      </span>
-                    </div>
-                  </p>
                   <p class="visible-xs-block visible-sm-block">
                     <span class="label label-important m-r-5" style="background-color:[% extra.servers[content.source].color %];">
                       [% extra.servers[content.source].agency_string %]
