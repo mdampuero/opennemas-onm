@@ -87,42 +87,6 @@
           }
         };
 
-        $scope.editBilling = function() {
-          var modal = $modal.open({
-            templateUrl: 'modal-billing',
-            controller: 'modalCtrl',
-            resolve: {
-              template: function() {
-                if ($scope.instance.metas) {
-                  var billing = {};
-                  for (var key in $scope.instance.metas) {
-                    if (key.indexOf('billing') !== -1) {
-                      billing[key] = angular.copy($scope.instance.metas[key]);
-                    }
-                  }
-
-                  return billing;
-                }
-
-                return { billing: {} };
-              },
-              success: function() {
-                return function(m, t) {
-                  m.close(t);
-                };
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            for (var key in response) {
-              if (key.indexOf('billing') !== -1) {
-                $scope.instance.metas[key] = response[key];
-              }
-            }
-          });
-        };
-
         /**
          * @function initializeSupportPlan
          * @memberOf InstanceCtrl

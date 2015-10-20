@@ -189,20 +189,16 @@
       </div>
       <div class="col-sm-6 col-xs-12">
         <div class="grid simple">
-          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="edit_billing = !edit_billing" type="button">
+          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="edit_billing = !edit_billing" ng-show="!edit_billing && instance.metas.billing_name" type="button">
             <i class="fa fa-edit"></i>
             {t}Edit{/t}
-          </button>
-          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="editBilling()" type="button">
-            <i class="fa fa-edit"></i>
-            Modal
           </button>
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
           </div>
           <div class="grid-body">
             <div class="grid-body-wrapper" ng-show="!edit_billing">
-              <div ng-show="instance.metas.billing_contact_name">
+              <div ng-show="instance.metas.billing_name">
                 <div class="row p-b-15">
                   <div class="col-sm-6">
                     <strong>{t}Name{/t}:</strong> [% instance.metas.billing_name %]
@@ -244,8 +240,8 @@
                   </div>
                 </div>
               </div>
-              <div class="text-center" ng-if="!instance.metas.billing_contact_name">
-                <h4 class="pointer" ng-click="editBilling()">
+              <div class="text-center" ng-show="!instance.metas.billing_name">
+                <h4 class="pointer" ng-click="edit_billing = 1">
                   <i class="fa fa-plus"></i>
                   {t}Add billing information{/t}
                 </h4>
@@ -254,15 +250,15 @@
             <div class="grid-body-wrapper" ng-animate="'animate'" ng-show="edit_billing">
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <label class="form-label" for="contact-name">{t}Contact name{/t}</label>
+                  <label class="form-label" for="contact-name">{t}Name{/t}</label>
                   <div class="controls">
-                    <input class="form-control" id="contact-name" ng-model="instance.metas.billing_contact_name" type="text">
+                    <input class="form-control" id="contact-name" ng-model="instance.metas.billing_name" type="text">
                   </div>
                 </div>
                 <div class="col-md-6 form-group">
-                  <label class="form-label" for="contact-email">{t}Contact email{/t}</label>
+                  <label class="form-label" for="company">{t}Company{/t}</label>
                   <div class="controls">
-                    <input class="form-control" id="contact-email" ng-model="instance.metas.billing_contact_email" type="text">
+                    <input class="form-control" id="company" ng-model="instance.metas.billing_company" type="text">
                   </div>
                 </div>
               </div>
@@ -326,9 +322,6 @@
                   <div class="controls">
                     <input class="form-control" id="country" ng-model="instance.metas.billing_country" type="text">
                   </div>
-                </div>
-                <div class="text-center">
-                  <button class="btn btn-white" ng-click="edit_billing = false" type="button">{t}Save{/t}</button>
                 </div>
               </div>
             </div>
@@ -480,89 +473,3 @@
     </div>
   </form>
 </div>
-<script type="text/ng-template" id="modal-billing">
-  <div class="modal-header">
-    <h4 class="modal-title">{t}Billing{/t}</h4>
-  </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-md-6 form-group">
-        <label class="form-label" for="contact-name">{t}Contact name{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="contact-name" ng-model="template.billing_contact_name" type="text">
-        </div>
-      </div>
-      <div class="col-md-6 form-group">
-        <label class="form-label" for="company-name">{t}Company name{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="company-name" ng-model="template.billing_company_name" type="text">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-sm-6">
-        <label class="form-label" for="vat">{t}VAT{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="vat" ng-model="template.billing_vat" type="text">
-        </div>
-      </div>
-      <div class="col-md-6 form-group">
-        <label class="form-label">{t}Last invoice date{/t}</label>
-        <div class="controls">
-          <input class="form-control" datetime-picker ng-model="template.billing_invoice_date" type="text">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 form-group">
-        <label class="form-label" for="contact-email">{t}Email{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="contact-email" ng-model="template.billing_contact_email" type="text">
-        </div>
-      </div>
-      <div class="form-group col-sm-6">
-        <label class="form-label" for="phone">{t}Phone number{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="phone" ng-model="template.billing_phone" type="text">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-sm-8">
-        <label class="form-label" for="address">{t}Address{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="address" ng-model="template.billing_address" type="text">
-        </div>
-      </div>
-      <div class="form-group col-sm-4">
-        <label class="form-label" for="postal-code">{t}Postal code{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="postal-code" ng-model="template.billing_postal_code" type="text">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-sm-4">
-        <label class="form-label" for="city">{t}City{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="city" ng-model="template.billing_city" type="text">
-        </div>
-      </div>
-      <div class="form-group col-sm-4">
-        <label class="form-label" for="state">{t}State{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="state" ng-model="template.billing_state" type="text">
-        </div>
-      </div>
-      <div class="form-group col-sm-4">
-        <label class="form-label" for="country">{t}Country{/t}</label>
-        <div class="controls">
-          <input class="form-control" id="country" ng-model="template.billing_country" type="text">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-success" ng-click="confirm()" type="button">{t}Save{/t}</button>
-  </div>
-</script>
