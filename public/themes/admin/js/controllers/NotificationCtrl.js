@@ -49,16 +49,7 @@
          *   Gets a list of notifications to display in dropdown.
          */
         $scope.getLatest = function() {
-          var data = {
-            epp: 10,
-            page: 1,
-            search: {
-              is_read: [ { value: 0 } ],
-              fixed: [ { value: 1 } ]
-            }
-          };
-
-          var url = routing.generate('backend_ws_notifications_list', data);
+          var url = routing.generate('backend_ws_notifications_latest');
 
           $http.get(url).success(function(response) {
             $scope.notifications = response.results;
