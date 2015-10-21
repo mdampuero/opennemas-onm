@@ -448,7 +448,7 @@
             <tr>
               <td align="center" valign="top">
                 <!-- BEGIN PREHEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader">
+                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader" style="display:none">
                   <tr>
                     <td valign="top" class="preheaderContainer" style="padding-top:9px;">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
