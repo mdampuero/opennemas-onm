@@ -84,18 +84,18 @@
                 <div class="form-group">
                   <div class="controls">
                     <div class="checkbox">
-                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
+                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                       <label for="fixed">{t}Fixed{/t} ({t}Notification always visible{/t})</label>
                     </div>
                   </div>
                 </div>
-                <div class="form-group" ng-if="notification.fixed == 0">
+                <div class="form-group">
                   <label class="form-label">{t}Starts{/t}</label>
                   <div class="controls">
                     <input class="form-control" datetime-picker ng-model="notification.start" placeholder="{t}Click to set date{/t}" type="datetime"/>
                   </div>
                 </div>
-                <div class="form-group" ng-if="notification.fixed == 0">
+                <div class="form-group">
                   <label class="form-label">{t}Ends{/t}</label>
                   <div class="controls">
                     <input class="form-control" datetime-picker ng-model="notification.end" placeholder="{t}Click to set date{/t}" type="datetime"/>
