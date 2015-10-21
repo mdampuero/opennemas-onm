@@ -2,6 +2,7 @@
 
 namespace Framework\ORM\Database\Persister;
 
+use Framework\ORM\Entity\Entity;
 use Framework\ORM\Persister\Persister;
 use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
@@ -59,5 +60,27 @@ abstract class DatabasePersister extends Persister
         $this->mcache = $mcache;
         $this->mconn  = $mconn;
         $this->source = $source;
+    }
+
+    /**
+     * Convert entity data to valid database values.
+     *
+     * @param Entity $entity The entity.
+     *
+     * @return array The converted data.
+     */
+    public function dbfy(Entity $entity)
+    {
+        $data = [];
+
+        foreach ($entity->getData() as $key => $value) {
+            if (is_array($value)) {
+                $value = @serialize($value);
+            }
+
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 }

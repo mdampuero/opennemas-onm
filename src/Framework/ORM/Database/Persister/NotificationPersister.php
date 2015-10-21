@@ -18,7 +18,9 @@ class NotificationPersister extends DatabasePersister
      */
     public function create(Entity &$entity)
     {
-        $this->mconn->insert('notification', $entity->getData());
+        $data = $this->dbfy($entity);
+
+        $this->mconn->insert('notification', $data);
 
         $entity->id = $this->mconn->lastInsertId();
     }
@@ -37,7 +39,7 @@ class NotificationPersister extends DatabasePersister
      */
     public function update(Entity $entity)
     {
-        $data = $entity->getData();
+        $data = $this->dbfy($entity);
         unset($data['id']);
 
         $this->mconn->update('notification', $data, [ 'id' => $entity->id ]);

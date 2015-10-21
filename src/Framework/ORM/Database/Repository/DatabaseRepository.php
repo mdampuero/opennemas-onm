@@ -269,13 +269,11 @@ class DatabaseRepository extends BaseManager
         }
 
         foreach ($rs as $key => $value) {
-            if (is_array($entity->{$key})) {
-                $entity->{$key} = @unserialize($value);
+            $entity->{$key} = $value;
 
-                if (!$entity->{$key}) {
-                    $entity->{$key} = array();
-                }
-            } else {
+            $value = @unserialize($value);
+
+            if ($value) {
                 $entity->{$key} = $value;
             }
         }
