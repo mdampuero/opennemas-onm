@@ -200,7 +200,7 @@
                           <span ng-if="extra.related[id].type === 'text'">[% extra.related[id].title %]</span>
                           <div class="img-thumbnail-wrapper">
                             <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" />
-                            <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>
+                            <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
                           </div>
                         </label>
                       </div>
@@ -217,7 +217,7 @@
                     <button class="btn btn-link" ng-click="preview(content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
                     </button>
-                    <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>
+                    <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
                     <button class="btn btn-link" ng-click="import(content)" ng-if="imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
                       <span class="fa fa-cloud-download"></span> {t}Import{/t}
                     </button>
@@ -268,7 +268,7 @@
               <dynamic-image class="img-thumbnail" path="[% routing.generate('backend_ws_news_agency_show_image', { source: content.source, id: content.id }) %]" raw="true">
                 <div class="hidden-select" ng-click="toggle(content)"></div>
                 <div class="thumbnail-actions thumbnail-actions-fixed text-right">
-                  <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>
+                  <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
                 </div>
               </dynamic-image>
             </div>
