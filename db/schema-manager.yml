@@ -116,7 +116,7 @@ instance_meta:
             options: { length: 255, notnull: false }
         meta_value:
             type:    text
-            options: { default: '', length: 65532, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -143,14 +143,14 @@ notification:
             type:    integer
             options: { default: null, unsigned: true, autoincrement: true }
         title:
-            type:    string
-            options: { default: '', length: 256 }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         type:
             type:    string
             options: { default: null, length: 40 }
         body:
             type:    text
-            options: { default: '', length: 65532, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         instance_id:
             type: bigint
             options: { default: null }
