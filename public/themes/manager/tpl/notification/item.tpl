@@ -51,7 +51,7 @@
           <div class="grid-title">
             <h4>
               <span class="semi-bold" ng-if="notification.id">
-                [% notification.title %]
+                [% notification.title.en %]
               </span>
               <span class="semi-bold" ng-if="!notification.id">
                 {t}New notification{/t}
@@ -70,7 +70,7 @@
                 <div class="form-group">
                   <label for="template" class="form-label">{t}Style{/t}</label>
                   <div class="controls">
-                    <select id="style" ng-model="notification.style" ng-options="value.value as value.name for (key, value) in extra.styles"></select>
+                    <select id="style" ng-model="notification.style" ng-options="key as value.name for (key, value) in extra.styles"></select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -92,13 +92,13 @@
                 <div class="form-group" ng-if="notification.fixed == 0">
                   <label class="form-label">{t}Starts{/t}</label>
                   <div class="controls">
-                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.start" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                    <input class="form-control" datetime-picker ng-model="notification.start" placeholder="{t}Click to set date{/t}" type="datetime"/>
                   </div>
                 </div>
                 <div class="form-group" ng-if="notification.fixed == 0">
                   <label class="form-label">{t}Ends{/t}</label>
                   <div class="controls">
-                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.end" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                    <input class="form-control" datetime-picker ng-model="notification.end" placeholder="{t}Click to set date{/t}" type="datetime"/>
                   </div>
                 </div>
               </div>
