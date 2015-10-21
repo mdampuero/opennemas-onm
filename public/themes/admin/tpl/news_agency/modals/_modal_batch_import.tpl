@@ -53,13 +53,16 @@
     <p class="text-[% message.type %]" ng-bind-html="message.message"></p>
   </div>
   <span ng-show="template.type == 'article'">
-    {t escape=off}Your articles have been published, check them in the <a href="{url name=admin_articles}">article list</a> or you can add them to one of your <a href="{url name=admin_frontpage_list}">frontpages</a>{/t}
+    {capture name=article_list_url}{url name=admin_articles}{/capture}
+    {capture name=frontpage_list_url}{url name=admin_frontpage_list}{/capture}
+    {t 1=$article_list_url 2=$frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="template.type == 'opinion'">
-    {t escape=off}Your opinions have been published, check them in the <a href="{url name=admin_opinions}">opinions list</a>or you can add them to one of your <a href="{url name=admin_frontpage_list}">frontpages</a>{/t}
+    {capture name=opinion_list_url}{url name=admin_opinions}{/capture}
+    {t 1=$opinion_list_url 2=$frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="!template.type">
-    {t escape=off}Your photos have been published, check them in the <a href="{url name=admin_images}">photo list</a>{/t}
+    {t escape=off 1={url name=admin_images}}Your photos have been published, check them in the <a href="%1">photo list</a>{/t}
   </span>
 </div>
 <div class="modal-footer">
