@@ -34,7 +34,9 @@ class NotificationController extends Controller
             }
         }
 
-        $notification->start = date('Y-m-d H:i:s');
+        if (empty($notification->start)) {
+            $notification->start = date('Y-m-d H:i:s');
+        }
 
         $this->get('orm.manager')->persist($notification);
 
@@ -410,6 +412,10 @@ class NotificationController extends Controller
                 }
             }
 
+            if (empty($notification->start)) {
+                $notification->start = date('Y-m-d H:i:s');
+            }
+
             $em->persist($notification);
 
             return new JsonResponse(_('Notification saved successfully'));
@@ -451,8 +457,8 @@ class NotificationController extends Controller
         $instances = $this->get('instance_manager')->findBy([]);
 
         $params['instances'] = [
-            '-1' => [ 'name' => 'Manager', 'value' => -1 ],
-            '0'  => [ 'name' => _('All'), 'value' => 0 ]
+            '-1' => [ 'name' => 'Manager', 'value' => '-1' ],
+            '0'  => [ 'name' => _('All'), 'value' => '0' ]
         ];
 
         foreach ($instances as $instance) {
