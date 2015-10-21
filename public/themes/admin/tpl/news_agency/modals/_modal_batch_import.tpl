@@ -47,18 +47,19 @@
     <div class="spinner-text">{t}Loading{/t}...</div>
   </div>
 </div>
-<div class="modal-body" ng-if="imported">
+<!-- FTW: font size -->
+<div class="modal-body" ng-if="imported" style="font-size:14px">
   <div ng-repeat="message in template.messages">
     <p class="text-[% message.type %]" ng-bind-html="message.message"></p>
   </div>
   <span ng-show="template.type == 'article'">
-    {t escape=off}Your articles have been published, check them in the <a href="{url name=admin_articles}">article list</a>, but if you want to add it to a frontpage please go to the <a href="{url name=admin_frontpage_list}">frontpage manager</a>{/t}
+    {t escape=off}Your articles have been published, check them in the <a href="{url name=admin_articles}">article list</a> or you can add them to one of your <a href="{url name=admin_frontpage_list}">frontpages</a>{/t}
   </span>
   <span ng-show="template.type == 'opinion'">
-    {t escape=off}Your opinions have been published, check them in the <a href="{url name=admin_opinions}">opinions list</a>, but if you want to add it to a frontpage please go to the <a href="{url name=admin_frontpage_list}">frontpage manager</a>{/t}
+    {t escape=off}Your opinions have been published, check them in the <a href="{url name=admin_opinions}">opinions list</a>or you can add them to one of your <a href="{url name=admin_frontpage_list}">frontpages</a>{/t}
   </span>
   <span ng-show="!template.type">
-    {t escape=off}Your photos have been published, check them in the <a href="{url name=admin_photos}">photos list</a>{/t}
+    {t escape=off}Your photos have been published, check them in the <a href="{url name=admin_photos}">photo list</a>{/t}
   </span>
 </div>
 <div class="modal-footer">

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-21 11:41+0200\n"
+"POT-Creation-Date: 2015-10-21 10:02+0000\n"
 "PO-Revision-Date: 2015-10-21 11:41+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -1728,16 +1728,6 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
 
-msgid "Newsletter deleted successfully."
-msgstr "Boletín de noticias eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "No se pudo eliminar el boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debes proporcionar un identificador para eliminar un boletín."
-
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Suscripción con identificador «%d» eliminada correctamente"
@@ -1774,6 +1764,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletín de noticias eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "No se pudo eliminar el boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
