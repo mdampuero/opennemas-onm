@@ -369,7 +369,7 @@
               </td>
               <td ng-show="isEnabled('name')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.title %]
+                  [% item.title['en'] %]
                 </a>
                 <div class="listing-inline-actions">
                   <a class="link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">

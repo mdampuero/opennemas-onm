@@ -25,11 +25,41 @@
          * @memberOf NotificationCtrl
          *
          * @description
+         *   The language to edit.
+         *
+         * @type {String}
+         */
+        $scope.language = 'en';
+        /**
+         * @memberOf NotificationCtrl
+         *
+         * @description
          *   The notification object.
          *
          * @type {Object}
          */
-        $scope.notification = data.notification;
+        $scope.notification = {
+          body: {
+            en: '',
+            es: '',
+            gl: '',
+          },
+          instance_id: 0,
+          fixed: 0,
+          style: 'info',
+          title: {
+            en: '',
+            es: '',
+            gl: '',
+          },
+          type: 'info'
+        };
+
+        $scope.languages = {
+          'en': 'English',
+          'es': 'Spanish',
+          'gl': 'Galician',
+        };
 
         /**
          * @memberOf NotificationCtrl
@@ -41,7 +71,18 @@
          */
         $scope.extra = data.extra;
 
-        console.log($scope.notification);
+        /**
+         * @function changeLanguage
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Changes the current language.
+         *
+         * @param {String} lang The language value.
+         */
+        $scope.changeLanguage = function(lang) {
+          $scope.language = lang;
+        };
 
         /**
          * @function save
@@ -64,12 +105,12 @@
 
           $scope.saving = 1;
 
-          if ($scope.notification.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            $scope.notification.domain_expire = $scope.instance.domain_expire.toString();
+          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
+            $scope.notification.start = $scope.notification.start.toString();
           }
 
-          if ($scope.notification.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            $scope.notification.external.last_invoice = $scope.instance.external.last_invoice.toString();
+          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
+            $scope.notification.end = $scope.notification.end.toString();
           }
 
           itemService.save('manager_ws_notification_create', $scope.instance)
@@ -130,14 +171,16 @@
               messenger.post({ message: response, type: 'error' });
               $scope.saving = 0;
             });
-          };
+        };
 
-          $scope.$on('$destroy', function() {
-            $scope.notification = null;
-            $scope.changed_modules = null;
-            $scope.template = null;
-            $scope.selected = null;
-          });
+        $scope.$on('$destroy', function() {
+          $scope.notification = null;
+        });
+
+
+        if (data.notification) {
+          $scope.notification = data.notification;
+        }
       }
     ]);
 })();

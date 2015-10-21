@@ -58,71 +58,74 @@
               </span>
             </h4>
           </div>
-          <div class="grid-body notification-form">
-            <div class="row">
-              <div class="col-sm-12">
+          <div class="grid-body notification-form no-padding">
+            <div class="row p-l-15 p-r-15 p-t-15">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Type{/t}</label>
+                  <div class="controls">
+                    <select id="style" ng-model="notification.type" ng-options="value.value as value.name for (key, value) in extra.types"></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Style{/t}</label>
+                  <div class="controls">
+                    <select id="style" ng-model="notification.style" ng-options="value.value as value.name for (key, value) in extra.styles"></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Instance{/t}</label>
+                  <div class="controls">
+                    <select id="style" ng-model="notification.instance_id" ng-options="value.value as value.name for (key, value) in extra.instances"></select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
+                      <label for="fixed">{t}Fixed{/t} ({t}Notification always visible{/t})</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" ng-if="notification.fixed == 0">
+                  <label class="form-label">{t}Starts{/t}</label>
+                  <div class="controls">
+                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.start" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                  </div>
+                </div>
+                <div class="form-group" ng-if="notification.fixed == 0">
+                  <label class="form-label">{t}Ends{/t}</label>
+                  <div class="controls">
+                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.end" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul class="fake-tabs">
+              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">[% value%]</li>
+            </ul>
+            <div class="row p-l-15 p-r-15 p-t-15">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label class="form-label">
                     {t}Title{/t}
                     <span ng-show="notificationForm.name.$invalid">*</span>
                   </label>
-                  <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.title.$invalid }">
-                    <input class="form-control" id="name" name="name" ng-model="notification.title" required type="text">
+                  <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.title[language].$invalid }">
+                    <input class="form-control" id="name" name="name" ng-model="notification.title[language]" required type="text">
                   </div>
                   <span class="error" ng-show="formValidated && notificationForm.name.$invalid">
                     <label for="name" class="error">{t}This field is required{/t}</label>
                   </span>
                 </div>
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label for="template" class="form-label">{t}Type{/t}</label>
-                      <div class="controls">
-                        <select id="style" ng-model="notification.type" ng-options="value.value as value.name for (key, value) in extra.types"></select>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="template" class="form-label">{t}Style{/t}</label>
-                      <div class="controls">
-                        <select id="style" ng-model="notification.style" ng-options="value.value as value.name for (key, value) in extra.styles"></select>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="template" class="form-label">{t}Instance{/t}</label>
-                      <div class="controls">
-                        <select id="style" ng-model="notification.instance_id" ng-options="value.value as value.name for (key, value) in extra.instances"></select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <div class="controls">
-                        <div class="checkbox">
-                          <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
-                          <label for="fixed">{t}Fixed{/t} ({t}Notification always visible{/t})</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group" ng-if="notification.fixed == 0">
-                      <label class="form-label">{t}Starts{/t}</label>
-                      <div class="controls">
-                        <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.start" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                      </div>
-                    </div>
-                    <div class="form-group" ng-if="notification.fixed == 0">
-                      <label class="form-label">{t}Ends{/t}</label>
-                      <div class="controls">
-                        <quick-datepicker icon-class="fa fa-clock-o" ng-model="notification.end" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label class="form-label">
                     {t}Body{/t}
                   </label>
-                  <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.body.$invalid }">
-                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="body" name="body" ng-model="notification.body" rows="5"></textarea>
+                  <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.body[language].$invalid }">
+                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="body" name="body" ng-model="notification.body[language]" rows="5"></textarea>
                   </div>
                 </div>
               </div>
@@ -142,7 +145,7 @@
               <ul class="notification-list notification-list-preview">
                 <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]">
                   <div class="notification-title">
-                    [% notification.title%]
+                    [% notification.title[language] %]
                     <span class="notification-list-item-close pull-right pointer" ng-if="notification.fixed == 0">
                       <i class="fa fa-times"></i>
                     </span>
@@ -151,7 +154,7 @@
                     <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help','fa-info': notification.type === 'info', 'fa-users': notification.type === 'users' }"></i>
                   </div>
                   <div class="notification-body">
-                    <div ng-bind-html="notification.body"></div>
+                    <div ng-bind-html="notification.body[language]"></div>
                   </div>
                 </li>
               </ul>
@@ -173,9 +176,9 @@
                     <div class="cbp_tmlabel">
                       <div class="p-t-15 p-l-30 p-r-30 p-b-30">
                         <h4>
-                          [% notification.title %]
+                          [% notification.title[language] %]
                         </h4>
-                        <div class="text-default" ng-bind-html="notification.body"></div>
+                        <div class="text-default" ng-bind-html="notification.body[language]"></div>
                       </div>
                     </div>
                   </li>

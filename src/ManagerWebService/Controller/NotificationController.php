@@ -179,10 +179,13 @@ class NotificationController extends Controller
             $notification = $notification->getData();
         }
 
-        $ids = array_unique(array_diff($ids, [ -1, 0 ]));
-        $instances = $this->get('instance_manager')->findBy([
-            'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-        ]);
+        $ids       = array_unique(array_diff($ids, [ -1, 0 ]));
+        $instances = [];
+        if (!empty($ids)) {
+            $instances = $this->get('instance_manager')->findBy([
+                'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
+            ]);
+        }
 
         $extra['instances'] = [
             '-1' => [ 'name' => _('Manager'), 'value' => -1 ],
@@ -208,17 +211,18 @@ class NotificationController extends Controller
     }
 
     /**
-     * Returns the data to create a new instance.
+     * Returns the data to create a new notification.
      *
      * @return JsonResponse The response object.
      */
     public function newAction()
     {
-        return new JsonResponse(
-            [
-                'template' => $this->getTemplateParams()
-            ]
-        );
+        $extra = $this->getTemplateParams();
+
+        unset($extra['types']['-1']);
+        unset($extra['styles']['-1']);
+
+        return new JsonResponse([ 'extra' => $extra ]);
     }
 
     /**
