@@ -155,14 +155,6 @@
 
           $scope.saving = 1;
 
-          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
-            $scope.notification.end = $scope.notification.end.toString();
-          }
-
-          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
-            $scope.notification.start = $scope.notification.start.toString();
-          }
-
           itemService.update('manager_ws_notification_update', $scope.notification.id,
             $scope.notification).success(function (response) {
               messenger.post({ message: response, type: 'success' });
