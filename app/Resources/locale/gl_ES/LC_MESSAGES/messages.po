@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-21 10:02+0000\n"
-"PO-Revision-Date: 2015-10-21 11:42+0200\n"
+"POT-Creation-Date: 2015-10-21 13:23+0200\n"
+"PO-Revision-Date: 2015-10-21 13:24+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1709,6 +1709,16 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletín."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
@@ -1744,16 +1754,6 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Non se puido eliminar o boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletín."
 
 msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
@@ -8334,8 +8334,10 @@ msgstr "#"
 msgid "No rank"
 msgstr "Sen calificar"
 
-msgid "WELCOME TO OPENNEMAS"
-msgstr "BENVIDO A OPENNEMAS"
+msgid ""
+"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
+msgstr ""
+"Benvido a Opennemas! Aprende como publicar as túas novas en só uns segundos!"
 
 msgid "Hi"
 msgstr "Ola"
@@ -8431,6 +8433,9 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "WELCOME TO OPENNEMAS"
+#~ msgstr "BENVIDO A OPENNEMAS"
 
 #~ msgid "Already imported"
 #~ msgstr "Xa importado"
