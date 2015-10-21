@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-16 15:31+0200\n"
-"PO-Revision-Date: 2015-10-16 15:31+0200\n"
+"POT-Creation-Date: 2015-10-21 11:41+0200\n"
+"PO-Revision-Date: 2015-10-21 11:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -4731,6 +4731,9 @@ msgstr "por"
 msgid "Choose an author..."
 msgstr "Escolle un autor…"
 
+msgid "Close"
+msgstr "Pechar"
+
 msgid "Yes, import and publish"
 msgstr "Si, importar e publicar"
 
@@ -4770,11 +4773,11 @@ msgstr ""
 msgid "Origin"
 msgstr "Orixe"
 
+msgid "Imported"
+msgstr "Importado"
+
 msgid "View content"
 msgstr "Ver contido"
-
-msgid "Already imported"
-msgstr "Xa importado"
 
 msgid "Unable to find any image that matches your search."
 msgstr "Non se puideron atopar imaxes que coincidan coa súa busca."
@@ -5392,9 +5395,6 @@ msgid ""
 msgstr ""
 "Completa o formulario de embaixo co titulo e a URL externa que queres "
 "engadir ao menú."
-
-msgid "Close"
-msgstr "Pechar"
 
 msgid "Add item"
 msgstr "Engadir elemento"
@@ -6164,6 +6164,9 @@ msgid ""
 msgstr ""
 "Google DFP usa un identificador de unidade para identificar unha "
 "publicidade. Completa o identificador de zona desde o teu panel de Google DFP"
+
+msgid "Add another size"
+msgstr "Añadir otro tamaño"
 
 msgid "When to show this ad"
 msgstr "Cando mostrar esta publicidade"
@@ -8428,6 +8431,9 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Already imported"
+#~ msgstr "Xa importado"
 
 #~ msgid "Editar"
 #~ msgstr "Editar"
