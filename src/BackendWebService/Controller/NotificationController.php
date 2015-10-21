@@ -52,6 +52,9 @@ class NotificationController extends Controller
         foreach ($notifications as &$notification) {
             $notification = $notification->getData();
 
+            $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
+            $notification['body'] = $notification['body'][CURRENT_LANGUAGE];
+
             $date = \DateTime::createFromFormat(
                 'Y-m-d H:i:s',
                 $notification['start']

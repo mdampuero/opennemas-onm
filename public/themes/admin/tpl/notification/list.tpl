@@ -70,7 +70,7 @@
                   <h4>
                     [% notification.title %]
                   </h4>
-                  [% notification.body %]
+                  <div ng-bind-html="notification.body"></div>
                 </div>
               </div>
             </li>
