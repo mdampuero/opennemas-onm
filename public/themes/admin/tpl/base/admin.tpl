@@ -277,7 +277,7 @@
                             </span>
                           </div>
                           <div class="notification-icon">
-                            <i class="fa fa-users fa-2x"></i>
+                            <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'users', 'fa-users': notification.type === 'users' }"></i>
                           </div>
                           <div class="notification-body" ng-bind-html="notification.body"></div>
                         </li>
