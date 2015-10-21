@@ -145,9 +145,6 @@ notification:
         title:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        type:
-            type:    string
-            options: { default: null, length: 40 }
         body:
             type:    text
             options: { default: null, length: 65532, notnull: false }
@@ -160,6 +157,12 @@ notification:
         end:
             type: datetime
             options: { default: null, notnull: false }
+        creator:
+            type: string
+            options: { default: '', length: 255 }
+        type:
+            type:    string
+            options: { default: null, length: 40 }
         style:
             type:    string
             options: { default: 'info', length: 40 }
