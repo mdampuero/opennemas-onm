@@ -59,7 +59,7 @@
     {t escape=off}Your opinions have been published, check them in the <a href="{url name=admin_opinions}">opinions list</a>or you can add them to one of your <a href="{url name=admin_frontpage_list}">frontpages</a>{/t}
   </span>
   <span ng-show="!template.type">
-    {t escape=off}Your photos have been published, check them in the <a href="{url name=admin_photos}">photo list</a>{/t}
+    {t escape=off}Your photos have been published, check them in the <a href="{url name=admin_images}">photo list</a>{/t}
   </span>
 </div>
 <div class="modal-footer">
