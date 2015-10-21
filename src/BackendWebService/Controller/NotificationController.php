@@ -23,6 +23,70 @@ class NotificationController extends Controller
      *
      * @return JsonResponse The response object.
      */
+    public function listLatestAction(Request $request)
+    {
+        $criteria = $request->query->filter('search') ? : [];
+        $epp      = $request->query->getDigits('epp', 10);
+        $page     = $request->query->getDigits('page', 1);
+
+        $id = $this->get('instance')->id;
+
+        $date = new \DateTime('now');
+        $date = $date->format('Y-m-d H:i:s');
+
+        $criteria = 'instance_id IN (0, ' . $id . ') AND (fixed = 1'
+            . ' OR is_read = 0) AND (start <= \'' . $date
+            . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+
+        $nr = $this->get('orm.manager')->getRepository('manager.notification');
+
+        $notifications = $nr->findBy($criteria, [ 'start' => 'desc' ], $epp, $page);
+
+        foreach ($notifications as &$notification) {
+            $notification = $notification->getData();
+
+            $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
+            $notification['body'] = $notification['body'][CURRENT_LANGUAGE];
+
+            $date = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $notification['start']
+            );
+
+            $notification['day'] = $date->format('l');
+            $time = $date->getTimeStamp();
+
+            $notification['day'] = $date->format('M, d');
+            if (time() - $time < 172800) {
+                $notification['day'] = _('Yesterday');
+            }
+
+            if (time() - $time < 86400) {
+                $notification['day'] = _('Today');
+            }
+
+            $notification['time'] = $date->format('H:i');
+            $notification['am'] = $date->format('a');
+        }
+
+        $total = $nr->countBy($criteria);
+
+        return new JsonResponse([
+            'epp'     => $epp,
+            'page'    => $page,
+            'results' => $notifications,
+            'total'   => $total,
+            'extra'   => $this->getTemplateParams()
+        ]);
+    }
+
+    /**
+     * Returns the list of instances as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
     public function listAction(Request $request)
     {
         $criteria = $request->query->filter('search') ? : [];
@@ -35,15 +99,9 @@ class NotificationController extends Controller
             [ 'value' => [ 0, $id ], 'operator' => 'IN' ]
         ];
 
-        // Filter to get latest notifications
-        if (is_array($criteria)
-            && array_key_exists('fixed', $criteria)
-            && array_key_exists('is_read', $criteria)
-        ) {
-            $criteria = 'instance_id IN (0, ' . $id . ')AND (fixed = '
-                . $criteria['fixed'][0]['value'] . ' OR is_read = '
-                . $criteria['is_read'][0]['value'] .')';
-        }
+        $criteria['start'] = [
+            [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<' ]
+        ];
 
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
