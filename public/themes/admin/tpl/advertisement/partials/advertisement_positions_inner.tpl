@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="radio">
-              <input id="inner-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="103" {if $advertisement->type_advertisement == 105}checked="checked" {/if}/>
+              <input id="inner-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="103" {if $advertisement->type_advertisement == 103}checked="checked" {/if}/>
               <label for="inner-banner1-column-right-I-300x*">
                 Banner1 Column Right(I) (300x*)
               </label>
