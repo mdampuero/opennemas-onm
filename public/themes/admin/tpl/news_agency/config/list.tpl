@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-controller="ContentListCtrl">
+  <div ng-controller="NewsAgencyServerListCtrl" ng-init="init('', {}, 'id', 'desc', 'backend_ws_news_agency_servers_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -31,7 +31,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_news_agency_server_create}">
+              <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}">
                 <i class="fa fa-plus"></i>
                 {t}Add server{/t}
               </a>
@@ -43,47 +43,58 @@
     <div class="content">
       <div class="grid simple">
         <div class="grid-body no-padding">
-          <table id="source-list" class="table table-hover no-margin">
-            <tr>
-              <th>{t}Source name{/t}</th>
-              <th class="center">{t}Sync from{/t}</th>
-              <th class="center" style="width:1px">{t}Activated{/t}</th>
-            </tr>
-            {foreach $servers as $server}
-              <tr id="{$server['id']}">
+          <div class="spinner-wrapper" ng-if="loading">
+            <div class="loading-spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+          </div>
+          <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+            <div class="center">
+              <h4>{t}No servers available{/t}</h4>
+            </div>
+          </div>
+          <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+            <table id="source-list" class="table table-hover no-margin">
+              <tr>
+                <th>{t}Source name{/t}</th>
+                <th class="center">{t}Sync from{/t}</th>
+                <th class="center" style="width:1px">{t}Activated{/t}</th>
+              </tr>
+              <tr ng-repeat="item in contents">
                 <td class="server_name">
-                  {$server['name']}
+                  [% item.name %]
                   <div class="listing-inline-actions">
-                    <a class="link" href="{url name=admin_news_agency_server_show id=$server['id']}" class="btn edit"><i class="fa fa-pencil"></i> Editar</a>
-                    <a class="link"  href="{url name=admin_news_agency_server_clean_files id=$server['id']}" class="btn" title="{t}Removes the synchronized files for this source{/t}"><i class="fa fa-fire"></i> {t}Remove local files{/t}</a>
-                    <button class="link link-danger" ng-click="deleteConfig('{url name=admin_news_agency_server_delete id=$server['id']}')" type="button">
+                    <a class="link" href="[% edit(item.id, 'backend_news_agency_server_show') %]">
+                      <i class="fa fa-pencil"></i>
+                      {t}Edit{/t}
+                    </a>
+                    {acl isAllowed="ONLY_MASTERS"}
+                      <button class="btn btn-link"  ng-click="clean($index, item.id)">
+                        <i class="fa" ng-class="{ 'fa-fire': !item.cleaning, 'fa-circle-o-notch fa-spin': item.cleaning }"></i>
+                        {t}Remove local files{/t}
+                      </button>
+                    {/acl}
+                    <button class="link link-danger" ng-click="delete(item, 'backend_ws_news_agency_server_delete')" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Remove{/t}
                     </button>
                   </div>
                 </td>
-                <td class="server_name nowrap center">{$sync_from[$server['sync_from']]}</td>
-                <td class="server_name right">
-                  <a class="btn" href="{url name=admin_news_agency_server_toogle id=$server['id']}" title="{t}Activate server{/t}">
-                    {if $server['activated'] == 1}
-                    <i class="fa fa-check"></i>
-                    {else}
-                    <i class="fa fa-times"></i>
-                    {/if}
-                  </a>
+                <td class="server_name nowrap center">
+                  [% extra.sync_from[item.sync_from] %]
+                </td>
+                <td class="server_name center">
+                  <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_news_agency_server_toggle', 'activated', item.activated != 1 ? 1 : 0, 'loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading && item.activated == '1', 'fa-times text-error': !item.loading && item.activated == '0' }"></i>
+                  </button>
                 </td>
               </tr>
-            {foreachelse}
-              <tr>
-                <td colspan="4" class="center">No servers available</td>
-              </tr>
-            {/foreach}
-          </table>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <script type="text/ng-template" id="modal-remove-config">
+  <script type="text/ng-template" id="modal-delete">
     {include file="news_agency/modals/_modal_remove_config.tpl"}
   </script>
 {/block}

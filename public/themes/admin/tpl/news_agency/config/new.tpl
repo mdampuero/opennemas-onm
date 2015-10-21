@@ -1,187 +1,198 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
-        <link rel="stylesheet" href="{$asset_url}">
-    {/stylesheets}
+{stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
+<link rel="stylesheet" href="{$asset_url}">
+{/stylesheets}
 {/block}
 
 {block name="content"}
-<form action="{if array_key_exists('id', $server)}{url name=admin_news_agency_server_update id=$server['id']}{else}{url name=admin_news_agency_server_create}{/if}" method="POST" autocomplete="off">
-
-<div class="page-navbar actions-navbar">
+<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off">
+  <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}News agency{/t} :: {if array_key_exists('id', $server)}{t}Update source{/t}{else}{t}Add source{/t}{/if}
-                    </h4>
-                </li>
-            </ul>
-        </div>
-        <div class="all-actions pull-right">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <a class="btn btn-link" href="{url name=admin_news_agency_servers}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                        <span class="fa fa-reply"></span>
-                    </a>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <button class="btn btn-primary" action="submit">
-                        {t}Save{/t}
-                    </button>
-                </li>
-            </ul>
-        </div>
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-microphone fa-lg"></i>
+              {t}News agency{/t}
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h5>
+              {if array_key_exists('id', $server)}
+                {t}Update source{/t}
+              {else}
+                {t}Add source{/t}
+              {/if}
+            </h5>
+          </li>
+        </ul>
+      </div>
+      <div class="all-actions pull-right">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+              <span class="fa fa-reply"></span>
+            </a>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-primary" action="submit">
+              {t}Save{/t}
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="content">
+  <div class="content">
 
     <div class="grid simple">
-        <div class="grid-body">
+      <div class="grid-body">
 
-            <div class="form-group">
-                <label for="name" class="form-label">{t}Source name{/t}</label>
-                <div class="controls">
-                    <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="activated" class="form-label">{t}Activated{/t}</label>
-                <div class="controls">
-                    <div class="slide-primary">
-                      <input type="checkbox" name="activated" class="ios" {if $server['activated'] != 0}checked="checked"{/if} value='1' />
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="color" class="form-label">{t}Color{/t}</label>
-                <span class="help">{t}Color to distinguish between other agencies{/t}</span>
-                <div class="controls">
-                    <input type="hidden" id="color" name="color" value="{$server['color']|default:'#424E51'}" class="form-control"/>
-                    <select name="colorpicker">
-                        <option value="#424E51">{t}Dark Gray{/t}</option>
-                        <option value="#000000">{t}Black{/t}</option>
-                        <option value="#980101">{t}Bold red{/t}</option>
-                        <option value="#7bd148">{t}Green{/t}</option>
-                        <option value="#0000FF">{t}Blue{/t}</option>
-                        <option value="#46d6db">{t}Turquoise{/t}</option>
-                        <option value="#7ae7bf">{t}Light green{/t}</option>
-                        <option value="#51b749">{t}Bold green{/t}</option>
-                        <option value="#fbd75b">{t}Yellow{/t}</option>
-                        <option value="#FF8C00">{t}Orange{/t}</option>
-                        <option value="#dc2127">{t}Red{/t}</option>
-                        <option value="#dbadff">{t}Purple{/t}</option>
-                    </select>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="name" class="form-label">{t}Source name{/t}</label>
+          <div class="controls">
+            <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
+          </div>
         </div>
-    </div>
 
-    <div class="grid simple">
-        <div class="grid-title">
-            <h4>{t}Connection{/t}</h4>
+        <div class="form-group">
+          <label for="activated" class="form-label">{t}Activated{/t}</label>
+          <div class="controls">
+            <div class="slide-primary">
+              <input type="checkbox" name="activated" class="ios" {if $server['activated'] != 0}checked="checked"{/if} value='1' />
+            </div>
+          </div>
         </div>
-        <div class="grid-body">
 
-            <div class="form-group">
-                <label for="url" class="form-label">{t}Url{/t}</label>
-                <span class="help">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
-                <div class="controls">
-                    <input type="text" id="server" name="url" value="{$server['url']}" class="form-control" required="required"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="username" class="form-label">{t}Username{/t}</label>
-                <div class="controls">
-                    <input type="text" id="username" name="username" value="{$server['username']}" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="password" class="form-label">{t}Password{/t}</label>
-                <div class="controls">
-                    <input type="password" id="password" name="password" value="{$server['password']}" class="form-control"/>
-                    <button class="check-pass btn">{t}Show password{/t}</button>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="color" class="form-label">{t}Color{/t}</label>
+          <span class="help">{t}Color to distinguish between other agencies{/t}</span>
+          <div class="controls">
+            <input type="hidden" id="color" name="color" value="{$server['color']|default:'#424E51'}" class="form-control"/>
+            <select name="colorpicker">
+              <option value="#424E51">{t}Dark Gray{/t}</option>
+              <option value="#000000">{t}Black{/t}</option>
+              <option value="#980101">{t}Bold red{/t}</option>
+              <option value="#7bd148">{t}Green{/t}</option>
+              <option value="#0000FF">{t}Blue{/t}</option>
+              <option value="#46d6db">{t}Turquoise{/t}</option>
+              <option value="#7ae7bf">{t}Light green{/t}</option>
+              <option value="#51b749">{t}Bold green{/t}</option>
+              <option value="#fbd75b">{t}Yellow{/t}</option>
+              <option value="#FF8C00">{t}Orange{/t}</option>
+              <option value="#dc2127">{t}Red{/t}</option>
+              <option value="#dbadff">{t}Purple{/t}</option>
+            </select>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="grid simple">
-        <div class="grid-title">
-            <h4>{t}Sync parameters{/t}</h4>
+      <div class="grid-title">
+        <h4>{t}Connection{/t}</h4>
+      </div>
+      <div class="grid-body">
+
+        <div class="form-group">
+          <label for="url" class="form-label">{t}Url{/t}</label>
+          <span class="help">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
+          <div class="controls">
+            <input type="text" id="server" name="url" value="{$server['url']}" class="form-control" required="required"/>
+          </div>
         </div>
-        <div class="grid-body">
 
-            <div class="form-group">
-                <label for="agency_string" class="form-label">{t}Agency{/t}</label>
-                <span class="help">{t}When importing elements this will be the signature{/t}</span>
-                <div class="controls">
-                    <input type="text" id="agency_string" name="agency_string" value="{$server['agency_string']}" class="form-control" required="required"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="author" class="form-label">{t}Import authors{/t}</label>
-                <span class="help">{t}Activate this if you want to import the author of the elements if available{/t}</span>
-                <div class="controls">
-                    <input name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1'>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="sync_from" class="form-label">{t}Sync elements newer than{/t}</label>
-                <span class="help">
-                    {t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}
-                </span>
-                <div class="controls">
-                    <select name="sync_from" required="required">
-                        {html_options options=$sync_from selected={$server['sync_from']}}
-                    </select>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="username" class="form-label">{t}Username{/t}</label>
+          <div class="controls">
+            <input type="text" id="username" name="username" value="{$server['username']}" class="form-control"/>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">{t}Password{/t}</label>
+          <div class="controls">
+            <input type="password" id="password" name="password" value="{$server['password']}" class="form-control"/>
+            <button class="check-pass btn">{t}Show password{/t}</button>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+
+    <div class="grid simple">
+      <div class="grid-title">
+        <h4>{t}Sync parameters{/t}</h4>
+      </div>
+      <div class="grid-body">
+
+        <div class="form-group">
+          <label for="agency_string" class="form-label">{t}Agency{/t}</label>
+          <span class="help">{t}When importing elements this will be the signature{/t}</span>
+          <div class="controls">
+            <input type="text" id="agency_string" name="agency_string" value="{$server['agency_string']}" class="form-control" required="required"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="author" class="form-label">{t}Import authors{/t}</label>
+          <span class="help">{t}Activate this if you want to import the author of the elements if available{/t}</span>
+          <div class="controls">
+            <input name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1'>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sync_from" class="form-label">{t}Sync elements newer than{/t}</label>
+          <span class="help">
+            {t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}
+          </span>
+          <div class="controls">
+            <select name="sync_from" required="required">
+              {html_options options=$sync_from selected={$server['sync_from']}}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </form>
 {/block}
 
 {block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
+{javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+<script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 
-    <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('.check-pass').on('click', function(e, ui){
-            e.preventDefault();
-            var passInput = $('#password');
-            var btn = $(this);
-            if (passInput.attr('type') == 'password') {
-                passInput.prop('type','text');
-                btn.html('{t}Hide password{/t}');
-            } else {
-                passInput.prop('type','password');
-                btn.html('{t}Show password{/t}');
-            }
-        });
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('.check-pass').on('click', function(e, ui){
+    e.preventDefault();
+    var passInput = $('#password');
+    var btn = $(this);
+    if (passInput.attr('type') == 'password') {
+      passInput.prop('type','text');
+      btn.html('{t}Hide password{/t}');
+    } else {
+      passInput.prop('type','password');
+      btn.html('{t}Show password{/t}');
+    }
+  });
 
-        $('select[name="colorpicker"]').simplecolorpicker(
-            'selectColor', $('#color').val()
-        ).on('change', function() {
-            $('#color').val($('select[name="colorpicker"]').val());
-        });
-    });
-    </script>
+  $('select[name="colorpicker"]').simplecolorpicker(
+      'selectColor', $('#color').val()
+      ).on('change', function() {
+    $('#color').val($('select[name="colorpicker"]').val());
+  });
+});
+</script>
 {/block}

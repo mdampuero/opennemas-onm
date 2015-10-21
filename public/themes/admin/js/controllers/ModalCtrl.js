@@ -9,8 +9,8 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
     /**
      * Closes the current modal
      */
-    $scope.close = function() {
-        $modalInstance.close(false);
+    $scope.close = function(response) {
+      $modalInstance.close(response);
     };
 
     /**

@@ -83,7 +83,7 @@
                     </rights>
                     {/if}
                     <dateline>
-                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
+                      <story.date norm="{$article->created_datetime->format('Ymd\THisP')}">
                         {$article->created_datetime->format('Ymd\THisP')}
                       </story.date>
                     </dateline>
@@ -173,7 +173,7 @@
             </NewsComponent>
           </NewsComponent>
         {/if}
-        {if !empty($photoInner)}
+        {if !empty($photoInner) && (empty(photo) || (!empty(photo) && $photo->id !== $photoInner->id))}
           <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}" Euid="{$photoInner->id}">
             <NewsLines>
               <HeadLine><![CDATA[{$article->title}]]></HeadLine>

@@ -26,7 +26,7 @@ class ReportController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $results = [
             [

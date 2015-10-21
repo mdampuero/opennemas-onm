@@ -124,8 +124,6 @@ class MonographsController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
-        break;
     }
 
     /**

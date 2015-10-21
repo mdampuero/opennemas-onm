@@ -219,3 +219,15 @@ services:
     related_contents:
         class: RelatedContent
         arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
+
+    orm.manager.braintree:
+        class: Framework\ORM\Braintree\BraintreeManager
+        arguments: [ @comet_cult_braintree.factory ]
+
+    orm.manager.freshbooks:
+        class: Framework\ORM\FreshBooks\FreshBooksManager
+        arguments: [ %freshbooks.domain%, %freshbooks.token% ]
+
+    orm.manager:
+        class: Framework\ORM\EntityManager
+        arguments: [ @orm.manager.braintree, @orm.manager.freshbooks ]

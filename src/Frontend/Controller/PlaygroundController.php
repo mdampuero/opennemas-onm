@@ -1,29 +1,11 @@
 <?php
-/**
- * Playground where to test new functions
- *
- * @package Frontend_Controllers
- **/
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- **/
+
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Playground where to test new functions
- *
- * @package Frontend_Controllers
- **/
 class PlaygroundController extends Controller
 {
     /**
@@ -43,7 +25,6 @@ class PlaygroundController extends Controller
         } else {
             return new Response('not valid action', 400);
         }
-
     }
 
     /**
@@ -64,14 +45,12 @@ class PlaygroundController extends Controller
     }
 
     /**
-     * undocumented function
+     * Displays the base/playground.tpl content.
      *
-     * @return void
-     * @author
-     **/
-    public function test()
+     * @return Response The response object.
+     */
+    public function template()
     {
-        var_dump('PlaygroundController.php init');
-        die();
+        return $this->render('playground.tpl');
     }
 }

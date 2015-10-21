@@ -272,11 +272,23 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 case 'comment':
                     $this->saver->saveComments($key, $schema, $data);
                     break;
+                case 'content-views':
+                    $this->saver->saveContentViews($key, $schema, $data);
+                    break;
+                case 'poll':
+                    $this->saver->savePolls($key, $schema, $data);
+                    break;
+                case 'poll-items':
+                    $this->saver->savePollItems($key, $schema, $data);
+                    break;
                 case 'photo':
                     $this->saver->savePhotos($key, $schema, $data);
                     break;
                 case 'opinion':
                     $this->saver->saveOpinions($key, $schema, $data);
+                    break;
+                case 'related-contents':
+                    $this->saver->saveRelatedContents($key, $schema, $data);
                     break;
                 case 'user':
                     $this->saver->saveUsers($key, $schema, $data);
@@ -286,6 +298,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     break;
                 case 'video':
                     $this->saver->saveVideos($key, $schema, $data);
+                    break;
+                case 'widget':
+                    $this->saver->saveWidgets($key, $schema, $data);
                     break;
                 default:
                     break;

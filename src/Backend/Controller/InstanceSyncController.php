@@ -119,7 +119,7 @@ class InstanceSyncController extends Controller
         $username = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
         $password = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
 
-        $element = $categories = [];
+        $element = [];
         $authError = false;
         if (!empty($siteUrl)) {
             $url = $siteUrl.'/ws/categories/lists.xml';

@@ -1,23 +1,73 @@
 <div class="modal-header">
   <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
-  <h3>{t}Import selected items{/t}</h3>
+  <h4 class="modal-title">{t}Import items{/t}</h4>
 </div>
-<div class="modal-body">
-    <p>{t escape=off}Are you sure you want to import [% selected %] elemets?{/t}</p>
+<div class="modal-body" ng-if="!loading && !imported">
+  <p>{t escape=off}Are you sure you want to import [% template.contents.length %] elements?{/t}</p>
+  <ul class="no-style p-l-7">
+    <li ng-repeat="content in template.contents">
+      <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': content.type === 'text', 'fa-picture-o': content.type === 'photo', 'fa-film': content.type === 'video' }"></i>
+      [% content.title %]
+    </li>
+  </ul>
+  <div class="p-t-30">
+    <span ng-show="template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text')">
+      {t}Import{/t}
+    </span>
+    <span ng-show="template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text')">
+      {t}as{/t}
+      <select id="type" name="type" ng-init="template.type = 'article'" ng-model="template.type">
+        {is_module_activated name="ARTICLE_MANAGER"}
+          <option value="article">{t}Article{/t}</option>
+        {/is_module_activated}
+        {is_module_activated name="OPINION_MANAGER"}
+          <option value="opinion">{t}Opinion{/t}</option>
+        {/is_module_activated}
+      </select>
+    </span>
+    <span ng-show="template.type === 'article' && (template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text'))">
+      &nbsp;{t}in{/t}&nbsp;
+      <select id="category" name="category" ng-model="template.category">
+        <option value="">{t}Choose a category...{/t}</option>
+        <option value="[% category.value %]" ng-repeat="category in template.categories">[% category.name %]</option>
+      </select>
+    </span>
+    <span ng-show="template.type === 'opinion' && (template.contents.length > 1 || (template.contents.length == 1 && template.contents[0].type == 'text'))">
+      &nbsp;{t}by{/t}&nbsp;
+      <select id="category" name="author" ng-model="template.author">
+        <option value="">{t}Choose an author...{/t}</option>
+        <option value="[% author.value %]" ng-repeat="author in template.authors">[% author.name %]</option>
+      </select>
+    </span>
+  </div>
+</div>
+<div class="modal-body" ng-if="loading">
+  <div class="spinner-wrapper">
+    <div class="loading-spinner"></div>
+    <div class="spinner-text">{t}Loading{/t}...</div>
+  </div>
+</div>
+<!-- FTW: font size -->
+<div class="modal-body" ng-if="imported" style="font-size:14px">
+  <div ng-repeat="message in template.messages">
+    <p class="text-[% message.type %]" ng-bind-html="message.message"></p>
+  </div>
+  <span ng-show="template.type == 'article'">
+    {capture name=article_list_url}{url name=admin_articles}{/capture}
+    {capture name=frontpage_list_url}{url name=admin_frontpage_list}{/capture}
+    {t 1=$article_list_url 2=$frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
+  </span>
+  <span ng-show="template.type == 'opinion'">
+    {capture name=opinion_list_url}{url name=admin_opinions}{/capture}
+    {t 1=$opinion_list_url 2=$frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
+  </span>
+  <span ng-show="!template.type">
+    {t escape=off 1={url name=admin_images}}Your photos have been published, check them in the <a href="%1">photo list</a>{/t}
+  </span>
 </div>
 <div class="modal-footer">
-    <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="importSelected(route)" type="button">{t}Yes, import them{/t}</button>
-    <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+  <button class="btn btn-link" ng-click="close(0)" ng-if="!imported" type="button">{t}No{/t}</button>
+  <button class="btn btn-link" ng-click="close(1)" ng-if="imported" type="button">{t}Close{/t}</button>
+  <button class="btn btn-white" ng-click="confirm()" ng-if="!imported" type="button">{t}Yes, import and publish{/t}</button>
+  <button class="btn btn-success" ng-click="confirm(1)" ng-if="!imported" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
 </div>
-
-<script>
-jQuery(document).ready(function ($){
-    $('#modal-news-agency-batch-import a.btn.yes').on('click', function(e, ui){
-        $('#formulario').attr('action', '{url name="admin_news_agency_batch_import"}');
-        $('#formulario').attr('method', 'POST');
-        $('#formulario').submit();
-        e.preventDefault();
-    });
-});
-</script>

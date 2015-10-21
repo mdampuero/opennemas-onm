@@ -3,7 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
 
-
 parameters:
     cache_prefix: onm
     available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
@@ -114,3 +113,10 @@ hwi_oauth:
 lexik_jwt_authentication:
     token_ttl:       %session.gc_maxlifetime%
     encoder_service: shared_key_jwt_encoder
+
+# Braintree configuration
+comet_cult_braintree:
+    environment: %braintree.environment%
+    merchant_id: %braintree.merchant_id%
+    public_key:  %braintree.public_key%
+    private_key: %braintree.private_key%

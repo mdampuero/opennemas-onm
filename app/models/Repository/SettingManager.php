@@ -153,7 +153,7 @@ class SettingManager extends BaseManager
         }
 
         // Remove lost settings from results
-        $results = array_filter($results, function($value) {
+        $results = array_filter($results, function ($value) {
             return $value !== $this->lostValue;
         });
 
