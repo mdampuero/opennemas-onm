@@ -32,6 +32,7 @@
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/ngQuickDate/dist/ng-quick-date.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
@@ -289,7 +290,6 @@
     {javascripts src="
     @Common/components/jquery/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,
-
     @Common/components/breakpoints/breakpoints.js,
     @Common/components/ckeditor/ckeditor.js,
     @Common/components/fastclick/lib/fastclick.js,
@@ -297,6 +297,9 @@
     @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
     @Common/components/messenger/build/js/messenger.min.js,
     @Common/components/messenger/build/js/messenger-theme-flat.js,
+    @Common/components/moment/min/moment-with-locales.min.js,
+    @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+    @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
     @Common/components/select2/select2.min.js,
 
     @Common/js/onm/md5.min.js,
@@ -322,6 +325,7 @@
     @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
 
     @Common/src/angular-authentication/authService.js,
+    @Common/src/angular-datetimepicker/datetimepicker.js,
     @Common/src/angular-form-autofill/formAutoFill.js,
     @Common/src/angular-gravatar/gravatar.js,
     @Common/src/angular-onm-editor/onm-editor.js,

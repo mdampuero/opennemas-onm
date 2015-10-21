@@ -14,6 +14,7 @@ angular.module(
     'ngTouch',
     'onm.auth',
     'onm.editor',
+    'onm.datetimepicker',
     'onm.form-autofill-fix',
     'onm.gravatar',
     'onm.history',
