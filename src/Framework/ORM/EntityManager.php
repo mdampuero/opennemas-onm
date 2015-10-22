@@ -123,6 +123,11 @@ class EntityManager
     {
         $entity = explode('.', $name);
         $entity = $entity[count($entity) - 1];
+        $entity = preg_replace(
+            '/([a-z])_([a-z])/e',
+            '"$1" . strtoupper("$2")',
+            $entity
+        );
 
         $repositories = [];
         foreach ($this->sources as $source => $priority) {

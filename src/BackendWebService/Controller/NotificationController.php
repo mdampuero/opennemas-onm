@@ -9,7 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
+use Framework\ORM\Exception\EntityNotFoundException;
 use Framework\ORM\Entity\Notification;
+use Framework\ORM\Entity\UserNotification;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,16 +33,31 @@ class NotificationController extends Controller
 
         $id = $this->get('instance')->id;
 
+        $unr = $this->get('orm.manager')->getRepository('user_notification');
+
+        // Get readed notifications
+        $notifications = $unr->findBy([
+            'user_id' => [ [ 'value' => $this->getUser()->id ] ]
+        ]);
+
+        $read = array_map(function ($n) {
+            return $n->notification_id;
+        }, $notifications);
+
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
 
-        $criteria = 'instance_id IN (0, ' . $id . ') AND (fixed = 1'
-            . ' OR is_read = 0) AND (start <= \'' . $date
+        $criteria = 'instance_id IN (0, ' . $id . ')'
+            . ' AND (start <= \'' . $date
             . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+
+        if (!empty($read)) {
+            $criteria .= ' AND (id NOT IN ( ' . implode(',', $read) . ' ))';
+        }
 
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
-        $notifications = $nr->findBy($criteria, [ 'start' => 'desc' ], $epp, $page);
+        $notifications = $nr->findBy($criteria, [ 'fixed' => 'desc' ], $epp, $page);
 
         foreach ($notifications as &$notification) {
             $notification = $notification->getData();
@@ -156,19 +173,24 @@ class NotificationController extends Controller
     {
         $em = $this->get('orm.manager');
 
-        try {
-            $notification = $em->getRepository('manager.notification')->find($id);
-            $notification->is_read = true;
+        $userId = $this->getUser()->id;
 
-            $em->persist($notification);
+        try {
+            $un = $em->getRepository('user_notification')->find(
+                [ 'notification_id' => $id, 'user_id' => $userId ]
+            );
 
             return new JsonResponse(_('Notification marked as read successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the notification with id "%s"'), $id),
-                404
-            );
+        } catch (EntityNotFoundException $e) {
+            $un = new UserNotification();
+            $un->user_id = $userId;
+            $un->notification_id = $id;
+
+            $em->persist($un);
+
+            return new JsonResponse(_('Notification marked as read successfully'));
         } catch (\Exception $e) {
+
             return new JsonResponse(_($e->getMessage()), 400);
         }
     }
@@ -192,15 +214,33 @@ class NotificationController extends Controller
         $updated = 0;
 
         try {
-            $criteria = [ 'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ] ];
+            $criteria = [
+                'notification_id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
+                'user_id' => [ [ 'value' => $this->getUser()->id ] ]
+            ];
 
-            $notifications = $em->getRepository('manager.notification')
+            $notifications = $em->getRepository('user_notification')
                 ->findBy($criteria);
 
-            foreach ($notifications as $notification) {
-                $notification->is_read = true;
-                $em->persist($notification);
-                $updated++;
+            $read = array_map(function ($un) {
+                return $un->notification_id;
+            }, $notifications);
+
+            $missed = array_diff($ids, $read);
+
+            $nr = $em->getRepository('manager.notification');
+            foreach ($missed as $id) {
+                $notification = $nr->find($id);
+                var_dump($notification);
+
+                if (!empty($notification) && !$notification->fixed) {
+                    $un = new UserNotification();
+                    $un->user_id = $this->getUser()->id;
+                    $un->notification_id = $id;
+
+                    $em->persist($un);
+                    $updated++;
+                }
             }
 
             return new JsonResponse(sprintf(

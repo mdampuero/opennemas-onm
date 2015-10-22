@@ -107,7 +107,13 @@ class DatabaseRepository extends BaseManager
             throw new EntityNotFoundException();
         }
 
-        $cacheId = $this->getCachePrefix() . $this->cacheSeparator .  $id;
+        $cacheId = $id;
+
+        if (is_array($cacheId)) {
+            $cacheId = implode($this->cacheSeparator, $cacheId);
+        }
+
+        $cacheId = $this->getCachePrefix() . $this->cacheSeparator .  $cacheId;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -116,7 +122,14 @@ class DatabaseRepository extends BaseManager
             $class = 'Framework\\ORM\\Entity\\' . $this->getEntityName();
 
             $entity = new $class();
-            $entity->id = $id;
+
+            if (!is_array($id)) {
+                $id = [ 'id' => $id ];
+            }
+
+            foreach ($id as $key => $value) {
+                $entity->{$key} = $value;
+            }
 
             $this->refresh($entity);
 
@@ -186,16 +199,16 @@ class DatabaseRepository extends BaseManager
 
         $cachedIds = array();
         foreach ($entities as $entity) {
-            $cachedIds[] = $this->getCachePrefix() . $this->cacheSeparator
-                . $entity->id;
+            $cachedIds[] = $entity->getCachedId();
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $entity) {
             $cacheId = explode($this->cacheSeparator, $entity);
+            array_shift($cacheId);
 
-            $entity = $this->find($cacheId[count($cacheId) - 1]);
+            $entity = $this->find($cacheId[0]);
             if ($entity) {
                 $entities[] = $entity;
             }
@@ -252,7 +265,7 @@ class DatabaseRepository extends BaseManager
     {
         if (empty($entity->id)) {
             throw new EntityNotFoundException(
-                "Could not find notification with id = 'null'"
+                "Could not find entity with id = 'null'"
             );
         }
 

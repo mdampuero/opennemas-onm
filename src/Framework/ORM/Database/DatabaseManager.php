@@ -114,6 +114,7 @@ class DatabaseManager
 
         $name   = explode('.', $name);
         $entity = $name[count($name) - 1];
+        $entity = str_replace('_', '', $entity);
 
         if (count($name) == 2 && $name[0] === 'manager') {
             $cache  = $this->mcache;

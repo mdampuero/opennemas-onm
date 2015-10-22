@@ -254,7 +254,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
-                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()" ng-click="markFixedAsRead()">
+                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
                     <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">

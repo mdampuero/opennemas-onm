@@ -113,9 +113,9 @@
             $scope.notification.end = $scope.notification.end.toString();
           }
 
-          itemService.save('manager_ws_notification_create', $scope.instance)
-            .success(function (response) {
-              messenger.post({ message: response, type: 'success' });
+          itemService.save('manager_ws_notification_create', $scope.notification)
+            .then(function (response) {
+              messenger.post({ message: response.data, type: 'success' });
 
               if (response.status === 201) {
                 // Get new notification id
@@ -128,7 +128,7 @@
               }
 
               $scope.saving = 0;
-            }).error(function(response) {
+            }, function(response) {
               $scope.saving = 0;
               messenger.post({ message: response, type: 'error' });
             });

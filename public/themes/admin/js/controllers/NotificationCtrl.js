@@ -112,6 +112,13 @@
           });
         };
 
+        /**
+         * @function markFixedAsRead
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Marks fixed notifications as read.
+         */
         $scope.markFixedAsRead = function() {
           if ($scope.isOpen) {
             return;
@@ -171,7 +178,7 @@
           }
 
           $scope.unread = nv.filter(function(a) {
-            return a.is_read == 0;
+            return a.fixed != 1;
           });
 
           $scope.fixed = nv.filter(function(a) {
