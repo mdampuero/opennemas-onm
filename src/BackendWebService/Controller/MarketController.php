@@ -36,8 +36,17 @@ class MarketController extends Controller
             $available[$theme['id']] = $theme['name'];
         }
 
-        $instance  = $this->get('instance');
-        $modules   = $request->request->get('modules');
+        $instance = $this->get('instance');
+        $modules  = $request->request->get('modules');
+        $billing  = $request->request->get('billing');
+
+        $instance = $this->get('instance');
+
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
+        }
+
+        $this->get('instance_manager')->persist($instance);
 
         // Filter request to ignore invalid modules
         $modules = array_filter($modules, function ($e) use ($available) {

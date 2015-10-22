@@ -106,6 +106,36 @@ instances:
             primary: false
             unique: false
             flags: { fulltext: true }
+instance_meta:
+    columns:
+        instance_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        meta_key:
+            type: string
+            options: { default: '', length: 255 }
+        meta_value:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [instance_id, meta_key]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: instance_id
+            columns: [instance_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: meta_key
+            columns: [meta_key]
+            primary: false
+            unique: false
+            flags: {  }
 settings:
     columns:
         name:

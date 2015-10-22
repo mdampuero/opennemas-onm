@@ -30,11 +30,11 @@
 
         /**
          * The type of the modules to list.
-         * 
+         *
          * @type {String}
          */
         $scope.type = 'pack'
-         
+
         /**
          * @function addToCart
          * @memberOf MarketListCtrl
@@ -108,38 +108,6 @@
           }
 
           return true;
-        };
-
-        /**
-         * @function checkout
-         * @memberOf MarketListctrl
-         *
-         * @description
-         *   Opens a modal window to confirm the cart.
-         */
-        $scope.checkout = function() {
-          var modal = $modal.open({
-            keyboard: false,
-            templateUrl: 'modal-checkout',
-            backdrop: 'static',
-            controller: 'MarketModalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  cart: $scope.cart
-                };
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (!response) {
-              return;
-            }
-
-            $scope.cart = [];
-            $analytics.pageTrack('/market/checkout/done');
-          });
         };
 
         /**

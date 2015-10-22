@@ -50,7 +50,7 @@
 
           var getType = {};
           if (success && getType.toString.call(success) === '[object Function]') {
-            success($modalInstance);
+            success($modalInstance, $scope.template);
           } else {
             $modalInstance.close(true);
           }

@@ -4,16 +4,11 @@
   {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
-  {if $master}
-  <style>
-    .wizard-step { width: 230px; }
-  </style>
-  {/if}
 {/block}
 
 {block name="body"}
-  <div class="wizard-wrapper clearfix" ng-controller="GettingStartedCtrl">
-    <div class="wizard-container welcome active" ng-class="{ 'active': !step || step == 1 }">
+<div class="wizard-wrapper clearfix" ng-class="{ 'active': previous }" ng-controller="GettingStartedCtrl">
+    <div class="wizard-container welcome" ng-class="{ 'active': step == 1, 'previous': previous == 1 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
@@ -32,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="wizard-container terms-and-conditions" ng-class="{ 'active': step == 2 }">
+    <div class="wizard-container terms-and-conditions" ng-class="{ 'active': step == 2, 'previous': previous == 2 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <p>
@@ -47,7 +42,7 @@
             <label for="accept-terms">
               {t}Accept the terms of use{/t}
             </label>
-            <div class="arrow"></div>
+            <div class="arrow hidden-sm hidden-xs" ng-class="{ 'warning': warning && !termsAccepted }"></div>
           </div>
         </div>
         <div class="wizard-button">
@@ -57,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="wizard-container help" ng-class="{ 'active': step == 3 }">
+    <div class="wizard-container help" ng-class="{ 'active': step == 3, 'previous': previous == 3 }">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
@@ -67,32 +62,32 @@
           {t}You can read and learn how to use your Opennemas by using our online documentation and videos.
           Take a look around and you will find it.{/t}
         </p>
-        <div class="help-items-wrapper clearfix">
-          <div class="help-item">
-            <div class="orb">
+        <ul class="wizard-list clearfix">
+          <li class="wizard-list-item">
+            <div class="wizard-list-item-icon">
               <i class="fa fa-support fa-3x"></i>
             </div>
-            <div class="item-text">
+            <div class="wizard-list-item-text">
               {t escape=off}Our <a href="http://help.opennemas.com/" target="_blank">knownledge base</a> has manuals and howtos about how to create contents and improve your newspaper.{/t}
             </div>
-          </div>
-          <div class="help-item">
-            <div class="orb">
+          </li>
+          <li class="wizard-list-item">
+            <div class="wizard-list-item-icon">
               <i class="fa fa-youtube fa-3x"></i>
             </div>
-            <div class="item-text">
+            <div class="wizard-list-item-text">
               {t escape=off}See our <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank">video tutorials</a> for getting step-by-step guidance.{/t}
             </div>
-          </div>
-          <div class="help-item">
-            <div class="orb">
+          </li>
+          <li class="wizard-list-item">
+            <div class="wizard-list-item-icon">
               <i class="fa fa-question fa-3x"></i>
             </div>
-            <div class="item-text">
+            <div class="wizard-list-item-text">
               {t escape=off}If you need further information you can always contact us by using the <span class="fa fa-support"></span> Help button in the upper right corner.{/t}
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
         <div class="wizard-button">
           <button class="btn btn-block btn-success" ng-click="goToStep(4)">
             <h4>{t}Next{/t}</h4>
@@ -100,107 +95,109 @@
         </div>
       </div>
     </div>
-    {if $master}
-    <div class="wizard-container ready" ng-class="{ 'active': step == 4 }">
-      <div class="wizard-overlay"></div>
-      <div class="wizard-content">
-        <div class="wizard-title">
-          <h1>{t}That's it!{/t}</h1>
-        </div>
-        <h4>{t}You can start to use your newspaper.{/t}</h4>
-        <p>
-          {t}Hope you will enjoy opennemas!{/t}
-        </p>
-        <div class="wizard-button">
-          <a class="btn btn-block btn-success" href="{url name='admin_getting_started_finish'}">
-            <h4>{t}Finish{/t}</h4>
-          </a>
-        </div>
-      </div>
-    </div>
-    {else}
-    <div class="wizard-container social-networks" ng-class="{ 'active': step == 4 }">
-      <div class="wizard-overlay"></div>
-      <div class="wizard-content">
-        <div class="wizard-title">
-          <h1>{t}Do you have a Facebook or a Twitter account?{/t}</h1>
-        </div>
-        <p>{t}Then you can associate those accounts to access your opennemas. It will make easier to get into your administration panel.{/t}</p>
-        <div class="social-items-wrapper clearfix">
-          <div class="social-item">
-            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook' style='orb'}" frameborder="0"></iframe>
+    {if $smarty.session._sf2_attributes.user->isAdmin()}
+      <div class="wizard-container market" ng-class="{ 'active': step == 4, 'previous': previous == 4 }">
+        <div class="wizard-overlay"></div>
+        <div class="wizard-content">
+          <div class="wizard-title">
+            <h1>{t}Opennemas Market{/t}</h1>
           </div>
-          <div class="social-item">
-            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter' style='orb'}" frameborder="0"></iframe>
+          <p>{t}Find and try new add-ons and take your newspaper to the next level.{/t}</p>
+          <ul class="wizard-list clearfix">
+            <li class="wizard-list-item">
+              <div class="wizard-list-item-icon">
+                <i class="fa fa-dropbox fa-3x"></i>
+              </div>
+              <div class="wizard-list-item-text">
+                {t escape=off}Do you need more? Check our packs and power your newspaper with extra features to make it the best.{/t}
+              </div>
+            </li>
+            <li class="wizard-list-item">
+              <div class="wizard-list-item-icon">
+                <i class="fa fa-cube fa-3x"></i>
+              </div>
+              <div class="wizard-list-item-text">
+                {t escape=off}We offer a huge list of add-ons to improve your experience. Check our market and pay only for what you really want.{/t}
+              </div>
+            </li>
+            <li class="wizard-list-item">
+              <div class="wizard-list-item-icon">
+                <i class="fa fa-eye fa-3x"></i>
+              </div>
+              <div class="wizard-list-item-text">
+                {t escape=off}Make your own style. Choose a template or request a exclusive design to make your newspaper look awesome.{/t}
+              </div>
+            </li>
+          </ul>
+          <div class="wizard-button">
+            <button class="btn btn-block btn-success" ng-click="goToStep(5)">
+              <h4>{t}Next{/t}</h4>
+            </button>
           </div>
         </div>
-        <div class="wizard-button">
-          <button class="btn btn-block btn-success" ng-click="goToStep(5)">
-            <h4>{t}Next{/t}</h4>
-          </button>
-        </div>
       </div>
-    </div>
-    <div class="wizard-container ready" ng-class="{ 'active': step == 5 }">
-      <div class="wizard-overlay"></div>
-      <div class="wizard-content">
-        <div class="wizard-title">
-          <h1>{t}That's it!{/t}</h1>
-        </div>
-        <h4>{t}You can start to use your newspaper.{/t}</h4>
-        <p>
-          {t}Hope you will enjoy opennemas!{/t}
-        </p>
-        <div class="wizard-button">
-          <a class="btn btn-block btn-success" href="{url name='admin_getting_started_finish'}">
-            <h4>{t}Finish{/t}</h4>
-          </a>
-        </div>
-      </div>
-    </div>
     {/if}
-    <div class="wizard-footer">
-      <div class="wizard-footer-wrapper">
-        <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
-          <div class="wizard-orb">
-            <h4>1</h4>
+    <div class="wizard-container ready" ng-class="{ 'active': step == {if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if},  'previous': previous == {if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if}}">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}That's it!{/t}</h1>
+        </div>
+        {if !$smarty.session._sf2_attributes.user->isMaster()}
+          <h4>{t}Wait...Do you have a Facebook or a Twitter account?{/t}</h4>
+          <p>
+            {t}Then you can associate those accounts to access your opennemas. It will make easier to get into your administration panel.{/t}
+          </p>
+          <div class="social-items-wrapper clearfix">
+            <div class="social-item">
+              <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook' style='orb'}" frameborder="0"></iframe>
+            </div>
+            <div class="social-item">
+              <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter' style='orb'}" frameborder="0"></iframe>
+            </div>
           </div>
-          <h5>{t}Welcome!{/t}</h5>
-        </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="goToStep(2)">
-          <div class="wizard-orb">
-            <h4>2</h4>
-          </div>
-          <h5>{t}Terms & conditions{/t}</h5>
-        </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
-          <div class="wizard-orb">
-            <h4>3</h4>
-          </div>
-          <h5>{t}Getting help{/t}</h5>
-        </button>
-        {if $master}
-        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
-          <div class="wizard-orb">
-            <h4>4</h4>
-          </div>
-          <h5>{t}Ready!{/t}</h5>
-        </button>
-        {else}
-        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
-          <div class="wizard-orb">
-            <h4>4</h4>
-          </div>
-          <h5>{t}Social Network{/t}</h5>
-        </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="goToStep(5)" ng-disabled="!termsAccepted">
-          <div class="wizard-orb">
-            <h4>5</h4>
-          </div>
-          <h5>{t}Ready!{/t}</h5>
-        </button>
         {/if}
+        <h4>{t}Now, you can start to use your newspaper.{/t}</h4>
+        <p>
+          {t}Hope you will enjoy opennemas!{/t}
+        </p>
+        <div class="wizard-button">
+          <a class="btn btn-block btn-success" href="{url name='admin_getting_started_finish'}">
+            <h4>{t}Finish{/t}</h4>
+          </a>
+        </div>
       </div>
+    </div>
+    <div class="wizard-footer">
+      <ul class="wizard-step-list">
+        <li class="wizard-step-list-item" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
+          <div class="wizard-step-list-item-fill">
+            <h5 class="wizard-step-list-item-text top">{t}Welcome!{/t}</h5>
+          </div>
+        </li>
+        <li class="wizard-step-list-item"  ng-class="{ 'active': step > 1 }" ng-click="goToStep(2)">
+          <div class="wizard-step-list-item-fill">
+            <h5 class="wizard-step-list-item-text bottom">{t}Terms & conditions{/t}</h5>
+          </div>
+        </li>
+        <li class="wizard-step-list-item"  ng-class="{ 'active': step > 2 }" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
+          <div class="wizard-step-list-item-fill">
+            <h5 class="wizard-step-list-item-text top">{t}Help{/t}</h5>
+          </div>
+        </li>
+        {if $smarty.session._sf2_attributes.user->isAdmin()}
+          <li class="wizard-step-list-item" ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
+            <div class="wizard-step-list-item-fill">
+              <h5 class="wizard-step-list-item-text bottom">{t}Opennemas Market{/t}</h5>
+            </div>
+          </li>
+        {/if}
+        <li class="wizard-step-list-item"  ng-class="{ 'active': step > {if $smarty.session._sf2_attributes.user->isAdmin()}4{else}3{/if} }" ng-click="goToStep({if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if})" ng-disabled="!termsAccepted">
+          <div class="wizard-step-list-item-fill">
+            <h5 class="wizard-step-list-item-text top">{t}Ready!{/t}</h5>
+          </div>
+        </li>
+      </li>
     </div>
   </div>
 {/block}

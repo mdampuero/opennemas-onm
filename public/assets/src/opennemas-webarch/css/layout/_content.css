@@ -70,15 +70,6 @@
   padding-right: 15px;
 }
 
-.infinite-row {
-  margin-right: -15px;
-}
-
-.infinite-row [class^=col-] {
-  padding: 0;
-  padding-right: 15px;
-}
-
 .table-wrapper {
   overflow-x: auto;
 }
@@ -118,7 +109,7 @@
 }
 
 @media (min-width: 1200px) {
-  .infinite-row .col-lg-1-25 {
+  .row .col-lg-1-25 {
     width: 12.5%;
   }
 }

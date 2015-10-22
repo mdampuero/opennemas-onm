@@ -43,6 +43,9 @@
             max_mailing:   0,
             max_users:   0,
             time_zone:     '335'
+          },
+          metas: {
+            billing: []
           }
         };
 
@@ -308,6 +311,10 @@
           if (data.instance) {
             // Initialize instance
             $scope.instance = data.instance;
+
+            if (!$scope.instance.metas) {
+              $scope.instance.metas = {};
+            }
           } else {
             // Select Base plan as default
             for (var i = 0; i < data.template.available_modules.length; i++) {
@@ -360,13 +367,6 @@
           },
           true
         );
-
-        // Copy of changed_in_modules array
-        if (data.instance) {
-          $scope.changed_modules = angular.copy(data.instance.changes_in_modules);
-        } else {
-          $scope.changed_modules = '';
-        }
 
         // Initializes the selected flags
         for (var i = 0; i < $scope.template.plans.length; i++) {
