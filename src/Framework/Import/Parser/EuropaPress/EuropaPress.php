@@ -244,13 +244,14 @@ class EuropaPress extends Parser
 
         $resource = new Resource();
 
-        $resource->id           = $this->getId($data) . '.photo';
+        $resource->agency_name  = 'EuropaPress';
         $resource->created_time = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
-        $resource->file_path    = (string) $data->FOTO->NOMBRE;
-        $resource->file_type    = 'image/' . substr($data->FOTO->EXTENSION, 1);
         $resource->extension    = substr($data->FOTO->EXTENSION, 1);
-        $resource->name         = (string) $data->FOTO->NOMBRE;
+        $resource->file_name    = (string) $data->FOTO->NOMBRE;
+        $resource->file_path    = (string) $data->FOTO->NOMBRE;
+        $resource->id           = $this->getId($data) . '.photo';
+        $resource->image_type    = 'image/' . $resource->extension;
         $resource->title        = (string) $data->FOTO->PIE;
         $resource->type         = 'photo';
         $resource->urn          = $this->getUrn($data, 'photo');
