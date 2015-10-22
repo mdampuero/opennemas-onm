@@ -73,12 +73,15 @@ class NewsMLEuropaPress extends NewsML
 
         // ISO 8601 doesn't match this date 20111211T103900+0000
         $date = preg_replace('@\+(\d){4}$@', '', $date);
-
-        return \DateTime::createFromFormat(
+        $date = \DateTime::createFromFormat(
             'Y-m-d\TH:i:s',
             $date,
             new \DateTimeZone('UTC')
         );
+
+        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+
+        return $date;
     }
 
     /**
