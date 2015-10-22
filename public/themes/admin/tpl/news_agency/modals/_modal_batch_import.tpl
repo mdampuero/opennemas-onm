@@ -55,14 +55,15 @@
   <span ng-show="template.type == 'article'">
     {capture name=article_list_url}{url name=admin_articles}{/capture}
     {capture name=frontpage_list_url}{url name=admin_frontpage_list}{/capture}
-    {t 1=$article_list_url 2=$frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
+    {t 1=$smarty.capture.article_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="template.type == 'opinion'">
     {capture name=opinion_list_url}{url name=admin_opinions}{/capture}
-    {t 1=$opinion_list_url 2=$frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
+    {t 1=$smarty.capture.opinion_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="!template.type">
-    {t escape=off 1={url name=admin_images}}Your photos have been published, check them in the <a href="%1">photo list</a>{/t}
+    {capture name=images_list_url}{url name=admin_images}{/capture}
+    {t escape=off 1=$smarty.capture.images_list}Your photos have been published, check them in the <a href="%1">photo list</a>{/t}
   </span>
 </div>
 <div class="modal-footer">
