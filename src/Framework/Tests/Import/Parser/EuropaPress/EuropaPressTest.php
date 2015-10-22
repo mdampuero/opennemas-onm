@@ -56,14 +56,15 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->photo->created_time =
             $this->photo->created_time->format('Y-m-d H:i:s');
 
-        $this->photo->id         = '20150921181604.photo';
-        $this->photo->file_path  = 'photo1.jpg';
-        $this->photo->file_type  = 'image/jpg';
-        $this->photo->extension  = 'jpg';
-        $this->photo->name       = 'photo1.jpg';
-        $this->photo->title      = 'Photo description';
-        $this->photo->type       = 'photo';
-        $this->photo->urn        =
+        $this->photo->agency_name = 'EuropaPress';
+        $this->photo->id          = '20150921181604.photo';
+        $this->photo->extension   = 'jpg';
+        $this->photo->file_path   = 'photo1.jpg';
+        $this->photo->file_name   = 'photo1.jpg';
+        $this->photo->image_type  = 'image/jpg';
+        $this->photo->title       = 'Photo description';
+        $this->photo->type        = 'photo';
+        $this->photo->urn         =
             'urn:europapress:europapress:20150921181604:photo:20150921181604';
 
         $this->text = new Resource();
