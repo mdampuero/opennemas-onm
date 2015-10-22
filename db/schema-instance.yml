@@ -1283,6 +1283,21 @@ users_content_categories:
             primary: true
             unique: true
             flags: {  }
+user_notification:
+    columns:
+        user_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        notification_id:
+            type: integer
+            options: { default: null, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [user_id, notification_id]
+            primary: true
+            unique: true
+            flags: {  }
 videos:
     columns:
         pk_video:

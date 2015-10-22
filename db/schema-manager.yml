@@ -169,9 +169,6 @@ notification:
         fixed:
             type: boolean
             options: { default: 0 }
-        is_read:
-            type: boolean
-            options: { default: 0 }
     index:
         -
             name: PRIMARY
