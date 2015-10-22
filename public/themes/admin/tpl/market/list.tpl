@@ -243,13 +243,13 @@
               </div>
             </div>
           </div>
-          <div class="module-tools clearfix">
+          <div class="module-tools row clearfix">
             <div class="col-xs-6">
               <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
                 {t}More info{/t}
             </div>
             <div class="col-xs-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)" ng-if="item.price.month !== 0">
                 <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
                 <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
                 <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
