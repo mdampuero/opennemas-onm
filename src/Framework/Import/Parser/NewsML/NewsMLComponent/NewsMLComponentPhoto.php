@@ -313,8 +313,8 @@ class NewsMLComponentPhoto extends NewsML
 
         $photo->agency_name  = $this->bag['agency_name'];
         $photo->extension    = substr($filename, strrpos($filename, '.') + 1);
-        $photo->file_path    = $this->getUrl($file);
         $photo->file_name    = $filename;
+        $photo->file_path    = $this->getUrl($file);
         $photo->height       = $this->getHeight($file);
         $photo->id           = $this->getId($data);
         $photo->image_type   = 'image/' . $photo->extension;
