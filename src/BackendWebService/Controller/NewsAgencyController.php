@@ -459,7 +459,7 @@ class NewsAgencyController extends Controller
         $resource   = $repository->find($source, $id);
 
         if (empty($category) && !empty($resource->category)) {
-            $category = $this->getSimilarCategory($resource->category);
+            $category = $this->getSimilarCategoryIdForElement($resource->category);
         }
 
         if (empty($category)) {
