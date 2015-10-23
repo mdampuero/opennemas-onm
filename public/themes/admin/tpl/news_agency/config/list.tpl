@@ -65,7 +65,7 @@
                   <div class="listing-inline-actions">
                     <a class="link" href="[% edit(item.id, 'backend_news_agency_server_show') %]">
                       <i class="fa fa-pencil"></i>
-                      {t}Editar{/t}
+                      {t}Edit{/t}
                     </a>
                     {acl isAllowed="ONLY_MASTERS"}
                       <button class="btn btn-link"  ng-click="clean($index, item.id)">

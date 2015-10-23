@@ -86,10 +86,16 @@ class NewsAgencyController extends Controller
         ], 201);
 
         if (count($imported) === 1 && $edit) {
+            $route = 'admin_article_show';
+
+            if ($type === 'opinion') {
+                $route = 'admin_opinion_show';
+            }
+
             $response->headers->add(
                 [
                     'location' => $this->generateUrl(
-                        'admin_article_show',
+                        $route,
                         [ 'id' => $imported[0] ]
                     )
                 ]
@@ -145,7 +151,9 @@ class NewsAgencyController extends Controller
 
             foreach ($element->related as $id) {
                 if (!array_key_exists($id, $related)) {
-                    $related[$id] = $repository->find($element->source, $id);
+                    $resource     = $repository->find($element->source, $id);
+                    $related[$id] = $resource;
+                    $urns[]       = $resource->urn;
                 }
             }
         }
@@ -231,7 +239,11 @@ class NewsAgencyController extends Controller
 
         // Get categories
         $this->ccm  = \ContentCategoryManager::get_instance();
-        $categories = $this->ccm->findAll();
+
+        $categories = array_filter($this->ccm->findAll(), function ($category) {
+            return $category->internal_category == '1';
+        });
+
 
         $params['categories'] = array_map(function ($category) {
             return [ 'name' => $category->title, 'value' => $category->id ];
@@ -510,20 +522,9 @@ class NewsAgencyController extends Controller
 
                     $content = $em->findOneBy($criteria, []);
 
-                    $imported = 0;
-                    if (empty($content)) {
-                        $imported = $this->import(
-                            $related->id,
-                            $related->source,
-                            $category,
-                            $type,
-                            $author
-                        );
-                    }
-
-                    $content = $em->find('Content', $imported);
-
-                    if ($content->content_type_name === 'photo') {
+                    if (!empty($content)
+                        && $content->content_type_name === 'photo'
+                    ) {
                         if (!array_key_exists('img1', $data)
                             || empty($data['img1'])
                         ) {
@@ -541,7 +542,8 @@ class NewsAgencyController extends Controller
                         }
                     }
 
-                    if ($type === 'article'
+                    if (!empty($content)
+                        && $type === 'article'
                         && $content->content_type_name === 'video'
                     ) {
                         if (!array_key_exists('fk_video', $data)) {
@@ -568,13 +570,13 @@ class NewsAgencyController extends Controller
 
             $data = [
                 'title'             => $resource->title,
-                'description'       => $resource->title,
+                'description'       => $resource->summary,
                 'local_file'        => $filePath,
                 'fk_category'       => 0,
                 'category_name'     => '',
                 'metadata'          => \Onm\StringUtils::getTags($resource->title),
-                'author_name'       => '&copy; EFE '.date('Y'),
                 'original_filename' => $resource->file_name,
+                'urn_source'        => $resource->urn,
             ];
         }
 

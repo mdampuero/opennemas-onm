@@ -106,7 +106,7 @@ class HttpRss extends Http
         $fullBody = (string) htmlentities($content->description) . '<br>'
             . htmlentities($content->children('content', true));
 
-        $article->id               = md5((string) $content->guid);
+        $article->id               = md5($path);
         $article->title            = (string) $content->title;
         $article->body             = $fullBody;
         $article->created_datetime = new \DateTime($content->pubDate);

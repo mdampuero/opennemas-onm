@@ -9,8 +9,8 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
     /**
      * Closes the current modal
      */
-    $scope.close = function() {
-        $modalInstance.close(false);
+    $scope.close = function(response) {
+      $modalInstance.close(response);
     };
 
     /**
@@ -21,7 +21,7 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
 
         var getType = {};
         if (success && getType.toString.call(success) === '[object Function]') {
-            success().then(function (response) {
+            success($modalInstance, $scope.template).then(function (response) {
                 $modalInstance.close(response);
                 $scope.loading = 0;
             });

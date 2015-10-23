@@ -48,25 +48,52 @@
 
           var url = routing.generate('backend_ws_news_agency_import');
           var data = {
-            author:   $scope.author,
-            category: $scope.category,
+            author:   $scope.template.author,
+            category: $scope.template.category,
             ids:      ids,
-            type:     $scope.type
+            type:     $scope.template.type
           };
 
           if (edit) {
             data.edit = 1;
+          } else {
+            $scope.loading = true;
           }
 
           $http.post(url, data).then(function(response) {
+            $scope.loading = false;
             if (response.status === 201 && response.headers('location')) {
               $window.location.href = response.headers('location');
             } else {
-              $modalInstance.close(response.data);
+              if (!edit) {
+                $scope.imported = true;
+                template.messages = response.data.messages;
+              } else {
+                $modalInstance.close(response.data);
+              }
             }
           }, function() {
+            $scope.loading = false;
             $modalInstance.close(false);
           });
+        };
+
+        /**
+         * @function isEditable
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   Checks if you can edit the content after importing.
+         *
+         * @return {Boolean} True if content could be editable after importing.
+         *                   Otherwise, returns false.
+         */
+        $scope.isEditable = function() {
+          var texts = $scope.template.contents.filter(function(a) {
+            return a.type === 'text';
+          });
+
+          return texts.length === 1;
         };
 
         /**

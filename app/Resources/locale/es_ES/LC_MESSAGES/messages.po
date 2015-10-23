@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-02 10:55+0200\n"
-"PO-Revision-Date: 2015-10-02 10:56+0200\n"
+"POT-Creation-Date: 2015-10-21 13:50+0200\n"
+"PO-Revision-Date: 2015-10-21 13:51+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1028,47 +1028,11 @@ msgstr ""
 "tu módulo de importación"
 
 #, php-format
-msgid "Last sync was %d minutes ago."
-msgstr "La última sincronización se llevó a cabo hace %d minuto/s."
-
-#, php-format
-msgid "Unable to find an element with the id \"%d\""
-msgstr "No se pudo encontrar un elemento con el identificador «%d»"
-
-msgid ""
-"This content was imported before. You may cause a content duplication while "
-"importing it."
-msgstr ""
-"Este contenido ya se ha importado. Si lo importa puede causar un duplicado "
-"de contenidos."
-
-#, php-format
 msgid "%s item(s) imported successfully"
 msgstr "%s elemento(s) importado(s) correctamente."
 
 msgid "The article you want to import doesn't exists."
 msgstr "El artículo que quieres importar no existe."
-
-#, php-format
-msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
-msgstr "Si estás seguro <a href=\"%s\">intenta desbloquearlo</a>"
-
-msgid "News agency server updated."
-msgstr "Servidor de agencia de noticias actualizado."
-
-msgid "News agency server added."
-msgstr "Servidor de agencia de noticias añadido."
-
-#, php-format
-msgid "Source identifier \"%d\" not valid"
-msgstr "Identificador de origen «%d» no válido"
-
-msgid "News agency server deleted."
-msgstr "Servidor de agencia de noticias eliminado."
-
-#, php-format
-msgid "Files for \"%s\" cleaned."
-msgstr "Archivos de «%s» limpiados."
 
 msgid "Please specify the article to import."
 msgstr "Debes especificar un articulo para importarlo."
@@ -1078,6 +1042,12 @@ msgstr "La categoría que seleccionaste no existe."
 
 msgid "Please assign the category where import this article"
 msgstr "Debes asignar la categoría donde quieres importar este artículo"
+
+msgid "News agency server added."
+msgstr "Servidor de agencia de noticias añadido."
+
+msgid "News agency server updated."
+msgstr "Servidor de agencia de noticias actualizado."
 
 msgid "Y-m-d"
 msgstr "d-m-Y"
@@ -1731,6 +1701,33 @@ msgstr ""
 "interesante del gestor de videos, es que la apariencia al usuario es igual "
 "que la de youtube.</p>"
 
+#, php-format
+msgid "%d contents imported successfully"
+msgstr "%d elemento(s) importado(s) correctamente."
+
+#, php-format
+msgid "Last sync was %d minutes ago."
+msgstr "La última sincronización se llevó a cabo hace %d minuto/s."
+
+msgid "Text"
+msgstr "Texto"
+
+msgid "Photo"
+msgstr "Foto"
+
+#, php-format
+msgid "Source identifier \"%d\" not valid"
+msgstr "Identificador de origen «%d» no válido"
+
+msgid "Files for server deleted successfully."
+msgstr "Ficheros del servidor eliminados correctamente."
+
+msgid "Server updated successfully"
+msgstr "Servidor actualizado correctamente."
+
+msgid "News agency server deleted."
+msgstr "Servidor de agencia de noticias eliminado."
+
 msgid "Newsletter deleted successfully."
 msgstr "Boletín de noticias eliminado correctamente."
 
@@ -1901,6 +1898,12 @@ msgstr "No definido"
 msgid "Application upgraded"
 msgstr "Aplicación actualizada"
 
+msgid "The XML could not be parsed"
+msgstr "No se puede procesar el archivo XML"
+
+msgid "Unable to create a server"
+msgstr "No se pudo crear el nuevo servidor"
+
 msgid "Already voted."
 msgstr "Ya has votado."
 
@@ -2008,11 +2011,6 @@ msgstr "Te has suscrito al boletín de noticias."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Hemos eliminado tu suscripción al boletín de noticias "
-
-msgid "Sorry, that email is already subscribed to our newsletter"
-msgstr ""
-"Lo sentimos, pero el correo electrónico ya está suscrito a nuestro boletín "
-"de noticias."
 
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Hemos eliminado tu suscripción al boletín de noticias"
@@ -2222,18 +2220,9 @@ msgstr "Error al crear una nueva instancia"
 msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
 
-msgid "is now on-line"
-msgstr "está ahora conectado"
-
 #, php-format
-msgid "Seems that the server configuration for %s is not correct."
-msgstr "Parece que la configuración del servidor para %s no es correcta."
-
-#, php-format
-msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
-msgstr ""
-"Se han descargado %d nuevos artículos y se han eliminado %d obsoletos desde "
-"\"%s\"."
+msgid "%s is now on-line"
+msgstr "%s está ahora conectado"
 
 msgid "Frontpage mobile version"
 msgstr "Portada: versión móvil"
@@ -2422,21 +2411,22 @@ msgstr ""
 
 msgid ""
 "<p><small>1. To add more users refer to <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario\">User "
-"Licence Page</a>.</small></p><p><small>2. For more information about storage "
-"or page views please go to our page <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado"
-"\">Page Views and Storage Space</a>.</small></p><p><small>All prices above "
-"do not include VAT (21%).</small></p>"
+"knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario\" "
+"target=\"_blank\">User Licence Page</a>.</small></p><p><small>2. For more "
+"information about storage or page views please go to our page <a href="
+"\"http://help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-"
+"page-views-y-espacio-ocupado\" target=\"_blank\">Page Views and Storage "
+"Space</a>.</small></p><p><small>All prices above do not include VAT (21%).</"
+"small></p>"
 msgstr ""
 "<p><small>1. Para añadir más usuarios consulta nuestra página de <a href="
 "\"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
-"licencias-de-usuario\">Licencias de Usuarios</a>.</small></p><p><small>2. "
-"Para más información sobre páginas vistas o almacenamiento consulta nuestra "
-"página <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
-"precios-opennemas-page-views-y-espacio-ocupado\">Paginas Vistas y Espacio "
-"Ocupado</a>.</small></p><p><small>Todos los precios de arriba no incluyen "
-"IVA (21%).</small></p>"
+"licencias-de-usuario\" target=\"_blank\">Licencias de Usuarios</a>.</small></"
+"p><p><small>2. Para más información sobre páginas vistas o almacenamiento "
+"consulta nuestra página <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/227476-precios-opennemas-page-views-y-espacio-ocupado\" target="
+"\"_blank\">Paginas Vistas y Espacio Ocupado</a>.</small></p><p><small>Todos "
+"los precios de arriba no incluyen IVA (21%).</small></p>"
 
 msgid "Professional pack"
 msgstr "Pack profesional"
@@ -2500,11 +2490,11 @@ msgstr ""
 msgid ""
 "<li>Frontpage customization</li>\n"
 "                        <li>Newsletter manager (<a href=\"http://opennemas."
-"com/pricing?language=en_US#newsletter\">0</a>)</li>"
+"com/pricing?language=en_US#newsletter\" target=\"_blank\">0</a>)</li>"
 msgstr ""
 "<li>Personalización de portadas</li>\n"
 "                        <li>Gestor de boletines (<a href=\"http://opennemas."
-"com/pricing?language=en_US#newsletter\">0</a>)</li>"
+"com/pricing?language=en_US#newsletter\" target=\"_blank\">0</a>)</li>"
 
 msgid "Expert pack"
 msgstr "Pack experto"
@@ -2779,7 +2769,8 @@ msgid ""
 "                                <li>\n"
 "                                    Support cost after launch\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\">\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">\n"
 "                                        http://help.opennemas.com/"
 "knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\n"
 "                                    </a>\n"
@@ -2851,8 +2842,8 @@ msgstr ""
 "de plantilla o fuera de tiempo: 1500€</li>\n"
 "                                <li>\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo"
-"\">Preco de desarrollo</a> después de la salida.\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">Preco de desarrollo</a> después de la salida.\n"
 "                                </li>\n"
 "                            </ul>\n"
 "                        </li>\n"
@@ -2916,7 +2907,8 @@ msgid ""
 "                                <li>\n"
 "                                    Support cost after launch\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\">\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">\n"
 "                                        http://help.opennemas.com/"
 "knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\n"
 "                                    </a>\n"
@@ -2970,8 +2962,8 @@ msgstr ""
 "de plantilla o fuera de tiempo: 1500€</li>\n"
 "                                <li>\n"
 "                                    <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo"
-"\">Preco de desarrollo</a> después de la salida.\n"
+"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
+"target=\"_blank\">Preco de desarrollo</a> después de la salida.\n"
 "\t\t\t\t\t</li>\n"
 "                            </ul>\n"
 "                        </li>\n"
@@ -4699,17 +4691,14 @@ msgstr "Ocultar contraseña"
 msgid "Add server"
 msgstr "Añadir servidor"
 
+msgid "No servers available"
+msgstr "No hay servidores disponibles"
+
 msgid "Sync from"
 msgstr "Sincronizar desde"
 
-msgid "Removes the synchronized files for this source"
-msgstr "Elimina los archivos sincronizados para este origen"
-
 msgid "Remove local files"
 msgstr "Eliminar ficheros locales"
-
-msgid "Activate server"
-msgstr "Activar servidor"
 
 msgid "Import"
 msgstr "Importar"
@@ -4766,14 +4755,62 @@ msgstr ""
 "¿Estás seguro que quieres eliminar la configuración del servidor "
 "seleccionado?"
 
-msgid "Import selected items"
-msgstr "Importar elementos seleccionados"
+msgid "Yes, delete it"
+msgstr "Si, eliminar"
 
-msgid "Are you sure you want to import [% selected %] elemets?"
-msgstr "¿Estás seguros de que quieres importar [% selected %] elementos?"
+msgid "Import items"
+msgstr "Importar elementos"
 
-msgid "Yes, import them"
-msgstr "Si, importarlos"
+msgid ""
+"Are you sure you want to import [% template.contents.length %] elements?"
+msgstr ""
+"¿Estás seguro de que quieres importar [% template.contents.length %] "
+"elementos?"
+
+msgid "as"
+msgstr "como"
+
+msgid "in"
+msgstr "en"
+
+msgid "Choose a category..."
+msgstr "Seleccione una categoría..."
+
+msgid "by"
+msgstr "por"
+
+msgid "Choose an author..."
+msgstr "Seleccione un autor..."
+
+msgid ""
+"Your articles have been published, check them in the <a href=\"%1\">article "
+"list</a> or you can add them to one of your <a href=\"%2\">frontpages</a>"
+msgstr ""
+"Se han publicado tus artículos, puedes verlos en el <a href=\"%1\">listado "
+"de artículos</a> o puedes añadirlos a una de tus <a href=\"%2\">portadas</a>"
+
+msgid ""
+"Your opinions have been published, check them in the <a href=\"%1\">opinions "
+"list</a>or you can add them to one of your <a href=\"%2\">frontpages</a>"
+msgstr ""
+"Se han publicado tus opiniones, puedes verlas en el <a href=\"%1\">listado "
+"de artículos</a> o puedes añadirlas a una de tus <a href=\"%2\">portadas</a>"
+
+msgid ""
+"Your photos have been published, check them in the <a href=\"%1\">photo "
+"list</a>"
+msgstr ""
+"Se han publicado tus fotos, puedes verlas en el <a href=\"%1\">listado de "
+"fotos</a>"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Yes, import and publish"
+msgstr "Si, importar y publicar"
+
+msgid "Yes, import and edit"
+msgstr "Si, importar y editar"
 
 msgid "Syncing from sources"
 msgstr "Sincronizando con los orígenes"
@@ -4785,23 +4822,17 @@ msgstr ""
 msgid "Stop sync"
 msgstr "Detener sincronización"
 
-msgid "Sync with server"
-msgstr "Sincronizar con servidor"
+msgid "Content preview"
+msgstr "Previsualización de contenido"
 
-msgid "Reload list"
-msgstr "Recargar listado"
-
-msgid "Batch import"
-msgstr "Importar en lote"
-
-msgid "Search by title or content"
-msgstr "Buscar por título o contenido"
+msgid "Sync"
+msgstr "Sincronizar"
 
 msgid "Source"
 msgstr "Origen"
 
-msgid "-- All --"
-msgstr "-- Todos -- "
+msgid "Reload"
+msgstr "Recargar"
 
 msgid "There is no elements to import"
 msgstr "No hay ningún elemento para poder importarlo"
@@ -4815,20 +4846,36 @@ msgstr ""
 msgid "Origin"
 msgstr "Origen"
 
-msgid "With image"
-msgstr "Con imagen"
+msgid "Imported"
+msgstr "Importado"
 
-msgid "This new has attached images"
-msgstr "Esta noticia tiene imagenes asociadas"
+msgid "View content"
+msgstr "Ver contenido"
 
-msgid "With video"
-msgstr "Con vídeo"
+msgid "Unable to find any image that matches your search."
+msgstr "No se pudieron encontrar imágenes que coincidan con tu búsqueda."
 
-msgid "View contents"
-msgstr "Ver contenidos"
+msgid ""
+"Maybe changing any filter could help or add one using the \"Upload\" button "
+"above."
+msgstr ""
+"Puede que cambiando los filtros ayude o tambien puede usar el botón «Subir» "
+"de arriba."
 
-msgid "Already imported"
-msgstr "Ya importado"
+msgid "No item selected"
+msgstr "No se seleccionaron elementos"
+
+msgid "Click in one item to show information about it"
+msgstr "Pulsa sobre un elemento para mostrar información sobre él."
+
+msgid "Image details"
+msgstr "Detalles de la imagen"
+
+msgid "Size:"
+msgstr "Tamaño:"
+
+msgid "Image preview"
+msgstr "Previsualización de imagen"
 
 msgid "Importing element"
 msgstr "Importar elemento"
@@ -5267,9 +5314,6 @@ msgstr "Nombre en pantalla"
 msgid "User name"
 msgstr "Nombre de usuario"
 
-msgid "Photo"
-msgstr "Foto"
-
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
@@ -5433,9 +5477,6 @@ msgid ""
 msgstr ""
 "Completa el formulario de debajo con el título y la URL externa que quieres "
 "añadir al menú."
-
-msgid "Close"
-msgstr "Cerrar"
 
 msgid "Add item"
 msgstr "Añadir elemento"
@@ -5972,12 +6013,6 @@ msgstr "Debes tener %1 vídeos para la portada"
 msgid "Mosaic"
 msgstr "Mosaico"
 
-msgid "No item selected"
-msgstr "No se seleccionaron elementos"
-
-msgid "Click in one item to show information about it"
-msgstr "Pulsa sobre un elemento para mostrar información sobre él."
-
 msgid "Video details"
 msgstr "Detalles del vídeo"
 
@@ -6216,6 +6251,9 @@ msgid ""
 msgstr ""
 "Google DFP usa un identificador de unidad para identificar una publicidad. "
 "Completa el id de zona desde tu panel de Google DFP."
+
+msgid "Add another size"
+msgstr "Añadir otro tamaño"
 
 msgid "When to show this ad"
 msgstr "Cuando mostrar este anuncio"
@@ -6626,9 +6664,6 @@ msgstr "Título original:"
 msgid "Resolution:"
 msgstr "Resolución:"
 
-msgid "Size:"
-msgstr "Tamaño:"
-
 msgid "Used for searches and automated suggestions."
 msgstr "Usado para búsquedas y sugerencias automáticas."
 
@@ -6656,16 +6691,6 @@ msgstr "No está disponible ningún dato IPTC."
 msgid "Search by description"
 msgstr "Buscar por descripción"
 
-msgid "Unable to find any image that matches your search."
-msgstr "No se pudieron encontrar imágenes que coincidan con tu búsqueda."
-
-msgid ""
-"Maybe changing any filter could help or add one using the \"Upload\" button "
-"above."
-msgstr ""
-"Puede que cambiando los filtros ayude o tambien puede usar el botón «Subir» "
-"de arriba."
-
 msgid "Information"
 msgstr "Información"
 
@@ -6681,17 +6706,14 @@ msgstr "Descripción no disponible"
 msgid "No tags"
 msgstr "Sin etiquetas"
 
-msgid "Image details"
-msgstr "Detalles de la imagen"
-
-msgid "Image preview"
-msgstr "Previsualización de imagen"
-
 msgid "Restore"
 msgstr "Restaurar"
 
 msgid "Content Type"
 msgstr "Tipo de contenido"
+
+msgid "-- All --"
+msgstr "-- Todos -- "
 
 msgid "No contents in the trash that matches your search."
 msgstr ""
@@ -7167,9 +7189,6 @@ msgstr "Autor:"
 
 msgid "Submitted on:"
 msgstr "Enviado el:"
-
-msgid "by"
-msgstr "por"
 
 msgid "month"
 msgstr "mes"
@@ -8240,6 +8259,49 @@ msgstr ""
 "Aquí puede eliminar en lote, caches, compiles, sesiones y otras cosas. de "
 "una instancia específica."
 
+msgid "Our Videos"
+msgstr "Nuestros vídeos"
+
+msgid "Our News"
+msgstr "Nuestras noticias"
+
+msgid "Our Twitter"
+msgstr "Nuestro twitter"
+
+msgid "Our Facebook"
+msgstr "Nuestro facebook"
+
+msgid "Our Google+"
+msgstr "Nuestro Google+"
+
+msgid "Our Company"
+msgstr "Nuestra empresa"
+
+msgid "Please do not hesitate to share feedback, questions or doubts with us"
+msgstr ""
+"Si tiene cualquier pregunta no dude en ponerse en contacto con nosotros "
+"mediante"
+
+msgid "<strong>ticketing system"
+msgstr "<strong>o mediante nuestro servicio de incidencias"
+
+msgid "(also available from Control Panel on the top right);"
+msgstr "(también disponible en la esquina superior del panel de control);"
+
+msgid "Regards,"
+msgstr "Atentamente,"
+
+msgid ""
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Team</span>"
+msgstr ""
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Equipo</span>"
+
 msgid "New instance"
 msgstr "Nueva instancia"
 
@@ -8379,6 +8441,12 @@ msgstr "#"
 msgid "No rank"
 msgstr "Sin clasificación"
 
+msgid ""
+"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
+msgstr ""
+"¡Bienvenido a Opennemas! Aprende a como publicar tus propias noticias en "
+"solo unos segundos"
+
 msgid "Hi"
 msgstr "Hola"
 
@@ -8411,35 +8479,18 @@ msgid ""
 msgstr ""
 "Como crear/modificar un <strong>artículo</strong> y ponerlo en la Portada"
 
-msgid "How to upload and add <strong>images</strong> to your articles"
+msgid ""
+"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
+"articles&nbsp;"
 msgstr "Como subir <strong>imágenes</strong> a tus artículos"
 
-msgid "How to compose a <strong>frontpage</strong>"
+msgid "How to compose a&nbsp;<strong>frontpage</strong>"
 msgstr "Como componer una <strong>portada</strong>"
 
 msgid "We also have help page \"First Steps in Opennemas\" that should help"
 msgstr ""
 "También disponemos de un articulo de \"Primeros Pasos en Opennemas\" que "
 "podría ayudarte"
-
-msgid ""
-"Please do not hesitate to share feedback, questions or doubts with us via "
-"email at %1 or via our <strong>ticketing system</strong> %2 (also available "
-"from Control Panel on the top right)"
-msgstr ""
-"Por favor no dudes en ponerte en contacto con nosotros si tienes cualquier "
-"duda o pregunta mediante correo electrónico %1 o mediante nuestro "
-"<strong>servicio de incidencias</strong> %2 (también disponible desde el "
-"panel de control)."
-
-msgid ""
-"Regards<br>\n"
-"Opennemas Team<br>\n"
-"Powered by OpenHost SL."
-msgstr ""
-"Atentamente,<br>\n"
-"El equipo de Opennemas<br>\n"
-"Powered by OpenHost SL."
 
 msgid "A new instance has been created"
 msgstr "Se ha creado una nueva instancia"
@@ -8494,6 +8545,88 @@ msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
 
+#~ msgid "WELCOME TO OPENNEMAS"
+#~ msgstr "BIENVENIDO A OPENNEMAS"
+
+#~ msgid "Already imported"
+#~ msgstr "Ya importado"
+
+#, fuzzy
+#~ msgid "Editar"
+#~ msgstr "Editar"
+
+#~ msgid "Unable to find an element with the id \"%d\""
+#~ msgstr "No se pudo encontrar un elemento con el identificador «%d»"
+
+#~ msgid ""
+#~ "This content was imported before. You may cause a content duplication "
+#~ "while importing it."
+#~ msgstr ""
+#~ "Este contenido ya se ha importado. Si lo importa puede causar un "
+#~ "duplicado de contenidos."
+
+#~ msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
+#~ msgstr "Si estás seguro <a href=\"%s\">intenta desbloquearlo</a>"
+
+#~ msgid "Files for \"%s\" cleaned."
+#~ msgstr "Archivos de «%s» limpiados."
+
+#~ msgid "Seems that the server configuration for %s is not correct."
+#~ msgstr "Parece que la configuración del servidor para %s no es correcta."
+
+#~ msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
+#~ msgstr ""
+#~ "Se han descargado %d nuevos artículos y se han eliminado %d obsoletos "
+#~ "desde \"%s\"."
+
+#~ msgid "Removes the synchronized files for this source"
+#~ msgstr "Elimina los archivos sincronizados para este origen"
+
+#~ msgid "Activate server"
+#~ msgstr "Activar servidor"
+
+#~ msgid "Sync with server"
+#~ msgstr "Sincronizar con servidor"
+
+#~ msgid "Batch import"
+#~ msgstr "Importar en lote"
+
+#~ msgid "Search by title or content"
+#~ msgstr "Buscar por título o contenido"
+
+#~ msgid "With image"
+#~ msgstr "Con imagen"
+
+#~ msgid "This new has attached images"
+#~ msgstr "Esta noticia tiene imagenes asociadas"
+
+#~ msgid "With video"
+#~ msgstr "Con vídeo"
+
+#~ msgid ""
+#~ "Please do not hesitate to share feedback, questions or doubts with us via "
+#~ "email at %1 or via our <strong>ticketing system</strong> %2 (also "
+#~ "available from Control Panel on the top right)"
+#~ msgstr ""
+#~ "Por favor no dudes en ponerte en contacto con nosotros si tienes "
+#~ "cualquier duda o pregunta mediante correo electrónico %1 o mediante "
+#~ "nuestro <strong>servicio de incidencias</strong> %2 (también disponible "
+#~ "desde el panel de control)."
+
+#~ msgid ""
+#~ "Regards<br>\n"
+#~ "Opennemas Team<br>\n"
+#~ "Powered by OpenHost SL."
+#~ msgstr ""
+#~ "Atentamente,<br>\n"
+#~ "El equipo de Opennemas<br>\n"
+#~ "Powered by OpenHost SL."
+
+#~ msgid "Sorry, that email is already subscribed to our newsletter"
+#~ msgstr ""
+#~ "Lo sentimos, pero el correo electrónico ya está suscrito a nuestro "
+#~ "boletín de noticias."
+
 #~ msgid ""
 #~ "In order to be able to access your control panel please <strong>accept "
 #~ "out Terms and Conditions</strong> at"
@@ -8507,15 +8640,6 @@ msgstr ""
 #~ msgstr ""
 #~ "usando el nombre de usuario y contraseña que pusiste al crear el "
 #~ "periódico o a través del acceso directo a los términos de servicio"
-
-#~ msgid "or via our ticketing system"
-#~ msgstr "o mediante nuestro servicio de incidencias"
-
-#~ msgid "(also available from Control Panel on the top right)"
-#~ msgstr "(también disponible desde el panel de control)"
-
-#~ msgid "Regards"
-#~ msgstr "Atentamente"
 
 #~ msgid "Opennemas Team"
 #~ msgstr "El equipo de Opennemas"

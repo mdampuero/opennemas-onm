@@ -22,7 +22,18 @@
     .controller('NewsAgencyListCtrl', [
       '$controller', '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger',
       function($controller, $http, $modal, $scope, $timeout, itemService, routing, messenger) {
+        /**
+         * The array of imported elements.
+         *
+         * @type {Array}
+         */
+        $scope.imported = [];
 
+        /**
+         * The current list mode.
+         *
+         * @type {String}
+         */
         $scope.mode = 'list';
 
         // Initialize the super class and extend it.
@@ -54,7 +65,10 @@
 
           modal.result.then(function(response) {
             if (response) {
-              messenger.post(response.messages);
+              if (response.messages) {
+                messenger.post(response.messages);
+              }
+
               $scope.list($scope.route);
             }
           });
@@ -67,10 +81,18 @@
          * @description
          *   Opens a modal window to import one item.
          *
-         * @param {Object} content The content to import
+         * @param {Object} content The content to import.
          */
         $scope.import = function(content) {
-          var contents = [ content ];
+          var contents = [];
+
+          // Add related contents
+          for (var i = 0; i < content.related.length && i < 2; i++) {
+            contents.push($scope.extra.related[content.related[i]]);
+          }
+
+          // Add main content
+          contents.push(content);
 
           $scope._import(contents);
         };
@@ -86,9 +108,15 @@
           var contents = [];
 
           for (var i = 0; i < $scope.contents.length; i++) {
-            var id = $scope.contents[i].id;
-            if ($scope.selected.contents.indexOf(id) !== -1) {
-              contents.push($scope.contents[i]);
+            var content = $scope.contents[i];
+
+            if ($scope.selected.contents.indexOf(content.id) !== -1) {
+              // Add related contents
+              for (var j = 0; j < content.import.length; j++) {
+                contents.push($scope.extra.related[content.import[j]]);
+              }
+
+              contents.push(content);
             }
           }
 
@@ -111,7 +139,7 @@
             related.push($scope.extra.related[content.related[i]]);
           }
 
-          var modal = $modal.open({
+          $modal.open({
             templateUrl: 'modal-view-content',
             windowClass: 'modal-news-agency-preview',
             controller: 'modalCtrl',
@@ -126,7 +154,7 @@
               success: null
             }
           });
-        }
+        };
 
         /**
          * @function
@@ -160,7 +188,7 @@
             $scope.selected.contents = [];
 
             for (var i = 0; i < $scope.contents.length; i++) {
-              if ($scope.extra.imported.indexOf($scope.contents[i].urn) === -1) {
+              if ($scope.imported.indexOf($scope.contents[i].urn) === -1) {
                 $scope.selected.contents.push($scope.contents[i].id);
               }
             }
@@ -199,7 +227,11 @@
               messenger.post(nv.last_sync);
             }, null);
           }
-        });
+
+          if (ov !== nv && nv.imported) {
+            $scope.imported = $scope.imported.concat(nv.imported);
+          }
+        }, true);
 
         // Updates selected related contents when selected contents change
         $scope.$watch('selected.contents', function(nv, ov) {

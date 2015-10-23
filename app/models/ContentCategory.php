@@ -194,7 +194,7 @@ class ContentCategory
     public function update($data)
     {
         $data['params'] = serialize($data['params']);
-        if (empty($data['logo_path'])) {
+        if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
         }
         $data['color'] =

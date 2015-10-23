@@ -20,7 +20,7 @@ class NitfOpennemas extends Nitf
     public function checkFormat($data)
     {
         if (parent::checkFormat($data)
-            && strpos($this->getAgencyName($data), 'Opennemas')  !== false
+            && is_object($this->getAuthor($data))
         ) {
             return true;
         }
@@ -33,13 +33,7 @@ class NitfOpennemas extends Nitf
      */
     public function getAgencyName($data)
     {
-        $agency = $data->xpath('//distributor');
-
-        if (!empty($agency)) {
-            return (string) $agency[0];
-        }
-
-        return '';
+        return 'Opennemas';
     }
 
     /**
@@ -67,6 +61,10 @@ class NitfOpennemas extends Nitf
 
         if (!empty($author)) {
             $author = json_decode((string) $author[0]);
+
+            if (!$author) {
+                return null;
+            }
 
             $author->photo = $this->getAuthorPhoto($data);
 

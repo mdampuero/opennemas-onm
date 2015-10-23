@@ -476,6 +476,39 @@ class InstanceManager extends BaseManager
             $this->conn->executeQuery($sql);
         }
 
+        // Delete metas
+        $delete = array_diff(
+            !empty($instance->_metas) ? array_keys($instance->_metas) : [],
+            !empty($instance->metas) ? array_keys($instance->metas) : []
+        );
+
+        if (!empty($delete)) {
+            foreach ($delete as &$value) {
+                $value = '\'' . $value . '\'';
+            }
+
+            $sql = 'DELETE FROM instance_meta WHERE instance_id = '
+                . $instance->id
+                . ' AND meta_key IN (' . implode(',', $delete) . ')';
+            $this->conn->executeQuery($sql);
+        }
+
+        // Update instance metas
+        if (!empty($instance->metas)) {
+            $values = [];
+            foreach ($instance->metas as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $value = serialize($value);
+                }
+
+                $values[] = '(\'' . $instance->id . '\',\'' . $key . '\',\''
+                    . $value . '\')';
+            }
+
+            $sql = 'REPLACE INTO instance_meta VALUES ' . implode(',', $values);
+            $this->conn->executeUpdate($sql);
+        }
+
         // Delete cache for domains
         foreach ($instance->domains as $domain) {
             $this->cache->delete($domain, 'instance');
@@ -531,6 +564,23 @@ class InstanceManager extends BaseManager
                 $instance->{$key} = $value;
             }
         }
+
+        $sql = 'SELECT * FROM instance_meta WHERE instance_id = ' . $instance->id;
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $instance->metas = [];
+        foreach ($rs as $r) {
+            $instance->metas[$r['meta_key']] = $r['meta_value'];
+
+            $data = @unserialize($r['meta_value']);
+
+            if ($data !== false) {
+                $instance->metas[$r['meta_key']] = $data;
+            }
+        }
+
+        $instance->_metas = $instance->metas;
 
         // Check for changes in modules
         if (is_null($instance->changes_in_modules)) {

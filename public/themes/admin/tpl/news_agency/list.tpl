@@ -164,25 +164,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: extra.imported.indexOf(content.urn) !== -1 }">
+              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: imported.indexOf(content.urn) !== -1 }">
                 <td class="checkbox-cell">
-                  <div class="checkbox check-default" ng-if="extra.imported.indexOf(content.urn) === -1">
+                  <div class="checkbox check-default" ng-if="imported.indexOf(content.urn) === -1">
                     <input id="checkbox[% $index %]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                     <label for="checkbox[% $index %]"></label>
                   </div>
                 </td>
                 <td>
-                  <div class="pointer" ng-click="expanded[$index] = !expanded[$index]">
+                  <div class="pointer p-b-10" ng-click="expanded[$index] = !expanded[$index]">
                     <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[$index], 'fa-caret-right': !expanded[$index] }" ng-if="content.related.length > 0" style="width: 8px;"></i>
                     [% content.title %]
                   </div>
-                  <p>
-                    <div class="small-text" ng-if="content.tags">
-                      <span class="label m-l-5 uppercase" ng-repeat="tag in content.tags.split(',')">
-                        [% tag %]
-                      </span>
-                    </div>
-                  </p>
                   <p class="visible-xs-block visible-sm-block">
                     <span class="label label-important m-r-5" style="background-color:[% extra.servers[content.source].color %];">
                       [% extra.servers[content.source].agency_string %]
@@ -198,14 +191,17 @@
                       <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-if="extra.related[id].type === 'photo'" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" style="height: 48px;" />
                     </span>
                   </div>
-                  <div class="attachments clearfix p-b-10" ng-show="expanded[$index] && content.related.length > 0">
+                  <div class="related clearfix p-b-10" ng-show="expanded[$index] && content.related.length > 0">
                     <div class="p-b-10" ng-class="{ 'col-xs-4': extra.related[id].type !== 'text' }" ng-repeat="id in content.related">
                       <div class="checkbox check-default" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }">
                         <input id="checkbox-related-[% content.id %]-related-[% $index %]" checklist-model="content.import" checklist-value="id" ng-disabled="!isSelected(content.id) || (content.import.length > 1 && content.import.indexOf(id) === -1)" type="checkbox">
                         <label for="checkbox-related-[% content.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': extra.related[id].type !== 'text' }">
-                          <i class="fa m-l-30 m-r-5" ng-class="{ 'fa-file-text-o': extra.related[id].type === 'text', 'fa-picture-o': extra.related[id].type === 'photo', 'fa-film': extra.related[id].type === 'video' }" ng-show="extra.related[id].type === 'text'"></i>
+                          <i class="fa m-l-30 m-r-5 fa-file-text-o" ng-show="extra.related[id].type === 'text'"></i>
                           <span ng-if="extra.related[id].type === 'text'">[% extra.related[id].title %]</span>
-                          <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" />
+                          <div class="img-thumbnail-wrapper">
+                            <img class="img-thumbnail" ng-class="{ 'selected': content.import && content.import.indexOf(id) !== -1 }" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" />
+                            <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
+                          </div>
                         </label>
                       </div>
                       <div class="m-l-15" ng-show="extra.related[id].type === 'text'">
@@ -221,8 +217,8 @@
                     <button class="btn btn-link" ng-click="preview(content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
                     </button>
-                    <span class="badge badge-success" ng-if="extra.imported.indexOf(content.urn) !== -1">{t}Already imported{/t}</span>
-                    <button class="btn btn-link" ng-click="import(content)" ng-if="extra.imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
+                    <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
+                    <button class="btn btn-link" ng-click="import(content)" ng-if="imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
                       <span class="fa fa-cloud-download"></span> {t}Import{/t}
                     </button>
                   </div>
@@ -271,6 +267,9 @@
             <div class="dynamic-image-placeholder no-margin" ng-click="select(content);xsOnly($event, toggle, content)">
               <dynamic-image class="img-thumbnail" path="[% routing.generate('backend_ws_news_agency_show_image', { source: content.source, id: content.id }) %]" raw="true">
                 <div class="hidden-select" ng-click="toggle(content)"></div>
+                <div class="thumbnail-actions thumbnail-actions-fixed text-right">
+                  <span class="badge badge-success" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
+                </div>
               </dynamic-image>
             </div>
           </div>

@@ -45,7 +45,7 @@
     {*<h4 class="text-center uppercase">
       {t}Screenshots and videos{/t}
     </h4>
-    <div class="clearfix infinite-row">
+    <div class="clearfix row">
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
     </div>*}

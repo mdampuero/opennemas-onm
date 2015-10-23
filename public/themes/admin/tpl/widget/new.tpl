@@ -99,9 +99,17 @@
             <input type="hidden" name="parsedParams" ng-model="parsedParams" ng-value="parsedParams" ng-init="parseParams({json_encode($widget->params)|clear_json})">
             <label for="" class="sr-only">{t}Parameter name{/t}</label>
             <div class="form-group ng-cloak" ng-repeat="param in params track by $index">
-              <input type="text" name="items[]" ng-model="param.name" placeholder="{t}Parameter name{/t}" />
-              <input type="text" name="values[]" ng-model="param.value"  placeholder="{t}Parameter value{/t}">
-              <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
+              <div class="row">
+                <div class="control col-md-2 col-sm-3 col-xs-12">
+                  <input type="text" class="form-control" name="items[]" ng-model="param.name" placeholder="{t}Parameter name{/t}" />
+                </div>
+                <div class="control col-md-9 col-sm-7 col-xs-12">
+                  <input type="text" class="form-control" name="values[]" ng-model="param.value"  placeholder="{t}Parameter value{/t}">
+                </div>
+                <div class="control col-md-1 col-sm-2 col-xs-12">
+                  <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
+                </div>
+              </div>
             </div>
           </div>
           <br>

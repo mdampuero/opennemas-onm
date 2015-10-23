@@ -98,6 +98,7 @@ abstract class Server
     {
         $ch = curl_init();
 
+        $auth = $this->params['username'] . ':' . $this->params['password'];
         $httpCode = '';
         $maxRedirects = 0;
         $maxRedirectsAllowed = 3;
@@ -106,7 +107,7 @@ abstract class Server
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-            curl_setopt($ch, CURLOPT_USERPWD, "mundiario:12mundiario34");
+            curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_HEADER, 1);
             $content = curl_exec($ch);
 

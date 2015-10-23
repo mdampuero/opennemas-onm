@@ -212,7 +212,7 @@
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
-      <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+      <div class="clearfix row ng-cloak" ng-if="!mode || mode === 'grid'">
         <div class="listing-no-contents ng-cloak" ng-if="!loading && !loadingMore && contents.length == 0">
           <div class="center">
             <h4>{t}Unable to find any image that matches your search.{/t}</h4>
@@ -246,7 +246,7 @@
           <span ng-if="loadingMore">{t}Loading{/t}</span>
         </h5>
       </div>
-      <div class="infinite-row master-row ng-cloak">
+      <div class="row master-row ng-cloak">
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
         </div>
       </div>

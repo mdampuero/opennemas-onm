@@ -43,15 +43,29 @@ class NewsMLComponentPhoto extends NewsML
      */
     public function checkPhoto($data)
     {
-        $q = '/NewsComponent/NewsComponent';
+        $count    = 0;
+        $elements = [];
 
-        // Check if NewsMLComponentPhoto
-        $count = 0;
-        $count += count($data->xpath($q . '/Role[@FormalName="Main"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Caption"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Preview"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Quicklook"]'));
-        $count += count($data->xpath($q . '/Role[@FormalName="Thumbnail"]'));
+        $elements['main'] = $data
+            ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Main"]');
+
+        $elements['caption'] = $data
+            ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Caption"]');
+
+        $elements['preview'] = $data
+            ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Preview"]');
+
+        $elements['quicklook'] = $data
+            ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Quicklook"]');
+
+        $elements['thumbnail'] = $data
+            ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Thumbnail"]');
+
+        foreach ($elements as $value) {
+            if (count($value) === 1) {
+                $count++;
+            }
+        }
 
         return $count > 1;
     }
@@ -299,8 +313,8 @@ class NewsMLComponentPhoto extends NewsML
 
         $photo->agency_name  = $this->bag['agency_name'];
         $photo->extension    = substr($filename, strrpos($filename, '.') + 1);
-        $photo->file_path    = $this->getUrl($file);
         $photo->file_name    = $filename;
+        $photo->file_path    = $this->getUrl($file);
         $photo->height       = $this->getHeight($file);
         $photo->id           = $this->getId($data);
         $photo->image_type   = 'image/' . $photo->extension;

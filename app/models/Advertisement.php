@@ -585,8 +585,17 @@ class Advertisement extends Content
         if (array_key_exists('width', $this->params) && !is_null($this->params['width'])
             && array_key_exists('height', $this->params) && !is_null($this->params['height'])
         ) {
-            $width = $this->params['width'];
-            $height = $this->params['height'];
+            if (is_array($this->params['width'])
+                && !empty($this->params['width'])
+                && is_array($this->params['height'])
+                && !empty($this->params['height'])
+            ) {
+                $width = $this->params['width'][0];
+                $height = $this->params['height'][0];
+            } else {
+                $width = $this->params['width'];
+                $height = $this->params['height'];
+            }
         }
 
         if ($this->with_script == 1) {

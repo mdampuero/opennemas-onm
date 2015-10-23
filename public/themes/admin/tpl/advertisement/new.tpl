@@ -130,28 +130,66 @@
                 <label for="googledfp_zone_id">
                   {t}Google DFP unit id{/t}
                 </label>
-                <input type="text" name="googledfp_unit_id" ng-model="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
+                <input class="form-control" type="text" name="googledfp_unit_id" ng-model="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
                 <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
               </div>
             </div>
-            <div class="row ng-cloak" id="ad_dimensions" ng-show="with_script <= 1">
-              <div class="col-sm-3">
-                <div class="form-group">
-                  <label class="form-label" for="params_width">
-                    {t}Width{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="params_width" name="params_width" ng-model="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script <= 1" min="0">
+            <div ng-init="init({json_encode($advertisement->params)|clear_json})" id="ad_dimensions">
+              <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length < 1">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label class="form-label">
+                      {t}Width{/t}
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-sm-offset-1">
+                  <div class="form-group">
+                    <label class="form-label">
+                      {t}Height{/t}
+                    </label>
+                    <div class="controls">
+                        <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-3 col-sm-offset-1">
-                <div class="form-group">
-                  <label for="params_height" class="form-label">
-                    {t}Height{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="params_height" name="params_height" ng-model="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script <= 1" min="0">
+              <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label class="form-label">
+                      {t}Width{/t}
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" value="[% size.width %]" ng-required="with_script != 2" min="0">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-sm-offset-1">
+                  <div class="form-group">
+                    <label class="form-label">
+                      {t}Height{/t}
+                    </label>
+                    <div class="controls">
+                      <div ng-class="{ 'input-group': $index > 0 }">
+                        <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" value="[% size.height %]" ng-required="with_script != 2" min="0">
+                        <span class="input-group-btn" ng-show="$index > 0">
+                          <button class="btn btn-danger" ng-click="removeInput(sizes, [% $index %])" type="button">
+                              <i class="fa fa-trash-o"></i>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ng-cloak" ng-show="with_script == 3">
+                <div class="input-group">
+                  <div class="input-group-btn">
+                    <button class="btn btn-default" ng-click="addSize();" type="button">{t}Add another size{/t}</button>
                   </div>
                 </div>
               </div>
