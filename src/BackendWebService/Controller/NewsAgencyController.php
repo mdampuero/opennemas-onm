@@ -415,28 +415,20 @@ class NewsAgencyController extends Controller
      * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      * @Security("has_role('IMPORT_ADMIN')")
      */
-    private function getSimilarCategoryIdForElement($element)
+    private function getSimilarCategoryIdForElement($originalCategory)
     {
+        $ccm = \ContentCategoryManager::get_instance();
+        $categories = $ccm->findAll();
+
+        $prevPoint = 1000;
         $finalCategory = 0;
-        if (is_array($element->getMetaData()) &&
-            array_key_exists('category', $element->getMetaData())
-        ) {
-            $originalCategory     = utf8_decode($element->getMetaData()['category']);
-            $originalCategoryTemp = strtolower($originalCategory);
+        foreach ($categories as $category) {
+            $categoryName = strtolower(utf8_decode($category->title));
+            $lev          = levenshtein($originalCategory, $categoryName);
 
-            $ccm        = \ContentCategoryManager::get_instance();
-            $categories = $ccm->findAll();
-
-            $prevPoint = 1000;
-            $finalCategory = null;
-            foreach ($categories as $category) {
-                $categoryName = strtolower(utf8_decode($category->title));
-                $lev          = levenshtein($originalCategoryTemp, $categoryName);
-
-                if ($lev < 2  && $lev < $prevPoint) {
-                    $prevPoint     = $lev;
-                    $finalCategory = $category->id;
-                }
+            if ($lev < 2  && $lev < $prevPoint) {
+                $prevPoint     = $lev;
+                $finalCategory = $category->id;
             }
         }
 
@@ -458,7 +450,7 @@ class NewsAgencyController extends Controller
         $repository = new LocalRepository();
         $resource   = $repository->find($source, $id);
 
-        if (empty($category) && !empty($resource->category)) {
+        if ((is_null($category) || empty($category)) && !empty($resource->category)) {
             $category = $this->getSimilarCategoryIdForElement($resource->category);
         }
 
