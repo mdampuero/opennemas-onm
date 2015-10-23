@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
@@ -286,29 +287,28 @@ class UserController extends Controller
                 // Increase security by regenerating the id
                 $request->getSession()->migrate();
 
-                $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
-
                 // Set last login date
                 $user->setLastLoginDate();
 
                 // Set token to null
                 $user->updateUserToken($user->id, null);
 
-                $_SESSION = array(
-                    'userid'           => $user->id,
-                    'realname'         => $user->name,
-                    'username'         => $user->username,
-                    'email'            => $user->email,
-                    'deposit'          => $user->deposit,
-                    'authMethod'       => $user->authMethod,
-                    'default_expire'   => $user->sessionexpire,
-                    'session_lifetime' => $maxSessionLifeTime * 60,
-                    'csrf'             => md5(uniqid(mt_rand(), true)),
-                    'meta'             => $user->getMeta(),
-                );
+                $_SESSION['userid']           = $user->id;
+                $_SESSION['realname']         = $user->name;
+                $_SESSION['username']         = $user->username;
+                $_SESSION['email']            = $user->email;
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
+
+                $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
+                $session = $request->getSession();
+
+                $securityContext = $this->get('security.context');
+                $securityContext->setToken($token);
+                $session->set('user', $user);
+                $session->set('_security_frontend', serialize($token));
             }
 
-            $this->get('session')->getFlashBag()->add('success', _('Log in succesful.'));
+            $session->getFlashBag()->add('success', _('Log in succesful.'));
 
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
