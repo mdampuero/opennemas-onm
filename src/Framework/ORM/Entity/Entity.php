@@ -26,6 +26,8 @@ abstract class Entity
     /**
      * Gets the value of the property from the RAW data array.
      *
+     * @param string $property The property name.
+     *
      * @return mixed The property value.
      */
     public function __get($property)
@@ -40,6 +42,23 @@ abstract class Entity
     }
 
     /**
+     * Checks if the value of the property is in the RAW data array.
+     *
+     * @param string $property The property name.
+     *
+     * @return boolean True if the property has a value. Otherwise, returns
+     *                 false.
+     */
+    public function __isset($property)
+    {
+        if (array_key_exists($property, $this->data)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Sets the value of the property in the RAW data array.
      *
      * @param string $property The property name.
@@ -50,6 +69,20 @@ abstract class Entity
         $property = \underscore($property);
 
         $this->data[$property] = $value;
+    }
+
+    /**
+     * Returns the cached id.
+     *
+     * @return string The cached id.
+     */
+    public function getCachedId()
+    {
+        $id = get_class($this);
+        $id = substr($id, strrpos($id, '\\') + 1);
+        $id = preg_replace('/([a-z])([A-Z])/', '$1_$2', $id);
+
+        return strtolower($id) . '-' . $this->id;
     }
 
     /**

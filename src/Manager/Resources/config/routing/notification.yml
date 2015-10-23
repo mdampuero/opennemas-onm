@@ -1,0 +1,16 @@
+manager_notifications_list:
+    path: /notifications
+    options:
+        expose: true
+
+manager_notification_show:
+    path: /notification/{id}/show
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_notification_create:
+    path: /notification/create
+    options:
+        expose: true

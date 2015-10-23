@@ -29,6 +29,12 @@ class SidebarController extends Controller
                     'click' => true
                 ],
                 [
+                    'name' => _('Notifications'),
+                    'icon' => 'fa-bell',
+                    'route' => 'manager_notifications_list',
+                    'click' => true
+                ],
+                [
                     'name' => _('Reports'),
                     'icon' => 'fa-files-o',
                     'route' => 'manager_reports_list',

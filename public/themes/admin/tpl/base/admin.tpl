@@ -247,35 +247,42 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                {*
-                <li class="quicklinks notifications dropdown">
-                  <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
-                    <i class="fa fa-bell"></i>
-                  </a>
-                  <div class="dropdown-menu">
-                    <div class="dropdown-title">
-                      {t}Notifications{/t}
+                {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
+                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
+                    <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
+                      <i class="fa fa-bell"></i>
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
+                        [% unread.length %]
+                      </span>
+                    </a>
+                    <div class="dropdown-menu ng-cloak">
+                      <div class="dropdown-title">
+                        <a href="{url name=backend_notifications_list}">
+                          {t}Notifications{/t}
+                        </a>
+                      </div>
+                      <ul class="notification-list">
+                        <scrollable>
+                        <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
+                          <div class="notification-title">
+                            [% notification.title %]
+                            <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
+                              <i class="fa fa-times"></i>
+                            </span>
+                          </div>
+                          <div class="notification-icon">
+                            <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'users', 'fa-users': notification.type === 'users' }"></i>
+                          </div>
+                          <div class="notification-body" ng-bind-html="notification.body"></div>
+                        </li>
+                        </scrollable>
+                      </ul>
                     </div>
-                    <ul class="notification-list">
-                      <li class="notification-success">
-                        <div class="title">Success!</div>
-                        <p>{t}This is a notification for a success{/t}</p>
-                      </li>
-                      <li class="notification-error">
-                        <div class="title">Error!</div>
-                        <p>{t}This notification is an error{/t}</p>
-                      </li>
-                      <li class="notification-warning">
-                        <div class="title">Warning!</div>
-                        <p>{t}This notification is a warning{/t}</p>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="quicklinks">
-                  <span class="h-seperate"></span>
-                </li>
-                *}
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/if}
                 <li class="quicklinks quick-items help-items dropdown">
                   <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
                     <i class="fa fa-support"></i>

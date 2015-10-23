@@ -1,0 +1,3 @@
+backend_notifications_list:
+    path:     /notifications
+    defaults: { _controller: BackendBundle:Notification:list }
