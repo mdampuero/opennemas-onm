@@ -847,7 +847,7 @@ class ContentCategoryManager
      *
      * @return array principal categories, childs categorys and category info
      */
-    public function getArraysMenu($category = null, $internalCategory = 1)
+    public function getArraysMenu($category = null, $internalCategory = [1])
     {
         //fullcat contains array with all cats order by posmenu
         //parentCategories is an array with all menu cats in frontpage
@@ -857,10 +857,13 @@ class ContentCategoryManager
         //$fullcat = $this->orderByPosmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
+        if (!is_array($internalCategory)) {
+            $internalCategory = [$internalCategory];
+        }
+
         $parentCategories = array();
         $categoryData = array();
         foreach ($fullcat as $prima) {
-
             if (!empty($category)
                 && $prima->pk_content_category == $category
                 && $category !='home'
@@ -869,10 +872,9 @@ class ContentCategoryManager
                 $categoryData[] = $prima;
             }
             if (($prima->internal_category == 1
-                || $prima->internal_category == $internalCategory)
+                || in_array($prima->internal_category, $internalCategory))
                 && ($prima->fk_content_category == 0)
             ) {
-
                 $parentCategories[] = $prima;
             }
         }
