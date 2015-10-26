@@ -40,8 +40,12 @@
 
           element.on('dp.change', function() {
             $scope.$apply(function() {
-              var date = moment(picker.date());
-              $scope.ngModel = date.format(format);
+              $scope.ngModel = null;
+
+              if (picker.date()) {
+                var date = moment(picker.date());
+                $scope.ngModel = date.format(format);
+              }
             });
           });
         }
