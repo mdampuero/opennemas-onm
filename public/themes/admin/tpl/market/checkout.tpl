@@ -74,7 +74,8 @@
           <div class="text-center" ng-show="step != 3 && (!cart || cart.length == 0)">
             <h1><i class="fa fa-shopping-cart"></i></h1>
             <h3>{t}Your shopping cart is empty{/t}</h3>
-            <h4>{t escape=off}Return to <a href="{url name='admin_market_list'}">market</a> and try again{/t}</h4>
+            {capture name="market_url"}{url name='admin_market_list'}{/capture}
+            <h4>{t escape=off 1=$smarty.capture.market_url}Return to <a href="%1">market</a> and try again{/t}</h4>
           </div>
           <div class="grid simple" ng-show="cart.length > 0 || step == 3">
             <div class="grid-body">
@@ -167,7 +168,7 @@
                       <div class="row">
                         <div class="form-group col-sm-6">
                           <label for="vat"></label>
-                          <input class="form-control" id="vat" ng-model="billing.vat" placeholder="{t}VAT{/t}" required="required" type="text">
+                          <input class="form-control" id="vat" ng-model="billing.vat" placeholder="{t}VAT Number{/t}" required="required" type="text">
                         </div>
                       </div>
                       <h5 class="m-t-20">{t}Address{/t}</h5>
