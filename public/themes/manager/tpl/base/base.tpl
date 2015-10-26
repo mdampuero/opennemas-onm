@@ -128,33 +128,6 @@
         </div>
         <div class="pull-right" ng-if="user.id">
           <ul class="nav quick-section">
-            <li class="quicklinks notifications dropdown">
-              <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
-                <i class="fa fa-bell"></i>
-              </a>
-              <div class="dropdown-menu">
-                <div class="dropdown-title">
-                  {t}Notifications{/t}
-                </div>
-                <ul class="notification-list">
-                  <li class="notification-success">
-                    <div class="title">Success!</div>
-                    <p>{t}This is a notification for a success{/t}</p>
-                  </li>
-                  <li class="notification-error">
-                    <div class="title">Error!</div>
-                    <p>{t}This notification is an error{/t}</p>
-                  </li>
-                  <li class="notification-warning">
-                    <div class="title">Warning!</div>
-                    <p>{t}This notification is a warning{/t}</p>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
                 <i class="fa fa-rebel text-danger master-user"></i>
