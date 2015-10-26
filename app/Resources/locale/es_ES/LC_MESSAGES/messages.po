@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-21 13:50+0200\n"
-"PO-Revision-Date: 2015-10-21 13:51+0200\n"
+"POT-Creation-Date: 2015-10-26 15:58+0100\n"
+"PO-Revision-Date: 2015-10-26 16:04+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1775,6 +1775,22 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
 
+msgid "Yesterday"
+msgstr "Ayer"
+
+msgid "Today"
+msgstr "Hoy"
+
+msgid "Notification marked as read successfully"
+msgstr "Notificación marcada como leida correctamente"
+
+msgid "Invalid notifications"
+msgstr "Notificaciones no válidas"
+
+#, php-format
+msgid "%d notifications marked as read successfully"
+msgstr "%d notificación(es) marcadas(s) como leída(s) correctamente"
+
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
 
@@ -2120,6 +2136,38 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+msgid "Notification saved successfully"
+msgstr "Configuración guardada correctamente"
+
+msgid "Notification deleted successfully."
+msgstr "Notificaciones eliminadas correctamente."
+
+#, php-format
+msgid "%s notifications deleted successfully."
+msgstr "%s notificaciones eliminadas correctamente."
+
+msgid "Manager"
+msgstr "Gestor"
+
+#, php-format
+msgid "Unable to find the entity with id \"%s\""
+msgstr "No se pudo encontrar la entidad con el identificador «%s»"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Information"
+msgstr "Información"
+
+msgid "Success"
+msgstr "Éxito"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Help"
+msgstr "Ayuda"
+
 msgid "Instances not used in last month"
 msgstr "Instancias no usadas en el último mes"
 
@@ -2137,6 +2185,9 @@ msgstr "Genera un informe que muestra las instancias creadas en el último mes."
 
 msgid "Instances"
 msgstr "Instancias"
+
+msgid "Notifications"
+msgstr "Notificaciones"
 
 msgid "Reports"
 msgstr "Informes"
@@ -4467,18 +4518,6 @@ msgstr "Página"
 msgid "Author"
 msgstr "Autor"
 
-msgid "Notifications"
-msgstr "Notificaciones"
-
-msgid "This is a notification for a success"
-msgstr "This is a notification for a success"
-
-msgid "This notification is an error"
-msgstr "This notification is an error"
-
-msgid "This notification is a warning"
-msgstr "This notification is a warning"
-
 msgid "Help center"
 msgstr "Centro de ayuda"
 
@@ -5230,20 +5269,40 @@ msgstr ""
 "usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
 "esquina superior derecha."
 
+msgid "Opennemas Market"
+msgstr "Tienda de Opennemas"
+
+msgid "Find and try new add-ons and take your newspaper to the next level."
+msgstr ""
+"Busque y pruebe nuevos añadidos para llevar a tu periódico al siguiente "
+"nivel."
+
+msgid ""
+"Do you need more? Check our packs and power your newspaper with extra "
+"features to make it the best."
+msgstr ""
+"¿Necesias algo más? Comprueba nuestros packs y mejora tu periódico con "
+"características adicionales que lo mejorarán."
+
+msgid ""
+"We offer a huge list of add-ons to improve your experience. Check our market "
+"and pay only for what you really want."
+msgstr ""
+"Te ofrecemos una gran lista de añadidos para mejroar tu experiencia. "
+"Comprueba nuestra tienda y paga solo por lo que quieras."
+
+msgid ""
+"Make your own style. Choose a template or request a exclusive design to make "
+"your newspaper look awesome."
+msgstr ""
+"Crea tu propio estilo. Selecciona una plantilla o solicita un diseño "
+"exclusivo para hacer que tu periódigo luzca mejor."
+
 msgid "That's it!"
 msgstr "Y eso es todo!"
 
-msgid "You can start to use your newspaper."
-msgstr "Ya puedes empezar a usar tu periódico."
-
-msgid "Hope you will enjoy opennemas!"
-msgstr "Esperamos que disfrutes de opennemas!"
-
-msgid "Finish"
-msgstr "Terminar"
-
-msgid "Do you have a Facebook or a Twitter account?"
-msgstr "¿Tienes una cuenta de Facebook o Twitter?"
+msgid "Wait...Do you have a Facebook or a Twitter account?"
+msgstr "Espera… ¿Tienes una cuenta de Facebook o Twitter?"
 
 msgid ""
 "Then you can associate those accounts to access your opennemas. It will make "
@@ -5252,20 +5311,23 @@ msgstr ""
 "Luego puedes asocialas para acceder a Opennemas. Esto hará mucho más fácil "
 "acceder al panel de administración."
 
+msgid "Now, you can start to use your newspaper."
+msgstr "Agora puedes empezar a usar tu periódico."
+
+msgid "Hope you will enjoy opennemas!"
+msgstr "Esperamos que disfrutes de opennemas!"
+
+msgid "Finish"
+msgstr "Terminar"
+
 msgid "Welcome!"
 msgstr "¡Bienvenido!"
 
 msgid "Terms & conditions"
 msgstr "Términos y condiciones"
 
-msgid "Getting help"
-msgstr "Obtener ayuda"
-
 msgid "Ready!"
 msgstr "Listo!"
-
-msgid "Social Network"
-msgstr "Redes sociales"
 
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
@@ -6499,11 +6561,39 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta con nosotros"
 
-msgid "pending activation"
-msgstr "activación pendiente"
+msgid "Billing information"
+msgstr "Información de facturación"
 
-msgid "pending deactivation"
-msgstr "desactivación pendiente"
+msgid "Company"
+msgstr "Empresa"
+
+msgid "VAT"
+msgstr ""
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Country"
+msgstr "País"
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support system</a>."
+msgstr ""
+"¿Algo fué mal? Contacta con nuestro <a href=\""
+"javascript:UserVoice.showPopupWidget();\">soporte técnico</a>."
 
 msgid "Here you can see a list of your activated modules"
 msgstr "Aquí puedes ver una lista de los módulos que tiene activados"
@@ -6624,9 +6714,6 @@ msgstr "Resultado de subida de archivo vacío"
 msgid "Iniciar"
 msgstr "Iniciar"
 
-msgid "Error"
-msgstr "Error"
-
 msgid "Delete multiple images"
 msgstr "Eliminar múltiples imágenes"
 
@@ -6690,9 +6777,6 @@ msgstr "No está disponible ningún dato IPTC."
 
 msgid "Search by description"
 msgstr "Buscar por descripción"
-
-msgid "Information"
-msgstr "Información"
 
 msgid "Resolution"
 msgstr "Resolución"
@@ -7205,61 +7289,6 @@ msgstr "Imagenes y vídeos"
 msgid "Last updated"
 msgstr "Última actualización"
 
-msgid "Cart review"
-msgstr "Revisión del carro"
-
-msgid "Checkout"
-msgstr "Comprar"
-
-msgid "Success"
-msgstr "Éxito"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "To confirm your purchase press the button below."
-msgstr "Para confirmar tu compra pulsa el botón de debajo"
-
-msgid ""
-"Our sales department will receive an email with the new features you want to "
-"include in your newspaper."
-msgstr ""
-"Nuestro departamento de ventas recibirá un correo electrónico con las "
-"funcionalidades que deseas incluír en tu periódico."
-
-msgid "You will receive an email with the list of features you are purchasing."
-msgstr ""
-"Receibirás un correo electrónico con la lista de características que estás "
-"comprando."
-
-msgid "Nice"
-msgstr "Genial"
-
-msgid ""
-"Thank you! We have received your request and will get back to you as soon as "
-"possible. You will receive a confirmation e-mail too."
-msgstr ""
-"¡Gracias! Acabamos de recibir tu petición y nos pondremos en contacto "
-"contigo lo antes posible. Recibirás una confirmación por email en unos "
-"minutos."
-
-msgid ""
-"\n"
-"          Oh!, it would be a good time to share with your friends your "
-"newspaper's improvements\n"
-"        "
-msgstr ""
-"\n"
-"          Oh!, sería genial que compartieras con tus amigos las mejoras en "
-"tu periódico\n"
-"        "
-
-msgid "Continue shopping"
-msgstr "Continar comprando"
-
-msgid "Confirm"
-msgstr "Confirmar"
-
 msgid "Packs"
 msgstr "Packs"
 
@@ -7274,6 +7303,9 @@ msgstr "Carrito"
 
 msgid "Your shopping cart is empty"
 msgstr "Tu carrito de compra está vacío"
+
+msgid "Checkout"
+msgstr "Comprar"
 
 msgid "Unable to find any module that matches your search."
 msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
@@ -7304,6 +7336,64 @@ msgstr ""
 
 msgid "Modules to purchase"
 msgstr "Módulos a comprar"
+
+msgid "Confirmation"
+msgstr "Confirmación"
+
+msgid "You are about to purchase the next items:"
+msgstr "Estas a punto de comprar los siguientes elementos:"
+
+msgid "Subtotal"
+msgstr "Subtotal"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Contact information"
+msgstr "Información de contacto"
+
+msgid "Contact name"
+msgstr "Nombre de contacto"
+
+msgid "Company name"
+msgstr "Nombre de la empresa"
+
+msgid "Phone number"
+msgstr "Número de teléfono"
+
+msgid "Payment Info"
+msgstr "Información de pago"
+
+msgid "Card number"
+msgstr "Número de tarjeta"
+
+msgid "Expire date"
+msgstr "Fecha de expiración"
+
+msgid "Confirm purchase"
+msgstr "Confirmar compra"
+
+msgid "Nice"
+msgstr "Genial"
+
+msgid ""
+"Thank you! We have received your request and will get back to you as soon as "
+"possible. You will receive a confirmation e-mail too."
+msgstr ""
+"¡Gracias! Acabamos de recibir tu petición y nos pondremos en contacto "
+"contigo lo antes posible. Recibirás una confirmación por email en unos "
+"minutos."
+
+msgid ""
+"\n"
+"                    Oh!, it would be a good time to share with your friends "
+"your newspaper's improvements\n"
+"                    "
+msgstr ""
+"\n"
+"          Oh!, sería genial que compartieras con tus amigos las mejoras en "
+"tu periódico\n"
+"        "
 
 msgid "Delete opinions"
 msgstr "Eliminar opiniones"
@@ -7956,9 +8046,6 @@ msgstr "Iniciar sesión"
 msgid "About"
 msgstr "Sobre"
 
-msgid "Help"
-msgstr "Ayuda"
-
 msgid "Privacy Policy"
 msgstr "Política de privacidad"
 
@@ -8125,6 +8212,15 @@ msgstr ""
 msgid "Instance"
 msgstr "Instancia"
 
+msgid "This is a notification for a success"
+msgstr "This is a notification for a success"
+
+msgid "This notification is an error"
+msgstr "This notification is an error"
+
+msgid "This notification is a warning"
+msgstr "This notification is a warning"
+
 msgid "Opennemas manager"
 msgstr "Gestor de opennemas"
 
@@ -8259,6 +8355,72 @@ msgstr ""
 "Aquí puede eliminar en lote, caches, compiles, sesiones y otras cosas. de "
 "una instancia específica."
 
+msgid "New notification"
+msgstr "Nuevas notificaciones"
+
+msgid "Edit notification"
+msgstr "Editar notificación"
+
+msgid "Style"
+msgstr "Estilo"
+
+msgid "Fixed"
+msgstr "Fija"
+
+msgid "Notification always visible"
+msgstr "Notificación siempre visible"
+
+msgid "Starts"
+msgstr "Comienzo"
+
+msgid "Click to set date"
+msgstr "Pulsa para establecer una fecha"
+
+msgid "Ends"
+msgstr "Fin"
+
+msgid "Filter by name, domain or contact"
+msgstr "Filtrar por nome, dominio o contacto"
+
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Domains"
+msgstr "Dominios"
+
+msgid "Domain expire"
+msgstr "Expiración del dominio:"
+
+msgid "Last access"
+msgstr "Último acceso"
+
+msgid "Database"
+msgstr "Base de datos"
+
+msgid "Media size"
+msgstr "Tamaño del media"
+
+msgid "Alexa"
+msgstr "Alexa"
+
+msgid "Page views"
+msgstr "Páginas vistas"
+
+msgid "Emails"
+msgstr "Emails"
+
+msgid "Enabled"
+msgstr "Activado"
+
+msgid "#"
+msgstr "#"
+
+msgid "Start"
+msgstr "Inicio"
+
+msgid "End"
+msgstr "Fin"
+
 msgid "Our Videos"
 msgstr "Nuestros vídeos"
 
@@ -8314,9 +8476,6 @@ msgstr "Correo del propietario"
 msgid "Created from"
 msgstr "Creado el"
 
-msgid "Media size"
-msgstr "Tamaño del media"
-
 msgid "Language"
 msgstr "Idioma:"
 
@@ -8328,9 +8487,6 @@ msgstr "Plantilla"
 
 msgid "Contact mail"
 msgstr "Email de contacto"
-
-msgid "Domains"
-msgstr "Dominios"
 
 msgid "No main domain"
 msgstr "Sin dominio principal"
@@ -8344,29 +8500,29 @@ msgstr "Los dominios de la instancia no pueden estar vacíos."
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
 
-msgid "Click to set date"
-msgstr "Pulsa para establecer una fecha"
-
 msgid "Billing"
 msgstr "Facturación"
+
+msgid "Add billing information"
+msgstr "Añadir información de facturación"
 
 msgid "Last invoice date"
 msgstr "Fecha de la última factura"
 
-msgid "Support"
-msgstr "Soporte"
-
-msgid "Development plan"
-msgstr "Plan de desarrollo"
-
 msgid "Select all"
 msgstr "Seleccionar todo"
 
+msgid "pending activation"
+msgstr "activación pendiente"
+
+msgid "pending deactivation"
+msgstr "desactivación pendiente"
+
+msgid "Support"
+msgstr "Soporte"
+
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sin espacios"
-
-msgid "Database"
-msgstr "Base de datos"
 
 msgid "Maximun activated users"
 msgstr "Usuarios activados máximos"
@@ -8410,33 +8566,6 @@ msgstr "URL del servidor"
 
 msgid "Select modules"
 msgstr "Módulos seleccionados"
-
-msgid "Filter by name, domain or contact"
-msgstr "Filtrar por nome, dominio o contacto"
-
-msgid "Columns"
-msgstr "Columnas"
-
-msgid "Domain expire"
-msgstr "Expiración del dominio:"
-
-msgid "Last access"
-msgstr "Último acceso"
-
-msgid "Alexa"
-msgstr "Alexa"
-
-msgid "Page views"
-msgstr "Páginas vistas"
-
-msgid "Emails"
-msgstr "Emails"
-
-msgid "Enabled"
-msgstr "Activado"
-
-msgid "#"
-msgstr "#"
 
 msgid "No rank"
 msgstr "Sin clasificación"
@@ -8545,6 +8674,40 @@ msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
 
+#~ msgid "Getting help"
+#~ msgstr "Obtener ayuda"
+
+#~ msgid "Social Network"
+#~ msgstr "Redes sociales"
+
+#~ msgid "Cart review"
+#~ msgstr "Revisión del carro"
+
+#~ msgid "To confirm your purchase press the button below."
+#~ msgstr "Para confirmar tu compra pulsa el botón de debajo"
+
+#~ msgid ""
+#~ "Our sales department will receive an email with the new features you want "
+#~ "to include in your newspaper."
+#~ msgstr ""
+#~ "Nuestro departamento de ventas recibirá un correo electrónico con las "
+#~ "funcionalidades que deseas incluír en tu periódico."
+
+#~ msgid ""
+#~ "You will receive an email with the list of features you are purchasing."
+#~ msgstr ""
+#~ "Receibirás un correo electrónico con la lista de características que "
+#~ "estás comprando."
+
+#~ msgid "Continue shopping"
+#~ msgstr "Continar comprando"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmar"
+
+#~ msgid "Development plan"
+#~ msgstr "Plan de desarrollo"
+
 #~ msgid "WELCOME TO OPENNEMAS"
 #~ msgstr "BIENVENIDO A OPENNEMAS"
 
@@ -8640,9 +8803,6 @@ msgstr ""
 #~ msgstr ""
 #~ "usando el nombre de usuario y contraseña que pusiste al crear el "
 #~ "periódico o a través del acceso directo a los términos de servicio"
-
-#~ msgid "Opennemas Team"
-#~ msgstr "El equipo de Opennemas"
 
 #~ msgid "Welcome to OpenNemas"
 #~ msgstr "Bienvenido a Opennemas"
@@ -9011,6 +9171,3 @@ msgstr ""
 
 #~ msgid "Save for later"
 #~ msgstr "Guardar para despues"
-
-#~ msgid "No items purchased"
-#~ msgstr "No hay elementos comprados"
