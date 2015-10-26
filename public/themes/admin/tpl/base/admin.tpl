@@ -249,7 +249,7 @@
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
                   <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
-                    <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
+                    <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
                         [% unread.length %]
@@ -284,11 +284,11 @@
                   </li>
                 {/if}
                 <li class="quicklinks quick-items help-items dropdown">
-                  <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
+                  <a href="#" data-toggle="dropdown">
                     <i class="fa fa-support"></i>
                   </a>
                   <div class="dropdown-menu">
-                    <!-- <div class="dropdown-title">{t}Help center{/t}</div> -->
+                     <div class="dropdown-title">{t}Help center{/t}</div>
                     <div class="clearfix quick-items-row">
                       <div class="quick-item">
                         <a href="javascript:UserVoice.showPopupWidget();">
