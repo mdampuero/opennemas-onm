@@ -256,10 +256,21 @@
                       </span>
                     </a>
                     <div class="dropdown-menu ng-cloak">
-                      <div class="dropdown-title">
-                        <a href="{url name=backend_notifications_list}">
+                      <div class="dropdown-title clearfix">
+                        <div class="pull-left">
                           {t}Notifications{/t}
+                        </div>
+                        <a href="{url name=backend_notifications_list}" class="pull-right">
+                          {t}See more{/t} +
                         </a>
+                      </div>
+                      <div class="text-center" ng-show="!notifications || notifications.length <= 0">
+                        <span class="fa fa-bell fa-2x"></span>
+                        <h5>
+                          {t}There are no notifications for now.{/t} <br>
+                          {capture name="notifications_url"}{url name=backend_notifications_list}{/capture}
+                          {t 1=$smarty.capture.notifications_url escape=off}Check your previous notifications <a href="%1">here</a>{/t}
+                        </h5>
                       </div>
                       <ul class="notification-list">
                         <scrollable>

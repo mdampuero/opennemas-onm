@@ -31,7 +31,7 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text" style="width:250px;"/>
+          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
         </li>
         <li class="quicklinks">
           <span class="h-seperate"></span>
@@ -50,7 +50,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
+          <button class="btn btn-white" ng-click="criteria = {  title_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'title', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
@@ -331,11 +331,11 @@
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('instance')" width="200">
+              <th class="pointer" ng-click="sort('instance')" width="10">
                 {t}Instance{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('type')" width="100">
+              <th class="pointer" ng-click="sort('type')" width="100" width=10>
                 {t}Type{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
               </th>
@@ -343,11 +343,11 @@
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" width="10">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="100">
+              <th class="pointer text-center" ng-click="sort('end')" width="10">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
