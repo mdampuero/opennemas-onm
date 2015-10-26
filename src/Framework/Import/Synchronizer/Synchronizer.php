@@ -288,4 +288,3 @@ class Synchronizer
         return $params;
     }
 }
-
