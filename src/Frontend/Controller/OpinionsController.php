@@ -75,15 +75,15 @@ class OpinionsController extends Controller
                 ],
             ];
 
-            $order = [ 'in_home' => 'DESC', 'starttime' => 'DESC' ];
-
             $em = $this->get('opinion_repository');
             $sm = $this->get('setting_repository');
 
+            $order['in_home'] = 'DESC';
             if ($page == 1) {
                 $order['position']  = 'ASC';
                 $filters['in_home'] = [['value' => 1]];
             }
+            $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
             $configurations = $sm->get(
