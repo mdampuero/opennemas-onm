@@ -1058,7 +1058,7 @@ CREATE TABLE `newsletter_archive` (
   `pk_newsletter` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `data` text,
-  `html` text,
+  `html` longtext,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated` datetime NOT NULL,
   `sent` varchar(255) NOT NULL,
