@@ -13,8 +13,16 @@
      * @description
      *   description
      */
-    .controller('MarketCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'routing', 'webStorage',
-      function ($analytics, $http, $modal, $scope, routing, webStorage) {
+    .controller('MarketCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
+      function ($analytics, $http, $modal, $scope, messenger, routing, webStorage) {
+        /**
+         * @memeberOf MarketCheckoutCtrl
+         *
+         * @description
+         *   Flag to edit billing information.
+         *
+         * @type {Boolean}
+         */
         $scope.edit = false;
 
         /**
@@ -34,26 +42,10 @@
           var data = { billing: $scope.billing, modules: modules };
 
           $http.post(url, data).success(function(response) {
-            var modal = $modal.open({
-              keyboard: false,
-              templateUrl: 'modal-checkout',
-              backdrop: 'static',
-              controller: 'modalCtrl',
-              resolve: {
-                template: function() {
-                  return null;
-                },
-                success: function() {
-                  return null;
-                }
-              }
-            });
-
-            modal.result.then(function(response) {
-              webStorage.local.remove('cart');
-              $analytics.pageTrack('/market/checkout/done');
-              window.location.href = routing.generate('admin_market_list');
-            });
+            $scope.step = 3;
+            $scope.cart = [];
+            webStorage.local.remove('cart');
+            $analytics.pageTrack('/market/checkout/done');
           }).error(function() {
             messenger.post({
               message: 'There was an error with your request',
@@ -77,6 +69,7 @@
 
         // Updates the total when the cart changes
         $scope.$watch('cart', function(nv) {
+          $scope.subtotal = 0;
           $scope.total = 0;
 
           if (!nv || (nv instanceof Array && nv.length === 0)) {
@@ -88,10 +81,21 @@
 
           for (var i = 0; i < nv.length; i++) {
             if (nv[i].price && nv[i].price.month) {
-              $scope.total += nv[i].price.month;
+              $scope.subtotal += nv[i].price.month;
             }
           }
+
+          $scope.iva = +($scope.subtotal * 0.21).toFixed(2);
+          $scope.total = +($scope.subtotal + $scope.iva).toFixed(2);
         }, true);
+
+        $scope.$watch('billing', function(nv, ov) {
+          $scope.edit = false;
+
+          if (!ov && !nv) {
+            $scope.edit = true;
+          }
+        });
 
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('cart')) {
