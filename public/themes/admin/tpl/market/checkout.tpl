@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content checkout-wizard">
       <div class="row ng-cloak">
         <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 p-r-30">
           <div class="text-center" ng-show="step != 3 && (!cart || cart.length == 0)">
@@ -90,24 +90,25 @@
                   </li>
                   <li ng-class="{ 'active': step === 3 }" ng-disabled="true">
                     <span class="step">3</span>
-                    <span class="title">{t}Confirm{/t}</span>
+                    <span class="title">{t}Confirmation{/t}</span>
                   </li>
                 </ul>
                 <div class="clearfix"></div>
               </div>
               <div class="tab-content transparent p-t-30">
                 <div class="tab-pane" ng-class="{ 'active': step == 1 }">
+                  <h5 class="p-b-20">{t}You are about to purchase the next items:{/t}</h5>
                   <ul class="cart-list no-margin">
                     <li class="clearfix" ng-repeat="item in cart">
                       <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
                       <div class="p-l-100">
                         <h5>[% item.name %]</h5>
                         <p class="description">[% item.description %]</p>
-                        <div class="text-right p-r-15">
+                        <div class="text-right p-r-15 p-b-15">
                           <div class="price">
-                            <h3 class="no-margin">
+                            <h4 class="no-margin">
                               <strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small>
-                            </h3>
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -115,23 +116,25 @@
                     </li>
                   </ul>
                   <hr>
-                  <div class="text-right">
-                    <h3 class="no-margin">
-                      <span class="uppercase">{t}Subtotal{/t}:</span>
-                      <strong>[% subtotal %]</strong><small>€ / {t}month{/t}</small>
-                    </h3>
-                    <h3 class="no-margin">
-                      <span class="uppercase">{t}IVA{/t} (21%):</span>
-                      <strong>[% iva %]</strong><small>€ / {t}month{/t}</small>
-                    </h3>
+                  <div class="text-right clearfix">
+                    <table align=right class="clearfix checkout-summary">
+                      <tbody>
+                        <tr>
+                          <td><h5 class="uppercase">{t}Subtotal{/t}:</h5></td>
+                          <td><h5><strong>[% subtotal %]</strong><small>€ / {t}month{/t}</small></h5></td>
+                        </tr>
+                        <tr>
+                          <td><h5 class="uppercase">{t}IVA{/t} (21%):</h5></td>
+                          <td><h5><strong>[% iva %]</strong><small>€ / {t}month{/t}</small></h5></td>
+                        </tr>
+                        <tr>
+                          <td><h4><span class="uppercase">{t}Total{/t}:</span></h4></td>
+                          <td><h4><strong>[% total %]</strong><small>€ / {t}month{/t}</small></h4></td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  <div class="p-t-30 text-right">
-                    <h3 class="no-margin">
-                      <span class="p-r-15 uppercase">{t}Total{/t}:</span>
-                      <strong>[% total %]</strong><small>€ / {t}month{/t}</small>
-                    </h3>
-                  </div>
-                  <div class="text-center p-t-50">
+                  <div class="text-center p-t-30">
                     <button class="btn btn-large btn-success text-center" ng-click="step = 2">
                       {t}Next{/t}
                     </button>
