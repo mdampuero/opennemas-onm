@@ -1972,7 +1972,7 @@ msgstr "No se pudo encontrar la página que estabas buscando."
 
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
-"El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
+"El código de reCAPTCHA no fue escrito correctamente. Vuelve atrás y pruebe "
 "de nuevo."
 
 msgid ""
@@ -7338,7 +7338,7 @@ msgid "Modules to purchase"
 msgstr "Módulos a comprar"
 
 msgid "Return to <a href=\"%1\">market</a> and try again"
-msgstr "Vuelva a la <a href=\"%1\">tienda</a> y pruebe de nuevo"
+msgstr "Vuelve a la <a href=\"%1\">tienda</a> y prueba de nuevo"
 
 msgid "Confirmation"
 msgstr "Confirmación"
