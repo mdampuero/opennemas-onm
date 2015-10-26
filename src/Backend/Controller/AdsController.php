@@ -39,9 +39,11 @@ class AdsController extends Controller
         // Sometimes category is array. When create & update advertisement
         $this->category = $this->get('request')->query->getDigits('category', 0);
 
+        // Fetch categories to all internal categories
+        $contentTypes = [$contentType, 7, 9, 11, 14];
         $ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $ccm->getArraysMenu($this->category, $contentType);
+            $ccm->getArraysMenu($this->category, $contentTypes);
 
         $timezones = \DateTimeZone::listIdentifiers();
         $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
