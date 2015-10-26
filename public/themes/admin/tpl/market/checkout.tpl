@@ -120,15 +120,15 @@
                     <table align=right class="clearfix checkout-summary">
                       <tbody>
                         <tr>
-                          <td><h5 class="uppercase">{t}Subtotal{/t}:</h5></td>
+                          <td><h5 class="uppercase">{t}Subtotal{/t}</h5></td>
                           <td><h5><strong>[% subtotal %]</strong><small>€ / {t}month{/t}</small></h5></td>
                         </tr>
                         <tr>
-                          <td><h5 class="uppercase">{t}IVA{/t} (21%):</h5></td>
+                          <td><h5 class="uppercase">{t}VAT{/t} (21%)</h5></td>
                           <td><h5><strong>[% iva %]</strong><small>€ / {t}month{/t}</small></h5></td>
                         </tr>
                         <tr>
-                          <td><h4><span class="uppercase">{t}Total{/t}:</span></h4></td>
+                          <td><h4><span class="uppercase">{t}Total{/t}</span></h4></td>
                           <td><h4><strong>[% total %]</strong><small>€ / {t}month{/t}</small></h4></td>
                         </tr>
                       </tbody>
@@ -223,7 +223,7 @@
                   </div>
                   <div class="text-center p-t-50">
                     <button class="btn btn-large btn-success text-center" ng-click="confirm()">
-                      {t}Confirm{/t}
+                      {t}Confirm purchase{/t}
                     </button>
                   </div>
                 </div>
