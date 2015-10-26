@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-21 13:50+0200\n"
-"PO-Revision-Date: 2015-10-21 13:52+0200\n"
+"POT-Creation-Date: 2015-10-26 16:23+0100\n"
+"PO-Revision-Date: 2015-10-26 16:25+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1755,6 +1755,22 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
 
+msgid "Yesterday"
+msgstr "Onte"
+
+msgid "Today"
+msgstr "Hoxe"
+
+msgid "Notification marked as read successfully"
+msgstr "Notificación marcada como lida correctamente"
+
+msgid "Invalid notifications"
+msgstr "Notificacións non válidas"
+
+#, php-format
+msgid "%d notifications marked as read successfully"
+msgstr "%d notificación(s) marcada(s) como lidas correctamente"
+
 msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
 
@@ -2099,6 +2115,38 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+msgid "Notification saved successfully"
+msgstr "Notificación gardada con éxito"
+
+msgid "Notification deleted successfully."
+msgstr "Notificación eliminada con éxito."
+
+#, php-format
+msgid "%s notifications deleted successfully."
+msgstr "%s notificacións eliminadas correctamente."
+
+msgid "Manager"
+msgstr "Xestor"
+
+#, php-format
+msgid "Unable to find the entity with id \"%s\""
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Information"
+msgstr "Información"
+
+msgid "Success"
+msgstr "Éxito"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Help"
+msgstr "Axuda"
+
 msgid "Instances not used in last month"
 msgstr "Instancias non usadas no último mes"
 
@@ -2115,6 +2163,9 @@ msgstr "Xera un informe que mostra as instancias creadas no último mes."
 
 msgid "Instances"
 msgstr "Instancias"
+
+msgid "Notifications"
+msgstr "Notificacións"
 
 msgid "Reports"
 msgstr "Informes"
@@ -2198,8 +2249,8 @@ msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
 
 #, php-format
-msgid "%s is now on-line"
-msgstr "%s está agora dispoñible"
+msgid "Your newspaper is now on-line"
+msgstr "O teu xornal xa está en liña"
 
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
@@ -4419,18 +4470,6 @@ msgstr "Páxina"
 msgid "Author"
 msgstr "Autor"
 
-msgid "Notifications"
-msgstr "Notificacións"
-
-msgid "This is a notification for a success"
-msgstr "This is a notification for a success"
-
-msgid "This notification is an error"
-msgstr "This notification is an error"
-
-msgid "This notification is a warning"
-msgstr "This notification is a warning"
-
 msgid "Help center"
 msgstr "Centro de axuda"
 
@@ -5171,19 +5210,32 @@ msgstr ""
 "botón de axuda <span class=\"fa fa-support\"></span> na esquina superior "
 "dereita."
 
+msgid "Opennemas Market"
+msgstr "Tenda de Opennemas"
+
+msgid "Find and try new add-ons and take your newspaper to the next level."
+msgstr ""
+
+msgid ""
+"Do you need more? Check our packs and power your newspaper with extra "
+"features to make it the best."
+msgstr ""
+
+msgid ""
+"We offer a huge list of add-ons to improve your experience. Check our market "
+"and pay only for what you really want."
+msgstr ""
+
+msgid ""
+"Make your own style. Choose a template or request a exclusive design to make "
+"your newspaper look awesome."
+msgstr ""
+
 msgid "That's it!"
 msgstr "E iso é todo!"
 
-msgid "You can start to use your newspaper."
-msgstr "Xa podes comezar a usar o teu periódico."
-
-msgid "Hope you will enjoy opennemas!"
-msgstr "Agardamos que desfrute de Opennemas!"
-
-msgid "Finish"
-msgstr "Rematar"
-
-msgid "Do you have a Facebook or a Twitter account?"
+#, fuzzy
+msgid "Wait...Do you have a Facebook or a Twitter account?"
 msgstr "Tes unha conta en Facebook ou Twitter?"
 
 msgid ""
@@ -5193,20 +5245,24 @@ msgstr ""
 "Entón podes asocialas para acceder a Opennemas. Isto fará moito máis doado "
 "entrar no panel de administración."
 
+#, fuzzy
+msgid "Now, you can start to use your newspaper."
+msgstr "Xa podes comezar a usar o teu periódico."
+
+msgid "Hope you will enjoy opennemas!"
+msgstr "Agardamos que desfrute de Opennemas!"
+
+msgid "Finish"
+msgstr "Rematar"
+
 msgid "Welcome!"
 msgstr "Benvido!"
 
 msgid "Terms & conditions"
 msgstr "Termos e condicións"
 
-msgid "Getting help"
-msgstr "Obter axuda"
-
 msgid "Ready!"
 msgstr "Listo!"
-
-msgid "Social Network"
-msgstr "Redes sociais"
 
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
@@ -6437,11 +6493,43 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta connosco"
 
-msgid "pending activation"
-msgstr "activación pendente"
+#, fuzzy
+msgid "Billing information"
+msgstr "Información básica"
 
-msgid "pending deactivation"
-msgstr "desactivación pendente"
+#, fuzzy
+msgid "Company"
+msgstr "A nosa empresa"
+
+#, fuzzy
+msgid "VAT"
+msgstr "IVE %"
+
+msgid "Phone"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+#, fuzzy
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "City"
+msgstr ""
+
+#, fuzzy
+msgid "State"
+msgstr "Estado"
+
+#, fuzzy
+msgid "Country"
+msgstr "Cantidade"
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support system</a>."
+msgstr ""
 
 msgid "Here you can see a list of your activated modules"
 msgstr "Aquí pode ver unha lista dos módulos activados no seu periódico"
@@ -6561,9 +6649,6 @@ msgstr "Resultado de subida de ficheiro baleiro"
 msgid "Iniciar"
 msgstr "Iniciar"
 
-msgid "Error"
-msgstr "Erro"
-
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
 
@@ -6627,9 +6712,6 @@ msgstr "Non hai datos IPTC dispoñibeis"
 
 msgid "Search by description"
 msgstr "Buscar por descrición"
-
-msgid "Information"
-msgstr "Información"
 
 msgid "Resolution"
 msgstr "Resolución"
@@ -7136,57 +7218,6 @@ msgstr "Imaxes e vídeos"
 msgid "Last updated"
 msgstr "Última actualización"
 
-msgid "Cart review"
-msgstr "Revisión do carro"
-
-msgid "Checkout"
-msgstr "Mercar"
-
-msgid "Success"
-msgstr "Éxito"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "To confirm your purchase press the button below."
-msgstr "Para confirmar a túa compra prema no botón de abaixo"
-
-msgid ""
-"Our sales department will receive an email with the new features you want to "
-"include in your newspaper."
-msgstr ""
-"O noso departamento de ventas recibirá un correo electrónico coas novas "
-"funcionalidades que quere incluír no seu periódico."
-
-msgid "You will receive an email with the list of features you are purchasing."
-msgstr "Recibirá un correo coa lista de características que mercou."
-
-msgid "Nice"
-msgstr "Xenial"
-
-msgid ""
-"Thank you! We have received your request and will get back to you as soon as "
-"possible. You will receive a confirmation e-mail too."
-msgstr ""
-"Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
-"pronto sexa posíbel. Debería recibir un correo de confirmación."
-
-msgid ""
-"\n"
-"          Oh!, it would be a good time to share with your friends your "
-"newspaper's improvements\n"
-"        "
-msgstr ""
-"\n"
-"Oh! Este pode ser un momento perfecto para compartir as melloras do teu "
-"periódico cos teus amigos"
-
-msgid "Continue shopping"
-msgstr "Continuar mercando"
-
-msgid "Confirm"
-msgstr "Confirmar"
-
 msgid "Packs"
 msgstr "Packs"
 
@@ -7201,6 +7232,9 @@ msgstr "Carro"
 
 msgid "Your shopping cart is empty"
 msgstr "O teu carro de compra está baleiro"
+
+msgid "Checkout"
+msgstr "Mercar"
 
 msgid "Unable to find any module that matches your search."
 msgstr "Non se puideron atopar módulos que coincidan coa túa busca."
@@ -7230,6 +7264,79 @@ msgstr ""
 
 msgid "Modules to purchase"
 msgstr "Módulos a mercar"
+
+msgid "Return to <a href=\"%1\">market</a> and try again"
+msgstr ""
+
+#, fuzzy
+msgid "Confirmation"
+msgstr "Configuración"
+
+#, fuzzy
+msgid "You are about to purchase the next items:"
+msgstr "Tes certeza que queres arquivar o seguinte elemento?"
+
+#, fuzzy
+msgid "Subtotal"
+msgstr "Subtitulo"
+
+msgid "Total"
+msgstr "Total"
+
+#, fuzzy
+msgid "Contact information"
+msgstr "Información da instancia"
+
+#, fuzzy
+msgid "Contact name"
+msgstr "Nome do contido"
+
+#, fuzzy
+msgid "Company name"
+msgstr "Nome da orde"
+
+msgid "Phone number"
+msgstr ""
+
+msgid "VAT Number"
+msgstr ""
+
+#, fuzzy
+msgid "Payment Info"
+msgstr "Modos de pagamento"
+
+#, fuzzy
+msgid "Card number"
+msgstr "Estimado membro"
+
+#, fuzzy
+msgid "Expire date"
+msgstr "Tempo de expiración"
+
+#, fuzzy
+msgid "Confirm purchase"
+msgstr "Confirmar contrasinal"
+
+msgid "Nice"
+msgstr "Xenial"
+
+msgid ""
+"Thank you! We have received your request and will get back to you as soon as "
+"possible. You will receive a confirmation e-mail too."
+msgstr ""
+"Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
+"pronto sexa posíbel. Debería recibir un correo de confirmación."
+
+#, fuzzy
+msgid ""
+"\n"
+"                    Oh!, it would be a good time to share with your friends "
+"your newspaper's improvements\n"
+"                    "
+msgstr ""
+"\n"
+"Oh! Este pode ser un momento perfecto para compartir as melloras do teu "
+"periódico cos teus amigos"
 
 msgid "Delete opinions"
 msgstr "Eliminar opinións"
@@ -7874,9 +7981,6 @@ msgstr "Iniciar sesión"
 msgid "About"
 msgstr "Sobre"
 
-msgid "Help"
-msgstr "Axuda"
-
 msgid "Privacy Policy"
 msgstr "Politica de privacidade"
 
@@ -8040,6 +8144,15 @@ msgstr "Prema Ctrl+F5 ou Ctrl+Maiús+R para que o navegador os recargue"
 msgid "Instance"
 msgstr "Instancia"
 
+msgid "This is a notification for a success"
+msgstr "This is a notification for a success"
+
+msgid "This notification is an error"
+msgstr "This notification is an error"
+
+msgid "This notification is a warning"
+msgstr "This notification is a warning"
+
 msgid "Opennemas manager"
 msgstr "Xestor de opennemas"
 
@@ -8172,6 +8285,77 @@ msgstr ""
 "Aquí pode eliminar en lote ficheiros de cache, compiles, sesións e outras "
 "cousas<br> dunha instancia específica"
 
+#, fuzzy
+msgid "New notification"
+msgstr "Notificacións"
+
+#, fuzzy
+msgid "Edit notification"
+msgstr "Notificacións"
+
+msgid "Style"
+msgstr ""
+
+msgid "Fixed"
+msgstr ""
+
+#, fuzzy
+msgid "Notification always visible"
+msgstr "Notificacións"
+
+#, fuzzy
+msgid "Starts"
+msgstr "Iniciar"
+
+msgid "Click to set date"
+msgstr "Prema para estabelecer unha data"
+
+msgid "Ends"
+msgstr ""
+
+msgid "Filter by name, domain or contact"
+msgstr "Filtrar por nome, dominio ou contacto"
+
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Domains"
+msgstr "Dominios"
+
+msgid "Domain expire"
+msgstr "Expiración do dominio:"
+
+msgid "Last access"
+msgstr "Último accesso"
+
+msgid "Database"
+msgstr "Base de datos"
+
+msgid "Media size"
+msgstr "Tamaño do media"
+
+msgid "Alexa"
+msgstr "Alexa"
+
+msgid "Page views"
+msgstr "Páx. vistas"
+
+msgid "Emails"
+msgstr "Correos-e"
+
+msgid "Enabled"
+msgstr "Activada"
+
+msgid "#"
+msgstr "#"
+
+msgid "Start"
+msgstr "Iniciar"
+
+#, fuzzy
+msgid "End"
+msgstr "Activada"
+
 msgid "Our Videos"
 msgstr "Os nosos vídeos"
 
@@ -8228,9 +8412,6 @@ msgstr "Nome do propietario"
 msgid "Created from"
 msgstr "Creado o"
 
-msgid "Media size"
-msgstr "Tamaño do media"
-
 msgid "Language"
 msgstr "Idioma:"
 
@@ -8242,9 +8423,6 @@ msgstr "Plantilla"
 
 msgid "Contact mail"
 msgstr "Correo-e de contacto"
-
-msgid "Domains"
-msgstr "Dominios"
 
 msgid "No main domain"
 msgstr "Sen dominio principal"
@@ -8258,29 +8436,30 @@ msgstr "Os dominios da instancia non poden quedar valeiros."
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
 
-msgid "Click to set date"
-msgstr "Prema para estabelecer unha data"
-
 msgid "Billing"
 msgstr "Facturación"
+
+#, fuzzy
+msgid "Add billing information"
+msgstr "Información básica"
 
 msgid "Last invoice date"
 msgstr "Data da última factura"
 
-msgid "Support"
-msgstr "Asistencia técnica"
-
-msgid "Development plan"
-msgstr "Plan de desenvolvemento"
-
 msgid "Select all"
 msgstr "Seleccionar todo"
 
+msgid "pending activation"
+msgstr "activación pendente"
+
+msgid "pending deactivation"
+msgstr "desactivación pendente"
+
+msgid "Support"
+msgstr "Asistencia técnica"
+
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
-
-msgid "Database"
-msgstr "Base de datos"
 
 msgid "Maximun activated users"
 msgstr "Número máximo de usuarios activados"
@@ -8324,33 +8503,6 @@ msgstr "URL do servidor"
 
 msgid "Select modules"
 msgstr "Módulos seleccionados"
-
-msgid "Filter by name, domain or contact"
-msgstr "Filtrar por nome, dominio ou contacto"
-
-msgid "Columns"
-msgstr "Columnas"
-
-msgid "Domain expire"
-msgstr "Expiración do dominio:"
-
-msgid "Last access"
-msgstr "Último accesso"
-
-msgid "Alexa"
-msgstr "Alexa"
-
-msgid "Page views"
-msgstr "Páx. vistas"
-
-msgid "Emails"
-msgstr "Correos-e"
-
-msgid "Enabled"
-msgstr "Activada"
-
-msgid "#"
-msgstr "#"
 
 msgid "No rank"
 msgstr "Sen calificar"
@@ -8454,6 +8606,41 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "%s is now on-line"
+#~ msgstr "%s está agora dispoñible"
+
+#~ msgid "Getting help"
+#~ msgstr "Obter axuda"
+
+#~ msgid "Social Network"
+#~ msgstr "Redes sociais"
+
+#~ msgid "Cart review"
+#~ msgstr "Revisión do carro"
+
+#~ msgid "To confirm your purchase press the button below."
+#~ msgstr "Para confirmar a túa compra prema no botón de abaixo"
+
+#~ msgid ""
+#~ "Our sales department will receive an email with the new features you want "
+#~ "to include in your newspaper."
+#~ msgstr ""
+#~ "O noso departamento de ventas recibirá un correo electrónico coas novas "
+#~ "funcionalidades que quere incluír no seu periódico."
+
+#~ msgid ""
+#~ "You will receive an email with the list of features you are purchasing."
+#~ msgstr "Recibirá un correo coa lista de características que mercou."
+
+#~ msgid "Continue shopping"
+#~ msgstr "Continuar mercando"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmar"
+
+#~ msgid "Development plan"
+#~ msgstr "Plan de desenvolvemento"
 
 #~ msgid "WELCOME TO OPENNEMAS"
 #~ msgstr "BENVIDO A OPENNEMAS"
@@ -8571,9 +8758,6 @@ msgstr ""
 #~ msgstr ""
 #~ "usando o nombre de usuario e contraseña que puxeches al crear o periódico "
 #~ "ou a través do acceso directo aos termos de servizo"
-
-#~ msgid "Opennemas Team"
-#~ msgstr "O equipo de Opennemas"
 
 #~ msgid "Welcome to OpenNemas"
 #~ msgstr "Benvido a Opennemas"
@@ -8947,9 +9131,6 @@ msgstr ""
 
 #~ msgid "Allow coments"
 #~ msgstr "Permitir comentarios"
-
-#~ msgid "Basic information"
-#~ msgstr "Información básica"
 
 #~ msgid "Position in selected page type"
 #~ msgstr "Posición no tipo de páxina seleccionado"
@@ -9372,9 +9553,6 @@ msgstr ""
 
 #~ msgid "None"
 #~ msgstr "Ningún"
-
-#~ msgid "Start"
-#~ msgstr "Iniciar"
 
 #~ msgid "Uploaded"
 #~ msgstr "Subido"
@@ -10446,9 +10624,6 @@ msgstr ""
 #~ msgid "Unable to delete the menu \"%s\" as is system internal."
 #~ msgstr "Non foi posíbel eliminar o menú «%s» xa que é un menú interno."
 
-#~ msgid "Opinion deleted successfully."
-#~ msgstr "Opinión eliminada correctamente."
-
 #~ msgid "You must give an id for delete an opinion."
 #~ msgstr "Debe fornecer un identificador para eliminar unha opinión."
 
@@ -11267,9 +11442,6 @@ msgstr ""
 #~ msgid "B/W"
 #~ msgstr "B/N"
 
-#~ msgid "Content name"
-#~ msgstr "Nome do contido"
-
 #~ msgid "Comment was rejected successfully."
 #~ msgstr "Comentario rexeitado correctamente."
 
@@ -11499,9 +11671,6 @@ msgstr ""
 #~ msgstr "Contrasinal:"
 
 #~ msgid "Advertisement manager"
-#~ msgstr "Xestor de publicidade"
-
-#~ msgid "Ad manager"
 #~ msgstr "Xestor de publicidade"
 
 #~ msgid "Editing group \"%1\""
