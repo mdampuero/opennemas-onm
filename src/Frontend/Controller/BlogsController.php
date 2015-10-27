@@ -17,6 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -263,11 +264,11 @@ class BlogsController extends Controller
         $dirtyID = $request->query->getDigits('blog_id');
         $urlSlug = $request->query->filter('blog_title', '', FILTER_SANITIZE_STRING);
 
-        // Resolve blog ID, search in repository or redirect to 404
-        list($blogID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
-        if (!\ContentManager::checkValidContentAndUrl($blog, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $blog = $this->get('content_url_matcher')
+            ->matchContentUrl('opinion', $dirtyID, $urlSlug);
+
+        if (empty($blog)) {
+            throw new ResourceNotFoundException();
         }
 
         // Setup view
@@ -278,15 +279,11 @@ class BlogsController extends Controller
         $cacheable = $subscriptionFilter->subscriptionHook($blog);
 
         // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId('blog', '', $blogID);
+        $cacheID = $this->view->generateCacheId('blog', '', $blog->id);
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-            // Check if the content is ready to be published
-            if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-            $this->view->assign('contentId', $blogID);
+            $this->view->assign('contentId', $blog->id);
 
             $author = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
@@ -327,7 +324,7 @@ class BlogsController extends Controller
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds('inner'),
                 'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => 'blog-inner,'.$blogID,
+                'x-tags'          => 'blog-inner,'.$blog->id,
                 'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable
             ]

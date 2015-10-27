@@ -99,24 +99,23 @@ class OpinionsController extends Controller
         $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
 
-        // Resolve epaper ID, search in repository or redirect to 404
-        list($opinionID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $er = $this->get('opinion_repository');
-        $opinion = $er->find('Opinion', $opinionID);
-        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $opinion = $this->get('content_url_matcher')
+            ->matchContentUrl('opinion', $dirtyID, $urlSlug);
+
+        if (empty($opinion)) {
+            throw new ResourceNotFoundException();
         }
 
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpage-mobile');
 
-        $cacheID = $this->view->generateCacheId('opinion-mobile', '', $opinionID);
+        $cacheID = $this->view->generateCacheId('opinion-mobile', '', $opinion->id);
         if (($this->view->caching == 0)
             || !$this->view->isCached('mobile/opinion-inner.tpl', $cacheID)
         ) {
             // Get author photo
-            $photo = $er->find('Photo', $opinion->fk_author_img);
+            $photo = $this->get('entity_repository')->find('Photo', $opinion->fk_author_img);
 
             $this->view->assign(
                 array(

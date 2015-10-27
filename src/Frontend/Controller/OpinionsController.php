@@ -646,11 +646,10 @@ class OpinionsController extends Controller
         $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
 
-        // Resolve epaper ID, search in repository or redirect to 404
-        list($opinionID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $er = $this->get('opinion_repository');
-        $opinion = $er->find('Opinion', $opinionID);
-        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate, $urlSlug)) {
+        $opinion = $this->get('content_url_matcher')
+            ->matchContentUrl('opinion', $dirtyID, $urlSlug);
+
+        if (empty($opinion)) {
             throw new ResourceNotFoundException();
         }
 
@@ -658,20 +657,12 @@ class OpinionsController extends Controller
         $cacheable = $subscriptionFilter->subscriptionHook($opinion);
 
         // Don't execute the app logic if there are caches available
-        $cacheId = $this->view->generateCacheId($this->category_name, '', $opinionID);
+        $cacheId = $this->view->generateCacheId($this->category_name, '', $opinion->id);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
-            if ($opinion->content_status != 1 || $opinion->in_litter != 0
-                || !$opinion->isStarted()
-            ) {
-                throw new ResourceNotFoundException();
-            }
-            $this->view->assign('contentId', $opinionID);
-
             $author = $this->get('user_repository')->find($opinion->fk_author);
             $opinion->author = $author;
-
             if (is_object($author)
                 && is_array($author->meta)
                 && array_key_exists('is_blog', $author->meta)
@@ -701,7 +692,7 @@ class OpinionsController extends Controller
 
             // Get author slug for suggested opinions
             foreach ($machineSuggestedContents as &$suggest) {
-                $element = $er->find('Opinion', $suggest['pk_content']);
+                $element = $this->get('opinion_repository')->find('Opinion', $suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
                     $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
@@ -715,7 +706,7 @@ class OpinionsController extends Controller
 
             // Associated media code --------------------------------------
             if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                $photo = $er->find('Photo', $opinion->img2);
+                $photo = $this->get('opinion_repository')->find('Photo', $opinion->img2);
                 $this->view->assign('photo', $photo);
             }
 
@@ -737,11 +728,11 @@ class OpinionsController extends Controller
                 $criteria = [ 'opinions`.`fk_author' => [[ 'value' => $opinion->fk_author ]] ];
             }
 
-            $criteria['pk_opinion'] = [[ 'operator' => '<>', 'value' => $opinionID ]];
+            $criteria['pk_opinion'] = [[ 'operator' => '<>', 'value' => $opinion->id ]];
             $criteria['content_status'] = [[ 'value' => 1 ]];
             $order = ['created' => 'desc'];
 
-            $otherOpinions = $er->findBy($criteria, $order, 10, 1);
+            $otherOpinions = $this->get('opinion_repository')->findBy($criteria, $order, 10, 1);
 
             foreach ($otherOpinions as &$otOpinion) {
                 $otOpinion->author = $author;
@@ -769,7 +760,7 @@ class OpinionsController extends Controller
             [
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinionID,
+                'x-tags'          => 'opinion,'.$opinion->id,
                 'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable,
             ]

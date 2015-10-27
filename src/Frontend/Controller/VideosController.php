@@ -234,12 +234,13 @@ class VideosController extends Controller
         $dirtyID = $request->query->filter('video_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve video ID, search in repository or redirect to 404
-        list($videoID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $video = $this->get('entity_repository')->find('Video', $videoID);
-        if (!\ContentManager::checkValidContentAndUrl($video, $urlDate, $urlSlug)) {
+        $video = $this->get('content_url_matcher')
+            ->matchContentUrl('video', $dirtyID, $urlSlug, $this->category_name);
+
+        if (empty($video)) {
             throw new ResourceNotFoundException();
         }
+
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
@@ -247,14 +248,10 @@ class VideosController extends Controller
         $cacheable = $subscriptionFilter->subscriptionHook($video);
 
         // If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
+        $cacheID = $this->view->generateCacheId($this->category_name, null, $video->id);
         if ($this->view->caching == 0
-            || !$this->view->isCached('video/video_inner.tpl', $videoID)
+            || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
-            if ($video->content_status == 0 || $video->in_litter == 1) {
-                throw new ResourceNotFoundException();
-            }
-
             // Load Video and categories
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
@@ -268,7 +265,7 @@ class VideosController extends Controller
             $otherVideos = $this->cm->findAll(
                 'Video',
                 ' content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
-                . $this->category . ' AND pk_content <> '.$videoID,
+                . $this->category . ' AND pk_content <> '.$video->id,
                 ' ORDER BY created DESC LIMIT 4'
             );
 
@@ -297,7 +294,7 @@ class VideosController extends Controller
             'video/video_inner.tpl',
             array(
                 'cache_id'    => $cacheID,
-                'x-tags'      => 'video,'.$videoID,
+                'x-tags'      => 'video,'.$video->id,
                 'x-cache-for' => '+1 day',
                 'x-cacheable' => $cacheable
             )

@@ -34,10 +34,10 @@ class Articles
         $this->cm = new \ContentManager();
         $ccm      = \ContentCategoryManager::get_instance();
 
-        // Resolve dirty Id
-        list($articleID, $urlDate) = \ContentManager::resolveID($id);
-        $article = $er->find('Article', $articleID);
-        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate)) {
+        $article = $this->get('content_url_matcher')
+            ->matchContentUrl('article', $id);
+
+        if (empty($article)) {
             throw new RestException(404, 'Page not found');
         }
 

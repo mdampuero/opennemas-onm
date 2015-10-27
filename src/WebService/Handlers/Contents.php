@@ -26,8 +26,19 @@ class Contents
     {
         $this->validateInt($id);
 
-        $params = \ContentManager::resolveID($id);
-        $refactorID = $params[0];
+        preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $id, $matches);
+
+        // Get real content id
+        $refactorID = 0;
+        if (array_key_exists('id', $matches) &&
+            array_key_exists('date', $matches) &&
+            (
+                substr($matches['id'], 0, -6) === '' ||
+                substr((int)$matches['id'], 0, -6) > 0
+            )
+        ) {
+            $refactorID = (int) $matches['id'];
+        }
 
         return $refactorID;
     }
