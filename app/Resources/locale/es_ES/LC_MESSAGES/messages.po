@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 16:23+0100\n"
-"PO-Revision-Date: 2015-10-26 16:24+0200\n"
+"POT-Creation-Date: 2015-10-27 16:38+0100\n"
+"PO-Revision-Date: 2015-10-27 16:46+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2272,7 +2272,7 @@ msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
 
 #, php-format
-msgid "Your newspaper is now on-line"
+msgid "Your newspaper is now live"
 msgstr "Tu periódico ya está en línea"
 
 msgid "Frontpage mobile version"
@@ -4517,6 +4517,15 @@ msgstr "Página"
 
 msgid "Author"
 msgstr "Autor"
+
+msgid "See more"
+msgstr "Ver más"
+
+msgid "There are no notifications for now."
+msgstr "No hay notificaciones por ahora."
+
+msgid "Check your previous notifications <a href=\"%1\">here</a>"
+msgstr "Comprueba tus notificaciones anteriores desde <a href=\"%1\">aquí</a>"
 
 msgid "Help center"
 msgstr "Centro de ayuda"
@@ -8218,15 +8227,6 @@ msgstr ""
 msgid "Instance"
 msgstr "Instancia"
 
-msgid "This is a notification for a success"
-msgstr "This is a notification for a success"
-
-msgid "This notification is an error"
-msgstr "This notification is an error"
-
-msgid "This notification is a warning"
-msgstr "This notification is a warning"
-
 msgid "Opennemas manager"
 msgstr "Gestor de opennemas"
 
@@ -8384,9 +8384,6 @@ msgstr "Pulsa para establecer una fecha"
 
 msgid "Ends"
 msgstr "Fin"
-
-msgid "Filter by name, domain or contact"
-msgstr "Filtrar por nome, dominio o contacto"
 
 msgid "Columns"
 msgstr "Columnas"
@@ -8573,6 +8570,9 @@ msgstr "URL del servidor"
 msgid "Select modules"
 msgstr "Módulos seleccionados"
 
+msgid "Filter by name, domain or contact"
+msgstr "Filtrar por nome, dominio o contacto"
+
 msgid "No rank"
 msgstr "Sin clasificación"
 
@@ -8679,6 +8679,15 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "This is a notification for a success"
+#~ msgstr "This is a notification for a success"
+
+#~ msgid "This notification is an error"
+#~ msgstr "This notification is an error"
+
+#~ msgid "This notification is a warning"
+#~ msgstr "This notification is a warning"
 
 #~ msgid "%s is now on-line"
 #~ msgstr "%s está ahora en línea"

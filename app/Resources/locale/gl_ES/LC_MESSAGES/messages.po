@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 16:23+0100\n"
-"PO-Revision-Date: 2015-10-26 16:25+0200\n"
+"POT-Creation-Date: 2015-10-27 16:38+0100\n"
+"PO-Revision-Date: 2015-10-27 16:45+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2249,7 +2249,7 @@ msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
 
 #, php-format
-msgid "Your newspaper is now on-line"
+msgid "Your newspaper is now live"
 msgstr "O teu xornal xa está en liña"
 
 msgid "Frontpage mobile version"
@@ -4470,6 +4470,15 @@ msgstr "Páxina"
 msgid "Author"
 msgstr "Autor"
 
+msgid "See more"
+msgstr "Ver máis"
+
+msgid "There are no notifications for now."
+msgstr "Non hai notificacións por agora."
+
+msgid "Check your previous notifications <a href=\"%1\">here</a>"
+msgstr "Comproba as túas notificacións anteriores <a href=\"%1\">aquí</a>"
+
 msgid "Help center"
 msgstr "Centro de axuda"
 
@@ -5234,9 +5243,8 @@ msgstr ""
 msgid "That's it!"
 msgstr "E iso é todo!"
 
-#, fuzzy
 msgid "Wait...Do you have a Facebook or a Twitter account?"
-msgstr "Tes unha conta en Facebook ou Twitter?"
+msgstr "Agarda… Tes unha conta en Facebook ou Twitter?"
 
 msgid ""
 "Then you can associate those accounts to access your opennemas. It will make "
@@ -5245,7 +5253,6 @@ msgstr ""
 "Entón podes asocialas para acceder a Opennemas. Isto fará moito máis doado "
 "entrar no panel de administración."
 
-#, fuzzy
 msgid "Now, you can start to use your newspaper."
 msgstr "Xa podes comezar a usar o teu periódico."
 
@@ -6493,43 +6500,39 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta connosco"
 
-#, fuzzy
 msgid "Billing information"
-msgstr "Información básica"
+msgstr "Información de facturación"
 
-#, fuzzy
 msgid "Company"
-msgstr "A nosa empresa"
+msgstr "Compañía"
 
-#, fuzzy
 msgid "VAT"
-msgstr "IVE %"
+msgstr "IVE"
 
 msgid "Phone"
-msgstr ""
+msgstr "Teléfono"
 
 msgid "Address"
-msgstr ""
+msgstr "Enderezo"
 
-#, fuzzy
 msgid "Postal code"
 msgstr "Código postal"
 
 msgid "City"
-msgstr ""
+msgstr "Cidade"
 
-#, fuzzy
 msgid "State"
 msgstr "Estado"
 
-#, fuzzy
 msgid "Country"
-msgstr "Cantidade"
+msgstr "País"
 
 msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support system</a>."
 msgstr ""
+"Hai algo mal? Contacta coa nosa <a href=\""
+"javascript:UserVoice.showPopupWidget();\">asistencia técnica</a>."
 
 msgid "Here you can see a list of your activated modules"
 msgstr "Aquí pode ver unha lista dos módulos activados no seu periódico"
@@ -7266,56 +7269,46 @@ msgid "Modules to purchase"
 msgstr "Módulos a mercar"
 
 msgid "Return to <a href=\"%1\">market</a> and try again"
-msgstr ""
+msgstr "Volve á <a href=\"%1\">tenda</a> e téntao de novo"
 
-#, fuzzy
 msgid "Confirmation"
-msgstr "Configuración"
+msgstr "Confirmación"
 
-#, fuzzy
 msgid "You are about to purchase the next items:"
-msgstr "Tes certeza que queres arquivar o seguinte elemento?"
+msgstr "Estas a piques de mercar os seguintes elementos:"
 
-#, fuzzy
 msgid "Subtotal"
-msgstr "Subtitulo"
+msgstr "Subtotal"
 
 msgid "Total"
 msgstr "Total"
 
-#, fuzzy
 msgid "Contact information"
-msgstr "Información da instancia"
+msgstr "Información de contacto"
 
-#, fuzzy
 msgid "Contact name"
-msgstr "Nome do contido"
+msgstr "Nome do contacto"
 
-#, fuzzy
 msgid "Company name"
-msgstr "Nome da orde"
+msgstr "Nome da empresa"
 
 msgid "Phone number"
-msgstr ""
+msgstr "Número de teléfono"
 
 msgid "VAT Number"
-msgstr ""
+msgstr "Identificador fiscal"
 
-#, fuzzy
 msgid "Payment Info"
-msgstr "Modos de pagamento"
+msgstr "Información de pagamento"
 
-#, fuzzy
 msgid "Card number"
-msgstr "Estimado membro"
+msgstr "Número de tarxeta"
 
-#, fuzzy
 msgid "Expire date"
-msgstr "Tempo de expiración"
+msgstr "Data de expiración"
 
-#, fuzzy
 msgid "Confirm purchase"
-msgstr "Confirmar contrasinal"
+msgstr "Confirmar compra"
 
 msgid "Nice"
 msgstr "Xenial"
@@ -7327,7 +7320,6 @@ msgstr ""
 "Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
 "pronto sexa posíbel. Debería recibir un correo de confirmación."
 
-#, fuzzy
 msgid ""
 "\n"
 "                    Oh!, it would be a good time to share with your friends "
@@ -8144,15 +8136,6 @@ msgstr "Prema Ctrl+F5 ou Ctrl+Maiús+R para que o navegador os recargue"
 msgid "Instance"
 msgstr "Instancia"
 
-msgid "This is a notification for a success"
-msgstr "This is a notification for a success"
-
-msgid "This notification is an error"
-msgstr "This notification is an error"
-
-msgid "This notification is a warning"
-msgstr "This notification is a warning"
-
 msgid "Opennemas manager"
 msgstr "Xestor de opennemas"
 
@@ -8285,36 +8268,29 @@ msgstr ""
 "Aquí pode eliminar en lote ficheiros de cache, compiles, sesións e outras "
 "cousas<br> dunha instancia específica"
 
-#, fuzzy
 msgid "New notification"
-msgstr "Notificacións"
+msgstr "Novas notificacións"
 
-#, fuzzy
 msgid "Edit notification"
-msgstr "Notificacións"
+msgstr "Editar notificación"
 
 msgid "Style"
-msgstr ""
+msgstr "Estilo"
 
 msgid "Fixed"
-msgstr ""
+msgstr "Fixa"
 
-#, fuzzy
 msgid "Notification always visible"
-msgstr "Notificacións"
+msgstr "Notificación sempre visíbel"
 
-#, fuzzy
 msgid "Starts"
-msgstr "Iniciar"
+msgstr "Comeza"
 
 msgid "Click to set date"
 msgstr "Prema para estabelecer unha data"
 
 msgid "Ends"
-msgstr ""
-
-msgid "Filter by name, domain or contact"
-msgstr "Filtrar por nome, dominio ou contacto"
+msgstr "Remata"
 
 msgid "Columns"
 msgstr "Columnas"
@@ -8352,9 +8328,8 @@ msgstr "#"
 msgid "Start"
 msgstr "Iniciar"
 
-#, fuzzy
 msgid "End"
-msgstr "Activada"
+msgstr "Fin"
 
 msgid "Our Videos"
 msgstr "Os nosos vídeos"
@@ -8439,9 +8414,8 @@ msgstr "Data de expiración do dominio:"
 msgid "Billing"
 msgstr "Facturación"
 
-#, fuzzy
 msgid "Add billing information"
-msgstr "Información básica"
+msgstr "Engadir información de facturación"
 
 msgid "Last invoice date"
 msgstr "Data da última factura"
@@ -8503,6 +8477,9 @@ msgstr "URL do servidor"
 
 msgid "Select modules"
 msgstr "Módulos seleccionados"
+
+msgid "Filter by name, domain or contact"
+msgstr "Filtrar por nome, dominio ou contacto"
 
 msgid "No rank"
 msgstr "Sen calificar"
@@ -8606,6 +8583,15 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "This is a notification for a success"
+#~ msgstr "This is a notification for a success"
+
+#~ msgid "This notification is an error"
+#~ msgstr "This notification is an error"
+
+#~ msgid "This notification is a warning"
+#~ msgstr "This notification is a warning"
 
 #~ msgid "%s is now on-line"
 #~ msgstr "%s está agora dispoñible"
