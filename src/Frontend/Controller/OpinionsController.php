@@ -789,7 +789,7 @@ class OpinionsController extends Controller
         $syncParams = s::get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
+                if (in_array($this->category_name, $values['categories'])) {
                     $wsUrl = $siteUrl;
                 }
             }

@@ -34,7 +34,7 @@ class Articles
         $this->cm = new \ContentManager();
         $ccm      = \ContentCategoryManager::get_instance();
 
-        $article = $this->get('content_url_matcher')
+        $article = getService('content_url_matcher')
             ->matchContentUrl('article', $id);
 
         if (empty($article)) {
@@ -77,7 +77,7 @@ class Articles
         }
 
         // Get Related contents
-        $relationIDs     = getService('related_contents')->getRelationsForInner($articleID);
+        $relationIDs     = getService('related_contents')->getRelationsForInner($article->id);
         $relatedContents = [];
         if (count($relationIDs) > 0) {
             $relatedContents = $this->cm->getContents($relationIDs);
