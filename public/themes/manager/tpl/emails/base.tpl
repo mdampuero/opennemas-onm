@@ -461,7 +461,7 @@
                                   <tr>
                                     <td valign="top" class="mcnTextContent">
                                       {capture name="email_title"}{block name="title"}{/block}{/capture}
-                                      {image_tag src="white.png" base_url="`$instance_base_url`" common=1 alt="`$smarty.capture.email_title`"}
+                                      {image_tag src="/assets/images/white.png" base_url="`$instance_base_url`" alt="`$smarty.capture.email_title`"}
                                     </td>
                                   </tr>
                                 </tbody>
