@@ -448,9 +448,9 @@
             <tr>
               <td align="center" valign="top">
                 <!-- BEGIN PREHEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader">
+                <table border="0" cellpadding="0" cellspacing="0" width="603" id="templatePreheader">
                   <tr>
-                    <td valign="top" class="preheaderContainer">
+                    <td valign="top" class="preheaderContainer"  style="padding:7px 15px 0 15px">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
                         <tbody class="mcnTextBlockOuter">
                           <tr>
@@ -460,8 +460,7 @@
                                 <tbody>
                                   <tr>
                                     <td valign="top" class="mcnTextContent">
-                                      {capture name="email_title"}{block name="title"}{/block}{/capture}
-                                      {image_tag src="/assets/images/white.png" base_url="`$instance_base_url`" alt="`$smarty.capture.email_title`"}
+                                      {block name="title"}{/block}
                                     </td>
                                   </tr>
                                 </tbody>
