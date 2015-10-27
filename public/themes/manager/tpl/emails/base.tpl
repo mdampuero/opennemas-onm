@@ -448,29 +448,20 @@
             <tr>
               <td align="center" valign="top">
                 <!-- BEGIN PREHEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader" style="display:none">
+                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader">
                   <tr>
-                    <td valign="top" class="preheaderContainer" style="padding-top:9px;">
+                    <td valign="top" class="preheaderContainer">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
                         <tbody class="mcnTextBlockOuter">
                           <tr>
                             <td valign="top" class="mcnTextBlockInner">
 
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="366" class="mcnTextContentContainer">
+                              <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnTextContentContainer">
                                 <tbody>
                                   <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-left:18px; padding-bottom:9px; padding-right:0;">
-                                      {block name="title"}{/block}
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                              <table align="right" border="0" cellpadding="0" cellspacing="0" width="197" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:0;">
-                                      <!-- <a href="*|ARCHIVE|*" target="_blank">View this email in your browser</a> -->
+                                    <td valign="top" class="mcnTextContent">
+                                      {capture name="email_title"}{block name="title"}{/block}{/capture}
+                                      {image_tag src="white.png" base_url="`$instance_base_url`" common=1 alt="`$smarty.capture.email_title`"}
                                     </td>
                                   </tr>
                                 </tbody>
