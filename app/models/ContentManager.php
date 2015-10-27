@@ -810,32 +810,36 @@ class ContentManager
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
         $date = $date->format('Y-m-d H:i:s');
+        $now  = date('Y-m-d H:i:s');
 
-        $criteria = array(
-            'join' => array(
-                array(
+        $criteria = [
+            'join' => [
+                [
                     'table'               => 'content_views',
                     'type'                => 'left',
-                    'contents.pk_content' => array(
-                        array(
+                    'contents.pk_content' => [
+                        [
                             'value' => 'content_views.pk_fk_content',
                             'field' => true
-                        )
-                    )
-                )
-            ),
-            'content_type_name' => array(array('value' => $contentType)),
-            'in_litter'         => array(array('value' => 0)),
-            'starttime'         => array(array('value' => $date, 'operator' => '>=')),
-            'endtime'           => array(
+                        ]
+                    ]
+                ]
+            ],
+            'content_type_name' => [['value' => $contentType]],
+            'in_litter'         => [['value' => 0]],
+            'starttime'         => [
+                'union' => 'AND',
+                ['value' => $date, 'operator' => '>='],
+                ['value' => $now, 'operator' => '<']
+            ],
+            'endtime'           => [
                 'union' => 'OR',
-                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
-                array('value' => $date, 'operator' => '>')
-            ),
-        );
+                ['value' => '0000-00-00 00:00:00', 'operator' => '='],
+                ['value' => $date, 'operator' => '>']
+            ],
+        ];
 
-        $order = array('content_views.views' => 'desc');
-
+        $order = ['content_views.views' => 'desc'];
         if ($category) {
             $category = getService('category_repository')->find($category);
 
@@ -843,23 +847,22 @@ class ContentManager
                 $category = $category->name;
             }
 
-            $criteria['category_name'] = array(array('value' => $category));
+            $criteria['category_name'] = [['value' => $category]];
         }
 
         if ($author) {
-            $criteria['fk_author'] = array(array('value' => $author));
+            $criteria['fk_author'] = [['value' => $author]];
         }
 
         if (!$all) {
-            $criteria['content_status'] = array(array('value' => 1));
+            $criteria['content_status'] = [['value' => 1]];
         }
 
         $contents = $em->findBy($criteria, $order, $num, 1);
 
-        // Repeat without 'created' filter
+        // Repeat with starttime filter changed
         if (count($contents) == 0) {
-            unset($criteria['starttime']);
-            unset($criteria['endtime']);
+            $criteria['starttime'] = [['value' => $now, 'operator' => '<']];
             $contents = $em->findBy($criteria, $order, $num, 1);
         }
 
