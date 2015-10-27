@@ -56,11 +56,23 @@ class BlogsController extends Controller
             $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
 
             $order   = array('starttime' => 'DESC');
+            $date    = date('Y-m-d H:i:s');
             $filters = array(
                 'content_type_name' => array(array('value' => 'opinion')),
                 'type_opinion'      => array(array('value' => 0)),
                 'content_status'    => array(array('value' => 1)),
                 'blog'              => array(array('value' => 1)),
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS' ],
+                    [ 'value' => $date, 'operator' => '<' ]
+                ],
+                'endtime'           => [
+                    'union'   => 'OR',
+                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
+                    [ 'value' => $date, 'operator' => '>' ]
+                ],
             );
 
             $em         = $this->get('opinion_repository');
@@ -75,7 +87,6 @@ class BlogsController extends Controller
 
             foreach ($blogs as &$blog) {
                 if (array_key_exists($blog->fk_author, $authors)) {
-
                     $blog->author           = $authors[$blog->fk_author];
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = $blog->author->username;
@@ -169,7 +180,7 @@ class BlogsController extends Controller
                 // Get the list articles for this author
                 $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                     $filter
-                    .' AND contents.content_status=1',
+                    .' AND contents.content_status=1 AND starttime <= NOW()',
                     'ORDER BY starttime DESC '.$_limit
                 );
 
