@@ -63,9 +63,8 @@ class NotificationController extends Controller
      */
     public function deleteAction($id)
     {
-        $notification = $this->get('orm.manager')
-            ->getRepository('manager.notification')
-            ->find($id);
+        $em = $this->get('orm.manager');
+        $notification = $em->getRepository('manager.notification')->find($id);
 
         $em->remove($notification);
 
