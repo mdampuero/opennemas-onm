@@ -248,31 +248,26 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
-                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()">
+                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()" ng-click="markFixedAsRead()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
                         [% unread.length %]
                       </span>
                     </a>
-                    <div class="dropdown-menu ng-cloak">
+                    <div class="dropdown-menu dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
                       <div class="dropdown-title clearfix">
-                        <div class="pull-left">
                           {t}Notifications{/t}
-                        </div>
-                        <a href="{url name=backend_notifications_list}" class="pull-right">
-                          {t}See more{/t} +
-                        </a>
                       </div>
-                      <div class="text-center" ng-show="!notifications || notifications.length <= 0">
+                      <div class="notification-list-placeholder" ng-show="!notifications || notifications.length == 0">
                         <span class="fa fa-bell fa-2x"></span>
                         <h5>
                           {t}There are no notifications for now.{/t} <br>
                           {capture name="notifications_url"}{url name=backend_notifications_list}{/capture}
-                          {t 1=$smarty.capture.notifications_url escape=off}Check your previous notifications <a href="%1">here</a>{/t}
+                          {t 1=$smarty.capture.notifications_url escape=off}Check your previous notifications <a href="%1">here</a>.{/t}
                         </h5>
                       </div>
-                      <ul class="notification-list">
+                      <ul class="notification-list" ng-show="notifications.length > 0">
                         <scrollable>
                         <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
                           <div class="notification-title">
@@ -288,6 +283,11 @@
                         </li>
                         </scrollable>
                       </ul>
+                      <div class="dropdown-footer clearfix">
+                        <a href="{url name=backend_notifications_list}">
+                          {t}See more{/t}
+                        </a>
+                      </div>
                     </div>
                   </li>
                   <li class="quicklinks">
@@ -298,7 +298,7 @@
                   <a href="#" data-toggle="dropdown">
                     <i class="fa fa-support"></i>
                   </a>
-                  <div class="dropdown-menu">
+                  <div class="dropdown-menu dropdown-menu-with-title">
                      <div class="dropdown-title">{t}Help center{/t}</div>
                     <div class="clearfix quick-items-row">
                       <div class="quick-item">
