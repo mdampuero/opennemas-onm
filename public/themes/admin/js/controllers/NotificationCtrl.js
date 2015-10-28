@@ -120,22 +120,21 @@
          *   Marks fixed notifications as read.
          */
         $scope.markFixedAsRead = function() {
-          if ($scope.isOpen) {
+          var fixed = $scope.fixed.map(function(a) {
+            return a.id;
+          });
+
+          if ($scope.isOpen || fixed.length === 0) {
             return;
           }
 
-          var data = {
-            ids: $scope.fixed.map(function(a) {
-              return a.id;
-            })
-          };
-
-          var url = routing.generate('backend_ws_notifications_patch');
+          var data = { ids: fixed };
+          var url  = routing.generate('backend_ws_notifications_patch');
 
           $http.patch(url, data).success(function() {
             for (var i = 0; i < $scope.notifications.length; i++) {
               if ($scope.notifications[i].fixed == 1) {
-                $scope.notifications[i].is_read = 1;
+                $scope.notifications[i].read = 1;
               }
             }
 
@@ -178,7 +177,7 @@
           }
 
           $scope.unread = nv.filter(function(a) {
-            return a.fixed != 1;
+            return a.read == 0;
           });
 
           $scope.fixed = nv.filter(function(a) {

@@ -40,9 +40,10 @@ class NotificationController extends Controller
             'user_id' => [ [ 'value' => $this->getUser()->id ] ]
         ]);
 
-        $read = array_map(function ($n) {
-            return $n->notification_id;
-        }, $notifications);
+        $read = [];
+        foreach ($notifications as $un) {
+            $read[$un->notification_id] = $un->read_time;
+        }
 
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
@@ -51,16 +52,14 @@ class NotificationController extends Controller
             . ' AND (start <= \'' . $date
             . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
-        if (!empty($read)) {
-            $criteria .= ' AND (id NOT IN ( ' . implode(',', $read) . ' ))';
-        }
-
         $nr = $this->get('orm.manager')->getRepository('manager.notification');
 
         $notifications = $nr->findBy($criteria, [ 'fixed' => 'desc' ], $epp, $page);
 
         foreach ($notifications as &$notification) {
             $notification = $notification->getData();
+
+            $notification['read'] = 0;
 
             $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
             $notification['body'] = $notification['body'][CURRENT_LANGUAGE];
@@ -80,6 +79,12 @@ class NotificationController extends Controller
 
             if (time() - $time < 86400) {
                 $notification['day'] = _('Today');
+            }
+
+            if (in_array($notification['id'], array_keys($read))
+                && $notification['start'] <= $read[$notification['id']]
+            ) {
+                $notification['read'] = 1;
             }
 
             $notification['time'] = $date->format('H:i');
@@ -180,17 +185,20 @@ class NotificationController extends Controller
                 [ 'notification_id' => $id, 'user_id' => $userId ]
             );
 
+            $un->read = date('Y-m-d H:i:s');
+            $em->persist($un);
+
             return new JsonResponse(_('Notification marked as read successfully'));
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
             $un->user_id = $userId;
             $un->notification_id = $id;
+            $un->read = date('Y-m-d H:i:s');
 
             $em->persist($un);
 
             return new JsonResponse(_('Notification marked as read successfully'));
         } catch (\Exception $e) {
-
             return new JsonResponse(_($e->getMessage()), 400);
         }
     }
@@ -222,25 +230,27 @@ class NotificationController extends Controller
             $notifications = $em->getRepository('user_notification')
                 ->findBy($criteria);
 
-            $read = array_map(function ($un) {
-                return $un->notification_id;
-            }, $notifications);
+            // Update read datetime for existing
+            $read = [];
+            foreach ($notifications as $notification) {
+                $read[] = $notification->id;
 
+                $notification->read_time = date('Y-m-d H:i:s');
+                $em->persist($notification);
+                $updated++;
+            }
+
+            // Create new UserNotification for missed
             $missed = array_diff($ids, $read);
-
-            $nr = $em->getRepository('manager.notification');
             foreach ($missed as $id) {
-                $notification = $nr->find($id);
-                var_dump($notification);
+                $un = new UserNotification();
 
-                if (!empty($notification) && !$notification->fixed) {
-                    $un = new UserNotification();
-                    $un->user_id = $this->getUser()->id;
-                    $un->notification_id = $id;
+                $un->user_id         = $this->getUser()->id;
+                $un->notification_id = $id;
+                $un->read_time       = date('Y-m-d H:i:s');
 
-                    $em->persist($un);
-                    $updated++;
-                }
+                $em->persist($un);
+                $updated++;
             }
 
             return new JsonResponse(sprintf(
@@ -248,6 +258,7 @@ class NotificationController extends Controller
                 $updated
             ));
         } catch (\Exception $e) {
+            var_dump($e->getMessage());die();
             return new JsonResponse(_($e->getMessage()), 400);
         }
     }
