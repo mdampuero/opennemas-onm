@@ -32,7 +32,7 @@ class UserNotificationPersister extends DatabasePersister
     {
         $this->iconn->delete(
             'user_notification',
-            [ 'id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
+            [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
         );
 
         $this->icache->delete($entity->getCachedId());
@@ -43,9 +43,14 @@ class UserNotificationPersister extends DatabasePersister
      */
     public function update(Entity $entity)
     {
+        $data = $this->dbfy($entity);
+
+        unset($data['notification_id']);
+        unset($data['user_id']);
+
         $this->iconn->update(
             'user_notification',
-            [],
+            $data,
             [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
         );
 

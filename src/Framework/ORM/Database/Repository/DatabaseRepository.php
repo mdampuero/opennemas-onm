@@ -290,5 +290,7 @@ class DatabaseRepository extends BaseManager
                 $entity->{$key} = $value;
             }
         }
+
+        $entity->refresh();
     }
 }

@@ -91,7 +91,6 @@ class UserNotificationRepository extends DatabaseRepository
         return $ordered;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -128,5 +127,7 @@ class UserNotificationRepository extends DatabaseRepository
                 $entity->{$key} = $value;
             }
         }
+
+        $entity->refresh();
     }
 }
