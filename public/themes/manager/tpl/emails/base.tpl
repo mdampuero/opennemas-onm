@@ -448,29 +448,19 @@
             <tr>
               <td align="center" valign="top">
                 <!-- BEGIN PREHEADER // -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader" style="display:none">
+                <table border="0" cellpadding="0" cellspacing="0" width="603" id="templatePreheader">
                   <tr>
-                    <td valign="top" class="preheaderContainer" style="padding-top:9px;">
+                    <td valign="top" class="preheaderContainer"  style="padding:7px 15px 0 15px">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
                         <tbody class="mcnTextBlockOuter">
                           <tr>
                             <td valign="top" class="mcnTextBlockInner">
 
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="366" class="mcnTextContentContainer">
+                              <table align="left" border="0" cellpadding="0" cellspacing="0" class="mcnTextContentContainer">
                                 <tbody>
                                   <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-left:18px; padding-bottom:9px; padding-right:0;">
+                                    <td valign="top" class="mcnTextContent">
                                       {block name="title"}{/block}
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                              <table align="right" border="0" cellpadding="0" cellspacing="0" width="197" class="mcnTextContentContainer">
-                                <tbody>
-                                  <tr>
-                                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:0;">
-                                      <!-- <a href="*|ARCHIVE|*" target="_blank">View this email in your browser</a> -->
                                     </td>
                                   </tr>
                                 </tbody>
