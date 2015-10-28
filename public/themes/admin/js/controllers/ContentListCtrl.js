@@ -477,9 +477,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.toggle = function(content) {
       if ($scope.selected.contents.indexOf(content.id) === -1) {
-        $scope.selected.contents.push(content.id);
-
-        $scope.selected.lastSelected = content;
+        if ($scope.selected.contents.length < 5) {
+          $scope.selected.contents.push(content.id);
+          $scope.selected.lastSelected = content;
+        }
       } else {
         $scope.selected.lastSelected = null;
 
