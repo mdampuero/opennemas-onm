@@ -111,25 +111,21 @@ class LetterController extends Controller
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve letter ID, search in repository or redirect to 404
-        list($letterID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $letter = $this->get('entity_repository')->find('Letter', $letterID);
-        if (!\ContentManager::checkValidContentAndUrl($letter, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $letter = $this->get('content_url_matcher')
+            ->matchContentUrl('letter', $dirtyID, $urlSlug);
+
+        if (empty($letter)) {
+            throw new ResourceNotFoundException();
         }
 
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-inner');
 
-        $cacheID = $this->view->generateCacheId('letter-inner', '', $letterID);
+        $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            if ($letter->content_status != 1 || $letter->in_litter != 0) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-
             $letter->with_comment = 1;
 
             $cm = new \ContentManager();
@@ -144,7 +140,7 @@ class LetterController extends Controller
                     'letter'       => $letter,
                     'content'      => $letter,
                     'otherLetters' => $otherLetters,
-                    'contentId'    => $letterID, // Used on module_comments.tpl
+                    'contentId'    => $letter->id, // Used on module_comments.tpl
                 )
             );
         }

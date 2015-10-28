@@ -16,6 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -39,7 +40,7 @@ class AdvertisementController extends Controller
         $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
 
         if (!is_object($advertisement)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         // Returns the HTML for the add and a header to varnish
@@ -63,17 +64,18 @@ class AdvertisementController extends Controller
      **/
     public function redirectAction(Request $request)
     {
-        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         // Resolve ad ID, search in repository or redirect to 404
-        list($id, $urlDate) = \ContentManager::resolveID($id);
-        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
-        if (!\ContentManager::checkValidContentAndUrl($advertisement, $urlDate)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $advertisement = $this->get('content_url_matcher')
+            ->matchContentUrl('advertisement', $dirtyID);
+
+        if (empty($advertisement)) {
+            throw new ResourceNotFoundException();
         }
 
         // Increase number of clicks
-        $advertisement->setNumClics($id);
+        $advertisement->setNumClics($advertisement->id);
 
         if ($advertisement->url) {
             return $this->redirect($advertisement->url);

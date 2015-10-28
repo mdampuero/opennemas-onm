@@ -191,6 +191,10 @@ services:
     template_cache_config_manager:
         class: Onm\Templating\Cache\Config
 
+    content_url_matcher:
+        class: Framework\Routing\ContentUrlMatcher
+        arguments: [ @entity_repository ]
+
     view:
         alias: onm_templating
 

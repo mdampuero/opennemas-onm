@@ -44,11 +44,10 @@ class ArticlesController extends Controller
 
         $this->ccm  = \ContentCategoryManager::get_instance();
 
-        // Resolve article ID, search in repository or redirect to 404
-        list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $er = $this->get('entity_repository');
-        $article = $er->find('Article', $articleID);
-        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
+        $article = $this->get('content_url_matcher')
+            ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
+
+        if (empty($article)) {
             throw new ResourceNotFoundException();
         }
 
@@ -65,7 +64,7 @@ class ArticlesController extends Controller
         $cacheable = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
-        $actualCategoryId    = $this->ccm->get_id($categoryName);
+        $actualCategoryId = $this->ccm->get_id($categoryName);
         $ads = $this->getAds($actualCategoryId);
         $this->view->assign('advertisements', $ads);
 
@@ -74,80 +73,73 @@ class ArticlesController extends Controller
         $layoutFile = 'layouts/'.$layout.'.tpl';
         $this->view->assign('layoutFile', $layoutFile);
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
+        $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
         if ($this->view->caching == 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
-            if (($article->content_status == 1) && ($article->in_litter == 0)
-                && ($article->isStarted())
-            ) {
-                // Categories code -------------------------------------------
-                // TODO: Seems that this is rubbish, evaluate its removal
-                $actualCategory      = $categoryName;
-                $actualCategoryId    = $this->ccm->get_id($actualCategory);
-                $actualCategoryTitle = $this->ccm->getTitle($actualCategory);
-                $categoryData        = null;
-                if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
-                    $categoryData = $this->ccm->categories[$actualCategoryId];
-                }
+            // Categories code -------------------------------------------
+            // TODO: Seems that this is rubbish, evaluate its removal
+            $actualCategoryTitle = $this->ccm->getTitle($categoryName);
+            $categoryData        = null;
+            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
+                $categoryData = $this->ccm->categories[$actualCategoryId];
+            }
 
-                $this->view->assign(
-                    array(
-                        'category_name'         => $actualCategory ,
-                        'actual_category_title' => $actualCategoryTitle,
-                        'actual_category_id'    => $actualCategoryId,
-                        'category_data'         => $categoryData,
-                    )
-                );
+            $this->view->assign(
+                array(
+                    'category_name'         => $categoryName,
+                    'actual_category_title' => $actualCategoryTitle,
+                    'actual_category_id'    => $actualCategoryId,
+                    'category_data'         => $categoryData,
+                )
+            );
 
-                // Associated media code --------------------------------------
-                if (isset($article->img2) && ($article->img2 > 0)) {
-                    $photoInt = $er->find('Photo', $article->img2);
-                    $this->view->assign('photoInt', $photoInt);
-                }
+            // Associated media code --------------------------------------
+            $er = $this->get('entity_repository');
+            if (isset($article->img2) && ($article->img2 > 0)) {
+                $photoInt = $er->find('Photo', $article->img2);
+                $this->view->assign('photoInt', $photoInt);
+            }
 
-                if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                    $videoInt = $er->find('Video', $article->fk_video2);
-                    $this->view->assign('videoInt', $videoInt);
-                }
+            if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
+                $videoInt = $er->find('Video', $article->fk_video2);
+                $this->view->assign('videoInt', $videoInt);
+            }
 
-                $article->media_url = '';
-                if (is_object($article->author)) {
-                    $article->author->getPhoto();
-                }
+            $article->media_url = '';
+            if (is_object($article->author)) {
+                $article->author->getPhoto();
+            }
 
-                // Related contents code ---------------------------------------
-                $relationIDs = getService('related_contents')->getRelationsForInner($articleID);
-                $relatedContents = [];
-                if (count($relationIDs) > 0) {
-                    $cm = new \ContentManager;
-                    $relatedContents = $cm->getContents($relationIDs);
+            // Related contents code ---------------------------------------
+            $relationIDs = getService('related_contents')->getRelationsForInner($article->id);
+            $relatedContents = [];
+            if (count($relationIDs) > 0) {
+                $cm = new \ContentManager;
+                $relatedContents = $cm->getContents($relationIDs);
 
-                    // Drop contents that are not available or not in time
-                    $relatedContents = $cm->getInTime($relatedContents);
-                    $relatedContents = $cm->getAvailable($relatedContents);
+                // Drop contents that are not available or not in time
+                $relatedContents = $cm->getInTime($relatedContents);
+                $relatedContents = $cm->getAvailable($relatedContents);
 
-                    // Add category name
-                    foreach ($relatedContents as $key => &$content) {
-                        $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
-                        if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
-                            $content->photo = $er->find('Photo', $content->img1);
-                        }
+                // Add category name
+                foreach ($relatedContents as $key => &$content) {
+                    $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
+                    if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
+                        $content->photo = $er->find('Photo', $content->img1);
                     }
                 }
-                $this->view->assign('relationed', $relatedContents);
-
-                // Machine suggested contents code -----------------------------
-                $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                    'article',
-                    "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
-                    4
-                );
-
-                $this->view->assign('suggested', $machineSuggestedContents);
-            } else {
-                throw new ResourceNotFoundException();
             }
+            $this->view->assign('relationed', $relatedContents);
+
+            // Machine suggested contents code -----------------------------
+            $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
+                'article',
+                "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
+                4
+            );
+
+            $this->view->assign('suggested', $machineSuggestedContents);
 
         } // end if $this->view->is_cached
 
@@ -155,7 +147,7 @@ class ArticlesController extends Controller
             "extends:{$layoutFile}|article/article.tpl",
             [
                 'cache_id'        => $cacheID,
-                'contentId'       => $articleID,
+                'contentId'       => $article->id,
                 'category_name'   => $categoryName,
                 'article'         => $article,
                 'content'         => $article,
