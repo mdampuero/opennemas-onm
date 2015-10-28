@@ -85,7 +85,7 @@ class NewsAgencyController extends Controller
             ]
         ], 201);
 
-        if (count($imported) === 1 && $edit) {
+        if ($edit) {
             $route = 'admin_article_show';
 
             if ($type === 'opinion') {
@@ -96,7 +96,7 @@ class NewsAgencyController extends Controller
                 [
                     'location' => $this->generateUrl(
                         $route,
-                        [ 'id' => $imported[0] ]
+                        [ 'id' => $imported[count($imported) - 1] ]
                     )
                 ]
             );
