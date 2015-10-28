@@ -93,7 +93,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <div class="tiles purple m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
@@ -102,6 +102,20 @@
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
                     <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="tiles yellow m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Page views this month{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last transparent">
+                    <span class="item-count">{$instance->page_views}</span>
                   </div>
                 </div>
               </div>
