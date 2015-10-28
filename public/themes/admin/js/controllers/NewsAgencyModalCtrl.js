@@ -17,6 +17,25 @@
      */
     .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$modalInstance', '$scope', '$window', 'routing', 'template',
       function ($controller, $http, $modalInstance, $scope, $window, routing, template) {
+        /**
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   The amount of photos to import.
+         *
+         * @type {Integer}
+         */
+        $scope.photos = 0;
+
+        /**
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   The amount of texts to import.
+         *
+         * @type {Integer}
+         */
+        $scope.texts = 0;
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('modalCtrl', {
@@ -25,6 +44,23 @@
           template: template,
           success: null
         }));
+
+        /**
+         * @function init
+         * @memberOf NewsAgencyModalCtrl
+         *
+         * @description
+         *   Initializes the type on init.
+         */
+        $scope.init = function() {
+          $scope.check();
+
+          $scope.template.type = 'article';
+
+          if ($scope.photos === $scope.template.contents.length) {
+            $scope.template.type = 'photo';
+          }
+        };
 
         /**
          * @function confirm
@@ -97,23 +133,23 @@
         };
 
         /**
-         * @function onlyPhotos
+         * @function check
          * @memberOf NewsAgencyModalCtrl
          *
          * @description
-         *   Checks if all selected contents are photos.
-         *
-         * @return {Boolean} True if all selected contents are photos.
-         *                   Otherwise, returns false.
+         *   Checks the types of the contents to import.
          */
-        $scope.onlyPhotos = function() {
+        $scope.check = function() {
+          console.log('check');
           for (var i = 0; i < $scope.template.contents.length;  i++) {
-            if ($scope.template.contents[i].type !== 'photo') {
-              return false;
+            if ($scope.template.contents[i].type === 'photo') {
+              $scope.photos++;
+            }
+
+            if ($scope.template.contents[i].type === 'text') {
+              $scope.texts++;
             }
           }
-
-          return true;
         };
       }
     ]);
