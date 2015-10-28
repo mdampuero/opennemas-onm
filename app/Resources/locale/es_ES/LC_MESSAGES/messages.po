@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-21 13:50+0200\n"
-"PO-Revision-Date: 2015-10-21 13:51+0200\n"
+"POT-Creation-Date: 2015-10-28 17:16+0100\n"
+"PO-Revision-Date: 2015-10-28 17:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2221,8 +2221,8 @@ msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
 
 #, php-format
-msgid "%s is now on-line"
-msgstr "%s está ahora conectado"
+msgid "Your newspaper is now live"
+msgstr "Tu periódico ya está en línea"
 
 msgid "Frontpage mobile version"
 msgstr "Portada: versión móvil"
@@ -4805,6 +4805,9 @@ msgstr ""
 
 msgid "Close"
 msgstr "Cerrar"
+
+msgid "Yes, import them"
+msgstr "Si, importarlos"
 
 msgid "Yes, import and publish"
 msgstr "Si, importar y publicar"
@@ -8544,6 +8547,9 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "%s is now on-line"
+#~ msgstr "%s está ahora conectado"
 
 #~ msgid "WELCOME TO OPENNEMAS"
 #~ msgstr "BIENVENIDO A OPENNEMAS"

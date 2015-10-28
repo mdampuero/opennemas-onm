@@ -286,7 +286,7 @@ class WebServiceController extends Controller
             ->setTo([$data['user_mail'] => $data['user_name']])
             ->setBody($htmlContent, 'text/html')
             ->setSender($companyMail['sender_mail'], "Opennemas")
-            ->setSubject(sprintf(_("%s is now on-line"), $data['name']))
+            ->setSubject(sprintf(_("Your newspaper is now live"), $data['name']))
             ->setBody(
                 $this->renderView(
                     'instances/mails/newInstanceToUser.tpl',
