@@ -16,12 +16,4 @@ class UserNotification extends Entity
         return strtolower($id) . '-' . $this->notification_id . '-'
             . $this->user_id;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exists()
-    {
-        return false;
-    }
 }

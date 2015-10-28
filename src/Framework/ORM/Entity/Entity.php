@@ -12,6 +12,13 @@ abstract class Entity
     protected $data = [];
 
     /**
+     * The existence flag
+     *
+     * @var boolean
+     */
+    private $in_db = false;
+
+    /**
      * Initializes the entity.
      *
      * @param array $data The entity data.
@@ -72,6 +79,17 @@ abstract class Entity
     }
 
     /**
+     * Checks if the entity already exists in FreshBooks.
+     *
+     * @return boolean True if the entity exists in FreshBooks. Otherwise,
+     *                 returns false.
+     */
+    public function exists()
+    {
+        return $this->in_db;
+    }
+
+    /**
      * Returns the cached id.
      *
      * @return string The cached id.
@@ -114,10 +132,10 @@ abstract class Entity
     }
 
     /**
-     * Checks if the entity already exists in FreshBooks.
-     *
-     * @return boolean True if the entity exists in FreshBooks. Otherwise,
-     *                 returns false.
+     * Sets the in_db flat to true.
      */
-    abstract public function exists();
+    public function refresh()
+    {
+        $this->in_db = true;
+    }
 }
