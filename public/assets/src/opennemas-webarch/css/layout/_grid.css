@@ -34,6 +34,7 @@
 
 .grid-body .tab-content {
   margin: 0;
+  overflow: visible;
 }
 
 .grid-body .tab-content .tab-pane {
