@@ -86,10 +86,10 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <button class="btn btn-block btn-white" ng-click="checkout()" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
-                    </button>
+                    </a>
                   </div>
                 </div>
               </li>
@@ -180,31 +180,31 @@
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <div class="infinite-row" ng-if="type != 'module'">
+      <div ng-if="type != 'module'">
         <h4 class="ng-cloak" ng-show="!loading  && allActivated(purchased)">{t}No items available to purchase{/t}</h4>
         <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
-        <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
+        <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
           </div>
         </div>
         <h4 class="ng-cloak" ng-show="!loading && !allDeactivated(purchased)">{t}Purchased{/t}</h4>
-        <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
+        <div class="row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
           </div>
         </div>
       </div>
       <div ng-if="type == 'module'">
         <h4 class="ng-cloak" ng-show="!loading && allActivated(available['PROFESSIONAL']) && allActivated(available['SILVER']) && allActivated(available['GOLD']) && allActivated(available['OTHER'])">{t}No items available to purchase{/t}</h4>
-        <div class="infinite-row" ng-repeat="plan in plans">
+        <div class="row" ng-repeat="plan in plans">
           <h3 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">[% plan.name %]</h3>
           <h4 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">{t}Available{/t}</h4>
-          <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
+          <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
             </div>
           </div>
           <!-- <h4 class="ng-cloak" ng-show="!loading  && !allDeactivated(purchased[plan.id])">{t}Purchased{/t}</h4>
-          <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
+          <div class="row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
+            <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
             </div>
           </div> -->
         </div>
@@ -244,7 +244,7 @@
             </div>
           </div>
           <div class="module-tools row clearfix">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-sm-6">
               <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
                 {t}More info{/t}
             </div>
@@ -259,9 +259,6 @@
           </div>
         </div>
       </div>
-    </script>
-    <script type="text/ng-template" id="modal-checkout">
-      {include file="market/modal/_checkout.tpl"}
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="market/modal/_details.tpl"}
