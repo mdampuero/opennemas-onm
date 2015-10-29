@@ -579,18 +579,13 @@ class InstanceController extends Controller
             }
 
             // Delete instance from cache for deleted domains
-            $cache = $this->get('cache');
-            $oldNamespace = $cache->getNamespace();
-
-            $cache->setNamespace('instance');
+            $cache = $this->get('cache_manager');
 
             $deletedDomains = array_diff($oldDomains, $instance->domains);
 
             foreach ($deletedDomains as $domain) {
                 $cache->delete($domain);
             }
-
-            $cache->setNamespace($oldNamespace);
 
             $this->get('onm.validator.instance')->validate($instance);
             $im->persist($instance);

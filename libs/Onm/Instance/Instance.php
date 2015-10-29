@@ -259,7 +259,7 @@ class Instance
 
         $this->initInternalConstants();
 
-        if ($this->internal_name !== 'onm_manager') {
+        if ($this->internal_name !== 'manager') {
             $this->initTheme();
         }
     }

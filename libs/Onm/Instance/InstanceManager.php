@@ -134,7 +134,6 @@ class InstanceManager extends BaseManager
     public function find($id)
     {
         $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
 
         $cacheId = "instance" . $this->cacheSeparator . $id;
         $entity  = null;
@@ -152,8 +151,6 @@ class InstanceManager extends BaseManager
                 $this->cache->save($cacheId, $entity);
             }
         }
-
-        $this->cache->setNamespace($previousNamespace);
 
         return $entity;
     }
@@ -226,9 +223,6 @@ class InstanceManager extends BaseManager
      */
     public function findMulti($data)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $ids  = array();
         $keys = array();
         foreach ($data as $value) {
@@ -268,7 +262,6 @@ class InstanceManager extends BaseManager
             }
         }
 
-        $this->cache->setNamespace($previousNamespace);
         return $ordered;
     }
 
@@ -365,7 +358,7 @@ class InstanceManager extends BaseManager
     public function loadManager()
     {
         $instance = new Instance();
-        $instance->internal_name = 'onm_manager';
+        $instance->internal_name = 'manager';
         $instance->activated = true;
 
         $instance->settings = array(
@@ -422,9 +415,6 @@ class InstanceManager extends BaseManager
      */
     public function persist(Instance &$instance)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $ref = new \ReflectionClass($instance);
         $properties = array();
         foreach ($ref->getProperties() as $property) {
@@ -516,8 +506,6 @@ class InstanceManager extends BaseManager
 
         // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
-
-        $this->cache->setNamespace($previousNamespace);
     }
 
     /**
@@ -595,9 +583,6 @@ class InstanceManager extends BaseManager
      */
     public function remove($instance)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $this->conn->selectDatabase('onm-instances');
 
         $sql = "DELETE FROM instances WHERE id=?";
@@ -615,7 +600,6 @@ class InstanceManager extends BaseManager
         }
 
         // Delete instance from cache
-        $this->cache->setNamespace($previousNamespace);
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
     }
 

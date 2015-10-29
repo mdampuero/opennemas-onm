@@ -50,15 +50,26 @@ class InstanceLoaderListener implements EventSubscriberInterface
     public $instance;
 
     /**
+     * The cache object for manager.
+     *
+     * @var AbstractCache
+     */
+    private $mcache;
+
+    /**
      * Initializes the instance loader.
      *
-     * @param InstanceManager $im    The instance manager.
-     * @param AbstractCache   $cache The cache service.
+     * @param InstanceManager $im     The instance manager.
+     * @param AbstractCache   $cache  The cache service.
+     * @param AbstractCache   $mcache The cache service for manager.
      */
-    public function __construct(InstanceManager $im, AbstractCache $cache)
+    public function __construct(InstanceManager $im, AbstractCache $cache, AbstractCache $mcache)
     {
         $this->im    = $im;
         $this->cache = $cache;
+        $this->mcache = $mcache;
+
+        $this->mcache->setNamespace('manager');
     }
 
     /**
@@ -78,8 +89,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
         if (preg_match("@^\/(manager|_profiler|_wdt|framework)@", $request->getRequestUri())) {
             $this->instance = $this->im->loadManager();
         } else {
-            $this->cache->setNamespace('instance');
-            $this->instance = $this->cache->fetch($host);
+            $this->instance = $this->mcache->fetch($host);
 
             if ($this->instance === false) {
                 $criteria = array(
@@ -93,7 +103,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 );
 
                 $this->instance = $this->im->findOneBy($criteria);
-                $this->cache->save($host, $this->instance);
+                $this->mcache->save($host, $this->instance);
             }
         }
 
@@ -113,7 +123,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $this->cache->setNamespace($this->instance->internal_name);
 
         // Initialize the instance database connection
-        if ($this->instance->internal_name != 'onm_manager') {
+        if ($this->instance->internal_name != 'manager') {
             $databaseName               = $this->instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn');
             $databaseInstanceConnection->selectDatabase($databaseName);
