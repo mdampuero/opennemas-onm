@@ -765,8 +765,8 @@ newsletter_archive:
             type: text
             options: { default: null, length: 65532, notnull: false }
         html:
-            type: longtext
-            options: { default: null, length: 65532, notnull: false }
+            type: text
+            options: { default: null, length: 4294967295, notnull: false }
         created:
             type: datetime
             options: { default: '0000-00-00 00:00:00' }
