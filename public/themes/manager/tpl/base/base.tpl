@@ -49,7 +49,8 @@
 
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less"
+      @Common/src/opennemas-webarch/less/main.less,
+      @ManagerTheme/less/main.less"
 
     filters="cssrewrite,less"}
       <link rel="stylesheet" type="text/css" href="{$asset_url}">
@@ -96,7 +97,7 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="pull-left">
           <ul class="nav quick-section">
-            <li class="quicklinks quick-items dropdown">
+            <li class="quicklinks quick-items create-items dropdown">
               <a href="#" data-toggle="dropdown">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
@@ -119,6 +120,12 @@
                     <a ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
                       <i class="fa fa-users"></i>
                       <span class="title">{t}Group{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+                      <i class="fa fa-bell"></i>
+                      <span class="title">{t}Notification{/t}</span>
                     </a>
                   </div>
                 </div>
