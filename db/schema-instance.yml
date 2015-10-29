@@ -1291,6 +1291,9 @@ user_notification:
         notification_id:
             type: integer
             options: { default: null, unsigned: true }
+        read_time:
+            type: datetime
+            options: { default: null }
     index:
         -
             name: PRIMARY
