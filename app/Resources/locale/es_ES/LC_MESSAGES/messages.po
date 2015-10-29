@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-27 16:38+0100\n"
-"PO-Revision-Date: 2015-10-27 16:46+0200\n"
+"POT-Creation-Date: 2015-10-29 10:52+0100\n"
+"PO-Revision-Date: 2015-10-29 10:55+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -4518,14 +4518,14 @@ msgstr "Página"
 msgid "Author"
 msgstr "Autor"
 
-msgid "See more"
-msgstr "Ver más"
-
 msgid "There are no notifications for now."
 msgstr "No hay notificaciones por ahora."
 
-msgid "Check your previous notifications <a href=\"%1\">here</a>"
+msgid "Check your previous notifications <a href=\"%1\">here</a>."
 msgstr "Comprueba tus notificaciones anteriores desde <a href=\"%1\">aquí</a>"
+
+msgid "See more"
+msgstr "Ver más"
 
 msgid "Help center"
 msgstr "Centro de ayuda"
@@ -4853,6 +4853,9 @@ msgstr ""
 
 msgid "Close"
 msgstr "Cerrar"
+
+msgid "Yes, import them"
+msgstr "Si, importarlos"
 
 msgid "Yes, import and publish"
 msgstr "Si, importar y publicar"
@@ -6547,6 +6550,17 @@ msgstr "Soporte por tiquets"
 
 msgid "Storage size"
 msgstr "Almacenamiento ocupado"
+
+msgid "Page views this month"
+msgstr "Páginas vistas este mes"
+
+msgid ""
+"Note: this number has not being used for billing purpose. Billing pageviews "
+"count goes from 26th to 25th of each month."
+msgstr ""
+"Nota: este número no ha sido usado para las facturas. Las contía de páginas "
+"vistas en la facturación comienzan desde el 26 de cada mes al 25 del "
+"siguiente."
 
 msgid "Available"
 msgstr "Disponible"
@@ -8254,6 +8268,12 @@ msgstr "Eliminar grupo de usuarios"
 msgid "Delete selected user groups"
 msgstr "Eliminar los grupos de usuarios seleccionados"
 
+msgid "Delete notification"
+msgstr "Eliminar notificación"
+
+msgid "Delete notifications"
+msgstr "Eliminar notificaciones"
+
 msgid "Do you really want to exit from backend?"
 msgstr "¿Estás seguro de que quieres salir del panel de administración?"
 
@@ -8275,6 +8295,12 @@ msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
 msgid "Do you really want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+
+msgid "Do you really want to delete the notification?"
+msgstr "¿Estás seguro de que quieres eliminar la notificación?"
+
+msgid "Do you really want to delete the selected notifications?"
+msgstr "¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
 
 msgid "log out"
 msgstr "Salir"

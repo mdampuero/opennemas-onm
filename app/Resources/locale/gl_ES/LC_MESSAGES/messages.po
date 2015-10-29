@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-27 16:38+0100\n"
-"PO-Revision-Date: 2015-10-27 16:45+0200\n"
+"POT-Creation-Date: 2015-10-29 10:53+0100\n"
+"PO-Revision-Date: 2015-10-29 10:55+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -4470,14 +4470,14 @@ msgstr "Páxina"
 msgid "Author"
 msgstr "Autor"
 
-msgid "See more"
-msgstr "Ver máis"
-
 msgid "There are no notifications for now."
 msgstr "Non hai notificacións por agora."
 
-msgid "Check your previous notifications <a href=\"%1\">here</a>"
-msgstr "Comproba as túas notificacións anteriores <a href=\"%1\">aquí</a>"
+msgid "Check your previous notifications <a href=\"%1\">here</a>."
+msgstr "Comproba as notificacións anteriores <a href=\"%1\">aquí</a>"
+
+msgid "See more"
+msgstr "Ver máis"
 
 msgid "Help center"
 msgstr "Centro de axuda"
@@ -4802,6 +4802,9 @@ msgstr ""
 
 msgid "Close"
 msgstr "Pechar"
+
+msgid "Yes, import them"
+msgstr "Si, importalos"
 
 msgid "Yes, import and publish"
 msgstr "Si, importar e publicar"
@@ -6478,6 +6481,16 @@ msgstr "Soporte por tickets"
 msgid "Storage size"
 msgstr "Amacenamento ocupado"
 
+msgid "Page views this month"
+msgstr "Páxinas vistas este mes"
+
+msgid ""
+"Note: this number has not being used for billing purpose. Billing pageviews "
+"count goes from 26th to 25th of each month."
+msgstr ""
+"Nota: Este número non se usa na facturación. A contía de páxinas vistas na "
+"facturación vai dende o 26 de cada mes até o 25 do seguinte."
+
 msgid "Available"
 msgstr "Dispoñibel"
 
@@ -6531,8 +6544,8 @@ msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support system</a>."
 msgstr ""
-"Hai algo mal? Contacta coa nosa <a href=\""
-"javascript:UserVoice.showPopupWidget();\">asistencia técnica</a>."
+"Hai algo mal? Contacta coa nosa <a href=\"javascript:UserVoice."
+"showPopupWidget();\">asistencia técnica</a>."
 
 msgid "Here you can see a list of your activated modules"
 msgstr "Aquí pode ver unha lista dos módulos activados no seu periódico"
@@ -8163,6 +8176,12 @@ msgstr "Eliminar grupo de usuarios"
 msgid "Delete selected user groups"
 msgstr "Eliminar os grupos de usuarios seleccionados"
 
+msgid "Delete notification"
+msgstr "Eliminar notificación"
+
+msgid "Delete notifications"
+msgstr "Eliminar notificacións"
+
 msgid "Do you really want to exit from backend?"
 msgstr "Tes certeza que queres sair do panel de administración?"
 
@@ -8183,6 +8202,12 @@ msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
 
 msgid "Do you really want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
+
+msgid "Do you really want to delete the notification?"
+msgstr "Tes certeza que queres eliminar a notificación?"
+
+msgid "Do you really want to delete the selected notifications?"
+msgstr "Tes certeza que queres eliminar as notificacións seleccionadas?"
 
 msgid "log out"
 msgstr "saír"
@@ -8642,9 +8667,6 @@ msgstr ""
 
 #~ msgid "Are you sure you want to import [% selected %] elemets?"
 #~ msgstr "Tes certeza que queres importar [% selected %] elementos?"
-
-#~ msgid "Yes, import them"
-#~ msgstr "Si, importalos"
 
 #~ msgid "Activate server"
 #~ msgstr "Activar servidor"
