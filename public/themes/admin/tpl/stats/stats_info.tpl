@@ -116,8 +116,9 @@
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
                     <span class="item-count">
-                      {$instance->page_views|number_format}
-                      <i class="fa fa-info-circle" tooltip="{t}Note: this number has not being used for billing purpose. Billing pageviews count goes from 26th to 25th of each month.{/t}" tooltip-placement="left"></i>
+                      {t}coming soon... work in progress...{/t}
+                      <!-- {$instance->page_views|number_format}
+                      <i class="fa fa-info-circle" tooltip="{t}Note: this number has not being used for billing purpose. Billing pageviews count goes from 26th to 25th of each month.{/t}" tooltip-placement="left"></i> -->
                     </span>
                   </div>
                 </div>
