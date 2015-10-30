@@ -25,12 +25,12 @@
     };
 
     var tooltip_strings = {
-      state: "{t}Status{/t}:",
-      views: "{t}Views{/t}:",
-      category: "{t}Category{/t}",
-      schedule: "{t}Schedule{/t}",
-      starttime: "{t}Available from{/t}",
-      last_author: "{t}Last editor{/t}",
+      state: "{t}Status{/t}: ",
+      views: "{t}Views{/t}: ",
+      category: "{t}Category{/t}: ",
+      schedule: "{t}Schedule{/t}: ",
+      starttime: "{t}Available from{/t}: ",
+      last_author: "{t}Last editor{/t}: ",
     }
 
     var frontpage_urls = {
