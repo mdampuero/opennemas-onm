@@ -1359,7 +1359,7 @@ class Content
     {
         switch ($state) {
             case 'not-scheduled':
-                $state = _('not-scheduled');
+                $state = _('not scheduled');
                 break;
             case 'scheduled':
                 $state = _('scheduled');
@@ -1368,7 +1368,7 @@ class Content
                 $state = _('dued');
                 break;
             case 'in-time':
-                $state = _('in-time');
+                $state = _('in time');
                 break;
             case 'postponed':
                 $state = _('postponed');
