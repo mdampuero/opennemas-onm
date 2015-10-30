@@ -1000,6 +1000,28 @@ class Content
     }
 
     /**
+     * Returns the availability state of a content translated
+     *
+     * @return string the state of the content
+     **/
+    public function getL10nStatus($state = null)
+    {
+        switch ($state) {
+            case 'trashed':
+                $state = _('trashed');
+                break;
+            case 'pending':
+                $state = _('pending');
+                break;
+            case 'available':
+                $state = _('available');
+                break;
+        }
+
+        return $state;
+    }
+
+    /**
      * Returns a quick info resume of this content
      *
      * @return array the quick info
@@ -1016,14 +1038,17 @@ class Content
         if ($this->id !== null) {
             $views = getService('content_views_repository')->getViews($this->id);
 
+            $status = $this->getStatus();
+            $schedulingState = $this->getSchedulingState();
+
             return array(
                 'title'           => $this->title,
                 'category'        => $ccm->getName($this->category),
                 'views'           => $views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
-                'scheduled_state' => $this->getSchedulingState(),
-                'state'           => $this->getStatus(),
+                'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
+                'state'           => $this->getL10nStatus($status),
                 'last_author'     => $author->name,
             );
         }
@@ -1321,6 +1346,36 @@ class Content
         } else {
             return self::NOT_SCHEDULED;
         }
+    }
+
+    /**
+     * Returns the scheduling state translated
+     *
+     * @param string $state the state string
+     *
+     * @return string the scheduling state translated
+     **/
+    public function getL10nSchedulingState($state = null)
+    {
+        switch ($state) {
+            case 'not-scheduled':
+                $state = _('not-scheduled');
+                break;
+            case 'scheduled':
+                $state = _('scheduled');
+                break;
+            case 'dued':
+                $state = _('dued');
+                break;
+            case 'in-time':
+                $state = _('in-time');
+                break;
+            case 'postponed':
+                $state = _('postponed');
+                break;
+        }
+
+        return $state;
     }
 
     /**
