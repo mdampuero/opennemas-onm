@@ -87,7 +87,7 @@ function get_tooltip_content(elem) {
                 '<br>' + tooltip_strings.views + content.views +
                 '<br>' + tooltip_strings.category + content.category +
                 "<br>" + tooltip_strings.schedule +
-                  " <span class='scheduled-state " + content.scheduled_state +
+                  "<span class='scheduled-state " + content.scheduled_state +
                   "'>" + content.scheduled_state + '</span>'+
                 '<br>' + tooltip_strings.starttime + content.starttime +
                 '<br>' + tooltip_strings.last_author + content.last_author;
