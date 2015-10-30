@@ -24,6 +24,15 @@
       frontpage_too_long: "{t}You have reached the maximum number of elements (100). To add new contents remove the older.{/t}"
     };
 
+    var tooltip_strings = {
+      state: "{t}Status{/t}:",
+      views: "{t}Views{/t}:",
+      category: "{t}Category{/t}",
+      schedule: "{t}Schedule{/t}",
+      starttime: "{t}Available from{/t}",
+      last_author: "{t}Last editor{/t}",
+    }
+
     var frontpage_urls = {
       list:                  '{url name=admin_frontpage_list}',
       save_positions:        '{url name=admin_frontpage_savepositions}',

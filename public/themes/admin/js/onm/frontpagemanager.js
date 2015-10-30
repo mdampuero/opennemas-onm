@@ -83,12 +83,12 @@ function get_tooltip_content(elem) {
                 content_states[id] = data;
             });
         } else {
-            content_html = 'Estado: '+ content.state +
-                '<br>Vistas: '+ content.views +
-                '<br>Categoría: '+ content.category +
-                "<br>Programación: <span class='scheduled-state " + content.scheduled_state + "'>" + content.scheduled_state + '</span>'+
-                '<br>Hora inicio: '+ content.starttime +
-                '<br>Último autor: '+ content.last_author;
+            content_html = tooltip_strings.state + content.state +
+                '<br>'tooltip_strings.views + content.views +
+                '<br>'tooltip_strings.category + content.category +
+                "<br>".tooltip_strings.schedule." <span class='scheduled-state " + content.scheduled_state + "'>" + content.scheduled_state + '</span>'+
+                '<br>'tooltip_strings.starttime + content.starttime +
+                '<br>'tooltip_strings.last_author + content.last_author;
             parent_content_div.data('popover-content', content_html);
         }
     } else {
