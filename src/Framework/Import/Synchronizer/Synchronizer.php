@@ -152,21 +152,23 @@ class Synchronizer
     {
         $contents = [];
         foreach ($files as $file) {
-            $xml = simplexml_load_file($file);
+            $xml = @simplexml_load_file($file);
 
-            $parser = $this->parserFactory->get($xml);
-            $parsed = $parser->parse($xml, $file);
+            if ($xml) {
+                $parser = $this->parserFactory->get($xml);
+                $parsed = $parser->parse($xml, $file);
 
-            if (is_object($parsed)) {
-                $parsed = [ $parsed ];
+                if (is_object($parsed)) {
+                    $parsed = [ $parsed ];
+                }
+
+                foreach ($parsed as $p) {
+                    $p->filename = basename($file);
+                    $p->source   = $source;
+                }
+
+                $contents = array_merge($contents, $parsed);
             }
-
-            foreach ($parsed as $p) {
-                $p->filename = basename($file);
-                $p->source   = $source;
-            }
-
-            $contents = array_merge($contents, $parsed);
         }
 
         return $contents;
