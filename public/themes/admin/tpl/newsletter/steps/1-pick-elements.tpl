@@ -70,7 +70,7 @@
                       <div class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil"></i></div>
                     </div>
                     <div class="container-actions pull-right">
-                      <button type="button" class="btn btn-white" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
+                      <button type="button" class="btn btn-white" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
                         <i class="fa fa-plus"></i>
                         {t}Add contents{/t}
                       </button>
