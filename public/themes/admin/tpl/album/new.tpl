@@ -205,7 +205,7 @@
               </div>
               <div class="album-thumbnail-placeholder">
                 <div class="img-thumbnail">
-                  <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="100" media-picker-target="photos">
+                  <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
                     <i class="fa fa-plus fa-2x"></i>
                     <h5>{t}Add images{/t}</h5>
                   </div>
