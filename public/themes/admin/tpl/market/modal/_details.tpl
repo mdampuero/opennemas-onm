@@ -32,7 +32,7 @@
           <div class="btn btn-default uppercase m-t-15" ng-disabled="true" ng-if="template.activated">
             {t}Purchased{/t}
           </div>
-          <button class="btn btn-default uppercase m-t-15" ng-click="confirm()" ng-if="!template.inCart && !template.activated " type="button">
+          <button class="btn btn-default uppercase m-t-15" ng-click="confirm()" ng-if="!template.inCart && !template.activated && template.item.price.month !== 0" type="button">
             {t}Add to cart{/t}
           </button>
         </div>
