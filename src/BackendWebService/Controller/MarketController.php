@@ -69,6 +69,28 @@ class MarketController extends Controller
     }
 
     /**
+     * Checks a VAT number.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkVatAction(Request $request)
+    {
+        $code      = 200;
+        $validator = $this->get('vat.service');
+
+        $country = $request->query->get('country');
+        $vat     = $request->query->get('vat');
+
+        if (!$validator->validate($country, $vat)) {
+            $code = 400;
+        }
+
+        return new JsonResponse(21, $code);
+    }
+
+    /**
      * Returns the list of modules and current activated modules.
      *
      * @return JsonResponse The response object.

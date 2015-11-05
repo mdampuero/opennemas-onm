@@ -25,6 +25,18 @@
          */
         $scope.edit = false;
 
+        $scope.step = 1;
+
+        /**
+         * @memeberOf MarketCheckoutCtrl
+         *
+         * @description
+         *   Flag to know if current VAT is valid.
+         *
+         * @type {Boolean}
+         */
+        $scope.validVat = false;
+
         /**
          * @function confirm
          * @memberOf MarketCheckoutCtrl
@@ -42,7 +54,7 @@
           var data = { billing: $scope.billing, modules: modules };
 
           $http.post(url, data).success(function(response) {
-            $scope.step = 3;
+            $scope.step = 4;
             $scope.cart = [];
             webStorage.local.remove('cart');
             $analytics.pageTrack('/market/checkout/done');
@@ -52,6 +64,28 @@
               type: 'error'
             });
           });
+        };
+
+        /**
+         * @function next
+         * @memberOf MarketCheckoutCtrl
+         *
+         * @description
+         *  Changes to the next step.
+         */
+        $scope.next = function() {
+          $scope.step++;
+        };
+
+        /**
+         * @function setStep
+         * @memberOf MarketCheckoutCtrl
+         *
+         * @description
+         *  Sets the step.
+         */
+        $scope.setStep = function(step) {
+          $scope.step = step;
         };
 
         /**
@@ -66,6 +100,13 @@
         $scope.removeFromCart = function(item) {
           $scope.cart.splice($scope.cart.indexOf(item), 1);
         };
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('billing', function(nv, ov) {
+          if (!ov.name && !nv.name) {
+            $scope.edit = true;
+          }
+        });
 
         // Updates the total when the cart changes
         $scope.$watch('cart', function(nv) {
@@ -84,18 +125,32 @@
               $scope.subtotal += nv[i].price.month;
             }
           }
-
-          $scope.iva = +($scope.subtotal * 0.21).toFixed(2);
-          $scope.total = +($scope.subtotal + $scope.iva).toFixed(2);
         }, true);
 
-        $scope.$watch('billing', function(nv, ov) {
-          $scope.edit = false;
-
-          if (!ov && !nv) {
-            $scope.edit = true;
+        // Updates vat and total values when vat tax changes
+        $scope.$watch('validVat', function(nv, ov) {
+          if (nv === true) {
+            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
+            $scope.total = $scope.subtotal + $scope.vat;
           }
         });
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.vat]', function() {
+          if (!$scope.billing.country || !$scope.billing.vat) {
+            return;
+          }
+
+          var url = routing.generate('backend_ws_market_check_vat',
+              { 'country': $scope.billing.country, 'vat': $scope.billing.vat });
+
+          $http.get(url).then(function(response) {
+            if (response.status === 200) {
+              $scope.vatTax = parseFloat(response.data);
+              $scope.validVat = true;
+            }
+          });
+        }, true);
 
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('cart')) {

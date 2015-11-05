@@ -4,9 +4,15 @@ namespace Backend\Controller;
 
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Intl\Intl;
 
 class MarketController extends Controller
 {
+    /**
+     * Displays the wizard form for checkout.
+     *
+     * @return Response The response object.
+     */
     public function checkoutAction()
     {
         $billing = [];
@@ -21,9 +27,19 @@ class MarketController extends Controller
             }
         }
 
-        return $this->render('market/checkout.tpl', [ 'billing' => $billing ]);
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
+        return $this->render(
+            'market/checkout.tpl',
+            [ 'billing' => $billing, 'countries' => $countries ]
+        );
     }
 
+    /**
+     * Displays the list of available modules.
+     *
+     * @return Response The response object.
+     */
     public function listAction()
     {
         $plans = \Onm\Module\ModuleManager::getAvailablePacks();
