@@ -614,9 +614,9 @@ class InstanceManager extends BaseManager
         $this->conn->selectDatabase($database);
 
         if (isset($data['username'])
-            && isset ($data['email'])
-            && isset ($data['password'])
-            && isset ($data['token'])
+            && isset($data['email'])
+            && isset($data['password'])
+            && isset($data['token'])
         ) {
             // Insert user into instance database
             $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`,
