@@ -191,13 +191,13 @@
         <input name="hasChanges" ng-value="hasChanges" type="hidden">
         <input name="modules" ng-value="activatedModules" type="hidden">
       </div>
-      {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas) && !empty($instance->metas['billing_name'])}
-        <div class="col-sm-6">
-          <div class="tiles white m-b-15">
-            <div class="tiles-body">
-              <div class="tiles-title text-uppercase text-black">
-                {t}Billing information{/t}
-              </div>
+      <div class="col-sm-6">
+        <div class="tiles white m-b-15">
+          <div class="tiles-body">
+            <div class="tiles-title text-uppercase text-black">
+              {t}Billing information{/t}
+            </div>
+            {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas) && !empty($instance->metas['billing_name'])}
               <div class="row p-b-15 p-t-15">
                 <div class="col-sm-6">
                   <strong>{t}Name{/t}:</strong> {$instance->metas['billing_name']}
@@ -243,38 +243,38 @@
                   <h5>{t escape=off}Something wrong? Contact our <a href="javascript:UserVoice.showPopupWidget();">support system</a>.{/t}</h5>
                 </div>
               </div>
-            </div>
+            {else}
+              <h4 class="p-t-30 text-center">{t}You have no billing information{/t}</h4>
+              <h5 class="p-b-30 text-center">{t escape=off}You will be asked to add it during the checkout in our market{/t}</h5>
+            {/if}
           </div>
         </div>
-      {/if}
+      </div>
     </div>
     <div class="row">
       <div class="col-xs-12 m-b-15 ng-cloak">
         <div class="tiles white">
-            <div class="clearfix b-grey b-b tiles-body">
-              <div class="pull-left">
-                <p class="hidden-xs">{t}Here you can see a list of your activated modules{/t}</p>
-                <h4>{t}Activated plans & modules{/t}</h4>
-              </div>
-              {*<div class="upgrade pull-right hidden">
-                <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
-                  <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
-                  <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
-                </button>
-              </div>*}
+          <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
+            <div class="tiles-title text-uppercase text-black">
+              {t}Activated plans & modules{/t}
             </div>
-            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
-              <div class="plans-wrapper">
-                <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
-                  <h5 class="plan-title">
-                    [% plan.title %]
-                  </h5>
-                  <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
-                    [% item.name %]
-                  </div>
+            {*<div class="upgrade pull-right hidden">
+              <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
+                <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
+                <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
+              </button>
+            </div>*}
+            <div class="plans-wrapper">
+              <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
+                <h5 class="plan-title">
+                  [% plan.title %]
+                </h5>
+                <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
+                  [% item.name %]
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
