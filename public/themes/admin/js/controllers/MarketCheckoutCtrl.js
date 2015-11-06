@@ -67,17 +67,6 @@
         };
 
         /**
-         * @function next
-         * @memberOf MarketCheckoutCtrl
-         *
-         * @description
-         *  Changes to the next step.
-         */
-        $scope.next = function() {
-          $scope.step++;
-        };
-
-        /**
          * @function setStep
          * @memberOf MarketCheckoutCtrl
          *

@@ -128,7 +128,7 @@
                     </table>
                   </div>
                   <div class="text-center p-t-30">
-                    <button class="btn btn-large btn-success text-center" ng-click="next()">
+                    <button class="btn btn-large btn-success text-center" ng-click="setStep(2)">
                       {t}Next{/t}
                     </button>
                   </div>
@@ -264,7 +264,7 @@
                     </div>*}
                   </div>
                   <div class="text-center p-t-50">
-                    <button class="btn btn-large btn-success text-center" ng-click="next()" ng-disabled="!validVat || billingForm.$invalid">
+                    <button class="btn btn-large btn-success text-center" ng-click="setStep(3)" ng-disabled="!validVat || billingForm.$invalid">
                       {t}Next{/t}
                     </button>
                   </div>
@@ -311,10 +311,9 @@
                         <td class="text-right">[% item.price.month %] €</td>
                       </tr>
                       <tr>
-                        <td rowspan="3"><h4 class="semi-bold">terms and conditions</h4>
-                          <p>Thank you for your business. We do expect payment within 21 days, so please process this invoice within that time. There will be a 1.5% interest charge per month on late invoices.</p>
-                          <td class="text-right"><strong>Subtotal</strong></td>
-                          <td class="text-right">[% subtotal %] €</td>
+                        <td rowspan="3"></td>
+                        <td class="text-right"><strong>Subtotal</strong></td>
+                        <td class="text-right">[% subtotal %] €</td>
                       </tr>
                       <tr>
                         <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %])</strong></td>
@@ -326,9 +325,16 @@
                       </tr>
                     </tbody>
                   </table>
-                  <div class="text-center p-t-50">
-                    <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid">
-                      {t}Next{/t}
+                  <div class="text-center">
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input id="terms" name="terms" ng-model="terms" type="checkbox">
+                        <label class="no-margin text-left" for="terms"></label>
+                        {t escape=off}I have read and accept the <a href="http://help.opennemas.com/knowledgebase/articles/235348-condiciones-del-servicio-de-opennemas" target="_blank">Terms of Service</a>{/t}
+                      </div>
+                    </div>
+                    <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms">
+                      {t}Confirm{/t}
                     </button>
                   </div>
                 </div>
