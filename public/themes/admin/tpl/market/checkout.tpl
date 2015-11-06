@@ -16,8 +16,10 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-shopping-cart"></i>
-                {t}Market{/t}
+                <a class="no-padding" href="{url name=admin_market_list}">
+                  <i class="fa fa-shopping-cart"></i>
+                  {t}Market{/t}
+                </a>
               </h4>
             </li>
           </ul>
@@ -129,7 +131,7 @@
                   </div>
                   <div class="text-center p-t-30">
                     <button class="btn btn-large btn-success text-center" ng-click="setStep(2)">
-                      {t}Next{/t}
+                      {t}Purchase{/t}
                     </button>
                   </div>
                 </div>
@@ -270,33 +272,26 @@
                   </div>
                 </div>
                 <div class="tab-pane" ng-class="{ 'active': step == 3 }">
-                  <div class="pull-left">
-                    <img alt="" class="invoice-logo p-b-15" height="80" src="/assets/images/logos/opennemas-powered.png">
+                  <div class="p-t-5 pull-left">
+                    <h4 class="semi-bold">[% billing.name %]</h4>
+                    <address>
+                      <strong ng-if="billing.company">[% billing.company %]</strong><br>
+                      [% billing.address %]<br>
+                      [% billing.postal_code %], [% billing.city %], [% billing.state %]<br>
+                      [% countries[billing.country] %]<br>
+                    </address>
+                  </div>
+                  <div class="pull-right">
+                    <img alt="" class="invoice-logo p-b-15" height="50" src="/assets/images/logos/opennemas-poweredby-horizontal.png">
                     <address>
                       <strong>Openhost, S.L.</strong><br>
                       Progreso 64, 4º A<br>
                       32003, Ourense, Ourense<br>
                       [% countries['ES']%]<br>
-                      <abbr title="Phone">P:</abbr> 988980045
                     </address>
                   </div>
                   <div class="clearfix"></div>
-                  <br>
-                  <br>
-                  <br>
-                  <div class="row p-b-30">
-                    <div class="col-md-12">
-                      <h4 class="semi-bold">[% billing.name %]</h4>
-                      <address>
-                        <strong ng-if="billing.company">[% billing.company %]</strong><br>
-                        [% billing.address %]<br>
-                        [% billing.postal_code %], [% billing.city %], [% countries[billing.country] %]
-                        [% billing.country %]<br>
-                        <abbr title="Phone">P:</abbr> [% billing.phone %]
-                      </address>
-                    </div>
-                  </div>
-                  <table class="table table-invoice">
+                  <table class="m-t-30 table table-invoice">
                     <thead>
                       <tr>
                         <th class="text-left uppercase">{t}Description{/t}</th>
@@ -316,7 +311,7 @@
                         <td class="text-right">[% subtotal %] €</td>
                       </tr>
                       <tr>
-                        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %])</strong></td>
+                        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
                         <td class="text-right">[% vat %] €</td>
                       </tr>
                       <tr>
@@ -339,17 +334,17 @@
                   </div>
                 </div>
               </div>
-              <div class="text-center" ng-if="step == 4">
+              <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-if="step == 4">
                 <i class="fa fa-heart fa-3x"></i>
-                <h3 class="p-b-30">{t}Nice{/t}!</h3>
+                <h3 class="p-b-30">{t}Thank you for your purchase request!{/t}</h3>
                 <p class="p-b-15">
-                {t}Thank you! We have received your request and will get back to you as soon as possible. You will receive a confirmation e-mail too.{/t}
-                </p>
-                <p class="p-b-30">
-                {t escape=off}Meanwhile, you can go to your <a href="{url name='admin_client_info_page'}">My newspaper</a> and check your active features, navigate our help to familiarize with your news tool, or check some awesome videos to see how easy are to manage Opennemas.{/t}
+                  {t}In the next 24 hours you will receive an email with payment instructions and the invoice.{/t}
                 </p>
                 <p class="p-b-15">
-                {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
+                {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+                </p>
+                <p class="p-b-10">
+                  {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
                 </p>
                 <div>
                   <a href="http://www.facebook.com" target="_blank">
@@ -365,6 +360,9 @@
                     <i class="fa fa-lg fa-linkedin"></i>
                   </a>
                 </div>
+                <h4 class="m-t-30">
+                  {t}Have a wonderful day!{/t}
+                </p>
               </div>
             </div>
           </div>
