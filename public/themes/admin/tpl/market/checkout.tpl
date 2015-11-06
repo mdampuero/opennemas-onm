@@ -101,7 +101,7 @@
               <div class="tab-content transparent p-t-30" ng-if="step != 4">
                 <div class="tab-pane" ng-class="{ 'active': step == 1 }">
                   <h5 class="p-b-20">{t}You are about to purchase the next items:{/t}</h5>
-                  <ul class="cart-list no-margin">
+                  <ul class="cart-list cart-list-big">
                     <li class="clearfix" ng-repeat="item in cart">
                       <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
                       <div class="p-l-100">
