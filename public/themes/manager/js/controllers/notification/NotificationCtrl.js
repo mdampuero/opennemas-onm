@@ -44,8 +44,8 @@
             es: '',
             gl: '',
           },
-          instance_id: 0,
-          fixed: 0,
+          instance_id: '0',
+          fixed: '0',
           style: 'info',
           title: {
             en: '',
