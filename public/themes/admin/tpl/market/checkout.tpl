@@ -124,7 +124,7 @@
                       <tbody>
                         <tr>
                           <td><h5 class="uppercase">{t}Total{/t}</h5></td>
-                          <td><h5><strong>[% total %]</strong><small>€ / {t}month{/t}</small></h5></td>
+                          <td><h5><strong>[% subtotal %]</strong><small>€ / {t}month{/t}</small></h5></td>
                         </tr>
                       </tbody>
                     </table>

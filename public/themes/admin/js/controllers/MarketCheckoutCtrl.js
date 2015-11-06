@@ -25,6 +25,14 @@
          */
         $scope.edit = false;
 
+        /**
+         * @memeberOf MarketCheckoutCtrl
+         *
+         * @description
+         *   The current step in the checkout wizard.
+         *
+         * @type {Boolean}
+         */
         $scope.step = 1;
 
         /**
