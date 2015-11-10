@@ -112,14 +112,14 @@ class Advertisement extends Content
     public $overlap        = null;
 
     /**
-     * The <script> content of this advertisement
+     * The script content of this advertisement
      *
      * @varstring
      **/
     public $script      = null;
 
     /**
-     * Whether this advertisement has a <script> content
+     * Whether this advertisement has a script content
      *
      * @var boolean
      **/
@@ -139,7 +139,6 @@ class Advertisement extends Content
      * @var boolean
      **/
     public $is_flash = null;
-
 
     /**
      * Initializes the Advertisement class
@@ -188,12 +187,12 @@ class Advertisement extends Content
         $data['type_medida'] =
             (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
-        $sql = "INSERT INTO advertisements
-                    (`pk_advertisement`, `type_advertisement`,
-                     `fk_content_categories`, `path`, `url`, `type_medida`,
-                     `num_clic`, `num_clic_count`, `num_view`, `with_script`,
-                     `script`, `overlap`, `timeout`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql =  "INSERT INTO advertisements"
+                ."(`pk_advertisement`, `type_advertisement`,"
+                ."`fk_content_categories`, `path`, `url`, `type_medida`,"
+                ."`num_clic`, `num_clic_count`, `num_view`, `with_script`,"
+                ."`script`, `overlap`, `timeout`)"
+                ."VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $values = array(
             $this->id,
@@ -261,7 +260,7 @@ class Advertisement extends Content
             $this->script = $isBase64;
         }
 
-        // FIXME: revisar que non se utilice ->img
+        // FIXME: review that this property is not used ->img
         $this->img = $this->path;
 
         // Initialize the categories array of this advertisement
@@ -711,7 +710,7 @@ class Advertisement extends Content
     /**
      * Fire this event when publish an advertisement and unpublished others
      * banners where type_advertisement is equals
-    */
+     */
     public function onPublish()
     {
         if (!empty($this->content_status) && (intval($this->content_status)>0)) {

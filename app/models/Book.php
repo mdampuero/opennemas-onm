@@ -46,7 +46,6 @@ class Book extends Content
      **/
     public $editorial  = null;
 
-
     /**
      * Initializes the book instance given an id
      *
@@ -70,7 +69,6 @@ class Book extends Content
      **/
     public function __get($name)
     {
-
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {

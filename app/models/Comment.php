@@ -116,7 +116,6 @@ class Comment
      **/
     public $content_type_referenced = '';
 
-
     const STATUS_ACCEPTED = 'accepted';
     const STATUS_REJECTED = 'rejected';
     const STATUS_PENDING  = 'pending';
@@ -181,7 +180,7 @@ class Comment
     public function create($params)
     {
         $currentDate = new \DateTime('', new \DateTimeZone('UTC'));
-        $defaultData = array(
+        $defaultData = [
             'content_id'   => null,
             'author'       => '',
             'author_email' => '',
@@ -194,7 +193,7 @@ class Comment
             'type'         => '',
             'parent_id'    => 0,
             'user_id'      => 0,
-        );
+        ];
 
         $data = array_merge($defaultData, $params);
 

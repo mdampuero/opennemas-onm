@@ -1986,7 +1986,6 @@ class ContentManager
 
     }
 
-
     /**
      * Returns the original ID and content type for a given content id
      *
@@ -2043,8 +2042,6 @@ class ContentManager
 
         return $returnValue;
     }
-
-
 
     /**
      * Check if content id exists
