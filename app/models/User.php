@@ -159,13 +159,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if (!property_exists($this, 'cache')) {
             $this->cache = null;
         }
-
-        // // Use MethodCacheManager
-        // if (is_null($this->cache)) {
-        //     $this->cache = new MethodCacheManager($this, array('ttl' => 60));
-        // } else {
-        //     $this->cache->setCacheLife(60); // 60 seconds
-        // }
     }
 
     /**
@@ -433,6 +426,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function checkIfUserExists($data)
     {
+        // FIXME: why username and email twice in different order?
         $sql = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
 
         $values = array($data['username'], $data['email'], $data['username'], $data['email']);
@@ -473,7 +467,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 }
             }
 
-
             $this->readAccessCategories($this->id);
 
             return true;
@@ -494,7 +487,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     {
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
-             .  "VALUES (?,?)";
+             . "VALUES (?,?)";
 
         $values = array($idUser, $idCategory);
 
@@ -603,7 +596,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         return true;
     }
-
 
     /**
      * Tries to login a user given a username information
@@ -1315,9 +1307,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if ($rs === false) {
             return array();
         }
+
         $users = array();
         while (!$rs->EOF) {
-
             $user = new \User($rs->fields['user_id']);
             $user->meta = $user->getMeta();
 
@@ -1349,7 +1341,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         return $users;
     }
-
 
     /**
      * Returns a list of User objects where the users are only registered not subscribed
@@ -1407,8 +1398,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $users = array_values($users);
 
         return $users;
+    }
 
-}
     /**
      * Returns the total users that can be activated
      *

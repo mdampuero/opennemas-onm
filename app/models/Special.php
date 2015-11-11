@@ -7,7 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
  * @package    Model
  **/
 
@@ -162,8 +161,8 @@ class Special extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM specials WHERE pk_special = '.intval($id);
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM specials WHERE pk_special = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, [intval($id)]);
 
         if (!$rs) {
             return false;

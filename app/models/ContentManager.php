@@ -332,7 +332,6 @@ class ContentManager
         $contentIds = $this->checkAndCleanFrontpageSize($contentIds);
 
         if (is_array($contentIds) && count($contentIds) > 0) {
-
             $er = getService('entity_repository');
 
             // Retrieve contents from cache
@@ -345,7 +344,6 @@ class ContentManager
 
             // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
-
                 // Only add elements for the requested category id
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
@@ -458,6 +456,7 @@ class ContentManager
                         'position'    => $element['position'],
                     )
                 );
+
                 if (is_array($content->params) && $content->params > 0) {
                     $content->params = array_merge(
                         $content->params,
@@ -466,6 +465,7 @@ class ContentManager
                 } else {
                     $content->params = $element['params'];
                 }
+
                 $contents[] = $content;
             }
         }
@@ -488,7 +488,6 @@ class ContentManager
      **/
     public function getContentsIdsForHomepageOfCategory($categoryID)
     {
-
         // Initialization of variables
         $contents = array();
         if (empty($categoryID)) {
@@ -504,7 +503,6 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs !== false) {
-
             // iterate over all found contents and initialize them
             while (!$rs->EOF) {
                 if (!class_exists($rs->fields['content_type'])) {
