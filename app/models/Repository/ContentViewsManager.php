@@ -29,7 +29,7 @@ class ContentViewsManager extends EntityManager
         if (is_array($id)) {
             $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
         } else {
-            $sql .= " WHERE pk_fk_content = $id";
+            $sql .= " WHERE pk_fk_content = ".intval($id);
         }
 
         $rs = $this->dbConn->fetchAll($sql);
@@ -51,7 +51,7 @@ class ContentViewsManager extends EntityManager
     }
 
     /**
-     * Saves the amount of views for a content in database.
+     * Saves the amount of views for a content in database
      *
      * @param integer $id    The content id.
      * @param integer $views The amount of views.
@@ -59,13 +59,17 @@ class ContentViewsManager extends EntityManager
     public function setViews($id, $views = null)
     {
         if (is_null($views)) {
-            $views = $this->getViews($id) + 1;
+            $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)'
+                    .' ON DUPLICATE KEY UPDATE views = views + 1';
+            $params = [$id, 1];
+        } else {
+            $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)'
+                    .' ON DUPLICATE KEY UPDATE views = ?';
+            $params = [$id, $views, $views];
         }
 
-        $sql = 'REPLACE INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)';
-
-        $this->dbConn->transactional(function ($em) use ($sql, $id, $views) {
-            $em->executeQuery($sql, array($id, $views));
+        $this->dbConn->transactional(function ($em) use ($sql, $params) {
+            $em->executeQuery($sql, $params);
         });
     }
 }
