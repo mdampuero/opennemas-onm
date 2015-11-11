@@ -109,6 +109,9 @@ class L10nSystemListener implements EventSubscriberInterface
         $languageComposed = explode('_', $locale);
         $shortLanguage =  $languageComposed[0];
 
+        if (!defined('CURRENT_LANGUAGE_LONG')) {
+            define('CURRENT_LANGUAGE', \Application::$language);
+        }
         if (!defined('CURRENT_LANGUAGE')) {
             define('CURRENT_LANGUAGE', $shortLanguage);
         }
