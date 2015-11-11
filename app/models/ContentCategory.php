@@ -252,7 +252,6 @@ class ContentCategory
                 return false;
             }
 
-            dispatchEventWithParams('category.update', array('category' => $this));
             dispatchEventWithParams('category.delete', array('category' => $this));
 
             return true;
