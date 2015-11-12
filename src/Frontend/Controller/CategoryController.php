@@ -126,6 +126,11 @@ class CategoryController extends Controller
                 ]
             );
 
+            # Only allow user to see 2 pages
+            if ($page > 1) {
+                $pagination = null;
+            }
+
             $this->view->assign(
                 [
                     'articles'              => $articles,
