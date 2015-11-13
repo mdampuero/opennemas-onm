@@ -42,6 +42,11 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
         } else {
             $output = (\Onm\Module\ModuleManager::isActivated($params['name'])) ?  $content : "";
         }
+
+        if (isset($params['deactivated']) && $params['deactivated'] == 1) {
+            $output = (empty($output)) ? $content : "";
+        }
+
         return $output;
     }
 }
