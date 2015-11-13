@@ -444,6 +444,11 @@ class Advertisement extends Content
         // Check category
         $category = (empty($category) || ($category=='home')) ? 0 : $category;
 
+        // Remove floating banners
+        if (($key = array_search('37', $types)) !== false) {
+            unset($types[$key]);
+        }
+
         // Get string of types separated by commas
         $types = implode(',', $types);
 
