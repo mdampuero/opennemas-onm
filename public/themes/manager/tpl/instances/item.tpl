@@ -280,7 +280,7 @@
                 <div class="col-md-6 form-group">
                   <label class="form-label" for="contact-email">{t}Email{/t}</label>
                   <div class="controls">
-                    <input class="form-control" id="contact-email" ng-model="instance.metas.billing_contact_email" type="text">
+                    <input class="form-control" id="contact-email" ng-model="instance.metas.billing_email" type="text">
                   </div>
                 </div>
                 <div class="form-group col-md-6">
