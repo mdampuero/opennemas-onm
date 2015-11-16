@@ -77,22 +77,23 @@ class MarketController extends Controller
      */
     public function checkVatAction(Request $request)
     {
-        $code      = 200;
-        $validator = $this->get('vat.service');
-        $value     = 0;
+        $code  = 200;
+        $vat   = $this->get('vat');
 
-        $country = $request->query->get('country');
-        $vat     = $request->query->get('vat');
+        $country   = $request->query->get('country');
+        $vatNumber = $request->query->get('vat');
 
-        if (!$validator->validate($country, $vat)) {
+        try {
+            if (!$vat->validate($country, $vatNumber)) {
+                $code = 400;
+            }
+        } catch (\Exception $e) {
             $code = 400;
         }
 
-        if (array_key_exists($country, $this->taxes)) {
-            $value = $this->taxes[$country]['value'];
-        }
+        $vatValue = $vat->getVatFromCode($country);
 
-        return new JsonResponse($value, $code);
+        return new JsonResponse($vatValue, $code);
     }
 
     /**
