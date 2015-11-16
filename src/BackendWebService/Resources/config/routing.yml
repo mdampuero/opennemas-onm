@@ -6,6 +6,10 @@ backend_ws_comments:
     resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
     prefix:   /
 
+backend_ws_domain:
+    resource: @BackendWebServiceBundle/Resources/config/routing/domain.yml
+    prefix:   /
+
 backend_ws_getting_started:
     resource: @BackendWebServiceBundle/Resources/config/routing/getting_started.yml
     prefix:   /

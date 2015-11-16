@@ -1,0 +1,33 @@
+backend_ws_domain_check:
+    path:     /domains/check
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:check }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_ws_domain_delete:
+    path:     /domains/{id}
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+backend_ws_domain_save:
+    path:    /domains
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:save}
+    methods: [ POST ]
+    options:
+        expose: true
+
+backend_ws_domain_show:
+    path: /domains/{id}
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:show }
+    methods: [ GET ]
+    options:
+        expose: true
+
+backend_ws_domains_list:
+    path: /domains
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:list}
+    options:
+        expose: true

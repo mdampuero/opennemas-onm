@@ -1082,6 +1082,10 @@ admin_client_send_upgrade_mail:
     defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
 
 # Routing refactoring starts here
+backend_domain_mapping:
+    prefix: /
+    resource: @BackendBundle/Resources/config/routing/domain_management.yml
+
 backend_market:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/market.yml
@@ -1090,6 +1094,6 @@ backend_news_agency_server:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/news_agency_server.yml
 
-backend_nnotification:
+backend_notification:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/notification.yml

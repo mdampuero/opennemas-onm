@@ -1,0 +1,32 @@
+@import '../../../assets/src/opennemas-webarch/less/helpers/_variables.less';
+
+.domain-list {
+  margin: 0;
+  padding: 0;
+}
+
+.domain-list-item {
+  border-bottom: 1px solid @border-color;
+  list-style: none;
+  margin: 0;
+  padding: 15px;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .label {
+    margin: 13px 5px 0 0;
+    text-transform: uppercase;
+  }
+
+  .sk-three-bounce {
+    margin: 0 auto;
+  }
+
+  .sk-three-bounce > .sk-child {
+    width: 10px;
+    height: 10px;
+    background-color: @info-color;
+  }
+}

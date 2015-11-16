@@ -370,6 +370,14 @@ $menuXml = [
                 "privilege"   => "ONLY_MASTERS",
             ],
 
+            [
+                "id"          => "domain_manager",
+                "title"       => _("Domains"),
+                "icon"        => "fa fa-server",
+                "link"        => url('admin_domain_management'),
+                "privilege"   => "USER_ADMIN",
+            ],
+
         ],
     ],
     [
