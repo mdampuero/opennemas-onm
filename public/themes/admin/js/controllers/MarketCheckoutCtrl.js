@@ -20,7 +20,7 @@
     .controller('MarketCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
       function ($analytics, $http, $modal, $scope, messenger, routing, webStorage) {
         /**
-         * @memeberOf MarketCheckoutCtrl
+         * @memberOf MarketCheckoutCtrl
          *
          * @description
          *   Flag to edit billing information.
@@ -30,7 +30,7 @@
         $scope.edit = false;
 
         /**
-         * @memeberOf MarketCheckoutCtrl
+         * @memberOf MarketCheckoutCtrl
          *
          * @description
          *   The current step in the checkout wizard.
@@ -40,7 +40,7 @@
         $scope.step = 1;
 
         /**
-         * @memeberOf MarketCheckoutCtrl
+         * @memberOf MarketCheckoutCtrl
          *
          * @description
          *   Flag to know if current VAT is valid.
@@ -50,7 +50,7 @@
         $scope.validVat = false;
 
         /**
-         * @memeberOf MarketCheckoutCtrl
+         * @memberOf MarketCheckoutCtrl
          *
          * @description
          *   The VAT tax to apply.

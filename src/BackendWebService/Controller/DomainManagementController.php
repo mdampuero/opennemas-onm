@@ -35,24 +35,31 @@ class DomainManagementController extends Controller
     }
 
     /**
-     * Adds a new domain to the current instance.
+     * Deletes an instance domain.
      *
-     * @param Request $request The request object.
+     * @param string $domain The domain to delete.
      *
-     * @return JsonResponse The response object.
-     *
-     * @CheckModuleAccess(module="DOMAIN_MAPPING")
+     * @return JsonResponse The response object
      */
-    public function create(Request $request)
+    public function delete($domain)
     {
-        $domain   = $request->request->get('domain');
         $instance = $this->get('instance');
 
-        $instance->domains = array_unique($instance->domains, [ $domain ]);
+        $index = array_search($instance->domains, $domain);
 
-        $this->get('instance_manager')->persist($instance);
+        if ($index !== false) {
+            unset($instance->domains[$index]);
+            $this->get('instance_manager')->persist($instance);
 
-        return new JsonResponse(_('Domain added successfully'));
+            return new JsonResponse(
+                sprintf(_('Domain deleted successfully'))
+            );
+        }
+
+        return new JsonResponse(
+            sprintf(_('Unable to delete the domain %s'), $domain),
+            400
+        );
     }
 
     /**
@@ -83,34 +90,31 @@ class DomainManagementController extends Controller
             'domains' => $domains,
         ]);
     }
+
     /**
-     * Deletes an instance domain.
+     * Adds a new domain to the current instance.
      *
-     * @param string $domain The domain to delete.
+     * @param Request $request The request object.
      *
-     * @return JsonResponse The response object
-     *
-     * @CheckModuleAccess(module="DOMAIN_MAPPING")
+     * @return JsonResponse The response object.
      */
-    public function delete($domain)
+    public function saveAction(Request $request)
     {
+        $billing  = $request->request->get('billing');
+        $domains  = $request->request->get('domains');
+        $create   = $request->request->get('create');
         $instance = $this->get('instance');
 
-        $index = array_search($instance->domains, $domain);
-
-        if ($index !== false) {
-            unset($instance->domains[$index]);
-            $this->get('instance_manager')->persist($instance);
-
-            return new JsonResponse(
-                sprintf(_('Domain deleted successfully'))
-            );
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
         }
 
-        return new JsonResponse(
-            sprintf(_('Unable to delete the domain %s'), $domain),
-            400
-        );
+        $this->get('instance_manager')->persist($instance);
+
+        $this->sendEmailToCustomer($billing, $domains, $instance, $create);
+        $this->sendEmailToSales($billing, $domains, $instance, $create);
+
+        return new JsonResponse(_('Domain added successfully'));
     }
 
     /**
@@ -172,5 +176,79 @@ class DomainManagementController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * Sends an email to the customer.
+     *
+     * @param array    $billing  The billing information.
+     * @param array    $domains  The requested domains.
+     * @param Instance $instance The instance.
+     */
+    private function sendEmailToCustomer($billing, $domains, $instance)
+    {
+        $content =                 $this->renderView(
+                    'domain_management/email/_purchaseToCustomer.tpl',
+                    [
+                        'billing'  => $billing,
+                        'domains'  => $domains,
+                        'instance' => $instance
+                    ]
+                );
+
+        var_dump($content);die();
+        $params = $this->container
+            ->getParameter("manager_webservice");
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Opennemas Domain mapping request')
+            ->setFrom($params['no_reply_from'])
+            ->setSender($params['no_reply_sender'])
+            ->setTo($this->getUser()->contact_mail)
+            ->setBody(
+                $this->renderView(
+                    'domain_management/email/_purchaseToCustomer.tpl',
+                    [
+                        'billing'  => $billing,
+                        'domains'  => $domains,
+                        'instance' => $instance
+                    ]
+                ),
+                'text/html'
+            );
+
+        $this->get('mailer')->send($message);
+    }
+
+    /**
+     * Sends an email to sales department.
+     *
+     * @param array    $billing  The billing information.
+     * @param array    $domains  The requested domains.
+     * @param Instance $instance The instance.
+     */
+    private function sendEmailToSales($billing, $domains, $instance)
+    {
+        $params = $this->container
+            ->getParameter("manager_webservice");
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Opennemas Domain mapping request')
+            ->setFrom($params['no_reply_from'])
+            ->setSender($params['no_reply_sender'])
+            ->setTo($this->container->getParameter('sales_email'))
+            ->setBody(
+                $this->renderView(
+                    'domain_management/email/_purchaseToSales.tpl',
+                    [
+                        'billing'  => $billing,
+                        'domains'  => $domains,
+                        'instance' => $instance
+                    ]
+                ),
+                'text/html'
+            );
+
+        $this->get('mailer')->send($message);
     }
 }

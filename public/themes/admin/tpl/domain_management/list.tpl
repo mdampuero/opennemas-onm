@@ -45,7 +45,11 @@ filters="cssrewrite,less"}
             <p>{t}Add more domains or manage your current address{/t}</p>
           </div>
           <div class="pull-right">
-            <a href="{url name="admin_domain_management_add"}" data-toggle="modal" class="btn btn-primary add-domain-button">
+            <a href="{url name=admin_domain_management_add}" class="btn btn-link text-success">
+              <i class="fa fa-plus"></i>
+              {t}Redirect your domain{/t}
+            </a>
+            <a href="{url name=admin_domain_management_add create=1}" class="btn btn-success">
               <i class="fa fa-plus"></i>
               {t}Add new domain{/t}
             </a>

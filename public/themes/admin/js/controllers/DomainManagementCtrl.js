@@ -7,6 +7,7 @@
      * @name  DomainManagementCtrl
      *
      * @requires $http
+     * @requires $location
      * @requires $modal
      * @requires $scope
      * @requires $timeout
@@ -17,12 +18,107 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger',
-      function($http, $modal, $scope, $timeout, routing, messenger) {
+      '$http', '$location', '$modal', '$scope', '$timeout', 'routing',
+      function($http, $location, $modal, $scope, $timeout, routing) {
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Array of domains.
+         *
+         * @type {Array}
+         */
         $scope.domains = [];
 
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Array of expanded domains.
+         *
+         * @type {Array}
+         */
         $scope.expanded = {};
 
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Flag to edit billing information.
+         *
+         * @type {Boolean}
+         */
+        $scope.edit = false;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Flag to know if it is a purchase or redirection.
+         *
+         * @type {Boolean}
+         */
+        $scope.add = 0;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   The current step in the checkout wizard.
+         *
+         * @type {Boolean}
+         */
+        $scope.step = 1;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Flag to know if current VAT is valid.
+         *
+         * @type {Boolean}
+         */
+        $scope.validVat = false;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   The VAT tax to apply.
+         *
+         * @type {Boolean}
+         */
+        $scope.vatTax = 0;
+
+        /**
+         * @function confirm
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *  Requests the purchase and shows a confirmation message.
+         */
+        $scope.confirm = function() {
+          $scope.saving = true;
+          var url = routing.generate('backend_ws_domain_save');
+          var data = {
+            billing: $scope.billing,
+            domains: $scope.domains,
+            add:     $scope.add
+          };
+
+          $http.post(url, data).success(function() {
+            $scope.step = 4;
+            $scope.domains = [];
+          });
+        };
+
+        /**
+         * @function expand
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Shows/hides the information for a domain.
+         */
         $scope.expand = function(index) {
           $scope.expanded[index] = !$scope.expanded[index];
 
@@ -90,24 +186,36 @@
          */
         $scope.map = function() {
           var domain = 'www.' + $scope.domain;
-          var url = routing.generate('backend_ws_domain_check', { domain: domain });
 
-          $scope.loading = true;
-          $http.get(url).then(function(response) {
-          $scope.loading = false;
-            if (response.status === 400) {
-              messenger.post({ message: response.data, type: 'error' });
-            }
-
-            if (response.status === 200) {
-              if ($scope.domains.indexOf(domain) === -1) {
-                $scope.domains.push(domain);
-              }
-
-              $scope.domain = null;
-            }
-          });
+          if ($scope.domains.indexOf(domain) === -1) {
+            $scope.domains.push(domain);
+            $scope.domain = '';
+          }
         };
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('billing', function(nv) {
+          if (!nv || !nv.name) {
+            $scope.edit = true;
+          }
+        });
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.vat]', function() {
+          if (!$scope.billing.country || !$scope.billing.vat) {
+            return;
+          }
+
+          var url = routing.generate('backend_ws_market_check_vat',
+              { 'country': $scope.billing.country, 'vat': $scope.billing.vat });
+
+          $http.get(url).then(function(response) {
+            $scope.vatTax = parseFloat(response.data);
+            $scope.validVat = true;
+          }, function() {
+            $scope.validVat = false;
+          });
+        }, true);
 
         // Updates total and vat when domain change
         $scope.$watch('domains', function(nv, ov) {
