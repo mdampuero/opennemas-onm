@@ -6,12 +6,16 @@
      * @ngdoc controller
      * @name  MarketCheckoutCtrl
      *
+     * @requires $analytics
      * @requires $http
+     * @requires $modal
      * @requires $scope
+     * @requires messenger
      * @requires routing
+     * @requires webStorage
      *
      * @description
-     *   description
+     *   Controller to handle actions in checkout
      */
     .controller('MarketCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
       function ($analytics, $http, $modal, $scope, messenger, routing, webStorage) {
@@ -44,6 +48,16 @@
          * @type {Boolean}
          */
         $scope.validVat = false;
+
+        /**
+         * @memeberOf MarketCheckoutCtrl
+         *
+         * @description
+         *   The VAT tax to apply.
+         *
+         * @type {Boolean}
+         */
+        $scope.vatTax = 0;
 
         /**
          * @function confirm
@@ -108,7 +122,7 @@
         // Updates the total when the cart changes
         $scope.$watch('cart', function(nv) {
           $scope.subtotal = 0;
-          $scope.total = 0;
+          $scope.total    = 0;
 
           if (!nv || (nv instanceof Array && nv.length === 0)) {
             webStorage.local.remove('cart');
@@ -122,6 +136,9 @@
               $scope.subtotal += nv[i].price.month;
             }
           }
+
+          $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
+          $scope.total = $scope.subtotal + $scope.vat;
         }, true);
 
         // Updates vat and total values when vat tax changes
