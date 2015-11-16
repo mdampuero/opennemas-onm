@@ -247,3 +247,7 @@ services:
     orm.manager:
         class: Framework\ORM\EntityManager
         arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
+
+    vat:
+        class: Framework\VAT\VATService
+        arguments: [ @vat.service ]

@@ -9,42 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 class MarketController extends Controller
 {
     /**
-     * The list of countries and taxes.
-     *
-     * @var array
-     */
-    protected $taxes = [
-        'GB' => [ 'name' => 'United Kingdom', 'value' => 20 ],
-        'BE' => [ 'name' => 'Belgium', 'value' => 21 ],
-        'BG' => [ 'name' => 'Bulgaria', 'value' => 20 ],
-        'CZ' => [ 'name' => 'Czech Republic ', 'value' => 21 ],
-        'DK' => [ 'name' => 'Denmark', 'value' => 25 ],
-        'DE' => [ 'name' => 'Germany', 'value' => 19 ],
-        'EE' => [ 'name' => 'Estonia', 'value' => 20 ],
-        'EL' => [ 'name' => 'Greece', 'value' => 23 ],
-        'ES' => [ 'name' => 'Spain', 'value' => 21 ],
-        'FR' => [ 'name' => 'France', 'value' => 20 ],
-        'HR' => [ 'name' => 'Croatia', 'value' => 25 ],
-        'IE' => [ 'name' => 'Ireland', 'value' => 23 ],
-        'IT' => [ 'name' => 'Italy', 'value' => 22 ],
-        'CY' => [ 'name' => 'Cyprus', 'value' => 19 ],
-        'LV' => [ 'name' => 'Latvia', 'value' => 21 ],
-        'LT' => [ 'name' => 'Lithuania', 'value' => 21 ],
-        'LU' => [ 'name' => 'Luxembourg', 'value' => 15 ],
-        'HU' => [ 'name' => 'Hungary', 'value' => 27 ],
-        'MT' => [ 'name' => 'Malta', 'value' => 18 ],
-        'NL' => [ 'name' => 'Netherlands', 'value' => 21 ],
-        'AT' => [ 'name' => 'Austria', 'value' => 20 ],
-        'PL' => [ 'name' => 'Poland', 'value' => 23 ],
-        'PT' => [ 'name' => 'Portugal', 'value' => 23 ],
-        'RO' => [ 'name' => 'Romania', 'value' => 24 ],
-        'SI' => [ 'name' => 'Slovenia', 'value' => 22 ],
-        'SK' => [ 'name' => 'Slovakia', 'value' => 20 ],
-        'FI' => [ 'name' => 'Finland', 'value' => 24 ],
-        'SE' => [ 'name' => 'Sweden', 'value' => 25 ],
-    ];
-
-    /**
      * Request a modules purchase to the sales department.
      *
      * @param Request $request The request object.
