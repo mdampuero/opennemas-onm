@@ -369,15 +369,6 @@ $menuXml = [
                 "link"        => url('admin_databaseerrors'),
                 "privilege"   => "ONLY_MASTERS",
             ],
-
-            [
-                "id"          => "domain_manager",
-                "title"       => _("Domains"),
-                "icon"        => "fa fa-server",
-                "link"        => url('admin_domain_management'),
-                "privilege"   => "USER_ADMIN",
-            ],
-
         ],
     ],
     [
@@ -386,6 +377,13 @@ $menuXml = [
         'icon'  => 'fa fa-shopping-cart',
         'link'  => url('admin_market_list'),
         'privilege' => 'ROLE_ADMIN'
+    ],
+    [
+        "id"          => "domain_manager",
+        "title"       => _("Domains"),
+        "icon"        => "fa fa-server",
+        "link"        => url('admin_domain_management'),
+        "privilege"   => "USER_ADMIN",
     ],
     [
         'id'      => 'faq_and_support',
