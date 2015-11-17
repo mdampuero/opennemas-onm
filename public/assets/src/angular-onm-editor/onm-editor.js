@@ -312,6 +312,10 @@
 
               if (scope.ngModel !== 'undefined') {
                 instance.on('key', function() {
+                  instance.fire('change');
+                });
+
+                instance.on('change', function() {
                   if (!blocked) {
                     scope.ngModel = instance.getData();
                     scope.$apply();
