@@ -145,6 +145,7 @@ class ModuleManager
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
                 'FRONTPAGES_LAYOUT'          => _('Frontpages Manager'),
                 'IMAGE_MANAGER'              => _('Images'),
+                'IADBOX_MANAGER'             => _('iadbox'),
                 'XML_IMPORT'                 => _('Import XMLs'),
                 'KEYWORD_MANAGER'            => _('Keywords'),
                 'KIOSKO_MANAGER'             => _('NewsStand'),
@@ -867,6 +868,23 @@ class ModuleManager
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
                     'long_description' => _('Missed long description...'),
+                    'price'            => [
+                        'month' => 0
+                    ]
+                ],
+                [
+                    'id'               => 'IADBOX_MANAGER',
+                    'plan'             => 'OTHER',
+                    'type'             => 'partner',
+                    'thumbnail'        => 'iadbox.jpg',
+                    'name'             => _('iadbox'),
+                    'description'      => _('iadbox is a way to serve ads when users want to receive them'),
+                    'long_description' => (
+                        _('<p>iadbox is an intelligent commercial messagin for the smartphone generation.</p>')
+                        . _('<p>It isa mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
+                        . _('<p><strong>More info</strong>: <a href="http://www.iadbox.com">www.iadbox.com</a></p>')
+                        . _('<p><strong>Ask for it </strong>: <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>')
+                    ),
                     'price'            => [
                         'month' => 0
                     ]
