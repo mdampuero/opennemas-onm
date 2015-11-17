@@ -33,7 +33,7 @@
               <h4 class="semi-bold">1. {t}Domains{/t}</h4>
               <p>
                 {if !$create}
-                  {t}I have an existing domain and I want to redirect my newspaper Opennemas to it.{/t}
+                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
                 {else}
                   {t}I do not have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
                 {/if}

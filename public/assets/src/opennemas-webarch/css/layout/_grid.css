@@ -1,5 +1,7 @@
 .grid.simple .grid-body,
-.grid.simple .grid-title {
+.grid.simple .grid-title,
+.grid.solid .grid-body,
+.grid.solid .grid-title {
   padding: 15px;
 }
 

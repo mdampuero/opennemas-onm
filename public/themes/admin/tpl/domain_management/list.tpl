@@ -46,7 +46,7 @@ filters="cssrewrite,less"}
                 <i class="block fa fa-retweet fa-2x m-b-15"></i>
                 <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
                 <h5 class="wrap">
-                  {t}I have an existing domain and I want to redirect my newspaper Opennemas to it.{/t}
+                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
                 </h5>
               </a>
             </div>
