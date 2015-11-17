@@ -78,7 +78,7 @@
                 <ul class="cart-list cart-list-big ng-cloak">
                   <li ng-repeat="domain in domains">
                     <div class="p-l-15">
-                      <h5 class="no-overflow">{t}Domain mapping{/t}</h5>
+                      <h5 class="no-overflow">{if $create}{t}Domain registration + mapping{/t}{else}{t}Domain mapping{/t}{/if}</h5>
                       <div class="clearfix">
                         <p class="description pull-left no-margin">[% domain %]</p>
                         <div class="text-right p-r-15 p-b-15">
@@ -254,9 +254,9 @@
                 </thead>
                 <tbody>
                   <tr ng-repeat="domain in domains">
-                    <td>{t}Domain mapping{/t}: [% domain %]</td>
-                    <td class="text-right">12.00 €</td>
-                    <td class="text-right">12.00 €</td>
+                    <td>{if $create}{t}Domain registration + mapping{/t}{else}{t}Domain mapping{/t}{/if}: [% domain %]</td>
+                    <td class="text-right">[% price %] €</td>
+                    <td class="text-right">[% price %] €</td>
                   </tr>
                   <tr>
                     <td rowspan="3"></td>
