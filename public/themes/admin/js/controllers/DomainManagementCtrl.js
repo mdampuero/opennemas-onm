@@ -24,6 +24,16 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
+         *   Flag to know if it is a purchase or redirection.
+         *
+         * @type {Boolean}
+         */
+        $scope.create = 0;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
          *   Array of domains.
          *
          * @type {Array}
@@ -54,11 +64,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   Flag to know if it is a purchase or redirection.
+         *   The price per module.
          *
-         * @type {Boolean}
+         * @type {Integer}
          */
-        $scope.add = 0;
+        $scope.price = 12;
 
         /**
          * @memberOf DomainManagementCtrl
@@ -102,8 +112,8 @@
           var url = routing.generate('backend_ws_domain_save');
           var data = {
             billing: $scope.billing,
-            domains: $scope.domains,
-            add:     $scope.add
+            create:  $scope.create,
+            domains: $scope.domains
           };
 
           $http.post(url, data).success(function() {
@@ -178,6 +188,17 @@
         };
 
         /**
+         * @function removeFromList
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Removes a domain from domain list.
+         */
+        $scope.removeFromList = function(index) {
+          $scope.domains.splice(index, 1);
+        };
+
+        /**
          * @function map
          * @memberOf DomainManagementCtrl
          *
@@ -217,6 +238,13 @@
           });
         }, true);
 
+        // Updates domain price when create flag changes
+        $scope.$watch('create', function(nv, ov) {
+          if (nv === 1) {
+            $scope.price = 18;
+          }
+        });
+
         // Updates total and vat when domain change
         $scope.$watch('domains', function(nv, ov) {
           if (ov === nv) {
@@ -224,7 +252,7 @@
           }
 
           if (nv.length > 0) {
-            $scope.subtotal = 12 * nv.length;
+            $scope.subtotal = $scope.price * nv.length;
             $scope.vat      = $scope.subtotal * 0.21;
             $scope.total    = $scope.subtotal + $scope.vat;
           }

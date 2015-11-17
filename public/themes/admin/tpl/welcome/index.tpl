@@ -29,6 +29,34 @@
 <div class="content welcome-page">
   <div class="row">
     <div class="col-sm-6">
+      <div class="row">
+        <div class="col-vlg-6">
+          <div class="grid simple">
+            <a href="{url name=admin_domain_management_add}">
+              <div class="grid-body text-center">
+                <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
+                <i class="block fa fa-retweet fa-2x m-b-15"></i>
+                <h5 class="wrap">
+                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
+                </h5>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-vlg-6">
+          <div class="grid solid green">
+            <a href="{url name=admin_domain_management_add create=1}">
+              <div class="grid-body text-center">
+                <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
+                <i class="block fa fa-plus fa-2x m-b-15"></i>
+                <h5 class="text-white wrap">
+                  {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
+                </h5>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
       <div class="grid simple add-contents">
         <div class="grid-title">
           <h4>{t}Add contents to your site{/t}</h4>
@@ -95,35 +123,6 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="grid simple">
-            <a href="{url name=admin_domain_management_add}">
-              <div class="grid-body text-center">
-                <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
-                <i class="block fa fa-retweet fa-2x m-b-15"></i>
-                <h5 class="wrap">
-                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
-                </h5>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="grid solid green">
-            <a href="{url name=admin_domain_management_add create=1}">
-              <div class="grid-body text-center">
-                <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
-                <i class="block fa fa-plus fa-2x m-b-15"></i>
-                <h5 class="text-white wrap">
-                  {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
-                </h5>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
       <div class="grid simple merchant">
         <div class="grid-title">
           <h4>{t}Want more features?{/t}</h4>

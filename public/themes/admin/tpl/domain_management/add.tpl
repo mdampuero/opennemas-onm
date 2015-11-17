@@ -1,5 +1,13 @@
 {extends file="domain_management/list.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="
+    @AdminTheme/less/_market.less
+  " filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="content"}
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -63,20 +71,41 @@
                   </h4>
                 </div>
               </div>
-              <ul class="domain-list ng-cloak" ng-if="domains.length > 0">
-                <li class="domain-list-item" ng-repeat="domain in domains">
-                  {t}Domain mapping{/t}: [% domain %]
-                  <span class="pull-right">12 €/year</span>
-                </li>
-                <li class="domain-list-item text-right">
-                  <div class="p-b-10">
-                    <strong>{t}Total{/t}:</strong>
-                    [% subtotal %] €/{t}year{/t}
+              <div ng-if="domains.length > 0">
+                <h5 class="m-t-30 ng-cloak semi-bold uppercase">
+                  {t}Requested domains{/t}
+                </h5>
+                <ul class="cart-list cart-list-big ng-cloak">
+                  <li ng-repeat="domain in domains">
+                    <div class="p-l-15">
+                      <h5 class="no-overflow">{t}Domain mapping{/t}</h5>
+                      <div class="clearfix">
+                        <p class="description pull-left no-margin">[% domain %]</p>
+                        <div class="text-right p-r-15 p-b-15">
+                          <div class="price">
+                            <h4 class="no-margin">
+                              <strong>[% price %]</strong>
+                              <small>€/year</small>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <i class="fa fa-times pull-left" ng-click="removeFromList($index)"></i>
+                  </li>
+                </ul>
+                <div class="ng-cloak text-right">
+                  <div class="p-r-30 p-t-10">
+                    <h4>
+                      <span class="m-r-30 uppercase">{t}Total{/t}:</span>
+                      <strong>[% subtotal %]</strong>
+                      <small>€/{t}year{/t}</small>
+                    </h4>
                   </div>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
-            <div class="m-t-30">
+            <div class="m-t-30 ng-cloak" ng-show="domains.length > 0">
               <h4 class="semi-bold">2. {t}Billing information{/t}</h4>
               <p>{t escape=off}If you need to update this information please <a href="mailto:sales@openhost.es">contact us</a>.{/t}</p>
               <div class="ng-cloak p-b-30" ng-show="edit">
@@ -245,7 +274,7 @@
                 </tbody>
               </table>
             </div>
-            <div>
+            <div class="ng-cloak" ng-show="domains.length > 0">
               <h4 class="semi-bold">4. {if $create}{t}Terms of create a new domain{/t}{else}{t}Terms of redirection{/t}{/if}</h4>
               {if $create}
                 <ul>
