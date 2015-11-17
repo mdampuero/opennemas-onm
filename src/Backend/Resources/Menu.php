@@ -18,6 +18,14 @@ $menuXml = [
         'icon'    => 'fa fa-home',
     ],
 
+    [
+        'id'      => 'my-newspaper',
+        'class'   => 'visible-xs',
+        'link'    => url('admin_client_info_page'),
+        'title'   => _("My newspaper"),
+        'icon'    => 'fa fa-bullseye',
+    ],
+
     // Frontpage menu
     [
         'id'      => 'frontpage',
