@@ -39,20 +39,26 @@ filters="cssrewrite,less"}
   <div class="row">
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
       <div class="grid simple">
-        <div class="grid-title clearfix">
-          <div class="pull-left">
-            <h4>{t}Domains{/t}</h4>
-            <p>{t}Add more domains or manage your current address{/t}</p>
-          </div>
-          <div class="pull-right">
-            <a href="{url name=admin_domain_management_add}" class="btn btn-link text-success">
-              <i class="fa fa-plus"></i>
-              {t}Redirect your domain{/t}
-            </a>
-            <a href="{url name=admin_domain_management_add create=1}" class="btn btn-success">
-              <i class="fa fa-plus"></i>
-              {t}Add new domain{/t}
-            </a>
+        <div class="grid-title">
+          <div class="row">
+            <div class="col-sm-6">
+              <a class="btn btn-block btn-white" href="{url name=admin_domain_management_add}">
+                <i class="block fa fa-retweet fa-2x m-b-15"></i>
+                <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
+                <h5 class="wrap">
+                  {t}I have an existing domain and I want to redirect my newspaper Opennemas to it.{/t}
+                </h5>
+              </a>
+            </div>
+            <div class="col-sm-6">
+              <a class="btn btn-block btn-success" href="{url name=admin_domain_management_add create=1}">
+                <i class="block fa fa-plus fa-2x m-b-15"></i>
+                <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
+                <h5 class="text-white wrap">
+                  {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
+                </h5>
+              </a>
+            </div>
           </div>
         </div>
         <div class="grid-body no-padding">
