@@ -37,7 +37,7 @@
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="grid simple">
           <div class="grid-body clearfix">
-            <div>
+            <div ng-show="step != 4">
               <h4 class="semi-bold">1. {t}Domains{/t}</h4>
               <p>
                 {if !$create}
@@ -105,7 +105,7 @@
                 </div>
               </div>
             </div>
-            <div class="m-t-30 ng-cloak" ng-show="domains.length > 0">
+            <div class="m-t-30 ng-cloak" ng-show="domains.length > 0 && step != 4">
               <h4 class="semi-bold">2. {t}Billing information{/t}</h4>
               <p>{t escape=off}If you need to update this information please <a href="mailto:sales@openhost.es">contact us</a>.{/t}</p>
               <div class="ng-cloak p-b-30" ng-show="edit">
@@ -223,7 +223,7 @@
                 </div>
               </div>
             </div>
-            <div class="p-t-15 ng-cloak" ng-if="step != 4 && domains.length > 0">
+            <div class="p-t-15 ng-cloak" ng-show="step != 4 && domains.length > 0">
               <h4 class="semi-bold">3. {t}Summary{/t}</h4>
               <div class="p-t-5 pull-left">
                 <h4 class="semi-bold">[% billing.name %]</h4>
@@ -274,7 +274,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="ng-cloak" ng-show="domains.length > 0">
+            <div class="ng-cloak" ng-show="domains.length > 0 && step != 4">
               <h4 class="semi-bold">4. {if $create}{t}Terms of create a new domain{/t}{else}{t}Terms of redirection{/t}{/if}</h4>
               {if $create}
                 <ul>
@@ -318,6 +318,36 @@
                   {t}Confirm{/t}
                 </button>
               </div>
+            </div>
+            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-show="step == 4">
+              <i class="fa fa-heart fa-3x"></i>
+              <h3 class="p-b-30">{t}Thank you for your request!{/t}</h3>
+              <p class="p-b-15">
+              {t}In the next 24 hours you will receive an email with payment instructions and the invoice.{/t}
+              </p>
+              <p class="p-b-15">
+              {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+              </p>
+              <p class="p-b-10">
+              {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
+              </p>
+              <div>
+                <a href="http://www.facebook.com" target="_blank">
+                  <i class="fa fa-lg fa-facebook m-r-30"></i>
+                </a>
+                <a href="http://twitter.com" target="_blank">
+                  <i class="fa fa-lg fa-twitter m-r-30"></i>
+                </a>
+                <a href="https://plus.google.com/" target="_blank">
+                  <i class="fa fa-lg fa-google-plus m-r-30"></i>
+                </a>
+                <a href="https://www.linkedin.com/" target="_blank">
+                  <i class="fa fa-lg fa-linkedin"></i>
+                </a>
+              </div>
+              <h4 class="m-t-30">
+                {t}Have a wonderful day!{/t}
+                </p>
             </div>
           </div>
         </div>
