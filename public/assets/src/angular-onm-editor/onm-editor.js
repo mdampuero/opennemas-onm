@@ -308,11 +308,27 @@
 
             var onLoad = function () {
               var instance = Editor.init(isTextarea, element[0], options);
+              var blocked = false;
 
-              if (scope.ngModel) {
-                instance.on('change', function() {
-                  scope.ngModel = instance.getData();
-                  scope.$apply();
+              if (scope.ngModel !== 'undefined') {
+                instance.on('key', function() {
+                  if (!blocked) {
+                    scope.ngModel = instance.getData();
+                    scope.$apply();
+                  }
+                });
+
+                // Updates the CKEditor content when model changes
+                scope.$watch('ngModel', function(nv, ov) {
+                  if (nv === ov) {
+                    return;
+                  }
+
+                  if (nv !== instance.getData()) {
+                    blocked = true;
+                    instance.setData(nv);
+                    blocked = false;
+                  }
                 });
               }
             };
