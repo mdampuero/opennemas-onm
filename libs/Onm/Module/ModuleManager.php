@@ -874,14 +874,15 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'IADBOX_MANAGER',
+                    'author'           => '<a href="http://www.iadbox.com">iadbox</a>',
                     'plan'             => 'OTHER',
                     'type'             => 'partner',
                     'thumbnail'        => 'iadbox.jpg',
                     'name'             => _('iadbox'),
                     'description'      => _('iadbox is a way to serve ads when users want to receive them'),
                     'long_description' => (
-                        _('<p>iadbox is an intelligent commercial messagin for the smartphone generation.</p>')
-                        . _('<p>It isa mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
+                        _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>')
+                        . _('<p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
                         . _('<p><strong>More info</strong>: <a href="http://www.iadbox.com">www.iadbox.com</a></p>')
                         . _('<p><strong>Ask for it </strong>: <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>')
                     ),
