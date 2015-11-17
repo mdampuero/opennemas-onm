@@ -113,8 +113,8 @@
         };
 
         // Updates the edit flag when billing changes.
-        $scope.$watch('billing', function(nv, ov) {
-          if (!ov.name && !nv.name) {
+        $scope.$watch('billing', function(nv) {
+          if (!nv || !nv.name) {
             $scope.edit = true;
           }
         });
