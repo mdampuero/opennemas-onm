@@ -145,6 +145,7 @@ class ModuleManager
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
                 'FRONTPAGES_LAYOUT'          => _('Frontpages Manager'),
                 'IMAGE_MANAGER'              => _('Images'),
+                'IADBOX_MANAGER'             => _('iadbox'),
                 'XML_IMPORT'                 => _('Import XMLs'),
                 'KEYWORD_MANAGER'            => _('Keywords'),
                 'KIOSKO_MANAGER'             => _('NewsStand'),
@@ -867,6 +868,26 @@ class ModuleManager
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
                     'long_description' => _('Missed long description...'),
+                    'price'            => [
+                        'month' => 0
+                    ]
+                ],
+                [
+                    'id'               => 'IADBOX_MANAGER',
+                    'author'           => '<a target="_blank" href="http://www.iadbox.com">iadbox</a>',
+                    'plan'             => 'OTHER',
+                    'type'             => 'partner',
+                    'thumbnail'        => 'iadbox.jpg',
+                    'name'             => _('iadbox'),
+                    'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
+                    'long_description' => (
+                        _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>')
+                        . _('<p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
+                        . _('<p><strong>More info</strong>: <a target="_blank" href="http://www.iadbox.com">www.iadbox.com</a></p>')
+                        . _('<p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>')
+                        . _('<p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>')
+                        . _('<p><strong>Ask for it </strong>: <a target="_blank" href="mailto:sales@openhost.es">sales@openhost.es</a></p>')
+                    ),
                     'price'            => [
                         'month' => 0
                     ]

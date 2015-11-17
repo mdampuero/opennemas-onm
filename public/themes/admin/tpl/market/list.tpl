@@ -30,6 +30,7 @@
                 <span ng-if="type == 'pack'">{t}Packs{/t}</span>
                 <span ng-if="type == 'service'">{t}Services{/t}</span>
                 <span ng-if="type == 'theme'">{t}Themes{/t}</span>
+                <span ng-if="type == 'partner'">{t}Partners{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
@@ -47,6 +48,9 @@
                 </li>
                 <li ng-click="type = 'theme'">
                   <a href="#">{t}Themes{/t}</a>
+                </li>
+                <li ng-click="type = 'partner'">
+                  <a href="#">{t}Partners{/t}</a>
                 </li>
               </ul>
             </li>
@@ -144,6 +148,15 @@
                 {t}Services{/t}
               </button>
             </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
+                <i class="fa fa-lg fa-thumbs-o-up"></i>
+                {t}Partners{/t}
+              </button>
+            </li>
           </ul>
           <ul class="hidden-xs nav quick-section pull-right">
             <li class="quicklinks">
@@ -217,7 +230,7 @@
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
               <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
               <div class="module-icon">
-                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-thumbs-o-up': item.type == 'partner', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>
             </div>
             <div class="module-body col-xs-8 col-sm-8">
