@@ -28,35 +28,36 @@
 
 <div class="content welcome-page">
   <div class="row">
-    <div class="col-sm-6">
-      <div class="row">
-        <div class="col-vlg-6">
-          <div class="grid simple">
-            <a href="{url name=admin_domain_management_add}">
-              <div class="grid-body text-center">
-                <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
-                <i class="block fa fa-retweet fa-2x m-b-15"></i>
-                <h5 class="wrap">
-                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
-                </h5>
-              </div>
-            </a>
-          </div>
+    <div class="col-lg-12">
+      <div class="grid simple vertical green">
+        <div class="grid-title no-border">
+          <h4>{t escape=off}Use your own domain with <span class="semi-bold">Opennemas</span>{/t}</h4>
         </div>
-        <div class="col-vlg-6">
-          <div class="grid solid green">
-            <a href="{url name=admin_domain_management_add create=1}">
-              <div class="grid-body text-center">
-                <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
-                <i class="block fa fa-plus fa-2x m-b-15"></i>
-                <h5 class="text-white wrap">
-                  {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
-                </h5>
-              </div>
-            </a>
+        <div class="grid-body no-border">
+          <div class="row-fluid">
+            <div>
+              <ul class="pull-left">
+                <li>
+                  <h5>
+                    {t}Do you already have a domain and you want to direct your Opennemas newspaper to it?{/t}
+                    <a href="{url name=admin_domain_management_add}" class="link">{t}Redirect your domain{/t}</a>
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    {t}Would you like to purchase a domain and get your Opennemas newspaper redirected to it?{/t}
+                    <a href="{url name=admin_domain_management_add create=1}" class="link"></i> {t}Add new domain{/t}</a>
+                  </h5>
+                </li>
+              </ul>
+              <div class="pull-right"> <i class="fa fa-globe fa fa-6x custom-icon-space" id="icon-resize"></i> </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="col-sm-6">
       <div class="grid simple add-contents">
         <div class="grid-title">
           <h4>{t}Add contents to your site{/t}</h4>
