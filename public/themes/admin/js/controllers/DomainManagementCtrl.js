@@ -214,6 +214,20 @@
           }
         };
 
+
+        /**
+         * @function map
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Listens for the enter key to add a domain to map
+         */
+        $scope.mapByKeyPress = function(event) {
+          if (event.keyCode === 13) {
+            $scope.map();
+          }
+        };
+
         // Updates the edit flag when billing changes.
         $scope.$watch('billing', function(nv) {
           if (!nv || !nv.name) {
