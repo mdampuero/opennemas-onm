@@ -1,0 +1,22 @@
+.carousel {
+  cursor: default;
+}
+
+.carousel-control {
+  cursor: pointer;
+
+  &.left,
+  &.right {
+    background-image: none;
+    opacity: 0;
+  }
+}
+
+.carousel:hover {
+  .carousel-control {
+    &.left,
+    &.right {
+      opacity: 1;
+    }
+  }
+}

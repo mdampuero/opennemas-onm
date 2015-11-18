@@ -387,6 +387,13 @@ $menuXml = [
         'privilege' => 'ROLE_ADMIN'
     ],
     [
+        "id"          => "theme-manager",
+        "title"       => _("Themes"),
+        "icon"        => "fa fa-magic",
+        "link"        => url('backend_theme_list'),
+        "privilege"   => "USER_ADMIN",
+    ],
+    [
         "id"          => "domain_manager",
         "title"       => _("Domains"),
         "icon"        => "fa fa-server",
