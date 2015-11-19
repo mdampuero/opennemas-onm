@@ -40,7 +40,9 @@
       });
 
       $('#formulario').on('submit', function(){
-        save_related_contents();
+        var btn = $('.btn.btn-primary');
+        btn.attr('disabled', true);
+        $('.btn.btn-primary .text').html(btn.data('text'));
       });
     });
   </script>
@@ -90,18 +92,18 @@
               {if isset($article->id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Update{/t}
+                  <span class="text">{t}Update{/t}</span>
                 </button>
               </li>
               {/acl}
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..."type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
               {/acl}
@@ -111,9 +113,8 @@
         </div>
       </div>
     </div>
-
     <div class="content">
-      <div class="row">
+     <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
