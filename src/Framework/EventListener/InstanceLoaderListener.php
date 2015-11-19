@@ -149,7 +149,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $uri = $request->getRequestUri();
                 $url = $scheme . $supposedDomain . $port . $uri;
 
-                $event->setResponse(new RedirectResponse($url, 302));
+                $event->setResponse(new RedirectResponse($url, 301));
             }
         } elseif (getContainerParameter('opennemas.redirect_frontend')
             && strpos($request->getRequestUri(), '/admin') !== 0
@@ -171,7 +171,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $uri  = $request->getRequestUri();
                 $url = 'http://' . $domain . $port . $uri;
 
-                $event->setResponse(new RedirectResponse($url, 302));
+                $event->setResponse(new RedirectResponse($url, 301));
             }
         }
     }
