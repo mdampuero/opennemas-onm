@@ -49,7 +49,7 @@
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
                   <span class="input-group-addon">www</span>
-                  <input class="form-control" ng-model="domain" placeholder="{t}Enter a domain{/t}" type="text">
+                  <input class="form-control" ng-model="domain" placeholder="{t}Enter a domain{/t}" type="text"  ng-keyup="mapByKeyPress($event)">
                   <span class="input-group-btn">
                     <span class="arrow"></span>
                     <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid()">

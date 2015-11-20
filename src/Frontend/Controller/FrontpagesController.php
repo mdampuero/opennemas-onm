@@ -37,39 +37,24 @@ class FrontpagesController extends Controller
     public function showAction(Request $request)
     {
         // Fetch HTTP variables
-        $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
-
-        $cacheID = $this->view->generateCacheId('frontpage', '', $categoryName);
-
-        $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
-        $this->view->assign(
-            array(
-                'category_name'   => $categoryName,
-                'actual_category' => $actualCategory
-            )
-        );
 
         // Get the ID of the actual category from the categoryName
         $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId = $ccm->get_id($categoryName);
 
+        $date = $this->get('setting_repository')
+            ->get('frontpage_' . $actualCategoryId . '_last_saved');
+
+        $cacheID = 'frontpage|' . $categoryName . '|' . $date;
+
         $cm = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
-        // Get min starttime
-        $current = date('Y-m-d H:i:s');
-        $expires = null;
-        foreach ($contentsInHomepage as $content) {
-            if ($content->starttime > $current
-                && (empty($expire)
-                    || (!empty($expire) && $content->starttime < $expire))
-            ) {
-                $expires = $content->starttime;
-            }
-        }
+        $expires = $this->getExpireForFrontpage($contentsInHomepage);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
@@ -153,9 +138,11 @@ class FrontpagesController extends Controller
         return $this->render(
             'frontpage/frontpage.tpl',
             array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'frontpage-page,'.$categoryName,
-                'x-cache-for' => $expires,
+                'cache_id'        => $cacheID,
+                'category_name'   => $categoryName,
+                'actual_category' => $categoryName,
+                'x-tags'          => 'frontpage-page,'.$categoryName,
+                'x-cache-for'     => $expires,
             )
         );
     }
@@ -277,5 +264,28 @@ class FrontpagesController extends Controller
         }
 
         return $advertisements;
+    }
+
+    /**
+     * Gets the expire time for the frontpage basing on its contents.
+     *
+     * @param array $contents Contents in frontpage.
+     *
+     * @return string The expire time for the frontpage.
+     */
+    private function getExpireForFrontpage($contents)
+    {
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contents as $content) {
+            if ($content->starttime > $current
+                && (empty($expires)
+                    || $content->starttime < $expires)
+            ) {
+                $expires = $content->starttime;
+            }
+        }
+
+        return $expires;
     }
 }

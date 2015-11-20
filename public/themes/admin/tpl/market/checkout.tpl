@@ -6,6 +6,11 @@
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
+  <style>
+  .grid.simple {
+    font-size:14px;
+  }
+  </style>
 {/block}
 
 {block name="content"}
@@ -83,7 +88,7 @@
             <div class="grid-body">
               <div ng-if="step != 4">
                 <h4 class="semi-bold">1. {t}Cart{/t}</h4>
-                <p>{t}You are about to purchase the next items:{/t}</p>
+                <p>{t}You are about to order next items. In the next 24hours our sales team will send you payment and activation information. {/t}</p>
                 <ul class="cart-list cart-list-big">
                   <li class="clearfix" ng-repeat="item in cart">
                     <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
@@ -93,7 +98,7 @@
                       <div class="text-right p-r-15 p-b-15">
                         <div class="price">
                           <h4 class="no-margin">
-                            <strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small>
+                            <strong>[% item.price.month %]</strong><small> € / {t}month{/t}</small>
                           </h4>
                         </div>
                       </div>
@@ -105,7 +110,7 @@
                 <div class="text-right">
                   <h4 class="p-r-30">
                     <span class="uppercase p-r-30">{t}Total{/t}</span>
-                    <strong>[% subtotal %]</strong><small>€ / {t}month{/t}</small>
+                    <strong>[% subtotal %]</strong><small> € / {t}month{/t}</small>
                   </h4>
                 </div>
               </div>
@@ -298,10 +303,10 @@
                 <i class="fa fa-heart fa-3x"></i>
                 <h3 class="p-b-30">{t}Thank you for your purchase request!{/t}</h3>
                 <p class="p-b-15">
-                  {t}In the next 24 hours you will receive an email with payment instructions and the invoice.{/t}
+                  {t}In the next 24 hours you will receive an email with payment instructions and invoice.{/t}
                 </p>
                 <p class="p-b-15">
-                {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+                {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy it is to work with Opennemas.{/t}
                 </p>
                 <p class="p-b-10">
                   {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}

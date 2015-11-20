@@ -881,12 +881,12 @@ class ModuleManager
                     'name'             => _('iadbox'),
                     'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
                     'long_description' => (
-                        _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>')
+                         _('<p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>')
+                        . _('<p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>')
+                        . _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>')
                         . _('<p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
                         . _('<p><strong>More info</strong>: <a target="_blank" href="http://www.iadbox.com">www.iadbox.com</a></p>')
-                        . _('<p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>')
-                        . _('<p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>')
-                        . _('<p><strong>Ask for it </strong>: <a target="_blank" href="mailto:sales@openhost.es">sales@openhost.es</a></p>')
+                        . _('<p><a class="btn btn-success" target="_blank" href="mailto:sales@openhost.es">Ask for it</a></p>')
                     ),
                     'price'            => [
                         'month' => 0

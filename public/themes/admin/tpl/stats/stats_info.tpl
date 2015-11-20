@@ -240,7 +240,7 @@
               </div>
               <div class="row p-t-15">
                 <div class="col-md-12">
-                  <h5>{t escape=off}Something wrong? Contact our <a href="javascript:UserVoice.showPopupWidget();">support system</a>.{/t}</h5>
+                  <h5>{t escape=off}Something wrong? Contact our <a href="javascript:UserVoice.showPopupWidget();">support team</a>.{/t}</h5>
                 </div>
               </div>
             {else}
