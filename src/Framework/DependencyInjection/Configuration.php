@@ -101,7 +101,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('plugins')
-                    ->addDefaultsIfNotSet()
                     ->prototype('scalar')->end()
                     ->defaultValue([
                         'public/themes'
