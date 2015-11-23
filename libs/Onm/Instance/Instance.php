@@ -254,7 +254,7 @@ class Instance
         }
 
         foreach ($this->settings as $key => $value) {
-            define($key, $value);
+            define($key, str_replace('es.openhost.theme.', '', $value));
         }
 
         $this->initInternalConstants();
