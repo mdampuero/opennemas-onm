@@ -58,18 +58,15 @@ class ContentViewsManager extends EntityManager
      */
     public function setViews($id, $views = null)
     {
+        $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)';
         if (is_null($views)) {
-            $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)'
-                    .' ON DUPLICATE KEY UPDATE views = views + 1';
+            $sql .= ' ON DUPLICATE KEY UPDATE views = views + 1';
             $params = [$id, 1];
         } else {
-            $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)'
-                    .' ON DUPLICATE KEY UPDATE views = ?';
+            $sql .=' ON DUPLICATE KEY UPDATE views = ?';
             $params = [$id, $views, $views];
         }
 
-        $this->dbConn->transactional(function ($em) use ($sql, $params) {
-            $em->executeQuery($sql, $params);
-        });
+        $this->dbConn->executeUpdate($sql, $params);
     }
 }
