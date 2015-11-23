@@ -232,6 +232,14 @@ services:
         class: RelatedContent
         arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
 
+    orm.loader:
+        class: Framework\ORM\Loader\Loader
+        arguments: [ @service_container, %plugins% ]
+
+    orm.loader.theme:
+        class: Framework\ORM\Loader\ThemeLoader
+        arguments: [ @orm.validator.theme ]
+
     orm.manager.braintree:
         class: Framework\ORM\Braintree\BraintreeManager
         arguments: [ @comet_cult_braintree.factory ]
@@ -247,6 +255,15 @@ services:
     orm.manager:
         class: Framework\ORM\EntityManager
         arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
+
+    orm.validator:
+        class: Framework\ORM\Validator\Validator
+
+    orm.validator.plugin:
+        class: Framework\ORM\Validator\PluginValidator
+
+    orm.validator.theme:
+        class: Framework\ORM\Validator\ThemeValidator
 
     vat:
         class: Framework\VAT\VATService
