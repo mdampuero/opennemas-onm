@@ -33,7 +33,7 @@
          *
          * @type {String}
          */
-        $scope.type = 'free';
+        $scope.type = 'available';
 
         /**
          * @function addToCart
@@ -139,7 +139,7 @@
          *                   returns false.
          */
         $scope.isEnabled = function(item) {
-          return $scope.enabled.indexOf(item.id) !== -1;
+          return $scope.enabled.indexOf(item.uuid) !== -1;
         };
 
         /**
@@ -160,7 +160,7 @@
           }
 
           for (var i = 0; i < $scope.cart.length; i++) {
-            if ($scope.cart[i].id === item.id) {
+            if ($scope.cart[i].uuid === item.uuid) {
               return true;
             }
           }
@@ -180,19 +180,19 @@
           var url = routing.generate('backend_ws_theme_list');
 
           $http.get(url).success(function(response) {
-            $scope.free      = response.themes;
+            $scope.available = response.themes;
             $scope.exclusive = response.exclusive;
             $scope.enabled   = response.enabled;
 
             $scope.installed = [];
 
             for (var i = 0; i < response.themes.length; i++) {
-              if (response.myThemes.indexOf(response.themes[i].id) !== -1) {
+              if (response.purchased.indexOf(response.themes[i].uuid) !== -1) {
                 $scope.installed.push(response.themes[i]);
               }
             }
 
-            $scope.items = $scope.free;
+            $scope.items = $scope[$scope.type];
 
             $scope.loading = false;
           }).error(function(response) {

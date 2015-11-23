@@ -31,15 +31,15 @@ class ThemeController extends Controller
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
-        $myThemes  = [ 'theme1', 'theme2' ];
-        $enabled   = [ 'theme1' ];
+        $purchased = [ 'es.openhost.theme.bragi', 'es.openhost.theme.vidar' ];
+        $enabled   = [ 'es.openhost.theme.bragi' ];
 
         return new JsonResponse(
             [
                 'themes'    => $themes,
                 'enabled'   => $enabled,
                 'exclusive' => $exclusive,
-                'myThemes'  => $myThemes
+                'purchased' => $purchased
             ]
         );
     }

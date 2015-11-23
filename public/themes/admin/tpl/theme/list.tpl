@@ -28,16 +28,16 @@
             </li>
             <li class="quicklinks dropdown ng-cloak visible-xs">
               <div data-toggle="dropdown">
-                <span ng-if="!type || type == 'free'">{t}Free{/t}</span>
+                <span ng-if="!type || type == 'available'">{t}Available{/t}</span>
                 <span ng-if="type == 'exclusive'">{t}Exclusive{/t}</span>
                 <span ng-if="type == 'installed'">{t}My themes{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
-                <li ng-click="type = 'free'">
+                <li ng-click="type = 'available'">
                   <a href="#">
                     <i class="fa fa-check m-r-5"></i>
-                    {t}Free{/t}
+                    {t}Available{/t}
                   </a>
                 </li>
                 <li ng-click="type = 'module'">
@@ -106,10 +106,10 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="quicklinks module-filter" ng-click="type = 'free'">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }">
+            <li class="quicklinks module-filter" ng-click="type = 'available'">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'available', 'btn-white': type != 'available' }">
                 <i class="fa fa-check m-r-5"></i>
-                {t}Free{/t}
+                {t}Available{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
@@ -117,7 +117,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'exclusive', 'btn-white': type != 'exclusive' }" ng-click="type = 'exclusive'">
-                <i class="fa fa-usd m-r-5"></i>
+                <i class="fa fa-pencil m-r-5"></i>
                 {t}Exclusive{/t}
               </button>
             </li>
