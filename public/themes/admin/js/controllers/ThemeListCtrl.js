@@ -111,7 +111,28 @@
         };
 
         /**
-         * @function isActivated
+         * @function list
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Finds the list of available modules.
+         */
+        $scope.enable = function(item) {
+          item.loading = true;
+
+          var url = routing.generate('backend_ws_theme_enable',
+              { uuid: item.uuid });
+
+          $http.get(url).success(function() {
+            $scope.active = item.uuid;
+            item.loading = false;
+          }).error(function() {
+            item.loading = false;
+          });
+        };
+
+        /**
+         * @function isActive
          * @memberOf MarketListCtrl
          *
          * @description
@@ -122,8 +143,8 @@
          * @return {Boolean} True, if the item is already activated. Otherwise,
          *                   returns false.
          */
-        $scope.isActivated = function(item) {
-          return $scope.installed.indexOf(item) !== -1;
+        $scope.isActive = function(item) {
+          return $scope.active === item.uuid;
         };
 
         /**
@@ -138,8 +159,8 @@
          * @return {Boolean} True, if the item is already enabled. Otherwise,
          *                   returns false.
          */
-        $scope.isEnabled = function(item) {
-          return $scope.enabled.indexOf(item.uuid) !== -1;
+        $scope.isPurchased = function(item) {
+          return $scope.purchased.indexOf(item) !== -1;
         };
 
         /**
@@ -180,15 +201,14 @@
           var url = routing.generate('backend_ws_theme_list');
 
           $http.get(url).success(function(response) {
-            $scope.available = response.themes;
-            $scope.exclusive = response.exclusive;
-            $scope.enabled   = response.enabled;
+            $scope.active          = response.active;
+            $scope.available       = response.themes;
+            $scope.exclusive       = response.exclusive;
 
-            $scope.installed = [];
-
+            $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
               if (response.purchased.indexOf(response.themes[i].uuid) !== -1) {
-                $scope.installed.push(response.themes[i]);
+                $scope.purchased.push(response.themes[i]);
               }
             }
 
@@ -234,11 +254,12 @@
             resolve: {
               template: function() {
                 return {
-                  activated: $scope.isActivated(item),
-                  enabled:   $scope.isEnabled(item),
-                  inCart:    $scope.isInCart(item),
-                  item:      item,
-                  lang:      $scope.lang
+                  isActive:    $scope.isActive,
+                  enable:      $scope.enable,
+                  inCart:      $scope.isInCart(item),
+                  item:        item,
+                  lang:        $scope.lang,
+                  isPurchased: $scope.isPurchased,
                 };
               },
               success: function() {

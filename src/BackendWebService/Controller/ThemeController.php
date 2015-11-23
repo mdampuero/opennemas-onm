@@ -10,11 +10,37 @@
 namespace BackendWebService\Controller;
 
 use Onm\Framework\Controller\Controller;
+use Onm\Instance\InstanceManager as im;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ThemeController extends Controller
 {
+    /**
+     * Enables a theme.
+     *
+     * @param string $id The theme UUID.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function enableAction($uuid)
+    {
+        $instance = $this->get('instance');
+        $themes = im::getAvailableTemplates();
+
+        $theme = str_replace('es.openhost.theme.', '', $uuid);
+
+        if (!in_array($theme, $themes)) {
+            return new JsonResponse(_('Invalid theme'), 400);
+        }
+
+        $instance->settings['TEMPLATE_USER'] = $uuid;
+
+        $this->get('instance_manager')->persist($instance);
+
+        return new JsonResponse();
+    }
+
     /**
      * Returns the list of themes.
      *
@@ -31,15 +57,25 @@ class ThemeController extends Controller
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
-        $purchased = [ 'es.openhost.theme.bragi', 'es.openhost.theme.vidar' ];
-        $enabled   = [ 'es.openhost.theme.bragi' ];
+        $instance  = $this->get('instance');
+        $purchased = [];
+
+        if (array_key_exists('purchased', $instance->metas)) {
+            $purchased = $this->get('instance')->metas['purchased'];
+        }
+
+        $active = 'es.openhost.theme.' . str_replace(
+            'es.openhost.theme.',
+            '',
+            $instance->settings['TEMPLATE_USER']
+        );
 
         return new JsonResponse(
             [
-                'themes'    => $themes,
-                'enabled'   => $enabled,
+                'active'    => $active,
                 'exclusive' => $exclusive,
-                'purchased' => $purchased
+                'purchased' => $purchased,
+                'themes'    => $themes
             ]
         );
     }

@@ -30,7 +30,7 @@
               <div data-toggle="dropdown">
                 <span ng-if="!type || type == 'available'">{t}Available{/t}</span>
                 <span ng-if="type == 'exclusive'">{t}Exclusive{/t}</span>
-                <span ng-if="type == 'installed'">{t}My themes{/t}</span>
+                <span ng-if="type == 'purchased'">{t}My themes{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
@@ -125,7 +125,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'installed', 'btn-white': type != 'installed' }" ng-click="type = 'installed'">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
                 <i class="fa fa-star-o m-r-5"></i>
                 {t}My themes{/t}
               </button>
@@ -168,12 +168,20 @@
       </div>
       <div>
         <h4 class="ng-cloak" ng-show="!loading  && items.length == 0">{t}No themes available{/t}</h4>
-        <div class="row clearfix ng-cloak" ng-show="!loading && items.length > 0">
-          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in items" ng-include="'item'">
+        <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && !loading && items.length > 0">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items" ng-include="'item'">
+          </div>
+        </div>
+        <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items">
+            <div class="item-wrapper" ng-include="'exclusive-item'"></div>
           </div>
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="exclusive-item">
+      {include file="theme/_exclusive_item.tpl"}
+    </script>
     <script type="text/ng-template" id="item">
       {include file="theme/_item.tpl"}
     </script>

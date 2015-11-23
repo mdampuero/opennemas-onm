@@ -1,4 +1,4 @@
-<div class="grid grid-hover pointer simple" ng-class="{ 'vertical blue': isActivated(item) && !isEnabled(item), 'vertical green': isEnabled(item) }" ng-click="xsOnly($event, showDetails, item);">
+<div class="grid grid-hover pointer simple" ng-class="{ 'vertical blue': isPurchased(item) && !isActive(item), 'vertical green': isActive(item) }" ng-click="xsOnly($event, showDetails, item);">
   <div class="grid-title no-border no-padding"></div>
   <div class="grid-body" ng-click="showDetails(item);$event.stopPropagation()">
     <div ng-click="$event.stopPropagation()">
@@ -23,30 +23,29 @@
           {t}Go to preview{/t}
         </h5>
       </a>
-      <button class="btn pull-right" ng-class="{ 'btn-white': !add, 'btn-success': add }" ng-if="!isActivated(item)" ng-mouseover="add = 1" ng-mouseleave="add = 0" style="width: 100px;">
+      <button class="btn pull-right" ng-class="{ 'btn-white': !add, 'btn-success': add }" ng-if="!isPurchased(item)" ng-mouseover="add = 1" ng-mouseleave="add = 0" style="width: 100px;">
         <h5 ng-class="{ 'text-white': add }" >
-          <span ng-if="!isActivated(item) && !add && (item.price.month)">
+          <span ng-if="!isPurchased(item) && !add && (item.price.month)">
             <strong>[% item.price.month.value %]</strong>
             <small> € / {t}month{/t}</small>
           </span>
-          <span ng-if="!isActivated(item) && !add && (!item.price.month && item.price.single)">
+          <span ng-if="!isPurchased(item) && !add && (!item.price.month && item.price.single)">
             <strong>[% item.price.single.value %]</strong>
             <small> € </small>
           </span>
-          <span class="semi-bold uppercase" ng-if="!isActivated(item) && !add && (!item.price || item.price.month == 0)">
+          <span class="semi-bold uppercase" ng-if="!isPurchased(item) && !add && (!item.price || item.price.month == 0)">
             {t}Free{/t}
           </span>
-          <span class="semi-bold uppercase" ng-if="!isActivated(item) && add">
+          <span class="semi-bold uppercase" ng-if="!isPurchased(item) && add">
             <i class="fa fa-shopping-cart m-r-5"></i>
             {t}Add{/t}
           </span>
         </h5>
       </button>
-      <button class="btn btn-info pull-right" ng-if="isActivated(item) && !isEnabled(item)" style="width: 100px;">
-        <h5 class="semi-bold text-white uppercase">{t}Enable{/t}</h5>
-      </button>
-      <button class="btn btn-success pull-right" disabled ng-if="isActivated(item) && isEnabled(item)" style="width: 100px;">
-        <h5 class="semi-bold text-white uppercase">{t}Enabled{/t}</h5>
+      <button class="btn btn-info pull-right" ng-class="{ 'btn-info': isPurchased(item), 'btn-success': isActive(item) }" ng-click="$event.stopPropagation();enable(item)" ng-disabled="isActive(item)" ng-if="isPurchased(item)" style="width: 100px;">
+        <h5 class="semi-bold text-white uppercase" ng-if="!isActive(item) && !item.loading">{t}Enable{/t}</h5>
+        <h5 class="semi-bold text-white uppercase" ng-if="isPurchased(item) && !isActive(item) && item.loading">{t}Enabling{/t}...</h5>
+        <h5 class="semi-bold text-white uppercase" ng-if="isPurchased(item) && isActive(item)">{t}Enabled{/t}</h5>
       </button>
     </div>
   </div>
