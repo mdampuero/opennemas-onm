@@ -24,7 +24,7 @@
     </div>
     <div class="col-sm-5">
       <h5 class="text-center uppercase">{t}Description{/t}</h5>
-      <div ng-bind-html="template.item.description"></div>
+      <div ng-bind-html="template.item.description[template.lang]"></div>
     </div>
   </div>
 </div>
@@ -36,13 +36,13 @@
       {t}Go to preview{/t}</h5>
   </a>
   <button class="btn pull-right" ng-class="{ 'btn-white': !add, 'btn-success': add }" ng-if="!template.activated" ng-mouseover="add = 1" ng-mouseleave="add = 0" style="width: 100px;">
-    <h5 ng-class="{ 'text-white': add }" >
+    <h5 ng-class="{ 'text-white': add }">
       <span ng-if="!template.activated && !add && (template.item.price.month)">
-        <strong>[% template.item.price.month %]</strong>
+        <strong>[% template.item.price.month.value %]</strong>
         <small> € / {t}month{/t}</small>
       </span>
       <span ng-if="!template.activated && !add && (!template.item.price.month && template.item.price.single)">
-        <strong>[% template.item.price.single %]</strong>
+        <strong>[% template.item.price.single.value %]</strong>
         <small> € </small>
       </span>
       <span class="semi-bold uppercase" ng-if="!template.activated && !add && (!template.item.price || template.item.price.month == 0)">

@@ -237,7 +237,8 @@
                   activated: $scope.isActivated(item),
                   enabled:   $scope.isEnabled(item),
                   inCart:    $scope.isInCart(item),
-                  item:      item
+                  item:      item,
+                  lang:      $scope.lang
                 };
               },
               success: function() {

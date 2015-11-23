@@ -15,7 +15,7 @@
       </carousel>
     </div>
     <h4 class="uppercase">[% item.name %]</h4>
-    <div ng-bind-html="item.short_description"></div>
+    <div ng-bind-html="item.short_description[lang]"></div>
     <div class="p-t-15">
      <a class="btn btn-link pull-left" href="#" ng-click="$event.stopPropagation()" target="_blank">
         <h5 class="uppercase">
@@ -26,11 +26,11 @@
       <button class="btn pull-right" ng-class="{ 'btn-white': !add, 'btn-success': add }" ng-if="!isActivated(item)" ng-mouseover="add = 1" ng-mouseleave="add = 0" style="width: 100px;">
         <h5 ng-class="{ 'text-white': add }" >
           <span ng-if="!isActivated(item) && !add && (item.price.month)">
-            <strong>[% item.price.month %]</strong>
+            <strong>[% item.price.month.value %]</strong>
             <small> € / {t}month{/t}</small>
           </span>
           <span ng-if="!isActivated(item) && !add && (!item.price.month && item.price.single)">
-            <strong>[% item.price.single %]</strong>
+            <strong>[% item.price.single.value %]</strong>
             <small> € </small>
           </span>
           <span class="semi-bold uppercase" ng-if="!isActivated(item) && !add && (!item.price || item.price.month == 0)">
