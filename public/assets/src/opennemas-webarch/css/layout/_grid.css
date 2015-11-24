@@ -5,6 +5,11 @@
   padding: 15px;
 }
 
+.grid.vertical .grid-body {
+  padding-left: 12px;
+  border-left: none;
+}
+
 .grid.simple .grid-title h4 {
   overflow: initial;
   margin: 0;
