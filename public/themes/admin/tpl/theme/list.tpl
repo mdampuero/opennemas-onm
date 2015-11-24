@@ -173,6 +173,12 @@
           </div>
         </div>
         <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
+          <div class="col-lg-12 grid simple">
+            <div class="grid-body">
+              <h4>{t}Do yo need a custom theme.{/t}</h4>
+
+            <p>{t}We could create a custom theme for you. With your own needs...{/t}</p>
+          </div></div>
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items">
             <div class="item-wrapper" ng-include="'exclusive-item'"></div>
           </div>
