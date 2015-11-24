@@ -45,15 +45,15 @@
          * @param {Object} item The item to add to cart.
          */
         $scope.addToCart = function(item) {
-          if (!$scope.cart) {
-            $scope.cart = [];
-          }
-
-          if ($scope.cart.indexOf(item) !== -1) {
-            return;
-          }
-
           $timeout(function() {
+            if (!$scope.cart) {
+              $scope.cart = [];
+            }
+
+            if ($scope.cart.indexOf(item) !== -1) {
+              return;
+            }
+
             $scope.cart.push(item);
           }, 1500);
         };
