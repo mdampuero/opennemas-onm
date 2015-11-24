@@ -25,6 +25,9 @@
         <strong>[% item.price.single.value %]</strong>
         <small>€</small>
       </span>
+      <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">
+        {t}Free{/t}
+      </span>
     </h4>
     <div class="p-t-15">
      <a class="btn btn-link pull-left" href="#" ng-click="$event.stopPropagation()" target="_blank">
@@ -35,9 +38,6 @@
       </a>
       <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)" style="width: 100px;">
         <h5>
-          <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">
-            {t}Free{/t}
-          </span>
           <span class="semi-bold text-white uppercase" ng-if="!isInCart(item) && !isPurchased(item)">
             <i class="fa fa-shopping-cart m-r-5"></i>
             {t}Add{/t}

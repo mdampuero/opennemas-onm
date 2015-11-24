@@ -53,6 +53,7 @@
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/src/angular-dynamic-image/less/main.less,
+      @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,

@@ -2,76 +2,65 @@
   'use strict';
 
   angular.module('onm.flyToCart', [])
+    /**
+     * @ngdoc directive
+     * @name  flyToCart
+     *
+     * @description
+     *   Directive to animate an image from button to shopping cart.
+     *
+     * @example
+     * <button class="fly-to-cart" type="button"><!-- Button content --></button>
+     */
     .directive('flyToCart', [
       function() {
         return {
           restrict: 'C',
-          transclude: true,
-          replace: true,
           scope: {},
-          template: '<button class="add-to-cart" ng-transclude></button>',
-          link: function link(scope, element, attributes) {
+          link: function link(scope, element) {
             element.on('click', function(){
-              var cartElem = angular.element($('.shopping-cart'));
-              console.log(cartElem);
+              var cart = angular.element($('.shopping-cart'));
 
-              var offset = cartElem.offset();
+              var target = cart.offset();
 
-              var offsetTopCart = offset.top;
-              var offsetLeftCart = offset.left;
+              var width = cart.prop('offsetWidth');
+              var height = cart.prop('offsetHeight');
 
-              var widthCart = cartElem.prop('offsetWidth');
-              var heightCart = cartElem.prop('offsetHeight');
+              var img = angular.element(element.parent().parent()).find('img');
+              var src = img.prop('currentSrc');
 
-              console.log(offsetTopCart, offsetLeftCart, widthCart, heightCart);
+              var source = element.offset();
 
-              var parentElem = angular.element(element.parent().parent());
-              var imgElem = parentElem.find('img');
-              console.log('img', imgElem);
+              img = angular.element(
+                  '<img class="flying-item"src="' + src + '"/>');
 
-              var offset2 = element.offset();
-              var offsetLeft = offset2.left;
-              var offsetTop = offset2.top;
-              var imgSrc = imgElem.prop('currentSrc');
-              console.log(offsetLeft + ' ' + offsetTop + ' ' + imgSrc);
-              var imgClone = angular.element('<img src="' + imgSrc + '"/>');
-
-              imgClone.css({
-                'height': '50px',
-                'position': 'fixed',
-                'top': offsetTop + 'px',
-                'left': offsetLeft + 25 + 'px',
-                'opacity': 0.5,
-                'z-index': 1000,
-                'overflow': 'hidden',
-                'width': '50px',
-                'border-radius': '100%',
-                'box-shadow': '0 0 5px #000'
+              img.css({
+                'top': source.top + 'px',
+                'left': source.left + 25 + 'px',
               });
 
-              imgClone.addClass('itemaddedanimate');
-              parentElem.append(imgClone);
+              $('body').append(img);
 
               setTimeout(function () {
-                imgClone.css({
-                  'top': ((offsetTopCart + heightCart / 2) - 15) +'px',
-                  'left': ((offsetLeftCart + widthCart / 2) - 5) +'px',
+                img.css({
+                  'top': ((target.top + height / 2) - 15) +'px',
+                  'left': ((target.left + width / 2) - 5) +'px',
                   'opacity': 1
                 });
               }, 150);
 
               setTimeout(function () {
-                imgClone.css({
+                img.css({
                   'opacity': 0,
                   'height': 0,
                   'width': 0,
-                  'top': ((offsetTopCart+heightCart/2) + 15)+'px',
-                  'left': ((offsetLeftCart+widthCart/2) + 5)+'px',
+                  'top': ((target.top + height / 2) + 15)+'px',
+                  'left': ((target.left + width / 2) + 5)+'px',
                 });
               }, 750);
 
               setTimeout(function () {
-                imgClone.remove();
+                img.remove();
               }, 1500);
             });
           }

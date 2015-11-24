@@ -262,12 +262,13 @@
             resolve: {
               template: function() {
                 return {
-                  isActive:    $scope.isActive,
+                  addToCart:   $scope.addToCart,
                   enable:      $scope.enable,
-                  inCart:      $scope.isInCart(item),
+                  isActive:    $scope.isActive,
+                  isInCart:    $scope.isInCart,
+                  isPurchased: $scope.isPurchased,
                   item:        item,
                   lang:        $scope.lang,
-                  isPurchased: $scope.isPurchased,
                 };
               },
               success: function() {
