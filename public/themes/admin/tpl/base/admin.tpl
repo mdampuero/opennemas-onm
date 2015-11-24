@@ -468,6 +468,7 @@
       @Common/src/opennemas-webarch/js/core.js,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
+      @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,

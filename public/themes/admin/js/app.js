@@ -11,6 +11,7 @@ angular.module(
     'onm.gravatar',
     'onm.editor',
     'onm.dynamicImage',
+    'onm.flyToCart',
     'onm.item',
     'onm.messenger',
     'onm.oqlEncoder',
