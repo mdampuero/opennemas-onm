@@ -19,8 +19,8 @@
      *   Handles actions for market.
      */
     .controller('ThemeListCtrl', [
-      '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $location, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * The available modules.
          *
@@ -54,7 +54,6 @@
           }
 
           $timeout(function() {
-            console.log('timeout');
             $scope.cart.push(item);
           }, 1500);
         };
@@ -311,13 +310,18 @@
             return;
           }
 
+          $location.path(nv);
           $scope.items = $scope[nv];
         });
 
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('themes-cart')) {
           $scope.cart = webStorage.local.get('themes-cart');
-          console.log($scope.cart);
+        }
+
+        // Initialize the type from current location
+        if ($location.path()) {
+          $scope.type = $location.path().replace('/', '');
         }
 
         // Get modules list
