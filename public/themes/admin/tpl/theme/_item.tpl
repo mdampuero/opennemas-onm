@@ -48,7 +48,7 @@
       </button>
       <button class="btn pull-right" ng-class="{ 'btn-white': isPurchased(item) && !isActive(item), 'btn-success': isActive(item) }" ng-click="$event.stopPropagation();enable(item)" ng-disabled="isActive(item)" ng-if="isPurchased(item)" style="width: 100px;">
         <h5 class="semi-bold uppercase" ng-if="!isActive(item) && !item.loading">{t}Enable{/t}</h5>
-        <h5 class="semi-bold text-white uppercase" ng-if="isPurchased(item) && !isActive(item) && item.loading">{t}Enabling{/t}...</h5>
+        <h5 class="semi-bold uppercase" ng-if="isPurchased(item) && !isActive(item) && item.loading">{t}Enabling{/t}...</h5>
         <h5 class="semi-bold text-white uppercase" ng-if="isPurchased(item) && isActive(item)">{t}Active{/t}</h5>
       </button>
     </div>
