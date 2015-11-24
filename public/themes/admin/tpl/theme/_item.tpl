@@ -17,11 +17,11 @@
     <h4 class="uppercase">[% item.name %]</h4>
     <div ng-bind-html="item.short_description[lang]"></div>
     <h4 class="text-right">
-      <span ng-if="!isInCart(item) && !isPurchased(item) && (item.price.month)">
+      <span ng-if="item.price.month">
         <strong>[% item.price.month.value %]</strong>
         <small>€ / {t}month{/t}</small>
       </span>
-      <span ng-if="!isInCart(item) && !isPurchased(item) && (!item.price.month && item.price.single)">
+      <span ng-if="!item.price.month && item.price.single">
         <strong>[% item.price.single.value %]</strong>
         <small>€</small>
       </span>
