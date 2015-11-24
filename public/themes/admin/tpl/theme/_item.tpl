@@ -4,13 +4,13 @@
     <div ng-click="$event.stopPropagation()">
       <carousel>
         <slide>
-          <img class="img-responsive" src="http://placehold.it/640x480">
+          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
         </slide>
         <slide>
-          <img class="img-responsive" src="http://placehold.it/640x480">
+          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
         </slide>
         <slide>
-          <img class="img-responsive" src="http://placehold.it/640x480">
+          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
         </slide>
       </carousel>
     </div>
