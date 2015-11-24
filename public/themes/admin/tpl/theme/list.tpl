@@ -82,7 +82,7 @@
                           <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
-                            <p class="description">[% item.description %]</p>
+                            <div class="description" ng-bind-html="item.short_description[lang]"></div>
                           </span>
                           <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
                         </li>

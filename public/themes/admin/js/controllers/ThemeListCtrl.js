@@ -53,7 +53,10 @@
             return;
           }
 
-          $scope.cart.push(item);
+          $timeout(function() {
+            console.log('timeout');
+            $scope.cart.push(item);
+          }, 1500);
         };
 
         /**
