@@ -78,7 +78,7 @@
                   <div class="shopping-cart-placeholder" ng-if="cart.length > 0">
                     <scrollable>
                       <ul class="cart-list">
-                        <li class="clearfix" ng-repeat="item in cart | orderBy: name">
+                        <li class="clearfix" ng-repeat="item in cart track by $index | orderBy: name">
                           <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>

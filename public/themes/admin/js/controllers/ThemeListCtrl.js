@@ -204,14 +204,20 @@
           var url = routing.generate('backend_ws_theme_list');
 
           $http.get(url).success(function(response) {
-            $scope.active          = response.active;
-            $scope.available       = response.themes;
-            $scope.exclusive       = response.exclusive;
+            $scope.active     = response.active;
+            $scope.exclusive  = response.exclusive;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
               if (response.purchased.indexOf(response.themes[i].uuid) !== -1) {
                 $scope.purchased.push(response.themes[i]);
+              }
+            }
+
+            $scope.available = [];
+            for (var i = 0; i < response.themes.length; i++) {
+              if (!$scope.isPurchased(response.themes[i])) {
+                $scope.available.push(response.themes[i]);
               }
             }
 
@@ -311,6 +317,7 @@
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('themes-cart')) {
           $scope.cart = webStorage.local.get('themes-cart');
+          console.log($scope.cart);
         }
 
         // Get modules list
