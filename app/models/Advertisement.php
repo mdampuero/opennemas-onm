@@ -606,6 +606,8 @@ class Advertisement extends Content
         if ($this->with_script == 1) {
             if (preg_match('/<iframe/', $this->script)) {
                 $content = $this->script;
+            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto') !== false) {
+                $content = $this->script;
             } else {
                 // Check for external advertisement Script
                 if (isset($this->extWsUrl)) {
