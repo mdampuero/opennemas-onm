@@ -168,7 +168,7 @@
       </div>
       <div>
         <h4 class="ng-cloak" ng-show="!loading  && items.length == 0">{t}No themes available{/t}</h4>
-        <div class="grid simple ng-cloak">
+        <div class="grid simple ng-cloak" ng-show="!loading">
           <div class="grid-body">
             <div class="text-center" ng-if="type == 'available'">
               <h4>{t}Change the look to your newspaper in just few clicks!{/t}</h4>
