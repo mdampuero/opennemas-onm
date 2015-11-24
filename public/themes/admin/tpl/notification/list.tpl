@@ -52,7 +52,7 @@
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
       <div class="row ng-cloak" ng-if="!loading">
-        <div class="col-lg-7 col-md-10 col-sm-12">
+        <div class="col-lg-11 col-md-10 col-sm-12">
           <ul class="cbp_tmtimeline">
             <li ng-repeat="notification in notifications">
               <time class="cbp_tmtime">
