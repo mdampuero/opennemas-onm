@@ -673,7 +673,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/303a576e2124efb07ec215e34ea2480b841cf5e4",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/86d2b1c9c195c12175551d02a475067977c0afcf",
                 "reference": "303a576e2124efb07ec215e34ea2480b841cf5e4",
                 "shasum": ""
             },
@@ -852,7 +852,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/68cc7bf629a7c1fc0696e583cc8ed46f897d0afb",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/503ea5cc9c8ae38790a6899d842aaa92d55258bb",
                 "reference": "68cc7bf629a7c1fc0696e583cc8ed46f897d0afb",
                 "shasum": ""
             },
@@ -1281,7 +1281,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/e5995827e95cb6401f050010469f4c4f2e11bd93",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/1239889d504b151e120625d744aa6fbbcf6b6d16",
                 "reference": "e5995827e95cb6401f050010469f4c4f2e11bd93",
                 "shasum": ""
             },
@@ -1805,12 +1805,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
-                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5"
+                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/Luracast/Restler/zipball/1dcf910c1e1fd1ea565a537b053a66971d818e42",
-                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "reference": "df35bb5e870b2fbf9ae57f533ea30ae9470d1421",
                 "shasum": ""
             },
             "require": {
@@ -1876,7 +1876,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2014-12-08 14:29:26"
+            "time": "2015-06-12 07:33:40"
         },
         {
             "name": "mockery/mockery",
@@ -1888,7 +1888,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/ee88cd05073533b10678772fe954d042748393c3",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/15f6bb72f66df6857b957bedd09dc4fd0ace3b03",
                 "reference": "ee88cd05073533b10678772fe954d042748393c3",
                 "shasum": ""
             },
@@ -2323,12 +2323,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "1.0.0"
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "1.0.0",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
             "type": "library",
@@ -2996,23 +2996,23 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "66b2e9662c44d478b69e48278aa54079a006eb42"
+                "reference": "cc69dbd24b4b2e6de60b2414ef95da2794f459a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/66b2e9662c44d478b69e48278aa54079a006eb42",
-                "reference": "66b2e9662c44d478b69e48278aa54079a006eb42",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/cc69dbd24b4b2e6de60b2414ef95da2794f459a2",
+                "reference": "cc69dbd24b4b2e6de60b2414ef95da2794f459a2",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.4",
                 "php": ">=5.3.9",
                 "psr/log": "~1.0",
-                "twig/twig": "~1.20|~2.0"
+                "twig/twig": "~1.23|~2.0"
             },
             "replace": {
                 "symfony/asset": "self.version",
@@ -3092,6 +3092,9 @@
                 ],
                 "files": [
                     "src/Symfony/Component/Intl/Resources/stubs/functions.php"
+                ],
+                "exclude-from-classmap": [
+                    "**/Tests/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3113,7 +3116,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-10-27 19:07:24"
+            "time": "2015-11-23 11:58:08"
         },
         {
             "name": "twig/twig",

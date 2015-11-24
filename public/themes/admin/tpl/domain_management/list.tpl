@@ -30,7 +30,6 @@ filters="cssrewrite,less"}
         <div class="content-wrapper blue p-r-30">
           <h3 class="text-white">Custom <span class="semi-bold">domains</span></h3>
           <p class="text-white">{t escape=off}Use your own domains with Opennemas... If you have your own domain or even if you don't have one we will guide you through the process of using a custom address with your opennemas newspaper{/t}</p>
-          <div class="pull-right icon"> <i class="icon-repeat fa-5x custom-icon-space fa fa-server" id="icon-rotate"></i> </div>
           <div class="clearfix"></div>
         </div>
       </div>
@@ -100,15 +99,6 @@ filters="cssrewrite,less"}
             </li>
           </ul>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-      <div class="alert alert-block alert-warning fade in">
-        <button type="button" class="close" data-dismiss="alert"></button>
-        <h4 class="alert-heading"><i class="icon-warning-sign"></i> Developer note</h4>
-        <p> Maybe we could show this module to everyone even if they don't have the module activated and if they want to add a mapping move the user to the payment procedure to activate the module </p>
       </div>
     </div>
   </div>
