@@ -16,7 +16,7 @@
     </div>
     <h4 class="uppercase">[% item.name %]</h4>
     <div ng-bind-html="item.description[lang]"></div>
-    <h4 class="text-right">
+    <h4 class="text-right" ng-if="!isPurchased(item)">
       <span ng-if="item.price.month">
         <strong>[% item.price.month %]</strong>
         <small>€ / {t}month{/t}</small>
