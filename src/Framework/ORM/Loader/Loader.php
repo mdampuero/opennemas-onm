@@ -94,6 +94,9 @@ class Loader
     {
         $config = Yaml::parse($path);
 
+        $path           = str_replace('/config.yml', '', $path);
+        $config['path'] = substr($path, strpos($path, '/themes'));
+
         if (!array_key_exists('type', $config)) {
             throw \Exception('InvalidPluginConfigurationException');
         }
