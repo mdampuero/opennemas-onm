@@ -2,16 +2,19 @@
   <div class="grid-title no-border no-padding"></div>
   <div class="grid-body" ng-click="showDetails(item);$event.stopPropagation()">
     <div ng-click="$event.stopPropagation()">
-      <carousel>
+      <carousel ng-if="item.screenshots.length > 0">
+        <slide ng-repeat="screenshot in item.screenshots">
+          <img class="img-responsive" ng-click="showDetails(item);" ng-src="[% item.path %]/[% screenshot %]">
+        </slide>
+      </carousel>
+      <carousel ng-if="!item.screenshots">
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
+          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/1024x634">
         </slide>
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
+          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/1024x634">
         </slide>
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/640x480">
-        </slide>
       </carousel>
     </div>
     <h4 class="uppercase">[% item.name %]</h4>
