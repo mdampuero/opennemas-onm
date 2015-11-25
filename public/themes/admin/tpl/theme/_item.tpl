@@ -16,7 +16,7 @@
     </div>
     <h4 class="uppercase">[% item.name %]</h4>
     <div ng-bind-html="item.description[lang]"></div>
-    <h4 class="text-right" ng-if="!isPurchased(item)">
+    <h4 class="text-right">
       <span ng-if="item.price.month">
         <strong>[% item.price.month %]</strong>
         <small>€ / {t}month{/t}</small>
@@ -33,7 +33,7 @@
      <a class="btn btn-link pull-left" href="#" ng-click="$event.stopPropagation()" target="_blank">
         <h5 class="uppercase">
           <i class="fa fa-globe"></i>
-          {t}Go to preview{/t}
+          {t}Live demo{/t}
         </h5>
       </a>
       <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)" style="width: 100px;">
