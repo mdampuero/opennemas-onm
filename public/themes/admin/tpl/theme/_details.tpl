@@ -24,14 +24,18 @@
     </div>
     <div class="col-md-4">
       <h5 class="text-center uppercase">{t}Description{/t}</h5>
-      <div ng-bind-html="template.item.description[template.lang]"></div>
+      <div ng-bind-html="template.item.long_description[template.lang]"></div>
+      <div class="checkbox">
+        <input id="custom" ng-change="template.toggleCustom(template.item)" ng-disabled="template.isInCart(template.item)" ng-model="template.item.customize" type="checkbox">
+        <label for="custom">{t}Customize{/t}</label>
+      </div>
       <h4 class="text-right">
         <span ng-if="template.item.price.month">
-          <strong>[% template.item.price.month.value %]</strong>
+          <strong>[% template.item.price.month %]</strong>
           <small>€ / {t}month{/t}</small>
         </span>
         <span ng-if="!template.item.price.month && template.item.price.single">
-          <strong>[% template.item.price.single.value %]</strong>
+          <strong>[% template.item.price.single %]</strong>
           <small>€</small>
         </span>
         <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || template.item.price.month == 0)">

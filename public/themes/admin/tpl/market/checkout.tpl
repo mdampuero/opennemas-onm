@@ -94,7 +94,7 @@
                     <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
                     <div class="p-l-100">
                       <h5>[% item.name %]</h5>
-                      <p class="description">[% item.description %]</p>
+                      <div class="description" ng-bind-html="item.description[lang] ? item.description[lang] : item.description"></div>
                       <div class="text-right p-r-15 p-b-15">
                         <div class="price">
                           <h4 class="no-margin">

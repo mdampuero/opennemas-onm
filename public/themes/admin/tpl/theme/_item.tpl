@@ -15,14 +15,14 @@
       </carousel>
     </div>
     <h4 class="uppercase">[% item.name %]</h4>
-    <div ng-bind-html="item.short_description[lang]"></div>
+    <div ng-bind-html="item.description[lang]"></div>
     <h4 class="text-right">
       <span ng-if="item.price.month">
-        <strong>[% item.price.month.value %]</strong>
+        <strong>[% item.price.month %]</strong>
         <small>€ / {t}month{/t}</small>
       </span>
       <span ng-if="!item.price.month && item.price.single">
-        <strong>[% item.price.single.value %]</strong>
+        <strong>[% item.price.single %]</strong>
         <small>€</small>
       </span>
       <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">

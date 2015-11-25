@@ -59,57 +59,22 @@
         };
 
         /**
-         * @function allActivated
+         * @function toggleCustom
          * @memberOf MarketListCtrl
          *
          * @description
-         *   Check if all modules from array are already activated.
-         *
-         * @param {Array} source The array of modules to check.
-         *
-         * @return {Boolean} True if all modules are already activated.
-         *                   Otherwise, returns false.
+         *   Customize the theme.
          */
-        $scope.allActivated = function(source) {
-          if (!source) {
-            return true;
+        $scope.toggleCustom = function(item) {
+          if (!item.customize) {
+            item.name = item.name.replace('(Custom)', '');
+            item.price.single = 350;
+            item.price.month  = 35;
+          } else {
+            item.name = item.name + ' (Custom)';
+            item.price.single = 1450;
+            item.price.month  = 135;
           }
-
-          for (var i = 0; i < source.length; i++) {
-            if (source[i].type !== 'internal' &&
-                $scope.activated.indexOf(source[i].id) === -1) {
-              return false;
-            }
-          }
-
-          return true;
-        };
-
-        /**
-         * @function allDeactivated
-         * @memberOf MarketListCtrl
-         *
-         * @description
-         *   Check if all modules from array are deactivated.
-         *
-         * @param {Array} source The array of modules to check.
-         *
-         * @return {Boolean} True if all modules are deactivated. Otherwise,
-         *                   returns false.
-         */
-        $scope.allDeactivated = function(source) {
-          if (!source) {
-            return true;
-          }
-
-          for (var i = 0; i < source.length; i++) {
-            if (source[i].type !== 'internal' &&
-                $scope.activated.indexOf(source[i].id) !== -1) {
-              return false;
-            }
-          }
-
-          return true;
         };
 
         /**
@@ -262,13 +227,14 @@
             resolve: {
               template: function() {
                 return {
-                  addToCart:   $scope.addToCart,
-                  enable:      $scope.enable,
-                  isActive:    $scope.isActive,
-                  isInCart:    $scope.isInCart,
-                  isPurchased: $scope.isPurchased,
-                  item:        item,
-                  lang:        $scope.lang,
+                  addToCart:    $scope.addToCart,
+                  enable:       $scope.enable,
+                  isActive:     $scope.isActive,
+                  isInCart:     $scope.isInCart,
+                  isPurchased:  $scope.isPurchased,
+                  item:         item,
+                  lang:         $scope.lang,
+                  toggleCustom: $scope.toggleCustom,
                 };
               },
               success: function() {
@@ -287,11 +253,11 @@
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
-            webStorage.local.remove('themes-cart');
+            webStorage.local.remove('cart');
             return;
           }
 
-          webStorage.local.add('themes-cart', nv);
+          webStorage.local.add('cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
@@ -316,8 +282,8 @@
         });
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has('themes-cart')) {
-          $scope.cart = webStorage.local.get('themes-cart');
+        if (webStorage.local.has('cart')) {
+          $scope.cart = webStorage.local.get('cart');
         }
 
         // Initialize the type from current location
