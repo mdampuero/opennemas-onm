@@ -168,21 +168,21 @@
       </div>
       <div>
         <h4 class="ng-cloak" ng-show="!loading  && items.length == 0">{t}No themes available{/t}</h4>
-        <div class="grid simple ng-cloak" ng-show="!loading">
-          <div class="grid-body">
-            <div class="text-center" ng-if="type == 'available'">
-              <h4>{t}Change the look to your newspaper in just few clicks!{/t}</h4>
-              <h5>{t}All our Themes have been designed by media professionals and they are all Mobile Responsive!{/t}</h4>
+        <div class="theme-list-message clearfix ng-cloak" ng-if="!loading">
+            <div class="alert">
+              <div ng-if="type == 'available'">
+                <h4>{t}Change the look to your newspaper in just few clicks!{/t}</h4>
+                <p>{t}All our Themes have been designed by media professionals and they are all Mobile Responsive!{/t}</p>
+              </div>
+              <div ng-if="type == 'exclusive'">
+                <h4>{t}Add customizations and design your own theme based on one of out grids or ask us to develop an exclusive and completely new theme{/t}</h4>
+                <p>{t}We are open to any solution you prefer!{/t}</p>
+              </div>
+              <div ng-if="type == 'purchased'">
+                <h4>{t}Find here your purchased themes and decide which one to use today!{/t}</h4>
+                <p>{t}All purchased Themes are ready for activation{/t}</p>
+              </div>
             </div>
-            <div class="text-center" ng-if="type == 'exclusive'">
-              <h4>{t}Add customizations and design your own theme based on one of out grids or ask us to develop an exclusive and completely new theme{/t}</h4>
-              <h5>{t}We are open to any solution you prefer!{/t}</h4>
-            </div>
-            <div class="text-center" ng-if="type == 'purchased'">
-              <h4>{t}Find here your purchased themes and decide which one to use today!{/t}</h4>
-              <h5>{t}All purchased Themes are ready for activation{/t}</h4>
-            </div>
-          </div>
         </div>
         <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
