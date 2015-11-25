@@ -26,14 +26,14 @@ class MarketController extends Controller
 
         $available = \Onm\Module\ModuleManager::getAvailableModules();
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes    = \Onm\Module\ModuleManager::getAvailableThemes();
+        $themes    = $this->get('orm.loader')->getPlugins();
 
         foreach ($packs as $pack) {
             $available[$pack['id']] = $pack['name'];
         }
 
         foreach ($themes as $theme) {
-            $available[$theme['id']] = $theme['name'];
+            $available[$theme->uuid] = $theme->name;
         }
 
         $instance = $this->get('instance');
