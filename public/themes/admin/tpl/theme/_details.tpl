@@ -22,7 +22,6 @@
         <slide>
           <img class="img-responsive" src="http://placehold.it/1024x768">
         </slide>
-        <slide>
       </carousel>
     </div>
     <div class="col-md-4">
