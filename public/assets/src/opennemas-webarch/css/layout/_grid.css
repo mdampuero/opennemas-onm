@@ -39,7 +39,6 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  transition: max-height 1s, opacity 5s;
   z-index: 10;
 }
 
