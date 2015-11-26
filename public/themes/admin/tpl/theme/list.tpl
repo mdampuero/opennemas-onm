@@ -79,10 +79,12 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart track by $index | orderBy: name">
-                          <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
+                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                          <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.screenshots || item.screenshots.length == 0" src="http://placehold.it/1024x768">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
-                            <div class="description" ng-bind-html="item.short_description[lang]"></div>
+                            <div class="description" ng-bind-html="item.description[lang]"></div>
                           </span>
                           <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
                         </li>

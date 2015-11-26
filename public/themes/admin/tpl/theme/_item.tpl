@@ -4,18 +4,18 @@
     <div ng-click="$event.stopPropagation()">
       <carousel ng-if="item.screenshots.length > 0">
         <slide ng-repeat="screenshot in item.screenshots">
-          <img class="img-responsive" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
+          <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
         </slide>
       </carousel>
       <carousel ng-if="!item.screenshots">
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/1024x768">
+          <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
         </slide>
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/1024x768">
+          <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
         </slide>
         <slide>
-          <img class="img-responsive" ng-click="showDetails(item);" src="http://placehold.it/1024x768">
+          <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
         </slide>
         <slide>
       </carousel>
