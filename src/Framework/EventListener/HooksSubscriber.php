@@ -266,15 +266,8 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $this->container->get('instance_manager')->current_instance->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
-
-        // $content = $event->getArgument('content');
-
-        // $baseRequest = "obj.http.x-instance ~ {$instanceName} && ";
-        // $kernel->getContainer()->get('varnish_ban_message_exchanger')
-        //     ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
-        //     ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
-        //     ->addBanMessage('obj.http.x-tags ~ rss')
+            ->addBanMessage("obj.http.x-instance ~ {$instanceName}")
+            ->addBanMessage("obj.http.x-tags ~ globalcss");
     }
 
     /**
