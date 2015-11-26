@@ -235,6 +235,7 @@ class AssetController extends Controller
             array(
                 // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
+                'x-tags' => 'globalcss',
             )
         );
     }
@@ -254,19 +255,15 @@ class AssetController extends Controller
         $this->view->setConfig('frontpages');
 
         $cacheID = 'css|global|' . $categoryName;
+
         if ($this->view->caching == 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
         ) {
-            $ccm                = \ContentCategoryManager::get_instance();
-            // $currentCategoryId  = $ccm->get_id($categoryName);
+            $ccm = \ContentCategoryManager::get_instance();
 
             // RenderColorMenu - ADDED RENDER COLOR MENU
-            $currentCategory = (isset($categoryName) ? $categoryName : null);
             $configColor = s::get('site_color');
             $siteColor   = (!empty($configColor) ? '#'.$configColor : '#005689');
-
-            // Styles to print each category's new
-            $currentCategoryColor = '';
 
             $selectedCategories = array();
             foreach ($ccm->categories as &$category) {
@@ -307,6 +304,7 @@ class AssetController extends Controller
             array(
                 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
+                'x-tags'       => 'globalcss',
             )
         );
     }
