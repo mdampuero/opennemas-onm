@@ -20,23 +20,25 @@
         <slide>
       </carousel>
     </div>
-    <h4 class="uppercase">[% item.name %]</h4>
-    <div ng-bind-html="item.description[lang]"></div>
-    <h4 class="text-right">
-      <span ng-if="item.price.month">
-        <strong>[% item.price.month %]</strong>
-        <small>€ / {t}month{/t}</small>
-      </span>
-      <span ng-if="!item.price.month && item.price.single">
-        <strong>[% item.price.single %]</strong>
-        <small>€</small>
-      </span>
-      <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">
-        {t}Free{/t}
-      </span>
-    </h4>
-    <div class="p-t-15">
-     <a class="btn btn-link pull-left" href="#" ng-click="$event.stopPropagation()" target="_blank">
+    <div class="clearfix p-t-5 p-b-10">
+      <h4 class="uppercase pull-left">[% item.name %]</h4>
+
+      <h4 class="text-right pull-right">
+        <span ng-if="item.price.month">
+          <strong>[% item.price.month %]</strong>
+          <small>€ / {t}month{/t}</small>
+        </span>
+        <span ng-if="!item.price.month && item.price.single">
+          <strong>[% item.price.single %]</strong>
+          <small>€</small>
+        </span>
+        <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">
+          {t}Free{/t}
+        </span>
+      </h4>
+    </div>
+    <div>
+     <a class="m-t-10 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Open live demo in a new tab{/t}">
         <h5 class="uppercase">
           <i class="fa fa-globe"></i>
           {t}Live demo{/t}
