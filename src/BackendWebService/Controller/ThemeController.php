@@ -38,6 +38,11 @@ class ThemeController extends Controller
 
         $this->get('instance_manager')->persist($instance);
 
+        dispatchEventWithParams(
+            'instance.update',
+            array('instance' => $instance->internal_name)
+        );
+
         return new JsonResponse();
     }
 
