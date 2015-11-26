@@ -18,8 +18,8 @@
      *   Handles all actions in instances listing.
      */
     .controller('InstanceListCtrl', [
-      '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, itemService, routing, messenger, webStorage, data) {
+      '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         /**
          * @memberOf InstanceListCtrl
          *
@@ -434,6 +434,25 @@
           $scope.pagination.page = null;
           $scope.pagination.total = null;
         });
+
+        // Reloads the list when filters change.
+        $scope.$watch('criteria', function(newValues, oldValues) {
+          // Change page when scrolling in grid mode
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          if (newValues !== oldValues) {
+            if ($scope.pagination.page !== 1) {
+              $scope.pagination.page = 1;
+            } else {
+              $scope.searchTimeout = $timeout(function() {
+                list();
+              }, 500);
+            }
+          }
+        }, true);
+
 
         // Refresh the list of elements when some parameter changes
         $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
