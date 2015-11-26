@@ -26,7 +26,7 @@
               var width = cart.prop('offsetWidth');
               var height = cart.prop('offsetHeight');
 
-              var img = angular.element(element.parent().parent()).find('img');
+              var img = angular.element(element.parent().parent().parent()).find('img');
               var src = img.prop('currentSrc');
 
               var source = element.offset();
