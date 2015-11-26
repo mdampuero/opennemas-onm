@@ -21,6 +21,8 @@
             element.on('click', function(){
               var cart = angular.element($('.shopping-cart'));
 
+              var top = $(window).scrollTop();
+
               var target = cart.offset();
 
               var width = cart.prop('offsetWidth');
@@ -35,7 +37,7 @@
                   '<img class="flying-item"src="' + src + '"/>');
 
               img.css({
-                'top': source.top + 'px',
+                'top': source.top - top + 'px',
                 'left': source.left + 25 + 'px',
               });
 
@@ -43,7 +45,7 @@
 
               setTimeout(function () {
                 img.css({
-                  'top': ((target.top + height / 2) - 15) +'px',
+                  'top': ((target.top - top + height / 2) - 15) +'px',
                   'left': ((target.left + width / 2) - 5) +'px',
                   'opacity': 1
                 });
@@ -54,7 +56,7 @@
                   'opacity': 0,
                   'height': 0,
                   'width': 0,
-                  'top': ((target.top + height / 2) + 15)+'px',
+                  'top': ((target.top - top + height / 2) + 15)+'px',
                   'left': ((target.left + width / 2) + 5)+'px',
                 });
               }, 750);
