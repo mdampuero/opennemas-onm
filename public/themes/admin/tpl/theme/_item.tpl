@@ -22,7 +22,7 @@
     <div class="clearfix p-t-5 p-b-10">
       <h4 class="uppercase pull-left">[% item.name %]</h4>
 
-      <h4 class="text-right pull-right">
+      <h4 class="text-right pull-right" ng-if="type !== 'purchased'">
         <span ng-if="item.price.month">
           <strong>[% item.price.month %]</strong>
           <small>€ / {t}month{/t}</small>
@@ -37,7 +37,7 @@
       </h4>
     </div>
     <div>
-     <a class="m-t-10 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Open live demo in a new tab{/t}">
+     <a ng-if="type !== 'purchased'" class="m-t-10 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Open live demo in a new tab{/t}">
         <h5 class="uppercase">
           <i class="fa fa-globe"></i>
           {t}Live demo{/t}
