@@ -22,6 +22,7 @@
         <slide>
           <img class="img-responsive" src="http://placehold.it/1024x768">
         </slide>
+        <slide>
       </carousel>
     </div>
     <div class="col-md-4">
@@ -82,50 +83,51 @@
           </div>
         </div>
       </div>
-      <div ng-if="!template.item.customize">
-        {t escape=off}
-          <h4>Newspaper Web Site with standard widgets developed by Opennemas team. No customization available.</h4>
-          <p>Personalization allowed in the platform: colour of menu and logo.</p>
-          <p><strong>Cost:</strong> Standard widgets included. To add a widget please contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>
-          <p><strong>Exclusivity:</strong> This template is not exclusive</p>
-          <p><strong>Delivery time:</strong> 1 day after payment</p>
-          <p>Change Request BEFORE launch: No Change included. For change request please check out Custom Option.</p>
-          <p>Change Request AFTER launch: No Change included. For change request please check out Custom Option.</p>
-          <p>Cost:</p>
-          <ul class="alternate" type="square">
-            <li>350€* (one pay)</li>
-            <li>35€* (12 months)</li>
-          </ul>
-        {/t}
-      </div>
-      <div ng-if="template.item.customize">
-        {t escape=off}
-          <h4>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences.</h4>
-          <p><strong>Widgets:</strong> Standard widgets included. To add a widget please contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>
-          <p><strong>Exclusivity:</strong> This template is not exclusive</p>
-          <p><strong>Delivery time:</strong> From 2 weeks up to 1 month depending on customization work.</p>
-          <p>Change Request BEFORE launch:
+      <div class="description-wrapper">
+        <div ng-if="!template.item.customize">
+          {t escape=off}
+            <h4>Newspaper Web Site with standard widgets developed by Opennemas team. No customization available.</h4>
+            <p>Personalization allowed in the platform: colour of menu and logo.</p>
+            <p><strong>Cost:</strong> Standard widgets included. To add a widget please contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>
+            <p><strong>Exclusivity:</strong> This template is not exclusive</p>
+            <p><strong>Delivery time:</strong> 1 day after payment</p>
+            <p>Change Request BEFORE launch: No Change included. For change request please check out Custom Option.</p>
+            <p>Change Request AFTER launch: No Change included. For change request please check out Custom Option.</p>
+            <p>Cost:</p>
+            <ul class="alternate" type="square">
+              <li>350€* (one pay)</li>
+              <li>35€* (12 months)</li>
+            </ul>
+          {/t}
+        </div>
+        <div ng-if="template.item.customize">
+          {t escape=off}
+            <h4>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences.</h4>
+            <p><strong>Widgets:</strong> Standard widgets included. To add a widget please contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a></p>
+            <p><strong>Exclusivity:</strong> This template is not exclusive</p>
+            <p><strong>Delivery time:</strong> From 2 weeks up to 1 month depending on customization work.</p>
+            <p>Change Request BEFORE launch:
             <ul class="alternate" type="square">
               <li>Typography, newspaper colours and style.</li>
               <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, Inner Article Disposition, Images Size, Headers and footers.</li>
               <li>1 iteration of feedback and change request included before production.</li>
             </ul>
-          </li>
-          <p>Change Request AFTER launch: Monitoring and Bug fixing (if any) included 30 days post production.</li>
+            </li>
+            <p>Change Request AFTER launch: Monitoring and Bug fixing (if any) included 30 days post production.</li>
           <p>Steps to activate the template:
-            <ul class="alternate" type="square">
-              <li>Order it.</li>
-              <li>We will contact you for gathering of requirements and purchase process.</li>
-              <li>In 2 to 4 weeks after first payment your template will be active</li>
-              <li>If any bug fixing is required we will take care of it, as in the first 30 days we will be monitoring your newspaper</li>
-              <li>Add On:
-                <ul class="alternate" type="square">
-                  <li>New widgets: 120€* each</li>
-                  <li>Get newspaper one week in advance: 500€*</li>
-                  <li>Support cost after launch</li>
-                </ul>
-              </li>
-            </ul>
+          <ul class="alternate" type="square">
+            <li>Order it.</li>
+            <li>We will contact you for gathering of requirements and purchase process.</li>
+            <li>In 2 to 4 weeks after first payment your template will be active</li>
+            <li>If any bug fixing is required we will take care of it, as in the first 30 days we will be monitoring your newspaper</li>
+            <li>Add On:
+              <ul class="alternate" type="square">
+                <li>New widgets: 120€* each</li>
+                <li>Get newspaper one week in advance: 500€*</li>
+                <li>Support cost after launch</li>
+              </ul>
+            </li>
+          </ul>
           </li>
           <p>Cost:</p>
           <ul class="alternate" type="square">
@@ -134,6 +136,7 @@
               *VAT not included</li>
           </ul>
         {/t}
+        </div>
       </div>
     </div>
   </div>
