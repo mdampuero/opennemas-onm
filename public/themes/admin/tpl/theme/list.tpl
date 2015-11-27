@@ -40,13 +40,13 @@
                     {t}Available{/t}
                   </a>
                 </li>
-                <li ng-click="type = 'module'">
+                <li ng-click="type = 'exclusive'">
                   <a href="#">
                     <i class="fa fa-usd m-r-5"></i>
                     {t}Exclusive{/t}
                   </a>
                 </li>
-                <li ng-click="type = 'pack'">
+                <li ng-click="type = 'purchased'">
                   <a href="#">
                     <i class="fa fa-star-o m-r-5"></i>
                     {t}My themes{/t}
