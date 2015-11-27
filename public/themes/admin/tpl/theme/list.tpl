@@ -173,11 +173,11 @@
         <div class="theme-list-message clearfix ng-cloak" ng-if="!loading">
           <div class="p-b-15 text-center">
             <div ng-if="type == 'available'">
-              <h4>{t}Change the look to your newspaper in just few clicks!{/t}</h4>
+              <h4>{t}Change the look of your newspaper in just few clicks!{/t}</h4>
               <h5>{t}All our Themes have been designed by media professionals and they are all Mobile Responsive!{/t}</h5>
             </div>
             <div ng-if="type == 'exclusive'">
-              <h4>{t}Add customizations and design your own theme based on one of out grids or ask us to develop an exclusive and completely new theme{/t}</h4>
+              <h4>{t}Add customizations and design to create your own theme based on one of out grids or ask us to develop an exclusive and completely new theme{/t}</h4>
               <h5>{t}We are open to any solution you prefer!{/t}</h5>
             </div>
             <div ng-if="type == 'purchased'">
