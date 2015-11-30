@@ -3,7 +3,7 @@
 namespace Framework\ORM\Persister;
 
 use Framework\ORM\Core\ChainElement;
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 
 abstract class Persister extends ChainElement
 {

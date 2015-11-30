@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\Braintree\Persister;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Persister\Persister;
 
 abstract class BraintreePersister extends Persister

@@ -9,7 +9,7 @@
  */
 namespace Framework\ORM\Database\Repository;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Exception\EntityNotFoundException;
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;

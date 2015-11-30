@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\Braintree\Repository;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Repository\Repository;
 
 abstract class BraintreeRepository extends Repository

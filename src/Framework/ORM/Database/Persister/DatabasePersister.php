@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\Database\Persister;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Persister\Persister;
 use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;

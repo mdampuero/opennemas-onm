@@ -4,7 +4,7 @@ namespace Framework\ORM;
 
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Database\DatabaseManager;
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;

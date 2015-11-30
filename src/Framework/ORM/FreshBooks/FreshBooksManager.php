@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\FreshBooks;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;
 use Freshbooks\FreshBooksApi;

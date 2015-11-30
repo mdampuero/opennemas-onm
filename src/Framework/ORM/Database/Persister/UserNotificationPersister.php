@@ -9,7 +9,7 @@
  */
 namespace Framework\ORM\Database\Persister;
 
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 
 class UserNotificationPersister extends DatabasePersister
 {

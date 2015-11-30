@@ -3,7 +3,7 @@
 namespace Framework\ORM\Braintree;
 
 use CometCult\BraintreeBundle\Factory\BraintreeFactory;
-use Framework\ORM\Entity\Entity;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;
 
