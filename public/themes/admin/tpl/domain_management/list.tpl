@@ -2,10 +2,10 @@
 
 {block name="header-css" append}
 {stylesheets src="
-@AdminTheme/less/_domain-management.less"
-filters="cssrewrite,less"}
-<link rel="stylesheet" type="text/css" href="{$asset_url}">
-{/stylesheets}
+    @AdminTheme/less/_domain.less"
+  filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
 {/block}
 
 {block name="content"}
@@ -26,11 +26,9 @@ filters="cssrewrite,less"}
 <div class="content" ng-controller="DomainManagementCtrl" ng-init="list()">
   <div class="row">
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-      <div class="single-colored-widget m-b-15">
-        <div class="content-wrapper blue p-r-30">
-          <h3 class="text-white">Custom <span class="semi-bold">domains</span></h3>
-          <p class="text-white">{t escape=off}Use your own domains with Opennemas... If you have your own domain or even if you don't have one we will guide you through the process of using a custom address with your opennemas newspaper{/t}</p>
-          <div class="clearfix"></div>
+      <div class="m-b-30 m-t-15">
+        <div class="center">
+          <h4>{t}How can I change 'opennemas.com' domain on my newspaper?{/t}</h4>
         </div>
       </div>
     </div>
@@ -90,9 +88,9 @@ filters="cssrewrite,less"}
                     <div class="col-sm-6">
                       <strong>{t}Points to{/t}:</strong> [% domain.target %]
                     </div>
-                    <div class="col-sm-6">
+                    {*<div class="col-sm-6">
                       <strong>{t}Expires{/t}:</strong> [% domain.expires %]
-                    </div>
+                    </div>*}
                   </div>
                 </div>
               </div>
