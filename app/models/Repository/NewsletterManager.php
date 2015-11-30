@@ -120,7 +120,10 @@ class NewsletterManager extends BaseManager
                             $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
                         } elseif (!empty($content->fk_video)) {
                             $item->video = $er->find('Video', $content->fk_video);
+                        } elseif (!empty($content->img2)) {
+                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img2);
                         }
+
                         if (isset($content->summary)) {
                             $item->summary  = $content->summary;
                         } else {
