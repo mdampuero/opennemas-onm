@@ -2,6 +2,8 @@
 
 namespace Framework\ORM\Entity;
 
+use Framework\ORM\Core\Entity;
+
 class Invoice extends Entity
 {
     /**
