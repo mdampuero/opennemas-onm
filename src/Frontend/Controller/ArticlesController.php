@@ -127,11 +127,13 @@ class ArticlesController extends Controller
                     $relatedContents = $cm->getInTime($relatedContents);
                     $relatedContents = $cm->getAvailable($relatedContents);
 
-                    // Add category name
+                    // Get front media element and add category name
                     foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
                         if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
                             $content->photo = $er->find('Photo', $content->img1);
+                        } elseif ($key == 0 && $content->content_type == 1 && !empty($content->fk_video)) {
+                            $content->video = $er->find('Video', $content->fk_video);
                         }
                     }
                 }
