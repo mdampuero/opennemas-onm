@@ -68,7 +68,7 @@
           <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && template.isActive(template.item)">{t}Enabled{/t}</h5>
           <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && template.item.loading">{t}Enabling{/t}...</h5>
         </button>
-        <a class="btn btn-white m-b-15 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank">
+        <a class="btn btn-white m-b-15 pull-left" href="[% template.item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank">
           <h5 class="uppercase">
             <i class="fa fa-globe"></i>
             {t}Live demo{/t}
