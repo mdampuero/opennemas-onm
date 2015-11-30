@@ -1,6 +1,13 @@
-backend_ws_domain_check:
-    path:     /domains/check
-    defaults: { _controller: BackendWebServiceBundle:DomainManagement:check }
+backend_ws_domain_check_available:
+    path:     /domains/available
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:checkAvailable }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_ws_domain_check_valid:
+    path:     /domains/valid
+    defaults: { _controller: BackendWebServiceBundle:DomainManagement:checkValid }
     methods:  [ GET ]
     options:
         expose: true

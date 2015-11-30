@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
+<!--[if lt IE 8]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <!--<![endif]-->
@@ -40,6 +40,7 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/select2/select2.css,
+      @Common/components/SpinKit/css/spinkit.css,
       @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,

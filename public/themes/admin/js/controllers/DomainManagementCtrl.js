@@ -18,8 +18,8 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$modal', '$scope', '$timeout', 'routing',
-      function($http, $location, $modal, $scope, $timeout, routing) {
+      '$http', '$location', '$modal', '$scope', '$timeout', 'messenger', 'routing',
+      function($http, $location, $modal, $scope, $timeout, messenger, routing) {
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -165,7 +165,7 @@
             return false;
           }
 
-          return /(\w+\.)+\w+/.test($scope.domain);
+          return /^(\w+\.)+\w+$/.test($scope.domain);
         };
 
         /**
@@ -209,8 +209,23 @@
           var domain = 'www.' + $scope.domain;
 
           if ($scope.domains.indexOf(domain) === -1) {
-            $scope.domains.push(domain);
-            $scope.domain = '';
+            if ($scope.create) {
+              $scope.loading = true;
+              var url = routing.generate('backend_ws_domain_check_available',
+                  { domain: domain });
+
+              $http.get(url).success(function() {
+                $scope.domains.push(domain);
+                $scope.domain = '';
+                $scope.loading = false;
+              }).error(function(response) {
+                $scope.loading = false;
+                messenger.post({ message: response, type: 'error' });
+              });
+            } else {
+              $scope.domains.push(domain);
+              $scope.domain = '';
+            }
           }
         };
 
@@ -223,7 +238,7 @@
          *   Listens for the enter key to add a domain to map
          */
         $scope.mapByKeyPress = function(event) {
-          if (event.keyCode === 13) {
+          if ($scope.isValid() && event.keyCode === 13) {
             $scope.map();
           }
         };
@@ -237,7 +252,8 @@
 
         // Updates the edit flag when billing changes.
         $scope.$watch('[billing.country, billing.vat]', function() {
-          if (!$scope.billing.country || !$scope.billing.vat) {
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.vat) {
             return;
           }
 
@@ -267,7 +283,7 @@
 
           if (nv.length > 0) {
             $scope.subtotal = $scope.price * nv.length;
-            $scope.vat      = $scope.subtotal * 0.21;
+            $scope.vat      = Math.round($scope.subtotal * 21)/100;
             $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);

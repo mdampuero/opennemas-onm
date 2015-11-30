@@ -9,6 +9,27 @@ use Onm\Framework\Controller\Controller;
 class DomainManagementController extends Controller
 {
     /**
+     * Checks if the domain is not in use.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkAvailableAction(Request $request)
+    {
+        $domain = $request->query->get('domain');
+
+        if (empty($domain) || !$this->checkDomainAvailable($domain)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not available'), $domain),
+                400
+            );
+        }
+
+        return new JsonResponse(_('Your domain is configured correctly'));
+    }
+
+    /**
      * Checks if the domain is configured correcty basing on information from
      * dig command.
      *
@@ -16,7 +37,7 @@ class DomainManagementController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function checkAction(Request $request)
+    public function checkValidAction(Request $request)
     {
         $domain   = $request->query->get('domain');
         $end      = substr($domain, strrpos($domain, '.') + 1);
@@ -24,7 +45,7 @@ class DomainManagementController extends Controller
 
         $expected = "{$instance->internal_name}.{$end}.opennemas.net";
 
-        if (empty($domain) || !$this->checkDomain($domain, $expected)) {
+        if (empty($domain) || !$this->checkDomainValid($domain, $expected)) {
             return new JsonResponse(
                 sprintf(_('Your domain has to point to %s'), $expected),
                 400
@@ -151,6 +172,26 @@ class DomainManagementController extends Controller
     }
 
     /**
+     * Checks if a domain is available.
+     *
+     * @param string $domain   The domain to check.
+     * @param string $expected The expected domain.
+     *
+     * @return boolean True if the domain is available to purchase. Otherwise,
+     *                 returns false.
+     */
+    private function checkDomainAvailable($domain)
+    {
+        exec('dig +short ' . $domain, $output, $code);
+
+        if ($code !== 0 || !empty($output)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks if a domain is pointing to the right opennemas.net domain.
      *
      * @param string $domain   The domain to check.
@@ -159,9 +200,9 @@ class DomainManagementController extends Controller
      * @return boolean True if the domain is pointing to the right opennemas.net
      *                 domain. Otherwise, returns false.
      */
-    private function checkDomain($domain, $expected)
+    private function checkDomainValid($domain, $expected)
     {
-        exec('dig ' . $domain, $output, $code);
+        exec('dig +short' . $domain, $output, $code);
 
         if ($code !== 0) {
             return false;
@@ -187,16 +228,6 @@ class DomainManagementController extends Controller
      */
     private function sendEmailToCustomer($billing, $domains, $instance)
     {
-        $content =                 $this->renderView(
-                    'domain_management/email/_purchaseToCustomer.tpl',
-                    [
-                        'billing'  => $billing,
-                        'domains'  => $domains,
-                        'instance' => $instance
-                    ]
-                );
-
-        var_dump($content);die();
         $params = $this->container
             ->getParameter("manager_webservice");
 

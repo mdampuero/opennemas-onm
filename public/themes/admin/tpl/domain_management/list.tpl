@@ -2,10 +2,10 @@
 
 {block name="header-css" append}
 {stylesheets src="
-@AdminTheme/less/_domain-management.less"
-filters="cssrewrite,less"}
-<link rel="stylesheet" type="text/css" href="{$asset_url}">
-{/stylesheets}
+    @AdminTheme/less/_domain.less"
+  filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
 {/block}
 
 {block name="content"}
@@ -90,9 +90,9 @@ filters="cssrewrite,less"}
                     <div class="col-sm-6">
                       <strong>{t}Points to{/t}:</strong> [% domain.target %]
                     </div>
-                    <div class="col-sm-6">
+                    {*<div class="col-sm-6">
                       <strong>{t}Expires{/t}:</strong> [% domain.expires %]
-                    </div>
+                    </div>*}
                   </div>
                 </div>
               </div>

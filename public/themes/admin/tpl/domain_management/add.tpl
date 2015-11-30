@@ -2,7 +2,8 @@
 
 {block name="header-css" append}
   {stylesheets src="
-    @AdminTheme/less/_market.less
+    @AdminTheme/less/_market.less,
+    @AdminTheme/less/_domain.less
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
@@ -49,20 +50,22 @@
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
                   <span class="input-group-addon">www</span>
-                  <input class="form-control" ng-model="domain" placeholder="{t}Enter a domain{/t}" type="text"  ng-keyup="mapByKeyPress($event)">
+                  <input autofocus class="form-control" ng-model="domain" placeholder="{t}Enter a domain{/t}" type="text"  ng-keyup="mapByKeyPress($event)">
                   <span class="input-group-btn">
                     <span class="arrow"></span>
                     <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid()">
-                      {t}Map it{/t}
+                      <span ng-if="!loading">
+                        {t}Map it{/t}
+                      </span>
+                      <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
+                        <div class="sk-child sk-bounce1"></div>
+                        <div class="sk-child sk-bounce2"></div>
+                        <div class="sk-child sk-bounce3"></div>
+                      </div>
                     </button>
                   </span>
                 </div>
                 <div class="pull-left">
-                  <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
-                    <div class="sk-child sk-bounce1"></div>
-                    <div class="sk-child sk-bounce2"></div>
-                    <div class="sk-child sk-bounce3"></div>
-                  </div>
                 </div>
                 <div class="pull-right">
                   <h4>
