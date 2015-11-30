@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Entity;
+namespace Framework\ORM\Core;
 
 abstract class Entity
 {
