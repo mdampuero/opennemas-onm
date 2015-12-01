@@ -38,6 +38,10 @@ backend_ws_picker:
     resource: @BackendWebServiceBundle/Resources/config/routing/picker.yml
     prefix:   /
 
+backend_ws_theme:
+    resource: @BackendWebServiceBundle/Resources/config/routing/theme.yml
+    prefix:   /
+
 backend_ws_users:
     resource: @BackendWebServiceBundle/Resources/config/routing/users.yml
     prefix:   /

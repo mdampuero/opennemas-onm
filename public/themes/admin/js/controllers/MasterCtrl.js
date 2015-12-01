@@ -18,6 +18,12 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
   '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
   function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, messenger, routing, Sidebar) {
     'use strict';
+    /**
+     * The current language.
+     *
+     * @type String
+     */
+    $scope.lang = 'en';
 
     /**
      * The routing service.
@@ -40,6 +46,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param string language The current language.
      */
     $scope.init = function(language) {
+      $scope.lang = language;
       $translate.use(language);
 
       paginationConfig.nextText     = $filter('translate')('Next');

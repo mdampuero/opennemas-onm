@@ -41,6 +41,10 @@ class OpennemasExtension extends Extension implements PrependExtensionInterface
         if (array_key_exists('assetic', $config)) {
             $container->setParameter('assetic', $config['assetic']);
         }
+
+        if (array_key_exists('plugins', $config)) {
+            $container->setParameter('plugins', $config['plugins']);
+        }
     }
 
     /**

@@ -53,8 +53,9 @@ class InstanceManager extends BaseManager
             $name  = $parts[count($parts) - 1];
 
             if (file_exists($value.'/init.php')) {
-                $themeInfo        =  include_once($value.'/init.php');
-                $templates[$name] = $themeInfo;
+                $themeInfo =  include_once($value.'/init.php');
+
+                $templates['es.openhost.theme.' . $name] = $themeInfo;
             }
         }
 

@@ -330,7 +330,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Modules{/t}</h4>
@@ -364,6 +364,25 @@
                       </span>
                     </label>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Themes{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="row">
+              <div class="col-md-2 col-sm-3 col-xs-2 m-b-5" ng-repeat="theme in template.themes">
+                <div class="checkbox check-default">
+                  <input id="checkbox-[% theme.uuid %]" ng-click="toggleChanges(theme)" checklist-model="instance.metas.purchased" checklist-value="theme.uuid" type="checkbox">
+                  <label for="checkbox-[% theme.uuid %]">
+                    [% theme.name %]
+                  </label>
                 </div>
               </div>
             </div>

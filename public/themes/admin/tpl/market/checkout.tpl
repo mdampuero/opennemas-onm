@@ -91,10 +91,12 @@
                 <p>{t}You are about to order next items. In the next 24hours our sales team will send you payment and activation information. {/t}</p>
                 <ul class="cart-list cart-list-big">
                   <li class="clearfix" ng-repeat="item in cart">
-                    <img class="img-responsive pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
+                    <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                    <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
+                    <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                     <div class="p-l-100">
                       <h5>[% item.name %]</h5>
-                      <p class="description">[% item.description %]</p>
+                      <div class="description" ng-bind-html="item.description[lang] ? item.description[lang] : item.description"></div>
                       <div class="text-right p-r-15 p-b-15">
                         <div class="price">
                           <h4 class="no-margin">

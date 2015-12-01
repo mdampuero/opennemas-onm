@@ -614,6 +614,12 @@ class InstanceController extends Controller
      */
     private function templateParams()
     {
+        $themes = $this->get('orm.loader')->getPlugins();
+
+        foreach ($themes as &$theme) {
+            $theme = $theme->getData();
+        }
+
         return [
             'languages' => [
                 'en_US' => _("English"),
@@ -628,6 +634,7 @@ class InstanceController extends Controller
                 'OTHER',
             ],
             'templates' => im::getAvailableTemplates(),
+            'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'available_modules' => mm::getAvailableModulesGrouped(),
         ];

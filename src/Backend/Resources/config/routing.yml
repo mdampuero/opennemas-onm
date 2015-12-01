@@ -1097,3 +1097,7 @@ backend_news_agency_server:
 backend_notification:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/notification.yml
+
+backend_theme:
+    prefix: /
+    resource: @BackendBundle/Resources/config/routing/theme.yml

@@ -70,7 +70,11 @@
           $scope.saving = true;
           var url = routing.generate('backend_ws_market_checkout');
           var modules = $scope.cart.map(function(e) {
-            return e.id;
+            var id = e.id;
+            if (!id) {
+              id = e.uuid;
+            }
+            return id;
           });
 
           var data = { billing: $scope.billing, modules: modules };
