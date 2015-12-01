@@ -43,17 +43,29 @@
     });
   });
 
+  gulp.task('touch', function () {
+    exec('find -type f -name main.less | xargs touch');
+  });
+
   gulp.task('watch', function () {
     livereload.listen();
 
+    // Executes tests and reload browser
     gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php' ],
       function () {
           gulp.start('phpunit');
           livereload.reload();
       });
+
+    // Executes tests and reload browser
+    gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
+      '!public/assets/src/**/main.less', '!public/themes/**/main.less',
+    ],
+      function () {
+        gulp.start('touch');
+        livereload.reload();
+      });
   });
 
   gulp.task('default', [ 'watch' ]);
 })();
-
-
