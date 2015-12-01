@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\Core;
 
-abstract class Entity
+class Entity
 {
     /**
      * Array of RAW data.
