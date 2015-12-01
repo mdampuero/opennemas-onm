@@ -9,7 +9,7 @@
  */
 namespace Framework\ORM\Loader;
 
-use Framework\ORM\Entity\Theme;
+use Framework\ORM\Core\Theme;
 use Framework\ORM\Validator\ThemeValidator;
 
 class ThemeLoader
