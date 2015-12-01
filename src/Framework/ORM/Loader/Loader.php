@@ -9,6 +9,7 @@
  */
 namespace Framework\ORM\Loader;
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 class Loader
@@ -21,24 +22,24 @@ class Loader
     protected $container;
 
     /**
-     * The list of paths to load plugins from.
+     * The list of paths to load items from.
      *
      * @var array
      */
     protected $paths;
 
     /**
-     * The list of plugins.
+     * The list of loaded items.
      *
      * @var array
      */
-    protected $plugins;
+    protected $loaded;
 
     /**
-     * Initializes the plugin loader.
+     * Initializes the Loader.
      *
-     * @param string $cache The cache service.
-     * @param string $paths The path to plugins folder.
+     * @param ServiceContainer $cache The service container.
+     * @param string           $paths The path to folders to load from.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
@@ -57,13 +58,13 @@ class Loader
     }
 
     /**
-     * Returns the list of plugins.
+     * Returns the list of loaded items.
      *
-     * @return array The list of plugins.
+     * @return array The list of loaded items.
      */
-    public function getPlugins()
+    public function get()
     {
-        return $this->plugins;
+        return $this->loaded;
     }
 
     /**
@@ -71,15 +72,17 @@ class Loader
      */
     public function load()
     {
+        $finder = new Finder();
+
         foreach ($this->paths as $path) {
             $path = $this->container->getParameter('kernel.root_dir')
-                . DS . '..' . DS . $path;
+                . DS . '..' . DS . $path . DS;
 
-            foreach (glob($path . '/*') as $dir) {
-                $configPath = $dir . DS . 'config.yml';
+            $finder->files()->in($path)->name('*.yml');
 
-                if (file_exists($configPath)) {
-                    $this->loadPlugin($configPath);
+            foreach ($finder as $file) {
+                if (file_exists($file)) {
+                    $this->loadItem($file);
                 }
             }
         }
@@ -90,19 +93,21 @@ class Loader
      *
      * @param string $path The path to plugin configuration file.
      */
-    public function loadPlugin($path)
+    public function loadItem($path)
     {
         $config = Yaml::parse($path);
 
         $path           = str_replace('/config.yml', '', $path);
         $config['path'] = substr($path, strpos($path, '/themes'));
 
-        if (!array_key_exists('type', $config)) {
-            throw \Exception('InvalidPluginConfigurationException');
+        try {
+            if (array_key_exists('type', $config)) {
+                $loader = $this->container
+                    ->get('orm.loader.' . $config['type']);
+
+                $this->loaded[] = $loader->load($config);
+            }
+        } catch (\Exception $e) {
         }
-
-        $loader = $this->container->get('orm.loader.' . $config['type']);
-
-        $this->plugins[] = $loader->load($config);
     }
 }

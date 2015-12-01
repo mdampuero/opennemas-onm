@@ -22,7 +22,7 @@ class ThemeLoader
     protected $validator;
 
     /**
-     * Initializes the theme loader
+     * Initializes the ThemeLoader
      *
      * @param ThemeValidator $validator The theme validator.
      */
@@ -37,8 +37,6 @@ class ThemeLoader
      * @param array $config The theme configuration.
      *
      * @return Theme The loaded theme.
-     *
-     * @throws InvalidThemeException If the theme configuration is not valid.
      */
     public function load($config)
     {
