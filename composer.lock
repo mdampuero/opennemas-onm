@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4bf6e13117d7de69a1117719c88bd413",
-    "content-hash": "11f18c09f4c6a02b7876690aa1e1f72f",
+    "hash": "e728a8505c720da687caf43cd679ba51",
+    "content-hash": "f96f6ed59d98e86d929fbd86e6b64abc",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -5318,7 +5318,6 @@
         "doctrine/doctrine-migrations-bundle": 20,
         "doctrine/migrations": 20,
         "drexarj/disqus-php": 20,
-        "friendsofsymfony/jsrouting-bundle": 0,
         "mockery/mockery": 20,
         "php-ffmpeg/php-ffmpeg": 20,
         "hwi/oauth-bundle": 20,
