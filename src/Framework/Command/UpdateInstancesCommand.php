@@ -278,18 +278,15 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Get Piwik config and last invoice date
-        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_invoice\' OR name=\'last_login\'';
+        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_login\'';
         $rs  = $this->im->getConnection()->fetchAll($sql);
 
-        $piwik       = null;
-        $lastInvoice = null;
+        $piwik = null;
 
         if ($rs !== false && !empty($rs)) {
             foreach ($rs as $value) {
                 if ($value['name'] == 'piwik') {
                     $piwik = unserialize($value['value']);
-                } elseif ($value['name'] == 'last_invoice') {
-                    $lastInvoice = unserialize($value['value']);
                 } else {
                     $i->last_login = unserialize($value['value']);
                 }
@@ -309,8 +306,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $this->im->getConnection()->close();
 
         // Get the page views from Piwik
-        if ($views && !empty($piwik) && !empty($lastInvoice)) {
-            $i->page_views = $this->getViews($piwik['page_id'], $lastInvoice);
+        if ($views && !empty($piwik)) {
+            $i->page_views = $this->getViews($piwik['page_id']);
         }
 
         // Get media size
@@ -326,10 +323,9 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      * Gets the number of page views from Piwik.
      *
      * @param  integer $siteId The site id in Piwik.
-     * @param  string  $from   Date of the last invoice.
      * @return integer         The number of page views.
      */
-    private function getViews($siteId, $from)
+    private function getViews($siteId)
     {
         if (!$siteId) {
             return 0;
@@ -338,9 +334,15 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $url   = $this->getContainer()->getParameter('piwik.url');
         $token = $this->getContainer()->getParameter('piwik.token');
 
-        $from = \DateTime::createFromFormat('Y-m-d H:i:s', $from);
-        $from = $from->format('Y-m-d');
-        $to   = date('Y-m-d');
+        $from = new \DateTime('now');
+
+        if ($from->format('d') <= '27') {
+            $from->modify('-1 month');
+        }
+
+        $from->setDate($from->format('Y'), $from->format('m'), 27);
+
+        $to = date('Y-m-d');
 
         $url .= "?module=API&method=API.get"
             . "&apiModule=VisitsSummary&apiAction=get"
