@@ -1,6 +1,7 @@
 (function () {
   'use strict';
 
+  var batch      = require('gulp-batch');
   var exec       = require('child_process').exec;
   var gulp       = require('gulp');
   var livereload = require('gulp-livereload');
@@ -8,11 +9,20 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('phpunit -c app/phpunit.xml.dist | tail -1', function(error, stdout) {
-      var result = stdout.split('\n');
-      var summary = result[result.length - 2];
+    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist | tail -1', function(error, stdout) {
+      var summary = stdout;
 
-      result = summary.replace(/,|\./g, '').replace(/: /g,':').split(' ');
+      if (summary.indexOf('Tests') === -1) {
+        notifier.notify({
+          'title':   'Unable to complete the tests!',
+          'icon':    path.join(__dirname, 'public/assets/images/fail.png'),
+          'message': 'There was an error while executing tests'
+        });
+
+        return;
+      }
+
+      var result  = summary.replace(/,|\./g, '').replace(/: /g,':').split(' ');
 
       var r = {};
       for (var i = 0; i < result.length; i++) {
@@ -34,17 +44,29 @@
     });
   });
 
+  gulp.task('touch', function () {
+    exec('find -type f -name main.less | xargs touch');
+  });
+
   gulp.task('watch', function () {
     livereload.listen();
 
+    // Executes tests and reload browser
     gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php' ],
-      function () {
-          gulp.start('phpunit');
-          livereload.reload();
-      });
+      batch(function (events, done) {
+        gulp.start('phpunit', done);
+        livereload.reload();
+      }));
+
+    // Executes tests and reload browser
+    gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
+      '!public/assets/src/**/main.less', '!public/themes/**/main.less',
+    ],
+      batch(function (events, done) {
+        gulp.start('touch', done);
+        livereload.reload();
+      }));
   });
 
   gulp.task('default', [ 'watch' ]);
 })();
-
-
