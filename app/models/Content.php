@@ -454,6 +454,7 @@ class Content
         }
 
         $this->id = $GLOBALS['application']->conn->Insert_ID();
+        $this->category_name = $catName;
 
         $sql = "INSERT INTO contents_categories (`pk_fk_content` ,"
              . "`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
