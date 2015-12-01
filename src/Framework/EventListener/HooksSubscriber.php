@@ -268,6 +268,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage("obj.http.x-instance ~ {$instanceName}")
+            ->addBanMessage("obj.http.x-tags ~ frontpage-page")
             ->addBanMessage("obj.http.x-tags ~ globalcss");
     }
 
@@ -286,6 +287,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage("obj.http.x-instance ~ {$instanceName}")
+            ->addBanMessage("obj.http.x-tags ~ frontpage-page")
             ->addBanMessage("obj.http.x-tags ~ globalcss");
     }
 
