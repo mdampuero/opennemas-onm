@@ -9,6 +9,8 @@
  */
 namespace Framework\ORM\Validator;
 
+use Framework\ORM\Exception\InvalidEntityException;
+
 use Framework\ORM\Core\Entity;
 
 class Validator
@@ -45,7 +47,7 @@ class Validator
         $missed = array_diff(array_keys($this->custom), array_keys($data));
 
         if (count($missed) > 0) {
-            throw new \Exception('NotValidException');
+            throw new InvalidEntityException('NotValidException');
         }
     }
 
@@ -81,7 +83,7 @@ class Validator
         $missed = array_diff(array_keys($this->required), array_keys($data));
 
         if (count($missed) > 0) {
-            throw new \Exception('NotValidException');
+            throw new InvalidEntityException('NotValidException');
         }
     }
 }
