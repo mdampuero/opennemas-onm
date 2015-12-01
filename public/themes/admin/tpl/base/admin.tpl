@@ -40,7 +40,7 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/select2/select2.css,
-      @Common/components/SpinKit/css/spinkit.css,
+      @Common/components/spinkit/css/spinkit.css,
       @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
