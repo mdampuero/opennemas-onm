@@ -1,6 +1,7 @@
 (function () {
   'use strict';
 
+  var batch      = require('gulp-batch');
   var exec       = require('child_process').exec;
   var gulp       = require('gulp');
   var livereload = require('gulp-livereload');
@@ -52,19 +53,19 @@
 
     // Executes tests and reload browser
     gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php' ],
-      function () {
-          gulp.start('phpunit');
-          livereload.reload();
-      });
+      batch(function (events, done) {
+        gulp.start('phpunit', done);
+        livereload.reload();
+      }));
 
     // Executes tests and reload browser
     gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
       '!public/assets/src/**/main.less', '!public/themes/**/main.less',
     ],
-      function () {
-        gulp.start('touch');
+      batch(function (events, done) {
+        gulp.start('touch', done);
         livereload.reload();
-      });
+      }));
   });
 
   gulp.task('default', [ 'watch' ]);
