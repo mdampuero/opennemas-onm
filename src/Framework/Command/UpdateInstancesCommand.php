@@ -342,7 +342,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         $from->setDate($from->format('Y'), $from->format('m'), 27);
 
-        $to = date('Y-m-d');
+        $from = $from->format('Y-m-d');
+        $to   = date('Y-m-d');
 
         $url .= "?module=API&method=API.get"
             . "&apiModule=VisitsSummary&apiAction=get"
