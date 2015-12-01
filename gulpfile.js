@@ -9,10 +9,19 @@
 
   gulp.task('phpunit', function () {
     exec('phpunit -c app/phpunit.xml.dist | tail -1', function(error, stdout) {
-      var result = stdout.split('\n');
-      var summary = result[result.length - 2];
+      var summary = stdout;
 
-      result = summary.replace(/,|\./g, '').replace(/: /g,':').split(' ');
+      if (summary.indexOf('Tests') === -1) {
+        notifier.notify({
+          'title':   'Unable to complete the tests!',
+          'icon':    path.join(__dirname, 'public/assets/images/fail.png'),
+          'message': 'There was an error while executing tests'
+        });
+
+        return;
+      }
+
+      var result  = summary.replace(/,|\./g, '').replace(/: /g,':').split(' ');
 
       var r = {};
       for (var i = 0; i < result.length; i++) {
