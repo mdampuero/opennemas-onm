@@ -1,29 +1,19 @@
 <?php
-
-use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Debug\Debug;
 
-umask(0002);
-
-$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
-
-// Use APC for autoloading to improve performance.
-// Change 'sf2' to a unique prefix in order to prevent cache key conflicts
-// with other applications also using APC.
-/*
-$apcLoader = new ApcClassLoader('sf2', $loader);
-$loader->unregister();
-$apcLoader->register(true);
-*/
-
-require_once __DIR__.'/../app/AppKernel.php';
-//require_once __DIR__.'/../app/AppCache.php';
+/**
+ * @var Composer\Autoload\ClassLoader
+ */
+$loader = require __DIR__.'/../app/autoload.php';
+include_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
 
 if (file_exists(APPLICATION_PATH.'/.development')) {
     $kernel = new AppKernel('dev', true);
+    Debug::enable();
 } else {
     $kernel = new AppKernel('prod', false);
 }
