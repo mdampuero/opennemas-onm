@@ -312,8 +312,8 @@
   </div>
   <div class="grid simple">
     <div class="grid-body no-padding">
-      <div class="grid-overlay" ng-if="loading"></div>
       <div class="table-wrapper">
+        <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
           <thead ng-if="items.length >= 0">
             <tr>
@@ -343,7 +343,7 @@
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('end')" width="250">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
