@@ -8,7 +8,7 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('phpunit -c app/phpunit.xml.dist | tail -1', function(error, stdout) {
+    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist | tail -1', function(error, stdout) {
       var summary = stdout;
 
       if (summary.indexOf('Tests') === -1) {
