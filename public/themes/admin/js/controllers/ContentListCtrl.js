@@ -446,7 +446,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     $scope.select = function(item) {
-      console.log('select');
       $scope.selected.lastSelected = item;
     };
 
@@ -1080,7 +1079,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.selected.contents = [];
 
           if (response.status === 200) {
-            $scope.list($scope.route);
+            $scope.list($scope.route, true);
           }
         }
       });
@@ -1156,7 +1155,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.$on('MediaPicker.close', function() {
       if ($scope.criteria.content_type_name === 'photo') {
-        $scope.list($scope.route);
+        $scope.list($scope.route, true);
       }
     });
 

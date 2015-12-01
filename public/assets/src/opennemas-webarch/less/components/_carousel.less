@@ -12,26 +12,24 @@
       }
     }
   }
-}
 
-.carousel-inner > .item > a > img,
-.carousel-inner > .item > img {
-  cursor:pointer;
+  img {
+    margin: 0 auto;
+    cursor:pointer;
+  }
 }
 
 .carousel-control {
   background-color: #fff;
   color: #53575B;
   cursor: pointer;
-  height: 30px;
-  margin-top: -15px;
+  height: 50px;
+  margin-top: -25px;
   opacity: 0;
   top: 50%;
-  width: 30px;
+  width: 50px;
 
   .glyphicon {
-    font-size: 18px;
-    padding: 5px;
     text-shadow: none;
   }
 
@@ -50,9 +48,27 @@
   }
 }
 
-
-.carousel-indicators {
-  display:none
+.carousel-big {
+  .carousel-control {
+    opacity: 1;
+  }
 }
 
+.carousel-minimal {
+  .carousel-control {
+    display: none;
+  }
 
+  .carousel-indicators {
+    bottom: 0;
+    margin-bottom: -30px;
+
+    li {
+      border-color: @default-color;
+
+      &.active {
+        background-color: @default-color;
+      }
+    }
+  }
+}
