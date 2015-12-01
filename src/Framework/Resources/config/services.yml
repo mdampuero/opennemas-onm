@@ -236,6 +236,10 @@ services:
         class: Framework\ORM\Loader\Loader
         arguments: [ @service_container, %plugins% ]
 
+    orm.loader.schema:
+        class: Framework\ORM\Loader\SchemaLoader
+        arguments: [ @orm.validator.schema ]
+
     orm.loader.theme:
         class: Framework\ORM\Loader\ThemeLoader
         arguments: [ @orm.validator.theme ]
@@ -261,6 +265,9 @@ services:
 
     orm.validator.plugin:
         class: Framework\ORM\Validator\PluginValidator
+
+    orm.validator.schema:
+        class: Framework\ORM\Validator\SchemaValidator
 
     orm.validator.theme:
         class: Framework\ORM\Validator\ThemeValidator
