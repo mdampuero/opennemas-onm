@@ -53,7 +53,7 @@ class ThemeController extends Controller
      */
     public function listAction()
     {
-        $themes = $this->get('orm.loader')->getPlugins();
+        $themes = $this->get('orm.loader')->get();
 
         foreach ($themes as &$theme) {
             $theme = $theme->getData();
