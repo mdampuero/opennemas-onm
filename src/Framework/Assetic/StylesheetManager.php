@@ -59,13 +59,6 @@ class StylesheetManager extends AssetManager
                         $this->config['filters']['less']['node_paths']
                     );
 
-                    if ($this->env == 'dev') {
-                        $filter = new LessNonCachedFilter(
-                            $this->config['filters']['less']['node'],
-                            $this->config['filters']['less']['node_paths']
-                        );
-                    }
-
                     $this->fm->set('less', $filter);
                     break;
                 default:
