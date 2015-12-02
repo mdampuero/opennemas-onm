@@ -292,8 +292,9 @@
                   <div class="form-group">
                     <div class="checkbox">
                       <input id="terms" name="terms" ng-model="terms" type="checkbox">
-                      <label class="no-margin text-left" for="terms"></label>
-                      {t escape=off}I have read and accept the <a href="http://help.opennemas.com/knowledgebase/articles/235348-condiciones-del-servicio-de-opennemas" target="_blank">Terms of Service</a>{/t}
+                      <label class="no-margin text-left" for="terms">
+                        {t escape=off}I have read and accept the <a href="http://help.opennemas.com/knowledgebase/articles/235348-condiciones-del-servicio-de-opennemas" target="_blank">Terms of Service</a>{/t}
+                      </label>
                     </div>
                   </div>
                   <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms">
