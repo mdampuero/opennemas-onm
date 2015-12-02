@@ -28,36 +28,37 @@
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
       <div class="m-b-30 m-t-15">
         <div class="center">
-          <h4>{t}How can I change 'opennemas.com' domain on my newspaper?{/t}</h4>
+          <h3 class="semi-bold">{t}How can I change 'opennemas.com' domain on my newspaper?{/t}</h3>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-      <div class="grid simple">
-        <div class="grid-title">
-          <div class="row">
-            <div class="col-sm-6">
-              <a class="btn btn-block btn-white" href="{url name=admin_domain_management_add}">
-                <i class="block fa fa-retweet fa-2x m-b-15"></i>
-                <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
-                <h5 class="wrap">
-                  {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
-                </h5>
-              </a>
-            </div>
-            <div class="col-sm-6">
-              <a class="btn btn-block btn-success" href="{url name=admin_domain_management_add create=1}">
-                <i class="block fa fa-plus fa-2x m-b-15"></i>
-                <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
-                <h5 class="text-white wrap">
-                  {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
-                </h5>
-              </a>
-            </div>
-          </div>
+      <div class="row p-b-20">
+        <div class="col-sm-6">
+          <a class="btn btn-block btn-white" href="{url name=admin_domain_management_add}">
+            <i class="block fa fa-retweet fa-2x m-b-15"></i>
+            <h4 class="block uppercase">{t}Redirect your own domain{/t}</h4>
+            <h5 class="wrap">
+              {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
+            </h5>
+          </a>
         </div>
+        <div class="col-sm-6">
+          <a class="btn btn-block btn-success" href="{url name=admin_domain_management_add create=1}">
+            <i class="block fa fa-plus fa-2x m-b-15"></i>
+            <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
+            <h5 class="text-white wrap">
+              {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
+            </h5>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>{t}Your domains{/t}</h4>
+      </div>
+      <div class="grid simple">
         <div class="grid-body no-padding">
           <div class="spinner-wrapper" ng-if="loading">
             <div class="loading-spinner"></div>
@@ -67,13 +68,15 @@
             <li class="domain-list-item pointer" ng-repeat="domain in domains" ng-click="expand($index)">
               <div class="clearfix">
                 <h4 class="m-r-10 pull-left">[% domain.name %]</h4>
-                <span class="label label-success pull-left uppercase" ng-if="domain.free">
+                <span class="label label-success pull-left uppercase" ng-if="domain.main">
                   {t}Main{/t}
                 </span>
-                <span class="label label-info pull-left uppercase" ng-if="domain.main">
+                <span class="label label-info pull-left uppercase" ng-if="domain.free">
                   {t}Free{/t}
                 </span>
                 <span class="p-t-15 pull-right">
+                  <span class="p-r-20" ng-if="!domain.free"><i class="fa fa-lg fa-check text-success"></i></span>
+                  <span class="p-r-20" ng-if="!domain.free"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
                   <i class="fa fa-chevron-right fa-lg" ng-class="{ 'fa-chevron-right': !expanded[$index], 'fa-chevron-down': expanded[$index] }"></i>
                 </span>
               </div>
@@ -85,14 +88,30 @@
                 </div>
                 <div ng-if="!domain.loading">
                   <div class="row">
-                    <div class="col-sm-6">
-                      <strong>{t}Points to{/t}:</strong> [% domain.target %]
+                    <div class="col-sm-12" ng-if="!domain.free">
+                      <p><strong>{t}Points to{/t}:</strong> [% domain.target %]</p>
+                      <p><i class="fa fa-lg fa-check text-success"></i> {t}Your domain is properly configured{/t}</p>
+                      <p><i class="fa fa-lg fa-exclamation-triangle text-danger"></i> {t}Your domain is not properly configured, check the instructions below.{/t}</p>
                     </div>
-                    {*<div class="col-sm-6">
+                    <div class="col-sm-6" ng-if="!domain.free">
                       <strong>{t}Expires{/t}:</strong> [% domain.expires %]
-                    </div>*}
-                    <div class="col-sm-6">
-                      <a href="#" ng-click="showDnsModal(domain)"><span class="fa fa-cog"></span> How to configure your DNS</a>
+                    </div>
+                    <div class="col-sm-12" ng-if="domain.free">
+                      {t}This is your opennemas address{/t}
+                    </div>
+                    <div class="col-sm-12" ng-if="!domain.free">
+                      <h4>Update your DNS records</h4>
+
+                      <h5 class="semi-bold">Point the www entrace in your domain to the Opennemas service.</h5>
+                      <div>
+                        <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name %].opennemas.net.</pre>
+                      </div>
+
+                      <h4 class="m-t-30">Redirect traffic from [% domain.name %] to  www.[% domain.name %]</h4>
+                      <p>Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain)</p>
+                      <p><span class="semi-bold">NOTE:</span> This change is NOT done in the DNS section</p>
+
+                      <a href="javascript:UserVoice.showPopupWidget();"><span class="fa fa-info-circle"></span> {t}If you need more help configuring your domains contact our support team{/t}</a>
                     </div>
                   </div>
                 </div>
@@ -104,7 +123,4 @@
     </div>
   </div>
 </div>
-<script type="text/ng-template" id="modal-dns-changes">
-  {include file="domain_management/modal/_dns_changes.tpl"}
-</script>
 {/block}
