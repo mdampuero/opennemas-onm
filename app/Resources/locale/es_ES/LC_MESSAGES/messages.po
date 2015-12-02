@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 15:43+0100\n"
-"PO-Revision-Date: 2015-10-30 16:29+0200\n"
+"PO-Revision-Date: 2015-12-02 16:37+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -112,7 +112,6 @@ msgstr "pendiente"
 msgid "available"
 msgstr "disponible"
 
-#, fuzzy
 msgid "not scheduled"
 msgstr "no planificado"
 
@@ -122,7 +121,6 @@ msgstr "planificado"
 msgid "dued"
 msgstr "expirado"
 
-#, fuzzy
 msgid "in time"
 msgstr "en tiempo"
 
@@ -1513,7 +1511,7 @@ msgid "Market"
 msgstr "Tienda"
 
 msgid "Themes"
-msgstr "Plantillas"
+msgstr "Temas"
 
 msgid "Domains"
 msgstr "Dominios"
@@ -1715,28 +1713,27 @@ msgstr "No se pudo guardar la posición para el elemento con id «%d»"
 msgid "Positions saved successfully"
 msgstr "Posiciones guardadas con éxito"
 
-#, fuzzy, php-format
+#, php-format
 msgid "The domain %s is not available"
-msgstr "Widget %s no disponible"
+msgstr "El dominio %s no está disponible"
 
 msgid "Your domain is configured correctly"
-msgstr ""
+msgstr "Tu dominio está configurado correctamente"
 
 #, php-format
 msgid "Your domain has to point to %s"
-msgstr ""
+msgstr "Tu dominio apunta a %s"
 
-#, fuzzy, php-format
+#, php-format
 msgid "Domain deleted successfully"
-msgstr "Elemento eliminado correctamente"
+msgstr "Dominio eliminado con éxito"
 
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the domain %s"
-msgstr "No se pudo eliminar el elemento «%s»"
+msgstr "No se pudo eliminar el dominio «%s»"
 
-#, fuzzy
 msgid "Domain added successfully"
-msgstr "Datos actualizados correctamente."
+msgstr "Dominio añadido correctamente."
 
 msgid "Your request could not been registered"
 msgstr "Tu solicitud no pudo guardarse"
@@ -1833,24 +1830,21 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
 
-#, fuzzy
 msgid "Yesterday"
-msgstr "Registrado"
+msgstr "Ayer"
 
 msgid "Today"
-msgstr ""
+msgstr "Hoy"
 
-#, fuzzy
 msgid "Notification marked as read successfully"
-msgstr "Configuración guardada correctamente."
+msgstr "Notificación marcada como leída correctamente"
 
-#, fuzzy
 msgid "Invalid notifications"
-msgstr "Notificaciones"
+msgstr "Notificaciones no válidas"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d notifications marked as read successfully"
-msgstr "%d elemento(s) restaurado(s) correctamente"
+msgstr "%d notificación(es) marcadas(s) como leída(s) correctamente"
 
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
@@ -1919,9 +1913,8 @@ msgstr ""
 "Suelte archivos aquí para subirlos o pulse en el botón «Añadir archivos…» de "
 "arriba."
 
-#, fuzzy
 msgid "Invalid theme"
-msgstr "Token no válido"
+msgstr "Tema non válido"
 
 #, php-format
 msgid "Unable to delete the item with the id \"%s\""
@@ -2201,25 +2194,22 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
-#, fuzzy
 msgid "Notification saved successfully"
-msgstr "Configuración guardada correctamente."
+msgstr "Notificación guardada correctamente"
 
-#, fuzzy
 msgid "Notification deleted successfully."
-msgstr "Configuración del sitio eliminada correctamente"
+msgstr "Notificación eliminada correctamente."
 
-#, fuzzy, php-format
+#, php-format
 msgid "%s notifications deleted successfully."
-msgstr "%s instancias eliminadas correctamente."
+msgstr "%s notificaciones eliminadas correctamente."
 
-#, fuzzy
 msgid "Manager"
-msgstr "Gestor de encuestas"
+msgstr "Gestor"
 
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the entity with id \"%s\""
-msgstr "No se pudo encontrar el elemento con el identificador «%s»"
+msgstr "No se pudo encontrar la entidad con el identificador «%s»"
 
 msgid "Error"
 msgstr "Error"
@@ -2231,7 +2221,7 @@ msgid "Success"
 msgstr "Éxito"
 
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 msgid "Help"
 msgstr "Ayuda"
@@ -2415,7 +2405,7 @@ msgid "Frontpages Manager"
 msgstr "Gestor de portadas"
 
 msgid "iadbox"
-msgstr ""
+msgstr "iadbox"
 
 msgid "Import XMLs"
 msgstr "Importación de XMLs"
@@ -2647,7 +2637,7 @@ msgstr ""
 "                        <li>Opennemas Conecta</li>"
 
 msgid "Free Basic Template"
-msgstr "Plantillas gratuitas"
+msgstr "Temas gratuitos"
 
 msgid "Change your site design with our free available templates."
 msgstr "Cambia el diseño de tu sitio con nuestras plantillas gratuitas."
@@ -3259,36 +3249,50 @@ msgstr "Permite al usuario subir imágenes"
 
 msgid "iadbox is a way to serve ads when users want to receive them."
 msgstr ""
+"iadox es la manera para ofrecer publicidad cuando los usuarios quieren "
+"recibirla."
 
 msgid ""
 "<p>Let us know if you want to try it on your newspaper, we are alreday using "
 "it on ours!</p>"
 msgstr ""
+"<p>Te invitamos a probar iadbox en tu periódico ¡nosotros ya lo usamos en "
+"los nuestros!</p>"
 
 msgid ""
 "<p>We will set it up for you for FREE and let iadbox team know so that you "
 "receive your reports and revenue.</p>"
 msgstr ""
+"<p>Te activaremos iadbox GRATUITAMENTE y informaremos al equipo de iadbox "
+"para que puedan llegarte tus informes y ingresos.</p>"
 
 msgid ""
 "<p>iadbox is an intelligent commercial messaging for the smartphone "
 "generation.</p>"
 msgstr ""
+"<p>iadbox es un sistema de mensajería inteligente pensada para la generación "
+"de los smartphones.</p>"
 
 msgid ""
 "<p>It is a mobile and desktop marketing platform, with a user-controlled "
 "inbox for interaction with audiences.</p>"
 msgstr ""
+"<p>Es una plataforma de marketing para móviles y ordenadores, con una "
+"bandeja de entrada para la interacción con las audiencias.</p>"
 
 msgid ""
 "<p><strong>More info</strong>: <a target=\"_blank\" href=\"http://www.iadbox."
 "com\">www.iadbox.com</a></p>"
 msgstr ""
+"<p><strong>Más información</strong>: <a target=\"_blank\" href=\""
+"http://www.iadbox.com\">www.iadbox.com</a>"
 
 msgid ""
 "<p><a class=\"btn btn-success\" target=\"_blank\" href=\"mailto:"
 "sales@openhost.es\">Ask for it</a></p>"
 msgstr ""
+"<p><a class=\"btn btn-success\" target=\"_blank\" href=\""
+"mailto:sales@openhost.es\">Pídelo ya</a></p>"
 
 msgid "Do you have your articles in Adobe InDesign or QuarkXPress"
 msgstr "¿Trabajas tus artículos con InDesign o QuarkXPress?"
@@ -4570,15 +4574,14 @@ msgstr "Página"
 msgid "Author"
 msgstr "Autor"
 
-#, fuzzy
 msgid "There are no notifications for now."
-msgstr "No hay notificaciones por ahora"
+msgstr "No hay notificaciones por ahora."
 
 msgid "Check your previous notifications <a href=\"%1\">here</a>."
-msgstr ""
+msgstr "Comprueba tus anteriores notificaciones <a href=\"%1\">aquí</a>."
 
 msgid "See more"
-msgstr ""
+msgstr "Ver más"
 
 msgid "Help center"
 msgstr "Centro de ayuda"
@@ -5334,9 +5337,8 @@ msgstr ""
 "usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
 "esquina superior derecha."
 
-#, fuzzy
 msgid "Opennemas Market"
-msgstr "El equipo de Opennemas"
+msgstr "Tienda de Opennemas"
 
 msgid "Find and try new add-ons and take your newspaper to the next level."
 msgstr ""
@@ -5359,9 +5361,8 @@ msgstr ""
 msgid "That's it!"
 msgstr "Y eso es todo!"
 
-#, fuzzy
 msgid "Wait...Do you have a Facebook or a Twitter account?"
-msgstr "¿Tienes una cuenta de Facebook o Twitter?"
+msgstr "Espera... ¿Tienes una cuenta de Facebook o Twitter?"
 
 msgid ""
 "Then you can associate those accounts to access your opennemas. It will make "
@@ -5370,7 +5371,6 @@ msgstr ""
 "Luego puedes asocialas para acceder a Opennemas. Esto hará mucho más fácil "
 "acceder al panel de administración."
 
-#, fuzzy
 msgid "Now, you can start to use your newspaper."
 msgstr "Ya puedes empezar a usar tu periódico."
 
@@ -6242,21 +6242,24 @@ msgid "Logged in users"
 msgstr "Usuarios conectados"
 
 msgid "Redirect your domain"
-msgstr ""
+msgstr "Redirige tu dominio"
 
 msgid ""
 "I have an existing domain and I want to redirect it to my Opennemas digital "
 "newspaper."
 msgstr ""
+"Ya tengo un dominio existente y quiero redirigirlo a mi periódico digital "
+"Opennemas."
 
-#, fuzzy
 msgid "Add new domain"
-msgstr "Añadir nueva respuesta"
+msgstr "Añadir nuevo dominio"
 
 msgid ""
 "I DO NOT have my own domain and I want to create one and redirect it to my "
 "Opennemas digital newspaper"
 msgstr ""
+"NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi periódico "
+"digital Opennemas"
 
 msgid "Add contents to your site"
 msgstr "Añadir contenidos a tu sitio"
@@ -6652,50 +6655,46 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta con nosotros"
 
-#, fuzzy
 msgid "Billing information"
-msgstr "Obtener información"
+msgstr "Información de facturación"
 
-#, fuzzy
 msgid "Company"
-msgstr "Nuestra empresa"
+msgstr "Empresa"
 
-#, fuzzy
 msgid "VAT"
-msgstr "IVA %"
+msgstr "IVA"
 
 msgid "Phone"
-msgstr ""
+msgstr "Teléfono"
 
 msgid "Address"
-msgstr ""
+msgstr "Dirección"
 
-#, fuzzy
 msgid "Postal code"
 msgstr "Código postal"
 
 msgid "City"
-msgstr ""
+msgstr "Ciudad"
 
-#, fuzzy
 msgid "State"
 msgstr "Estado"
 
-#, fuzzy
 msgid "Country"
-msgstr "Cantidad"
+msgstr "País"
 
 msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support team</a>."
 msgstr ""
+"¿Algo está mal? Contacta con nuestro <a href=\""
+"javascript:UserVoice.showPopupWidget();\">equipo de soporte</a>."
 
-#, fuzzy
 msgid "You have no billing information"
-msgstr "No se pudo guardar la información de la imagen."
+msgstr "No tienes información de facturación"
 
 msgid "You will be asked to add it during the checkout in our market"
 msgstr ""
+"Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
 
 msgid "Activated plans & modules"
 msgstr "Planes y módulos activados"
@@ -6721,45 +6720,42 @@ msgstr "Lista de módulos para adquirir"
 msgid "List of modules to unsubscribe"
 msgstr "Lista de módulos para desuscribir"
 
-#, fuzzy
 msgid "Domain Mapping"
-msgstr "Expiración del dominio:"
+msgstr "Redirección de dominio"
 
 msgid "Primary Domain"
-msgstr ""
+msgstr "Dominio principal"
 
 msgid "More info"
 msgstr "Más información"
 
-#, fuzzy
 msgid "Technical information"
-msgstr "Obtener información"
+msgstr "Más información"
 
 msgid ""
 "I do not have my own domain and I want to create one and redirect it to my "
 "Opennemas digital newspaper"
 msgstr ""
+"NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi periódico "
+"digital Opennemas"
 
-#, fuzzy
 msgid "Enter a domain"
-msgstr "Dominios de la instancia"
+msgstr "Escribe un dominio"
 
 msgid "Map it"
-msgstr ""
+msgstr "Asignar"
 
 msgid "year"
-msgstr ""
+msgstr "año"
 
-#, fuzzy
 msgid "Requested domains"
-msgstr "Dominios de la instancia"
+msgstr "Dominios solicitados"
 
 msgid "Domain registration + mapping"
-msgstr ""
+msgstr "Registro de dominio + redirección"
 
-#, fuzzy
 msgid "Domain mapping"
-msgstr "Sin dominio principal"
+msgstr "Redirección de dominio"
 
 msgid "Total"
 msgstr "Total"
@@ -6768,73 +6764,62 @@ msgid ""
 "If you need to update this information please <a href=\"mailto:"
 "sales@openhost.es\">contact us</a>."
 msgstr ""
+"Si necesitas actualizar esta información, por favor <a href=\""
+"mailto:sales@openhost.es\">contactanos</a>."
 
-#, fuzzy
 msgid "Contact information"
-msgstr "Información de la instancia"
+msgstr "Información de contacto"
 
 msgid "This field is required"
 msgstr "Este campo es obligatorio"
 
-#, fuzzy
 msgid "Contact name"
-msgstr "Email de contacto"
+msgstr "Nombre de contacto"
 
-#, fuzzy
 msgid "Company name"
-msgstr "Nombre de la orden"
+msgstr "Nombre de la empresa"
 
-#, fuzzy
 msgid "This is not a valid email"
-msgstr "Escribe una dirección de correo electrónico válida"
+msgstr "Este no es un correo electrónico válido"
 
-#, fuzzy
 msgid "This is not a valid phone"
-msgstr "This is a notification"
+msgstr "Este no es un número de teléfono válido"
 
 msgid "Phone number"
-msgstr ""
+msgstr "Número de teléfono"
 
-#, fuzzy
 msgid "This is not a valid vat"
-msgstr "This is a notification"
+msgstr "Este no es un CIF válido"
 
 msgid "VAT Number"
-msgstr ""
+msgstr "Número de identificación fiscal"
 
-#, fuzzy
 msgid "This is not a valid address"
-msgstr "Escribe una dirección de correo electrónico válida"
+msgstr "Este no es una dirección válida"
 
 msgid "This is not a valid postal_code"
-msgstr ""
+msgstr "Esta no es un código postal válido"
 
-#, fuzzy
 msgid "This is not a valid city"
-msgstr "This is a notification"
+msgstr "Esta no es una ciudad válida"
 
-#, fuzzy
 msgid "This is not a valid state"
-msgstr "Este usuario es master"
+msgstr "Este no es un estado válido"
 
-#, fuzzy
 msgid "Select a country"
-msgstr "- Seleccione categoría -"
+msgstr "Seleccione un país"
 
 msgid "Summary"
 msgstr "Entradilla"
 
-#, fuzzy
 msgid "Unit price"
-msgstr "Establecer el precio"
+msgstr "Unidad de precio"
 
-#, fuzzy
 msgid "Terms of create a new domain"
-msgstr "No se pudo crear el nuevo artículo de opinión."
+msgstr "Términos para la creación de un nuevo dominio"
 
-#, fuzzy
 msgid "Terms of redirection"
-msgstr "Términos y condiciones"
+msgstr "Términos de redirección"
 
 msgid ""
 "Payment: the registration and redirection service requires payment in "
@@ -6892,84 +6877,82 @@ msgid ""
 msgstr ""
 
 msgid "I have read and accept the Terms of creating a new domain"
-msgstr ""
+msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
 
 msgid "I have read and accept the Terms of redirection"
-msgstr ""
+msgstr "Leí y acepto los Términois de redirección"
 
 msgid "Confirm"
 msgstr "Confirmar"
 
 msgid "Thank you for your request!"
-msgstr ""
+msgstr "Grazas por tu solicitud!"
 
 msgid ""
 "In the next 24 hours you will receive an email with payment instructions and "
 "the invoice."
 msgstr ""
+"En las próximas 24 horas recibirás un correco con las instrucciones de pago "
+"y la factura."
 
-#, fuzzy
 msgid ""
 "Oh!, it would be a good time to share with your friends your newspaper's "
 "improvements"
 msgstr ""
-"Oh!, sería genial que compartieras con tus amigos las mejoras en "
-"tu periódico"
+"Oh!, sería genial que compartieras con tus amigos las mejoras en tu periódico"
 
 msgid "Have a wonderful day!"
-msgstr ""
+msgstr "Ten un buen día!"
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr ""
+msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
 
 msgid "Redirect your own domain"
-msgstr ""
+msgstr "Redirige tu dominio"
 
-#, fuzzy
 msgid "Your domains"
-msgstr "Dominios"
+msgstr "Tus dominios"
 
 msgid "Main"
-msgstr ""
+msgstr "Principal"
 
 msgid "Free"
 msgstr "Gratis"
 
-#, fuzzy
 msgid "Points to"
-msgstr "Apuntar al interior"
+msgstr "Apunta a"
 
 msgid "Your domain is properly configured"
-msgstr ""
+msgstr "Tu dominio está configurado correctamente"
 
 msgid "Your domain is not properly configured, check the instructions below."
 msgstr ""
+"Tu dominio no está configurado correctamente, comprueba las instrucciones "
+"debajo."
 
-#, fuzzy
 msgid "Expires"
-msgstr "Expirado"
+msgstr "Expira"
 
-#, fuzzy
 msgid "This is your opennemas address"
-msgstr "Completa tu dirección de correo"
+msgstr "Esta es tu dirección opennemas"
 
 msgid "If you need more help configuring your domains contact our support team"
 msgstr ""
+"Si necesitas más información para configurar tus dominios contacta con "
+"nuestro equipo de soporte"
 
 msgid "You have requested the following purchases for your newspaper \"%1\""
 msgstr ""
 "Acabas de solicitar las siguientes características para tu compra \"%1\""
 
-#, fuzzy
 msgid "Domains to create"
-msgstr "Tiempo de expiración de dominio:"
+msgstr "Dominios a crear"
 
-#, fuzzy
 msgid "Domains to redirect"
-msgstr "Expiración del dominio:"
+msgstr "Dominios a redirigir"
 
 msgid "VAT number"
-msgstr ""
+msgstr "Número de identificación fiscal"
 
 msgid "Our sales department will contact you to get further information"
 msgstr ""
@@ -6979,9 +6962,8 @@ msgstr ""
 msgid "Add"
 msgstr "Añadir"
 
-#, fuzzy
 msgid "In cart"
-msgstr "En las categorías"
+msgstr "En el carrito"
 
 msgid "month"
 msgstr "mes"
@@ -6989,16 +6971,14 @@ msgstr "mes"
 msgid "Enabled"
 msgstr "Activado"
 
-#, fuzzy
 msgid "Enabling"
-msgstr "Activar"
+msgstr "Activando"
 
 msgid "Live demo"
-msgstr ""
+msgstr "Míralo en web"
 
-#, fuzzy
 msgid "Custom"
-msgstr "Personalizar"
+msgstr "Personalizado"
 
 #, fuzzy
 msgid ""
@@ -7116,13 +7096,11 @@ msgstr ""
 "    </li>\n"
 "</ul>"
 
-#, fuzzy
 msgid "Exclusive"
-msgstr "Plantilla exclusiva"
+msgstr "Exclusivo"
 
-#, fuzzy
 msgid "My themes"
-msgstr "Plantillas"
+msgstr "Mis temas"
 
 msgid "Cart"
 msgstr "Carrito"
@@ -7136,42 +7114,44 @@ msgstr "Comprar"
 msgid "Unable to find any module that matches your search."
 msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
 
-#, fuzzy
 msgid "No themes available"
-msgstr "No hay servidores disponibles"
+msgstr "No hay temas disponibles"
 
 msgid "Change the look of your newspaper in just few clicks!"
-msgstr ""
+msgstr "Cambia la apariencia de tú periódico in tan sólo unos clics!"
 
 msgid ""
 "All our Themes have been designed by media professionals and they are all "
 "Mobile Responsive!"
 msgstr ""
+"Todos nuestros temas han sido diseñados por profesionales del periodismo "
+"digital y se adaptan automáticamente a todos los dispositivos!"
 
 msgid ""
 "Add customizations and design to create your own theme based on one of out "
 "grids or ask us to develop an exclusive and completely new theme"
 msgstr ""
+"Añade la personalización que más te gusta a una de nuestras rejillas o "
+"pídenos de desarrollar algo exclusivo y completamente nuevo!"
 
 msgid "We are open to any solution you prefer!"
-msgstr ""
+msgstr "Estamos abiertos a cualquiera solución que elijas."
 
 msgid "Find here your purchased themes and decide which one to use today!"
 msgstr ""
+"Encuentras aquí todos los temas que te pertenecen y decide cual activar hoy!"
 
 msgid "All purchased Themes are ready for activation"
-msgstr ""
+msgstr "Todos los Temas de tus compras están listos para la activación."
 
 msgid "Open live demo in a new tab"
-msgstr ""
+msgstr "Abrir demostración en una nueva pestaña"
 
-#, fuzzy
 msgid "Active"
-msgstr "Activar"
+msgstr "Activo"
 
-#, fuzzy
 msgid "Delivery time"
-msgstr "Informe de envío"
+msgstr "Tiempo de entrega"
 
 msgid "Refresh the list for getting newest error list"
 msgstr "Actualiza la lista para obtener la lista de errores más actual."
@@ -7374,15 +7354,14 @@ msgstr "Creando artículo"
 msgid "Editing article"
 msgstr "Editando artículo"
 
-#, fuzzy
 msgid "Updating"
-msgstr "Actualizar"
+msgstr "Actualizando"
 
 msgid "Update"
 msgstr "Actualizar"
 
 msgid "Saving"
-msgstr ""
+msgstr "Guardando"
 
 msgid "Inner title"
 msgstr "Título interior"
@@ -7848,7 +7827,7 @@ msgid "Services"
 msgstr "Servicios"
 
 msgid "Partners"
-msgstr ""
+msgstr "Socios"
 
 msgid "No items available to purchase"
 msgstr "No hay elementos disponibles para comprar"
@@ -7863,26 +7842,34 @@ msgid "Modules to purchase"
 msgstr "Módulos a comprar"
 
 msgid "Return to <a href=\"%1\">market</a> and try again"
-msgstr ""
+msgstr "Vuelva a <a href=\"%1\">la tienda</a> y probar de nuevo"
 
 msgid ""
 "You are about to order next items. In the next 24hours our sales team will "
 "send you payment and activation information. "
 msgstr ""
+"Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
+"horas nuestro departamento de ventas te enviará la información de pago y "
+"activación."
 
 msgid ""
 "I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
 "articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
 "\">Terms of Service</a>"
 msgstr ""
+"Leí y acepto los <a href=\""
+"http://help.opennemas.com/knowledgebase/articles/235348-condiciones-del-"
+"servicio-de-opennemas\" target=\"_blank\">Términos del servicio</a>"
 
 msgid "Thank you for your purchase request!"
-msgstr ""
+msgstr "Gracias por tu solicitud de compra!"
 
 msgid ""
 "In the next 24 hours you will receive an email with payment instructions and "
 "invoice."
 msgstr ""
+"En las próximas 24 horas recibirás un correco con las instrucciones de pago "
+"y la factura."
 
 msgid "Delete opinions"
 msgstr "Eliminar opiniones"
@@ -8698,9 +8685,8 @@ msgstr ""
 msgid "Instance"
 msgstr "Instancia"
 
-#, fuzzy
 msgid "Notification"
-msgstr "Notificaciones"
+msgstr "Notificación"
 
 msgid "Opennemas manager"
 msgstr "Gestor de opennemas"
@@ -8729,13 +8715,11 @@ msgstr "Eliminar grupo de usuarios"
 msgid "Delete selected user groups"
 msgstr "Eliminar los grupos de usuarios seleccionados"
 
-#, fuzzy
 msgid "Delete notification"
-msgstr "Eliminar opiniones"
+msgstr "Eliminar notificación"
 
-#, fuzzy
 msgid "Delete notifications"
-msgstr "Eliminar opiniones"
+msgstr "Eliminar notificaciones"
 
 msgid "Do you really want to exit from backend?"
 msgstr "¿Estás seguro de que quieres salir del panel de administración?"
@@ -8759,13 +8743,11 @@ msgid "Do you really want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
 
-#, fuzzy
 msgid "Do you really want to delete the notification?"
-msgstr "¿Estás seguro de que quieres eliminar la instancia?"
+msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 
-#, fuzzy
 msgid "Do you really want to delete the selected notifications?"
-msgstr "¿Estás seguro de que quieres eliminar las instancias seleccionadas?"
+msgstr "¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
 
 msgid "log out"
 msgstr "Salir"
@@ -8852,32 +8834,29 @@ msgstr ""
 "Aquí puede eliminar en lote, caches, compiles, sesiones y otras cosas. de "
 "una instancia específica."
 
-#, fuzzy
 msgid "New notification"
-msgstr "Notificaciones"
+msgstr "Nueva notificación"
 
-#, fuzzy
 msgid "Edit notification"
-msgstr "Notificaciones"
+msgstr "Editar notificación"
 
 msgid "Style"
-msgstr ""
+msgstr "Estilo"
 
 msgid "Fixed"
-msgstr ""
+msgstr "Fija"
 
-#, fuzzy
 msgid "Notification always visible"
-msgstr "Notificaciones"
+msgstr "Notificación siempre visible"
 
 msgid "Starts"
-msgstr ""
+msgstr "Comienza"
 
 msgid "Click to set date"
 msgstr "Pulsa para establecer una fecha"
 
 msgid "Ends"
-msgstr ""
+msgstr "Finaliza"
 
 msgid "Columns"
 msgstr "Columnas"
@@ -8907,11 +8886,10 @@ msgid "#"
 msgstr "#"
 
 msgid "Start"
-msgstr ""
+msgstr "Inicio"
 
-#, fuzzy
 msgid "End"
-msgstr "Activado"
+msgstr "Fin"
 
 msgid "Our Videos"
 msgstr "Nuestros vídeos"
@@ -8992,9 +8970,8 @@ msgstr "Tiempo de expiración de dominio:"
 msgid "Billing"
 msgstr "Facturación"
 
-#, fuzzy
 msgid "Add billing information"
-msgstr "Información del autor"
+msgstr "Añadir información de facturación"
 
 msgid "Last invoice date"
 msgstr "Fecha de la última factura"
