@@ -164,7 +164,6 @@ class DomainManagementController extends Controller
     {
         $output = dns_get_record($domain, DNS_CNAME);
 
-        var_dump($output);die();
         if (empty($output)) {
             return '';
         }
