@@ -81,6 +81,17 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
+    collector.database:
+        class: Framework\DataCollector\DatabaseCollector
+        public: false
+        arguments: [ @dbal_connection ]
+        tags:
+            -
+                name:     data_collector
+                id:       'database_collector'
+                template: '@OnmFramework/collector/database.html.twig'
+                priority: 100
+
     db_conn:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]

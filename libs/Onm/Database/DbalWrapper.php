@@ -15,6 +15,7 @@ namespace Onm\Database;
  */
 class DbalWrapper
 {
+    private $buffer = [];
     private $connection = null;
 
     /**
@@ -111,9 +112,21 @@ class DbalWrapper
     {
         $connection = $this->getConnection();
 
+        $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+
         $rs = call_user_func_array(array($connection, $method), $params);
 
         return $rs;
+    }
+
+    /**
+     * Returns the buffer of function calls.
+     *
+     * @return array The current function calls buffer.
+     */
+    public function getBuffer()
+    {
+        return $this->buffer;
     }
 
     /**
