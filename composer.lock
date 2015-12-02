@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e728a8505c720da687caf43cd679ba51",
-    "content-hash": "f96f6ed59d98e86d929fbd86e6b64abc",
+    "hash": "a5eac50c5961108fd265a1dece60b075",
+    "content-hash": "37b12c5267bd28501820c8dd8d08e533",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1275,34 +1275,38 @@
         },
         {
             "name": "hwi/oauth-bundle",
-            "version": "0.3.x-dev",
+            "version": "dev-master",
             "target-dir": "HWI/Bundle/OAuthBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "1239889d504b151e120625d744aa6fbbcf6b6d16"
+                "reference": "023955d9408578988eb40828be6fdc8434f22204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/1239889d504b151e120625d744aa6fbbcf6b6d16",
-                "reference": "1239889d504b151e120625d744aa6fbbcf6b6d16",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/023955d9408578988eb40828be6fdc8434f22204",
+                "reference": "023955d9408578988eb40828be6fdc8434f22204",
                 "shasum": ""
             },
             "require": {
-                "kriswallsmith/buzz": "~0.7",
+                "kriswallsmith/buzz": "~0.13",
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.1",
-                "symfony/options-resolver": "~2.1",
-                "symfony/security-bundle": "~2.1"
+                "symfony/form": "~2.3",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/options-resolver": "~2.3",
+                "symfony/security-bundle": "~2.3",
+                "symfony/yaml": "~2.3"
             },
             "conflict": {
                 "twig/twig": "<1.12"
             },
             "require-dev": {
-                "doctrine/orm": "~2.2",
+                "doctrine/orm": "~2.3",
+                "friendsofsymfony/user-bundle": "~1.3|~2.0",
+                "symfony/phpunit-bridge": "~2.7",
                 "symfony/property-access": "~2.3",
-                "symfony/twig-bundle": "~2.1",
-                "symfony/validator": "~2.1"
+                "symfony/twig-bundle": "~2.3",
+                "symfony/validator": "~2.3"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "to use Doctrine user provider",
@@ -1313,12 +1317,12 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.4-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "HWI\\Bundle\\OAuthBundle": ""
+                    "HWI\\Bundle\\OAuthBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1352,6 +1356,7 @@
                 "bitbucket",
                 "bitly",
                 "box",
+                "bufferapp",
                 "dailymotion",
                 "deviantart",
                 "disqus",
@@ -1359,10 +1364,12 @@
                 "eventbrite",
                 "facebook",
                 "firewall",
+                "fiware",
                 "flickr",
                 "foursquare",
                 "github",
                 "google",
+                "hubic",
                 "instagram",
                 "jira",
                 "linkedin",
@@ -1376,18 +1383,20 @@
                 "security",
                 "sensio connect",
                 "sina weibo",
+                "spotify",
                 "stack exchange",
                 "stereomood",
                 "trello",
                 "twitch",
                 "twitter",
                 "vkontakte",
+                "wechat",
                 "windows live",
                 "wordpress",
                 "yahoo",
                 "yandex"
             ],
-            "time": "2015-11-22 17:50:20"
+            "time": "2015-11-26 10:12:07"
         },
         {
             "name": "imagine/imagine",
