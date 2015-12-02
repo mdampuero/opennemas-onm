@@ -59,7 +59,7 @@ class AuthenticationController extends Controller
             $user->updateUserToken($user->id, null);
             $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
 
-            $securityContext = $this->get('security.context');
+            $securityContext = $this->get('security.token_storage');
             $securityContext->setToken($token);
             $session->set('user', $user);
             $_SESSION['userid'] = $user->id;
