@@ -75,12 +75,12 @@
                   {t}Free{/t}
                 </span>
                 <span class="p-t-15 pull-right">
-                  <span class="p-r-20" ng-if="!domain.free"><i class="fa fa-lg fa-check text-success"></i></span>
-                  <span class="p-r-20" ng-if="!domain.free"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
-                  <i class="fa fa-chevron-right fa-lg" ng-class="{ 'fa-chevron-right': !expanded[$index], 'fa-chevron-down': expanded[$index] }"></i>
+                  <span class="p-r-20" ng-if="domain.free || domain.target === domain.name + '.opennemas.net'"><i class="fa fa-lg fa-check text-success"></i></span>
+                  <span class="p-r-20" ng-if="!domain.free && domain.target !== domain.name + '.opennemas.net'"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
+                  <i class="fa fa-chevron-right fa-lg " ng-class="{ 'fa-rotate-90': expanded[$index]}"></i>
                 </span>
               </div>
-              <div ng-if="expanded[$index]">
+              <div class="domain-list-item-details " ng-class="{ 'expanded': expanded[$index] }">
                 <div class="sk-three-bounce" ng-if="domain.loading">
                   <div class="sk-child sk-bounce1"></div>
                   <div class="sk-child sk-bounce2"></div>
@@ -90,18 +90,24 @@
                   <div class="row">
                     <div class="col-sm-12" ng-if="!domain.free">
                       <p><strong>{t}Points to{/t}:</strong> [% domain.target %]</p>
-                      <p><i class="fa fa-lg fa-check text-success"></i> {t}Your domain is properly configured{/t}</p>
-                      <p><i class="fa fa-lg fa-exclamation-triangle text-danger"></i> {t}Your domain is not properly configured, check the instructions below.{/t}</p>
+                      <p ng-if="domain.target === domain.name + '.opennemas.net'">
+                        <i class="fa fa-lg fa-check text-success"></i>
+                        {t}Your domain is properly configured{/t}
+                      </p>
+                      <p ng-if="domain.target !== domain.name + '.opennemas.net'">
+                        <i class="fa fa-lg fa-exclamation-triangle text-danger"></i>
+                        {t}Your domain is not properly configured, check the instructions below.{/t}
+                      </p>
                     </div>
-                    <div class="col-sm-6" ng-if="!domain.free">
+                    <div class="col-sm-6 hidden" ng-if="!domain.free">
                       <strong>{t}Expires{/t}:</strong> [% domain.expires %]
                     </div>
                     <div class="col-sm-12" ng-if="domain.free">
+                      <i class="fa fa-lg fa-check text-success"></i>
                       {t}This is your opennemas address{/t}
                     </div>
                     <div class="col-sm-12" ng-if="!domain.free">
                       <h4>Update your DNS records</h4>
-
                       <h5 class="semi-bold">Point the www entrace in your domain to the Opennemas service.</h5>
                       <div>
                         <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name %].opennemas.net.</pre>
