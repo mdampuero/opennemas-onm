@@ -150,6 +150,30 @@
           }
         };
 
+        $scope.showDnsModal = function(item) {
+          var modal = $modal.open({
+            templateUrl: 'modal-dns-changes',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  item:      item
+                };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              $scope.addToCart(item);
+            }
+          });
+        };
+
         /**
          * @function isValid
          * @memberOf DomainManagementCtrl

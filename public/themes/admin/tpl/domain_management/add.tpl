@@ -295,14 +295,6 @@
                   <li>{t}The customer must make changes to the DNS zone for your domain registration www. This change has nothing to do with the Opennemas platform or company Openhost, SL (company that maintains the service). {/t}</li>
                   <li>{t}If redirection does not work through no fault of the platform, ie by malfunction of the DNS servers the client, Openhost, SL area will have nothing to do with the damage caused to the hours of service failure. {/t}</li>
                 </ul>
-                <h5 class="text-center">{t}DNS CHANGES{/t}</h5>
-                <ul>
-                  <li>{t}DNS Record: Change www register in the domain area. In example change to www.domain.com (where "domain.com" would be your domain name). {/t}</li>
-                  <li>{t}www IN CNAME domain.com.opennemas.net. {/t}</li>
-                  <li>{t}Hosting: redirect traffic from the site domain.com to www.domain.com. This change is NOT done through DNS but through the control panel settings where the domain and hosting are configured. {/t}</li>
-                  <li>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain)  {/t}</li>
-                  <li>{t}IMPORTANT: It is only necessary to make the change log www. But making the change in Hosting, your newspaper will not have traffic to the domain without the www.{/t}</li>
-                </ul>
               {/if}
               <div class="text-center p-t-30">
                 <div class="form-group">

@@ -83,7 +83,7 @@
                   <div class="sk-child sk-bounce2"></div>
                   <div class="sk-child sk-bounce3"></div>
                 </div>
-                <div class="p-l-30" ng-if="!domain.loading">
+                <div ng-if="!domain.loading">
                   <div class="row">
                     <div class="col-sm-6">
                       <strong>{t}Points to{/t}:</strong> [% domain.target %]
@@ -91,6 +91,9 @@
                     {*<div class="col-sm-6">
                       <strong>{t}Expires{/t}:</strong> [% domain.expires %]
                     </div>*}
+                    <div class="col-sm-6">
+                      <a href="#" ng-click="showDnsModal(domain)"><span class="fa fa-cog"></span> How to configure your DNS</a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -101,4 +104,7 @@
     </div>
   </div>
 </div>
+<script type="text/ng-template" id="modal-dns-changes">
+  {include file="domain_management/modal/_dns_changes.tpl"}
+</script>
 {/block}
