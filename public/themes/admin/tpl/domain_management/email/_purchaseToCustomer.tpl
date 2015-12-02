@@ -15,17 +15,17 @@
 </ul>
 
 <h4>{t}Billing information{/t}</h4>
-{t}Name{/t}: {$billing['name']}
+{t}Name{/t}: {$billing['name']}<br>
 {if $billing['company']}
-  {t}Company{/t}: {$billing['company']}
+  {t}Company{/t}: {$billing['company']}<br>
 {/if}
-{t}VAT number{/t}: {$billing['vat']}
-{t}Email{/t}: {$billing['email']}
-{t}Phone{/t}: {$billing['phone']}
-{t}Address{/t}: {$billing['address']}
-{t}Postal code{/t}: {$billing['postal_code']}
-{t}City{/t}: {$billing['city']}
-{t}State{/t}: {$billing['state']}
-{t}Country{/t}: {$billing['country']}
+{t}VAT number{/t}: {$billing['vat']}<br>
+{t}Email{/t}: {$billing['email']}<br>
+{t}Phone{/t}: {$billing['phone']}<br>
+<address>
+  {$billing['address']}<br>
+  {$billing['postal_code']}, {$billing['city']}, {$billing['state']}<br>
+  {$countries[$billing['country']]}<br>
+</address>
 
 {t}Our sales department will contact you to get further information{/t}

@@ -4,6 +4,7 @@ namespace BackendWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
 
 class DomainManagementController extends Controller
@@ -177,9 +178,12 @@ class DomainManagementController extends Controller
      * @param array    $billing  The billing information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
+     * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToCustomer($billing, $domains, $instance)
+    private function sendEmailToCustomer($billing, $domains, $instance, $create)
     {
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
         $params = $this->container
             ->getParameter("manager_webservice");
 
@@ -192,9 +196,11 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToCustomer.tpl',
                     [
-                        'billing'  => $billing,
-                        'domains'  => $domains,
-                        'instance' => $instance
+                        'billing'   => $billing,
+                        'create'    => $create,
+                        'countries' => $countries,
+                        'domains'   => $domains,
+                        'instance'  => $instance
                     ]
                 ),
                 'text/html'
@@ -209,9 +215,12 @@ class DomainManagementController extends Controller
      * @param array    $billing  The billing information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
+     * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($billing, $domains, $instance)
+    private function sendEmailToSales($billing, $domains, $instance, $create)
     {
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
         $params = $this->container
             ->getParameter("manager_webservice");
 
@@ -224,9 +233,11 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToSales.tpl',
                     [
-                        'billing'  => $billing,
-                        'domains'  => $domains,
-                        'instance' => $instance
+                        'billing'   => $billing,
+                        'create'    => $create,
+                        'countries' => $countries,
+                        'domains'   => $domains,
+                        'instance'  => $instance
                     ]
                 ),
                 'text/html'
