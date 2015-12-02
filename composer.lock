@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a5eac50c5961108fd265a1dece60b075",
-    "content-hash": "37b12c5267bd28501820c8dd8d08e533",
+    "hash": "a94d21ab8129b8727977086c7854706e",
+    "content-hash": "4f586af52188a14c0c58ea9b1404e0e5",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1284,7 +1284,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/023955d9408578988eb40828be6fdc8434f22204",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/402f3f11679e23ff2e894545bf9c3fb8c4990c43",
                 "reference": "023955d9408578988eb40828be6fdc8434f22204",
                 "shasum": ""
             },
@@ -2907,16 +2907,16 @@
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "v2.7.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/assetic-bundle.git",
-                "reference": "d885ec8451d5a7b077bda81bb19ac9fbff9cdc76"
+                "reference": "9ad8456e78d99572037be7302346c65d5248e7b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/d885ec8451d5a7b077bda81bb19ac9fbff9cdc76",
-                "reference": "d885ec8451d5a7b077bda81bb19ac9fbff9cdc76",
+                "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/9ad8456e78d99572037be7302346c65d5248e7b1",
+                "reference": "9ad8456e78d99572037be7302346c65d5248e7b1",
                 "shasum": ""
             },
             "require": {
@@ -2973,7 +2973,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2015-11-17 09:45:47"
+            "time": "2015-12-01 12:15:10"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -5323,6 +5323,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "symfony/assetic-bundle": 20,
         "cometcult/braintree-bundle": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "doctrine/migrations": 20,
