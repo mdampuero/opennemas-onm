@@ -110,6 +110,12 @@ function logUserEvent($action = null, $id = null, $data = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
+    if ($absolute) {
+        $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
+    } else {
+        $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
+    }
+
     global $kernel;
     return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
 }
