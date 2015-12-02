@@ -65,8 +65,8 @@
             <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
           <ul class="domain-list ng-cloak" ng-if="!loading">
-            <li class="domain-list-item pointer" ng-repeat="domain in domains" ng-click="expand($index)">
-              <div class="clearfix">
+            <li class="domain-list-item" ng-repeat="domain in domains">
+              <div class="clearfix pointer" ng-click="expand($index)">
                 <h4 class="m-r-10 pull-left">[% domain.name %]</h4>
                 <span class="label label-success pull-left uppercase" ng-if="domain.main">
                   {t}Main{/t}
