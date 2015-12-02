@@ -117,15 +117,17 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       }
     };
 
-    $scope.saveHtml = function(url) {
-      var data = {
-        title: $scope.subject,
-        html: $scope.html
-      };
+    $scope.saveHtml = function(url, save) {
+      if(save) {
+        var data = {
+          title: $scope.subject,
+          html: $scope.html
+        };
 
-      $http.post(url, data).success(function(response) {
-        $scope.renderMessages(response.messages);
-      });
+        $http.post(url, data).success(function(response) {
+          $scope.renderMessages(response.messages);
+        });
+      }
     };
 
     /**
