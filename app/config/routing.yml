@@ -47,7 +47,7 @@ hwi_oauth_login:
     prefix:   /admin/login
 
 facebook_login:
-    pattern: /admin/login/check-facebook
+    path: /admin/login/check-facebook
 
 twitter_login:
-    pattern: /admin/login/check-twitter
+    path: /admin/login/check-twitter
