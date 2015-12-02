@@ -10,9 +10,17 @@
   list-style: none;
   margin: 0;
   padding: 15px;
+  user-select: none;
 
   &:last-child {
     border-bottom: 0;
+  }
+
+  .fa-chevron-down,
+  .fa-chevron-right {
+    text-align: center;
+    width: 30px;
+    transition: all .1s;
   }
 
   .label {
@@ -28,6 +36,18 @@
     width: 10px;
     height: 10px;
     background-color: @info-color;
+  }
+}
+
+.domain-list-item-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .25s;
+
+  &.expanded {
+    max-height: 500px;
+    opacity: 1;
   }
 }
 

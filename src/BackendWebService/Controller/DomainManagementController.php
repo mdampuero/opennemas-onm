@@ -4,6 +4,7 @@ namespace BackendWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
 
 class DomainManagementController extends Controller
@@ -99,9 +100,10 @@ class DomainManagementController extends Controller
         $domains = [];
         foreach ($instance->domains as $key => $value) {
             $domains[] = [
-                'free' => $value === $base,
-                'name' => $value,
-                'main' => $key == $instance->main_domain
+                'free'   => $value === $base,
+                'name'   => $value,
+                'main'   => $key == $instance->main_domain,
+                'target' => $this->getTarget($value)
             ];
         }
 
@@ -139,39 +141,6 @@ class DomainManagementController extends Controller
     }
 
     /**
-     * Returns the information for a domain
-     *
-     * @param string $id The domain.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showAction($id)
-    {
-        $info = [
-            'expires' => '',
-            'target'  => '',
-        ];
-
-        exec('dig ' . $id, $output, $code);
-
-        if ($code === 0) {
-            $i = 0;
-
-            while ($i < count($output) && strpos($output[$i], $id) !== 0) {
-                $i++;
-            }
-
-            if ($i < count($output)) {
-                $target = str_replace("\t", ' ', $output[$i]);
-
-                $info['target'] = substr($target, strrpos($target, ' ') + 1);
-            }
-        }
-
-        return new JsonResponse($info);
-    }
-
-    /**
      * Checks if a domain is available.
      *
      * @param string $domain   The domain to check.
@@ -182,41 +151,25 @@ class DomainManagementController extends Controller
      */
     private function checkDomainAvailable($domain)
     {
-        exec('dig +short ' . $domain, $output, $code);
-
-        if ($code !== 0 || !empty($output)) {
-            return false;
-        }
-
-        return true;
+        return empty($this->getTarget($domain));
     }
 
     /**
-     * Checks if a domain is pointing to the right opennemas.net domain.
+     * Returns the target for the given domain.
      *
-     * @param string $domain   The domain to check.
-     * @param string $expected The expected domain.
+     * @param string $domain  The domain to check.
      *
-     * @return boolean True if the domain is pointing to the right opennemas.net
-     *                 domain. Otherwise, returns false.
+     * @return string The domain or IP where the given domain is pointing to.
      */
-    private function checkDomainValid($domain, $expected)
+    private function getTarget($domain)
     {
-        exec('dig +short' . $domain, $output, $code);
+        $output = dns_get_record($domain, DNS_CNAME);
 
-        if ($code !== 0) {
-            return false;
+        if (empty($output)) {
+            return '';
         }
 
-        foreach ($output as $value) {
-            if (strpos($value, $domain) === 0
-                && strpos($value, $expected) !== false
-            ) {
-                return true;
-            }
-        }
-
-        return false;
+        return $output[0]['target'];
     }
 
     /**
@@ -225,9 +178,12 @@ class DomainManagementController extends Controller
      * @param array    $billing  The billing information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
+     * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToCustomer($billing, $domains, $instance)
+    private function sendEmailToCustomer($billing, $domains, $instance, $create)
     {
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
         $params = $this->container
             ->getParameter("manager_webservice");
 
@@ -240,9 +196,11 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToCustomer.tpl',
                     [
-                        'billing'  => $billing,
-                        'domains'  => $domains,
-                        'instance' => $instance
+                        'billing'   => $billing,
+                        'create'    => $create,
+                        'countries' => $countries,
+                        'domains'   => $domains,
+                        'instance'  => $instance
                     ]
                 ),
                 'text/html'
@@ -257,9 +215,12 @@ class DomainManagementController extends Controller
      * @param array    $billing  The billing information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
+     * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($billing, $domains, $instance)
+    private function sendEmailToSales($billing, $domains, $instance, $create)
     {
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
         $params = $this->container
             ->getParameter("manager_webservice");
 
@@ -272,9 +233,11 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToSales.tpl',
                     [
-                        'billing'  => $billing,
-                        'domains'  => $domains,
-                        'instance' => $instance
+                        'billing'   => $billing,
+                        'create'    => $create,
+                        'countries' => $countries,
+                        'domains'   => $domains,
+                        'instance'  => $instance
                     ]
                 ),
                 'text/html'

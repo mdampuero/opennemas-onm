@@ -131,23 +131,6 @@
          */
         $scope.expand = function(index) {
           $scope.expanded[index] = !$scope.expanded[index];
-
-          if ($scope.domains[index].target) {
-            return;
-          }
-
-          $scope.domains[index].loading = true;
-
-          if ($scope.expanded[index]) {
-            var url = routing.generate('backend_ws_domain_show',
-                { id: $scope.domains[index].name });
-
-            $http.get(url).then(function(response) {
-              $scope.domains[index].loading = false;
-              $scope.domains[index].target  = response.data.target;
-              $scope.domains[index].expires = response.data.expires;
-            });
-          }
         };
 
         /**

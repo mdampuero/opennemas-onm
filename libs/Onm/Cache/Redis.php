@@ -35,7 +35,9 @@ class Redis extends AbstractCache
         ) {
             $redis = new RedisBase();
             $redis->pconnect($options['server'], $options['port']);
-
+            if (array_key_exists('auth', $options)) {
+                $redis->auth($options['auth']);
+            }
             $this->setRedis($redis);
         }
 

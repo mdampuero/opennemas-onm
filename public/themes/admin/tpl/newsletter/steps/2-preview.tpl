@@ -52,12 +52,12 @@
         </div>
       </div>
       <div class="grid simple">
-        <button class="btn btn-default pull-right" ng-click="edit = !edit" style="margin: 7px 7px 0 0" title="{t}Edit{/t}" type="button">
+        <button class="btn btn-default pull-right" ng-click="edit = !edit; saveHtml('{url name=admin_newsletter_save_html id=$newsletter->id}', !edit)" style="margin: 7px 7px 0 0" type="button">
           <span ng-if="!edit">
             <span class="fa fa-pencil"></span>
             {t}Edit{/t}
           </span>
-          <span class="ng-cloak" ng-click="saveHtml('{url name=admin_newsletter_save_html id=$newsletter->id}')" ng-if="edit">
+          <span class="ng-cloak" ng-if="edit">
             <span class="fa fa-save"></span>
             {t}Save{/t}
           </span>
