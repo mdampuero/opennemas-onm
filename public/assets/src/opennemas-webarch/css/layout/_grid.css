@@ -5,6 +5,10 @@
   padding: 15px;
 }
 
+.grid-body.blue {
+  background-color: #0090d9 !important;
+}
+
 .grid.vertical .grid-body {
   padding-left: 12px;
   border-left: none;
