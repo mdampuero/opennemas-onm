@@ -90,11 +90,11 @@
                   <div class="row">
                     <div class="col-sm-12" ng-if="!domain.free">
                       <p><strong>{t}Points to{/t}:</strong> [% domain.target %]</p>
-                      <p ng-if="isRight()">
+                      <p ng-if="isRight(domain)">
                         <i class="fa fa-lg fa-check text-success"></i>
                         {t}Your domain is properly configured{/t}
                       </p>
-                      <p ng-if="!isRight()">
+                      <p ng-if="!isRight(domain)">
                         <i class="fa fa-lg fa-exclamation-triangle text-danger"></i>
                         {t}Your domain is not properly configured, check the instructions below.{/t}
                       </p>
