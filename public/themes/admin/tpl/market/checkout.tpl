@@ -239,7 +239,7 @@
                 </div>
               </div>
               <div class="p-t-15" ng-show="step != 4">
-                <h4 class="semi-bold">3. {t}Summary{/t}</h4>
+                <h4 class="semi-bold">3. {t}Purchase summary{/t}</h4>
                 <p class="p-b-30 text-danger" ng-show="billingForm.$invalid">
                   {t}You have to complete your billing information to complete the purchase.{/t}
                 </p>
