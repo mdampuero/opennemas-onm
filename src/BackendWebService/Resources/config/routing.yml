@@ -6,6 +6,14 @@ backend_ws_comments:
     resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
     prefix:   /
 
+backend_ws_domain:
+    resource: @BackendWebServiceBundle/Resources/config/routing/domain.yml
+    prefix:   /
+
+backend_ws_getting_started:
+    resource: @BackendWebServiceBundle/Resources/config/routing/getting_started.yml
+    prefix:   /
+
 backend_ws_market:
     resource: @BackendWebServiceBundle/Resources/config/routing/market.yml
     prefix:   /
@@ -30,6 +38,10 @@ backend_ws_picker:
     resource: @BackendWebServiceBundle/Resources/config/routing/picker.yml
     prefix:   /
 
+backend_ws_theme:
+    resource: @BackendWebServiceBundle/Resources/config/routing/theme.yml
+    prefix:   /
+
 backend_ws_users:
     resource: @BackendWebServiceBundle/Resources/config/routing/users.yml
     prefix:   /
@@ -52,6 +64,10 @@ backend_ws_cachemanager:
 
 backend_ws_newsletter:
     resource: @BackendWebServiceBundle/Resources/config/routing/newsletter.yml
+    prefix:   /
+
+backend_ws_notification:
+    resource: @BackendWebServiceBundle/Resources/config/routing/notification.yml
     prefix:   /
 
 backend_ws_image:

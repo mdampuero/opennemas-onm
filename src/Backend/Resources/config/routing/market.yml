@@ -1,3 +1,8 @@
+admin_market_checkout:
+    path: /market/checkout
+    defaults: { _controller  : BackendBundle:Market:checkout }
 admin_market_list:
     path: /market
     defaults: { _controller  : BackendBundle:Market:list }
+    options:
+        expose: true

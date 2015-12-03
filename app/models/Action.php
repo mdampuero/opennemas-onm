@@ -51,7 +51,6 @@ class Action
      **/
     public function set($data)
     {
-
         $queryData = array(
             $data['action_name'],
             $data['counter'],
@@ -98,7 +97,6 @@ class Action
         if (!$rs) {
             return array();
         }
-
 
         $actions = array();
         while (!$rs->EOF) {

@@ -34,21 +34,21 @@ class ArticlesController extends Controller
 
         define('BASE_PATH', '/mobile');
 
-        $dirtyID = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve article ID, search in repository or redirect to 404
-        list($articleID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $er = $this->get('entity_repository');
-        $article = $er->find('Article', $articleID);
-        if (!\ContentManager::checkValidContentAndUrl($article, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $article = $this->get('content_url_matcher')
+            ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
+
+        if (empty($article)) {
+            throw new ResourceNotFoundException();
         }
 
         // Check for paywall
         $this->paywallHook($article);
 
-        $cacheID = $this->view->generateCacheId('articles-mobile', '', $articleID);
+        $cacheID = $this->view->generateCacheId('articles-mobile', '', $article->id);
         if ($this->view->caching == 0
             || !$this->view->isCached('mobile/article-inner.tpl', $cacheID)
         ) {
@@ -61,13 +61,13 @@ class ArticlesController extends Controller
 
             // Set inner photo if available
             if (isset($article->img2) && ($article->img2 != 0)) {
-                $photo = $er->find('Photo', $article->img2);
+                $photo = $this->get('entity_repository')->find('Photo', $article->img2);
                 $article->photo = $photo;
                 $this->view->assign('photo', $photo->path_file.$photo->name);
             }
 
             $relContentManager = getService('related_contents');
-            $relatedContentIds = $relContentManager->getRelationsForInner($articleID);
+            $relatedContentIds = $relContentManager->getRelationsForInner($article->id);
 
             $relatedContents = $cm->getContents($relatedContentIds);
             $relatedContents = $cm->getInTime($relatedContents);

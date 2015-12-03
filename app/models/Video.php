@@ -201,10 +201,9 @@ class Video extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-
         $contents = implode(', ', $arrayIds);
 
-        $sql = "SELECT  video_url, information  FROM videos WHERE author_name='internal' "
+        $sql = "SELECT video_url, information FROM videos WHERE author_name='internal' "
             ." AND pk_video IN (".$contents.")";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -235,8 +234,7 @@ class Video extends Content
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM videos '
-                .'WHERE `pk_video` IN ('.$contents.')';
+        $sql = 'DELETE FROM videos WHERE `pk_video` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
@@ -263,7 +261,6 @@ class Video extends Content
         // If video file was converted/copied successfully insert
         // the video into database
         if (!empty($processedFile)) {
-
             $videoInformation = array_merge(
                 $videoFileData,
                 array(
@@ -483,8 +480,8 @@ class Video extends Content
                 MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
         } elseif (!empty($information)
             && is_array($information)
-            && array_key_exists('thumbnail', $information)) {
-
+            && array_key_exists('thumbnail', $information)
+        ) {
             if ($this->author_name == 'external' || $this->author_name == 'script') {
                 $this->thumb_image = new \Photo($information['thumbnail']);
                 if (!empty($this->thumb_image->name)) {

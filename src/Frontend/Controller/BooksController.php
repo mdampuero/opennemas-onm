@@ -91,7 +91,7 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the book is not available
+     * @throws ResourceNotFoundException if the book is not available
      **/
     public function showAction(Request $request)
     {
@@ -99,12 +99,11 @@ class BooksController extends Controller
         $dirtyID      = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve book ID, search in repository or redirect to 404
-        list($bookID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $er   = $this->get('entity_repository');
-        $book = $er->find('Book', $bookID);
-        if (!\ContentManager::checkValidContentAndUrl($book, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $book = $this->get('content_url_matcher')
+            ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);
+
+        if (empty($book)) {
+            throw new ResourceNotFoundException();
         }
 
         $this->view = new \Template(TEMPLATE_USER);
@@ -126,7 +125,8 @@ class BooksController extends Controller
 
             // Get books cover image
             foreach ($books as $key => $value) {
-                $books[$key]->cover_img = $er->find('Photo', $value->cover_id);
+                $books[$key]->cover_img =
+                    $this->get('entity_repository')->find('Photo', $value->cover_id);
             }
 
             $this->view->assign(
@@ -134,7 +134,7 @@ class BooksController extends Controller
                     'book'        => $book,
                     'content'     => $book,
                     'libros'      => $books,
-                    'contentId'   => $bookID,
+                    'contentId'   => $book->id,
                     'category'    => $book->category,
                     'cache_id'    => $cacheID,
                 )

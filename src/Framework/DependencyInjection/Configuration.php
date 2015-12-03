@@ -100,6 +100,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('plugins')
+                    ->prototype('scalar')->end()
+                    ->defaultValue([
+                        'public/themes'
+                    ])
+                ->end()
             ->end()
         ;
 

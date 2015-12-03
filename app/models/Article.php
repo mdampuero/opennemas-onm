@@ -431,7 +431,6 @@ class Article extends Content
         }
     }
 
-
     /**
      * Returns the author object of this article
      *

@@ -32,6 +32,7 @@
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/ngQuickDate/dist/ng-quick-date.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
@@ -48,7 +49,8 @@
 
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less"
+      @Common/src/opennemas-webarch/less/main.less,
+      @ManagerTheme/less/main.less"
 
     filters="cssrewrite,less"}
       <link rel="stylesheet" type="text/css" href="{$asset_url}">
@@ -95,7 +97,7 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="pull-left">
           <ul class="nav quick-section">
-            <li class="quicklinks quick-items dropdown">
+            <li class="quicklinks quick-items create-items dropdown">
               <a href="#" data-toggle="dropdown">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
@@ -120,6 +122,12 @@
                       <span class="title">{t}Group{/t}</span>
                     </a>
                   </div>
+                  <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+                      <i class="fa fa-bell"></i>
+                      <span class="title">{t}Notification{/t}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </li>
@@ -127,33 +135,6 @@
         </div>
         <div class="pull-right" ng-if="user.id">
           <ul class="nav quick-section">
-            <li class="quicklinks notifications dropdown">
-              <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
-                <i class="fa fa-bell"></i>
-              </a>
-              <div class="dropdown-menu">
-                <div class="dropdown-title">
-                  {t}Notifications{/t}
-                </div>
-                <ul class="notification-list">
-                  <li class="notification-success">
-                    <div class="title">Success!</div>
-                    <p>{t}This is a notification for a success{/t}</p>
-                  </li>
-                  <li class="notification-error">
-                    <div class="title">Error!</div>
-                    <p>{t}This notification is an error{/t}</p>
-                  </li>
-                  <li class="notification-warning">
-                    <div class="title">Warning!</div>
-                    <p>{t}This notification is a warning{/t}</p>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
                 <i class="fa fa-rebel text-danger master-user"></i>
@@ -289,7 +270,6 @@
     {javascripts src="
     @Common/components/jquery/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,
-
     @Common/components/breakpoints/breakpoints.js,
     @Common/components/ckeditor/ckeditor.js,
     @Common/components/fastclick/lib/fastclick.js,
@@ -297,6 +277,9 @@
     @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
     @Common/components/messenger/build/js/messenger.min.js,
     @Common/components/messenger/build/js/messenger-theme-flat.js,
+    @Common/components/moment/min/moment-with-locales.min.js,
+    @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+    @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
     @Common/components/select2/select2.min.js,
 
     @Common/js/onm/md5.min.js,
@@ -322,8 +305,10 @@
     @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
 
     @Common/src/angular-authentication/authService.js,
+    @Common/src/angular-datetimepicker/datetimepicker.js,
     @Common/src/angular-form-autofill/formAutoFill.js,
     @Common/src/angular-gravatar/gravatar.js,
+    @Common/src/angular-onm-editor/onm-editor.js,
     @Common/src/angular-history/history.js,
     @Common/src/angular-http-interceptor/http-interceptor.js,
     @Common/src/angular-item-service/itemService.js,

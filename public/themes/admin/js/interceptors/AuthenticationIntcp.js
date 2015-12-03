@@ -11,6 +11,8 @@
             $window.location.href = routing.generate('admin_logout');
             return deferred.promise;
           }
+
+          return $q.reject(response);
         };
 
         return this;

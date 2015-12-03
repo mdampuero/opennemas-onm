@@ -579,18 +579,13 @@ class InstanceController extends Controller
             }
 
             // Delete instance from cache for deleted domains
-            $cache = $this->get('cache');
-            $oldNamespace = $cache->getNamespace();
-
-            $cache->setNamespace('instance');
+            $cache = $this->get('cache_manager');
 
             $deletedDomains = array_diff($oldDomains, $instance->domains);
 
             foreach ($deletedDomains as $domain) {
                 $cache->delete($domain);
             }
-
-            $cache->setNamespace($oldNamespace);
 
             $this->get('onm.validator.instance')->validate($instance);
             $im->persist($instance);
@@ -619,6 +614,12 @@ class InstanceController extends Controller
      */
     private function templateParams()
     {
+        $themes = $this->get('orm.loader')->getPlugins();
+
+        foreach ($themes as &$theme) {
+            $theme = $theme->getData();
+        }
+
         return [
             'languages' => [
                 'en_US' => _("English"),
@@ -633,6 +634,7 @@ class InstanceController extends Controller
                 'OTHER',
             ],
             'templates' => im::getAvailableTemplates(),
+            'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'available_modules' => mm::getAvailableModulesGrouped(),
         ];

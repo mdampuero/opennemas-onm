@@ -332,7 +332,6 @@ class ContentManager
         $contentIds = $this->checkAndCleanFrontpageSize($contentIds);
 
         if (is_array($contentIds) && count($contentIds) > 0) {
-
             $er = getService('entity_repository');
 
             // Retrieve contents from cache
@@ -345,7 +344,6 @@ class ContentManager
 
             // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
-
                 // Only add elements for the requested category id
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
@@ -458,6 +456,7 @@ class ContentManager
                         'position'    => $element['position'],
                     )
                 );
+
                 if (is_array($content->params) && $content->params > 0) {
                     $content->params = array_merge(
                         $content->params,
@@ -466,6 +465,7 @@ class ContentManager
                 } else {
                     $content->params = $element['params'];
                 }
+
                 $contents[] = $content;
             }
         }
@@ -488,7 +488,6 @@ class ContentManager
      **/
     public function getContentsIdsForHomepageOfCategory($categoryID)
     {
-
         // Initialization of variables
         $contents = array();
         if (empty($categoryID)) {
@@ -504,7 +503,6 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs !== false) {
-
             // iterate over all found contents and initialize them
             while (!$rs->EOF) {
                 if (!class_exists($rs->fields['content_type'])) {
@@ -1986,7 +1984,6 @@ class ContentManager
 
     }
 
-
     /**
      * Returns the original ID and content type for a given content id
      *
@@ -2044,8 +2041,6 @@ class ContentManager
         return $returnValue;
     }
 
-
-
     /**
      * Check if content id exists
      *
@@ -2062,61 +2057,6 @@ class ContentManager
         return $contentID;
     }
 
-    /**
-     * Clean id and search if exist in content table.
-     * If not found search in refactor_id table. (used for translate old format ids)
-     *
-     * @param string $dirtyID Vble with date in first 14 digits
-     *
-     * @return int id in table content or forward to 404
-     *
-     */
-    public static function resolveID($dirtyID)
-    {
-        // Check for valid Id
-        if (!empty($dirtyID)) {
-            preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyID, $matches);
-
-            if (array_key_exists('id', $matches) &&
-                array_key_exists('date', $matches) &&
-                (
-                    substr($matches['id'], 0, -6) === '' ||
-                    substr((int)$matches['id'], 0, -6) > 0
-                )
-            ) {
-                $contentID = (int) $matches['id'];
-                $urlDate = $matches['date'];
-
-                return [ $contentID, $urlDate ];
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * Check if a content exists and also check date and slug from url
-     * with content properties.
-     *
-     * @param object $content The content object
-     *
-     * @return bool true if all checks are correct
-     *
-     */
-    public static function checkValidContentAndUrl($content, $urlDate, $urlSlug = '')
-    {
-        if (is_null($content) ||
-            strtotime($content->created) != strtotime($urlDate) ||
-            (
-                !empty($urlSlug) &&
-                $content->slug != $urlSlug
-            )
-        ) {
-            return false;
-        }
-
-        return true;
-    }
     /**
      * Checks and cleans articles and opinions from frontpage when the frontpage
      * limit is reached.

@@ -2129,7 +2129,6 @@ class Content
         return $this;
     }
 
-
     /**
      * Update content property given the content id, property & value
      *

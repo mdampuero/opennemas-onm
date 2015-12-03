@@ -53,8 +53,9 @@ class InstanceManager extends BaseManager
             $name  = $parts[count($parts) - 1];
 
             if (file_exists($value.'/init.php')) {
-                $themeInfo        =  include_once($value.'/init.php');
-                $templates[$name] = $themeInfo;
+                $themeInfo =  include_once($value.'/init.php');
+
+                $templates['es.openhost.theme.' . $name] = $themeInfo;
             }
         }
 
@@ -134,7 +135,6 @@ class InstanceManager extends BaseManager
     public function find($id)
     {
         $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
 
         $cacheId = "instance" . $this->cacheSeparator . $id;
         $entity  = null;
@@ -152,8 +152,6 @@ class InstanceManager extends BaseManager
                 $this->cache->save($cacheId, $entity);
             }
         }
-
-        $this->cache->setNamespace($previousNamespace);
 
         return $entity;
     }
@@ -226,9 +224,6 @@ class InstanceManager extends BaseManager
      */
     public function findMulti($data)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $ids  = array();
         $keys = array();
         foreach ($data as $value) {
@@ -268,7 +263,6 @@ class InstanceManager extends BaseManager
             }
         }
 
-        $this->cache->setNamespace($previousNamespace);
         return $ordered;
     }
 
@@ -365,7 +359,7 @@ class InstanceManager extends BaseManager
     public function loadManager()
     {
         $instance = new Instance();
-        $instance->internal_name = 'onm_manager';
+        $instance->internal_name = 'manager';
         $instance->activated = true;
 
         $instance->settings = array(
@@ -422,9 +416,6 @@ class InstanceManager extends BaseManager
      */
     public function persist(Instance &$instance)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $ref = new \ReflectionClass($instance);
         $properties = array();
         foreach ($ref->getProperties() as $property) {
@@ -476,15 +467,46 @@ class InstanceManager extends BaseManager
             $this->conn->executeQuery($sql);
         }
 
+        // Delete metas
+        $delete = array_diff(
+            !empty($instance->_metas) ? array_keys($instance->_metas) : [],
+            !empty($instance->metas) ? array_keys($instance->metas) : []
+        );
+
+        if (!empty($delete)) {
+            foreach ($delete as &$value) {
+                $value = '\'' . $value . '\'';
+            }
+
+            $sql = 'DELETE FROM instance_meta WHERE instance_id = '
+                . $instance->id
+                . ' AND meta_key IN (' . implode(',', $delete) . ')';
+            $this->conn->executeQuery($sql);
+        }
+
+        // Update instance metas
+        if (!empty($instance->metas)) {
+            $values = [];
+            foreach ($instance->metas as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $value = serialize($value);
+                }
+
+                $values[] = '(\'' . $instance->id . '\',\'' . $key . '\',\''
+                    . $value . '\')';
+            }
+
+            $sql = 'REPLACE INTO instance_meta VALUES ' . implode(',', $values);
+            $this->conn->executeUpdate($sql);
+        }
+
         // Delete cache for domains
         foreach ($instance->domains as $domain) {
-            $this->cache->delete($domain, 'instance');
+            $this->cache->delete($domain);
         }
 
         // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
-
-        $this->cache->setNamespace($previousNamespace);
     }
 
     /**
@@ -532,6 +554,23 @@ class InstanceManager extends BaseManager
             }
         }
 
+        $sql = 'SELECT * FROM instance_meta WHERE instance_id = ' . $instance->id;
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $instance->metas = [];
+        foreach ($rs as $r) {
+            $instance->metas[$r['meta_key']] = $r['meta_value'];
+
+            $data = @unserialize($r['meta_value']);
+
+            if ($data !== false) {
+                $instance->metas[$r['meta_key']] = $data;
+            }
+        }
+
+        $instance->_metas = $instance->metas;
+
         // Check for changes in modules
         if (is_null($instance->changes_in_modules)) {
             $instance->changes_in_modules = [];
@@ -545,9 +584,6 @@ class InstanceManager extends BaseManager
      */
     public function remove($instance)
     {
-        $previousNamespace = $this->cache->getNamespace();
-        $this->cache->setNamespace('instance');
-
         $this->conn->selectDatabase('onm-instances');
 
         $sql = "DELETE FROM instances WHERE id=?";
@@ -565,7 +601,6 @@ class InstanceManager extends BaseManager
         }
 
         // Delete instance from cache
-        $this->cache->setNamespace($previousNamespace);
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
     }
 
@@ -580,9 +615,9 @@ class InstanceManager extends BaseManager
         $this->conn->selectDatabase($database);
 
         if (isset($data['username'])
-            && isset ($data['email'])
-            && isset ($data['password'])
-            && isset ($data['token'])
+            && isset($data['email'])
+            && isset($data['password'])
+            && isset($data['token'])
         ) {
             // Insert user into instance database
             $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`,

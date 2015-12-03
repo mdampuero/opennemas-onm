@@ -34,18 +34,17 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "squizlabs/php_codesniffer": "1.5.*",
-        "phpmd/phpmd": "2.1.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpmd/phpmd": "2.3.*",
         "sebastian/phpcpd": "2.0.*",
-        "pdepend/pdepend": "2.0.*",
-        "phploc/phploc": "2.0.*",
-        "phpunit/phpunit": "4.3.*",
-        "theseer/phpdox": "0.7.*"
+        "pdepend/pdepend": "2.2.*",
+        "phploc/phploc": "2.1.*",
+        "phpunit/phpunit": "4.8.*",
+        "theseer/phpdox": "0.8.*"
     },
 
     "require": {
         "php": ">=5.5.9",
-
         "symfony/symfony": "2.7.*",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "doctrine/dbal": "<2.5",
@@ -56,7 +55,6 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-
         "cometcult/braintree-bundle": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "doctrine/migrations": "dev-master",
@@ -73,6 +71,7 @@
         "hwi/oauth-bundle": "0.3.*@dev",
         "recaptcha/php5": "1.1.0",
         "rtconner/freshbooks-api": "dev-master",
+        "sparkling/vat-bundle": "~0.1",
         "google/recaptcha": "1.1",
         "smarty/smarty" : "3.1.21",
         "smarty-gettext/smarty-gettext": "@stable",

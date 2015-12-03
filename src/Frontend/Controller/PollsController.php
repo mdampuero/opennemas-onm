@@ -164,43 +164,37 @@ class PollsController extends Controller
         $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve poll ID, search in repository or redirect to 404
-        list($pollID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $poll = $this->get('entity_repository')->find('Poll', $pollID);
-        if (!\ContentManager::checkValidContentAndUrl($poll, $urlDate, $urlSlug)) {
+        $poll = $this->get('content_url_matcher')
+            ->matchContentUrl('poll', $dirtyID, $urlSlug, $this->categoryName);
+
+        if (empty($poll)) {
             throw new ResourceNotFoundException();
         }
 
         $this->view->setConfig('poll-inner');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $pollID);
+        $cacheID = $this->view->generateCacheId($this->categoryName, '', $poll->id);
         if ($this->view->caching == 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
-            if ($poll->content_status == 1
-                && $poll->in_litter == 0
-            ) {
-                $items         = $poll->items;
-                $poll->dirtyId = $dirtyID;
+            $items         = $poll->items;
+            $poll->dirtyId = $dirtyID;
 
-                $otherPolls = $this->cm->find(
-                    'Poll',
-                    'content_status=1 ',
-                    'ORDER BY created DESC LIMIT 5'
-                );
+            $otherPolls = $this->cm->find(
+                'Poll',
+                'content_status=1 ',
+                'ORDER BY created DESC LIMIT 5'
+            );
 
-                $this->view->assign([
-                    'poll'       => $poll,
-                    'content'    => $poll,
-                    'contentId'  => $pollID,
-                    'items'      => $items,
-                    'otherPolls' => $otherPolls,
-                ]);
-            } else {
-                throw new ResourceNotFoundException();
-            }
+            $this->view->assign([
+                'poll'       => $poll,
+                'content'    => $poll,
+                'contentId'  => $poll->id,
+                'items'      => $items,
+                'otherPolls' => $otherPolls,
+            ]);
 
             // Used on module_comments.tpl
-            $this->view->assign('contentId', $pollID);
+            $this->view->assign('contentId', $poll->id);
         }
 
         $cookieName = "poll-".$poll->id;

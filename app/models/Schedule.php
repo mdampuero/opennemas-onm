@@ -64,8 +64,8 @@ class Schedule extends Content
     public function getEventsByWhere($where)
     {
         $sql = 'SELECT * FROM phpc_AR_events '
-            ."WHERE  ".$where
-            ." ORDER BY  starttime DESC";
+                ."WHERE ".$where
+                ." ORDER BY  starttime DESC";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

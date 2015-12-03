@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-30 15:47+0100\n"
-"PO-Revision-Date: 2015-10-30 15:54+0200\n"
+"POT-Creation-Date: 2015-12-02 15:43+0100\n"
+"PO-Revision-Date: 2015-12-03 09:40+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -110,7 +110,7 @@ msgstr "pendente"
 msgid "available"
 msgstr "dispoñibel"
 
-msgid "not-scheduled"
+msgid "not scheduled"
 msgstr "non planificado"
 
 msgid "scheduled"
@@ -119,7 +119,7 @@ msgstr "planificado"
 msgid "dued"
 msgstr "expirado"
 
-msgid "in-time"
+msgid "in time"
 msgstr "en tempo"
 
 msgid "postponed"
@@ -1367,6 +1367,9 @@ msgstr "Examinar"
 msgid "Dashboard"
 msgstr "Inicio"
 
+msgid "My newspaper"
+msgstr "O meu periódico"
+
 msgid "Website"
 msgstr "Sitio web"
 
@@ -1489,6 +1492,12 @@ msgstr "Rexistro de erros de SQL"
 
 msgid "Market"
 msgstr "Tenda"
+
+msgid "Themes"
+msgstr "Temas"
+
+msgid "Domains"
+msgstr "Dominios"
 
 msgid "Help & Support"
 msgstr "Axuda e asistencia"
@@ -1687,6 +1696,28 @@ msgstr ""
 msgid "Positions saved successfully"
 msgstr "Posicións gardadas correctamente"
 
+#, php-format
+msgid "The domain %s is not available"
+msgstr "O dominio %s non está dispoñíbel"
+
+msgid "Your domain is configured correctly"
+msgstr "O teu dominio está configurado correctamente"
+
+#, php-format
+msgid "Your domain has to point to %s"
+msgstr "O teu dominio apunta a %s"
+
+#, php-format
+msgid "Domain deleted successfully"
+msgstr "Dominio eliminado correctamente"
+
+#, php-format
+msgid "Unable to delete the domain %s"
+msgstr "Non foi posíbel eliminar o dominio %s"
+
+msgid "Domain added successfully"
+msgstr "Datos engaddo correctamente"
+
 msgid "Your request could not been registered"
 msgstr "A túa solicitude non foi enviada"
 
@@ -1779,6 +1810,22 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
 
+msgid "Yesterday"
+msgstr "Onte"
+
+msgid "Today"
+msgstr "Hoxe"
+
+msgid "Notification marked as read successfully"
+msgstr "Notificación marcada como lida correctamente"
+
+msgid "Invalid notifications"
+msgstr "Notificacións non válidas"
+
+#, php-format
+msgid "%d notifications marked as read successfully"
+msgstr "%d notificacións marcadas como lidas correctamente"
+
 msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
 
@@ -1845,6 +1892,9 @@ msgid ""
 msgstr ""
 "Solte ficheiros aquí para subilos ou prema no botón «Engadir ficheiros…» de "
 "arriba."
+
+msgid "Invalid theme"
+msgstr "Tema non válido"
 
 #, php-format
 msgid "Unable to delete the item with the id \"%s\""
@@ -2123,6 +2173,38 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+msgid "Notification saved successfully"
+msgstr "Notificación gardada correctamente"
+
+msgid "Notification deleted successfully."
+msgstr "Notificación eliminada correctamente."
+
+#, php-format
+msgid "%s notifications deleted successfully."
+msgstr "%s notificacións eliminadas correctamente."
+
+msgid "Manager"
+msgstr "Xestor"
+
+#, php-format
+msgid "Unable to find the entity with id \"%s\""
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Information"
+msgstr "Información"
+
+msgid "Success"
+msgstr "Éxito"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Help"
+msgstr "Axuda"
+
 msgid "Instances not used in last month"
 msgstr "Instancias non usadas no último mes"
 
@@ -2139,6 +2221,9 @@ msgstr "Xera un informe que mostra as instancias creadas no último mes."
 
 msgid "Instances"
 msgstr "Instancias"
+
+msgid "Notifications"
+msgstr "Notificacións"
 
 msgid "Reports"
 msgstr "Informes"
@@ -2293,6 +2378,9 @@ msgstr "Contacto"
 
 msgid "Frontpages Manager"
 msgstr "Xestor de portadas"
+
+msgid "iadbox"
+msgstr "iadbox"
 
 msgid "Import XMLs"
 msgstr "Importación de XMLs"
@@ -2526,11 +2614,10 @@ msgstr ""
 "                        <li>Opennemas Connect</li>"
 
 msgid "Free Basic Template"
-msgstr "Plantilla básica de balde"
+msgstr "Tema básico de balde"
 
 msgid "Change your site design with our free available templates."
-msgstr ""
-"Cambia o deseño do teu sitio coas nosas plantillas de balde dispoñíbeis."
+msgstr "Cambia o deseño do teu sitio cos nosos temas de balde dispoñíbeis."
 
 msgid ""
 "<ul>\n"
@@ -2549,68 +2636,16 @@ msgstr ""
 "                        <li>\n"
 "                            Widgets: Non incluídos. Para engaidr un widget "
 "contacte connosco en\n"
-"                            <a href=\"mailto:sales@openhost.es"
-"\">sales@openhost.es</a>\n"
+"                            <a href=\"mailto:sales@openhost.es\""
+">sales@openhost.es</a>\n"
 "                        </li>\n"
-"                        <li>Exclusividade: Esta plantilla non é exclusiva</"
-"li>\n"
+"                        <li>Exclusividade: Esta plantilla non é "
+"exclusiva</li>\n"
 "                        <li>Entrega: inmediata</li>\n"
 "                    </ul>"
 
-msgid "Standard Template"
-msgstr "Plantilla estándar"
-
-msgid ""
-"Standard newspaper web site design with prebuild widgets developed by "
-"Opennemas team. No customization available"
-msgstr ""
-"Deseño de sitio web de periódico estándar con widgets predeseñados "
-"desenvolvidos polo equipo de Opennemas. Sen personalización dispoñíbel"
-
-msgid ""
-"<ul>\n"
-"                        <li>\n"
-"                            Widgets: Standard widgets included. To add a "
-"widget please contact us at\n"
-"                            <a href=\"mailto:sales@openhost.es"
-"\">sales@openhost.es</a>\n"
-"                        </li>\n"
-"                        <li>Exclusivity: This template is not exclusive</"
-"li>\n"
-"                        <li>Delivery time: 1 week</li>\n"
-"                        <li>Change request BEFORE launch: No change "
-"included</li>\n"
-"                        <li>Change request AFTER launch: No change included</"
-"li>\n"
-"                        <li>Add on:\n"
-"                            <ul>\n"
-"                                <li>New widgets: 120€ each</li>\n"
-"                            </ul>\n"
-"                        </li>\n"
-"                    </ul>"
-msgstr ""
-"<ul>\n"
-"                        <li>\n"
-"                            Widgets: Non incluídos. Para engaidr un widget "
-"contacte connosco en\n"
-"                            <a href=\"mailto:sales@openhost.es"
-"\">sales@openhost.es</a>\n"
-"                        </li>\n"
-"                        <li>Exclusividade: Esta plantilla non é exclusiva</"
-"li>\n"
-"                        <li>Entrega: 1 semana</li>\n"
-"\t\t\t<li>Solicitudes de cambio ANTES do lanzamento: Non incluídos</li>\n"
-"                        <li>Solicitudes de cambio DESPOIS do lanzamento: Non "
-"incluídos</li>\n"
-"                        <li>Engadidos:\n"
-"                            <ul>\n"
-"                                <li>Novos widgets: 120€ cada un</li>\n"
-"                            </ul>\n"
-"                        </li>\n"
-"                    </ul>"
-
 msgid "Custom Template"
-msgstr "Plantilla personalizada"
+msgstr "Tema personalizado"
 
 msgid ""
 "Get a customized newspaper Web Site, with widgets included, so that everyone "
@@ -2679,8 +2714,8 @@ msgstr ""
 "periódico</li>\n"
 "            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
 "artigo interior\n"
-"                disposición, tamaños de imaxe, cabeceiras e pés de páxina</"
-"li>\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de "
+"páxina</li>\n"
 "            <li>1 iteración de comentarios e solicitudes de cambios "
 "incluídos antes da saída</li>\n"
 "        </ul>\n"
@@ -2704,7 +2739,7 @@ msgstr ""
 "</ul>"
 
 msgid "Exclusive Template"
-msgstr "Plantilla exclusiva"
+msgstr "Tema exclusivo"
 
 msgid ""
 "Unique Newspaper Web Site  with many widgets, completely customizable and in "
@@ -2805,8 +2840,8 @@ msgstr ""
 "periódico</li>\n"
 "            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
 "artigo interior\n"
-"                disposición, tamaños de imaxe, cabeceiras e pés de páxina</"
-"li>\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de "
+"páxina</li>\n"
 "            <li>1 iteración de comentarios e solicitudes de cambios "
 "incluídos antes da saída</li>\n"
 "        </ul>\n"
@@ -2826,11 +2861,11 @@ msgstr ""
 "            <li>Reducir unha semana o tempo de entrega: 500€</li>\n"
 "            <li>\n"
 "                Custo de asistencia despois do lanzamento\n"
-"                    <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/463594-precios-opennemas-servicio-de-desarrollo\" target=\"_blank"
-"\">\n"
-"                    http://help.opennemas.com/knowledgebase/articles/463594-"
-"precios-opennemas-servicio-de-desarrollo\n"
+"                    <a href=\""
+"http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-"
+"servicio-de-desarrollo\" target=\"_blank\">\n"
+"                    http://help.opennemas.com/knowledgebase/articles/463594"
+"-precios-opennemas-servicio-de-desarrollo\n"
 "                    </a>\n"
 "            </li>\n"
 "        </ul>\n"
@@ -2838,7 +2873,7 @@ msgstr ""
 "</ul>"
 
 msgid "Custom Exclusive Template"
-msgstr "Plantilla personalizada exclusiva"
+msgstr "Tema personalizado exclusivo"
 
 msgid ""
 "Newspaper web site developed from scratch by Opennemas team exclusively for "
@@ -2926,8 +2961,8 @@ msgstr ""
 "periódico</li>\n"
 "            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
 "artigo interior\n"
-"                disposición, tamaños de imaxe, cabeceiras e pés de páxina</"
-"li>\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de "
+"páxina</li>\n"
 "            <li>1 iteración de comentarios e solicitudes de cambios "
 "incluídos antes da saída</li>\n"
 "        </ul>\n"
@@ -2947,11 +2982,11 @@ msgstr ""
 "            <li>Reducir unha semana o tempo de entrega: 500€</li>\n"
 "            <li>\n"
 "                Custo de asistencia despois do lanzamento\n"
-"                <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/463594-precios-opennemas-servicio-de-desarrollo\" target=\"_blank"
-"\">\n"
-"                    http://help.opennemas.com/knowledgebase/articles/463594-"
-"precios-opennemas-servicio-de-desarrollo\n"
+"                <a href=\""
+"http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-"
+"servicio-de-desarrollo\" target=\"_blank\">\n"
+"                    http://help.opennemas.com/knowledgebase/articles/463594"
+"-precios-opennemas-servicio-de-desarrollo\n"
 "                </a>\n"
 "            </li>\n"
 "        </ul>\n"
@@ -3169,6 +3204,52 @@ msgstr ""
 
 msgid "Allows user to upload images"
 msgstr "Permítelle subir imaxes"
+
+msgid "iadbox is a way to serve ads when users want to receive them."
+msgstr ""
+"iadbox é a maneira de ofrecer publicidade cando os usuarios queren recibila."
+
+msgid ""
+"<p>Let us know if you want to try it on your newspaper, we are alreday using "
+"it on ours!</p>"
+msgstr ""
+"<p>Convidámosche a probar iadbox no teu xornal ¡nós xa o usamos nos "
+"nosos!</p>"
+
+msgid ""
+"<p>We will set it up for you for FREE and let iadbox team know so that you "
+"receive your reports and revenue.</p>"
+msgstr ""
+"<p>Activarémosche iadbox DE BALDE e informaremos ao equipo de iadbox para "
+"que poidan chegarche os teus informes e ingresos.</p>"
+
+msgid ""
+"<p>iadbox is an intelligent commercial messaging for the smartphone "
+"generation.</p>"
+msgstr ""
+"<p>iadbox é un sistema de mensaxería instelixente pensada para a xeración "
+"dos teléfonos intelixentes.</p>"
+
+msgid ""
+"<p>It is a mobile and desktop marketing platform, with a user-controlled "
+"inbox for interaction with audiences.</p>"
+msgstr ""
+"<p>É unha plataforma de marquetin para móbiles e ordenadores, con unha "
+"bandexa de entrada para a interacción coas audiencias.</p>"
+
+msgid ""
+"<p><strong>More info</strong>: <a target=\"_blank\" href=\"http://www.iadbox."
+"com\">www.iadbox.com</a></p>"
+msgstr ""
+"<p><strong>Máis información</strong>: <a target=\"_blank\" href=\""
+"http://www.iadbox.com\">www.iadbox.com</a></p>"
+
+msgid ""
+"<p><a class=\"btn btn-success\" target=\"_blank\" href=\"mailto:"
+"sales@openhost.es\">Ask for it</a></p>"
+msgstr ""
+"<p><a class=\"btn btn-success\" target=\"_blank\" href=\""
+"mailto:sales@openhost.es\">Pídeo xa</a>"
 
 msgid "Do you have your articles in Adobe InDesign or QuarkXPress"
 msgstr "¿Traballas os teus artigos en InDesign e QuarkXPress?"
@@ -3502,7 +3583,7 @@ msgid ""
 "This support plan is ideal for updating your theme if you have had it for a "
 "long time."
 msgstr ""
-"Este plan de asistencia é perfecto para actualizar as túas plantillas que xa "
+"Este plan de asistencia é perfecto para actualizar os teus temas que xa "
 "tivera por tempo."
 
 msgid ""
@@ -3518,8 +3599,8 @@ msgstr ""
 "<p>40 horas (2h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts</p>"
@@ -3528,8 +3609,8 @@ msgid ""
 "This support plan is ideal for updating your theme and at the same time "
 "redefining spaces."
 msgstr ""
-"Este plan de asistencia é perfecto para anovar a túa plantilla e ao mesmo "
-"tempo redefinir espazos."
+"Este plan de asistencia é perfecto para anovar o teu tema e ao mesmo tempo "
+"redefinir espazos."
 
 msgid ""
 "<p>60 hours (3h day/1month)</p>\n"
@@ -3544,8 +3625,8 @@ msgstr ""
 "<p>60 horas (3h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts/Skype</p>"
@@ -3568,8 +3649,8 @@ msgstr ""
 "<p>80 horas (4h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3607,8 +3688,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3648,8 +3729,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -4434,26 +4515,20 @@ msgstr "Administración de OpenNemas"
 msgid "Instance information"
 msgstr "Información da instancia"
 
-msgid "My newspaper"
-msgstr "O meu periódico"
-
 msgid "Page"
 msgstr "Páxina"
 
 msgid "Author"
 msgstr "Autor"
 
-msgid "Notifications"
-msgstr "Notificacións"
+msgid "There are no notifications for now."
+msgstr "Non hai notificacións por agora."
 
-msgid "This is a notification for a success"
-msgstr "This is a notification for a success"
+msgid "Check your previous notifications <a href=\"%1\">here</a>."
+msgstr "Comproba as túas notificacións anteriores <a href=\"%1\">aquí</a>."
 
-msgid "This notification is an error"
-msgstr "This notification is an error"
-
-msgid "This notification is a warning"
-msgstr "This notification is a warning"
+msgid "See more"
+msgstr "Ver máis"
 
 msgid "Help center"
 msgstr "Centro de axuda"
@@ -5198,20 +5273,38 @@ msgstr ""
 "botón de axuda <span class=\"fa fa-support\"></span> na esquina superior "
 "dereita."
 
+msgid "Opennemas Market"
+msgstr "A Tenda de Opennemas"
+
+msgid "Find and try new add-ons and take your newspaper to the next level."
+msgstr "Busca e proba novos engadidos e leva o teu xornal ao seguinte nivel"
+
+msgid ""
+"Do you need more? Check our packs and power your newspaper with extra "
+"features to make it the best."
+msgstr ""
+"Queres máis? Comproba os nosos packs e mellora o teu xornal con "
+"funcionalidades adicionais para facelo o mellor."
+
+msgid ""
+"We offer a huge list of add-ons to improve your experience. Check our market "
+"and pay only for what you really want."
+msgstr ""
+"Ofrecemos unha gan lista de engadidos para mellorar a túa experiencia. "
+"Comproba a nosa tenda e paga só polo que realmente queres."
+
+msgid ""
+"Make your own style. Choose a template or request a exclusive design to make "
+"your newspaper look awesome."
+msgstr ""
+"Crea o teu propio estilo. Escolle un tema ou solicita un deseño exclusivo "
+"para facer que o teu xornal se vexa incríbel."
+
 msgid "That's it!"
 msgstr "E iso é todo!"
 
-msgid "You can start to use your newspaper."
-msgstr "Xa podes comezar a usar o teu periódico."
-
-msgid "Hope you will enjoy opennemas!"
-msgstr "Agardamos que desfrute de Opennemas!"
-
-msgid "Finish"
-msgstr "Rematar"
-
-msgid "Do you have a Facebook or a Twitter account?"
-msgstr "Tes unha conta en Facebook ou Twitter?"
+msgid "Wait...Do you have a Facebook or a Twitter account?"
+msgstr "Agarda… Tes unha conta en Facebook ou Twitter?"
 
 msgid ""
 "Then you can associate those accounts to access your opennemas. It will make "
@@ -5220,20 +5313,23 @@ msgstr ""
 "Entón podes asocialas para acceder a Opennemas. Isto fará moito máis doado "
 "entrar no panel de administración."
 
+msgid "Now, you can start to use your newspaper."
+msgstr "Agora xa podes comezar a usar o teu xornal."
+
+msgid "Hope you will enjoy opennemas!"
+msgstr "Agardamos que desfrute de Opennemas!"
+
+msgid "Finish"
+msgstr "Rematar"
+
 msgid "Welcome!"
 msgstr "Benvido!"
 
 msgid "Terms & conditions"
 msgstr "Termos e condicións"
 
-msgid "Getting help"
-msgstr "Obter axuda"
-
 msgid "Ready!"
 msgstr "Listo!"
-
-msgid "Social Network"
-msgstr "Redes sociais"
 
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
@@ -6082,6 +6178,26 @@ msgstr "Configuración do módulo «Video»"
 msgid "Logged in users"
 msgstr "Usuarios conectados"
 
+msgid "Redirect your domain"
+msgstr "Redirixir o teu dominio"
+
+msgid ""
+"I have an existing domain and I want to redirect it to my Opennemas digital "
+"newspaper."
+msgstr ""
+"Teño un dominio existente e quero redirixilo ao meu xornal dixital en "
+"Opennemas."
+
+msgid "Add new domain"
+msgstr "Engadir un novo dominio"
+
+msgid ""
+"I DO NOT have my own domain and I want to create one and redirect it to my "
+"Opennemas digital newspaper"
+msgstr ""
+"NON teño un dominio propio, quero crealo e redirixilo ao meu xornal dixital "
+"en Opennemas."
+
 msgid "Add contents to your site"
 msgstr "Engade contidos ao teu sitio"
 
@@ -6477,14 +6593,45 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta connosco"
 
-msgid "pending activation"
-msgstr "activación pendente"
+msgid "Billing information"
+msgstr "Información de facturación"
 
-msgid "pending deactivation"
-msgstr "desactivación pendente"
+msgid "Company"
+msgstr "Empresa"
 
-msgid "Here you can see a list of your activated modules"
-msgstr "Aquí pode ver unha lista dos módulos activados no seu periódico"
+msgid "VAT"
+msgstr "IVE"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Address"
+msgstr "Enderezo"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "City"
+msgstr "Cidade"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Country"
+msgstr "País"
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Hai algo mal? Contacta co noso <a href=\""
+"javascript:UserVoice.showPopupWidget();\">equipo de soporte</a>."
+
+msgid "You have no billing information"
+msgstr "Non tes ningunha información de facturación"
+
+msgid "You will be asked to add it during the checkout in our market"
+msgstr "Solicitaraseche esta información durante o proceso de compra na tenda"
 
 msgid "Activated plans & modules"
 msgstr "Plans e módulos activados"
@@ -6509,6 +6656,487 @@ msgstr "Lista de módulos para adquirir"
 
 msgid "List of modules to unsubscribe"
 msgstr "Lista de módulos para desuscribir"
+
+msgid "Domain Mapping"
+msgstr "Redirección de dominios"
+
+msgid "Primary Domain"
+msgstr "Dominio principal"
+
+msgid "More info"
+msgstr "Máis información"
+
+msgid "Technical information"
+msgstr "Información técnica"
+
+msgid ""
+"I do not have my own domain and I want to create one and redirect it to my "
+"Opennemas digital newspaper"
+msgstr ""
+"NON teño un dominio propio, quero crealo e redirixilo ao meu xornal dixital "
+"en Opennemas."
+
+msgid "Enter a domain"
+msgstr "Escriba un dominio"
+
+msgid "Map it"
+msgstr "Redirixilo"
+
+msgid "year"
+msgstr "ano"
+
+msgid "Requested domains"
+msgstr "Dominios solicitados"
+
+msgid "Domain registration + mapping"
+msgstr "Rexistro e redirección de dominio"
+
+msgid "Domain mapping"
+msgstr "Redirección de dominio"
+
+msgid "Total"
+msgstr "Total"
+
+msgid ""
+"If you need to update this information please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+"Se desexa actualizar esta información, <a href=\"mailto:sales@openhost.es\">"
+"contacte connosco</a>."
+
+msgid "Contact information"
+msgstr "Información de contacto"
+
+msgid "This field is required"
+msgstr "Este campo é obligatorio"
+
+msgid "Contact name"
+msgstr "Nome de contato"
+
+msgid "Company name"
+msgstr "Nome da empresa"
+
+msgid "This is not a valid email"
+msgstr "Este non é un correo electrónico válido"
+
+msgid "This is not a valid phone"
+msgstr "Este non é un teléfono válido"
+
+msgid "Phone number"
+msgstr "Número de teléfono"
+
+msgid "This is not a valid vat"
+msgstr "Este non é un identificador fiscal válido"
+
+msgid "VAT Number"
+msgstr "Identificador fiscal"
+
+msgid "This is not a valid address"
+msgstr "Este non é un enderezo válido"
+
+msgid "This is not a valid postal_code"
+msgstr "Este non é un código postal válido"
+
+msgid "This is not a valid city"
+msgstr "Este non é unha cidade válida"
+
+msgid "This is not a valid state"
+msgstr "Este non é un estado válido"
+
+msgid "Select a country"
+msgstr "Seleccione un país"
+
+msgid "Summary"
+msgstr "Resumo"
+
+msgid "Unit price"
+msgstr "Prezo de unidade"
+
+msgid "Terms of create a new domain"
+msgstr "Termos da creación dun novo dominio"
+
+msgid "Terms of redirection"
+msgstr "Termos de redirección"
+
+msgid ""
+"Payment: the registration and redirection service requires payment in "
+"advance. This amount cannot be divided into several payments."
+msgstr ""
+"Pago: o servizo de rexistro e redirección require o pago por adiantado. Esta "
+"cantidade non pode dividirse en varios pagos."
+
+msgid ""
+"Identity: when buying a new domain, the identity of the domains would be the "
+"one of your entity. The administrative identity, technical contact, billing "
+"contact name would be Openhost, SL"
+msgstr ""
+"Identidade: ao comprar un novo dominio, a identidade dos dominios será a túa "
+"identidade. A identidade administrativa, contacto técnico e nome de contacto "
+"de facturación será a de Openhost, SL"
+
+msgid ""
+"Availability: please inform us of the name of the domain that you wish to "
+"register and we will let you know if it is available. May be one or more "
+"domains."
+msgstr ""
+"Dispoñibilidade: por favor informenos do nome do dominio que desexa "
+"rexistrar e dirémoslle se está dispoñíbel. Pode ser un dominio ou varios."
+
+msgid ""
+"The service of registering and redirecting the domain is valid for one year, "
+"so you will be notified prior to the renewal date."
+msgstr ""
+"O servizo de rexistro e redirección de dominios é válido durante un ano, "
+"polo que notificarémoslle antes da data de renovación."
+
+msgid ""
+"Following the purchase of the domain, if the user wants to transfer it to "
+"another provider, which may only be transferred to another from the 6th "
+"month after the date of registration of the domain."
+msgstr ""
+"Despois da compra do dominio, se o usuario desexa transferilo a outro "
+"fornecedor, poderá transferilo a outro a partir do 6º mes despois de "
+"rexistro do dominio."
+
+msgid ""
+"Payment: the redirection service requires payment in advance. The amount "
+"cannot be divided into several payments. "
+msgstr ""
+"Pago: o servizo de redirección require o pago por adiantado. A cantidade non "
+"pode dividirse en varios pagos."
+
+msgid ""
+"Identity: the identity of the domains would be the customer's identity "
+"because the domain does not undergo any change. "
+msgstr ""
+"Identidade: A identidade dos dominios será a identidade do cliente xa que o "
+"dominio non terá ningún cambio."
+
+msgid ""
+"The service domain redirection is valid for one year, so you will be "
+"notified prior to the renewal date. "
+msgstr ""
+"O servizo de redirección de dominios é válido durante un ano, polo que "
+"notificarémoslle antes da data de renovación."
+
+msgid ""
+"The customer must make changes to the DNS zone for your domain registration "
+"www. This change has nothing to do with the Opennemas platform or company "
+"Openhost, SL (company that maintains the service). "
+msgstr ""
+"O cliente deberá realizar os cambios na zona www do DNS desde o seu rexistro "
+"de DNS. Este cambio non ten nada que ver coa plataforma de Opennemas ou a "
+"compañía de Openhost, SL (compañía que mantén o servizo)."
+
+msgid ""
+"If redirection does not work through no fault of the platform, ie by "
+"malfunction of the DNS servers the client, Openhost, SL area will have "
+"nothing to do with the damage caused to the hours of service failure. "
+msgstr ""
+"Se a redirección non funciona por causas axenas á plataforma, por exemplo un "
+"mal funcionamento dos servidores DNS do cliente, Openhost, SL non terá nada "
+"que ver co dano causado ás horas de fallo no servicio."
+
+msgid "I have read and accept the Terms of creating a new domain"
+msgstr "Leín e acepto os Termos de creación dun novo dominio"
+
+msgid "I have read and accept the Terms of redirection"
+msgstr "Leín e aceopto os Termos de redirección"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "Thank you for your request!"
+msgstr "Grazas pola túa solicitude!"
+
+msgid ""
+"In the next 24 hours you will receive an email with payment instructions and "
+"the invoice."
+msgstr ""
+"Nas vindeiras 24 horas recibirás un correo electrónico coas instrucións de "
+"pago e a factura."
+
+msgid ""
+"Oh!, it would be a good time to share with your friends your newspaper's "
+"improvements"
+msgstr ""
+"Oh! Este pode ser un momento perfecto para compartir as melloras do teu "
+"periódico cos teus amigos"
+
+msgid "Have a wonderful day!"
+msgstr "Que teñas un bo día!"
+
+msgid "How can I change 'opennemas.com' domain on my newspaper?"
+msgstr "Como podo cambiar o dominio «opennemas.com» no meu xornal?"
+
+msgid "Redirect your own domain"
+msgstr "Redirixe o teu dominio"
+
+msgid "Your domains"
+msgstr "Os teus dominios"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "Points to"
+msgstr "Apunta a"
+
+msgid "Your domain is properly configured"
+msgstr "O teu dominio está configurado correctamente"
+
+msgid "Your domain is not properly configured, check the instructions below."
+msgstr ""
+"O teu dominio non está configurado correctamente, comproba as instrucións de "
+"embaixo"
+
+msgid "Expires"
+msgstr "Expira"
+
+msgid "This is your opennemas address"
+msgstr "Este é o teu enderezo opennemas"
+
+msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+"Se precisas axuda para configurar os teus dominios contacta co noso equipo "
+"de soporte"
+
+msgid "You have requested the following purchases for your newspaper \"%1\""
+msgstr "Solicitaches os seguintes elementos para o teu periódico \"%1\""
+
+msgid "Domains to create"
+msgstr "Dominios a crear"
+
+msgid "Domains to redirect"
+msgstr "Dominios a redirixir"
+
+msgid "VAT number"
+msgstr "Identificador fiscal"
+
+msgid "Our sales department will contact you to get further information"
+msgstr ""
+"O noso departamento de vendas porase en contacto contigo para obter máis "
+"información"
+
+msgid "Add"
+msgstr "Engadir"
+
+msgid "In cart"
+msgstr "No carriño"
+
+msgid "month"
+msgstr "mes"
+
+msgid "Enabled"
+msgstr "Activada"
+
+msgid "Enabling"
+msgstr "Activando"
+
+msgid "Live demo"
+msgstr "Ver demo"
+
+msgid "Custom"
+msgstr "Personalizar"
+
+msgid ""
+"\n"
+"            <h4>Newspaper Web Site with standard widgets developed by "
+"Opennemas team. No customization available.</h4>\n"
+"            <p>Personalization allowed in the platform: colour of menu and "
+"logo.</p>\n"
+"            <p><strong>Cost:</strong> Standard widgets included. To add a "
+"widget please contact us at <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a></p>\n"
+"            <p><strong>Exclusivity:</strong> This template is not exclusive</"
+"p>\n"
+"            <p><strong>Delivery time:</strong> 1 day after payment</p>\n"
+"            <p>Change Request BEFORE launch: No Change included. For change "
+"request please check out Custom Option.</p>\n"
+"            <p>Change Request AFTER launch: No Change included. For change "
+"request please check out Custom Option.</p>\n"
+"            <p>Cost:</p>\n"
+"            <ul class=\"alternate\" type=\"square\">\n"
+"              <li>350€* (one pay)</li>\n"
+"              <li>35€* (12 months)</li>\n"
+"            </ul>\n"
+"          "
+msgstr ""
+"\n"
+"            <h4>Tema Profesional para xornais con widgets estándar xa "
+"desenvolvidos ao que non se lle poden aplicar cambios.</h4>\n"
+"            <p>Personalización incluída na plataforma: cor do menú e "
+"logo.</p>\n"
+"            <p><strong>Widgets:</strong> Inclúe widgets estandard. Para "
+"engadir un widget contacta connoscos en <a href=\"mailto:sales@openhost.es\""
+">sales@openhost.es</a></p>\n"
+"            <p><strong>Exclusividade:</strong> Este tema non é exclusivo</p>"
+"\n"
+"            <p><strong>Tempo de entrega:</strong> 1 día despois do pago</p>\n"
+"            <p>Solicitudes de cambios ANTES do lanzamento: Non se inclúe "
+"ningún cambio. Para solicitar cambios comproba a nosa opción "
+"Personalizar.</p>\n"
+"            <p>Solicitudes de cambios DESPOIS do lanzamento: No se inclúe "
+"ningún cambio. Para solicitar cambios comproba a nosa opción "
+"Personalizar.</p>\n"
+"            <p>Prezo:</p>\n"
+"            <ul class=\"alternate\" type=\"square\">\n"
+"              <li>350€* (pago único)</li>\n"
+"              <li>35€* (12 meses)</li>\n"
+"            </ul>\n"
+"          "
+
+msgid ""
+"\n"
+"            <h4>Newspaper Web Site Template that can be customized to "
+"reflect better brand guidelines and customer preferences.</h4>\n"
+"            <p><strong>Widgets:</strong> Standard widgets included. To add a "
+"widget please contact us at <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a></p>\n"
+"            <p><strong>Exclusivity:</strong> This template is not exclusive</"
+"p>\n"
+"            <p><strong>Delivery time:</strong> From 2 weeks up to 1 month "
+"depending on customization work.</p>\n"
+"            <p>Change Request BEFORE launch:\n"
+"            <ul class=\"alternate\" type=\"square\">\n"
+"              <li>Typography, newspaper colours and style.</li>\n"
+"              <li>Changes NOT included: Widgets, Menus, Titles, Pretitle, "
+"Inner Article Disposition, Images Size, Headers and footers.</li>\n"
+"              <li>1 iteration of feedback and change request included before "
+"production.</li>\n"
+"            </ul>\n"
+"            </li>\n"
+"            <p>Change Request AFTER launch: Monitoring and Bug fixing (if "
+"any) included 30 days post production.</li>\n"
+"          <p>Steps to activate the template:\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>Order it.</li>\n"
+"            <li>We will contact you for gathering of requirements and "
+"purchase process.</li>\n"
+"            <li>In 2 to 4 weeks after first payment your template will be "
+"active</li>\n"
+"            <li>If any bug fixing is required we will take care of it, as in "
+"the first 30 days we will be monitoring your newspaper</li>\n"
+"            <li>Add On:\n"
+"              <ul class=\"alternate\" type=\"square\">\n"
+"                <li>New widgets: 120€* each</li>\n"
+"                <li>Get newspaper one week in advance: 500€*</li>\n"
+"                <li>Support cost after launch</li>\n"
+"              </ul>\n"
+"            </li>\n"
+"          </ul>\n"
+"          </li>\n"
+"          <p>Cost:</p>\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>1450€ (one pay)*</li>\n"
+"            <li>135€ (12 months)*<br>\n"
+"              *VAT not included</li>\n"
+"          </ul>\n"
+"        "
+msgstr ""
+"\n"
+"<h4>Plantilla de sitio web de periódico que pode personalizarse para "
+"reflexar mellor a túa guía de estilo de marca e as túas preferencias</h4>\n"
+"\n"
+"<p><strong>Widgets:</strong> Widgets estándar incluídos. Para engaidr un "
+"widget contacte connosco en <a href=\"mailto:sales@openhost.es\""
+">sales@openhost.es</a></p>\n"
+"<p><strong>Exclusividade:</strong> Esta plantilla non é exclusiva</p>\n"
+"<p><strong>Entrega:</strong> Desde 2 semanas até 1 mes dependendo do "
+"traballo de personalización</p>\n"
+"<p>Solicitudes de cambio ANTES do lanzamento: \n"
+"        <ul>\n"
+"            <li>Cambios incluídos: tipo de letra, cores e estilo do "
+"periódico</li>\n"
+"            <li>Cambios non incluídos: widgets, menús, títulos, pretítulo, "
+"artigo interior\n"
+"                disposición, tamaños de imaxe, cabeceiras e pés de "
+"páxina</li>\n"
+"            <li>1 iteración de comentarios e solicitudes de cambios "
+"incluídos antes da saída</li>\n"
+"        </ul>\n"
+"</p>\n"
+"<p>Solicitudes de cambio DESPOIS do lanzamento: Monitorización e arranxo de "
+"erros (se houbera) incluídos 30 days despois da saída</p>\n"
+"          <p>Pasos para activar o tema</p>:\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>Pide o tema de base que te gusta.</li>\n"
+"            <li>Contactarémosche para detallar os requisitos de "
+"personalización e de pago.</li>\n"
+"            <li>No orde de 2 semanas laborables a 1 mes desde o primeiro "
+"pago o novo tema, estará activo. Se fixera falta facer algún arranxo no "
+"primer mes encargarémonos de momento que estamos monitoreando a túa "
+"página</li>\n"
+"\n"
+"<p>Engadidos:</p>\n"
+"<ul>\n"
+"    <li>Novos widgets: 120€ cada un</li>\n"
+"    <li>Reducir unha semana o tempo de entrega: 500€</li>\n"
+"    <li>Custo de asistencia despois do lanzamento</li>\n"
+"</ul>\n"
+"          <p>Prezo:</p>\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>1450€ (pago único)*</li>\n"
+"            <li>135€ (12 meses)*<br> *IVE non incluído</li>\n"
+"          </ul>"
+
+msgid "Exclusive"
+msgstr "Exclusivo"
+
+msgid "My themes"
+msgstr "Os meus temas"
+
+msgid "Cart"
+msgstr "Carro"
+
+msgid "Your shopping cart is empty"
+msgstr "O teu carro de compra está baleiro"
+
+msgid "Checkout"
+msgstr "Mercar"
+
+msgid "Unable to find any module that matches your search."
+msgstr "Non se puideron atopar módulos que coincidan coa túa busca."
+
+msgid "No themes available"
+msgstr "Non hai temas dispoñíbeis"
+
+msgid "Change the look of your newspaper in just few clicks!"
+msgstr "Cambia a aparencia do teu xornal en tan só uns clics!"
+
+msgid ""
+"All our Themes have been designed by media professionals and they are all "
+"Mobile Responsive!"
+msgstr ""
+"Todos os nosos temas foron deseñados por profesionais do xornalismo dixital "
+"e adáptanse automaticamente a todos os dispositivos!"
+
+msgid ""
+"Add customizations and design to create your own theme based on one of out "
+"grids or ask us to develop an exclusive and completely new theme"
+msgstr ""
+"Engade a personalización que máis che gusta a unha das nosas grellas ou "
+"pídenos desenvolver algo exclusivo e completamente novo!"
+
+msgid "We are open to any solution you prefer!"
+msgstr "Estamos abertos a calquera solución que elixas!"
+
+msgid "Find here your purchased themes and decide which one to use today!"
+msgstr "Aquí están os temas que xa mercaches, decide o que queres usar hoxe!"
+
+msgid "All purchased Themes are ready for activation"
+msgstr "Todos os temas xa mercados están listos para a súa activación"
+
+msgid "Open live demo in a new tab"
+msgstr "Abrir demostración nunha nova xanela"
+
+msgid "Active"
+msgstr "Activado"
+
+msgid "Delivery time"
+msgstr "Tempo de entrega"
 
 msgid "Refresh the list for getting newest error list"
 msgstr "Actualizar a lista para obter a lista de erros actualizada"
@@ -6601,9 +7229,6 @@ msgstr "Resultado de subida de ficheiro baleiro"
 msgid "Iniciar"
 msgstr "Iniciar"
 
-msgid "Error"
-msgstr "Erro"
-
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
 
@@ -6668,9 +7293,6 @@ msgstr "Non hai datos IPTC dispoñibeis"
 msgid "Search by description"
 msgstr "Buscar por descrición"
 
-msgid "Information"
-msgstr "Información"
-
 msgid "Resolution"
 msgstr "Resolución"
 
@@ -6714,8 +7336,14 @@ msgstr "Creando artigo"
 msgid "Editing article"
 msgstr "Editar artigo"
 
+msgid "Updating"
+msgstr "Actualizando"
+
 msgid "Update"
 msgstr "Actualizar"
+
+msgid "Saving"
+msgstr "Gardando"
 
 msgid "Inner title"
 msgstr "Titulo interior:"
@@ -6725,9 +7353,6 @@ msgstr "Sinatura"
 
 msgid "Pretitle"
 msgstr "Antetitulo"
-
-msgid "Summary"
-msgstr "Resumo"
 
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
@@ -7161,9 +7786,6 @@ msgstr "Autor:"
 msgid "Submitted on:"
 msgstr "Enviado o:"
 
-msgid "month"
-msgstr "mes"
-
 msgid "Purchased"
 msgstr "Mercado"
 
@@ -7176,100 +7798,56 @@ msgstr "Imaxes e vídeos"
 msgid "Last updated"
 msgstr "Última actualización"
 
-msgid "Cart review"
-msgstr "Revisión do carro"
-
-msgid "Checkout"
-msgstr "Mercar"
-
-msgid "Success"
-msgstr "Éxito"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "To confirm your purchase press the button below."
-msgstr "Para confirmar a túa compra prema no botón de abaixo"
-
-msgid ""
-"Our sales department will receive an email with the new features you want to "
-"include in your newspaper."
-msgstr ""
-"O noso departamento de ventas recibirá un correo electrónico coas novas "
-"funcionalidades que quere incluír no seu periódico."
-
-msgid "You will receive an email with the list of features you are purchasing."
-msgstr "Recibirá un correo coa lista de características que mercou."
-
-msgid "Nice"
-msgstr "Xenial"
-
-msgid ""
-"Thank you! We have received your request and will get back to you as soon as "
-"possible. You will receive a confirmation e-mail too."
-msgstr ""
-"Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
-"pronto sexa posíbel. Debería recibir un correo de confirmación."
-
-msgid ""
-"\n"
-"          Oh!, it would be a good time to share with your friends your "
-"newspaper's improvements\n"
-"        "
-msgstr ""
-"\n"
-"Oh! Este pode ser un momento perfecto para compartir as melloras do teu "
-"periódico cos teus amigos"
-
-msgid "Continue shopping"
-msgstr "Continuar mercando"
-
-msgid "Confirm"
-msgstr "Confirmar"
-
 msgid "Packs"
 msgstr "Packs"
 
 msgid "Services"
 msgstr "Servizos"
 
-msgid "Themes"
-msgstr "Plantillas"
-
-msgid "Cart"
-msgstr "Carro"
-
-msgid "Your shopping cart is empty"
-msgstr "O teu carro de compra está baleiro"
-
-msgid "Unable to find any module that matches your search."
-msgstr "Non se puideron atopar módulos que coincidan coa túa busca."
+msgid "Partners"
+msgstr "Socios"
 
 msgid "No items available to purchase"
 msgstr "Non hai elementos dispoñibles para comprar"
 
-msgid "Free"
-msgstr "Gratis"
-
-msgid "More info"
-msgstr "Máis información"
-
 msgid "Added to cart"
 msgstr "No carro"
-
-msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr "Solicitaches os seguintes elementos para o teu periódico \"%1\""
 
 msgid "Modules requested"
 msgstr "Módulos solicitados"
 
-msgid "Our sales department will contact you to get further information"
-msgstr ""
-"O noso departamento de vendas porase en contacto contigo para obter máis "
-"información"
-
 msgid "Modules to purchase"
 msgstr "Módulos a mercar"
+
+msgid "Return to <a href=\"%1\">market</a> and try again"
+msgstr "Volva á <a href=\"%1\">tenda</a> e proba de novo"
+
+msgid ""
+"You are about to order next items. In the next 24hours our sales team will "
+"send you payment and activation information. "
+msgstr ""
+"Estás a piques de solicitar os seguintes elementos. Nas vindeiras 24 horas o "
+"noso equipo de vendas enviarache a túa información de pago e activación."
+
+msgid ""
+"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Terms of Service</a>"
+msgstr ""
+"Leín e acepto os <a href=\""
+"http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-"
+"opennemas\" title=\"Terms of use in Opennemas\">Termos de uso en "
+"Opennemas</a>"
+
+msgid "Thank you for your purchase request!"
+msgstr "Grazas pola túa solicitude de compra!"
+
+msgid ""
+"In the next 24 hours you will receive an email with payment instructions and "
+"invoice."
+msgstr ""
+"Nas vindeiras 24 horas recibirás un correo electrónico coas instrucións de "
+"pago e a factura."
 
 msgid "Delete opinions"
 msgstr "Eliminar opinións"
@@ -7914,9 +8492,6 @@ msgstr "Iniciar sesión"
 msgid "About"
 msgstr "Sobre"
 
-msgid "Help"
-msgstr "Axuda"
-
 msgid "Privacy Policy"
 msgstr "Politica de privacidade"
 
@@ -8033,9 +8608,6 @@ msgstr ""
 msgid "New user group"
 msgstr "Nuevo grupo de usuario"
 
-msgid "This field is required"
-msgstr "Este campo é obligatorio"
-
 msgid "Selected privileges"
 msgstr "Privilexios seleccionados"
 
@@ -8080,6 +8652,9 @@ msgstr "Prema Ctrl+F5 ou Ctrl+Maiús+R para que o navegador os recargue"
 msgid "Instance"
 msgstr "Instancia"
 
+msgid "Notification"
+msgstr "Notificación"
+
 msgid "Opennemas manager"
 msgstr "Xestor de opennemas"
 
@@ -8107,6 +8682,12 @@ msgstr "Eliminar grupo de usuarios"
 msgid "Delete selected user groups"
 msgstr "Eliminar os grupos de usuarios seleccionados"
 
+msgid "Delete notification"
+msgstr "Eliminar notificación"
+
+msgid "Delete notifications"
+msgstr "Eliminar notificacións"
+
 msgid "Do you really want to exit from backend?"
 msgstr "Tes certeza que queres sair do panel de administración?"
 
@@ -8127,6 +8708,12 @@ msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
 
 msgid "Do you really want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
+
+msgid "Do you really want to delete the notification?"
+msgstr "Tes certeza que queres eliminar a notificación?"
+
+msgid "Do you really want to delete the selected notifications?"
+msgstr "Tes certeza que queres eliminar as notificacións seleccionadas?"
 
 msgid "log out"
 msgstr "saír"
@@ -8212,6 +8799,63 @@ msgstr ""
 "Aquí pode eliminar en lote ficheiros de cache, compiles, sesións e outras "
 "cousas<br> dunha instancia específica"
 
+msgid "New notification"
+msgstr "Nova notificación"
+
+msgid "Edit notification"
+msgstr "Editar notificación"
+
+msgid "Style"
+msgstr "Estilo"
+
+msgid "Fixed"
+msgstr "Fixa"
+
+msgid "Notification always visible"
+msgstr "Notificación sempre visíbel"
+
+msgid "Starts"
+msgstr "Comeza"
+
+msgid "Click to set date"
+msgstr "Prema para estabelecer unha data"
+
+msgid "Ends"
+msgstr "Remata"
+
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Domain expire"
+msgstr "Expiración do dominio:"
+
+msgid "Last access"
+msgstr "Último accesso"
+
+msgid "Database"
+msgstr "Base de datos"
+
+msgid "Media size"
+msgstr "Tamaño do media"
+
+msgid "Alexa"
+msgstr "Alexa"
+
+msgid "Page views"
+msgstr "Páx. vistas"
+
+msgid "Emails"
+msgstr "Correos-e"
+
+msgid "#"
+msgstr "#"
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "End"
+msgstr "Fin"
+
 msgid "Our Videos"
 msgstr "Os nosos vídeos"
 
@@ -8268,9 +8912,6 @@ msgstr "Nome do propietario"
 msgid "Created from"
 msgstr "Creado o"
 
-msgid "Media size"
-msgstr "Tamaño do media"
-
 msgid "Language"
 msgstr "Idioma:"
 
@@ -8283,14 +8924,8 @@ msgstr "Plantilla"
 msgid "Contact mail"
 msgstr "Correo-e de contacto"
 
-msgid "Domains"
-msgstr "Dominios"
-
 msgid "No main domain"
 msgstr "Sen dominio principal"
-
-msgid "Add"
-msgstr "Engadir"
 
 msgid "Instance domains cannot be empty."
 msgstr "Os dominios da instancia non poden quedar valeiros."
@@ -8298,29 +8933,29 @@ msgstr "Os dominios da instancia non poden quedar valeiros."
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
 
-msgid "Click to set date"
-msgstr "Prema para estabelecer unha data"
-
 msgid "Billing"
 msgstr "Facturación"
+
+msgid "Add billing information"
+msgstr "Engadir información de facturación"
 
 msgid "Last invoice date"
 msgstr "Data da última factura"
 
-msgid "Support"
-msgstr "Asistencia técnica"
-
-msgid "Development plan"
-msgstr "Plan de desenvolvemento"
-
 msgid "Select all"
 msgstr "Seleccionar todo"
 
+msgid "pending activation"
+msgstr "activación pendente"
+
+msgid "pending deactivation"
+msgstr "desactivación pendente"
+
+msgid "Support"
+msgstr "Asistencia técnica"
+
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
-
-msgid "Database"
-msgstr "Base de datos"
 
 msgid "Maximun activated users"
 msgstr "Número máximo de usuarios activados"
@@ -8367,30 +9002,6 @@ msgstr "Módulos seleccionados"
 
 msgid "Filter by name, domain or contact"
 msgstr "Filtrar por nome, dominio ou contacto"
-
-msgid "Columns"
-msgstr "Columnas"
-
-msgid "Domain expire"
-msgstr "Expiración do dominio:"
-
-msgid "Last access"
-msgstr "Último accesso"
-
-msgid "Alexa"
-msgstr "Alexa"
-
-msgid "Page views"
-msgstr "Páx. vistas"
-
-msgid "Emails"
-msgstr "Correos-e"
-
-msgid "Enabled"
-msgstr "Activada"
-
-msgid "#"
-msgstr "#"
 
 msgid "No rank"
 msgstr "Sen calificar"
@@ -8495,9 +9106,66 @@ msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
 
-#, fuzzy
-#~ msgid "State"
-#~ msgstr "Estado"
+#~ msgid "Standard Template"
+#~ msgstr "Plantilla estándar"
+
+#~ msgid ""
+#~ "Standard newspaper web site design with prebuild widgets developed by "
+#~ "Opennemas team. No customization available"
+#~ msgstr ""
+#~ "Deseño de sitio web de periódico estándar con widgets predeseñados "
+#~ "desenvolvidos polo equipo de Opennemas. Sen personalización dispoñíbel"
+
+#~ msgid "This is a notification for a success"
+#~ msgstr "This is a notification for a success"
+
+#~ msgid "This notification is an error"
+#~ msgstr "This notification is an error"
+
+#~ msgid "This notification is a warning"
+#~ msgstr "This notification is a warning"
+
+#~ msgid "Getting help"
+#~ msgstr "Obter axuda"
+
+#~ msgid "Social Network"
+#~ msgstr "Redes sociais"
+
+#~ msgid "Here you can see a list of your activated modules"
+#~ msgstr "Aquí pode ver unha lista dos módulos activados no seu periódico"
+
+#~ msgid "Cart review"
+#~ msgstr "Revisión do carro"
+
+#~ msgid "To confirm your purchase press the button below."
+#~ msgstr "Para confirmar a túa compra prema no botón de abaixo"
+
+#~ msgid ""
+#~ "Our sales department will receive an email with the new features you want "
+#~ "to include in your newspaper."
+#~ msgstr ""
+#~ "O noso departamento de ventas recibirá un correo electrónico coas novas "
+#~ "funcionalidades que quere incluír no seu periódico."
+
+#~ msgid ""
+#~ "You will receive an email with the list of features you are purchasing."
+#~ msgstr "Recibirá un correo coa lista de características que mercou."
+
+#~ msgid "Nice"
+#~ msgstr "Xenial"
+
+#~ msgid ""
+#~ "Thank you! We have received your request and will get back to you as soon "
+#~ "as possible. You will receive a confirmation e-mail too."
+#~ msgstr ""
+#~ "Grazas! Recibimos a túa solicitude e poñerémonos en contacto contigo tan "
+#~ "pronto sexa posíbel. Debería recibir un correo de confirmación."
+
+#~ msgid "Continue shopping"
+#~ msgstr "Continuar mercando"
+
+#~ msgid "Development plan"
+#~ msgstr "Plan de desenvolvemento"
 
 #~ msgid "%s is now on-line"
 #~ msgstr "%s está agora dispoñible"
@@ -8615,9 +9283,6 @@ msgstr ""
 #~ msgstr ""
 #~ "usando o nombre de usuario e contraseña que puxeches al crear o periódico "
 #~ "ou a través do acceso directo aos termos de servizo"
-
-#~ msgid "Opennemas Team"
-#~ msgstr "O equipo de Opennemas"
 
 #~ msgid "Welcome to OpenNemas"
 #~ msgstr "Benvido a Opennemas"
@@ -8932,17 +9597,6 @@ msgstr ""
 #~ msgstr "Aceptación dos termos do servizo"
 
 #~ msgid ""
-#~ "In order to use the Opennemas platform you must read and accept our terms "
-#~ "of use. You can find these terms in the next link <a href=\"http://help."
-#~ "opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-#~ "\" title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>"
-#~ msgstr ""
-#~ "Para usar a plataforma Opennemas debes ler e aceptar os termos de uso. "
-#~ "Podes atopar o texto integro na seguinte ligazón <a href=\"http://help."
-#~ "opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-#~ "\" title=\"Terms of use in Opennemas\">Termos de uso en Opennemas</a>"
-
-#~ msgid ""
 #~ "I have read and accept the Opennemas <a href=\"http://help.opennemas.com/"
 #~ "knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title="
 #~ "\"Terms of use in Opennemas\">Terms of use</a> and <a href=\"http://help."
@@ -8991,9 +9645,6 @@ msgstr ""
 
 #~ msgid "Allow coments"
 #~ msgstr "Permitir comentarios"
-
-#~ msgid "Basic information"
-#~ msgstr "Información básica"
 
 #~ msgid "Position in selected page type"
 #~ msgstr "Posición no tipo de páxina seleccionado"
@@ -9396,9 +10047,6 @@ msgstr ""
 #~ msgid "Clear"
 #~ msgstr "Limpar"
 
-#~ msgid "Saving..."
-#~ msgstr "Gardando…"
-
 #~ msgid "Saved"
 #~ msgstr "Gardado"
 
@@ -9416,9 +10064,6 @@ msgstr ""
 
 #~ msgid "None"
 #~ msgstr "Ningún"
-
-#~ msgid "Start"
-#~ msgstr "Iniciar"
 
 #~ msgid "Uploaded"
 #~ msgstr "Subido"
@@ -9657,9 +10302,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Se o prefires pode ler a nosa documentación en liña ou se tes outra "
 #~ "dúbida pregúntanos."
-
-#~ msgid "General information"
-#~ msgstr "Información xeral"
 
 #~ msgid "Select image"
 #~ msgstr "Seleccionar imaxe"
@@ -10490,9 +11132,6 @@ msgstr ""
 #~ msgid "Unable to delete the menu \"%s\" as is system internal."
 #~ msgstr "Non foi posíbel eliminar o menú «%s» xa que é un menú interno."
 
-#~ msgid "Opinion deleted successfully."
-#~ msgstr "Opinión eliminada correctamente."
-
 #~ msgid "You must give an id for delete an opinion."
 #~ msgstr "Debe fornecer un identificador para eliminar unha opinión."
 
@@ -10648,14 +11287,8 @@ msgstr ""
 #~ msgid "Batch in home"
 #~ msgstr "En portada en lote"
 
-#~ msgid "Delete opinion"
-#~ msgstr "Eliminar opinión"
-
 #~ msgid "Are you sure you want to delete <span>%num%</span> opinions?"
 #~ msgstr "Ten certeza que quere eliminar <span>%num%</span> opinións?"
-
-#~ msgid "Select an author"
-#~ msgstr "Seleccionar autor"
 
 #~ msgid "All authors"
 #~ msgstr "Todos os autores"
@@ -10755,9 +11388,6 @@ msgstr ""
 
 #~ msgid "Are you sure you want to delete <span>%num%</span> advertisements?"
 #~ msgstr "Ten certeza que quere eliminar <span>%num%</span> publicidades?"
-
-#~ msgid "Actived"
-#~ msgstr "Activado"
 
 #~ msgid "There is no videos yet."
 #~ msgstr "Non hai ningún vídeo aínda."
@@ -10897,9 +11527,6 @@ msgstr ""
 
 #~ msgid "6 months"
 #~ msgstr "6 meses"
-
-#~ msgid "1 year"
-#~ msgstr "1 ano"
 
 #~ msgid "%d years"
 #~ msgstr "%d anos"
@@ -11311,9 +11938,6 @@ msgstr ""
 #~ msgid "B/W"
 #~ msgstr "B/N"
 
-#~ msgid "Content name"
-#~ msgstr "Nome do contido"
-
 #~ msgid "Comment was rejected successfully."
 #~ msgstr "Comentario rexeitado correctamente."
 
@@ -11527,9 +12151,6 @@ msgstr ""
 #~ msgid "Justice"
 #~ msgstr "Xustiza"
 
-#~ msgid "File %s is not a valid Europapress file"
-#~ msgstr "O ficheiro %s non é un ficheiro de Europapress válido"
-
 #~ msgid "WIDGET"
 #~ msgstr "WIDGET"
 
@@ -11543,9 +12164,6 @@ msgstr ""
 #~ msgstr "Contrasinal:"
 
 #~ msgid "Advertisement manager"
-#~ msgstr "Xestor de publicidade"
-
-#~ msgid "Ad manager"
 #~ msgstr "Xestor de publicidade"
 
 #~ msgid "Editing group \"%1\""

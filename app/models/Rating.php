@@ -242,7 +242,7 @@ class Rating
         return $output;
     }
 
-        /**
+    /**
      * Renders the link part for the rating HTML
      *
      * @param int $currentPos the current position of the link in the list

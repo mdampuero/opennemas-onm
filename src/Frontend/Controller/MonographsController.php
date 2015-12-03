@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,11 +41,12 @@ class MonographsController extends Controller
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
-        $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->categoryName = $this->get('request')->query
+            ->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
             $this->category     = $this->ccm->get_id($this->categoryName);
-            $actual_category_id =  $this->category;// FOR WIDGETS
+            $actual_category_id = $this->category;
             $category_real_name = $this->ccm->getTitle($this->categoryName);
 
         } else {
@@ -102,7 +104,7 @@ class MonographsController extends Controller
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
                     if (!empty($monograph->img1)) {
-                        $img                  = $this->get('entity_repository')->find('Photo', $monograph->img1);
+                        $img = $this->get('entity_repository')->find('Photo', $monograph->img1);
                         $monograph->img1_path = $img->path_file.$img->name;
                         $monograph->img       = $img;
                     }
@@ -138,26 +140,21 @@ class MonographsController extends Controller
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve special ID, search in repository or redirect to 404
-        list($specialID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $special = $this->get('entity_repository')->find('Special', $specialID);
-        if (!\ContentManager::checkValidContentAndUrl($special, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        $special = $this->get('content_url_matcher')
+            ->matchContentUrl('special', $dirtyID, $urlSlug);
+
+        if (empty($special)) {
+            throw new ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $specialID);
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $special->id);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
-            if ($special->content_status != 1
-                || $special->in_litter != 0
-            ) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-
-            $contents = $special->getContents($specialID);
+            $contents = $special->getContents($special->id);
             $columns  = array();
 
+            $er = $this->get('entity_repository');
             if (!empty($contents)) {
                 if ((count($contents) == 1)  &&
                     (($contents[0]['type_content']=='Attachment')
@@ -171,13 +168,13 @@ class MonographsController extends Controller
                         $content = \Content::get($item['fk_content']);
 
                         if (!empty($content->img1)) {
-                            $photo                = $this->get('entity_repository')->find('Photo', $content->img1);
+                            $photo = $er->find('Photo', $content->img1);
                             $content->img1_path = $photo->path_file.$photo->name;
                             $content->img1      = $photo;
                         }
 
                         if (!empty($content->fk_video)) {
-                            $video              = $this->get('entity_repository')->find('Video', $content->fk_video);
+                            $video = $er->find('Video', $content->fk_video);
                             $content->obj_video = $video;
                         }
 
@@ -200,7 +197,7 @@ class MonographsController extends Controller
             }
 
             if (!empty($special->img1)) {
-                $photo               = $this->get('entity_repository')->find('Photo', $special->img1);
+                $photo = $er->find('Photo', $special->img1);
                 $special->path_img = $photo->path_file.$photo->name;
                 $special->img      = $photo;
             }
@@ -210,7 +207,7 @@ class MonographsController extends Controller
                     'special'   => $special,
                     'content'   => $special,
                     'columns'   => $columns,
-                    'contentId' => $specialID,
+                    'contentId' => $special->id,
                 )
             );
         }

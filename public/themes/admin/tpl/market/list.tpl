@@ -29,7 +29,7 @@
                 <span ng-if="type == 'module'">{t}Modules{/t}</span>
                 <span ng-if="type == 'pack'">{t}Packs{/t}</span>
                 <span ng-if="type == 'service'">{t}Services{/t}</span>
-                <span ng-if="type == 'theme'">{t}Themes{/t}</span>
+                <span ng-if="type == 'partner'">{t}Partners{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
@@ -45,8 +45,8 @@
                 <li ng-click="type = 'service'">
                   <a href="#">{t}Services{/t}</a>
                 </li>
-                <li ng-click="type = 'theme'">
-                  <a href="#">{t}Themes{/t}</a>
+                <li ng-click="type = 'partner'">
+                  <a href="#">{t}Partners{/t}</a>
                 </li>
               </ul>
             </li>
@@ -75,10 +75,12 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                          <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
+                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                          <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
-                            <p class="description">[% item.description %]</p>
+                            <div class="description" ng-bind-html="item.description[lang] ? item.description[lang] : item.description"></div>
                           </span>
                           <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
                         </li>
@@ -86,10 +88,10 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <button class="btn btn-block btn-white" ng-click="checkout()" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
-                    </button>
+                    </a>
                   </div>
                 </div>
               </li>
@@ -129,19 +131,19 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks module-filter">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'theme', 'btn-white': type != 'theme' }" ng-click="type = 'theme'">
-                <i class="fa fa-lg fa-eye"></i>
-                {t}Themes{/t}
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
+                <i class="fa fa-lg fa-support"></i>
+                {t}Services{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
-                <i class="fa fa-lg fa-support"></i>
-                {t}Services{/t}
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
+                <i class="fa fa-lg fa-thumbs-o-up"></i>
+                {t}Partners{/t}
               </button>
             </li>
           </ul>
@@ -180,31 +182,31 @@
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <div class="infinite-row" ng-if="type != 'module'">
+      <div ng-if="type != 'module'">
         <h4 class="ng-cloak" ng-show="!loading  && allActivated(purchased)">{t}No items available to purchase{/t}</h4>
         <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
-        <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
+        <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
           </div>
         </div>
         <h4 class="ng-cloak" ng-show="!loading && !allDeactivated(purchased)">{t}Purchased{/t}</h4>
-        <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
+        <div class="row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
           </div>
         </div>
       </div>
       <div ng-if="type == 'module'">
         <h4 class="ng-cloak" ng-show="!loading && allActivated(available['PROFESSIONAL']) && allActivated(available['SILVER']) && allActivated(available['GOLD']) && allActivated(available['OTHER'])">{t}No items available to purchase{/t}</h4>
-        <div class="infinite-row" ng-repeat="plan in plans">
+        <div class="row" ng-repeat="plan in plans">
           <h3 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">[% plan.name %]</h3>
           <h4 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">{t}Available{/t}</h4>
-          <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
+          <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
             </div>
           </div>
           <!-- <h4 class="ng-cloak" ng-show="!loading  && !allDeactivated(purchased[plan.id])">{t}Purchased{/t}</h4>
-          <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
+          <div class="row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
+            <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
             </div>
           </div> -->
         </div>
@@ -217,7 +219,7 @@
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
               <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
               <div class="module-icon">
-                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
+                <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-thumbs-o-up': item.type == 'partner', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>
             </div>
             <div class="module-body col-xs-8 col-sm-8">
@@ -244,7 +246,7 @@
             </div>
           </div>
           <div class="module-tools row clearfix">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-sm-6">
               <button class="more-info btn btn-block btn-link" ng-click="showDetails(item);$event.stopPropagation()">
                 {t}More info{/t}
             </div>
@@ -259,9 +261,6 @@
           </div>
         </div>
       </div>
-    </script>
-    <script type="text/ng-template" id="modal-checkout">
-      {include file="market/modal/_checkout.tpl"}
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="market/modal/_details.tpl"}

@@ -44,15 +44,13 @@ class ContentsController extends Controller
         // Resolve article ID
         preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
         $dirtyID = $matches['date'].sprintf('%06d', $matches['id']);
-        list($contentID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $this->view = new \Template(TEMPLATE_USER);
-        $cacheID   = $this->view->generateCacheId('article', null, $contentID);
-
+        $contentID = $matches['id'];
         $content = new \Content($contentID);
-        $content = $content->get($contentID);
+        $content = $this->get('content_url_matcher')
+            ->matchContentUrl($content->content_type_name, $dirtyID, $urlSlug);
 
-        if (!\ContentManager::checkValidContentAndUrl($content, $urlDate, $urlSlug)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        if (empty($content)) {
+            throw new ResourceNotFoundException();
         }
 
         // Check for paywall
@@ -60,11 +58,14 @@ class ContentsController extends Controller
             $this->paywallHook($content);
         }
 
-
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $cacheID = $this->view
+            ->generateCacheId($content->content_type_name, null, $contentID);
 
         return $this->render(
             'article/article_printer.tpl',

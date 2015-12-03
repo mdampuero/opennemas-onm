@@ -1,18 +1,38 @@
-::-moz-selection { background: #357AE8; color: #fff; text-shadow: none; }
-::selection { background: #357AE8; color: #fff; text-shadow: none; }
-:focus { -moz-outline-style: none; }
+::-moz-selection {
+  background: #357AE8; color: #fff; text-shadow: none;
+}
+
+::selection {
+  background: #357AE8; color: #fff; text-shadow: none;
+}
+:focus {
+  -moz-outline-style: none;
+}
 
 .block {
   display: block;
   width: 100%;
 }
 
-.nowrap {white-space: nowrap;}
+.nowrap {
+  white-space: nowrap;
+}
 
-.left { text-align:left !important; }
-.right { text-align:right !important; }
-.center { text-align:center !important; }
-.pointer { cursor: pointer; }
+.left {
+  text-align:left !important;
+}
+
+.right {
+  text-align:right !important;
+}
+
+.center {
+  text-align:center !important;
+}
+
+.no-overflow {
+  overflow: visible !important;
+}
 
 .no-style {
   list-style: none;
@@ -26,7 +46,15 @@
 }
 
 .pointer {
-  cursor:pointer !important;
+  cursor: pointer !important;
+}
+
+.m-r-10 {
+  margin-right: 10px !important;
+}
+
+.m-b-15 {
+  margin-bottom: 15px !important;
 }
 
 .p-l-7 {
@@ -54,6 +82,14 @@
   }
 }
 
+.text-default {
+  color: @text-color;
+}
+
 .uppercase {
   text-transform: uppercase;
+}
+
+.wrap {
+  white-space: normal;
 }

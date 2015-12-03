@@ -250,10 +250,9 @@ class Attachment extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-
         $contents = implode(', ', $arrayIds);
 
-        $sql = 'SELECT  path  FROM attachments WHERE pk_attachment IN ('.$contents.')';
+        $sql = 'SELECT path FROM attachments WHERE pk_attachment IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
@@ -270,8 +269,7 @@ class Attachment extends Content
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM attachments '
-                .'WHERE `pk_attachment` IN ('.$contents.')';
+        $sql = 'DELETE FROM attachments WHERE `pk_attachment` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
@@ -279,7 +277,6 @@ class Attachment extends Content
         }
 
         return true;
-
     }
 
     /**

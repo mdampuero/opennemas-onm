@@ -3,7 +3,7 @@
       <div class="col-xs-4">
         <img class="img-responsive m-b-15" ng-src="/assets/images/market/[% template.item.thumbnail %]">
         <div class="module-icon">
-          <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
+          <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-thumbs-o-up': template.item.type == 'partner', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
         </div>
       </div>
       <div class="col-xs-8">
@@ -45,7 +45,7 @@
     {*<h4 class="text-center uppercase">
       {t}Screenshots and videos{/t}
     </h4>
-    <div class="clearfix infinite-row">
+    <div class="clearfix row">
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
     </div>*}

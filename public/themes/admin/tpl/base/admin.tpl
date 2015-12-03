@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
+<!--[if lt IE 8]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <!--<![endif]-->
@@ -35,14 +35,12 @@
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/select2/select2.css,
+      @Common/components/spinkit/css/spinkit.css,
       @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
@@ -51,14 +49,12 @@
       @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
-      @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/src/angular-dynamic-image/less/main.less,
+      @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
@@ -253,41 +249,59 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                {*
-                <li class="quicklinks notifications dropdown">
-                  <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
-                    <i class="fa fa-bell"></i>
-                  </a>
-                  <div class="dropdown-menu">
-                    <div class="dropdown-title">
-                      {t}Notifications{/t}
+                {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
+                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()" ng-click="markFixedAsRead()">
+                    <a href="#" data-toggle="dropdown">
+                      <i class="fa fa-bell"></i>
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
+                        [% unread.length %]
+                      </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
+                      <div class="dropdown-title clearfix">
+                          {t}Notifications{/t}
+                      </div>
+                      <div class="notification-list-placeholder" ng-show="!notifications || notifications.length == 0">
+                        <span class="fa fa-bell fa-2x"></span>
+                        <h5>
+                          {t}There are no notifications for now.{/t} <br>
+                          {capture name="notifications_url"}{url name=backend_notifications_list}{/capture}
+                          {t 1=$smarty.capture.notifications_url escape=off}Check your previous notifications <a href="%1">here</a>.{/t}
+                        </h5>
+                      </div>
+                      <ul class="notification-list" ng-show="notifications.length > 0">
+                        <scrollable>
+                        <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
+                          <div class="notification-title">
+                            [% notification.title %]
+                            <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
+                              <i class="fa fa-times"></i>
+                            </span>
+                          </div>
+                          <div class="notification-icon">
+                            <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'users', 'fa-users': notification.type === 'users' }"></i>
+                          </div>
+                          <div class="notification-body" ng-bind-html="notification.body"></div>
+                        </li>
+                        </scrollable>
+                      </ul>
+                      <div class="dropdown-footer clearfix">
+                        <a href="{url name=backend_notifications_list}">
+                          {t}See more{/t}
+                        </a>
+                      </div>
                     </div>
-                    <ul class="notification-list">
-                      <li class="notification-success">
-                        <div class="title">Success!</div>
-                        <p>{t}This is a notification for a success{/t}</p>
-                      </li>
-                      <li class="notification-error">
-                        <div class="title">Error!</div>
-                        <p>{t}This notification is an error{/t}</p>
-                      </li>
-                      <li class="notification-warning">
-                        <div class="title">Warning!</div>
-                        <p>{t}This notification is a warning{/t}</p>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="quicklinks">
-                  <span class="h-seperate"></span>
-                </li>
-                *}
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/if}
                 <li class="quicklinks quick-items help-items dropdown">
-                  <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
+                  <a href="#" data-toggle="dropdown">
                     <i class="fa fa-support"></i>
                   </a>
-                  <div class="dropdown-menu">
-                    <!-- <div class="dropdown-title">{t}Help center{/t}</div> -->
+                  <div class="dropdown-menu dropdown-menu-with-title">
+                     <div class="dropdown-title">{t}Help center{/t}</div>
                     <div class="clearfix quick-items-row">
                       <div class="quick-item">
                         <a href="javascript:UserVoice.showPopupWidget();">
@@ -442,7 +456,6 @@
       @Common/components/angular-sanitize/angular-sanitize.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
-      @Common/components/ngQuickDate/dist/ng-quick-date.min.js,
       @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
       @Common/components/angular-route/angular-route.min.js,
       @Common/components/ng-tags-input/ng-tags-input.min.js,
@@ -457,6 +470,7 @@
       @Common/src/opennemas-webarch/js/core.js,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
+      @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,

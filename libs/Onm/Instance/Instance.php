@@ -254,12 +254,12 @@ class Instance
         }
 
         foreach ($this->settings as $key => $value) {
-            define($key, $value);
+            define($key, str_replace('es.openhost.theme.', '', $value));
         }
 
         $this->initInternalConstants();
 
-        if ($this->internal_name !== 'onm_manager') {
+        if ($this->internal_name !== 'manager') {
             $this->initTheme();
         }
     }

@@ -26,10 +26,10 @@ class Opinions
     {
         $this->validateInt($id);
 
-        // Resolve epaper ID, search in repository or redirect to 404
-        list($opinionID, $urlDate) = \ContentManager::resolveID($id);
-        $opinion = getService('opinion_repository')->find('Opinion', $opinionID);
-        if (!\ContentManager::checkValidContentAndUrl($opinion, $urlDate)) {
+        $opinion = $this->get('content_url_matcher')
+            ->matchContentUrl('opinion', $dirtyID);
+
+        if (empty($opinion)) {
             throw new RestException(404, 'Page not found');
         }
 
@@ -42,10 +42,10 @@ class Opinions
         $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
 
         // Get machine related contents
-        $opinion->machineRelated = $this->machineRelated($opinionID);
+        $opinion->machineRelated = $this->machineRelated($opinion->id);
 
         //Fetch the other opinions for this author
-        $opinion->otherOpinions = $this->others($opinionID);
+        $opinion->otherOpinions = $this->others($opinion->id);
 
         // Get external media url
         $opinion->externalMediaUrl = MEDIA_IMG_ABSOLUTE_URL;

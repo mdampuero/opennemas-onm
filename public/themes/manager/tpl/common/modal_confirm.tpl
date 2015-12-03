@@ -9,6 +9,8 @@
         <span ng-if="template.name == 'delete-users'">{t}Delete selected users{/t}</span>
         <span ng-if="template.name == 'delete-user-group'">{t}Delete user group{/t}</span>
         <span ng-if="template.name == 'delete-user-groups'">{t}Delete selected user groups{/t}</span>
+        <span ng-if="template.name == 'delete-notification'">{t}Delete notification{/t}</span>
+        <span ng-if="template.name == 'delete-notifications'">{t}Delete notifications{/t}</span>
     </h4>
 </div>
 <div class="modal-body">
@@ -19,6 +21,8 @@
     <p ng-if="template.name == 'delete-users'">{t}Do you really want to delete the selected users?{/t}</p>
     <p ng-if="template.name == 'delete-user-group'">{t}Do you really want to delete the user group?{/t}</p>
     <p ng-if="template.name == 'delete-user-groups'">{t}Do you really want to delete the selected user groups?{/t}</p>
+    <p ng-if="template.name == 'delete-notification'">{t}Do you really want to delete the notification?{/t}</p>
+    <p ng-if="template.name == 'delete-notifications'">{t}Do you really want to delete the selected notifications?{/t}</p>
     <ul ng-if="template.item">
         <li>
             [% template.item.name %]
@@ -60,5 +64,8 @@
         <span ng-if="template.name == 'delete-users'">{t}delete them{/t}</span>
         <span ng-if="template.name == 'delete-user-group'">{t}delete it{/t}</span>
         <span ng-if="template.name == 'delete-user-groups'">{t}delete them{/t}</span>
+        <span ng-if="template.name == 'delete-notification'">{t}delete it{/t}</span>
+        <span ng-if="template.name == 'delete-notifications'">{t}delete them{/t}</span>
+
     </button>
 </div>

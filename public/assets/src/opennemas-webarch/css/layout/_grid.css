@@ -1,6 +1,17 @@
 .grid.simple .grid-body,
-.grid.simple .grid-title {
+.grid.simple .grid-title,
+.grid.solid .grid-body,
+.grid.solid .grid-title {
   padding: 15px;
+}
+
+.grid-body.blue {
+  background-color: #0090d9 !important;
+}
+
+.grid.vertical .grid-body {
+  padding-left: 12px;
+  border-left: none;
 }
 
 .grid.simple .grid-title h4 {
@@ -8,8 +19,23 @@
   margin: 0;
 }
 
-.grid-body {
-  position: relative;
+.grid-body-wrapper {
+  opacity: 1;
+  overflow: hidden;
+  max-height: 800px;
+  transition: all .5s;
+  width: 100%;
+
+  &.ng-hide {
+    max-height: 0px;
+    overflow: hidden;
+    opacity: 0;
+    transition: all .5s;
+  }
+}
+
+.grid-hover:hover {
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, .125);
 }
 
 .grid-overlay {
@@ -22,6 +48,7 @@
 
 .grid-body .tab-content {
   margin: 0;
+  overflow: visible;
 }
 
 .grid-body .tab-content .tab-pane {

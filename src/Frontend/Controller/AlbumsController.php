@@ -177,10 +177,10 @@ class AlbumsController extends Controller
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
         $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve album ID, search in repository or redirect to 404
-        list($albumID, $urlDate) = \ContentManager::resolveID($dirtyID);
-        $album = $this->get('entity_repository')->find('Album', $albumID);
-        if (!\ContentManager::checkValidContentAndUrl($album, $urlDate, $urlSlug)) {
+        $album = $this->get('content_url_matcher')
+            ->matchContentUrl('album', $dirtyID, $urlSlug, $this->categoryName);
+
+        if (empty($album)) {
             throw new ResourceNotFoundException();
         }
 
@@ -192,53 +192,47 @@ class AlbumsController extends Controller
         // Items_page refers to the widget
         $itemsPerPage = 8;
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $album->id);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
-            // Show the album only if it is properly published
-            if (($album->content_status == 1) && ($album->in_litter == 0)) {
-                $this->view->assign('album', $album);
-                $album->with_comment = 1;
+            $album->with_comment = 1;
 
-                // Get the other albums for the albums widget
-                $settings = s::get('album_settings');
-                $total    = isset($settings['total_front'])?($settings['total_front']):2;
-                $days     = isset($settings['time_last'])?($settings['time_last']):4;
+            // Get the other albums for the albums widget
+            $settings = s::get('album_settings');
+            $total    = isset($settings['total_front'])?($settings['total_front']):2;
+            $days     = isset($settings['time_last'])?($settings['time_last']):4;
 
-                $otherAlbums = $this->cm->findAll(
-                    'Album',
-                    'content_status=1 AND pk_content !='.$albumID.' AND `contents_categories`.`pk_fk_content_category` ='
-                    . $this->category . ' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
-                    ' ORDER BY created DESC LIMIT '.$total
-                );
+            $otherAlbums = $this->cm->findAll(
+                'Album',
+                'content_status=1 AND pk_content !='.$album->id.' AND `contents_categories`.`pk_fk_content_category` ='
+                . $this->category . ' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
+                ' ORDER BY created DESC LIMIT '.$total
+            );
 
-                foreach ($otherAlbums as &$content) {
-                    $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
-                    $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
-                    $content->category_name  = $content->loadCategoryName($content->id);
-                    $content->category_title = $content->loadCategoryTitle($content->id);
-                }
+            foreach ($otherAlbums as &$content) {
+                $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
+                $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
+                $content->category_name  = $content->loadCategoryName($content->id);
+                $content->category_title = $content->loadCategoryTitle($content->id);
+            }
 
-                // Fetch album author
-                $album->author = $this->get('user_repository')->find($album->fk_author);
+            // Fetch album author
+            $album->author = $this->get('user_repository')->find($album->fk_author);
 
-                // Load category and photos
-                $album->category_name  = $album->loadCategoryName($album->id);
-                $album->category_title = $album->loadCategoryTitle($album->id);
+            // Load category and photos
+            $album->category_name  = $album->loadCategoryName($album->id);
+            $album->category_title = $album->loadCategoryTitle($album->id);
 
-                // TODO: Improve this.
-                // In order to make subscription module to work remove the attached album photos when not cacheable
-                $_albumArray           = (!isset($album->album_content_replaced))
-                    ? $album->_getAttachedPhotos($album->id) : null;
-                $_albumArrayPaged      = (!isset($album->album_content_replaced))
-                    ? $album->getAttachedPhotosPaged($album->id, 8, $this->page) : null;
+            // TODO: Improve this.
+            // In order to make subscription module to work remove the attached album photos when not cacheable
+            $_albumArray           = (!isset($album->album_content_replaced))
+                ? $album->_getAttachedPhotos($album->id) : null;
+            $_albumArrayPaged      = (!isset($album->album_content_replaced))
+                ? $album->getAttachedPhotosPaged($album->id, 8, $this->page) : null;
 
-                if (count($_albumArrayPaged) > $itemsPerPage) {
-                    array_pop($_albumArrayPaged);
-                }
-            } else {
-                throw new ResourceNotFoundException();
+            if (count($_albumArrayPaged) > $itemsPerPage) {
+                array_pop($_albumArrayPaged);
             }
 
             $this->view->assign(
@@ -258,9 +252,9 @@ class AlbumsController extends Controller
             'album/album.tpl',
             array(
                 'cache_id'       => $cacheID,
-                'contentId'      => $albumID,
+                'contentId'      => $album->id,
                 'advertisements' => $this->getAds('inner'),
-                'x-tags'         => 'album,'.$albumID,
+                'x-tags'         => 'album,'.$album->id,
                 'x-cache-for'    => '+1 day',
                 'x-cacheable'    => $cacheable
             )

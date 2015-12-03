@@ -21,561 +21,560 @@ class AdvertisementPositions
      *
      * @var string
      **/
-    private $positions = array();
+    private $positions = [];
 
     /**
      * Initializes this class
      **/
     public function __construct()
     {
-        $this->positions = array(
-
+        $this->positions = [
             // Frontpage banners
-            1 => array(
+            1 => [
                 'name'  => 'Top Left LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            2 => array(
+            ],
+            2 => [
                 'name'  => 'Top Right LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            3 => array(
+            ],
+            3 => [
                 'name'  => 'Center Left LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            4 => array(
+            ],
+            4 => [
                 'name'  => 'Center Right LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            5 => array(
+            ],
+            5 => [
                 'name'  => 'Bottom Left LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            6 => array(
+            ],
+            6 => [
                 'name'  => 'Bottom Right LeaderBoard',
                 'group' => 'frontpage'
-            ),
-            7 => array(
+            ],
+            7 => [
                 'name'  => 'Banner Right Logo',
                 'group' => 'frontpage'
-            ),
-            9  => array(
+            ],
+            9  => [
                 'name'  => 'Top Mega-LeaderBoard',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Frontpage column 1 buttons
-            11 => array(
+            11 => [
                 'name'  => 'Button Column 1 Position 1',
                 'group' => 'frontpage'
-            ),
-            12 => array(
+            ],
+            12 => [
                 'name'  => 'Button Column 1 Position 2',
                 'group' => 'frontpage'
-            ),
-            13 => array(
+            ],
+            13 => [
                 'name'  => 'Button Column 1 Position 3',
                 'group' => 'frontpage'
-            ),
-            14 => array(
+            ],
+            14 => [
                 'name'  => 'Button Column 1 Position 4',
                 'group' => 'frontpage'
-            ),
-            15 => array(
+            ],
+            15 => [
                 'name'  => 'Button Column 1 Position 5',
                 'group' => 'frontpage'
-            ),
-            16 => array(
+            ],
+            16 => [
                 'name'  => 'Button Column 1 Position 6',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Frontpage column 2 buttons
-            21 => array(
+            21 => [
                 'name'  => 'Button Colunm 2 Position 1',
                 'group' => 'frontpage'
-            ),
-            22 => array(
+            ],
+            22 => [
                 'name'  => 'Button Colunm 2 Position 2',
                 'group' => 'frontpage'
-            ),
-            23 => array(
+            ],
+            23 => [
                 'name'  => 'Button Colunm 2 Position 3',
                 'group' => 'frontpage'
-            ),
-            24 => array(
+            ],
+            24 => [
                 'name'  => 'Button Colunm 2 Position 4',
                 'group' => 'frontpage'
-            ),
-            25 => array(
+            ],
+            25 => [
                 'name'  => 'Button Colunm 2 Position 5',
                 'group' => 'frontpage'
-            ),
-            26 => array(
+            ],
+            26 => [
                 'name'  => 'Button Colunm 2 Position 6',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Frontpage column 3 buttons
-            31 => array(
+            31 => [
                 'name'  => 'Button Colunm 3 Position 1',
                 'group' => 'frontpage'
-            ),
-            32 => array(
+            ],
+            32 => [
                 'name'  => 'Button Colunm 3 Position 2',
                 'group' => 'frontpage'
-            ),
-            33 => array(
+            ],
+            33 => [
                 'name'  => 'Button Colunm 3 Position 3',
                 'group' => 'frontpage'
-            ),
-            34 => array(
+            ],
+            34 => [
                 'name'  => 'Button Colunm 3 Position 4',
                 'group' => 'frontpage'
-            ),
-            35 => array(
+            ],
+            35 => [
                 'name'  => 'Button Colunm 3 Position 5',
                 'group' => 'frontpage'
-            ),
-            36 => array(
+            ],
+            36 => [
                 'name'  => 'Button Colunm 3 Position 6',
                 'group' => 'frontpage'
-            ),
-            37 => array(
+            ],
+            37 => [
                 'name'  => 'Floating banner',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Frontpage intersticial
-            50 => array(
+            50 => [
                 'name'  => 'Banner Interticial en portada',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Frontpage skycrapers
-            91 => array(
+            91 => [
                 'name'  => 'Left Skyscraper',
                 'group' => 'frontpage'
-            ),
-            92 => array(
+            ],
+            92 => [
                 'name'  => 'Right Skyscraper',
                 'group' => 'frontpage'
-            ),
+            ],
 
             // Article inner banners
-            101 => array(
+            101 => [
                 'name'  => '[I] Big banner superior',
                 'group' => 'article_inner'
-            ),
-            102 => array(
+            ],
+            102 => [
                 'name'  => '[I] Banner superior Derecho',
                 'group' => 'article_inner'
-            ),
-            103 => array(
+            ],
+            103 => [
                 'name'  => '[I] Banner Columna Derecha 1',
                 'group' => 'article_inner'
-            ),
-            104 => array(
+            ],
+            104 => [
                 'name'  => '[I] Robapágina',
                 'group' => 'article_inner'
-            ),
-            105 => array(
+            ],
+            105 => [
                 'name'  => '[I] Banner Columna Derecha 2',
                 'group' => 'article_inner'
-            ),
-            106 => array(
+            ],
+            106 => [
                 'name'  => '[I] Banner Columna Derecha 3',
                 'group' => 'article_inner'
-            ),
-            107 => array(
+            ],
+            107 => [
                 'name'  => '[I] Banner Columna Derecha 4',
                 'group' => 'article_inner'
-            ),
-            108 => array(
+            ],
+            108 => [
                 'name'  => '[I] Banner Columna Derecha 5',
                 'group' => 'article_inner'
-            ),
-            109 => array(
+            ],
+            109 => [
                 'name'  => '[I] Big Banner Inferior',
                 'group' => 'article_inner'
-            ),
-            110 => array(
+            ],
+            110 => [
                 'name'  => '[I] Banner Inferior Derecho',
                 'group' => 'article_inner'
-            ),
+            ],
 
             // Intersticial banner article inner
-            150 => array(
+            150 => [
                 'name'  => '[I] Banner Interticial noticia interior',
                 'group' => 'article_inner'
-            ),
+            ],
 
             // Skycraper banners article inner
-            191 => array(
+            191 => [
                 'name'  => '[I] Left Skyscraper',
                 'group' => 'article_inner'
-            ),
-            192 => array(
+            ],
+            192 => [
                 'name'  => '[I] Right Skyscraper',
                 'group' => 'article_inner'
-            ),
-            193 => array(
+            ],
+            193 => [
                 'name'  => '[I] InBody Skyscraper',
                 'group' => 'article_inner'
-            ),
+            ],
 
             // Videos frontpage banners
-            201 => array(
+            201 => [
                 'name'  => '[V] Big banner superior',
                 'group' => 'video_frontpage'
-            ),
-            202 => array(
+            ],
+            202 => [
                 'name'  => '[V] Banner superior derecho',
                 'group' => 'video_frontpage'
-            ),
-            203 => array(
+            ],
+            203 => [
                 'name'  => '[V] Banner Video Button',
                 'group' => 'video_frontpage'
-            ),
-            209 => array(
+            ],
+            209 => [
                 'name'  => '[V] Big Banner Inferior',
                 'group' => 'video_frontpage'
-            ),
-            210 => array(
+            ],
+            210 => [
                 'name'  => '[V] Banner Inferior Derecho',
                 'group' => 'video_frontpage'
-            ),
+            ],
 
             // Intersticial banner video front
-            250 => array(
+            250 => [
                 'name'  => '[V] Banner Interticial',
                 'group' => 'video_frontpage'
-            ),
+            ],
 
             // Intersticial banner video front
-            291 => array(
+            291 => [
                 'name'  => '[V] Left Skyscraper',
                 'group' => 'video_frontpage'
-            ),
-            292 => array(
+            ],
+            292 => [
                 'name'  => '[V] Right Skyscraper',
                 'group' => 'video_frontpage'
-            ),
+            ],
 
             // Video inner banners
-            301 => array(
+            301 => [
                 'name'  => '[VI] Big banner superior',
                 'group' => 'video_inner'
-            ),
-            302 => array(
+            ],
+            302 => [
                 'name'  => '[VI] Banner superior Derecho',
                 'group' => 'video_inner'
-            ),
-            303 => array(
+            ],
+            303 => [
                 'name'  => '[VI] Banner Video Button',
                 'group' => 'video_inner'
-            ),
-            309 => array(
+            ],
+            309 => [
                 'name'  => '[VI] Big Banner Inferior',
                 'group' => 'video_inner'
-            ),
-            310 => array(
+            ],
+            310 => [
                 'name'  => '[VI] Banner Inferior Derecho',
                 'group' => 'video_inner'
-            ),
+            ],
 
             // Intersticial banner video inner
-            350 => array(
+            350 => [
                 'name'  => '[VI] Banner Interticial',
                 'group' => 'video_inner'
-            ),
+            ],
 
             // Intersticial banner video inner
-            391 => array(
+            391 => [
                 'name'  => '[VI] Left Skyscraper',
                 'group' => 'video_inner'
-            ),
-            392 => array(
+            ],
+            392 => [
                 'name'  => '[VI] Right Skyscraper',
                 'group' => 'video_inner'
-            ),
+            ],
 
             // Albums frontpage banners
-            401 => array(
+            401 => [
                 'name'  => '[A] Big banner superior',
                 'group' => 'album_frontpage'
-            ),
-            402 => array(
+            ],
+            402 => [
                 'name'  => '[A] Banner superior Derecho',
                 'group' => 'album_frontpage'
-            ),
-            403 => array(
+            ],
+            403 => [
                 'name'  => '[A] Banner 1 Column Right',
                 'group' => 'album_frontpage'
-            ),
-            405 => array(
+            ],
+            405 => [
                 'name'  => '[A] Banner 2 Column Right',
                 'group' => 'album_frontpage'
-            ),
-            409 => array(
+            ],
+            409 => [
                 'name'  => '[A] Big Banner Inferior',
                 'group' => 'album_frontpage'
-            ),
-            410 => array(
+            ],
+            410 => [
                 'name'  => '[A] Banner Inferior Derecho',
                 'group' => 'album_frontpage'
-            ),
+            ],
 
             // Intersticial banner album front
-            450 => array(
+            450 => [
                 'name'  => '[A] Banner Interticial',
                 'group' => 'album_frontpage'
-            ),
+            ],
 
             // Intersticial banner album front
-            491 => array(
+            491 => [
                 'name'  => '[A] Left Skyscraper',
                 'group' => 'album_frontpage'
-            ),
-            492 => array(
+            ],
+            492 => [
                 'name'  => '[A] Right Skyscraper',
                 'group' => 'album_frontpage'
-            ),
+            ],
 
             // Albums inner banners
-            501 => array(
+            501 => [
                 'name'  => '[AI] Big banner superior',
                 'group' => 'album_inner'
-            ),
-            502 => array(
+            ],
+            502 => [
                 'name'  => '[AI] Banner superior Derecho',
                 'group' => 'album_inner'
-            ),
-            503 => array(
+            ],
+            503 => [
                 'name'  => '[AI] Banner Columna Derecha',
                 'group' => 'album_inner'
-            ),
-            509 => array(
+            ],
+            509 => [
                 'name'  => '[AI] Big Banner Inferior',
                 'group' => 'album_inner'
-            ),
-            510 => array(
+            ],
+            510 => [
                 'name'  => '[AI] Banner Inferior Derecho',
                 'group' => 'album_inner'
-            ),
+            ],
 
             // Intersticial banner album inner
-            550 => array(
+            550 => [
                 'name'  => '[AI] Banner Interticial',
                 'group' => 'album_inner'
-            ),
+            ],
 
             // Intersticial banner album inner
-            591 => array(
+            591 => [
                 'name'  => '[AI] Left Skyscraper',
                 'group' => 'album_inner'
-            ),
-            592 => array(
+            ],
+            592 => [
                 'name'  => '[AI] Right Skyscraper',
                 'group' => 'album_inner'
-            ),
+            ],
 
             // Opinion frontpage banners
-            601 => array(
+            601 => [
                 'name'  => '[O] Big banner superior',
                 'group' => 'opinion_frontpage'
-            ),
-            602 => array(
+            ],
+            602 => [
                 'name'  => '[O] Banner superior Derecho',
                 'group' => 'opinion_frontpage'
-            ),
-            603 => array(
+            ],
+            603 => [
                 'name'  => '[O] Banner 1 Column Right',
                 'group' => 'opinion_frontpage'
-            ),
-            605 => array(
+            ],
+            605 => [
                 'name'  => '[O] Banner 2 Column Right',
                 'group' => 'opinion_frontpage'
-            ),
-            609 => array(
+            ],
+            609 => [
                 'name'  => '[O] Big Banner Inferior',
                 'group' => 'opinion_frontpage'
-            ),
-            610 => array(
+            ],
+            610 => [
                 'name'  => '[O] Banner Inferior Derecho',
                 'group' => 'opinion_frontpage'
-            ),
+            ],
 
             // Intersticial banner opinion front
-            650 => array(
+            650 => [
                 'name'  => '[O] Banner Interticial',
                 'group' => 'opinion_frontpage'
-            ),
+            ],
 
             // Intersticial banner opinion front
-            691 => array(
+            691 => [
                 'name'  => '[O] Left Skyscraper',
                 'group' => 'opinion_frontpage'
-            ),
-            692 => array(
+            ],
+            692 => [
                 'name'  => '[O] Right Skyscraper',
                 'group' => 'opinion_frontpage'
-            ),
+            ],
 
             // Opinion inner banners
-            701 => array(
+            701 => [
                 'name'  => '[OI] Big Banner Top(I) (728X90)',
                 'group' => 'opinion_inner'
-            ),
-            702 => array(
+            ],
+            702 => [
                 'name'  => '[OI] Banner Top Right(I) (234X90)',
                 'group' => 'opinion_inner'
-            ),
-            703 => array(
+            ],
+            703 => [
                 'name'  => '[OI] Banner1 Column Right (I) (300X*)',
                 'group' => 'opinion_inner'
-            ),
-            704 => array(
+            ],
+            704 => [
                 'name'  => '[OI] Robapágina (650X*)',
                 'group' => 'opinion_inner'
-            ),
-            705 => array(
+            ],
+            705 => [
                 'name'  => '[OI] Banner2 Column Right(I) (300X*)',
                 'group' => 'opinion_inner'
-            ),
-            706 => array(
+            ],
+            706 => [
                 'name'  => '[OI] Banner3 Column Right(I) (300X*)',
                 'group' => 'opinion_inner'
-            ),
-            707 => array(
+            ],
+            707 => [
                 'name'  => '[OI] Banner4 Column Right(I) (300X*)',
                 'group' => 'opinion_inner'
-            ),
-            708 => array(
+            ],
+            708 => [
                 'name'  => '[OI] Banner5 Column Right(I) (300X*)',
                 'group' => 'opinion_inner'
-            ),
-            709 => array(
+            ],
+            709 => [
                 'name'  => '[OI] Big Banner Bottom(I) (728X90)',
                 'group' => 'opinion_inner'
-            ),
-            710 => array(
+            ],
+            710 => [
                 'name'  => '[OI] Banner Bottom Right(I) (234X90)',
                 'group' => 'opinion_inner'
-            ),
+            ],
 
             // Intersticial banner opinion inner
-            750 => array(
+            750 => [
                 'name'  => '[OI] Banner Intersticial - Inner (800X600)',
                 'group' => 'opinion_inner'
-            ),
+            ],
 
             // Intersticial banner opinion inner
-            791 => array(
+            791 => [
                 'name'  => '[OI] Left Skyscraper',
                 'group' => 'opinion_inner'
-            ),
-            792 => array(
+            ],
+            792 => [
                 'name'  => '[OI] Right Skyscraper',
                 'group' => 'opinion_inner'
-            ),
-            793 => array(
+            ],
+            793 => [
                 'name'  => '[OI] InBody Skyscraper',
                 'group' => 'opinion_inner'
-            ),
+            ],
 
 
             // Polls frontpage banners
-            801 => array(
+            801 => [
                 'name'  => '[E] Big banner superior',
                 'group' => 'polls_frontpage'
-            ),
-            802 => array(
+            ],
+            802 => [
                 'name'  => '[E] Banner superior Derecho',
                 'group' => 'polls_frontpage'
-            ),
-            803 => array(
+            ],
+            803 => [
                 'name'  => '[E] Banner 1 Column Right',
                 'group' => 'polls_frontpage'
-            ),
-            805 => array(
+            ],
+            805 => [
                 'name'  => '[E] Banner 2 Column Right',
                 'group' => 'polls_frontpage'
-            ),
-            809 => array(
+            ],
+            809 => [
                 'name'  => '[E] Big Banner Inferior',
                 'group' => 'polls_frontpage'
-            ),
-            810 => array(
+            ],
+            810 => [
                 'name'  => '[E] Banner Inferior Derecho',
                 'group' => 'polls_frontpage'
-            ),
+            ],
 
             // Intersticial banner polls front
-            850 => array(
+            850 => [
                 'name'  => '[E] Banner Interticial',
                 'group' => 'polls_frontpage'
-            ),
+            ],
 
             // Intersticial banner polls front
-            891 => array(
+            891 => [
                 'name'  => '[E] Left Skyscraper',
                 'group' => 'polls_frontpage'
-            ),
-            892 => array(
+            ],
+            892 => [
                 'name'  => '[E] Right Skyscraper',
                 'group' => 'polls_frontpage'
-            ),
+            ],
 
 
             // Polls inner banners
-            901 => array(
+            901 => [
                 'name'  => '[EI] Big banner superior',
                 'group' => 'polls_inner'
-            ),
-            902 => array(
+            ],
+            902 => [
                 'name'  => '[EI] Banner superior Derecho',
                 'group' => 'polls_inner'
-            ),
-            903 => array(
+            ],
+            903 => [
                 'name'  => '[EI] Banner Columna Derecha',
                 'group' => 'polls_inner'
-            ),
-            909 => array(
+            ],
+            909 => [
                 'name'  => '[EI] Big Banner Inferior',
                 'group' => 'polls_inner'
-            ),
-            910 => array(
+            ],
+            910 => [
                 'name'  => '[EI] Banner Inferior Derecho',
                 'group' => 'polls_inner'
-            ),
+            ],
 
             // Intersticial banner polls inner
-            950 => array(
+            950 => [
                 'name'  => '[EI] Banner Interticial',
                 'group' => 'polls_inner'
-            ),
+            ],
 
             // Intersticial banner polls inner
-            991 => array(
+            991 => [
                 'name'  => '[EI] Left Skyscraper',
                 'group' => 'polls_inner'
-            ),
-            992 => array(
+            ],
+            992 => [
                 'name'  => '[EI] Right Skyscraper',
                 'group' => 'polls_inner'
-            ),
+            ],
 
             // Newsletter banners
-            1001 => array(
+            1001 => [
                 'name'  => '[B] Big banner superior',
                 'group' => 'newsletter'
-            ),
-            1009 => array(
+            ],
+            1009 => [
                 'name'  => '[B] Big Banner Inferior',
                 'group' => 'newsletter'
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -642,7 +641,7 @@ class AdvertisementPositions
      **/
     public function getThemeAdsPositions()
     {
-        $themeAds = array();
+        $themeAds = [];
         foreach ($this->positions as $key => $value) {
             if (array_key_exists('custom', $value)) {
                 $themeAds[$key] = $value;
@@ -659,9 +658,9 @@ class AdvertisementPositions
      *
      * @return array list of all positions for a group
      **/
-    public function getAdsPositionsForGroup($groupName = null, $positions = array())
+    public function getAdsPositionsForGroup($groupName = null, $positions = [])
     {
-        $groupPositions = array();
+        $groupPositions = [];
         if (!is_null($groupName)) {
             // Get group positions
             foreach ($this->positions as $key => $value) {
@@ -688,7 +687,7 @@ class AdvertisementPositions
      **/
     public function getAllAdsNames()
     {
-        $adsNames = array();
+        $adsNames = [];
         foreach ($this->positions as $key => $value) {
             $adsNames[$key] = $value['name'];
         }

@@ -145,6 +145,7 @@ class ModuleManager
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
                 'FRONTPAGES_LAYOUT'          => _('Frontpages Manager'),
                 'IMAGE_MANAGER'              => _('Images'),
+                'IADBOX_MANAGER'             => _('iadbox'),
                 'XML_IMPORT'                 => _('Import XMLs'),
                 'KEYWORD_MANAGER'            => _('Keywords'),
                 'KIOSKO_MANAGER'             => _('NewsStand'),
@@ -436,36 +437,36 @@ class ModuleManager
                     'month' => 0
                 ]
             ],
-            [
-                'id'               => 'STANDARD_TEMPLATE',
-                'type'             => 'theme',
-                'thumbnail'        => 'theme-standard.jpg',
-                'name'             => _('Standard Template'),
-                'description'      => _(
-                    'Standard newspaper web site design with prebuild widgets '
-                    .'developed by Opennemas team. No customization available'
-                ),
-                'long_description' => _(
-                    '<ul>
-                        <li>
-                            Widgets: Standard widgets included. To add a widget please contact us at
-                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
-                        </li>
-                        <li>Exclusivity: This template is not exclusive</li>
-                        <li>Delivery time: 1 week</li>
-                        <li>Change request BEFORE launch: No change included</li>
-                        <li>Change request AFTER launch: No change included</li>
-                        <li>Add on:
-                            <ul>
-                                <li>New widgets: 120€ each</li>
-                            </ul>
-                        </li>
-                    </ul>'
-                ),
-                'price' => [
-                    'single' => 350
-                ]
-            ],
+            // [
+            //     'id'               => 'STANDARD_TEMPLATE',
+            //     'type'             => 'theme',
+            //     'thumbnail'        => 'theme-standard.jpg',
+            //     'name'             => _('Standard Template'),
+            //     'description'      => _(
+            //         'Standard newspaper web site design with prebuild widgets '
+            //         .'developed by Opennemas team. No customization available'
+            //     ),
+            //     'long_description' => _(
+            //         '<ul>
+            //             <li>
+            //                 Widgets: Standard widgets included. To add a widget please contact us at
+            //                 <a href="mailto:sales@openhost.es">sales@openhost.es</a>
+            //             </li>
+            //             <li>Exclusivity: This template is not exclusive</li>
+            //             <li>Delivery time: 1 week</li>
+            //             <li>Change request BEFORE launch: No change included</li>
+            //             <li>Change request AFTER launch: No change included</li>
+            //             <li>Add on:
+            //                 <ul>
+            //                     <li>New widgets: 120€ each</li>
+            //                 </ul>
+            //             </li>
+            //         </ul>'
+            //     ),
+            //     'price' => [
+            //         'single' => 350
+            //     ]
+            // ],
             [
                 'id'               => 'CUSTOM_TEMPLATE',
                 'type'             => 'theme',
@@ -867,6 +868,26 @@ class ModuleManager
                     'name'             => _('Images'),
                     'description'      => _('Allows user to upload images'),
                     'long_description' => _('Missed long description...'),
+                    'price'            => [
+                        'month' => 0
+                    ]
+                ],
+                [
+                    'id'               => 'IADBOX_MANAGER',
+                    'author'           => '<a target="_blank" href="http://www.iadbox.com">iadbox</a>',
+                    'plan'             => 'OTHER',
+                    'type'             => 'partner',
+                    'thumbnail'        => 'iadbox.jpg',
+                    'name'             => _('iadbox'),
+                    'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
+                    'long_description' => (
+                         _('<p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>')
+                        . _('<p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>')
+                        . _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>')
+                        . _('<p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>')
+                        . _('<p><strong>More info</strong>: <a target="_blank" href="http://www.iadbox.com">www.iadbox.com</a></p>')
+                        . _('<p><a class="btn btn-success" target="_blank" href="mailto:sales@openhost.es">Ask for it</a></p>')
+                    ),
                     'price'            => [
                         'month' => 0
                     ]

@@ -9,6 +9,7 @@
  */
 namespace Framework\Command;
 
+use Framework\ORM\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -86,25 +87,83 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $offset  = $input->getOption('offset');
         $created = $input->getOption('created');
         $views   = $input->getOption('views');
-        $verbose   = $input->getOption('verbose');
 
         $amount = ($offset) ? 30: null;
 
         $this->im  = $this->getContainer()->get('instance_manager');
+        $this->em  = $this->getContainer()->get('orm.manager');
         $instances = $this->im->findBy(null, array('id', 'asc'), $amount, $offset);
 
         if (count($instances) == 0) {
             $output->writeln('No instances');
-            exit(1);
+            return;
         }
 
         foreach ($instances as $instance) {
             if ($output->isVerbose()) {
                 $output->writeln('Getting info about \''.$instance->internal_name.'\'');
             }
+
             $this->getInstanceInfo($instance, $alexa, $views, $created);
             $this->im->persist($instance);
+
+            if ($instance->users > 1
+                || $instance->page_views > 45000
+                || $instance->media_size > 450
+            ) {
+                $this->createNotification($instance);
+            }
         }
+    }
+
+    private function createNotification($instance)
+    {
+        $nr      = $this->em->getRepository('manager.notification');
+        $tpl     = new \TemplateManager();
+
+        $criteria = [
+            'instance_id' => [ [ 'value' => $instance->id ] ],
+            'fixed'       => [ [ 'value' => 1 ] ],
+            'creator'     => [ [ 'value' => 'cron.update_instances' ] ]
+        ];
+
+        $notification = $nr->findOneBy($criteria);
+
+        if (empty($notification)) {
+            $notification = new Notification();
+
+            $notification->instance_id = $instance->id;
+            $notification->creator     = 'cron.update_instances';
+            $notification->fixed       = 1;
+            $notification->style       = 'warning';
+            $notification->type        = 'info';
+        }
+
+        $notification->start = date('Y-m-d H:i:s');
+        $notification->end   = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->title = [
+            'en' => 'Instance information',
+            'es' => 'Información de la instancia',
+            'gl' => 'Información da instancia',
+        ];
+
+        $notification->body = [
+            'en' => $tpl->fetch(
+                'base/instance_limit.tpl',
+                [ 'instance' => $instance, 'language' => 'en' ]
+            ),
+            'es' => $tpl->fetch(
+                'base/instance_limit.tpl',
+                [ 'instance' => $instance, 'language' => 'es' ]
+            ),
+            'gl' => $tpl->fetch(
+                'base/instance_limit.tpl',
+                [ 'instance' => $instance, 'language' => 'gl' ]
+            ),
+        ];
+
+        $this->em->persist($notification);
     }
 
     /**
@@ -219,18 +278,15 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Get Piwik config and last invoice date
-        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_invoice\' OR name=\'last_login\'';
+        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_login\'';
         $rs  = $this->im->getConnection()->fetchAll($sql);
 
-        $piwik       = null;
-        $lastInvoice = null;
+        $piwik = null;
 
         if ($rs !== false && !empty($rs)) {
             foreach ($rs as $value) {
                 if ($value['name'] == 'piwik') {
                     $piwik = unserialize($value['value']);
-                } elseif ($value['name'] == 'last_invoice') {
-                    $lastInvoice = unserialize($value['value']);
                 } else {
                     $i->last_login = unserialize($value['value']);
                 }
@@ -250,8 +306,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $this->im->getConnection()->close();
 
         // Get the page views from Piwik
-        if ($views && !empty($piwik) && !empty($lastInvoice)) {
-            $i->page_views = $this->getViews($piwik['page_id'], $lastInvoice);
+        if ($views && !empty($piwik)) {
+            $i->page_views = $this->getViews($piwik['page_id']);
         }
 
         // Get media size
@@ -267,10 +323,9 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      * Gets the number of page views from Piwik.
      *
      * @param  integer $siteId The site id in Piwik.
-     * @param  string  $from   Date of the last invoice.
      * @return integer         The number of page views.
      */
-    private function getViews($siteId, $from)
+    private function getViews($siteId)
     {
         if (!$siteId) {
             return 0;
@@ -279,7 +334,14 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $url   = $this->getContainer()->getParameter('piwik.url');
         $token = $this->getContainer()->getParameter('piwik.token');
 
-        $from = \DateTime::createFromFormat('Y-m-d H:i:s', $from);
+        $from = new \DateTime('now');
+
+        if ($from->format('d') <= '27') {
+            $from->modify('-1 month');
+        }
+
+        $from->setDate($from->format('Y'), $from->format('m'), 27);
+
         $from = $from->format('Y-m-d');
         $to   = date('Y-m-d');
 

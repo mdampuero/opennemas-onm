@@ -26,18 +26,27 @@ class MarketController extends Controller
 
         $available = \Onm\Module\ModuleManager::getAvailableModules();
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes    = \Onm\Module\ModuleManager::getAvailableThemes();
+        $themes    = $this->get('orm.loader')->getPlugins();
 
         foreach ($packs as $pack) {
             $available[$pack['id']] = $pack['name'];
         }
 
         foreach ($themes as $theme) {
-            $available[$theme['id']] = $theme['name'];
+            $available[$theme->uuid] = $theme->name;
         }
 
-        $instance  = $this->get('instance');
-        $modules   = $request->request->get('modules');
+        $instance = $this->get('instance');
+        $modules  = $request->request->get('modules');
+        $billing  = $request->request->get('billing');
+
+        $instance = $this->get('instance');
+
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
+        }
+
+        $this->get('instance_manager')->persist($instance);
 
         // Filter request to ignore invalid modules
         $modules = array_filter($modules, function ($e) use ($available) {
@@ -57,6 +66,34 @@ class MarketController extends Controller
         );
 
         return new JsonResponse(_('Your request has been registered'));
+    }
+
+    /**
+     * Checks a VAT number.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkVatAction(Request $request)
+    {
+        $code  = 200;
+        $vat   = $this->get('vat');
+
+        $country   = $request->query->get('country');
+        $vatNumber = $request->query->get('vat');
+
+        try {
+            if (!$vat->validate($country, $vatNumber)) {
+                $code = 400;
+            }
+        } catch (\Exception $e) {
+            $code = 400;
+        }
+
+        $vatValue = $vat->getVatFromCode($country);
+
+        return new JsonResponse($vatValue, $code);
     }
 
     /**

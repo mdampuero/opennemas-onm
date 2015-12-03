@@ -77,7 +77,7 @@ class ContentCategoryManager
      * Fetches the available categories and stores them into a property
      *
      * @return array List of ContentCategory objects
-    */
+     */
     public function findAll()
     {
         $cache = getService('cache');
@@ -242,8 +242,8 @@ class ContentCategoryManager
     public function getFirstCategory($categoryType)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT * FROM content_categories WHERE '
-                   .' inmenu=1 AND internal_category=?'
+            $sql = 'SELECT * FROM content_categories '
+                   .'WHERE inmenu=1 AND internal_category=?'
                    .' ORDER BY posmenu LIMIT 1';
 
             $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryType));

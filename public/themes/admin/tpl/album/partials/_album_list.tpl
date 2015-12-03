@@ -235,7 +235,7 @@
       <div class="loading-spinner"></div>
       <div class="spinner-text">{t}Loading{/t}...</div>
     </div>
-    <div class="clearfix infinite-row ng-cloak" ng-if="!mode || mode === 'grid'">
+    <div class="clearfix row ng-cloak" ng-if="!mode || mode === 'grid'">
       <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(content.id) }" ng-repeat="content in contents">
         <div class="dynamic-image-placeholder" ng-click="select(content); xsOnly($event, toggle, content)">
           <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,400,400">
@@ -263,7 +263,7 @@
         <span ng-if="loadingMore">{t}Loading{/t}</span>
       </h5>
     </div>
-    <div class="infinite-row master-row ng-cloak">
+    <div class="row master-row ng-cloak">
       <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item">
       </div>
     </div>

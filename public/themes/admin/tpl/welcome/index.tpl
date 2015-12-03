@@ -29,6 +29,32 @@
 <div class="content welcome-page">
   <div class="row">
     <div class="col-sm-6">
+      <a href="{url name=admin_domain_management_add}">
+        <div class="grid simple">
+          <div class="grid-body text-center">
+            <i class="block fa fa-retweet fa-2x m-b-15"></i>
+            <h4 class="block uppercase">{t}Redirect your domain{/t}</h4>
+            <h5 class="wrap">
+              {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
+            </h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6">
+      <a href="{url name=admin_domain_management_add create=1}">
+        <div class="grid simple">
+          <div class="grid-body green text-center">
+            <i class="block fa fa-plus fa-2x m-b-15 text-white"></i>
+            <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
+            <h5 class="text-white wrap">
+              {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
+            </h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6">
       <div class="grid simple add-contents">
         <div class="grid-title">
           <h4>{t}Add contents to your site{/t}</h4>
@@ -95,7 +121,6 @@
           </div>
         </div>
       </div>
-
       <div class="grid simple merchant">
         <div class="grid-title">
           <h4>{t}Want more features?{/t}</h4>
@@ -127,28 +152,25 @@
       </div>
     </div>
     <div class="col-sm-6">
-      <div class="welcome-message tiles blue col-xs-12">
-        <div class="tiles-body">
+      <div class="grid simple">
+        <div class="grid-body blue welcome-message">
           <h4 class="text-white">{t escape=off}<strong>Are you new in Opennemas?</strong>{/t}</h4>
-
           <h5 class="text-white">{t}If you need some help getting started to create awesome content, check out our online user documentation.{/t}</h5>
-
-
           <ul>
             <li><a class="text-white" href="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas" target="_blank">{t}First steps in opennemas{/t}</a></li>
             <li><a class="text-white" href="http://help.opennemas.com/knowledgebase">{t}Detailed documentation{/t}</a></li>
             <li><a class="text-white" href="javascript:UserVoice.showPopupWidget();">{t}Contact us for help{/t}</a></li>
           </ul>
           <br>
-          <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
+          <p class="text-white">{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <carousel interval="">
+          <carousel interval="10000">
             {foreach $youtube_videos  as $videoId}
-              <slide class="{if $videoId@iteration == 1}active{/if} item">
-                <div class="video-container">
-                  <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" allowfullscreen></iframe>
-                </div>
-              </slide>
+            <slide>
+              <div class="video-container">
+                <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" type="text/html" allowfullscreen></iframe>
+              </div>
+            </slide>
             {/foreach}
           </carousel>
         </div>

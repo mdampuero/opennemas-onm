@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-  <div class="content my-account-page" ng-app="BackendApp" ng-controller="MyAccountCtrl">
+<div class="content my-account-page" ng-app="BackendApp" ng-controller="AccountCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -169,82 +169,112 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 m-b-15">
-        <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
-          <div class="tiles white">
-            <div class="tiles-body clearfix">
-              <div>
-                <div class="more-plans clearfix">
-                  <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                  <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
-                    {t}Check out our modules{/t}
-                  </a>
-                </div>
-                <div class="get-help clearfix">
-                  <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
-                  <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
-                    {t}Contact Us{/t}
-                  </a>
-                </div>
+      <div class="col-sm-6 col-xs-12 m-b-15">
+        <div class="tiles white">
+          <div class="tiles-body clearfix">
+            <div>
+              <div class="more-plans clearfix">
+                <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
+                <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                  {t}Check out our modules{/t}
+                </a>
+              </div>
+              <div class="get-help clearfix">
+                <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
+                <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
+                  {t}Contact Us{/t}
+                </a>
               </div>
             </div>
-            {*
-            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {$plans};modules = {$available_modules}">
-              <div class="plans-wrapper">
-                <div class="inline p-r-30" ng-repeat="plan in plans">
-                  <div class="checkbox">
-                    <input id="select_[% plan.id %]" ng-model="selected[plan.id]" ng-change="togglePlan(plan.id)" ng-disabled="plan.id == 'Base' || isBlocked(plan.id)" type="checkbox">
-                    <label for="select_[% plan.id %]">
-                      <h5 class="no-margin p-b-15">
-                        <span id="{$plan}">[% plan.title %] ([% plan.total %])</span>
-                      </h5>
-                    </label>
-                  </div>
-                  <div ng-repeat="item in modules | filter: { plan: plan.id }">
-                    <div class="checkbox">
-                      <input checklist-model="changes" checklist-value="item" id="module_[% item.id %]" ng-disabled="plan.id == 'Base' || isUpgraded(item.id) || isDowngraded(item.id)" type="checkbox"/>
-                      <label for="module_[% item.id %]">
-                        [% item.name %]
-                        <span class="text-danger" ng-if="isUpgraded(item.id)">({t}pending activation{/t})</span>
-                        <span class="text-danger" ng-if="isDowngraded(item.id)">({t}pending deactivation{/t})</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            *}
           </div>
-          <input name="hasChanges" ng-value="hasChanges" type="hidden">
-          <input name="modules" ng-value="activatedModules" type="hidden">
-        </form>
+        </div>
+        <input name="hasChanges" ng-value="hasChanges" type="hidden">
+        <input name="modules" ng-value="activatedModules" type="hidden">
       </div>
+      <div class="col-sm-6">
+        <div class="tiles white m-b-15">
+          <div class="tiles-body">
+            <div class="tiles-title text-uppercase text-black">
+              {t}Billing information{/t}
+            </div>
+            {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas) && !empty($instance->metas['billing_name'])}
+              <div class="row p-b-15 p-t-15">
+                <div class="col-sm-6">
+                  <strong>{t}Name{/t}:</strong> {$instance->metas['billing_name']}
+                </div>
+                <div class="col-sm-6" ng-if="billing_company_name">
+                  <strong>{t}Company{/t}:</strong> {$instance->metas['billing_company']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}VAT{/t}</strong> {$instance->metas['billing_vat']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}Email{/t}:</strong> {$instance->metas['billing_email']}
+                </div>
+                <div class="col-sm-6">
+                  <strong>{t}Phone{/t}:</strong> {$instance->metas['billing_phone']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-8">
+                  <strong>{t}Address{/t}:</strong> {$instance->metas['billing_address']}
+                </div>
+                <div class="col-sm-4">
+                  <strong>{t}Postal code{/t}:</strong> {$instance->metas['billing_postal_code']}
+                </div>
+              </div>
+              <div class="row p-b-15">
+                <div class="col-sm-4">
+                  <strong>{t}City{/t}:</strong> {$instance->metas['billing_city']}
+                </div>
+                <div class="col-sm-4">
+                  <strong>{t}State{/t}:</strong> {$instance->metas['billing_state']}
+                </div>
+                <div class="col-sm-4">
+                  <strong>{t}Country{/t}:</strong> {$instance->metas['billing_country']}
+                </div>
+              </div>
+              <div class="row p-t-15">
+                <div class="col-md-12">
+                  <h5>{t escape=off}Something wrong? Contact our <a href="javascript:UserVoice.showPopupWidget();">support team</a>.{/t}</h5>
+                </div>
+              </div>
+            {else}
+              <h4 class="p-t-30 text-center">{t}You have no billing information{/t}</h4>
+              <h5 class="p-b-30 text-center">{t escape=off}You will be asked to add it during the checkout in our market{/t}</h5>
+            {/if}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-xs-12 m-b-15 ng-cloak">
         <div class="tiles white">
-            <div class="clearfix b-grey b-b tiles-body">
-              <div class="pull-left">
-                <p class="hidden-xs">{t}Here you can see a list of your activated modules{/t}</p>
-                <h4>{t}Activated plans & modules{/t}</h4>
-              </div>
-              {*<div class="upgrade pull-right hidden">
-                <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
-                  <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
-                  <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
-                </button>
-              </div>*}
+          <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
+            <div class="tiles-title text-uppercase text-black">
+              {t}Activated plans & modules{/t}
             </div>
-            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
-              <div class="plans-wrapper">
-                <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
-                  <h5 class="plan-title">
-                    [% plan.title %]
-                  </h5>
-                  <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
-                    [% item.name %]
-                  </div>
+            {*<div class="upgrade pull-right hidden">
+              <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
+                <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
+                <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
+              </button>
+            </div>*}
+            <div class="plans-wrapper">
+              <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
+                <h5 class="plan-title">
+                  [% plan.title %]
+                </h5>
+                <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
+                  [% item.name %]
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
