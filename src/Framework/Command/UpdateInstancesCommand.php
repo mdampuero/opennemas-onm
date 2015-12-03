@@ -350,7 +350,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             . "&idSite=$siteId"
             . "&period=range&date=$from,$to"
             . "&format=json"
-            . "&showColumns=nb_visits"
+            . "&showColumns=nb_pageviews"
             . "&token_auth=$token";
 
         $ch = curl_init($url);
