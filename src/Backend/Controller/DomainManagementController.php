@@ -35,7 +35,6 @@ class DomainManagementController extends Controller
     public function addAction(Request $request)
     {
         $billing = [];
-        $vatTax  = 0;
 
         $instance = $this->get('instance');
 
@@ -48,18 +47,15 @@ class DomainManagementController extends Controller
         }
 
         $countries = Intl::getRegionBundle()->getCountryNames();
-
-        if (array_key_exists('country', $billing)) {
-            $vatTax = $this->get('vat')->getVatFromCode($billing['country']);
-        }
+        $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'domain_management/add.tpl',
             [
                 'billing'   => $billing,
-                'countries' => $countries,
                 'create'    => $request->query->get('create'),
-                'vatTax'    => $vatTax,
+                'countries' => $countries,
+                'taxes'     => $taxes
             ]
         );
     }
