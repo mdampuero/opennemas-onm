@@ -180,7 +180,8 @@
 
             $scope.available = [];
             for (var i = 0; i < response.themes.length; i++) {
-              if (!$scope.isPurchased(response.themes[i])) {
+              if (!$scope.isPurchased(response.themes[i]) &&
+                  !response.themes[i].exclusive) {
                 $scope.available.push(response.themes[i]);
               }
             }
