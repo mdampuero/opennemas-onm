@@ -60,6 +60,16 @@ class VATService
     }
 
     /**
+     * Return an array with all applicable taxes.
+     *
+     * @return array Array with all applicable taxes.
+     */
+    public function getTaxes()
+    {
+        return $this->taxes;
+    }
+
+    /**
      * Returns the VAT value from the coutry code.
      *
      * @param string $code The coutry code.

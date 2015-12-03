@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}{if $create}create = 1;{/if}countries = {json_encode($countries)|clear_json}; vatTax = {$vatTax}">
+  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}{if $create}create = 1;{/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="grid simple">

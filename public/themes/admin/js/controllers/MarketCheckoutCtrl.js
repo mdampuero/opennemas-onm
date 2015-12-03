@@ -154,20 +154,25 @@
         });
 
         // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.country, billing.vat]', function() {
-          if (!$scope.billing.country || !$scope.billing.vat) {
+        $scope.$watch('[billing.company, billing.country, billing.vat]', function() {
+          if (!$scope.billing) {
             return;
           }
 
-          var url = routing.generate('backend_ws_market_check_vat',
-              { 'country': $scope.billing.country, 'vat': $scope.billing.vat });
+          $scope.vatTax = 0;
 
-          $http.get(url).then(function(response) {
-            if (response.status === 200) {
-              $scope.vatTax = parseFloat(response.data);
-              $scope.validVat = true;
-            }
-          });
+          // Individual customer
+          if (!$scope.billing.company && $scope.billing.country &&
+              $scope.taxes[$scope.billing.country]) {
+            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+            return;
+          }
+
+          // Spanish company
+          if ($scope.billing.company && $scope.billing.country === 'ES' &&
+              $scope.taxes[$scope.billing.country]) {
+            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+          }
         }, true);
 
         // Initialize the shopping cart from the webStorage
