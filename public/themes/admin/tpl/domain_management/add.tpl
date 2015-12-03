@@ -227,7 +227,7 @@
               </div>
             </div>
             <div class="p-t-15 ng-cloak" ng-show="step != 4 && domains.length > 0">
-              <h4 class="semi-bold">3. {t}Summary{/t}</h4>
+              <h4 class="semi-bold">3. {t}Purchase summary{/t}</h4>
               <div class="p-t-5 pull-left">
                 <h4 class="semi-bold">[% billing.name %]</h4>
                 <address>
