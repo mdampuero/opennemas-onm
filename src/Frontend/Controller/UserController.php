@@ -302,7 +302,7 @@ class UserController extends Controller
                 $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
                 $session = $request->getSession();
 
-                $securityContext = $this->get('security.context');
+                $securityContext = $this->get('security.token_storage');
                 $securityContext->setToken($token);
                 $session->set('user', $user);
                 $session->set('_security_frontend', serialize($token));

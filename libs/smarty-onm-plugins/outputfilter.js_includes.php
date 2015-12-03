@@ -13,7 +13,7 @@ function smarty_outputfilter_js_includes($output, Smarty_Internal_Template $smar
     $js_includes = $smarty->parent->js_includes;
     $js_footer_code = '';
 
-    if (count($js_includes['footer']) > 0) {
+    if (array_key_exists('footer', $js_includes) && count($js_includes['footer']) > 0) {
 
         foreach ($js_includes['footer'] as $js_include) {
             $js_footer_code .= "<script src='".$js_include."'></script>";
@@ -22,7 +22,7 @@ function smarty_outputfilter_js_includes($output, Smarty_Internal_Template $smar
         $output = str_replace('</body>', $js_footer_code.'</body>', $output);
     }
 
-    if (count($js_includes['header']) > 0) {
+    if (array_key_exists('header', $js_includes) && count($js_includes['header']) > 0) {
 
         foreach ($js_includes['header'] as $js_include) {
             if ($js_include['type'] == 'file') {

@@ -133,9 +133,10 @@ class SimpleMenu
             && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
             && (($hasSubmenu && !empty($submenuContent)) || !$hasSubmenu)
         ) {
+            $isCurrent = false;
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 
-            if ($element['link'] === '/admin') {
+            if (array_key_exists('link', $element) && $element['link'] === '/admin') {
                 $isCurrent = preg_match("@^".preg_quote($element['link'])."$@", $_SERVER['REQUEST_URI']);
             }
 
