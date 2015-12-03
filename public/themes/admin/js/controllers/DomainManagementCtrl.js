@@ -134,6 +134,21 @@
         };
 
         /**
+         * @function isRight
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Checks if the domain is valid.
+         *
+         * @return {Boolean} True if the domain is valid. Otherwise, returns
+         *                   false.
+         */
+        $scope.isRight = function(domain) {
+          return domain.target ===
+            domain.name.replace('www.', '') + '.opennemas.net';
+        };
+
+        /**
          * @function isValid
          * @memberOf DomainManagementCtrl
          *
