@@ -28,10 +28,15 @@ class MarketController extends Controller
         }
 
         $countries = Intl::getRegionBundle()->getCountryNames();
+        $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'market/checkout.tpl',
-            [ 'billing' => $billing, 'countries' => $countries ]
+            [
+                'billing'   => $billing,
+                'countries' => $countries,
+                'taxes'     => $taxes
+            ]
         );
     }
 
