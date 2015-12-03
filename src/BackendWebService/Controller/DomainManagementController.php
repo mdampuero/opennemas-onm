@@ -95,14 +95,14 @@ class DomainManagementController extends Controller
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
-        $primary = $instance->domains[$instance->main_domain];
+        $primary = $instance->domains[$instance->main_domain - 1];
 
         $domains = [];
         foreach ($instance->domains as $key => $value) {
             $domains[] = [
                 'free'   => $value === $base,
                 'name'   => $value,
-                'main'   => $key == $instance->main_domain,
+                'main'   => $value == $primary,
                 'target' => $this->getTarget($value)
             ];
         }

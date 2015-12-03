@@ -134,6 +134,21 @@
         };
 
         /**
+         * @function isRight
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Checks if the domain is valid.
+         *
+         * @return {Boolean} True if the domain is valid. Otherwise, returns
+         *                   false.
+         */
+        $scope.isRight = function(domain) {
+          return domain.target ===
+            domain.name.replace('www.', '') + '.opennemas.net';
+        };
+
+        /**
          * @function isValid
          * @memberOf DomainManagementCtrl
          *
@@ -234,21 +249,25 @@
         });
 
         // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.country, billing.vat]', function() {
-          if (!$scope.billing || !$scope.billing.country ||
-              !$scope.billing.vat) {
+        $scope.$watch('[billing.company, billing.country, billing.vat]', function() {
+          if (!$scope.billing) {
             return;
           }
 
-          var url = routing.generate('backend_ws_market_check_vat',
-              { 'country': $scope.billing.country, 'vat': $scope.billing.vat });
+          $scope.vatTax = 0;
 
-          $http.get(url).then(function(response) {
-            $scope.vatTax = parseFloat(response.data);
-            $scope.validVat = true;
-          }, function() {
-            $scope.validVat = false;
-          });
+          // Individual customer
+          if (!$scope.billing.company && $scope.billing.country &&
+              $scope.taxes[$scope.billing.country]) {
+            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+            return;
+          }
+
+          // Spanish company
+          if ($scope.billing.company && $scope.billing.country === 'ES' &&
+              $scope.taxes[$scope.billing.country]) {
+            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+          }
         }, true);
 
         // Updates domain price when create flag changes

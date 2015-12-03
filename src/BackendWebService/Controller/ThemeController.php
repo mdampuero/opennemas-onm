@@ -57,6 +57,7 @@ class ThemeController extends Controller
 
         foreach ($themes as &$theme) {
             $theme = $theme->getData();
+            $theme['description'] = null;
         }
 
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();

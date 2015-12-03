@@ -186,7 +186,7 @@ abstract class AssetManager
         $this->af->setDefaultOutput(
             $this->config['output_path'] . '/*.' . $this->extension
         );
-        $this->af->setDebug($this->debug);
+        $this->af->setDebug($this->debug());
     }
 
     /**

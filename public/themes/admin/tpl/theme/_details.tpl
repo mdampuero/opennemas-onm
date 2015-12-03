@@ -62,12 +62,12 @@
               {t}Free{/t}
             </span>
         </h3>
-        <button class="btn btn-info m-b-15 pull-right" ng-class="{ 'btn-info': template.isPurchased(template.item), 'btn-success': template.isActive(template.item) }" ng-click="template.enable(template.item)" ng-disabled="template.isActive(template.item)" ng-if="template.isPurchased(template.item)" style="width: 100px;">
-          <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && !template.item.loading">{t}Enable{/t}</h5>
-          <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && template.isActive(template.item)">{t}Enabled{/t}</h5>
-          <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && template.item.loading">{t}Enabling{/t}...</h5>
+        <button class="btn m-b-15 pull-right" ng-class="{ 'btn-white': template.isPurchased(template.item) && !template.isActive(template.item), 'btn-success': template.isActive(template.item) }" ng-click="template.enable(template.item)" ng-disabled="template.isActive(template.item)" ng-if="template.isPurchased(template.item)" style="width: 100px;">
+          <h5 class="semi-bold uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && !template.item.loading">{t}Enable{/t}</h5>
+          <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && template.isActive(template.item)">{t}Active{/t}</h5>
+          <h5 class="semi-bold uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && template.item.loading">{t}Enabling{/t}...</h5>
         </button>
-        <a class="btn btn-white m-b-15 pull-left" href="[% template.item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank">
+        <a class="btn btn-white m-b-15 pull-left" href="[% template.item.parameters.preview_url %]" ng-click="$event.stopPropagation()" ng-if="!template.isPurchased(template.item)" target="_blank">
           <h5 class="uppercase">
             <i class="fa fa-globe"></i>
             {t}Live demo{/t}

@@ -12,7 +12,11 @@ function smarty_function_url($params, &$smarty) {
     if (is_object($generator)) {
         if (array_key_exists('name', $params)) {
             $name = $params['name'];
-            $absolute = $params['absolute'];
+            if (array_key_exists('absolute', $params) && $params['absolute']) {
+                $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
+            } else {
+                $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
+            }
             unset($params['name'], $params['absolute']);
             try {
                 $url = $generator->generate($name, $params, $absolute);
