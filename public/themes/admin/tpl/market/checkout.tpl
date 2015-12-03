@@ -86,7 +86,7 @@
           </div>
           <div class="grid simple" ng-show="cart.length > 0 || step == 4">
             <div class="grid-body">
-              <div ng-if="step != 4">
+              <div ng-show="step != 4">
                 <h4 class="semi-bold">1. {t}Cart{/t}</h4>
                 <p>{t}You are about to order next items. In the next 24hours our sales team will send you payment and activation information. {/t}</p>
                 <ul class="cart-list cart-list-big">
@@ -116,7 +116,7 @@
                   </h4>
                 </div>
               </div>
-              <div class="p-t-15" ng-if="step != 4">
+              <div class="p-t-15" ng-show="step != 4">
                 <div class="billing-info">
                   <h4 class="semi-bold">
                     2. {t}Billing information{/t}
@@ -238,56 +238,61 @@
                   </div>
                 </div>
               </div>
-              <div class="p-t-15" ng-if="step != 4">
+              <div class="p-t-15" ng-show="step != 4">
                 <h4 class="semi-bold">3. {t}Summary{/t}</h4>
-                <div class="p-t-5 pull-left">
-                  <h4 class="semi-bold">[% billing.name %]</h4>
-                  <address>
-                    <strong ng-if="billing.company">[% billing.company %]</strong><br>
-                    [% billing.address %]<br>
-                    [% billing.postal_code %], [% billing.city %], [% billing.state %]<br>
-                    [% countries[billing.country] %]<br>
-                  </address>
+                <p class="p-b-30 text-danger" ng-show="billingForm.$invalid">
+                  {t}You have to complete your billing information to complete the purchase.{/t}
+                </p>
+                <div ng-show="billingForm.$valid">
+                  <div class="p-t-5 pull-left">
+                    <h4 class="semi-bold">[% billing.name %]</h4>
+                    <address>
+                      <strong ng-if="billing.company">[% billing.company %]</strong><br>
+                      [% billing.address %]<br>
+                      [% billing.postal_code %], [% billing.city %], [% billing.state %]<br>
+                      [% countries[billing.country] %]<br>
+                    </address>
+                  </div>
+                  <div class="pull-right">
+                    <img alt="" class="invoice-logo p-b-15" height="50" src="/assets/images/logos/opennemas-powered-horizontal.png">
+                    <address>
+                      <strong>Openhost, S.L.</strong><br>
+                      Progreso 64, 4º A<br>
+                      32003, Ourense, Ourense<br>
+                      [% countries['ES']%]<br>
+                    </address>
+                  </div>
+                  <div class="clearfix"></div>
+                  <table class="m-t-30 table table-invoice">
+                    <thead>
+                      <tr>
+                        <th class="text-left uppercase">{t}Description{/t}</th>
+                        <th style="width:140px" class="text-right uppercase">{t}Unit price{/t}</th>
+                        <th style="width:90px" class="text-right uppercase">{t}Total{/t}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="item in cart">
+                        <td>[% item.name %]</td>
+                        <td class="text-right">[% item.price.month %] €</td>
+                        <td class="text-right">[% item.price.month %] €</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3"></td>
+                        <td class="text-right"><strong>Subtotal</strong></td>
+                        <td class="text-right">[% subtotal %] €</td>
+                      </tr>
+                      <tr>
+                        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
+                        <td class="text-right">[% vat %] €</td>
+                      </tr>
+                      <tr>
+                        <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
+                        <td class="text-right"><strong>[% total %] €</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="pull-right">
-                  <img alt="" class="invoice-logo p-b-15" height="50" src="/assets/images/logos/opennemas-powered-horizontal.png">
-                  <address>
-                    <strong>Openhost, S.L.</strong><br>
-                    Progreso 64, 4º A<br>
-                    32003, Ourense, Ourense<br>
-                    [% countries['ES']%]<br>
-                  </address>
-                </div>
-                <div class="clearfix"></div>
-                <table class="m-t-30 table table-invoice">
-                  <thead>
-                    <tr>
-                      <th class="text-left uppercase">{t}Description{/t}</th>
-                      <th style="width:140px" class="text-right uppercase">{t}Unit price{/t}</th>
-                      <th style="width:90px" class="text-right uppercase">{t}Total{/t}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="item in cart">
-                      <td>[% item.name %]</td>
-                      <td class="text-right">[% item.price.month %] €</td>
-                      <td class="text-right">[% item.price.month %] €</td>
-                    </tr>
-                    <tr>
-                      <td rowspan="3"></td>
-                      <td class="text-right"><strong>Subtotal</strong></td>
-                      <td class="text-right">[% subtotal %] €</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
-                      <td class="text-right">[% vat %] €</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
-                      <td class="text-right"><strong>[% total %] €</strong></td>
-                    </tr>
-                  </tbody>
-                </table>
                 <div class="text-center">
                   <div class="form-group">
                     <div class="checkbox">
@@ -302,7 +307,7 @@
                   </button>
                 </div>
               </div>
-              <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-if="step == 4">
+              <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-show="step == 4">
                 <i class="fa fa-heart fa-3x"></i>
                 <h3 class="p-b-30">{t}Thank you for your purchase request!{/t}</h3>
                 <p class="p-b-15">
