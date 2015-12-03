@@ -529,6 +529,14 @@ class InstanceController extends Controller
 
         try {
             $instance = $im->find($id);
+            $theme    = $instance->settings['TEMPLATE_USER'];
+
+            if (strpos($theme, 'es.openhost.theme.') === false) {
+                $theme = 'es.openhost.theme.' . $theme;
+
+                $instance->settings['TEMPLATE_USER'] = $theme;
+            }
+
             $im->getExternalInformation($instance);
 
             return new JsonResponse(
