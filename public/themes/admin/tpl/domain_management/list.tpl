@@ -75,8 +75,8 @@
                   {t}Free{/t}
                 </span>
                 <span class="p-t-15 pull-right">
-                  <span class="p-r-20" ng-if="domain.free || domain.target === domain.name + '.opennemas.net'"><i class="fa fa-lg fa-check text-success"></i></span>
-                  <span class="p-r-20" ng-if="!domain.free && domain.target !== domain.name + '.opennemas.net'"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
+                  <span class="p-r-20" ng-if="domain.free || isRight(domain)"><i class="fa fa-lg fa-check text-success"></i></span>
+                  <span class="p-r-20" ng-if="!domain.free && !isRight(domain)"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
                   <i class="fa fa-chevron-right fa-lg " ng-class="{ 'fa-rotate-90': expanded[$index]}"></i>
                 </span>
               </div>
@@ -90,11 +90,11 @@
                   <div class="row">
                     <div class="col-sm-12" ng-if="!domain.free">
                       <p><strong>{t}Points to{/t}:</strong> [% domain.target %]</p>
-                      <p ng-if="domain.target === domain.name + '.opennemas.net'">
+                      <p ng-if="isRight()">
                         <i class="fa fa-lg fa-check text-success"></i>
                         {t}Your domain is properly configured{/t}
                       </p>
-                      <p ng-if="domain.target !== domain.name + '.opennemas.net'">
+                      <p ng-if="!isRight()">
                         <i class="fa fa-lg fa-exclamation-triangle text-danger"></i>
                         {t}Your domain is not properly configured, check the instructions below.{/t}
                       </p>
@@ -106,18 +106,22 @@
                       <i class="fa fa-lg fa-check text-success"></i>
                       {t}This is your opennemas address{/t}
                     </div>
-                    <div class="col-sm-12" ng-if="!domain.free">
-                      <h4>Update your DNS records</h4>
-                      <h5 class="semi-bold">Point the www entrace in your domain to the Opennemas service.</h5>
+                    <div class="col-sm-12" ng-if="!domain.free && !isRight(domain)">
+                      <h4>{t}Update your DNS records{/t}</h4>
+                      <h5 class="semi-bold">{t}Point the www entrace in your domain to the Opennemas service.{/t}</h5>
                       <div>
                         <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name %].opennemas.net.</pre>
                       </div>
-
-                      <h4 class="m-t-30">Redirect traffic from [% domain.name %] to  www.[% domain.name %]</h4>
-                      <p>Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain)</p>
-                      <p><span class="semi-bold">NOTE:</span> This change is NOT done in the DNS section</p>
-
-                      <a href="javascript:UserVoice.showPopupWidget();"><span class="fa fa-info-circle"></span> {t}If you need more help configuring your domains contact our support team{/t}</a>
+                      <h4 class="m-t-30">{t}Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% domain.name.replace('www.', '') %]{/t}</h4>
+                      <p>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain){/t}</p>
+                      <p>
+                        <span class="semi-bold">{t}NOTE{/t}:</span>
+                        {t}This change is NOT done in the DNS section{/t}
+                      </p>
+                      <a href="javascript:UserVoice.showPopupWidget();">
+                        <span class="fa fa-info-circle"></span>
+                        {t}If you need more help configuring your domains contact our support team{/t}
+                      </a>
                     </div>
                   </div>
                 </div>
