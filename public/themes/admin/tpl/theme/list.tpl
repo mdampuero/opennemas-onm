@@ -163,14 +163,12 @@
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
       <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-        <div class="center">
-          <h4>{t}Unable to find any module that matches your search.{/t}</h4>
-          <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-        </div>
+        <h4 class="text-center ng-cloak" ng-show="!loading  && items.length == 0">
+          {t}No themes available{/t}
+        </h4>
       </div>
       <div>
-        <h4 class="ng-cloak" ng-show="!loading  && items.length == 0">{t}No themes available{/t}</h4>
-        <div class="theme-list-message clearfix ng-cloak" ng-if="!loading">
+        <div class="theme-list-message clearfix ng-cloak" ng-if="!loading && items.length > 0">
           <div class="p-b-15 text-center">
             <div ng-if="type == 'available'">
               <h4>{t}Change the look of your newspaper in just few clicks!{/t}</h4>
