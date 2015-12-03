@@ -321,7 +321,8 @@
               {t}In the next 24 hours you will receive an email with payment instructions and the invoice.{/t}
               </p>
               <p class="p-b-15">
-              {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+              {capture name="client_info_url"}{url name=admin_client_info_page}{/capture}
+              {t escape=off 1=$smarty.capture.client_info_url}Meanwhile, you can go to your <a href="%1">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
               </p>
               <p class="p-b-10">
               {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
