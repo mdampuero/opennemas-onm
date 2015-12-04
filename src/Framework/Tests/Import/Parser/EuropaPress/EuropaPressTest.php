@@ -71,9 +71,11 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->agency_name  = 'EuropaPress';
         $this->text->body         = 'Sample body';
         $this->text->category     = 'Politics POL';
-        $this->text->created_time =
-            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
-        $this->text->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $this->text->created_time = \DateTime::createFromFormat(
+            'd/m/Y H:i:s',
+            '21/09/2015 18:16:04',
+            new \DateTimeZone('Europe/Madrid')
+        );
 
         $this->text->created_time =
             $this->text->created_time->format('Y-m-d H:i:s');
