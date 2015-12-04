@@ -90,6 +90,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         $amount = ($offset) ? 30: null;
 
+        $this->getContainer()->get('cache_manager')->setNamespace('manager');
         $this->im  = $this->getContainer()->get('instance_manager');
         $this->em  = $this->getContainer()->get('orm.manager');
         $instances = $this->im->findBy(null, array('id', 'asc'), $amount, $offset);
