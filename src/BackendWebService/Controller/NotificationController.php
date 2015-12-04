@@ -258,7 +258,6 @@ class NotificationController extends Controller
                 $updated
             ));
         } catch (\Exception $e) {
-            var_dump($e->getMessage());die();
             return new JsonResponse(_($e->getMessage()), 400);
         }
     }
