@@ -59,7 +59,7 @@
         <delete dir="${basedir}/build/jsdoc" />
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/phpdox"/>
+        <!-- <delete dir="${basedir}/build/phpdox"/> --><!-- Commented to speed up builds -->
     </target>
 
     <!-- <target name="prepare" depends="clean,phpab" -->
