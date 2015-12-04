@@ -50,8 +50,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->photo = new Resource();
 
         $this->photo->created_time =
-            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
-        $this->photo->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
+            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
 
         $this->photo->created_time =
             $this->photo->created_time->format('Y-m-d H:i:s');
@@ -120,8 +119,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('now');
         $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
 
-        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
 
         $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
     }
@@ -184,8 +182,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04');
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
 
         $resource = new Resource();
 
