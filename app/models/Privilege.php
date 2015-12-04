@@ -295,7 +295,7 @@ class Privilege
                 'description'  => _('Create'),
                 'module'       => 'ARTICLE',
             ),
-           13 =>  array(
+            13 =>  array(
                 'pk_privilege' => '13',
                 'name'         => 'ARTICLE_ARCHIVE',
                 'description'  => _('Arquive/unarquive'),

@@ -105,7 +105,6 @@ class Special extends Content
 
                 break;
             default:
-
                 break;
         }
 

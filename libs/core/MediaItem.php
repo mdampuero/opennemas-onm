@@ -123,7 +123,7 @@ class MediaItem
         // Details of file
         $details = @stat($this->filename);
 
-        $this->mtime	= $details['mtime'];
+        $this->mtime    = $details['mtime'];
         $this->size     = $details['size'];
         $dimensions     = $this->getDimensions($this->filename);
         $this->width    = $dimensions[0];

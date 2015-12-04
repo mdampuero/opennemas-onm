@@ -251,7 +251,6 @@ class PClave
             // Select keyword type
             switch ($term->tipo) {
                 case 'url':
-
                     $replacement = "<a href='".$term->value."'
                                        title='".$term->pclave."'>".
                                        $term->pclave."</a>";
@@ -259,19 +258,16 @@ class PClave
                     break;
 
                 case 'email':
-
                     $replacement = "<a href='mailto:".$term->value."'
                                        target='_blank'>".$term->pclave."</a>";
 
                     break;
 
                 case 'intsearch':
-
                     $replacement = "<a href='".SITE_URL."tag/".$term->value."'
                                        target='_blank'>".$term->pclave."</a>";
 
                     break;
-
                 default:
                     break;
             }

@@ -97,7 +97,6 @@ class Album extends Content
 
                 break;
             default:
-
                 break;
         }
 

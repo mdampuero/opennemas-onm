@@ -277,7 +277,6 @@ class ImagesController extends Controller
         switch ($request->getMethod()) {
             case 'HEAD':
             case 'GET':
-
                 return  $response->setContent(json_encode(array()));
                 break;
             case 'POST':

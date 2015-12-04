@@ -89,7 +89,6 @@ class Book extends Content
 
                 break;
             default:
-
                 break;
         }
 

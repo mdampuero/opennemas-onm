@@ -429,7 +429,6 @@ class Photo extends Content
 
                     break;
                 case 'image/jpeg':
-
                     $exif = array();
                     if (isset($info)) {
                         foreach (array_keys($info) as $key) {

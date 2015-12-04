@@ -185,7 +185,7 @@ class Subscriptor
         }
 
         // Special properties
-        if (isset ($this->pk_pc_user)) {
+        if (isset($this->pk_pc_user)) {
             $this->id = $this->pk_pc_user;
         } else {
             $this->id = null;

@@ -312,7 +312,6 @@ class Content
 
                 break;
             default:
-
                 break;
         }
     }
@@ -409,10 +408,10 @@ class Content
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
-        if (empty($data['description'])&& !isset ($data['description'])) {
+        if (empty($data['description']) && !isset($data['description'])) {
             $data['description']     = '';
         }
-        if (empty($data['metadata']) && !isset ($data['metadata'])) {
+        if (empty($data['metadata']) && !isset($data['metadata'])) {
             $data['metadata']='';
         }
         if (!isset($data['with_comment'])) {
@@ -564,7 +563,7 @@ class Content
         $data['fk_publisher'] =  (empty($data['content_status']))? '' : $_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
-            && !isset ($data['fk_user_last_editor'])
+            && !isset($data['fk_user_last_editor'])
         ) {
             $data['fk_user_last_editor'] = $_SESSION['userid'];
         }
@@ -577,10 +576,10 @@ class Content
         } else {
             $data['slug'] = StringUtils::getTitle($data['slug']);
         }
-        if (empty($data['description']) && !isset ($data['description'])) {
+        if (empty($data['description']) && !isset($data['description'])) {
             $data['description']='';
         }
-        if (empty($data['metadata']) && !isset ($data['metadata'])) {
+        if (empty($data['metadata']) && !isset($data['metadata'])) {
             $data['metadata']='';
         }
 

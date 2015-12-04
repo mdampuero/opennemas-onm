@@ -30,8 +30,7 @@ class ExportContentsCommand extends ContainerAwareCommand
             )
             ->setName('export:contents')
             ->setDescription('Exports contents from one instance to a given folder path')
-            ->setHelp(
-<<<EOF
+            ->setHelp(<<<EOF
 The <info>%command.name%</info> exports contents from an instance:
 
   <info>%command.full_name%</info>

@@ -263,12 +263,11 @@ class Video extends Content
         if (!empty($processedFile)) {
             $videoInformation = array_merge(
                 $videoFileData,
-                array(
-                    "video_url" => $processedFile['flvFile'],
-                    "information" =>
-                        array('thumbnails' => $processedFile['thumbnails']),
+                [
+                    "video_url"   => $processedFile['flvFile'],
+                    "information" => ['thumbnails' => $processedFile['thumbnails']],
                     "author_name" => 'internal',
-                )
+                ]
             );
             $videoId = $this->create($videoInformation);
             if (!$videoId) {

@@ -72,7 +72,7 @@ class Comment
      *
      * @var string
      **/
-     public $body         = '';
+    public $body         = '';
 
     /**
      * Whether this comment is published or not

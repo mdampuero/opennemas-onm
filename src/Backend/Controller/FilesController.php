@@ -185,7 +185,7 @@ class FilesController extends Controller
         if (!empty($parentCategories) && !empty($aux_categories)) {
             foreach ($parentCategories as $k => $v) {
                 foreach ($aux_categories as $ind) {
-                    if (!empty ($sub_files[$ind][0])) {
+                    if (!empty($sub_files[$ind][0])) {
                         foreach ($sub_files[$ind][0] as $value) {
                             if ($v->pk_content_category == $ccm->get_id($ccm->getFather($value->catName))) {
                                 if ($ccm->get_id($ccm->getFather($value->catName))) {
@@ -347,15 +347,15 @@ class FilesController extends Controller
         $id = $request->request->getDigits('id');
 
         $file = new \Attachment($id);
-          $data = array(
-                'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                'content_status' => 1,
-                'id'             => $id,
-                'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'fk_publisher'   => $_SESSION['userid'],
-            );
+        $data = array(
+            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+            'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+            'content_status' => 1,
+            'id'             => $id,
+            'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'fk_publisher'   => $_SESSION['userid'],
+        );
 
         if ($file->update($data)) {
             dispatchEventWithParams('content.update', array('content' => $file));

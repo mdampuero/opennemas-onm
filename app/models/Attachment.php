@@ -93,7 +93,6 @@ class Attachment extends Content
 
                 break;
             default:
-
                 break;
         }
 
