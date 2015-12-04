@@ -77,7 +77,6 @@ class Privilege
     public function read($id)
     {
         foreach (self::$privileges as $privilege) {
-
             if ($privilege['pk_privilege'] == $id) {
                 $this->load($privilege);
 
@@ -301,7 +300,7 @@ class Privilege
                 'description'  => _('Arquive/unarquive'),
                 'module'       => 'ARTICLE',
             ),
-           14 =>  array(
+            14 =>  array(
                 'pk_privilege' => '14',
                 'name'         => 'ARTICLE_FAVORITE',
                 'description'  => _('Manager favorite flag'),

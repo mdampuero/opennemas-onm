@@ -39,7 +39,6 @@ class JavascriptManager extends AssetManager
         foreach ($filters as $filter) {
             switch ($filter) {
                 case 'uglifyjs':
-
                     $this->fm->set(
                         'uglifyjs',
                         new UglifyJsFilter(
