@@ -744,6 +744,7 @@ class OpinionsController extends Controller
                 array(
                     'opinion'         => $opinion,
                     'content'         => $opinion,
+                    'contentId'       => $opinion->id,
                     'other_opinions'  => $otherOpinions,
                     'author'          => $author,
                 )
@@ -826,7 +827,7 @@ class OpinionsController extends Controller
                         'content'         => $opinion,
                         'actual_category' => 'opinion',
                         'media_url'       => $opinion->externalMediaUrl,
-                        'contentId'       => $opinion->id, // Used on comments
+                        'contentId'       => $opinion->id,
                         'ext'             => 1 //Used on widgets
                     )
                 );
