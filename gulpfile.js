@@ -9,19 +9,19 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist | tail -1',
+    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist 2>&1 | tail -1',
       function(error, stdout) {
-        var icon    = 'pass.png';
-        var summary = stdout;
+        var title, message = '';
+        var summary        = stdout;
 
         if (summary.indexOf('Tests') === -1 && summary.indexOf('OK') === -1) {
-          notifier.notify({
-            'title':   'Unable to complete the tests!',
-            'icon':    path.join(__dirname, 'public/assets/images/fail.png'),
-            'message': 'There was an error while executing tests'
-          });
-
-          return;
+          title   = 'Unable to complete the tests!';
+          icon    = 'fail.png';
+          message = 'There was an error while executing tests'
+        } else {
+          icon    = 'pass.png'
+          title   = 'Tests executed!',
+          message = summary
         }
 
         if (summary.indexOf('Tests') !== -1) {
@@ -29,9 +29,9 @@
         }
 
         notifier.notify({
-          'title':   'Tests executed!',
+          'title':   title,
           'icon':    path.join(__dirname, 'public/assets/images', icon),
-          'message': summary
+          'message': message
         });
       }
     );
