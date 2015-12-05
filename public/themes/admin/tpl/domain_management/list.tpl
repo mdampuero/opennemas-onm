@@ -110,7 +110,7 @@
                       <h4>{t}Update your DNS records{/t}</h4>
                       <h5 class="semi-bold">{t}Point the www entrace in your domain to the Opennemas service.{/t}</h5>
                       <div>
-                        <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name %].opennemas.net.</pre>
+                        <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name.replace('www.', '') %].opennemas.net.</pre>
                       </div>
                       <h4 class="m-t-30">{t}Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% domain.name.replace('www.', '') %]{/t}</h4>
                       <p>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain){/t}</p>
