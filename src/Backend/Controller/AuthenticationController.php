@@ -114,7 +114,7 @@ class AuthenticationController extends Controller
         }
 
         $intention = time() . rand();
-        $token     = $this->get('form.csrf_provider')->generateCsrfToken($intention);
+        $token     = $this->get('security.csrf.token_manager')->getToken($intention);
 
         $this->request->getSession()->set('intention', $intention);
 
