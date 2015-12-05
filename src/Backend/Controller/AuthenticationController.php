@@ -42,10 +42,8 @@ class AuthenticationController extends Controller
 
         if ($token) {
             $user = $this->get('user_repository')->findBy(
-                array(
-                    'token' => array(array('value' => $token))
-                ),
-                array('token' => 'asc'),
+                ['token' => [['value' => $token]]],
+                ['token' => 'asc'],
                 1,
                 1
             );
