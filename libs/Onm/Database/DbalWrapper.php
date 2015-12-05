@@ -112,7 +112,7 @@ class DbalWrapper
     {
         $connection = $this->getConnection();
 
-        $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+        $this->addCallToBuffer($method, $params);
 
         $rs = call_user_func_array(array($connection, $method), $params);
 
@@ -127,6 +127,19 @@ class DbalWrapper
     public function getBuffer()
     {
         return $this->buffer;
+    }
+
+    /**
+     * Adds a method and params to the buffer
+     *
+     * @param string $method The called method
+     * @param string $params The callee params
+     **/
+    public function addCallToBuffer($method, $params)
+    {
+        if (!in_array($method, ['setFetchMode', 'SetFetchMode'])) {
+            $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+        }
     }
 
     /**
