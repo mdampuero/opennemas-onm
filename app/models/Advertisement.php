@@ -567,6 +567,16 @@ class Advertisement extends Content
     {
         $output = '';
 
+        $params = array_merge(
+            [
+                'width'      => null,
+                'height'     => null,
+                'beforeHTML' => null,
+                'afterHTML'  => null,
+            ],
+            $params
+        );
+
         if (array_key_exists('cssclass', $params)
             && isset($params['cssclass'])
         ) {
