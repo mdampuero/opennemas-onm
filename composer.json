@@ -68,7 +68,7 @@
         "paypal/adaptivepayments-sdk-php": "v3.8.107",
         "paypal/merchant-sdk-php": "v3.8.107",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
-        "hwi/oauth-bundle": "dev-master",
+        "hwi/oauth-bundle": "0.4.*",
         "recaptcha/php5": "1.1.0",
         "rtconner/freshbooks-api": "dev-master",
         "sparkling/vat-bundle": "~0.1",
