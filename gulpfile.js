@@ -9,29 +9,29 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist 2>&1 | tail -1',
+    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist 2>&1',
       function(error, stdout) {
-        var title, message = '';
-        var summary        = stdout;
+        var title   = '';
+        var summary = stdout;
+        var icon    = 'fail.png'
 
-        if (summary.indexOf('Tests') === -1 && summary.indexOf('OK') === -1) {
+        // Remove trainling NL and get the last one
+        var report = stdout.replace(/\n$/, "").split(/\r?\n/);
+        report = report[report.length - 1];
+        if (report.indexOf('Tests') !== -1 || report.indexOf('OK') === -1) {
           title   = 'Unable to complete the tests!';
           icon    = 'fail.png';
-          message = 'There was an error while executing tests'
-        } else {
-          icon    = 'pass.png'
-          title   = 'Tests executed!',
-          message = summary
-        }
 
-        if (summary.indexOf('Tests') !== -1) {
-          icon = 'fail.png'
+          console.log(stdout);
+        } else {
+          title   = 'Tests executed!',
+          icon    = 'pass.png'
         }
 
         notifier.notify({
           'title':   title,
           'icon':    path.join(__dirname, 'public/assets/images', icon),
-          'message': message
+          'message': report
         });
       }
     );
