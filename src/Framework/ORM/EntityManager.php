@@ -126,7 +126,7 @@ class EntityManager
         $entity = preg_replace_callback(
             '/([a-z])_([a-z])/',
             function ($matches) {
-                return $matches[0] . strtoupper($matches[1]);
+                return $matches[1] . strtoupper($matches[2]);
             },
             $entity
         );
@@ -135,7 +135,6 @@ class EntityManager
         foreach ($this->sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
                 ucfirst($entity) . 'Repository';
-
             if (class_exists($repository)) {
                 $manager = strtolower($source[0]) . 'm';
 
