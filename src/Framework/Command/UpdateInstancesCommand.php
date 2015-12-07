@@ -9,7 +9,6 @@
  */
 namespace Framework\Command;
 
-use Framework\ORM\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,64 +106,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
             $this->getInstanceInfo($instance, $alexa, $views, $created);
             $this->im->persist($instance);
-
-            if ($instance->users > 1
-                || $instance->page_views > 45000
-                || $instance->media_size > 450
-            ) {
-                $this->createNotification($instance);
-            }
         }
-    }
-
-    private function createNotification($instance)
-    {
-        $nr      = $this->em->getRepository('manager.notification');
-        $tpl     = new \TemplateManager();
-
-        $criteria = [
-            'instance_id' => [ [ 'value' => $instance->id ] ],
-            'fixed'       => [ [ 'value' => 1 ] ],
-            'creator'     => [ [ 'value' => 'cron.update_instances' ] ]
-        ];
-
-        $notification = $nr->findOneBy($criteria);
-
-        if (empty($notification)) {
-            $notification = new Notification();
-
-            $notification->instance_id = $instance->id;
-            $notification->creator     = 'cron.update_instances';
-            $notification->fixed       = 1;
-            $notification->style       = 'warning';
-            $notification->type        = 'info';
-        }
-
-        $notification->start = date('Y-m-d H:i:s');
-        $notification->end   = date('Y-m-d H:i:s', time() + 86400);
-
-        $notification->title = [
-            'en' => 'Instance information',
-            'es' => 'Información de la instancia',
-            'gl' => 'Información da instancia',
-        ];
-
-        $notification->body = [
-            'en' => $tpl->fetch(
-                'base/instance_limit.tpl',
-                [ 'instance' => $instance, 'language' => 'en' ]
-            ),
-            'es' => $tpl->fetch(
-                'base/instance_limit.tpl',
-                [ 'instance' => $instance, 'language' => 'es' ]
-            ),
-            'gl' => $tpl->fetch(
-                'base/instance_limit.tpl',
-                [ 'instance' => $instance, 'language' => 'gl' ]
-            ),
-        ];
-
-        $this->em->persist($notification);
     }
 
     /**
