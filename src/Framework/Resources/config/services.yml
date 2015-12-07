@@ -202,7 +202,7 @@ services:
         class: Onm\Templating\Cache\Config
 
     content_url_matcher:
-        class: Framework\Routing\ContentUrlMatcher
+        class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ @entity_repository ]
 
     view:
@@ -243,7 +243,7 @@ services:
         arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
 
     core.event_dispatcher:
-        class: Framework\Component\EventDispatcher
+        class: Framework\Component\EventDispatcher\EventDispatcher
         arguments: [ @event_dispatcher ]
 
     orm.loader:
