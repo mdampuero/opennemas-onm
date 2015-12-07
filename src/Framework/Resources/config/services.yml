@@ -242,6 +242,10 @@ services:
         class: RelatedContent
         arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
 
+    core.event_dispatcher:
+        class: Framework\Component\EventDispatcher
+        arguments: [ @event_dispatcher ]
+
     orm.loader:
         class: Framework\ORM\Loader\Loader
         arguments: [ @service_container, %plugins% ]
