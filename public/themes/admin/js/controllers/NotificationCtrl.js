@@ -181,7 +181,7 @@
           });
 
           $scope.fixed = nv.filter(function(a) {
-            return a.fixed == 1;
+            return a.fixed == 1 && a.generated != 1;
           });
         }, true);
 
