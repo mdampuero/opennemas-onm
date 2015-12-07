@@ -46,16 +46,17 @@ class NotificationController extends Controller
             [ 'criteria' => $criteria, 'epp' => $epp, 'page' => $page ]
         );
 
-        foreach ($notifications as &$notification) {
-            $this->convertNotification($notification);
+        if (is_array($notifications)) {
+            foreach ($notifications as &$notification) {
+                $this->convertNotification($notification);
 
-            if (in_array($notification['id'], array_keys($read))
-                && $notification['start'] <= $read[$notification['id']]
-            ) {
-                $notification['read'] = 1;
+                if (in_array($notification['id'], array_keys($read))
+                    && $notification['start'] <= $read[$notification['id']]
+                ) {
+                    $notification['read'] = 1;
+                }
             }
         }
-
         return new JsonResponse([
             'epp'     => $epp,
             'page'    => $page,
@@ -93,8 +94,10 @@ class NotificationController extends Controller
             [ 'criteria' => $criteria, 'epp' => $epp, 'page' => $page ]
         );
 
-        foreach ($notifications as &$notification) {
-            $this->convertNotification($notification);
+        if (is_array($notifications)) {
+            foreach ($notifications as &$notification) {
+                $this->convertNotification($notification);
+            }
         }
 
         $total = $this->get('core.event_dispatcher')
