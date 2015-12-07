@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Component;
+namespace Framework\Tests\Component\EventDispatcher;
 
-use Framework\Component\EventDispatcher;
+use Framework\Component\EventDispatcher\EventDispatcher;
 
 class EventDispatcherTest extends \PHPUnit_Framework_TestCase
 {
