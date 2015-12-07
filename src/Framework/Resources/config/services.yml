@@ -282,3 +282,9 @@ services:
     vat:
         class: Framework\VAT\VATService
         arguments: [ @vat.service ]
+
+    subscriber.notification:
+        class: Framework\EventListener\NotificationSubscriber
+        arguments: [ @service_container ]
+        tags:
+            - { name: kernel.event_subscriber }
