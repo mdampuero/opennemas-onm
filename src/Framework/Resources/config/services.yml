@@ -216,9 +216,6 @@ services:
         class: Framework\Assetic\JavascriptManager
         arguments: [ @service_container, %assetic% ]
 
-    authentication_entry_point:
-        class: Framework\Security\AuthenticationEntryPoint
-
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
         tags:
