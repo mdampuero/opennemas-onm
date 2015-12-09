@@ -72,7 +72,9 @@ abstract class Server
     public function cleanFiles()
     {
         $deleted = [];
-        foreach ($this->localFiles as $file) {
+        $files   = glob($this->params['path'] . DS . '*');
+
+        foreach ($files as $file) {
             $modTime = filemtime($file);
             $limit   = time() - $this->params['sync_from'];
 
