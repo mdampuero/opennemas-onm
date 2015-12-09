@@ -33,28 +33,32 @@ class NotificationController extends Controller
         $id   = $this->get('instance')->id;
         $page = $request->query->getDigits('page', 1);
 
-        $criteria = 'instance_id IN (0, ' . $id . ')' . ' AND (start <= \''
-            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
-
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
             [ 'user_id' => $this->getUser()->id ]
         );
 
+        $criteria = 'instance_id IN (0, ' . $id . ')' . ' AND (start <= \''
+            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+
+        if (!empty($read)) {
+            $criteria .= ' AND id NOT IN ( ' . implode(', ', array_keys($read))
+                . ' )';
+        }
+
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
-            [ 'criteria' => $criteria, 'epp' => $epp, 'page' => $page ]
+            [
+                'criteria' => $criteria,
+                'epp'      => $epp,
+                'order'    => [ 'fixed' => 'desc' ],
+                'page'     => $page
+            ]
         );
 
         if (is_array($notifications)) {
             foreach ($notifications as &$notification) {
                 $this->convertNotification($notification);
-
-                if (in_array($notification['id'], array_keys($read))
-                    && $notification['start'] <= $read[$notification['id']]
-                ) {
-                    $notification['read'] = 1;
-                }
             }
         }
         return new JsonResponse([
@@ -91,7 +95,12 @@ class NotificationController extends Controller
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
-            [ 'criteria' => $criteria, 'epp' => $epp, 'page' => $page ]
+            [
+                'criteria' => $criteria,
+                'epp'      => $epp,
+                'order'    => [ 'fixed' => 'desc' ],
+                'page'     => $page
+            ]
         );
 
         if (is_array($notifications)) {
@@ -121,25 +130,23 @@ class NotificationController extends Controller
      */
     public function patchAction($id)
     {
-        $em = $this->get('orm.manager');
-
+        $em     = $this->get('orm.manager');
+        $un     = null;
         $userId = $this->getUser()->id;
 
         try {
             $un = $em->getRepository('user_notification')->find(
                 [ 'notification_id' => $id, 'user_id' => $userId ]
             );
-
-            $un->read = date('Y-m-d H:i:s');
-            $em->persist($un);
-
-            return new JsonResponse(_('Notification marked as read successfully'));
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
             $un->user_id = $userId;
             $un->notification_id = $id;
-            $un->read = date('Y-m-d H:i:s');
+        }
 
+        $un->read_time = date('Y-m-d H:i:s');
+
+        try {
             $em->persist($un);
 
             return new JsonResponse(_('Notification marked as read successfully'));
