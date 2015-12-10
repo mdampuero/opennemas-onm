@@ -16,7 +16,7 @@ class Paginator
      *
      * @var string
      */
-    protected $links = '';
+    public $links = '';
 
     /**
      * The configuration options.
@@ -84,30 +84,6 @@ class Paginator
             . '</ul>';
 
         return $this;
-    }
-
-    /**
-     * Returns the URL for a page.
-     *
-     * @param integer $page The page value.
-     *
-     * @return string The URL for the page.
-     */
-    protected function getUrl($page)
-    {
-        $route  = $this->options['route'];
-        $params = [];
-        if (is_array($route)) {
-            if (array_key_exists('params', $route)) {
-                $params = $route['params'];
-            }
-
-            $route  = $route['name'];
-        }
-
-        $params = array_merge($params, [ 'page' => $page ]);
-
-        return $this->router->generate($route, $params);
     }
 
     /**
@@ -220,5 +196,29 @@ class Paginator
         return '<li' . $disabled . '>'
             . '<a href="' . $this->getUrl($page) .'">' . _('Previous')
             . '</a></li>';
+    }
+
+    /**
+     * Returns the URL for a page.
+     *
+     * @param integer $page The page value.
+     *
+     * @return string The URL for the page.
+     */
+    protected function getUrl($page)
+    {
+        $route  = $this->options['route'];
+        $params = [];
+        if (is_array($route)) {
+            if (array_key_exists('params', $route)) {
+                $params = $route['params'];
+            }
+
+            $route  = $route['name'];
+        }
+
+        $params = array_merge($params, [ 'page' => $page ]);
+
+        return $this->router->generate($route, $params);
     }
 }
