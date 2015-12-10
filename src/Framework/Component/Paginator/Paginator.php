@@ -20,6 +20,7 @@ class Paginator
         'boundary'    => false,
         'directional' => false,
         'epp'         => 10,
+        'join'        => '?',
         'maxLinks'    => 5,
         'page'        => 1,
         'total'       => 0,
@@ -37,16 +38,20 @@ class Paginator
     {
         $this->options = array_merge($this->options, $options);
 
-        if (!array_key_exists('items', $this->options)
-            || $this->options['items'] === 0
-            || $this->options['items'] <= $this->options['epp']
+        if (!array_key_exists('total', $this->options)
+            || $this->options['total'] === 0
+            || $this->options['total'] <= $this->options['epp']
         ) {
             return '';
         }
 
         $this->options['pages'] = ceil(
-            $this->options['items'] / $this->options['epp']
+            $this->options['total'] / $this->options['epp']
         );
+
+        if (strpos($this->options['url'], '?')) {
+            $this->options['join'] = '&';
+        }
 
         return '<ul class="pagination">'
             . $this->getFirstLink()
@@ -68,13 +73,15 @@ class Paginator
             return '';
         }
 
-        $href = '#';
+        $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
+        $href     = '#';
 
-        if (!empty($this->options['url']) && $this->options['page'] !== 1) {
-            $href = $this->options['url'] . '?page=1';
+        if (!empty($this->options['url'])) {
+            $href = $this->options['url'] . $this->options['join'] . 'page=1';
         }
 
-        return '<li><a href="' . $href .'">' . _('First') . '</a></li>';
+        return '<li' . $disabled . '><a href="' . $href .'">' . _('First')
+            . '</a></li>';
     }
 
     /**
@@ -88,15 +95,17 @@ class Paginator
             return '';
         }
 
-        $href = '#';
+        $disabled = $this->options['page'] == $this->options['pages'] ?
+            ' class="disabled"' : '';
+        $href     = '#';
 
-        if (!empty($this->options['url']) &&
-            $this->options['page'] !== $this->options['pages']
-        ) {
-            $href = $this->options['url'] . '?page=' . $this->options['pages'];
+        if (!empty($this->options['url'])) {
+            $href = $this->options['url'] . $this->options['join']
+                . 'page=' . $this->options['pages'];
         }
 
-        return '<li><a href="' . $href .'">' . _('Last') . '</a></li>';
+        return '<li' . $disabled . '><a href="' . $href .'">' . _('Last')
+            . '</a></li>';
     }
 
     /**
@@ -124,8 +133,8 @@ class Paginator
         $links = '';
         for ($i = $min; $i <= $max; $i++) {
             if (!empty($this->options['url'])) {
-                $href = $page == $i ?  '#' : $this->options['url']
-                    . '?page=' . $i;
+                $href = $this->options['url'] . $this->options['join']
+                    . 'page=' . $i;
             }
 
             $links .= '<li' . ($page == $i ? ' class="active"' : '') . '>'
@@ -149,16 +158,17 @@ class Paginator
             return '';
         }
 
-        $href = '#';
+        $disabled = $this->options['page'] == $this->options['pages'] ?
+            ' class="disabled"' : '';
+        $href     = '#';
 
-        if (!empty($this->options['url']) &&
-            $this->options['page'] < $this->options['pages']
-        ) {
-            $href = $this->options['url'] . '?page='
-                . ($this->options['page'] + 1);
+        if (!empty($this->options['url'])) {
+            $href = $this->options['url'] . $this->options['join'] . 'page='
+                . min($this->options['page'] + 1, $this->options['pages']);
         }
 
-        return '<li><a href="' . $href .'">' . _('Next') . '</a></li>';
+        return '<li' . $disabled . '><a href="' . $href .'">' . _('Next')
+            . '</a></li>';
     }
 
     /**
@@ -172,13 +182,15 @@ class Paginator
             return '';
         }
 
-        $href = '#';
+        $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
+        $href     = '#';
 
-        if (!empty($this->options['url']) && $this->options['page'] > 1) {
-            $href = $this->options['url'] . '?page='
-                . ($this->options['page'] - 1);
+        if (!empty($this->options['url'])) {
+            $href = $this->options['url'] . $this->options['join'] . 'page='
+                . max($this->options['page'] - 1, 1);
         }
 
-        return '<li><a href="' . $href .'">' . _('Previous') . '</a></li>';
+        return '<li' . $disabled . '>'
+            . '<a href="' . $href .'">' . _('Previous') . '</a></li>';
     }
 }
