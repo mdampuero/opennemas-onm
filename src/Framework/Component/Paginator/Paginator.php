@@ -95,10 +95,19 @@ class Paginator
      */
     protected function getUrl($page)
     {
-        return $this->router->generate(
-            $this->options['route'],
-            [ 'page' => $page ]
-        );
+        $route  = $this->options['route'];
+        $params = [];
+        if (is_array($route)) {
+            if (array_key_exists('params', $route)) {
+                $params = $route['params'];
+            }
+
+            $route  = $route['name'];
+        }
+
+        $params = array_merge($params, [ 'page' => $page ]);
+
+        return $this->router->generate($route, $params);
     }
 
     /**
@@ -186,7 +195,8 @@ class Paginator
         }
 
         $page     = min($this->options['page'] + 1, $this->options['pages']);
-        $disabled = $page == $this->options['pages'] ? ' class="disabled"' : '';
+        $disabled = $this->options['page'] == $this->options['pages'] ?
+            ' class="disabled"' : '';
 
         return '<li' . $disabled . '><a href="'
             . $this->getUrl($page) .'">' . _('Next')
@@ -205,7 +215,7 @@ class Paginator
         }
 
         $page     = max($this->options['page'] - 1, 1);
-        $disabled = $page == 1 ? ' class="disabled"' : '';
+        $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
 
         return '<li' . $disabled . '>'
             . '<a href="' . $this->getUrl($page) .'">' . _('Previous')
