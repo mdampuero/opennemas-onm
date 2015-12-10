@@ -1,8 +1,8 @@
 <div id="albums_available" class="content-provider-block">
-    {foreach from=$albums item=content name=album_loop}
-        {include file="album/content-provider/album.tpl"}
-    {/foreach}
+  {foreach from=$albums item=content name=album_loop}
+    {include file="album/content-provider/album.tpl"}
+  {/foreach}
 </div>
-<div class="pagination pagination-mini clearfix">
-    {$pager->links}
-</div><!-- / -->
+<div class="pagination-wrapper">
+  {$pager}
+</div>
