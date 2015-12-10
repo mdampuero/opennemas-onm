@@ -103,4 +103,51 @@ class Compress
 
         return true;
     }
+
+    /**
+     * Compress archives in a Tgz
+     *
+     * @param string $compressFile the file compress
+     * @param string $destination the target destionation
+     *
+     * @return boolean true if the file was compresed
+     */
+    public static function compressOnlyTar($compressFile, $destination)
+    {
+        $command = "tar cpf $compressFile $destination";
+
+        exec($command, $output, $outputCode);
+
+        // Unused var $output
+        unset($output);
+
+        if ($outputCode != 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Decompress a tgz file into a destionation
+     *
+     * @param string $compressFile the original file to extract
+     * @param string $destination the folder where extract files
+     *
+     * @return boolean true if the file was decompressed
+     */
+    public static function decompressOnlyTar($compressFile, $destination)
+    {
+        $command = "tar xpf $compressFile -C $destination";
+        exec($command, $output, $return_var);
+
+        // Unused var $output
+        unset($output);
+
+        if ($return_var != 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
