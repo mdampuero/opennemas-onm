@@ -65,10 +65,10 @@ class InstanceCreator
      */
     public function backupAssets($mediaPath)
     {
-        $tgzFile = $this->getBackupPath() . DS . 'media.tar.gz';
+        $tarFile = $this->getBackupPath() . DS . 'media.tar';
 
         if ($this->fs->exists($mediaPath)
-            && !\Onm\Compress\Compress::compressTgz($tgzFile, $mediaPath)
+            && !\Onm\Compress\Compress::compressOnlyTar($tarFile, $mediaPath)
         ) {
             throw new BackupException(
                 'Could not create a backup of the directory'
@@ -239,10 +239,10 @@ class InstanceCreator
      */
     public function restoreAssets($path)
     {
-        $tgzFile = $path . DS . "media.tar.gz";
+        $tarFile = $path . DS . "media.tar";
 
-        if (!$this->fs->exists($tgzFile)
-            || !\Onm\Compress\Compress::decompressTgz($tgzFile, "/")
+        if (!$this->fs->exists($tarFile)
+            || !\Onm\Compress\Compress::decompressOnlyTar($tarFile, "/")
         ) {
             throw new AssetsNotRestoredException(
                 "Could not restore the assets directory."
