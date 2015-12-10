@@ -27,77 +27,45 @@ class NotificationController extends Controller
      */
     public function listLatestAction(Request $request)
     {
-        $criteria = $request->query->filter('search') ? : [];
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-
-        $id = $this->get('instance')->id;
-
-        $unr = $this->get('orm.manager')->getRepository('user_notification');
-
-        // Get readed notifications
-        $notifications = $unr->findBy([
-            'user_id' => [ [ 'value' => $this->getUser()->id ] ]
-        ]);
-
-        $read = [];
-        foreach ($notifications as $un) {
-            $read[$un->notification_id] = $un->read_time;
-        }
-
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
+        $epp  = $request->query->getDigits('epp', 10);
+        $id   = $this->get('instance')->id;
+        $page = $request->query->getDigits('page', 1);
 
-        $criteria = 'instance_id IN (0, ' . $id . ')'
-            . ' AND (start <= \'' . $date
-            . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+        $read = $this->get('core.event_dispatcher')->dispatch(
+            'notifications.getRead',
+            [ 'user_id' => $this->getUser()->id ]
+        );
 
-        $nr = $this->get('orm.manager')->getRepository('manager.notification');
+        $criteria = 'instance_id IN (0, ' . $id . ')' . ' AND (start <= \''
+            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
-        $notifications = $nr->findBy($criteria, [ 'fixed' => 'desc' ], $epp, $page);
-
-        foreach ($notifications as &$notification) {
-            $notification = $notification->getData();
-
-            $notification['read'] = 0;
-
-            $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
-            $notification['body'] = $notification['body'][CURRENT_LANGUAGE];
-
-            $date = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $notification['start']
-            );
-
-            $notification['day'] = $date->format('l');
-            $time = $date->getTimeStamp();
-
-            $notification['day'] = $date->format('M, d');
-            if (time() - $time < 172800) {
-                $notification['day'] = _('Yesterday');
-            }
-
-            if (time() - $time < 86400) {
-                $notification['day'] = _('Today');
-            }
-
-            if (in_array($notification['id'], array_keys($read))
-                && $notification['start'] <= $read[$notification['id']]
-            ) {
-                $notification['read'] = 1;
-            }
-
-            $notification['time'] = $date->format('H:i');
-            $notification['am'] = $date->format('a');
+        if (!empty($read)) {
+            $criteria .= ' AND id NOT IN ( ' . implode(', ', array_keys($read))
+                . ' )';
         }
 
-        $total = $nr->countBy($criteria);
+        $notifications = $this->get('core.event_dispatcher')->dispatch(
+            'notifications.get',
+            [
+                'criteria' => $criteria,
+                'epp'      => $epp,
+                'order'    => [ 'fixed' => 'desc' ],
+                'page'     => $page
+            ]
+        );
 
+        if (is_array($notifications)) {
+            foreach ($notifications as &$notification) {
+                $this->convertNotification($notification);
+            }
+        }
         return new JsonResponse([
             'epp'     => $epp,
             'page'    => $page,
             'results' => $notifications,
-            'total'   => $total,
+            'total'   => count($notifications),
             'extra'   => $this->getTemplateParams()
         ]);
     }
@@ -125,38 +93,24 @@ class NotificationController extends Controller
             [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<' ]
         ];
 
-        $nr = $this->get('orm.manager')->getRepository('manager.notification');
+        $notifications = $this->get('core.event_dispatcher')->dispatch(
+            'notifications.get',
+            [
+                'criteria' => $criteria,
+                'epp'      => $epp,
+                'order'    => [ 'fixed' => 'desc' ],
+                'page'     => $page
+            ]
+        );
 
-        $notifications = $nr->findBy($criteria, [ 'start' => 'desc' ], $epp, $page);
-
-        foreach ($notifications as &$notification) {
-            $notification = $notification->getData();
-
-            $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
-            $notification['body'] = $notification['body'][CURRENT_LANGUAGE];
-
-            $date = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $notification['start']
-            );
-
-            $notification['day'] = $date->format('l');
-            $time = $date->getTimeStamp();
-
-            $notification['day'] = $date->format('M, d');
-            if (time() - $time < 172800) {
-                $notification['day'] = _('Yesterday');
+        if (is_array($notifications)) {
+            foreach ($notifications as &$notification) {
+                $this->convertNotification($notification);
             }
-
-            if (time() - $time < 86400) {
-                $notification['day'] = _('Today');
-            }
-
-            $notification['time'] = $date->format('H:i');
-            $notification['am'] = $date->format('a');
         }
 
-        $total = $nr->countBy($criteria);
+        $total = $this->get('core.event_dispatcher')
+            ->dispatch('notifications.count', [ 'criteria' => $criteria ]);
 
         return new JsonResponse([
             'epp'     => $epp,
@@ -176,25 +130,23 @@ class NotificationController extends Controller
      */
     public function patchAction($id)
     {
-        $em = $this->get('orm.manager');
-
+        $em     = $this->get('orm.manager');
+        $un     = null;
         $userId = $this->getUser()->id;
 
         try {
             $un = $em->getRepository('user_notification')->find(
                 [ 'notification_id' => $id, 'user_id' => $userId ]
             );
-
-            $un->read = date('Y-m-d H:i:s');
-            $em->persist($un);
-
-            return new JsonResponse(_('Notification marked as read successfully'));
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
             $un->user_id = $userId;
             $un->notification_id = $id;
-            $un->read = date('Y-m-d H:i:s');
+        }
 
+        $un->read_time = date('Y-m-d H:i:s');
+
+        try {
             $em->persist($un);
 
             return new JsonResponse(_('Notification marked as read successfully'));
@@ -260,6 +212,39 @@ class NotificationController extends Controller
         } catch (\Exception $e) {
             return new JsonResponse(_($e->getMessage()), 400);
         }
+    }
+
+    /**
+     * Converts a notification to use it in the response.
+     *
+     * @param Notification $notification The notification to covert.
+     */
+    private function convertNotification(&$notification)
+    {
+        $notification = $notification->getData();
+
+        $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
+        $notification['body']  = $notification['body'][CURRENT_LANGUAGE];
+        $notification['read']  = 0;
+
+        $date = \DateTime::createFromFormat(
+            'Y-m-d H:i:s',
+            $notification['start']
+        );
+
+        $time = $date->getTimeStamp();
+
+        $notification['day'] = $date->format('M, d');
+        if (time() - $time < 172800) {
+            $notification['day'] = _('Yesterday');
+        }
+
+        if (time() - $time < 86400) {
+            $notification['day'] = _('Today');
+        }
+
+        $notification['time'] = $date->format('H:i');
+        $notification['am'] = $date->format('a');
     }
 
     /**

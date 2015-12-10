@@ -1,0 +1,6 @@
+services:
+    core.subscriber.notification:
+        class: Framework\EventListener\NotificationSubscriber
+        arguments: [ @service_container ]
+        tags:
+            - { name: kernel.event_subscriber }
