@@ -49,23 +49,22 @@ class PollsController extends Controller
         $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
         $this->view->assign(
-            array(
+            [
                 'category'     => $category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
-            )
+            ]
         );
     }
 
     /**
      * Lists all the available polls.
      *
-     * @return void
+     * @return Response The response object.
      *
      * @Security("has_role('POLL_ADMIN')")
-     *
      * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function listAction()
@@ -95,27 +94,26 @@ class PollsController extends Controller
     /**
      * Lists all the polls in the widget.
      *
-     * @return void
+     * @return Response The response object.
      *
      * @Security("has_role('POLL_ADMIN')")
-     *
      * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function widgetAction()
     {
         $configurations = s::get('poll_settings');
+        $totalWidget = 0;
+
         if (array_key_exists('total_widget', $configurations)) {
             $totalWidget = $configurations['total_widget'];
-        } else {
-            $totalWidget = 0;
         }
 
         return $this->render(
             'poll/list.tpl',
-            array(
+            [
                 'category'              => 'widget',
                 'total_elements_widget' => $totalWidget,
-            )
+            ]
         );
     }
 
@@ -123,10 +121,10 @@ class PollsController extends Controller
      * Handles the form for create new polls.
      *
      * @param  Request  $request The request object.
-     * @return Response          The response object.
+     *
+     * @return Response The response object.
      *
      * @Security("has_role('POLL_CREATE')")
-     *
      * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function createAction(Request $request)
@@ -134,7 +132,7 @@ class PollsController extends Controller
         if ('POST' == $request->getMethod()) {
             $poll = new \Poll();
 
-            $data = array(
+            $data = [
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
@@ -146,7 +144,7 @@ class PollsController extends Controller
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'item'           => json_decode($request->request->get('parsedAnswers')),
                 'params'         => $request->request->get('params', []),
-            );
+            ];
             $poll = $poll->create($data);
 
             if (!empty($poll->id)) {
@@ -158,21 +156,19 @@ class PollsController extends Controller
                 return $this->redirect(
                     $this->generateUrl('admin_poll_show', ['id' => $poll->id])
                 );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the new poll.')
-                );
-
-                return $this->redirect(
-                    $this->generateUrl('admin_polls', ['category' => $data['category']])
-                );
             }
 
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to create the new poll.')
+            );
 
-        } else {
-            return $this->render('poll/new.tpl', array('commentsConfig' => s::get('comments_config')));
+            return $this->redirect(
+                $this->generateUrl('admin_polls', ['category' => $data['category']])
+            );
         }
+
+        return $this->render('poll/new.tpl', [ 'commentsConfig' => s::get('comments_config') ]);
     }
 
     /**
@@ -204,11 +200,11 @@ class PollsController extends Controller
 
         return $this->render(
             'poll/new.tpl',
-            array(
+            [
                 'poll'  => $poll,
                 'items' => $poll->items,
                 'commentsConfig' => s::get('comments_config'),
-            )
+            ]
         );
     }
 
@@ -229,7 +225,7 @@ class PollsController extends Controller
         if (count($request->request) < 1) {
             $this->get('session')->getFlashBag()->add('error', _("Poll data sent not valid."));
 
-            return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_poll_show', [ 'id' => $id ]));
         }
 
         $poll = new \Poll($id);
@@ -241,11 +237,11 @@ class PollsController extends Controller
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_polls', array('category' => $data['category']))
+                $this->generateUrl('admin_polls', [ 'category' => $data['category'] ])
             );
         }
 
-        $data = array(
+        $data = [
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
@@ -258,7 +254,7 @@ class PollsController extends Controller
             'content_status' => $request->request->getDigits('content_status', 0),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params'),
-        );
+        ];
 
         if ($poll->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -273,7 +269,7 @@ class PollsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_poll_show', array('id' => $poll->id))
+            $this->generateUrl('admin_poll_show', [ 'id' => $poll->id ])
         );
     }
 
@@ -311,15 +307,15 @@ class PollsController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_polls',
-                    array(
+                    [
                         'category' => $category,
                         'page'     => $page
-                    )
+                    ]
                 )
             );
-        } else {
-            return new Response('Ok', 200);
         }
+
+        return new Response('Ok', 200);
     }
 
     /**
@@ -339,46 +335,35 @@ class PollsController extends Controller
         $em  = $this->get('entity_repository');
         $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'poll')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'poll' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
+        ];
 
-        $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countPolls = $em->countBy($filters);
 
         // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countPolls,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_polls_content_provider',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countPolls,
+            'route'       => [
+                'name'   => 'admin_polls_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'poll/content-provider.tpl',
-            array(
+            [
                 'polls' => $polls,
                 'pager'  => $pagination,
-            )
+            ]
         );
     }
 
@@ -399,39 +384,38 @@ class PollsController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'poll')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'poll' ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countPolls = $em->countBy($filters);
 
-
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countPolls,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl(
-                'admin_polls_content_provider_related',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'total' => $countPolls,
+            'page'  => $page,
+            'route' => [
+                'name'  => 'admin_polls_content_provider_related',
+                'param' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
-            array(
+            [
                 'contentType'           => 'Poll',
                 'contents'              => $polls,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $categoryId,
                 'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
-            )
+            ]
         );
     }
 
@@ -439,26 +423,26 @@ class PollsController extends Controller
      * Handles the configuration for the polls module.
      *
      * @param  Request  $request The request object.
-     * @return Response          The response object.
+     *
+     * @return Response The response object.
      *
      * @Security("has_role('POLL_SETTINGS')")
-     *
      * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('poll_settings');
-            $data = array(
-                'poll_settings' => array(
+            $data = [
+                'poll_settings' => [
                     'typeValue'    => $settingsRAW['typeValue'] ?: 0,
                     'heightPoll'   => $settingsRAW['heightPoll'] ?: 0,
                     'widthPoll'    => $settingsRAW['widthPoll'] ?: 0,
                     'total_widget' => $settingsRAW['total_widget'] ?: 0,
                     'widthWidget'  => $settingsRAW['widthWidget'] ?: 0,
                     'heightWidget' => $settingsRAW['heightWidget'] ?: 0,
-                )
-            );
+                ]
+            ];
 
             foreach ($data as $key => $value) {
                 s::set($key, $value);
@@ -466,13 +450,13 @@ class PollsController extends Controller
             $this->get('session')->getFlashBag()->add('success', _('Settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_polls_config'));
-        } else {
-            $configurations = s::get(array('poll_settings',));
-
-            return $this->render(
-                'poll/config.tpl',
-                array('configs' => $configurations,)
-            );
         }
+
+        $configurations = s::get([ 'poll_settings', ]);
+
+        return $this->render(
+            'poll/config.tpl',
+            [ 'configs' => $configurations, ]
+        );
     }
 }

@@ -393,7 +393,6 @@ class AdsController extends Controller
 
         $filters = array(
             'content_type_name'  => array(array('value' => 'advertisement')),
-            'type_advertisement' => array(array('value' => 37)),
             'in_litter'          => array(array('value' => 1, 'operator' => '!='))
         );
 
@@ -402,27 +401,16 @@ class AdsController extends Controller
 
         $countAds = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countAds,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_ads_content_provider',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countAds,
+            'route'       => [
+                'name'   => 'admin_ads_content_provider',
+                'params' => ['category' => $categoryId]
+            ],
         ]);
 
         return $this->render(
