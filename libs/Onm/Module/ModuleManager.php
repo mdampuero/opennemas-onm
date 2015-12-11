@@ -290,7 +290,7 @@ class ModuleManager
                 ]
             ],
             [
-                'id'               => 'SILVER',
+                'id'               => 'ADVANCED',
                 'type'             => 'pack',
                 'thumbnail'        => 'pack-advanced.jpg',
                 'name'             => _('Advanced pack'),
@@ -346,7 +346,7 @@ class ModuleManager
                 ]
             ],
             [
-                'id'               => 'GOLD',
+                'id'               => 'EXPERT',
                 'name'             => _('Expert pack'),
                 'thumbnail'        => 'pack-expert.jpg',
                 'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!'),
@@ -847,7 +847,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpage Manager'),
@@ -921,7 +921,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
-                    'plan'             => 'GOLD',
+                    'plan'             => 'EXPERT',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('NewsStand'),
@@ -987,7 +987,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
-                    'plan'             => 'GOLD',
+                    'plan'             => 'EXPERT',
                     'type'             => 'module',
                     'thumbnail'        => 'module-agencies.jpg',
                     'name'             => _('News Agency importer'),
@@ -1007,7 +1007,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWSLETTER_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsletters.jpg',
                     'name'             => _('Newsletter'),
@@ -1141,7 +1141,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SYNC_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Frontpage Synchronization'),
@@ -1194,7 +1194,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_GROUP_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('User groups'),
                     'description'      => _('Add description...'),
@@ -1205,7 +1205,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('Users'),
                     'description'      => _('Add description...'),
