@@ -234,7 +234,8 @@ services:
         arguments: [ @instance_manager ]
 
     paginator:
-        class: Onm\Pager\Slider
+        class: Framework\Component\Paginator\Paginator
+        arguments: [ @router ]
 
     onm.framework_status:
         class: Onm\Framework\Status

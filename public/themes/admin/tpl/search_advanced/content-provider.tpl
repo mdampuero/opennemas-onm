@@ -18,7 +18,7 @@
     {/foreach}
   </div>
   <div class="pagination clearfix">
-    {$pager->links}
+    {$pager}
   </div><!-- / -->
 {elseif (!empty($search_string))}
   {t}No results{/t}

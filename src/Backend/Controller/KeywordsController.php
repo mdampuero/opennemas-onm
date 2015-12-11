@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for the keywords
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -19,97 +14,56 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
- * Handles the actions for the keywords
- *
- * @package Backend_Controllers
- **/
+ * Handles the actions for the keywords.
+ */
 class KeywordsController extends Controller
 {
     /**
      * Lists all the keywords
      *
-     * @param Request $request the request object
-     *
-     * @return Response
+     * @return Response The response object.
      *
      * @Security("has_role('PCLAVE_ADMIN')")
-     *
      * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
-    public function listAction(Request $request)
+     */
+    public function listAction()
     {
-        $name = $request->query->filter('name', null, FILTER_SANITIZE_STRING);
-        $page = $request->query->getDigits('page', 1);
-
-        $filter = '';
-        if (!empty($name)) {
-            $filter = '`pclave` LIKE "%' . $name . '%"';
-        }
-
-        $keywordManager = new \PClave();
-        $keywords = $keywordManager->find($filter);
-        $itemsPerPage = s::get('items_per_page');
-
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => count($keywords),
-            'base_url'          => $this->generateUrl('admin_keywords'),
-        ]);
-
-        $keywords = array_slice($keywords, ($page-1)*$itemsPerPage, $itemsPerPage);
-
-        return $this->render(
-            'keywords/list.tpl',
-            array(
-                'keywords'   => $keywords,
-                'pagination' => $pagination,
-                'name'       => $name,
-                'types'      => \PClave::getTypes(),
-            )
-        );
+        return $this->render('keywords/list.tpl');
     }
 
     /**
-     * Shows the keyword information given its id
+     * Shows the keyword information given its id.
      *
-     * @param Request $request the request object
+     * @param integer $id The keyword id.
      *
-     * @return Response the response object
+     * @return Response The response object
      *
      * @Security("has_role('PCLAVE_UPDATE')")
-     *
      * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
-    public function showAction(Request $request)
+     */
+    public function showAction($id)
     {
-        $id = $request->query->getDigits('id');
-
         $keyword = new \PClave();
         $keyword->read($id);
 
         return $this->render(
             'keywords/new.tpl',
-            array(
-                'keyword' => $keyword,
-                'tipos'   => \PClave::getTypes(),
-            )
+            [ 'keyword' => $keyword, 'tipos' => \PClave::getTypes() ]
         );
     }
 
     /**
      * Shows the form for creating a new keyword and handles its form.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("has_role('PCLAVE_CREATE')")
-     *
      * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -130,27 +84,24 @@ class KeywordsController extends Controller
                     array('id' => $keyword->id)
                 )
             );
-        } else {
-            return $this->render(
-                'keywords/new.tpl',
-                array(
-                    'tipos' => \PClave::getTypes(),
-                )
-            );
         }
+
+        return $this->render(
+            'keywords/new.tpl',
+            [ 'tipos' => \PClave::getTypes() ]
+        );
     }
 
     /**
-     * Updates the Pclave information given its new data
+     * Updates the Pclave information given its new data.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("has_role('PCLAVE_UPDATE')")
-     *
      * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $data = array(
@@ -171,27 +122,6 @@ class KeywordsController extends Controller
                 array('id' => $data['id'])
             )
         );
-    }
-
-    /**
-     * Deletes a keyword given its id.
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('PCLAVE_DELETE')")
-     *
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $keyword = new \PClave();
-        $keyword->delete($id);
-
-        return $this->redirect($this->generateUrl('admin_keywords'));
     }
 
     /**

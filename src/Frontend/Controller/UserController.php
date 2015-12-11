@@ -564,22 +564,21 @@ class UserController extends Controller
                     }
                 }
                 // Build the pager
-                $pagination = $this->get('paginator')->create([
-                    'elements_per_page' => $itemsPerPage,
-                    'total_items'       => $contentsCount,
-                    'base_url'          => $this->generateUrl(
-                        'frontend_author_frontpage',
-                        array('slug' => $slug,)
-                    ),
+                $pagination = $this->get('paginator')->get([
+                    'epp'   => $itemsPerPage,
+                    'page'  => $page,
+                    'total' => $contentsCount,
+                    'route' => [
+                        'name'   => 'frontend_author_frontpage',
+                        'params' => [ 'slug' => $slug, ]
+                    ],
                 ]);
 
-                $this->view->assign(
-                    array(
-                        'contents'   => $contents,
-                        'author'     => $user,
-                        'pagination' => $pagination,
-                    )
-                );
+                $this->view->assign([
+                    'contents'   => $contents,
+                    'author'     => $user,
+                    'pagination' => $pagination,
+                ]);
             }
         }
 
@@ -664,12 +663,11 @@ class UserController extends Controller
             }
 
             // Build the pager
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $itemsPerPage,
-                'total_items'       => $totalUsers,
-                'base_url'          => $this->generateUrl(
-                    'frontend_frontpage_authors'
-                ),
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $itemsPerPage,
+                'page'  => $page,
+                'total' => $totalUsers,
+                'route' => 'frontend_frontpage_authors'
             ]);
 
             // Get user by slug

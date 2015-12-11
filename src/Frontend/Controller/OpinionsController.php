@@ -170,11 +170,11 @@ class OpinionsController extends Controller
             $opinions      = $em->findBy($filters, $order, $numOpinions, $page);
             $countOpinions = $em->countBy($filters);
 
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $numOpinions,
-                'total_items'       => $countOpinions,
-                'delta'             => 3,
-                'base_url'          => $this->generateUrl('frontend_opinion_frontpage'),
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $numOpinions,
+                'page'  => $page,
+                'total' => $countOpinions,
+                'route' => 'frontend_opinion_frontpage'
             ]);
 
             $authors = [];
@@ -321,11 +321,11 @@ class OpinionsController extends Controller
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $itemsPerPage,
-                'total_items'       => $totalOpinions,
-                'delta'             => 3,
-                'base_url'          => $this->generateUrl('frontend_opinion_external_frontpage'),
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $itemsPerPage,
+                'page'  => $page,
+                'total' => $totalOpinions,
+                'route' => 'frontend_opinion_external_frontpage'
             ]);
 
             $this->view->assign(
@@ -455,17 +455,17 @@ class OpinionsController extends Controller
                 }
             }
 
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $numOpinions,
-                'total_items'       => $countOpinions,
-                'delta'             => 3,
-                'base_url'          => $this->generateUrl(
-                    'frontend_opinion_author_frontpage',
-                    array(
-                        'author_id' => sprintf('%06d', $author->id),
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $numOpinions,
+                'page'  => $page,
+                'total' => $countOpinions,
+                'route' => [
+                    'name'   => 'frontend_opinion_author_frontpage',
+                    'params' => [
+                        'author_id'   => sprintf('%06d', $author->id),
                         'author_slug' => $author->slug,
-                    )
-                ),
+                    ]
+                ]
             ]);
 
             $this->view->assign(
@@ -599,16 +599,17 @@ class OpinionsController extends Controller
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $itemsPerPage,
-                'total_items'       => $countOpinions,
-                'base_url'          => $this->generateUrl(
-                    'frontend_opinion_external_author_frontpage',
-                    array(
-                        'author_id' => sprintf('%06d', $author->id),
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $itemsPerPage,
+                'page'  => $page,
+                'total' => $countOpinions,
+                'route' => [
+                    'name'   => 'frontend_opinion_external_author_frontpage',
+                    'params' => [
+                        'author_id'   => sprintf('%06d', $author->id),
                         'author_slug' => $author->slug,
-                    )
-                ),
+                    ]
+                ]
             ]);
 
             $this->view->assign(

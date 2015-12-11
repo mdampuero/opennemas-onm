@@ -1,8 +1,8 @@
 <div id="opinions_available" class="content-provider-block">
-    {foreach from=$opinions item=content name=opinions_loop}
-        {include file="opinion/content-provider/opinion.tpl"}
-    {/foreach}
+  {foreach from=$opinions item=content name=opinions_loop}
+    {include file="opinion/content-provider/opinion.tpl"}
+  {/foreach}
 </div>
-<div class="pagination clearfix">
-    {$pager->links}
-</div><!-- / -->
+<div class="pagination-wrapper">
+  {$pager}
+</div>

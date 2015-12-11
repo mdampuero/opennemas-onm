@@ -411,27 +411,16 @@ class AlbumsController extends Controller
         $countAlbums = $em->countBy($filters);
 
         // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countAlbums,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_albums_content_provider',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countAlbums,
+            'route'       => [
+                'name'   => 'admin_albums_content_provider',
+                'params' => ['category' => $categoryId]
+            ],
         ]);
 
         return $this->render(
@@ -473,13 +462,14 @@ class AlbumsController extends Controller
         $countAlbums = $em->countBy($filters);
 
         // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countAlbums,
-            'base_url'          => $this->generateUrl(
-                'admin_albums_content_provider_related',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'page'  => $page,
+            'total' => $countAlbums,
+            'route' => [
+                'name'   => 'admin_albums_content_provider_related',
+                'params' => ['category' => $categoryId]
+            ],
         ]);
 
         return $this->render(
@@ -489,7 +479,7 @@ class AlbumsController extends Controller
                 'contents'              => $albums,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $categoryId,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
             )
         );

@@ -112,19 +112,15 @@ class CategoryController extends Controller
 
             $total = count($articles)+1;
 
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                [
-                    'page'  => $page,
-                    'items' => $itemsPerPage,
-                    'total' => $total,
-                    'url'   => $this->generateUrl(
-                        'category_frontpage',
-                        [
-                            'category_name' => $categoryName,
-                        ]
-                    )
+            $pagination = $this->get('paginator')->get([
+                'epp'   => $itemsPerPage,
+                'page'  => $page,
+                'total' => $total,
+                'route' => [
+                    'name'   => 'category_frontpage',
+                    'params' => [ 'category_name' => $categoryName ]
                 ]
-            );
+            ]);
 
             # Only allow user to see 2 pages
             if ($page > 1) {

@@ -274,35 +274,24 @@ class WidgetsController extends Controller
         $countWidgets = $em->countBy($filters);
 
         // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countWidgets,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_widgets_content_provider',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countWidgets,
+            'route'       => [
+                'name'   => 'admin_widgets_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'widget/content-provider.tpl',
-            array(
+            [
                 'widgets' => $widgets,
                 'pager'   => $pagination,
-            )
+            ]
         );
     }
 }

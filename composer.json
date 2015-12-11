@@ -28,8 +28,7 @@
         },
         "files": [
             "libs/functions.php",
-            "libs/adodb5/adodb.inc.php",
-            "libs/Pager/Pager.php"
+            "libs/adodb5/adodb.inc.php"
         ]
     },
     "require-dev": {

@@ -57,7 +57,7 @@ class LettersController extends Controller
         if ('POST' == $request->getMethod()) {
             $letter = new \Letter();
 
-            $data = array(
+            $data = [
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -67,7 +67,7 @@ class LettersController extends Controller
                 'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-            );
+            ];
 
             if ($letter->create($data)) {
                 $this->get('session')->getFlashBag()->add(
@@ -83,7 +83,7 @@ class LettersController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_letter_show',
-                    array('id' => $letter->id)
+                    [ 'id' => $letter->id ]
                 )
             );
         } else {
@@ -121,10 +121,7 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        return $this->render(
-            'letter/new.tpl',
-            array('letter' => $letter,)
-        );
+        return $this->render('letter/new.tpl', [ 'letter' => $letter ]);
     }
 
     /**
@@ -143,7 +140,7 @@ class LettersController extends Controller
         if (count($request->request) < 1) {
             $this->get('session')->getFlashBag()->add('error', _("Letter data sent not valid."));
 
-            return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_letter_show', [ 'id' => $id ]));
         }
 
         $id = $request->query->getDigits('id');
@@ -152,7 +149,7 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        $data = array(
+        $data = [
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -163,7 +160,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-        );
+        ];
 
         if ($letter->update($data)) {
             $this->get('session')->getFlashBag()->add('success', _('Letter successfully updated.'));
@@ -172,10 +169,7 @@ class LettersController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_letter_show',
-                array('id' => $letter->id)
-            )
+            $this->generateUrl('admin_letter_show', ['id' => $letter->id ])
         );
     }
 
@@ -196,45 +190,34 @@ class LettersController extends Controller
         $em  = $this->get('entity_repository');
         $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'letter')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ ['value' => 'letter'] ],
+            'content_status'    => [ ['value' => 1] ],
+            'in_litter'         => [ ['value' => 1, 'operator' => '!='] ],
+            'pk_content'        => [ ['value' => $ids, 'operator' => 'NOT IN'] ]
+        ];
 
-        $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countLetters = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countLetters,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_letters_content_provider',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'directional' => true,
+            'boundary'    => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countLetters,
+            'route'       => [
+                'name'   => 'admin_letters_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ]
         ]);
 
         return $this->render(
             'letter/content-provider.tpl',
-            array(
+            [
                 'letters'  => $letters,
                 'pager'    => $pagination,
-            )
+            ]
         );
     }
 
@@ -255,31 +238,34 @@ class LettersController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'letter')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [ ['value' => 'letter'] ],
+            'in_litter'         => [ ['value' => 1, 'operator' => '!='] ]
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countLetters = $em->countBy($filters);
 
         // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countLetters,
-            'base_url'          => $this->generateUrl('admin_letters_content_provider_related'),
+        $pagination = $this->get('paginator')->get([
+            'directional' => true,
+            'boundary'    => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countLetters,
+            'route'       => 'admin_letters_content_provider_related'
         ]);
 
         return $this->render(
             "common/content_provider/_container-content-list.tpl",
-            array(
+            [
                 'contents'   => $letters,
-                'pagination' => $pagination->links
-            )
+                'pagination' => $pagination
+            ]
         );
     }
 }
