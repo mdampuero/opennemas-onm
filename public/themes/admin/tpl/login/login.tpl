@@ -127,13 +127,31 @@
     src="@Common/js/jquery/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,
     @Common/components/modernizr/modernizr.js,
-    @Common/js/onm/md5.min.js,
-    @Common/js/admin.js"}
+    @Common/js/onm/md5.min.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function($) {
-      BackendAuthentication.init()
+      'use strict';
+
+      $('.language-selector').on('change', function(e, ui) {
+          document.location.href = '?language=' + $(this).find('option:selected').val();
+      });
+
+      // Encode password in md5 on backend login
+      $('#loginform').on('submit', function(e, ui) {
+          var form = $('#loginform');
+
+          if (form.find('input[name="_password"]').length > 0) {
+              var password = form.find('input[name="_password"]').val();
+
+              if (password.indexOf('md5:') === -1) {
+                  password = 'md5:' + hex_md5(password);
+              }
+
+              form.find('input[name="_password"]').val(password);
+          }
+      });
     });
     </script>
         {uservoice_widget}
