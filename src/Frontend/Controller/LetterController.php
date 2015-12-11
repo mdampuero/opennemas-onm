@@ -69,16 +69,18 @@ class LetterController extends Controller
                 }
             }
 
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                array(
-                    'page'  => $page,
-                    'items' => $itemsPerPage,
-                    'total' => $countLetters,
-                    'url'   => $this->generateUrl(
-                        'frontend_letter_frontpage'
-                    )
-                )
-            );
+            // Pagination for block more videos
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $countLetters,
+                'route'       => [
+                    'name'   => 'frontend_letter_frontpage',
+                ]
+            ]);
 
             $this->view->assign(
                 array(
