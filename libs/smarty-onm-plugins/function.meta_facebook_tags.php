@@ -56,7 +56,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (isset($content->thumb) && !empty($content->thumb)) {
             // Video
-            if (strpos($content->thumb, 'http://')  === false) {
+            if (strpos($content->thumb, 'http')  === false) {
                 $content->thumb = SITE_URL.$content->thumb;
             }
             $output []= '<meta property="og:image" content="'.$content->thumb.'" />';
