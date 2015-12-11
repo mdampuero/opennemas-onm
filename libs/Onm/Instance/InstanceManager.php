@@ -24,6 +24,7 @@ use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\InstanceNotDeletedException;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\InstanceNotRestoredException;
+use Onm\Module\ModuleManager;
 use Repository\SettingManager;
 
 /**
@@ -575,6 +576,8 @@ class InstanceManager extends BaseManager
         if (is_null($instance->changes_in_modules)) {
             $instance->changes_in_modules = [];
         }
+
+        $this->checkPacksActivated($instance);
     }
 
     /**
@@ -729,5 +732,31 @@ class InstanceManager extends BaseManager
         }
 
         $this->cache->setNamespace($namespace);
+    }
+
+    /**
+     * Adds the activated packs basing on the activated modules.
+     *
+     * @param Instance $instance The instance.
+     */
+    private function checkPacksActivated(&$instance)
+    {
+        $packs = [ 'BASIC', 'PROFESSIONAL', 'ADVANCED', 'EXPERT' ];
+
+        $instance->activated_modules =
+            array_diff($instance->activated_modules, $packs);
+
+        foreach ($packs as $pack) {
+            $modules = ModuleManager::getModuleIdsByPack($pack);
+
+            if (empty(array_diff($modules, $instance->activated_modules))
+                && !in_array($pack, $instance->activated_modules)
+            ) {
+                $instance->activated_modules[] = $pack;
+            }
+        }
+
+        $instance->activated_modules =
+            array_values($instance->activated_modules);
     }
 }
