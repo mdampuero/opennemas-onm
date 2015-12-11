@@ -2,7 +2,7 @@
 
 {block name="header-css" append}
   {stylesheets src="
-    @AdminTheme/less/_market.less,
+    @AdminTheme/less/_store.less,
     @AdminTheme/less/_themes.less
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">

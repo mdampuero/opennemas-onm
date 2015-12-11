@@ -6,7 +6,7 @@ use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class MarketController extends Controller
+class StoreController extends Controller
 {
     /**
      * Request a modules purchase to the sales department.

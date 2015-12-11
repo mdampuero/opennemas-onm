@@ -1,7 +1,7 @@
   <div class="error-body modal-body module-dialog">
     <div class="row">
       <div class="col-xs-4">
-        <img class="img-responsive m-b-15" ng-src="/assets/images/market/[% template.item.thumbnail %]">
+        <img class="img-responsive m-b-15" ng-src="/assets/images/store/[% template.item.thumbnail %]">
         <div class="module-icon">
           <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-thumbs-o-up': template.item.type == 'partner', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
         </div>

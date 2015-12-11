@@ -2,14 +2,14 @@
 
 {block name="header-css" append}
   {stylesheets src="
-    @AdminTheme/less/_market.less
+    @AdminTheme/less/_store.less
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
 {/block}
 
 {block name="content"}
-  <div ng-controller="MarketListCtrl" ng-init="plans = {json_encode($plans)|clear_json}">
+  <div ng-controller="StoreListCtrl" ng-init="plans = {json_encode($plans)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -17,7 +17,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-shopping-cart"></i>
-                {t}Market{/t}
+                {t}Store{/t}
               </h4>
             </li>
             <li class="quicklinks ng-cloak visible-xs">
@@ -25,7 +25,6 @@
             </li>
             <li class="quicklinks dropdown ng-cloak visible-xs">
               <div data-toggle="dropdown">
-                <span ng-if="!type">{t}All{/t}</span>
                 <span ng-if="type == 'module'">{t}Modules{/t}</span>
                 <span ng-if="type == 'pack'">{t}Packs{/t}</span>
                 <span ng-if="type == 'service'">{t}Services{/t}</span>
@@ -33,9 +32,6 @@
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
-                <li ng-click="type = undefined">
-                  <a href="#">{t}All{/t}</a>
-                </li>
                 <li ng-click="type = 'module'">
                   <a href="#">{t}Modules{/t}</a>
                 </li>
@@ -75,7 +71,7 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
                           <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
                           <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                           <span class="pull-left">
@@ -88,7 +84,7 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_store_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
                     </a>
@@ -104,15 +100,6 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="quicklinks hidden-xs">
-              <button class="btn" ng-class="{ 'btn-primary': !type, 'btn-white': type }" ng-click="type = undefined">
-                <i class="fa fa-lg fa-th"></i>
-                {t}All{/t}
-              </button>
-            </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks module-filter" ng-click="type = 'pack'">
               <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'pack', 'btn-white': type != 'pack' }">
                 <i class="fa fa-lg fa-dropbox"></i>
@@ -217,7 +204,7 @@
         <div class="grid-body no-padding">
           <div class="clearfix">
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img class="module-image pull-left" ng-src="/assets/images/market/[%item.thumbnail%]">
+              <img class="module-image pull-left" ng-src="/assets/images/store/[%item.thumbnail%]">
               <div class="module-icon">
                 <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-thumbs-o-up': item.type == 'partner', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>
@@ -263,7 +250,7 @@
       </div>
     </script>
     <script type="text/ng-template" id="modal-details">
-      {include file="market/modal/_details.tpl"}
+      {include file="store/modal/_details.tpl"}
     </script>
   </div>
 {/block}

@@ -4,7 +4,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  MarketCheckoutCtrl
+     * @name  StoreCheckoutCtrl
      *
      * @requires $analytics
      * @requires $http
@@ -17,10 +17,10 @@
      * @description
      *   Controller to handle actions in checkout
      */
-    .controller('MarketCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
+    .controller('StoreCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
       function ($analytics, $http, $modal, $scope, messenger, routing, webStorage) {
         /**
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   Flag to edit billing information.
@@ -30,7 +30,7 @@
         $scope.edit = false;
 
         /**
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   The current step in the checkout wizard.
@@ -40,7 +40,7 @@
         $scope.step = 1;
 
         /**
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   Flag to know if current VAT is valid.
@@ -50,7 +50,7 @@
         $scope.validVat = false;
 
         /**
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   The VAT tax to apply.
@@ -61,14 +61,14 @@
 
         /**
          * @function confirm
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *  Requests the purchase and shows a confirmation modal window.
          */
         $scope.confirm = function() {
           $scope.saving = true;
-          var url = routing.generate('backend_ws_market_checkout');
+          var url = routing.generate('backend_ws_store_checkout');
           var modules = $scope.cart.map(function(e) {
             var id = e.id;
             if (!id) {
@@ -83,7 +83,7 @@
             $scope.step = 4;
             $scope.cart = [];
             webStorage.local.remove('cart');
-            $analytics.pageTrack('/market/checkout/done');
+            $analytics.pageTrack('/store/checkout/done');
           }).error(function() {
             messenger.post({
               message: 'There was an error with your request',
@@ -94,7 +94,7 @@
 
         /**
          * @function setStep
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *  Sets the step.
@@ -105,7 +105,7 @@
 
         /**
          * @function removeFromCart
-         * @memberOf MarketCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   Removes an item from cart.

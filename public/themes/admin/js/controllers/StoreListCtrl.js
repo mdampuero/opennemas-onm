@@ -7,7 +7,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  MarketListCtrl
+     * @name  StoreListCtrl
      *
      * @requires $http
      * @requires $scope
@@ -16,9 +16,9 @@
      * @requires webStorage
      *
      * @description
-     *   Handles actions for market.
+     *   Handles actions for store.
      */
-    .controller('MarketListCtrl', [
+    .controller('StoreListCtrl', [
       '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
       function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
@@ -37,7 +37,7 @@
 
         /**
          * @function addToCart
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Adds an item to the cart.
@@ -58,7 +58,7 @@
 
         /**
          * @function allActivated
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Check if all modules from array are already activated.
@@ -85,7 +85,7 @@
 
         /**
          * @function allDeactivated
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Check if all modules from array are deactivated.
@@ -112,7 +112,7 @@
 
         /**
          * @function isActivated
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Checks if an item is already activated.
@@ -134,7 +134,7 @@
 
         /**
          * @function isInCart
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Checks if an item is already in cart.
@@ -160,14 +160,14 @@
 
         /**
          * @function list
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Finds the list of available modules.
          */
         $scope.list = function() {
           $scope.loading = true;
-          var url = routing.generate('backend_ws_market_list');
+          var url = routing.generate('backend_ws_store_list');
 
           $http.get(url).success(function(response) {
             $scope.activated = response.activated;
@@ -181,7 +181,7 @@
 
         /**
          * @function removeFromCart
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Removes an item from cart.
@@ -197,7 +197,7 @@
 
         /**
          * @function showDetails
-         * @memberOf MarketListCtrl
+         * @memberOf StoreListCtrl
          *
          * @description
          *   Opens a modal window with the module details

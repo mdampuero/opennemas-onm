@@ -1086,9 +1086,9 @@ backend_domain_mapping:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/domain_management.yml
 
-backend_market:
+backend_store:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/market.yml
+    resource: @BackendBundle/Resources/config/routing/store.yml
 
 backend_news_agency_server:
     prefix: /
