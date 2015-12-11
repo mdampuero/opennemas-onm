@@ -111,11 +111,17 @@
                         <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad" target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
                         <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas" target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
                         <li>
-                            <select name="language" id="language" class="language-selector">
-                            {foreach from=$languages key=key item=language}
-                                <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
-                            {/foreach}
-                        </select>
+                          <div class="dropup">
+                            <a class="dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                              {t}Language{/t} {$languages[$current_language]}
+                              <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                              {foreach from=$languages key=key item=language}
+                                <li class="{if $key == $current_language}current{/if}"><a href="?language={$key}">{$language}</a></li>
+                              {/foreach}
+                            </ul>
+                          </div>
                         </li>
                     </ul>
                 </div>
@@ -124,19 +130,16 @@
 
     {block name="footer-js"}
     {javascripts
-    src="@Common/js/jquery/jquery.min.js,
-    @Common/components/bootstrap/dist/js/bootstrap.min.js,
-    @Common/components/modernizr/modernizr.js,
-    @Common/js/onm/md5.min.js"}
+    src="
+      @Common/components/jquery/jquery.min.js,
+      @Common/components/bootstrap/dist/js/bootstrap.min.js,
+      @Common/components/modernizr/modernizr.js,
+      @Common/js/onm/md5.min.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function($) {
       'use strict';
-
-      $('.language-selector').on('change', function(e, ui) {
-          document.location.href = '?language=' + $(this).find('option:selected').val();
-      });
 
       // Encode password in md5 on backend login
       $('#loginform').on('submit', function(e, ui) {
@@ -154,7 +157,7 @@
       });
     });
     </script>
-        {uservoice_widget}
+    {uservoice_widget}
     {/block}
     </body>
 </html>
