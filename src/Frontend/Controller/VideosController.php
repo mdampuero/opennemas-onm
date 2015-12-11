@@ -170,6 +170,7 @@ class VideosController extends Controller
                     'total'       => count($othersVideos)+1,
                     'route'       => [
                         'name'   => 'frontend_video_ajax_paginated',
+                    ]
                 ]);
 
                 $this->view->assign('pagination', $pagination);
