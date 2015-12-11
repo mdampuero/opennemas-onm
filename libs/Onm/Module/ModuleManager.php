@@ -119,6 +119,24 @@ class ModuleManager
     }
 
     /**
+     * Returns the list of module ids for pack.
+     *
+     * @param string $pack The pack id.
+     *
+     * @return array The list of module id.
+     */
+    public static function getModuleIdsByPack($pack)
+    {
+        $modules = self::getAvailableModulesGrouped();
+
+        return array_map(function ($module) {
+            return $module['id'];
+        }, array_filter($modules, function ($module) use ($pack) {
+            return $module['plan'] === $pack;
+        }));
+    }
+
+    /**
      * Returns the list of available modules in Onm instance.
      *
      * @return array the list of available modules
