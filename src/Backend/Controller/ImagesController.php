@@ -222,7 +222,6 @@ class ImagesController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
         $page = $request->query->getDigits('page', 1);
 
