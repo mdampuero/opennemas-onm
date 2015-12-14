@@ -142,7 +142,7 @@ class StoreController extends Controller
         $packs = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes = \Onm\Module\ModuleManager::getAvailableThemes();
 
-        $results = array_merge($modules, $packs, $themes);
+        $results = array_merge($modules, $packs);
         foreach ($results as &$result) {
             if (empty($result['author'])) {
                 $result['author'] = '<a href="https://www.opennemas.com/about" target="_blank">Opennemas</a>';
