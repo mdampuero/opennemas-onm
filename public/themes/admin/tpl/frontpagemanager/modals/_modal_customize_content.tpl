@@ -174,20 +174,18 @@
 {/stylesheets}
 
 {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
-    <script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
-
-<script>
-  $('#modal-element-customize-content').on('shown.bs.modal', function (e) {
-    $('select[name="colorpicker-background"]').simplecolorpicker({
-      picker: true
-    }).change(function() {
-      $('#bg-color').val($('select[name="colorpicker-background"]').val());
+  <script>
+    $('#modal-element-customize-content').on('shown.bs.modal', function (e) {
+      $('select[name="colorpicker-background"]').simplecolorpicker({
+        picker: true
+      }).change(function() {
+        $('#bg-color').val($('select[name="colorpicker-background"]').val());
+      });
+      $('select[name="colorpicker-font"]').simplecolorpicker({
+       picker: true
+     }).change(function() {
+      $('#font-color').val($('select[name="colorpicker-font"]').val());
     });
-    $('select[name="colorpicker-font"]').simplecolorpicker({
-     picker: true
-   }).change(function() {
-    $('#font-color').val($('select[name="colorpicker-font"]').val());
-  });
- });
-</script>
+   });
+  </script>
+{/javascripts}

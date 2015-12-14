@@ -496,13 +496,12 @@
       @AdminTheme/js/services/*,
       @Common/js/admin.js
     "}
-      <script type="text/javascript" src="{$asset_url}"></script>
+      <script type="text/javascript">
+        Tinycon.setBubble({count_pending_comments});
+      </script>
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
-    <script type="text/javascript">
-      Tinycon.setBubble({count_pending_comments});
-    </script>
     {uservoice_widget}
   {/block}
 </body>

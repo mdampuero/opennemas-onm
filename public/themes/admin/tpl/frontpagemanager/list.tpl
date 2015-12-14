@@ -17,6 +17,8 @@
 {/block}
 
 {block name="footer-js" append}
+  {javascripts src="@AdminTheme/js/jquery/jquery.colorbox-min.js,
+    @AdminTheme/js/onm/frontpagemanager.js"}
   <script type="text/javascript">
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
@@ -45,9 +47,9 @@
     };
     var content_states = {
       {foreach from=$frontpage_articles item=content}
-      {if $content->id}
-      {$content->id}: {$content->getQuickInfo()|json_encode},
-      {/if}
+        {if $content->id}
+          {$content->id}: {$content->getQuickInfo()|json_encode},
+        {/if}
       {/foreach}
     }
     var frontpage_info = {
@@ -55,9 +57,6 @@
       changed: false
     }
   </script>
-  {javascripts src="@AdminTheme/js/jquery/jquery.colorbox-min.js,
-  @AdminTheme/js/onm/frontpagemanager.js"}
-    <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 {/block}
 
