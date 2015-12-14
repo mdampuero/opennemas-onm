@@ -213,6 +213,7 @@ class ModuleManager
             [
                 'id'               => 'BASIC',
                 'name'             => _('Basic pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-basic.jpg',
                 'description'      => _('Publishing your news is FREE!'),
                 'long_description' => (
@@ -258,6 +259,7 @@ class ModuleManager
             [
                 'id'               => 'PROFESSIONAL',
                 'name'             => _('Professional pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-pro.jpg',
                 'description'      => _('Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!'),
                 'long_description' => (
@@ -366,6 +368,7 @@ class ModuleManager
             [
                 'id'               => 'EXPERT',
                 'name'             => _('Expert pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-expert.jpg',
                 'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!'),
                 'long_description' => (
@@ -892,9 +895,9 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'IADBOX_MANAGER',
+                    'type'             => 'partner',
                     'author'           => '<a target="_blank" href="http://www.iadbox.com">iadbox</a>',
                     'plan'             => 'OTHER',
-                    'type'             => 'partner',
                     'thumbnail'        => 'iadbox.jpg',
                     'name'             => _('iadbox'),
                     'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
