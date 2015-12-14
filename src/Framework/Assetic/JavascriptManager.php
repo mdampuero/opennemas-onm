@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
@@ -8,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Framework\Assetic;
 
 use Assetic\FilterManager;
@@ -28,15 +26,24 @@ class JavascriptManager extends AssetManager
      */
     protected $extension = 'js';
 
+     /**
+     * {@inheritDoc}
+     */
+    public function addAsset($asset)
+    {
+        if (preg_match('/.*\.(js)/', $asset)) {
+            $this->assets[] = realpath($asset);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
-    public function initFilters($filters)
+    public function initFilters()
     {
-        $this->filters = $filters;
-        $this->fm      = new FilterManager();
+        $this->fm = new FilterManager();
 
-        foreach ($filters as $filter) {
+        foreach ($this->filters as $filter) {
             switch ($filter) {
                 case 'uglifyjs':
                     $this->fm->set(

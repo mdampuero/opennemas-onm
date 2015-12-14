@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
@@ -8,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Framework\Assetic;
 
 use Assetic\FilterManager;
@@ -30,15 +28,25 @@ class StylesheetManager extends AssetManager
      */
     protected $extension = 'css';
 
+
     /**
      * {@inheritDoc}
      */
-    public function initFilters($filters)
+    public function addAsset($asset)
     {
-        $this->filters = $filters;
-        $this->fm      = new FilterManager();
+        if (preg_match('/.*\.(css|scss|less)/', $asset)) {
+            $this->assets[] = realpath($asset);
+        }
+    }
 
-        foreach ($filters as $filter) {
+    /**
+     * {@inheritDoc}
+     */
+    public function initFilters()
+    {
+        $this->fm = new FilterManager();
+
+        foreach ($this->filters as $filter) {
             switch ($filter) {
                 case 'cssrewrite':
                     $this->fm->set('cssrewrite', new CssRewriteFilter());

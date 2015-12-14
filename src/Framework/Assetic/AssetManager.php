@@ -52,11 +52,25 @@ abstract class AssetManager
     protected $env;
 
     /**
+     * The array of filters
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * The filter manager.
      *
      * @var FilterManager
      */
     protected $fm;
+
+    /**
+     * The block content.
+     *
+     * @var string
+     */
+    public $literal = '';
 
     /**
      * Default output path.
@@ -132,12 +146,8 @@ abstract class AssetManager
      * @param array   $assets The list of assets.
      * @param booelan $append Whether to append or restart the array of assets.
      */
-    public function initAssets($assets, $append = false)
+    public function addAssets($assets)
     {
-        if (!$append) {
-            $this->assets = array();
-        }
-
         foreach ($assets as $asset) {
             $asset = $this->parseAssetSrc($asset);
 
@@ -145,14 +155,26 @@ abstract class AssetManager
             if ($pos == strlen($asset) - 1) {
                 foreach (glob($asset) as $asset) {
                     if (!is_dir($asset)) {
-                        $this->assets[] = str_replace($this->sitePath, '', $asset);
+                        $this->addAsset(str_replace($this->sitePath, '', $asset));
                     } else {
                         $this->initAssets(glob($asset . '/*'), true);
                     }
                 }
             } else {
-                $this->assets[] = $asset;
+                $this->addAsset(str_replace($this->sitePath, '', $asset));
             }
+        }
+    }
+
+    /**
+     * Adds a new filter to the array of filters
+     *
+     * @param string $filter The filter name.
+     */
+    public function addFilter($filter)
+    {
+        if (!in_array($filter, $this->filters)) {
+            $this->filters[] = $filter;
         }
     }
 
@@ -194,7 +216,11 @@ abstract class AssetManager
      */
     public function writeAssets()
     {
-        $srcs = array();
+        if (empty($this->assets)) {
+            return [];
+        }
+
+        $srcs = [];
 
         // Prepare the assets writer
         $this->writer = new AssetWriter($this->config['root']);
@@ -372,9 +398,14 @@ abstract class AssetManager
     }
 
     /**
-     * Creates a new FilterManager from the given filters configuration.
+     * Adds a new asset to the array of assetes.
      *
-     * @param array $filters Array of filters configuration.
+     * @param string $asset The path to the asset.
      */
-    abstract public function initFilters($filters);
+    abstract public function addAsset($asset)
+
+    /**
+     * Initializes the filter manager with the current filters.
+     */
+    abstract public function initFilters();
 }
