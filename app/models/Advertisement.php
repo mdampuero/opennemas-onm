@@ -334,8 +334,10 @@ class Advertisement extends Content
         $sql = 'DELETE FROM advertisements WHERE pk_advertisement = ?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
