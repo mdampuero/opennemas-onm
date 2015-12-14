@@ -27,6 +27,7 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
 
     $am = getService('stylesheet_manager');
     $am->initConfiguration($params);
+    $am->literal .= $content;
 
     $config = $am->getConfiguration();
 
@@ -34,7 +35,7 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
         $filters = array();
         if (array_key_exists('filters', $params)) {
             foreach (explode(',', $params['filters']) as $filter) {
-                $filters[] = trim($filter);
+                $am->addFilter(trim($filter));
             }
         }
 
@@ -43,26 +44,6 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
             $srcs[] = trim($src);
         }
 
-        $am->initFilters($filters);
-        $am->initAssets($srcs);
-        $am->initFactory();
-
-        $assetsUrls = array_reverse($am->writeAssets());
-        $count      = count($assetsUrls);
-
-        $template->assign($config['asset_url'], $assetsUrls[$count - 1]);
-    } else { // Closing tag
-        if (isset($content) && $am->debug()) {
-
-            $count--;
-
-            if ($count > 0) {
-                $template->assign($config['asset_url'], $assetsUrls[$count - 1]);
-            }
-
-            $repeat = $count > 0;
-        }
-
-        return $content;
+        $am->addAssets($srcs);
     }
 }
