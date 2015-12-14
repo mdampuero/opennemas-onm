@@ -33,7 +33,7 @@
          *
          * @type {String}
          */
-        $scope.type = 'pack'
+        $scope.type = 'pack';
 
         /**
          * @function addToCart
@@ -171,7 +171,28 @@
 
           $http.get(url).success(function(response) {
             $scope.activated = response.activated;
-            $scope.items     = response.results;
+
+            $scope.free      = [];
+            $scope.module    = [];
+            $scope.pack      = [];
+            $scope.partner   = [];
+            $scope.service   = [];
+            $scope.purchased = [];
+            for (var i = 0; i < response.results.length; i++) {
+              var module = response.results[i];
+
+              if (response.activated.indexOf(module.id) !== -1) {
+                $scope.purchased.push(module);
+              } else {
+                if (module.price.month === 0) {
+                  $scope.free.push(module);
+                } else {
+                  $scope[module.type].push(module);
+                }
+              }
+            }
+
+            $scope.items = $scope[$scope.type];
             $scope.loading = false;
           }).error(function(response) {
             $scope.loading = false;
@@ -249,6 +270,14 @@
           // Adding items
           $scope.pulse = true;
           $timeout(function() { $scope.pulse = false; }, 1000);
+        }, true);
+
+        $scope.$watch('type', function(nv, ov) {
+          if (ov === nv) {
+            return;
+          }
+
+          $scope.items = $scope[nv];
         }, true);
 
         // Initialize the shopping cart from the webStorage

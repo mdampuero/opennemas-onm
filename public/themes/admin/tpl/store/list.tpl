@@ -25,10 +25,12 @@
             </li>
             <li class="quicklinks dropdown ng-cloak visible-xs">
               <div data-toggle="dropdown">
-                <span ng-if="type == 'module'">{t}Modules{/t}</span>
                 <span ng-if="type == 'pack'">{t}Packs{/t}</span>
+                <span ng-if="type == 'module'">{t}Modules{/t}</span>
                 <span ng-if="type == 'service'">{t}Services{/t}</span>
                 <span ng-if="type == 'partner'">{t}Partners{/t}</span>
+                <span ng-if="type == 'free'">{t}Free{/t}</span>
+                <span ng-if="type == 'purchased'">{t}My selection{/t}</span>
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
@@ -43,6 +45,12 @@
                 </li>
                 <li ng-click="type = 'partner'">
                   <a href="#">{t}Partners{/t}</a>
+                </li>
+                <li ng-click="type = 'free'">
+                  <a href="#">{t}Free{/t}</a>
+                </li>
+                <li ng-click="type = 'purchased'">
+                  <a href="#">{t}My selection {/t}</a>
                 </li>
               </ul>
             </li>
@@ -101,8 +109,8 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks module-filter" ng-click="type = 'pack'">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'pack', 'btn-white': type != 'pack' }">
-                <i class="fa fa-lg fa-dropbox"></i>
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'pack', 'btn-white': type != 'pack' }">
+                <i class="fa fa-lg fa-dropbox hidden-sm"></i>
                 {t}Packs{/t}
               </button>
             </li>
@@ -110,8 +118,8 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
-                <i class="fa fa-lg fa-cube"></i>
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
+                <i class="fa fa-lg fa-cube hidden-sm"></i>
                 {t}Modules{/t}
               </button>
             </li>
@@ -119,8 +127,8 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
-                <i class="fa fa-lg fa-support"></i>
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
+                <i class="fa fa-lg fa-support hidden-sm"></i>
                 {t}Services{/t}
               </button>
             </li>
@@ -128,13 +136,31 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
-                <i class="fa fa-lg fa-thumbs-o-up"></i>
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
+                <i class="fa fa-lg fa-thumbs-o-up hidden-sm"></i>
                 {t}Partners{/t}
               </button>
             </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }" ng-click="type = 'free'">
+                <i class="fa fa-ban fa-circle-o hidden-sm"></i>
+                {t}Free{/t}
+              </button>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
+                <i class="fa fa-lg fa-star hidden-sm"></i>
+                {t}My selection{/t}
+              </button>
+            </li>
           </ul>
-          <ul class="hidden-xs nav quick-section pull-right">
+          <ul class="hidden-sm hidden-xs nav quick-section pull-right">
             <li class="quicklinks">
               <div class="input-group" style="width: 200px">
                 <input name="name" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text"/>
@@ -163,40 +189,11 @@
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-        <div class="center">
-          <h4>{t}Unable to find any module that matches your search.{/t}</h4>
-          <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-        </div>
+      <div class="listing-no-contents ng-cloak text-center" ng-if="!loading && (items | filter : { name: criteria.name }).length == 0">
+        <h4>{t}No items available to purchase{/t}</h4>
       </div>
-      <div ng-if="type != 'module'">
-        <h4 class="ng-cloak" ng-show="!loading  && allActivated(purchased)">{t}No items available to purchase{/t}</h4>
-        <h4 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h4>
-        <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
-          </div>
-        </div>
-        <h4 class="ng-cloak" ng-show="!loading && !allDeactivated(purchased)">{t}Purchased{/t}</h4>
-        <div class="row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type } | orderBy: name)" ng-if="isActivated(item)" ng-include="'item'">
-          </div>
-        </div>
-      </div>
-      <div ng-if="type == 'module'">
-        <h4 class="ng-cloak" ng-show="!loading && allActivated(available['PROFESSIONAL']) && allActivated(available['SILVER']) && allActivated(available['GOLD']) && allActivated(available['OTHER'])">{t}No items available to purchase{/t}</h4>
-        <div class="row" ng-repeat="plan in plans">
-          <h3 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">[% plan.name %]</h3>
-          <h4 class="ng-cloak" ng-show="!loading && !allActivated(available[plan.id])">{t}Available{/t}</h4>
-          <div class="row clearfix ng-cloak" ng-show="!loading && !allActivated(available[plan.id]) && available[plan.id] && available[plan.id].length > 0">
-            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in available[plan.id] = (items | filter: criteria | filter: { type: type } | filter: { plan: plan.id } | orderBy: name)" ng-if="!isActivated(item)" ng-include="'item'">
-            </div>
-          </div>
-          <!-- <h4 class="ng-cloak" ng-show="!loading  && !allDeactivated(purchased[plan.id])">{t}Purchased{/t}</h4>
-          <div class="row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
-            <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased[plan.id] && purchased[plan.id].length > 0">
-            </div>
-          </div> -->
-        </div>
+      <div class="row clearfix ng-cloak">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in items | filter : { name: criteria.name }" ng-include="'item'"></div>
       </div>
     </div>
     <script type="text/ng-template" id="item">
