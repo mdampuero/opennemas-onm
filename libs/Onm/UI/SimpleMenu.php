@@ -134,7 +134,9 @@ class SimpleMenu
             && (($hasSubmenu && !empty($submenuContent)) || !$hasSubmenu)
         ) {
             $isCurrent = false;
-            $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
+            if (array_key_exists("link", $element)) {
+                $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
+            }
 
             if (array_key_exists('link', $element) && $element['link'] === '/admin') {
                 $isCurrent = preg_match("@^".preg_quote($element['link'])."$@", $_SERVER['REQUEST_URI']);
@@ -203,7 +205,7 @@ class SimpleMenu
     private function getHref($element, $hasArrow, $isOpen)
     {
         $id       = 'submenu_'.$element['id'];
-        $url      = $element['link'];
+        $url      = (array_key_exists('link', $element)) ? $element['link'] : "";
         $title    = $element['title'];
         $external = isset($element['target']);
 
@@ -245,7 +247,7 @@ class SimpleMenu
                     $arrow";
         }
 
-        return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>
+        return "<a href=\"$url\" $target $attrTitle $attrId>
                     $icon
                     <span class=\"title\">$title</span>
                     $arrow
