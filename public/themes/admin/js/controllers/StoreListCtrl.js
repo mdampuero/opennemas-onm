@@ -19,8 +19,8 @@
      *   Handles actions for store.
      */
     .controller('StoreListCtrl', [
-      '$analytics', '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($analytics, $http, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $location, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * The available modules.
          *
@@ -283,6 +283,11 @@
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('cart')) {
           $scope.cart = webStorage.local.get('cart');
+        }
+
+        // Initialize the type from current location
+        if ($location.path()) {
+          $scope.type = $location.path().replace('/', '');
         }
 
         // Get modules list

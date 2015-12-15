@@ -79,7 +79,7 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart track by $index | orderBy: name">
-                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                          <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
                           <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
                           <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                           <span class="pull-left">
@@ -92,7 +92,7 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_store_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
                     </a>

@@ -166,13 +166,13 @@ class StoreController extends Controller
             ->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Market purchase request')
+            ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->getUser()->contact_mail)
             ->setBody(
                 $this->renderView(
-                    'market/email/_purchaseToCustomer.tpl',
+                    'store/email/_purchaseToCustomer.tpl',
                     [
                         'instance' => $instance,
                         'modules'  => $modules
@@ -196,13 +196,13 @@ class StoreController extends Controller
             ->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Market purchase request')
+            ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->container->getParameter('sales_email'))
             ->setBody(
                 $this->renderView(
-                    'market/email/_purchaseToSales.tpl',
+                    'store/email/_purchaseToSales.tpl',
                     [
                         'instance' => $instance,
                         'modules'  => $modules,

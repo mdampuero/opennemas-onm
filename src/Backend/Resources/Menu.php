@@ -380,7 +380,7 @@ $menuXml = [
         ],
     ],
     [
-        'id'    => 'market',
+        'id'    => 'store',
         'title' => _('Store'),
         'icon'  => 'fa fa-shopping-cart',
         'link'  => url('admin_store_list'),
