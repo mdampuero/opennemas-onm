@@ -30,3 +30,7 @@
     </div>
   </div>
 </div>
+<div class="modal-footer">
+  <button class="btn btn-link" ng-click="close(1)" ng-if="imported" type="button">{t}Close{/t}</button>
+  <button class="btn btn-success" ng-click="confirm(1)" type="button">{t}Import{/t}</button>
+</div>
