@@ -45,11 +45,11 @@
     livereload.listen();
 
     // Executes tests and reload browser
-    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php' ],
-      batch(function (events, done) {
-        gulp.start('phpunit', done);
-        livereload.reload();
-      }));
+    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php',
+        'public/themes/**/*.tpl' ], batch(function (events, done) {
+      gulp.start('phpunit', done);
+      livereload.reload();
+    }));
 
     // Executes tests and reload browser
     gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
