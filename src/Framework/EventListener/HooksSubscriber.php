@@ -82,8 +82,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['deleteEntityRepositoryCache', 5]
             ],
             'content.create' => [
-                ['deleteSmartyCache', 5],
-                ['sendVarnishRequestCleaner', 5],
+                ['mockHookAction', 0],
             ],
             'content.update' => [
                 ['deleteEntityRepositoryCache', 10],
