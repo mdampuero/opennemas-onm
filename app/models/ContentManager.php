@@ -833,7 +833,7 @@ class ContentManager
             'endtime'           => [
                 'union' => 'OR',
                 ['value' => '0000-00-00 00:00:00', 'operator' => '='],
-                ['value' => $date, 'operator' => '>']
+                ['value' => $now, 'operator' => '>']
             ],
         ];
 
