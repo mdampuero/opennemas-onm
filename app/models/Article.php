@@ -196,9 +196,12 @@ class Article extends Content
                 ? ''
                 : $data['img2_footer'];
 
+        // Start transaction
+        $GLOBALS['application']->conn->BeginTrans();
         parent::create($data);
 
         if (empty($this->id)) {
+            $GLOBALS['application']->conn->RollbackTrans();
             return false;
         }
 
@@ -218,8 +221,13 @@ class Article extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
+            $GLOBALS['application']->conn->RollbackTrans();
             return false;
         }
+
+        // Finish transaction
+        $GLOBALS['application']->conn->CommitTrans();
+
         if (!empty($data['relatedFront'])) {
             $this->saveRelated(
                 $data['relatedFront'],
