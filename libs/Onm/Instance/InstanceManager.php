@@ -685,6 +685,7 @@ class InstanceManager extends BaseManager
         $instance->external['site_agency'] = $instance->internal_name . '.opennemas.com';
 
         foreach (array_keys($instance->external) as $key) {
+            $this->cache->delete($key);
             $this->sm->invalidate($key);
 
             if (!$this->sm->set($key, $instance->external[$key])) {
@@ -712,6 +713,7 @@ class InstanceManager extends BaseManager
         $settings = ['pass_level', 'piwik', 'max_mailing', 'max_users', 'last_invoice'];
 
         foreach ($settings as $key) {
+            $this->cache->delete($key);
             $this->sm->invalidate($key);
 
             $value = '';
