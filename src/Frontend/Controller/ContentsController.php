@@ -58,14 +58,13 @@ class ContentsController extends Controller
             $this->paywallHook($content);
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-        $cacheID = $this->view
-            ->generateCacheId($content->content_type_name, null, $contentID);
+        $cacheID = $this->view->generateCacheId($content->content_type_name, null, $contentID);
 
         return $this->render(
             'article/article_printer.tpl',
