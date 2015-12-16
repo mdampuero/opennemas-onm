@@ -52,21 +52,22 @@ function smarty_function_structured_data_tags($params, &$smarty) {
         // Generate tags
         $output = '<script type="application/ld+json">
             {
-              "@context" : "http://schema.org",
-              "@type" : "Article",
-              "name" : "'.$title.'",
-              "author" : {
-                "@type" : "Person",
-                "name" : "'.$user->name.'"
-              },
-              "datePublished" : "'.$content->created.'",
-              "image" : "'.$imageUrl.'",
-              "articleSection" : "'.$category->title.'",
-              "keywords" : "'.$content->metadata.'",
-              "url" : "'.$url.'",
-              "publisher" : {
-                "@type" : "Organization",
-                "name" : "'.getService("setting_repository")->get("site_name").'"
+                "@context" : "http://schema.org",
+                "@type" : "Article",
+                "name" : "'.$title.'",
+                "author" : {
+                    "@type" : "Person",
+                    "name" : "'.$user->name.'"
+                },
+                "datePublished" : "'.$content->created.'",
+                "image" : "'.$imageUrl.'",
+                "articleSection" : "'.$category->title.'",
+                "keywords" : "'.$content->metadata.'",
+                "url" : "'.$url.'",
+                "publisher" : {
+                    "@type" : "Organization",
+                    "name" : "'.getService("setting_repository")->get("site_name").'"
+                }
             }
             </script>';
     }
