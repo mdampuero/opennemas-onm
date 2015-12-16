@@ -103,11 +103,11 @@ services:
 
     dbal_connection:
         class: Onm\Database\DbalWrapper
-        arguments: [ %database% ]
+        arguments: [ %database%, %kernel.environment% ]
 
     dbal_connection_manager:
         class: Onm\Database\DbalWrapper
-        arguments: [ %database% ]
+        arguments: [ %database%, %kernel.environment% ]
 
     db_conn_manager:
         class: Onm\DatabaseConnection
