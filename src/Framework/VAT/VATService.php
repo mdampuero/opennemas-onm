@@ -9,8 +9,6 @@
  */
 namespace Framework\VAT;
 
-use Sparkling\VATBundle\Service\VATService as BaseVATService;
-
 class VATService
 {
     /**
@@ -48,16 +46,6 @@ class VATService
         'FI' => [ 'name' => 'Finland', 'value' => 24 ],
         'SE' => [ 'name' => 'Sweden', 'value' => 25 ],
     ];
-
-    /**
-     * Initializes the VAT service.
-     *
-     * @param BaseVATService $validator The VAT validator service.
-     */
-    public function __construct(BaseVATService $validator)
-    {
-        $this->validator = $validator;
-    }
 
     /**
      * Return an array with all applicable taxes.
@@ -114,6 +102,12 @@ class VATService
      */
     public function validate($country, $vatNumber)
     {
-        return $this->validator->validate($country, $vatNumber);
+        if ($country === 'ES') {
+            return  \IsoCodes\Cif::validate($vatNumber)
+                || \IsoCodes\Nif::validate($vatNumber)
+                || \IsoCodes\Vat::validate($vatNumber);
+        }
+
+        return \IsoCodes\Vat::validate($vatNumber);
     }
 }
