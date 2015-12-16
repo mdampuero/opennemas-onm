@@ -16,9 +16,14 @@
         <a class="user-action" href="javascript:UserVoice.showPopupWidget();">
           <i class="fa fa-question fa-lg"></i>
         </a>
-        <div class="user-action" ng-click="mode = 'notifications'">
-          <i class="fa fa-bell"></i>
-        </div>
+        <span class="pointer" ng-click="mode = 'notifications'">
+          <div class="user-action">
+            <i class="fa fa-bell"></i>
+          </div>
+          <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notifications.length > 0">
+            [% notifications.length %]
+          </span>
+        </span>
         <div class="user-action no-padding" ng-click="mode = 'profile'">
           <div class="profile-pic">
             {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="35"}
@@ -28,23 +33,14 @@
     </div>
     <ul class="collapsed notification-list" ng-class="{ 'collapsed': mode != 'notifications'}">
       <li class="list-title">
-        <span class="title">{t}Notifications{/t}</span>
+        <span class="title">
+          <a href="{url name=backend_notifications_list}">{t}Notifications{/t}<a>
+        </span>
       </li>
-      <li class="notification">
-        <p>{t}No notifications for now{/t}</p>
+      <li class="notification notification-[% item.style %]" ng-repeat="item in notifications">
+        <div class="notification-title">[% item.title %]</div>
+        <div ng-bind-html="item.body"></div>
       </li>
-      <!-- <li class="notification notification-success">
-        <div class="notification-title">Success!</div>
-        <p>{t}This is a notification{/t}</p>
-      </li>
-      <li class="notification notification-error">
-        <div class="notification-title">Error!</div>
-        <p>{t}This is a notification{/t}</p>
-      </li>
-      <li class="notification notification-warning">
-        <div class="notification-title">Warning!</div>
-        <p>{t}This is a notification{/t}</p>
-      </li> -->
     </ul>
     <ul class="collapsed" ng-class="{ 'collapsed': mode != 'profile'}">
       <li class="list-title">
