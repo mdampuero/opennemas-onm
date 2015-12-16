@@ -343,12 +343,13 @@ class NotificationController extends Controller
                 'warning' => [ 'name' => _('Warning'), 'value' => 'warning' ]
             ],
             'types' => [
-                '-1'    => [ 'name' => _('All'), 'value' => '-1' ],
-                'email' => [ 'name' => _('Email'), 'value' => 'email' ],
-                'help'  => [ 'name' => _('Help'), 'value' => 'help' ],
-                'info'  => [ 'name' => _('Information'), 'value' => 'info' ],
-                'media' => [ 'name' => _('Media'), 'value' => 'media' ],
-                'users' => [ 'name' => _('Users'), 'value' => 'users' ]
+                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
+                'comment' => [ 'name' => _('Comments'), 'value' => 'comment' ],
+                'email'   => [ 'name' => _('Email'), 'value' => 'email' ],
+                'help'    => [ 'name' => _('Help'), 'value' => 'help' ],
+                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
+                'media'   => [ 'name' => _('Media'), 'value' => 'media' ],
+                'user'    => [ 'name' => _('Users'), 'value' => 'user' ]
             ]
         ];
 

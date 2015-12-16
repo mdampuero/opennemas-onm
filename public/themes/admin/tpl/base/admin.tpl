@@ -279,7 +279,7 @@
                             </span>
                           </div>
                           <div class="notification-icon">
-                            <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'users', 'fa-users': notification.type === 'users' }"></i>
+                            <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
                           </div>
                           <div class="notification-body" ng-bind-html="notification.body"></div>
                         </li>
