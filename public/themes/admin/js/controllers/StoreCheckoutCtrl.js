@@ -179,6 +179,7 @@
         $scope.$watch('[billing.country, billing.phone]', function() {
           if (!$scope.billing || !$scope.billing.country ||
               !$scope.billing.phone) {
+            $scope.validPhone = false;
             return;
           }
 
@@ -202,6 +203,7 @@
         $scope.$watch('[billing.country, billing.vat]', function() {
           if (!$scope.billing || !$scope.billing.country ||
               !$scope.billing.vat) {
+            $scope.validVat = false;
             return;
           }
 

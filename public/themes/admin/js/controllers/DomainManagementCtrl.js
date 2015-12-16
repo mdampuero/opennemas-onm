@@ -270,6 +270,54 @@
           }
         }, true);
 
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.phone]', function() {
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.phone) {
+            $scope.validPhone = false;
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_phone',
+              { country: $scope.billing.country, phone: $scope.billing.phone });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validPhone = true;
+            }).error(function() {
+              $scope.validPhone = false;
+            });
+          }, 500);
+        }, true);
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.vat]', function() {
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.vat) {
+            $scope.validVat = false;
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_vat',
+              { country: $scope.billing.country, vat: $scope.billing.vat });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validVat = true;
+            }).error(function() {
+              $scope.validVat = false;
+            });
+          }, 500);
+        }, true);
+
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv, ov) {
           if (nv === 1) {
