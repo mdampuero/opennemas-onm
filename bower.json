@@ -101,6 +101,7 @@
     "spinkit": "1.2.5",
     "skyicons": "https://github.com/darkskyapp/skycons.git",
     "swfobject": "*",
+    "tinycon-angularjs": "1.1.0",
     "wordcount": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git",
     "wysihtml": "0.4.17"
   },
