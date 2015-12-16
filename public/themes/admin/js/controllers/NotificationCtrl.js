@@ -42,29 +42,11 @@
         };
 
         /**
-         * @function getLatest
+         * @function list
          * @memberOf NotificationCtrl
          *
          * @description
-         *   Gets a list of notifications to display in dropdown.
-         */
-        $scope.getLatest = function() {
-          var url = routing.generate('backend_ws_notifications_latest');
-
-          $http.get(url).success(function(response) {
-            $scope.notifications = response.results;
-
-            $scope.bounce = true;
-            $timeout(function() { $scope.bounce = false; }, 1000);
-          });
-        };
-
-        /**
-         * @function getLatest
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   Gets a list of notifications to display in dropdown.
+         *   Gets a list of notifications.
          */
         $scope.list = function() {
           $scope.loading = true;

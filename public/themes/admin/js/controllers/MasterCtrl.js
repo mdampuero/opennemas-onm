@@ -15,8 +15,8 @@
  * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
-  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, messenger, routing, Sidebar) {
+  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
+  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
     'use strict';
     /**
      * The current language.
@@ -73,6 +73,24 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       }, 1000);
     };
 
+    /**
+     * @function getLatest
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Gets a list of notifications to display in dropdown.
+     */
+    $scope.getLatest = function() {
+      var url = routing.generate('backend_ws_notifications_latest');
+
+      $http.get(url).success(function(response) {
+        $scope.notifications = response.results;
+        anTinycon.setBubble(response.total);
+
+        $scope.bounce = true;
+        $timeout(function() { $scope.bounce = false; }, 1000);
+      });
+    };
 
     $scope.xsOnly = function(event, callback, args) {
       if ($scope.windowWidth < 992) {
