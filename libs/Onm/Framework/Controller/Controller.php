@@ -126,7 +126,7 @@ class Controller extends SymfonyController
         ) {
             $instanceName = getService('instance_manager')->current_instance->internal_name;
 
-            $response->headers->set('x-tags', $parameters['x-tags']);
+            $response->headers->set('x-tags', 'instance-'.$instanceName.','.$parameters['x-tags']);
             $response->headers->set('x-instance', $instanceName);
 
             if (array_key_exists('x-cache-for', $parameters)

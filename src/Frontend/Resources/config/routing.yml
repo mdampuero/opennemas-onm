@@ -652,12 +652,12 @@ frontend_frontpage_category:
 
 frontend_css_global:
     path: dynamic/css/global.{cb}.css
-    defaults: { _controller: FrontendBundle:Asset:customCss }
+    defaults: { _controller: FrontendBundle:Asset:globalCss }
     requirements:
         cb : "[0-9]+"
 
 frontend_css_frontpage_category:
-    path: dynamic/css/frontpage/{cb}.{category}.css
+    path: dynamic/css/frontpage/{category}.{cb}.css
     defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
     requirements:
         category : "[a-z0-9\-]+"

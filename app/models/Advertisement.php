@@ -422,7 +422,7 @@ class Advertisement extends Content
 
         // Clean entity repository cache
         $ad = new \Advertisement($id);
-        dispatchEventWithParams('content.repository-delete', array('content' => $ad));
+        dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
     }
 
     /**

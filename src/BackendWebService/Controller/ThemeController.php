@@ -38,10 +38,7 @@ class ThemeController extends Controller
 
         $this->get('instance_manager')->persist($instance);
 
-        dispatchEventWithParams(
-            'frontpage.save_position',
-            array('category' => 'home')
-        );
+        dispatchEventWithParams('theme.change');
 
         return new JsonResponse();
     }

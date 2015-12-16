@@ -169,7 +169,7 @@ class SystemSettingsController extends Controller
         }
 
         // Delete caches for custom_css and frontpages
-        $this->dispatchEvent('frontpage.save_position', array('category' => 0));
+        $this->dispatchEvent('setting.update');
 
         $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
