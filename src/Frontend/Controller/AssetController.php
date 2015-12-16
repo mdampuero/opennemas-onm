@@ -247,14 +247,12 @@ class AssetController extends Controller
      *
      * @return Response the response object
      **/
-    public function customCssAction(Request $request)
+    public function globalCssAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
-        $cacheID = 'css|global|' . $categoryName;
+        $cacheID = 'css|global';
 
         if ($this->view->caching == 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
@@ -302,7 +300,7 @@ class AssetController extends Controller
             ),
             200,
             array(
-                'Expire'       => new \DateTime("+5 min"),
+                // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
                 'x-tags'       => 'globalcss',
             )
