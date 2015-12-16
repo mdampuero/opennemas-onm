@@ -5,6 +5,13 @@ backend_ws_store_checkout:
     options:
         expose: true
 
+backend_ws_store_check_phone:
+    path:     /store/phone
+    defaults: { _controller: BackendWebServiceBundle:Store:checkPhone }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 backend_ws_store_check_vat:
     path:     /store/vat
     defaults: { _controller: BackendWebServiceBundle:Store:checkVat }

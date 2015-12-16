@@ -17,8 +17,8 @@
      * @description
      *   Controller to handle actions in checkout
      */
-    .controller('StoreCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', 'messenger', 'routing', 'webStorage',
-      function ($analytics, $http, $modal, $scope, messenger, routing, webStorage) {
+    .controller('StoreCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', '$timeout', 'messenger', 'routing', 'webStorage',
+      function ($analytics, $http, $modal, $scope, $timeout, messenger, routing, webStorage) {
         /**
          * @memberOf StoreCheckoutCtrl
          *
@@ -173,6 +173,52 @@
               $scope.taxes[$scope.billing.country]) {
             $scope.vatTax = $scope.taxes[$scope.billing.country].value;
           }
+        }, true);
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.phone]', function() {
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.phone) {
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_phone',
+              { country: $scope.billing.country, phone: $scope.billing.phone });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validPhone = true;
+            }).error(function() {
+              $scope.validPhone = false;
+            });
+          }, 500);
+        }, true);
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('[billing.country, billing.vat]', function() {
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.vat) {
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_vat',
+              { country: $scope.billing.country, vat: $scope.billing.vat });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validVat = true;
+            }).error(function() {
+              $scope.validVat = false;
+            });
+          }, 500);
         }, true);
 
         // Initialize the shopping cart from the webStorage

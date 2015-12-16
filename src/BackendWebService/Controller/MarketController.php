@@ -6,7 +6,7 @@ use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class StoreController extends Controller
+class MarketController extends Controller
 {
     /**
      * Request a modules purchase to the sales department.
@@ -110,11 +110,7 @@ class StoreController extends Controller
         $country   = $request->query->get('country');
         $vatNumber = $request->query->get('vat');
 
-        try {
-            if (!$vat->validate($country, $vatNumber)) {
-                $code = 400;
-            }
-        } catch (\Exception $e) {
+        if (!$vat->validate($country, $vatNumber)) {
             $code = 400;
         }
 
@@ -169,7 +165,7 @@ class StoreController extends Controller
         $packs = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes = \Onm\Module\ModuleManager::getAvailableThemes();
 
-        $results = array_merge($modules, $packs);
+        $results = array_merge($modules, $packs, $themes);
         foreach ($results as &$result) {
             if (empty($result['author'])) {
                 $result['author'] = '<a href="https://www.opennemas.com/about" target="_blank">Opennemas</a>';
@@ -193,13 +189,13 @@ class StoreController extends Controller
             ->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Store purchase request')
+            ->setSubject('Opennemas Market purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->getUser()->contact_mail)
             ->setBody(
                 $this->renderView(
-                    'store/email/_purchaseToCustomer.tpl',
+                    'market/email/_purchaseToCustomer.tpl',
                     [
                         'instance' => $instance,
                         'modules'  => $modules
@@ -223,13 +219,13 @@ class StoreController extends Controller
             ->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Store purchase request')
+            ->setSubject('Opennemas Market purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->container->getParameter('sales_email'))
             ->setBody(
                 $this->renderView(
-                    'store/email/_purchaseToSales.tpl',
+                    'market/email/_purchaseToSales.tpl',
                     [
                         'instance' => $instance,
                         'modules'  => $modules,
