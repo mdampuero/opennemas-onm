@@ -45,6 +45,42 @@ class NotificationService
     }
 
     /**
+     * Creates a non-persisted notification basing on the pending comments.
+     *
+     * @param integer $comments The number of pending comments.
+     *
+     * @return Notification The notification.
+     */
+    public function getFromComments($comments)
+    {
+        $notification = new Notification();
+
+        $notification->id          = time();
+        $notification->instance_id = $this->container->get('instance')->id;
+        $notification->fixed       = 1;
+        $notification->generated   = 1;
+        $notification->read        = 0;
+        $notification->style       = 'info';
+        $notification->type        = 'comment';
+        $notification->start       = date('Y-m-d H:i:s');
+        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->title = [
+            CURRENT_LANGUAGE_SHORT => _('Comments'),
+        ];
+
+        $notification->body = [
+            CURRENT_LANGUAGE_SHORT => sprintf(
+                _('You have %s pending comments'),
+                $comments
+            )
+        ];
+
+
+        return $notification;
+    }
+
+    /**
      * Creates a non-persisted notification basing on the instance information.
      *
      * @param Instance $instance The instance.
