@@ -380,10 +380,10 @@ $menuXml = [
         ],
     ],
     [
-        'id'    => 'market',
-        'title' => _('Market'),
+        'id'    => 'store',
+        'title' => _('Store'),
         'icon'  => 'fa fa-shopping-cart',
-        'link'  => url('admin_market_list'),
+        'link'  => url('admin_store_list'),
         'privilege' => 'ROLE_ADMIN'
     ],
     [

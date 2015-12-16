@@ -235,36 +235,6 @@ class NotificationController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $im = $this->get('instance_manager');
-
-        try {
-            $instance = $im->find($id);
-            $oldActivated = $instance->activated;
-
-            foreach ($request->request->all() as $key => $value) {
-                $instance->{$key} =
-                    $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-            }
-
-            $this->get('onm.validator.instance')->validate($instance);
-            $im->persist($instance);
-
-            if ($oldActivated != $instance->activated) {
-                dispatchEventWithParams(
-                    'instance.update',
-                    array('instance' => $instance->internal_name)
-                );
-            }
-
-            return new JsonResponse(_('Instance saved successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the instance with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
-        }
     }
 
     /**
@@ -276,77 +246,6 @@ class NotificationController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
-
-        if (is_array($selected) && count($selected) == 0) {
-            return new JsonResponse(
-                _('Unable to find the instances for the given criteria'),
-                404
-            );
-        }
-
-        $im = $this->get('instance_manager');
-
-        $criteria = [
-            'id' => [
-                [ 'value' => $selected, 'operator' => 'IN']
-            ]
-        ];
-
-        $instances = $im->findBy($criteria);
-
-        foreach ($instances as $instance) {
-            try {
-                $oldActivated = $instance->activated;
-
-                foreach ($request->request->all() as $key => $value) {
-                    $instance->{$key} =
-                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-                }
-
-                $this->get('onm.validator.instance')->validate($instance);
-                $im->persist($instance);
-                $updated[] = $instance->id;
-
-                if ($oldActivated != $instance->activated) {
-                    dispatchEventWithParams(
-                        'instance.update',
-                        array('instance' => $instance->internal_name)
-                    );
-                }
-            } catch (\Exception $e) {
-                $error[]    = $instance->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error',
-                ];
-            }
-        }
-
-        if (count($updated) > 0) {
-            $messages[] = [
-                'message' => sprintf(
-                    _('%s instances updated successfully.'),
-                    count($updated)
-                ),
-                'type' => 'success'
-            ];
-        }
-
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
-            $statusCode
-        );
     }
 
     /**
@@ -444,12 +343,13 @@ class NotificationController extends Controller
                 'warning' => [ 'name' => _('Warning'), 'value' => 'warning' ]
             ],
             'types' => [
-                '-1'    => [ 'name' => _('All'), 'value' => '-1' ],
-                'email' => [ 'name' => _('Email'), 'value' => 'email' ],
-                'help'  => [ 'name' => _('Help'), 'value' => 'help' ],
-                'info'  => [ 'name' => _('Information'), 'value' => 'info' ],
-                'media' => [ 'name' => _('Media'), 'value' => 'media' ],
-                'users' => [ 'name' => _('Users'), 'value' => 'users' ]
+                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
+                'comment' => [ 'name' => _('Comments'), 'value' => 'comment' ],
+                'email'   => [ 'name' => _('Email'), 'value' => 'email' ],
+                'help'    => [ 'name' => _('Help'), 'value' => 'help' ],
+                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
+                'media'   => [ 'name' => _('Media'), 'value' => 'media' ],
+                'user'    => [ 'name' => _('Users'), 'value' => 'user' ]
             ]
         ];
 

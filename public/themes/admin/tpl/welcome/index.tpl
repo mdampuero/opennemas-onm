@@ -126,18 +126,18 @@
           <h4>{t}Want more features?{/t}</h4>
         </div>
         <div class="grid-body">
-          <p>{t}We have two ways to add functionality to you site. Check our Opennemas Market:{/t}</p>
+          <p>{t}We have two ways to add functionality to you site. Check our Opennemas Store:{/t}</p>
 
           <div class="row">
             <div class="col-sm-6 plans">
-              <a href="{url name=admin_market_list}#?type=packs" class="thumbnail">
+              <a href="{url name=admin_store_list}#/pack" class="thumbnail">
                 <i class="fa fa-dropbox"></i>
                 <div class="title">{t}Plans{/t}</div>
                 <div class="description">{t}Bundles multiple functionality in a reduced price{/t}</div>
               </a>
             </div>
             <div class="col-sm-6 modules">
-              <a href="{url name=admin_market_list}#?type=modules" class="thumbnail">
+              <a href="{url name=admin_store_list}#/module" class="thumbnail">
                 <i class="fa fa-archive"></i>
                 <div class="title">{t}Modules{/t}</div>
                 <div class="description">{t}Adds an specific feature in your site{/t}</div>

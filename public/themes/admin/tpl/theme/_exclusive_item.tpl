@@ -4,7 +4,7 @@
     <h4 class="uppercase">[% item.name %]</h4>
     <div class="row">
       <div class="col-md-6">
-        <img class="img-responsive" src="/assets/images/market/[% item.thumbnail %]">
+        <img class="img-responsive" src="/assets/images/store/[% item.thumbnail %]">
       </div>
       <div class="col-md-6">
         <h5 class="semi-bold text-uppercase">{t}Exclusive{/t}</h5>

@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="clearfix">
-        <button class="btn fly-to-cart m-b-15 pull-right" ng-class="{ 'btn-danger': template.isInCart(template.item), 'btn-success': !template.isInCart(template.item) }" ng-click="template.addToCart(template.item);$event.stopPropagation()" ng-disabled="template.isInCart(template.item)" ng-if="!template.isPurchased(template.item)" style="width: 100px;">
+        <button class="btn fly-to-cart m-b-15 pull-right" ng-class="{ 'btn-danger': template.isInCart(template.item), 'btn-success': !template.isInCart(template.item) }" ng-click="template.addToCart(template.item);$event.stopPropagation()" ng-disabled="template.isInCart(template.item)" ng-if="!template.isPurchased(template.item)">
           <h5 class="text-white">
             <span class="m-r-15 semi-bold text-white uppercase" ng-if="!template.isInCart(template.item) && !template.isPurchased(template.item)">
               <i class="fa fa-shopping-cart m-r-5"></i>
@@ -49,19 +49,6 @@
             </span>
           </h5>
         </button>
-        <h3 class="text-right m-r-15 pull-right" ng-if="!template.isPurchased(template.item)">
-            <span ng-if="template.item.price.month">
-              <strong>[% template.item.price.month %]</strong>
-              <small>€ / {t}month{/t}</small>
-            </span>
-            <span ng-if="!template.item.price.month && template.item.price.single">
-              <strong>[% template.item.price.single %]</strong>
-              <small>€</small>
-            </span>
-            <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || template.item.price.month == 0)">
-              {t}Free{/t}
-            </span>
-        </h3>
         <button class="btn m-b-15 pull-right" ng-class="{ 'btn-white': template.isPurchased(template.item) && !template.isActive(template.item), 'btn-success': template.isActive(template.item) }" ng-click="template.enable(template.item)" ng-disabled="template.isActive(template.item)" ng-if="template.isPurchased(template.item)" style="width: 100px;">
           <h5 class="semi-bold uppercase" ng-if="template.isPurchased(template.item) && !template.isActive(template.item) && !template.item.loading">{t}Enable{/t}</h5>
           <h5 class="semi-bold text-white uppercase" ng-if="template.isPurchased(template.item) && template.isActive(template.item)">{t}Active{/t}</h5>
@@ -74,12 +61,27 @@
           </h5>
         </a>
       </div>
-      <div class="row  m-b-15 m-t-10">
+      <div class="row m-b-15 m-t-10">
         <div class="col-xs-6">
-          <div class="checkbox">
+          <div class="checkbox p-t-7">
             <input id="custom" ng-change="template.toggleCustom(template.item)" ng-disabled="template.isInCart(template.item) || template.isPurchased(template.item)" ng-model="template.item.customize" type="checkbox">
             <label for="custom" style="font-size:1.3em">{t}Custom{/t}</label>
           </div>
+        </div>
+        <div class="col-xs-6">
+          <h3 class="no-margin text-right" ng-if="!template.isPurchased(template.item)">
+            <span ng-if="template.item.price.month">
+              <strong>[% template.item.price.month %]</strong>
+              <small>€ / {t}month{/t}</small>
+            </span>
+            <span ng-if="!template.item.price.month && template.item.price.single">
+              <strong>[% template.item.price.single %]</strong>
+              <small>€</small>
+            </span>
+            <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || template.item.price.month == 0)">
+              {t}Free{/t}
+            </span>
+          </h3>
         </div>
       </div>
       <div class="description-wrapper">

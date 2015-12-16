@@ -2,7 +2,7 @@
 
 {block name="header-css" append}
   {stylesheets src="
-    @AdminTheme/less/_market.less
+    @AdminTheme/less/_store.less
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
@@ -14,16 +14,16 @@
 {/block}
 
 {block name="content"}
-  <div ng-controller="MarketCheckoutCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+  <div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=admin_market_list}">
+                <a class="no-padding" href="{url name=admin_store_list}">
                   <i class="fa fa-shopping-cart"></i>
-                  {t}Market{/t}
+                  {t}Store{/t}
                 </a>
               </h4>
             </li>
@@ -52,7 +52,7 @@
                     <scrollable>
                     <ul class="cart-list">
                       <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                        <img class="img-responsive pull-left" ng-src="/assets/images/market/[% item.thumbnail %]">
+                        <img class="img-responsive pull-left" ng-src="/assets/images/store/[% item.thumbnail %]">
                         <span class="pull-left">
                           <h5>[% item.name %]</h5>
                           <p class="description">[% item.description %]</p>
@@ -63,7 +63,7 @@
                     </scrollable>
                   </div>
                   <div class="p-r-10 p-t-15">
-                    <a class="btn btn-block btn-white" href="{url name=admin_market_checkout}" ng-disabled="!cart || cart.length == 0">
+                    <a class="btn btn-block btn-white" href="{url name=admin_store_checkout}" ng-disabled="!cart || cart.length == 0">
                       <i class="fa fa-shopping-cart"></i>
                       {t}Checkout{/t}
                     </a>
@@ -81,8 +81,8 @@
           <div class="text-center" ng-show="step != 4 && (!cart || cart.length == 0)">
             <h1><i class="fa fa-shopping-cart"></i></h1>
             <h3>{t}Your shopping cart is empty{/t}</h3>
-            {capture name="market_url"}{url name='admin_market_list'}{/capture}
-            <h4>{t escape=off 1=$smarty.capture.market_url}Return to <a href="%1">market</a> and try again{/t}</h4>
+            {capture name="store_url"}{url name='admin_store_list'}{/capture}
+            <h4>{t escape=off 1=$smarty.capture.store_url}Return to <a href="%1">store</a> and try again{/t}</h4>
           </div>
           <div class="grid simple" ng-show="cart.length > 0 || step == 4">
             <div class="grid-body">
@@ -91,7 +91,7 @@
                 <p>{t}You are about to order next items. In the next 24hours our sales team will send you payment and activation information. {/t}</p>
                 <ul class="cart-list cart-list-big">
                   <li class="clearfix" ng-repeat="item in cart">
-                    <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/market/[%item.thumbnail%]">
+                    <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
                     <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
                     <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                     <div class="p-l-100">
@@ -150,12 +150,12 @@
                             <input class="form-control" id="email" name="email" ng-model="billing.email" placeholder="{t}Email{/t}" required="required" type="email">
                           </div>
                         </div>
-                        <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid }">
+                        <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid || !validPhone, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid && validPhone }">
                           <div class="input-with-icon right">
-                            <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid"></i>
+                            <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid && validPhone"></i>
                             <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.pattern" tooltip="{t}This is not a valid phone{/t}"></i>
-                            <input class="form-control" id="phone" name="phone" ng-model="billing.phone" pattern="[0-9]+" placeholder="{t}Phone number{/t}" required="required" type="text">
+                            <i class="fa fa-times text-danger" ng-if="!validPhone" tooltip="{t}This is not a valid phone{/t}"></i>
+                            <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" required="required" type="text">
                           </div>
                         </div>
                       </div>
@@ -302,7 +302,7 @@
                       </label>
                     </div>
                   </div>
-                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms">
+                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms || !validPhone || !validVat">
                     {t}Confirm{/t}
                   </button>
                 </div>

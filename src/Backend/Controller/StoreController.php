@@ -6,7 +6,7 @@ use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Intl\Intl;
 
-class MarketController extends Controller
+class StoreController extends Controller
 {
     /**
      * Displays the wizard form for checkout.
@@ -31,7 +31,7 @@ class MarketController extends Controller
         $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
-            'market/checkout.tpl',
+            'store/checkout.tpl',
             [
                 'billing'   => $billing,
                 'countries' => $countries,
@@ -53,6 +53,6 @@ class MarketController extends Controller
             'name' => _('Others')
         ];
 
-        return $this->render('market/list.tpl', [ 'plans' => $plans ]);
+        return $this->render('store/list.tpl', [ 'plans' => $plans ]);
     }
 }

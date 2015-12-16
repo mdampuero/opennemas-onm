@@ -151,7 +151,12 @@
                   routing: routing
                 };
               },
-              success: null
+              success: function() {
+                return function(m) {
+                  $scope.import(content);
+                  m.close(1);
+                };
+              }
             }
           });
         };

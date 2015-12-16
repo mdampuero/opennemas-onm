@@ -36,9 +36,7 @@ class VideosController extends Controller
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
-        $request = $this->get('request');
-
-        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =

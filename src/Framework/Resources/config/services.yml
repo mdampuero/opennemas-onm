@@ -251,4 +251,3 @@ services:
 
     vat:
         class: Framework\VAT\VATService
-        arguments: [ @vat.service ]

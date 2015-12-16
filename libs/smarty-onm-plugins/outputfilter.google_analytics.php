@@ -78,6 +78,10 @@ function addGoogleAnalyticsCode($output)
         }
     }
 
+    // Add opennemas Account
+    $code .= "_gaq.push(['onm._setAccount', 'UA-40838799-5']);\n";
+    $code .= "_gaq.push(['onm._trackPageview']);\n";
+
     // Load ga.js script
     $code .= "(function() {\n"
         . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"

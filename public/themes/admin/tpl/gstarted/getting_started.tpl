@@ -96,11 +96,11 @@
       </div>
     </div>
     {if $smarty.session._sf2_attributes.user->isAdmin()}
-      <div class="wizard-container market" ng-class="{ 'active': step == 4, 'previous': previous == 4 }">
+      <div class="wizard-container store" ng-class="{ 'active': step == 4, 'previous': previous == 4 }">
         <div class="wizard-overlay"></div>
         <div class="wizard-content">
           <div class="wizard-title">
-            <h1>{t}Opennemas Market{/t}</h1>
+            <h1>{t}Opennemas Store{/t}</h1>
           </div>
           <p>{t}Find and try new add-ons and take your newspaper to the next level.{/t}</p>
           <ul class="wizard-list clearfix">
@@ -117,7 +117,7 @@
                 <i class="fa fa-cube fa-3x"></i>
               </div>
               <div class="wizard-list-item-text">
-                {t escape=off}We offer a huge list of add-ons to improve your experience. Check our market and pay only for what you really want.{/t}
+                {t escape=off}We offer a huge list of add-ons to improve your experience. Check our store and pay only for what you really want.{/t}
               </div>
             </li>
             <li class="wizard-list-item">
@@ -188,7 +188,7 @@
         {if $smarty.session._sf2_attributes.user->isAdmin()}
           <li class="wizard-step-list-item" ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
             <div class="wizard-step-list-item-fill">
-              <h5 class="wizard-step-list-item-text bottom">{t}Opennemas Market{/t}</h5>
+              <h5 class="wizard-step-list-item-text bottom">{t}Opennemas Store{/t}</h5>
             </div>
           </li>
         {/if}

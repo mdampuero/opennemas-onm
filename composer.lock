@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c810d3ddb4ca42d9479914cbdbcd01bc",
-    "content-hash": "dc80ac7fd196347a357ef595a7ed0549",
+    "hash": "e6858a1dc7e07cbeff5c2933997e7ad7",
+    "content-hash": "2eefa9f1ba905a19bcaa084e6c08c4b0",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -122,7 +122,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cometcult/CometCultBraintreeBundle/zipball/72f18ef0df06ed4c1437f4b1463525c03bda16fe",
+                "url": "https://api.github.com/repos/cometcult/CometCultBraintreeBundle/zipball/41b10264c82ad7cb2b9ffa1d3e00599ac9b000e8",
                 "reference": "72f18ef0df06ed4c1437f4b1463525c03bda16fe",
                 "shasum": ""
             },
@@ -855,7 +855,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/b386d2a17634192fc406acc4090d58eb6e903ca5",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/80792f4e496659bb0f93488a2b4b7a8935b721cb",
                 "reference": "b386d2a17634192fc406acc4090d58eb6e903ca5",
                 "shasum": ""
             },
@@ -1187,6 +1187,69 @@
                 "routing"
             ],
             "time": "2015-01-23 02:44:26"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php",
+            "version": "7.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+                "reference": "d0bfaec05d1881f56bbb00e6e4c7004b49562eb9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/d0bfaec05d1881f56bbb00e6e4c7004b49562eb9",
+                "reference": "d0bfaec05d1881f56bbb00e6e4c7004b49562eb9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "*",
+                "pear/versioncontrol_git": "dev-master",
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6",
+                "symfony/console": "~2.4"
+            },
+            "suggest": {
+                "ext-intl": "To use the geocoder and carrier mapping"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "libphonenumber": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "http://giggsey.com/"
+                }
+            ],
+            "description": "PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "time": "2015-11-12 14:17:02"
         },
         {
             "name": "google/recaptcha",
@@ -1956,7 +2019,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/9c29a2fb66ef07d7b478bffae0df3b79e6b17c10",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/1a9bde4985f4a125ed7287be7d9f4d3df25d5d10",
                 "reference": "15f6bb72f66df6857b957bedd09dc4fd0ace3b03",
                 "shasum": ""
             },
@@ -2518,6 +2581,86 @@
             "time": "2014-07-07 17:21:13"
         },
         {
+            "name": "ronanguilloux/isocodes",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ronanguilloux/IsoCodes.git",
+                "reference": "08aabd230ea963cba3aa5338319b1bffacbc0285"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ronanguilloux/IsoCodes/zipball/08aabd230ea963cba3aa5338319b1bffacbc0285",
+                "reference": "08aabd230ea963cba3aa5338319b1bffacbc0285",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "@stable",
+                "pdepend/pdepend": "2.0.*",
+                "phploc/phploc": "*",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "~4.7",
+                "satooshi/php-coveralls": "dev-master",
+                "sebastian/phpcpd": "*",
+                "squizlabs/php_codesniffer": "2.0.x-dev"
+            },
+            "suggest": {
+                "gourmet/validation": "For CakePHP 3 integration",
+                "sllh/iso-codes-validator": "For Symfony or Silex integration with ease"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "IsoCodes": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ronan Guilloux",
+                    "email": "ronan.guilloux@gmail.com",
+                    "homepage": "http://github.com/ronanguilloux",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP library, validating various ISO codes, such as IBAN, SWIFT/BIC, BBAN, RIB, Credit Card number, INSEE, VAT, NSS, Siren, Siret, Ssn, NINO, Zipcode (US, Canada, France...), ISBN & EAN13, Spanish CIF & NIF",
+            "homepage": "https://github.com/ronanguilloux/IsoCodes",
+            "keywords": [
+                "BBAN",
+                "BIC",
+                "CIF",
+                "Credit Card number",
+                "EAN13",
+                "IBAN",
+                "INSEE",
+                "ISBN",
+                "ISO codes",
+                "NIF",
+                "NINO",
+                "NSS",
+                "RIB",
+                "Siren",
+                "Siret",
+                "Ssn",
+                "swift",
+                "vat",
+                "zipcode"
+            ],
+            "time": "2015-06-22 19:37:41"
+        },
+        {
             "name": "rtconner/freshbooks-api",
             "version": "dev-master",
             "source": {
@@ -2822,50 +2965,6 @@
                 "templating"
             ],
             "time": "2014-10-31 04:22:20"
-        },
-        {
-            "name": "sparkling/vat-bundle",
-            "version": "0.1.4",
-            "target-dir": "Sparkling/VATBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ruudk/VATBundle.git",
-                "reference": "0213061aaa69522dd6627b591e2a02b6e7240b18"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ruudk/VATBundle/zipball/0213061aaa69522dd6627b591e2a02b6e7240b18",
-                "reference": "0213061aaa69522dd6627b591e2a02b6e7240b18",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/framework-bundle": ">=2.0,<3.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Sparkling\\VATBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ruud Kamphuis",
-                    "email": "ruudk@mphuis.com"
-                }
-            ],
-            "description": "A Symfony2 Bundle that checks a european VAT number",
-            "homepage": "http://github.com/sparklingapp/VATBundle",
-            "keywords": [
-                "Symfony2",
-                "validation",
-                "vat"
-            ],
-            "time": "2015-01-12 20:29:23"
         },
         {
             "name": "swiftmailer/swiftmailer",

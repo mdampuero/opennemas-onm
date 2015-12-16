@@ -43,7 +43,7 @@
           {t}Live demo{/t}
         </h5>
       </a>
-      <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)" style="width: 100px;">
+      <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)">
         <h5>
           <span class="semi-bold text-white uppercase" ng-if="!isInCart(item) && !isPurchased(item)">
             <i class="fa fa-shopping-cart m-r-5"></i>

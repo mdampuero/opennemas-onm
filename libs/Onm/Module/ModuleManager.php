@@ -119,6 +119,24 @@ class ModuleManager
     }
 
     /**
+     * Returns the list of module ids for pack.
+     *
+     * @param string $pack The pack id.
+     *
+     * @return array The list of module id.
+     */
+    public static function getModuleIdsByPack($pack)
+    {
+        $modules = self::getAvailableModulesGrouped();
+
+        return array_map(function ($module) {
+            return $module['id'];
+        }, array_filter($modules, function ($module) use ($pack) {
+            return $module['plan'] === $pack;
+        }));
+    }
+
+    /**
      * Returns the list of available modules in Onm instance.
      *
      * @return array the list of available modules
@@ -195,6 +213,7 @@ class ModuleManager
             [
                 'id'               => 'BASIC',
                 'name'             => _('Basic pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-basic.jpg',
                 'description'      => _('Publishing your news is FREE!'),
                 'long_description' => (
@@ -240,6 +259,7 @@ class ModuleManager
             [
                 'id'               => 'PROFESSIONAL',
                 'name'             => _('Professional pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-pro.jpg',
                 'description'      => _('Our best selling solution, it allows to manage a professional newspaper and start gaining money with it!'),
                 'long_description' => (
@@ -290,7 +310,7 @@ class ModuleManager
                 ]
             ],
             [
-                'id'               => 'SILVER',
+                'id'               => 'ADVANCED',
                 'type'             => 'pack',
                 'thumbnail'        => 'pack-advanced.jpg',
                 'name'             => _('Advanced pack'),
@@ -346,8 +366,9 @@ class ModuleManager
                 ]
             ],
             [
-                'id'               => 'GOLD',
+                'id'               => 'EXPERT',
                 'name'             => _('Expert pack'),
+                'type'             => 'pack',
                 'thumbnail'        => 'pack-expert.jpg',
                 'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!'),
                 'long_description' => (
@@ -847,7 +868,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpage Manager'),
@@ -874,9 +895,9 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'IADBOX_MANAGER',
+                    'type'             => 'partner',
                     'author'           => '<a target="_blank" href="http://www.iadbox.com">iadbox</a>',
                     'plan'             => 'OTHER',
-                    'type'             => 'partner',
                     'thumbnail'        => 'iadbox.jpg',
                     'name'             => _('iadbox'),
                     'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
@@ -921,7 +942,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
-                    'plan'             => 'GOLD',
+                    'plan'             => 'EXPERT',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('NewsStand'),
@@ -987,7 +1008,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
-                    'plan'             => 'GOLD',
+                    'plan'             => 'EXPERT',
                     'type'             => 'module',
                     'thumbnail'        => 'module-agencies.jpg',
                     'name'             => _('News Agency importer'),
@@ -1007,7 +1028,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'NEWSLETTER_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsletters.jpg',
                     'name'             => _('Newsletter'),
@@ -1141,7 +1162,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'SYNC_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Frontpage Synchronization'),
@@ -1194,7 +1215,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_GROUP_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('User groups'),
                     'description'      => _('Add description...'),
@@ -1205,7 +1226,7 @@ class ModuleManager
                 ],
                 [
                     'id'               => 'USER_MANAGER',
-                    'plan'             => 'SILVER',
+                    'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('Users'),
                     'description'      => _('Add description...'),
