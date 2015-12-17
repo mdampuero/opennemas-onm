@@ -67,10 +67,10 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    // public function getCacheDir()
-    // {
-    //     return realpath(parent::getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
-    // }
+    public function getCacheDir()
+    {
+        return realpath(parent::getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
+    }
 
     /**
      * {@inheritdoc}
