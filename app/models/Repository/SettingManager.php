@@ -44,6 +44,7 @@ class SettingManager extends BaseManager
         'site_keywords',
         'site_language',
         'site_logo',
+        'site_name',
         'site_title',
         'time_zone'
     ];
