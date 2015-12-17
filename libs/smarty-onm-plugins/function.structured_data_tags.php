@@ -15,6 +15,14 @@ function smarty_function_structured_data_tags($params, &$smarty) {
 
         // Set content data for tags
         $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
+        $summary = $content->summary;
+        if (empty($summary)) {
+            if (empty($content->body)) {
+                $summary = mb_substr($content->description, 0, 120)."...";
+            } else {
+                $summary = mb_substr($content->body, 0, 120)."...";
+            }
+        }
         $url = "http://".SITE.'/'.$content->uri;
 
         $category = getService('category_repository')->find($content->category);
@@ -49,28 +57,69 @@ function smarty_function_structured_data_tags($params, &$smarty) {
             $imageUrl = $params['default_image'];
         }
 
+        // Get image size
+        $imageWidth = $imageHeight = 0;
+        if (!empty($imageUrl)) {
+            $imageSize = getimagesize($imageUrl);
+            if (array_key_exists(0, $imageSize) && array_key_exists(1, $imageSize)) {
+                $imageWidth = $imageSize[0];
+                $imageHeight = $imageSize[1];
+            }
+        }
+
+        // Get primary logo
+        $logo = getService('setting_repository')->get('site_logo');
+        $logoUrl = '';
+        $logoWidth = $logoHeight = 0;
+        if (!empty($logo)) {
+            $logoUrl = "http://".SITE.'/'.MEDIA_DIR_URL.'sections/'.$logo;
+            $logoSize = getimagesize($logoUrl);
+            if (array_key_exists(0, $logoSize) && array_key_exists(1, $logoSize)) {
+                $logoWidth = $logoSize[0];
+                $logoHeight = $logoSize[1];
+            }
+        }
+
         // Generate tags
         $output = '<script type="application/ld+json">
             {
                 "@context" : "http://schema.org",
                 "@type" : "Article",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "'.$url.'"
+                },
+                "headline": "'.$content->title.'",
                 "name" : "'.$title.'",
                 "author" : {
                     "@type" : "Person",
                     "name" : "'.$user->name.'"
                 },
                 "datePublished" : "'.$content->created.'",
-                "image" : "'.$imageUrl.'",
+                "dateModified": "'.$content->changed.'",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "'.$imageUrl.'",
+                    "height": '.$imageWidth.',
+                    "width": '.$imageHeight.'
+                },
                 "articleSection" : "'.$category->title.'",
                 "keywords" : "'.$content->metadata.'",
                 "url" : "'.$url.'",
                 "publisher" : {
                     "@type" : "Organization",
-                    "name" : "'.getService("setting_repository")->get("site_name").'"
-                }
+                    "name" : "'.getService("setting_repository")->get("site_name").'",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "'.$logoUrl.'",
+                        "width": '.$logoWidth.',
+                        "height": '.$logoHeight.'
+                    }
+                },
+                "description": "'.strip_tags($summary).'"
             }
             </script>';
     }
 
-    return $output;
+    return str_replace(["\r", "\n"], " ", $output);
 }
