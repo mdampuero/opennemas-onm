@@ -23,6 +23,18 @@
          * @memberOf StoreCheckoutCtrl
          *
          * @description
+         *   The billing information.
+         *
+         * @type {Object}
+         */
+        $scope.billing = {
+          country: 'ES'
+        };
+
+        /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
          *   Flag to edit billing information.
          *
          * @type {Boolean}
@@ -43,11 +55,21 @@
          * @memberOf StoreCheckoutCtrl
          *
          * @description
+         *   Flag to know if current phone is valid.
+         *
+         * @type {Boolean}
+         */
+        $scope.validPhone = true;
+
+        /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
          *   Flag to know if current VAT is valid.
          *
          * @type {Boolean}
          */
-        $scope.validVat = false;
+        $scope.validVat = true;
 
         /**
          * @memberOf StoreCheckoutCtrl
@@ -79,7 +101,7 @@
 
           var data = { billing: $scope.billing, modules: modules };
 
-          $http.post(url, data).success(function(response) {
+          $http.post(url, data).success(function() {
             $scope.step = 4;
             $scope.cart = [];
             webStorage.local.remove('cart');
@@ -119,7 +141,11 @@
         // Updates the edit flag when billing changes.
         $scope.$watch('billing', function(nv) {
           if (!nv || !nv.name) {
-            $scope.edit = true;
+            $scope.edit       = true;
+            $scope.validPhone = false;
+            $scope.validVat   = false;
+
+            return;
           }
         });
 
@@ -146,7 +172,7 @@
         }, true);
 
         // Updates vat and total values when vat tax changes
-        $scope.$watch('validVat', function(nv, ov) {
+        $scope.$watch('validVat', function(nv) {
           if (nv === true) {
             $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
             $scope.total = $scope.subtotal + $scope.vat;
