@@ -1031,9 +1031,9 @@ class Content
     {
         $ccm     = ContentCategoryManager::get_instance();
         if (!empty($this->fk_user_last_editor)) {
-            $author  = new User($this->fk_user_last_editor);
+            $author  = getService('user_repository')->find($this->fk_user_last_editor);
         } else {
-            $author  = new User($this->fk_author);
+            $author  = getService('user_repository')->find($this->fk_author);
         }
 
         if ($this->id !== null) {
