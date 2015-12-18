@@ -2,18 +2,17 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) OpenHost S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Assetic;
+namespace Framework\Component\Assetic;
 
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\LessFilter;
-use Framework\Assetic\Filter\LessNonCachedFilter;
 use Assetic\Filter\UglifyCssFilter;
 
 /**
@@ -28,32 +27,21 @@ class StylesheetManager extends AssetManager
      */
     protected $extension = 'css';
 
-
     /**
      * {@inheritDoc}
      */
-    public function addAsset($asset)
+    protected function getFilterManager($filters)
     {
-        if (preg_match('/.*\.(css|scss|less)/', $asset)) {
-            $this->assets[] = realpath($asset);
-        }
-    }
+        $fm = new FilterManager();
 
-    /**
-     * {@inheritDoc}
-     */
-    public function initFilters()
-    {
-        $this->fm = new FilterManager();
-
-        foreach ($this->filters as $filter) {
+        foreach ($filters as $filter) {
             switch ($filter) {
                 case 'cssrewrite':
-                    $this->fm->set('cssrewrite', new CssRewriteFilter());
+                    $fm->set('cssrewrite', new CssRewriteFilter());
                     break;
 
                 case 'uglifycss':
-                    $this->fm->set(
+                    $fm->set(
                         'uglifycss',
                         new UglifyCssFilter(
                             $this->config['filters']['uglifycss']['bin'],
@@ -62,16 +50,19 @@ class StylesheetManager extends AssetManager
                     );
                     break;
                 case 'less':
-                    $filter = new LessFilter(
-                        $this->config['filters']['less']['node'],
-                        $this->config['filters']['less']['node_paths']
+                    $fm->set(
+                        'less',
+                        new LessFilter(
+                            $this->config['filters']['less']['node'],
+                            $this->config['filters']['less']['node_paths']
+                        )
                     );
-
-                    $this->fm->set('less', $filter);
                     break;
                 default:
                     throw new FilterException();
             }
         }
+
+        return $fm;
     }
 }
