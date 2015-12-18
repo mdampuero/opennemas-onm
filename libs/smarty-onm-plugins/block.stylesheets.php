@@ -29,8 +29,10 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
             $filters = explode(',', preg_replace('/\s+/', '', $params['filters']));
         }
 
-        foreach (explode(',', $params['src']) as $src) {
-            $bag->addStyle(trim($src), $filters);
+        if (!empty($params['src'])) {
+            foreach (explode(',', $params['src']) as $src) {
+                $bag->addStyle(trim($src), $filters);
+            }
         }
     }
 

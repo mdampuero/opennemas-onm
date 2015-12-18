@@ -29,8 +29,10 @@ function smarty_block_javascripts($params, $content, $template, &$repeat)
             $filters = explode(',', preg_replace('/\s+/', '', $params['filters']));
         }
 
-        foreach (explode(',', $params['src']) as $src) {
-            $bag->addScript(trim($src), $filters);
+        if (!empty($params['src'])) {
+            foreach (explode(',', $params['src']) as $src) {
+                $bag->addScript(trim($src), $filters);
+            }
         }
     }
 
