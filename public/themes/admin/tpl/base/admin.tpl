@@ -22,13 +22,12 @@
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
   {/block}
 
-  <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
-  <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
+  <link href="{$params.COMMON_ASSET_DIR}images/favicon.png" rel="icon">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
+  <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
   {block name="header-css"}
-    {stylesheets src="
-      @Common/components/bootstrap/dist/css/bootstrap.min.css,
+    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
@@ -64,19 +63,14 @@
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less"
-    filters="cssrewrite,less"}
-      <link rel="stylesheet" type="text/css" href="{$asset_url}">
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
-    {javascripts src="
-      @Common/components/jquery/jquery.min.js,
+    {javascripts src="@Common/components/jquery/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js"
     filters="uglifyjs"}
-      <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
-
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
@@ -412,8 +406,7 @@
   <![endif]-->
   {block name="global-js"}
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    {javascripts src="
-      @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
+    {javascripts src="@Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
@@ -483,11 +476,7 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-      @Common/js/admin.js
-    "}
-      <script type="text/javascript">
-        Tinycon.setBubble({count_pending_comments});
-      </script>
+      @Common/js/admin.js"}
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
