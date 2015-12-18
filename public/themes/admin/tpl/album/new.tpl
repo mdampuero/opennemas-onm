@@ -53,19 +53,19 @@
               </li>
               <li class="quicklinks">
                 {if isset($album->id)}
-                {acl isAllowed="ALBUM_UPDATE"}
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-save"></i>
-                  {t}Save{/t}
-                </button>
-                {/acl}
+                  {acl isAllowed="ALBUM_UPDATE"}
+                    <button class="btn btn-primary" type="submit">
+                      <i class="fa fa-save"></i>
+                      {t}Save{/t}
+                    </button>
+                  {/acl}
                 {else}
-                {acl isAllowed="ALBUM_CREATE"}
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-save"></i>
-                  {t}Save{/t}
-                </button>
-                {/acl}
+                  {acl isAllowed="ALBUM_CREATE"}
+                    <button class="btn btn-primary" type="submit">
+                      <i class="fa fa-save"></i>
+                      {t}Save{/t}
+                    </button>
+                  {/acl}
                 {/if}
               </li>
             </ul>

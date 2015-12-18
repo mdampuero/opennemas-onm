@@ -2,50 +2,47 @@
 
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-    <script type="text/javascript" src="{$asset_url}"></script>
-  {/javascripts}
+    <script>
+      jQuery(document).ready(function($){
+        $('#title_input, #category').on('change', function() {
+          var title = $('#title_input');
+          var category = $('#category option:selected');
+          var metaTags = $('#metadata');
+          var title_int_element = $('#title_int_input');
+          if (title_int_element.val().length == 0) {
+            title_int_element.val(title.val());
+          };
 
-  <script>
+          // Fill tags from title and category
+          if (!metaTags.val()) {
+            var tags = title.val();
 
-    jQuery(document).ready(function($){
-      $('#title_input, #category').on('change', function() {
-        var title = $('#title_input');
-        var category = $('#category option:selected');
-        var metaTags = $('#metadata');
-        var title_int_element = $('#title_int_input');
-        if (title_int_element.val().length == 0) {
-          title_int_element.val(title.val());
-        };
-
-        // Fill tags from title and category
-        if (!metaTags.val()) {
-          var tags = title.val();
-
-          if (category.data('name')) {
-            tags += " " + category.data('name');
+            if (category.data('name')) {
+              tags += " " + category.data('name');
+            }
+            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
           }
-          fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-        }
-      });
+        });
 
-      $('#starttime, #endtime').datetimepicker({
-        format: 'YYYY-MM-D HH:mm:ss'
-      });
+        $('#starttime, #endtime').datetimepicker({
+          format: 'YYYY-MM-D HH:mm:ss'
+        });
 
-      $("#starttime").on("dp.change",function (e) {
+        $("#starttime").on("dp.change",function (e) {
           $('#endtime').data("DateTimePicker").minDate(e.date);
-      });
-      $("#endtime").on("dp.change",function (e) {
+        });
+        $("#endtime").on("dp.change",function (e) {
           $('#starttime').data("DateTimePicker").maxDate(e.date);
-      });
+        });
 
-      $('#formulario').on('submit', function(){
-        var btn = $('.btn.btn-primary');
-        btn.attr('disabled', true);
-        $('.btn.btn-primary .text').html(btn.data('text'));
+        $('#formulario').on('submit', function(){
+          var btn = $('.btn.btn-primary');
+          btn.attr('disabled', true);
+          $('.btn.btn-primary .text').html(btn.data('text'));
+        });
       });
-    });
-  </script>
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
