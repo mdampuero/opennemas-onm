@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) OpenHost S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,30 +20,21 @@
  */
 function smarty_block_javascripts($params, $content, $template, &$repeat)
 {
-    // In debug mode, we have to be able to loop a certain number of times, so we use a static counter
-    static $count;
-    static $assetsUrls;
-
-    $am = getService('javascript_manager');
-    $am->initConfiguration($params);
-    $am->literal .= $content;
-
-    $config = $am->getConfiguration();
+    $bag = getService('core.service.assetic.asset_bag');
 
     if ($repeat) { // Opening tag (first call only)
-        $filters = array();
+        $filters = [];
 
-        if (array_key_exists('filters', $params)) {
-            foreach (explode(',', $params['filters']) as $filter) {
-                $am->addFilter(trim($filter));
-            }
+        if (!empty($params['filters'])) {
+            $filters = explode(',', preg_replace('/\s+/', '', $params['filters']));
         }
 
-        $srcs = array();
         foreach (explode(',', $params['src']) as $src) {
-            $srcs[] = trim($src);
+            $bag->addScript(trim($src), $filters);
         }
+    }
 
-        $am->addAssets($srcs);
+    if (!empty($content)) {
+        $bag->addLiteralScript($content);
     }
 }
