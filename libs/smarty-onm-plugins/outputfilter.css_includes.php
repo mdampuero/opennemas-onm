@@ -10,20 +10,19 @@
  */
 function smarty_outputfilter_css_includes($output, Smarty_Internal_Template $smarty)
 {
-    $am = getService('stylesheet_manager');
+    $manager = getService('core.service.assetic.stylesheet_manager');
+    $bag     = getService('core.service.assetic.asset_bag');
 
-    $am->initFilters();
-    $am->initFactory();
-    $assets = $am->writeAssets();
+    $assets = $manager->writeAssets($bag->getStyles());
 
     if (!empty($assets)) {
         foreach ($assets as $asset) {
             $styles .= "<link rel='stylesheet' type='text/css' href='" . $asset . "'>";
         }
-
-        $styles .= $am->literal;
-        $output = str_replace('</head>', $styles.'</head>', $output);
     }
+
+    $styles .= implode('', $bag->getLiteralStyles());
+    $output  = str_replace('</head>', $styles . '</head>', $output);
 
     return $output;
 }

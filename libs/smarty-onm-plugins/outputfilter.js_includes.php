@@ -10,20 +10,19 @@
  */
 function smarty_outputfilter_js_includes($output, Smarty_Internal_Template $smarty)
 {
-    $am = getService('javascript_manager');
+    $manager = getService('core.service.assetic.javascript_manager');
+    $bag     = getService('core.service.assetic.asset_bag');
 
-    $am->initFilters();
-    $am->initFactory();
-    $assets = $am->writeAssets();
+    $assets = $manager->writeAssets($bag->getScripts());
 
-    if (!empty($am->assets)) {
+    if (!empty($assets)) {
         foreach ($assets as $asset) {
             $scripts .= "<script src='" . $asset . "'></script>";
         }
     }
 
-    $scripts .= $am->literal;
-    $output = str_replace('</body>', $scripts.'</body>', $output);
+    $scripts .= implode('', $bag->getLiteralScripts());
+    $output   = str_replace('</body>', $scripts . '</body>', $output);
 
     return $output;
 }
