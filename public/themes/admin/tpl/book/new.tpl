@@ -1,19 +1,17 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-<script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+    <script type="text/javascript">
+      $('#date').datetimepicker({
+        format: 'YYYY-MM-D HH:mm:ss'
+      });
 
-<script type="text/javascript">
-  $('#date').datetimepicker({
-    format: 'YYYY-MM-D HH:mm:ss'
-  });
-
-  jQuery('#title').on('change', function(e, ui) {
-    fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-  });
-</script>
+      jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+      });
+    </script>
+  {/javascripts}
 {/block}
 
 

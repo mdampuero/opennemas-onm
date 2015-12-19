@@ -2,33 +2,29 @@
 
 {block name="header-css" append}
   {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js
-  "}
-    <script type="text/javascript" src="{$asset_url}"></script>
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $('#date').datetimepicker({
+          format: 'YYYY-MM-D'
+        });
+
+        $('#title').on('change', function(e, ui) {
+          fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+
+        $('.fileinput').fileinput({
+          name: 'cover',
+          uploadtype:'image'
+        });
+      });
+    </script>
   {/javascripts}
-
-  <script type="text/javascript">
-    jQuery(document).ready(function($) {
-      $('#date').datetimepicker({
-        format: 'YYYY-MM-D'
-      });
-
-      $('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-      });
-
-      $('.fileinput').fileinput({
-        name: 'cover',
-        uploadtype:'image'
-      });
-    });
-  </script>
 {/block}
 
 {block name="content"}
