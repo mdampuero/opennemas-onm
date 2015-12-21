@@ -56,7 +56,6 @@ class CommentSubscriber implements EventSubscriberInterface
         $comments = $this->container->get('comment_repository')
             ->countPendingComments();
 
-        $comments = 5;
         if ($comments === 0) {
             return;
         }
