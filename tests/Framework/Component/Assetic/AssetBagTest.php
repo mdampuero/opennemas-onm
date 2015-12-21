@@ -96,6 +96,9 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
         $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@FosJsRoutingBundle/js/router.js' ]);
 
         $this->assertNotEmpty($path);
+
+        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@AddminTheme/js/foo/*' ]);
+        $this->assertEmpty($path);
     }
 
     public function testParseThemeName()
