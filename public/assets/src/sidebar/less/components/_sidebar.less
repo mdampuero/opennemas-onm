@@ -100,12 +100,17 @@
             float: right;
 
             &:before {
-              font-family: 'FontAwesome';
               content: "\f105";
+              display: block;
+              font-family: 'FontAwesome';
+              transition: all .25s;
             }
 
             &.open:before {
-              content: "\f107";
+              -webkit-transform: rotateZ(90deg);
+              -moz-transform: rotateZ(90deg);
+              -ms-transform: rotateZ(90deg);
+              transform: rotateZ(90deg);
             }
           }
 
@@ -389,7 +394,10 @@
           }
 
           &.open:before {
-            content: "\f107";
+            -webkit-transform: rotateZ(-90deg);
+            -moz-transform: rotateZ(-90deg);
+            -ms-transform: rotateZ(-90deg);
+            transform: rotateZ(-90deg);
           }
         }
 
@@ -399,23 +407,27 @@
         }
       }
     }
-  }
 
-  .sub-menu {
-    li {
-      a {
-        i {
-          margin-left: 0;
-          margin-right: @sidebar-indentation;
+    .sub-menu {
+      li {
+        a {
+          i {
+            margin-left: 0;
+            margin-right: @sidebar-indentation;
+          }
+
+          .arrow {
+            margin: 10px 0 0 20px;
+          }
         }
-      }
 
-      .sub-menu {
-        li {
-          a {
-            i {
-              margin-left: 0;
-              margin-right: @sidebar-indentation;
+        .sub-menu {
+          li {
+            a {
+              i {
+                margin-left: 0;
+                margin-right: @sidebar-indentation;
+              }
             }
           }
         }
