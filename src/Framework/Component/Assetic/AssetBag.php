@@ -85,9 +85,11 @@ class AssetBag
     {
         $scripts = $this->parsePath($path);
 
-        foreach ($scripts as $script) {
-            if (!array_key_exists($script, $this->scripts)) {
-                $this->scripts[$script] = $filters;
+        if (!empty($scripts)) {
+            foreach ($scripts as $script) {
+                if (!array_key_exists($script, $this->scripts)) {
+                    $this->scripts[$script] = $filters;
+                }
             }
         }
     }
@@ -102,9 +104,11 @@ class AssetBag
     {
         $styles = $this->parsePath($path);
 
-        foreach ($styles as $style) {
-            if (!array_key_exists($style, $this->styles)) {
-                $this->styles[$style] = $filters;
+        if (!empty($styles)) {
+            foreach ($styles as $style) {
+                if (!array_key_exists($style, $this->styles)) {
+                    $this->styles[$style] = $filters;
+                }
             }
         }
     }
@@ -166,7 +170,7 @@ class AssetBag
      *
      * @param string $src The asset source path.
      *
-     * @return string The real asset source path.
+     * @return array The list of real asset source paths.
      */
     private function parsePath($src)
     {
@@ -195,25 +199,25 @@ class AssetBag
         }
 
         $path = $this->sitePath . $this->config['folders'][$index] . DS
-            . $theme . $asset;
-
-        if (strpos($path, '*') !== false) {
-            $path = str_replace('*', '', $path);
-        }
+            . $theme . str_replace('*', '', $asset);
 
         if (is_file($path)) {
             return [ $path ];
         }
 
-        $finder = new Finder();
-        $finder->files()->in($path);
+        if (is_dir($path)) {
+            $finder = new Finder();
+            $finder->files()->in($path);
 
-        $path = [];
-        foreach ($finder as $file) {
-            $path[] = $file->getRealPath();
+            $path = [];
+            foreach ($finder as $file) {
+                $path[] = $file->getRealPath();
+            }
+
+            return $path;
         }
 
-        return $path;
+        return false;
     }
 
     /**
