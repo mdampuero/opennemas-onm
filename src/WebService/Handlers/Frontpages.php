@@ -221,20 +221,20 @@ class Frontpages
         $generator = getService('router');
 
         // Set pagination
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
+        $pagination = getService('paginator')->get(
+            [
                 'page'  => $page,
-                'items' => $itemsPerPage,
+                'epp'   => $itemsPerPage,
                 'total' => $countArticles,
-                'url'   => $generator->generate(
-                    'categ_sync_frontpage',
-                    array(
+                'route' => [
+                    'name'   => 'categ_sync_frontpage',
+                    'params' => [
                         'category_name' => $categoryName,
-                    )
-                )
-            )
+                    ]
+                ]
+            ]
         );
 
-        return utf8_encode(serialize(array($pagination, $articles)));
+        return utf8_encode(serialize(array($pagination->links, $articles)));
     }
 }
