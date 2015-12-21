@@ -1503,8 +1503,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         // Get original information of the uploaded image
         $originalFileName = $file->getBaseName();
-        $originalFileData = pathinfo($originalFileName);
-        $fileExtension    = strtolower($originalFileData['extension']);
+        $fileExtension    = $file->getClientOriginalExtension();
 
         // Generate new file name
         $currentTime = gettimeofday();
