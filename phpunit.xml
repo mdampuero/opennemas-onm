@@ -12,7 +12,7 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     syntaxCheck="false"
-    bootstrap="autoload.php"
+    bootstrap="app/autoload.php"
 >
 
     <testsuites>
@@ -61,13 +61,5 @@
         <log type="coverage-xml" target="../build/logs/coverage/xml"/>
         <log type="junit" target="../build/logs/junit.xml" logIncompleteSkipped="false"/>
     </logging> -->
-
-    <selenium>
-        <browser name="Firefox on localhost"
-                browser="*chrome"
-                host="localhost"
-                port="4444"
-                timeout="30000"/>
-    </selenium>
 
 </phpunit>

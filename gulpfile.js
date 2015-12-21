@@ -9,7 +9,7 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist 2>&1',
+    exec('./vendor/phpunit/phpunit/phpunit 2>&1',
       function(error, stdout) {
         var title   = '';
         var summary = stdout;
