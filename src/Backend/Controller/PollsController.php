@@ -345,7 +345,7 @@ class PollsController extends Controller
         $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countPolls = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -361,8 +361,8 @@ class PollsController extends Controller
         return $this->render(
             'poll/content-provider.tpl',
             [
-                'polls' => $polls,
-                'pager'  => $pagination,
+                'polls'      => $polls,
+                'pagination' => $pagination,
             ]
         );
     }
@@ -413,7 +413,7 @@ class PollsController extends Controller
                 'contents'              => $polls,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $categoryId,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
             ]
         );

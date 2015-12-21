@@ -215,8 +215,8 @@ class LettersController extends Controller
         return $this->render(
             'letter/content-provider.tpl',
             [
-                'letters'  => $letters,
-                'pager'    => $pagination,
+                'letters'    => $letters,
+                'pagination' => $pagination,
             ]
         );
     }
@@ -250,7 +250,7 @@ class LettersController extends Controller
         $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countLetters = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => true,

@@ -4,5 +4,5 @@
   {/foreach}
 </div>
 <div class="pagination-wrapper">
-  {$pager}
+  {$pagination}
 </div>

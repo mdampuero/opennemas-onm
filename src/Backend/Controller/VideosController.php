@@ -595,7 +595,7 @@ class VideosController extends Controller
         $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -611,8 +611,8 @@ class VideosController extends Controller
         return $this->render(
             'video/content-provider.tpl',
             array(
-                'videos' => $videos,
-                'pager'  => $pagination,
+                'videos'     => $videos,
+                'pagination' => $pagination,
             )
         );
     }
@@ -663,7 +663,7 @@ class VideosController extends Controller
                 'contents'              => $videos,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
             )
         );

@@ -678,8 +678,8 @@ class ArticlesController extends Controller
         return $this->render(
             'article/content-provider-suggested.tpl',
             array(
-                'articles' => $articles,
-                'pager'    => $pagination,
+                'articles'   => $articles,
+                'pagination' => $pagination,
             )
         );
     }
@@ -731,8 +731,8 @@ class ArticlesController extends Controller
         return $this->render(
             'article/content-provider-category.tpl',
             array(
-                'articles' => $articles,
-                'pager'   => $pagination,
+                'articles'   => $articles,
+                'pagination' => $pagination,
             )
         );
     }

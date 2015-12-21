@@ -409,7 +409,7 @@ class AlbumsController extends Controller
         $albums      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countAlbums = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -425,8 +425,8 @@ class AlbumsController extends Controller
         return $this->render(
             'album/content-provider.tpl',
             array(
-                'albums' => $albums,
-                'pager'  => $pagination,
+                'albums'     => $albums,
+                'pagination' => $pagination,
             )
         );
     }
@@ -460,7 +460,7 @@ class AlbumsController extends Controller
         $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
         $countAlbums = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,
             'page'  => $page,

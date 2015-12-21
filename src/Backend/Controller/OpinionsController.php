@@ -539,8 +539,8 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/content-provider.tpl',
             array(
-                'opinions' => $opinions,
-                'pager'    => $pagination,
+                'opinions'   => $opinions,
+                'pagination' => $pagination,
             )
         );
     }
@@ -581,7 +581,7 @@ class OpinionsController extends Controller
             array(
                 'contentType'           => 'Opinion',
                 'contents'              => $opinions,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
             )
         );

@@ -273,7 +273,7 @@ class WidgetsController extends Controller
         $widgets      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countWidgets = $em->countBy($filters);
 
-        // Build the pager
+        // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -289,8 +289,8 @@ class WidgetsController extends Controller
         return $this->render(
             'widget/content-provider.tpl',
             [
-                'widgets' => $widgets,
-                'pager'   => $pagination,
+                'widgets'    => $widgets,
+                'pagination' => $pagination,
             ]
         );
     }
