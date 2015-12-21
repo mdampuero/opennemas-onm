@@ -183,6 +183,7 @@ class ModuleManager
                 'STATIC_PAGES_MANAGER'       => _('Static pages'),
                 'SUPPORT_NONE'               => _('Basic support'),
                 'SUPPORT_PRO'                => _('Profesional support'),
+                'SUPPORT_1'                  => _('Support 1'),
                 'SUPPORT_2'                  => _('Support 2'),
                 'SUPPORT_3'                  => _('Support 3'),
                 'SUPPORT_4'                  => _('Support 4'),
@@ -1310,6 +1311,23 @@ class ModuleManager
                     ),
                     'price'            => [
                         'month' => 100
+                    ]
+                ],
+                [
+                    'id'               => 'SUPPORT_1',
+                    'plan'             => 'Support',
+                    'type'             => 'service',
+                    'thumbnail'        => 'service-2.jpg',
+                    'name'             => _('Support 1'),
+                    'description'      => _('Do you need 2 hours on hangouts/skype/phone to ask all your questions or to walk through Opennemas and make sure you know it all?'),
+                    'long_description' => _(
+                        '<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or to walk through Opennemas and make sure you know it all?</p>
+                        <p>This is the Support Offer perfect for you!</p>
+                        <p>For a very small fee you will get our expert team on the line and you will be able to ask all the questions you have and/or receive personal training.</p>
+                        <p>Please remember that we guarantee FREE support via tickets/emails.</p>'
+                    ),
+                    'price'            => [
+                        'month' => 30
                     ]
                 ],
                 [
