@@ -641,7 +641,7 @@ class Advertisement extends Content
         }
 
         if ($this->with_script == 1) {
-            if (preg_match('/<iframe/', $this->script)) {
+            if (preg_match('/<iframe/', $this->script) || isset($this->default_ad)) {
                 $content = $this->script;
             } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto') !== false) {
                 $content = $this->script;
@@ -684,6 +684,9 @@ class Advertisement extends Content
                 $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
                       .sprintf('%06d', $this->pk_advertisement).'.html';
                 $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
+                if (isset($this->default_ad) && $this->default_ad == 1) {
+                    $url = $this->url;
+                }
             }
 
             // If the Ad is Flash/Image based try to get the width and height fixed
