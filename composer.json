@@ -13,13 +13,11 @@
         }
     ],
     "include-path": [
-        "app/",
-        "app/models/",
         "libs/",
         "libs/core",
+        "libs/models/",
         "src/",
-        "src/WebService/Handlers/",
-        "vendor/"
+        "src/WebService/Handlers/"
     ],
     "autoload": {
         "psr-4": {
@@ -27,21 +25,16 @@
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
         "files": [
+            "app/AppKernel.php",
             "libs/functions.php",
             "libs/adodb5/adodb.inc.php"
         ]
     },
-    "require-dev": {
-        "sensio/generator-bundle": "~2.3",
-        "squizlabs/php_codesniffer": "2.*",
-        "phpmd/phpmd": "2.3.*",
-        "sebastian/phpcpd": "2.0.*",
-        "pdepend/pdepend": "2.2.*",
-        "phploc/phploc": "2.1.*",
-        "phpunit/phpunit": "4.8.*",
-        "theseer/phpdox": "0.8.*"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
-
     "require": {
         "php": ">=5.5.9",
         "symfony/symfony": "2.8.*",
@@ -77,6 +70,16 @@
         "smarty-gettext/smarty-gettext": "@stable",
         "lexik/jwt-authentication-bundle": "dev-master",
         "league/csv": "~7.0"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "~2.3",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpmd/phpmd": "2.3.*",
+        "sebastian/phpcpd": "2.0.*",
+        "pdepend/pdepend": "2.2.*",
+        "phploc/phploc": "2.1.*",
+        "phpunit/phpunit": "4.8.*",
+        "theseer/phpdox": "0.8.*"
     },
     "repositories": [
         {
