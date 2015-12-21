@@ -41,6 +41,13 @@ class Paginator
     public function __construct($router)
     {
         $this->router = $router;
+
+        $this->templates = [
+            'first'    => _('First'),
+            'last'     => _('Last'),
+            'next'     => _('Next'),
+            'previous' => _('Previous'),
+        ];
     }
 
     /**
@@ -69,6 +76,13 @@ class Paginator
             || $this->options['total'] <= $this->options['epp']
         ) {
             return '';
+        }
+
+        if (array_key_exists('templates', $options)) {
+            $this->templates = array_merge(
+                $this->templates,
+                $options['templates']
+            );
         }
 
         $this->options['pages'] = ceil(
@@ -100,7 +114,7 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
 
         return '<li' . $disabled . '><a href="' . $this->getUrl(1) .'">'
-            . _('First') . '</a></li>';
+            . $this->templates['first'] . '</a></li>';
     }
 
     /**
@@ -118,8 +132,8 @@ class Paginator
             ' class="disabled"' : '';
 
         return '<li' . $disabled . '><a href="'
-            . $this->getUrl($this->options['pages']) .'">' . _('Last')
-            . '</a></li>';
+            . $this->getUrl($this->options['pages']) .'">'
+            . $this->templates['last'] . '</a></li>';
     }
 
     /**
@@ -175,7 +189,7 @@ class Paginator
             ' class="disabled"' : '';
 
         return '<li' . $disabled . '><a href="'
-            . $this->getUrl($page) .'">' . _('Next')
+            . $this->getUrl($page) .'">' . $this->templates['next']
             . '</a></li>';
     }
 
@@ -194,8 +208,8 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
 
         return '<li' . $disabled . '>'
-            . '<a href="' . $this->getUrl($page) .'">' . _('Previous')
-            . '</a></li>';
+            . '<a href="' . $this->getUrl($page) .'">'
+            . $this->templates['previous'] . '</a></li>';
     }
 
     /**
