@@ -31,15 +31,6 @@ class CacheCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $this->data = $this->cache->getBuffer();
-
-        //foreach ($this->data as &$query) {
-            //$sql    = array_slice($query['params'], 0, 1);
-            //$params = array_key_exists(0, array_slice($query['params'], 1)) ? array_slice($query['params'], 1)[0] : array();
-            //$query  = [
-                //'method' => $query['method'],
-                //'params' => (count($params) > 0) ? print_r($params, true) : '',
-            //];
-        //}
     }
 
     /**
