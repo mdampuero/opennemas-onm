@@ -12,11 +12,10 @@
     exec('./vendor/phpunit/phpunit/phpunit 2>&1',
       function(error, stdout) {
         var title   = '';
-        var summary = stdout;
-        var icon    = 'fail.png'
+        var icon    = 'fail.png';
 
         // Remove trainling NL and get the last one
-        var report = stdout.replace(/\n$/, "").split(/\r?\n/);
+        var report = stdout.replace(/\n$/, '').split(/\r?\n/);
         report = report[report.length - 1];
         if (report.indexOf('Tests') !== -1 || report.indexOf('OK') === -1) {
           title   = 'Unable to complete the tests!';
@@ -24,8 +23,8 @@
 
           console.log(stdout);
         } else {
-          title   = 'Tests executed!',
-          icon    = 'pass.png'
+          title   = 'Tests executed!';
+          icon    = 'pass.png';
         }
 
         notifier.notify({
@@ -46,7 +45,8 @@
 
     // Executes tests and reload browser
     gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php',
-        'public/themes/**/*.tpl' ], batch(function (events, done) {
+      'public/themes/**/*.tpl', 'tests/**/*.php'
+    ], batch(function (events, done) {
       gulp.start('phpunit', done);
       livereload.reload();
     }));
@@ -54,11 +54,10 @@
     // Executes tests and reload browser
     gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
       '!public/assets/src/**/main.less', '!public/themes/**/main.less',
-    ],
-      batch(function (events, done) {
+    ], batch(function (events, done) {
         gulp.start('touch', done);
         livereload.reload();
-      }));
+    }));
   });
 
   gulp.task('default', [ 'watch' ]);
