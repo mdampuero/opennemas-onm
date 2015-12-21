@@ -23,7 +23,7 @@ umask(0002);
 /**
  * @var Composer\Autoload\ClassLoader $loader
  */
-$loader = require __DIR__.'/../app/autoload.php';
+$loader = require __DIR__.'/../tmp/autoload.php';
 Debug::enable();
 
 // Little hack to allow final slashes in the url

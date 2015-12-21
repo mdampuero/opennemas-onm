@@ -6,7 +6,7 @@ use Symfony\Component\Debug\Debug;
  * @var Composer\Autoload\ClassLoader
  */
 $loader = require __DIR__.'/../app/autoload.php';
-include_once __DIR__.'/../app/bootstrap.php.cache';
+include_once __DIR__.'/../tmp/bootstrap.php.cache';
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
