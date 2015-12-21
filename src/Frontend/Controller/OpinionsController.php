@@ -293,7 +293,7 @@ class OpinionsController extends Controller
                 $opinions = $this->cm->getUrlContent($wsUrl.'/ws/opinions/authorsnotinhomepaged/'.$page, true);
             }
 
-            // Sum of total opinions in home + not in home for the pager
+            // Sum of total opinions in home + not in home for the pagination
             $totalOpinions =  ITEMS_PAGE + (int) $this->cm->getUrlContent(
                 $wsUrl.'/ws/opinions/countauthorsnotinhome/',
                 true

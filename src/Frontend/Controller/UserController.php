@@ -563,7 +563,7 @@ class UserController extends Controller
                         $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
                     }
                 }
-                // Build the pager
+                // Build the pagination
                 $pagination = $this->get('paginator')->get([
                     'epp'   => $itemsPerPage,
                     'page'  => $page,
@@ -662,7 +662,7 @@ class UserController extends Controller
                 $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
             }
 
-            // Build the pager
+            // Build the pagination
             $pagination = $this->get('paginator')->get([
                 'epp'   => $itemsPerPage,
                 'page'  => $page,
