@@ -25,6 +25,7 @@ class Paginator
      */
     protected $options = [
         'boundary'    => false,
+        'class'       => 'pagination',
         'directional' => false,
         'epp'         => 10,
         'maxLinks'    => 5,
@@ -89,7 +90,7 @@ class Paginator
             $this->options['total'] / $this->options['epp']
         );
 
-        $this->links = '<ul class="pagination">'
+        $this->links = '<ul class="' . $this->options['class'] . '">'
             . $this->getFirstLink()
             . $this->getPreviousLink()
             . $this->getLinks()
@@ -111,10 +112,10 @@ class Paginator
             return '';
         }
 
-        $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
+        $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
-        return '<li' . $disabled . '><a href="' . $this->getUrl(1) .'">'
-            . $this->templates['first'] . '</a></li>';
+        return '<li class="first' . $disabled . '"><a href="'
+            . $this->getUrl(1) .'">' . $this->templates['first'] . '</a></li>';
     }
 
     /**
@@ -129,9 +130,9 @@ class Paginator
         }
 
         $disabled = $this->options['page'] == $this->options['pages'] ?
-            ' class="disabled"' : '';
+            ' disabled' : '';
 
-        return '<li' . $disabled . '><a href="'
+        return '<li class="last' . $disabled . '"><a href="'
             . $this->getUrl($this->options['pages']) .'">'
             . $this->templates['last'] . '</a></li>';
     }
@@ -186,9 +187,9 @@ class Paginator
 
         $page     = min($this->options['page'] + 1, $this->options['pages']);
         $disabled = $this->options['page'] == $this->options['pages'] ?
-            ' class="disabled"' : '';
+            ' disabled' : '';
 
-        return '<li' . $disabled . '><a href="'
+        return '<li class="next' . $disabled . '"><a href="'
             . $this->getUrl($page) .'">' . $this->templates['next']
             . '</a></li>';
     }
@@ -205,9 +206,9 @@ class Paginator
         }
 
         $page     = max($this->options['page'] - 1, 1);
-        $disabled = $this->options['page'] == 1 ? ' class="disabled"' : '';
+        $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
-        return '<li' . $disabled . '>'
+        return '<li class="previous' . $disabled . '">'
             . '<a href="' . $this->getUrl($page) .'">'
             . $this->templates['previous'] . '</a></li>';
     }
