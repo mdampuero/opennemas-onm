@@ -16,36 +16,38 @@
   </div>
 </div>
 
-<script>
-jQuery("#modal-category-empty").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false,
-});
+{javascripts}
+  <script>
+    jQuery("#modal-category-empty").modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true, //Can close on escape
+        show: false,
+    });
 
-jQuery('.empty-category').click(function(e, ui) {
-    jQuery('#modal-category-empty .modal-body span').html( jQuery(this).data('title') );
-    //Sets up the modal
-    jQuery("#modal-category-empty").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
-    e.preventDefault();
-});
+    jQuery('.empty-category').click(function(e, ui) {
+        jQuery('#modal-category-empty .modal-body span').html( jQuery(this).data('title') );
+        //Sets up the modal
+        jQuery("#modal-category-empty").modal('show');
+        jQuery("body").data("selected-for-del", jQuery(this).data("url"));
+        e.preventDefault();
+    });
 
-jQuery('#modal-category-empty a.btn.yes').on('click', function(e, ui){
-    var url = jQuery("body").data("selected-for-del");
-    if (url) {
-        jQuery.ajax({
-            url:  url,
-            success: function(){
-                location.reload();
-            }
-        });
-    }
-    e.preventDefault();
-});
+    jQuery('#modal-category-empty a.btn.yes').on('click', function(e, ui){
+        var url = jQuery("body").data("selected-for-del");
+        if (url) {
+            jQuery.ajax({
+                url:  url,
+                success: function(){
+                    location.reload();
+                }
+            });
+        }
+        e.preventDefault();
+    });
 
-jQuery('#modal-category-empty a.btn.no').on('click', function(e){
-    jQuery("#modal-category-empty ").modal('hide');
-    e.preventDefault();
-});
-</script>
+    jQuery('#modal-category-empty a.btn.no').on('click', function(e){
+        jQuery("#modal-category-empty ").modal('hide');
+        e.preventDefault();
+    });
+  </script>
+{/javascripts}

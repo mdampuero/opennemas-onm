@@ -387,10 +387,6 @@ admin_videos_content_provider_related:
     path:     /videos/content-provider-related
     defaults: { _controller  : BackendBundle:Videos:contentProviderRelated }
 
-admin_videos_content_provider_gallery:
-    path:     /videos/content-provider-gallery
-    defaults: { _controller  : BackendBundle:Videos:contentProviderGallery }
-
 # Album controller routes
 admin_albums:
     path:     /albums

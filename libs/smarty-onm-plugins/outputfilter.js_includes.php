@@ -10,33 +10,19 @@
  */
 function smarty_outputfilter_js_includes($output, Smarty_Internal_Template $smarty)
 {
-    $js_includes = $smarty->parent->js_includes;
-    $js_footer_code = '';
+    $manager = getService('core.service.assetic.javascript_manager');
+    $bag     = getService('core.service.assetic.asset_bag');
 
-    if (is_array($js_includes)
-        && array_key_exists('footer', $js_includes)
-        && count($js_includes['footer']) > 0
-    ) {
-        foreach ($js_includes['footer'] as $js_include) {
-            $js_footer_code .= "<script src='".$js_include."'></script>";
+    $assets = $manager->writeAssets($bag->getScripts());
+
+    if (!empty($assets)) {
+        foreach ($assets as $asset) {
+            $scripts .= "<script src='" . $asset . "'></script>";
         }
-
-        $output = str_replace('</body>', $js_footer_code.'</body>', $output);
     }
 
-    if (is_array($js_includes)
-        && array_key_exists('header', $js_includes)
-        && count($js_includes['header']) > 0
-    ) {
-        foreach ($js_includes['header'] as $js_include) {
-            if ($js_include['type'] == 'file') {
-                $js_footer_code .= "<script src='".$js_include['src']."'></script>";
-            }
-
-        }
-
-        $output = str_replace('</head>', $js_footer_code.'</head>', $output);
-    }
+    $scripts .= implode('', $bag->getLiteralScripts());
+    $output   = str_replace('</body>', $scripts . '</body>', $output);
 
     return $output;
 }

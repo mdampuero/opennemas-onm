@@ -1,4 +1,4 @@
-<div class="row thumbnail-wrapper">
+<div class="row thumbnail-wrapper ng-cloak">
   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
   <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">
     <p>{t}Are you sure?{/t}</p>

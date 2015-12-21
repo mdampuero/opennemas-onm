@@ -1,29 +1,30 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-<style type="text/css">
-  .utilities-conf {
-    position:absolute;
-    top:0;
-    right:0;
-  }
-</style>
+  {stylesheets}
+    <style type="text/css">
+      .utilities-conf {
+        position:absolute;
+        top:0;
+        right:0;
+      }
+    </style>
+  {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript">
-  var video_manager_url = {
-    get_information: '{url name=admin_videos_get_info}',
-    fill_tags: '{url name=admin_utils_calculate_tags}'
-  }
+  {javascripts src="@AdminTheme/js/onm/video.js"}
+    <script type="text/javascript">
+      var video_manager_url = {
+        get_information: '{url name=admin_videos_get_info}',
+        fill_tags: '{url name=admin_utils_calculate_tags}'
+      }
 
-  $('#title').on('change', function(e, ui) {
-    fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-  });
-</script>
-{javascripts src="@AdminTheme/js/onm/video.js"}
-<script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
+      $('#title').on('change', function(e, ui) {
+        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+      });
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
@@ -210,7 +211,6 @@
       </div>
     </div>
     <div class="form-vertical video-edit-form">
-
       <input type="hidden" name="type" value="{$smarty.get.type}">
       <input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
     </div>

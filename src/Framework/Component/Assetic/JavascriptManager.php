@@ -1,15 +1,13 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) OpenHost S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Framework\Assetic;
+namespace Framework\Component\Assetic;
 
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
@@ -31,15 +29,14 @@ class JavascriptManager extends AssetManager
     /**
      * {@inheritDoc}
      */
-    public function initFilters($filters)
+    protected function getFilterManager($filters)
     {
-        $this->filters = $filters;
-        $this->fm      = new FilterManager();
+        $fm = new FilterManager();
 
         foreach ($filters as $filter) {
             switch ($filter) {
                 case 'uglifyjs':
-                    $this->fm->set(
+                    $fm->set(
                         'uglifyjs',
                         new UglifyJsFilter(
                             $this->config['filters']['uglifyjs']['bin'],
@@ -48,7 +45,7 @@ class JavascriptManager extends AssetManager
                     );
                     break;
                 case 'uglifyjs2':
-                    $this->fm->set(
+                    $fm->set(
                         'uglifyjs2',
                         new UglifyJs2Filter(
                             $this->config['filters']['uglifyjs2']['bin'],
@@ -60,5 +57,7 @@ class JavascriptManager extends AssetManager
                     throw new FilterException();
             }
         }
+
+        return $fm;
     }
 }

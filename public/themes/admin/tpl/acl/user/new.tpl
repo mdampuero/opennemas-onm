@@ -2,64 +2,62 @@
 
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-  @Common/js/jquery/jquery.validate.min.js,
-  @Common/js/jquery/jquery.multiselect.js,
-  @Common/js/jquery/localization/messages_es.js,
-  @Common/js/onm/jquery.password-strength.js,
-  @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
-  @Common/js/admin.js "}
-  <script type="text/javascript" src="{$asset_url}"></script>
+      @Common/js/jquery/jquery.validate.min.js,
+      @Common/js/jquery/jquery.multiselect.js,
+      @Common/js/jquery/localization/messages_es.js,
+      @Common/js/onm/jquery.password-strength.js,
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
+      @Common/js/admin.js "}
+    <script>
+      jQuery(document).ready(function($){
+        // Password strength checker
+        var strength = $('#password').passStrength({
+          userid: '#login'
+        });
+
+        // Password and confirm password match
+        $("#passwordconfirm").on('keyup blur', validate);
+        function validate() {
+          var password1 = $("#password").val();
+          var password2 = $("#passwordconfirm").val();
+
+          if(password1 == password2) {
+            $(".checker").html(
+              '<div class="alert-pass  alert-success"><strong>Valid</strong></div>'
+              );
+          }
+          else {
+            $(".checker").html(
+              '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
+              );
+          }
+        }
+
+        // Avatar image uploader
+        $('.fileinput').fileinput({
+          name: 'avatar',
+          uploadtype:'image'
+        });
+
+        // Use multiselect on user groups and categories
+        $('select#id_user_group').twosidedmultiselect();
+        $('select#ids_category').twosidedmultiselect();
+
+        // Paywall datepicker only if available
+        {acl isAllowed='USER_ADMIN'}
+          {is_module_activated name='PAYWALL'}
+            $('#paywall_time_limit').datetimepicker({
+              format: 'YYYY-MM-D HH:mm:ss'
+            });
+          {/is_module_activated}
+        {/acl}
+      });
+    </script>
   {/javascripts}
-  <script>
-  jQuery(document).ready(function($){
-    // Password strength checker
-    var strength = $('#password').passStrength({
-      userid: '#login'
-    });
-
-    // Password and confirm password match
-    $("#passwordconfirm").on('keyup blur', validate);
-    function validate() {
-      var password1 = $("#password").val();
-      var password2 = $("#passwordconfirm").val();
-
-      if(password1 == password2) {
-        $(".checker").html(
-          '<div class="alert-pass  alert-success"><strong>Valid</strong></div>'
-          );
-      }
-      else {
-        $(".checker").html(
-          '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
-          );
-      }
-    }
-
-    // Avatar image uploader
-    $('.fileinput').fileinput({
-      name: 'avatar',
-      uploadtype:'image'
-    });
-
-    // Use multiselect on user groups and categories
-    $('select#id_user_group').twosidedmultiselect();
-    $('select#ids_category').twosidedmultiselect();
-
-    // Paywall datepicker only if available
-    {acl isAllowed='USER_ADMIN'}
-    {is_module_activated name='PAYWALL'}
-    $('#paywall_time_limit').datetimepicker({
-      format: 'YYYY-MM-D HH:mm:ss'
-    });
-    {/is_module_activated}
-    {/acl}
-  });
-  </script>
 {/block}
 
 {block name="header-css" append}
   {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
-  <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
 {/block}
 

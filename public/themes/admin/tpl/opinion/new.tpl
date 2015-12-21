@@ -1,47 +1,43 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
-        $('.tabs').tabs();
-
-        jQuery(document).ready(function ($){
-            $('#starttime, #endtime').datetimepicker({
-              format: 'YYYY-MM-D HH:mm:ss'
-            });
-
-            $("#starttime").on("dp.change",function (e) {
-                $('#endtime').data("DateTimePicker").minDate(e.date);
-            });
-            $("#endtime").on("dp.change",function (e) {
-                $('#starttime').data("DateTimePicker").maxDate(e.date);
-            });
-
-            $('#title').on('change', function(e, ui) {
-              var metaTags = $('#metadata');
-              var title = $('#title input');
-
-              // Fill tags from title and category
-              if (!metaTags.val()) {
-                var tags = title.val();
-                fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-              }
-            });
-
-            $('#type_opinion').on('change', function() {
-                var selected = $(this).find('option:selected').val();
-                if (selected != 0) {
-                    $('#author').hide();
-                    $('#fk_author').val(selected);
-                } else {
-                    $('#author').show();
-                }
-            });
+      jQuery(document).ready(function ($){
+        $('#starttime, #endtime').datetimepicker({
+          format: 'YYYY-MM-D HH:mm:ss'
         });
 
+        $("#starttime").on("dp.change",function (e) {
+          $('#endtime').data("DateTimePicker").minDate(e.date);
+        });
+        $("#endtime").on("dp.change",function (e) {
+          $('#starttime').data("DateTimePicker").maxDate(e.date);
+        });
+
+        $('#title').on('change', function(e, ui) {
+          var metaTags = $('#metadata');
+          var title = $('#title input');
+
+          // Fill tags from title and category
+          if (!metaTags.val()) {
+            var tags = title.val();
+            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
+          }
+        });
+
+        $('#type_opinion').on('change', function() {
+          var selected = $(this).find('option:selected').val();
+          if (selected != 0) {
+            $('#author').hide();
+            $('#fk_author').val(selected);
+          } else {
+            $('#author').show();
+          }
+        });
+      });
     </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}

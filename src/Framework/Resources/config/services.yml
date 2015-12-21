@@ -213,14 +213,6 @@ services:
     view:
         alias: onm_templating
 
-    stylesheet_manager:
-        class: Framework\Assetic\StylesheetManager
-        arguments: [ @service_container, %assetic% ]
-
-    javascript_manager:
-        class: Framework\Assetic\JavascriptManager
-        arguments: [ @service_container, %assetic% ]
-
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
         tags:

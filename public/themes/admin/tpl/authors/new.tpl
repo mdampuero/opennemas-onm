@@ -2,29 +2,25 @@
 
 {block name="header-css" append}
   {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
   {javascripts src="@AdminTheme/js/onm/video.js,
-    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js
-  "}
-    <script type="text/javascript" src="{$asset_url}"></script>
+    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+    <script>
+      $(document).ready(function($){
+        $('.fileinput').fileinput({
+          name: 'avatar',
+          uploadtype:'image'
+        });
+
+        $('.delete').on('click', function(){
+          $('.file-input').val('0');
+        });
+      });
+    </script>
   {/javascripts}
-
-  <script>
-    $(document).ready(function($){
-      $('.fileinput').fileinput({
-        name: 'avatar',
-        uploadtype:'image'
-      });
-
-      $('.delete').on('click', function(){
-        $('.file-input').val('0');
-      });
-    });
-  </script>
 {/block}
 
 {block name="content"}
