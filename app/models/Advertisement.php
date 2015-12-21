@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Module\ModuleManager;
 use Onm\Settings as s;
 
 /**
@@ -435,10 +436,9 @@ class Advertisement extends Content
      **/
     public static function findForPositionIdsAndCategory($types = array(), $category = 'home')
     {
-        $banners = array();
-        $finalBanners = array();
+        $banners = $finalBanners = [];
 
-        // If not advertisement types are passed return earlier
+        // If advertisement types aren't passed return earlier
         if (!is_array($types) || count($types) <= 0) {
             return $banners;
         }
@@ -451,72 +451,88 @@ class Advertisement extends Content
             unset($types[$key]);
         }
 
-        // Get string of types separated by commas
-        $types = implode(',', $types);
+        if (!ModuleManager::isActivated('ADS_MANAGER')) {
+            // Fetch ads from static file
+            $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
 
-        // Generate sql with or without category
-        if ($category !== 0) {
-            $config = s::get('ads_settings');
-            if (isset($config['no_generics'])
-                && ($config['no_generics'] == '1')
-            ) {
-                $generics = '';
-            } else {
-                $generics = ' OR fk_content_categories=0';
-            }
-            $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
-        } else {
-            $catsSQL = 'AND advertisements.fk_content_categories=0 ';
-        }
-
-        $sql = "SELECT pk_advertisement as id FROM advertisements "
-              ."WHERE advertisements.type_advertisement IN (".$types.") "
-              .$catsSQL.' ORDER BY id';
-
-        $conn = getService('dbal_connection');
-        $result = $conn->fetchAll($sql);
-
-        if (count($result) <= 0) {
-            return $banners;
-        }
-
-        $result = array_map(function ($element) {
-            return array('Advertisement', $element['id']);
-        }, $result);
-
-        $adManager = getService('advertisement_repository');
-        $advertisements = $adManager->findMulti($result);
-
-        foreach ($advertisements as $advertisement) {
-            // Dont use this ad if is not in time
-            if ((!$advertisement->isInTime()
-                && $advertisement->type_medida == 'DATE')
-                || $advertisement->content_status != 1
-                || $advertisement->in_litter != 0) {
-                continue;
-            }
-
-            // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
-            // already stored ad objects. This should be removed after caches will be regenerated
-            if (!is_array($advertisement->fk_content_categories)) {
-                $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
-            }
-
-            if (is_string($advertisement->params)) {
-                $advertisement->params = unserialize($advertisement->params);
-                if (!is_array($advertisement->params)) {
-                    $advertisement->params = array();
+            foreach ($advertisements as $ad) {
+                if (in_array($ad->type_advertisement, $types) &&
+                    (
+                        in_array($category, $ad->fk_content_categories) ||
+                        in_array(0, $ad->fk_content_categories)
+                    )
+                ) {
+                    $banners[$ad->type_advertisement][] = $ad;
                 }
             }
+        } else {
+            // Get string of types separated by commas
+            $types = implode(',', $types);
 
-            // If the ad doesn't belong to the given category or home, skip it
-            if (!in_array($category, $advertisement->fk_content_categories)
-                && !in_array(0, $advertisement->fk_content_categories)
-            ) {
-                continue;
+            // Generate sql with or without category
+            if ($category !== 0) {
+                $config = s::get('ads_settings');
+                if (isset($config['no_generics'])
+                    && ($config['no_generics'] == '1')
+                ) {
+                    $generics = '';
+                } else {
+                    $generics = ' OR fk_content_categories=0';
+                }
+                $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
+            } else {
+                $catsSQL = 'AND advertisements.fk_content_categories=0 ';
             }
 
-            $banners [$advertisement->type_advertisement][] = $advertisement;
+            $sql = "SELECT pk_advertisement as id FROM advertisements "
+                  ."WHERE advertisements.type_advertisement IN (".$types.") "
+                  .$catsSQL.' ORDER BY id';
+
+            $conn = getService('dbal_connection');
+            $result = $conn->fetchAll($sql);
+
+            if (count($result) <= 0) {
+                return $banners;
+            }
+
+            $result = array_map(function ($element) {
+                return array('Advertisement', $element['id']);
+            }, $result);
+
+            $adManager = getService('advertisement_repository');
+            $advertisements = $adManager->findMulti($result);
+
+            foreach ($advertisements as $advertisement) {
+                // Dont use this ad if is not in time
+                if ((!$advertisement->isInTime()
+                    && $advertisement->type_medida == 'DATE')
+                    || $advertisement->content_status != 1
+                    || $advertisement->in_litter != 0) {
+                    continue;
+                }
+
+                // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
+                // already stored ad objects. This should be removed after caches will be regenerated
+                if (!is_array($advertisement->fk_content_categories)) {
+                    $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+                }
+
+                if (is_string($advertisement->params)) {
+                    $advertisement->params = unserialize($advertisement->params);
+                    if (!is_array($advertisement->params)) {
+                        $advertisement->params = array();
+                    }
+                }
+
+                // If the ad doesn't belong to the given category or home, skip it
+                if (!in_array($category, $advertisement->fk_content_categories)
+                    && !in_array(0, $advertisement->fk_content_categories)
+                ) {
+                    continue;
+                }
+
+                $banners [$advertisement->type_advertisement][] = $advertisement;
+            }
         }
 
         if (!empty($banners)) {
@@ -568,6 +584,16 @@ class Advertisement extends Content
     public function render($params)
     {
         $output = '';
+
+        // Don't render any non default ads if module is not activated
+        if (!ModuleManager::isActivated('ADS_MANAGER') &&
+            (
+                !isset($this->default_ad) ||
+                $this->default_ad != 1
+            )
+        ) {
+            return $output;
+        }
 
         $params = array_merge(
             [
