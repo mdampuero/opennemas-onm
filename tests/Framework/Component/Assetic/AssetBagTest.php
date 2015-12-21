@@ -82,22 +82,20 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
         $expected = SITE_PATH . $this->config['folders']['common'] . DS . 'bar' . DS . 'baz.js';
         $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Common/bar/baz.js' ]);
 
-        $this->assertEquals($expected, $path);
+        $this->assertEquals([ $expected ], $path);
 
         $expected = SITE_PATH . $this->config['folders']['themes'] . DS . 'foo' . DS . 'bar' . DS . 'baz.js';
         $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Theme/bar/baz.js' ]);
 
-        $this->assertEquals($expected, $path);
+        $this->assertEquals([ $expected ], $path);
 
-        $expected = SITE_PATH . $this->config['folders']['themes'] . DS . 'foo' . DS . 'bar' . DS . 'baz.js';
-        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@FooTheme/bar/baz.js' ]);
+        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@AdminTheme/js/controllers/*' ]);
 
-        $this->assertEquals($expected, $path);
+        $this->assertNotEmpty($path);
 
-        $expected = SITE_PATH . $this->config['folders']['bundles'] . DS . 'foo' . DS . 'bar' . DS . 'baz.js';
-        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@FooBundle/bar/baz.js' ]);
+        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@FosJsRoutingBundle/js/router.js' ]);
 
-        $this->assertEquals($expected, $path);
+        $this->assertNotEmpty($path);
     }
 
     public function testParseThemeName()

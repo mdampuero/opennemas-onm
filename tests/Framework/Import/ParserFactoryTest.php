@@ -48,7 +48,7 @@ class ParserFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParsersWithValidDirectory()
     {
-        $directory = __DIR__ . DS . '..' . DS . '..' . DS . 'Import/Parser';
+        $directory = __DIR__ . '/../../../src/Framework/Import/Parser';
 
         $parsers = $this->getParsers->invokeArgs($this->factory, [ $directory ]);
 
