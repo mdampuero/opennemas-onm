@@ -565,6 +565,7 @@ class UserController extends Controller
                 }
                 // Build the pagination
                 $pagination = $this->get('paginator')->get([
+                    'class' => 'pager',
                     'epp'   => $itemsPerPage,
                     'page'  => $page,
                     'total' => $contentsCount,
@@ -664,6 +665,7 @@ class UserController extends Controller
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
+                'class' => 'pager',
                 'epp'   => $itemsPerPage,
                 'page'  => $page,
                 'total' => $totalUsers,

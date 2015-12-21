@@ -135,6 +135,7 @@ class AlbumsController extends Controller
 
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
+                'class'       => 'pager',
                 'directional' => true,
                 'maxLinks'    => 0,
                 'epp'         => $itemsPerPage,
@@ -345,6 +346,7 @@ class AlbumsController extends Controller
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => false,
+            'class'       => 'pager',
             'directional' => true,
             'maxLinks'    => 0,
             'epp'         => $totalAlbumMoreFrontpage,
