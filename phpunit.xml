@@ -18,9 +18,9 @@
     <testsuites>
         <testsuite name="Opennemas">
             <directory>tests/*</directory>
-            <directory>../src/*/Tests</directory>
-            <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/*/Bundle/*Bundle/Tests</directory>
+            <directory>./src/*/Tests</directory>
+            <directory>./src/*/*Bundle/Tests</directory>
+            <directory>./src/*/Bundle/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -32,15 +32,15 @@
     <filter>
         <whitelist>
             <directory>models</directory>
-            <directory>../libs/Onm</directory>
-            <directory>../src/</directory>
+            <directory>./libs/Onm</directory>
+            <directory>./src/</directory>
             <exclude>
-                <directory>../src/*Bundle/Resources</directory>
-                <directory>../src/*Bundle/Tests</directory>
-                <directory>../src/*/*Bundle/Resources</directory>
-                <directory>../src/*/*Bundle/Tests</directory>
-                <directory>../src/*/Bundle/*Bundle/Resources</directory>
-                <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <directory>./src/*Bundle/Resources</directory>
+                <directory>./src/*Bundle/Tests</directory>
+                <directory>./src/*/*Bundle/Resources</directory>
+                <directory>./src/*/*Bundle/Tests</directory>
+                <directory>./src/*/Bundle/*Bundle/Resources</directory>
+                <directory>./src/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
         <blacklist>
