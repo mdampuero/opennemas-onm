@@ -9,6 +9,8 @@
  */
 namespace Framework\Component\Assetic;
 
+use Symfony\Component\Finder\Finder;
+
 class AssetBag
 {
     /**
@@ -81,10 +83,12 @@ class AssetBag
      */
     public function addScript($path, $filters = [])
     {
-        $script = $this->parsePath($path);
+        $scripts = $this->parsePath($path);
 
-        if (!in_array($script, $this->scripts)) {
-            $this->scripts[$script] = $filters;
+        foreach ($scripts as $script) {
+            if (!array_key_exists($script, $this->scripts)) {
+                $this->scripts[$script] = $filters;
+            }
         }
     }
 
@@ -96,10 +100,12 @@ class AssetBag
      */
     public function addStyle($path, $filters = [])
     {
-        $style = $this->parsePath($path);
+        $styles = $this->parsePath($path);
 
-        if (!in_array($style, $this->styles)) {
-            $this->styles[$style] = $filters;
+        foreach ($styles as $style) {
+            if (!array_key_exists($style, $this->styles)) {
+                $this->styles[$style] = $filters;
+            }
         }
     }
 
@@ -165,19 +171,19 @@ class AssetBag
     private function parsePath($src)
     {
         if (strpos($src, '@') === false) {
-            return $src;
+            return [ $src ];
         }
 
         $theme = substr($src, 1, strpos($src, '/') - 1);
         $asset = substr($src, strpos($src, '/'));
 
         if ($theme === 'Theme') {
-            return $this->themePath . $asset;
+            return [ $this->themePath . $asset ];
         }
 
         if ($theme === 'Common') {
-            return $this->sitePath . $this->config['folders']['common']
-                    . $asset;
+            return [ $this->sitePath . $this->config['folders']['common']
+                    . $asset ];
         }
 
         $index = 'themes';
@@ -188,8 +194,26 @@ class AssetBag
             $theme = $this->parseBundleName($theme);
         }
 
-        return $this->sitePath . $this->config['folders'][$index] . DS
+        $path = $this->sitePath . $this->config['folders'][$index] . DS
             . $theme . $asset;
+
+        if (strpos($path, '*') !== false) {
+            $path = str_replace('*', '', $path);
+        }
+
+        if (is_file($path)) {
+            return [ $path ];
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($path);
+
+        $path = [];
+        foreach ($finder as $file) {
+            $path[] = $file->getRealPath();
+        }
+
+        return $path;
     }
 
     /**
