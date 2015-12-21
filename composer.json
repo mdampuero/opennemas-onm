@@ -115,6 +115,8 @@
     "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "tmp",
         "symfony-web-dir": "public",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
