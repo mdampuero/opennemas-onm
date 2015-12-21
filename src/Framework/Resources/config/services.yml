@@ -97,6 +97,17 @@ services:
                 template: '@OnmFramework/collector/database.html.twig'
                 priority: 100
 
+    collector.cache:
+        class: Framework\DataCollector\CacheCollector
+        public: false
+        arguments: [ @cache ]
+        tags:
+            -
+                name:     data_collector
+                id:       'cache_collector'
+                template: '@OnmFramework/collector/cache.html.twig'
+                priority: 100
+
     db_conn:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]
