@@ -15,6 +15,7 @@ function smarty_outputfilter_css_includes($output, Smarty_Internal_Template $sma
 
     $assets = $manager->writeAssets($bag->getStyles());
 
+    $styles = '';
     if (!empty($assets)) {
         foreach ($assets as $asset) {
             $styles .= "<link rel='stylesheet' type='text/css' href='" . $asset . "'>";

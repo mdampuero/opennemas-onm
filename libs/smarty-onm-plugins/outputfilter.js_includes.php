@@ -15,6 +15,7 @@ function smarty_outputfilter_js_includes($output, Smarty_Internal_Template $smar
 
     $assets = $manager->writeAssets($bag->getScripts());
 
+    $scripts = '';
     if (!empty($assets)) {
         foreach ($assets as $asset) {
             $scripts .= "<script src='" . $asset . "'></script>";
