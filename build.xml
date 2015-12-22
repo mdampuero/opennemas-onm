@@ -14,7 +14,7 @@
         <pathelement path="${basedir}/src/Manager" />
         <pathelement path="${basedir}/src/ManagerWebService" />
         <pathelement path="${basedir}/src/WebService" />
-        <pathelement path="${basedir}/app/models" />
+        <pathelement path="${basedir}/libs/models" />
         <pathelement path="${basedir}/libs/Onm" />
         <pathelement path="${basedir}/libs/core" />
         <!-- Take a look at lint target should be updated -->
