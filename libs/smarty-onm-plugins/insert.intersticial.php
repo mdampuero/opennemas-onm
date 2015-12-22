@@ -53,11 +53,9 @@ function smarty_insert_intersticial($params, &$smarty)
         /* ]]> */
         </script>
         <script>
-        $("ins").each(function(){
-            if ($(this).children().length == 0) {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-        });
+        if ($(".intersticial ins *").length == 0) {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
         </script>';
     }
 
