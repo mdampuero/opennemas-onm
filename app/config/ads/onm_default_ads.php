@@ -692,10 +692,7 @@ return array_map(function ($ad) {
                  style="display:block"
                  data-ad-client="ca-pub-7694073983816204"
                  data-ad-slot="1495938492"
-                 data-ad-format="auto"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
+                 data-ad-format="auto"></ins>',
         'with_script' => '1',
         'timeout' => '15',
         'is_flash' => 0,
