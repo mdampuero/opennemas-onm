@@ -113,10 +113,12 @@ class CategoryController extends Controller
             $total = count($articles)+1;
 
             $pagination = $this->get('paginator')->get([
-                'epp'   => $itemsPerPage,
-                'page'  => $page,
-                'total' => $total,
-                'route' => [
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'maxLinks'    => 0,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
                     'name'   => 'category_frontpage',
                     'params' => [ 'category_name' => $categoryName ]
                 ]
