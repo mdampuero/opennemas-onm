@@ -371,7 +371,7 @@ class ModuleManager
                 'name'             => _('Expert pack'),
                 'type'             => 'pack',
                 'thumbnail'        => 'pack-expert.jpg',
-                'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!'),
+                'description'      => _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers become contributors!'),
                 'long_description' => (
                     _('Add news from your favourites agencies, manage multiple personalized frontpages and let your readers to become contributors to your newspaper!')
                     ._(
@@ -1299,8 +1299,8 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'service',
                     'thumbnail'        => 'service-2.jpg',
-                    'name'             => _('Support Training and Advisory Services'),
-                    'description'      => _('Do you need 2 hours on hangouts/skype/phone to ask all your questions or to walk through Opennemas and make sure you know it all?'),
+                    'name'             => _('Training and Advisory Services'),
+                    'description'      => _('Ask all your questions, walk through Opennemas and/or receive personal training via phone'),
                     'long_description' => _(
                         '<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or to walk through Opennemas and make sure you know it all?</p>
                         <p>This is the Support Offer perfect for you!</p>
