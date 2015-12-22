@@ -171,7 +171,6 @@ class OpinionsController extends Controller
             $countOpinions = $em->countBy($filters);
 
             $pagination = $this->get('paginator')->get([
-                'class' => 'pager',
                 'epp'   => $numOpinions,
                 'page'  => $page,
                 'total' => $countOpinions,
@@ -323,7 +322,6 @@ class OpinionsController extends Controller
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
             $pagination = $this->get('paginator')->get([
-                'class' => 'pager',
                 'epp'   => $itemsPerPage,
                 'page'  => $page,
                 'total' => $totalOpinions,
@@ -458,7 +456,6 @@ class OpinionsController extends Controller
             }
 
             $pagination = $this->get('paginator')->get([
-                'class' => 'pager',
                 'epp'   => $numOpinions,
                 'page'  => $page,
                 'total' => $countOpinions,
@@ -603,7 +600,6 @@ class OpinionsController extends Controller
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
             $pagination = $this->get('paginator')->get([
-                'class' => 'pager',
                 'epp'   => $itemsPerPage,
                 'page'  => $page,
                 'total' => $countOpinions,

@@ -81,7 +81,6 @@ class BlogsController extends Controller
             $countItems = $em->countBy($filters);
 
             $pagination = $this->get('paginator')->get([
-                'class' => 'pager',
                 'epp'   => $itemsPerPage,
                 'total' => $countItems,
                 'route' => 'frontend_blog_frontpage',
@@ -221,7 +220,6 @@ class BlogsController extends Controller
                 }
 
                 $pagination = $this->get('paginator')->get([
-                    'class' => 'pager',
                     'epp'   => $itemsPerPage,
                     'total' => $countItems,
                     'route' => [
