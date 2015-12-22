@@ -565,10 +565,11 @@ class UserController extends Controller
                 }
                 // Build the pagination
                 $pagination = $this->get('paginator')->get([
-                    'epp'   => $itemsPerPage,
-                    'page'  => $page,
-                    'total' => $contentsCount,
-                    'route' => [
+                    'directional' => true,
+                    'epp'         => $itemsPerPage,
+                    'page'        => $page,
+                    'total'       => $contentsCount,
+                    'route'       => [
                         'name'   => 'frontend_author_frontpage',
                         'params' => [ 'slug' => $slug, ]
                     ],
@@ -664,10 +665,11 @@ class UserController extends Controller
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
-                'epp'   => $itemsPerPage,
-                'page'  => $page,
-                'total' => $totalUsers,
-                'route' => 'frontend_frontpage_authors'
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $totalUsers,
+                'route'       => 'frontend_frontpage_authors'
             ]);
 
             // Get user by slug
