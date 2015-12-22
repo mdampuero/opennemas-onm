@@ -51,6 +51,13 @@ function smarty_insert_intersticial($params, &$smarty)
                 timeout: '.$timeout.'
             });
         /* ]]> */
+        </script>
+        <script>
+        $("ins").each(function(){
+            if ($(this).children().length == 0) {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        });
         </script>';
     }
 
