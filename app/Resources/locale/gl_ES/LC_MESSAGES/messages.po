@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 13:33+0100\n"
-"PO-Revision-Date: 2015-12-22 22:51+0200\n"
+"POT-Creation-Date: 2015-12-23 13:34+0100\n"
+"PO-Revision-Date: 2015-12-23 13:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -19,333 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
-
-msgid "Advertisement"
-msgstr "Publicidade"
-
-msgid "Album"
-msgstr "Álbum"
-
-msgid "Album not available"
-msgstr "Álbum non dispoñíbel"
-
-msgid "Article"
-msgstr "Artigo"
-
-msgid "Article not available"
-msgstr "Artigo non dispoñíbel"
-
-msgid "File"
-msgstr "Ficheiro"
-
-msgid "File not available"
-msgstr "Ficheiro non dispoñíbel"
-
-msgid "Book"
-msgstr "Libro"
-
-msgid "Not valid comment id."
-msgstr "Non é un id de comentario válido."
-
-msgid "Status not valid."
-msgstr "Estado non válido."
-
-#, php-format
-msgid "Field '%s' not valid"
-msgstr "Campo «%s» non válido"
-
-msgid "Database error."
-msgstr "Erro de base de datos."
-
-msgid "Opinion"
-msgstr "Artigo de opinión"
-
-msgid "Event"
-msgstr "Evento"
-
-msgid "Comment"
-msgstr "Comentario"
-
-msgid "Image"
-msgstr "Imaxe"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Special"
-msgstr "Especial"
-
-msgid "Poll"
-msgstr "Enquisa"
-
-msgid "Widget"
-msgstr "Widget"
-
-msgid "Static page"
-msgstr "Páxina estática"
-
-msgid "Kiosko"
-msgstr "Kiosko"
-
-msgid "Agenda"
-msgstr "Axenda"
-
-msgid "Letter to editor"
-msgstr "Cartas ao director"
-
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid ""
-"Some elements were removed because this frontpage had too many contents."
-msgstr ""
-"Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
-
-msgid "trashed"
-msgstr "en lixo"
-
-msgid "pending"
-msgstr "pendente"
-
-msgid "available"
-msgstr "dispoñibel"
-
-msgid "not scheduled"
-msgstr "non planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tempo"
-
-msgid "postponed"
-msgstr "adiado"
-
-msgid "Cover"
-msgstr "Portada"
-
-msgid "Unable to save the cover data."
-msgstr "Non se puido gardar a portada."
-
-msgid "Letter"
-msgstr "Carta"
-
-msgid "Menu"
-msgstr "Menú"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "Internal search"
-msgstr "Busca interna"
-
-msgid "Email"
-msgstr "Correo electrónico"
-
-msgid "Image data not valid"
-msgstr "Os datos enviados da instancia non son válidos."
-
-#, php-format
-msgid "Unable to save your image file in the Opennemas storage target"
-msgstr "Non se puido gardar o ficheiro de imaxe no almacenamento de Opennemas"
-
-msgid "Unable to copy your image file"
-msgstr "Non se puido copiar o ficheiro da imaxe"
-
-msgid "Unable to save your image information."
-msgstr "Non se puido gardar a información da imaxe."
-
-#, php-format
-msgid "Image type: %s"
-msgstr "Tipo de imaxe: %s"
-
-msgid "No available EXIF data"
-msgstr "Non hai datos EXIF dispoñibeis"
-
-msgid "No available IPTC data"
-msgstr "Non hai datos IPTC dispoñibeis"
-
-msgid "Invalid image file"
-msgstr "Ficheiro de imaxe non válido"
-
-msgid "Poll not available"
-msgstr "Enquisa non dispoñíbel"
-
-msgid "List"
-msgstr "Lista"
-
-msgid "Activate/deactivate"
-msgstr "Activar/desactivar"
-
-msgid "Edit"
-msgstr "Editar"
-
-msgid "Remove"
-msgstr "Eliminar"
-
-msgid "Create"
-msgstr "Crear"
-
-msgid "Manage frontpages"
-msgstr "Xestionar portadas"
-
-msgid "List pending articles"
-msgstr "Listado de artigos pendentes"
-
-msgid "Publish/unpublish"
-msgstr "Publicar/despublicar"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Arquive/unarquive"
-msgstr "Arquivar/desarquivar"
-
-msgid "Manager favorite flag"
-msgstr "Xestionar estado de favorito"
-
-msgid "Manage home frontpage"
-msgstr "Xestionar portada principal"
-
-msgid "Send to trash and restore"
-msgstr "Enviar e restaurar do lixo"
-
-msgid "List articles in arquive"
-msgstr "Listar artigos en hemeroteca"
-
-msgid "Manage advertisements for homepage"
-msgstr "Xestionar publicidade da portada"
-
-msgid "Manage favorite flag"
-msgstr "Xestionar estado de favorito"
-
-msgid "Manage frontpage"
-msgstr "Xestionar portada"
-
-msgid "Administrate opinion widget"
-msgstr "Administrar widget de opinión"
-
-msgid "Manage poll comments"
-msgstr "Xestionar comentarios de enquisas"
-
-msgid "Approve/reject"
-msgstr "Aprobar/rexeitar"
-
-msgid "Create/upload"
-msgstr "Crear/subir"
-
-msgid "File Fronts"
-msgstr "Portadas de ficheiros"
-
-msgid "Manage Newsletter"
-msgstr "Xestionar boletin de novas"
-
-msgid "Backend manager"
-msgstr "Xestor do editor"
-
-msgid "Manage caches"
-msgstr "Xestionar cachés"
-
-msgid "Use search"
-msgstr "Usar busca"
-
-msgid "List trashed elementes"
-msgstr "Mostrar elementos no lixo"
-
-msgid "Import news from agency"
-msgstr "Importar novas de axencias"
-
-msgid "Import XML files"
-msgstr "Importación de ficheiros XML"
-
-msgid "Manage global settings"
-msgstr "Xestionar as preferencias globais"
-
-msgid "Access instance manager"
-msgstr "Acceder ao xestor de instancias"
-
-msgid "Modify other users's content"
-msgstr "Modificar contido doutros usuarios"
-
-msgid "Delete other users's content"
-msgstr "Eliminar contido doutros usuarios"
-
-msgid "Configure system-wide settings"
-msgstr "Configurar as preferencias globais"
-
-msgid "Change the user group from one user"
-msgstr "Cambiar o grupo de usuario dun usuario"
-
-msgid "Manage widget"
-msgstr "Xestionar widget"
-
-msgid "Administrate settings"
-msgstr "Administrar configuracións"
-
-msgid "Manage module settings"
-msgstr "Xestionar preferencias do módulo"
-
-msgid "Manage agenda"
-msgstr "Xestionar a axenda"
-
-msgid "Manage module setting"
-msgstr "Xestionar preferencias del módulo"
-
-msgid "Import EFE articles file"
-msgstr "Importación de ficheiros de artigos de EFE"
-
-msgid "Manage favourite flag"
-msgstr "Xestionar estado de favorito"
-
-msgid "Config News Agency importer"
-msgstr "Configurar o importador de novas de axencias"
-
-msgid "Administer synchronization between Opennemas"
-msgstr "Administrar a sincronización entre Opennemas"
-
-msgid "Administer instances"
-msgstr "Administrar instancias"
-
-msgid "Administer paywall"
-msgstr "Administrar paywall"
-
-msgid "Edit user own profile"
-msgstr "Edición de propio perfíl de usuario"
-
-msgid "Static Page"
-msgstr "Páxina estática"
-
-msgid "Already exists one user with that information"
-msgstr "Xa existe un usuario con esa información"
-
-msgid "There was an error while processing your video file"
-msgstr "Produciuse un erro ao procesar o ficheiro de vídeo"
-
-#, php-format
-msgid ""
-"The server limits file uploads up to %s Mb. Try to upload files smaller than "
-"that size."
-msgstr ""
-"O servidor limita a subida de ficheiros até un máximo de %s Mb. Debes subir "
-"ficheiros máis pequenos que dito tamaño."
-
-msgid "There was a problem while converting your video. "
-msgstr "Produciuse un erro ao convertir o ficheiro de vídeo."
-
-#, php-format
-msgid "Video format \"%s\" not supported"
-msgstr "Non se admite o formato de vídeo «%s»"
-
-msgid "Video not available"
-msgstr "Video non dispoñíbel"
-
-#, php-format
-msgid "Widget %s not available"
-msgstr "Widget %s non dispoñíbel"
 
 msgid ""
 "You have reach the maximum users allowed. If you want to create more users, "
@@ -360,6 +33,9 @@ msgstr "Todos"
 #, php-format
 msgid "Unable to find the user with the id '%d'"
 msgstr "Non se puido atopar unha foto con identificador «%d»"
+
+msgid "Frontpage"
+msgstr "Portada"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado do sistema"
@@ -507,12 +183,6 @@ msgstr "Publicidade actualizada correctamente."
 
 msgid "Unable to update the advertisement data."
 msgstr "Non se puido actualizar a publicidade."
-
-msgid "Previous"
-msgstr "Anterior"
-
-msgid "Next"
-msgstr "Seguinte"
 
 msgid "Settings saved successfully."
 msgstr "Configuracións gardadas correctamente."
@@ -969,11 +639,20 @@ msgstr "Carta gardada correctamente."
 msgid "Unable to update the letter."
 msgstr "Non se puido actualizar a carta."
 
-msgid "Others"
-msgstr "Outros"
+msgid "Opinion"
+msgstr "Artigo de opinión"
 
 msgid "Bloggers"
 msgstr "Autores de blog"
+
+msgid "Album"
+msgstr "Álbum"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Poll"
+msgstr "Enquisa"
 
 msgid "Letters to the Editor"
 msgstr "Cartas ao director"
@@ -1285,6 +964,9 @@ msgstr "Páxina estática actualizada correctamente."
 msgid "Can't get static page title. Check the title"
 msgstr "No foi posibel obter o titulo da páxina estática. Comprobe o titulo"
 
+msgid "Others"
+msgstr "Outros"
+
 msgid "English"
 msgstr "Inglés"
 
@@ -1339,11 +1021,6 @@ msgstr "Non se puido obter información do vídeo. Comproba o enderezo."
 
 msgid "Please check the video url, seems to be incorrect"
 msgstr "Comproba o URL do vídeo, semella ser incorrecto"
-
-msgid ""
-"<div><p>Unable to find any video matching your search criteria.</p></div>"
-msgstr ""
-"<div><p>Non se puideron atopar vídeos que coincidan coa súa busca.</p></div>"
 
 #, php-format
 msgid "Unable to find a widget with the id \"%d\""
@@ -1490,7 +1167,7 @@ msgstr "Xestor de caché"
 msgid "SQL error log"
 msgstr "Rexistro de erros de SQL"
 
-msgid "Market"
+msgid "Store"
 msgstr "Tenda"
 
 msgid "Themes"
@@ -1810,12 +1487,6 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
 
-msgid "Yesterday"
-msgstr "Onte"
-
-msgid "Today"
-msgstr "Hoxe"
-
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como lida correctamente"
 
@@ -1825,6 +1496,12 @@ msgstr "Notificacións non válidas"
 #, php-format
 msgid "%d notifications marked as read successfully"
 msgstr "%d notificacións marcadas como lidas correctamente"
+
+msgid "Yesterday"
+msgstr "Onte"
+
+msgid "Today"
+msgstr "Hoxe"
 
 msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
@@ -1934,6 +1611,9 @@ msgstr "Nome de usuario"
 msgid "Activated"
 msgstr "Activado"
 
+msgid "Email"
+msgstr "Correo electrónico"
+
 msgid "Gender"
 msgstr "Sexo"
 
@@ -1957,6 +1637,31 @@ msgstr "Non foi posíbel analizar o XML"
 
 msgid "Unable to create a server"
 msgstr "Non foi posíbel crear un servidor"
+
+#, php-format
+msgid ""
+"You have %s pending comments. Click <a href=\"%s\">here</a> to moderate."
+msgstr ""
+"Tes %s comentarios pendentes. Preme <a href=\"%s\">aquí</a> para moderalos."
+
+msgid "Instance information"
+msgstr "Información da instancia"
+
+#, php-format
+msgid "<li>You have %d activated users. The cost is %d €/day or %s €/month"
+msgstr "<li>Tes %d usuarios activos. O custo é de %d €/día ou %s €/mes"
+
+#, php-format
+msgid "<li>You have %d page views"
+msgstr "<li>Tes %d páginas vistas"
+
+#, php-format
+msgid " The cost is %d €/month"
+msgstr " O coste es %d €/mes"
+
+#, php-format
+msgid "<li>Your storage size is %d MB"
+msgstr "<li>Usas %d MB de almacenamento"
 
 msgid "Already voted."
 msgstr "Xa votaches antes."
@@ -2310,6 +2015,315 @@ msgstr "Creouse unha nova instancia de Opennemas"
 msgid "Your newspaper is now live"
 msgstr "O teu xornal xa está en liña"
 
+msgid "Advertisement"
+msgstr "Publicidade"
+
+msgid "Album not available"
+msgstr "Álbum non dispoñíbel"
+
+msgid "Article"
+msgstr "Artigo"
+
+msgid "Article not available"
+msgstr "Artigo non dispoñíbel"
+
+msgid "File"
+msgstr "Ficheiro"
+
+msgid "File not available"
+msgstr "Ficheiro non dispoñíbel"
+
+msgid "Book"
+msgstr "Libro"
+
+msgid "Not valid comment id."
+msgstr "Non é un id de comentario válido."
+
+msgid "Status not valid."
+msgstr "Estado non válido."
+
+#, php-format
+msgid "Field '%s' not valid"
+msgstr "Campo «%s» non válido"
+
+msgid "Database error."
+msgstr "Erro de base de datos."
+
+msgid "Event"
+msgstr "Evento"
+
+msgid "Comment"
+msgstr "Comentario"
+
+msgid "Image"
+msgstr "Imaxe"
+
+msgid "Special"
+msgstr "Especial"
+
+msgid "Widget"
+msgstr "Widget"
+
+msgid "Static page"
+msgstr "Páxina estática"
+
+msgid "Kiosko"
+msgstr "Kiosko"
+
+msgid "Agenda"
+msgstr "Axenda"
+
+msgid "Letter to editor"
+msgstr "Cartas ao director"
+
+msgid ""
+"Some elements were removed because this frontpage had too many contents."
+msgstr ""
+"Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
+
+msgid "trashed"
+msgstr "en lixo"
+
+msgid "pending"
+msgstr "pendente"
+
+msgid "available"
+msgstr "dispoñibel"
+
+msgid "not scheduled"
+msgstr "non planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tempo"
+
+msgid "postponed"
+msgstr "adiado"
+
+msgid "Cover"
+msgstr "Portada"
+
+msgid "Unable to save the cover data."
+msgstr "Non se puido gardar a portada."
+
+msgid "Letter"
+msgstr "Carta"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Internal search"
+msgstr "Busca interna"
+
+msgid "Image data not valid"
+msgstr "Os datos enviados da instancia non son válidos."
+
+#, php-format
+msgid "Unable to save your image file in the Opennemas storage target"
+msgstr "Non se puido gardar o ficheiro de imaxe no almacenamento de Opennemas"
+
+msgid "Unable to copy your image file"
+msgstr "Non se puido copiar o ficheiro da imaxe"
+
+msgid "Unable to save your image information."
+msgstr "Non se puido gardar a información da imaxe."
+
+#, php-format
+msgid "Image type: %s"
+msgstr "Tipo de imaxe: %s"
+
+msgid "No available EXIF data"
+msgstr "Non hai datos EXIF dispoñibeis"
+
+msgid "No available IPTC data"
+msgstr "Non hai datos IPTC dispoñibeis"
+
+msgid "Invalid image file"
+msgstr "Ficheiro de imaxe non válido"
+
+msgid "Poll not available"
+msgstr "Enquisa non dispoñíbel"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Activate/deactivate"
+msgstr "Activar/desactivar"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "Manage frontpages"
+msgstr "Xestionar portadas"
+
+msgid "List pending articles"
+msgstr "Listado de artigos pendentes"
+
+msgid "Publish/unpublish"
+msgstr "Publicar/despublicar"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Arquive/unarquive"
+msgstr "Arquivar/desarquivar"
+
+msgid "Manager favorite flag"
+msgstr "Xestionar estado de favorito"
+
+msgid "Manage home frontpage"
+msgstr "Xestionar portada principal"
+
+msgid "Send to trash and restore"
+msgstr "Enviar e restaurar do lixo"
+
+msgid "List articles in arquive"
+msgstr "Listar artigos en hemeroteca"
+
+msgid "Manage advertisements for homepage"
+msgstr "Xestionar publicidade da portada"
+
+msgid "Manage favorite flag"
+msgstr "Xestionar estado de favorito"
+
+msgid "Manage frontpage"
+msgstr "Xestionar portada"
+
+msgid "Administrate opinion widget"
+msgstr "Administrar widget de opinión"
+
+msgid "Manage poll comments"
+msgstr "Xestionar comentarios de enquisas"
+
+msgid "Approve/reject"
+msgstr "Aprobar/rexeitar"
+
+msgid "Create/upload"
+msgstr "Crear/subir"
+
+msgid "File Fronts"
+msgstr "Portadas de ficheiros"
+
+msgid "Manage Newsletter"
+msgstr "Xestionar boletin de novas"
+
+msgid "Backend manager"
+msgstr "Xestor do editor"
+
+msgid "Manage caches"
+msgstr "Xestionar cachés"
+
+msgid "Use search"
+msgstr "Usar busca"
+
+msgid "List trashed elementes"
+msgstr "Mostrar elementos no lixo"
+
+msgid "Import news from agency"
+msgstr "Importar novas de axencias"
+
+msgid "Import XML files"
+msgstr "Importación de ficheiros XML"
+
+msgid "Manage global settings"
+msgstr "Xestionar as preferencias globais"
+
+msgid "Access instance manager"
+msgstr "Acceder ao xestor de instancias"
+
+msgid "Modify other users's content"
+msgstr "Modificar contido doutros usuarios"
+
+msgid "Delete other users's content"
+msgstr "Eliminar contido doutros usuarios"
+
+msgid "Configure system-wide settings"
+msgstr "Configurar as preferencias globais"
+
+msgid "Change the user group from one user"
+msgstr "Cambiar o grupo de usuario dun usuario"
+
+msgid "Manage widget"
+msgstr "Xestionar widget"
+
+msgid "Administrate settings"
+msgstr "Administrar configuracións"
+
+msgid "Manage module settings"
+msgstr "Xestionar preferencias do módulo"
+
+msgid "Manage agenda"
+msgstr "Xestionar a axenda"
+
+msgid "Manage module setting"
+msgstr "Xestionar preferencias del módulo"
+
+msgid "Import EFE articles file"
+msgstr "Importación de ficheiros de artigos de EFE"
+
+msgid "Manage favourite flag"
+msgstr "Xestionar estado de favorito"
+
+msgid "Config News Agency importer"
+msgstr "Configurar o importador de novas de axencias"
+
+msgid "Administer synchronization between Opennemas"
+msgstr "Administrar a sincronización entre Opennemas"
+
+msgid "Administer instances"
+msgstr "Administrar instancias"
+
+msgid "Administer paywall"
+msgstr "Administrar paywall"
+
+msgid "Edit user own profile"
+msgstr "Edición de propio perfíl de usuario"
+
+msgid "Static Page"
+msgstr "Páxina estática"
+
+msgid "Already exists one user with that information"
+msgstr "Xa existe un usuario con esa información"
+
+msgid "There was an error while processing your video file"
+msgstr "Produciuse un erro ao procesar o ficheiro de vídeo"
+
+#, php-format
+msgid ""
+"The server limits file uploads up to %s Mb. Try to upload files smaller than "
+"that size."
+msgstr ""
+"O servidor limita a subida de ficheiros até un máximo de %s Mb. Debes subir "
+"ficheiros máis pequenos que dito tamaño."
+
+msgid "There was a problem while converting your video. "
+msgstr "Produciuse un erro ao convertir o ficheiro de vídeo."
+
+#, php-format
+msgid "Video format \"%s\" not supported"
+msgstr "Non se admite o formato de vídeo «%s»"
+
+msgid "Video not available"
+msgstr "Video non dispoñíbel"
+
+#, php-format
+msgid "Widget %s not available"
+msgstr "Widget %s non dispoñíbel"
+
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
 
@@ -2420,6 +2434,9 @@ msgstr "Asistencia básica"
 
 msgid "Profesional support"
 msgstr "Asistencia profesional"
+
+msgid "Support 1"
+msgstr "Asistencia 1"
 
 msgid "Support 2"
 msgstr "Asistencia 2"
@@ -2587,6 +2604,13 @@ msgstr ""
 
 msgid "Expert pack"
 msgstr "Pack experto"
+
+msgid ""
+"Add news from your favourites agencies, manage multiple personalized "
+"frontpages and let your readers become contributors!"
+msgstr ""
+"Engade novas desde as túas axencias favoritas, xestiona varias portadas "
+"personalizadas e permítelle á túa audiencia convertirse!"
 
 msgid ""
 "Add news from your favourites agencies, manage multiple personalized "
@@ -3556,8 +3580,38 @@ msgstr ""
 msgid "No support"
 msgstr "Sen asistencia"
 
-msgid "Support 1"
-msgstr "Asistencia 1"
+msgid "Training and Advisory Services"
+msgstr "Soporte Asesoramiento e Formación"
+
+msgid ""
+"Ask all your questions, walk through Opennemas and/or receive personal "
+"training via phone"
+msgstr ""
+"Fai todas as túas preguntas, recibe formación sobre Opennemas via "
+"telefono/hangouts/skype"
+
+msgid ""
+"<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or "
+"to walk through Opennemas and make sure you know it all?</p>\n"
+"                        <p>This is the Support Offer perfect for you!</p>\n"
+"                        <p>For a very small fee you will get our expert team "
+"on the line and you will be able to ask all the questions you have and/or "
+"receive personal training.</p>\n"
+"                        <p>Please remember that we guarantee FREE support "
+"via tickets/emails.</p>"
+msgstr ""
+"<p>¿Precisas atención personalizada do noso equipo por telefono/hangouts/"
+"skype para facer todas as  preguntas posibles e/ou para ter unha formación "
+"completa e asegurarte que sábelo todo da nosa plataforma Opennemas?</p>\n"
+"<p>Esta é a oferta perfecta para ti!</p>\n"
+"<p>Por un custo moi pequeno terás o noso experto equipo en liña e poderás "
+"facer todo tipo de preguntas sobre o teu proxecto e/ou recibir formación "
+"individual.</p>\n"
+"<p>Por favor recorda que garantizamos soporte GRATUITO vía incidencias e "
+"e-mails.</p>"
+
+msgid "Support Pro"
+msgstr "Asistencia Pro"
 
 msgid "This support plan is thought for changes and creation of new widgets."
 msgstr ""
@@ -3738,18 +3792,6 @@ msgstr ""
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets, "
 "Google Hangouts/Skype e teléfono</p>"
-
-msgid "Get next page"
-msgstr "Páxina seguinte"
-
-msgid "Next »"
-msgstr "Seguinte »"
-
-msgid "Get previous page"
-msgstr "Páxina anterior"
-
-msgid "« Previous"
-msgstr "« Anterior"
 
 msgid "Sorry, you don't have enough privileges"
 msgstr "Non tes permisos dabondo"
@@ -4109,6 +4151,9 @@ msgstr "Debes gardar os cambios ou volver á lista"
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
 
+msgid "Next"
+msgstr "Seguinte"
+
 msgid "Email subject"
 msgstr "Asunto da mensaxe"
 
@@ -4157,6 +4202,9 @@ msgstr "Fallido"
 
 msgid "Recipient selection"
 msgstr "Selección de destinatarios"
+
+msgid "Previous"
+msgstr "Anterior"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr "Seleccione as persoas ás que quere enviarlle o boletin de novas."
@@ -4511,9 +4559,6 @@ msgstr "Editar widget «[% content.title %]»"
 
 msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
-
-msgid "Instance information"
-msgstr "Información da instancia"
 
 msgid "Page"
 msgstr "Páxina"
@@ -5508,9 +5553,6 @@ msgstr "Imaxes e vídeos"
 
 msgid "Last updated"
 msgstr "Última actualización"
-
-msgid "Store"
-msgstr "Tenda"
 
 msgid "Packs"
 msgstr "Packs"
@@ -9140,6 +9182,27 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid ""
+#~ "<div><p>Unable to find any video matching your search criteria.</p></div>"
+#~ msgstr ""
+#~ "<div><p>Non se puideron atopar vídeos que coincidan coa súa busca.</p></"
+#~ "div>"
+
+#~ msgid "Market"
+#~ msgstr "Tenda"
+
+#~ msgid "Get next page"
+#~ msgstr "Páxina seguinte"
+
+#~ msgid "Next »"
+#~ msgstr "Seguinte »"
+
+#~ msgid "Get previous page"
+#~ msgstr "Páxina anterior"
+
+#~ msgid "« Previous"
+#~ msgstr "« Anterior"
 
 #~ msgid "No notifications for now"
 #~ msgstr "Non hai notificacións por agora"
