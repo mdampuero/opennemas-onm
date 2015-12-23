@@ -726,20 +726,19 @@ class OpinionsController extends Controller
 
         $session = $this->get('session');
 
+        $this->view->assign([
+            'opinion'        => $opinion,
+            'content'        => $opinion,
+            'other_opinions' => $otherOpinions,
+            'author'         => $author,
+            'contentId'      => $opinion->id,
+            'photo'          => $photo,
+            'suggested'      => $machineSuggestedContents
+        ]);
+
         $session->set(
             'last_preview',
-            $this->view->fetch(
-                'opinion/opinion.tpl',
-                array(
-                    'opinion'        => $opinion,
-                    'content'        => $opinion,
-                    'other_opinions' => $otherOpinions,
-                    'author'         => $author,
-                    'contentId'      => $opinion->id,
-                    'photo'          => $photo,
-                    'suggested'      => $machineSuggestedContents
-                )
-            )
+            $this->view->fetch('opinion/opinion.tpl')
         );
 
         return new Response('OK');
