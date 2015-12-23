@@ -304,7 +304,7 @@ class OpinionsController extends Controller
         $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
         $data = array(
-            'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'                => $request->request->get('body', ''),
             'category'            => 'opinion',
             'content_status'      => (empty($contentStatus)) ? 0 : 1,
             'endtime'             => $request->request->get('endtime', ''),
@@ -319,7 +319,7 @@ class OpinionsController extends Controller
             'in_home'             => (empty($inhome)) ? 0 : 1,
             'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'summary'             => $request->request->get('summary', ''),
             'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
@@ -401,7 +401,7 @@ class OpinionsController extends Controller
         }
 
         $data = array(
-            'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'                => $request->request->get('body', ''),
             'category'            => 'opinion',
             'content_status'      => (empty($contentStatus)) ? 0 : 1,
             'endtime'             => $request->request->get('endtime', ''),
@@ -417,7 +417,7 @@ class OpinionsController extends Controller
             'in_home'             => (empty($inhome)) ? 0 : 1,
             'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'summary'             => $request->request->get('summary', ''),
             'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
