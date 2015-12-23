@@ -199,8 +199,36 @@
           }
         }, true);
 
+        $scope.$watch('billing.country', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
+          var url = routing.generate('backend_ws_store_check_phone',
+              { country: $scope.billing.country, phone: $scope.billing.phone });
+
+          $http.get(url).success(function() {
+            $scope.validPhone = true;
+          }).error(function() {
+            $scope.validPhone = false;
+          });
+
+          url = routing.generate('backend_ws_store_check_vat',
+              { country: $scope.billing.country, vat: $scope.billing.vat });
+
+          $http.get(url).success(function() {
+            $scope.validVat = true;
+          }).error(function() {
+            $scope.validVat = false;
+          });
+        }, true);
+
         // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.country, billing.phone]', function() {
+        $scope.$watch('billing.phone', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
           if (!$scope.billing || !$scope.billing.country ||
               !$scope.billing.phone) {
             $scope.validPhone = false;
@@ -224,7 +252,11 @@
         }, true);
 
         // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.country, billing.vat]', function() {
+        $scope.$watch('billing.vat', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
           if (!$scope.billing || !$scope.billing.country ||
               !$scope.billing.vat) {
             $scope.validVat = false;
