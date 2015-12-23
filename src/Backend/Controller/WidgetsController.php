@@ -131,7 +131,7 @@ class WidgetsController extends Controller
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
-                'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
+                'content'        => $post->filter('content', ''),
                 'params'          => json_decode($post->get('parsedParams', null)),
             );
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -205,7 +205,7 @@ class WidgetsController extends Controller
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
-            'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
+            'content'         => $post->filter('content', ''),
             'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),
         );

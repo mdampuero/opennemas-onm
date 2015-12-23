@@ -66,7 +66,7 @@ class LettersController extends Controller
                 'params'         => $request->request->get('params'),
                 'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'body'           => $request->request->filter('body', ''),
             ];
 
             if ($letter->create($data)) {
@@ -159,7 +159,7 @@ class LettersController extends Controller
             'params'         => $request->request->get('params'),
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+            'body'           => $request->request->filter('body', ''),
         ];
 
         if ($letter->update($data)) {
