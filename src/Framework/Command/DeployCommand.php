@@ -129,7 +129,7 @@ EOF
             // Update dependencies
             $this->output->writeln("<info>Updating vendor libraries</info>");
             $composerDev = ($this->input->getOption('dev')) ? '--dev' : '--no-dev';
-            $this->execProcess($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o '.$composerDev);
+            $this->execProcess('SYMFONY_ENV=prod '.$phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o '.$composerDev);
         }
     }
 
