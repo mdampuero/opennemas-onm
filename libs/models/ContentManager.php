@@ -1892,12 +1892,13 @@ class ContentManager
         global $kernel;
         $cache = $kernel->getContainer()->get('cache');
 
-        $externalContent = $cache->fetch(CACHE_PREFIX.$url);
+        $cacheKey = CACHE_PREFIX.'_'.urlencode($url);
+        $externalContent = $cache->fetch($cacheKey);
         if (!$externalContent) {
             $c  = curl_init($url);
             curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
             $externalContent = curl_exec($c);
-            $cache->save(CACHE_PREFIX.$url, $externalContent, 300);
+            $cache->save($cacheKey, $externalContent, 300);
             curl_close($c);
         }
 
