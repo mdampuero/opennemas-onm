@@ -184,10 +184,10 @@
               if (response.activated.indexOf(module.id) !== -1) {
                 $scope.purchased.push(module);
               } else {
+                $scope[module.type].push(module);
+
                 if (module.price.month === 0) {
                   $scope.free.push(module);
-                } else {
-                  $scope[module.type].push(module);
                 }
               }
             }
