@@ -353,7 +353,7 @@
 
           if (nv.length > 0) {
             $scope.subtotal = $scope.price * nv.length;
-            $scope.vat      = Math.round($scope.subtotal * 21)/100;
+            $scope.vat      = Math.round($scope.subtotal * $scope.vatTax)/100;
             $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);
