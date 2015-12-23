@@ -141,7 +141,7 @@ class SpecialsController extends Controller
         $data = array(
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', ''),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
@@ -259,7 +259,7 @@ class SpecialsController extends Controller
                 'id'             => $id,
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'description'    => $request->request->filter('description', ''),
                 'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),

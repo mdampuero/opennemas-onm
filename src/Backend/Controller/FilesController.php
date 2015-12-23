@@ -261,7 +261,7 @@ class FilesController extends Controller
             'path'           => $directoryDate.$fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
-            'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', null),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
             'fk_publisher'   => $_SESSION['userid'],
         );
@@ -352,7 +352,7 @@ class FilesController extends Controller
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
             'id'             => $id,
-            'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', null),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
             'fk_publisher'   => $_SESSION['userid'],
         );

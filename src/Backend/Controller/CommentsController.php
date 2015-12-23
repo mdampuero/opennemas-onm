@@ -365,7 +365,7 @@ class CommentsController extends Controller
 
         $data = array(
             'status' => $request->request->filter('status'),
-            'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+            'body'   => $request->request->filter('body', ''),
         );
 
         try {
