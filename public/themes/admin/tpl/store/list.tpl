@@ -193,7 +193,7 @@
         <h4>{t}No items available to purchase{/t}</h4>
       </div>
       <div class="row clearfix ng-cloak">
-        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in items | filter : { name: criteria.name } | orderBy : 'name'" ng-include="'item'"></div>
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 module-wrapper" ng-repeat="item in items | filter : { name: criteria.name }" ng-include="'item'"></div>
       </div>
     </div>
     <script type="text/ng-template" id="item">
