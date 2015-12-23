@@ -876,21 +876,20 @@ class ArticlesController extends Controller
             4
         );
 
+        $this->view->assign([
+            'relationed'            => $relat,
+            'suggested'             => $machineSuggestedContents,
+            'actual_category_title' => $actual_category_title,
+            'contentId'             => $article->id,
+            'article'               => $article,
+            'category_name'         => $category_name,
+            'photoInt'              => $photoInt,
+            'videoInt'              => $videoInt
+        ]);
+
         $this->get('session')->set(
             'last_preview',
-            $this->view->fetch(
-                'article/article.tpl',
-                array(
-                    'relationed'            => $relat,
-                    'suggested'             => $machineSuggestedContents,
-                    'actual_category_title' => $actual_category_title,
-                    'contentId'             => $article->id,
-                    'article'               => $article,
-                    'category_name'         => $category_name,
-                    'photoInt'              => $photoInt,
-                    'videoInt'              => $videoInt,
-                )
-            )
+            $this->view->fetch('article/article.tpl')
         );
 
         return new Response('OK');
