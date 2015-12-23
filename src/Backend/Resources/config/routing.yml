@@ -387,10 +387,6 @@ admin_videos_content_provider_related:
     path:     /videos/content-provider-related
     defaults: { _controller  : BackendBundle:Videos:contentProviderRelated }
 
-admin_videos_content_provider_gallery:
-    path:     /videos/content-provider-gallery
-    defaults: { _controller  : BackendBundle:Videos:contentProviderGallery }
-
 # Album controller routes
 admin_albums:
     path:     /albums
@@ -1086,9 +1082,9 @@ backend_domain_mapping:
     prefix: /
     resource: @BackendBundle/Resources/config/routing/domain_management.yml
 
-backend_market:
+backend_store:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/market.yml
+    resource: @BackendBundle/Resources/config/routing/store.yml
 
 backend_news_agency_server:
     prefix: /

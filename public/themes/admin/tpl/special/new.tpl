@@ -1,14 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-<script>
-  $(document).ready(function($){
-    $('#title').on('change', function(e, ui) {
-      fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-    });
-  });
-</script>
-
+  {javascripts}
+    <script>
+      $(document).ready(function($){
+        $('#title').on('change', function(e, ui) {
+          fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+      });
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
@@ -29,7 +30,6 @@
             </li>
           </ul>
         </div>
-
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li>
@@ -40,19 +40,19 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
               {if !is_null($special->id)}
-              {acl isAllowed="SPECIAL_UPDATE"}
-              <button type="submit" class="btn btn-primary">
-                <span class="fa fa-save"></span>
-                {t}Update{/t}
-              </button>
-              {/acl}
+                {acl isAllowed="SPECIAL_UPDATE"}
+                  <button type="submit" class="btn btn-primary">
+                    <span class="fa fa-save"></span>
+                    {t}Update{/t}
+                  </button>
+                {/acl}
               {else}
-              {acl isAllowed="SPECIAL_CREATE"}
-              <button type="submit" class="btn btn-primary">
-                <span class="fa fa-save"></span>
-                {t}Save{/t}
-              </button>
-              {/acl}
+                {acl isAllowed="SPECIAL_CREATE"}
+                  <button type="submit" class="btn btn-primary">
+                    <span class="fa fa-save"></span>
+                    {t}Save{/t}
+                  </button>
+                {/acl}
               {/if}
             </li>
           </ul>
@@ -71,7 +71,6 @@
                   value="{$special->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
-
               <div class="form-group">
                 <label for="subtitle" class="form-label">{t}Subtitle{/t}</label>
                 <div class="controls">
@@ -84,10 +83,8 @@
                   <textarea name="description" id="description" onm-editor onm-editor-preset="simple">{$special->description|clearslash}</textarea>
                 </div>
               </div>
-
             </div>
           </div>
-
           {include file="special/partials/_contents_containers.tpl"}
         </div>
         <div class="col-md-4">
@@ -123,42 +120,41 @@
               </div>
             </div>
           </div>
-
           {acl isAllowed='PHOTO_ADMIN'}
-          {is_module_activated name="IMAGE_MANAGER"}
-          <div class="grid simple">
-            <div class="grid-title">
-              <h4>{t}Image for Special{/t}</h4>
-            </div>
-            <div class="grid-body">
-              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
-                <div class="form-group ng-cloak">
-                  <div class="thumbnail-placeholder">
-                    <div class="img-thumbnail" ng-if="!photo1">
-                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
-                        <i class="fa fa-picture-o fa-2x"></i>
-                        <h5>{t}Pick an image{/t}</h5>
+            {is_module_activated name="IMAGE_MANAGER"}
+              <div class="grid simple">
+                <div class="grid-title">
+                  <h4>{t}Image for Special{/t}</h4>
+                </div>
+                <div class="grid-body">
+                  <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
+                    <div class="form-group ng-cloak">
+                      <div class="thumbnail-placeholder">
+                        <div class="img-thumbnail" ng-if="!photo1">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                            <i class="fa fa-picture-o fa-2x"></i>
+                            <h5>{t}Pick an image{/t}</h5>
+                          </div>
+                        </div>
+                        <div class="dynamic-image-placeholder" ng-if="photo1">
+                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                          <div class="thumbnail-actions">
+                            <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
+                              <i class="fa fa-trash-o fa-2x"></i>
+                            </div>
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                              <i class="fa fa-camera fa-2x"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                        </dynamic-image>
                       </div>
                     </div>
-                    <div class="dynamic-image-placeholder" ng-if="photo1">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
-                      <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
-                          <i class="fa fa-trash-o fa-2x"></i>
-                        </div>
-                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
-                          <i class="fa fa-camera fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
-                    </dynamic-image>
                   </div>
+                  <input type="hidden" name="img1" ng-value="img1"/>
                 </div>
               </div>
-              <input type="hidden" name="img1" ng-value="img1"/>
-            </div>
-          </div>
-          {/is_module_activated}
+            {/is_module_activated}
           {/acl}
         </div>
       </div>

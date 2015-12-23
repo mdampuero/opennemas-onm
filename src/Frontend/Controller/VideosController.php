@@ -114,19 +114,17 @@ class VideosController extends Controller
                 );
 
                 // Pagination for block more videos
-                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                    array(
-                        'page'  => $this->page,
-                        'items' => $totalVideosMoreFrontpage,
-                        'total' => count($othersVideos)+1,
-                        'url'   => $this->generateUrl(
-                            'frontend_video_ajax_paginated',
-                            array(
-                                'category' => $this->category
-                            )
-                        )
-                    )
-                );
+                $pagination = $this->get('paginator')->get([
+                    'boundary'    => false,
+                    'directional' => true,
+                    'maxLinks'    => 0,
+                    'epp'         => $totalVideosMoreFrontpage,
+                    'page'        => $this->page,
+                    'total'       => count($othersVideos)+1,
+                    'route'       => [
+                        'name'   => 'frontend_video_ajax_paginated',
+                    ]
+                ]);
 
                 $this->view->assign('pagination', $pagination);
 
@@ -163,16 +161,17 @@ class VideosController extends Controller
                 );
 
                 // Pagination for block more videos
-                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                    array(
-                        'page'  => $this->page,
-                        'items' => $totalVideosMoreFrontpage,
-                        'total' => count($othersVideos)+1,
-                        'url'   => $this->generateUrl(
-                            'frontend_video_ajax_paginated'
-                        )
-                    )
-                );
+                $pagination = $this->get('paginator')->get([
+                    'boundary'    => false,
+                    'directional' => true,
+                    'maxLinks'    => 0,
+                    'epp'         => $totalVideosMoreFrontpage,
+                    'page'        => $this->page,
+                    'total'       => count($othersVideos)+1,
+                    'route'       => [
+                        'name'   => 'frontend_video_ajax_paginated',
+                    ]
+                ]);
 
                 $this->view->assign('pagination', $pagination);
             }
@@ -427,19 +426,18 @@ class VideosController extends Controller
             );
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $this->page,
-                'items' => $totalVideosMoreFrontpage,
-                'total' => count($othersVideos)+1,
-                'url'   => $this->generateUrl(
-                    'frontend_video_ajax_paginated',
-                    array(
-                        'category' => $this->category
-                    )
-                )
-            )
-        );
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => false,
+            'directional' => true,
+            'maxLinks'    => 0,
+            'epp'         => $totalVideosMoreFrontpage,
+            'page'        => $this->page,
+            'total'       => count($othersVideos)+1,
+            'route'       => [
+                'name'   => 'frontend_video_ajax_paginated',
+                'params' => ['category' => $this->category]
+            ]
+        ]);
 
         return $this->render(
             'video/partials/_widget_more_videos.tpl',

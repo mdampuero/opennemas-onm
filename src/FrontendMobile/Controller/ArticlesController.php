@@ -9,6 +9,7 @@
  **/
 namespace FrontendMobile\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;

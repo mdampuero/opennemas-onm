@@ -12,6 +12,13 @@ use Onm\Settings as s;
  */
 function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $smarty)
 {
+    // Don't render any advertisement if module is not activated
+    // Just render default onm ads from file
+    // No DFP nor OpenX allowed
+    if (!Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+        return $output;
+    }
+
     if (is_array($smarty->parent->tpl_vars)
         && array_key_exists('advertisements', $smarty->parent->tpl_vars)
         && is_array($smarty->parent->tpl_vars['advertisements']->value)

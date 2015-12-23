@@ -1,3 +1,8 @@
+imports:
+    - { resource: services/orm.yml }
+    - { resource: services/service.yml }
+    - { resource: services/subscriber.yml }
+
 parameters:
 #    onm_test.example.class: Onm\TestBundle\Example
 
@@ -92,17 +97,28 @@ services:
                 template: '@OnmFramework/collector/database.html.twig'
                 priority: 100
 
+    collector.cache:
+        class: Framework\DataCollector\CacheCollector
+        public: false
+        arguments: [ @cache ]
+        tags:
+            -
+                name:     data_collector
+                id:       'cache_collector'
+                template: '@OnmFramework/collector/cache.html.twig'
+                priority: 100
+
     db_conn:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]
 
     dbal_connection:
         class: Onm\Database\DbalWrapper
-        arguments: [ %database% ]
+        arguments: [ %database%, %kernel.environment% ]
 
     dbal_connection_manager:
         class: Onm\Database\DbalWrapper
-        arguments: [ %database% ]
+        arguments: [ %database%, %kernel.environment% ]
 
     db_conn_manager:
         class: Onm\DatabaseConnection
@@ -202,22 +218,11 @@ services:
         class: Onm\Templating\Cache\Config
 
     content_url_matcher:
-        class: Framework\Routing\ContentUrlMatcher
+        class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ @entity_repository ]
 
     view:
         alias: onm_templating
-
-    stylesheet_manager:
-        class: Framework\Assetic\StylesheetManager
-        arguments: [ @service_container, %assetic% ]
-
-    javascript_manager:
-        class: Framework\Assetic\JavascriptManager
-        arguments: [ @service_container, %assetic% ]
-
-    authentication_entry_point:
-        class: Framework\Security\AuthenticationEntryPoint
 
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
@@ -232,7 +237,8 @@ services:
         arguments: [ @instance_manager ]
 
     paginator:
-        class: Onm\Pager\Slider
+        class: Framework\Component\Paginator\Paginator
+        arguments: [ @router ]
 
     onm.framework_status:
         class: Onm\Framework\Status
@@ -241,6 +247,10 @@ services:
     related_contents:
         class: RelatedContent
         arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
+
+    core.event_dispatcher:
+        class: Framework\Component\EventDispatcher\EventDispatcher
+        arguments: [ @event_dispatcher ]
 
     orm.loader:
         class: Framework\ORM\Loader\Loader
@@ -284,4 +294,3 @@ services:
 
     vat:
         class: Framework\VAT\VATService
-        arguments: [ @vat.service ]

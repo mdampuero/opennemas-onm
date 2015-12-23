@@ -10,7 +10,6 @@ function smarty_insert_intersticial($params, &$smarty)
     // Get required params
     $type     = $params['type'];
     $ads      = $smarty->tpl_vars['advertisements']->value;
-    $category = $smarty->tpl_vars['category']->value;
 
     if (!is_array($ads)) {
         $ads = array();
@@ -51,6 +50,11 @@ function smarty_insert_intersticial($params, &$smarty)
                 timeout: '.$timeout.'
             });
         /* ]]> */
+        </script>
+        <script>
+        if ($(".intersticial ins *").length == 0) {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
         </script>';
     }
 

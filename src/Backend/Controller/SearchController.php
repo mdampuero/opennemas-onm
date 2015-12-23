@@ -111,35 +111,23 @@ class SearchController extends Controller
                     $content->content_type_name.'.tpl';
             }
 
-            // Build the pager
-            $pagination = $this->get('paginator')->create([
-                'spacesBeforeSeparator' => 0,
-                'spacesAfterSeparator'  => 0,
-                'firstLinkTitle'        => '',
-                'lastLinkTitle'         => '',
-                'separator'             => '',
-                'firstPagePre'          => '',
-                'firstPageText'         => '',
-                'firstPagePost'         => '',
-                'lastPagePre'           => '',
-                'lastPageText'          => '',
-                'lastPagePost'          => '',
-                'prevImg'               => _('Previous'),
-                'nextImg'               => _('Next'),
-                'elements_per_page'     => 8,
-                'total_items'           => $total,
-                'delta'                 => 1,
-                'base_url'              => $this->generateUrl(
-                    'admin_search_content_provider',
-                    array('search_string' => $searchString, 'related' => $related)
-                ).'&page=%d',
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => 8,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
+                    'name'   => 'admin_search_content_provider',
+                    'params' => [ 'search_string' => $searchString, 'related' => $related ]
+                ],
             ]);
 
-            $this->view->assign('pagination', $pagination->links);
-
             $this->view->assign([
-                'results' => $results,
-                'search_string' => $searchString
+                'results'       => $results,
+                'search_string' => $searchString,
+                'pagination'    => $pagination
             ]);
 
             if ($related == true) {
@@ -148,7 +136,6 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
-                        'pager'       => $pagination,
                     )
                 );
 
@@ -158,7 +145,6 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
-                        'pager'       => $pagination,
                     )
                 );
             }

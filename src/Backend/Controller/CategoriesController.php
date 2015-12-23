@@ -441,7 +441,6 @@ class CategoriesController extends Controller
      **/
     public function toggleRssAction(Request $request)
     {
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
 

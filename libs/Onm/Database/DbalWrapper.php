@@ -15,17 +15,37 @@ namespace Onm\Database;
  */
 class DbalWrapper
 {
+    /**
+     * The function call buffer.
+     *
+     * @var array
+     */
     private $buffer = [];
+
+    /**
+     * The database connection.
+     *
+     * @var Doctrine\DBAL\Connection
+     */
     private $connection = null;
+
+    /**
+     * The current environment.
+     *
+     * @var string
+     */
+    private $env;
 
     /**
      * Creates a new Wrapper to Doctrine DBAL.
      *
-     * @param string $databaseParameters Array with database parameters.
+     * @param string $params The array of parameters.
+     * @param string $env    The current environment.
      */
-    public function __construct($params)
+    public function __construct($params, $env)
     {
-        $this->connectionParams = array();
+        $this->connectionParams = [];
+        $this->env              = $env;
 
         if (!array_key_exists('dbal', $params)
             || (array_key_exists('dbal', $params)
@@ -112,7 +132,7 @@ class DbalWrapper
     {
         $connection = $this->getConnection();
 
-        $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+        $this->addCallToBuffer($method, $params);
 
         $rs = call_user_func_array(array($connection, $method), $params);
 
@@ -127,6 +147,21 @@ class DbalWrapper
     public function getBuffer()
     {
         return $this->buffer;
+    }
+
+    /**
+     * Adds a method and params to the buffer
+     *
+     * @param string $method The called method.
+     * @param mixed  $params The called params.
+     */
+    public function addCallToBuffer($method, $params)
+    {
+        if ($this->env !== 'prod'
+            && !in_array($method, ['setFetchMode', 'SetFetchMode'])
+        ) {
+            $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+        }
     }
 
     /**

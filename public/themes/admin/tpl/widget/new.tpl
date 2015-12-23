@@ -151,16 +151,18 @@
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript">
-  jQuery(document).ready(function($){
-    var tags = $('#metadata');
-    var title = $('#title');
-    title.on('change', function() {
-      // Fill tags from title
-      if (!tags.val()) {
-        fill_tags(title.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-      }
+{javascripts}
+  <script type="text/javascript">
+    jQuery(document).ready(function($){
+      var tags = $('#metadata');
+      var title = $('#title');
+      title.on('change', function() {
+        // Fill tags from title
+        if (!tags.val()) {
+          fill_tags(title.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+        }
+      });
     });
-  });
-</script>
+  </script>
+{/javascripts}
 {/block}

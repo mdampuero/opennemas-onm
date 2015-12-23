@@ -80,10 +80,11 @@ class BlogsController extends Controller
             $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
             $countItems = $em->countBy($filters);
 
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $itemsPerPage,
-                'total_items'       => $countItems,
-                'base_url'          => $this->generateUrl('frontend_blog_frontpage'),
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'total'       => $countItems,
+                'route'       => 'frontend_blog_frontpage',
             ]);
 
             foreach ($blogs as &$blog) {
@@ -219,13 +220,14 @@ class BlogsController extends Controller
                     }
                 }
 
-                $pagination = $this->get('paginator')->create([
-                    'elements_per_page' => $itemsPerPage,
-                    'total_items'       => $countItems,
-                    'base_url'          => $this->generateUrl(
-                        'frontend_blog_author_frontpage',
-                        ['author_slug' => $author->slug]
-                    ),
+                $pagination = $this->get('paginator')->get([
+                    'directional' => true,
+                    'epp'         => $itemsPerPage,
+                    'total'       => $countItems,
+                    'route'       => [
+                        'name'   => 'frontend_blog_author_frontpage',
+                        'params' => [ 'author_slug' => $author->slug ]
+                    ],
                 ]);
 
                 $this->view->assign(

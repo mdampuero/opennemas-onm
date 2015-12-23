@@ -384,7 +384,7 @@
                 [% extra.instances[item.instance_id].name %]
               </td>
               <td class="text-center">
-                <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type === 'info', 'fa-users': item.type === 'users', }" tooltip="[% extra.types[item.type].name %]"></i>
+                <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-comment': item.type === 'comment', 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type !== 'comment' && item.type !== 'media' && item.type !== 'email' && item.type !== 'help' && item.type !== 'user', 'fa-users': item.type === 'user' }"></i>
               </td>
               <td class="text-center">
                 [% item.start %]

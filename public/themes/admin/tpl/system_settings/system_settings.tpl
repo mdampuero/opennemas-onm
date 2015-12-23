@@ -3,78 +3,70 @@
 {block name="header-css" append}
 {stylesheets
   src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css,
-  @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-  <link rel="stylesheet" href="{$asset_url}">
+      @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+    <style type="text/css">
+      .colorpicker {
+        z-index: 10;
+      }
+    </style>
   {/stylesheets}
-
-  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
-  <link rel="stylesheet" href="{$asset_url}">
-  {/stylesheets}
-  <style type="text/css">
-    .colorpicker {
-      z-index: 10;
-    }
-  </style>
 {/block}
 
 {block name="footer-js" append}
   {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
-  @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
-  @Common/js/onm/md5.min.js"}
-  <script type="text/javascript" src="{$asset_url}"></script>
-  {/javascripts}
-
-  <script type="text/javascript">
-    jQuery(document).ready(function($) {
-      //Color Picker jQuery
-      $('#site_color').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-          $(el).val(hex);
-          $(el).ColorPickerHide();
-        },
-        onChange: function (hsb, hex, rgb) {
-          $('#site_color').val(hex);
-          $('#colorpicker_viewer').css('background-color', '#' + hex);
-        },
-        onBeforeShow: function () {
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
+      @Common/js/onm/md5.min.js"}
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        //Color Picker jQuery
+        $('#site_color').ColorPicker({
+          onSubmit: function(hsb, hex, rgb, el) {
+            $(el).val(hex);
+            $(el).ColorPickerHide();
+          },
+          onChange: function (hsb, hex, rgb) {
+            $('#site_color').val(hex);
+            $('#colorpicker_viewer').css('background-color', '#' + hex);
+          },
+          onBeforeShow: function () {
+            $(this).ColorPickerSetColor(this.value);
+          }
+        }).bind('keyup', function(){
           $(this).ColorPickerSetColor(this.value);
-        }
-      }).bind('keyup', function(){
-        $(this).ColorPickerSetColor(this.value);
+        });
+
+        $('#allow_logo').on('click', function(){
+          if($(this).is(':checked')) {
+            $('#site_logo_block').show();
+          } else {
+            $('#site_logo_block').hide();
+          }
+        });
+
+        $('.check-pass').on('click', function(e){
+          e.preventDefault();
+          var passInput = $('#onm_digest_pass');
+          var btn = $(this);
+          if (passInput.attr('type') == 'password') {
+            passInput.prop('type','text');
+          } else {
+            passInput.prop('type','password');
+          }
+
+          btn.find('i').toggleClass('fa-unlock-alt');
+        });
+
+        $('.external-link').on('click', function(e) {
+          e.stopPropagation();
+        });
+
+        // Logo, mobile and favico image uploader
+        $('.fileinput.site-logo').fileinput({ name: 'site_logo', uploadtype:'image' });
+        $('.fileinput.favico').fileinput({ name: 'favico', uploadtype:'image' });
+        $('.fileinput.mobile-logo').fileinput({ name: 'mobile_logo', uploadtype:'image' });
       });
-
-      $('#allow_logo').on('click', function(){
-        if($(this).is(':checked')) {
-          $('#site_logo_block').show();
-        } else {
-          $('#site_logo_block').hide();
-        }
-      });
-
-      $('.check-pass').on('click', function(e){
-        e.preventDefault();
-        var passInput = $('#onm_digest_pass');
-        var btn = $(this);
-        if (passInput.attr('type') == 'password') {
-          passInput.prop('type','text');
-        } else {
-          passInput.prop('type','password');
-        }
-
-        btn.find('i').toggleClass('fa-unlock-alt');
-      });
-
-      $('.external-link').on('click', function(e) {
-        e.stopPropagation();
-      });
-
-      // Logo, mobile and favico image uploader
-      $('.fileinput.site-logo').fileinput({ name: 'site_logo', uploadtype:'image' });
-      $('.fileinput.favico').fileinput({ name: 'favico', uploadtype:'image' });
-      $('.fileinput.mobile-logo').fileinput({ name: 'mobile_logo', uploadtype:'image' });
-    });
-
-  </script>
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}

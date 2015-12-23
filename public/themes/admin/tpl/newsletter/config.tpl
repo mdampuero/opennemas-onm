@@ -2,35 +2,37 @@
 
 {block name="footer-js" append}
 {capture name=url}{url name=admin_system_settings}{/capture}
-<script type="text/javascript">
-jQuery(document).ready(function($){
-    var newsletterType = $('#newsletter_subscriptionType');
-    var reCaptcha = '{$missing_recaptcha}';
+  {javascripts}
+    <script type="text/javascript">
+      jQuery(document).ready(function($){
+          var newsletterType = $('#newsletter_subscriptionType');
+          var reCaptcha = '{$missing_recaptcha}';
 
-    //If selected manage newsletter by e-mail, show e-mail address field
-    newsletterType.on('change', function() {
-        var divExternal= $('.external-config');
-        var divInternal = $('.internal-config');
-        if ($(this).val() == 'submit') {
-            divExternal.css('display', 'table-row');
-            divInternal.css('display', 'none');
-        } else {
-            divExternal.css('display', 'none');
-            divInternal.css('display', 'table-row');
-        }
-    });
+          //If selected manage newsletter by e-mail, show e-mail address field
+          newsletterType.on('change', function() {
+              var divExternal= $('.external-config');
+              var divInternal = $('.internal-config');
+              if ($(this).val() == 'submit') {
+                  divExternal.css('display', 'table-row');
+                  divInternal.css('display', 'none');
+              } else {
+                  divExternal.css('display', 'none');
+                  divInternal.css('display', 'table-row');
+              }
+          });
 
-    //If newsletter is activated and recaptcha is missing don't send form
-    if (reCaptcha) {
-        if ($('#warnings-validation')) {
-            $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-        }
-        $('#formulario').on('submit', function(){
-            return false;
-        });
-    }
-});
-</script>
+          //If newsletter is activated and recaptcha is missing don't send form
+          if (reCaptcha) {
+              if ($('#warnings-validation')) {
+                  $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
+              }
+              $('#formulario').on('submit', function(){
+                  return false;
+              });
+          }
+      });
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}

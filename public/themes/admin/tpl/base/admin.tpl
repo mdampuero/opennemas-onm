@@ -22,13 +22,12 @@
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
   {/block}
 
-  <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
-  <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
+  <link href="{$params.COMMON_ASSET_DIR}images/favicon.png" rel="icon">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
+  <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
   {block name="header-css"}
-    {stylesheets src="
-      @Common/components/bootstrap/dist/css/bootstrap.min.css,
+    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
@@ -64,19 +63,14 @@
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less"
-    filters="cssrewrite,less"}
-      <link rel="stylesheet" type="text/css" href="{$asset_url}">
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
-    {javascripts src="
-      @Common/components/jquery/jquery.min.js,
+    {javascripts src="@Common/components/jquery/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js"
     filters="uglifyjs"}
-      <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
-
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
@@ -84,10 +78,10 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')">
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}');getLatest()" >
   {block name="body"}
     <div class="overlay"></div>
-    <header class="header navbar navbar-inverse">
+    <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl">
       <div class="navbar-inner">
         <div class="header-seperation">
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
@@ -95,20 +89,6 @@
               open<strong>nemas</strong>
             </h1>
           </a>
-          <div>
-            {block name="comments"}
-              {if {count_pending_comments} gt 0}
-                <ul class="nav pull-right notifcation-center" ng-if="sidebar.isCollapsed()">
-                  <li class="dropdown" id="header_inbox_bar">
-                    <a href="{url name=admin_comments}" class="dropdown-toggle">
-                      <div class="iconset top-messages"></div>
-                      <span class="badge animated" id="msgs-badge">{count_pending_comments}</span>
-                    </a>
-                  </li>
-                </ul>
-              {/if}
-            {/block}
-          </div>
         </div>
         <div class="header-quick-nav">
           {block name="header_links"}
@@ -250,7 +230,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
-                  <li class="quicklinks notifications dropdown" ng-controller="NotificationCtrl" ng-init="getLatest()" ng-click="markFixedAsRead()">
+                  <li class="quicklinks notifications dropdown" ng-click="markFixedAsRead()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
@@ -279,7 +259,7 @@
                             </span>
                           </div>
                           <div class="notification-icon">
-                            <i class="fa" ng-class="{ 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'users', 'fa-users': notification.type === 'users' }"></i>
+                            <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
                           </div>
                           <div class="notification-body" ng-bind-html="notification.body"></div>
                         </li>
@@ -407,6 +387,9 @@
         <div class="page-content">
           <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
             <span class="fa fa-bars fa-lg"></span>
+            <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'no-animate': !sidebar.isCollapsed(), 'bounceIn': bounce, 'pulse': pulse }" ng-show="sidebar.isCollapsed() && notifications.length > 0">
+              [% notifications.length %]
+            </span>
           </div>
           <div class="view" id="view" ng-view autoscroll="true">
             {block name="content"}{/block}
@@ -423,8 +406,7 @@
   <![endif]-->
   {block name="global-js"}
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    {javascripts src="
-      @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
+    {javascripts src="@Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
@@ -439,7 +421,6 @@
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
       @Common/components/modernizr/modernizr.js,
-      @Common/js/libs/tinycon.min.js,
       @Common/js/onm/md5.min.js,
       @Common/js/onm/scripts.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
@@ -467,6 +448,7 @@
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
+      @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
       @Common/src/opennemas-webarch/js/core.js,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
@@ -494,15 +476,10 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-      @Common/js/admin.js
-    "}
-      <script type="text/javascript" src="{$asset_url}"></script>
+      @Common/js/admin.js"}
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
-    <script type="text/javascript">
-      Tinycon.setBubble({count_pending_comments});
-    </script>
     {uservoice_widget}
   {/block}
 </body>

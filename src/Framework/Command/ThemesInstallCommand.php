@@ -22,24 +22,32 @@ class ThemesInstallCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputArgument('theme', InputArgument::OPTIONAL, 'theme'),
-                )
+            ->addArgument(
+                'theme',
+                InputArgument::OPTIONAL,
+                'What theme do you want to install'
+            )
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, it will install all themes'
             )
             ->setName('themes:install')
             ->setDescription('Deploys or installs themes to the latest version')
             ->setHelp(
                 <<<EOF
-The <info>themes:install</info> updates all themes code by executing a git pull
+The <info>themes:install</info> updates or installs themes code by executing
 and updates the .deploy.php file.
 
+- Update all themes already installed
 <info>php app/console themes:install</info>
 
-If 'theme' argument is defined the command will install or update a particular theme.
+- Install all themes or update all themes already installed
+<info>php app/console themes:install --all</info>
 
-<info>php app/console themes:install vidar</info>
-
+- Install or update an specific theme
+<info>php app/console themes:install THEME_NAME</info>
 EOF
             );
     }
@@ -57,10 +65,11 @@ EOF
         $themeName = $input->getArgument('theme');
         if ($themeName) {
             $this->updateSpecificTheme($themeName);
+        } elseif ($this->input->getOption('all')) {
+            $this->installAllThemes();
         } else {
             $this->updateThemes();
         }
-
 
         $this->generateDeployFile();
     }
@@ -76,6 +85,33 @@ EOF
         $contents = "<?php define('DEPLOYED_AT', '$time');";
 
         file_put_contents(APPLICATION_PATH.'/.deploy.php', $contents);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function installAllThemes()
+    {
+        $themes = 'africainteligencia base basic bastet bragi cplandora cronicas estrelladigital flashnews '
+            .'hathor horus idealgallego khepri laregion lavozdelanzarote lrinternacional marruecosnegocios '
+            .'nemty odin prontoar retrincos selket sercoruna sermos sobek tecnofisis televisionlr vidar zisa';
+
+        $themes = explode(' ', $themes);
+
+        foreach ($themes as $themeName) {
+            chdir($this->basePath.'/public/themes/');
+            if (file_exists($themeName)) {
+                $this->updateSpecificTheme($themeName);
+            } else {
+                $this->execProcess('git clone ssh://gitolite@git.openhost.es:23911/onm-theme-'.$themeName.'.git '.$themeName);
+            }
+        }
+
+        return;
+
     }
 
     /**

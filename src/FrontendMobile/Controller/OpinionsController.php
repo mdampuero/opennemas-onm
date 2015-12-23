@@ -64,7 +64,7 @@ class OpinionsController extends Controller
                 'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10'
             );
 
-            if (isset ($director[0])) {
+            if (isset($director[0])) {
                 $director[0]->name = 'Director';
                 $this->view->assign('director', $director[0]);
             }

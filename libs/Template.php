@@ -10,20 +10,19 @@ use Onm\FilesManager as fm;
 class Template extends Smarty
 {
     // Private properties
-    public $theme               = null;
-    public $themeName           = null;
-    public $locale_dir	        = null;
-    public $css_dir	            = null;
-    public $image_dir           = null;
-    public $js_dir              = null;
-    public $common_asset_dir    = null;
-    public $js_includes         = array( 'head' => array() );
-    public $css_includes        = array( 'head' => array(), 'footer' => array() );
-    public $metatags            = array();
+    public $theme            = null;
+    public $themeName        = null;
+    public $locale_dir       = null;
+    public $css_dir          = null;
+    public $image_dir        = null;
+    public $js_dir           = null;
+    public $common_asset_dir = null;
+    public $js_includes      = ['header' => array(), 'footer' => []];
+    public $css_includes     = ['header' => array(), 'footer' => []];
+    public $metatags         = [];
+    public $filters          = [];
+    public $baseCachePath    = '';
     public $templateBaseDir;
-    // public $container           = null;
-    public $filters             = array();
-    public $baseCachePath       = '';
 
     /**
      * Initializes the Template class

@@ -131,7 +131,7 @@ class WidgetsController extends Controller
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
-                'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
+                'content'        => $post->filter('content', ''),
                 'params'          => json_decode($post->get('parsedParams', null)),
             );
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -205,7 +205,7 @@ class WidgetsController extends Controller
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
-            'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
+            'content'         => $post->filter('content', ''),
             'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),
         );
@@ -273,36 +273,25 @@ class WidgetsController extends Controller
         $widgets      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countWidgets = $em->countBy($filters);
 
-        // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countWidgets,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_widgets_content_provider',
-                array('category' => $categoryId)
-            ),
+        // Build the pagination
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countWidgets,
+            'route'       => [
+                'name'   => 'admin_widgets_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'widget/content-provider.tpl',
-            array(
-                'widgets' => $widgets,
-                'pager'   => $pagination,
-            )
+            [
+                'widgets'    => $widgets,
+                'pagination' => $pagination,
+            ]
         );
     }
 }

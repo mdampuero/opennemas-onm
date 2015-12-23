@@ -2,7 +2,7 @@
 
 {block name="header-css" append}
   {stylesheets src="
-    @AdminTheme/less/_market.less,
+    @AdminTheme/less/_store.less,
     @AdminTheme/less/_domain.less
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
@@ -139,12 +139,12 @@
                         <input class="form-control" id="email" name="email" ng-model="billing.email" placeholder="{t}Email{/t}" required="required" type="email">
                       </div>
                     </div>
-                    <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid }">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid || !validPhone, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid && validPhone }">
                       <div class="input-with-icon right">
-                        <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid"></i>
+                        <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid && validPhone"></i>
                         <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.required" tooltip="{t}This field is required{/t}"></i>
-                        <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.pattern" tooltip="{t}This is not a valid phone{/t}"></i>
-                        <input class="form-control" id="phone" name="phone" ng-model="billing.phone" pattern="[0-9]+" placeholder="{t}Phone number{/t}" required="required" type="text">
+                        <i class="fa fa-times text-danger" ng-if="!validPhone" tooltip="{t}This is not a valid phone{/t}"></i>
+                        <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" required="required" type="text">
                       </div>
                     </div>
                   </div>
@@ -198,7 +198,7 @@
                       <div class="input-with-icon right">
                         <select class="form-control" id="country" name="country" ng-model="billing.country" placeholder="{t}Country{/t}" required="required">
                           <option value="">{t}Select a country{/t}...</option>
-                          <option value="[% key %]" ng-repeat="(key,value) in countries">[% value %]</option>
+                          <option value="[% value %]" ng-repeat="(key,value) in countries | orderBy" ng-selected="[% billing.country === value %]">[% key %]</option>
                         </select>
                       </div>
                     </div>
@@ -295,14 +295,6 @@
                   <li>{t}The customer must make changes to the DNS zone for your domain registration www. This change has nothing to do with the Opennemas platform or company Openhost, SL (company that maintains the service). {/t}</li>
                   <li>{t}If redirection does not work through no fault of the platform, ie by malfunction of the DNS servers the client, Openhost, SL area will have nothing to do with the damage caused to the hours of service failure. {/t}</li>
                 </ul>
-                <h5 class="text-center">{t}DNS CHANGES{/t}</h5>
-                <ul>
-                  <li>{t}DNS Record: Change www register in the domain area. In example change to www.domain.com (where "domain.com" would be your domain name). {/t}</li>
-                  <li>{t}www IN CNAME domain.com.opennemas.net. {/t}</li>
-                  <li>{t}Hosting: redirect traffic from the site domain.com to www.domain.com. This change is NOT done through DNS but through the control panel settings where the domain and hosting are configured. {/t}</li>
-                  <li>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain)  {/t}</li>
-                  <li>{t}IMPORTANT: It is only necessary to make the change log www. But making the change in Hosting, your newspaper will not have traffic to the domain without the www.{/t}</li>
-                </ul>
               {/if}
               <div class="text-center p-t-30">
                 <div class="form-group">
@@ -317,7 +309,7 @@
                     </label>
                   </div>
                 </div>
-                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms">
+                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms || !validPhone || !validVat">
                   {t}Confirm{/t}
                 </button>
               </div>

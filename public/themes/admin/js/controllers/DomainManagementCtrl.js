@@ -81,14 +81,24 @@
         $scope.step = 1;
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *   Flag to know if current phone is valid.
+         *
+         * @type {Boolean}
+         */
+        $scope.validPhone = true;
+
+        /**
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   Flag to know if current VAT is valid.
          *
          * @type {Boolean}
          */
-        $scope.validVat = false;
+        $scope.validVat = true;
 
         /**
          * @memberOf DomainManagementCtrl
@@ -245,6 +255,16 @@
         $scope.$watch('billing', function(nv) {
           if (!nv || !nv.name) {
             $scope.edit = true;
+            $scope.validPhone = false;
+            $scope.validVat   = false;
+          }
+        });
+
+        // Updates vat and total values when vat tax changes
+        $scope.$watch('validVat', function(nv) {
+          if (nv === true) {
+            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
+            $scope.total = $scope.subtotal + $scope.vat;
           }
         });
 
@@ -270,6 +290,87 @@
           }
         }, true);
 
+        $scope.$watch('billing.country', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
+          var url = routing.generate('backend_ws_store_check_phone',
+              { country: $scope.billing.country, phone: $scope.billing.phone });
+
+          $http.get(url).success(function() {
+            $scope.validPhone = true;
+          }).error(function() {
+            $scope.validPhone = false;
+          });
+
+          url = routing.generate('backend_ws_store_check_vat',
+              { country: $scope.billing.country, vat: $scope.billing.vat });
+
+          $http.get(url).success(function() {
+            $scope.validVat = true;
+          }).error(function() {
+            $scope.validVat = false;
+          });
+        }, true);
+
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('billing.phone', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.phone) {
+            $scope.validPhone = false;
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_phone',
+              { country: $scope.billing.country, phone: $scope.billing.phone });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validPhone = true;
+            }).error(function() {
+              $scope.validPhone = false;
+            });
+          }, 500);
+        }, true);
+
+        // Updates the edit flag when billing changes.
+        $scope.$watch('billing.vat', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if (!$scope.billing || !$scope.billing.country ||
+              !$scope.billing.vat) {
+            $scope.validVat = false;
+            return;
+          }
+
+          if ($scope.searchTimeout) {
+            $timeout.cancel($scope.searchTimeout);
+          }
+
+          var url = routing.generate('backend_ws_store_check_vat',
+              { country: $scope.billing.country, vat: $scope.billing.vat });
+
+          $scope.searchTimeout = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.validVat = true;
+            }).error(function() {
+              $scope.validVat = false;
+            });
+          }, 500);
+        }, true);
+
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv, ov) {
           if (nv === 1) {
@@ -285,7 +386,7 @@
 
           if (nv.length > 0) {
             $scope.subtotal = $scope.price * nv.length;
-            $scope.vat      = Math.round($scope.subtotal * 21)/100;
+            $scope.vat      = Math.round($scope.subtotal * $scope.vatTax)/100;
             $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);

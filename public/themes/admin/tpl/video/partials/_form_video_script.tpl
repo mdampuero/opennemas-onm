@@ -57,18 +57,19 @@
 <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
 <input type="hidden" name="author_name" value="script"/>
 <input type="hidden" name="infor" value=""/>
+{javascripts}
+  <script>
+    jQuery(document).ready(function($){
+      'use strict';
 
-<script>
-  jQuery(document).ready(function($){
-    'use strict';
+      $('.video-form').on('submit', function(e, ui) {
+        if ($('.related-element-id').val().length < 1) {
+          $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
+          e.preventDefault();
 
-    $('.video-form').on('submit', function(e, ui) {
-      if ($('.related-element-id').val().length < 1) {
-        $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
-        e.preventDefault();
-
-        return false;
-      };
+          return false;
+        };
+      });
     });
-  });
-</script>
+  </script>
+{/javascripts}

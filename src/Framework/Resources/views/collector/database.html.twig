@@ -32,16 +32,34 @@
 {% endblock %}
 
 {% block panel %}
+    <h2>Database Metrics</h2>
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ collector.queries | length }}</span>
+            <span class="label">Queries</span>
+        </div>
+    </div>
+    <p class="help">
+        Queries includes transactions.
+    </p>
     <h2>Queries</h2>
-    <table>
-        <tr>
-            <th>Function</th>
-            <th>Parameters</th>
-        </tr>
+    <table class="queries">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>SQL</th>
+                <th>Params</th>
+            </tr>
+        </thead>
         {% for query in collector.queries %}
         <tr>
             <td>{{ query.method }}</td>
-            <td>{{ query.params | join }}</td>
+            <td>{{ query.sql | join}}</td>
+            <td>
+                <pre>
+                    {{ query.params }}
+                </pre>
+            </td>
         </tr>
         {% endfor %}
     </table>

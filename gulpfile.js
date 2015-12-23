@@ -9,29 +9,28 @@
   var path       = require('path');
 
   gulp.task('phpunit', function () {
-    exec('./vendor/phpunit/phpunit/phpunit -c app/phpunit.xml.dist | tail -1',
+    exec('./vendor/phpunit/phpunit/phpunit 2>&1',
       function(error, stdout) {
-        var icon    = 'pass.png';
-        var summary = stdout;
+        var title   = '';
+        var icon    = 'fail.png';
 
-        if (summary.indexOf('Tests') === -1 && summary.indexOf('OK') === -1) {
-          notifier.notify({
-            'title':   'Unable to complete the tests!',
-            'icon':    path.join(__dirname, 'public/assets/images/fail.png'),
-            'message': 'There was an error while executing tests'
-          });
+        // Remove trainling NL and get the last one
+        var report = stdout.replace(/\n$/, '').split(/\r?\n/);
+        report = report[report.length - 1];
+        if (report.indexOf('Tests') !== -1 || report.indexOf('OK') === -1) {
+          title   = 'Unable to complete the tests!';
+          icon    = 'fail.png';
 
-          return;
-        }
-
-        if (summary.indexOf('Tests') !== -1) {
-          icon = 'fail.png'
+          console.log(stdout);
+        } else {
+          title   = 'Tests executed!';
+          icon    = 'pass.png';
         }
 
         notifier.notify({
-          'title':   'Tests executed!',
+          'title':   title,
           'icon':    path.join(__dirname, 'public/assets/images', icon),
-          'message': summary
+          'message': report
         });
       }
     );
@@ -45,20 +44,20 @@
     livereload.listen();
 
     // Executes tests and reload browser
-    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php' ],
-      batch(function (events, done) {
-        gulp.start('phpunit', done);
-        livereload.reload();
-      }));
+    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php',
+      'public/themes/**/*.tpl', 'tests/**/*.php'
+    ], batch(function (events, done) {
+      gulp.start('phpunit', done);
+      livereload.reload();
+    }));
 
     // Executes tests and reload browser
     gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
       '!public/assets/src/**/main.less', '!public/themes/**/main.less',
-    ],
-      batch(function (events, done) {
+    ], batch(function (events, done) {
         gulp.start('touch', done);
         livereload.reload();
-      }));
+    }));
   });
 
   gulp.task('default', [ 'watch' ]);

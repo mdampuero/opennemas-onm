@@ -2,6 +2,7 @@ angular.module(
   'BackendApp',
   [
     'angularFileUpload',
+    'angularTinycon',
     'angulartics',
     'angulartics.google.analytics',
     'checklist-model',

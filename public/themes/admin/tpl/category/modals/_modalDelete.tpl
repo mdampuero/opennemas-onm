@@ -18,36 +18,38 @@
   </div>
 </div>
 
-<script>
-jQuery("#modal-category-delete").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false,
-});
+{javascripts}
+  <script>
+    jQuery("#modal-category-delete").modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true, //Can close on escape
+        show: false,
+    });
 
-jQuery('.del-category').click(function(e, ui) {
-    jQuery('#modal-category-delete .modal-body span').html( jQuery(this).data('title') );
-    //Sets up the modal
-    jQuery("#modal-category-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
-    e.preventDefault();
-});
+    jQuery('.del-category').click(function(e, ui) {
+        jQuery('#modal-category-delete .modal-body span').html( jQuery(this).data('title') );
+        //Sets up the modal
+        jQuery("#modal-category-delete").modal('show');
+        jQuery("body").data("selected-for-del", jQuery(this).data("url"));
+        e.preventDefault();
+    });
 
-jQuery('#modal-category-delete a.btn.yes').on('click', function(e, ui){
-    var url = jQuery("body").data("selected-for-del");
-    if (url) {
-        jQuery.ajax({
-            url:  url,
-            success: function(){
-                location.reload();
-            }
-        });
-    }
-    e.preventDefault();
-});
+    jQuery('#modal-category-delete a.btn.yes').on('click', function(e, ui){
+        var url = jQuery("body").data("selected-for-del");
+        if (url) {
+            jQuery.ajax({
+                url:  url,
+                success: function(){
+                    location.reload();
+                }
+            });
+        }
+        e.preventDefault();
+    });
 
-jQuery('#modal-category-delete a.btn.no').on('click', function(e){
-    jQuery("#modal-category-delete ").modal('hide');
-    e.preventDefault();
-});
-</script>
+    jQuery('#modal-category-delete a.btn.no').on('click', function(e){
+        jQuery("#modal-category-delete ").modal('hide');
+        e.preventDefault();
+    });
+  </script>
+{/javascripts}

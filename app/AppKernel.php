@@ -23,7 +23,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             // new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Sparkling\VATBundle\SparklingVATBundle(),
             new CometCult\BraintreeBundle\CometCultBraintreeBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
@@ -39,7 +38,8 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
+            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
@@ -67,10 +67,10 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    // public function getCacheDir()
-    // {
-    //     return realpath(parent::getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
-    // }
+    public function getCacheDir()
+    {
+        return realpath(parent::getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
+    }
 
     /**
      * {@inheritdoc}

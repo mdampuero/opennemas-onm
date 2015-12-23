@@ -1,0 +1,27 @@
+backend_ws_store_checkout:
+    path:     /store
+    defaults: { _controller: BackendWebServiceBundle:Store:checkout }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+backend_ws_store_check_phone:
+    path:     /store/phone
+    defaults: { _controller: BackendWebServiceBundle:Store:checkPhone }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_ws_store_check_vat:
+    path:     /store/vat
+    defaults: { _controller: BackendWebServiceBundle:Store:checkVat }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_ws_store_list:
+    path:     /store
+    defaults: { _controller: BackendWebServiceBundle:Store:list }
+    methods:  [ GET ]
+    options:
+        expose: true

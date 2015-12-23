@@ -132,19 +132,19 @@ class AlbumsController extends Controller
             $albums      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
             $countAlbums = $em->countBy($filters);
 
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                array(
-                    'page'  => $this->page,
-                    'items' => $itemsPerPage,
-                    'total' => $countAlbums,
-                    'url'   => $this->generateUrl(
-                        'frontend_album_frontpage_category',
-                        array(
-                            'category_name' => $this->categoryName
-                        )
-                    )
-                )
-            );
+
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $itemsPerPage,
+                'page'        => $this->page,
+                'total'       => $countAlbums,
+                'route'       => [
+                    'name'   => 'frontend_album_frontpage_category',
+                    'params' => ['category_name' => $this->categoryName]
+                ]
+            ]);
             $this->view->assign(
                 array(
                     'albums'     => $albums,
@@ -343,19 +343,18 @@ class AlbumsController extends Controller
             );
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $this->page,
-                'items' => $totalAlbumMoreFrontpage,
-                'total' => count($othersAlbums)+1,
-                'url'   => $this->generateUrl(
-                    'frontend_album_ajax_paginated',
-                    array(
-                        'category' => $this->category
-                    )
-                )
-            )
-        );
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => false,
+            'directional' => true,
+            'maxLinks'    => 0,
+            'epp'         => $totalAlbumMoreFrontpage,
+            'page'        => $this->page,
+            'total'       => count($othersAlbums)+1,
+            'route'       => [
+                'name'   => 'frontend_album_ajax_paginated',
+                'params' => ['category' => $this->category]
+            ]
+        ]);
 
         return $this->render(
             'album/partials/_widget_more_albums.tpl',

@@ -36,9 +36,7 @@ class VideosController extends Controller
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
-        $request = $this->get('request');
-
-        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
@@ -163,7 +161,7 @@ class VideosController extends Controller
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                    'description'    => $requestPost->filter('description', ''),
                     'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                     'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                     'params'         => $request->request->get('params', []),
@@ -187,12 +185,12 @@ class VideosController extends Controller
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                    'description'    => $requestPost->filter('description', ''),
                     'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                     'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                     'information'    => $information,
-                    'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
-                    'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                    'body'           => $requestPost->filter('body', ''),
+                    'video_url'      => $requestPost->filter('video_url', ''),
                 );
 
                 try {
@@ -317,12 +315,12 @@ class VideosController extends Controller
                         'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                         'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                         'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                        'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                        'description'    => $requestPost->filter('description', ''),
                         'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                         'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                         'information'    => $information,
-                        'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
-                        'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                        'body'           => $requestPost->filter('body', ''),
+                        'video_url'      => $requestPost->filter('video_url', ''),
                         'starttime'      => $video->starttime,
                         'params'         => $request->request->get('params', []),
                     );
@@ -597,35 +595,24 @@ class VideosController extends Controller
         $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
-        // Build the pager
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countVideos,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_videos_content_provider',
-                array('category' => $categoryId)
-            ),
+        // Build the pagination
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countVideos,
+            'route'       => [
+                'name'   => 'admin_videos_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'video/content-provider.tpl',
             array(
-                'videos' => $videos,
-                'pager'  => $pagination,
+                'videos'     => $videos,
+                'pagination' => $pagination,
             )
         );
     }
@@ -659,14 +646,14 @@ class VideosController extends Controller
         $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countVideos,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl(
-                'admin_videos_content_provider_related',
-                array('category' => $categoryId,)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'page'  => $page,
+            'total' => $countVideos,
+            'route' => [
+                'name'   => 'admin_videos_content_provider_related',
+                'params' => [ 'category' => $categoryId, ]
+            ],
         ]);
 
         return $this->render(
@@ -676,78 +663,8 @@ class VideosController extends Controller
                 'contents'              => $videos,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
-            )
-        );
-    }
-
-    /**
-     * Shows a paginated list of images from a category.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @CheckModuleAccess(module="VIDEO_MANAGER")
-     */
-    public function contentProviderGalleryAction(Request $request)
-    {
-        $metadata   = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-        $categoryId = $request->query->getDigits('category', 0);
-        $page       = $request->query->getDigits('page', 1);
-
-        $itemsPerPage = 16;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = array(
-            'content_type_name' => array(array('value' => 'video')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
-        }
-
-        if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::getTags($metadata);
-            $tokens = explode(', ', $tokens);
-
-            $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));
-            $filters['metadata']['union'] = 'OR';
-        }
-
-        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
-        $countVideos = $em->countBy($filters);
-
-        if (empty($videos)) {
-            return new Response(
-                _("<div><p>Unable to find any video matching your search criteria.</p></div>")
-            );
-        }
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $countVideos,
-                'url'   => $this->generateUrl(
-                    'admin_videos_content_provider_gallery',
-                    array(
-                        'category'  => $categoryId,
-                        'metadatas' => $metadata,
-                    )
-                )
-            )
-        );
-
-        return $this->render(
-            'video/video_gallery.ajax.tpl',
-            array(
-                'pagination' => $pagination,
-                'videos'     => $videos,
             )
         );
     }

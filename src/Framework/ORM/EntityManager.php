@@ -123,9 +123,11 @@ class EntityManager
     {
         $entity = explode('.', $name);
         $entity = $entity[count($entity) - 1];
-        $entity = preg_replace(
-            '/([a-z])_([a-z])/e',
-            '"$1" . strtoupper("$2")',
+        $entity = preg_replace_callback(
+            '/([a-z])_([a-z])/',
+            function ($matches) {
+                return $matches[1] . strtoupper($matches[2]);
+            },
             $entity
         );
 
@@ -133,7 +135,6 @@ class EntityManager
         foreach ($this->sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
                 ucfirst($entity) . 'Repository';
-
             if (class_exists($repository)) {
                 $manager = strtolower($source[0]) . 'm';
 

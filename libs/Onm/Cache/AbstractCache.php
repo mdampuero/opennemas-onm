@@ -27,6 +27,13 @@ abstract class AbstractCache implements CacheInterface
     private $namespace = '';
 
     /**
+     * The function call buffer.
+     *
+     * @var array
+     */
+    protected $buffer = [];
+
+    /**
      * Set the namespace to prefix all cache ids with
      *
      * @param  string $namespace
@@ -35,6 +42,16 @@ abstract class AbstractCache implements CacheInterface
     public function setNamespace($namespace)
     {
         $this->namespace = (string) $namespace;
+    }
+
+    /**
+     * Returns the current function call buffer.
+     *
+     * @return array The function call buffer.
+     */
+    public function getBuffer()
+    {
+        return $this->buffer;
     }
 
     /**
@@ -63,6 +80,8 @@ abstract class AbstractCache implements CacheInterface
             }
             $rawValues = $this->doFetch($ids);
 
+            $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $id ] ];
+
             $values = array();
             foreach ($rawValues as $key => $value) {
                 $values [str_replace($this->namespace. '_', '', $key)] = $value;
@@ -70,6 +89,8 @@ abstract class AbstractCache implements CacheInterface
 
             return $values;
         }
+
+        $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
 
         return $this->doFetch($this->getNamespacedId($id));
     }
@@ -105,8 +126,12 @@ abstract class AbstractCache implements CacheInterface
                 $values [$this->getNamespacedId($key)] = $value;
             }
 
+            $this->buffer[] = [ 'method' => 'saveMulti', 'params' => [ 'ids' => $id, 'values' => $data ] ];
+
             return $this->doSave($values, $data, $lifeTime);
         }
+
+        $this->buffer[] = [ 'method' => 'save', 'params' => [ 'ids' => $id, 'values' => $data ] ];
 
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }

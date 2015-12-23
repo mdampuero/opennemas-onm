@@ -10,7 +10,6 @@ function smarty_insert_renderbanner($params, &$smarty)
     // Get required params
     $type     = $params['type'];
     $ads      = $smarty->tpl_vars['advertisements']->value;
-    $category = $smarty->tpl_vars['category']->value;
 
     if (!is_array($ads)) {
         $ads = array();

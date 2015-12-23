@@ -100,12 +100,17 @@
             float: right;
 
             &:before {
-              font-family: 'FontAwesome';
               content: "\f105";
+              display: block;
+              font-family: 'FontAwesome';
+              transition: all .25s;
             }
 
             &.open:before {
-              content: "\f107";
+              -webkit-transform: rotateZ(90deg);
+              -moz-transform: rotateZ(90deg);
+              -ms-transform: rotateZ(90deg);
+              transform: rotateZ(90deg);
             }
           }
 
@@ -136,8 +141,17 @@
       padding: 8px;
       width: 200px;
 
+      a {
+        display: inline;
+        width: auto;
+      }
+
       &.notification-error {
         background-color: fade(@error-color, 50%);
+      }
+
+      &.notification-info {
+        background-color: fade(@info-color, 50%);
       }
 
       &.notification-success {
@@ -201,7 +215,13 @@
       display: table;
       overflow: hidden;
       padding: 5px 10px;
+      position: relative;
       width: 210px;
+
+      .notifications-orb {
+        left: 50%;
+        top: 7px;
+      }
 
       .user-action {
         background: @sidebar-background;
@@ -212,6 +232,7 @@
         margin: 0 15px;
         overflow: hidden;
         padding-top: 7px;
+        position: relative;
         text-align: center;
         width: 35px;
 
@@ -373,7 +394,10 @@
           }
 
           &.open:before {
-            content: "\f107";
+            -webkit-transform: rotateZ(-90deg);
+            -moz-transform: rotateZ(-90deg);
+            -ms-transform: rotateZ(-90deg);
+            transform: rotateZ(-90deg);
           }
         }
 
@@ -383,23 +407,27 @@
         }
       }
     }
-  }
 
-  .sub-menu {
-    li {
-      a {
-        i {
-          margin-left: 0;
-          margin-right: @sidebar-indentation;
+    .sub-menu {
+      li {
+        a {
+          i {
+            margin-left: 0;
+            margin-right: @sidebar-indentation;
+          }
+
+          .arrow {
+            margin: 10px 0 0 20px;
+          }
         }
-      }
 
-      .sub-menu {
-        li {
-          a {
-            i {
-              margin-left: 0;
-              margin-right: @sidebar-indentation;
+        .sub-menu {
+          li {
+            a {
+              i {
+                margin-left: 0;
+                margin-right: @sidebar-indentation;
+              }
             }
           }
         }

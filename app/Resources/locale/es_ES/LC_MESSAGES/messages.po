@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 13:33+0100\n"
-"PO-Revision-Date: 2015-12-03 13:34+0200\n"
+"POT-Creation-Date: 2015-12-23 13:34+0100\n"
+"PO-Revision-Date: 2015-12-23 13:38+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -20,335 +20,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
-
-msgid "Advertisement"
-msgstr "Publicidad"
-
-msgid "Album"
-msgstr "Álbum"
-
-msgid "Album not available"
-msgstr "Álbum no disponible"
-
-msgid "Article"
-msgstr "Artículo"
-
-msgid "Article not available"
-msgstr "Artículo no disponible"
-
-msgid "File"
-msgstr "Archivos"
-
-msgid "File not available"
-msgstr "Fichero no disponible"
-
-msgid "Book"
-msgstr "Libro"
-
-msgid "Not valid comment id."
-msgstr "Identificador de comentario no válido."
-
-msgid "Status not valid."
-msgstr "Estado no válido."
-
-#, php-format
-msgid "Field '%s' not valid"
-msgstr "El campo '%s' no es válido"
-
-msgid "Database error."
-msgstr "Error de base de datos."
-
-msgid "Opinion"
-msgstr "Opinión"
-
-msgid "Event"
-msgstr "Evento"
-
-msgid "Comment"
-msgstr "Comentario"
-
-msgid "Image"
-msgstr "Imagen"
-
-msgid "Video"
-msgstr "Vídeo"
-
-msgid "Special"
-msgstr "Especial"
-
-msgid "Poll"
-msgstr "Encuesta"
-
-msgid "Widget"
-msgstr "Widget"
-
-msgid "Static page"
-msgstr "Página estática"
-
-msgid "Kiosko"
-msgstr "Kiosko"
-
-msgid "Agenda"
-msgstr "Agenda"
-
-msgid "Letter to editor"
-msgstr "Carta al director"
-
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid ""
-"Some elements were removed because this frontpage had too many contents."
-msgstr ""
-"Se han eliminado algunos elementos porque la portada tenía demasiados "
-"contenidos."
-
-msgid "trashed"
-msgstr "en papelera"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "no planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tiempo"
-
-msgid "postponed"
-msgstr "aplazado"
-
-msgid "Cover"
-msgstr "Portada"
-
-msgid "Unable to save the cover data."
-msgstr "No se pudo guardar la portada."
-
-msgid "Letter"
-msgstr "Carta"
-
-msgid "Menu"
-msgstr "Menú"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "Internal search"
-msgstr "Búsqueda interna"
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Image data not valid"
-msgstr "Los datos de la imagen no son válidos"
-
-#, php-format
-msgid "Unable to save your image file in the Opennemas storage target"
-msgstr ""
-"No se pudo guardar tu fichero de imagen en el almacenamiento de Opennemas"
-
-msgid "Unable to copy your image file"
-msgstr "No se pudo copiar tu fichero de imagen"
-
-msgid "Unable to save your image information."
-msgstr "No se pudo guardar la información de la imagen."
-
-#, php-format
-msgid "Image type: %s"
-msgstr "Tipo de imagen: %s"
-
-msgid "No available EXIF data"
-msgstr "No está disponible ningún dato EXIF"
-
-msgid "No available IPTC data"
-msgstr "No está disponible ningún dato IPTC"
-
-msgid "Invalid image file"
-msgstr "Fichero de imagen inválido"
-
-msgid "Poll not available"
-msgstr "Encuesta no disponible"
-
-msgid "List"
-msgstr "Listado"
-
-msgid "Activate/deactivate"
-msgstr "Activar/desactivar"
-
-msgid "Edit"
-msgstr "Editar"
-
-msgid "Remove"
-msgstr "Eliminar"
-
-msgid "Create"
-msgstr "Crear"
-
-msgid "Manage frontpages"
-msgstr "Gestionar portadas"
-
-msgid "List pending articles"
-msgstr "Listado de artículos pendientes"
-
-msgid "Publish/unpublish"
-msgstr "Publicar/despublicar"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Arquive/unarquive"
-msgstr "Archivar/desarchivar"
-
-msgid "Manager favorite flag"
-msgstr "Gestionar el estado de favorito"
-
-msgid "Manage home frontpage"
-msgstr "Gestionar portada principal"
-
-msgid "Send to trash and restore"
-msgstr "Enviar y restaurar de la papelera"
-
-msgid "List articles in arquive"
-msgstr "Listar artículos en hemeroteca"
-
-msgid "Manage advertisements for homepage"
-msgstr "Administrar publicidades en portadas"
-
-msgid "Manage favorite flag"
-msgstr "Gestionar estado de favorito"
-
-msgid "Manage frontpage"
-msgstr "Gestionar portada"
-
-msgid "Administrate opinion widget"
-msgstr "Administrar widget de opinión"
-
-msgid "Manage poll comments"
-msgstr "Administrar comentarios de encuestas"
-
-msgid "Approve/reject"
-msgstr "Aprovar/rechazar"
-
-msgid "Create/upload"
-msgstr "Crear/subir"
-
-msgid "File Fronts"
-msgstr "Portadas de fichero"
-
-msgid "Manage Newsletter"
-msgstr "Gestionar boletín de noticias"
-
-msgid "Backend manager"
-msgstr "Gestor del editor"
-
-msgid "Manage caches"
-msgstr "Gestionar cachés"
-
-msgid "Use search"
-msgstr "Usar la búsqueda"
-
-msgid "List trashed elementes"
-msgstr "Listar elementos en papelera"
-
-msgid "Import news from agency"
-msgstr "Importar noticias de agencias"
-
-msgid "Import XML files"
-msgstr "Importado de archivos XML"
-
-msgid "Manage global settings"
-msgstr "Gestionar las preferencias globales"
-
-msgid "Access instance manager"
-msgstr "Acceder al gestor de instancias"
-
-msgid "Modify other users's content"
-msgstr "Modificar contenido de otros usuarios"
-
-msgid "Delete other users's content"
-msgstr "Eliminar contenido de otros usuarios"
-
-msgid "Configure system-wide settings"
-msgstr "Configurar las preferencias globales"
-
-msgid "Change the user group from one user"
-msgstr "Cambiar el grupo de usuario de un usuario"
-
-msgid "Manage widget"
-msgstr "Gestionar widget"
-
-msgid "Administrate settings"
-msgstr "Administrar configuraciones"
-
-msgid "Manage module settings"
-msgstr "Gestionar preferencias del módulo"
-
-msgid "Manage agenda"
-msgstr "Gestionar agenda"
-
-msgid "Manage module setting"
-msgstr "Gestionar preferencias del módulo"
-
-msgid "Import EFE articles file"
-msgstr "Importado de artículos de EFE"
-
-msgid "Manage favourite flag"
-msgstr "Gestionar estado de favorito"
-
-msgid "Config News Agency importer"
-msgstr "Configurar el importador de agencias"
-
-msgid "Administer synchronization between Opennemas"
-msgstr "Administrar la sincronización entre Opennemas"
-
-msgid "Administer instances"
-msgstr "Administrar instancias"
-
-msgid "Administer paywall"
-msgstr "Administrar paywall"
-
-msgid "Edit user own profile"
-msgstr "Editar perfil de usuario propio"
-
-msgid "Static Page"
-msgstr "Página estática"
-
-msgid "Already exists one user with that information"
-msgstr "Ya existe un usuario con esa información"
-
-msgid "There was an error while processing your video file"
-msgstr "Se ha producido un error al procesar tu ficheiro de vídeo"
-
-#, php-format
-msgid ""
-"The server limits file uploads up to %s Mb. Try to upload files smaller than "
-"that size."
-msgstr ""
-"Parece que el servidor limita la subida de archivos a %s Mb. Intenta subir "
-"un ficheiro más pequeño."
-
-msgid "There was a problem while converting your video. "
-msgstr "Se ha producido un error al convertir su vídeo"
-
-#, php-format
-msgid "Video format \"%s\" not supported"
-msgstr "Formato de vídeo «%s» no admitido"
-
-msgid "Video not available"
-msgstr "Vídeo no disponible"
-
-#, php-format
-msgid "Widget %s not available"
-msgstr "Widget %s no disponible"
 
 msgid ""
 "You have reach the maximum users allowed. If you want to create more users, "
@@ -363,6 +34,9 @@ msgstr "Todos"
 #, php-format
 msgid "Unable to find the user with the id '%d'"
 msgstr "No se pudo encontrar el usuario con el identificador «%d»"
+
+msgid "Frontpage"
+msgstr "Portada"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
@@ -509,12 +183,6 @@ msgstr "Publicidad actualizada correctamente."
 
 msgid "Unable to update the advertisement data."
 msgstr "No se pudo actualizar la información de la publicidad."
-
-msgid "Previous"
-msgstr "Anterior"
-
-msgid "Next"
-msgstr "Siguiente"
 
 msgid "Settings saved successfully."
 msgstr "Configuraciones guardadas con éxito."
@@ -974,11 +642,20 @@ msgstr "Carta actualizada con éxito."
 msgid "Unable to update the letter."
 msgstr "No se pudo actualizar la carta."
 
-msgid "Others"
-msgstr "Otros"
+msgid "Opinion"
+msgstr "Opinión"
 
 msgid "Bloggers"
 msgstr "Autor de blog"
+
+msgid "Album"
+msgstr "Álbum"
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid "Poll"
+msgstr "Encuesta"
 
 msgid "Letters to the Editor"
 msgstr "Cartas al editor"
@@ -1300,6 +977,9 @@ msgid "Can't get static page title. Check the title"
 msgstr ""
 "No se pudo obtener el título de la página estática. Comprueba el título."
 
+msgid "Others"
+msgstr "Otros"
+
 msgid "English"
 msgstr "Inglés"
 
@@ -1355,12 +1035,6 @@ msgstr ""
 
 msgid "Please check the video url, seems to be incorrect"
 msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
-
-msgid ""
-"<div><p>Unable to find any video matching your search criteria.</p></div>"
-msgstr ""
-"<div><p>No se pudo encontrar ningún video que coincida con tu búsqueda</p></"
-"div>"
 
 #, php-format
 msgid "Unable to find a widget with the id \"%d\""
@@ -1507,7 +1181,7 @@ msgstr "Gestor de caché"
 msgid "SQL error log"
 msgstr "Registro de errores SQL"
 
-msgid "Market"
+msgid "Store"
 msgstr "Tienda"
 
 msgid "Themes"
@@ -1830,12 +1504,6 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
 
-msgid "Yesterday"
-msgstr "Ayer"
-
-msgid "Today"
-msgstr "Hoy"
-
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
 
@@ -1845,6 +1513,12 @@ msgstr "Notificaciones no válidas"
 #, php-format
 msgid "%d notifications marked as read successfully"
 msgstr "%d notificación(es) marcadas(s) como leída(s) correctamente"
+
+msgid "Yesterday"
+msgstr "Ayer"
+
+msgid "Today"
+msgstr "Hoy"
 
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
@@ -1954,6 +1628,9 @@ msgstr "Nombre de usuario"
 msgid "Activated"
 msgstr "Activado"
 
+msgid "Email"
+msgstr "Email"
+
 msgid "Gender"
 msgstr "Sexo"
 
@@ -1977,6 +1654,32 @@ msgstr "No se puede procesar el archivo XML"
 
 msgid "Unable to create a server"
 msgstr "No se pudo crear el nuevo servidor"
+
+#, php-format
+msgid ""
+"You have %s pending comments. Click <a href=\"%s\">here</a> to moderate."
+msgstr ""
+"Tienes %s comentarios pendientes. Pulsa <a href=\"%s\">aquí</a> para "
+"moderarlos."
+
+msgid "Instance information"
+msgstr "Información de la instancia"
+
+#, php-format
+msgid "<li>You have %d activated users. The cost is %d €/day or %s €/month"
+msgstr "<li>Tienes %d usuarios activos. El coste es de %d €/día o %s €/mes"
+
+#, php-format
+msgid "<li>You have %d page views"
+msgstr "<li>Tienes %d páginas vistas"
+
+#, php-format
+msgid " The cost is %d €/month"
+msgstr " El coste es de %d €/mes"
+
+#, php-format
+msgid "<li>Your storage size is %d MB"
+msgstr "<li>Usas %d MB de almacenamiento"
 
 msgid "Already voted."
 msgstr "Ya has votado."
@@ -2333,6 +2036,317 @@ msgstr "Se ha creado una nueva instancia de OpenNemas"
 msgid "Your newspaper is now live"
 msgstr "Tu periódico ya está en línea"
 
+msgid "Advertisement"
+msgstr "Publicidad"
+
+msgid "Album not available"
+msgstr "Álbum no disponible"
+
+msgid "Article"
+msgstr "Artículo"
+
+msgid "Article not available"
+msgstr "Artículo no disponible"
+
+msgid "File"
+msgstr "Archivos"
+
+msgid "File not available"
+msgstr "Fichero no disponible"
+
+msgid "Book"
+msgstr "Libro"
+
+msgid "Not valid comment id."
+msgstr "Identificador de comentario no válido."
+
+msgid "Status not valid."
+msgstr "Estado no válido."
+
+#, php-format
+msgid "Field '%s' not valid"
+msgstr "El campo '%s' no es válido"
+
+msgid "Database error."
+msgstr "Error de base de datos."
+
+msgid "Event"
+msgstr "Evento"
+
+msgid "Comment"
+msgstr "Comentario"
+
+msgid "Image"
+msgstr "Imagen"
+
+msgid "Special"
+msgstr "Especial"
+
+msgid "Widget"
+msgstr "Widget"
+
+msgid "Static page"
+msgstr "Página estática"
+
+msgid "Kiosko"
+msgstr "Kiosko"
+
+msgid "Agenda"
+msgstr "Agenda"
+
+msgid "Letter to editor"
+msgstr "Carta al director"
+
+msgid ""
+"Some elements were removed because this frontpage had too many contents."
+msgstr ""
+"Se han eliminado algunos elementos porque la portada tenía demasiados "
+"contenidos."
+
+msgid "trashed"
+msgstr "en papelera"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "no planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tiempo"
+
+msgid "postponed"
+msgstr "aplazado"
+
+msgid "Cover"
+msgstr "Portada"
+
+msgid "Unable to save the cover data."
+msgstr "No se pudo guardar la portada."
+
+msgid "Letter"
+msgstr "Carta"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Internal search"
+msgstr "Búsqueda interna"
+
+msgid "Image data not valid"
+msgstr "Los datos de la imagen no son válidos"
+
+#, php-format
+msgid "Unable to save your image file in the Opennemas storage target"
+msgstr ""
+"No se pudo guardar tu fichero de imagen en el almacenamiento de Opennemas"
+
+msgid "Unable to copy your image file"
+msgstr "No se pudo copiar tu fichero de imagen"
+
+msgid "Unable to save your image information."
+msgstr "No se pudo guardar la información de la imagen."
+
+#, php-format
+msgid "Image type: %s"
+msgstr "Tipo de imagen: %s"
+
+msgid "No available EXIF data"
+msgstr "No está disponible ningún dato EXIF"
+
+msgid "No available IPTC data"
+msgstr "No está disponible ningún dato IPTC"
+
+msgid "Invalid image file"
+msgstr "Fichero de imagen inválido"
+
+msgid "Poll not available"
+msgstr "Encuesta no disponible"
+
+msgid "List"
+msgstr "Listado"
+
+msgid "Activate/deactivate"
+msgstr "Activar/desactivar"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "Manage frontpages"
+msgstr "Gestionar portadas"
+
+msgid "List pending articles"
+msgstr "Listado de artículos pendientes"
+
+msgid "Publish/unpublish"
+msgstr "Publicar/despublicar"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Arquive/unarquive"
+msgstr "Archivar/desarchivar"
+
+msgid "Manager favorite flag"
+msgstr "Gestionar el estado de favorito"
+
+msgid "Manage home frontpage"
+msgstr "Gestionar portada principal"
+
+msgid "Send to trash and restore"
+msgstr "Enviar y restaurar de la papelera"
+
+msgid "List articles in arquive"
+msgstr "Listar artículos en hemeroteca"
+
+msgid "Manage advertisements for homepage"
+msgstr "Administrar publicidades en portadas"
+
+msgid "Manage favorite flag"
+msgstr "Gestionar estado de favorito"
+
+msgid "Manage frontpage"
+msgstr "Gestionar portada"
+
+msgid "Administrate opinion widget"
+msgstr "Administrar widget de opinión"
+
+msgid "Manage poll comments"
+msgstr "Administrar comentarios de encuestas"
+
+msgid "Approve/reject"
+msgstr "Aprovar/rechazar"
+
+msgid "Create/upload"
+msgstr "Crear/subir"
+
+msgid "File Fronts"
+msgstr "Portadas de fichero"
+
+msgid "Manage Newsletter"
+msgstr "Gestionar boletín de noticias"
+
+msgid "Backend manager"
+msgstr "Gestor del editor"
+
+msgid "Manage caches"
+msgstr "Gestionar cachés"
+
+msgid "Use search"
+msgstr "Usar la búsqueda"
+
+msgid "List trashed elementes"
+msgstr "Listar elementos en papelera"
+
+msgid "Import news from agency"
+msgstr "Importar noticias de agencias"
+
+msgid "Import XML files"
+msgstr "Importado de archivos XML"
+
+msgid "Manage global settings"
+msgstr "Gestionar las preferencias globales"
+
+msgid "Access instance manager"
+msgstr "Acceder al gestor de instancias"
+
+msgid "Modify other users's content"
+msgstr "Modificar contenido de otros usuarios"
+
+msgid "Delete other users's content"
+msgstr "Eliminar contenido de otros usuarios"
+
+msgid "Configure system-wide settings"
+msgstr "Configurar las preferencias globales"
+
+msgid "Change the user group from one user"
+msgstr "Cambiar el grupo de usuario de un usuario"
+
+msgid "Manage widget"
+msgstr "Gestionar widget"
+
+msgid "Administrate settings"
+msgstr "Administrar configuraciones"
+
+msgid "Manage module settings"
+msgstr "Gestionar preferencias del módulo"
+
+msgid "Manage agenda"
+msgstr "Gestionar agenda"
+
+msgid "Manage module setting"
+msgstr "Gestionar preferencias del módulo"
+
+msgid "Import EFE articles file"
+msgstr "Importado de artículos de EFE"
+
+msgid "Manage favourite flag"
+msgstr "Gestionar estado de favorito"
+
+msgid "Config News Agency importer"
+msgstr "Configurar el importador de agencias"
+
+msgid "Administer synchronization between Opennemas"
+msgstr "Administrar la sincronización entre Opennemas"
+
+msgid "Administer instances"
+msgstr "Administrar instancias"
+
+msgid "Administer paywall"
+msgstr "Administrar paywall"
+
+msgid "Edit user own profile"
+msgstr "Editar perfil de usuario propio"
+
+msgid "Static Page"
+msgstr "Página estática"
+
+msgid "Already exists one user with that information"
+msgstr "Ya existe un usuario con esa información"
+
+msgid "There was an error while processing your video file"
+msgstr "Se ha producido un error al procesar tu ficheiro de vídeo"
+
+#, php-format
+msgid ""
+"The server limits file uploads up to %s Mb. Try to upload files smaller than "
+"that size."
+msgstr ""
+"Parece que el servidor limita la subida de archivos a %s Mb. Intenta subir "
+"un ficheiro más pequeño."
+
+msgid "There was a problem while converting your video. "
+msgstr "Se ha producido un error al convertir su vídeo"
+
+#, php-format
+msgid "Video format \"%s\" not supported"
+msgstr "Formato de vídeo «%s» no admitido"
+
+msgid "Video not available"
+msgstr "Vídeo no disponible"
+
+#, php-format
+msgid "Widget %s not available"
+msgstr "Widget %s no disponible"
+
 msgid "Frontpage mobile version"
 msgstr "Portada: versión móvil"
 
@@ -2445,6 +2459,9 @@ msgstr "Soporte básico"
 
 msgid "Profesional support"
 msgstr "Soporte profesional"
+
+msgid "Support 1"
+msgstr "Soporte 1"
 
 msgid "Support 2"
 msgstr "Soporte 2"
@@ -2610,6 +2627,13 @@ msgstr ""
 
 msgid "Expert pack"
 msgstr "Pack experto"
+
+msgid ""
+"Add news from your favourites agencies, manage multiple personalized "
+"frontpages and let your readers become contributors!"
+msgstr ""
+"Añade las noticias de tus agencias favoritas, gestiona múltiples portadas "
+"personalizadas y deja que tus lectores contribuyan publicando!"
 
 msgid ""
 "Add news from your favourites agencies, manage multiple personalized "
@@ -3605,8 +3629,39 @@ msgstr ""
 msgid "No support"
 msgstr "Sin soporte"
 
-msgid "Support 1"
-msgstr "Soporte 1"
+msgid "Training and Advisory Services"
+msgstr "Soporte Asesoramiento y Formación"
+
+msgid ""
+"Ask all your questions, walk through Opennemas and/or receive personal "
+"training via phone"
+msgstr ""
+"Haz todas tus preguntas, recibe formación acerca de Opennemas via "
+"telefono/hangouts/skype"
+
+msgid ""
+"<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or "
+"to walk through Opennemas and make sure you know it all?</p>\n"
+"                        <p>This is the Support Offer perfect for you!</p>\n"
+"                        <p>For a very small fee you will get our expert team "
+"on the line and you will be able to ask all the questions you have and/or "
+"receive personal training.</p>\n"
+"                        <p>Please remember that we guarantee FREE support "
+"via tickets/emails.</p>"
+msgstr ""
+"<p>¿Necesitas atención personalizada de nuestro equipo por telefono/hangouts/"
+"skype para hacer todas las preguntas posibles y/o para tener una formación "
+"completa y asegurarte que lo sabes todo de nuestra plataforma Opennemas?</p>"
+"\n"
+"<p>Esta es la oferta perfecta para ti!</p>\n"
+"<p>Por un coste muy pequeño tendrás nuestro experto equipo en linea y podrás "
+"hacer todo tipo de preguntas acerca de tu proyecto y/o recibir formación "
+"individual.</p>\n"
+"<p>Por favor recuerda que garantizamos soporte GRATUITO vía incidencias y "
+"e-mails.</p>"
+
+msgid "Support Pro"
+msgstr "Soporte Pro"
 
 msgid "This support plan is thought for changes and creation of new widgets."
 msgstr ""
@@ -3786,18 +3841,6 @@ msgstr ""
 "                        </ul>\n"
 "                        <p>Soporte proporcionado por emails/tickets, Google "
 "Hangouts/Skype y teléfono</p>"
-
-msgid "Get next page"
-msgstr "Ir a la página siguiente"
-
-msgid "Next »"
-msgstr "Siguiente »"
-
-msgid "Get previous page"
-msgstr "Ir a la página anterior"
-
-msgid "« Previous"
-msgstr "« Anterior"
 
 msgid "Sorry, you don't have enough privileges"
 msgstr "No tienes suficientes permisos"
@@ -4160,6 +4203,9 @@ msgstr "Debes guardar los cambios o volver a la lista"
 msgid "Pick contents"
 msgstr "Seleccionar contenidos"
 
+msgid "Next"
+msgstr "Siguiente"
+
 msgid "Email subject"
 msgstr "Asunto del email"
 
@@ -4208,6 +4254,9 @@ msgstr "Fallido"
 
 msgid "Recipient selection"
 msgstr "Selección de destinatarios"
+
+msgid "Previous"
+msgstr "Anterior"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr ""
@@ -4564,9 +4613,6 @@ msgstr "Editar widget '[% content.title %]'"
 msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
-msgid "Instance information"
-msgstr "Información de la instancia"
-
 msgid "Page"
 msgstr "Página"
 
@@ -4621,12 +4667,6 @@ msgstr "Salir"
 msgid "Welcome"
 msgstr "Bienvenido"
 
-msgid "No notifications for now"
-msgstr "No hay notificaciones por ahora"
-
-msgid "This is a notification"
-msgstr "This is a notification"
-
 msgid "Delete letters"
 msgstr "Eliminar cartas"
 
@@ -4665,6 +4705,9 @@ msgstr "Url del relacionado"
 
 msgid "Image assigned"
 msgstr "Imagen asignada"
+
+msgid "Are you sure?"
+msgstr "¿Estas seguro?"
 
 msgid "Pick an image"
 msgstr "Escoja una imagen"
@@ -5035,15 +5078,6 @@ msgstr "Sin asignar"
 msgid "New file"
 msgstr "Nuevo fichero"
 
-msgid "Delete polls"
-msgstr "Eliminar encuestas"
-
-msgid "Delete poll"
-msgstr "Eliminar encuesta"
-
-msgid "Are you sure you want to delete <span>%num%</span> polls?"
-msgstr "¿Estás seguro de que quieres eliminar <span>%num%</span> encuestas?"
-
 msgid "Editing poll"
 msgstr "Editando encuesta"
 
@@ -5336,7 +5370,7 @@ msgstr ""
 "usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
 "esquina superior derecha."
 
-msgid "Opennemas Market"
+msgid "Opennemas Store"
 msgstr "Tienda de Opennemas"
 
 msgid "Find and try new add-ons and take your newspaper to the next level."
@@ -5352,10 +5386,10 @@ msgstr ""
 "funcionalidades adicionales para hacerlo el mejor."
 
 msgid ""
-"We offer a huge list of add-ons to improve your experience. Check our market "
+"We offer a huge list of add-ons to improve your experience. Check our store "
 "and pay only for what you really want."
 msgstr ""
-"Te ofrecemos una gran lista de añadidos con los que mejroar tu experiencia. "
+"Te ofrecemos una gran lista de añadidos con los que mejorar tu experiencia. "
 "Comprueba nuestra tienda y paga solo por lo que necesites."
 
 msgid ""
@@ -5573,6 +5607,210 @@ msgstr "Filtrar por título"
 msgid "Unable to find any content that matches your search."
 msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
 
+msgid "month"
+msgstr "mes"
+
+msgid "Purchased"
+msgstr "Comprado"
+
+msgid "Add to cart"
+msgstr "Añadir al carro"
+
+msgid "Screenshots and videos"
+msgstr "Imagenes y vídeos"
+
+msgid "Last updated"
+msgstr "Última actualización"
+
+msgid "Packs"
+msgstr "Packs"
+
+msgid "Modules"
+msgstr "Módulos"
+
+msgid "Services"
+msgstr "Servicios"
+
+msgid "Partners"
+msgstr "Socios"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "My selection"
+msgstr "Mi selección"
+
+msgid "My selection "
+msgstr "Mi selección"
+
+msgid "Cart"
+msgstr "Carrito"
+
+msgid "Your shopping cart is empty"
+msgstr "Tu carrito de compra está vacío"
+
+msgid "Checkout"
+msgstr "Comprar"
+
+msgid "No items available to purchase"
+msgstr "No hay elementos disponibles para comprar"
+
+msgid "More info"
+msgstr "Más información"
+
+msgid "Added to cart"
+msgstr "En el carrito"
+
+msgid "You have requested the following purchases for your newspaper \"%1\""
+msgstr ""
+"Acabas de solicitar las siguientes características para tu compra \"%1\""
+
+msgid "Modules requested"
+msgstr "Modulos solicitados"
+
+msgid "Our sales department will contact you to get further information"
+msgstr ""
+"Nuestro departamento de ventas se pondrá en contacto contigo para obtener "
+"más información"
+
+msgid "Modules to purchase"
+msgstr "Módulos a comprar"
+
+msgid "Return to <a href=\"%1\">store</a> and try again"
+msgstr "Vuelva a <a href=\"%1\">la tienda</a> y probar de nuevo"
+
+msgid ""
+"You are about to order next items. In the next 24hours our sales team will "
+"send you payment and activation information. "
+msgstr ""
+"Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
+"horas nuestro departamento de ventas te enviará la información de pago y "
+"activación."
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Billing information"
+msgstr "Información de facturación"
+
+msgid ""
+"If you need to update this information please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+"Si necesitas actualizar esta información, por favor <a href=\"mailto:"
+"sales@openhost.es\">contactanos</a>."
+
+msgid "Contact information"
+msgstr "Información de contacto"
+
+msgid "This field is required"
+msgstr "Este campo es obligatorio"
+
+msgid "Contact name"
+msgstr "Nombre de contacto"
+
+msgid "Company name"
+msgstr "Nombre de la empresa"
+
+msgid "This is not a valid email"
+msgstr "Este no es un correo electrónico válido"
+
+msgid "This is not a valid phone"
+msgstr "Este no es un número de teléfono válido"
+
+msgid "Phone number"
+msgstr "Número de teléfono"
+
+msgid "This is not a valid vat"
+msgstr "Este no es un CIF válido"
+
+msgid "VAT Number"
+msgstr "Número de identificación fiscal"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "This is not a valid address"
+msgstr "Este no es una dirección válida"
+
+msgid "This is not a valid postal_code"
+msgstr "Esta no es un código postal válido"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "This is not a valid city"
+msgstr "Esta no es una ciudad válida"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "This is not a valid state"
+msgstr "Este no es un estado válido"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Country"
+msgstr "País"
+
+msgid "Select a country"
+msgstr "Seleccione un país"
+
+msgid "Purchase summary"
+msgstr "Resumen de la compra"
+
+msgid "You have to complete your billing information to complete the purchase."
+msgstr "Debes introducir la información de pago para completar la compra."
+
+msgid "Unit price"
+msgstr "Unidad de precio"
+
+msgid "VAT"
+msgstr "IVA"
+
+msgid ""
+"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Terms of Service</a>"
+msgstr ""
+"Leí y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Términos del servicio</a>"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "Thank you for your purchase request!"
+msgstr "Gracias por tu solicitud de compra!"
+
+msgid ""
+"In the next 24 hours you will receive an email with payment instructions and "
+"invoice."
+msgstr ""
+"En las próximas 24 horas recibirás un correo con las instrucciones de pago y "
+"la factura."
+
+msgid ""
+"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
+"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
+"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
+"see how easy is to manage Opennemas."
+msgstr ""
+"Mientras tanto, puedes ir a <a href=\"%1\">Mi periódico</a> y comprobar tus "
+"características activadas, navegar por <a href=\"http://help.opennemas.com"
+"\">nuestra ayuda</a> o comprobar <a href=\"http://youtube.com/opennemas"
+"\">nuestros vídeos</a> para ver lo fácil que es usar Opennemas."
+
+msgid ""
+"Oh!, it would be a good time to share with your friends your newspaper's "
+"improvements"
+msgstr ""
+"Oh!, sería genial que compartieras con tus amigos las mejoras en tu periódico"
+
+msgid "Have a wonderful day!"
+msgstr "Ten un buen día!"
+
 msgid "Add new item"
 msgstr "Añadir nuevo elemento"
 
@@ -5587,9 +5825,6 @@ msgstr "Categorías de vídeo"
 
 msgid "Poll Categories"
 msgstr "Categorías de encuestas"
-
-msgid "Modules"
-msgstr "Módulos"
 
 msgid "Sync Categories"
 msgstr "Sincronizar categorías"
@@ -6073,12 +6308,6 @@ msgstr "No se pudieron encontrar autores que coincidan con tu búsqueda."
 msgid "No biography set"
 msgstr "No tiene biografía establecida"
 
-msgid "Delete video"
-msgstr "Eliminar vídeo"
-
-msgid "Are you sure you want to delete <span>%num%</span> videos?"
-msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> vídeos?"
-
 msgid "Creating video"
 msgstr "Creando vídeo"
 
@@ -6099,9 +6328,6 @@ msgstr "Usar código HTML"
 
 msgid "Use file video URLs (External HTML5/FLV)"
 msgstr "Usar URLs a ficheros de vídeo (HTML5/FLV externo)"
-
-msgid "No available videos for your search criteria"
-msgstr "No hay ningún vídeo disponible bajo tu criterio de búsqueda"
 
 msgid "Video URL"
 msgstr "URL del vídeo"
@@ -6293,11 +6519,10 @@ msgid "Want more features?"
 msgstr "¿Interesado en mas características?"
 
 msgid ""
-"We have two ways to add functionality to you site. Check our Opennemas "
-"Market:"
+"We have two ways to add functionality to you site. Check our Opennemas Store:"
 msgstr ""
-"Tenemos dos formas de añadir funcionalidad a tu sitio. Comprueba nuestro "
-"Opennemas Market:"
+"Tenemos dos formas de añadir funcionalidad a tu sitio. Comprueba nuestra "
+"Tienda de Opennemas:"
 
 msgid "Plans"
 msgstr "Planes"
@@ -6466,9 +6691,6 @@ msgstr "y en la posición"
 
 msgid "Advertisment"
 msgstr "Publicidad"
-
-msgid "Are you sure?"
-msgstr "¿Estas seguro?"
 
 msgid "Flash based"
 msgstr "Basado en Flash"
@@ -6662,32 +6884,11 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta con nosotros"
 
-msgid "Billing information"
-msgstr "Información de facturación"
-
 msgid "Company"
 msgstr "Empresa"
 
-msgid "VAT"
-msgstr "IVA"
-
 msgid "Phone"
 msgstr "Teléfono"
-
-msgid "Address"
-msgstr "Dirección"
-
-msgid "Postal code"
-msgstr "Código postal"
-
-msgid "City"
-msgstr "Ciudad"
-
-msgid "State"
-msgstr "Estado"
-
-msgid "Country"
-msgstr "País"
 
 msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
@@ -6699,7 +6900,7 @@ msgstr ""
 msgid "You have no billing information"
 msgstr "No tienes información de facturación"
 
-msgid "You will be asked to add it during the checkout in our market"
+msgid "You will be asked to add it during the checkout in our store"
 msgstr ""
 "Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
 
@@ -6733,9 +6934,6 @@ msgstr "Redirección de dominio"
 msgid "Primary Domain"
 msgstr "Dominio principal"
 
-msgid "More info"
-msgstr "Más información"
-
 msgid "Technical information"
 msgstr "Más información"
 
@@ -6764,66 +6962,8 @@ msgstr "Registro de dominio + redirección"
 msgid "Domain mapping"
 msgstr "Redirección de dominio"
 
-msgid "Total"
-msgstr "Total"
-
-msgid ""
-"If you need to update this information please <a href=\"mailto:"
-"sales@openhost.es\">contact us</a>."
-msgstr ""
-"Si necesitas actualizar esta información, por favor <a href=\"mailto:"
-"sales@openhost.es\">contactanos</a>."
-
-msgid "Contact information"
-msgstr "Información de contacto"
-
-msgid "This field is required"
-msgstr "Este campo es obligatorio"
-
-msgid "Contact name"
-msgstr "Nombre de contacto"
-
-msgid "Company name"
-msgstr "Nombre de la empresa"
-
-msgid "This is not a valid email"
-msgstr "Este no es un correo electrónico válido"
-
-msgid "This is not a valid phone"
-msgstr "Este no es un número de teléfono válido"
-
-msgid "Phone number"
-msgstr "Número de teléfono"
-
-msgid "This is not a valid vat"
-msgstr "Este no es un CIF válido"
-
-msgid "VAT Number"
-msgstr "Número de identificación fiscal"
-
-msgid "This is not a valid address"
-msgstr "Este no es una dirección válida"
-
-msgid "This is not a valid postal_code"
-msgstr "Esta no es un código postal válido"
-
-msgid "This is not a valid city"
-msgstr "Esta no es una ciudad válida"
-
-msgid "This is not a valid state"
-msgstr "Este no es un estado válido"
-
-msgid "Select a country"
-msgstr "Seleccione un país"
-
-msgid "Purchase summary"
-msgstr "Resumen de la compra"
-
-msgid "Unit price"
-msgstr "Unidad de precio"
-
-msgid "You have to complete your billing information to complete the purchase."
-msgstr "Debes introducir la información de pago para completar la compra."
+msgid "Summary"
+msgstr "Entradilla"
 
 msgid "Terms of create a new domain"
 msgstr "Términos para la creación de un nuevo dominio"
@@ -6916,9 +7056,6 @@ msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
 msgid "I have read and accept the Terms of redirection"
 msgstr "Leí y acepto los Términois de redirección"
 
-msgid "Confirm"
-msgstr "Confirmar"
-
 msgid "Thank you for your request!"
 msgstr "Grazas por tu solicitud!"
 
@@ -6926,28 +7063,8 @@ msgid ""
 "In the next 24 hours you will receive an email with payment instructions and "
 "the invoice."
 msgstr ""
-"En las próximas 24 horas recibirás un correco con las instrucciones de pago "
-"y la factura."
-
-msgid ""
-"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
-"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
-"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
-"see how easy is to manage Opennemas."
-msgstr ""
-"Mientras tanto, puedes ir a <a href=\"%1\">Mi periódico</a> y comprobar tus "
-"características activadas, navegar por <a href=\"http://help.opennemas.com"
-"\">nuestra ayuda</a> o comprobar <a href=\"http://youtube.com/opennemas"
-"\">nuestros vídeos</a> para ver lo fácil que es usar Opennemas."
-
-msgid ""
-"Oh!, it would be a good time to share with your friends your newspaper's "
-"improvements"
-msgstr ""
-"Oh!, sería genial que compartieras con tus amigos las mejoras en tu periódico"
-
-msgid "Have a wonderful day!"
-msgstr "Ten un buen día!"
+"En las próximas 24 horas recibirás un correo con las instrucciones de pago y "
+"la factura."
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
 msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
@@ -6960,9 +7077,6 @@ msgstr "Tus dominios"
 
 msgid "Main"
 msgstr "Principal"
-
-msgid "Free"
-msgstr "Gratis"
 
 msgid "Points to"
 msgstr "Apunta a"
@@ -7012,10 +7126,6 @@ msgstr ""
 "Si necesitas más información para configurar tus dominios contacta con "
 "nuestro equipo de soporte"
 
-msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr ""
-"Acabas de solicitar las siguientes características para tu compra \"%1\""
-
 msgid "Domains to create"
 msgstr "Dominios a crear"
 
@@ -7025,22 +7135,14 @@ msgstr "Dominios a redirigir"
 msgid "VAT number"
 msgstr "Número de identificación fiscal"
 
-msgid "Our sales department will contact you to get further information"
-msgstr ""
-"Nuestro departamento de ventas se pondrá en contacto contigo para obtener "
-"más información"
-
 msgid "Add"
 msgstr "Añadir"
 
 msgid "In cart"
 msgstr "En el carrito"
 
-msgid "month"
-msgstr "mes"
-
-msgid "Enabled"
-msgstr "Activado"
+msgid "Active"
+msgstr "Activo"
 
 msgid "Enabling"
 msgstr "Activando"
@@ -7197,18 +7299,6 @@ msgstr "Exclusivo"
 msgid "My themes"
 msgstr "Mis temas"
 
-msgid "Cart"
-msgstr "Carrito"
-
-msgid "Your shopping cart is empty"
-msgstr "Tu carrito de compra está vacío"
-
-msgid "Checkout"
-msgstr "Comprar"
-
-msgid "Unable to find any module that matches your search."
-msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
-
 msgid "No themes available"
 msgstr "No hay temas disponibles"
 
@@ -7242,11 +7332,20 @@ msgstr "Todos los Temas de tus compras están listos para la activación."
 msgid "Open live demo in a new tab"
 msgstr "Abrir demostración en una nueva pestaña"
 
-msgid "Active"
-msgstr "Activo"
-
 msgid "Delivery time"
 msgstr "Tiempo de entrega"
+
+msgid "weeks"
+msgstr "semanas"
+
+msgid "months"
+msgstr "meses"
+
+msgid "standard"
+msgstr "estándar"
+
+msgid "widget"
+msgstr "widget"
 
 msgid "Refresh the list for getting newest error list"
 msgstr "Actualiza la lista para obtener la lista de errores más actual."
@@ -7467,9 +7566,6 @@ msgstr "Firma"
 msgid "Pretitle"
 msgstr "Antetítulo"
 
-msgid "Summary"
-msgstr "Entradilla"
-
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
 
@@ -7535,6 +7631,9 @@ msgstr "Imagen para portada principal"
 
 msgid "Video for frontpage"
 msgstr "Vídeo para portada"
+
+msgid "Pick a video"
+msgstr "Escoja un vídeo"
 
 msgid "File name"
 msgstr "Nombre del archivo"
@@ -7905,72 +8004,6 @@ msgstr "Autor:"
 
 msgid "Submitted on:"
 msgstr "Enviado el:"
-
-msgid "Purchased"
-msgstr "Comprado"
-
-msgid "Add to cart"
-msgstr "Añadir al carro"
-
-msgid "Screenshots and videos"
-msgstr "Imagenes y vídeos"
-
-msgid "Last updated"
-msgstr "Última actualización"
-
-msgid "Packs"
-msgstr "Packs"
-
-msgid "Services"
-msgstr "Servicios"
-
-msgid "Partners"
-msgstr "Socios"
-
-msgid "No items available to purchase"
-msgstr "No hay elementos disponibles para comprar"
-
-msgid "Added to cart"
-msgstr "En el carrito"
-
-msgid "Modules requested"
-msgstr "Modulos solicitados"
-
-msgid "Modules to purchase"
-msgstr "Módulos a comprar"
-
-msgid "Return to <a href=\"%1\">market</a> and try again"
-msgstr "Vuelva a <a href=\"%1\">la tienda</a> y probar de nuevo"
-
-msgid ""
-"You are about to order next items. In the next 24hours our sales team will "
-"send you payment and activation information. "
-msgstr ""
-"Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
-"horas nuestro departamento de ventas te enviará la información de pago y "
-"activación."
-
-msgid ""
-"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
-"\">Terms of Service</a>"
-msgstr ""
-"Leí y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
-"\">Términos del servicio</a>"
-
-msgid "Thank you for your purchase request!"
-msgstr "Gracias por tu solicitud de compra!"
-
-msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"invoice."
-msgstr ""
-"En las próximas 24 horas recibirás un correco con las instrucciones de pago "
-"y la factura."
-
-msgid "Delete opinions"
-msgstr "Eliminar opiniones"
 
 msgid "Editing opinion"
 msgstr "Editando opinión"
@@ -8626,6 +8659,9 @@ msgstr "Política de privacidad"
 msgid "Legal"
 msgstr "Legal"
 
+msgid "Language"
+msgstr "Idioma:"
+
 msgid "Recover password"
 msgstr "Recuperar contraseña"
 
@@ -8981,6 +9017,9 @@ msgstr "Páginas vistas"
 msgid "Emails"
 msgstr "Emails"
 
+msgid "Enabled"
+msgstr "Activado"
+
 msgid "#"
 msgstr "#"
 
@@ -9044,9 +9083,6 @@ msgstr "Correo del propietario"
 
 msgid "Created from"
 msgstr "Creado el"
-
-msgid "Language"
-msgstr "Idioma:"
 
 msgid "(Human readable name)"
 msgstr "(Nombre legible por personas)"
@@ -9242,6 +9278,57 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid ""
+#~ "<div><p>Unable to find any video matching your search criteria.</p></div>"
+#~ msgstr ""
+#~ "<div><p>No se pudo encontrar ningún video que coincida con tu búsqueda</"
+#~ "p></div>"
+
+#~ msgid "Market"
+#~ msgstr "Tienda"
+
+#~ msgid "Get next page"
+#~ msgstr "Ir a la página siguiente"
+
+#~ msgid "Next »"
+#~ msgstr "Siguiente »"
+
+#~ msgid "Get previous page"
+#~ msgstr "Ir a la página anterior"
+
+#~ msgid "« Previous"
+#~ msgstr "« Anterior"
+
+#~ msgid "No notifications for now"
+#~ msgstr "No hay notificaciones por ahora"
+
+#~ msgid "This is a notification"
+#~ msgstr "This is a notification"
+
+#~ msgid "Delete polls"
+#~ msgstr "Eliminar encuestas"
+
+#~ msgid "Delete poll"
+#~ msgstr "Eliminar encuesta"
+
+#~ msgid "Are you sure you want to delete <span>%num%</span> polls?"
+#~ msgstr "¿Estás seguro de que quieres eliminar <span>%num%</span> encuestas?"
+
+#~ msgid "Delete video"
+#~ msgstr "Eliminar vídeo"
+
+#~ msgid "Are you sure you want to delete <span>%num%</span> videos?"
+#~ msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> vídeos?"
+
+#~ msgid "No available videos for your search criteria"
+#~ msgstr "No hay ningún vídeo disponible bajo tu criterio de búsqueda"
+
+#~ msgid "Unable to find any module that matches your search."
+#~ msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
+
+#~ msgid "Delete opinions"
+#~ msgstr "Eliminar opiniones"
 
 #~ msgid "Standard Template"
 #~ msgstr "Plantilla estándar"

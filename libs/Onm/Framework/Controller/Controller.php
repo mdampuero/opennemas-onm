@@ -62,7 +62,9 @@ class Controller extends SymfonyController
         }
 
         // $this->template = $this->view->createTemplate($view, $cacheID);
-
+        // if (array_key_exists('debug', $_GET) && $_GET['debug']==1) {
+        //     echo var_export($this->view->getTemplateVars(), true); die();
+        // }
         return $this->view->fetch($view, $cacheID);
     }
 
@@ -126,7 +128,7 @@ class Controller extends SymfonyController
         ) {
             $instanceName = getService('instance_manager')->current_instance->internal_name;
 
-            $response->headers->set('x-tags', $parameters['x-tags']);
+            $response->headers->set('x-tags', 'instance-'.$instanceName.','.$parameters['x-tags']);
             $response->headers->set('x-instance', $instanceName);
 
             if (array_key_exists('x-cache-for', $parameters)

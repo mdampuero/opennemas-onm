@@ -297,7 +297,7 @@ class OpinionsController extends Controller
                 'content_status'      => (empty($contentStatus)) ? 0 : 1,
                 'in_home'             => (empty($inhome)) ? 0 : 1,
                 'with_comment'        => (empty($withComment)) ? 0 : 1,
-                'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'summary'             => $request->request->filter('summary', ''),
                 'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
                 'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
@@ -306,7 +306,7 @@ class OpinionsController extends Controller
                 'fk_author'           => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
                 'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'body'                => $request->request->filter('body', ''),
                 'fk_author_img'       => $request->request->getDigits('fk_author_img'),
                 'fk_publisher'        => $_SESSION['userid'],
                 'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -399,7 +399,7 @@ class OpinionsController extends Controller
                 'content_status'      => (empty($contentStatus)) ? 0 : 1,
                 'in_home'             => (empty($inhome)) ? 0 : 1,
                 'with_comment'        => (empty($withComment)) ? 0 : 1,
-                'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'summary'             => $request->request->filter('summary', ''),
                 'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
                 'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
@@ -408,7 +408,7 @@ class OpinionsController extends Controller
                 'fk_author'           => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
                 'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'body'                => $request->request->filter('body', ''),
                 'fk_author_img'       => $request->request->getDigits('fk_author_img'),
                 'fk_publisher'        => $_SESSION['userid'],
                 'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -524,34 +524,23 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countOpinions,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_opinions_content_provider',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countOpinions,
+            'route'       => [
+                'name'   => 'admin_opinions_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'opinion/content-provider.tpl',
             array(
-                'opinions' => $opinions,
-                'pager'    => $pagination,
+                'opinions'   => $opinions,
+                'pagination' => $pagination,
             )
         );
     }
@@ -578,11 +567,13 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countOpinions,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl('admin_opinions_content_provider_related'),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countOpinions,
+            'route'       => 'admin_opinions_content_provider_related',
         ]);
 
         return $this->render(
@@ -590,7 +581,7 @@ class OpinionsController extends Controller
             array(
                 'contentType'           => 'Opinion',
                 'contents'              => $opinions,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
             )
         );
@@ -735,20 +726,19 @@ class OpinionsController extends Controller
 
         $session = $this->get('session');
 
+        $this->view->assign([
+            'opinion'        => $opinion,
+            'content'        => $opinion,
+            'other_opinions' => $otherOpinions,
+            'author'         => $author,
+            'contentId'      => $opinion->id,
+            'photo'          => $photo,
+            'suggested'      => $machineSuggestedContents
+        ]);
+
         $session->set(
             'last_preview',
-            $this->view->fetch(
-                'opinion/opinion.tpl',
-                array(
-                    'opinion'        => $opinion,
-                    'content'        => $opinion,
-                    'other_opinions' => $otherOpinions,
-                    'author'         => $author,
-                    'contentId'      => $opinion->id,
-                    'photo'          => $photo,
-                    'suggested'      => $machineSuggestedContents
-                )
-            )
+            $this->view->fetch('opinion/opinion.tpl')
         );
 
         return new Response('OK');

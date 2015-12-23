@@ -24,9 +24,9 @@
             <li class="quicklinks hidden-xs">
               <h5>
                 {if isset($menu->name)}
-                {t}Editing menu{/t}
+                  {t}Editing menu{/t}
                 {else}
-                {t}Creating menu{/t}
+                  {t}Creating menu{/t}
                 {/if}
               </h5>
             </li>
