@@ -27,7 +27,7 @@ class StoreController extends Controller
             }
         }
 
-        $countries = Intl::getRegionBundle()->getCountryNames();
+        $countries = array_flip(Intl::getRegionBundle()->getCountryNames());
         $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
