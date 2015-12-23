@@ -1316,7 +1316,7 @@ class ModuleManager
                     'plan'             => 'Support',
                     'type'             => 'service',
                     'thumbnail'        => 'service-1.jpg',
-                    'name'             => _('Support 1'),
+                    'name'             => _('Support Pro'),
                     'description'      => _('This support plan is thought for changes and creation of new widgets.'),
                     'long_description' => _(
                         '<p>10 hours (2h day/1week).</p>
