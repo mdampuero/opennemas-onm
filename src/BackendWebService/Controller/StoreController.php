@@ -133,6 +133,12 @@ class StoreController extends Controller
         $modules   = \Onm\Module\ModuleManager::getAvailableModulesGrouped();
         $activated = $this->get('instance')->activated_modules;
 
+        if (in_array('ALBUM_MANAGER', $activated)
+            && in_array('VIDEO_MANAGER', $activated)
+        ) {
+            $activated[] = 'MEDIA_MANAGER';
+        }
+
         // Remove internal modules
         $modules = array_filter($modules, function ($a) {
             if (array_key_exists('type', $a) && $a['type'] === 'internal') {
