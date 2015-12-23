@@ -88,10 +88,10 @@ EOF
         $output->writeln("\t- From PHP files");
 
         $phpFiles = array(
-            APP_PATH.'models/*.php',
             SRC_PATH.'*/*/*.php',
             SRC_PATH.'*/Resources/Menu.php',
             SITE_LIBS_PATH.'core/*.php',
+            SITE_LIBS_PATH.'models/*.php',
             SITE_LIBS_PATH.'Onm/**/**/*.php',
             SITE_LIBS_PATH.'Onm/*/*.php',
             SITE_LIBS_PATH.'smarty-onm-plugins/*.php',
