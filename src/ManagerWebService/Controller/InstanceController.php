@@ -637,8 +637,8 @@ class InstanceController extends Controller
             'plans'     => [
                 'BASIC',
                 'PROFESSIONAL',
-                'SILVER',
-                'GOLD',
+                'ADVANCED',
+                'EXPERT',
                 'OTHER',
             ],
             'templates' => im::getAvailableTemplates(),

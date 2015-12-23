@@ -2,7 +2,6 @@
 
 {block name="header-css" append}
 {stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
-<link rel="stylesheet" href="{$asset_url}">
 {/stylesheets}
 {/block}
 
@@ -169,30 +168,28 @@
 {/block}
 
 {block name="footer-js" append}
-{javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
-<script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
+  {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $('.check-pass').on('click', function(e, ui){
+          e.preventDefault();
+          var passInput = $('#password');
+          var btn = $(this);
+          if (passInput.attr('type') == 'password') {
+            passInput.prop('type','text');
+            btn.html('{t}Hide password{/t}');
+          } else {
+            passInput.prop('type','password');
+            btn.html('{t}Show password{/t}');
+          }
+        });
 
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-  $('.check-pass').on('click', function(e, ui){
-    e.preventDefault();
-    var passInput = $('#password');
-    var btn = $(this);
-    if (passInput.attr('type') == 'password') {
-      passInput.prop('type','text');
-      btn.html('{t}Hide password{/t}');
-    } else {
-      passInput.prop('type','password');
-      btn.html('{t}Show password{/t}');
-    }
-  });
-
-  $('select[name="colorpicker"]').simplecolorpicker(
-      'selectColor', $('#color').val()
-      ).on('change', function() {
-    $('#color').val($('select[name="colorpicker"]').val());
-  });
-});
-</script>
+        $('select[name="colorpicker"]').simplecolorpicker(
+            'selectColor', $('#color').val()
+            ).on('change', function() {
+          $('#color').val($('select[name="colorpicker"]').val());
+        });
+      });
+    </script>
+  {/javascripts}
 {/block}

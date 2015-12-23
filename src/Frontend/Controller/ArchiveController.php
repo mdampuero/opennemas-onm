@@ -96,19 +96,22 @@ class ArchiveController extends Controller
                 }
             }
 
-            // Pager
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl([
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $total,
-                'url'   => $this->generateUrl(
-                    'frontend_archive_content',
-                    [
+            // Pagination for block more videos
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
+                    'name'   => 'frontend_archive_content',
+                    'params' => [
                         'day'   => $day,
                         'month' => $month,
                         'year'  => $year,
                     ]
-                )
+                ]
             ]);
 
             # Only allow user to see 2 pages of archive

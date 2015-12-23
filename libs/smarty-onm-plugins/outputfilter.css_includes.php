@@ -10,17 +10,20 @@
  */
 function smarty_outputfilter_css_includes($output, Smarty_Internal_Template $smarty)
 {
-    $css_includes = $smarty->parent->css_includes;
-    $css_code = '';
+    $manager = getService('core.service.assetic.stylesheet_manager');
+    $bag     = getService('core.service.assetic.asset_bag');
 
-    if (count($css_includes['footer']) > 0) {
+    $assets = $manager->writeAssets($bag->getStyles());
 
-        foreach ($css_includes['footer'] as $js_include) {
-            $css_code .= '<link rel="stylesheet" type="text/css" href="'.$js_include.'">';
+    $styles = '';
+    if (!empty($assets)) {
+        foreach ($assets as $asset) {
+            $styles .= "<link rel='stylesheet' type='text/css' href='" . $asset . "'>";
         }
-
-        $output = str_replace('</head>', $css_code.'</head>', $output);
     }
+
+    $styles .= implode('', $bag->getLiteralStyles());
+    $output  = str_replace('</head>', $styles . '</head>', $output);
 
     return $output;
 }

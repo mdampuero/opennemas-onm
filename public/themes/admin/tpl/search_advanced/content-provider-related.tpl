@@ -1,9 +1,8 @@
 <form action="{url name=admin_search_content_provider}" method="get" id="search-form-content-provider">
   <div class="form-group">
-    <label class="form-label">{t}Write here the text for search...{/t}</label>
     <div class="controls">
       <div class="input-group">
-        <input type="text" name="search_string" class="form-control" value="{$search_string}">
+        <input type="text" name="search_string" class="form-control" placeholder="{t}Write here the text for search...{/t}" value="{$search_string}">
         <span class="input-group-addon button">
           <i class="fa fa-search"></i>
         </span>
@@ -17,9 +16,9 @@
       {include file=$content->content_partial_path}
     {/foreach}
   </div>
-  <div class="pagination clearfix">
-    {$pager->links}
-  </div><!-- / -->
+  <div class="pagination-wrapper">
+    {$pagination}
+  </div>
 {elseif (!empty($search_string))}
   {t}No results{/t}
 {/if}

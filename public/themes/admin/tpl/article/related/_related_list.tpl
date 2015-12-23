@@ -11,7 +11,7 @@
           {t}Add contents{/t}
         </div>
       </div>
-      <div ui-sortable ng-model="relatedInFrontpage">
+      <div ui-sortable class="ng-cloak" ng-model="relatedInFrontpage">
         <div class="related-item" ng-repeat="content in relatedInFrontpage">
           <div class="related-item-info">
             <span class="sort-icon"></span>
@@ -31,7 +31,7 @@
           {t}Add contents{/t}
         </div>
       </div>
-      <div ui-sortable ng-model="relatedInInner">
+      <div ui-sortable class="ng-cloak" ng-model="relatedInInner">
         <div class="related-item" ng-repeat="content in relatedInInner">
           <div class="related-item-info">
             <span class="sort-icon"></span>
@@ -52,7 +52,7 @@
             {t}Add contents{/t}
           </button>
         </div>
-        <div ui-sortable ng-model="relatedInHome">
+        <div ui-sortable class="ng-cloak" ng-model="relatedInHome">
           <div class="related-item" ng-repeat="content in relatedInHome">
             <div class="related-item-info">
               <span class="sort-icon"></span>
@@ -72,7 +72,7 @@
             {t}Add gallery{/t}
           </button>
         </div>
-        <div class="related-item" ng-if="galleryForFrontpage">
+        <div class="related-item ng-cloak" ng-if="galleryForFrontpage">
           <div class="related-item-info">
             <span class="sort-icon"></span>
             [% galleryForFrontpage.content_type_name %] - [% galleryForFrontpage.title %]
@@ -90,7 +90,7 @@
             {t}Add gallery{/t}
           </button>
         </div>
-          <div class="related-item" ng-if="galleryForInner">
+          <div class="related-item ng-cloak" ng-if="galleryForInner">
           <div class="related-item-info">
             <span class="sort-icon"></span>
             [% galleryForInner.content_type_name %] - [% galleryForInner.title %]
@@ -108,7 +108,7 @@
             {t}Add gallery{/t}
           </div>
         </div>
-        <div class="related-item" ng-if="galleryForHome">
+        <div class="related-item ng-cloak" ng-if="galleryForHome">
           <div class="related-item-info">
             <span class="sort-icon"></span>
             [% galleryForHome.content_type_name %] - [% galleryForHome.title %]

@@ -242,7 +242,7 @@ class ImporterXml
         $this->parseNodes($values);
 
         $imgImported = null;
-        if (!empty( $this->data['img'] )) {
+        if (!empty($this->data['img'])) {
             $originalFileName = urldecode($this->data['img']);
             $originalFileName = StringUtils::cleanFileName($originalFileName);
             $imgImported      = Content::findByOriginaNameInUrn($originalFileName);

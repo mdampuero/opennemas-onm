@@ -179,17 +179,18 @@ class PaywallController extends Controller
 
         $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => count($users),
-            'base_url'          => $this->generateUrl(
-                'admin_paywall_users',
-                array(
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'page'  => $page,
+            'total' => count($users),
+            'route' => [
+                'name'   => 'admin_paywall_users',
+                'params' => [
                     'order'      => $order,
                     'type'       => $type,
                     'searchname' => $name,
-                )
-            ),
+                ]
+            ],
         ]);
 
         return $this->render(
@@ -385,16 +386,17 @@ class PaywallController extends Controller
 
         $purchasesPage = array_slice($purchases, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => count($purchases),
-            'base_url'          => $this->generateUrl(
-                'admin_paywall_purchases',
-                array(
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'page'  => $page,
+            'total' => count($purchases),
+            'route' => [
+                'name'   => 'admin_paywall_purchases',
+                'params' => [
                     'order'      => $order,
                     'searchname' => $name,
-                )
-            ),
+                ]
+            ],
         ]);
 
         return $this->render(

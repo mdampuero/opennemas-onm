@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for managing articles
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,9 +19,7 @@ use Onm\Settings as s;
 
 /**
  * Handles the actions for managing articles
- *
- * @package Backend_Controllers
- **/
+ */
 class ArticlesController extends Controller
 {
     /**
@@ -616,14 +609,17 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countArticles,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl(
-                'admin_articles_content_provider_in_frontpage',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'maxLinks'    => 5,
+            'page'        => $page,
+            'total'       => $countArticles,
+            'route'       => [
+                'name'   => 'admin_articles_content_provider_in_frontpage',
+                'params' => ['category' => $categoryId]
+            ]
         ]);
 
         return $this->render(
@@ -666,34 +662,24 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => 8,
-            'total_items'           => $countArticles,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_articles_content_provider_suggested',
-                ['category' => $category]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => 8,
+            'maxLinks'    => 5,
+            'page'        => $page,
+            'total'       => $countArticles,
+            'route'       => [
+                'name'   => 'admin_articles_content_provider_suggested',
+                'params' => ['category' => $category]
+            ],
         ]);
 
         return $this->render(
             'article/content-provider-suggested.tpl',
             array(
-                'articles' => $articles,
-                'pager'    => $pagination,
+                'articles'   => $articles,
+                'pagination' => $pagination,
             )
         );
     }
@@ -729,34 +715,24 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => 8,
-            'total_items'           => $countArticles,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_articles_content_provider_category',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => 8,
+            'maxLinks'    => 5,
+            'page'        => $page,
+            'total'       => $countArticles,
+            'route'       => [
+                'name'   => 'admin_articles_content_provider_category',
+                'params' => ['category' => $categoryId]
+            ],
         ]);
 
         return $this->render(
             'article/content-provider-category.tpl',
             array(
-                'articles' => $articles,
-                'pager'   => $pagination,
+                'articles'   => $articles,
+                'pagination' => $pagination,
             )
         );
     }
@@ -790,14 +766,17 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countArticles,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl(
-                'admin_articles_content_provider_related',
-                ['category' => $categoryId]
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'maxLinks'    => 5,
+            'page'        => $page,
+            'total'       => $countArticles,
+            'route'       => [
+                'name'   => 'admin_articles_content_provider_related',
+                'params' => ['category' => $categoryId]
+            ],
         ]);
 
         return $this->render(

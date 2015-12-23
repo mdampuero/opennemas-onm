@@ -26,8 +26,7 @@
   {block name="header-css"}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
-    {stylesheets src="
-      @Common/components/bootstrap/dist/css/bootstrap.min.css,
+    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/select2/select2.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
@@ -41,19 +40,14 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/animate.css/animate.min.css,
-
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
-
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/less/main.less,
-      @ManagerTheme/less/main.less"
-
-    filters="cssrewrite,less"}
-      <link rel="stylesheet" type="text/css" href="{$asset_url}">
+      @ManagerTheme/less/main.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
 
@@ -323,9 +317,7 @@
 
     @ManagerTheme/js/controllers/*,
 
-    @Common/src/opennemas-webarch/js/core.js
-    " filters="uglifyjs"}
-      <script type="text/javascript" src="{$asset_url}"></script>
+    @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}
   {/block}
 </body>

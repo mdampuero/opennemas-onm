@@ -33,7 +33,7 @@
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
                       </div>
-                      <div class="dynamic-image-placeholder" ng-if="photo1">
+                      <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
                         <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
@@ -84,7 +84,7 @@
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
                       </div>
-                      <div class="dynamic-image-placeholder" ng-if="photo2">
+                      <div class="dynamic-image-placeholder ng-cloak" ng-if="photo2">
                         <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
@@ -137,7 +137,7 @@
                             <h5>{t}Pick an image{/t}</h5>
                           </div>
                         </div>
-                        <div class="dynamic-image-placeholder" ng-if="photo3">
+                        <div class="dynamic-image-placeholder ng-cloak" ng-if="photo3">
                           <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" only-image="true">
                             <div class="thumbnail-actions ng-cloak">
                               <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
@@ -204,10 +204,10 @@
                           <div class="img-thumbnail" ng-if="!video1">
                             <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
                               <i class="fa fa-film fa-2x"></i>
-                              <h5>Pick a video</h5>
+                              <h5>{t}Pick a video{/t}</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video1 && video1.thumb_image">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="video1 && video1.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" ng-model="video1.thumb_image" instance="{$smarty.const.INSTANCE_MEDIA}">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
@@ -220,7 +220,7 @@
                               <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video1 && !video1.thumb_image">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="video1 && !video1.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video1">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
@@ -235,7 +235,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" ng-if="video1">
+                      <div class="form-group ng-cloak" ng-if="video1">
                         <ul>
                           <li>{t}File name{/t}: [% video1.title %]</li>
                           <li>{t}Creation date{/t}: [% video1.created %]</li>
@@ -275,7 +275,7 @@
                               <h5>Pick a video</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video2 && video2.thumb_image">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="video2 && video2.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" ng-model="video2.thumb_image" instance="{$smarty.const.INSTANCE_MEDIA}">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
@@ -288,7 +288,7 @@
                               <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video2 && !video2.thumb_image">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="video2 && !video2.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video2">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
@@ -303,7 +303,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" ng-if="video2">
+                      <div class="form-group ng-cloak" ng-if="video2">
                         <ul>
                           <li>{t}File name{/t}: [% video2.title %]</li>
                           <li>{t}Creation date{/t}: [% video2.created %]</li>
@@ -326,70 +326,4 @@
       {/acl}
     {/if}
   {/is_module_activated}
-
-    {is_module_activated name="IMAGE_MANAGER"}
-    <script>
-    jQuery(document).ready(function($){
-        $('#related_media .unset').on('click', function (e, ui) {
-            e.preventDefault();
-
-            var parent = jQuery(this).closest('.contentbox');
-
-            parent.find('.related-element-id').val('');
-            parent.find('.related-element-footer').val('');
-            parent.find('.image').html('');
-
-            parent.removeClass('assigned');
-        });
-    });
-    </script>
-    {/is_module_activated}
-
-    {is_module_activated name="VIDEO_MANAGER"}
-    <script>
-    jQuery(document).ready(function($){
-        $('#related-videos').tabs();
-        jQuery('#related-videos .delete-button').on('click', function () {
-            var parent = jQuery(this).parent();
-            var elementID = parent.find('.related-element-id');
-
-            if (elementID.val() > 0) {
-                elementID.data('id', elementID.val());
-                elementID.val(null);
-                parent.fadeTo('slow', 0.5);
-            } else {
-                elementID.val(elementID.data('id'));
-                parent.fadeTo('slow', 1);
-            };
-        });
-
-        load_ajax_in_container('{url name=admin_videos_content_provider_gallery category=$category}', $('#videos'));
-
-        function load_video_results () {
-            var category = $('#category_video option:selected').val();
-            var text = $('#stringVideoSearch').val();
-            var url = '{url name=admin_videos_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
-            load_ajax_in_container(
-                url,
-                $('#videos')
-            );
-        }
-        $('#stringVideoSearch, #category_video').on('change', function(e, ui) {
-            return load_video_results();
-        });
-        $('#stringVideoSearch').keydown(function(event) {
-            if (event.keyCode == 13) {
-                event.preventDefault();
-                return load_video_results();
-            }
-        });
-
-        $('#videos').on('click', '.pager a', function(e, ui) {
-            e.preventDefault();
-            var link = $(this);
-            load_ajax_in_container(link.attr('href'), $('#videos'));
-        });
-    });
-    </script>
-    {/is_module_activated}
 {/acl}

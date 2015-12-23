@@ -95,10 +95,10 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         $resource = $response->getResourceOwner()->getName();
 
         $user = null;
-        if ($this->container->get('security.context')->getToken() &&
-            $this->container->get('security.context')->getToken()->getUser()
+        if ($this->container->get('security.token_storage')->getToken() &&
+            $this->container->get('security.token_storage')->getToken()->getUser()
         ) {
-            $user = $this->container->get('security.context')->getToken()->getUser();
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
             // Connect accounts
             $user->setMeta(array($resource . '_email' => $email));

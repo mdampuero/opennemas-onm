@@ -62,12 +62,12 @@ main {
     width: 100%;
     z-index: 20;
 
-    ul {
+    .credit > ul {
       list-style: none;
       padding: 0;
       margin: 0 auto;
 
-      li {
+      > li {
         display:inline-block;
         margin: 0;
         padding:0;
@@ -87,7 +87,7 @@ main {
           margin: 0px 10px;
         }
 
-        a {
+        > a, #languageDropdown {
           display: inline-block;
           color: #fff;
           height: 30px;
@@ -98,6 +98,14 @@ main {
           }
         }
       }
+    }
+
+    .dropdown-toggle {
+      cursor:pointer;
+    }
+
+    .dropdown-menu {
+      color:#ccc
     }
   }
 }

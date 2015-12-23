@@ -175,7 +175,7 @@
             <div>
               <div class="more-plans clearfix">
                 <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                <a href="{url name=admin_store_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
                   {t}Check out our modules{/t}
                 </a>
               </div>
@@ -245,7 +245,7 @@
               </div>
             {else}
               <h4 class="p-t-30 text-center">{t}You have no billing information{/t}</h4>
-              <h5 class="p-b-30 text-center">{t escape=off}You will be asked to add it during the checkout in our market{/t}</h5>
+              <h5 class="p-b-30 text-center">{t escape=off}You will be asked to add it during the checkout in our store{/t}</h5>
             {/if}
           </div>
         </div>

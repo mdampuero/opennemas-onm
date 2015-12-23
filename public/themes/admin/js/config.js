@@ -49,7 +49,15 @@ angular.module('BackendApp')
     $translateProvider.preferredLanguage('en');
   }).config(function ($analyticsProvider) {
     $analyticsProvider.virtualPageviews(false);
-  }).config(function (EditorProvider) {
+  }).config([ 'anTinyconProvider', function(anTinyconProvider){
+    anTinyconProvider.setOptions({
+      width: 7,
+      height: 9,
+      font: "10px arial",
+      colour: "#ffffff",
+      fallback: true
+    });
+  }]).config(function (EditorProvider) {
     // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
     EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');

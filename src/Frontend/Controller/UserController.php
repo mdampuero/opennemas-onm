@@ -302,7 +302,7 @@ class UserController extends Controller
                 $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
                 $session = $request->getSession();
 
-                $securityContext = $this->get('security.context');
+                $securityContext = $this->get('security.token_storage');
                 $securityContext->setToken($token);
                 $session->set('user', $user);
                 $session->set('_security_frontend', serialize($token));
@@ -563,23 +563,23 @@ class UserController extends Controller
                         $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
                     }
                 }
-                // Build the pager
-                $pagination = $this->get('paginator')->create([
-                    'elements_per_page' => $itemsPerPage,
-                    'total_items'       => $contentsCount,
-                    'base_url'          => $this->generateUrl(
-                        'frontend_author_frontpage',
-                        array('slug' => $slug,)
-                    ),
+                // Build the pagination
+                $pagination = $this->get('paginator')->get([
+                    'directional' => true,
+                    'epp'         => $itemsPerPage,
+                    'page'        => $page,
+                    'total'       => $contentsCount,
+                    'route'       => [
+                        'name'   => 'frontend_author_frontpage',
+                        'params' => [ 'slug' => $slug, ]
+                    ],
                 ]);
 
-                $this->view->assign(
-                    array(
-                        'contents'   => $contents,
-                        'author'     => $user,
-                        'pagination' => $pagination,
-                    )
-                );
+                $this->view->assign([
+                    'contents'   => $contents,
+                    'author'     => $user,
+                    'pagination' => $pagination,
+                ]);
             }
         }
 
@@ -663,13 +663,13 @@ class UserController extends Controller
                 $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
             }
 
-            // Build the pager
-            $pagination = $this->get('paginator')->create([
-                'elements_per_page' => $itemsPerPage,
-                'total_items'       => $totalUsers,
-                'base_url'          => $this->generateUrl(
-                    'frontend_frontpage_authors'
-                ),
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $totalUsers,
+                'route'       => 'frontend_frontpage_authors'
             ]);
 
             // Get user by slug

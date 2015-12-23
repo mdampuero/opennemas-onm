@@ -18,7 +18,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Locale\Locale;
 
 use Onm\Settings as s;
 
@@ -128,7 +127,7 @@ class L10nSystemListener implements EventSubscriberInterface
             $locale = $localeTemp.'.UTF-8';
         }
 
-        Locale::setDefault($shortLanguage);
+        \Locale::setDefault($shortLanguage);
         putenv("LC_MESSAGES=$locale");
         setlocale(LC_ALL, $locale);
         bindtextdomain($domain, $localeDir);

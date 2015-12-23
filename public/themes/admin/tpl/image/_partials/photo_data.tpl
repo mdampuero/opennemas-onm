@@ -120,11 +120,12 @@
     <input type="hidden" name="category[{$photo->id}]" value="{$photo->category}" />
   </div><!-- /photo-{$rnf} -->
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('#description-{$photo->id}').on('change', function(e, ui) {
-      fill_tags(jQuery('#description-{$photo->id}').val(),'#metadata-{$photo->id}', '{url name=admin_utils_calculate_tags}');
+{javascripts}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#description-{$photo->id}').on('change', function(e, ui) {
+        fill_tags(jQuery('#description-{$photo->id}').val(),'#metadata-{$photo->id}', '{url name=admin_utils_calculate_tags}');
+      });
     });
-  });
-</script>
+  </script>
+{/javascripts}

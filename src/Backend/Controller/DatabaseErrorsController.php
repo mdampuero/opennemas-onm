@@ -60,10 +60,11 @@ class DatabaseErrorsController extends Controller
             $errors = [];
         }
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $totalErrors,
-            'base_url'          => $this->generateUrl('admin_databaseerrors'),
+        $pagination = $this->get('paginator')->get([
+            'epp'   => $itemsPerPage,
+            'page'  => $page,
+            'total' => $totalErrors,
+            'route' => 'admin_databaseerrors',
         ]);
 
         return $this->render(

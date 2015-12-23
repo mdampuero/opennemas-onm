@@ -524,34 +524,23 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'spacesBeforeSeparator' => 0,
-            'spacesAfterSeparator'  => 0,
-            'firstLinkTitle'        => '',
-            'lastLinkTitle'         => '',
-            'separator'             => '',
-            'firstPagePre'          => '',
-            'firstPageText'         => '',
-            'firstPagePost'         => '',
-            'lastPagePre'           => '',
-            'lastPageText'          => '',
-            'lastPagePost'          => '',
-            'prevImg'               => _('Previous'),
-            'nextImg'               => _('Next'),
-            'elements_per_page'     => $itemsPerPage,
-            'total_items'           => $countOpinions,
-            'delta'                 => 1,
-            'base_url'              => $this->generateUrl(
-                'admin_opinions_content_provider',
-                array('category' => $categoryId)
-            ),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countOpinions,
+            'route'       => [
+                'name'   => 'admin_opinions_content_provider',
+                'params' => [ 'category' => $categoryId ]
+            ],
         ]);
 
         return $this->render(
             'opinion/content-provider.tpl',
             array(
-                'opinions' => $opinions,
-                'pager'    => $pagination,
+                'opinions'   => $opinions,
+                'pagination' => $pagination,
             )
         );
     }
@@ -578,11 +567,13 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countOpinions,
-            'delta'             => 1,
-            'base_url'          => $this->generateUrl('admin_opinions_content_provider_related'),
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $countOpinions,
+            'route'       => 'admin_opinions_content_provider_related',
         ]);
 
         return $this->render(
@@ -590,7 +581,7 @@ class OpinionsController extends Controller
             array(
                 'contentType'           => 'Opinion',
                 'contents'              => $opinions,
-                'pagination'            => $pagination->links,
+                'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
             )
         );

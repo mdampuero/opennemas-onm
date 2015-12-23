@@ -47,7 +47,7 @@ class Acl
                 return true;
             }
 
-            $user = getService('security.context')->getToken()->getUser();
+            $user = getService('security.token_storage')->getToken()->getUser();
 
             if (is_null($user) || $user == 'anon.') {
                 return false;
@@ -114,8 +114,8 @@ class Acl
             }
 
             $isGranted = false;
-            if (getService('security.context')->getToken()) {
-                $user = getService('security.context')->getToken()->getUser();
+            if (getService('security.token_storage')->getToken()) {
+                $user = getService('security.token_storage')->getToken()->getUser();
 
                 if ($user && $user !== 'anon.') {
                     $isGranted = in_array(
@@ -159,8 +159,8 @@ class Acl
      */
     public static function isAdmin()
     {
-        if (getService('security.context')->getToken()) {
-            $user = getService('security.context')->getToken()->getUser();
+        if (getService('security.token_storage')->getToken()) {
+            $user = getService('security.token_storage')->getToken()->getUser();
 
             if ($user && $user != 'anon.') {
                 return $user->isAdmin();
@@ -197,8 +197,8 @@ class Acl
      */
     public static function isMaster()
     {
-        if (getService('security.context')->getToken()) {
-            $user = getService('security.context')->getToken()->getUser();
+        if (getService('security.token_storage')->getToken()) {
+            $user = getService('security.token_storage')->getToken()->getUser();
 
             if ($user && $user != 'anon.') {
                 return $user->isMaster();

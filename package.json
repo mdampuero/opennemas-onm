@@ -11,6 +11,7 @@
     "angular-jsdoc": "git://github.com/openhost/angular-jsdoc.git",
     "gulp": "~3.9.0",
     "gulp-livereload": "~3.8.1",
+    "gulp-batch": "*",
     "jasmine-core": "~2.3.*",
     "jsdoc": "~3.3.*",
     "jshint": "~2.5.*",

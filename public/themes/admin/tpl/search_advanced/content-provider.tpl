@@ -17,8 +17,8 @@
       {include file=$content->content_partial_path}
     {/foreach}
   </div>
-  <div class="pagination clearfix">
-    {$pager->links}
+  <div class="pagination-wrapper">
+    {$pagination}
   </div><!-- / -->
 {elseif (!empty($search_string))}
   {t}No results{/t}

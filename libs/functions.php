@@ -81,8 +81,8 @@ function logUserEvent($action = null, $id = null, $data = null)
 
     $activatedUsers = \User::getTotalActivatedUsersRemaining(1, 1);
 
-    if(!is_null(getService('security.context')->getToken())) {
-        $currentUser = getService('security.context')->getToken()->getUser();
+    if (!is_null(getService('security.token_storage')->getToken())) {
+        $currentUser = getService('security.token_storage')->getToken()->getUser();
 
         $message =  'User '.$currentUser->username.'(ID:'.$currentUser->id.') '.
                     'exectuted action '.$action.': user ID '.$id;
@@ -110,6 +110,12 @@ function logUserEvent($action = null, $id = null, $data = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
+    if ($absolute) {
+        $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
+    } else {
+        $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
+    }
+
     global $kernel;
     return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
 }

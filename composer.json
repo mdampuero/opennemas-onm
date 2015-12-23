@@ -13,13 +13,11 @@
         }
     ],
     "include-path": [
-        "app/",
-        "app/models/",
         "libs/",
         "libs/core",
+        "libs/models/",
         "src/",
-        "src/WebService/Handlers/",
-        "vendor/"
+        "src/WebService/Handlers/"
     ],
     "autoload": {
         "psr-4": {
@@ -27,10 +25,51 @@
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
         "files": [
+            "app/AppKernel.php",
             "libs/functions.php",
-            "libs/adodb5/adodb.inc.php",
-            "libs/Pager/Pager.php"
+            "libs/adodb5/adodb.inc.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "2.8.*",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "doctrine/dbal": "<2.5",
+        "doctrine/doctrine-bundle": "~1.4",
+        "symfony/assetic-bundle": "dev-master",
+        "symfony/monolog-bundle": "~2.4",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "sensio/distribution-bundle": "~5.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "cometcult/braintree-bundle": "dev-master",
+        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "doctrine/migrations": "dev-master",
+        "drak/native-session": "*",
+        "drexarj/disqus-php": "dev-master",
+        "frandieguez/panorama-php": "1.0.*",
+        "friendsofsymfony/jsrouting-bundle": "1.5.*",
+        "giggsey/libphonenumber-for-php": "^7.2",
+        "imagine/imagine": "0.6.*",
+        "luracast/restler": "3.0.0",
+        "mockery/mockery": "dev-master",
+        "paypal/adaptivepayments-sdk-php": "v3.8.107",
+        "paypal/merchant-sdk-php": "v3.8.107",
+        "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
+        "hwi/oauth-bundle": "0.4.*",
+        "recaptcha/php5": "1.1.0",
+        "ronanguilloux/isocodes": "^1.2",
+        "rtconner/freshbooks-api": "dev-master",
+        "google/recaptcha": "1.1",
+        "smarty/smarty" : "3.1.21",
+        "smarty-gettext/smarty-gettext": "@stable",
+        "lexik/jwt-authentication-bundle": "dev-master",
+        "league/csv": "~7.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -41,42 +80,6 @@
         "phploc/phploc": "2.1.*",
         "phpunit/phpunit": "4.8.*",
         "theseer/phpdox": "0.8.*"
-    },
-
-    "require": {
-        "php": ">=5.5.9",
-        "symfony/symfony": "2.7.*",
-        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
-        "doctrine/dbal": "<2.5",
-        "doctrine/doctrine-bundle": "~1.4",
-        "symfony/assetic-bundle": "~2.3",
-        "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~4.0",
-        "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "cometcult/braintree-bundle": "dev-master",
-        "doctrine/doctrine-migrations-bundle": "dev-master",
-        "doctrine/migrations": "dev-master",
-        "drak/native-session": "*",
-        "drexarj/disqus-php": "dev-master",
-        "frandieguez/panorama-php": "1.0.*",
-        "friendsofsymfony/jsrouting-bundle": "@stable",
-        "imagine/imagine": "0.6.*",
-        "luracast/restler": "3.0.0",
-        "mockery/mockery": "dev-master",
-        "paypal/adaptivepayments-sdk-php": "v3.8.107",
-        "paypal/merchant-sdk-php": "v3.8.107",
-        "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
-        "hwi/oauth-bundle": "0.3.*@dev",
-        "recaptcha/php5": "1.1.0",
-        "rtconner/freshbooks-api": "dev-master",
-        "sparkling/vat-bundle": "~0.1",
-        "google/recaptcha": "1.1",
-        "smarty/smarty" : "3.1.21",
-        "smarty-gettext/smarty-gettext": "@stable",
-        "lexik/jwt-authentication-bundle": "dev-master",
-        "league/csv": "~7.0"
     },
     "repositories": [
         {
@@ -98,7 +101,6 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-update-cmd": [
@@ -107,7 +109,6 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ]
     },
@@ -117,6 +118,8 @@
     "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "tmp",
         "symfony-web-dir": "public",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {

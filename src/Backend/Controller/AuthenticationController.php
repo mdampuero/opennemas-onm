@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Onm\Framework\Controller\Controller;
@@ -42,10 +42,8 @@ class AuthenticationController extends Controller
 
         if ($token) {
             $user = $this->get('user_repository')->findBy(
-                array(
-                    'token' => array(array('value' => $token))
-                ),
-                array('token' => 'asc'),
+                ['token' => [['value' => $token]]],
+                ['token' => 'asc'],
                 1,
                 1
             );
@@ -59,7 +57,7 @@ class AuthenticationController extends Controller
             $user->updateUserToken($user->id, null);
             $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
 
-            $securityContext = $this->get('security.context');
+            $securityContext = $this->get('security.token_storage');
             $securityContext->setToken($token);
             $session->set('user', $user);
             $_SESSION['userid'] = $user->id;
@@ -83,17 +81,14 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-
         if ($session->get('_security.backend.target_path')) {
             $referer = $session->get('_security.backend.target_path');
         }
 
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
         } else {
-            $error = $request->getSession()
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
         }
 
         if ($error) {
@@ -114,7 +109,7 @@ class AuthenticationController extends Controller
         }
 
         $intention = time() . rand();
-        $token     = $this->get('form.csrf_provider')->generateCsrfToken($intention);
+        $token     = $this->get('security.csrf.token_manager')->getToken($intention);
 
         $this->request->getSession()->set('intention', $intention);
 

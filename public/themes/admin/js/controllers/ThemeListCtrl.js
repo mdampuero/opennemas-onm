@@ -7,7 +7,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  MarketListCtrl
+     * @name  ThemeListCtrl
      *
      * @requires $http
      * @requires $scope
@@ -16,7 +16,7 @@
      * @requires webStorage
      *
      * @description
-     *   Handles actions for market.
+     *   Handles actions for themes store.
      */
     .controller('ThemeListCtrl', [
       '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
@@ -37,7 +37,7 @@
 
         /**
          * @function addToCart
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Adds an item to the cart.
@@ -60,7 +60,7 @@
 
         /**
          * @function toggleCustom
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Customize the theme.
@@ -79,7 +79,7 @@
 
         /**
          * @function list
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Finds the list of available modules.
@@ -100,7 +100,7 @@
 
         /**
          * @function isActive
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Checks if an item is already activated.
@@ -116,7 +116,7 @@
 
         /**
          * @function isEnabled
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Checks if an item is already enabled.
@@ -132,7 +132,7 @@
 
         /**
          * @function isInCart
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Checks if an item is already in cart.
@@ -158,7 +158,7 @@
 
         /**
          * @function list
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Finds the list of available modules.
@@ -197,7 +197,7 @@
 
         /**
          * @function removeFromCart
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Removes an item from cart.
@@ -213,7 +213,7 @@
 
         /**
          * @function showDetails
-         * @memberOf MarketListCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *   Opens a modal window with the module details

@@ -14,8 +14,8 @@ backend_ws_getting_started:
     resource: @BackendWebServiceBundle/Resources/config/routing/getting_started.yml
     prefix:   /
 
-backend_ws_market:
-    resource: @BackendWebServiceBundle/Resources/config/routing/market.yml
+backend_ws_store:
+    resource: @BackendWebServiceBundle/Resources/config/routing/store.yml
     prefix:   /
 
 backend_ws_menus:

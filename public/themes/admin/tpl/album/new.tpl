@@ -1,19 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  <script>
-    $(document).ready(function($){
-      $('#title').on('change', function(e, ui) {
-        var metaTags = $('#metadata');
+  {javascripts}
+    <script>
+      $(document).ready(function($){
+        $('#title').on('change', function(e, ui) {
+          var metaTags = $('#metadata');
 
-        // Fill tags from title and category
-        if (!metaTags.val()) {
-          var tags = $('#title').val();
-          fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-        }
+          // Fill tags from title and category
+          if (!metaTags.val()) {
+            var tags = $('#title').val();
+            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
+          }
+        });
       });
-    });
-  </script>
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
@@ -53,19 +55,19 @@
               </li>
               <li class="quicklinks">
                 {if isset($album->id)}
-                {acl isAllowed="ALBUM_UPDATE"}
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-save"></i>
-                  {t}Save{/t}
-                </button>
-                {/acl}
+                  {acl isAllowed="ALBUM_UPDATE"}
+                    <button class="btn btn-primary" type="submit">
+                      <i class="fa fa-save"></i>
+                      {t}Save{/t}
+                    </button>
+                  {/acl}
                 {else}
-                {acl isAllowed="ALBUM_CREATE"}
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-save"></i>
-                  {t}Save{/t}
-                </button>
-                {/acl}
+                  {acl isAllowed="ALBUM_CREATE"}
+                    <button class="btn btn-primary" type="submit">
+                      <i class="fa fa-save"></i>
+                      {t}Save{/t}
+                    </button>
+                  {/acl}
                 {/if}
               </li>
             </ul>

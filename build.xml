@@ -14,7 +14,7 @@
         <pathelement path="${basedir}/src/Manager" />
         <pathelement path="${basedir}/src/ManagerWebService" />
         <pathelement path="${basedir}/src/WebService" />
-        <pathelement path="${basedir}/app/models" />
+        <pathelement path="${basedir}/libs/models" />
         <pathelement path="${basedir}/libs/Onm" />
         <pathelement path="${basedir}/libs/core" />
         <!-- Take a look at lint target should be updated -->
@@ -59,7 +59,7 @@
         <delete dir="${basedir}/build/jsdoc" />
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/phpdox"/>
+        <!-- <delete dir="${basedir}/build/phpdox"/> --><!-- Commented to speed up builds -->
     </target>
 
     <!-- <target name="prepare" depends="clean,phpab" -->
@@ -218,14 +218,14 @@
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${toolsdir}/phpunit" failonerror="true">
             <arg line="-c" />
-            <arg value="${basedir}/app/phpunit.xml.dist" />
+            <arg value="${basedir}/phpunit.xml" />
         </exec>
     </target>
 
     <target name="phpunit-ci" description="Run unit tests with PHPUnit">
         <exec executable="${toolsdir}/phpunit" failonerror="true">
             <arg line="-c" />
-            <arg value="${basedir}/app/phpunit.xml.dist" />
+            <arg value="${basedir}/phpunit.xml" />
             <arg line="--coverage-html" />
             <arg value="${basedir}/build/coverage" />
             <!-- <arg line="\-\-coverage-xml" /> -->

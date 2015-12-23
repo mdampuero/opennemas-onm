@@ -69,6 +69,33 @@ class MarketController extends Controller
     }
 
     /**
+     * Checks a phone number.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkPhoneAction(Request $request)
+    {
+        $code      = 200;
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+        $country = $request->query->get('country');
+        $phone   = $request->query->get('phone');
+
+        try {
+            $numberProto = $phoneUtil->parse($phone, $country);
+            if (!$phoneUtil->isValidNumber($numberProto)) {
+                $code = 400;
+            }
+        } catch (\Exception $e) {
+            $code = 400;
+        }
+
+        return new JsonResponse('', $code);
+    }
+
+    /**
      * Checks a VAT number.
      *
      * @param Request $request The request object.
@@ -83,11 +110,7 @@ class MarketController extends Controller
         $country   = $request->query->get('country');
         $vatNumber = $request->query->get('vat');
 
-        try {
-            if (!$vat->validate($country, $vatNumber)) {
-                $code = 400;
-            }
-        } catch (\Exception $e) {
+        if (!$vat->validate($country, $vatNumber)) {
             $code = 400;
         }
 
