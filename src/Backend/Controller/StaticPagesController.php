@@ -101,7 +101,7 @@ class StaticPagesController extends Controller
 
             $data = array(
                 'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
+                'body'           => $request->request->filter('body', ''),
                 'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -156,7 +156,7 @@ class StaticPagesController extends Controller
 
                 $data = array(
                     'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
+                    'body'           => $request->request->filter('body', ''),
                     'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
