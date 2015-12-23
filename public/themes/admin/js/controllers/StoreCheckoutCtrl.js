@@ -144,8 +144,6 @@
             $scope.edit       = true;
             $scope.validPhone = false;
             $scope.validVat   = false;
-
-            return;
           }
         });
 

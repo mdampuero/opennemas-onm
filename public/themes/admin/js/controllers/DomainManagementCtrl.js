@@ -81,14 +81,24 @@
         $scope.step = 1;
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *   Flag to know if current phone is valid.
+         *
+         * @type {Boolean}
+         */
+        $scope.validPhone = true;
+
+        /**
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
          *   Flag to know if current VAT is valid.
          *
          * @type {Boolean}
          */
-        $scope.validVat = false;
+        $scope.validVat = true;
 
         /**
          * @memberOf DomainManagementCtrl
@@ -245,6 +255,16 @@
         $scope.$watch('billing', function(nv) {
           if (!nv || !nv.name) {
             $scope.edit = true;
+            $scope.validPhone = false;
+            $scope.validVat   = false;
+          }
+        });
+
+        // Updates vat and total values when vat tax changes
+        $scope.$watch('validVat', function(nv) {
+          if (nv === true) {
+            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
+            $scope.total = $scope.subtotal + $scope.vat;
           }
         });
 
