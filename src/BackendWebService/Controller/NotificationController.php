@@ -223,8 +223,8 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        $notification['title'] = $notification['title'][CURRENT_LANGUAGE];
-        $notification['body']  = $notification['body'][CURRENT_LANGUAGE];
+        $notification['title'] = $notification['title'][CURRENT_LANGUAGE_SHORT];
+        $notification['body']  = $notification['body'][CURRENT_LANGUAGE_SHORT];
         $notification['read']  = 0;
 
         $date = \DateTime::createFromFormat(
