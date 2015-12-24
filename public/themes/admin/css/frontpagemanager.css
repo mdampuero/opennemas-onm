@@ -1,3 +1,7 @@
+body {
+  overflow: initial;
+}
+
 #copyright {margin-bottom:207px}
 #frontpagemanager {
   display: block;
