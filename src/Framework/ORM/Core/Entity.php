@@ -104,6 +104,16 @@ class Entity
     }
 
     /**
+     * Returns the current class name without namespace.
+     *
+     * @return string The current class name without namespace.
+     */
+    public function getClassName()
+    {
+        return substr(get_class($this), strrpos(get_class($this), '\\') + 1);
+    }
+
+    /**
      * Returns the entity RAW data.
      *
      * @return array The RAW data.
@@ -112,6 +122,19 @@ class Entity
     {
         return $this->data;
     }
+
+    /**
+     * Returns the parent class name without namespace.
+     *
+     * @return string The parent class name without namespace.
+     */
+    public function getParentClassName()
+    {
+        $class = get_parent_class($this);
+
+        return substr($class, strrpos($class, '\\') + 1);
+    }
+
 
     /**
      * Merge the current entity data with the given data.
