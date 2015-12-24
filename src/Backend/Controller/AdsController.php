@@ -150,7 +150,7 @@ class AdsController extends Controller
             $firstCategory = $categories[0];
 
             $data = array(
-                'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'category'           => $firstCategory,
                 'categories'         => implode(',', $categories),
@@ -167,7 +167,7 @@ class AdsController extends Controller
                 'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
                 'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
-                'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
+                'script'             => $request->request->get('script', ''),
                 'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
                 'fk_author'          => $_SESSION['userid'],
                 'fk_publisher'       => $_SESSION['userid'],
@@ -325,7 +325,7 @@ class AdsController extends Controller
 
         $data = array(
             'id'                 => $ad->id,
-            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
@@ -341,7 +341,7 @@ class AdsController extends Controller
             'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
-            'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
+            'script'             => $request->request->get('script', ''),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $_SESSION['userid'],
             'fk_publisher'       => $_SESSION['userid'],
