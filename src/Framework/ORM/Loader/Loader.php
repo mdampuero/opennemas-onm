@@ -81,9 +81,7 @@ class Loader
             $finder->files()->in($path)->name('*.yml');
 
             foreach ($finder as $file) {
-                if (file_exists($file)) {
-                    $this->loadItem($file);
-                }
+                $this->loadItem($file);
             }
         }
     }
