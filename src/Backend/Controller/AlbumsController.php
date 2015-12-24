@@ -314,10 +314,10 @@ class AlbumsController extends Controller
         $data = array(
             'id'             => $id,
             'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $request->request->getDigits('category'),
-            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request->get('description', ''),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
