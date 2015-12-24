@@ -5,7 +5,7 @@ namespace Framework\Tests\ORM\Configuration;
 use Framework\ORM\Exception\InvalidThemeException;
 use Framework\ORM\Loader\ThemeLoader;
 use Framework\Fixture\FixtureLoader;
-use Framework\ORM\Validator\ThemeValidator;
+use Framework\ORM\Validator\Validator;
 
 class ThemeLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class ThemeLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->fixtureLoader = new FixtureLoader($this);
 
-        $this->validator = new ThemeValidator();
+        $this->validator = new Validator(__DIR__ . '/../../../../src/Framework/Resources/config/orm/validation');
         $this->loader    = new ThemeLoader($this->validator);
     }
 
