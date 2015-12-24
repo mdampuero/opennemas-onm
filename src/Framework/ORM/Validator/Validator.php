@@ -9,12 +9,58 @@
  */
 namespace Framework\ORM\Validator;
 
-use Framework\ORM\Exception\InvalidEntityException;
-
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Exception\InvalidEntityException;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 
 class Validator
 {
+    /**
+     * Array of defined enumerations.
+     *
+     * @var array
+     */
+    protected $enum = [];
+
+    /**
+     * Array of allowed properties.
+     *
+     * @var array
+     */
+    protected $properties = [];
+
+    /**
+     * Array of required fields.
+     *
+     * @var array
+     */
+    protected $required = [];
+
+    /**
+     * Initializes the Validator.
+     *
+     * @param string $path The path to the validation rules directory.
+     */
+    public function __construct($path)
+    {
+        if (!is_dir($path)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The path %s with the validation rules does not exist',
+                    $path
+                )
+            );
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($path)->name('*.yml');
+
+        foreach ($finder as $file) {
+            $this->loadRules($file);
+        }
+    }
+
     /**
      * Validates the entity.
      *
@@ -24,66 +70,191 @@ class Validator
      */
     public function validate(Entity $entity)
     {
-        $data = $entity->getData();
+        $data    = $entity->getData();
+        $ruleset = \underscore($entity->getClassName());
 
-        if (property_exists($this, 'required')) {
-            $this->validateRequired($data);
+        if (!array_key_exists($ruleset, $this->properties)) {
+            $ruleset = \underscore($entity->getParentClassName());
         }
 
-        if (property_exists($this, 'optional')) {
-            $this->validateOptional($data);
+        if (!array_key_exists($ruleset, $this->properties)) {
+            throw new InvalidEntityException();
         }
+
+
+        $this->validateRequired($ruleset, $data);
+        $this->validateData($ruleset, $data);
     }
 
     /**
-     * Validates the custom parameters.
+     * Checks if the value is an array.
      *
-     * @param arra $data The configuration parameters.
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is an array. Otherwise, return false.
+     */
+    protected function isArray($value)
+    {
+        return is_array($value);
+    }
+
+    /**
+     * Checks if the value is a double.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is a double. Otherwise, return false.
+     */
+    protected function isDouble($value)
+    {
+        return is_double($value);
+    }
+
+    /**
+     * Checks if the value is valid basing on the defined enumerations.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is valid. Otherwise, return false.
+     */
+    protected function isEnum($value, $ruleset, $property)
+    {
+        if (array_key_exists($ruleset, $this->enum)
+            && array_key_exists($property, $this->enum[$ruleset])
+            && in_array($value, $this->enum[$ruleset][$property])
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the value is a integer.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is a integer. Otherwise, return false.
+     */
+    protected function isInteger($value)
+    {
+        return is_integer($value);
+    }
+
+    /**
+     * Checks if the value is numeric.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is numeric. Otherwise, return false.
+     */
+    protected function isNumeric($value)
+    {
+        return is_numeric($value);
+    }
+
+    /**
+     * Checks if the value is string.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is string. Otherwise, return false.
+     */
+    protected function isString($value)
+    {
+        return is_string($value);
+    }
+
+    /**
+     * Validates an entity property.
+     *
+     * @param string $ruleset  The ruleset to use.
+     * @param string $property The property name.
+     * @param mixed  $value    The property value.
+     */
+    protected function validateProperty($ruleset, $property, $value)
+    {
+        if (!array_key_exists($property, $this->properties[$ruleset])) {
+            return false;
+        }
+
+        $types = $this->properties[$ruleset][$property];
+
+        if (!is_array($types)) {
+            $types = [ $types ];
+        }
+
+        foreach ($types as $type) {
+            $checkType = 'is' . ucfirst($type);
+
+            if (method_exists($this, $checkType)
+                && $this->{$checkType}($value, $ruleset, $property)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Validates the entity data.
+     *
+     * @param string $ruleset The ruleset to use.
+     * @param array  $data    The data to validate.
      *
      * @throws InvalidEntityException If some required parameters left.
      */
-    public function validateCustom($data)
+    protected function validateData($ruleset, $data)
     {
-        $missed = array_diff(array_keys($this->custom), array_keys($data));
-
-        if (count($missed) > 0) {
-            throw new InvalidEntityException('NotValidException');
-        }
-    }
-
-    /**
-     * Validates the required parameters.
-     *
-     * @param arra $data The configuration parameters.
-     */
-    public function validateOptional($data)
-    {
-        $custom = array_diff(
-            array_keys($data),
-            array_keys($this->required),
-            array_keys($this->optional)
-        );
-
-        if (count($custom) > 0) {
-            if (property_exists($this, 'custom')) {
-                $this->validateCustom(array_intersect_key($data, $custom));
+        foreach ($data as $property => $value) {
+            if (!$this->validateProperty($ruleset, $property, $value)) {
+                throw new InvalidEntityException();
             }
         }
     }
 
     /**
-     * Validates the required parameters.
+     * Checks if one or more required values are missing.
      *
-     * @param arra $data The configuration parameters.
+     * @param string $ruleset The ruleset to use.
+     * @param array  $data    The data to validate.
      *
-     * @throws InvalidEntityException If some required parameters left.
+     * @throws InvalidEntityException If some required value is missing.
      */
-    public function validateRequired($data)
+    protected function validateRequired($ruleset, $data)
     {
-        $missed = array_diff(array_keys($this->required), array_keys($data));
+        if (empty($this->required)) {
+            return;
+        }
+
+        $missed = array_diff($this->required[$ruleset], array_keys($data));
 
         if (count($missed) > 0) {
             throw new InvalidEntityException('NotValidException');
+        }
+    }
+
+    /**
+     * Loads the validation rules from validation rules files.
+     *
+     * @param string $path The path to validation rules file.
+     */
+    protected function loadRules($path)
+    {
+        $ruleset = basename($path, '.yml');
+        $config  = Yaml::parse($path);
+
+        if (array_key_exists($ruleset, $this->properties)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The validation rules for entity %s already exist',
+                    $ruleset
+                )
+            );
+        }
+
+        foreach ($config as $key => $value) {
+            $this->{$key}[$ruleset] = $value;
         }
     }
 }
