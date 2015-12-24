@@ -139,9 +139,9 @@ class SpecialsController extends Controller
         $special = new \Special();
 
         $data = array(
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-            'description'    => $request->request->filter('description', ''),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request->get('description', ''),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
@@ -257,9 +257,9 @@ class SpecialsController extends Controller
             }
             $data = array(
                 'id'             => $id,
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'    => $request->request->filter('description', ''),
+                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'description'    => $request->request->get('description', ''),
                 'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
