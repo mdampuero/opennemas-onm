@@ -175,7 +175,7 @@ class CoversController extends Controller
         $postInfo = $request->request;
 
         $coverData = array(
-            'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
+            'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'       => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category'),
