@@ -158,10 +158,10 @@ class BooksController extends Controller
         }
 
         $data = [
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'cover_id'       => $request->request->getInt('book_cover_id'),
-            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -267,9 +267,9 @@ class BooksController extends Controller
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
