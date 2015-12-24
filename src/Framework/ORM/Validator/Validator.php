@@ -38,6 +38,13 @@ class Validator
     protected $required = [];
 
     /**
+     * Array of rulesets.
+     *
+     * @var array
+     */
+    protected $rulesets = [];
+
+    /**
      * Initializes the Validator.
      *
      * @param string $path The path to the validation rules directory.
@@ -70,20 +77,28 @@ class Validator
      */
     public function validate(Entity $entity)
     {
-        $data    = $entity->getData();
-        $ruleset = \underscore($entity->getClassName());
+        $data     = $entity->getData();
+        $rulesets = [
+            \underscore($entity->getClassName()),
+            \underscore($entity->getParentClassName())
+        ];
 
-        if (!array_key_exists($ruleset, $this->properties)) {
-            $ruleset = \underscore($entity->getParentClassName());
+        $rulesets = array_intersect($this->rulesets, $rulesets);
+
+        if (empty($rulesets)) {
+            throw new InvalidEntityException(
+                sprintf(
+                    _("Unable to validate entity of type '%s'"),
+                    $entity->getClassName()
+                )
+            );
         }
 
-        if (!array_key_exists($ruleset, $this->properties)) {
-            throw new InvalidEntityException();
+        foreach ($rulesets as $ruleset) {
+            $this->validateRequired($ruleset, $data);
+            $this->validateData($ruleset, $data);
+            $validated = true;
         }
-
-
-        $this->validateRequired($ruleset, $data);
-        $this->validateData($ruleset, $data);
     }
 
     /**
@@ -175,7 +190,7 @@ class Validator
     protected function validateProperty($ruleset, $property, $value)
     {
         if (!array_key_exists($property, $this->properties[$ruleset])) {
-            return false;
+            return true;
         }
 
         $types = $this->properties[$ruleset][$property];
@@ -208,7 +223,14 @@ class Validator
     {
         foreach ($data as $property => $value) {
             if (!$this->validateProperty($ruleset, $property, $value)) {
-                throw new InvalidEntityException();
+                throw new InvalidEntityException(
+                    sprintf(
+                        _("The property '%s' of type '%s' has an invalid value of '%s'"),
+                        $property,
+                        gettype($value),
+                        print_r($value, true)
+                    )
+                );
             }
         }
     }
@@ -223,14 +245,22 @@ class Validator
      */
     protected function validateRequired($ruleset, $data)
     {
-        if (empty($this->required)) {
+        if (empty($this->required)
+            || !array_key_exists($ruleset, $this->required)
+        ) {
             return;
         }
 
         $missed = array_diff($this->required[$ruleset], array_keys($data));
 
         if (count($missed) > 0) {
-            throw new InvalidEntityException('NotValidException');
+            throw new InvalidEntityException(
+                sprintf(
+                    _("The fields '%s' are missing for entity of class '%s'"),
+                    implode("', '", $missed),
+                    \classify($ruleset)
+                )
+            );
         }
     }
 
@@ -241,8 +271,8 @@ class Validator
      */
     protected function loadRules($path)
     {
+        $config  = Yaml::parse(file_get_contents($path));
         $ruleset = basename($path, '.yml');
-        $config  = Yaml::parse($path);
 
         if (array_key_exists($ruleset, $this->properties)) {
             throw new \InvalidArgumentException(
@@ -253,7 +283,9 @@ class Validator
             );
         }
 
-        foreach ($config as $key => $value) {
+        $this->rulesets[] = $ruleset;
+
+        foreach ($config['entity'] as $key => $value) {
             $this->{$key}[$ruleset] = $value;
         }
     }

@@ -5,13 +5,14 @@ namespace Framework\Tests\ORM\Validator;
 use Framework\ORM\Exception\InvalidSchemaException;
 use Framework\ORM\Core\Entity;
 use Framework\ORM\Entity\Client;
+use Framework\ORM\Entity\Theme;
 use Framework\ORM\Validator\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->entity = new Entity([ 'foo' => 'bar', 'baz' => 'qux' ]);
+        $this->client = new Client([ 'foo' => 'bar', 'baz' => 'qux' ]);
 
         // Mock constructor only
         $this->validator = \Mockery::mock('\Framework\ORM\Validator\Validator')
@@ -22,14 +23,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->properties['enum']       = $reflection->getProperty('enum');
         $this->properties['properties'] = $reflection->getProperty('properties');
         $this->properties['required']   = $reflection->getProperty('required');
+        $this->properties['rulesets']       = $reflection->getProperty('rulesets');
 
         foreach ($this->properties as $property) {
             $property->setAccessible(true);
         }
 
-        $this->properties['required']->setValue($this->validator, [ 'entity' => [ 'foo' ] ]);
+        $this->properties['rulesets']->setValue($this->validator, [ 'client', 'extension' ]);
+        $this->properties['required']->setValue($this->validator, [ 'client' => [ 'foo' ] ]);
         $this->properties['properties']->setValue($this->validator, [
-            'entity' => [
+            'client' => [
                 'foo' => 'string',
                 'baz' => [ 'string' ]
             ],
@@ -55,7 +58,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadRulesAlreadySet()
     {
-        $this->validator->loadRules(__DIR__ . '/../../../../../src/Framework/Resources/config/orm/validation/extension.yml');
+        $this->validator->loadRules(__DIR__ . '/../../../../src/Framework/Resources/config/orm/validation/extension.yml');
     }
 
     /**
@@ -63,7 +66,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalidRuleset()
     {
-        $this->validator->validate(new Client([ 'corge' => 'flob' ]));
+        $this->validator->validate(new Entity([ 'corge' => 'flob' ]));
     }
 
     /**
@@ -71,20 +74,20 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid()
     {
-        $this->validator->validate(new Entity([ 'corge' => 'flob' ]));
+        $this->validator->validate(new Client([ 'corge' => 'flob' ]));
     }
 
     public function testValidateValid()
     {
-        $this->properties['required']->setValue($this->validator, [ 'entity' => [ 'foo' ] ]);
+        $this->properties['required']->setValue($this->validator, [ 'client' => [ 'foo' ] ]);
         $this->properties['properties']->setValue($this->validator, [
-            'entity' => [
+            'client' => [
                 'foo' => 'string',
                 'baz' => [ 'string' ]
             ]
         ]);
 
-        $this->validator->validate($this->entity);
+        $this->validator->validate($this->client);
     }
 
     public function testIsArray()
@@ -102,10 +105,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEnum()
     {
-        $this->properties['enum']->setValue($this->validator, [ 'entity' => [ 'foo' => [ 'bar' ] ] ]);
+        $this->properties['enum']->setValue($this->validator, [ 'client' => [ 'foo' => [ 'bar' ] ] ]);
 
-        $this->assertTrue($this->validator->isEnum('bar', 'entity', 'foo'));
-        $this->assertFalse($this->validator->isEnum('norf', 'entity', 'foo'));
+        $this->assertTrue($this->validator->isEnum('bar', 'client', 'foo'));
+        $this->assertFalse($this->validator->isEnum('norf', 'client', 'foo'));
     }
 
     public function testIsInteger()
@@ -132,8 +135,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidatePropertyInvalid()
     {
-        $this->assertFalse($this->validator->validateProperty('entity', 'norf', 'glorp'));
-        $this->assertFalse($this->validator->validateProperty('entity', 'foo', 1));
+        $this->assertFalse($this->validator->validateProperty('client', 'foo', 1));
+    }
+
+    public function testValidatePropertyValid()
+    {
+        $this->assertTrue($this->validator->validateProperty('client', 'wooble', 'wumble'));
     }
 
     /**
@@ -141,24 +148,24 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateDataInvalid()
     {
-        $entity = new Entity([ 'glork' => 'glorp' ]);
-        $this->validator->validateData('entity', $entity->getData());
+        $entity = new Client([ 'foo' => 1 ]);
+        $this->validator->validateData('client', $entity->getData());
     }
 
     public function testValidateDataValid()
     {
-        $this->validator->validateData('entity', $this->entity->getData());
+        $this->validator->validateData('client', $this->client->getData());
     }
 
     public function testValidateRequired()
     {
-        $this->validator->validateRequired('entity', $this->entity->getData());
+        $this->validator->validateRequired('client', $this->client->getData());
     }
 
     public function testValidateRequiredEmpty()
     {
         $this->properties['required']->setValue($this->validator, []);
-        $this->validator->validateRequired('entity', $this->entity->getData());
+        $this->validator->validateRequired('client', $this->client->getData());
     }
 
     /**
@@ -166,7 +173,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateRequiredMissing()
     {
-        $this->properties['required']->setValue($this->validator, [ 'entity' => [ 'norf' ] ]);
-        $this->validator->validateRequired('entity', $this->entity->getData());
+        $this->properties['required']->setValue($this->validator, [ 'client' => [ 'norf' ] ]);
+        $this->validator->validateRequired('client', $this->client->getData());
     }
 }
