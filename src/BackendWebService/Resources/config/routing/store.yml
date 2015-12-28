@@ -1,5 +1,5 @@
 backend_ws_store_checkout:
-    path:     /store
+    path:     /store/checkout
     defaults: { _controller: BackendWebServiceBundle:Store:checkout }
     methods:  [ POST ]
     options:
