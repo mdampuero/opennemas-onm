@@ -34,6 +34,19 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
+         *   The domain to add.
+         *
+         * @type {Object}
+         */
+        $scope.domain = {
+          name: '',
+          tld: '.com'
+        };
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
          *   Array of domains.
          *
          * @type {Array}
@@ -169,11 +182,13 @@
          *                   false.
          */
         $scope.isValid = function() {
-          if ($scope.domains.indexOf('www.' + $scope.domain) !== -1) {
+          var domain = 'www.' + $scope.domain.name + $scope.domain.tld;
+
+          if ($scope.domains.indexOf(domain) !== -1) {
             return false;
           }
 
-          return /^(\w+\.)+\w+$/.test($scope.domain);
+          return /^(\w+)+(\.\w+)*$/.test(domain);
         };
 
         /**
@@ -214,7 +229,7 @@
          *   Maps the domain.
          */
         $scope.map = function() {
-          var domain = 'www.' + $scope.domain;
+          var domain = 'www.' + $scope.domain.name + $scope.domain.tld;
 
           if ($scope.domains.indexOf(domain) === -1) {
             if ($scope.create) {
@@ -224,7 +239,7 @@
 
               $http.get(url).success(function() {
                 $scope.domains.push(domain);
-                $scope.domain = '';
+                $scope.domain.name = '';
                 $scope.loading = false;
               }).error(function(response) {
                 $scope.loading = false;
@@ -232,7 +247,7 @@
               });
             } else {
               $scope.domains.push(domain);
-              $scope.domain = '';
+              $scope.domain.name = '';
             }
           }
         };
