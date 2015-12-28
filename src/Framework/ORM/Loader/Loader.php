@@ -98,7 +98,7 @@ class Loader
         $config['path'] = substr($path, strpos($path, '/themes'));
 
         if (!array_key_exists('type', $config)) {
-            throw \Exception('InvalidPluginConfigurationException');
+            throw new \Exception('InvalidPluginConfigurationException');
         }
 
         $loader = $this->container->get('orm.loader.' . $config['type']);
