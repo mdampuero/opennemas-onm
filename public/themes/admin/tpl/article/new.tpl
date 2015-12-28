@@ -55,8 +55,16 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-file-text-o"></i>
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question-circle"></i>
+                </a>
                 {t}Articles{/t}
               </h4>
+            </li>
+            <li class="quicklinks visible-xs">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question-circle fa-lg"></i>
+              </a>
             </li>
             <li class="quicklinks seperate hidden-xs">
               <span class="h-seperate"></span>
@@ -77,15 +85,6 @@
               <li class="quicklinks">
                 <span class="h-seperate"></span>
               </li>
-            <li class="quicklinks">
-              <a href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank">
-                <i class="fa fa-info-circle fa-lg"></i>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-
               <li class="quicklinks hidden-xs">
                 <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
                   <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>

@@ -9,21 +9,21 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-file-text-o"></i>
+              <i class="fa fa-file-text-o m-r-10"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question-circle"></i>
+              </a>
               {t}Articles{/t}
             </h4>
+          </li>
+          <li class="quicklinks visible-xs">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <i class="fa fa-question-circle fa-lg"></i>
+            </a>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank">
-                <i class="fa fa-info-circle fa-lg"></i>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
               <a class="btn btn-primary" href="{url name=admin_article_create}">

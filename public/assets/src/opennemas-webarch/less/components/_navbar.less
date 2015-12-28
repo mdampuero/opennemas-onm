@@ -42,6 +42,11 @@
       }
     }
 
+    .btn-link {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
     .btn-link:active,
     .btn-link:focus,
     .btn-link:hover {
@@ -53,11 +58,28 @@
     .btn-primary:focus {
       color: #fff;
     }
-
   }
 
   .dropdown-menu {
     margin-top: 10px !important;
+  }
+
+  .help-icon {
+    background: #fff;
+    color: @info-color !important;
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    width: 21px;
+    height: 21px;
+    padding: 0 2px !important;
+    line-height: 1.1em;
+    margin: 0;
+    border-radius: 100%;
+
+    &:hover {
+      color: darken(@info-color, 10%) !important;
+    }
   }
 
   .h-seperate {
@@ -241,6 +263,22 @@ div[ng-view].ng-leave-active .selected-navbar {
     &.actions-navbar {
       background: #22252d;
       color: #fff;
+    }
+
+    .help-icon {
+      background: #fff;
+      color: @info-color;
+      position: relative;
+      top: 8px;
+      left: 10px;
+      width: 21px;
+      height: 21px;
+      padding: 2.5px !important;
+
+      &:hover {
+        background: #fff;
+        color: darken(@info-color, 10%) !important;
+      }
     }
 
     .nav > li {
