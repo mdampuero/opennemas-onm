@@ -33,16 +33,27 @@
     padding: 11px 0 8px;
   }
 
-  .btn-link:active,
-  .btn-link:focus,
-  .btn-link:hover {
-    color: #22262e;
-  }
+  .nav > li {
+    a {
+      color: #505458;
 
-  .btn-primary,
-  .btn-primary:hover,
-  .btn-primary:focus {
-    color: #fff;
+      &:hover {
+        color: #000;
+      }
+    }
+
+    .btn-link:active,
+    .btn-link:focus,
+    .btn-link:hover {
+      color: #22262e;
+    }
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:focus {
+      color: #fff;
+    }
+
   }
 
   .dropdown-menu {
@@ -225,11 +236,34 @@ div[ng-view].ng-leave-active .selected-navbar {
   }
 
   .page-navbar {
-    top: 50px;
+    top: 0px;
+
+    &.actions-navbar {
+      background: #22252d;
+      color: #fff;
+    }
+
+    .nav > li {
+      a, .btn-link {
+        color: #fff;
+
+        &:hover {
+          color: #ddd;
+        }
+      }
+    }
 
     &.selected-navbar.collapsed {
       opacity: 0;
       top: -50px;
+    }
+
+    h1, h2, h3, h4, h5 {
+      color: #fff;
+    }
+
+    .quick-section .h-seperate {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
     }
   }
 
