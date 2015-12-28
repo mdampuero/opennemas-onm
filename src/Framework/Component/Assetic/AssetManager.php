@@ -165,27 +165,32 @@ abstract class AssetManager
         }
 
         if ($this->debug()) {
-            $srcs = $parsed;
-        } else {
-            // Create all-in-one asset
-            $parsed = array_map(function ($a) {
-                return substr($a, 1);
-            }, $parsed);
-
-            $assets = $factory->createAsset($parsed);
-
-            $cached = new AssetCache(
-                $assets,
-                new FileSystemCache($this->config['build_path'])
-            );
-
-            $this->writer->writeAsset($cached);
-
-            // Save all-in-one source path
-            $srcs[] = $this->createAssetSrc($cached->getTargetPath());
+            return $parsed;
         }
 
-        return $srcs;
+        // Create all-in-one asset
+        $parsed = array_map(function ($a) {
+            return substr($a, 1);
+        }, $parsed);
+
+        // Get hash for asset collection
+        $hash = md5(implode(',', $assets));
+
+        // Create and set target path
+        $target = $this->config['output_path'] . '/' . substr($hash, 0, 8) . '.'
+            . $this->extension;
+
+        $assets = $factory->createAsset($parsed);
+        $assets->setTargetPath($target);
+
+        $cached = new AssetCache(
+            $assets,
+            new FileSystemCache($this->config['build_path'])
+        );
+
+        $this->writer->writeAsset($cached);
+
+        return [ $this->createAssetSrc($cached->getTargetPath()) ];
     }
 
     /**
