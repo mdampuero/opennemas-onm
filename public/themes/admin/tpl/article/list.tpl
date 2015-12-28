@@ -17,6 +17,14 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
+              <a href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank">
+                <i class="fa fa-info-circle fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
               <a class="btn btn-primary" href="{url name=admin_article_create}">
                 <i class="fa fa-plus"></i>
@@ -29,7 +37,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
