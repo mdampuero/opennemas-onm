@@ -10,8 +10,16 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-list-alt"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221738-opennemas-c%C3%B3mo-cambiar-el-men%C3%BA-de-mi-peri%C3%B3dico" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question-circle"></i>
+              </a>
               {t}Menus{/t}
             </h4>
+          </li>
+          <li class="quicklinks visible-xs">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/221738-opennemas-c%C3%B3mo-cambiar-el-men%C3%BA-de-mi-peri%C3%B3dico" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <i class="fa fa-question-circle fa-lg"></i>
+            </a>
           </li>
         </ul>
         <div class="all-actions pull-right">

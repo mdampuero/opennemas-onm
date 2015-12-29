@@ -69,8 +69,16 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-newspaper-o"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question-circle"></i>
+              </a>
               {t}Frontpages{/t}
             </h4>
+          </li>
+          <li class="quicklinks visible-xs">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <i class="fa fa-question-circle fa-lg"></i>
+            </a>
           </li>
           <li class="quicklinks hidden-xs hidden-sm">
             <span class="h-seperate"></span>

@@ -9,7 +9,7 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-file-text-o m-r-10"></i>
+              <i class="fa fa-file-text-o"></i>
               <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question-circle"></i>
               </a>
