@@ -47,24 +47,16 @@ class Validator
     /**
      * Initializes the Validator.
      *
-     * @param string $path The path to the validation rules directory.
+     * @param array $validations The list of validations.
      */
-    public function __construct($path)
+    public function __construct($validations)
     {
-        if (!is_dir($path)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The path %s with the validation rules does not exist',
-                    $path
-                )
-            );
+        if (empty($validations)) {
+            return;
         }
 
-        $finder = new Finder();
-        $finder->files()->in($path)->name('*.yml');
-
-        foreach ($finder as $file) {
-            $this->loadRules($file);
+        foreach ($validations as $validation) {
+            $this->loadValidation($validation);
         }
     }
 
@@ -97,7 +89,6 @@ class Validator
         foreach ($rulesets as $ruleset) {
             $this->validateRequired($ruleset, $data);
             $this->validateData($ruleset, $data);
-            $validated = true;
         }
     }
 
@@ -265,14 +256,13 @@ class Validator
     }
 
     /**
-     * Loads the validation rules from validation rules files.
+     * Loads validation rules from a validation object.
      *
-     * @param string $path The path to validation rules file.
+     * @param Validation $validation The path to validation rules file.
      */
-    protected function loadRules($path)
+    protected function loadValidation($validation)
     {
-        $config  = Yaml::parse(file_get_contents($path));
-        $ruleset = basename($path, '.yml');
+        $ruleset = \underscore($validation->entity['name']);
 
         if (array_key_exists($ruleset, $this->properties)) {
             throw new \InvalidArgumentException(
@@ -285,8 +275,10 @@ class Validator
 
         $this->rulesets[] = $ruleset;
 
-        foreach ($config['entity'] as $key => $value) {
-            $this->{$key}[$ruleset] = $value;
+        foreach ($validation->entity as $key => $value) {
+            if ($key !== 'name') {
+                $this->{$key}[$ruleset] = $value;
+            }
         }
     }
 }
