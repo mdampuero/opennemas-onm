@@ -577,6 +577,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             updateItemsStatus(loading, 0, name, value);
           }
         }
+
+        $scope.selected.contents = [];
+        $scope.selected.all = false;
       });
     };
 
