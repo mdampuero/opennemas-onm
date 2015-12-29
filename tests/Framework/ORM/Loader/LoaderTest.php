@@ -18,32 +18,19 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testValidPaths()
     {
-        $fakeLoader = $this->getMockBuilder('FakeLoader')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'load' ])
-            ->getMock();
-
-        $fakeLoader->method('load')->willReturn(new Entity());
-        $fakeLoader->expects($this->once())->method('load');
-
         $container = $this->getMockBuilder('ServiceContainer')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get', 'getParameter' ])
+            ->setMethods([ 'getParameter' ])
             ->getMock();
 
-        $container->method('get')->willReturn($fakeLoader);
-        $container->method('getParameter')->willReturn(
-            substr(__DIR__, 0, strpos(__DIR__, '/src')) . '/app'
-        );
-
+        $container->method('getParameter')->willReturn(__DIR__ . '/../../../../app');
         $container->expects($this->once())->method('getParameter');
-        $container->expects($this->once())->method('get');
 
         $loader = new Loader(
             $container,
-            [ 'public/themes/basic' ]
+            [ 'config/orm' ]
         );
 
-        $this->assertNotEmpty($loader->get());
+        $this->assertNotEmpty($loader->load());
     }
 }

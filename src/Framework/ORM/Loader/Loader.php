@@ -9,17 +9,19 @@
  */
 namespace Framework\ORM\Loader;
 
+use Framework\ORM\Core\Validation;
+use Framework\ORM\Core\Connection;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 class Loader
 {
     /**
-     * The service container.
+     * The base path.
      *
-     * @var ServiceContainer
+     * @var string
      */
-    protected $container;
+    protected $basePath;
 
     /**
      * The list of paths to load items from.
@@ -29,21 +31,14 @@ class Loader
     protected $paths;
 
     /**
-     * The list of loaded items.
-     *
-     * @var array
-     */
-    protected $loaded;
-
-    /**
      * Initializes the Loader.
      *
-     * @param ServiceContainer $cache The service container.
-     * @param string           $paths The path to folders to load from.
+     * @param string $basePath The service container.
+     * @param string $paths The path to folders to load from.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($container, $paths)
+    public function __construct($basePath, $paths)
     {
         if (empty($paths)) {
             throw new \InvalidArgumentException(
@@ -51,39 +46,29 @@ class Loader
             );
         }
 
-        $this->container = $container;
-        $this->paths     = $paths;
-
-        $this->load();
+        $this->basePath = $basePath;
+        $this->paths    = $paths;
     }
 
     /**
-     * Returns the list of loaded items.
-     *
-     * @return array The list of loaded items.
-     */
-    public function get()
-    {
-        return $this->loaded;
-    }
-
-    /**
-     * Loads all plugins in the paths.
+     * Loads ORM-related items from configuration files.
      */
     public function load()
     {
         $finder = new Finder();
+        $loaded = [];
 
         foreach ($this->paths as $path) {
-            $path = $this->container->getParameter('kernel.root_dir')
-                . DS . '..' . DS . $path . DS;
+            $path = $this->basePath . DS . $path . DS;
 
             $finder->files()->in($path)->name('*.yml');
 
             foreach ($finder as $file) {
-                $this->loadItem($file);
+                $loaded[] = $this->loadItem($file->getRealPath());
             }
         }
+
+        return $loaded;
     }
 
     /**
@@ -93,19 +78,40 @@ class Loader
      */
     public function loadItem($path)
     {
-        $config = Yaml::parse($path);
+        $data = Yaml::parse(file_get_contents($path));
 
-        $path           = str_replace('/config.yml', '', $path);
-        $config['path'] = substr($path, strpos($path, '/themes'));
-
-        try {
-            if (array_key_exists('type', $config)) {
-                $loader = $this->container
-                    ->get('orm.loader.' . $config['type']);
-
-                $this->loaded[] = $loader->load($config);
-            }
-        } catch (\Exception $e) {
+        if (empty($data)) {
+            return false;
         }
+
+        $method = 'load' . ucfirst(array_keys($data)[0]);
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}($data);
+        }
+    }
+
+    /**
+     * Returns a new entity from data.
+     *
+     * @param array $data The data to load.
+     *
+     * @return Entity The loaded entity.
+     */
+    public function loadEntity($data)
+    {
+        return new Validation($data);
+    }
+
+    /**
+     * Returns a new database connection from data.
+     *
+     * @param array $data The data to load.
+     *
+     * @return Connection The loaded database connection.
+     */
+    public function loadDatabase($data)
+    {
+        return new Connection($data);
     }
 }
