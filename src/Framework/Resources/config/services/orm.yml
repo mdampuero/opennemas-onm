@@ -1,12 +1,9 @@
 services:
     orm.loader:
         class: Framework\ORM\Loader\Loader
-        arguments: [ @service_container, %plugins% ]
+        arguments: [ %kernel.root_dir%, %plugins% ]
 
-    orm.loader.theme:
-        class: Framework\ORM\Loader\ThemeLoader
-        arguments: [ @orm.validator ]
-
+    # Only used by @orm.loader
     orm.loader.schema:
         class: Framework\ORM\Loader\SchemaLoader
         arguments: [ @orm.validator.schema ]
@@ -29,10 +26,6 @@ services:
 
     orm.validator:
         class: Framework\ORM\Validator\Validator
-        arguments: [ %kernel.root_dir%/../src/Framework/Resources/config/orm/validation ]
-
-    orm.validator.plugin:
-        class: Framework\ORM\Validator\PluginValidator
         arguments: [ %kernel.root_dir%/../src/Framework/Resources/config/orm/validation ]
 
     orm.validator.schema:
