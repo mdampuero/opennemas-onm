@@ -1,13 +1,13 @@
 <?php
 
-namespace Framework\Tests\ORM\Validator;
+namespace Framework\Tests\ORM\Core\Validator;
 
 use Framework\ORM\Exception\InvalidSchemaException;
 use Framework\ORM\Core\Entity;
 use Framework\ORM\Core\Validation;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Entity\Theme;
-use Framework\ORM\Validator\Validator;
+use Framework\ORM\Core\Validator\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
