@@ -1,12 +1,7 @@
 services:
     orm.loader:
-        class: Framework\ORM\Loader\Loader
+        class: Framework\ORM\Core\Loader\Loader
         arguments: [ %kernel.root_dir%, %plugins% ]
-
-    # Only used by @orm.loader
-    orm.loader.schema:
-        class: Framework\ORM\Loader\SchemaLoader
-        arguments: [ @orm.validator.schema ]
 
     orm.manager.braintree:
         class: Framework\ORM\Braintree\BraintreeManager
@@ -24,10 +19,3 @@ services:
         class: Framework\ORM\EntityManager
         arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
 
-    orm.validator:
-        class: Framework\ORM\Validator\Validator
-        arguments: [ %kernel.root_dir%/../src/Framework/Resources/config/orm/validation ]
-
-    orm.validator.schema:
-        class: Framework\ORM\Validator\SchemaValidator
-        arguments: [ %kernel.root_dir%/../src/Framework/Resources/config/orm/validation ]
