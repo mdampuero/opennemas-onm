@@ -5,6 +5,7 @@ namespace Framework\ORM;
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Validator\Validator;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;
@@ -23,58 +24,26 @@ class EntityManager
     ];
 
     /**
-     * The Braintree manager.
+     * The entity validator.
      *
-     * @var BraintreeManager
+     * @var Validator
      */
-    protected $bm;
-
-    /**
-     * The Database manager.
-     *
-     * @var DatabaseManager
-     */
-    protected $dm;
-
-    /**
-     * The FreshBooks manager.
-     *
-     * @var FreshBooksManager
-     */
-    protected $fm;
+    protected $validator;
 
     /**
      * Initializes the FreshBooks api.
      *
-     * @param BraintreeManager  $bm The Braintree manager.
-     * @param DatabaseManager   $dm The Database manager.
-     * @param FreshBooksManager $fm The FreshBooks manager.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(BraintreeManager $bm, DatabaseManager $dm, FreshBooksManager $fm)
+    public function __construct($container)
     {
-        $this->bm = $bm;
-        $this->dm = $dm;
-        $this->fm = $fm;
-    }
+        $this->config    = $container->get('orm.loader')->load();
+        $this->container = $container;
+        $this->validator = new Validator();
 
-    /**
-     * Returns the BraintreeManager manager.
-     *
-     * @return BraintreeManager The Braintree manager.
-     */
-    public function getBraintreeManager()
-    {
-        return $this->bm;
-    }
-
-    /**
-     * Returns the FreshBooksManager manager.
-     *
-     * @return FreshBooksManager The FreshBooks manager.
-     */
-    public function getFreshBooksManager()
-    {
-        return $this->fm;
+        if (array_key_exists('validation', $this->config)) {
+            $this->validator->configure($this->config['validation']);
+        }
     }
 
     /**
@@ -88,18 +57,14 @@ class EntityManager
      */
     public function getPersister(Entity $entity)
     {
-        $class = get_class($entity);
-        $class = substr($class, strrpos($class, '\\') + 1);
-
         $persisters = [];
         foreach ($this->sources as $source => $priority) {
-            $persister = __NAMESPACE__ . '\\' . $source . '\\Persister\\' .
-                ucfirst($class) . 'Persister';
+            try {
+                $persisters[$priority] = $this->container
+                    ->get('orm.manager.' . \underscore($source))
+                    ->getPersister($entity);
 
-            if (class_exists($persister)) {
-                $manager = strtolower($source[0]) . 'm';
-
-                $persisters[$priority] = $this->{$manager}->getPersister($entity);
+            } catch (\Exception $e) {
             }
         }
 
@@ -107,7 +72,7 @@ class EntityManager
             return $this->buildChain($persisters);
         }
 
-        throw new InvalidPersisterException($class, 'any source');
+        throw new InvalidPersisterException($entity->getClassName(), 'any source');
     }
 
     /**
@@ -122,28 +87,15 @@ class EntityManager
     public function getRepository($name)
     {
         $entity = explode('.', $name);
-        $entity = $entity[count($entity) - 1];
-        $entity = preg_replace_callback(
-            '/([a-z])_([a-z])/',
-            function ($matches) {
-                return $matches[1] . strtoupper($matches[2]);
-            },
-            $entity
-        );
+        $entity = \classify($entity[count($entity) - 1]);
 
         $repositories = [];
         foreach ($this->sources as $source => $priority) {
-            $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
-                ucfirst($entity) . 'Repository';
-            if (class_exists($repository)) {
-                $manager = strtolower($source[0]) . 'm';
-
-                if ($source === 'database') {
-                    $name = $entity;
-                }
-
-                $repositories[$priority] =
-                    $this->{$manager}->getRepository($name);
+            try {
+                $repositories[$priority] = $this->container
+                    ->get('orm.manager.' . \underscore($source))
+                    ->getRepository($name);
+            } catch (\Exception $e) {
             }
         }
 
@@ -164,10 +116,10 @@ class EntityManager
         $persister = $this->getPersister($entity);
 
         if ($entity->exists()) {
-            $persister->update($entity);
-        } else {
-            $persister->create($entity);
+            return $persister->update($entity);
         }
+
+        $persister->create($entity);
     }
 
     /**

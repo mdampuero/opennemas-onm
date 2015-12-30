@@ -6,35 +6,57 @@ use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Entity\Client;
-use Framework\ORM\Entity\Invoice;
+use Framework\ORM\Core\Entity;
 use Framework\ORM\Entity\Payment;
 use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
+use Framework\ORM\Exception\InvalidPersisterException;
 
 class EntityManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $factory = $this
-            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+        $container = $this->getMockBuilder('ServiceContainer')
             ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->dm = $this
-            ->getMockBuilder('Framework\ORM\Database\DatabaseManager')
+        $this->loader = $this->getMockBuilder('Loader')
             ->disableOriginalConstructor()
+            ->setMethods([ 'load' ])
             ->getMock();
 
-        $this->bm = new BraintreeManager($factory);
-        $this->fm = new FreshBooksManager(null, null);
-        $this->em = new EntityManager($this->bm, $this->dm, $this->fm);
+        $this->dm = $this->getMockBuilder('DatabaseManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPersister', 'getRepository' ])
+            ->getMock();
+
+        $this->persister = $this->getMockBuilder('Persister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'create', 'remove', 'update' ])
+            ->getMock();
+
+        $container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->loader->expects($this->once())->method('load')
+            ->willReturn([ 'validation' => [] ]);
+
+        $this->em = new EntityManager($container);
     }
 
-    public function testConstructor()
+    public function serviceContainerCallback()
     {
-        $this->assertEquals($this->bm, $this->em->getBraintreeManager());
-        $this->assertEquals($this->fm, $this->em->getFreshBooksManager());
-        $this->assertEquals($this->fm, $this->em->getFreshBooksManager());
+        $args = func_get_args();
+
+        switch ($args[0]) {
+            case 'orm.loader':
+                return $this->loader;
+            case 'orm.manager.database':
+                return $this->dm;
+            default:
+                throw new \Exception();
+        }
     }
 
     /**
@@ -42,6 +64,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterInvalid()
     {
+        $this->dm->method('getPersister')->will($this->throwException(new \Exception()));
+
         $entity = new Payment();
 
         $this->em->getPersister($entity);
@@ -49,8 +73,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPersisterValid()
     {
-        $entity = new Client();
+        $this->dm->method('getPersister')->willReturn($this->persister);
 
+        $entity     = new Client();
         $persisters = $this->em->getPersister($entity);
 
         $this->assertTrue(0 < count($persisters));
@@ -61,11 +86,13 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRepositoryInvalid()
     {
+        $this->dm->method('getRepository')->will($this->throwException(new \Exception));
         $this->em->getRepository('payment');
     }
 
     public function testGetRepositoryValid()
     {
+        $this->dm->method('getRepository')->willReturn($this->getMock('Repository'));
         $persisters = $this->em->getRepository('client');
 
         $this->assertTrue(0 < count($persisters));
@@ -73,120 +100,37 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPersistWithExistingEntity()
     {
-        $ftp = $this
-            ->getMockBuilder('Framework\ORM\FreshBooks\Persister\FreshBooksPersister')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity     = new Entity([ 'id' => 1 ]);
+        $reflection = new \ReflectionClass($entity);
+        $property   = $reflection->getProperty('in_db');
 
-        $ftp->expects($this->once())->method('update')->willReturn(false);
+        $property->setAccessible(true);
+        $property->setValue($entity, [ true ]);
 
-        $bm = $this->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dm->method('getPersister')->willReturn($this->persister);
+        $this->persister->expects($this->once())->method('update');
 
-        $dm = $this->getMockBuilder('Framework\ORM\Database\DatabaseManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm = $this->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm->expects($this->once())->method('getPersister')->willReturn($ftp);
-
-        $em = new EntityManager($bm, $dm, $fm);
-
-        $em->persist(new Invoice([ 'invoice_id' => 1 ]));
+        $this->em->persist($entity);
     }
 
     public function testPersistWithUnexistingEntity()
     {
-        $ftp = $this
-            ->getMockBuilder('Framework\ORM\FreshBooks\Persister\FreshBooksPersister')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = new Entity([ 'id' => 1 ]);
 
-        $ftp->expects($this->once())->method('create')->willReturn(false);
+        $this->dm->method('getPersister')->willReturn($this->persister);
+        $this->persister->expects($this->once())->method('create');
 
-        $bm = $this->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $dm = $this->getMockBuilder('Framework\ORM\Database\DatabaseManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm = $this->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm->expects($this->once())->method('getPersister')->willReturn($ftp);
-
-        $em = new EntityManager($bm, $dm, $fm);
-
-        $em->persist(new Invoice());
+        $this->em->persist($entity);
     }
 
     public function testRemoveWithExistingEntity()
     {
-        $ftp = $this
-            ->getMockBuilder('Framework\ORM\FreshBooks\Persister\FreshBooksPersister')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = new Entity([ 'id' => 1 ]);
 
-        $ftp->expects($this->once())->method('remove')->willReturn(false);
+        $this->dm->method('getPersister')->willReturn($this->persister);
+        $this->persister->expects($this->once())->method('remove');
 
-        $bm = $this->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $dm = $this->getMockBuilder('Framework\ORM\Database\DatabaseManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm = $this->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm->expects($this->once())->method('getPersister')->willReturn($ftp);
-
-        $em = new EntityManager($bm, $dm, $fm);
-
-        $em->remove(new Invoice([ 'invoice_id' => 1 ]));
-    }
-
-    /**
-     * @expectedException \Framework\ORM\Exception\EntityNotFoundException
-     */
-    public function testRemoveWithUnexistingEntity()
-    {
-        $ftp = $this
-            ->getMockBuilder('Framework\ORM\FreshBooks\Persister\FreshBooksPersister')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $ftp->expects($this->once())->method('remove')
-            ->will(
-                $this->throwException(new \Framework\ORM\Exception\EntityNotFoundException())
-            );
-
-        $bm = $this->getMockBuilder('Framework\ORM\Braintree\BraintreeManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $dm = $this->getMockBuilder('Framework\ORM\Database\DatabaseManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm = $this->getMockBuilder('Framework\ORM\FreshBooks\FreshBooksManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fm->expects($this->once())->method('getPersister')->willReturn($ftp);
-
-        $em = new EntityManager($bm, $dm, $fm);
-
-        $em->remove(new Invoice());
+        $this->em->remove($entity);
     }
 
     public function testBuildChainWithoutElements()
