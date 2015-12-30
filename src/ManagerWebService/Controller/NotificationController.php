@@ -291,8 +291,7 @@ class NotificationController extends Controller
     {
         try {
             $em = $this->get('orm.manager');
-            $notification = $em ->getRepository('manager.notification')
-                ->find($id);
+            $notification = $em->getRepository('manager.notification')->find($id);
 
             $keys = array_unique(array_merge(
                 array_keys($request->request->all()),
@@ -300,15 +299,9 @@ class NotificationController extends Controller
             ));
 
             foreach ($keys as $key) {
-                if ($request->request->get($key)
-                    && !is_null($request->request->get($key))
-                ) {
-                    $notification->{$key} =
-                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-                } else {
-                    $notification->{$key} = null;
-                }
+                $notification->{$key} = $request->request->get($key);
             }
+
 
             if (empty($notification->start)) {
                 $notification->start = date('Y-m-d H:i:s');
