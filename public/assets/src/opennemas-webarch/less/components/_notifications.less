@@ -10,6 +10,27 @@
   }
 }
 
+.notification-item {
+  transition: all .5s;
+  margin: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  visibility: hidden;
+  border-radius: 4px;
+
+  .notification-item-content {
+    padding: 15px;
+  }
+}
+
+.notification-item-visible {
+  opacity: 1;
+  max-height: 500px;
+  margin-bottom: 15px;
+  visibility: visible;
+}
+
 .notification-list {
   list-style: none;
   height: 275px;
@@ -51,22 +72,22 @@
   padding: 30px;
 }
 
-.notification-content-error,
+.notification-item-error,
 .notification-list-item-error {
   background-color: fade(@error-color, 15%);
 }
 
-.notification-content-info,
+.notification-item-info,
 .notification-list-item-info {
   background-color: fade(@info-color, 15%);
 }
 
-.notification-content-success,
+.notification-item-success,
 .notification-list-item-success {
   background-color: fade(@success-color, 15%);
 }
 
-.notification-content-warning,
+.notification-item-warning,
 .notification-list-item-warning {
   background-color: fade(@warning-color, 15%);
 }

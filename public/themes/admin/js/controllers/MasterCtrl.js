@@ -15,8 +15,8 @@
  * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
-  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
+  '$compile', '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
+  function ($compile, $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
     'use strict';
     /**
      * The current language.
@@ -88,7 +88,73 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         anTinycon.setBubble(response.total);
 
         $scope.bounce = true;
-        $timeout(function() { $scope.bounce = false; }, 1000);
+
+        var i = 0;
+        while (i < response.results.length && !$scope.notification) {
+          if (response.results[i].always_visible == 1) {
+            $scope.notification = response.results[i];
+          }
+
+          i++;
+        }
+
+        if ($scope.notification) {
+          var tpl = '<div class="notification-item notification-item-[% notification.style ? notification.style : \'success\' %]" ng-class="{ \'notification-item-visible\': notification.visible }">' +
+            '<div class="clearfix notification-item-content">' +
+              '<div class="notification-title">' +
+                '[% notification.title %]' +
+                '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead(notification.id)">' +
+                  '<i class="fa fa-times"></i>' +
+                '</span>' +
+              '</div>' +
+              '<div class="notification-icon">' +
+                '<i class="fa" ng-class="{ \'fa-comment\': notification.type === \'comment\', \'fa-database\': notification.type === \'media\', \'fa-envelope\': notification.type === \'email\', \'fa-support\': notification.type === \'help\', \'fa-info\': notification.type !== \'comment\' && notification.type !== \'media\' && notification.type !== \'email\' && notification.type !== \'help\' && notification.type !== \'user\', \'fa-users\': notification.type === \'user\' }"></i>' +
+              '</div>' +
+              '<div class="notification-body" ng-bind-html="notification.body"></div>' +
+            '</div>'+
+          '</div>';
+
+          var e = $compile(tpl)($scope);
+          $('.content').prepend(e);
+        }
+
+        $timeout(function() {
+          $scope.bounce = false;
+          $scope.notification.visible = true;
+        }, 1000);
+      });
+    };
+
+    /**
+     * @function markAsRead
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Marks a notification as read.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
+    $scope.markAsRead = function(id) {
+      var url = routing.generate('backend_ws_notification_patch', { id: id });
+
+      $http.patch(url).success(function() {
+        $scope.notification.visible = false;
+
+        $timeout(function() {
+          $scope.notification = null;
+        }, 1000);
+
+        var i = 0;
+        while (i < $scope.notifications.length &&
+            $scope.notifications[i].id !== id) {
+          i++;
+        }
+
+        if (i < $scope.notifications.length) {
+          $scope.notifications.splice(i, 1);
+          $scope.pulse = true;
+          $timeout(function() { $scope.pulse = false; }, 1000);
+        }
       });
     };
 
