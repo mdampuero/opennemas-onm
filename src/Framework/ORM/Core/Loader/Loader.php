@@ -14,40 +14,21 @@ use Framework\ORM\Core\Connection;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Loads ORM configuration files.
+ */
 class Loader
 {
-    /**
-     * The base path.
-     *
-     * @var string
-     */
-    protected $basePath;
-
-    /**
-     * The list of paths to load items from.
-     *
-     * @var array
-     */
-    protected $paths;
-
     /**
      * Initializes the Loader.
      *
      * @param string $basePath The service container.
-     * @param string $paths The path to folders to load from.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($basePath, $paths)
+    public function __construct($path)
     {
-        if (empty($paths)) {
-            throw new \InvalidArgumentException(
-                _('Unable to load plugins. No folder specified.')
-            );
-        }
-
-        $this->basePath = $basePath;
-        $this->paths    = $paths;
+        $this->path = $path;
     }
 
     /**
@@ -58,14 +39,13 @@ class Loader
         $finder = new Finder();
         $loaded = [];
 
-        foreach ($this->paths as $path) {
-            $path = $this->basePath . DS . $path . DS;
+        $finder->files()->in($this->path)->name('*.yml');
 
-            $finder->files()->in($path)->name('*.yml');
+        foreach ($finder as $file) {
+            $item = $this->loadItem($file->getRealPath());
+            $type = \underscore($item->getClassName());
 
-            foreach ($finder as $file) {
-                $loaded[] = $this->loadItem($file->getRealPath());
-            }
+            $loaded[$type][] = $item;
         }
 
         return $loaded;
