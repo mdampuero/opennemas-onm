@@ -91,7 +91,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         var i = 0;
         while (i < response.results.length && !$scope.notification) {
-          if (response.results[i].always_visible == 1) {
+          if (response.results[i].forced == 1) {
             $scope.notification = response.results[i];
           }
 
@@ -103,7 +103,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
             '<div class="clearfix notification-item-content">' +
               '<div class="notification-title">' +
                 '[% notification.title %]' +
-                '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead(notification.id)">' +
+                '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead(notification.id)" ng-if="notification.fixed == 0">' +
                   '<i class="fa fa-times"></i>' +
                 '</span>' +
               '</div>' +
@@ -116,11 +116,14 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
           var e = $compile(tpl)($scope);
           $('.content').prepend(e);
+
+          $timeout(function() {
+            $scope.notification.visible = true;
+          }, 1000);
         }
 
         $timeout(function() {
           $scope.bounce = false;
-          $scope.notification.visible = true;
         }, 1000);
       });
     };

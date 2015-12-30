@@ -169,6 +169,9 @@ notification:
         fixed:
             type: boolean
             options: { default: 0 }
+        forced:
+            type: boolean
+            options: { default: 0 }
     index:
         -
             name: PRIMARY
