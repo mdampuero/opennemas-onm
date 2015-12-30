@@ -1,13 +1,13 @@
 services:
     orm.loader:
         class: Framework\ORM\Core\Loader\Loader
-        arguments: [ %kernel.root_dir%, %plugins% ]
+        arguments: [ %orm.config_path% ]
 
     orm.manager.braintree:
         class: Framework\ORM\Braintree\BraintreeManager
         arguments: [ @comet_cult_braintree.factory ]
 
-    orm.manager.freshbooks:
+    orm.manager.fresh_books:
         class: Framework\ORM\FreshBooks\FreshBooksManager
         arguments: [ %freshbooks.domain%, %freshbooks.token% ]
 
@@ -17,5 +17,4 @@ services:
 
     orm.manager:
         class: Framework\ORM\EntityManager
-        arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
-
+        arguments: [ @service_container ]
