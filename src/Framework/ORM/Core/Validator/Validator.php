@@ -49,12 +49,22 @@ class Validator
      *
      * @param array $validations The list of validations.
      */
-    public function __construct($validations)
+    public function __construct($validations = [])
     {
         if (empty($validations)) {
             return;
         }
 
+        $this->configure($validations);
+    }
+
+    /**
+     * Configures the Validator with new validations.
+     *
+     * @param array $validations The validations to add.
+     */
+    public function configure($validations)
+    {
         foreach ($validations as $validation) {
             $this->loadValidation($validation);
         }
