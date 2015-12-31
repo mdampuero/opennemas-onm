@@ -162,10 +162,11 @@ class StoreController extends Controller
                 'id'               => 'MEDIA_MANAGER',
                 'plan'             => 'PROFESSIONAL',
                 'name'             => _('Media'),
-                'thumbnail'        => 'module-multimedia.jpg',
-                'description'      => _('Add Video and Image Galleries to your content. '),
-                'long_description' => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
                 'type'             => 'module',
+                'thumbnail'        => 'module-multimedia.jpg',
+                'description'      => _('Add Video and Image Galleries to your content.'),
+                'long_description' => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
+                    <p>Our video manager is the same as youtube one, perfect consistency and performance.</p>'),
                 'price' => [
                     'month' => 35
                 ]
