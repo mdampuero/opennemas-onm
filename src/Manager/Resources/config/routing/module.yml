@@ -1,0 +1,16 @@
+manager_modules_list:
+    path: /modules
+    options:
+        expose: true
+
+manager_module_show:
+    path: /module/{id}/show
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_module_create:
+    path: /module/create
+    options:
+        expose: true
