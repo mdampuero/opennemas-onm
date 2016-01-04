@@ -74,13 +74,13 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
         $bundle = $this->methods['parseBundleName']
             ->invokeArgs($this->bag, [ 'FooBundle' ]);
 
-        $this->assertEquals('foo', $bundle);
+        $this->assertEquals(realpath(__DIR__ . '/../../../../public/bundles/') . '/foo', $bundle);
     }
 
     public function testParsePath()
     {
-        $expected = SITE_PATH . $this->config['folders']['common'] . DS . 'bar' . DS . 'baz.js';
-        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Common/bar/baz.js' ]);
+        $expected = SITE_PATH . $this->config['folders']['common'] . DS . 'js' . DS . 'admin.js';
+        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Common/js/admin.js' ]);
 
         $this->assertEquals([ $expected ], $path);
 
@@ -106,6 +106,6 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
         $theme = $this->methods['parseThemeName']
             ->invokeArgs($this->bag, [ 'FooTheme' ]);
 
-        $this->assertEquals('foo', $theme);
+        $this->assertEquals(realpath(__DIR__ . '/../../../../public/themes/') . '/foo', $theme);
     }
 }
