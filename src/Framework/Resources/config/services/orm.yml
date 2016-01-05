@@ -1,7 +1,7 @@
 services:
     orm.loader:
         class: Framework\ORM\Core\Loader\Loader
-        arguments: [ %orm.config_path% ]
+        arguments: [ %orm.config_path%, %kernel.environment% ]
 
     orm.manager.braintree:
         class: Framework\ORM\Braintree\BraintreeManager
