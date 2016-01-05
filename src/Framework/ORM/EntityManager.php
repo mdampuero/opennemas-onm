@@ -7,8 +7,8 @@ use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Core\Entity;
 use Framework\ORM\Core\Validation\Validator;
 use Framework\ORM\FreshBooks\FreshBooksManager;
-use Framework\ORM\Exception\InvalidPersisterException;
-use Framework\ORM\Exception\InvalidRepositoryException;
+use Framework\ORM\Core\Exception\InvalidPersisterException;
+use Framework\ORM\Core\Exception\InvalidRepositoryException;
 
 class EntityManager
 {

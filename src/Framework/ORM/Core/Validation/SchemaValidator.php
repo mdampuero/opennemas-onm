@@ -10,7 +10,7 @@
 namespace Framework\ORM\Validator;
 
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Exception\InvalidSchemaException;
+use Framework\ORM\Core\Exception\InvalidSchemaException;
 
 class SchemaValidator extends Validator
 {

@@ -25,7 +25,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
+     * @expectedException Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
     {
@@ -67,7 +67,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvalidCriteriaException
+     * @expectedException Framework\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {
@@ -174,7 +174,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
+     * @expectedException Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testGetPDFWithInvalidId()
     {

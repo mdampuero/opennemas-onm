@@ -10,8 +10,10 @@ class EntityNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $message = uniqid();
 
-        $e = new EntityNotFoundException($message);
+        $e = new EntityNotFoundException('Entity', 1, 'error');
 
-        $this->assertEquals($message, $e->getMessage());
+        $this->assertTrue(strpos($e->getMessage(), 'Entity') !== false);
+        $this->assertTrue(strpos($e->getMessage(), '1') !== false);
+        $this->assertTrue(strpos($e->getMessage(), 'error') !== false);
     }
 }

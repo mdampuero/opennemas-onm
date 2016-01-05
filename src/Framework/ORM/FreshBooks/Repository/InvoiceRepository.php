@@ -3,8 +3,8 @@
 namespace Framework\ORM\FreshBooks\Repository;
 
 use Framework\ORM\Entity\Invoice;
-use Framework\ORM\Exception\InvoiceNotFoundException;
-use Framework\ORM\Exception\InvalidCriteriaException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Framework\ORM\Core\Exception\InvalidCriteriaException;
 
 class InvoiceRepository extends FreshBooksRepository
 {
@@ -29,7 +29,7 @@ class InvoiceRepository extends FreshBooksRepository
             return new Invoice($response['invoice']);
         }
 
-        throw new InvoiceNotFoundException($id, $this->source, $this->api->getError());
+        throw new EntityNotFoundException('Invoice', $id, $this->api->getError());
     }
 
     /**
@@ -89,6 +89,6 @@ class InvoiceRepository extends FreshBooksRepository
             return $this->api->getResponse();
         }
 
-        throw new InvoiceNotFoundException($id, $this->source, $this->api->getError());
+        throw new EntityNotFoundException('Invoice', $id, $this->source, $this->api->getError());
     }
 }

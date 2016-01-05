@@ -87,7 +87,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
+     * @expectedException Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -117,7 +117,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
+     * @expectedException Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

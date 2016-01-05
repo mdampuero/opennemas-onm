@@ -26,7 +26,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\ClientNotFoundException
+     * @expectedException Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
     {
@@ -129,7 +129,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvalidCriteriaException
+     * @expectedException Framework\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {

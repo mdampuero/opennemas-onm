@@ -10,7 +10,7 @@
 namespace Framework\ORM\Core\Validation;
 
 use Framework\ORM\Core\Validation\Validable;
-use Framework\ORM\Exception\InvalidEntityException;
+use Framework\ORM\Core\Exception\InvalidEntityException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 

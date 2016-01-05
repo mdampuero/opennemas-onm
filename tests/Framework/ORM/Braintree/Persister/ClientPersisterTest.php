@@ -96,7 +96,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\ClientNotFoundException
+     * @expectedException \Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithRuntimeError()
     {
@@ -162,7 +162,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\ClientNotFoundException
+     * @expectedException \Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithRuntimeError()
     {

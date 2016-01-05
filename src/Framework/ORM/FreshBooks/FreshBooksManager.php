@@ -3,8 +3,8 @@
 namespace Framework\ORM\FreshBooks;
 
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Exception\InvalidPersisterException;
-use Framework\ORM\Exception\InvalidRepositoryException;
+use Framework\ORM\Core\Exception\InvalidPersisterException;
+use Framework\ORM\Core\Exception\InvalidRepositoryException;
 use Freshbooks\FreshBooksApi;
 
 class FreshBooksManager

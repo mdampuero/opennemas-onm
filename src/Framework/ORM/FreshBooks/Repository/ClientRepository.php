@@ -3,8 +3,8 @@
 namespace Framework\ORM\FreshBooks\Repository;
 
 use Framework\ORM\Entity\Client;
-use Framework\ORM\Exception\ClientNotFoundException;
-use Framework\ORM\Exception\InvalidCriteriaException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Framework\ORM\Core\Exception\InvalidCriteriaException;
 
 class ClientRepository extends FreshBooksRepository
 {
@@ -17,7 +17,7 @@ class ClientRepository extends FreshBooksRepository
      *
      * @return Client The client.
      *
-     * @throws ClientNotFoundException When the client id is invalid.
+     * @throws EntityNotFoundException When the client id is invalid.
      */
     public function find($id, $client = null, $next = true)
     {
@@ -41,7 +41,7 @@ class ClientRepository extends FreshBooksRepository
             return $client;
         }
 
-        throw new ClientNotFoundException($id, $this->source, $this->api->getError());
+        throw new EntityNotFoundException('Client', $id, $this->api->getError());
     }
 
     /**

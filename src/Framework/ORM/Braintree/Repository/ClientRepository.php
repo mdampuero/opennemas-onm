@@ -3,8 +3,8 @@
 namespace Framework\ORM\Braintree\Repository;
 
 use Framework\ORM\Entity\Client;
-use Framework\ORM\Exception\ClientNotFoundException;
-use Framework\ORM\Exception\InvalidCriteriaException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Framework\ORM\Core\Exception\InvalidCriteriaException;
 
 class ClientRepository extends BraintreeRepository
 {
@@ -17,7 +17,7 @@ class ClientRepository extends BraintreeRepository
      *
      * @return Client The client.
      *
-     * @throws ClientNotFoundException When the client id is invalid.
+     * @throws EntityNotFoundException When the client id is invalid.
      */
     public function find($id, $client = null, $next = true)
     {
@@ -39,10 +39,10 @@ class ClientRepository extends BraintreeRepository
 
             return $client;
         } catch (\Exception $e) {
-            throw new ClientNotFoundException($id, $this->source, $e->getMessage());
+            throw new EntityNotFoundException($id, $this->source, $e->getMessage());
         }
 
-        throw new ClientNotFoundException($id, $this->source);
+        throw new EntityNotFoundException($id, $this->source);
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Framework\ORM\FreshBooks\Persister;
 
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Exception\InvoiceNotFoundException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
 
 class InvoicePersister extends FreshBooksPersister
 {
@@ -78,9 +78,9 @@ class InvoicePersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new InvoiceNotFoundException(
+        throw new EntityNotFoundException(
+            'Invoice',
             $entity->invoice_id,
-            $this->source,
             $this->api->getError()
         );
     }
@@ -106,9 +106,9 @@ class InvoicePersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new InvoiceNotFoundException(
+        throw new EntityNotFoundException(
+            'Invoice',
             $entity->invoice_id,
-            $this->source,
             $this->api->getError()
         );
     }

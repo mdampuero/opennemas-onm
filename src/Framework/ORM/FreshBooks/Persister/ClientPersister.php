@@ -3,7 +3,7 @@
 namespace Framework\ORM\FreshBooks\Persister;
 
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Exception\ClientNotFoundException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
 
 class ClientPersister extends FreshBooksPersister
 {
@@ -42,7 +42,7 @@ class ClientPersister extends FreshBooksPersister
      * @param Entity $entity The client to update.
      * @param boolean $next  Whether to continue to the next persister.
      *
-     * @throws ClientNotFoundException If the client does not exist.
+     * @throws EntityNotFoundException If the client does not exist.
      */
     public function remove(Entity $entity, $next = true)
     {
@@ -58,9 +58,9 @@ class ClientPersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new ClientNotFoundException(
+        throw new EntityNotFoundException(
+            $entity->getClassName(),
             $entity->client_id,
-            $this->source,
             $this->api->getError()
         );
     }
@@ -71,7 +71,7 @@ class ClientPersister extends FreshBooksPersister
      * @param Entity $entity The client to update.
      * @param boolean $next  Whether to continue to the next persister.
      *
-     * @throws ClientNotFoundException If the client does not exist.
+     * @throws EntityNotFoundException If the client does not exist.
      */
     public function update(Entity $entity, $next = true)
     {
@@ -87,9 +87,9 @@ class ClientPersister extends FreshBooksPersister
             return $this;
         }
 
-        throw new ClientNotFoundException(
+        throw new EntityNotFoundException(
+            $entity->getClassName(),
             $entity->client_id,
-            $this->source,
             $this->api->getError()
         );
     }

@@ -9,7 +9,7 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Exception\EntityNotFoundException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
 use Framework\ORM\Entity\Notification;
 use Framework\ORM\Entity\UserNotification;
 use Onm\Framework\Controller\Controller;

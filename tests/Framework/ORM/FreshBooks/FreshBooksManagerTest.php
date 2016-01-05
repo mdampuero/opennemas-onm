@@ -20,7 +20,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvalidRepositoryException
+     * @expectedException Framework\ORM\Core\Exception\InvalidRepositoryException
      */
     public function testGetRepositoryInvalid()
     {
@@ -34,7 +34,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Framework\ORM\Exception\InvalidPersisterException
+     * @expectedException Framework\ORM\Core\Exception\InvalidPersisterException
      */
     public function testGetPersisterInvalid()
     {
@@ -111,7 +111,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\EntityNotFoundException
+     * @expectedException \Framework\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithUnexistingEntity()
     {
@@ -121,7 +121,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $p->method('remove')->will(
-            $this->throwException(new \Framework\ORM\Exception\EntityNotFoundException())
+            $this->throwException(new \Framework\ORM\Core\Exception\EntityNotFoundException('Client', 1, ''))
         );
 
         $fm = $this

@@ -11,7 +11,7 @@ use Framework\ORM\Core\Validation;
 use Framework\ORM\Entity\Payment;
 use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
-use Framework\ORM\Exception\InvalidPersisterException;
+use Framework\ORM\Core\Exception\InvalidPersisterException;
 
 class EntityManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,7 +80,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidPersisterException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidPersisterException
      */
     public function testGetPersisterInvalid()
     {
@@ -98,7 +98,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidRepositoryException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidRepositoryException
      */
     public function testGetRepositoryInvalid()
     {

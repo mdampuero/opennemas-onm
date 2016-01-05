@@ -2,7 +2,7 @@
 
 namespace Framework\Tests\ORM\Core\Validator;
 
-use Framework\ORM\Exception\InvalidSchemaException;
+use Framework\ORM\Core\Exception\InvalidSchemaException;
 use Framework\ORM\Core\Entity;
 use Framework\ORM\Core\Validation;
 use Framework\ORM\Entity\Client;
@@ -74,7 +74,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidEntityException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateInvalidRuleset()
     {
@@ -82,7 +82,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidEntityException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateInvalid()
     {
@@ -150,7 +150,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidEntityException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateDataInvalid()
     {
@@ -175,7 +175,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Framework\ORM\Exception\InvalidEntityException
+     * @expectedException \Framework\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateRequiredMissing()
     {
