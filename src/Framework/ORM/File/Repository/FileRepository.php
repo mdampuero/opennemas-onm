@@ -12,8 +12,8 @@ namespace Framework\ORM\File\Repository;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Repository\Repository;
-use Framework\ORM\Validator\Validator;
+use Framework\ORM\Core\Repository;
+use Framework\ORM\Validation\Validator;
 
 class FileRepository extends Repository
 {

@@ -3,7 +3,7 @@
 namespace Framework\ORM\Database\Persister;
 
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Persister\Persister;
+use Framework\ORM\Core\Persister;
 use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 

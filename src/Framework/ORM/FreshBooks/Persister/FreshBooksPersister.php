@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\FreshBooks\Persister;
 
-use Framework\ORM\Persister\Persister;
+use Framework\ORM\Core\Persister;
 use Freshbooks\FreshBooksApi;
 
 abstract class FreshBooksPersister extends Persister

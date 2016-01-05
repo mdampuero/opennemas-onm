@@ -2,7 +2,7 @@
 
 namespace Framework\ORM\FreshBooks\Repository;
 
-use Framework\ORM\Repository\Repository;
+use Framework\ORM\Core\Repository;
 use Freshbooks\FreshBooksApi;
 
 abstract class FreshBooksRepository extends Repository
