@@ -13,9 +13,9 @@ use Framework\ORM\Core\Entity;
 use Framework\ORM\Exception\EntityNotFoundException;
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
-use Repository\BaseManager;
+use Framework\ORM\Repository\Repository;
 
-class DatabaseRepository extends BaseManager
+class DatabaseRepository extends Repository
 {
     /**
      * The cache object.
