@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Persister;
+namespace Framework\ORM\Core;
 
 use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Core\Entity;

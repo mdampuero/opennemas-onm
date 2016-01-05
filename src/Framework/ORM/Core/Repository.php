@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Repository;
+namespace Framework\ORM\Core;
 
 use Framework\ORM\Core\ChainElement;
 
