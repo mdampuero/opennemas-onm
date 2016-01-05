@@ -145,7 +145,9 @@ abstract class AssetManager
             $target     = $this->getTargetPath($path);
             $targetPath = $this->config['root'] . $target;
 
-            if (!$this->debug() && !file_exists($targetPath)) {
+            if ($this->debug()
+                || (!$this->debug() && !file_exists($targetPath))
+            ) {
                 $fm = $this->getFilterManager($filters);
                 $factory->setFilterManager($fm);
 
