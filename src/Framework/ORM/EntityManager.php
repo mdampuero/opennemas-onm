@@ -5,24 +5,13 @@ namespace Framework\ORM;
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Validator\Validator;
+use Framework\ORM\Core\Validation\Validator;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Exception\InvalidPersisterException;
 use Framework\ORM\Exception\InvalidRepositoryException;
 
 class EntityManager
 {
-    /**
-     * Entity manager sources.
-     *
-     * @var array
-     */
-    protected $sources = [
-        'Braintree'  => 1,
-        'Database'   => 2,
-        'FreshBooks' => 0,
-    ];
-
     /**
      * The entity validator.
      *
@@ -37,9 +26,9 @@ class EntityManager
      */
     public function __construct($container)
     {
+        $this->validator = new Validator();
         $this->config    = $container->get('orm.loader')->load();
         $this->container = $container;
-        $this->validator = new Validator();
 
         if (array_key_exists('validation', $this->config)) {
             $this->validator->configure($this->config['validation']);
@@ -55,17 +44,26 @@ class EntityManager
      *
      * @throws InvalidPersisterException If the persister does not exist.
      */
-    public function getPersister(Entity $entity)
+    public function getPersister(Entity $entity, $persister = null)
     {
-        $persisters = [];
-        foreach ($this->sources as $source => $priority) {
-            try {
-                $persisters[$priority] = $this->container
-                    ->get('orm.manager.' . \underscore($source))
-                    ->getPersister($entity);
+        $available = [];
+        if (array_key_exists($entity->getClassName(), $this->config['validation'])) {
+            $available = $this->config['validation'][$entity->getClassName()]
+                ->mapping['persisters'];
+        }
 
-            } catch (\Exception $e) {
-            }
+        // If only need one persister
+        if (!empty($persister)) {
+            $available = [ $available[$persister] ];
+        }
+
+        $persisters = [];
+        foreach ($available as $params) {
+            $class = '\\' . $params['class'];
+            $args  = $this->parseArgs($params['arguments']);
+            $class = new \ReflectionClass($class);
+
+            $persisters[] = $class->newInstanceArgs($args);
         }
 
         if (!empty($persisters)) {
@@ -78,42 +76,54 @@ class EntityManager
     /**
      * Returns a new repository by name.
      *
-     * @param string $name The repository name.
+     * @param string $name       The entity name.
+     * @param string $repository The repository name.
      *
      * @return Repository The repository.
      *
      * @throws InvalidRepositoryException If the repository does not exist.
      */
-    public function getRepository($name)
+    public function getRepository($entity, $repository = null)
     {
-        $entity = explode('.', $name);
+        $entity = explode('.', $entity);
         $entity = \classify($entity[count($entity) - 1]);
 
+        $available = [];
+        if (array_key_exists($entity, $this->config['validation'])) {
+            $available = $this->config['validation'][$entity]
+                ->mapping['repositories'];
+        }
+
+        // If only need one repository
+        if (!empty($repository)) {
+            $available = [ $available[$repository] ];
+        }
+
         $repositories = [];
-        foreach ($this->sources as $source => $priority) {
-            try {
-                $repositories[$priority] = $this->container
-                    ->get('orm.manager.' . \underscore($source))
-                    ->getRepository($name);
-            } catch (\Exception $e) {
-            }
+        foreach ($available as $params) {
+            $class = '\\' . $params['class'];
+            $args  = $this->parseArgs($params['arguments']);
+            $class = new \ReflectionClass($class);
+
+            $repositories[] = $class->newInstanceArgs($args);
         }
 
         if (!empty($repositories)) {
             return $this->buildChain($repositories);
         }
 
-        throw new InvalidRepositoryException($name, 'any source');
+        throw new InvalidRepositoryException($entity, 'any source');
     }
 
     /**
      * Persists an entity in FreshBooks.
      *
-     * @param Entity $entity The entity to remove.
+     * @param Entity $entity    The entity to remove.
+     * @param string $persister The persister name.
      */
-    public function persist(Entity $entity)
+    public function persist(Entity $entity, $persister = null)
     {
-        $persister = $this->getPersister($entity);
+        $persister = $this->getPersister($entity, $persister);
 
         if ($entity->exists()) {
             return $persister->update($entity);
@@ -125,15 +135,14 @@ class EntityManager
     /**
      * Removes an entity from FreshBooks.
      *
-     * @param Entity $entity The entity to remove.
+     * @param Entity $entity    The entity to remove.
+     * @param string $persister The persister name.
      *
      * @throws EntityNotFoundException If entity does not exist
      */
-    public function remove(Entity $entity)
+    public function remove(Entity $entity, $persister = null)
     {
-        $persister = $this->getPersister($entity);
-
-        $persister->remove($entity);
+        $this->getPersister($entity, $persister)->remove();
     }
 
     /**
@@ -145,8 +154,6 @@ class EntityManager
      */
     private function buildChain($elements)
     {
-        ksort($elements);
-
         if (empty($elements)) {
             return null;
         }
@@ -160,5 +167,62 @@ class EntityManager
         }
 
         return $first;
+    }
+
+    /**
+     * Parses the array of arguments for persisters and repositories.
+     *
+     * @param array $ars The array of arguments.
+     *
+     * @return array The array of arguments with variables and services.
+     */
+    protected function parseArgs($args)
+    {
+        if (empty($args)) {
+            return [];
+        }
+
+        $arguments = [];
+        foreach ($args as $arg) {
+            $arguments[] = $this->parseArg($arg);
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * Parses an argument for persisters and repositories.
+     *
+     * @param string $arg The arguments to parse.
+     *
+     * @return mixed The object or parameter from service container or the
+     *               literal value.
+     */
+    protected function parseArg($arg)
+    {
+        if (!is_string($arg)) {
+            return $arg;
+        }
+
+        if ($arg === '@service_container') {
+            return $this->container;
+        }
+
+        if (strpos($arg, '@orm.connection') !== false) {
+            $conn = str_replace('@orm.connection.', '', $arg);
+            return $this->config['connection'][$conn];
+        }
+
+        if (strpos($arg, '@') === 0) {
+            $service = str_replace('@', '', $arg);
+            return $this->container->get($service);
+        }
+
+        if ($arg[0] === $arg[strlen($arg) - 1] && $arg[0] === '%') {
+            $param = str_replace('%', '', $arg);
+            return $this->container->getParameter($param);
+        }
+
+        return $arg;
     }
 }

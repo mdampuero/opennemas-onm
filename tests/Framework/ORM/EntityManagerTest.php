@@ -7,6 +7,7 @@ use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Validation;
 use Framework\ORM\Entity\Payment;
 use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
@@ -16,9 +17,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $container = $this->getMockBuilder('ServiceContainer')
+        $this->container = $this->getMockBuilder('ServiceContainer')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
         $this->loader = $this->getMockBuilder('Loader')
@@ -26,23 +27,38 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'load' ])
             ->getMock();
 
-        $this->dm = $this->getMockBuilder('DatabaseManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getPersister', 'getRepository' ])
-            ->getMock();
-
         $this->persister = $this->getMockBuilder('Persister')
             ->disableOriginalConstructor()
             ->setMethods([ 'create', 'remove', 'update' ])
             ->getMock();
 
-        $container->expects($this->any())->method('get')
+        $this->repository = $this->getMockBuilder('Repository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->loader->expects($this->once())->method('load')
+        $this->container->expects($this->any())->method('getParameter')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+
+        $this->loader->expects($this->any())->method('load')
             ->willReturn([ 'validation' => [] ]);
 
-        $this->em = new EntityManager($container);
+        $this->em = new EntityManager($this->container);
+
+        $this->em->config['connection']['foo'] = true;
+        $this->em->config['validation']['Entity'] = new Validation([
+            'mapping' => [
+                'persisters' => [
+                    'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
+                ],
+                'repositories' => [
+                    'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
+                ]
+            ]
+        ]);
     }
 
     public function serviceContainerCallback()
@@ -50,6 +66,10 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $args = func_get_args();
 
         switch ($args[0]) {
+            case '@foo':
+                return 'foo';
+            case 'foo':
+                return 'foo';
             case 'orm.loader':
                 return $this->loader;
             case 'orm.manager.database':
@@ -64,8 +84,6 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterInvalid()
     {
-        $this->dm->method('getPersister')->will($this->throwException(new \Exception()));
-
         $entity = new Payment();
 
         $this->em->getPersister($entity);
@@ -73,12 +91,10 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPersisterValid()
     {
-        $this->dm->method('getPersister')->willReturn($this->persister);
+        $entity = new Entity();
 
-        $entity     = new Client();
-        $persisters = $this->em->getPersister($entity);
-
-        $this->assertTrue(0 < count($persisters));
+        $this->assertNotEmpty($this->em->getPersister($entity));
+        $this->assertEquals(1, count($this->em->getPersister($entity, 'Entity')));
     }
 
     /**
@@ -86,16 +102,15 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRepositoryInvalid()
     {
-        $this->dm->method('getRepository')->will($this->throwException(new \Exception));
         $this->em->getRepository('payment');
     }
 
     public function testGetRepositoryValid()
     {
-        $this->dm->method('getRepository')->willReturn($this->getMock('Repository'));
-        $persisters = $this->em->getRepository('client');
+        $this->assertNotEmpty($this->em->getRepository('entity'));
 
-        $this->assertTrue(0 < count($persisters));
+        $persisters = $this->em->getRepository('entity', 'Entity');
+        $this->assertEquals(1, count($persisters));
     }
 
     public function testPersistWithExistingEntity()
@@ -107,30 +122,45 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($entity, [ true ]);
 
-        $this->dm->method('getPersister')->willReturn($this->persister);
+        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $em->method('getPersister')->willReturn($this->persister);
         $this->persister->expects($this->once())->method('update');
 
-        $this->em->persist($entity);
+        $em->persist($entity);
     }
 
     public function testPersistWithUnexistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $this->dm->method('getPersister')->willReturn($this->persister);
+        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $em->method('getPersister')->willReturn($this->persister);
         $this->persister->expects($this->once())->method('create');
 
-        $this->em->persist($entity);
+        $em->persist($entity);
     }
 
     public function testRemoveWithExistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $this->dm->method('getPersister')->willReturn($this->persister);
+        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getPersister' ])
+            ->getMock();
+
+        $em->method('getPersister')->willReturn($this->persister);
         $this->persister->expects($this->once())->method('remove');
 
-        $this->em->remove($entity);
+        $em->remove($entity);
     }
 
     public function testBuildChainWithoutElements()
@@ -157,5 +187,28 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($a, $chain);
         $this->assertEquals($b, $a->next());
         $this->assertFalse($b->hasNext());
+    }
+
+    public function testParseArgs()
+    {
+        $reflection = new \ReflectionClass($this->em);
+        $method = $reflection->getMethod('parseArgs');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->em, [ [] ]));
+        $this->assertNotEmpty($method->invokeArgs($this->em, [ [ 'foo' => 'bar' ] ]));
+    }
+
+    public function testParseArg()
+    {
+        $reflection = new \ReflectionClass($this->em);
+        $method = $reflection->getMethod('parseArg');
+        $method->setAccessible(true);
+
+        $this->assertEquals(123, $method->invokeArgs($this->em, [ 123 ]));
+        $this->assertEquals($this->container, $method->invokeArgs($this->em, [ '@service_container' ]));
+        $this->assertNotEmpty($method->invokeArgs($this->em, [ '@orm.connection.foo' ]));
+        $this->assertNotEmpty($method->invokeArgs($this->em, [ '@foo' ]));
+        $this->assertNotEmpty($method->invokeArgs($this->em, [ '%foo%' ]));
     }
 }
