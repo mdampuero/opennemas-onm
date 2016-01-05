@@ -16,7 +16,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoader()
     {
-        $loader = new Loader(__DIR__ . '/../../../../../app/config/orm');
+        $loader = new Loader(__DIR__ . '/../../../../../app/config/orm', 'dev');
         $this->assertNotEmpty($loader->load());
     }
 }

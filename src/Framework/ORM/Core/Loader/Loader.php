@@ -22,12 +22,14 @@ class Loader
     /**
      * Initializes the Loader.
      *
-     * @param string $basePath The service container.
+     * @param string $path The path to load from.
+     * @param string $env  The current environment.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($path)
+    public function __construct($path, $env)
     {
+        $this->env  = $env;
         $this->path = $path;
     }
 
@@ -45,7 +47,7 @@ class Loader
             $item = $this->loadItem($file->getRealPath());
             $type = \underscore($item->getClassName());
 
-            $loaded[$type][] = $item;
+            $loaded[$type][$item->name] = $item;
         }
 
         return $loaded;
@@ -80,7 +82,7 @@ class Loader
      */
     public function loadEntity($data)
     {
-        return new Validation($data);
+        return new Validation($data['entity']);
     }
 
     /**
@@ -90,8 +92,8 @@ class Loader
      *
      * @return Connection The loaded database connection.
      */
-    public function loadDatabase($data)
+    public function loadConnection($data)
     {
-        return new Connection($data);
+        return new Connection($data['connection'], $this->env);
     }
 }
