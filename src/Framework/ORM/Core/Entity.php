@@ -1,82 +1,25 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Framework\ORM\Core;
 
-class Entity
-{
-    /**
-     * Array of RAW data.
-     *
-     * @var array
-     */
-    protected $data = [];
+use Framework\Component\Data\DataObject;
+use Framework\ORM\Core\Validation\Validable;
 
+class Entity extends DataObject implements Validable
+{
     /**
      * The existence flag
      *
      * @var boolean
      */
     private $in_db = false;
-
-    /**
-     * Initializes the entity.
-     *
-     * @param array $data The entity data.
-     */
-    public function __construct($data = null)
-    {
-        if (!empty($data)) {
-            $this->data = $data;
-        }
-    }
-
-    /**
-     * Gets the value of the property from the RAW data array.
-     *
-     * @param string $property The property name.
-     *
-     * @return mixed The property value.
-     */
-    public function __get($property)
-    {
-        $property = \underscore($property);
-
-        if (array_key_exists($property, $this->data)) {
-            return $this->data[$property];
-        }
-
-        return null;
-    }
-
-    /**
-     * Checks if the value of the property is in the RAW data array.
-     *
-     * @param string $property The property name.
-     *
-     * @return boolean True if the property has a value. Otherwise, returns
-     *                 false.
-     */
-    public function __isset($property)
-    {
-        if (array_key_exists($property, $this->data)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Sets the value of the property in the RAW data array.
-     *
-     * @param string $property The property name.
-     * @param mixed  $value    The property value.
-     */
-    public function __set($property, $value)
-    {
-        $property = \underscore($property);
-
-        $this->data[$property] = $value;
-    }
 
     /**
      * Checks if the entity already exists in FreshBooks.
@@ -114,16 +57,6 @@ class Entity
     }
 
     /**
-     * Returns the entity RAW data.
-     *
-     * @return array The RAW data.
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * Returns the parent class name without namespace.
      *
      * @return string The parent class name without namespace.
@@ -134,7 +67,6 @@ class Entity
 
         return substr($class, strrpos($class, '\\') + 1);
     }
-
 
     /**
      * Merge the current entity data with the given data.
