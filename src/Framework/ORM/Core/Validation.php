@@ -10,9 +10,19 @@
 namespace Framework\ORM\Core;
 
 use Doctrine\DBAL\Schema\Schema as DbalSchema;
+use Framework\Component\Data\DataObject;
+use Framework\ORM\Core\Validation\Validable;
 
-class Validation extends Entity
+class Validation extends DataObject implements Validable
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassName()
+    {
+        return 'Validation';
+    }
+
     /**
      * Returns a schema for doctrine DBAL basing on the current schema.
      */
@@ -55,5 +65,13 @@ class Validation extends Entity
         }
 
         return $schema;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParentClassName()
+    {
+        return false;
     }
 }
