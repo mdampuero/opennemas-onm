@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\ORM\Exception;
+namespace Framework\Tests\ORM\Core\Exception;
 
-use Framework\ORM\Exception\InvalidCriteriaException;
+use Framework\ORM\Core\Exception\InvalidCriteriaException;
 
 class InvalidCriteriaExceptionTest extends \PHPUnit_Framework_TestCase
 {

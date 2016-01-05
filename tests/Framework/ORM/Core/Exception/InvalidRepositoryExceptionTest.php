@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\ORM\Exception;
+namespace Framework\Tests\ORM\Core\Exception;
 
-use Framework\ORM\Exception\InvalidRepositoryException;
+use Framework\ORM\Core\Exception\InvalidRepositoryException;
 
 class InvalidRepositoryExceptionTest extends \PHPUnit_Framework_TestCase
 {

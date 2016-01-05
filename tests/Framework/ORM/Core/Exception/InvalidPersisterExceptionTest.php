@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\ORM\Exception;
+namespace Framework\Tests\ORM\Core\Exception;
 
-use Framework\ORM\Exception\InvalidPersisterException;
+use Framework\ORM\Core\Exception\InvalidPersisterException;
 
 class InvalidPersisterExceptionTest extends \PHPUnit_Framework_TestCase
 {

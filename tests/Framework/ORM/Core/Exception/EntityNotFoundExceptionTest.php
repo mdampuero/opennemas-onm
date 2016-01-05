@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\ORM\Exception;
+namespace Framework\Tests\ORM\Core\Exception;
 
-use Framework\ORM\Exception\EntityNotFoundException;
+use Framework\ORM\Core\Exception\EntityNotFoundException;
 
 class EntityNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Exception;
+namespace Framework\ORM\Core\Exception;
 
 class InvalidPersisterException extends \Exception
 {
