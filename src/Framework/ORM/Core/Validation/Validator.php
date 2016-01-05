@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core\Validator;
+namespace Framework\ORM\Core\Validation;
 
-use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Validation\Validable;
 use Framework\ORM\Exception\InvalidEntityException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
@@ -77,7 +77,7 @@ class Validator
      *
      * @throws InvalidEntityException If the entity is not valid.
      */
-    public function validate(Entity $entity)
+    public function validate(Validable $entity)
     {
         $data     = $entity->getData();
         $rulesets = [
@@ -272,7 +272,7 @@ class Validator
      */
     protected function loadValidation($validation)
     {
-        $ruleset = \underscore($validation->entity['name']);
+        $ruleset = \underscore($validation->name);
 
         if (array_key_exists($ruleset, $this->properties)) {
             throw new \InvalidArgumentException(
@@ -285,7 +285,7 @@ class Validator
 
         $this->rulesets[] = $ruleset;
 
-        foreach ($validation->entity as $key => $value) {
+        foreach ($validation->getData() as $key => $value) {
             if ($key !== 'name') {
                 $this->{$key}[$ruleset] = $value;
             }
