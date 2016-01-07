@@ -78,10 +78,10 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}');getLatest()" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
   {block name="body"}
     <div class="overlay"></div>
-    <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl">
+    <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="getLatest()">
       <div class="navbar-inner">
         <div class="header-seperation">
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
