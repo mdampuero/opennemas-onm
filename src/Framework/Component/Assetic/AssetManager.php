@@ -225,8 +225,8 @@ abstract class AssetManager
         }
 
         return $this->config['output_path'] . DS . $src
-            . substr(md5($asset), 0, 8) . '.' . DEPLOYED_AT
-            . '.' . $this->extension;
+            . substr(md5($asset), 0, 8) . '.' . DEPLOYED_AT . '.xzy.'
+            . $this->extension;
     }
 
     /**
