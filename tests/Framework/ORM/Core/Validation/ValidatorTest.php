@@ -41,8 +41,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->properties['required']      = $reflection->getProperty('required');
         $this->properties['rulesets']      = $reflection->getProperty('rulesets');
         $this->methods['isArray']          = $reflection->getMethod('isArray');
-        $this->methods['isDouble']         = $reflection->getMethod('isDouble');
         $this->methods['isEnum']           = $reflection->getMethod('isEnum');
+        $this->methods['isFloat']         = $reflection->getMethod('isFloat');
         $this->methods['isInteger']        = $reflection->getMethod('isInteger');
         $this->methods['isNumeric']        = $reflection->getMethod('isNumeric');
         $this->methods['isString']         = $reflection->getMethod('isString');
@@ -108,17 +108,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isArray']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
-    public function testIsDouble()
-    {
-        $this->assertTrue($this->methods['isDouble']->invokeArgs($this->validator, [ 1.1 ]));
-        $this->assertFalse($this->methods['isDouble']->invokeArgs($this->validator, [ [] ]));
-        $this->assertFalse($this->methods['isDouble']->invokeArgs($this->validator, [ 'foo' ]));
-    }
-
     public function testIsEnum()
     {
         $this->assertTrue($this->methods['isEnum']->invokeArgs($this->validator, [ 'grault', 'client', 'garply' ]));
         $this->assertFalse($this->methods['isEnum']->invokeArgs($this->validator, [ 'norf', 'client', 'foo' ]));
+    }
+
+    public function testIsDouble()
+    {
+        $this->assertTrue($this->methods['isFloat']->invokeArgs($this->validator, [ 1.1 ]));
+        $this->assertFalse($this->methods['isFloat']->invokeArgs($this->validator, [ [] ]));
+        $this->assertFalse($this->methods['isFloat']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
     public function testIsInteger()

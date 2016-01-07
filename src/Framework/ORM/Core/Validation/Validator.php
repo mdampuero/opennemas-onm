@@ -45,6 +45,19 @@ class Validator
     protected $rulesets = [];
 
     /**
+     * Array of PHP-Doctrine equivalent types
+     *
+     * @var array
+     */
+    protected $types = [
+        'array'    => [ 'array', 'array_json', 'simple_array' ],
+        'datetime' => [ 'date', 'dateinterval', 'datetime', 'datetimetz', 'time' ],
+        'integer'  => [ 'bigint', 'integer', 'smallint' ],
+        'float'    => [ 'decimal', 'float' ],
+        'string'   => [ 'binary', 'blob', 'gui', 'string', 'text' ]
+    ];
+
+    /**
      * Initializes the Validator.
      *
      * @param array $validations The list of validations.
@@ -103,6 +116,24 @@ class Validator
     }
 
     /**
+     * Returns the equivalent PHP type for Doctrine type.
+     *
+     * @param string $type The Doctrine type.
+     *
+     * @return string The PHP equivalent type.
+     */
+    protected function convertType($type)
+    {
+        foreach ($this->types as $target => $types) {
+            if (in_array($type, $types)) {
+                return $target;
+            }
+        }
+
+        return $type;
+    }
+
+    /**
      * Checks if the value is an array.
      *
      * @param mixed $value The value to check.
@@ -112,18 +143,6 @@ class Validator
     protected function isArray($value)
     {
         return is_array($value);
-    }
-
-    /**
-     * Checks if the value is a double.
-     *
-     * @param mixed $value The value to check.
-     *
-     * @return boolean True if the value is a double. Otherwise, return false.
-     */
-    protected function isDouble($value)
-    {
-        return is_double($value);
     }
 
     /**
@@ -143,6 +162,18 @@ class Validator
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the value is a float.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is a float. Otherwise, return false.
+     */
+    protected function isFloat($value)
+    {
+        return is_double($value);
     }
 
     /**
@@ -201,7 +232,7 @@ class Validator
         }
 
         foreach ($types as $type) {
-            $checkType = 'is' . ucfirst($type);
+            $checkType = 'is' . ucfirst($this->convertType($type));
 
             if (method_exists($this, $checkType)
                 && $this->{$checkType}($value, $ruleset, $property)) {
