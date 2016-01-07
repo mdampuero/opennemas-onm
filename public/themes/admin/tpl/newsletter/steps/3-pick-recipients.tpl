@@ -60,12 +60,14 @@
                 {t}Select receivers{/t}
               </label>
               <div class="controls ng-cloak">
-                <div class="m-b-10" ng-repeat="option in source.items">
-                  <div class="checkbox">
-                    <input id="checkbox-left-[% $index %]" checklist-model="source.selected" checklist-value="option" type="checkbox">
-                    <label for="checkbox-left-[% $index %]">
-                      [% option.email %]
-                    </label>
+                <div class="recipients-box">
+                  <div class="m-b-10" ng-repeat="option in source.items">
+                    <div class="checkbox">
+                      <input id="checkbox-left-[% $index %]" checklist-model="source.selected" checklist-value="option" type="checkbox">
+                      <label for="checkbox-left-[% $index %]">
+                        [% option.email %]
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -84,12 +86,14 @@
                 {t}Receivers{/t}
               </label>
               <div class="controls ng-cloak">
-                <div class="m-b-10" ng-repeat="item in target.items">
-                  <div class="checkbox">
-                    <input id="checkbox-right-[% $index %]" checklist-model="target.selected" checklist-value="item" type="checkbox">
-                    <label for="checkbox-right-[% $index %]">
-                      [% item.email %]
-                    </label>
+                <div class="recipients-box">
+                  <div class="m-b-10" ng-repeat="item in target.items">
+                    <div class="checkbox">
+                      <input id="checkbox-right-[% $index %]" checklist-model="target.selected" checklist-value="item" type="checkbox">
+                      <label for="checkbox-right-[% $index %]">
+                        [% item.email %]
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

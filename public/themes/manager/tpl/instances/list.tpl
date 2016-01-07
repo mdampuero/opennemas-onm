@@ -139,7 +139,7 @@
           <div class="checkbox check-default">
             <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'last_login'" type="checkbox">
             <label for="checkbox-last-access">
-              {t}Last access{/t}
+              {t}Last activity{/t}
             </label>
           </div>
         </div>
@@ -352,7 +352,7 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contact_mail') == 'asc', 'fa fa-caret-down': isOrderedBy('contact_mail') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('last_login')" ng-show="isEnabled('last_login')">
-                {t}Last access{/t}
+                {t}Last activity{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('last_login') == 'asc', 'fa fa-caret-down': isOrderedBy('last_login') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('created')" ng-show="isEnabled('created')">
