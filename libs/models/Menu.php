@@ -145,7 +145,7 @@ class Menu
 
         $this->setMenuElements($id, $data['items']);
 
-        dispatchEventWithParams('menu.create', array('menu' => $this));
+        dispatchEventWithParams('menu.create', array('content' => $this));
 
         return true;
     }
@@ -230,7 +230,7 @@ class Menu
         /* Notice log of this action */
         // logContentEvent(__METHOD__, $this);
 
-        dispatchEventWithParams('menu.delete', array('menu' => $this));
+        dispatchEventWithParams('menu.delete', array('content' => $this));
 
         return true;
     }
