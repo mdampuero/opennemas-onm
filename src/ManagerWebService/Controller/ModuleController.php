@@ -298,18 +298,41 @@ class ModuleController extends Controller
                 array_keys($module->getData())
             ));
 
+            unset($keys[array_search('_method', $keys)]);
+
             foreach ($keys as $key) {
                 if ($request->request->get($key)
                     && !is_null($request->request->get($key))
                 ) {
-                    $module->{$key} =
-                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+                    $module->{$key} = $request->request->filter($key);
                 } else {
                     $module->{$key} = null;
                 }
             }
 
-            $module->updated = date('Y-m-d H:i:s');
+            $images              = [];
+            $module->name        = json_decode($module->name, true);
+            $module->description = json_decode($module->description, true);
+            $module->type        = 'module';
+            $module->updated     = date('Y-m-d H:i:s');
+
+            $module->short_description =
+                json_decode($module->short_description, true);
+
+            $i = 1;
+            foreach ($request->files as $file) {
+                $images[] = '/assets/images/modules/' . $module->id
+                    . '_' . $i . '.' . $file->getClientOriginalExtension();
+
+                $file->move(
+                    SITE_PATH . '/assets/images/modules',
+                    $module->id . '_' . $i . '.' . $file->getClientOriginalExtension()
+                );
+
+                $i++;
+            }
+
+            $module->images = $images;
 
             $em->persist($module);
 

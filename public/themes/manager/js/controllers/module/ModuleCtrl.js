@@ -19,8 +19,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $modal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$http', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $http, $location, $modal, $scope, itemService, routing, messenger, data) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -44,6 +44,7 @@
             es: '',
             gl: '',
           },
+          images: [],
           name: {
             en: '',
             es: '',
@@ -86,46 +87,9 @@
           $scope.language = lang;
         };
 
-        /**
-         * @function save
-         * @memberOf ModuleCtrl
-         *
-         * @description
-         *   Creates a new module.
-         */
-        $scope.save = function() {
-          if ($scope.moduleForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
-          $scope.saving = 1;
-
-          itemService.save('manager_ws_module_create', $scope.module)
-            .then(function (response) {
-              messenger.post({ message: response.data, type: 'success' });
-
-              if (response.status === 201) {
-                // Get new module id
-                var url = response.headers()['location'];
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                  'manager_module_show', { id: id });
-                $location.path(url);
-              }
-
-              $scope.saving = 0;
-            }, function(response) {
-              $scope.saving = 0;
-              messenger.post({ message: response, type: 'error' });
-            });
+        $scope.removeFile = function() {
+          $scope.module.images = [];
+          $('#image').val('');
         };
 
          /**
@@ -135,37 +99,65 @@
          * @description
          *   Updates an module.
          */
-        $scope.update = function() {
-          if ($scope.moduleForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
+        $scope.save = function() {
           $scope.saving = 1;
 
-          itemService.update('manager_ws_module_update', $scope.module.id,
-            $scope.module).success(function (response) {
-              messenger.post({ message: response, type: 'success' });
-              $scope.saving = 0;
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-              $scope.saving = 0;
-            });
+          var data = new FormData();
+          var url  = routing.generate('manager_ws_module_create');
+
+          if ($scope.module.id) {
+            url  = routing.generate('manager_ws_module_update', { id: $scope.module.id });
+            data.append('_method', 'PUT');
+          }
+
+          for (var key in $scope.module) {
+            if (key === 'name' || key === 'description' || key === 'short_description') {
+              data.append(key, JSON.stringify($scope.module[key]));
+            } else if ($scope.module[key] instanceof Array) {
+              for (var i = 0; i <  $scope.module[key].length; i++) {
+                data.append(key + '_' + i, $scope.module[key][i]);
+              }
+            } else {
+              data.append(key, $scope.module[key]);
+            }
+          }
+
+          $http.post(url, data, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+          }).success(function (response) {
+            messenger.post({ message: response, type: 'success' });
+            $scope.saving = 0;
+
+            if ($scope.module.id && response.status === 201) {
+              // Get new module id
+              var url = response.headers()['location'];
+              var id  = url.substr(url.lastIndexOf('/') + 1);
+
+              url = routing.ngGenerateShort(
+                  'manager_module_show', { id: id });
+              $location.path(url);
+            }
+          }).error(function(response) {
+            messenger.post({ message: response, type: 'error' });
+            $scope.saving = 0;
+          });
+        };
+
+        $scope.toggleOverlay = function() {
+          $scope.overlay = !$scope.overlay;
         };
 
         $scope.$on('$destroy', function() {
           $scope.module = null;
         });
 
-
         if (data.module) {
           $scope.module = data.module;
+
+          if (!$scope.module.images) {
+            $scope.module.images = [];
+          }
         }
       }
     ]);
