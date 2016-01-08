@@ -34,7 +34,7 @@
             <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!module.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="module.id">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="module.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -74,9 +74,47 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="image">{t}Image{/t}<label>
+              <label for="image">{t}Image{/t}</label>
               <div class="controls">
-                <input id="id" ng-model="module.author.url" type="file">
+                <input class="hidden" id="image" name="image" file-model="module.images[0]" type="file"/>
+                <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay }">
+                    <p>{t}Are you sure?{/t}</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay()" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeFile();toggleOverlay()" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
+                    </div>
+                  </div>
+                  <label for="image" ng-if="!module.images || module.images.length === 0 || !module.images[0]">
+                    <div class="thumbnail-placeholder">
+                      <div class="img-thumbnail">
+                        <div class="thumbnail-empty">
+                          <i class="fa fa-picture-o fa-3x block"></i>
+                          <h5>{t}Pick an image{/t}</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                  <div class="img-thumbnail text-center img-thumbnail-center no-animate" ng-if="module.images.length > 0">
+                    <div class="text-center" ng-if="module.images.length > 0" ng-preview="module.images[0]">
+                      <div class="thumbnail-actions ng-cloak" ng-if="module.images.length > 0">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay()">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <label class="thumbnail-action" for="image">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

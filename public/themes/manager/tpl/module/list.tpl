@@ -97,49 +97,49 @@
       <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'image'" type="checkbox">
             <label for="checkbox-name">
+              {t}Image{/t}
+            </label>
+          </div>
+        </div>
+        <div>
+          <div class="checkbox check-default">
+            <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+            <label for="checkbox-domains">
               {t}Name{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'domains'" type="checkbox">
-            <label for="checkbox-domains">
-              {t}Domains{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
+            <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'uuid'" type="checkbox">
             <label for="checkbox-domain-expire">
-              {t}Domain expire{/t}
+              {t}UUID{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
+            <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
             <label for="checkbox-contact">
-              {t}Contact{/t}
+              {t}Author{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'last_login'" type="checkbox">
+            <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-last-access">
-              {t}Last access{/t}
+              {t}Created{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
             <label for="checkbox-created">
-              {t}Created{/t}
+              {t}Updated{/t}
             </label>
           </div>
         </div>
@@ -210,104 +210,6 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
-            <label for="checkbox-videos">
-              {t}Videos{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-widgets" checklist-model="columns.selected" checklist-value="'widgets'" type="checkbox">
-            <label for="checkbox-widgets">
-              {t}Widgets{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-static-pages" checklist-model="columns.selected" checklist-value="'static_pages'" type="checkbox">
-            <label for="checkbox-static-pages">
-              {t}Static pages{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-attachments" checklist-model="columns.selected" checklist-value="'attachments'" type="checkbox">
-            <label for="checkbox-attachments">
-              {t}Attachments{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-polls" checklist-model="columns.selected" checklist-value="'polls'" type="checkbox">
-            <label for="checkbox-polls">
-              {t}Polls{/t}
-            </label>
-          </div>
-        </div>
-        <div class="checkbox check-default">
-          <input id="checkbox-letters" checklist-model="columns.selected" checklist-value="'letters'" type="checkbox">
-          <label for="checkbox-letters">
-            {t}Letters{/t}
-          </label>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
-            <label for="checkbox-media-size">
-              {t}Media size{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-alexa" checklist-model="columns.selected" checklist-value="'alexa'" type="checkbox">
-            <label for="checkbox-alexa">
-              {t}Alexa{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
-            <label for="checkbox-page-views">
-              {t}Page views{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
-            <label for="checkbox-users">
-              {t}Users{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
-            <label for="checkbox-emails">
-              {t}Emails{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-activated" checklist-model="columns.selected" checklist-value="'activated'" type="checkbox">
-            <label for="checkbox-activated">
-              {t}Enabled{/t}
-            </label>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="grid simple">
@@ -327,23 +229,26 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('instance')">
+              <th class="pointer" ng-show="isEnabled('image')" width="120">
+                {t}Image{/t}
+              </th>
+              <th class="pointer" ng-click="sort('instance')" ng-show="isEnabled('name')">
                 {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isEnabled('name')" width="250">
+              <th class="pointer" ng-click="sort('title')" ng-show="isEnabled('uuid')" width="250">
                 {t}UUID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" ng-show="isEnabled('author')" width="250">
                 {t}Author{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('type')" width="250">
+              <th class="pointer text-center" ng-click="sort('type')" ng-show="isEnabled('created')" width="250">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" ng-show="isEnabled('updated')" width="250">
                 {t}Updated{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
@@ -363,6 +268,9 @@
               <td>
                 [% item.id %]
               </td>
+              <td ng-show="isEnabled('image')">
+                <dynamic-image class="img-thumbnail" path="[% item.images[0] %]" raw="true"></dynamic-image>
+              </td>
               <td ng-show="isEnabled('name')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
                   [% item.name['en'] %]
@@ -376,16 +284,16 @@
                   </button>
                 </div>
               </td>
-              <td>
+              <td ng-show="isEnabled('uuid')">
                 [% item.uuid %]
               </td>
-              <td>
+              <td ng-show="isEnabled('author')">
                 [% item.author %]
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isEnabled('created')">
                 [% item.created %]
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isEnabled('updated')">
                 [% item.updated %]
               </td>
             </tr>
