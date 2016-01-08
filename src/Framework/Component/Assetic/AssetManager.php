@@ -213,10 +213,9 @@ abstract class AssetManager
     protected function getTargetPath($asset)
     {
         $src = $asset;
-
         if (is_array($asset)) {
             $src   = '';
-            $asset = implode(',', $asset);
+            $asset = implode(',', array_keys($asset));
         }
 
         if (!empty($src)) {
