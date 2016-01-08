@@ -386,7 +386,7 @@
                       img.width, maxHeight, maxWidth);
 
                   $scope.$apply();
-                }
+                };
 
                 img.src = nv;
               }
