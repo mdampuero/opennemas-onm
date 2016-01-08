@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('onm.form-autofill-fix', []).directive('formAutofillFix', [
-    '$timeout'
+    '$timeout',
     function ($timeout) {
       return function (scope, element, attrs) {
         element.prop('method', 'post');

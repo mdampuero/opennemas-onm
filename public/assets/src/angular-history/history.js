@@ -76,4 +76,4 @@
       return history;
   }]);
 
-});
+})();
