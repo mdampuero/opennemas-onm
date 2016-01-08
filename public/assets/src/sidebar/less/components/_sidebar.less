@@ -502,35 +502,10 @@
   }
 }
 
-@media only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (orientation: portrait) {
+@media only screen and (max-device-width: @tablet-width) and (min-device-width: @phone-width) and (orientation: portrait) {
   .sidebar {
     display: block;
     opacity: 1;
     visibility: visible;
-  }
-}
-
-@media (max-width: 767px) {
-  /* When in phone mode hide some elements and put some colors in navbars */
-  .page-navbar.actions-navbar, .page-navbar.selected-navbar {
-    top: 0px;
-  }
-  .page-navbar.selected-navbar.collapsed {
-    top: -50px;
-  }
-  .page-navbar {
-    background: #22252d;
-    color: #fff;
-  }
-  .page-navbar h1,
-  .page-navbar h2,
-  .page-navbar h3,
-  .page-navbar h4,
-  .page-navbar h5,
-  .btn-link {
-    color: #fff;
-  }
-  .page-navbar .quick-section .h-seperate {
-    border-left: 1px solid rgba(255, 255, 255, 0.5);
   }
 }
