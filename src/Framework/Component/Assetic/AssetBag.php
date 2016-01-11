@@ -205,7 +205,7 @@ class AssetBag
 
             $path = [];
             foreach ($finder as $file) {
-                $path[] = $file->getRealPath();
+                $path[] = str_replace(DS . DS, DS, $file->getPathname());
             }
 
             return $path;
