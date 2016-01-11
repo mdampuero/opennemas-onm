@@ -126,7 +126,7 @@
                     {t}User name{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="login" maxlength="20" name="login" required="required" type="text" value="{$user->username|default:""}"/>
+                    <input class="form-control" id="login" maxlength="20" pattern="[a-z0-9\d-.]+" name="login" required="required" type="text" value="{$user->username|default:""}" title="{t}Only lowercase letters, numbers, point and hyphen allowed{/t}" />
                   </div>
                 </div>
                 <div class="form-group">

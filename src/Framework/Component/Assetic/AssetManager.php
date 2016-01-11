@@ -121,76 +121,68 @@ abstract class AssetManager
      */
     public function writeAssets($assets)
     {
-        $factory = $this->getAssetFactory();
         if (empty($assets)) {
             return [];
         }
 
-        $parsed = [];
+        if (!$this->debug()) {
+            // Check all-in-one asset if prod environment
+            $target     = $this->getTargetPath($assets);
+            $targetPath = $this->config['root'] . $target;
 
-        // Prepare the assets writer
-        $this->writer = new AssetWriter($this->config['root']);
+            if (file_exists($targetPath)) {
+                return [ $this->createAssetSrc($target) ];
+            }
+        }
 
+        $cache   = new FileSystemCache($this->config['build_path']);
+        $factory = $this->getAssetFactory();
+        $parsed  = [];
+        $writer  = new AssetWriter($this->config['root']);
+
+        // Apply filters to each file
         foreach ($assets as $path => $filters) {
-            $name = substr($path, strrpos($path, '/') + 1);
-            $name = substr($name, 0, strrpos($name, '.'));
+            $target     = $this->getTargetPath($path);
+            $targetPath = $this->config['root'] . $target;
 
-            $fm = $this->getFilterManager($filters);
+            if ($this->debug()
+                || (!$this->debug() && !file_exists($targetPath))
+            ) {
+                $fm = $this->getFilterManager($filters);
+                $factory->setFilterManager($fm);
 
-            $factory->setFilterManager($fm);
+                $asset = $factory->createAsset($path, $filters);
+                $asset->setTargetPath($target);
 
-            $asset = $factory->createAsset($path, $filters);
+                $cached = new AssetCache($asset, $cache);
+                $writer->writeAsset($cached);
+            }
 
-            // Get hash to append to filename
-            $hash = substr(
-                $asset->getTargetPath(),
-                strrpos($asset->getTargetPath(), '/') + 1
-            );
-
-            $hash = substr($hash, 0, strrpos($hash, '.'));
-
-            // Create and set target path
-            $target = $this->config['output_path'] . '/' . $name . '-'
-                . $hash . '.' . $this->extension;
-            $asset->setTargetPath($target);
-
-            $cached = new AssetCache(
-                $asset,
-                new FileSystemCache($this->config['build_path'])
-            );
-
-            $this->writer->writeAsset($cached);
-
-            $parsed[] = '/' . $cached->getTargetPath();
+            $parsed[] = $this->createAssetSrc($target);
         }
 
         if ($this->debug()) {
             return $parsed;
         }
 
-        // Create all-in-one asset
         $parsed = array_map(function ($a) {
+            // Remove starting '/'
+            if ($a[0] !== '/') {
+                return $a;
+            }
+
             return substr($a, 1);
         }, $parsed);
 
-        // Get hash for asset collection
-        $hash = md5(implode(',', $assets));
-
-        // Create and set target path
-        $target = $this->config['output_path'] . '/' . substr($hash, 0, 8) . '.'
-            . $this->extension;
+        $target = $this->getTargetPath($assets);
 
         $assets = $factory->createAsset($parsed);
         $assets->setTargetPath($target);
 
-        $cached = new AssetCache(
-            $assets,
-            new FileSystemCache($this->config['build_path'])
-        );
+        $cached = new AssetCache($assets, $cache);
+        $writer->writeAsset($cached);
 
-        $this->writer->writeAsset($cached);
-
-        return [ $this->createAssetSrc($cached->getTargetPath()) ];
+        return [ $this->createAssetSrc($target) ];
     }
 
     /**
@@ -212,6 +204,40 @@ abstract class AssetManager
     }
 
     /**
+     * Returns a target path from real asset paths.
+     *
+     * @param mixed $asset The real path to asset.
+     *
+     * @return string The target path for given assets.
+     */
+    protected function getTargetPath($asset)
+    {
+        $src = '';
+
+        if (is_string($asset)) {
+            $asset = DS . str_replace(SITE_PATH, '', $asset);
+            $src   = $asset;
+        }
+
+        if (is_array($asset)) {
+            $asset = array_map(function ($a) {
+                return DS . str_replace(SITE_PATH, '', $a);
+            }, array_keys($asset));
+
+            $asset = implode(',', $asset);
+        }
+
+        if (!empty($src)) {
+            $src = basename($src);
+            $src = substr($src, 0, strrpos($src, '.')) . '.';
+        }
+
+        return $this->config['output_path'] . DS . $src
+            . substr(md5($asset), 0, 8) . '.' . DEPLOYED_AT . '.xzy.'
+            . $this->extension;
+    }
+
+    /**
      * Creates a target asset name basing on the default target path.
      *
      * @param string $defaultTarget Default target name.
@@ -220,39 +246,36 @@ abstract class AssetManager
      */
     private function createAssetSrc($src)
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
-        $port = $request->getPort();
         if ($request->headers->get('X-Forwarded-port')) {
             $port = $request->headers->get('X-Forwarded-port');
         }
 
+        $port = '';
         if ($port != 80 && $port != 443) {
             $port = ':' . $port;
-        } else {
-            $port = '';
         }
 
-
-        $src = DS . substr($src, 0, strrpos($src, '.') + 1) . DEPLOYED_AT . '.'
-            . $this->extension;
+        $src = DS . $src;
 
         if ($this->config['use_asset_servers']) {
-            if (strpos($this->config['asset_domain'], '%d') !== false) {
-                // Site URL with pattern
-                $sum = 0;
-                $max = strlen($src);
-                for ($i = 0; $i < $max; $i++) {
-                    $sum += ord($src[$i]);
-                }
-
-                $server = $sum % $this->config['asset_servers'];
-                $src = sprintf($this->config['asset_domain'], $server) . $port
-                    . $src;
-            } else {
+            if (strpos($this->config['asset_domain'], '%d') === false) {
                 // Static site URL
-                $src = $this->config['asset_domain'] . $port . $src;
+                return $this->config['asset_domain'] . $port . $src;
             }
+
+            // Site URL with pattern
+            $sum = 0;
+            $max = strlen($src);
+            for ($i = 0; $i < $max; $i++) {
+                $sum += ord($src[$i]);
+            }
+
+            $server = $sum % $this->config['asset_servers'];
+
+            return sprintf($this->config['asset_domain'], $server) . $port
+                . $src;
         }
 
         return $src;
