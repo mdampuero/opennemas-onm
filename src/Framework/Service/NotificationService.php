@@ -159,20 +159,19 @@ class NotificationService
 
         if ($instance->users > 1) {
             $body .= sprintf(
-                _('<li>You have %d activated users. The cost is %d €/day or %s €/month'),
+                _('<li>You have %d activated users. Note that the cost is %s €/month</li>'),
                 $instance->users,
-                ($instance->users - 1) * 0.40,
-                ($instance->users - 1) * 10
+                ($instance->users - 1) * 12
             );
         }
 
         if ($instance->page_views > 45000) {
-            $body .= sprintf(_('<li>You have %d page views'), $instance->page_views);
+            $body .= sprintf(_('<li>This month you\'re recording %d page views. '), $instance->page_views);
 
             if ($instance->page_views > 50000) {
                 $body .= sprintf(
-                    _(' The cost is %d €/month'),
-                    number_format($instance->page_views * 0.000075, 2)
+                    _('Note that the cost %s € pv/month.'),
+                    number_format($instance->page_views * 0.00009, 2)
                 );
             }
 
@@ -181,13 +180,13 @@ class NotificationService
 
         if ($instance->media_size > 450) {
             $body .= sprintf(
-                _('<li>Your storage size is %d MB'),
+                _('<li>Your are using %d Mb of storage. '),
                 round($instance->media_size)
             );
 
             if ($instance->media_size > 500) {
                 $body .= sprintf(
-                    _(' The cost is %d €/month'),
+                    _('Note that the cost %s € Mb/month.'),
                     number_format($instance->media_size * 0.01, 2)
                 );
             }
