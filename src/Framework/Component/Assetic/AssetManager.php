@@ -212,10 +212,19 @@ abstract class AssetManager
      */
     protected function getTargetPath($asset)
     {
-        $src = $asset;
+        $src = '';
+
+        if (is_string($asset)) {
+            $asset = DS . str_replace(SITE_PATH, '', $asset);
+            $src   = $asset;
+        }
+
         if (is_array($asset)) {
-            $src   = '';
-            $asset = implode(',', array_keys($asset));
+            $asset = array_map(function ($a) {
+                return DS . str_replace(SITE_PATH, '', $a);
+            }, array_keys($asset));
+
+            $asset = implode(',', $asset);
         }
 
         if (!empty($src)) {
