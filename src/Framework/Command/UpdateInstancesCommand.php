@@ -104,7 +104,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             && !$options['media_size']
             && !$options['created']
         ) {
-            $this->output->writeln('<error>Please provide --instnace-stats --alexa, --views, --media-size or --created</error>');
+            $this->output->writeln('<error>Please provide --instance-stats --alexa, --views, --media-size or --created</error>');
             return 1;
         }
 
