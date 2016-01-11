@@ -159,9 +159,9 @@ class NotificationService
 
         if ($instance->users > 1) {
             $body .= sprintf(
-                _('<li>You have %d activated users. Note that the cost is %s €/month</li>'),
+                _('<li>You have %d activated users. Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" title="Get more info about user licensing">the cost is %s € user/month</a></li>'),
                 $instance->users,
-                ($instance->users - 1) * 12
+                12
             );
         }
 
@@ -170,8 +170,8 @@ class NotificationService
 
             if ($instance->page_views > 50000) {
                 $body .= sprintf(
-                    _('Note that the cost %s € pv/month.'),
-                    number_format($instance->page_views * 0.00009, 2)
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" title="Get more info about user licensing">the cost %s € pv/month</a>.'),
+                    0.00009
                 );
             }
 
@@ -186,8 +186,8 @@ class NotificationService
 
             if ($instance->media_size > 500) {
                 $body .= sprintf(
-                    _('Note that the cost %s € Mb/month.'),
-                    number_format($instance->media_size * 0.01, 2)
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" title="Get more info about user licensing">the cost %s € Mb/month</a>.'),
+                    0.01
                 );
             }
 

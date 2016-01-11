@@ -868,13 +868,14 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'thumbnail'        => 'iadbox.jpg',
                     'name'             => _('iadbox'),
-                    'description'      => _('iadbox is a way to serve ads when users want to receive them.'),
-                    'long_description' => _('<p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>
+                    'description'      => _('<p>iadbox is a way to serve ads when users want to receive them.</p>
+                        <p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>
                         <p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>
-                        <p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>
+                    '),
+                    'long_description' => _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>
                         <p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>
                         <p><strong>More info</strong>: <a target="_blank" href="http://www.iadbox.com">www.iadbox.com</a></p>
-                        <p><a class="btn btn-success" target="_blank" href="mailto:sales@openhost.es">Ask for it</a></p>'),
+                        <p><a class="btn btn-success" href="mailto:sales@openhost.es">Ask for it</a></p>'),
                     'price'            => [
                         'month' => 0
                     ]
