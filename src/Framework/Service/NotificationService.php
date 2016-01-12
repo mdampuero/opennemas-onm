@@ -161,7 +161,7 @@ class NotificationService
             $body .=
                 '<li>'
                 .sprintf(
-                    _('You have %d activated users. Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" target="_blank" title="Get more info about user licensing">the cost is %s € user/month</a>'),
+                    _('You have %d activated users. Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" target="_blank" title="Learn more">the cost is %s € user/month</a>'),
                     $instance->users,
                     12
                 )
@@ -175,7 +175,7 @@ class NotificationService
 
             if ($instance->page_views > 50000) {
                 $body .= sprintf(
-                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Get more info about page views pricing">the cost %s € pv/month</a>.'),
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € pv/month</a>.'),
                     number_format(0.00009, 5)
                 );
             }
@@ -192,7 +192,7 @@ class NotificationService
 
             if ($instance->media_size > 500) {
                 $body .= sprintf(
-                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Get more info about storage pricing">the cost %s € Mb/month</a>.'),
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € Mb/month</a>.'),
                     0.01
                 );
             }
