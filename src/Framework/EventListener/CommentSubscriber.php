@@ -53,6 +53,7 @@ class CommentSubscriber implements EventSubscriberInterface
      */
     public function getNotifications(Event $event)
     {
+        $response = $event->getResponse();
         $comments = $this->container->get('comment_repository')
             ->countPendingComments();
 
