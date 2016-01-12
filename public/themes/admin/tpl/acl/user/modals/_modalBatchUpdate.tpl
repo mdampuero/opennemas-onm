@@ -121,7 +121,7 @@
       <strong>{t}Warning{/t}:</strong> {t}Enable this users will cost you [% Math.round(template.selected.contents.length * 40) / 100 %] €/day.{/t}
       </p>
       <p class="text-danger" ng-show="template.name == 'create'">
-      <strong>{t}Warning{/t}:</strong> {t}Create this user will cost you 0.4 €/day.{/t}
+      <strong>{t}Warning{/t}:</strong> {t}Create this user will cost you 12 €/month.{/t}
       </p>
       <div class="checkbox" ng-show="template.value == 1">
         <input id="terms" name="terms" ng-model="terms" type="checkbox">
