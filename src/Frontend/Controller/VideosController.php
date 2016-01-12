@@ -35,11 +35,6 @@ class VideosController extends Controller
      **/
     public function init()
     {
-
-        if (!\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
-            throw new ResourceNotFoundException();
-        }
-
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
