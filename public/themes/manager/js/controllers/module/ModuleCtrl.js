@@ -19,8 +19,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $http, $location, $modal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$http', '$location', '$modal', '$scope', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $http, $location, $modal, $scope, Cleaner, itemService, routing, messenger, data) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -30,6 +30,7 @@
          * @type {String}
          */
         $scope.language = 'en';
+
         /**
          * @memberOf ModuleCtrl
          *
@@ -39,23 +40,12 @@
          * @type {Object}
          */
         $scope.module = {
-          about: {
-            en: '',
-            es: '',
-            gl: '',
-          },
-          description: {
-            en: '',
-            es: '',
-            gl: '',
-          },
-          images: [],
-          name: {
-            en: '',
-            es: '',
-            gl: '',
-          },
-          type: 'module'
+          about:       { en: '', es: '', gl: '' },
+          description: { en: '', es: '', gl: '' },
+          images:      [],
+          metas:       { price: [ { 'value': 0, 'type': 'monthly' } ] },
+          name:        { en: '', es: '', gl: '' },
+          type:        'module'
         };
 
         /**
@@ -67,6 +57,34 @@
          * @type {Object}
          */
         $scope.extra = data.extra;
+
+        /**
+         * @function addPrice
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Adds a new price to the list.
+         */
+        $scope.addPrice = function() {
+          if (!$scope.module.metas.price) {
+            $scope.module.metas.price = [];
+          }
+
+          $scope.module.metas.price.push({ value: 0, type: 'monthly' });
+        };
+
+        /**
+         * @function removePrice
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Remove a price from the list.
+         *
+         * @param {Integer} index The position of the price in the list.
+         */
+        $scope.removePrice = function(index) {
+          $scope.module.metas.price.splice(index, 1);
+        };
 
         /**
          * @function changeLanguage
@@ -140,8 +158,10 @@
             data.append('_method', 'PUT');
           }
 
+          Cleaner.clean($scope.module);
+
           for (var key in $scope.module) {
-            if (key === 'name' || key === 'description' || key === 'about') {
+            if (key === 'name' || key === 'description' || key === 'about' || key === 'metas') {
               data.append(key, JSON.stringify($scope.module[key]));
             } else if ($scope.module[key] instanceof Array) {
               for (var i = 0; i <  $scope.module[key].length; i++) {
@@ -192,10 +212,8 @@
 
         // Initializes the module
         if (data.module) {
-          $scope.module = data.module;
-
-          if (!$scope.module.images) {
-            $scope.module.images = [];
+          for (var i in data.module) {
+            $scope.module[i] = data.module[i];
           }
         }
       }

@@ -22,20 +22,18 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="hidden-xs quicklinks">
             <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_modules_list') %]">
               <i class="fa fa-reply"></i>
             </a>
           </li>
-          <li class="quicklinks">
+          <li class="hidden-xs quicklinks">
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!module.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-            </button>
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="module.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-success" ng-click="save();" ng-disabled="saving">
+              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
+              {t}Save{/t}
             </button>
           </li>
         </ul>
@@ -50,16 +48,21 @@
         <div class="grid simple">
           <div class="grid-body module-form">
             <div class="form-group">
-              <label for="id">{t}UUID{/t}</label>
+              <div class="clearfix">
+                <label class="pull-left" for="id">{t}UUID{/t}</label>
+                <div class="checkbox pull-right">
+                  <input id="custom" name="custom" ng-model="custom" type="checkbox">
+                  <label for="custom">{t}Custom{/t}</label>
+                </div>
+              </div>
               <div class="controls">
-                <input class="form-control" id="uuid" ng-model="module.uuid" placeholder="es.openhost.module.example" type="text">
+                <select class="form-control no-animate" id="uuid" ng-if="!custom" ng-model="module.uuid" ng-options="uuid for uuid in extra.uuids"></select>
+                <input class="form-control no-animate" id="uuid" ng-if="custom" ng-model="module.uuid" placeholder="es.openhost.module.example" type="text">
               </div>
             </div>
-            <div class="form-group">
-              <label for="version">{t}Version{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="version" ng-model="module.version" placeholder="1.0" type="text">
-              </div>
+            <div class="checkbox form-group">
+              <input id="enabled" name="enabled" ng-model="module.enabled" ng-true-value="'1'" ng-false-value="'0'" type="checkbox">
+              <label for="enabled">{t}Enabled{/t}</label>
             </div>
             <div class="form-group">
               <label for="author">{t}Author{/t}</label>
@@ -71,6 +74,31 @@
               <label for="author_url">{t}URL{/t}</label>
               <div class="controls">
                 <input class="form-control" id="author_url" ng-model="module.url" placeholder="http://www.openhost.es" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="price">{t}Price{/t}</label>
+              <div class="controls">
+                <div class="m-t-15 row" ng-repeat="price in module.metas.price">
+                  <div class="col-xs-3">
+                    <input class="form-control text-right" id="price-[% $index %]" name="price-[% $index %]" ng-model="price.value" type="text">
+                  </div>
+                  <div class="col-xs-7">
+                    <select class="form-control" id="price-type-[% $index %]" name="price-type-[% $index %]" ng-model="price.type">
+                      <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
+                      <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
+                      <option value="single">{t}Single{/t} (€)</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-2">
+                    <button class="btn btn-block btn-success" ng-click="addPrice()" ng-if="$index === 0" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-block btn-danger" ng-click="removePrice($index)" ng-if="$index > 0" type="button">
+                      <i class="fa fa-lg fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-group">
