@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 use Onm\Security\Acl;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
@@ -183,9 +184,21 @@ class AclUserController extends Controller
         unset($user->password);
         unset($user->token);
 
+        $extra = [ 'billing' => [] ];
+
+        $extra['billing'] = [];
+        foreach ($this->get('instance')->metas as $key => $value) {
+            if (strpos($key, 'billing') !== false) {
+                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+            }
+        }
+
+        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+
         return $this->render(
             'acl/user/new.tpl',
             array(
+                'extra'                     => $extra,
                 'user'                      => $user,
                 'user_groups'               => $userGroup->find(),
                 'selected_groups'           => $selectedGroups,

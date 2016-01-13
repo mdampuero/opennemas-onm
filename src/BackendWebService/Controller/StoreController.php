@@ -189,6 +189,27 @@ class StoreController extends Controller
     }
 
     /**
+     * Saves the billing information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveBillingAction(Request $request)
+    {
+        $billing  = $request->request->all();
+        $instance = $this->get('instance');
+
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
+        }
+
+        $this->get('instance_manager')->persist($instance);
+
+        return new JsonResponse(_('Billing information saved successfully'));
+    }
+
+    /**
      * Sends an email to the customer.
      *
      * @param array    $modules  The requested modules.

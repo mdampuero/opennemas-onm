@@ -6,6 +6,8 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
 
     $scope.template = template;
 
+    $scope.Math = window.Math;
+
     /**
      * Closes the current modal
      */

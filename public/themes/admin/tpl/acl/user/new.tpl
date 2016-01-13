@@ -62,7 +62,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-init="user ={json_encode($user)|clear_json}">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -93,7 +93,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-primary" name="action" type="submit" value="validate">
+              <button class="btn btn-primary" name="action" ng-click="confirmUser()" type="button" value="validate">
                 <i class="fa fa-save"></i>
                 {t}Save{/t}
               </button>
@@ -342,7 +342,7 @@
                     {t}Status{/t}
                   </label>
                   <div class="controls">
-                    <select id="activated" name="activated">
+                    <select id="activated" name="activated" ng-model="activated">
                       <option value="0" {if ($user->activated eq "0")}selected{/if}>{t}Deactivated{/t}</option>
                       <option value="1" {if ($user->activated eq "1")}selected{/if}>{t}Activated{/t}</option>
                     </select>
@@ -405,5 +405,8 @@
       </div>
     </div>
   </div>
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="acl/user/modals/_modalBatchUpdate.tpl"}
+  </script>
 </form>
 {/block}
