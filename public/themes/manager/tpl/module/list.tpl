@@ -4,8 +4,10 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <i class="fa fa-plug"></i>
-            {t}Modules{/t}
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_modules_list') %]">
+              <i class="fa fa-plug"></i>
+              {t}Modules{/t}
+            </a>
           </h4>
         </li>
       </ul>
@@ -27,14 +29,11 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-form no-boarder">
+        <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
+          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -46,19 +45,8 @@
             </ui-select-choices>
           </ui-select>
           </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
-        </li>
         <li class="quicklinks">
-          <button class="btn btn-white" ng-click="criteria = {  title_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'title', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
-            <i class="fa fa-trash-o fa-lg"></i>
-          </button>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks">
-          <button class="btn btn-white" ng-click="refresh()">
+          <button class="btn btn-link" ng-click="refresh()">
             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
           </button>
         </li>
@@ -73,14 +61,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks form-inline pagination-links">
-          <div class="btn-group">
-            <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
-              <i class="fa fa-chevron-left"></i>
-            </button>
-            <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
-              <i class="fa fa-chevron-right"></i>
-            </button>
-          </div>
+          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -97,57 +78,41 @@
       <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'image'" type="checkbox">
-            <label for="checkbox-name">
+            <input id="checkbox-image" checklist-model="columns.selected" checklist-value="'image'" type="checkbox">
+            <label for="checkbox-image">
               {t}Image{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-            <label for="checkbox-domains">
+            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+            <label for="checkbox-name">
               {t}Name{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'uuid'" type="checkbox">
-            <label for="checkbox-domain-expire">
+            <input id="checkbox-uuid" checklist-model="columns.selected" checklist-value="'uuid'" type="checkbox">
+            <label for="checkbox-uuid">
               {t}UUID{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
-            <label for="checkbox-contact">
+            <input id="checkbox-translations" checklist-model="columns.selected" checklist-value="'translations'" type="checkbox">
+            <label for="checkbox-translations">
+              {t}Translations{/t}
+            </label>
+          </div>
+        </div>
+        <div>
+          <div class="checkbox check-default">
+            <input id="checkbox-author" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
+            <label for="checkbox-author">
               {t}Author{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-            <label for="checkbox-last-access">
-              {t}Created{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
-            <label for="checkbox-created">
-              {t}Updated{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-database" checklist-model="columns.selected" checklist-value="'database'" type="checkbox">
-            <label for="checkbox-database">
-              {t}Database{/t}
             </label>
           </div>
         </div>
@@ -155,57 +120,25 @@
       <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
-            <label for="checkbox-contents">
-              {t}Contents{/t}
+            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+            <label for="checkbox-created">
+              {t}Created{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
-            <label for="checkbox-articles">
-              {t}Articles{/t}
+            <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
+            <label for="checkbox-updated">
+              {t}Updated{/t}
             </label>
           </div>
         </div>
         <div>
           <div class="checkbox check-default">
-            <input id="checkbox-opinions" checklist-model="columns.selected" checklist-value="'opinions'" type="checkbox">
-            <label for="checkbox-opinions">
-              {t}Opinions{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-advertisements" checklist-model="columns.selected" checklist-value="'advertisements'" type="checkbox">
-            <label for="checkbox-advertisements">
-              {t}Advertisements{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-albumns" checklist-model="columns.selected" checklist-value="'albumns'" type="checkbox">
-            <label for="checkbox-albumns">
-              {t}Albums{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
-            <label for="checkbox-photos">
-              {t}Photo{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
-            <label for="checkbox-support">
-              {t}Support plan{/t}
+            <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+            <label for="checkbox-enabled">
+              {t}Enabled{/t}
             </label>
           </div>
         </div>
@@ -229,7 +162,7 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-show="isEnabled('image')" width="120">
+              <th class="text-center pointer" ng-show="isEnabled('image')" width="120">
                 {t}Image{/t}
               </th>
               <th class="pointer" ng-click="sort('instance')" ng-show="isEnabled('name')">
@@ -238,6 +171,10 @@
               </th>
               <th class="pointer" ng-click="sort('title')" ng-show="isEnabled('uuid')" width="250">
                 {t}UUID{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('title')" ng-show="isEnabled('translations')" width="100">
+                {t}Translations{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
               <th class="pointer text-center" ng-click="sort('end')" ng-show="isEnabled('author')" width="250">
@@ -287,7 +224,13 @@
               <td ng-show="isEnabled('uuid')">
                 [% item.uuid %]
               </td>
-              <td ng-show="isEnabled('author')">
+              <td class="text-center" ng-show="isEnabled('translations')">
+                <span class="orb orb-danger" ng-class="{ 'orb-danger': countStringsLeft(item) > 0, 'orb-success': countStringsLeft(item) === 0 }">
+                  <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
+                  <span ng-if="countStringsLeft(item) > 0">[% countStringsLeft(item) %]</span>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isEnabled('author')">
                 [% item.author %]
               </td>
               <td class="text-center" ng-show="isEnabled('created')">
@@ -302,11 +245,8 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-left pagination-info" ng-if="items.length > 0">
-        {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
-      </div>
       <div class="pull-right" ng-if="items.length > 0">
-        <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
   </div>

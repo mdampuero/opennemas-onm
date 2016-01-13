@@ -101,6 +101,37 @@
         };
 
         /**
+         * @function countStringsLeft
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Counts the number of remaining strings for a language.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Integer} The number of remaining strings.
+         */
+        $scope.countStringsLeft = function(item) {
+          var left = 0;
+
+          for (var lang in $scope.extra.languages) {
+            if (!item.name || !item.name[lang]) {
+              left++;
+            }
+
+            if (!item.description || !item.description[lang]) {
+              left++;
+            }
+
+            if (!item.about || !item.about[lang]) {
+              left++;
+            }
+          }
+
+          return left;
+        };
+
+        /**
          * @function isEnabled
          * @memberOf ModuleListCtrl
          *
