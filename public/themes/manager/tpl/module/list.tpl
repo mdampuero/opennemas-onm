@@ -237,9 +237,11 @@
                 [% item.uuid %]
               </td>
               <td class="text-center" ng-show="isEnabled('translations')">
-                <span class="orb orb-danger" ng-class="{ 'orb-danger': countStringsLeft(item) > 0, 'orb-success': countStringsLeft(item) === 0 }">
-                  <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
-                  <span ng-if="countStringsLeft(item) > 0">[% countStringsLeft(item) %]</span>
+                <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
+                  <i class="fa fa-check""countStringsLeft(item) === 0"></i>
+                </span>
+                <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
+                  [% countStringsLeft(item) %]
                 </span>
               </td>
               <td class="text-center" ng-show="isEnabled('author')">

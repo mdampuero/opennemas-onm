@@ -154,7 +154,7 @@
             <ul class="fake-tabs b-t-0">
               <li ng-repeat="(key, value) in extra.languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">
                 [% value %]
-                <span class="orb orb-danger" ng-class="{ 'orb-danger': countStringsLeft(key) > 0, 'orb-success': countStringsLeft(key) === 0 }">
+                <span class="orb" ng-class="{ 'orb-danger': countStringsLeft(key) > 0, 'orb-success': countStringsLeft(key) === 0 }">
                   <i class="fa fa-check" ng-if="countStringsLeft(key) === 0"></i>
                   <span ng-if="countStringsLeft(key) > 0">[% countStringsLeft(key) %]</span>
                 </span>
