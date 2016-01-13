@@ -22,6 +22,7 @@ angular.module(
     'onm.imagePreview',
     'onm.item',
     'onm.messenger',
+    'onm.pagination',
     'onm.resizable',
     'onm.routing',
     'onm.sidebar',
