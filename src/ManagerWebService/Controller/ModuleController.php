@@ -266,7 +266,7 @@ class ModuleController extends Controller
             unset($extra['types']['-1']);
 
             return new JsonResponse([
-                'extra'        => $extra,
+                'extra'  => $extra,
                 'module' => $module->getData()
             ]);
         } catch (EntityNotFoundException $e) {
@@ -310,29 +310,28 @@ class ModuleController extends Controller
                 }
             }
 
-            $images              = [];
-            $module->name        = json_decode($module->name, true);
+            $module->about       = json_decode($module->about, true);
             $module->description = json_decode($module->description, true);
+            $module->name        = json_decode($module->name, true);
             $module->type        = 'module';
             $module->updated     = date('Y-m-d H:i:s');
 
-            $module->short_description =
-                json_decode($module->short_description, true);
+            if (!empty($request->files->count())) {
+                $module->images = [];
+            }
 
             $i = 1;
             foreach ($request->files as $file) {
-                $images[] = '/assets/images/modules/' . $module->id
-                    . '_' . $i . '.' . $file->getClientOriginalExtension();
+                $module->images[] = '/assets/images/modules/' . $module->id
+                    . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
 
-                $file->move(
+                $file[0]->move(
                     SITE_PATH . '/assets/images/modules',
-                    $module->id . '_' . $i . '.' . $file->getClientOriginalExtension()
+                    $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
                 );
 
                 $i++;
             }
-
-            $module->images = $images;
 
             $em->persist($module);
 
@@ -355,37 +354,12 @@ class ModuleController extends Controller
     private function getTemplateParams()
     {
         $params = [
-            'styles' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
-                'error'   => [ 'name' => _('Error'), 'value' => 'error' ],
-                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'success' => [ 'name' => _('Success'), 'value' => 'success' ],
-                'warning' => [ 'name' => _('Warning'), 'value' => 'warning' ]
-            ],
-            'types' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
-                'comment' => [ 'name' => _('Comments'), 'value' => 'comment' ],
-                'email'   => [ 'name' => _('Email'), 'value' => 'email' ],
-                'help'    => [ 'name' => _('Help'), 'value' => 'help' ],
-                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'media'   => [ 'name' => _('Media'), 'value' => 'media' ],
-                'user'    => [ 'name' => _('Users'), 'value' => 'user' ]
+            'languages' => [
+                'en' => _('English'),
+                'es' => _('Spanish'),
+                'gl' => _('Galician'),
             ]
         ];
-
-        $instances = $this->get('instance_manager')->findBy([]);
-
-        $params['instances'] = [
-            '-1' => [ 'name' => 'Manager', 'value' => '-1' ],
-            '0'  => [ 'name' => _('All'), 'value' => '0' ]
-        ];
-
-        foreach ($instances as $instance) {
-            $params['instances'][$instance->id] = [
-                'name'  => $instance->internal_name,
-                'value' => $instance->id
-            ];
-        }
 
         return $params;
     }
