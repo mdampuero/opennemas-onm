@@ -153,9 +153,6 @@ extension:
         author:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        version:
-            type: string
-            options: { default: null, length: 10, notnull: false }
         description:
             type:    text
             options: { default: null, length: 65532, notnull: false }
@@ -171,9 +168,9 @@ extension:
         updated:
             type: datetime
             options: { default: null, notnull: false }
-        text_domain:
-            type: string
-            options: { default: null, length: 100, notnull: false }
+        enabled:
+            type: boolean
+            options: { default: false }
     index:
         -
             name: PRIMARY
