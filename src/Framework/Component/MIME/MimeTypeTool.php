@@ -24,9 +24,9 @@ class MimeTypeTool
         'flv'  => 'video/x-flv',
         // images
         'png'  => 'image/png',
+        'jpg'  => 'image/jpeg',
         'jpe'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
-        'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
         'ico'  => 'image/vnd.microsoft.icon',
