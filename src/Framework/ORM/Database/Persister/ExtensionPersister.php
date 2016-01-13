@@ -26,6 +26,14 @@ class ExtensionPersister extends DatabasePersister
         $this->mconn->insert('extension', $data);
 
         $entity->id = $this->mconn->lastInsertId();
+
+        foreach ($metas as $key => $value) {
+            $sql = "REPLACE INTO `extension_meta` SET extension_id = ?,"
+                ." meta_key = ?, meta_value = ?";
+            $params = [ $entity->id, $key, $value ];
+
+            $this->mconn->executeUpdate($sql, $params);
+        }
     }
 
     /**
