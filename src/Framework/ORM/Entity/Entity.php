@@ -37,15 +37,11 @@ abstract class Entity
      *
      * @return mixed The property value.
      */
-    public function __get($property)
+    public function &__get($property)
     {
         $property = \underscore($property);
 
-        if (array_key_exists($property, $this->data)) {
-            return $this->data[$property];
-        }
-
-        return null;
+        return $this->data[$property];
     }
 
     /**
