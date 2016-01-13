@@ -11,6 +11,7 @@ namespace ManagerWebService\Controller;
 
 use Framework\ORM\Entity\Extension;
 use Onm\Framework\Controller\Controller;
+use Onm\Module\ModuleManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,19 +26,54 @@ class ModuleController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em     = $this->get('orm.manager');
         $module = new Extension();
 
         foreach ($request->request as $key => $value) {
             if (!is_null($value)) {
-                $module->{$key} =
-                    $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+                $module->{$key} = $request->request->get($key);
             }
         }
 
-        $module->created = date('Y-m-d H:i:s');
-        $module->updated = date('Y-m-d H:i:s');
+        $count = $em->getRepository('manager.extension')
+            ->countBy([ 'uuid' => [ [ 'value' => $module->uuid ] ] ]);
 
-        $this->get('orm.manager')->persist($module);
+        if ($count > 0) {
+            return new JsonResponse(
+                sprintf(
+                    _("A module with uuid '%s' already exists"),
+                    $module->uuid
+                ),
+                400
+            );
+        }
+
+        $module->about       = json_decode($module->about, true);
+        $module->created     = date('Y-m-d H:i:s');
+        $module->description = json_decode($module->description, true);
+        $module->metas       = json_decode($module->metas, true);
+        $module->name        = json_decode($module->name, true);
+        $module->type        = 'module';
+        $module->updated     = date('Y-m-d H:i:s');
+
+        if (!empty($request->files->count())) {
+            $module->images = [];
+        }
+
+        $i = 1;
+        foreach ($request->files as $file) {
+            $module->images[] = '/assets/images/modules/' . $module->id
+                . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
+
+            $file[0]->move(
+                SITE_PATH . '/assets/images/modules',
+                $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
+            );
+
+            $i++;
+        }
+
+        $em->persist($module);
 
         $response = new JsonResponse(_('Module saved successfully'), 201);
 
@@ -63,7 +99,7 @@ class ModuleController extends Controller
     public function deleteAction($id)
     {
         $em = $this->get('orm.manager');
-        $module = $em->getRepository('manager.module')->find($id);
+        $module = $em->getRepository('manager.extension')->find($id);
 
         $em->remove($module);
 
@@ -96,14 +132,9 @@ class ModuleController extends Controller
 
         $em = $this->get('orm.manager');
 
-        $criteria = [
-            'id' => [
-                [ 'value' => $selected, 'operator' => 'IN']
-            ]
-        ];
+        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
 
-        $modules = $em->getRepository('manager.module')
-            ->findBy($criteria);
+        $modules = $em->getRepository('manager.module')->findBy($criteria);
 
         foreach ($modules as $module) {
             try {
@@ -234,6 +265,26 @@ class ModuleController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
+        $em = $this->get('orm.manager');
+
+        try {
+            $module = $em->getRepository('manager.extension')->find($id);
+
+            foreach ($request->request->all() as $key => $value) {
+                $module->{$key} = $request->request->get($key);
+            }
+
+            $em->persist($module);
+
+            return new JsonResponse(_('Module saved successfully'));
+        } catch (InstanceNotFoundException $e) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the module with id "%s"'), $id),
+                404
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse(_($e->getMessage()), 400);
+        }
     }
 
     /**
@@ -245,6 +296,64 @@ class ModuleController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
+        $error      = [];
+        $messages   = [];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
+
+        if (is_array($selected) && count($selected) == 0) {
+            return new JsonResponse(
+                _('Unable to find the modules for the given criteria'),
+                404
+            );
+        }
+
+        $em = $this->get('orm.manager');
+
+        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+
+        $modules = $em->getRepository('manager.extension')->findBy($criteria);
+
+        foreach ($modules as $module) {
+            try {
+                foreach ($request->request->all() as $key => $value) {
+                    if ($key !== 'selected') {
+                        $module->{$key} = $request->request->get($key);
+                    }
+                }
+
+                $em->persist($module);
+                $updated[] = $module->id;
+            } catch (\Exception $e) {
+                $error[]    = $module->id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error',
+                ];
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages[] = [
+                'message' => sprintf(
+                    _('%s modules updated successfully.'),
+                    count($updated)
+                ),
+                'type' => 'success'
+            ];
+        }
+
+        if (count($error) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($error) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
+            $statusCode
+        );
     }
 
     /**
@@ -312,6 +421,7 @@ class ModuleController extends Controller
 
             $module->about       = json_decode($module->about, true);
             $module->description = json_decode($module->description, true);
+            $module->metas       = json_decode($module->metas, true);
             $module->name        = json_decode($module->name, true);
             $module->type        = 'module';
             $module->updated     = date('Y-m-d H:i:s');
@@ -358,7 +468,8 @@ class ModuleController extends Controller
                 'en' => _('English'),
                 'es' => _('Spanish'),
                 'gl' => _('Galician'),
-            ]
+            ],
+            'uuids' => array_keys(ModuleManager::getAvailableModules())
         ];
 
         return $params;
