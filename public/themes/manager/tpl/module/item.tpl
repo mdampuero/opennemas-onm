@@ -50,7 +50,7 @@
         <div class="grid simple">
           <div class="grid-body module-form">
             <div class="form-group">
-              <label for="id">{t}Id{/t}</label>
+              <label for="id">{t}UUID{/t}</label>
               <div class="controls">
                 <input class="form-control" id="uuid" ng-model="module.uuid" placeholder="es.openhost.module.example" type="text">
               </div>
@@ -64,13 +64,13 @@
             <div class="form-group">
               <label for="author">{t}Author{/t}</label>
               <div class="controls">
-                <input class="form-control" id="author" ng-model="module.author.name" placeholder="Openhost, S.L." type="text">
+                <input class="form-control" id="author" ng-model="module.author" placeholder="Openhost, S.L." type="text">
               </div>
             </div>
             <div class="form-group">
-              <label for="author_url">{t}Author URL{/t}</label>
+              <label for="author_url">{t}URL{/t}</label>
               <div class="controls">
-                <input class="form-control" id="author_url" ng-model="module.author.url" placeholder="http://www.openhost.es" type="text">
+                <input class="form-control" id="author_url" ng-model="module.url" placeholder="http://www.openhost.es" type="text">
               </div>
             </div>
             <div class="form-group">
@@ -124,7 +124,13 @@
         <div class="grid simple">
           <div class="grid-body no-padding">
             <ul class="fake-tabs b-t-0">
-              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">[% value%]</li>
+              <li ng-repeat="(key, value) in extra.languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">
+                [% value %]
+                <span class="orb orb-danger" ng-class="{ 'orb-danger': countStringsLeft(key) > 0, 'orb-success': countStringsLeft(key) === 0 }">
+                  <i class="fa fa-check" ng-if="countStringsLeft(key) === 0"></i>
+                  <span ng-if="countStringsLeft(key) > 0">[% countStringsLeft(key) %]</span>
+                </span>
+              </li>
             </ul>
             <div class="row p-l-15 p-r-15 p-t-15">
               <div class="col-md-12">
@@ -142,18 +148,18 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">
-                    {t}Short description{/t}
-                  </label>
-                  <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.short_description[language].$invalid }">
-                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="short_description" name="short_description" ng-model="module.short_description[language]" rows="5"></textarea>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">
                     {t}Description{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.description[language].$invalid }">
                     <textarea class="form-control" onm-editor onm-editor-preset="simple" id="description" name="description" ng-model="module.description[language]" rows="5"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">
+                    {t}About{/t}
+                  </label>
+                  <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.about[language].$invalid }">
+                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="about" name="about" ng-model="module.about[language]" rows="5"></textarea>
                   </div>
                 </div>
               </div>

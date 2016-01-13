@@ -39,6 +39,11 @@
          * @type {Object}
          */
         $scope.module = {
+          about: {
+            en: '',
+            es: '',
+            gl: '',
+          },
           description: {
             en: '',
             es: '',
@@ -50,18 +55,7 @@
             es: '',
             gl: '',
           },
-          short_description: {
-            en: '',
-            es: '',
-            gl: '',
-          },
           type: 'module'
-        };
-
-        $scope.languages = {
-          'en': 'English',
-          'es': 'Spanish',
-          'gl': 'Galician',
         };
 
         /**
@@ -87,6 +81,42 @@
           $scope.language = lang;
         };
 
+        /**
+         * @function countStringsLeft
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Counts the number of remaining strings for a language.
+         *
+         * @param {String} lang The language to check.
+         *
+         * @return {Integer} The number of remaining strings.
+         */
+        $scope.countStringsLeft = function(lang) {
+          var left = 0;
+
+          if (!$scope.module.name || !$scope.module.name[lang]) {
+            left++;
+          }
+
+          if (!$scope.module.description || !$scope.module.description[lang]) {
+            left++;
+          }
+
+          if (!$scope.module.about || !$scope.module.about[lang]) {
+            left++;
+          }
+
+          return left;
+        };
+
+        /**
+         * @function removeFile
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Removes the current image file.
+         */
         $scope.removeFile = function() {
           $scope.module.images = [];
           $('#image').val('');
@@ -111,11 +141,11 @@
           }
 
           for (var key in $scope.module) {
-            if (key === 'name' || key === 'description' || key === 'short_description') {
+            if (key === 'name' || key === 'description' || key === 'about') {
               data.append(key, JSON.stringify($scope.module[key]));
             } else if ($scope.module[key] instanceof Array) {
               for (var i = 0; i <  $scope.module[key].length; i++) {
-                data.append(key + '_' + i, $scope.module[key][i]);
+                data.append(key + '[' + i + ']', $scope.module[key][i]);
               }
             } else {
               data.append(key, $scope.module[key]);
@@ -144,14 +174,23 @@
           });
         };
 
+        /**
+         * @function toggleOverlay
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Toggles the overlay.
+         */
         $scope.toggleOverlay = function() {
           $scope.overlay = !$scope.overlay;
         };
 
+        // To execute on destroy
         $scope.$on('$destroy', function() {
           $scope.module = null;
         });
 
+        // Initializes the module
         if (data.module) {
           $scope.module = data.module;
 
