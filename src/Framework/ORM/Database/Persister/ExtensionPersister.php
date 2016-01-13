@@ -20,6 +20,9 @@ class ExtensionPersister extends DatabasePersister
     {
         $data = $this->dbfy($entity);
 
+        $metas = $data['metas'];
+        unset($data['metas']);
+
         $this->mconn->insert('extension', $data);
 
         $entity->id = $this->mconn->lastInsertId();
@@ -39,10 +42,22 @@ class ExtensionPersister extends DatabasePersister
      */
     public function update(Entity $entity)
     {
-        $data = $this->dbfy($entity);
+        $data  = $this->dbfy($entity);
+        $metas = $data['metas'];
+
         unset($data['id']);
+        unset($data['metas']);
 
         $this->mconn->update('extension', $data, [ 'id' => $entity->id ]);
+
+        foreach ($metas as $key => $value) {
+            $sql = "REPLACE INTO `extension_meta` SET extension_id = ?,"
+                ." meta_key = ?, meta_value = ?";
+            $params = [ $entity->id, $key, $value ];
+
+            $this->mconn->executeUpdate($sql, $params);
+        }
+
         $this->mcache->delete($entity->getCachedId());
     }
 }

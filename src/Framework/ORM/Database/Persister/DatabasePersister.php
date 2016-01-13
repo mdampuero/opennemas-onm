@@ -74,8 +74,16 @@ abstract class DatabasePersister extends Persister
         $data = [];
 
         foreach ($entity->getData() as $key => $value) {
-            if (is_array($value)) {
+            if ($key !== 'metas' && is_array($value)) {
                 $value = @serialize($value);
+            }
+
+            if ($key === 'metas') {
+                foreach ($value as &$metaValue) {
+                    if (is_array($metaValue)) {
+                        $metaValue = @serialize($metaValue);
+                    }
+                }
             }
 
             $data[$key] = $value;
