@@ -156,10 +156,10 @@ extension:
         version:
             type: string
             options: { default: null, length: 10, notnull: false }
-        short_description:
+        description:
             type:    text
             options: { default: null, length: 65532, notnull: false }
-        description:
+        about:
             type:    text
             options: { default: null, length: 65532, notnull: false }
         images:
