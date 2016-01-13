@@ -42,10 +42,8 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [
-            'name', 'domains', 'last_login', 'created',
-            'articles', 'alexa', 'activated'
-          ]
+          selected: [ 'enabled', 'created', 'image', 'l10n', 'name', 'updated',
+            'uuid' ]
         };
 
         /**
@@ -82,7 +80,7 @@
          * @type {Object}
          */
         $scope.orderBy = [{
-          name: 'start',
+          name: 'created',
           value: 'desc'
         }];
 
@@ -330,15 +328,15 @@
          * @description
          *   Enables/disables an module.
          *
-         * @param boolean enabled Module activated value.
+         * @param boolean enabled Module enabled value.
          */
         $scope.setEnabled = function(module, enabled) {
           module.loading = 1;
 
           itemService.patch('manager_ws_module_patch', module.id,
-            { activated: enabled }).success(function(response) {
+            { enabled: enabled }).success(function(response) {
               module.loading = 0;
-              module.activated = enabled;
+              module.enabled = enabled;
 
               messenger.post({ message: response, type: 'success' });
             }).error(function(response) {
@@ -353,7 +351,7 @@
          * @description
          *   Enables/disables the selected modules.
          *
-         * @param integer enabled The activated value.
+         * @param integer enabled The enabled value.
          */
         $scope.setEnabledSelected = function(enabled) {
           for (var i = 0; i < $scope.items.length; i++) {
@@ -363,7 +361,7 @@
             }
           }
 
-          var data = { selected: $scope.selected.items, activated: enabled };
+          var data = { selected: $scope.selected.items, enabled: enabled };
 
           itemService.patchSelected('manager_ws_modules_patch', data)
             .success(function(response) {
@@ -372,7 +370,7 @@
                 var id = $scope.items[i].id;
 
                 if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].activated = enabled;
+                  $scope.items[i].enabled = enabled;
                   delete $scope.items[i].loading;
                 }
               }

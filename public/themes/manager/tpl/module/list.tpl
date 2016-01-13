@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="instance"}
+{include file='common/selected_navbar.tpl' list="extension"}
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -120,6 +120,14 @@
       <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
+            <input id="checkbox-price" checklist-model="columns.selected" checklist-value="'price'" type="checkbox">
+            <label for="checkbox-price">
+              {t}Price{/t}
+            </label>
+          </div>
+        </div>
+        <div>
+          <div class="checkbox check-default">
             <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-created">
               {t}Created{/t}
@@ -162,32 +170,36 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="text-center pointer" ng-show="isEnabled('image')" width="120">
+              <th class="text-center" ng-show="isEnabled('image')" width="120">
                 {t}Image{/t}
               </th>
-              <th class="pointer" ng-click="sort('instance')" ng-show="isEnabled('name')">
+              <th ng-show="isEnabled('name')">
                 {t}Name{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isEnabled('uuid')" width="250">
+              <th class="pointer" ng-click="sort('uuid')" ng-show="isEnabled('uuid')" width="250">
                 {t}UUID{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('title')" ng-show="isEnabled('translations')" width="100">
-                {t}Translations{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
+              <th class="text-center" ng-show="isEnabled('translations')" width="60">
+                l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" ng-show="isEnabled('author')" width="250">
+              <th class="pointer text-center" ng-click="sort('author')" ng-show="isEnabled('author')" width="250">
                 {t}Author{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('author') == 'asc', 'fa fa-caret-down': isOrderedBy('author') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('type')" ng-show="isEnabled('created')" width="250">
+              <th class="text-center"  ng-show="isEnabled('price')" width="100">
+                {t}Price{/t}
+              </th>
+              <th class="pointer text-center" ng-click="sort('created')" ng-show="isEnabled('created')" width="200">
                 {t}Created{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" ng-show="isEnabled('updated')" width="250">
+              <th class="pointer text-center" ng-click="sort('updated')" ng-show="isEnabled('updated')" width="200">
                 {t}Updated{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isEnabled('enabled')" width="50">
+                {t}Enabled{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -233,11 +245,21 @@
               <td class="text-center" ng-show="isEnabled('author')">
                 [% item.author %]
               </td>
+              <td class="text-right" ng-show="isEnabled('price')">
+                <div ng-repeat="price in item.metas.price">
+                  [% price.value ? price.value : 0 %] €<span ng-if="price.type === 'monthly'">/{t}month{/t}</span><span ng-if="price.type === 'yearly'">/{t}year{/t}</span>
+                </div>
+              </td>
               <td class="text-center" ng-show="isEnabled('created')">
                 [% item.created %]
               </td>
               <td class="text-center" ng-show="isEnabled('updated')">
                 [% item.updated %]
+              </td>
+              <td class="text-center" ng-show="isEnabled('enabled')">
+                <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.enabled == '1' ? '0' : '1')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.enabled == '1', 'fa-times text-error': !item.loading && item.enabled == '0' }"></i>
+                </button>
               </td>
             </tr>
           </tbody>
