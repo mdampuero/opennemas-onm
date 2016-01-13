@@ -304,6 +304,7 @@
     @Common/src/angular-form-autofill/formAutoFill.js,
     @Common/src/angular-gravatar/gravatar.js,
 
+    @Common/src/angular-cleaner/cleaner.js,
     @Common/src/angular-dynamic-image/js/dynamic-image.js,
     @Common/src/angular-onm-editor/onm-editor.js,
     @Common/src/angular-onm-pagination/js/onm-pagination.js,

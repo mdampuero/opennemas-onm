@@ -13,6 +13,7 @@ angular.module(
     'ngTagsInput',
     'ngTouch',
     'onm.auth',
+    'onm.cleaner',
     'onm.editor',
     'onm.datetimepicker',
     'onm.dynamicImage',
