@@ -210,7 +210,7 @@
               if (response.activated.indexOf(module.id) !== -1) {
                 $scope.purchased.push(module);
               } else {
-                $scope[module.type].push(module);
+                $scope[module.metas.category].push(module);
 
                 if ($scope.isFree(module)) {
                   $scope.free.push(module);
