@@ -182,6 +182,7 @@ class ModuleManager
                 'STATIC_LIBRARY'             => _('Static library'),
                 'STATIC_PAGES_MANAGER'       => _('Static pages'),
                 'SUPPORT_NONE'               => _('Basic support'),
+                'SUPPORT_TRAINING'           =>_('Training and Advisory Services'),
                 'SUPPORT_PRO'                => _('Profesional support'),
                 'SUPPORT_1'                  => _('Support 1'),
                 'SUPPORT_2'                  => _('Support 2'),
