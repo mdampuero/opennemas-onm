@@ -134,7 +134,7 @@ class ModuleController extends Controller
 
         $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
 
-        $modules = $em->getRepository('manager.module')->findBy($criteria);
+        $modules = $em->getRepository('manager.extension')->findBy($criteria);
 
         foreach ($modules as $module) {
             try {
