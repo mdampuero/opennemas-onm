@@ -94,9 +94,7 @@ abstract class DatabasePersister extends Persister
                 });
             }
 
-            if (!empty($value)) {
-                $data[$key] = $value;
-            }
+            $data[$key] = $value;
         }
 
         return $data;

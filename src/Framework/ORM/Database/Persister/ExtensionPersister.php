@@ -18,12 +18,23 @@ class ExtensionPersister extends DatabasePersister
      */
     public function create(Entity &$entity)
     {
-        $data = $this->dbfy($entity);
-
+        $data  = $this->dbfy($entity);
         $metas = $data['metas'];
+
         unset($data['metas']);
 
-        $this->mconn->insert('extension', $data);
+        $types = [];
+        foreach ($data as $value) {
+            if (is_null($value)) {
+                $types[] = \PDO::PARAM_NULL;
+            } elseif (is_integer($value)) {
+                $types[] = \PDO::PARAM_INT;
+            } else {
+                $types[] = \PDO::PARAM_STR;
+            }
+        }
+
+        $this->mconn->insert('extension', $data, $types);
 
         $entity->id = $this->mconn->lastInsertId();
 
@@ -52,11 +63,21 @@ class ExtensionPersister extends DatabasePersister
     {
         $data  = $this->dbfy($entity);
         $metas = $data['metas'];
-
         unset($data['id']);
         unset($data['metas']);
 
-        $this->mconn->update('extension', $data, [ 'id' => $entity->id ]);
+        $types = [];
+        foreach ($data as $value) {
+            if (is_null($value)) {
+                $types[] = \PDO::PARAM_NULL;
+            } elseif (is_integer($value)) {
+                $types[] = \PDO::PARAM_INT;
+            } else {
+                $types[] = \PDO::PARAM_STR;
+            }
+        }
+
+        $this->mconn->update('extension', $data, [ 'id' => $entity->id ], $types);
 
         foreach ($metas as $key => $value) {
             if (!empty($value)) {
