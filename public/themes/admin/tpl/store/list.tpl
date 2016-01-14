@@ -201,7 +201,7 @@
         <div class="grid-body no-padding">
           <div class="clearfix">
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img class="module-image pull-left" ng-src="/assets/images/store/[%item.thumbnail%]">
+              <img class="module-image pull-left" ng-src="[% item.images[0] %]">
               <div class="module-icon">
                 <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-thumbs-o-up': item.type == 'partner', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>
