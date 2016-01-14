@@ -159,6 +159,32 @@
         };
 
         /**
+         * @function isFree
+         * @memberOf StoreListCtrl
+         *
+         * @description
+         *   Checks if a module is free.
+         *
+         * @param {Object} module The module to check
+         *
+         * @return {Boolean} True if the module is free. Otherwise, returns
+         *                   false.
+         */
+        $scope.isFree = function(module) {
+          if (!module.metas || !module.metas.price) {
+            return true;
+          }
+
+          for (var i = 0; i < module.metas.price.length; i++) {
+            if (module.metas.price[i].value == 0) {
+              return true;
+            }
+          }
+
+          return false;
+        };
+
+        /**
          * @function list
          * @memberOf StoreListCtrl
          *
@@ -186,7 +212,7 @@
               } else {
                 $scope[module.type].push(module);
 
-                if (module.price.month === 0) {
+                if ($scope.isFree(module)) {
                   $scope.free.push(module);
                 }
               }
