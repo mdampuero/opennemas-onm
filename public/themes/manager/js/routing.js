@@ -89,7 +89,11 @@ angular.module('ManagerApp')
           data: function($routeParams, itemService) {
             // Default filters
             var data = {
-              epp: 25
+              epp: 25,
+              orderBy: [{
+                name: 'uuid',
+                value: 'asc'
+              }],
             };
 
             return itemService.list('manager_ws_modules_list', data).then(

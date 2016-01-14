@@ -235,13 +235,13 @@
           $http.post(url, data, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
-          }).success(function (response) {
+          }).success(function (response, status, headers) {
             messenger.post({ message: response, type: 'success' });
             $scope.saving = 0;
 
-            if ($scope.module.id && response.status === 201) {
+            if (!$scope.module.id && status === 201) {
               // Get new module id
-              var url = response.headers()['location'];
+              var url = headers().location;
               var id  = url.substr(url.lastIndexOf('/') + 1);
 
               url = routing.ngGenerateShort(

@@ -33,7 +33,7 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
+          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid_like[0].value" type="text" style="width:250px;"/>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">

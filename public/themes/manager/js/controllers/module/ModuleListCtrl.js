@@ -80,7 +80,7 @@
          * @type {Object}
          */
         $scope.orderBy = [{
-          name: 'created',
+          name: 'uuid',
           value: 'desc'
         }];
 
