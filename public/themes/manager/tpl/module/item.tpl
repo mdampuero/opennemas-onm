@@ -49,7 +49,7 @@
           <div class="grid-body module-form">
             <div class="form-group">
               <div class="clearfix">
-                <label class="pull-left" for="id">{t}UUID{/t}</label>
+                <label class="form-label pull-left" for="uuid">{t}UUID{/t}</label>
                 <div class="checkbox pull-right">
                   <input id="custom" name="custom" ng-model="custom" type="checkbox">
                   <label for="custom">{t}Custom{/t}</label>
@@ -65,21 +65,33 @@
               <label for="enabled">{t}Enabled{/t}</label>
             </div>
             <div class="form-group">
-              <label for="author">{t}Author{/t}</label>
+              <label class="form-label" for="category">{t}Category{/t}</label>
+              <div class="controls">
+                <select id="category" name="category" ng-model="module.metas.category">
+                  <option value="">{t}Select a category...{/t}</option>
+                  <option value="module">{t}Module{/t}</option>
+                  <option value="pack">{t}Pack{/t}</option>
+                  <option value="partner">{t}Partner{/t}</option>
+                  <option value="service">{t}Service{/t}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="author">{t}Author{/t}</label>
               <div class="controls">
                 <input class="form-control" id="author" ng-model="module.author" placeholder="Openhost, S.L." type="text">
               </div>
             </div>
             <div class="form-group">
-              <label for="author_url">{t}URL{/t}</label>
+              <label class="form-label" for="author_url">{t}URL{/t}</label>
               <div class="controls">
                 <input class="form-control" id="author_url" ng-model="module.url" placeholder="http://www.openhost.es" type="text">
               </div>
             </div>
             <div class="form-group">
-              <label for="price">{t}Price{/t}</label>
+              <label class="form-label" for="price">{t}Price{/t}</label>
               <div class="controls">
-                <div class="m-t-15 row" ng-repeat="price in module.metas.price">
+                <div class="m-b-15 row" ng-repeat="price in module.metas.price">
                   <div class="col-xs-3">
                     <input class="form-control text-right" id="price-[% $index %]" name="price-[% $index %]" ng-model="price.value" type="text">
                   </div>
@@ -102,7 +114,21 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="image">{t}Image{/t}</label>
+              <div class="clearfix">
+                <label class="form-label pull-left" for="uuid">{t}Modules included{/t}</label>
+                <div class="checkbox pull-right">
+                  <input id="custom-module" name="custom-module" ng-model="custom_module" type="checkbox">
+                  <label for="custom-module">{t}Custom{/t}</label>
+                </div>
+              </div>
+              <div class="controls">
+                <tags-input ng-model="module.metas.modules_included">
+                  <auto-complete source="autocomplete($query)"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="image">{t}Image{/t}</label>
               <div class="controls">
                 <input class="hidden" id="image" name="image" file-model="module.images[0]" type="file"/>
                 <div class="thumbnail-wrapper">

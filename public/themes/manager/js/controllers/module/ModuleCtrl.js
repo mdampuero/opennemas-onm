@@ -25,6 +25,16 @@
          * @memberOf ModuleCtrl
          *
          * @description
+         *   The template parameters.
+         *
+         * @type {Object}
+         */
+        $scope.extra = data.extra;
+
+        /**
+         * @memberOf ModuleCtrl
+         *
+         * @description
          *   The language to edit.
          *
          * @type {String}
@@ -43,20 +53,29 @@
           about:       { en: '', es: '', gl: '' },
           description: { en: '', es: '', gl: '' },
           images:      [],
-          metas:       { price: [ { 'value': 0, 'type': 'monthly' } ] },
+          metas:       { category: 'module', price: [ { 'value': 0, 'type': 'monthly' } ] },
           name:        { en: '', es: '', gl: '' },
           type:        'module'
         };
 
         /**
+         * @function addModule
          * @memberOf ModuleCtrl
          *
          * @description
-         *   The template parameters.
+         *   Adds a new modules_included to the list.
          *
-         * @type {Object}
+         * @param {String} module The module to add.
          */
-        $scope.extra = data.extra;
+        $scope.addModule = function(module) {
+          if (!$scope.module.metas.modules_included) {
+            $scope.module.metas.modules_included = [];
+          }
+
+          if ($scope.module.metas.modules_included.indexOf(module) === -1) {
+            $scope.module.metas.modules_included.push(module);
+          }
+        };
 
         /**
          * @function addPrice
@@ -71,6 +90,39 @@
           }
 
           $scope.module.metas.price.push({ value: 0, type: 'monthly' });
+        };
+
+        /**
+         * @function addPrice
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Adds a new price to the list.
+         */
+        $scope.autocomplete = function(query) {
+          var tags = [];
+
+          for (var i = 0; i < $scope.extra.uuids.length;  i++) {
+            var uuid = $scope.extra.uuids[i].toLowerCase();
+            if (uuid.indexOf(query.toLowerCase()) !== -1) {
+              tags.push($scope.extra.uuids[i]);
+            }
+          }
+
+          return tags;
+        };
+
+        /**
+         * @function removeModule
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Remove a module from the list.
+         *
+         * @param {Integer} index The position of the module in the list.
+         */
+        $scope.removeModule = function(index) {
+          $scope.module.metas.modules_included.splice(index, 1);
         };
 
         /**
@@ -156,6 +208,14 @@
           if ($scope.module.id) {
             url  = routing.generate('manager_ws_module_update', { id: $scope.module.id });
             data.append('_method', 'PUT');
+          }
+
+          if ($scope.module.metas.modules_included) {
+            $scope.module.metas.modules_included =
+              $scope.module.metas.modules_included.map(function(e) {
+                if (e instanceof Object)
+                return e.text;
+              });
           }
 
           Cleaner.clean($scope.module);

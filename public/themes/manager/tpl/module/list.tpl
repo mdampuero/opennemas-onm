@@ -102,12 +102,22 @@
         </div>
         <div>
           <div class="checkbox check-default">
+            <input id="checkbox-category" checklist-model="columns.selected" checklist-value="'category'" type="checkbox">
+            <label for="checkbox-category">
+              {t}Category{/t}
+            </label>
+          </div>
+        </div>
+        <div>
+          <div class="checkbox check-default">
             <input id="checkbox-translations" checklist-model="columns.selected" checklist-value="'translations'" type="checkbox">
             <label for="checkbox-translations">
               {t}Translations{/t}
             </label>
           </div>
         </div>
+      </div>
+      <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
             <input id="checkbox-author" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
@@ -116,8 +126,6 @@
             </label>
           </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
         <div>
           <div class="checkbox check-default">
             <input id="checkbox-price" checklist-model="columns.selected" checklist-value="'price'" type="checkbox">
@@ -179,6 +187,9 @@
               <th class="pointer" ng-click="sort('uuid')" ng-show="isEnabled('uuid')" width="250">
                 {t}UUID{/t}
               </th>
+              <th class="pointer" ng-click="sort('type')" ng-show="isEnabled('category')" width="150">
+                {t}Category{/t}
+              </th>
               <th class="text-center" ng-show="isEnabled('translations')" width="60">
                 l10n
               </th>
@@ -235,6 +246,12 @@
               </td>
               <td ng-show="isEnabled('uuid')">
                 [% item.uuid %]
+              </td>
+              <td ng-show="isEnabled('category')">
+                <span ng-if="item.metas.category === 'module'">{t}Module{/t}</span>
+                <span ng-if="item.metas.category === 'pack'">{t}Pack{/t}</span>
+                <span ng-if="item.metas.category === 'partner'">{t}Partner{/t}</span>
+                <span ng-if="item.metas.category === 'service'">{t}Service{/t}</span>
               </td>
               <td class="text-center" ng-show="isEnabled('translations')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
