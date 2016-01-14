@@ -59,11 +59,24 @@ class ExtensionPersister extends DatabasePersister
         $this->mconn->update('extension', $data, [ 'id' => $entity->id ]);
 
         foreach ($metas as $key => $value) {
-            $sql = "REPLACE INTO `extension_meta` SET extension_id = ?,"
-                ." meta_key = ?, meta_value = ?";
-            $params = [ $entity->id, $key, $value ];
+            if (!empty($value)) {
+                $sql = "REPLACE INTO `extension_meta` SET extension_id = ?,"
+                    ." meta_key = ?, meta_value = ?";
+                $params = [ $entity->id, $key, $value ];
 
-            $this->mconn->executeUpdate($sql, $params);
+                $this->mconn->executeUpdate($sql, $params);
+            }
+        }
+
+        if (!empty(array_keys($metas))) {
+            $sql = "DELETE FROM `extension_meta` WHERE extension_id = ?"
+                . " AND meta_key NOT IN (?)";
+
+            $this->mconn->executeUpdate(
+                $sql,
+                [ $entity->id, array_keys($metas) ],
+                [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            );
         }
 
         $this->mcache->delete($entity->getCachedId());

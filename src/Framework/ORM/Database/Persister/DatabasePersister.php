@@ -79,14 +79,24 @@ abstract class DatabasePersister extends Persister
             }
 
             if ($key === 'metas') {
-                foreach ($value as &$metaValue) {
-                    if (is_array($metaValue)) {
-                        $metaValue = @serialize($metaValue);
+                $value = array_map(function ($a) {
+                    if (!empty($a)) {
+                        if (is_array($a)) {
+                            return @serialize($a);
+                        }
+
+                        return $a;
                     }
-                }
+                }, $value);
+
+                $value = array_filter($value, function ($a) {
+                    return !empty($a);
+                });
             }
 
-            $data[$key] = $value;
+            if (!empty($value)) {
+                $data[$key] = $value;
+            }
         }
 
         return $data;
