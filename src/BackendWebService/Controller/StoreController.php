@@ -175,7 +175,8 @@ class StoreController extends Controller
             'about'       => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
             <p>Our video manager is the same as youtube one, perfect consistency and performance.</p>'),
             'metas' => [
-                'price' => [ [ 'value' => 35, 'type' => 'monthly' ] ]
+                'category' => 'module',
+                'price'    => [ [ 'value' => 35, 'type' => 'monthly' ] ]
             ]
         ];
 
