@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
-use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
