@@ -59,25 +59,6 @@
         };
 
         /**
-         * @function addModule
-         * @memberOf ModuleCtrl
-         *
-         * @description
-         *   Adds a new modules_included to the list.
-         *
-         * @param {String} module The module to add.
-         */
-        $scope.addModule = function(module) {
-          if (!$scope.module.metas.modules_included) {
-            $scope.module.metas.modules_included = [];
-          }
-
-          if ($scope.module.metas.modules_included.indexOf(module) === -1) {
-            $scope.module.metas.modules_included.push(module);
-          }
-        };
-
-        /**
          * @function addPrice
          * @memberOf ModuleCtrl
          *
@@ -110,19 +91,6 @@
           }
 
           return tags;
-        };
-
-        /**
-         * @function removeModule
-         * @memberOf ModuleCtrl
-         *
-         * @description
-         *   Remove a module from the list.
-         *
-         * @param {Integer} index The position of the module in the list.
-         */
-        $scope.removeModule = function(index) {
-          $scope.module.metas.modules_included.splice(index, 1);
         };
 
         /**

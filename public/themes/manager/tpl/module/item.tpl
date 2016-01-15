@@ -115,14 +115,20 @@
             </div>
             <div class="form-group">
               <div class="clearfix">
-                <label class="form-label pull-left" for="uuid">{t}Modules included{/t}</label>
-                <div class="checkbox pull-right">
-                  <input id="custom-module" name="custom-module" ng-model="custom_module" type="checkbox">
-                  <label for="custom-module">{t}Custom{/t}</label>
-                </div>
+                <label class="form-label" for="uuid">{t}Modules included{/t}</label>
               </div>
               <div class="controls">
                 <tags-input ng-model="module.metas.modules_included">
+                  <auto-complete source="autocomplete($query)"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="clearfix">
+                <label class="form-label" for="uuid">{t}Modules in conflict{/t}</label>
+              </div>
+              <div class="controls">
+                <tags-input ng-model="module.metas.modules_in_conflict">
                   <auto-complete source="autocomplete($query)"></auto-complete>
                 </tags-input>
               </div>
