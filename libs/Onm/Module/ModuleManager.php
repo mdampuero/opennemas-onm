@@ -184,7 +184,6 @@ class ModuleManager
                 'SUPPORT_NONE'               => _('Basic support'),
                 'SUPPORT_TRAINING'           =>_('Training and Advisory Services'),
                 'SUPPORT_PRO'                => _('Profesional support'),
-                'SUPPORT_1'                  => _('Support 1'),
                 'SUPPORT_2'                  => _('Support 2'),
                 'SUPPORT_3'                  => _('Support 3'),
                 'SUPPORT_4'                  => _('Support 4'),
