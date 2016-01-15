@@ -151,8 +151,11 @@ extension:
             type:    string
             options: { default: null, length: 40 }
         author:
-            type: text
-            options: { default: null, length: 65532, notnull: false }
+            type: string
+            options: { default: null, length: 140, notnull: false }
+        url:
+            type: string
+            options: { default: null, length: 140, notnull: false }
         description:
             type:    text
             options: { default: null, length: 65532, notnull: false }
