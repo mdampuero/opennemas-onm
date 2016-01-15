@@ -272,6 +272,10 @@
 
         // Initializes the module
         if (data.module) {
+          if ($scope.extra.uuids.indexOf(data.module.uuid) === -1) {
+            $scope.custom = true;
+          }
+
           for (var i in data.module) {
             $scope.module[i] = data.module[i];
           }
