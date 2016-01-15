@@ -119,7 +119,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
-                <i class="fa fa-lg fa-cube hidden-sm"></i>
+                <i class="fa fa-cube hidden-sm m-r-5"></i>
                 {t}Modules{/t}
               </button>
             </li>
@@ -128,7 +128,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
-                <i class="fa fa-lg fa-support hidden-sm"></i>
+                <i class="fa fa-support hidden-sm m-r-5"></i>
                 {t}Services{/t}
               </button>
             </li>
@@ -137,7 +137,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
-                <i class="fa fa-lg fa-thumbs-o-up hidden-sm"></i>
+                <i class="fa fa-thumbs-o-up hidden-sm m-r-5"></i>
                 {t}Partners{/t}
               </button>
             </li>
@@ -146,7 +146,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }" ng-click="type = 'free'">
-                <i class="fa fa-ban fa-circle-o hidden-sm"></i>
+                <i class="fa fa-ban fa-circle-o hidden-sm m-r-5"></i>
                 {t}Free{/t}
               </button>
             </li>
@@ -155,7 +155,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
-                <i class="fa fa-lg fa-star hidden-sm"></i>
+                <i class="fa fa-star-o hidden-sm m-r-5"></i>
                 {t}My selection{/t}
               </button>
             </li>
