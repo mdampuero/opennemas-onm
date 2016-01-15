@@ -19,8 +19,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$modal', '$scope', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $http, $location, $modal, $scope, Cleaner, itemService, routing, messenger, data) {
+      '$filter', '$http', '$location', '$modal', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $http, $location, $modal, $scope, $timeout, Cleaner, itemService, routing, messenger, data) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -91,6 +91,38 @@
           }
 
           return tags;
+        };
+
+        $scope.uuidValid = true;
+
+        var tm;
+        /**
+         * @function check
+         * @memberOf ModuleCtrl
+         *
+         * @description
+         *   Checks if the given UUID is valid.
+         */
+        $scope.check = function() {
+          var url = routing.generate('manager_ws_module_check',
+              { uuid: $scope.module.uuid });
+
+          if ($scope.module.id) {
+            url = routing.generate('manager_ws_module_check',
+              { id: $scope.module.id, uuid: $scope.module.uuid });
+          }
+
+          if (tm) {
+            $timeout.cancel(tm);
+          }
+
+          tm = $timeout(function() {
+            $http.get(url).success(function() {
+              $scope.uuidValid = true;
+            }).error(function() {
+              $scope.uuidValid = false;
+            });
+          }, 500);
         };
 
         /**
@@ -236,6 +268,15 @@
         // To execute on destroy
         $scope.$on('$destroy', function() {
           $scope.module = null;
+        });
+
+        // Check UUID on change
+        $scope.$watch('module.uuid', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          $scope.check();
         });
 
         // Initializes the module

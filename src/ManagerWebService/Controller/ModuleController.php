@@ -18,6 +18,30 @@ use Symfony\Component\HttpFoundation\Request;
 class ModuleController extends Controller
 {
     /**
+     * Checks if the given UUID is available.
+     *
+     * @param Request $request The request object.
+     * @param string  $uuid    The UUID to check.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkAction(Request $request, $uuid)
+    {
+        $module = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findOneBy([ 'uuid' => [ [ 'value' => $uuid ] ] ]);
+
+        if (!$module || $request->query->get('id') === $module->id) {
+            return new JsonResponse('', 200);
+        }
+
+        return new JsonResponse(
+            sprintf(_('A module with the uuid %d already exists'), $uuid),
+            400
+        );
+    }
+
+    /**
      * Creates a new module from the request.
      *
      * @param Request $request The request object.
@@ -463,13 +487,25 @@ class ModuleController extends Controller
      */
     private function getTemplateParams()
     {
+        $uuids = array_keys(ModuleManager::getAvailableModules());
+
+        $modules = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findBy([
+                'uuid' => [ [ 'value' => $uuids, 'operator' => 'NOT IN' ] ]
+            ]);
+
+        $uuids = array_map(function ($a) {
+            return $a->uuid;
+        }, $modules);
+
         $params = [
             'languages' => [
                 'en' => _('English'),
                 'es' => _('Spanish'),
                 'gl' => _('Galician'),
             ],
-            'uuids' => array_keys(ModuleManager::getAvailableModules())
+            'uuids' => $uuids
         ];
 
         return $params;

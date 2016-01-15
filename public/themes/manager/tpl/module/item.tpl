@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success" ng-click="save();" ng-disabled="saving">
+            <button class="btn btn-success" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>
@@ -42,27 +42,22 @@
   </div>
 </div>
 <div class="content">
-  <form name="moduleForm" novalidate>
+  <form name="moduleForm">
     <div class="row">
       <div class="col-md-4">
         <div class="grid simple">
           <div class="grid-body module-form">
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error': moduleForm.$dirty && !uuidValid, 'has-success': moduleForm.$dirty && uuidValid }">
               <div class="clearfix">
                 <label class="form-label pull-left" for="uuid">{t}UUID{/t}</label>
-                <div class="checkbox pull-right">
-                  <input id="custom" name="custom" ng-model="custom" type="checkbox">
-                  <label for="custom">{t}Custom{/t}</label>
-                </div>
               </div>
               <div class="controls">
-                <select class="form-control no-animate" id="uuid" ng-if="!custom" ng-model="module.uuid" ng-options="uuid for uuid in extra.uuids"></select>
-                <input class="form-control no-animate" id="uuid" ng-if="custom" ng-model="module.uuid" placeholder="es.openhost.module.example" type="text">
+                <div class="input-with-icon right">
+                  <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && uuidValid"></i>
+                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && !uuidValid" tooltip="{t}This UUID is invalid{/t}"></i>
+                  <input class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" placeholder="es.openhost.module.example" type="text">
+                </div>
               </div>
-            </div>
-            <div class="checkbox form-group">
-              <input id="enabled" name="enabled" ng-model="module.enabled" ng-true-value="'1'" ng-false-value="'0'" type="checkbox">
-              <label for="enabled">{t}Enabled{/t}</label>
             </div>
             <div class="form-group">
               <label class="form-label" for="category">{t}Category{/t}</label>
@@ -197,7 +192,6 @@
                 <div class="form-group">
                   <label class="form-label">
                     {t}Name{/t}
-                    <span ng-show="moduleForm.name.$invalid">*</span>
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.title[language].$invalid }">
                     <input class="form-control" id="name" name="name" ng-model="module.name[language]" required type="text">
