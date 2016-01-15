@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<!-- <script>
-  $('body').on('click', '.dismiss', function(e, ui) {
-    e.preventDefault();
-    $.ajax('{url name="admin_acl_user_set_meta"}?initial_tour_done=1');
-    $(this).closest('.welcome-message').slideUp('fast');
-  });
-</script> -->
-{/block}
-
 {block name="content"}
 <div class="page-navbar actions-navbar">
   <div class="navbar navbar-inverse">
