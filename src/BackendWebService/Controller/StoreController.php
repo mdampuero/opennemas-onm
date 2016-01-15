@@ -164,22 +164,6 @@ class StoreController extends Controller
             return $a->getData();
         }, $modules);
 
-
-        $modules[] = [
-            'uuid'        => 'MEDIA_MANAGER',
-            'name'        => _('Media'),
-            'description' => _('Add Video and Image Galleries to your content.'),
-            'plan'        => 'PROFESSIONAL',
-            'type'        => 'module',
-            'thumbnail'   => 'module-multimedia.jpg',
-            'about'       => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
-            <p>Our video manager is the same as youtube one, perfect consistency and performance.</p>'),
-            'metas' => [
-                'category' => 'module',
-                'price'    => [ [ 'value' => 35, 'type' => 'monthly' ] ]
-            ]
-        ];
-
         return new JsonResponse(
             [ 'results' => $modules, 'activated' => $activated ]
         );
