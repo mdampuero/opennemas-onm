@@ -277,7 +277,9 @@
           }
 
           for (var i in data.module) {
-            $scope.module[i] = data.module[i];
+            if (data.module[i]) {
+              $scope.module[i] = data.module[i];
+            }
           }
         }
       }
