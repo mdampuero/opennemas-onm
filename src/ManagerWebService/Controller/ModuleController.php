@@ -12,6 +12,7 @@ namespace ManagerWebService\Controller;
 use Framework\ORM\Entity\Extension;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -84,13 +85,18 @@ class ModuleController extends Controller
             $module->images = [];
         }
 
+        $fs = new Filesystem();
+        if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
+            $fs->mkdir(SITE_PATH . 'media/core/modules');
+        }
+
         $i = 1;
         foreach ($request->files as $file) {
-            $module->images[] = '/assets/images/modules/' . $module->id
+            $module->images[] = '/media/core/modules/' . $module->id
                 . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
 
             $file[0]->move(
-                SITE_PATH . '/assets/images/modules',
+                SITE_PATH . '/media/core/modules',
                 $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
             );
 
@@ -454,13 +460,18 @@ class ModuleController extends Controller
                 $module->images = [];
             }
 
+            $fs = new Filesystem();
+            if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
+                $fs->mkdir(SITE_PATH . 'media/core/modules');
+            }
+
             $i = 1;
             foreach ($request->files as $file) {
-                $module->images[] = '/assets/images/modules/' . $module->id
+                $module->images[] = '/media/core/modules/' . $module->id
                     . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
 
                 $file[0]->move(
-                    SITE_PATH . '/assets/images/modules',
+                    SITE_PATH . '/media/core/modules',
                     $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
                 );
 
