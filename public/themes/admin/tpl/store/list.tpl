@@ -215,16 +215,17 @@
                 </div>
               </div>
               <div class="text-right price">
-                <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month">
-                    <strong>[% item.price.month %]</strong>
-                    <small> € / {t}month{/t}</small>
-                  </span>
-                  <span ng-if="!item.price.month && item.price.single">
-                    <strong>[% item.price.single %]</strong>
-                    <small> € </small>
-                  </span>
-                  <span ng-if="item.price.month == 0"><strong>{t}Free{/t}</strong></span>
+                <h3 class="no-margin" ng-show="item.metas.price">
+                  <div ng-repeat="price in item.metas.price">
+                    <span ng-if="price.value">
+                      <strong>[% price.value %]</strong>
+                      <small ng-if="price.type === 'monthly'">€/{t}month{/t}</small>
+                      <small ng-if="price.type === 'yearly'">€/{t}year{/t}</small>
+                      <small ng-if="price.type === 'single'">€</small>
+                      <small ng-if="price.type === 'item'">€/{t}item{/t}</small>
+                    </span>
+                    <span ng-if="price.value == 0"><strong>{t}Free{/t}</strong></span>
+                  </div>
                 </h3>
               </div>
             </div>
