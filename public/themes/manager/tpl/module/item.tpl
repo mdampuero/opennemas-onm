@@ -95,6 +95,7 @@
                       <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
                       <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
                       <option value="single">{t}Single{/t} (€)</option>
+                      <option value="item">{t}Item{/t} (€/{t}item{/t})</option>
                     </select>
                   </div>
                   <div class="col-xs-2">
