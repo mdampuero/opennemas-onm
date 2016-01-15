@@ -188,7 +188,7 @@
                 {t}UUID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('uuid') == 'asc', 'fa fa-caret-down': isOrderedBy('uuid') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('type')" ng-show="isEnabled('category')" width="150">
+              <th ng-show="isEnabled('category')" width="150">
                 {t}Category{/t}
               </th>
               <th class="text-center" ng-show="isEnabled('translations')" width="60">
