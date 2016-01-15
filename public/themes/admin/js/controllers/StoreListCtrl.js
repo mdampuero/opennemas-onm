@@ -199,29 +199,6 @@
           return false;
         };
 
-        $scope.isUpgradable = function(item) {
-          // If all subitems purchased and at least one in cart
-          if (!$scope.cart || !item.metas || !item.metas.modules_included ||
-              item.metas.modules_included.length === 0) {
-            return false;
-          }
-
-          var itemsInCart = $scope.cart.map(function (a) {
-            return a.uuid;
-          });
-
-          var notInCart = item.metas.modules_included.filter(function(a) {
-            return itemsInCart.indexOf(a) !== -1 ? false : true;
-          });
-
-          console.log(item.uuid, itemsInCart, item.metas.modules_included, notInCart);
-          if (notInCart.length === 0) {
-            return true;
-          }
-
-          return false;
-        };
-
         /**
          * @function list
          * @memberOf StoreListCtrl
