@@ -41,13 +41,21 @@ function smarty_insert_intersticial($params, &$smarty)
         $pk_advertisement = date('YmdHis', strtotime($selectedAd->created)).
                             sprintf('%06d', $selectedAd->pk_advertisement);
 
+        // Get cookie lifetime from settings
+        $config = getService('setting_repository')->get('ads_settings');
+        $cookieLifetime = 120;
+        if (isset($config['lifetime_cookie'])) {
+            $cookieLifetime = $config['lifetime_cookie'];
+        }
+
         $content = '<script type="text/javascript" language="javascript">
         /* <![CDATA[ */
             var intersticial = new IntersticialBanner({
                 publiId: "'.$pk_advertisement.'",
                 cookieName: "ib_'.$pk_advertisement.'",
                 content: '.$adContent.',
-                timeout: '.$timeout.'
+                timeout: '.$timeout.',
+                daysExpire: '.$cookieLifetime.'
             });
         /* ]]> */
         </script>
