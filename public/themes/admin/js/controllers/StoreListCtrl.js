@@ -222,7 +222,10 @@
             for (var i = 0; i < response.results.length; i++) {
               var module = response.results[i];
 
-              if (response.activated.indexOf(module.uuid) !== -1) {
+              if ($scope.isFree(module) &&
+                  module.metas.category !== 'partner') {
+                $scope.free.push(module);
+              } else if (response.activated.indexOf(module.uuid) !== -1) {
                 $scope.purchased.push(module);
               } else {
                 if (module.metas && module.metas.modules_included) {
@@ -238,10 +241,6 @@
                   }
                 }  else {
                   $scope[module.metas.category].push(module);
-                }
-
-                if ($scope.isFree(module)) {
-                  $scope.free.push(module);
                 }
               }
             }
