@@ -55,7 +55,7 @@
                 <div class="input-with-icon right">
                   <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
                   <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" tooltip="{t}This UUID is invalid{/t}"></i>
-                  <input class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" placeholder="es.openhost.module.example" type="text">
+                  <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" placeholder="es.openhost.module.example" type="text">
                 </div>
               </div>
             </div>

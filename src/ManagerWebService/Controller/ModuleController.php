@@ -502,9 +502,7 @@ class ModuleController extends Controller
 
         $modules = $this->get('orm.manager')
             ->getRepository('manager.extension')
-            ->findBy([
-                'uuid' => [ [ 'value' => $uuids, 'operator' => 'NOT IN' ] ]
-            ]);
+            ->findBy([]);
 
         $uuids = array_map(function ($a) {
             return $a->uuid;
