@@ -60,6 +60,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
                 $content->thumb = SITE_URL.$content->thumb;
             }
             $output []= '<meta property="og:image" content="'.$content->thumb.'" />';
+        } elseif (isset($content->img1) && ($content->img1 > 0)) {
+            $photoFront = getService('entity_repository')->find('Photo', $content->img1);
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+            $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (array_key_exists('default_image', $params)) {
             // Default
             $output []= '<meta property="og:image" content="'.$params['default_image'].'" />';
