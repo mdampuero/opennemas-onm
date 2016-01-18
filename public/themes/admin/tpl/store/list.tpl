@@ -235,7 +235,7 @@
                 {t}More info{/t}
             </div>
             <div class="col-xs-12 col-sm-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)" ng-if="item.price.month !== 0">
+              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
                 <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
                 <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
                 <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
