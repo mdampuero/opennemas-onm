@@ -226,7 +226,7 @@
                   </span>
                 </td>
                 <td class="center">
-                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_user_set_enabled', 'activated', content.activated != 1 ? 1 : 0, 'loading')" type="button">
+                  <button class="btn btn-white" ng-click="selected.contents = [ content.id ];updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', content.activated != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.activated == '1', 'fa-times text-error': !content.loading && content.activated == '0' }"></i>
                   </button>
                 </td>
@@ -250,7 +250,7 @@
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-update-selected">
-    {include file="common/modals/_modalBatchUpdate.tpl"}
+    {include file="acl/user/modals/_modalBatchUpdate.tpl"}
   </script>
 </form>
 {/block}

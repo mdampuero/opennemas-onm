@@ -36,7 +36,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="grid simple">
       <div class="grid-body">
@@ -61,19 +60,30 @@
         </div>
       </div>
     </div>
-
     <div class="grid simple">
       <div class="grid-title">
         <h5>{t}OpenX/Revive Ad server integration{/t}</h5>
       </div>
       <div class="grid-body">
-
-
         <div class="form-group">
           <label for="revive_ad_server_url" class="form-label">{t}Ad server base url{/t}</label>
           <div class="controls">
             <input class="form-control" type="text" name="revive_ad_server_url" value="{$configs['revive_ad_server']['url']}">
             <div class="help-block">{t}The ad server URL (i.e. http://ad.serverexample.net/).{/t}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid simple">
+      <div class="grid-title">
+        <h5>{t}Tradedoubler integration{/t}</h5>
+      </div>
+      <div class="grid-body">
+        <div class="form-group">
+          <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="number" name="tradedoubler_id" value="{$configs['tradedoubler_id']}">
+            <div class="help-block">{t}Only the ID from Tradedoubler validation tag{/t}</div>
           </div>
         </div>
       </div>

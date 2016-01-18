@@ -22,6 +22,52 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
     };
 
     /**
+     * Initialize list of mail accounts
+     */
+    $scope.init = function(items) {
+      $scope.sourceCurrentPage = 1;
+      $scope.targetCurrentPage = 1;
+      $scope.perPage = 10;
+      $scope.maxSize = 5;
+      $scope.sourcePagedItems = items.slice(0, 10);
+      $scope.targetPagedItems = [];
+    };
+
+    /**
+     * Source pagination
+     */
+    $scope.sourcePageChanged = function() {
+      $scope.sourcePagedItems = $scope.source.items.slice(
+        (($scope.sourceCurrentPage - 1) * $scope.perPage),
+        (($scope.sourceCurrentPage - 1) * $scope.perPage) + $scope.perPage
+      );
+    };
+
+    /**
+     * Target pagination
+     */
+    $scope.targetPageChanged = function() {
+      $scope.targetPagedItems = $scope.target.items.slice(
+        (($scope.targetCurrentPage - 1) * $scope.perPage),
+        (($scope.targetCurrentPage - 1) * $scope.perPage) + $scope.perPage
+      );
+    };
+
+    /**
+     * Source pagination
+     */
+    $scope.$watch("sourceCurrentPage", function() {
+      $scope.sourcePageChanged();
+    });
+
+    /**
+     * Target pagination
+     */
+    $scope.$watch("targetCurrentPage ", function() {
+      $scope.targetPageChanged();
+    });
+
+    /**
      * Add selected email to receivers list and remove them from available
      * receivers list.
      */
@@ -36,6 +82,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
       $scope.source.all = false;
       $scope.source.selected = [];
+      $scope.sourcePageChanged();
+      $scope.targetPageChanged();
     };
 
     /**
@@ -53,6 +101,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
       $scope.target.all = false;
       $scope.target.selected = [];
+      $scope.sourcePageChanged();
+      $scope.targetPageChanged();
     };
 
     /**

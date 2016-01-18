@@ -57,8 +57,8 @@ class StoreController extends Controller
         // Get names for filtered modules to use in template
         $purchased = array_intersect_key($available, array_flip($modules));
 
-        $this->sendEmailToSales($instance, $purchased);
-        $this->sendEmailToCustomer($instance, $purchased);
+        $this->sendEmailToSales($billing, $purchased, $instance);
+        $this->sendEmailToCustomer($purchased, $instance);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
@@ -170,12 +170,33 @@ class StoreController extends Controller
     }
 
     /**
+     * Saves the billing information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveBillingAction(Request $request)
+    {
+        $billing  = $request->request->all();
+        $instance = $this->get('instance');
+
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
+        }
+
+        $this->get('instance_manager')->persist($instance);
+
+        return new JsonResponse(_('Billing information saved successfully'));
+    }
+
+    /**
      * Sends an email to the customer.
      *
-     * @param Instance $instance The instance to upgrade.
      * @param array    $modules  The requested modules.
+     * @param Instance $instance The instance to upgrade.
      */
-    private function sendEmailToCustomer($instance, $modules)
+    private function sendEmailToCustomer($modules, $instance)
     {
         $params = $this->container
             ->getParameter("manager_webservice");
@@ -204,8 +225,9 @@ class StoreController extends Controller
      *
      * @param Instance $instance The instance to upgrade.
      * @param array    $modules  The requested modules.
+     * @param array    $billing  The billing information.
      */
-    private function sendEmailToSales($instance, $modules)
+    private function sendEmailToSales($billing, $modules, $instance)
     {
         $params = $this->container
             ->getParameter("manager_webservice");
@@ -219,6 +241,7 @@ class StoreController extends Controller
                 $this->renderView(
                     'store/email/_purchaseToSales.tpl',
                     [
+                        'billing'  => $billing,
                         'instance' => $instance,
                         'modules'  => $modules,
                         'user'     => $this->getUser()

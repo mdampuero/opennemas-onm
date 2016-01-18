@@ -76,7 +76,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $instance = $this->container->get('instance');
         $response = $event->getResponse();
 
-        if ($instance->users === 1
+        if ($instance->users == 1
             && $instance->page_views < 45000
             && $instance->media_size < 450
         ) {

@@ -12,6 +12,8 @@
   <link rel="manifest" href="/backend_manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link href="/assets/images/favicon.png" rel="icon">
   <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
@@ -21,8 +23,6 @@
   {block name="meta"}
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
   {/block}
-
-  <link href="{$params.COMMON_ASSET_DIR}images/favicon.png" rel="icon">
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 

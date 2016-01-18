@@ -1,72 +1,79 @@
-/**
-* Service to handle route generation by using FosJsRouting.
-*/
-angular.module('onm.history', []).factory('history', function($location) {
+(function() {
+  'use strict';
 
-    /**
-     * The history service.
-     *
-     * @type Object
-     */
-    var history = {
-        routes: []
-    };
+  /**
+   * Service to handle route generation by using FosJsRouting.
+   */
+  angular.module('onm.history', []).factory('history', [
+    '$location',
+    function($location) {
 
-    /**
-     * Clears the history basing on the URL.
-     *
-     * @param string url The URL to clear.
-     *
-     * @return boolean True if the history could be cleared successfully.
-     *                 Otherwise, returns false.
-     */
-    history.clear = function(url) {
-        for (var i = history.routes.length - 1; i >= 0; i--) {
-            if (history.routes[i].route == url) {
-                history.routes.splice(i, 1);
+      /**
+       * The history service.
+       *
+       * @type Object
+       */
+      var history = {
+          routes: []
+      };
 
-                return true;
-            }
-        };
+      /**
+       * Clears the history basing on the URL.
+       *
+       * @param string url The URL to clear.
+       *
+       * @return boolean True if the history could be cleared successfully.
+       *                 Otherwise, returns false.
+       */
+      history.clear = function(url) {
+          for (var i = history.routes.length - 1; i >= 0; i--) {
+              if (history.routes[i].route == url) {
+                  history.routes.splice(i, 1);
 
-        return false;
-    };
+                  return true;
+              }
+          }
 
-    /**
-     * Saves the page status for an URL
-     *
-     * @param string url    The URL to save.
-     * @param Object params The URL parameters.
-     */
-    history.push = function(url, params) {
-        return history.routes.push(
-            { route: url, params: params }
-        );
-    };
+          return false;
+      };
 
-    /**
-     * Restores the last page status basing on the URL.
-     *
-     * @param string url The URL to restore.
-     *
-     * @return boolean True if the page could be restored successfully.
-     *                 Otherwise, returns false.
-     */
-    history.restore = function(url) {
-        for (var i = history.routes.length - 1; i >= 0; i--) {
-            if (history.routes[i].route == url) {
-                for (var name in history.routes[i].params) {
-                    $location.search(name, history.routes[i].params[name]);
-                };
+      /**
+       * Saves the page status for an URL
+       *
+       * @param string url    The URL to save.
+       * @param Object params The URL parameters.
+       */
+      history.push = function(url, params) {
+          return history.routes.push(
+              { route: url, params: params }
+          );
+      };
 
-                history.routes.splice(i, 1);
+      /**
+       * Restores the last page status basing on the URL.
+       *
+       * @param string url The URL to restore.
+       *
+       * @return boolean True if the page could be restored successfully.
+       *                 Otherwise, returns false.
+       */
+      history.restore = function(url) {
+          for (var i = history.routes.length - 1; i >= 0; i--) {
+              if (history.routes[i].route == url) {
+                  for (var name in history.routes[i].params) {
+                      $location.search(name, history.routes[i].params[name]);
+                  }
 
-                return true;
-            }
-        };
+                  history.routes.splice(i, 1);
 
-        return false;
-    };
+                  return true;
+              }
+          }
 
-    return history;
-});
+          return false;
+      };
+
+      return history;
+  }]);
+
+})();
