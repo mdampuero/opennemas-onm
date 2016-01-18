@@ -181,14 +181,12 @@
             for (var i = 0; i < response.results.length; i++) {
               var module = response.results[i];
 
-              if (response.activated.indexOf(module.id) !== -1) {
+              if (module.price.month === 0 && module.type !== 'partner') {
+                $scope.free.push(module);
+              } else if (response.activated.indexOf(module.id) !== -1) {
                 $scope.purchased.push(module);
               } else {
                 $scope[module.type].push(module);
-
-                if (module.price.month === 0) {
-                  $scope.free.push(module);
-                }
               }
             }
 
