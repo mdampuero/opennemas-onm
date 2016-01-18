@@ -80,14 +80,26 @@
     </style>
     <script type="text/javascript">
       function selectLang() {
-        var langs = [ 'en', 'es', 'gl', 'pt' ];
-        var lang  = navigator.language;
+        var availableLangs = [ 'en', 'es', 'gl', 'pt' ];
+        var langs          = navigator.languages;
+        var lang           = false;
+        var i              = 0;
 
-        if (lang.indexOf('-') !== -1) {
-          lang = lang.substring(0, lang.indexOf('-'));
+        while (i < langs.length && !lang) {
+          var l = langs[i];
+
+          if (l.indexOf('-') !== -1) {
+            l = l.substring(0, l.indexOf('-'));
+          }
+
+          if (availableLangs.indexOf(l) !== -1) {
+            lang = l;
+          }
+
+          i++;
         }
 
-        if (langs.indexOf(lang) === -1) {
+        if (!lang) {
           lang = 'en';
         }
 
