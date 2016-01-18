@@ -198,7 +198,7 @@
                 {t}Author{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('author') == 'asc', 'fa fa-caret-down': isOrderedBy('author') == 'desc'}"></i>
               </th>
-              <th class="text-center"  ng-show="isEnabled('price')" width="100">
+              <th class="text-center"  ng-show="isEnabled('price')" width="150">
                 {t}Price{/t}
               </th>
               <th class="pointer text-center" ng-click="sort('created')" ng-show="isEnabled('created')" width="200">
@@ -265,9 +265,10 @@
               <td class="text-center" ng-show="isEnabled('author')">
                 [% item.author %]
               </td>
-              <td class="text-right" ng-show="isEnabled('price')">
+              <td class="text-center" ng-show="isEnabled('price')">
                 <div ng-repeat="price in item.metas.price">
-                  [% price.value ? price.value : 0 %] €<span ng-if="price.type === 'monthly'">/{t}month{/t}</span><span ng-if="price.type === 'yearly'">/{t}year{/t}</span>
+                  [% price.value ? price.value : 0 %] €<span ng-if="price.type === 'monthly'">/{t}month{/t}</span><span ng-if="price.type === 'yearly'">/{t}year{/t}</span><span ng-if="price.type === 'item'">/{t}item{/t}</span>
+
                 </div>
               </td>
               <td class="text-center" ng-show="isEnabled('created')">
