@@ -14,7 +14,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a ng-href="[% routing.ngGenerate('manager_module_create') %]" class="btn btn-primary">
+            <a ng-href="[% routing.ngGenerate('manager_module_create') %]" class="btn btn-success">
               <i class="fa fa-plus fa-lg"></i>
               {t}Create{/t}
             </a>
