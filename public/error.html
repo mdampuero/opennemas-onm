@@ -80,9 +80,26 @@
     </style>
     <script type="text/javascript">
       function selectLang() {
-        var lang = navigator.language;
+        var availableLangs = [ 'en', 'es', 'gl', 'pt' ];
+        var langs          = navigator.languages;
+        var lang           = false;
+        var i              = 0;
 
-        if (lang !== 'es' || lang !== 'gl' || lang !== 'pt') {
+        while (i < langs.length && !lang) {
+          var l = langs[i];
+
+          if (l.indexOf('-') !== -1) {
+            l = l.substring(0, l.indexOf('-'));
+          }
+
+          if (availableLangs.indexOf(l) !== -1) {
+            lang = l;
+          }
+
+          i++;
+        }
+
+        if (!lang) {
           lang = 'en';
         }
 
@@ -106,11 +123,12 @@
       <div class="col-lg-10 col-lg-offset-1 text-center">
         <div class="logo">
           <h1 class="en pt lang visible">Ooops!</h1>
-          <h1 class="es gl lang">¡Uyyy!</h1>
+          <h1 class="es lang">¡Uyyy!</h1>
+          <h1 class="gl lang">Recoiro!</h1>
         </div>
         <p class="en lang lead text-muted visible">Something unexpected happened! Please try again in a few minutes.</p>
         <p class="es lang lead text-muted">¡Acaba de pasar algo inesperado! Por favor, vuelve a intentarlo en unos minutos.</p>
-        <p class="gl lang lead text-muted">¡Acaba de pasar algo inesperado! Por favor, volve a intentalo nuns minutos.</p>
+        <p class="gl lang lead text-muted">¡Pasou algo inesperado! Por favor, téntao de novo nuns minutos.</p>
         <p class="pt lang lead text-muted">Passou algo inesperado! Por favor, tente novamente em alguns minutos.</p>
         <div class="col-lg-10 col-lg-offset-1">
           <svg class="img-responsive owl" version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="148 27.3 545.9 520" enable-background="new 148 27.3 545.9 520" xml:space="preserve">
