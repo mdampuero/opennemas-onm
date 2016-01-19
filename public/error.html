@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>500</title>
+    <title>Opennemas</title>
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
     <style type="text/css">
       @import url(//fonts.googleapis.com/css?family=Raleway:300);
       /*!
@@ -21,21 +22,6 @@
       a:hover svg { opacity: .8; }
       p { margin-bottom: 0; }
       svg { background-color: transparent; display: block; margin: 0 auto; text-align: center; }
-      .left { text-align: left; }
-      .lang { display: none; }
-      .logo h1{ color:#fff; font-weight: 300; font: 100px Raleway; letter-spacing: -0.05em; margin-bottom: 0; margin-top: 0; text-align: center; text-shadow:0 1px 0 #ccc,0 2px 0 #c9c9c9,0 3px 0 #bbb,0 4px 0 #b9b9b9,0 5px 0 #aaa,0 6px 1px rgba(0,0,0,0.1),0 0 5px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.3),0 3px 5px rgba(0,0,0,0.2),0 5px 10px rgba(0,0,0,0.25),0 10px 10px rgba(0,0,0,0.2),0 20px 20px rgba(0,0,0,0.15); }
-      .message { bottom: 0; position: fixed; margin: 30px; }
-      .message.left { border-left: 1px solid rgba(255, 255, 255, 0.3); left: 0; padding-left: 15px; }
-      .message.right { right: 0; }
-      .openhost-logo { height: 65px; width: 65px; }
-      .owl { height: 600px; width: 600px; }
-      .right { text-align: right; }
-      .subtitle { font-size: 1.25em; }
-      .text-muted { font-size: 18pt; font-weight: 300; }
-      .title { font-size: 2em; }
-      .visible { display: block; }
-      @media (max-width:767px) { .text-muted{ font-weight: 300; } }
-      @media (max-width:480px) { .text-muted{ font-size: 18px; } }
 
       /* ANIMATIONS */
       @keyframes fadeout {
@@ -77,6 +63,44 @@
       #spark_12 {animation:fadeout 3190ms 375ms ease-out infinite;}
       #eyeslashes {animation: blink 7190ms 375ms ease-out infinite;}
       #pupil_l, #pupil_r {animation: pupils 7190ms 375ms ease-out infinite;transform-origin: center center;}
+
+      .left { text-align: left; }
+      .lang { display: none; }
+
+      .page-title h1 { color:#fff; font-weight: 300; font: 7.2em Raleway; letter-spacing: -0.05em; margin-bottom: 0; margin-top: 0; text-align: center; text-shadow:0 1px 0 #ccc,0 2px 0 #c9c9c9,0 3px 0 #bbb,0 4px 0 #b9b9b9,0 5px 0 #aaa,0 6px 1px rgba(0,0,0,0.1),0 0 5px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.3),0 3px 5px rgba(0,0,0,0.2),0 5px 10px rgba(0,0,0,0.25),0 10px 10px rgba(0,0,0,0.2),0 20px 20px rgba(0,0,0,0.15); }
+      .page-message { font-size: 1.8em; font-weight: 300; line-height:1.2em; }
+
+      .owl { width: 80%; max-width:600px; }
+
+      .footer { bottom: 0; position: fixed; padding: 30px; width:100%; display:block; }
+
+      .footer .opennemas-logo { border-left: 1px solid rgba(255, 255, 255, 0.3); left: 0; padding-left: 15px; text-align:left; }
+      .footer .opennemas-logo .title { font-size: 2em; }
+      .footer .opennemas-logo .subtitle { font-size: 1.25em; }
+
+      .footer .openhost-logo { text-align:right; position:relative; display:block; }
+      .footer .openhost-logo .logo { text-align:right; right: 0; position:absolute;  display:block; }
+      .footer .openhost-logo .logo svg { height: 65px; width: 65px; margin:0; display:inline-block;}
+
+      .visible { display: block; }
+
+      @media (max-width:767px) {
+        body { padding-top:20px;}
+        .owl { width:100%; }
+        .page-title h1 { font-size:4em;}
+        .page-message { font-size:1.5em;}
+
+        .owl { width: 100%; }
+
+        .footer { position:relative !important; padding:0; display:block; padding:0 15px; padding-top:15px;}
+
+        .footer .opennemas-logo { border:0 none; text-align:left; display:inline-block; padding-top:5px;}
+        .footer .opennemas-logo .title { font-size: 1.5em; }
+        .footer .opennemas-logo .subtitle { font-size: .8em; }
+
+        .footer .openhost-logo .logo { position:relative; margin:0 auto; display:inline-block;}
+        .footer .openhost-logo .logo svg { height: 55px; width: 55px;}
+      }
     </style>
     <script type="text/javascript">
       function selectLang() {
@@ -120,17 +144,17 @@
   </head>
   <body onload="selectLang()">
     <div class="container">
-      <div class="col-lg-10 col-lg-offset-1 text-center">
-        <div class="logo">
+      <div class="text-center">
+        <div class="logo page-title">
           <h1 class="en pt lang visible">Ooops!</h1>
           <h1 class="es lang">¡Uyyy!</h1>
           <h1 class="gl lang">Recoiro!</h1>
         </div>
-        <p class="en lang lead text-muted visible">Something unexpected happened! Please try again in a few minutes.</p>
-        <p class="es lang lead text-muted">¡Acaba de pasar algo inesperado! Por favor, vuelve a intentarlo en unos minutos.</p>
-        <p class="gl lang lead text-muted">¡Pasou algo inesperado! Por favor, téntao de novo nuns minutos.</p>
-        <p class="pt lang lead text-muted">Passou algo inesperado! Por favor, tente novamente em alguns minutos.</p>
-        <div class="col-lg-10 col-lg-offset-1">
+        <p class="en lang lead page-message visible">Something unexpected happened! Please try again in a few minutes.</p>
+        <p class="es lang lead page-message">¡Acaba de pasar algo inesperado! Por favor, vuelve a intentarlo en unos minutos.</p>
+        <p class="gl lang lead page-message">¡Pasou algo inesperado! Por favor, téntao de novo nuns minutos.</p>
+        <p class="pt lang lead page-message">Passou algo inesperado! Por favor, tente novamente em alguns minutos.</p>
+        <div class="">
           <svg class="img-responsive owl" version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="148 27.3 545.9 520" enable-background="new 148 27.3 545.9 520" xml:space="preserve">
             <metadata>
               <sfw  xmlns="&ns_sfw;">
@@ -1016,73 +1040,75 @@
       </div>
     </div>
     <div class="container-fluid footer">
-      <div class="message left">
-        <a href="http://www.opennemas.com" target="_blank" title="Opennemas, CMS #1 for online newspapers">
-          <div class="title">opennemas.com</div>
-          <div class="subtitle">CMS #1 for online newspapers</div>
-        </a>
-      </div>
-      <div class="message right">
-        <a class="logo" href="http://www.openhost.es" target="_blank">
-          <svg version="1.1" class="openhost-logo" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 841.9 512 512" enable-background="new 0 841.9 512 512" xml:space="preserve">
-            <metadata>
-              <sfw  xmlns="&ns_sfw;">
-                <slices></slices>
-                <sliceSourceBounds  width="502" height="464" bottomLeftOrigin="true" y="-488.9" x="5.1"></sliceSourceBounds>
-              </sfw>
-            </metadata>
-            <path fill="#FFFFFF" d="M29.9,1330.8c-3.7,0-7.1-0.8-10.1-2.3c-3-1.5-5.6-3.6-7.8-6c-2.2-2.5-3.9-5.3-5.1-8.5
-            c-1.2-3.2-1.8-6.5-1.8-9.9c0-3.5,0.6-6.9,1.9-10.1c1.3-3.2,3-6.1,5.2-8.5c2.2-2.5,4.8-4.5,7.9-5.9c1-0.5,2-0.9,3.1-1.2l1.3-0.4v5.6
-            l-0.7,0.2c-0.6,0.2-1.2,0.5-1.7,0.8c-2.3,1.2-4.4,2.9-6,4.9c-1.7,2-3,4.3-3.9,6.9c-0.9,2.5-1.4,5.2-1.4,7.8c0,2.8,0.5,5.5,1.4,8.1
-            c0.9,2.6,2.3,4.9,4,6.8c1.7,2,3.7,3.6,6.1,4.7c2.3,1.2,4.9,1.8,7.7,1.8c2.9,0,5.5-0.6,7.8-1.8c2.3-1.2,4.4-2.9,6-4.9
-            c1.7-2,3-4.3,3.9-6.9c0.9-2.6,1.4-5.2,1.4-7.8c0-2.8-0.5-5.5-1.4-8.1c-1-2.6-2.3-4.9-4-6.9c-1.7-2-3.7-3.6-6.1-4.7
-            c-0.5-0.2-1-0.4-1.5-0.7l-0.6-0.2v-5.6l1.3,0.4c1.2,0.4,2.4,0.8,3.5,1.4c3,1.6,5.6,3.6,7.8,6.1c2.1,2.5,3.8,5.4,5,8.6
-            c1.2,3.2,1.8,6.4,1.8,9.7c0,3.5-0.6,7-1.9,10.2c-1.3,3.2-3,6.1-5.2,8.5c-2.2,2.5-4.8,4.4-7.8,5.9C36.7,1330,33.4,1330.8,29.9,1330.8
-            z"/>
-            <path fill="#FFFFFF" d="M361.1,1330.8c-3.7,0-7.1-0.8-10.1-2.3c-3-1.5-5.6-3.6-7.8-6c-2.2-2.5-3.9-5.3-5.1-8.5
-            c-1.2-3.2-1.8-6.5-1.8-9.9c0-3.5,0.6-6.9,1.9-10.1c1.3-3.2,3-6.1,5.2-8.5c2.2-2.5,4.8-4.5,7.9-5.9c1-0.5,2-0.9,3.1-1.2l1.3-0.4v5.6
-            l-0.7,0.2c-0.6,0.2-1.2,0.5-1.7,0.8c-2.3,1.2-4.4,2.9-6,4.9c-1.7,2-3,4.3-3.9,6.9c-0.9,2.6-1.4,5.2-1.4,7.8c0,2.8,0.5,5.5,1.4,8.1
-            c0.9,2.6,2.3,4.9,4,6.8c1.7,2,3.7,3.6,6.1,4.7c2.3,1.2,4.9,1.8,7.7,1.8c2.9,0,5.5-0.6,7.8-1.8c2.3-1.2,4.4-2.9,6-4.9
-            c1.7-2,3-4.3,3.9-6.9c0.9-2.6,1.4-5.2,1.4-7.8c0-2.8-0.5-5.5-1.4-8.1c-1-2.6-2.3-4.9-4-6.9c-1.7-2-3.7-3.6-6.1-4.7
-            c-0.5-0.2-0.9-0.4-1.5-0.7l-0.6-0.2v-5.6l1.3,0.4c1.2,0.4,2.4,0.8,3.5,1.4c3,1.6,5.6,3.6,7.8,6.1c2.1,2.5,3.8,5.4,5,8.6
-            c1.2,3.2,1.8,6.4,1.8,9.7c0,3.5-0.6,7-1.9,10.2c-1.3,3.2-3,6.1-5.2,8.5c-2.2,2.5-4.8,4.4-7.8,5.9
-            C367.9,1330,364.6,1330.8,361.1,1330.8z"/>
-            <path fill="#FFFFFF" d="M77.7,1330.4v-52.8h21.9c2.3,0,4.4,0.5,6.4,1.5c1.9,1,3.6,2.3,5,3.9c1.4,1.6,2.5,3.4,3.3,5.4
-            c0.8,2,1.2,4,1.2,6.1c0,2.2-0.4,4.3-1.1,6.3c-0.7,2-1.8,3.8-3.1,5.4c-1.3,1.6-3,2.8-4.8,3.8c-1.9,1-4,1.4-6.3,1.4h-5.9v-5.4h5.7
-            c1.5,0,2.9-0.3,4.1-0.9c1.2-0.6,2.2-1.5,3.1-2.5c0.9-1.1,1.5-2.3,2-3.7c0.5-1.4,0.7-2.9,0.7-4.4c0-1.5-0.3-3-0.8-4.4
-            c-0.6-1.4-1.3-2.6-2.3-3.7c-0.9-1-2-1.9-3.3-2.5c-1.2-0.6-2.5-0.9-3.9-0.9H83.3v15.8h0v31.7H77.7z"/>
-            <polygon fill="#FFFFFF" points="138.4,1330.4 138.4,1277.6 173.7,1277.6 173.7,1282.9 144.1,1282.9 144.1,1325.1 174.3,1325.1
-            174.3,1330.4 "/>
-            <rect x="155" y="1300.8" fill="#FFFFFF" width="14.9" height="5.2"/>
-            <polygon fill="#FFFFFF" points="270.5,1330.4 270.5,1277.6 276.2,1277.6 276.2,1300.8 285.7,1300.8 285.7,1306.1 276.2,1306.1
-            276.2,1330.4 "/>
-            <polygon fill="#FFFFFF" points="306.2,1330.4 306.2,1306.1 296.7,1306.1 296.7,1300.8 306.2,1300.8 306.2,1277.6 311.9,1277.6
-            311.9,1330.4 "/>
-            <rect x="464.2" y="1277.6" fill="#FFFFFF" width="42.9" height="5.3"/>
-            <rect x="482.8" y="1293.8" fill="#FFFFFF" width="5.7" height="36.6"/>
-            <path fill="#FFFFFF" d="M419.7,1305.1c-0.5-0.1-1-0.3-1.5-0.5c-2.2-0.7-4-1.5-5.5-2.6c-1.6-1.1-2.8-2.4-3.5-3.9
-            c-0.8-1.5-1.2-3.4-1.2-5.7c0-2.4,0.5-4.6,1.4-6.5c0.9-1.9,2.3-3.5,4-4.8c1.7-1.3,3.7-2.3,6-2.9c2.3-0.6,4.8-1,7.6-1
-            c3.4,0,6.5,0.5,9.2,1.5c2.7,1,5.2,2.6,7.4,4.7l0.6,0.6l-3,4.7l-0.9-1c-3.1-3.4-7.5-5.2-13.2-5.2c-4.7,0-8.1,0.9-10.2,2.6
-            c-2,1.7-3,3.9-3,6.9c0,1.5,0.3,2.7,0.7,3.6c0.5,0.9,1.2,1.7,2.3,2.4c1.1,0.7,2.5,1.3,4.2,1.8l0.9,0.3l-1,5.4L419.7,1305.1z"/>
-            <path fill="#FFFFFF" d="M427.3,1330.8c-8.1,0-15.1-2.6-20.8-7.9l-0.6-0.6l3.1-4.7l0.9,0.9c2,2.1,4.6,3.9,7.5,5.1
-            c3,1.3,6.3,1.9,10.1,1.9c4.2,0,7.5-0.8,9.9-2.3c2.2-1.4,3.3-3.6,3.3-6.5c0-1.5-0.3-2.8-0.8-3.8c-0.6-1-1.4-1.9-2.6-2.7
-            c-1.3-0.8-2.8-1.5-4.7-2.1l-0.8-0.3l0-0.9l0.9-4.6l1.1,0.3c0.6,0.2,1.2,0.4,1.8,0.5c2.3,0.7,4.3,1.6,5.9,2.7c1.7,1.1,3,2.6,3.9,4.2
-            c0.9,1.7,1.4,3.7,1.4,6.1c0,2.4-0.5,4.5-1.4,6.3c-1,1.8-2.3,3.3-4,4.5c-1.7,1.2-3.7,2.1-6.1,2.7
-            C432.6,1330.5,430.1,1330.8,427.3,1330.8z"/>
-            <polygon fill="#FFFFFF" points="198.7,1330.4 198.7,1277.6 203,1277.6 218.5,1297 214.5,1301 204.4,1288.3 204.4,1330.4 "/>
-            <polygon fill="#FFFFFF" points="238,1330.4 221.4,1309.6 225.3,1305.6 237.2,1320.5 237.2,1277.6 242.8,1277.6 242.8,1330.4 "/>
-            <path opacity="0.2" fill="#FFFFFF" enable-background="new    " d="M374,913.9c-26.6-26.6-59.9-42.2-94.5-47.1l0,47.4
-            c22.5,4.4,44,15.4,61.4,32.8c46.8,46.8,46.8,122.8,0,169.6c-46.8,46.8-122.8,46.8-169.6,0s-46.8-122.8,0-169.6l-33.1-33.1
-            c-65,65-65,170.8,0,235.8s170.8,65,235.8,0S439,978.9,374,913.9z"/>
-            <path opacity="0.5" fill="#FFFFFF" enable-background="new    " d="M396.2,985.1c-10.5-31.5-30.7-57.2-56.2-74.8L321.2,948
-            c16.1,12.4,28.8,29.6,35.7,50.3c18.5,55.6-11.6,115.8-67.2,134.3c-55.6,18.5-115.8-11.6-134.3-67.2
-            c-18.5-55.6,11.6-115.8,67.2-134.3l-13.1-39.3c-77.3,25.7-119.2,109.5-93.4,186.8s109.5,119.2,186.8,93.4S421.9,1062.4,396.2,985.1z
-            "/>
-            <path fill="#FFFFFF" d="M369.2,963.5c-15.4-25.5-38.1-43.9-63.8-54.2l-9,36.5c16.5,7.7,30.9,20.2,41,36.9
-            c27.1,44.9,12.6,103.4-32.2,130.5c-44.9,27.1-103.4,12.6-130.5-32.2s-12.6-103.4,32.2-130.5l-19.2-31.8
-            c-62.4,37.7-82.5,119.1-44.8,181.5c37.7,62.4,119.1,82.5,181.5,44.8S406.9,1025.9,369.2,963.5z"/>
-          </svg>
-        </a>
+      <div class="row">
+          <div class="col-lg-6 col-xs-9 opennemas-logo">
+          <a href="http://www.opennemas.com" target="_blank" title="Opennemas, CMS #1 for online newspapers">
+            <div class="title">opennemas.com</div>
+            <div class="subtitle">CMS #1 for online newspapers</div>
+          </a>
+        </div>
+        <div class="col-lg-6 col-xs-3 openhost-logo">
+          <a class="logo pull-right" href="http://www.openhost.es" target="_blank">
+            <svg version="1.1" class="openhost-logo" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 841.9 512 512" enable-background="new 0 841.9 512 512" xml:space="preserve">
+              <metadata>
+                <sfw  xmlns="&ns_sfw;">
+                  <slices></slices>
+                  <sliceSourceBounds  width="502" height="464" bottomLeftOrigin="true" y="-488.9" x="5.1"></sliceSourceBounds>
+                </sfw>
+              </metadata>
+              <path fill="#FFFFFF" d="M29.9,1330.8c-3.7,0-7.1-0.8-10.1-2.3c-3-1.5-5.6-3.6-7.8-6c-2.2-2.5-3.9-5.3-5.1-8.5
+              c-1.2-3.2-1.8-6.5-1.8-9.9c0-3.5,0.6-6.9,1.9-10.1c1.3-3.2,3-6.1,5.2-8.5c2.2-2.5,4.8-4.5,7.9-5.9c1-0.5,2-0.9,3.1-1.2l1.3-0.4v5.6
+              l-0.7,0.2c-0.6,0.2-1.2,0.5-1.7,0.8c-2.3,1.2-4.4,2.9-6,4.9c-1.7,2-3,4.3-3.9,6.9c-0.9,2.5-1.4,5.2-1.4,7.8c0,2.8,0.5,5.5,1.4,8.1
+              c0.9,2.6,2.3,4.9,4,6.8c1.7,2,3.7,3.6,6.1,4.7c2.3,1.2,4.9,1.8,7.7,1.8c2.9,0,5.5-0.6,7.8-1.8c2.3-1.2,4.4-2.9,6-4.9
+              c1.7-2,3-4.3,3.9-6.9c0.9-2.6,1.4-5.2,1.4-7.8c0-2.8-0.5-5.5-1.4-8.1c-1-2.6-2.3-4.9-4-6.9c-1.7-2-3.7-3.6-6.1-4.7
+              c-0.5-0.2-1-0.4-1.5-0.7l-0.6-0.2v-5.6l1.3,0.4c1.2,0.4,2.4,0.8,3.5,1.4c3,1.6,5.6,3.6,7.8,6.1c2.1,2.5,3.8,5.4,5,8.6
+              c1.2,3.2,1.8,6.4,1.8,9.7c0,3.5-0.6,7-1.9,10.2c-1.3,3.2-3,6.1-5.2,8.5c-2.2,2.5-4.8,4.4-7.8,5.9C36.7,1330,33.4,1330.8,29.9,1330.8
+              z"/>
+              <path fill="#FFFFFF" d="M361.1,1330.8c-3.7,0-7.1-0.8-10.1-2.3c-3-1.5-5.6-3.6-7.8-6c-2.2-2.5-3.9-5.3-5.1-8.5
+              c-1.2-3.2-1.8-6.5-1.8-9.9c0-3.5,0.6-6.9,1.9-10.1c1.3-3.2,3-6.1,5.2-8.5c2.2-2.5,4.8-4.5,7.9-5.9c1-0.5,2-0.9,3.1-1.2l1.3-0.4v5.6
+              l-0.7,0.2c-0.6,0.2-1.2,0.5-1.7,0.8c-2.3,1.2-4.4,2.9-6,4.9c-1.7,2-3,4.3-3.9,6.9c-0.9,2.6-1.4,5.2-1.4,7.8c0,2.8,0.5,5.5,1.4,8.1
+              c0.9,2.6,2.3,4.9,4,6.8c1.7,2,3.7,3.6,6.1,4.7c2.3,1.2,4.9,1.8,7.7,1.8c2.9,0,5.5-0.6,7.8-1.8c2.3-1.2,4.4-2.9,6-4.9
+              c1.7-2,3-4.3,3.9-6.9c0.9-2.6,1.4-5.2,1.4-7.8c0-2.8-0.5-5.5-1.4-8.1c-1-2.6-2.3-4.9-4-6.9c-1.7-2-3.7-3.6-6.1-4.7
+              c-0.5-0.2-0.9-0.4-1.5-0.7l-0.6-0.2v-5.6l1.3,0.4c1.2,0.4,2.4,0.8,3.5,1.4c3,1.6,5.6,3.6,7.8,6.1c2.1,2.5,3.8,5.4,5,8.6
+              c1.2,3.2,1.8,6.4,1.8,9.7c0,3.5-0.6,7-1.9,10.2c-1.3,3.2-3,6.1-5.2,8.5c-2.2,2.5-4.8,4.4-7.8,5.9
+              C367.9,1330,364.6,1330.8,361.1,1330.8z"/>
+              <path fill="#FFFFFF" d="M77.7,1330.4v-52.8h21.9c2.3,0,4.4,0.5,6.4,1.5c1.9,1,3.6,2.3,5,3.9c1.4,1.6,2.5,3.4,3.3,5.4
+              c0.8,2,1.2,4,1.2,6.1c0,2.2-0.4,4.3-1.1,6.3c-0.7,2-1.8,3.8-3.1,5.4c-1.3,1.6-3,2.8-4.8,3.8c-1.9,1-4,1.4-6.3,1.4h-5.9v-5.4h5.7
+              c1.5,0,2.9-0.3,4.1-0.9c1.2-0.6,2.2-1.5,3.1-2.5c0.9-1.1,1.5-2.3,2-3.7c0.5-1.4,0.7-2.9,0.7-4.4c0-1.5-0.3-3-0.8-4.4
+              c-0.6-1.4-1.3-2.6-2.3-3.7c-0.9-1-2-1.9-3.3-2.5c-1.2-0.6-2.5-0.9-3.9-0.9H83.3v15.8h0v31.7H77.7z"/>
+              <polygon fill="#FFFFFF" points="138.4,1330.4 138.4,1277.6 173.7,1277.6 173.7,1282.9 144.1,1282.9 144.1,1325.1 174.3,1325.1
+              174.3,1330.4 "/>
+              <rect x="155" y="1300.8" fill="#FFFFFF" width="14.9" height="5.2"/>
+              <polygon fill="#FFFFFF" points="270.5,1330.4 270.5,1277.6 276.2,1277.6 276.2,1300.8 285.7,1300.8 285.7,1306.1 276.2,1306.1
+              276.2,1330.4 "/>
+              <polygon fill="#FFFFFF" points="306.2,1330.4 306.2,1306.1 296.7,1306.1 296.7,1300.8 306.2,1300.8 306.2,1277.6 311.9,1277.6
+              311.9,1330.4 "/>
+              <rect x="464.2" y="1277.6" fill="#FFFFFF" width="42.9" height="5.3"/>
+              <rect x="482.8" y="1293.8" fill="#FFFFFF" width="5.7" height="36.6"/>
+              <path fill="#FFFFFF" d="M419.7,1305.1c-0.5-0.1-1-0.3-1.5-0.5c-2.2-0.7-4-1.5-5.5-2.6c-1.6-1.1-2.8-2.4-3.5-3.9
+              c-0.8-1.5-1.2-3.4-1.2-5.7c0-2.4,0.5-4.6,1.4-6.5c0.9-1.9,2.3-3.5,4-4.8c1.7-1.3,3.7-2.3,6-2.9c2.3-0.6,4.8-1,7.6-1
+              c3.4,0,6.5,0.5,9.2,1.5c2.7,1,5.2,2.6,7.4,4.7l0.6,0.6l-3,4.7l-0.9-1c-3.1-3.4-7.5-5.2-13.2-5.2c-4.7,0-8.1,0.9-10.2,2.6
+              c-2,1.7-3,3.9-3,6.9c0,1.5,0.3,2.7,0.7,3.6c0.5,0.9,1.2,1.7,2.3,2.4c1.1,0.7,2.5,1.3,4.2,1.8l0.9,0.3l-1,5.4L419.7,1305.1z"/>
+              <path fill="#FFFFFF" d="M427.3,1330.8c-8.1,0-15.1-2.6-20.8-7.9l-0.6-0.6l3.1-4.7l0.9,0.9c2,2.1,4.6,3.9,7.5,5.1
+              c3,1.3,6.3,1.9,10.1,1.9c4.2,0,7.5-0.8,9.9-2.3c2.2-1.4,3.3-3.6,3.3-6.5c0-1.5-0.3-2.8-0.8-3.8c-0.6-1-1.4-1.9-2.6-2.7
+              c-1.3-0.8-2.8-1.5-4.7-2.1l-0.8-0.3l0-0.9l0.9-4.6l1.1,0.3c0.6,0.2,1.2,0.4,1.8,0.5c2.3,0.7,4.3,1.6,5.9,2.7c1.7,1.1,3,2.6,3.9,4.2
+              c0.9,1.7,1.4,3.7,1.4,6.1c0,2.4-0.5,4.5-1.4,6.3c-1,1.8-2.3,3.3-4,4.5c-1.7,1.2-3.7,2.1-6.1,2.7
+              C432.6,1330.5,430.1,1330.8,427.3,1330.8z"/>
+              <polygon fill="#FFFFFF" points="198.7,1330.4 198.7,1277.6 203,1277.6 218.5,1297 214.5,1301 204.4,1288.3 204.4,1330.4 "/>
+              <polygon fill="#FFFFFF" points="238,1330.4 221.4,1309.6 225.3,1305.6 237.2,1320.5 237.2,1277.6 242.8,1277.6 242.8,1330.4 "/>
+              <path opacity="0.2" fill="#FFFFFF" enable-background="new    " d="M374,913.9c-26.6-26.6-59.9-42.2-94.5-47.1l0,47.4
+              c22.5,4.4,44,15.4,61.4,32.8c46.8,46.8,46.8,122.8,0,169.6c-46.8,46.8-122.8,46.8-169.6,0s-46.8-122.8,0-169.6l-33.1-33.1
+              c-65,65-65,170.8,0,235.8s170.8,65,235.8,0S439,978.9,374,913.9z"/>
+              <path opacity="0.5" fill="#FFFFFF" enable-background="new    " d="M396.2,985.1c-10.5-31.5-30.7-57.2-56.2-74.8L321.2,948
+              c16.1,12.4,28.8,29.6,35.7,50.3c18.5,55.6-11.6,115.8-67.2,134.3c-55.6,18.5-115.8-11.6-134.3-67.2
+              c-18.5-55.6,11.6-115.8,67.2-134.3l-13.1-39.3c-77.3,25.7-119.2,109.5-93.4,186.8s109.5,119.2,186.8,93.4S421.9,1062.4,396.2,985.1z
+              "/>
+              <path fill="#FFFFFF" d="M369.2,963.5c-15.4-25.5-38.1-43.9-63.8-54.2l-9,36.5c16.5,7.7,30.9,20.2,41,36.9
+              c27.1,44.9,12.6,103.4-32.2,130.5c-44.9,27.1-103.4,12.6-130.5-32.2s-12.6-103.4,32.2-130.5l-19.2-31.8
+              c-62.4,37.7-82.5,119.1-44.8,181.5c37.7,62.4,119.1,82.5,181.5,44.8S406.9,1025.9,369.2,963.5z"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </body>
