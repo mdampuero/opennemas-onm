@@ -377,7 +377,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
-            $author = $this->get('user_repository')->find($authorID);
+            $author = $this->get('user_repository')->find((int)$authorID);
             if (is_null($author)) {
                 throw new ResourceNotFoundException();
             }
