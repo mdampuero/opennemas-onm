@@ -591,7 +591,7 @@ class UserController extends Controller
             array(
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'author_user_frontpage,'.$slug.','.$page,
-                'x-cache-for' => '1d'
+                'x-cache-for' => '+1 day'
             )
         );
     }
@@ -696,7 +696,7 @@ class UserController extends Controller
             array(
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'authors_users_frontpage,'.$page,
-                'x-cache-for' => '1d'
+                'x-cache-for' => '+1 day'
             )
         );
     }
