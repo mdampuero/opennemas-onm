@@ -203,7 +203,7 @@ class InstanceManager extends BaseManager
     {
         // Executing the SQL
         $sql = "SELECT id FROM `instances` "
-            ."WHERE MONTH(created) = MONTH(NOW())";
+            ."WHERE created > DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         $this->conn->selectDatabase('onm-instances');
         $rs = $this->conn->fetchAll($sql);
