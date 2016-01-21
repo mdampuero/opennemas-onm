@@ -276,7 +276,7 @@ class InstanceManager extends BaseManager
     {
         // Executing the SQL
         $sql = "SELECT id FROM `instances` "
-            ."WHERE last_login IS NULL OR MONTH(last_login) < MONTH(NOW())";
+            ."WHERE last_login IS NULL OR last_login < DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         $this->conn->selectDatabase('onm-instances');
         $rs = $this->conn->fetchAll($sql);
