@@ -209,7 +209,6 @@ class CommentsController extends Controller
         $body         = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
         $authorName   = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail  = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
-        $isValidEmail = $request->request->filter('author-email', '', FILTER_VALIDATE_EMAIL);
         $contentId    = $request->request->getDigits('content-id');
         $ip           = getUserRealIP();
 
@@ -220,7 +219,9 @@ class CommentsController extends Controller
             && !empty($contentId)
         ) {
             // Validate email if not empty
-            if (!$isValidEmail && !empty($authorEmail)) {
+            if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL) &&
+                !empty($authorEmail)
+            ) {
                 $message = _('Please enter a valid email address');
             } else {
                 $comment = new \Comment();
