@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Opennemas</title>
+    <title>Opennemas - #1 CMS for digital newspapers</title>
     <meta name="viewport" content="width=device-width , initial-scale=1.0">
     <style type="text/css">
       @import url(//fonts.googleapis.com/css?family=Raleway:300);
@@ -190,18 +190,13 @@
       }
     </style>
   </head>
-  <body onload="selectLang()">
+  <body>
     <div class="container">
       <div class="text-center">
         <div class="logo page-title">
-          <h1 class="lang en pt visible">Ooops!</h1>
-          <h1 class="lang es">¡Uyyy!</h1>
-          <h1 class="lang gl">Recoiro!</h1>
+          <h1 class="page-header" id="page-header">Ooops!</h1>
         </div>
-        <p class="page-message lang en visible">Something unexpected happened! Please try again in a few minutes.</p>
-        <p class="page-message lang es">¡Acaba de pasar algo inesperado! Por favor, vuelve a intentarlo en unos minutos.</p>
-        <p class="page-message lang gl">¡Pasou algo inesperado! Por favor, téntao de novo nuns minutos.</p>
-        <p class="page-message lang pt">Passou algo inesperado! Por favor, tente novamente em alguns minutos.</p>
+        <p class="page-message lang visible" id="page-message">Something unexpected happened! Please try again in a few minutes.</p>
         <div class="">
           <svg class="img-responsive owl" version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="148 27.3 545.9 520" enable-background="new 148 27.3 545.9 520" xml:space="preserve">
             <metadata>
@@ -1092,7 +1087,7 @@
           <div class="col-lg-6 col-xs-9 opennemas-logo">
           <a href="http://www.opennemas.com" target="_blank" title="Opennemas, CMS #1 for online newspapers">
             <div class="title">opennemas.com</div>
-            <div class="subtitle">CMS #1 for online newspapers</div>
+            <div class="subtitle" id="footer-message">CMS #1 for online newspapers</div>
           </a>
         </div>
         <div class="col-lg-6 col-xs-3 openhost-logo">
@@ -1161,13 +1156,31 @@
     </div>
 
     <script type="text/javascript">
-      function selectLang() {
+      !function(t,e){function n(){if(!a){a=!0;for(var t=0;t<d.length;t++)d[t].fn.call(window,d[t].ctx);d=[]}}function o(){"complete"===document.readyState&&n()}t=t||"docReady",e=e||window;var d=[],a=!1,c=!1;e[t]=function(t,e){return a?void setTimeout(function(){t(e)},1):(d.push({fn:t,ctx:e}),void("complete"===document.readyState?setTimeout(n,1):c||(document.addEventListener?(document.addEventListener("DOMContentLoaded",n,!1),window.addEventListener("load",n,!1)):(document.attachEvent("onreadystatechange",o),window.attachEvent("onload",n)),c=!0)))}}("docReady",window);
+      docReady(function () {
         'use strict';
 
         var availableLangs = [ 'en', 'es', 'gl', 'pt' ];
         var langs          = navigator.languages;
         var lang           = false;
         var i              = 0;
+        var translations   = {
+          'es': {
+            'title'        : 'CMS nº1 para periódicos digitales',
+            'page-header'  : '¡Uyyy!',
+            'page-message' : '¡Acaba de pasar algo inesperado! Por favor, vuelve a intentarlo en unos minutos.'
+          },
+          'gl': {
+            'title'        : 'CMS nº1 para xornais dixitais',
+            'page-header'  : '¡Uyyy!',
+            'page-message' : '¡Pasou algo inesperado! Por favor, téntao de novo nuns minutos.'
+          },
+          'pt': {
+            'title'        : 'CMS número 1 para jornais online',
+            'page-header'  : 'Ooops!',
+            'page-message' : 'Passou algo inesperado! Por favor, tente novamente em alguns minutos.'
+          },
+        };
 
         while (i < langs.length && !lang) {
           var l = langs[i];
@@ -1188,18 +1201,13 @@
         }
 
         if (lang !== 'en') {
-          var e = document.getElementsByClassName('en');
-
-          for (var i = 0; i < e.length; i++) {
-            e[i].className = e[i].className.replace('visible', '');
-          }
-
-          e = document.getElementsByClassName(lang);
-          for (var i = 0; i < e.length; i++) {
-            e[i].className += ' visible';
-          }
+          document.title = 'Opennemas - '+translations[lang]['title'];
+          document.getElementById('page-header').innerHTML = translations[lang]['page-header'];
+          document.getElementById('page-message').innerHTML = translations[lang]['page-message'];
+          document.getElementById('page-message').innerHTML = translations[lang]['page-message'];
+          document.getElementById('footer-message').innerHTML = translations[lang]['title'];
         }
-      }
+      });
     </script>
   </body>
 </html>
