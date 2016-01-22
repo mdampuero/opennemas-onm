@@ -17,28 +17,28 @@
       svg { background-color: transparent; display: block; margin: 0 auto; text-align: center; }
 
       /* ANIMATIONS */
-      @-webkit-keyframes fadeout {
-        0%{opacity:0;-webkit-transform:scale(1,1);transform:scale(1,1);}
-        1%{opacity:1;}
-        5%{opacity:0;}
-        10%{opacity:1;-webkit-transform:scale(1,1);transform:scale(1,1);}
-        20%{opacity:0;-webkit-transform:scale(.1,.1);transform:scale(.1,.1);}
-        100%{opacity:0;}
-      }
       @keyframes fadeout {
-        0%{opacity:0;-webkit-transform:scale(1,1);transform:scale(1,1);}
+        0%{opacity:0;transform:scale(1,1);}
         1%{opacity:1;}
         5%{opacity:0;}
-        10%{opacity:1;-webkit-transform:scale(1,1);transform:scale(1,1);}
-        20%{opacity:0;-webkit-transform:scale(.1,.1);transform:scale(.1,.1);}
+        10%{opacity:1;transform:scale(1,1);}
+        20%{opacity:0;transform:scale(.1,.1);}
         100%{opacity:0;}
       }
-      @-webkit-keyframes blink {
-        0%{opacity:0;}
+      @-webkit-keyframes fadeout {
+        0%{opacity:0;-webkit-transform:scale(1,1);}
+        1%{opacity:1;}
         5%{opacity:0;}
-        6%{opacity:1;}
+        10%{opacity:1;-webkit-transform:scale(1,1);}
+        20%{opacity:0;-webkit-transform:scale(.1,.1);}
+        100%{opacity:0;}
+      }
+      @-moz-keyframes fadeout {
+        0%{opacity:0;}
+        1%{opacity:1;}
+        5%{opacity:0;}
         10%{opacity:1;}
-        11%{opacity:0;}
+        20%{opacity:0;}
         100%{opacity:0;}
       }
       @keyframes blink {
@@ -49,23 +49,45 @@
         11%{opacity:0;}
         100%{opacity:0;}
       }
-      @-webkit-keyframes pupils {
-        0%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        5%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        10%{-webkit-transform:scale(1.5,1.5);transform:scale(1.5,1.5);}
-        30%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        100%{-webkit-transform:scale(1,1);transform:scale(1,1);}
+      @-webkit-keyframes blink {
+        0%{opacity:0;}
+        5%{opacity:0;}
+        6%{opacity:1;}
+        10%{opacity:1;}
+        11%{opacity:0;}
+        100%{opacity:0;}
+      }
+      @-moz-keyframes blink {
+        0%{opacity:0;}
+        5%{opacity:0;}
+        6%{opacity:1;}
+        10%{opacity:1;}
+        11%{opacity:0;}
+        100%{opacity:0;}
       }
       @keyframes pupils {
-        0%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        5%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        10%{-webkit-transform:scale(1.5,1.5);transform:scale(1.5,1.5);}
-        30%{-webkit-transform:scale(1,1);transform:scale(1,1);}
-        100%{-webkit-transform:scale(1,1);transform:scale(1,1);}
+        0%{transform:scale(1,1);}
+        5%{transform:scale(1,1);}
+        10%{transform:scale(1.5,1.5);}
+        30%{transform:scale(1,1);}
+        100%{transform:scale(1,1);}
+      }
+      @-webkit-keyframes pupils {
+        0%{-webkit-transform:scale(1,1);}
+        5%{-webkit-transform:scale(1,1);}
+        10%{-webkit-transform:scale(1.5,1.5);}
+        30%{-webkit-transform:scale(1,1);}
+        100%{-webkit-transform:scale(1,1);}
+      }
+      @-moz-keyframes pupils {
+        0%{-moz-transform:scale(1,1);}
+        5%{-moz-transform:scale(1,1);}
+        10%{-moz-transform:scale(1,1);}
+        30%{-moz-transform:scale(1,1);}
+        100%{-moz-transform:scale(1,1);}
       }
 
       #spark_1, #spark_2, #spark_3, #spark_4, #spark_5, #spark_6, #spark_7, #spark_8, #spark_9, #spark_10, #spark_11, #spark_12 {
-        -webkit-transform-origin:center center;
         transform-origin:center center;
       }
       #spark_1 {
@@ -73,58 +95,60 @@
         animation:fadeout 3000ms 0ms ease-out infinite;
       }
       #spark_2 {
-        -webkit-animation:fadeout 4000ms 100ms ease-out infinite;
         animation:fadeout 4000ms 100ms ease-out infinite;
+        -webkit-animation:fadeout 4000ms 100ms ease-out infinite;
       }
       #spark_3 {
-        -webkit-animation:fadeout 4100ms 150ms ease-out infinite;
         animation:fadeout 4100ms 150ms ease-out infinite;
+        -webkit-animation:fadeout 4100ms 150ms ease-out infinite;
       }
       #spark_4 {
-        -webkit-animation:fadeout 3500ms 250ms ease-out infinite;
         animation:fadeout 3500ms 250ms ease-out infinite;
+        -webkit-animation:fadeout 3500ms 250ms ease-out infinite;
       }
       #spark_5 {
-        -webkit-animation:fadeout 2900ms 270ms ease-out infinite;
         animation:fadeout 2900ms 270ms ease-out infinite;
+        -webkit-animation:fadeout 2900ms 270ms ease-out infinite;
       }
       #spark_6 {
-        -webkit-animation:fadeout 2500ms 350ms ease-out infinite;
         animation:fadeout 2500ms 350ms ease-out infinite;
+        -webkit-animation:fadeout 2500ms 350ms ease-out infinite;
       }
       #spark_7 {
-        -webkit-animation:fadeout 4150ms 380ms ease-out infinite;
         animation:fadeout 4150ms 380ms ease-out infinite;
+        -webkit-animation:fadeout 4150ms 380ms ease-out infinite;
       }
       #spark_8 {
-        -webkit-animation:fadeout 3400ms 450ms ease-out infinite;
         animation:fadeout 3400ms 450ms ease-out infinite;
+        -webkit-animation:fadeout 3400ms 450ms ease-out infinite;
       }
       #spark_9 {
-        -webkit-animation:fadeout 2800ms 600ms ease-out infinite;
         animation:fadeout 2800ms 600ms ease-out infinite;
+        -webkit-animation:fadeout 2800ms 600ms ease-out infinite;
       }
       #spark_10 {
-        -webkit-animation:fadeout 2500ms 420ms ease-out infinite;
         animation:fadeout 2500ms 420ms ease-out infinite;
+        -webkit-animation:fadeout 2500ms 420ms ease-out infinite;
       }
       #spark_11 {
-        -webkit-animation:fadeout 4250ms 380ms ease-out infinite;
         animation:fadeout 4250ms 380ms ease-out infinite;
+        -webkit-animation:fadeout 4250ms 380ms ease-out infinite;
       }
       #spark_12 {
-        -webkit-animation:fadeout 3190ms 375ms ease-out infinite;
         animation:fadeout 3190ms 375ms ease-out infinite;
+        -webkit-animation:fadeout 3190ms 375ms ease-out infinite;
       }
       #eyeslashes {
-        -webkit-animation: blink 7190ms 375ms ease-out infinite;
         animation: blink 7190ms 375ms ease-out infinite;
+        -webkit-animation: blink 7190ms 375ms ease-out infinite;
       }
       #pupil_l, #pupil_r {
-        -webkit-animation: pupils 7190ms 375ms ease-out infinite;
         animation: pupils 7190ms 375ms ease-out infinite;
-        -webkit-transform-origin: center center;
+        -webkit-animation: pupils 7190ms 375ms ease-out infinite;
+        -moz-animation: pupils 7190ms 375ms ease-out infinite;
         transform-origin: center center;
+        -webkit-transform-origin: center center;
+        -moz-transform-origin: center center;
       }
 
       .left { text-align: left; }
@@ -165,47 +189,6 @@
         .footer .openhost-logo .logo svg { height: 55px; width: 55px;}
       }
     </style>
-    <script type="text/javascript">
-      function selectLang() {
-        'use strict';
-
-        var availableLangs = [ 'en', 'es', 'gl', 'pt' ];
-        var langs          = navigator.languages;
-        var lang           = false;
-        var i              = 0;
-
-        while (i < langs.length && !lang) {
-          var l = langs[i];
-
-          if (l.indexOf('-') !== -1) {
-            l = l.substring(0, l.indexOf('-'));
-          }
-
-          if (availableLangs.indexOf(l) !== -1) {
-            lang = l;
-          }
-
-          i++;
-        }
-
-        if (!lang) {
-          lang = 'en';
-        }
-
-        if (lang !== 'en') {
-          var e = document.getElementsByClassName('en');
-
-          for (var i = 0; i < e.length; i++) {
-            e[i].className = e[i].className.replace('visible', '');
-          }
-
-          e = document.getElementsByClassName(lang);
-          for (var i = 0; i < e.length; i++) {
-            e[i].className += ' visible';
-          }
-        }
-      }
-    </script>
   </head>
   <body onload="selectLang()">
     <div class="container">
@@ -1176,5 +1159,47 @@
         </div>
       </div>
     </div>
+
+    <script type="text/javascript">
+      function selectLang() {
+        'use strict';
+
+        var availableLangs = [ 'en', 'es', 'gl', 'pt' ];
+        var langs          = navigator.languages;
+        var lang           = false;
+        var i              = 0;
+
+        while (i < langs.length && !lang) {
+          var l = langs[i];
+
+          if (l.indexOf('-') !== -1) {
+            l = l.substring(0, l.indexOf('-'));
+          }
+
+          if (availableLangs.indexOf(l) !== -1) {
+            lang = l;
+          }
+
+          i++;
+        }
+
+        if (!lang) {
+          lang = 'en';
+        }
+
+        if (lang !== 'en') {
+          var e = document.getElementsByClassName('en');
+
+          for (var i = 0; i < e.length; i++) {
+            e[i].className = e[i].className.replace('visible', '');
+          }
+
+          e = document.getElementsByClassName(lang);
+          for (var i = 0; i < e.length; i++) {
+            e[i].className += ' visible';
+          }
+        }
+      }
+    </script>
   </body>
 </html>
