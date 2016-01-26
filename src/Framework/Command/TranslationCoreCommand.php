@@ -23,7 +23,7 @@ class TranslationCoreCommand extends Command
         'gl_ES',
         // 'it_IT',
         // 'fr_FR',
-        // 'pt_BR'
+        // 'pt_PT',
     );
 
     public $localeFolder = 'Resources/locale';
