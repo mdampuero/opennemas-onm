@@ -867,9 +867,9 @@ class ArticlesController extends Controller
             $relationes[$key] = $value['id'];
         }
 
-        $relat = $cm->cache->getContents($relationes);
+        $relat = $cm->getContents($relationes);
         $relat = $cm->getInTime($relat);
-        $relat = $cm->cache->getAvailable($relat);
+        $relat = $cm->getAvailable($relat);
 
         foreach ($relat as $ril) {
             $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
@@ -885,12 +885,14 @@ class ArticlesController extends Controller
         $this->view->assign([
             'relationed'            => $relat,
             'suggested'             => $machineSuggestedContents,
-            'actual_category_title' => $actual_category_title,
             'contentId'             => $article->id,
-            'article'               => $article,
             'category_name'         => $category_name,
+            'actual_category'       => $category_name,
+            'article'               => $article,
+            'content'               => $article,
+            'actual_category_title' => $actual_category_title,
             'photoInt'              => $photoInt,
-            'videoInt'              => $videoInt
+            'videoInt'              => $videoInt,
         ]);
 
         $this->get('session')->set(
