@@ -18,12 +18,13 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
           resolve: {
             template: function() {
               return {
-                name:     'create',
-                value:    1,
-                checkPhone:  $scope.checkPhone,
-                checkVat:    $scope.checkVat,
-                extra:       $scope.extra,
-                saveBilling: $scope.saveBilling,
+                name:           $scope.user.id ? 'update' : 'create',
+                backend_access: true,
+                value:          1,
+                checkPhone:     $scope.checkPhone,
+                checkVat:       $scope.checkVat,
+                extra:          $scope.extra,
+                saveBilling:    $scope.saveBilling,
               };
             },
             success: function() {
