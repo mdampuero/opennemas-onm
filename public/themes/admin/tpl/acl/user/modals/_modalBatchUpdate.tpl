@@ -1,5 +1,4 @@
 <div ng-init="template.extra.billing.name ? template.step = 2 : template.step = 1">
-
   <div ng-if="template.step != 2 || !template.extra.billing || !template.extra.billing.name">
     <form name="billingForm" ng-init="template.checkPhone(template);template.checkVat(template)">
       <div class="modal-header">
@@ -9,7 +8,7 @@
         </h4>
       </div>
       <div class="modal-body">
-        <p>{t}Activate the access to Backend means to add a User to your platform and has a cost of 12€/month.{/t} {t}If you have questions please have a look to our help article and/or contact us at sales@openhost.es{/t}</p>
+        <p>{t}Activate the access to Backend means to add a User to your platform and has a cost of 12€/month.{/t} {t escape=off}If you have questions please have a look to our help article and/or contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a>{/t}</p>
         <p>{t}Please, fill billing information below, we will send you an invoice for all activated users at the end of the month.{/t} </p>
         <div class="row">
           <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.name.$invalid, 'has-success': billingForm.name.$dirty && billingForm.name.$valid }">
@@ -115,23 +114,25 @@
         {t}Update selected items{/t} [% template.value %]
       </h4>
     </div>
-    <div class="modal-body" ng-init="template.value == 1 ? terms = false : terms = true">
-      <p>{t}Activate the access to Backend means to add a User to your platform and has a cost of 12€/month.{/t} {t}If you have questions please have a look to our help article and/or contact us at sales@openhost.es{/t}</p>
+    <div class="modal-body" ng-init="template.value == 1 && template.backend_access ? terms = false : terms = true">
+      <p ng-if="template.value == 1 && template.backend_access">{t}Activate the access to Backend means to add a User to your platform and has a cost of 12€/month.{/t} {t escape=off}If you have questions please have a look to our help article and/or contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a>{/t}</p>
       <p ng-if="template.name == 'create'">{t escape=off}Are you sure you want to create a new user?{/t}</p>
+      <p ng-if="template.name == 'update'">{t escape=off}Are you sure you want to update the user?{/t}</p>
       <p ng-if="template.name == 'activated' && template.value == 0">{t escape=off}Are you sure you want to disable [% template.selected.contents.length %] user(s)?{/t}</p>
       <p ng-if="template.name == 'activated' && template.value == 1">{t escape=off}Are you sure you want to enable [% template.selected.contents.length %] user(s)?{/t}</p>
       <p class="text-danger" ng-show="template.name == 'activated' && template.value == 1">
 
-      <div class="checkbox" ng-show="template.value == 1">
+      <div class="checkbox" ng-show="template.value == 1 && template.backend_access">
         <input id="terms" name="terms" ng-model="terms" type="checkbox">
         <label for="terms">{t}I understand and accept the charges.{/t}</label>
       </div>
     </div>
     <div class="modal-footer">
       <span class="loading" ng-if="deleting == 1"></span>
-      <button class="btn btn-primary" ng-click="confirm()" ng-disabled="!terms" type="button">
-        <span ng-show="template.name != 'create'">{t}Yes, activate all{/t}</span>
+      <button class="btn btn-primary" ng-click="confirm()" ng-disabled="template.backend_access && !terms" type="button">
+        <span ng-show="template.name != 'create' && template.name != 'update'">{t}Yes, update all{/t}</span>
         <span ng-show="template.name == 'create'">{t}Yes, save it{/t}</span>
+        <span ng-show="template.name == 'update'">{t}Yes, update it{/t}</span>
       </button>
       <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
     </div>
