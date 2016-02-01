@@ -212,7 +212,7 @@
          *                   false.
          */
         $scope.isValid = function() {
-          var domain = 'www.' + $scope.domain.name + $scope.domain.tld;
+          var domain = 'www.' + $scope.domain;
 
           if ($scope.domains.indexOf(domain) !== -1) {
             return false;
