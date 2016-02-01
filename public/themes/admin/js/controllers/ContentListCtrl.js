@@ -598,7 +598,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
               // Load shared variable
               var selected = $scope.selected.contents;
 
-              updateItemsStatus(loading, 1);
+              $scope.updateItemsStatus(loading, 1);
 
               var url = routing.generate(route,
                 { contentType: $scope.criteria.content_type_name });
@@ -614,7 +614,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.renderMessages(response.data.messages);
 
           if (response.status === 200) {
-            updateItemsStatus(loading, 0, name, value);
+            $scope.updateItemsStatus(loading, 0, name, value);
           }
         }
 
@@ -1142,7 +1142,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param  string  name    Name of the property to update.
      * @param  mixed   value   Value of the property to update.
      */
-    function updateItemsStatus(loading, status, name, value) {
+    $scope.updateItemsStatus = function(loading, status, name, value) {
       // Load shared variables
       var contents = $scope.contents;
       var selected = $scope.selected.contents;

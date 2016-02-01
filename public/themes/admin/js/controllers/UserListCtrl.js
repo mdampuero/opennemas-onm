@@ -23,14 +23,17 @@ angular.module('BackendApp.controllers').controller('UserListCtrl', [
 
       // Calculate backend access
       var backend_access = false;
-      angular.forEach($scope.selected.contents, function(selected_value, selected_key) {
-        angular.forEach($scope.contents, function(content_value, content_key) {
-          if (selected_value == content_value.id && parseInt(content_value.type) == 0) {
-            console.log(selected_value, content_value.id, content_value.type)
-            backend_access = true;
-          }
-        });
+
+      var selected = $scope.contents.filter(function(e) {
+        return $scope.selected.contents.indexOf(e.id) !== -1;
       });
+
+      var i = 0;
+      while (i < selected.length && !backend_access) {
+        if (selected[i++].type == 0) {
+          backend_access = true;
+        }
+      }
 
       var modal = $modal.open({
         templateUrl: 'modal-update-selected',
@@ -54,7 +57,7 @@ angular.module('BackendApp.controllers').controller('UserListCtrl', [
               // Load shared variable
               var selected = $scope.selected.contents;
 
-              updateItemsStatus(loading, 1);
+              $scope.updateItemsStatus(loading, 1);
 
               var url = routing.generate(route,
                 { contentType: $scope.criteria.content_type_name });
@@ -70,7 +73,7 @@ angular.module('BackendApp.controllers').controller('UserListCtrl', [
           $scope.renderMessages(response.data.messages);
 
           if (response.status === 200) {
-            updateItemsStatus(loading, 0, name, value);
+            $scope.updateItemsStatus(loading, 0, name, value);
           }
         }
 
