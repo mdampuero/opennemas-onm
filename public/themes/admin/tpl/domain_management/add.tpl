@@ -50,51 +50,9 @@
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
                   <span class="input-group-addon">www.</span>
-                  <input autofocus class="form-control" ng-model="domain.name" placeholder="{t}Enter a domain{/t}" type="text"  ng-keyup="mapByKeyPress($event)">
+                  <input autofocus class="form-control typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue | limitTo: 5" type="text" typeahead-popup-template-url="suggestions">
                   <span class="input-group-btn">
-                    <div class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                      <span class="ng-cloak">[% domain.tld %]</span>
-                      <span class="caret"></span>
-                    </div>
-                    <ul class="dropdown-menu dropdown-menu-scrollable" style="height: 400px;">
-                      <scrollable>
-                      <li ng-click="domain.tld = '.pro'"><a href="#">.pro</a></li>
-                      <li ng-click="domain.tld = '.es'"><a href="#">.es</a></li>
-                      <li ng-click="domain.tld = '.eu'"><a href="#">.eu</a></li>
-                      <li ng-click="domain.tld = '.cat'"><a href="#">.cat</a></li>
-                      <li ng-click="domain.tld = '.com'"><a href="#">.com</a></li>
-                      <li ng-click="domain.tld = '.net'"><a href="#">.net</a></li>
-                      <li ng-click="domain.tld = '.org'"><a href="#">.org</a></li>
-                      <li ng-click="domain.tld = '.info'"><a href="#">.info</a></li>
-                      <li ng-click="domain.tld = '.tel'"><a href="#">.tel</a></li>
-                      <li ng-click="domain.tld = '.mobi'"><a href="#">.mobi</a></li>
-                      <li ng-click="domain.tld = '.name'"><a href="#">.name</a></li>
-                      <li ng-click="domain.tld = '.fr'"><a href="#">.fr</a></li>
-                      <li ng-click="domain.tld = '.be'"><a href="#">.be</a></li>
-                      <li ng-click="domain.tld = '.pl'"><a href="#">.pl</a></li>
-                      <li ng-click="domain.tld = '.co.uk'"><a href="#">.co.uk</a></li>
-                      <li ng-click="domain.tld = '.de'"><a href="#">.de</a></li>
-                      <li ng-click="domain.tld = '.ch'"><a href="#">.ch</a></li>
-                      <li ng-click="domain.tld = '.it'"><a href="#">.it</a></li>
-                      <li ng-click="domain.tld = '.at'"><a href="#">.at</a></li>
-                      <li ng-click="domain.tld = '.nl'"><a href="#">.nl</a></li>
-                      <li ng-click="domain.tld = '.cz'"><a href="#">.cz</a></li>
-                      <li ng-click="domain.tld = '.li'"><a href="#">.li</a></li>
-                      <li ng-click="domain.tld = '.pt'"><a href="#">.pt</a></li>
-                      <li ng-click="domain.tld = '.se'"><a href="#">.se</a></li>
-                      <li ng-click="domain.tld = '.lt'"><a href="#">.lt</a></li>
-                      <li ng-click="domain.tld = '.fi'"><a href="#">.fi</a></li>
-                      <li ng-click="domain.tld = '.dk'"><a href="#">.dk</a></li>
-                      <li ng-click="domain.tld = '.us'"><a href="#">.us</a></li>
-                      <li ng-click="domain.tld = '.nu'"><a href="#">.nu</a></li>
-                      <li ng-click="domain.tld = '.re'"><a href="#">.re</a></li>
-                      <li ng-click="domain.tld = '.wf'"><a href="#">.wf</a></li>
-                      <li ng-click="domain.tld = '.tf'"><a href="#">.tf</a></li>
-                      <li ng-click="domain.tld = '.yt'"><a href="#">.yt</a></li>
-                      <li ng-click="domain.tld = '.in'"><a href="#">.in</a></li>
-                      </scrollable>
-                    </ul>
-                    <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid()">
+                    <button class="btn btn-success" ng-click="width = width + 100" ng-disabled="!isValid()">
                       <span ng-if="!loading">
                         {t}Map it{/t}
                       </span>
@@ -389,5 +347,12 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="suggestions">
+      <ul class="dropdown-menu suggestions" ng-style="{ top: position().top + 'px', left: position().left + 'px', display: 'block' }" ng-show="isOpen() && !moveInProgress">
+        <li ng-repeat="match in matches track by $index" ng-class="{ active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="[% ::match.id %]">
+          <a><span ng-bind-html="match.label"></span></a>
+        </li>
+      </ul>
+    </script>
   </div>
 {/block}

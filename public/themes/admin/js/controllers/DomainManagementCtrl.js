@@ -38,10 +38,7 @@
          *
          * @type {Object}
          */
-        $scope.domain = {
-          name: '',
-          tld: '.com'
-        };
+        $scope.domain = '';
 
         /**
          * @memberOf DomainManagementCtrl
@@ -93,6 +90,8 @@
          */
         $scope.step = 1;
 
+        $scope.suggests = [];
+
         /**
          * @memberOf StoreCheckoutCtrl
          *
@@ -122,6 +121,8 @@
          * @type {Boolean}
          */
         $scope.vatTax = 0;
+
+        $scope.width = $('.typeahead').width();
 
         /**
          * @function confirm
@@ -154,6 +155,35 @@
          */
         $scope.expand = function(index) {
           $scope.expanded[index] = !$scope.expanded[index];
+        };
+
+        $scope.getSuggestions = function(domain) {
+          var name = domain;
+          var tld  = '';
+
+          if (domain.lastIndexOf('.') !== -1) {
+            name = domain.substring(0, domain.lastIndexOf('.'));
+            tld  = domain.substring(domain.lastIndexOf('.'));
+          }
+
+          var tlds = [
+            '.com', '.net', '.co.uk', '.es', '.cat', '.ch', '.cz', '.de',
+            '.dk', '.at', '.be', '.eu', '.fi', '.fr', '.in', '.info', '.it',
+            '.li', '.lt', '.mobi', '.name', '.nl', '.nu', '.org', '.pl',
+            '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
+          ];
+
+          var suggestions = [];
+
+          for (var i = 0; i < tlds.length; i++) {
+            if (!tld || tlds[i] !== tld) {
+              suggestions.push(name + tlds[i]);
+            }
+          }
+
+          $('.suggestions').width($scope.width - 24);
+
+          return suggestions;
         };
 
         /**
@@ -229,7 +259,7 @@
          *   Maps the domain.
          */
         $scope.map = function() {
-          var domain = 'www.' + $scope.domain.name + $scope.domain.tld;
+          var domain = 'www.' + $scope.domain;
 
           if ($scope.domains.indexOf(domain) === -1) {
             if ($scope.create) {
