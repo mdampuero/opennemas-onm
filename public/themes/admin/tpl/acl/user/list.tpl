@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1, activated: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="UserListCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1, activated: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -173,7 +173,7 @@
                 <th class="left">{t}Full name{/t}</th>
                 <th class="center nowrap hidden-xs" style="width:110px">{t}Username{/t}</th>
                 <th class="center hidden-xs hidden-sm" >{t}E-mail{/t}</th>
-                <th class="center hidden-xs hidden-sm" >{t}Type{/t}</th>
+                <th class="center hidden-xs hidden-sm" >{t}Backend access{/t}</th>
                 <th class="center hidden-xs" >{t}Group{/t}</th>
                 <th class="center hidden-xs" >{t}Activated{/t}</th>
               </tr>
@@ -216,8 +216,8 @@
                   [% content.email %]
                 </td>
                 <td class="center hidden-xs hidden-sm">
-                  <span ng-if="content.type == 0">{t}Backend{/t}</span>
-                  <span ng-if="content.type == 1">{t}Frontend{/t}</span>
+                  <span ng-if="content.type == 0">{t}Yes{/t}</span>
+                  <span ng-if="content.type == 1">{t}No{/t}</span>
                 </td>
                 <td class="center hidden-xs">
                   <span ng-if="content.id_user_group == ''">{t}Not assigned{/t}</span>
@@ -226,7 +226,7 @@
                   </span>
                 </td>
                 <td class="center">
-                  <button class="btn btn-white" ng-click="selected.contents = [ content.id ];updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', content.activated != 1 ? 1 : 0, 'loading')" type="button">
+                  <button class="btn btn-white" ng-click="selected.contents = [ content.id ]; updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', content.activated != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.activated == '1', 'fa-times text-error': !content.loading && content.activated == '0' }"></i>
                   </button>
                 </td>
