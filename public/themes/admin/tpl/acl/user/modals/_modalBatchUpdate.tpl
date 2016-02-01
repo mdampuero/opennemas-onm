@@ -111,7 +111,7 @@
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
       <h4 class="modal-title">
-        {t}Update selected items{/t} [% template.value %]
+        {t}Update selected items{/t}
       </h4>
     </div>
     <div class="modal-body" ng-init="template.value == 1 && template.backend_access ? terms = false : terms = true">
