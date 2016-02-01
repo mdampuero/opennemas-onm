@@ -255,7 +255,7 @@
                   {t}Gender:{/t}
                 </label>
                 <div class="controls">
-                  <select name="meta[gender]" id="meta_gender" class="form-control">
+                  <select name="meta[gender]" id="meta_gender">
                     {html_options options=$gender_options selected=$user->meta['gender']}
                   </select>
                 </div>
@@ -277,9 +277,9 @@
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <div class="checkbox">
-                    <input id="activated" name="activated" type="checkbox" ng-model="user.activated" ng-true-value=1 ng-false-value=0 ng-checked="user.activated == 1" value=1 />
+                    <input id="activated" name="activated" ng-model="user.activated" ng-true-value="'1'" ng-false-value="'0'" ng-checked="user.activated == 1" type="checkbox" value="1"/>
                     <label class="form-label" for="activated">
-                      {t}Activated{/t} [% user.activated %], {$user->activated}
+                      {t}Activated{/t}
                     </label>
                   </div>
                 </div>
@@ -288,11 +288,11 @@
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <div class="checkbox">
-                    <input id="usertype" name="usertype" type="checkbox" ng-model="user.type" ng-true-value=0 ng-false-value=1 ng-checked="user.type == 0" value=0/>
-                    <label class="form-label" for="usertype">
-                      {t}Has backend access{/t} [% user.type %], {$user->type}
+                    <input id="type" name="type" ng-checked="user.type == 0" ng-model="user.type" ng-true-value="'0'" ng-false-value="'1'" type="checkbox" value="0"/>
+                    <label class="form-label" for="type">
+                      {t}Has backend access{/t}
                     </label>
-                    <div class="help">{t}Used to enable or disable user access to control panel.{/t}</div>
+                    <div class="help m-t-5">{t}Used to enable or disable user access to control panel.{/t}</div>
                   </div>
                 </div>
                 {/acl}
