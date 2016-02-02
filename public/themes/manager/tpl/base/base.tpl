@@ -103,9 +103,15 @@
                     </a>
                   </div>
                   <div class="quick-item">
-                    <a ng-href="[% routing.ngGenerate('manager_user_create') %]">
-                      <i class="fa fa-user"></i>
-                      <span class="title">{t}User{/t}</span>
+                    <a ng-href="[% routing.ngGenerate('manager_module_create') %]">
+                      <i class="fa fa-plug"></i>
+                      <span class="title">{t}Module{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+                      <i class="fa fa-bell"></i>
+                      <span class="title">{t}Notification{/t}</span>
                     </a>
                   </div>
                   <div class="quick-item">
@@ -114,10 +120,12 @@
                       <span class="title">{t}Group{/t}</span>
                     </a>
                   </div>
+                </div>
+                <div class="clearfix quick-items-row">
                   <div class="quick-item">
-                    <a ng-href="[% routing.ngGenerate('manager_notification_create') %]">
-                      <i class="fa fa-bell"></i>
-                      <span class="title">{t}Notification{/t}</span>
+                    <a ng-href="[% routing.ngGenerate('manager_user_create') %]">
+                      <i class="fa fa-user"></i>
+                      <span class="title">{t}User{/t}</span>
                     </a>
                   </div>
                 </div>

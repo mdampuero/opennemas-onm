@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_instances_list') %]">
-              <i class="fa fa-cubes fa-lg"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_instances_list') %]">
+              <i class="fa fa-cubes"></i>
               {t}Instances{/t}
             </a>
           </h4>
@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
+            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
+            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
