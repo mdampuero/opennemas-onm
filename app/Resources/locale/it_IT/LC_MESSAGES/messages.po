@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-25 15:23+0000\n"
+"POT-Creation-Date: 2016-02-02 17:23+0100\n"
 "PO-Revision-Date: 2016-01-25 16:15+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -1562,6 +1562,18 @@ msgstr "Copertina attualizzata correttamente-"
 msgid "News agency server deleted."
 msgstr ""
 
+#, fuzzy
+msgid "Newsletter deleted successfully."
+msgstr "Catagoria eliminata correttamente."
+
+#, fuzzy, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Ci è stato impossibile creare la nuova lettera."
+
+#, fuzzy
+msgid "You must provide an id for delete a newsletter."
+msgstr "Per favore inserire l'id per eliminare l'articolo."
+
 #, fuzzy, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Configurazione del sito eliminata correttamente"
@@ -1595,18 +1607,6 @@ msgstr ""
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr ""
 "È stata correttamente cambiata la disponibilitá per la categoria \"%d\""
-
-#, fuzzy
-msgid "Newsletter deleted successfully."
-msgstr "Catagoria eliminata correttamente."
-
-#, fuzzy, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Ci è stato impossibile creare la nuova lettera."
-
-#, fuzzy
-msgid "You must provide an id for delete a newsletter."
-msgstr "Per favore inserire l'id per eliminare l'articolo."
 
 #, fuzzy
 msgid "Notification marked as read successfully"
@@ -2207,6 +2207,48 @@ msgstr ""
 msgid "Your newspaper is now live"
 msgstr ""
 
+msgid "First"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Next"
+msgstr "Seguente"
+
+msgid "Previous"
+msgstr "Precedente"
+
+#, php-format
+msgid "The client with id '%d' was not found in %s"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The criteria (%s) is not valid in %s"
+msgstr "Campo '%s' non valido"
+
+#, php-format
+msgid "The persister '%s' does not exist in %s"
+msgstr ""
+
+#, php-format
+msgid "The repository '%s' does not exist in %s"
+msgstr ""
+
+#, php-format
+msgid "The invoice with id '%d' was not found in %s"
+msgstr ""
+
+#, php-format
+msgid "The payment with id '%d' was not found in %s"
+msgstr ""
+
+#, fuzzy
+msgid "Unable to load plugins. No folder specified."
+msgstr ""
+"Impossibile salvare la posizione del contenuto: si è verificato un errore "
+"durante il salvataggio nella base di dati."
+
 msgid "Advertisement"
 msgstr "Pubblicità"
 
@@ -2242,32 +2284,6 @@ msgstr "Campo '%s' non valido"
 msgid "Database error."
 msgstr "Errore base di dati."
 
-msgid "trashed"
-msgstr ""
-
-#, fuzzy
-msgid "pending"
-msgstr "In attesa"
-
-#, fuzzy
-msgid "available"
-msgstr "File non disponibile"
-
-msgid "not scheduled"
-msgstr ""
-
-msgid "scheduled"
-msgstr ""
-
-msgid "dued"
-msgstr ""
-
-msgid "in time"
-msgstr ""
-
-msgid "postponed"
-msgstr ""
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2300,6 +2316,32 @@ msgid ""
 msgstr ""
 "Alcuni elementi sono stati rimossi perché la prima pagina eccedeva in "
 "contenuti."
+
+msgid "trashed"
+msgstr ""
+
+#, fuzzy
+msgid "pending"
+msgstr "In attesa"
+
+#, fuzzy
+msgid "available"
+msgstr "File non disponibile"
+
+msgid "not scheduled"
+msgstr ""
+
+msgid "scheduled"
+msgstr ""
+
+msgid "dued"
+msgstr ""
+
+msgid "in time"
+msgstr ""
+
+msgid "postponed"
+msgstr ""
 
 #, fuzzy
 msgid "Cover"
@@ -3868,9 +3910,6 @@ msgstr ""
 msgid "Pick contents"
 msgstr ""
 
-msgid "Next"
-msgstr "Seguente"
-
 msgid "Email subject"
 msgstr ""
 
@@ -3915,9 +3954,6 @@ msgstr ""
 
 msgid "Recipient selection"
 msgstr ""
-
-msgid "Previous"
-msgstr "Precedente"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr ""
@@ -5098,12 +5134,20 @@ msgstr ""
 msgid "Billing information"
 msgstr ""
 
-msgid "Enable users has a cost."
+msgid ""
+"Activate the access to Backend means to add a User to your platform and has "
+"a cost of 12€/month."
 msgstr ""
 
-#, fuzzy
-msgid "Please, fill your billing information below."
-msgstr "Non è stato possibile salvare le informazioni dell'immagine."
+msgid ""
+"If you have questions please have a look to our help article and/or contact "
+"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
+msgstr ""
+
+msgid ""
+"Please, fill billing information below, we will send you an invoice for all "
+"activated users at the end of the month."
+msgstr ""
 
 msgid "This field is required"
 msgstr ""
@@ -5164,6 +5208,10 @@ msgstr ""
 msgid "Are you sure you want to create a new user?"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to update the user?"
+msgstr "Per favore fornire un id per eliminare una copertina."
+
 msgid ""
 "Are you sure you want to disable [% template.selected.contents.length %] "
 "user(s)?"
@@ -5174,18 +5222,13 @@ msgid ""
 "user(s)?"
 msgstr ""
 
-msgid ""
-"Enable this users will cost you [% Math.round(template.selected.contents."
-"length * 40) / 100 %] €/day."
-msgstr ""
-
-msgid "Create this user will cost you 12 €/month."
-msgstr ""
-
 msgid "I understand and accept the charges."
 msgstr ""
 
 msgid "Yes, save it"
+msgstr ""
+
+msgid "Yes, update it"
 msgstr ""
 
 msgid "Editing user"
@@ -5194,9 +5237,6 @@ msgstr ""
 #, fuzzy
 msgid "Creating user"
 msgstr "Crea"
-
-msgid "User info"
-msgstr ""
 
 msgid "Display name"
 msgstr ""
@@ -5225,16 +5265,6 @@ msgstr ""
 msgid "Confirm password"
 msgstr ""
 
-msgid "User group:"
-msgstr ""
-
-msgid "Select"
-msgstr ""
-
-#, fuzzy
-msgid "selected"
-msgstr "Rifiutato"
-
 msgid "Additional data"
 msgstr ""
 
@@ -5250,23 +5280,22 @@ msgstr ""
 msgid "Gender:"
 msgstr ""
 
-msgid "User type"
-msgstr ""
-
 #, fuzzy
-msgid "Backend"
+msgid "Has backend access"
 msgstr "Gestore del Backend"
-
-#, fuzzy
-msgid "Frontend"
-msgstr "Prima Pagina"
-
-#, fuzzy
-msgid "Deactivated"
-msgstr "Giornale non attivato"
 
 msgid "Used to enable or disable user access to control panel."
 msgstr ""
+
+msgid "User group:"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+#, fuzzy
+msgid "selected"
+msgstr "Rifiutato"
 
 msgid "Social Networks"
 msgstr ""
@@ -5291,8 +5320,20 @@ msgstr ""
 msgid "Paywall time limit:"
 msgstr ""
 
+#, fuzzy
+msgid "Backend"
+msgstr "Gestore del Backend"
+
+#, fuzzy
+msgid "Frontend"
+msgstr "Prima Pagina"
+
 msgid "Group"
 msgstr ""
+
+#, fuzzy
+msgid "Deactivated"
+msgstr "Giornale non attivato"
 
 #, fuzzy
 msgid "Unable to find any user that matches your search."
@@ -5925,6 +5966,9 @@ msgid "Editing author"
 msgstr ""
 
 msgid "Creating author"
+msgstr ""
+
+msgid "User info"
 msgstr ""
 
 msgid "Twitter user"
@@ -8757,6 +8801,13 @@ msgstr ""
 msgid "User group"
 msgstr ""
 
+msgid "User type"
+msgstr ""
+
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Please, fill your billing information below."
+#~ msgstr "Non è stato possibile salvare le informazioni dell'immagine."

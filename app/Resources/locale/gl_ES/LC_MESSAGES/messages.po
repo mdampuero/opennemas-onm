@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-25 15:20+0000\n"
-"PO-Revision-Date: 2016-01-12 12:33+0200\n"
+"POT-Creation-Date: 2016-02-02 17:23+0100\n"
+"PO-Revision-Date: 2016-02-02 17:28+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1441,6 +1441,16 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletín."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
@@ -1476,16 +1486,6 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Non se puido eliminar o boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como lida correctamente"
@@ -1583,9 +1583,8 @@ msgstr ""
 "Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o xestor de "
 "vídeos é o mesmo que Youtube, consistencia e rendemento perfecto</p>"
 
-#, fuzzy
 msgid "Billing information saved successfully"
-msgstr "Información do ficheiro actualizada correctamente."
+msgstr "Información de facturación actualizada correctamente."
 
 msgid "Invalid theme"
 msgstr "Tema non válido"
@@ -2057,6 +2056,45 @@ msgstr "Creouse unha nova instancia de Opennemas"
 msgid "Your newspaper is now live"
 msgstr "O teu xornal xa está en liña"
 
+msgid "First"
+msgstr "Primeira"
+
+msgid "Last"
+msgstr "Última"
+
+msgid "Next"
+msgstr "Seguinte"
+
+msgid "Previous"
+msgstr "Anterior"
+
+#, php-format
+msgid "The client with id '%d' was not found in %s"
+msgstr "Non se puido atopar o cliente con id «%d» en %s"
+
+#, php-format
+msgid "The criteria (%s) is not valid in %s"
+msgstr "O criterio (%s) non é válido en %s"
+
+#, php-format
+msgid "The persister '%s' does not exist in %s"
+msgstr "O persistor «%s» non existe en %s"
+
+#, php-format
+msgid "The repository '%s' does not exist in %s"
+msgstr "O repositorio «%s» non existe en %s"
+
+#, php-format
+msgid "The invoice with id '%d' was not found in %s"
+msgstr "Non se puido atopar a factura con id «%d» en %s"
+
+#, php-format
+msgid "The payment with id '%d' was not found in %s"
+msgstr "Non se puido atopar o pago con id «%d» en %s"
+
+msgid "Unable to load plugins. No folder specified."
+msgstr "Non se puideron cargar os plugins. Non se especificou un cartafol."
+
 msgid "Advertisement"
 msgstr "Publicidade"
 
@@ -2091,30 +2129,6 @@ msgstr "Campo «%s» non válido"
 msgid "Database error."
 msgstr "Erro de base de datos."
 
-msgid "trashed"
-msgstr "en lixo"
-
-msgid "pending"
-msgstr "pendente"
-
-msgid "available"
-msgstr "dispoñibel"
-
-msgid "not scheduled"
-msgstr "non planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tempo"
-
-msgid "postponed"
-msgstr "adiado"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2146,6 +2160,30 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
+
+msgid "trashed"
+msgstr "en lixo"
+
+msgid "pending"
+msgstr "pendente"
+
+msgid "available"
+msgstr "dispoñibel"
+
+msgid "not scheduled"
+msgstr "non planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tempo"
+
+msgid "postponed"
+msgstr "adiado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -3161,7 +3199,7 @@ msgid "Module for managing the cache of pages"
 msgstr "Módulo para xestionar as páxinas das cachés"
 
 msgid "Create, update and delete categories for contents."
-msgstr ""
+msgstr "Crear, actualizar e eliminar categorías para os contidos"
 
 #, fuzzy
 msgid ""
@@ -3295,13 +3333,12 @@ msgstr ""
 "páxinas de papel. Moitos medios desfrutan desta automatización. Afórranse "
 "horas ao día neste proceso.</p>"
 
-#, fuzzy
 msgid ""
 "Create a list of your favourite keywords and choose if you want to link it "
 "to something or assign an action to it."
 msgstr ""
-"Mostra as palabras chave e selecciona se quere ligala con lago ou asignarlle "
-"unha acción."
+"Mostra unha lista de palabras chave favoritas e selecciona se quere ligala "
+"con algo ou asignarlle unha acción."
 
 #, fuzzy
 msgid ""
@@ -4075,9 +4112,8 @@ msgstr "Subscribir"
 msgid "Unsubscribe"
 msgstr "Anular a subscrición"
 
-#, fuzzy
 msgid "Search by name or email"
-msgstr "Filtrar por nome ou correo"
+msgstr "Buscar por nome ou correo"
 
 msgid "No subscribed"
 msgstr "Non subscrito"
@@ -4159,9 +4195,6 @@ msgstr "Debes gardar os cambios ou volver á lista"
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
 
-msgid "Next"
-msgstr "Seguinte"
-
 msgid "Email subject"
 msgstr "Asunto da mensaxe"
 
@@ -4210,9 +4243,6 @@ msgstr "Fallido"
 
 msgid "Recipient selection"
 msgstr "Selección de destinatarios"
-
-msgid "Previous"
-msgstr "Anterior"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr "Seleccione as persoas ás que quere enviarlle o boletin de novas."
@@ -5408,12 +5438,26 @@ msgstr ""
 msgid "Billing information"
 msgstr "Información de facturación"
 
-msgid "Enable users has a cost."
+msgid ""
+"Activate the access to Backend means to add a User to your platform and has "
+"a cost of 12€/month."
 msgstr ""
+"Activar o acceso ao Panel significa engadir un Usuario á súa plataforma e "
+"ten un custo de 12€/mes."
 
-#, fuzzy
-msgid "Please, fill your billing information below."
-msgstr "Non tes ningunha información de facturación"
+msgid ""
+"If you have questions please have a look to our help article and/or contact "
+"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
+msgstr ""
+"Se tes calquera pregunta podes ollar o noso artigo de axuda e/ou contactar "
+"connosco en <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>."
+
+msgid ""
+"Please, fill billing information below, we will send you an invoice for all "
+"activated users at the end of the month."
+msgstr ""
+"Por favor, completa a información de facturación de embaixo, enviarémosche "
+"unha factura con todos os usuarios activos ao final do mes."
 
 msgid "This field is required"
 msgstr "Este campo é obligatorio"
@@ -5469,50 +5513,40 @@ msgstr "País"
 msgid "Select a country"
 msgstr "Seleccione un país"
 
-#, fuzzy
 msgid "Are you sure you want to create a new user?"
-msgstr "Tes certeza que queres proceder coa actualización?"
+msgstr "Tes certeza que queres crear un novo usuario?"
 
-#, fuzzy
+msgid "Are you sure you want to update the user?"
+msgstr "Tes certeza que queres actualizar o usuario?"
+
 msgid ""
 "Are you sure you want to disable [% template.selected.contents.length %] "
 "user(s)?"
 msgstr ""
 "Tes certeza que queres desactivar [% template.selected.contents.length %] "
-"elemento(s)?"
+"usuario(s)?"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to enable [% template.selected.contents.length %] "
 "user(s)?"
 msgstr ""
 "Tes certeza que queres activar [% template.selected.contents.length %] "
-"elemento(s)?"
-
-msgid ""
-"Enable this users will cost you [% Math.round(template.selected.contents."
-"length * 40) / 100 %] €/day."
-msgstr ""
-
-#, fuzzy
-msgid "Create this user will cost you 12 €/month."
-msgstr "Nota que o custo é de %s € pv/mes."
+"usuario(s)?"
 
 msgid "I understand and accept the charges."
-msgstr ""
+msgstr "Entendo e acepto os custos."
 
-#, fuzzy
 msgid "Yes, save it"
-msgstr "Si, aceptar"
+msgstr "Si, gardar"
+
+msgid "Yes, update it"
+msgstr "Si, actualizar"
 
 msgid "Editing user"
 msgstr "Editando usuario"
 
 msgid "Creating user"
 msgstr "Crear usuario"
-
-msgid "User info"
-msgstr "Información do usuario"
 
 msgid "Display name"
 msgstr "Nome en pantalla"
@@ -5544,15 +5578,6 @@ msgstr "Biografia"
 msgid "Confirm password"
 msgstr "Confirmar contrasinal"
 
-msgid "User group:"
-msgstr "Grupos de usuarios:"
-
-msgid "Select"
-msgstr "Seleccionar"
-
-msgid "selected"
-msgstr "seleccionados"
-
 msgid "Additional data"
 msgstr "Datos adicionais"
 
@@ -5568,20 +5593,20 @@ msgstr "Data de nacemento:"
 msgid "Gender:"
 msgstr "Sexo:"
 
-msgid "User type"
-msgstr "Tipo de usuario"
-
-msgid "Backend"
-msgstr "Panel de control"
-
-msgid "Frontend"
-msgstr "Públicos"
-
-msgid "Deactivated"
-msgstr "Desactivado"
+msgid "Has backend access"
+msgstr "Acceso ao panel"
 
 msgid "Used to enable or disable user access to control panel."
 msgstr "Úseo para activar ou desactivar o acceso ao panel de control."
+
+msgid "User group:"
+msgstr "Grupos de usuarios:"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid "selected"
+msgstr "seleccionados"
 
 msgid "Social Networks"
 msgstr "Redes sociais"
@@ -5592,9 +5617,8 @@ msgstr "Facebook"
 msgid "Twitter"
 msgstr "Twitter"
 
-#, fuzzy
 msgid "Options"
-msgstr "Opinións"
+msgstr "Opcións"
 
 msgid "User language"
 msgstr "Idioma do usuario"
@@ -5605,8 +5629,17 @@ msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 msgid "Paywall time limit:"
 msgstr "Limite de tiempo del paywall:"
 
+msgid "Backend"
+msgstr "Panel de control"
+
+msgid "Frontend"
+msgstr "Públicos"
+
 msgid "Group"
 msgstr "Grupo"
+
+msgid "Deactivated"
+msgstr "Desactivado"
 
 msgid "Unable to find any user that matches your search."
 msgstr "Non se puideron atopar usuarios que coincidan coa súa busca."
@@ -5620,9 +5653,8 @@ msgstr "Nome completo"
 msgid "E-mail"
 msgstr "Correo electrónico"
 
-#, fuzzy
 msgid "Backend access"
-msgstr "Xestor do editor"
+msgstr "Acceso ao panel"
 
 msgid "Not assigned"
 msgstr "Non asignado"
@@ -6282,6 +6314,9 @@ msgstr "Editando autor"
 
 msgid "Creating author"
 msgstr "Creando autor"
+
+msgid "User info"
+msgstr "Información do usuario"
 
 msgid "Twitter user"
 msgstr "Usuario de Twitter"
@@ -9254,11 +9289,22 @@ msgstr "Novo usuario"
 msgid "User group"
 msgstr "Grupo de usuarios"
 
+msgid "User type"
+msgstr "Tipo de usuario"
+
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#, fuzzy
+#~ msgid "Please, fill your billing information below."
+#~ msgstr "Non tes ningunha información de facturación"
+
+#, fuzzy
+#~ msgid "Create this user will cost you 12 €/month."
+#~ msgstr "Nota que o custo é de %s € pv/mes."
 
 #~ msgid ""
 #~ "Note that <a href=\"http://help.opennemas.com/knowledgebase/"

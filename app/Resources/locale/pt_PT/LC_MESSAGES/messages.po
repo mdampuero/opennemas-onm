@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-22 14:20+0000\n"
+"POT-Creation-Date: 2016-02-02 17:23+0100\n"
 "PO-Revision-Date: 2016-01-07 18:09+0100\n"
 "Last-Translator: Alex <alex@openhost.es>\n"
 "Language-Team: Portuguese <devs@opennemas.com>\n"
@@ -1455,6 +1455,16 @@ msgstr "Servidor atualizado com êxito."
 msgid "News agency server deleted."
 msgstr "Servidor de agência de notícias excluído."
 
+msgid "Newsletter deleted successfully."
+msgstr "Newsletter excluído com êxito."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Não foi possível excluir a newsletter \"%s\""
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Você deve providenciar um id para excluir uma newsletter."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscritor com id \"%d\" excluído com êxito"
@@ -1487,16 +1497,6 @@ msgstr "Por favor, especifique um id de subscriptor para alterar o seu estado."
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Alterado com êxito o estado de activado para %d subscriptores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Newsletter excluído com êxito."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Não foi possível excluir a newsletter \"%s\""
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Você deve providenciar um id para excluir uma newsletter."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificação marcada como lida com êxito"
@@ -2054,6 +2054,46 @@ msgstr ""
 msgid "Your newspaper is now live"
 msgstr ""
 
+msgid "First"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "Previous"
+msgstr "Anterior"
+
+#, php-format
+msgid "The client with id '%d' was not found in %s"
+msgstr ""
+
+#, php-format
+msgid "The criteria (%s) is not valid in %s"
+msgstr ""
+
+#, php-format
+msgid "The persister '%s' does not exist in %s"
+msgstr ""
+
+#, php-format
+msgid "The repository '%s' does not exist in %s"
+msgstr ""
+
+#, php-format
+msgid "The invoice with id '%d' was not found in %s"
+msgstr ""
+
+#, php-format
+msgid "The payment with id '%d' was not found in %s"
+msgstr ""
+
+#, fuzzy
+msgid "Unable to load plugins. No folder specified."
+msgstr "Não foi possível guardar as posições para o widget de especiais."
+
 msgid "Advertisement"
 msgstr "Anúncio"
 
@@ -2088,32 +2128,6 @@ msgstr "Campo '%s' não é válido"
 msgid "Database error."
 msgstr "Erro banco de dados."
 
-#, fuzzy
-msgid "trashed"
-msgstr "Lixo"
-
-#, fuzzy
-msgid "pending"
-msgstr "Pendente"
-
-msgid "available"
-msgstr ""
-
-msgid "not scheduled"
-msgstr ""
-
-msgid "scheduled"
-msgstr ""
-
-msgid "dued"
-msgstr ""
-
-msgid "in time"
-msgstr ""
-
-msgid "postponed"
-msgstr ""
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2145,6 +2159,32 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Alguns elementos foram removidos porque esta capa tinha muitos conteúdos."
+
+#, fuzzy
+msgid "trashed"
+msgstr "Lixo"
+
+#, fuzzy
+msgid "pending"
+msgstr "Pendente"
+
+msgid "available"
+msgstr ""
+
+msgid "not scheduled"
+msgstr ""
+
+msgid "scheduled"
+msgstr ""
+
+msgid "dued"
+msgstr ""
+
+msgid "in time"
+msgstr ""
+
+msgid "postponed"
+msgstr ""
 
 msgid "Cover"
 msgstr "Tampa"
@@ -3413,10 +3453,10 @@ msgstr ""
 msgid "%d months ago"
 msgstr ""
 
-msgid "Creating static page"
+msgid "Cache Manager"
 msgstr ""
 
-msgid "Editing page"
+msgid "Settings"
 msgstr ""
 
 msgid "Go back"
@@ -3425,43 +3465,22 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "The slug component in the url"
+msgid "Cache group"
 msgstr ""
 
-msgid "Body"
+msgid "Expire time"
 msgstr ""
 
-msgid "Insert image"
+msgid "seconds"
 msgstr ""
 
-msgid "Published"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "Write a tag and press Enter..."
-msgstr ""
-
-msgid "Create new page"
+msgid "Remove all"
 msgstr ""
 
 msgid "Clear selection"
 msgstr ""
 
-msgid "Search by title"
-msgstr ""
-
-msgid "No published"
-msgstr ""
-
-msgid "Status"
+msgid "Type"
 msgstr ""
 
 msgid "View"
@@ -3470,1389 +3489,74 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-msgid "Unable to find any page that matches your search."
+msgid "No cache files were generated for now."
 msgstr ""
 
 msgid ""
-"Maybe changing any filter could help or add one using the \"Create\" button "
-"above."
+"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>  "
+"and come back here"
 msgstr ""
 
-msgid "Open in a new window"
+msgid "Resource"
 msgstr ""
 
-msgid "Link"
+msgid "Valid until"
 msgstr ""
 
-msgid "Delete albums"
+msgid "Size"
 msgstr ""
 
-msgid "You must select some elements."
+msgid "View page"
 msgstr ""
 
-msgid "Accept"
+msgid "Delete cache file"
 msgstr ""
 
-msgid "Delete album"
-msgstr ""
-
-msgid "Are you sure that do you want delete \"[% content.name %]\"?"
-msgstr ""
-
-msgid "Yes, delete"
-msgstr ""
-
-msgid "Complete all the required album information before save it"
-msgstr ""
-
-msgid "Check that you have included more than one image in this album"
-msgstr ""
-
-msgid "Assign an image as a cover image"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "Are you sure you want to delete <span>%num%</span> albums?"
-msgstr ""
-
-msgid "Yes, delete all"
-msgstr ""
-
-msgid "Disable"
-msgstr ""
-
-msgid "Enable"
-msgstr ""
-
-msgid "In home"
-msgstr ""
-
-msgid "Drop from home"
-msgstr ""
-
-msgid "Mosaic"
-msgstr ""
-
-msgid "Unable to find any album that matches your search."
-msgstr ""
-
-msgid "Section"
-msgstr ""
-
-msgid "Views"
-msgstr ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Home"
-msgstr ""
-
-msgid "No item selected"
-msgstr ""
-
-msgid "Click in one item to show information about it"
-msgstr ""
-
-msgid "Album details"
-msgstr ""
-
-msgid "Sort elements"
-msgstr ""
-
-msgid "You must put %1 albums in the HOME"
-msgstr ""
-
-msgid "Edit '%1'"
-msgstr ""
-
-msgid "Remove element from this frontpage"
-msgstr ""
-
-msgid "Remove from this frontpage"
-msgstr ""
-
-msgid "Customize in frontpage"
-msgstr ""
-
-msgid "Customize content"
-msgstr ""
-
-msgid "Remove from all frontpages"
-msgstr ""
-
-msgid "Arquive"
-msgstr ""
-
-msgid "Send to trash"
-msgstr ""
-
-msgid "Editing album"
-msgstr ""
-
-msgid "Creating Album"
-msgstr ""
-
-msgid "Allow comments"
-msgstr ""
-
-msgid "Agency"
-msgstr ""
-
-msgid "Author"
-msgstr ""
-
-msgid "Album images"
-msgstr ""
-
-msgid "Are you sure?"
-msgstr ""
-
-msgid "Add images"
-msgstr ""
-
-msgid "Cover image"
-msgstr ""
-
-msgid "Only available for registered users"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Total in widget home"
+msgid "Delete cache elements"
 msgstr ""
 
 msgid ""
-"Use  total in widget album for define how many albums can see in widgets in "
-"frontpage"
-msgstr ""
-
-msgid "Cover size in widget album (width x height)"
-msgstr ""
-
-msgid "Order album's frontpage by"
-msgstr ""
-
-msgid ""
-"Select if order album's frontpage by most views or albums checked as "
-"favorites."
-msgstr ""
-
-msgid "Created Date"
-msgstr ""
-
-msgid "Most views"
-msgstr ""
-
-msgid "Favorites"
-msgstr ""
-
-msgid "Time of the last album most viewed (days)"
-msgstr ""
-
-msgid "Total in album frontpage"
-msgstr ""
-
-msgid "Use this to define how many albums can see in the album frontpage."
-msgstr ""
-
-msgid "Total in album frontpage/widget more albums"
-msgstr ""
-
-msgid "Total number of album on more albums section in album home frontpage"
-msgstr ""
-
-msgid "Widget home"
-msgstr ""
-
-msgid "Listing"
-msgstr ""
-
-msgid "Config album module"
-msgstr ""
-
-msgid "Save positions"
-msgstr ""
-
-msgid "New album"
-msgstr ""
-
-msgid "Remove all"
-msgstr ""
-
-msgid "Restore"
-msgstr ""
-
-msgid "Content Type"
-msgstr ""
-
-msgid "-- All --"
-msgstr ""
-
-msgid "Covers"
-msgstr ""
-
-msgid "No contents in the trash that matches your search."
-msgstr ""
-
-msgid "Remove permanently"
-msgstr ""
-
-msgid "Delete all trashed contents"
-msgstr ""
-
-msgid ""
-"Are you sure you want to remove permanently all the contents inside the "
-"trash?"
+"Are you sure you want to delete [% template.selected.length %] cache "
+"elements?"
 msgstr ""
 
 msgid "Yes, remove all"
 msgstr ""
 
-msgid "Delete books"
+msgid "No"
 msgstr ""
 
-msgid "Delete book"
-msgstr ""
-
-msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
-msgstr ""
-
-msgid "Are you sure you want to delete <span>%num%</span> books?"
-msgstr ""
-
-msgid "Unable to find any book that matches your search."
-msgstr ""
-
-msgid "You must put %1 books in the HOME"
-msgstr ""
-
-msgid "Publish"
-msgstr ""
-
-msgid "Unpublish"
-msgstr ""
-
-msgid "Position"
-msgstr ""
-
-msgid "Unassigned"
-msgstr ""
-
-msgid "Creating Book"
-msgstr ""
-
-msgid "Editing Book"
-msgstr ""
-
-msgid "Go Back"
-msgstr ""
-
-msgid "Pick an image"
-msgstr ""
-
-msgid "Separated by comas"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Editorial"
-msgstr ""
-
-msgid "Widget Home"
-msgstr ""
-
-msgid "New book"
-msgstr ""
-
-msgid "Domains to create"
-msgstr ""
-
-msgid "Domains to redirect"
-msgstr ""
-
-msgid "Billing information"
-msgstr ""
-
-msgid "Company"
-msgstr ""
-
-msgid "VAT number"
-msgstr ""
-
-msgid "Phone"
-msgstr ""
-
-msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr ""
-
-msgid "Our sales department will contact you to get further information"
-msgstr ""
-
-msgid "Domain Mapping"
+msgid "Delete cache element"
 msgstr ""
 
 msgid ""
-"I have an existing domain and I want to redirect it to my Opennemas digital "
-"newspaper."
+"Are you sure you want to delete the cache element \"[% template.content."
+"title %]\"."
+msgstr ""
+
+msgid "Yes, remove"
+msgstr ""
+
+msgid "Instance not activated - Opennemas"
+msgstr ""
+
+msgid "Maintenance mode."
 msgstr ""
 
 msgid ""
-"I do not have my own domain and I want to create one and redirect it to my "
-"Opennemas digital newspaper"
+"We are doing some maintenance in the Opennemas platform, please wait a few "
+"minutes."
 msgstr ""
 
-msgid "Enter a domain"
-msgstr ""
-
-msgid "Map it"
-msgstr ""
-
-msgid "year"
-msgstr ""
-
-msgid "Requested domains"
-msgstr ""
-
-msgid "Domain registration + mapping"
-msgstr ""
-
-msgid "Domain mapping"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid ""
-"If you need to update this information please <a href=\"mailto:"
-"sales@openhost.es\">contact us</a>."
-msgstr ""
-
-msgid "Contact information"
-msgstr ""
-
-msgid "This field is required"
-msgstr ""
-
-msgid "Contact name"
-msgstr ""
-
-msgid "Company name"
-msgstr ""
-
-msgid "This is not a valid email"
-msgstr ""
-
-msgid "This is not a valid phone"
-msgstr ""
-
-msgid "Phone number"
-msgstr ""
-
-msgid "This is not a valid vat"
-msgstr ""
-
-msgid "VAT Number"
-msgstr ""
-
-msgid "Address"
-msgstr ""
-
-msgid "This is not a valid address"
-msgstr ""
-
-msgid "This is not a valid postal_code"
-msgstr ""
-
-msgid "Postal code"
-msgstr ""
-
-msgid "This is not a valid city"
-msgstr ""
-
-msgid "City"
-msgstr ""
-
-msgid "This is not a valid state"
-msgstr ""
-
-msgid "State"
-msgstr ""
-
-msgid "Country"
-msgstr ""
-
-msgid "Select a country"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
-msgid "Unit price"
-msgstr ""
-
-msgid "VAT"
-msgstr ""
-
-msgid "Terms of create a new domain"
-msgstr ""
-
-msgid "Terms of redirection"
-msgstr ""
-
-msgid ""
-"Payment: the registration and redirection service requires payment in "
-"advance. This amount cannot be divided into several payments."
-msgstr ""
-
-msgid ""
-"Identity: when buying a new domain, the identity of the domains would be the "
-"one of your entity. The administrative identity, technical contact, billing "
-"contact name would be Openhost, SL"
-msgstr ""
-
-msgid ""
-"Availability: please inform us of the name of the domain that you wish to "
-"register and we will let you know if it is available. May be one or more "
-"domains."
-msgstr ""
-
-msgid ""
-"The service of registering and redirecting the domain is valid for one year, "
-"so you will be notified prior to the renewal date."
-msgstr ""
-
-msgid ""
-"Following the purchase of the domain, if the user wants to transfer it to "
-"another provider, which may only be transferred to another from the 6th "
-"month after the date of registration of the domain."
-msgstr ""
-
-msgid ""
-"Payment: the redirection service requires payment in advance. The amount "
-"cannot be divided into several payments. "
-msgstr ""
-
-msgid ""
-"Identity: the identity of the domains would be the customer's identity "
-"because the domain does not undergo any change. "
-msgstr ""
-
-msgid ""
-"The service domain redirection is valid for one year, so you will be "
-"notified prior to the renewal date. "
-msgstr ""
-
-msgid ""
-"The customer must make changes to the DNS zone for your domain registration "
-"www. This change has nothing to do with the Opennemas platform or company "
-"Openhost, SL (company that maintains the service). "
-msgstr ""
-
-msgid ""
-"If redirection does not work through no fault of the platform, ie by "
-"malfunction of the DNS servers the client, Openhost, SL area will have "
-"nothing to do with the damage caused to the hours of service failure. "
-msgstr ""
-
-msgid "I have read and accept the Terms of creating a new domain"
-msgstr ""
-
-msgid "I have read and accept the Terms of redirection"
-msgstr ""
-
-msgid "Confirm"
-msgstr ""
-
-msgid "Thank you for your request!"
-msgstr ""
-
-msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"the invoice."
-msgstr ""
-
-msgid ""
-"Oh!, it would be a good time to share with your friends your newspaper's "
-"improvements"
-msgstr ""
-
-msgid "Have a wonderful day!"
-msgstr ""
-
-msgid "Primary Domain"
-msgstr ""
-
-msgid "More info"
-msgstr ""
-
-msgid "Technical information"
-msgstr ""
-
-msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr ""
-
-msgid "Redirect your own domain"
-msgstr ""
-
-msgid "Add new domain"
-msgstr ""
-
-msgid ""
-"I DO NOT have my own domain and I want to create one and redirect it to my "
-"Opennemas digital newspaper"
-msgstr ""
-
-msgid "Your domains"
-msgstr ""
-
-msgid "Main"
-msgstr ""
-
-msgid "Free"
-msgstr ""
-
-msgid "Points to"
-msgstr ""
-
-msgid "Your domain is properly configured"
-msgstr ""
-
-msgid "Your domain is not properly configured, check the instructions below."
-msgstr ""
-
-msgid "Expires"
-msgstr ""
-
-msgid "This is your opennemas address"
-msgstr ""
-
-msgid "Update your DNS records"
-msgstr ""
-
-msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr ""
-
-msgid ""
-"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
-"domain.name.replace('www.', '') %]"
-msgstr ""
-
-msgid ""
-"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
-"by the hosting provider for your domain)"
-msgstr ""
-
-msgid "NOTE"
-msgstr ""
-
-msgid "This change is NOT done in the DNS section"
-msgstr ""
-
-msgid "If you need more help configuring your domains contact our support team"
-msgstr ""
-
-msgid "Username or password are incorrect"
-msgstr ""
-
-msgid "Please, check if the credentials are correct and try again."
-msgstr ""
-
-msgid "Available categories for sync"
-msgstr ""
-
-msgid "No elements to sync in this server"
-msgstr ""
-
-msgid "The given url has no elements to sync or it is not an Opennemas server."
-msgstr ""
-
-msgid "Also check if the credentials are correct."
-msgstr ""
-
-msgid "Instance Synchronization"
-msgstr ""
-
-msgid "Ins. Sync."
-msgstr ""
-
-msgid "Adding site"
-msgstr ""
-
-msgid "Go back to list"
-msgstr ""
-
-msgid "Site URL"
-msgstr ""
-
-msgid "http://example.com"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Site color"
-msgstr ""
-
-msgid "Reset color"
-msgstr ""
-
-msgid "Add site to sync"
-msgstr ""
-
-msgid "Add site"
-msgstr ""
-
-msgid "Site Url"
-msgstr ""
-
-msgid "Categories to Sync"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Categories to sync"
-msgstr ""
-
-msgid "There are no synchronize settings available"
-msgstr ""
-
-msgid "Try adding one site to synchronize on the config button above."
-msgstr ""
-
-msgid "User name"
-msgstr ""
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Last login"
-msgstr ""
-
-msgid "End of subscription"
-msgstr ""
-
-msgid "Paid"
-msgstr ""
-
-msgid "Expired"
-msgstr ""
-
-msgid "Registered"
-msgstr ""
-
-msgid "Show all…"
-msgstr ""
-
-msgid "No paywall users yet."
-msgstr ""
-
-msgid "Full name"
-msgstr ""
-
-msgid "Order id"
-msgstr ""
-
-msgid "Payment date"
-msgstr ""
-
-msgid "Amount"
-msgstr ""
-
-msgid "No purchases were made yet."
-msgstr ""
-
-msgid "Premium users"
-msgstr ""
-
-msgid "Create new user"
-msgstr ""
-
-msgid "Filter by name"
-msgstr ""
-
-msgid "--All--"
-msgstr ""
-
-msgid "%1 users"
-msgstr ""
-
-msgid "Export list"
-msgstr ""
-
-msgid "Purchases"
-msgstr ""
-
-msgid "Filter by name or email"
-msgstr ""
-
-msgid "Sort by"
-msgstr ""
-
-msgid "%1 purchases"
-msgstr ""
-
-msgid "Paypal API authentication"
-msgstr ""
-
-msgid "Get this parameters from your "
-msgstr ""
-
-msgid "Paypal identification data"
-msgstr ""
-
-msgid "Signature"
-msgstr ""
-
-msgid "Use the testing environment Sandbox"
-msgstr ""
-
-msgid "Real mode (recommended)"
-msgstr ""
-
-msgid "Testing mode"
-msgstr ""
-
-msgid ""
-"Paypal allows you to enable a testing environment where <strong>all the "
-"transactions will not be real</strong>, so you can test if the paywall is "
-"working well."
-msgstr ""
-
-msgid ""
-"Active a testing environment in your Paypal account (only if you are a "
-"developer)"
-msgstr ""
-
-msgid "More information"
-msgstr ""
-
-msgid "Validate here your Paypal API credentials in the selected mode"
-msgstr ""
-
-msgid "Validate"
-msgstr ""
-
-msgid "Currency & taxes"
-msgstr ""
-
-msgid "Money unit"
-msgstr ""
-
-msgid "VAT %"
-msgstr ""
-
-msgid "Payment modes"
-msgstr ""
-
-msgid ""
-"Below you can add different payment modes by including the time range that "
-"the user can purchase, the description and the price"
-msgstr ""
-
-msgid "Add new payment mode"
-msgstr ""
-
-msgid "Recurring payments (optional)"
-msgstr ""
-
-msgid ""
-"Paypal allow your users to subscribe to your Paywall through recurring "
-"payments. This means that your users will be charged periodically without "
-"having to worry about payments and due dates, and will allow you to increase "
-"the user engagement."
-msgstr ""
-
-msgid "Mark this if you want to enable recurring payments"
-msgstr ""
-
-msgid ""
-"You have to activate some options in the Paypal configuration to make "
-"recurring payments work. Please follow next steps:"
-msgstr ""
-
-msgid "Go to your merchant Paypal"
-msgstr ""
-
-msgid "IPN web configuration page "
-msgstr ""
-
-msgid " and log in with your merchant account"
-msgstr ""
-
-msgid "Click in the \"Choose IPN configuration\" button"
-msgstr ""
-
-msgid "Fill in the \"Notification URL\" field with this address"
-msgstr ""
-
-msgid "Enable the \"Receive IPN messages\" checkbox"
-msgstr ""
-
-msgid ""
-"Click on the validate button to check ipn is working fine and enable "
-"recurring payment"
-msgstr ""
-
-msgid "Waiting"
-msgstr ""
-
-msgid "Valid"
-msgstr ""
-
-msgid "Finally, click in the \"Save\" button to save this configuration"
-msgstr ""
-
-msgid "Accept Opennemas payment agreements terms"
-msgstr ""
-
-msgid ""
-"Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
-"\">payment agreements terms</a> of Opennemas"
-msgstr ""
-
-msgid "Set a price"
-msgstr ""
-
-msgid "Config newsletter module"
-msgstr ""
-
-msgid ""
-"The paywall allows you to monetize your contents by enabling a subscription "
-"enabled model access to your contents."
-msgstr ""
-
-msgid "Subscribed users"
-msgstr ""
-
-msgid "Lastest purchases"
-msgstr ""
-
-msgid "Purchases last month"
-msgstr ""
-
-msgid "%1 doesn’t exist."
-msgstr ""
-
-msgid "Do you want to register %1?"
-msgstr ""
-
-msgid "'%1' not activated - Opennemas"
-msgstr ""
-
-msgid "%1 temporary deactivated."
-msgstr ""
-
-msgid "Content preview"
-msgstr ""
-
-msgid "Priority"
-msgstr ""
-
-msgid "Urgent"
-msgstr ""
-
-msgid "Important"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Basic"
-msgstr ""
-
-msgid "Import"
-msgstr ""
-
-msgid "Remove the server configuration"
-msgstr ""
-
-msgid "Are you sure that you want to delete the selected server configuration?"
-msgstr ""
-
-msgid "Yes, delete it"
-msgstr ""
-
-msgid "Syncing from sources"
-msgstr ""
-
-msgid "Downloading articles from news agencies, please wait..."
-msgstr ""
-
-msgid "Stop sync"
-msgstr ""
-
-msgid "Import items"
-msgstr ""
-
-msgid ""
-"Are you sure you want to import [% template.contents.length %] elements?"
-msgstr ""
-
-msgid "as"
-msgstr ""
-
-msgid "in"
-msgstr ""
-
-msgid "Choose a category..."
-msgstr ""
-
-msgid "by"
-msgstr ""
-
-msgid "Choose an author..."
-msgstr ""
-
-msgid ""
-"Your articles have been published, check them in the <a href=\"%1\">article "
-"list</a> or you can add them to one of your <a href=\"%2\">frontpages</a>"
-msgstr ""
-
-msgid ""
-"Your opinions have been published, check them in the <a href=\"%1\">opinions "
-"list</a>or you can add them to one of your <a href=\"%2\">frontpages</a>"
-msgstr ""
-
-msgid ""
-"Your photos have been published, check them in the <a href=\"%1\">photo "
-"list</a>"
-msgstr ""
-
-msgid "Yes, import them"
-msgstr ""
-
-msgid "Yes, import and publish"
-msgstr ""
-
-msgid "Yes, import and edit"
-msgstr ""
-
-msgid "Importing element"
-msgstr ""
-
-msgid ""
-"You are about to import one article, please select a category where you want "
-"to import this content."
-msgstr ""
-
-msgid "In which category you want to import this element?"
-msgstr ""
-
-msgid "- Select a category -"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "News agency"
-msgstr ""
-
-msgid "Update source"
-msgstr ""
-
-msgid "Add source"
-msgstr ""
-
-msgid "Source name"
-msgstr ""
-
-msgid "Color to distinguish between other agencies"
-msgstr ""
-
-msgid "Dark Gray"
-msgstr ""
-
-msgid "Black"
-msgstr ""
-
-msgid "Bold red"
-msgstr ""
-
-msgid "Green"
-msgstr ""
-
-msgid "Blue"
-msgstr ""
-
-msgid "Turquoise"
-msgstr ""
-
-msgid "Light green"
-msgstr ""
-
-msgid "Bold green"
-msgstr ""
-
-msgid "Yellow"
-msgstr ""
-
-msgid "Orange"
-msgstr ""
-
-msgid "Red"
-msgstr ""
-
-msgid "Purple"
-msgstr ""
-
-msgid "Connection"
-msgstr ""
-
-msgid "Url"
-msgstr ""
-
-msgid "The server url for this source. Example: ftp://server.com/path"
-msgstr ""
-
-msgid "Show password"
-msgstr ""
-
-msgid "Sync parameters"
-msgstr ""
-
-msgid "When importing elements this will be the signature"
-msgstr ""
-
-msgid "Import authors"
-msgstr ""
-
-msgid ""
-"Activate this if you want to import the author of the elements if available"
-msgstr ""
-"Activate this if you want to import the author of the elements if available"
-
-msgid "Sync elements newer than"
-msgstr ""
-
-msgid ""
-"Set this to you preferences to fetch elements since a fixed date.<br>Less "
-"time means faster synchronizations."
-msgstr ""
-
-msgid "Hide password"
-msgstr ""
-
-msgid "Add server"
-msgstr ""
-
-msgid "No servers available"
-msgstr ""
-
-msgid "Sync from"
-msgstr ""
-
-msgid "Remove local files"
-msgstr ""
-
-msgid "Pretitle:"
-msgstr ""
-
-msgid "Priority:"
-msgstr ""
-
-msgid "Date:"
-msgstr ""
-
-msgid "Summary:"
-msgstr ""
-
-msgid "Attachments"
-msgstr ""
-
-msgid ""
-"This agency element has some attachments that could be imported with it."
-msgstr ""
-
-msgid "Photos"
-msgstr ""
-
-msgid "Files:"
-msgstr ""
-
-msgid "Documentary modules:"
-msgstr ""
-
-msgid "Sync"
-msgstr ""
-
-msgid "Source"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Reload"
-msgstr ""
-
-msgid "There is no elements to import"
-msgstr ""
-
-msgid ""
-"Try syncing from server by click over the \"Sync with server\" button above."
-msgstr ""
-
-msgid "Origin"
-msgstr ""
-
-msgid "Imported"
-msgstr ""
-
-msgid "View content"
-msgstr ""
-
-msgid "Unable to find any image that matches your search."
-msgstr ""
-
-msgid ""
-"Maybe changing any filter could help or add one using the \"Upload\" button "
-"above."
-msgstr ""
-
-msgid "Image details"
-msgstr ""
-
-msgid "Size:"
-msgstr ""
-
-msgid "Image preview"
-msgstr ""
-
-msgid "Write here the text for search..."
-msgstr ""
-
-msgid "No results"
-msgstr "No results"
-
-msgid ""
-"There was an error while performing the search please reload this tab by "
-"changing to another one."
-msgstr ""
-
-msgid "Global search"
-msgstr ""
-
-msgid "Filter by title"
-msgstr ""
-
-msgid "Unable to find any content that matches your search."
-msgstr ""
-
-msgid "Delete newsstands"
-msgstr ""
-
-msgid "Delete kiosko"
-msgstr ""
-
-msgid "Are you sure that do you want to delete the selected cover?"
-msgstr ""
-
-msgid "Delete kioskos"
-msgstr ""
-
-msgid "Are you sure you want to delete <span>%num%</span> kioskos?"
-msgstr ""
-
-msgid "Unable to find any cover that matches your search."
-msgstr ""
-
-msgid "You must put %1 covers in the HOME"
-msgstr ""
-
-msgid "Price"
-msgstr ""
-
-msgid "Last editor"
-msgstr ""
-
-msgid "Creating ePaper"
-msgstr ""
-
-msgid "Editing ePaper"
-msgstr ""
-
-msgid "Click here to pick a date"
-msgstr ""
-
-msgid "Split decimals with a dot"
-msgstr ""
-
-msgid "Item"
-msgstr ""
-
-msgid "Add new photo"
-msgstr ""
-
-msgid "Change"
-msgstr ""
-
-msgid "%1"
-msgstr ""
-
-msgid "List of words separated by commas"
-msgstr ""
-
-msgid "Order newsstand frontpage by"
-msgstr ""
-
-msgid "Select if order newsstand's frontpage by dates or by section."
-msgstr ""
-
-msgid "Grouped by date is recommended for weekly newspapers."
-msgstr ""
-
-msgid "Sections"
-msgstr ""
-
-msgid "Dates"
-msgstr ""
-
-msgid "Grouped by date"
-msgstr ""
-
-msgid "Config covers module"
-msgstr ""
-
-msgid "New cover"
-msgstr ""
-
-msgid "Are you sure to send the newsletter."
-msgstr ""
-
-msgid "This newsletter is going to send. Are you sure?"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Send"
-msgstr ""
-
-msgid "Update Container label"
-msgstr ""
-
-msgid "Container Name"
-msgstr ""
-
-msgid "There is no active container"
-msgstr ""
-
-msgid "You must select a container"
-msgstr ""
-
-msgid "Potential lose of the actual generated HTML."
-msgstr ""
-
-msgid ""
-"This newsletter already have a generated HTML, potentially changed by you."
-"<br>If you update the newsletter contents the HTML will overwrite the actual "
-"HTML."
-msgstr ""
-
-msgid "Overwrite actual HTML"
-msgstr ""
-
-msgid "Save changes"
-msgstr ""
-
-msgid "You must save a changes or back to list"
-msgstr ""
-
-msgid "Add Container label"
-msgstr ""
-
-msgid "Delivering report"
-msgstr ""
-
-msgid "Back to list"
-msgstr ""
-
-msgid "Newsletter sending report"
-msgstr ""
-
-msgid ""
-"Your newsletter was sent to the list of mails. Please find below the "
-"detailed report for each email and its status."
-msgstr ""
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Failed"
-msgstr ""
-
-msgid "Recipient selection"
-msgstr ""
-
-msgid "Previous"
-msgstr "Anterior"
-
-msgid "Please select your desired persons to sent the newsletter to."
-msgstr ""
-
-msgid "Add to list"
-msgstr ""
-
-msgid "Toggle all"
-msgstr ""
-
-msgid "Select receivers"
-msgstr ""
-
-msgid "Remove from list"
-msgstr ""
-
-msgid "Receivers"
-msgstr ""
-
-msgid "Add more emails"
-msgstr ""
-
-msgid "Write a list of email address writing one per line"
-msgstr ""
-
-msgid "Parse list & add"
-msgstr ""
-
-msgid "Pick contents"
-msgstr ""
-
-msgid "Next"
-msgstr "Próximo"
-
-msgid "Email subject"
-msgstr ""
-
-msgid "Add contents to groups by using the \"Add contents\" button"
-msgstr ""
-
-msgid "Add Container"
-msgstr ""
-
-msgid "Clean containers"
-msgstr ""
-
-msgid "Clean contents"
-msgstr ""
-
-msgid "Add contents"
-msgstr ""
-
-msgid ""
-"Click in \"Add contents\" button above or drop contents from other containers"
-msgstr ""
-
-msgid "Preview"
+msgid "Send to trash"
 msgstr ""
 
 msgid ""
 "Are you sure that do you want delete the subscriptor with the mail \"[% "
 "template.content.email %]\"?"
+msgstr ""
+
+msgid "Yes, delete"
 msgstr ""
 
 msgid "Delete selected items"
@@ -4863,6 +3567,9 @@ msgid ""
 "item(s)?"
 msgstr ""
 
+msgid "Yes, delete all"
+msgstr ""
+
 msgid "Delete videos"
 msgstr ""
 
@@ -4871,10 +3578,16 @@ msgid ""
 "span> subscriptors?"
 msgstr ""
 
+msgid "You must select some elements."
+msgstr ""
+
 msgid "Creating subscriptor"
 msgstr ""
 
 msgid "Editing subscriptor"
+msgstr ""
+
+msgid "Go back to list"
 msgstr ""
 
 msgid "Surname"
@@ -4889,6 +3602,9 @@ msgstr ""
 msgid ""
 "If is subscribed, the user email address will be available on the account "
 "provider"
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "If is activated means that the user is ready to receive newsletters"
@@ -4918,6 +3634,9 @@ msgstr ""
 msgid "No subscribed"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "No available subscriptors."
 msgstr ""
 
@@ -4937,6 +3656,132 @@ msgid "Accepted by administrator"
 msgstr ""
 
 msgid "Disabled by administrator"
+msgstr ""
+
+msgid "Update Container label"
+msgstr ""
+
+msgid "Container Name"
+msgstr ""
+
+msgid "Add Container label"
+msgstr ""
+
+msgid "There is no active container"
+msgstr ""
+
+msgid "You must select a container"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Are you sure to send the newsletter."
+msgstr ""
+
+msgid "This newsletter is going to send. Are you sure?"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Potential lose of the actual generated HTML."
+msgstr ""
+
+msgid ""
+"This newsletter already have a generated HTML, potentially changed by you."
+"<br>If you update the newsletter contents the HTML will overwrite the actual "
+"HTML."
+msgstr ""
+
+msgid "Overwrite actual HTML"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "You must save a changes or back to list"
+msgstr ""
+
+msgid "Pick contents"
+msgstr ""
+
+msgid "Email subject"
+msgstr ""
+
+msgid "Add contents to groups by using the \"Add contents\" button"
+msgstr ""
+
+msgid "Add Container"
+msgstr ""
+
+msgid "Clean containers"
+msgstr ""
+
+msgid "Clean contents"
+msgstr ""
+
+msgid "Add contents"
+msgstr ""
+
+msgid ""
+"Click in \"Add contents\" button above or drop contents from other containers"
+msgstr ""
+
+msgid "Delivering report"
+msgstr ""
+
+msgid "Back to list"
+msgstr ""
+
+msgid "Newsletter sending report"
+msgstr ""
+
+msgid ""
+"Your newsletter was sent to the list of mails. Please find below the "
+"detailed report for each email and its status."
+msgstr ""
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Failed"
+msgstr ""
+
+msgid "Recipient selection"
+msgstr ""
+
+msgid "Please select your desired persons to sent the newsletter to."
+msgstr ""
+
+msgid "Add to list"
+msgstr ""
+
+msgid "Toggle all"
+msgstr ""
+
+msgid "Select receivers"
+msgstr ""
+
+msgid "Remove from list"
+msgstr ""
+
+msgid "Receivers"
+msgstr ""
+
+msgid "Add more emails"
+msgstr ""
+
+msgid "Write a list of email address writing one per line"
+msgstr ""
+
+msgid "Parse list & add"
+msgstr ""
+
+msgid "Preview"
 msgstr ""
 
 msgid ""
@@ -5001,6 +3846,9 @@ msgstr ""
 msgid "Articles in Frontpage"
 msgstr ""
 
+msgid "Config newsletter module"
+msgstr ""
+
 msgid "Subscriptors"
 msgstr ""
 
@@ -5008,6 +3856,11 @@ msgid "Search by subject"
 msgstr ""
 
 msgid "Unable to find any newsletter that matches your search."
+msgstr ""
+
+msgid ""
+"Maybe changing any filter could help or add one using the \"Create\" button "
+"above."
 msgstr ""
 
 msgid "Updated"
@@ -5036,192 +3889,265 @@ msgstr ""
 msgid "Yes, remove them all"
 msgstr ""
 
-msgid "Director Articles"
+msgid "Delete newsstands"
 msgstr ""
 
-msgid "Editorial Articles"
+msgid "Delete kiosko"
 msgstr ""
 
-msgid "Other Articles"
+msgid "Are you sure that do you want to delete the selected cover?"
 msgstr ""
 
-msgid "Director"
+msgid "Delete kioskos"
 msgstr ""
 
-msgid "Blog"
+msgid "Are you sure you want to delete <span>%num%</span> kioskos?"
 msgstr ""
 
-msgid "Unable to find any opinion that matches your search."
+msgid "Covers"
 msgstr ""
 
-msgid "There is no opinions yet."
+msgid "Creating ePaper"
 msgstr ""
 
-msgid "Editing opinion"
+msgid "Editing ePaper"
 msgstr ""
 
-msgid "Creating opinion"
+msgid "Go Back"
 msgstr ""
 
-msgid "Attributes"
+msgid "Date"
 msgstr ""
 
-msgid "In homepage"
+msgid "Click here to pick a date"
 msgstr ""
 
-msgid "-- Select opinion type --"
+msgid "Price"
 msgstr ""
 
-msgid "Opinion from author"
+msgid "Split decimals with a dot"
 msgstr ""
 
-msgid "Opinion from editorial"
+msgid "Item"
 msgstr ""
 
-msgid "Director's letter"
+msgid "Add new photo"
 msgstr ""
 
-msgid "Schedule"
+msgid "Change"
 msgstr ""
 
-msgid "Publication start date"
+msgid "Published"
 msgstr ""
 
-msgid "Server hour:"
+msgid "Favorite"
 msgstr ""
 
-msgid "Publication end date"
+msgid "%1"
 msgstr ""
 
-msgid "Director opinions in Opinion frontpage"
+msgid "List of words separated by commas"
 msgstr ""
 
-msgid "How many director opinions will be shown in the opinion frontpage."
+msgid "Write a tag and press Enter..."
 msgstr ""
 
-msgid "Editorial opinions in Opinion frontpage"
+msgid "Publish"
 msgstr ""
 
-msgid "How many editorial opinions will be shown in the opinion frontpage."
+msgid "Unpublish"
 msgstr ""
 
-msgid "Opinions in Opinion frontpage"
+msgid "In home"
 msgstr ""
 
-msgid "How many opinions opinions will be shown in the opinion frontpage."
+msgid "Drop from home"
 msgstr ""
 
-msgid "Author opinions in frontpage opinion widget"
+msgid "Search by title"
 msgstr ""
 
-msgid "How many author opinions will be shown in the widget."
+msgid "No published"
 msgstr ""
 
-msgid "Order blog's frontpage by"
+msgid "Unable to find any cover that matches your search."
 msgstr ""
 
-msgid "Select if order blogs's frontpages by created date or bloggers name."
+msgid "Section"
 msgstr ""
 
-msgid "Blogger"
+msgid "Home"
 msgstr ""
 
-msgid "Items per blog page"
+msgid "Last editor"
 msgstr ""
 
-msgid "Config opinion module"
+msgid "Sort elements"
 msgstr ""
 
-msgid "New opinion"
+msgid "You must put %1 covers in the HOME"
 msgstr ""
 
-msgid "Modules to purchase"
+msgid "Order newsstand frontpage by"
 msgstr ""
 
-msgid "Modules requested"
+msgid "Select if order newsstand's frontpage by dates or by section."
 msgstr ""
 
-msgid "Cart"
+msgid "Grouped by date is recommended for weekly newspapers."
 msgstr ""
 
-msgid "Your shopping cart is empty"
+msgid "Sections"
 msgstr ""
 
-msgid "Checkout"
+msgid "Dates"
 msgstr ""
 
-msgid "Return to <a href=\"%1\">store</a> and try again"
+msgid "Grouped by date"
 msgstr ""
 
-msgid ""
-"You are about to order next items. In the next 24hours our sales team will "
-"send you payment and activation information. "
+msgid "Widget Home"
 msgstr ""
 
-msgid "month"
+msgid "Listing"
 msgstr ""
 
-msgid "Purchase summary"
+msgid "Config covers module"
 msgstr ""
 
-msgid "You have to complete your billing information to complete the purchase."
+msgid "Save positions"
 msgstr ""
 
-msgid ""
-"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
-"\">Terms of Service</a>"
+msgid "New cover"
 msgstr ""
 
-msgid "Thank you for your purchase request!"
+msgid "Creating widget"
 msgstr ""
 
-msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"invoice."
+msgid "Editing widget"
 msgstr ""
 
-msgid ""
-"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
-"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
-"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
-"see how easy is to manage Opennemas."
+msgid "Widget name"
 msgstr ""
 
-msgid "Purchased"
+msgid "Widget type"
 msgstr ""
 
-msgid "Add to cart"
+msgid "Intelligent Widget"
 msgstr ""
 
-msgid "Screenshots and videos"
+msgid "HTML"
 msgstr ""
 
-msgid "Last updated"
+msgid "Content"
 msgstr ""
 
-msgid "Packs"
+msgid "Insert image"
 msgstr ""
 
-msgid "Modules"
+msgid "Parameters"
 msgstr ""
 
-msgid "Services"
+msgid "Parameter name"
 msgstr ""
 
-msgid "Partners"
+msgid "Parameter value"
 msgstr ""
 
-msgid "My selection"
+msgid "Add parameter"
 msgstr ""
 
-msgid "My selection "
+msgid "Tags"
 msgstr ""
 
-msgid "No items available to purchase"
+msgid "Edit '%1'"
 msgstr ""
 
-msgid "Added to cart"
+msgid "Remove from this frontpage"
+msgstr ""
+
+msgid "Remove from all frontpages"
+msgstr ""
+
+msgid "Arquive"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "IntelligentWidget"
+msgstr ""
+
+msgid "Unable to find any widget that matches your search."
+msgstr ""
+
+msgid "There is no available widgets"
+msgstr ""
+
+msgid "Edit widget '[% content.title %]'"
+msgstr ""
+
+msgid "OpenNeMaS administration"
+msgstr ""
+
+msgid "Instance information"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "There are no notifications for now."
+msgstr ""
+
+msgid "Check your previous notifications <a href=\"%1\">here</a>."
+msgstr ""
+
+msgid "See more"
+msgstr ""
+
+msgid "Help center"
+msgstr ""
+
+msgid "Contact us"
+msgstr ""
+
+msgid "Ask for help using email"
+msgstr ""
+
+msgid "F.A.Q."
+msgstr ""
+
+msgid "Read what user ask more"
+msgstr ""
+
+msgid "Videotutorials"
+msgstr ""
+
+msgid "Use videos to get walkthrough guides"
+msgstr ""
+
+msgid "This user is a master"
+msgstr ""
+
+msgid "Go to newspaper"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Getting started"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Welcome"
 msgstr ""
 
 msgid "Delete letters"
@@ -5230,16 +4156,19 @@ msgstr ""
 msgid "Delete letter"
 msgstr ""
 
-msgid "Are you sure you want to delete <span>%num%</span> letters?"
+msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
 msgstr ""
 
-msgid "Texto"
-msgstr "Texto"
+msgid "Are you sure you want to delete <span>%num%</span> letters?"
+msgstr ""
 
 msgid "Editing letter"
 msgstr ""
 
 msgid "Creating letter"
+msgstr ""
+
+msgid "Body"
 msgstr ""
 
 msgid "Author information"
@@ -5260,6 +4189,24 @@ msgstr ""
 msgid "Image assigned"
 msgstr ""
 
+msgid "Are you sure?"
+msgstr ""
+
+msgid "Pick an image"
+msgstr ""
+
+msgid "Texto"
+msgstr "Texto"
+
+msgid "Remove element from this frontpage"
+msgstr ""
+
+msgid "Customize in frontpage"
+msgstr ""
+
+msgid "Customize content"
+msgstr ""
+
 msgid "Unable to find any letter that matches your search."
 msgstr ""
 
@@ -5269,151 +4216,425 @@ msgstr ""
 msgid "Publish/Unpublish"
 msgstr ""
 
-msgid "Unable to find any video that matches your search."
+msgid "News agency"
 msgstr ""
 
-msgid "You must put %1 videos in the HOME"
+msgid "Update source"
 msgstr ""
 
-msgid "Video type and file URLs"
+msgid "Add source"
 msgstr ""
 
-msgid "HTML5 video"
+msgid "Source name"
 msgstr ""
 
-msgid "Flash video"
+msgid "Color"
 msgstr ""
 
-msgid "MP4 format"
+msgid "Color to distinguish between other agencies"
 msgstr ""
 
-msgid "http://www.example.com/path/to/file.mp4"
+msgid "Dark Gray"
 msgstr ""
 
-msgid "Ogg format"
+msgid "Black"
 msgstr ""
 
-msgid "http://www.example.com/path/to/file.ogg"
+msgid "Bold red"
 msgstr ""
 
-msgid "WebM format"
+msgid "Green"
 msgstr ""
 
-msgid "http://www.example.com/path/to/file.webm"
+msgid "Blue"
 msgstr ""
 
-msgid "FLV format"
+msgid "Turquoise"
 msgstr ""
 
-msgid "http://www.example.com/path/to/file.flv"
+msgid "Light green"
 msgstr ""
 
-msgid "Video cover"
+msgid "Bold green"
 msgstr ""
 
-msgid "Image not set"
+msgid "Yellow"
 msgstr ""
 
-msgid "Set image"
+msgid "Orange"
 msgstr ""
 
-msgid "Video details"
+msgid "Red"
 msgstr ""
 
-msgid "Video URL"
+msgid "Purple"
 msgstr ""
 
-msgid "Get information"
+msgid "Connection"
 msgstr ""
 
-msgid "Allowed video sources:"
+msgid "Url"
 msgstr ""
 
-msgid "Write HTML code"
+msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr ""
 
-msgid "Video Cover"
+msgid "Password"
 msgstr ""
 
-msgid "Other information"
+msgid "Show password"
 msgstr ""
 
-msgid "Original Title"
+msgid "Sync parameters"
 msgstr ""
 
-msgid "Service"
+msgid "Agency"
 msgstr ""
 
-msgid "Duration"
+msgid "When importing elements this will be the signature"
 msgstr ""
 
-msgid "Embed Url"
-msgstr ""
-
-msgid "Thumbnail URL"
-msgstr ""
-
-msgid "Thumbnail image"
-msgstr ""
-
-msgid "Pick type"
-msgstr ""
-
-msgid "Pick the method to add the video"
-msgstr ""
-
-msgid "Link video from other web video services"
-msgstr ""
-
-msgid "Use HTML code"
-msgstr ""
-
-msgid "Use file video URLs (External HTML5/FLV)"
-msgstr ""
-
-msgid "Creating video"
-msgstr ""
-
-msgid "Editing video"
+msgid "Import authors"
 msgstr ""
 
 msgid ""
-"Use  total in widget home for define how many videos can see in widgets in "
-"newspaper frontpage"
+"Activate this if you want to import the author of the elements if available"
 msgstr ""
+"Activate this if you want to import the author of the elements if available"
 
-msgid "Total in video frontpage column"
-msgstr ""
-
-msgid ""
-"Use  total in video frontpage column for define how many videos can see in "
-"the column left in video frontpage categories"
-msgstr ""
-
-msgid "Total in video frontpage more videos"
-msgstr ""
-
-msgid "Total number of videos on more videos section in video home frontpage"
-msgstr ""
-
-msgid "Total offset in video frontpage more videos"
-msgstr ""
-
-msgid "Total number of videos that are placed on top home video frontpage"
-msgstr ""
-
-msgid "Total in video gallery"
+msgid "Sync elements newer than"
 msgstr ""
 
 msgid ""
-"Use  Total in video gallery for define how many videos can see in the "
-"gallery when you edit or create one article"
+"Set this to you preferences to fetch elements since a fixed date.<br>Less "
+"time means faster synchronizations."
 msgstr ""
 
-msgid "Config video module"
+msgid "Hide password"
+msgstr ""
+
+msgid "Add server"
+msgstr ""
+
+msgid "No servers available"
+msgstr ""
+
+msgid "Sync from"
+msgstr ""
+
+msgid "Remove local files"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Pretitle:"
+msgstr ""
+
+msgid "Priority:"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Urgent"
+msgstr ""
+
+msgid "Important"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Basic"
+msgstr ""
+
+msgid "Date:"
+msgstr ""
+
+msgid "Summary:"
+msgstr ""
+
+msgid "Attachments"
+msgstr ""
+
+msgid ""
+"This agency element has some attachments that could be imported with it."
+msgstr ""
+
+msgid "Photos"
+msgstr ""
+
+msgid "Files:"
+msgstr ""
+
+msgid "Documentary modules:"
+msgstr ""
+
+msgid "Remove the server configuration"
+msgstr ""
+
+msgid "Are you sure that you want to delete the selected server configuration?"
+msgstr ""
+
+msgid "Yes, delete it"
+msgstr ""
+
+msgid "Import items"
+msgstr ""
+
+msgid ""
+"Are you sure you want to import [% template.contents.length %] elements?"
+msgstr ""
+
+msgid "as"
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+msgid "Choose a category..."
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "Choose an author..."
+msgstr ""
+
+msgid ""
+"Your articles have been published, check them in the <a href=\"%1\">article "
+"list</a> or you can add them to one of your <a href=\"%2\">frontpages</a>"
+msgstr ""
+
+msgid ""
+"Your opinions have been published, check them in the <a href=\"%1\">opinions "
+"list</a>or you can add them to one of your <a href=\"%2\">frontpages</a>"
+msgstr ""
+
+msgid ""
+"Your photos have been published, check them in the <a href=\"%1\">photo "
+"list</a>"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Yes, import them"
+msgstr ""
+
+msgid "Yes, import and publish"
+msgstr ""
+
+msgid "Yes, import and edit"
+msgstr ""
+
+msgid "Syncing from sources"
+msgstr ""
+
+msgid "Downloading articles from news agencies, please wait..."
+msgstr ""
+
+msgid "Stop sync"
+msgstr ""
+
+msgid "Content preview"
+msgstr ""
+
+msgid "Sync"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "There is no elements to import"
+msgstr ""
+
+msgid ""
+"Try syncing from server by click over the \"Sync with server\" button above."
+msgstr ""
+
+msgid "Origin"
+msgstr ""
+
+msgid "Imported"
+msgstr ""
+
+msgid "View content"
+msgstr ""
+
+msgid "Unable to find any image that matches your search."
+msgstr ""
+
+msgid ""
+"Maybe changing any filter could help or add one using the \"Upload\" button "
+"above."
+msgstr ""
+
+msgid "No item selected"
+msgstr ""
+
+msgid "Click in one item to show information about it"
+msgstr ""
+
+msgid "Image details"
+msgstr ""
+
+msgid "Size:"
+msgstr ""
+
+msgid "Image preview"
+msgstr ""
+
+msgid "Importing element"
+msgstr ""
+
+msgid ""
+"You are about to import one article, please select a category where you want "
+"to import this content."
+msgstr ""
+
+msgid "In which category you want to import this element?"
+msgstr ""
+
+msgid "- Select a category -"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Editing file"
+msgstr ""
+
+msgid "Creating file"
+msgstr ""
+
+msgid "File path"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Files (#)"
+msgstr ""
+
+msgid "Size (MB)"
+msgstr ""
+
+msgid "TOTAL"
+msgstr ""
+
+msgid "Unable to find any file that matches your search."
+msgstr ""
+
+msgid "You must put %1 polls in the HOME"
+msgstr ""
+
+msgid "Unassigned"
+msgstr ""
+
+msgid "New file"
+msgstr ""
+
+msgid "Editing poll"
+msgstr ""
+
+msgid "Creating a poll"
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Visualization format"
+msgstr ""
+
+msgid "Bars"
+msgstr ""
+
+msgid "Circular"
+msgstr ""
+
+msgid "Answers"
+msgstr ""
+
+msgid "Votes"
+msgstr ""
+
+msgid "No votes"
+msgstr ""
+
+msgid "Remove poll answer"
+msgstr ""
+
+msgid "Add new answer"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "Allow comments"
+msgstr ""
+
+msgid "Publication closed date"
+msgstr ""
+
+msgid "Only available for registered users"
+msgstr ""
+
+msgid "Unable to find any poll that matches your search."
+msgstr ""
+
+msgid "Poll section preferences"
+msgstr ""
+
+msgid "Values type"
+msgstr ""
+
+msgid "Percents"
+msgstr ""
+
+msgid "Vote count"
+msgstr ""
+
+msgid "Charts height"
+msgstr ""
+
+msgid "Charts width"
+msgstr ""
+
+msgid "Poll home widget preferences"
+msgstr ""
+
+msgid "Elements in frontpage widget"
+msgstr ""
+
+msgid "Chart width"
+msgstr ""
+
+msgid "Chart height"
+msgstr ""
+
+msgid "Config album module"
+msgstr ""
+
+msgid "New poll"
 msgstr ""
 
 msgid "Delete advertisements"
+msgstr ""
+
+msgid "Permanently remove item"
+msgstr ""
+
+msgid ""
+"Are you sure that do you want remove permanently from trash \"[% template."
+"content.title %]\"?"
+msgstr ""
+
+msgid " You will not be able to restore it back."
 msgstr ""
 
 msgid ""
@@ -5469,20 +4690,6 @@ msgstr ""
 msgid "Yes, update all"
 msgstr ""
 
-msgid "Permanently remove item"
-msgstr ""
-
-msgid ""
-"Are you sure that do you want remove permanently from trash \"[% template."
-"content.title %]\"?"
-msgstr ""
-
-msgid " You will not be able to restore it back."
-msgstr ""
-
-msgid "Yes, remove"
-msgstr ""
-
 msgid "Drop these elements"
 msgstr ""
 
@@ -5502,6 +4709,17 @@ msgstr ""
 msgid "Keep"
 msgstr ""
 
+msgid "Restore item"
+msgstr ""
+
+msgid ""
+"Are you sure that do you want restore from trash \"[% template.content.title "
+"%]\"?"
+msgstr ""
+
+msgid "Yes, restore"
+msgstr ""
+
 msgid "Arquive these elements"
 msgstr ""
 
@@ -5515,17 +4733,6 @@ msgid ""
 "they will remain available for read."
 msgstr ""
 
-msgid "Restore item"
-msgstr ""
-
-msgid ""
-"Are you sure that do you want restore from trash \"[% template.content.title "
-"%]\"?"
-msgstr ""
-
-msgid "Yes, restore"
-msgstr ""
-
 msgid "-- All categories --"
 msgstr ""
 
@@ -5535,603 +4742,625 @@ msgstr ""
 msgid "(inactive)"
 msgstr ""
 
-msgid "Delete category"
-msgstr ""
-
-msgid "Delete all the contents in category"
+msgid "Welcome to Opennemas"
 msgstr ""
 
 msgid ""
-"Are you sure that do you want delete all the contents in the category "
-"\"<span>%title%</span>\"?"
-msgstr ""
-
-msgid "Editing category"
-msgstr ""
-
-msgid "Creating category"
-msgstr ""
-
-msgid "Config categories module"
-msgstr ""
-
-msgid "Slug"
-msgstr ""
-
-msgid "Subsection of"
-msgstr ""
-
-msgid "Subsections"
-msgstr ""
-
-msgid "Internal name"
-msgstr ""
-
-msgid "In menu"
-msgstr ""
-
-msgid "Actions"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Show in RSS"
-msgstr ""
-
-msgid "Category available for"
-msgstr ""
-
-msgid "All contents"
-msgstr ""
-
-msgid "ePaper"
-msgstr ""
-
-msgid "Category logo"
-msgstr ""
-
-msgid "Change image headers and colors in frontpages"
+"Now you will be able to publish your own news, articles and take part of the "
+"information around everyone."
 msgstr ""
 
 msgid ""
-"Enable this if you want to use a custom image and color in your category "
-"frontpages"
+"Before starting to work on it you have to perform some tasks, sush as setup "
+"your social networks and get some information about how to use Opennemas"
 msgstr ""
 
-msgid "Empty"
+msgid "In order to use Opennemas you must accept the terms of use"
 msgstr ""
 
-msgid "Delete all the contents in this category"
+msgid "Accept the terms of use"
 msgstr ""
 
-msgid "For articles"
-msgstr ""
-
-msgid "For albums"
-msgstr ""
-
-msgid "For videos"
-msgstr ""
-
-msgid "For ePapers"
-msgstr ""
-
-msgid "For polls"
-msgstr ""
-
-msgid "For Specials"
-msgstr ""
-
-msgid "For books"
-msgstr ""
-
-msgid "Show in rss"
-msgstr ""
-
-msgid "No available categories for listing"
-msgstr ""
-
-msgid "Cache Manager"
-msgstr ""
-
-msgid "Cache group"
-msgstr ""
-
-msgid "Expire time"
-msgstr ""
-
-msgid "seconds"
-msgstr ""
-
-msgid "No cache files were generated for now."
+msgid "Do you need some help?"
 msgstr ""
 
 msgid ""
-"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>  "
-"and come back here"
-msgstr ""
-
-msgid "Resource"
-msgstr ""
-
-msgid "Valid until"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "View page"
-msgstr ""
-
-msgid "Delete cache file"
-msgstr ""
-
-msgid "Delete cache elements"
+"You can read and learn how to use your Opennemas by using our online "
+"documentation and videos.\n"
+"          Take a look around and you will find it."
 msgstr ""
 
 msgid ""
-"Are you sure you want to delete [% template.selected.length %] cache "
-"elements?"
-msgstr ""
-
-msgid "Delete cache element"
+"Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge "
+"base</a> has manuals and howtos about how to create contents and improve "
+"your newspaper."
 msgstr ""
 
 msgid ""
-"Are you sure you want to delete the cache element \"[% template.content."
-"title %]\"."
+"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target="
+"\"_blank\">video tutorials</a> for getting step-by-step guidance."
 msgstr ""
 
-msgid "Editing keyword"
+msgid ""
+"If you need further information you can always contact us by using the <span "
+"class=\"fa fa-support\"></span> Help button in the upper right corner."
 msgstr ""
 
-msgid "Creating keyword"
+msgid "Opennemas Store"
 msgstr ""
 
-msgid "Value"
+msgid "Find and try new add-ons and take your newspaper to the next level."
 msgstr ""
 
-msgid "Unable to find any keyword that matches your search."
+msgid ""
+"Do you need more? Check our packs and power your newspaper with extra "
+"features to make it the best."
 msgstr ""
 
-msgid "Keyword"
+msgid ""
+"We offer a huge list of add-ons to improve your experience. Check our store "
+"and pay only for what you really want."
 msgstr ""
 
-msgid "External link to "
+msgid ""
+"Make your own style. Choose a template or request a exclusive design to make "
+"your newspaper look awesome."
 msgstr ""
 
-msgid "Internal search to keyword"
+msgid "That's it!"
 msgstr ""
 
-msgid "Link to send email to"
+msgid "Wait...Do you have a Facebook or a Twitter account?"
 msgstr ""
 
-msgid "Edit this content"
+msgid ""
+"Then you can associate those accounts to access your opennemas. It will make "
+"easier to get into your administration panel."
 msgstr ""
 
-msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
+msgid "Now, you can start to use your newspaper."
 msgstr ""
 
-msgid "Creating widget"
+msgid "Hope you will enjoy opennemas!"
 msgstr ""
 
-msgid "Editing widget"
+msgid "Finish"
 msgstr ""
 
-msgid "Widget name"
+msgid "Welcome!"
 msgstr ""
 
-msgid "Widget type"
+msgid "Terms & conditions"
 msgstr ""
 
-msgid "Intelligent Widget"
+msgid "Ready!"
 msgstr ""
 
-msgid "HTML"
+msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr ""
 
-msgid "Content"
+msgid "Editing group"
 msgstr ""
 
-msgid "Parameters"
+msgid "Creating user group"
 msgstr ""
 
-msgid "Parameter name"
+msgid "Group name"
 msgstr ""
 
-msgid "Parameter value"
+msgid "Privileges"
 msgstr ""
 
-msgid "Add parameter"
+msgid "Unable to find any user group that matches your search."
 msgstr ""
 
-msgid "IntelligentWidget"
+msgid "Edit user group"
 msgstr ""
 
-msgid "Unable to find any widget that matches your search."
+msgid "Delete this user group"
 msgstr ""
 
-msgid "There is no available widgets"
+msgid ""
+"Are you sure that you want to delete the user \"[% template.content.name "
+"%]\"?"
 msgstr ""
 
-msgid "Edit widget '[% content.title %]'"
+msgid "Billing information"
 msgstr ""
 
-msgid "Customize"
+msgid ""
+"Activate the access to Backend means to add a User to your platform and has "
+"a cost of 12€/month."
 msgstr ""
 
-msgid "Settings for frontpage"
+msgid ""
+"If you have questions please have a look to our help article and/or contact "
+"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
 msgstr ""
 
-msgid "Text size for title"
+msgid ""
+"Please, fill billing information below, we will send you an invoice for all "
+"activated users at the end of the month."
 msgstr ""
 
-msgid "Image position"
+msgid "This field is required"
 msgstr ""
 
-msgid "Settings home frontpage"
+msgid "Contact name"
 msgstr ""
 
-msgid "Title for home frontpage"
+msgid "Company name"
 msgstr ""
 
-msgid "Subtitle"
+msgid "This is not a valid email"
 msgstr ""
 
-msgid "Images assigned"
+msgid "This is not a valid phone"
 msgstr ""
 
-msgid "Image to show in frontpages"
+msgid "Phone number"
 msgstr ""
 
-msgid "Footer text"
+msgid "This is not a valid vat"
 msgstr ""
 
-msgid "Image to show in inner"
+msgid "VAT Number"
 msgstr ""
 
-msgid "Home image"
+msgid "Address"
 msgstr ""
 
-msgid "Video for frontpage"
+msgid "This is not a valid address"
 msgstr ""
 
-msgid "Pick a video"
+msgid "This is not a valid postal_code"
 msgstr ""
 
-msgid "File name"
+msgid "Postal code"
 msgstr ""
 
-msgid "Creation date"
+msgid "This is not a valid city"
 msgstr ""
 
-msgid "Footer text for inner video:"
+msgid "City"
 msgstr ""
 
-msgid "Video for inner article page"
+msgid "This is not a valid state"
 msgstr ""
 
-msgid "Suggest this element to home"
+msgid "State"
 msgstr ""
 
-msgid "Suggest to home"
+msgid "Country"
 msgstr ""
 
-msgid "Unsuggest this element to home"
+msgid "Select a country"
 msgstr ""
 
-msgid "Unsuggest to home"
+msgid "Are you sure you want to create a new user?"
 msgstr ""
 
-msgid "Creating article"
+#, fuzzy
+msgid "Are you sure you want to update the user?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to disable [% template.selected.contents.length %] "
+"user(s)?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to enable [% template.selected.contents.length %] "
+"user(s)?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+msgid "I understand and accept the charges."
 msgstr ""
 
-msgid "Editing article"
+msgid "Yes, save it"
 msgstr ""
 
-msgid "Updating"
+msgid "Yes, update it"
 msgstr ""
 
-msgid "Update"
+msgid "Editing user"
 msgstr ""
 
-msgid "Saving"
+msgid "Creating user"
 msgstr ""
 
-msgid "Inner title"
+msgid "Display name"
 msgstr ""
 
-msgid "Pretitle"
+msgid "User name"
 msgstr ""
 
-msgid "Suggested for frontpage"
+msgid "Only lowercase letters, numbers, point and hyphen allowed"
+msgstr ""
+
+msgid ""
+"If you want a custom avatar sign up in <a href='http://www.gravatar."
+"com'>gravatar.com</a> with the same email address as you have here in "
+"OpenNemas"
+msgstr ""
+
+msgid "Blog Url"
+msgstr ""
+
+msgid "Short Biography"
+msgstr ""
+
+msgid "Biography"
+msgstr ""
+
+msgid "Confirm password"
+msgstr ""
+
+msgid "Additional data"
+msgstr ""
+
+msgid "Registered date:"
+msgstr ""
+
+msgid "Postal Code:"
+msgstr ""
+
+msgid "Birth Date:"
+msgstr ""
+
+msgid "Gender:"
+msgstr ""
+
+msgid "Has backend access"
+msgstr ""
+
+msgid "Used to enable or disable user access to control panel."
+msgstr ""
+
+msgid "User group:"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "selected"
+msgstr ""
+
+msgid "Social Networks"
+msgstr ""
+
+msgid "Facebook"
+msgstr ""
+
+msgid "Twitter"
+msgstr ""
+
+#, fuzzy
+msgid "Options"
+msgstr "Opiniões"
+
+msgid "User language"
+msgstr ""
+
+msgid "Used for displayed messages, interface and measures in your page."
+msgstr ""
+
+msgid "Paywall time limit:"
+msgstr ""
+
+msgid "Backend"
+msgstr ""
+
+msgid "Frontend"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Deactivated"
+msgstr ""
+
+msgid "Unable to find any user that matches your search."
+msgstr ""
+
+msgid "Avatar"
+msgstr ""
+
+msgid "Full name"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+#, fuzzy
+msgid "Backend access"
+msgstr "Gestor de backend"
+
+msgid "Not assigned"
+msgstr ""
+
+msgid "Your account is connected to %1."
+msgstr ""
+
+msgid "Disconnect from Facebook"
+msgstr ""
+
+msgid "Disconnect"
+msgstr ""
+
+msgid "Allows you to login into Opennemas with %1"
+msgstr ""
+
+msgid "Write here the text for search..."
+msgstr ""
+
+msgid "No results"
+msgstr "No results"
+
+msgid ""
+"There was an error while performing the search please reload this tab by "
+"changing to another one."
+msgstr ""
+
+msgid "Global search"
+msgstr ""
+
+msgid "Filter by title"
+msgstr ""
+
+msgid "Unable to find any content that matches your search."
+msgstr ""
+
+msgid "month"
+msgstr ""
+
+msgid "Purchased"
+msgstr ""
+
+msgid "Add to cart"
+msgstr ""
+
+msgid "Screenshots and videos"
+msgstr ""
+
+msgid "Last updated"
+msgstr ""
+
+msgid "Packs"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "Services"
+msgstr ""
+
+msgid "Partners"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "My selection"
+msgstr ""
+
+msgid "My selection "
+msgstr ""
+
+msgid "Cart"
+msgstr ""
+
+msgid "Your shopping cart is empty"
+msgstr ""
+
+msgid "Checkout"
+msgstr ""
+
+msgid "No items available to purchase"
+msgstr ""
+
+msgid "More info"
+msgstr ""
+
+msgid "Added to cart"
+msgstr ""
+
+msgid "You have requested the following purchases for your newspaper \"%1\""
+msgstr ""
+
+msgid "Modules requested"
+msgstr ""
+
+msgid "Our sales department will contact you to get further information"
+msgstr ""
+
+msgid "Modules to purchase"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "VAT number"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Return to <a href=\"%1\">store</a> and try again"
+msgstr ""
+
+msgid ""
+"You are about to order next items. In the next 24hours our sales team will "
+"send you payment and activation information. "
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid ""
+"If you need to update this information please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+
+msgid "Contact information"
+msgstr ""
+
+msgid "Purchase summary"
+msgstr ""
+
+msgid "You have to complete your billing information to complete the purchase."
+msgstr ""
+
+msgid "Unit price"
+msgstr ""
+
+msgid "VAT"
+msgstr ""
+
+msgid ""
+"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Terms of Service</a>"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Thank you for your purchase request!"
+msgstr ""
+
+msgid ""
+"In the next 24 hours you will receive an email with payment instructions and "
+"invoice."
+msgstr ""
+
+msgid ""
+"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
+"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
+"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
+"see how easy is to manage Opennemas."
+msgstr ""
+
+msgid ""
+"Oh!, it would be a good time to share with your friends your newspaper's "
+"improvements"
+msgstr ""
+
+msgid "Have a wonderful day!"
+msgstr ""
+
+msgid "Add new item"
 msgstr ""
 
 msgid "External link"
 msgstr ""
 
-msgid "Only available for subscribers"
+msgid "Album Categories"
 msgstr ""
 
-msgid "Related contents"
+msgid "Video Categories"
 msgstr ""
 
-msgid "Related in frontpage"
+msgid "Poll Categories"
 msgstr ""
 
-msgid "Related in inner"
+msgid "Sync Categories"
 msgstr ""
 
-msgid "Related in home"
+msgid "Automatic Categories"
 msgstr ""
 
-msgid "Gallery for frontpage"
+msgid "Sync Automatic Categories"
 msgstr ""
 
-msgid "Only one album"
+msgid ""
+"Fill the below form with the title and the external URL you want to add to "
+"the menu."
 msgstr ""
 
-msgid "Add gallery"
+msgid "Add item"
 msgstr ""
 
-msgid "Gallery for inner"
+msgid "Editing menu"
 msgstr ""
 
-msgid "Gallery for Home"
+msgid "Creating menu"
 msgstr ""
 
-msgid "Unable to find any article that matches your search."
+msgid "Position"
 msgstr ""
 
-msgid "No available articles."
+msgid ""
+"(If your theme has defined positions for menus you can assign one menu to "
+"each of them)"
 msgstr ""
 
-msgid "Available from"
+msgid "Menu contents"
 msgstr ""
 
-msgid "to"
+msgid "Use drag and drop to sort and nest elements"
+msgstr ""
+
+msgid "Add items"
+msgstr ""
+
+msgid "Module"
+msgstr ""
+
+msgid "Category blog"
+msgstr ""
+
+msgid "Album category"
+msgstr ""
+
+msgid "Poll category"
+msgstr ""
+
+msgid "Video Category"
+msgstr ""
+
+msgid "Synched category"
+msgstr ""
+
+msgid "Synched blog category"
+msgstr ""
+
+msgid "Unable to find any menu that matches your search."
+msgstr ""
+
+msgid "Position assigned"
 msgstr ""
 
 msgid "Unasigned"
 msgstr ""
 
-msgid "Instance not activated - Opennemas"
+msgid "Creating static page"
 msgstr ""
 
-msgid "Maintenance mode."
+msgid "Editing page"
 msgstr ""
 
-msgid ""
-"We are doing some maintenance in the Opennemas platform, please wait a few "
-"minutes."
+msgid "The slug component in the url"
 msgstr ""
 
-msgid "Welcome"
+msgid "Create new page"
 msgstr ""
 
-msgid "Profile"
+msgid "Unable to find any page that matches your search."
 msgstr ""
 
-msgid "Getting started"
+msgid "Open in a new window"
 msgstr ""
 
-msgid "Log out"
-msgstr ""
-
-msgid "OpenNeMaS administration"
-msgstr ""
-
-msgid "Instance information"
-msgstr ""
-
-msgid "Page"
-msgstr ""
-
-msgid "There are no notifications for now."
-msgstr ""
-
-msgid "Check your previous notifications <a href=\"%1\">here</a>."
-msgstr ""
-
-msgid "See more"
-msgstr ""
-
-msgid "Help center"
-msgstr ""
-
-msgid "Contact us"
-msgstr ""
-
-msgid "Ask for help using email"
-msgstr ""
-
-msgid "F.A.Q."
-msgstr ""
-
-msgid "Read what user ask more"
-msgstr ""
-
-msgid "Videotutorials"
-msgstr ""
-
-msgid "Use videos to get walkthrough guides"
-msgstr ""
-
-msgid "This user is a master"
-msgstr ""
-
-msgid "Go to newspaper"
-msgstr ""
-
-msgid "Customize font and color style"
-msgstr ""
-
-msgid "Image disposition in frontpage"
-msgstr ""
-
-msgid "Background Color"
-msgstr ""
-
-msgid "White"
-msgstr ""
-
-msgid "Light Blue"
-msgstr ""
-
-msgid "Light Red"
-msgstr ""
-
-msgid "Light Orange"
-msgstr ""
-
-msgid "Light purple"
-msgstr ""
-
-msgid "Light yellow"
-msgstr ""
-
-msgid "Bold blue"
-msgstr ""
-
-msgid "Gray"
-msgstr ""
-
-msgid "Title font color"
-msgstr ""
-
-msgid "Title font family"
-msgstr ""
-
-msgid "Title font style"
-msgstr ""
-
-msgid "Title font weight"
-msgstr ""
-
-msgid "Title font size"
-msgstr ""
-
-msgid "Top Wide Image"
-msgstr ""
-
-msgid "Image wide"
-msgstr ""
-
-msgid "Top right Image"
-msgstr ""
-
-msgid "image-top-right"
-msgstr ""
-
-msgid "Top Left Image"
-msgstr ""
-
-msgid "image-top-left"
-msgstr ""
-
-msgid "Wide image"
-msgstr ""
-
-msgid "image-middle-wide"
-msgstr ""
-
-msgid "Right image"
-msgstr ""
-
-msgid "image-middle-left"
-msgstr ""
-
-msgid "Left image"
-msgstr ""
-
-msgid "Reset"
-msgstr ""
-
-msgid "Are you sure that do you want to send to trash the next element?"
-msgstr ""
-
-msgid "New version available"
-msgstr ""
-
-msgid ""
-"There is a new version for this frontpage, if you try to save the current "
-"changes the new version will be overwritten."
-msgstr ""
-
-msgid "Reload frontpage"
-msgstr ""
-
-msgid "Archive this element"
-msgstr ""
-
-msgid "Are you sure that do you want to archive the next element?"
-msgstr ""
-
-msgid ""
-"This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
-"will remain available for read."
-msgstr ""
-
-msgid "Please, remember save positions after finish."
-msgstr ""
-
-msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
-msgstr ""
-
-msgid ""
-"You have reached the maximum number of elements (100). To add new contents "
-"remove the older."
-msgstr ""
-
-msgid "Preview frontpage with actual content positions"
-msgstr ""
-
-msgid "Managing frontpage:"
-msgstr ""
-
-msgid ""
-"The frontpage manager is currently <strong>unavaible for your screen size</"
-"strong>"
-msgstr ""
-
-msgid "Available contents"
-msgstr ""
-
-msgid "Suggested"
-msgstr ""
-
-msgid "Others in category"
-msgstr ""
-
-msgid "Latest articles"
-msgstr ""
-
-msgid "Change the layout of this frontpage"
-msgstr ""
-
-msgid "Refresh the list for getting newest error list"
-msgstr ""
-
-msgid "Refresh list"
-msgstr ""
-
-msgid "Clean"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Error explanation"
-msgstr ""
-
-msgid "Execution time"
-msgstr ""
-
-msgid "There is no SQL errors registered in database."
-msgstr ""
-
-msgid "Come back later."
+msgid "Link"
 msgstr ""
 
 msgid "General"
@@ -6149,11 +5378,17 @@ msgstr ""
 msgid "This will be displayed as the default article signature."
 msgstr ""
 
+msgid "Footer text"
+msgstr ""
+
 msgid ""
 "Text showed at the bottom of your page. Usually used for copyright notice."
 msgstr ""
 
 msgid "Appearance"
+msgstr ""
+
+msgid "Site color"
 msgstr ""
 
 msgid "Color used for links, menus and some widgets."
@@ -6224,9 +5459,6 @@ msgstr ""
 msgid "Default language"
 msgstr ""
 
-msgid "Used for displayed messages, interface and measures in your page."
-msgstr ""
-
 msgid "Time Zone"
 msgstr ""
 
@@ -6245,6 +5477,9 @@ msgid ""
 msgstr ""
 
 msgid "Items per page"
+msgstr ""
+
+msgid "Items per blog page"
 msgstr ""
 
 msgid "Form Module"
@@ -6386,9 +5621,6 @@ msgid ""
 "your youtube page url."
 msgstr ""
 
-msgid "Facebook"
-msgstr ""
-
 msgid "Facebook Page Url"
 msgstr ""
 
@@ -6410,9 +5642,6 @@ msgid ""
 msgstr ""
 
 msgid "Secret key"
-msgstr ""
-
-msgid "Twitter"
 msgstr ""
 
 msgid "Twitter Page"
@@ -6445,19 +5674,221 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 
+msgid "Editing author"
+msgstr ""
+
+msgid "Creating author"
+msgstr ""
+
+msgid "User info"
+msgstr ""
+
+msgid "Twitter user"
+msgstr ""
+
+msgid "View as Blog"
+msgstr ""
+
+msgid "If this option is activated page author will be showed as blog"
+msgstr ""
+
+msgid "Other Blog Url"
+msgstr ""
+
+msgid "Show in RSS"
+msgstr ""
+
+msgid "If this option is activated this author will be showed in rss"
+msgstr ""
+
+msgid "Create new author"
+msgstr ""
+
+msgid "Unable to find any author that matches your search."
+msgstr ""
+
+msgid "No biography set"
+msgstr ""
+
+msgid "Creating video"
+msgstr ""
+
+msgid "Editing video"
+msgstr ""
+
+msgid "Pick type"
+msgstr ""
+
+msgid "Pick the method to add the video"
+msgstr ""
+
+msgid "Link video from other web video services"
+msgstr ""
+
+msgid "Use HTML code"
+msgstr ""
+
+msgid "Use file video URLs (External HTML5/FLV)"
+msgstr ""
+
+msgid "Video URL"
+msgstr ""
+
+msgid "Get information"
+msgstr ""
+
+msgid "Allowed video sources:"
+msgstr ""
+
+msgid "Other information"
+msgstr ""
+
+msgid "Original Title"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "Duration"
+msgstr ""
+
+msgid "Embed Url"
+msgstr ""
+
+msgid "Thumbnail URL"
+msgstr ""
+
+msgid "Thumbnail image"
+msgstr ""
+
+msgid "Unable to find any video that matches your search."
+msgstr ""
+
+msgid "You must put %1 videos in the HOME"
+msgstr ""
+
+msgid "Mosaic"
+msgstr ""
+
+msgid "Video details"
+msgstr ""
+
+msgid "Write HTML code"
+msgstr ""
+
+msgid "Video Cover"
+msgstr ""
+
+msgid "Image not set"
+msgstr ""
+
+msgid "Set image"
+msgstr ""
+
+msgid "Video type and file URLs"
+msgstr ""
+
+msgid "HTML5 video"
+msgstr ""
+
+msgid "Flash video"
+msgstr ""
+
+msgid "MP4 format"
+msgstr ""
+
+msgid "http://www.example.com/path/to/file.mp4"
+msgstr ""
+
+msgid "Ogg format"
+msgstr ""
+
+msgid "http://www.example.com/path/to/file.ogg"
+msgstr ""
+
+msgid "WebM format"
+msgstr ""
+
+msgid "http://www.example.com/path/to/file.webm"
+msgstr ""
+
+msgid "FLV format"
+msgstr ""
+
+msgid "http://www.example.com/path/to/file.flv"
+msgstr ""
+
+msgid "Video cover"
+msgstr ""
+
+msgid "Total in widget home"
+msgstr ""
+
+msgid ""
+"Use  total in widget home for define how many videos can see in widgets in "
+"newspaper frontpage"
+msgstr ""
+
+msgid "Total in video frontpage column"
+msgstr ""
+
+msgid ""
+"Use  total in video frontpage column for define how many videos can see in "
+"the column left in video frontpage categories"
+msgstr ""
+
+msgid "Total in video frontpage more videos"
+msgstr ""
+
+msgid "Total number of videos on more videos section in video home frontpage"
+msgstr ""
+
+msgid "Total offset in video frontpage more videos"
+msgstr ""
+
+msgid "Total number of videos that are placed on top home video frontpage"
+msgstr ""
+
+msgid "Total in video gallery"
+msgstr ""
+
+msgid ""
+"Use  Total in video gallery for define how many videos can see in the "
+"gallery when you edit or create one article"
+msgstr ""
+
+msgid "Widget home"
+msgstr ""
+
+msgid "Config video module"
+msgstr ""
+
 msgid "Logged in users"
 msgstr ""
 
-msgid "Welcome to Opennemas"
+msgid "Redirect your domain"
 msgstr ""
 
-msgid "Redirect your domain"
+msgid ""
+"I have an existing domain and I want to redirect it to my Opennemas digital "
+"newspaper."
+msgstr ""
+
+msgid "Add new domain"
+msgstr ""
+
+msgid ""
+"I DO NOT have my own domain and I want to create one and redirect it to my "
+"Opennemas digital newspaper"
 msgstr ""
 
 msgid "Add contents to your site"
 msgstr ""
 
 msgid "New article"
+msgstr ""
+
+msgid "New opinion"
 msgstr ""
 
 msgid "Media manager"
@@ -6514,148 +5945,511 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Are you sure that do you want send to the trash this comment from \"[% "
-"template.content.author %]\"?"
-msgstr ""
-
-msgid "Change comment manager"
+"A Google DFP advertisement has been detected in your HTML/javascript "
+"advertisement but Opennemas already supports this type of advertisements."
 msgstr ""
 
 msgid ""
-"Opennemas supports multiple managers for comments. You can change to your "
-"desired manager whenever you want."
+"Would you like to auto-correct this advertisement to use our Google DFP "
+"integration?"
 msgstr ""
 
-msgid "Pick the method to manage comments:"
+msgid "Google DFP unit"
 msgstr ""
 
-msgid "Built-in system"
+msgid "Width"
 msgstr ""
 
-msgid ""
-"Opennemas has simple but effective comment system that requires zero "
-"configuration."
+msgid "Height"
 msgstr ""
 
-msgid ""
-"Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
-"comment system</a> and use their powerful system to manage your website "
-"comments."
+msgid "Ads"
 msgstr ""
 
-msgid ""
-"Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
-"plugins/comments/\">Facebook comment system</a> and use their online tools "
-"to manage your website comments."
+msgid "Creating banner"
 msgstr ""
 
-msgid "Change comments module"
+msgid "Editing banner"
 msgstr ""
 
-msgid ""
-"To be able to moderate comments of your site in Facebook you must create and "
-"set here your <strong>Facebook App Id</strong>."
+msgid "Image or Flash object"
 msgstr ""
 
-msgid ""
-"You can get your Facebook App Keys from <a href=\"https://developers."
-"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
+msgid "HTML or Javascript code"
 msgstr ""
 
-msgid "Config facebook module"
+msgid "Open X zone"
 msgstr ""
 
-msgid "You are now using Facebook comments"
+msgid "Open X zone id"
 msgstr ""
 
 msgid ""
-"If you want to moderate comments, you first need to create a Facebook "
-"application in <a href=\"https://developers.facebook.com/\" target=\"_blank"
-"\">here</a> to get an application Id and then click on settings to configure "
-"it"
+"OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
+"the zone id from your OpenX/Revive server %1"
+msgstr ""
+
+msgid "Google DFP unit id"
 msgstr ""
 
 msgid ""
-"To moderate your comments go to <a href=\"https://developers.facebook.com/"
-"tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
+"Google DFP uses an unit ID to identify an advertisement. Please fill the "
+"zone id from your Google DFP panel"
 msgstr ""
 
-msgid "Editing comment"
+msgid "Add another size"
 msgstr ""
 
-msgid "Submitted on"
+msgid "When to show this ad"
 msgstr ""
 
-msgid "Sent from IP address"
+msgid "Restrictions"
 msgstr ""
 
-msgid "Commented on"
+msgid "Without limits"
 msgstr ""
 
-msgid "Display"
+msgid "Date range"
 msgstr ""
 
-msgid "Number of comments to show by page"
+msgid "Show this ad if satisfy one condition"
 msgstr ""
 
-msgid "Allow comments in contents by default"
+msgid "From"
+msgstr ""
+
+msgid "Until"
+msgstr ""
+
+msgid "Show this ad within a range of dates."
+msgstr ""
+
+msgid "Display banner while"
+msgstr ""
+
+msgid "Amount of seconds that this banner will block all the page."
+msgstr ""
+
+msgid "Where to show this ad"
+msgstr ""
+
+msgid "In categories"
+msgstr ""
+
+msgid "and pages of type"
+msgstr ""
+
+msgid "Inner article"
+msgstr ""
+
+msgid "Inner video"
+msgstr ""
+
+msgid "Inner opinion"
+msgstr ""
+
+msgid "Galleries"
+msgstr ""
+
+msgid "Gallery Inner"
+msgstr ""
+
+msgid "Poll Inner"
+msgstr ""
+
+msgid "and inside the position"
+msgstr ""
+
+msgid "Advertisment"
+msgstr ""
+
+msgid "Flash based"
+msgstr ""
+
+msgid "Override default click handler"
 msgstr ""
 
 msgid ""
-"Whether to allow users to comment in comments by default for all contents "
-"(you can change this setting for specific contents)"
+"When you click in some Flash-based advertisements they redirect you to "
+"another web site. If you want to overlap that address with that specified by "
+"you above you should mark this."
 msgstr ""
 
-msgid "Before a comment appears"
+msgid "Floating ads (for drop them into columns)"
 msgstr ""
 
-msgid "An administrator must always approve the comment "
+msgid "Test for Javascript ad"
 msgstr ""
 
-msgid "Disqus"
+msgid "Close window"
 msgstr ""
 
-msgid "Set your Disqus configuration"
-msgstr ""
-
-msgid ""
-"A shortname is the unique identifier assigned to a Disqus site. All the "
-"comments posted to a site are referenced with the shortname"
+msgid "Cookie lifetime for intersticials"
 msgstr ""
 
 msgid ""
-"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">here</a>"
+"This setting indicates how long will take to re-display the interstitial in "
+"frontpage."
 msgstr ""
 
-msgid "Disqus module configuration"
+msgid "(in minutes)"
 msgstr ""
 
-msgid "To moderate your Disqus comments, click here"
+msgid "Allow generic advertisement"
 msgstr ""
 
-msgid "Disqus not configured"
+msgid "This settings allow printing home ads when ads in category are empty."
 msgstr ""
 
-msgid "Config comments module"
+msgid "OpenX/Revive Ad server integration"
 msgstr ""
 
-msgid "Search by body"
+msgid "Ad server base url"
 msgstr ""
 
-msgid "Unable to find any comment that matches your search."
+msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
 msgstr ""
 
-msgid "Maybe changing any filter could help."
+msgid "Tradedoubler integration"
 msgstr ""
 
-msgid "In response to"
+msgid "Tradedoubler ID"
 msgstr ""
 
-msgid "Author:"
+msgid "Only the ID from Tradedoubler validation tag"
 msgstr ""
 
-msgid "Submitted on:"
+msgid "Unable to find any advertisement that matches your search."
+msgstr ""
+
+msgid "Permanence"
+msgstr ""
+
+msgid "Media element (jpg, png, gif)"
+msgstr ""
+
+msgid "Media flash element (swf)"
+msgstr ""
+
+msgid "Clicks:"
+msgstr ""
+
+msgid "Viewed:"
+msgstr ""
+
+msgid "Instance Synchronization"
+msgstr ""
+
+msgid "Ins. Sync."
+msgstr ""
+
+msgid "Adding site"
+msgstr ""
+
+msgid "Site URL"
+msgstr ""
+
+msgid "http://example.com"
+msgstr ""
+
+msgid "Reset color"
+msgstr ""
+
+msgid "Username or password are incorrect"
+msgstr ""
+
+msgid "Please, check if the credentials are correct and try again."
+msgstr ""
+
+msgid "Available categories for sync"
+msgstr ""
+
+msgid "No elements to sync in this server"
+msgstr ""
+
+msgid "The given url has no elements to sync or it is not an Opennemas server."
+msgstr ""
+
+msgid "Also check if the credentials are correct."
+msgstr ""
+
+msgid "Add site to sync"
+msgstr ""
+
+msgid "Add site"
+msgstr ""
+
+msgid "Site Url"
+msgstr ""
+
+msgid "Categories to Sync"
+msgstr ""
+
+msgid "Categories to sync"
+msgstr ""
+
+msgid "There are no synchronize settings available"
+msgstr ""
+
+msgid "Try adding one site to synchronize on the config button above."
+msgstr ""
+
+msgid "My account"
+msgstr ""
+
+msgid "This is the email used to create your newspaper"
+msgstr ""
+
+msgid "Your newspaper was created on %1"
+msgstr ""
+
+msgid "Plan"
+msgstr ""
+
+msgid "Base + Modules"
+msgstr ""
+
+msgid "Support plan"
+msgstr ""
+
+msgid "Support by tickets"
+msgstr ""
+
+msgid "Storage size"
+msgstr ""
+
+msgid "Page views this month"
+msgstr ""
+
+msgid "coming soon... work in progress..."
+msgstr ""
+
+msgid ""
+"Note: this number has not being used for billing purpose. Billing pageviews "
+"count goes from 26th to 25th of each month."
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Max"
+msgstr ""
+
+msgid "Opennemas offers many more modules and solutions"
+msgstr ""
+
+msgid "Check out our modules"
+msgstr ""
+
+msgid ""
+"If you need a custom plan or you want to purchase a plan or module please "
+"click in the next link:"
+msgstr ""
+
+msgid "Contact Us"
+msgstr ""
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+
+msgid "You have no billing information"
+msgstr ""
+
+msgid "You will be asked to add it during the checkout in our store"
+msgstr ""
+
+msgid "Activated plans & modules"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Waiting for upgrade"
+msgstr ""
+
+msgid "Upgrade instance"
+msgstr ""
+
+msgid "Are you sure you want to proceed with this upgrade ?"
+msgstr ""
+
+msgid "Request upgrade"
+msgstr ""
+
+msgid "List of modules to hire"
+msgstr ""
+
+msgid "List of modules to unsubscribe"
+msgstr ""
+
+msgid "Domain Mapping"
+msgstr ""
+
+msgid "Primary Domain"
+msgstr ""
+
+msgid "Technical information"
+msgstr ""
+
+msgid ""
+"I do not have my own domain and I want to create one and redirect it to my "
+"Opennemas digital newspaper"
+msgstr ""
+
+msgid "Enter a domain"
+msgstr ""
+
+msgid "Map it"
+msgstr ""
+
+msgid "year"
+msgstr ""
+
+msgid "Requested domains"
+msgstr ""
+
+msgid "Domain registration + mapping"
+msgstr ""
+
+msgid "Domain mapping"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Terms of create a new domain"
+msgstr ""
+
+msgid "Terms of redirection"
+msgstr ""
+
+msgid ""
+"Payment: the registration and redirection service requires payment in "
+"advance. This amount cannot be divided into several payments."
+msgstr ""
+
+msgid ""
+"Identity: when buying a new domain, the identity of the domains would be the "
+"one of your entity. The administrative identity, technical contact, billing "
+"contact name would be Openhost, SL"
+msgstr ""
+
+msgid ""
+"Availability: please inform us of the name of the domain that you wish to "
+"register and we will let you know if it is available. May be one or more "
+"domains."
+msgstr ""
+
+msgid ""
+"The service of registering and redirecting the domain is valid for one year, "
+"so you will be notified prior to the renewal date."
+msgstr ""
+
+msgid ""
+"Following the purchase of the domain, if the user wants to transfer it to "
+"another provider, which may only be transferred to another from the 6th "
+"month after the date of registration of the domain."
+msgstr ""
+
+msgid ""
+"Payment: the redirection service requires payment in advance. The amount "
+"cannot be divided into several payments. "
+msgstr ""
+
+msgid ""
+"Identity: the identity of the domains would be the customer's identity "
+"because the domain does not undergo any change. "
+msgstr ""
+
+msgid ""
+"The service domain redirection is valid for one year, so you will be "
+"notified prior to the renewal date. "
+msgstr ""
+
+msgid ""
+"The customer must make changes to the DNS zone for your domain registration "
+"www. This change has nothing to do with the Opennemas platform or company "
+"Openhost, SL (company that maintains the service). "
+msgstr ""
+
+msgid ""
+"If redirection does not work through no fault of the platform, ie by "
+"malfunction of the DNS servers the client, Openhost, SL area will have "
+"nothing to do with the damage caused to the hours of service failure. "
+msgstr ""
+
+msgid "I have read and accept the Terms of creating a new domain"
+msgstr ""
+
+msgid "I have read and accept the Terms of redirection"
+msgstr ""
+
+msgid "Thank you for your request!"
+msgstr ""
+
+msgid ""
+"In the next 24 hours you will receive an email with payment instructions and "
+"the invoice."
+msgstr ""
+
+msgid "How can I change 'opennemas.com' domain on my newspaper?"
+msgstr ""
+
+msgid "Redirect your own domain"
+msgstr ""
+
+msgid "Your domains"
+msgstr ""
+
+msgid "Main"
+msgstr ""
+
+msgid "Points to"
+msgstr ""
+
+msgid "Your domain is properly configured"
+msgstr ""
+
+msgid "Your domain is not properly configured, check the instructions below."
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "This is your opennemas address"
+msgstr ""
+
+msgid "Update your DNS records"
+msgstr ""
+
+msgid "Point the www entrace in your domain to the Opennemas service."
+msgstr ""
+
+msgid ""
+"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
+"domain.name.replace('www.', '') %]"
+msgstr ""
+
+msgid ""
+"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
+"by the hosting provider for your domain)"
+msgstr ""
+
+msgid "NOTE"
+msgstr ""
+
+msgid "This change is NOT done in the DNS section"
+msgstr ""
+
+msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+
+msgid "Domains to create"
+msgstr ""
+
+msgid "Domains to redirect"
 msgstr ""
 
 msgid "Add"
@@ -6749,25 +6543,7 @@ msgid ""
 "        "
 msgstr ""
 
-msgid "Open live demo in a new tab"
-msgstr ""
-
 msgid "Exclusive"
-msgstr ""
-
-msgid "Delivery time"
-msgstr ""
-
-msgid "weeks"
-msgstr ""
-
-msgid "months"
-msgstr ""
-
-msgid "standard"
-msgstr ""
-
-msgid "widget"
 msgstr ""
 
 msgid "My themes"
@@ -6798,863 +6574,49 @@ msgstr ""
 msgid "All purchased Themes are ready for activation"
 msgstr ""
 
-msgid "Reset <strong>password</strong>"
+msgid "Open live demo in a new tab"
 msgstr ""
 
-msgid "We've sent an e-mail to"
+msgid "Delivery time"
 msgstr ""
 
-msgid ""
-"Please check your e-mail now for a message with the subject line \"Password "
-"reminder\"."
+msgid "weeks"
 msgstr ""
 
-msgid ""
-"If you use e-mail filtering or anti-spam software,please make sure our e-"
-"mail is not filtered or blocked."
+msgid "months"
 msgstr ""
 
-msgid "Enter your e-mail address and click Submit to recover your password."
+msgid "standard"
 msgstr ""
 
-msgid "Go back to login"
+msgid "widget"
 msgstr ""
 
-msgid "Submit"
+msgid "Refresh the list for getting newest error list"
 msgstr ""
 
-msgid "Dear member"
+msgid "Refresh list"
 msgstr ""
 
-msgid "Per your request, please follow these steps to regain access to"
+msgid "Clean"
 msgstr ""
 
-msgid "Click the link below to choose a new password"
+msgid "Filter"
 msgstr ""
 
-msgid ""
-"If the link is not clickable, you can copy and paste the address into your "
-"Web browser's address window"
+msgid "Creation date"
 msgstr ""
 
-msgid ""
-"Follow the instructions on the screen to choose a new password.  After you "
-"have chosen a password you will automatically enter"
+msgid "Error explanation"
 msgstr ""
 
-msgid "In the future you can login to"
+msgid "Execution time"
 msgstr ""
 
-msgid "by entering your e-mail address and this password"
+msgid "There is no SQL errors registered in database."
 msgstr ""
 
-msgid "If you did not request your ID and password for"
-msgstr ""
-
-msgid ""
-"someone has mistakenly entered your e-mail address when requesting their "
-"password"
-msgstr ""
-
-msgid ""
-"Please ignore this message, or, if you wish, you may go to the address above "
-"to select a new password for your account"
-msgstr ""
-
-msgid ""
-"To protect your privacy, we will only send this information to the e-mail "
-"address on file for this account"
-msgstr ""
-
-msgid "Sign into open<strong>nemas</strong>"
-msgstr ""
-
-msgid "Use Facebook, Twitter or your email to sign in."
-msgstr ""
-
-msgid "Username or email"
-msgstr ""
-
-msgid "Forgot Password?"
-msgstr ""
-
-msgid "Log in"
-msgstr ""
-
-msgid "About"
-msgstr ""
-
-msgid "Privacy Policy"
-msgstr ""
-
-msgid "Legal"
-msgstr ""
-
-msgid "Language"
-msgstr ""
-
-msgid "Recover password"
-msgstr ""
-
-msgid ""
-"Please enter your new password in both fields below, and then click Submit."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr ""
-
-msgid "Editing author"
-msgstr ""
-
-msgid "Creating author"
-msgstr ""
-
-msgid "User info"
-msgstr ""
-
-msgid "Display name"
-msgstr ""
-
-msgid "Twitter user"
-msgstr ""
-
-msgid ""
-"If you want a custom avatar sign up in <a href='http://www.gravatar."
-"com'>gravatar.com</a> with the same email address as you have here in "
-"OpenNemas"
-msgstr ""
-
-msgid "View as Blog"
-msgstr ""
-
-msgid "If this option is activated page author will be showed as blog"
-msgstr ""
-
-msgid "Other Blog Url"
-msgstr ""
-
-msgid "Short Biography"
-msgstr ""
-
-msgid "Biography"
-msgstr ""
-
-msgid "If this option is activated this author will be showed in rss"
-msgstr ""
-
-msgid "Create new author"
-msgstr ""
-
-msgid "Unable to find any author that matches your search."
-msgstr ""
-
-msgid "Avatar"
-msgstr ""
-
-msgid "No biography set"
-msgstr ""
-
-msgid "Flash based"
-msgstr ""
-
-msgid "Override default click handler"
-msgstr ""
-
-msgid ""
-"When you click in some Flash-based advertisements they redirect you to "
-"another web site. If you want to overlap that address with that specified by "
-"you above you should mark this."
-msgstr ""
-
-msgid "Floating ads (for drop them into columns)"
-msgstr ""
-
-msgid "Advertisment"
-msgstr ""
-
-msgid "Ads"
-msgstr ""
-
-msgid "Creating banner"
-msgstr ""
-
-msgid "Editing banner"
-msgstr ""
-
-msgid "Image or Flash object"
-msgstr ""
-
-msgid "HTML or Javascript code"
-msgstr ""
-
-msgid "Open X zone"
-msgstr ""
-
-msgid "Google DFP unit"
-msgstr ""
-
-msgid "Open X zone id"
-msgstr ""
-
-msgid ""
-"OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
-"the zone id from your OpenX/Revive server %1"
-msgstr ""
-
-msgid "Google DFP unit id"
-msgstr ""
-
-msgid ""
-"Google DFP uses an unit ID to identify an advertisement. Please fill the "
-"zone id from your Google DFP panel"
-msgstr ""
-
-msgid "Width"
-msgstr ""
-
-msgid "Height"
-msgstr ""
-
-msgid "Add another size"
-msgstr ""
-
-msgid "When to show this ad"
-msgstr ""
-
-msgid "Restrictions"
-msgstr ""
-
-msgid "Without limits"
-msgstr ""
-
-msgid "Date range"
-msgstr ""
-
-msgid "Show this ad if satisfy one condition"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "Until"
-msgstr ""
-
-msgid "Show this ad within a range of dates."
-msgstr ""
-
-msgid "Display banner while"
-msgstr ""
-
-msgid "Amount of seconds that this banner will block all the page."
-msgstr ""
-
-msgid "Where to show this ad"
-msgstr ""
-
-msgid "In categories"
-msgstr ""
-
-msgid "and pages of type"
-msgstr ""
-
-msgid "Inner article"
-msgstr ""
-
-msgid "Inner video"
-msgstr ""
-
-msgid "Inner opinion"
-msgstr ""
-
-msgid "Galleries"
-msgstr ""
-
-msgid "Gallery Inner"
-msgstr ""
-
-msgid "Poll Inner"
-msgstr ""
-
-msgid "and inside the position"
-msgstr ""
-
-msgid "Test for Javascript ad"
-msgstr ""
-
-msgid "Close window"
-msgstr ""
-
-msgid "Cookie lifetime for intersticials"
-msgstr ""
-
-msgid ""
-"This setting indicates how long will take to re-display the interstitial in "
-"frontpage."
-msgstr ""
-
-msgid "(in minutes)"
-msgstr ""
-
-msgid "Allow generic advertisement"
-msgstr ""
-
-msgid "This settings allow printing home ads when ads in category are empty."
-msgstr ""
-
-msgid "OpenX/Revive Ad server integration"
-msgstr ""
-
-msgid "Ad server base url"
-msgstr ""
-
-msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
-msgstr ""
-
-msgid "Tradedoubler integration"
-msgstr ""
-
-msgid "Tradedoubler ID"
-msgstr ""
-
-msgid "Only the ID from Tradedoubler validation tag"
-msgstr ""
-
-msgid ""
-"A Google DFP advertisement has been detected in your HTML/javascript "
-"advertisement but Opennemas already supports this type of advertisements."
-msgstr ""
-
-msgid ""
-"Would you like to auto-correct this advertisement to use our Google DFP "
-"integration?"
-msgstr ""
-
-msgid "Unable to find any advertisement that matches your search."
-msgstr ""
-
-msgid "Permanence"
-msgstr ""
-
-msgid "Media element (jpg, png, gif)"
-msgstr ""
-
-msgid "Media flash element (swf)"
-msgstr ""
-
-msgid "Clicks:"
-msgstr ""
-
-msgid "Viewed:"
-msgstr ""
-
-msgid ""
-"Are you sure that you want to delete the user \"[% template.content.name "
-"%]\"?"
-msgstr ""
-
-msgid "Enable users has a cost."
-msgstr ""
-
-#, fuzzy
-msgid "Please, fill your billing information below."
-msgstr "Não foi possível gravar as informações da imagem."
-
-msgid "Are you sure you want to create a new user?"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"Are you sure you want to disable [% template.selected.contents.length %] "
-"user(s)?"
-msgstr ""
-"Are you sure you want to reject [% template.selected.contents.length %] "
-"item(s)?"
-
-#, fuzzy
-msgid ""
-"Are you sure you want to enable [% template.selected.contents.length %] "
-"user(s)?"
-msgstr ""
-"Are you sure you want to reject [% template.selected.contents.length %] "
-"item(s)?"
-
-msgid ""
-"Enable this users will cost you [% Math.round(template.selected.contents."
-"length * 40) / 100 %] €/day."
-msgstr ""
-
-msgid "Create this user will cost you 12 €/month."
-msgstr ""
-
-msgid "I understand and accept the charges."
-msgstr ""
-
-msgid "Yes, save it"
-msgstr ""
-
-msgid "Your account is connected to %1."
-msgstr ""
-
-msgid "Disconnect from Facebook"
-msgstr ""
-
-msgid "Disconnect"
-msgstr ""
-
-msgid "Editing user"
-msgstr ""
-
-msgid "Creating user"
-msgstr ""
-
-msgid "Only lowercase letters, numbers, point and hyphen allowed"
-msgstr ""
-
-msgid "Blog Url"
-msgstr ""
-
-msgid "Confirm password"
-msgstr ""
-
-msgid "Privileges"
-msgstr ""
-
-msgid "User group:"
-msgstr ""
-
-msgid "Select"
-msgstr ""
-
-msgid "selected"
-msgstr ""
-
-msgid "Additional data"
-msgstr ""
-
-msgid "Registered date:"
-msgstr ""
-
-msgid "Postal Code:"
-msgstr ""
-
-msgid "Birth Date:"
-msgstr ""
-
-msgid "Gender:"
-msgstr ""
-
-msgid "User type"
-msgstr ""
-
-msgid "Backend"
-msgstr ""
-
-msgid "Frontend"
-msgstr ""
-
-msgid "User language"
-msgstr ""
-
-msgid "Deactivated"
-msgstr ""
-
-msgid "Used to enable or disable user access to control panel."
-msgstr ""
-
-msgid "Social Networks"
-msgstr ""
-
-msgid "Paywall time limit:"
-msgstr ""
-
-msgid "Allows you to login into Opennemas with %1"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
-msgid "Group"
-msgstr ""
-
-msgid "Unable to find any user that matches your search."
-msgstr ""
-
-msgid "Not assigned"
-msgstr ""
-
-msgid "Editing group"
-msgstr ""
-
-msgid "Creating user group"
-msgstr ""
-
-msgid "Group name"
-msgstr ""
-
-msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-msgstr ""
-
-msgid "Unable to find any user group that matches your search."
-msgstr ""
-
-msgid "Edit user group"
-msgstr ""
-
-msgid "Delete this user group"
-msgstr ""
-
-msgid ""
-"Now you will be able to publish your own news, articles and take part of the "
-"information around everyone."
-msgstr ""
-
-msgid ""
-"Before starting to work on it you have to perform some tasks, sush as setup "
-"your social networks and get some information about how to use Opennemas"
-msgstr ""
-
-msgid "In order to use Opennemas you must accept the terms of use"
-msgstr ""
-
-msgid "Accept the terms of use"
-msgstr ""
-
-msgid "Do you need some help?"
-msgstr ""
-
-msgid ""
-"You can read and learn how to use your Opennemas by using our online "
-"documentation and videos.\n"
-"          Take a look around and you will find it."
-msgstr ""
-
-msgid ""
-"Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge "
-"base</a> has manuals and howtos about how to create contents and improve "
-"your newspaper."
-msgstr ""
-
-msgid ""
-"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target="
-"\"_blank\">video tutorials</a> for getting step-by-step guidance."
-msgstr ""
-
-msgid ""
-"If you need further information you can always contact us by using the <span "
-"class=\"fa fa-support\"></span> Help button in the upper right corner."
-msgstr ""
-
-msgid "Opennemas Store"
-msgstr ""
-
-msgid "Find and try new add-ons and take your newspaper to the next level."
-msgstr ""
-
-msgid ""
-"Do you need more? Check our packs and power your newspaper with extra "
-"features to make it the best."
-msgstr ""
-
-msgid ""
-"We offer a huge list of add-ons to improve your experience. Check our store "
-"and pay only for what you really want."
-msgstr ""
-
-msgid ""
-"Make your own style. Choose a template or request a exclusive design to make "
-"your newspaper look awesome."
-msgstr ""
-
-msgid "That's it!"
-msgstr ""
-
-msgid "Wait...Do you have a Facebook or a Twitter account?"
-msgstr ""
-
-msgid ""
-"Then you can associate those accounts to access your opennemas. It will make "
-"easier to get into your administration panel."
-msgstr ""
-
-msgid "Now, you can start to use your newspaper."
-msgstr ""
-
-msgid "Hope you will enjoy opennemas!"
-msgstr ""
-
-msgid "Finish"
-msgstr ""
-
-msgid "Welcome!"
-msgstr ""
-
-msgid "Terms & conditions"
-msgstr ""
-
-msgid "Ready!"
-msgstr ""
-
-msgid "Special contents"
-msgstr ""
-
-msgid "Articles in left column"
-msgstr ""
-
-msgid "Click here to add contents"
-msgstr ""
-
-msgid "Articles in right column"
-msgstr ""
-
-msgid "You must put %1 specials in the HOME"
-msgstr ""
-
-msgid "Unable to find any special that matches your search."
-msgstr ""
-
-msgid "Creating special"
-msgstr ""
-
-msgid "Editing special"
-msgstr ""
-
-msgid "List of words separated by commas."
-msgstr ""
-
-msgid "Image for Special"
-msgstr ""
-
-msgid "Number of elements in widget home"
-msgstr ""
-
-msgid ""
-"Use  total in widget special for define how many videos can see in widgets "
-"in newspaper frontpage"
-msgstr ""
-
-msgid "Time of the last special most viewed (days):"
-msgstr ""
-
-msgid ""
-"Used to define the frontpage specials, the time range of the latest specials "
-"are the most viewed"
-msgstr ""
-
-msgid "Config special module"
-msgstr ""
-
-msgid "Unable to find any file that matches your search."
-msgstr ""
-
-msgid "You must put %1 polls in the HOME"
-msgstr ""
-
-msgid "Editing file"
-msgstr ""
-
-msgid "Creating file"
-msgstr ""
-
-msgid "File path"
-msgstr ""
-
-msgid "Files (#)"
-msgstr ""
-
-msgid "Size (MB)"
-msgstr ""
-
-msgid "TOTAL"
-msgstr ""
-
-msgid "New file"
-msgstr ""
-
-msgid "Unable to find any poll that matches your search."
-msgstr ""
-
-msgid "Votes"
-msgstr ""
-
-msgid "Editing poll"
-msgstr ""
-
-msgid "Creating a poll"
-msgstr ""
-
-msgid "Visualization format"
-msgstr ""
-
-msgid "Bars"
-msgstr ""
-
-msgid "Circular"
-msgstr ""
-
-msgid "Answers"
-msgstr ""
-
-msgid "No votes"
-msgstr ""
-
-msgid "Remove poll answer"
-msgstr ""
-
-msgid "Add new answer"
-msgstr ""
-
-msgid "Publication closed date"
-msgstr ""
-
-msgid "Poll section preferences"
-msgstr ""
-
-msgid "Values type"
-msgstr ""
-
-msgid "Percents"
-msgstr ""
-
-msgid "Vote count"
-msgstr ""
-
-msgid "Charts height"
-msgstr ""
-
-msgid "Charts width"
-msgstr ""
-
-msgid "Poll home widget preferences"
-msgstr ""
-
-msgid "Elements in frontpage widget"
-msgstr ""
-
-msgid "Chart width"
-msgstr ""
-
-msgid "Chart height"
-msgstr ""
-
-msgid "New poll"
-msgstr ""
-
-msgid "Upgrade instance"
-msgstr ""
-
-msgid "Are you sure you want to proceed with this upgrade ?"
-msgstr ""
-
-msgid "Request upgrade"
-msgstr ""
-
-msgid "My account"
-msgstr ""
-
-msgid "This is the email used to create your newspaper"
-msgstr ""
-
-msgid "Your newspaper was created on %1"
-msgstr ""
-
-msgid "Plan"
-msgstr ""
-
-msgid "Base + Modules"
-msgstr ""
-
-msgid "Support plan"
-msgstr ""
-
-msgid "Support by tickets"
-msgstr ""
-
-msgid "Storage size"
-msgstr ""
-
-msgid "Page views this month"
-msgstr ""
-
-msgid "coming soon... work in progress..."
-msgstr ""
-
-msgid ""
-"Note: this number has not being used for billing purpose. Billing pageviews "
-"count goes from 26th to 25th of each month."
-msgstr ""
-
-msgid "Max"
-msgstr ""
-
-msgid "Opennemas offers many more modules and solutions"
-msgstr ""
-
-msgid "Check out our modules"
-msgstr ""
-
-msgid ""
-"If you need a custom plan or you want to purchase a plan or module please "
-"click in the next link:"
-msgstr ""
-
-msgid "Contact Us"
-msgstr ""
-
-msgid ""
-"Something wrong? Contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-
-msgid "You have no billing information"
-msgstr ""
-
-msgid "You will be asked to add it during the checkout in our store"
-msgstr ""
-
-msgid "Activated plans & modules"
-msgstr ""
-
-msgid "Upgrade"
-msgstr ""
-
-msgid "Waiting for upgrade"
-msgstr ""
-
-msgid "List of modules to hire"
-msgstr ""
-
-msgid "List of modules to unsubscribe"
-msgstr ""
-
-msgid "Delete multiple images"
-msgstr ""
-
-msgid "Delete image"
-msgstr ""
-
-msgid "Files uploaded successfully"
-msgstr ""
-
-msgid ""
-"The dropped files are uploaded but you should complete their information."
-msgstr ""
-
-msgid "Edit images"
-msgstr ""
-
-msgid "Are you sure you want to delete <span>%num%</span> images?"
-msgstr ""
-
-msgid "Editing image"
-msgstr ""
-
-msgid "Pick a location for the image"
-msgstr ""
-
-msgid "Geolocate photo with my position"
-msgstr ""
-
-msgid "Assign location"
+msgid "Come back later."
 msgstr ""
 
 msgid "Edit uploaded"
@@ -7713,6 +6675,37 @@ msgstr ""
 msgid "Iniciar"
 msgstr ""
 
+msgid "Delete multiple images"
+msgstr ""
+
+msgid "Delete image"
+msgstr ""
+
+msgid "Are you sure you want to delete <span>%num%</span> images?"
+msgstr ""
+
+msgid "Files uploaded successfully"
+msgstr ""
+
+msgid ""
+"The dropped files are uploaded but you should complete their information."
+msgstr ""
+
+msgid "Edit images"
+msgstr ""
+
+msgid "Editing image"
+msgstr ""
+
+msgid "Pick a location for the image"
+msgstr ""
+
+msgid "Geolocate photo with my position"
+msgstr ""
+
+msgid "Assign location"
+msgstr ""
+
 msgid "Original filename:"
 msgstr ""
 
@@ -7758,310 +6751,1138 @@ msgstr ""
 msgid "No tags"
 msgstr ""
 
-msgid "Add new item"
+msgid "Restore"
 msgstr ""
 
-msgid "Album Categories"
+msgid "Content Type"
 msgstr ""
 
-msgid "Video Categories"
+msgid "-- All --"
 msgstr ""
 
-msgid "Poll Categories"
+msgid "No contents in the trash that matches your search."
 msgstr ""
 
-msgid "Sync Categories"
+msgid "Remove permanently"
 msgstr ""
 
-msgid "Automatic Categories"
-msgstr ""
-
-msgid "Sync Automatic Categories"
+msgid "Delete all trashed contents"
 msgstr ""
 
 msgid ""
-"Fill the below form with the title and the external URL you want to add to "
-"the menu."
+"Are you sure you want to remove permanently all the contents inside the "
+"trash?"
 msgstr ""
 
-msgid "Add item"
+msgid "Creating article"
 msgstr ""
 
-msgid "Module"
+msgid "Editing article"
 msgstr ""
 
-msgid "Category blog"
+msgid "Updating"
 msgstr ""
 
-msgid "Album category"
+msgid "Update"
 msgstr ""
 
-msgid "Poll category"
+msgid "Saving"
 msgstr ""
 
-msgid "Video Category"
+msgid "Inner title"
 msgstr ""
 
-msgid "Synched category"
+msgid "Signature"
 msgstr ""
 
-msgid "Synched blog category"
+msgid "Pretitle"
 msgstr ""
 
-msgid "Editing menu"
+msgid "Suggested for frontpage"
 msgstr ""
 
-msgid "Creating menu"
+msgid "Slug"
 msgstr ""
 
-msgid ""
-"(If your theme has defined positions for menus you can assign one menu to "
-"each of them)"
+msgid "Schedule"
 msgstr ""
 
-msgid "Menu contents"
+msgid "Publication start date"
 msgstr ""
 
-msgid "Use drag and drop to sort and nest elements"
+msgid "Server hour:"
 msgstr ""
 
-msgid "Add items"
+msgid "Publication end date"
 msgstr ""
 
-msgid "Unable to find any menu that matches your search."
+msgid "Only available for subscribers"
 msgstr ""
 
-msgid "Position assigned"
+msgid "Suggest this element to home"
 msgstr ""
 
-msgid "Select modules"
+msgid "Suggest to home"
 msgstr ""
 
-msgid "Select all"
+msgid "Unsuggest this element to home"
 msgstr ""
 
-msgid "New instance"
+msgid "Unsuggest to home"
 msgstr ""
 
-msgid "Edit instance"
+msgid "Customize"
 msgstr ""
 
-msgid "Owner email"
+msgid "Settings for frontpage"
 msgstr ""
 
-msgid "Created from"
+msgid "Text size for title"
 msgstr ""
 
-msgid "Media size"
+msgid "Image position"
 msgstr ""
 
-msgid "(Human readable name)"
+msgid "Settings home frontpage"
 msgstr ""
 
-msgid "Template"
+msgid "Title for home frontpage"
 msgstr ""
 
-msgid "Contact mail"
+msgid "Images assigned"
 msgstr ""
 
-msgid "No main domain"
+msgid "Image to show in frontpages"
 msgstr ""
 
-msgid "Instance domains cannot be empty."
+msgid "Image to show in inner"
 msgstr ""
 
-msgid "Domain expire date:"
+msgid "Home image"
 msgstr ""
 
-msgid "Billing"
+msgid "Video for frontpage"
 msgstr ""
 
-msgid "Add billing information"
+msgid "Pick a video"
 msgstr ""
 
-msgid "Last invoice date"
+msgid "File name"
 msgstr ""
 
-msgid "pending activation"
+msgid "Footer text for inner video:"
 msgstr ""
 
-msgid "pending deactivation"
+msgid "Video for inner article page"
 msgstr ""
 
-msgid "Support"
+msgid "Unable to find any article that matches your search."
 msgstr ""
 
-msgid "Alphanumeric, without spaces"
+msgid "No available articles."
 msgstr ""
 
-msgid "Database"
+msgid "Available from"
 msgstr ""
 
-msgid "Maximun activated users"
+msgid "to"
 msgstr ""
 
-msgid "0 for unlimited users"
+msgid "Related contents"
 msgstr ""
 
-msgid "Minimum password level"
+msgid "Related in frontpage"
 msgstr ""
 
-msgid "Default"
+msgid "Related in inner"
 msgstr ""
 
-msgid "Weak"
+msgid "Related in home"
 msgstr ""
 
-msgid "Good"
+msgid "Gallery for frontpage"
 msgstr ""
 
-msgid "Strong"
+msgid "Only one album"
 msgstr ""
 
-msgid "Maximun number of emails sent by month"
+msgid "Add gallery"
 msgstr ""
 
-msgid "Piwik Statistics"
+msgid "Gallery for inner"
 msgstr ""
 
-msgid "Page ID:"
+msgid "Gallery for Home"
 msgstr ""
 
-msgid ""
-"You can get your Piwik Site information from <a href=\"https://piwik."
-"openhost.es/admin\">our Piwik server</a>."
+msgid "Creating special"
 msgstr ""
 
-msgid "Server url"
+msgid "Editing special"
 msgstr ""
 
-msgid "There was an error while creating an instance with the following data:"
+msgid "List of words separated by commas."
 msgstr ""
 
-msgid "Instance name"
+msgid "Image for Special"
 msgstr ""
 
-msgid "Instance internal_name"
+msgid "Special contents"
 msgstr ""
 
-msgid "Instance contact_mail"
+msgid "Articles in left column"
 msgstr ""
 
-msgid "Instance domains"
+msgid "Click here to add contents"
 msgstr ""
 
-msgid "A new instance has been created"
+msgid "Articles in right column"
 msgstr ""
 
-msgid "You can access your newspaper with the information bellow"
+msgid "You must put %1 specials in the HOME"
 msgstr ""
 
-msgid "Newspaper URL"
+msgid "Unable to find any special that matches your search."
 msgstr ""
 
-msgid "Sincerely"
+msgid "Number of elements in widget home"
 msgstr ""
 
 msgid ""
-"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
+"Use  total in widget special for define how many videos can see in widgets "
+"in newspaper frontpage"
 msgstr ""
 
-msgid "Hi"
-msgstr ""
-
-msgid "Your newspaper is already live:"
-msgstr ""
-
-msgid "Webpage:"
-msgstr ""
-
-msgid "Admin panel:"
+msgid "Time of the last special most viewed (days):"
 msgstr ""
 
 msgid ""
-"For security reasons we advise you to change your password after first login "
-"to Admin Panel."
+"Used to define the frontpage specials, the time range of the latest specials "
+"are the most viewed"
+msgstr ""
+
+msgid "Config special module"
+msgstr ""
+
+msgid "Delete category"
+msgstr ""
+
+msgid "Delete all the contents in category"
 msgstr ""
 
 msgid ""
-"If you have doubts about frontpage management or need a quick walk through "
-"we have <strong>video demo</strong> 3 minutes long"
+"Are you sure that do you want delete all the contents in the category "
+"\"<span>%title%</span>\"?"
+msgstr ""
+
+msgid "Editing category"
+msgstr ""
+
+msgid "Creating category"
+msgstr ""
+
+msgid "Config categories module"
+msgstr ""
+
+msgid "Subsection of"
+msgstr ""
+
+msgid "Subsections"
+msgstr ""
+
+msgid "Internal name"
+msgstr ""
+
+msgid "In menu"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Category available for"
+msgstr ""
+
+msgid "All contents"
+msgstr ""
+
+msgid "ePaper"
+msgstr ""
+
+msgid "Category logo"
+msgstr ""
+
+msgid "Change image headers and colors in frontpages"
 msgstr ""
 
 msgid ""
-"How to create/edit <strong>articles</strong> and place them in a frontpage"
+"Enable this if you want to use a custom image and color in your category "
+"frontpages"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
+
+msgid "Delete all the contents in this category"
+msgstr ""
+
+msgid "For articles"
+msgstr ""
+
+msgid "For albums"
+msgstr ""
+
+msgid "For videos"
+msgstr ""
+
+msgid "For ePapers"
+msgstr ""
+
+msgid "For polls"
+msgstr ""
+
+msgid "For Specials"
+msgstr ""
+
+msgid "For books"
+msgstr ""
+
+msgid "Show in rss"
+msgstr ""
+
+msgid "No available categories for listing"
+msgstr ""
+
+msgid "Change comment manager"
 msgstr ""
 
 msgid ""
-"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
-"articles&nbsp;"
+"Opennemas supports multiple managers for comments. You can change to your "
+"desired manager whenever you want."
 msgstr ""
 
-msgid "How to compose a&nbsp;<strong>frontpage</strong>"
+msgid "Pick the method to manage comments:"
 msgstr ""
 
-msgid "We also have help page \"First Steps in Opennemas\" that should help"
-msgstr ""
-
-msgid "Filter by name, domain or contact"
-msgstr ""
-
-msgid "Columns"
-msgstr ""
-
-msgid "Domain expire"
-msgstr ""
-
-msgid "Last activity"
-msgstr ""
-
-msgid "Alexa"
-msgstr ""
-
-msgid "Page views"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-msgid "#"
-msgstr ""
-
-msgid "There is no available instances yet"
-msgstr ""
-
-msgid "No rank"
-msgstr ""
-
-msgid "Showing"
-msgstr ""
-
-msgid "of"
-msgstr ""
-
-msgid "We seem to have lost you in the clouds."
-msgstr ""
-
-msgid "The page your looking for is not here"
-msgstr ""
-
-msgid "Help &amp; FAQ"
-msgstr ""
-
-msgid "Privacy"
-msgstr ""
-
-msgid "New user"
-msgstr ""
-
-msgid "User group"
+msgid "Built-in system"
 msgstr ""
 
 msgid ""
-"There is no users created yet or <br/>your search don't match your criteria"
+"Opennemas has simple but effective comment system that requires zero "
+"configuration."
+msgstr ""
+
+msgid ""
+"Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
+"comment system</a> and use their powerful system to manage your website "
+"comments."
+msgstr ""
+
+msgid ""
+"Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
+"plugins/comments/\">Facebook comment system</a> and use their online tools "
+"to manage your website comments."
+msgstr ""
+
+msgid ""
+"Are you sure that do you want send to the trash this comment from \"[% "
+"template.content.author %]\"?"
+msgstr ""
+
+msgid "Editing comment"
+msgstr ""
+
+msgid "Submitted on"
+msgstr ""
+
+msgid "Sent from IP address"
+msgstr ""
+
+msgid "Commented on"
+msgstr ""
+
+msgid "Disqus"
+msgstr ""
+
+msgid "Change comments module"
+msgstr ""
+
+msgid "Set your Disqus configuration"
+msgstr ""
+
+msgid ""
+"A shortname is the unique identifier assigned to a Disqus site. All the "
+"comments posted to a site are referenced with the shortname"
+msgstr ""
+
+msgid ""
+"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">here</a>"
+msgstr ""
+
+msgid "Disqus module configuration"
+msgstr ""
+
+msgid "To moderate your Disqus comments, click here"
+msgstr ""
+
+msgid "Disqus not configured"
+msgstr ""
+
+msgid ""
+"To be able to moderate comments of your site in Facebook you must create and "
+"set here your <strong>Facebook App Id</strong>."
+msgstr ""
+
+msgid ""
+"You can get your Facebook App Keys from <a href=\"https://developers."
+"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
+msgstr ""
+
+msgid "Config facebook module"
+msgstr ""
+
+msgid "You are now using Facebook comments"
+msgstr ""
+
+msgid ""
+"If you want to moderate comments, you first need to create a Facebook "
+"application in <a href=\"https://developers.facebook.com/\" target=\"_blank"
+"\">here</a> to get an application Id and then click on settings to configure "
+"it"
+msgstr ""
+
+msgid ""
+"To moderate your comments go to <a href=\"https://developers.facebook.com/"
+"tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Number of comments to show by page"
+msgstr ""
+
+msgid "Allow comments in contents by default"
+msgstr ""
+
+msgid ""
+"Whether to allow users to comment in comments by default for all contents "
+"(you can change this setting for specific contents)"
+msgstr ""
+
+msgid "Before a comment appears"
+msgstr ""
+
+msgid "An administrator must always approve the comment "
+msgstr ""
+
+msgid "Config comments module"
+msgstr ""
+
+msgid "Search by body"
+msgstr ""
+
+msgid "Unable to find any comment that matches your search."
+msgstr ""
+
+msgid "Maybe changing any filter could help."
+msgstr ""
+
+msgid "In response to"
+msgstr ""
+
+msgid "Author:"
+msgstr ""
+
+msgid "Submitted on:"
+msgstr ""
+
+msgid "Editing opinion"
+msgstr ""
+
+msgid "Creating opinion"
+msgstr ""
+
+msgid "In homepage"
+msgstr ""
+
+msgid "-- Select opinion type --"
+msgstr ""
+
+msgid "Opinion from author"
+msgstr ""
+
+msgid "Opinion from editorial"
+msgstr ""
+
+msgid "Director's letter"
+msgstr ""
+
+msgid "Blog"
+msgstr ""
+
+msgid "Director Articles"
+msgstr ""
+
+msgid "Editorial Articles"
+msgstr ""
+
+msgid "Other Articles"
+msgstr ""
+
+msgid "Editorial"
+msgstr ""
+
+msgid "Director"
+msgstr ""
+
+msgid "Views"
+msgstr ""
+
+msgid "Unable to find any opinion that matches your search."
+msgstr ""
+
+msgid "There is no opinions yet."
+msgstr ""
+
+msgid "Director opinions in Opinion frontpage"
+msgstr ""
+
+msgid "How many director opinions will be shown in the opinion frontpage."
+msgstr ""
+
+msgid "Editorial opinions in Opinion frontpage"
+msgstr ""
+
+msgid "How many editorial opinions will be shown in the opinion frontpage."
+msgstr ""
+
+msgid "Opinions in Opinion frontpage"
+msgstr ""
+
+msgid "How many opinions opinions will be shown in the opinion frontpage."
+msgstr ""
+
+msgid "Author opinions in frontpage opinion widget"
+msgstr ""
+
+msgid "How many author opinions will be shown in the widget."
+msgstr ""
+
+msgid "Order blog's frontpage by"
+msgstr ""
+
+msgid "Select if order blogs's frontpages by created date or bloggers name."
+msgstr ""
+
+msgid "Created Date"
+msgstr ""
+
+msgid "Blogger"
+msgstr ""
+
+msgid "Config opinion module"
+msgstr ""
+
+msgid "%1 doesn’t exist."
+msgstr ""
+
+msgid "Do you want to register %1?"
+msgstr ""
+
+msgid "'%1' not activated - Opennemas"
+msgstr ""
+
+msgid "%1 temporary deactivated."
+msgstr ""
+
+msgid "Editing keyword"
+msgstr ""
+
+msgid "Creating keyword"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Filter by name"
+msgstr ""
+
+msgid "Unable to find any keyword that matches your search."
+msgstr ""
+
+msgid "Keyword"
+msgstr ""
+
+msgid "External link to "
+msgstr ""
+
+msgid "Internal search to keyword"
+msgstr ""
+
+msgid "Link to send email to"
+msgstr ""
+
+msgid "Edit this content"
+msgstr ""
+
+msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
+msgstr ""
+
+msgid "Delete albums"
+msgstr ""
+
+msgid "Delete album"
+msgstr ""
+
+msgid "Are you sure that do you want delete \"[% content.name %]\"?"
+msgstr ""
+
+msgid "Are you sure you want to delete <span>%num%</span> albums?"
+msgstr ""
+
+msgid "Complete all the required album information before save it"
+msgstr ""
+
+msgid "Check that you have included more than one image in this album"
+msgstr ""
+
+msgid "Assign an image as a cover image"
+msgstr ""
+
+msgid "Editing album"
+msgstr ""
+
+msgid "Creating Album"
+msgstr ""
+
+msgid "Album images"
+msgstr ""
+
+msgid "Add images"
+msgstr ""
+
+msgid "Cover image"
+msgstr ""
+
+msgid "Unable to find any album that matches your search."
+msgstr ""
+
+msgid "Album details"
+msgstr ""
+
+msgid "You must put %1 albums in the HOME"
+msgstr ""
+
+msgid ""
+"Use  total in widget album for define how many albums can see in widgets in "
+"frontpage"
+msgstr ""
+
+msgid "Cover size in widget album (width x height)"
+msgstr ""
+
+msgid "Order album's frontpage by"
+msgstr ""
+
+msgid ""
+"Select if order album's frontpage by most views or albums checked as "
+"favorites."
+msgstr ""
+
+msgid "Most views"
+msgstr ""
+
+msgid "Favorites"
+msgstr ""
+
+msgid "Time of the last album most viewed (days)"
+msgstr ""
+
+msgid "Total in album frontpage"
+msgstr ""
+
+msgid "Use this to define how many albums can see in the album frontpage."
+msgstr ""
+
+msgid "Total in album frontpage/widget more albums"
+msgstr ""
+
+msgid "Total number of album on more albums section in album home frontpage"
+msgstr ""
+
+msgid "New album"
+msgstr ""
+
+msgid "New version available"
+msgstr ""
+
+msgid ""
+"There is a new version for this frontpage, if you try to save the current "
+"changes the new version will be overwritten."
+msgstr ""
+
+msgid "Reload frontpage"
+msgstr ""
+
+msgid "Are you sure that do you want to send to trash the next element?"
+msgstr ""
+
+msgid "Customize font and color style"
+msgstr ""
+
+msgid "Image disposition in frontpage"
+msgstr ""
+
+msgid "Background Color"
+msgstr ""
+
+msgid "White"
+msgstr ""
+
+msgid "Light Blue"
+msgstr ""
+
+msgid "Light Red"
+msgstr ""
+
+msgid "Light Orange"
+msgstr ""
+
+msgid "Light purple"
+msgstr ""
+
+msgid "Light yellow"
+msgstr ""
+
+msgid "Bold blue"
+msgstr ""
+
+msgid "Gray"
+msgstr ""
+
+msgid "Title font color"
+msgstr ""
+
+msgid "Title font family"
+msgstr ""
+
+msgid "Title font style"
+msgstr ""
+
+msgid "Title font weight"
+msgstr ""
+
+msgid "Title font size"
+msgstr ""
+
+msgid "Top Wide Image"
+msgstr ""
+
+msgid "Image wide"
+msgstr ""
+
+msgid "Top right Image"
+msgstr ""
+
+msgid "image-top-right"
+msgstr ""
+
+msgid "Top Left Image"
+msgstr ""
+
+msgid "image-top-left"
+msgstr ""
+
+msgid "Wide image"
+msgstr ""
+
+msgid "image-middle-wide"
+msgstr ""
+
+msgid "Right image"
+msgstr ""
+
+msgid "image-middle-left"
+msgstr ""
+
+msgid "Left image"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Archive this element"
+msgstr ""
+
+msgid "Are you sure that do you want to archive the next element?"
+msgstr ""
+
+msgid ""
+"This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
+"will remain available for read."
+msgstr ""
+
+msgid "Please, remember save positions after finish."
+msgstr ""
+
+msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
+msgstr ""
+
+msgid ""
+"You have reached the maximum number of elements (100). To add new contents "
+"remove the older."
+msgstr ""
+
+msgid "Preview frontpage with actual content positions"
+msgstr ""
+
+msgid "Managing frontpage:"
+msgstr ""
+
+msgid ""
+"The frontpage manager is currently <strong>unavaible for your screen size</"
+"strong>"
+msgstr ""
+
+msgid "Available contents"
+msgstr ""
+
+msgid "Suggested"
+msgstr ""
+
+msgid "Others in category"
+msgstr ""
+
+msgid "Latest articles"
+msgstr ""
+
+msgid "Change the layout of this frontpage"
+msgstr ""
+
+msgid "Premium users"
+msgstr ""
+
+msgid "Create new user"
+msgstr ""
+
+msgid "Last login"
+msgstr ""
+
+msgid "End of subscription"
+msgstr ""
+
+msgid "--All--"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Registered"
+msgstr ""
+
+msgid "Expired"
+msgstr ""
+
+msgid "%1 users"
+msgstr ""
+
+msgid "Export list"
+msgstr ""
+
+msgid "Purchases"
+msgstr ""
+
+msgid "Filter by name or email"
+msgstr ""
+
+msgid "Sort by"
+msgstr ""
+
+msgid "Payment date"
+msgstr ""
+
+msgid "%1 purchases"
+msgstr ""
+
+msgid "Paypal API authentication"
+msgstr ""
+
+msgid "Get this parameters from your "
+msgstr ""
+
+msgid "Paypal identification data"
+msgstr ""
+
+msgid "Use the testing environment Sandbox"
+msgstr ""
+
+msgid "Real mode (recommended)"
+msgstr ""
+
+msgid "Testing mode"
+msgstr ""
+
+msgid ""
+"Paypal allows you to enable a testing environment where <strong>all the "
+"transactions will not be real</strong>, so you can test if the paywall is "
+"working well."
+msgstr ""
+
+msgid ""
+"Active a testing environment in your Paypal account (only if you are a "
+"developer)"
+msgstr ""
+
+msgid "More information"
+msgstr ""
+
+msgid "Validate here your Paypal API credentials in the selected mode"
+msgstr ""
+
+msgid "Validate"
+msgstr ""
+
+msgid "Currency & taxes"
+msgstr ""
+
+msgid "Money unit"
+msgstr ""
+
+msgid "VAT %"
+msgstr ""
+
+msgid "Payment modes"
+msgstr ""
+
+msgid ""
+"Below you can add different payment modes by including the time range that "
+"the user can purchase, the description and the price"
+msgstr ""
+
+msgid "Add new payment mode"
+msgstr ""
+
+msgid "Recurring payments (optional)"
+msgstr ""
+
+msgid ""
+"Paypal allow your users to subscribe to your Paywall through recurring "
+"payments. This means that your users will be charged periodically without "
+"having to worry about payments and due dates, and will allow you to increase "
+"the user engagement."
+msgstr ""
+
+msgid "Mark this if you want to enable recurring payments"
+msgstr ""
+
+msgid ""
+"You have to activate some options in the Paypal configuration to make "
+"recurring payments work. Please follow next steps:"
+msgstr ""
+
+msgid "Go to your merchant Paypal"
+msgstr ""
+
+msgid "IPN web configuration page "
+msgstr ""
+
+msgid " and log in with your merchant account"
+msgstr ""
+
+msgid "Click in the \"Choose IPN configuration\" button"
+msgstr ""
+
+msgid "Fill in the \"Notification URL\" field with this address"
+msgstr ""
+
+msgid "Enable the \"Receive IPN messages\" checkbox"
+msgstr ""
+
+msgid ""
+"Click on the validate button to check ipn is working fine and enable "
+"recurring payment"
+msgstr ""
+
+msgid "Waiting"
+msgstr ""
+
+msgid "Valid"
+msgstr ""
+
+msgid "Finally, click in the \"Save\" button to save this configuration"
+msgstr ""
+
+msgid "Accept Opennemas payment agreements terms"
+msgstr ""
+
+msgid ""
+"Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
+"\">payment agreements terms</a> of Opennemas"
+msgstr ""
+
+msgid "Set a price"
+msgstr ""
+
+msgid "Order id"
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "Show all…"
+msgstr ""
+
+msgid "No purchases were made yet."
+msgstr ""
+
+msgid "No paywall users yet."
+msgstr ""
+
+msgid ""
+"The paywall allows you to monetize your contents by enabling a subscription "
+"enabled model access to your contents."
+msgstr ""
+
+msgid "Subscribed users"
+msgstr ""
+
+msgid "Lastest purchases"
+msgstr ""
+
+msgid "Purchases last month"
+msgstr ""
+
+msgid "Reset <strong>password</strong>"
+msgstr ""
+
+msgid "We've sent an e-mail to"
+msgstr ""
+
+msgid ""
+"Please check your e-mail now for a message with the subject line \"Password "
+"reminder\"."
+msgstr ""
+
+msgid ""
+"If you use e-mail filtering or anti-spam software,please make sure our e-"
+"mail is not filtered or blocked."
+msgstr ""
+
+msgid "Enter your e-mail address and click Submit to recover your password."
+msgstr ""
+
+msgid "Go back to login"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Sign into open<strong>nemas</strong>"
+msgstr ""
+
+msgid "Use Facebook, Twitter or your email to sign in."
+msgstr ""
+
+msgid "Username or email"
+msgstr ""
+
+msgid "Forgot Password?"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Recover password"
+msgstr ""
+
+msgid ""
+"Please enter your new password in both fields below, and then click Submit."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr ""
+
+msgid "Dear member"
+msgstr ""
+
+msgid "Per your request, please follow these steps to regain access to"
+msgstr ""
+
+msgid "Click the link below to choose a new password"
+msgstr ""
+
+msgid ""
+"If the link is not clickable, you can copy and paste the address into your "
+"Web browser's address window"
+msgstr ""
+
+msgid ""
+"Follow the instructions on the screen to choose a new password.  After you "
+"have chosen a password you will automatically enter"
+msgstr ""
+
+msgid "In the future you can login to"
+msgstr ""
+
+msgid "by entering your e-mail address and this password"
+msgstr ""
+
+msgid "If you did not request your ID and password for"
+msgstr ""
+
+msgid ""
+"someone has mistakenly entered your e-mail address when requesting their "
+"password"
+msgstr ""
+
+msgid ""
+"Please ignore this message, or, if you wish, you may go to the address above "
+"to select a new password for your account"
+msgstr ""
+
+msgid ""
+"To protect your privacy, we will only send this information to the e-mail "
+"address on file for this account"
+msgstr ""
+
+msgid "Delete books"
+msgstr ""
+
+msgid "Delete book"
+msgstr ""
+
+msgid "Are you sure you want to delete <span>%num%</span> books?"
+msgstr ""
+
+msgid "Creating Book"
+msgstr ""
+
+msgid "Editing Book"
+msgstr ""
+
+msgid "Separated by comas"
+msgstr ""
+
+msgid "Unable to find any book that matches your search."
+msgstr ""
+
+msgid "You must put %1 books in the HOME"
+msgstr ""
+
+msgid "New book"
 msgstr ""
 
 msgid "Report"
@@ -8070,22 +7891,66 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
+msgid "There is no available instances yet"
+msgstr ""
+
 msgid ""
 "There is no reports created yet or <br/>your search don't match your criteria"
 msgstr ""
 
+msgid "New user group"
+msgstr ""
+
+msgid "Selected privileges"
+msgstr ""
+
+msgid "Toggle all privileges"
+msgstr ""
+
+msgid "[% section.title %]"
+msgstr ""
+
+msgid "Users groups"
+msgstr ""
+
 msgid ""
-"Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
-"                        from one specific instance."
+"There is no available groups yet or <br/>your search don't match your "
+"criteria"
 msgstr ""
 
-msgid "New version"
+msgid "Edit group"
 msgstr ""
 
-msgid "A new version of Opennemas is downloaded. Launch it?"
+msgid "Showing"
 msgstr ""
 
-msgid "Launch"
+msgid "of"
+msgstr ""
+
+msgid "Initializing"
+msgstr ""
+
+msgid ""
+"Your browser was unable to load all of Opennemas's resources. They may have "
+"been blocked by your firewall, proxy or browser configuration."
+msgstr ""
+
+msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
+msgstr ""
+
+msgid "Instance"
+msgstr ""
+
+msgid "Notification"
+msgstr ""
+
+msgid "Opennemas manager"
+msgstr ""
+
+msgid "Use manager account to sign in."
+msgstr ""
+
+msgid "Login"
 msgstr ""
 
 msgid "Download CSV of selected"
@@ -8148,6 +8013,15 @@ msgstr ""
 msgid "delete them"
 msgstr ""
 
+msgid "New version"
+msgstr ""
+
+msgid "A new version of Opennemas is downloaded. Launch it?"
+msgstr ""
+
+msgid "Launch"
+msgstr ""
+
 msgid "Welcome to OpenNeMas instance manager"
 msgstr ""
 
@@ -8155,6 +8029,116 @@ msgid ""
 "Here you will see some statistics about <strong>instances</strong> and other "
 "<br>\n"
 "        awesome things that will blow out your imagination."
+msgstr ""
+
+msgid "Zend Opcache status"
+msgstr ""
+
+msgid "Opcache summary"
+msgstr ""
+
+msgid "Detailed statistics"
+msgstr ""
+
+msgid "Scripts"
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Hits"
+msgstr ""
+
+msgid "Command output"
+msgstr ""
+
+msgid "Command name:"
+msgstr ""
+
+msgid "Command name"
+msgstr ""
+
+msgid "Params"
+msgstr ""
+
+msgid "Cleans the cache for an specific instance"
+msgstr ""
+
+msgid ""
+"Select the desired instance where clean cache and compile files in.\n"
+"                                <br>Select 'All' for cleaning all the cache/"
+"compile files."
+msgstr ""
+
+msgid "Execute"
+msgstr ""
+
+msgid ""
+"Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
+"                        from one specific instance."
+msgstr ""
+
+msgid "New notification"
+msgstr ""
+
+msgid "Edit notification"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Fixed"
+msgstr ""
+
+msgid "Notification always visible"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "Click to set date"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Domain expire"
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "Database"
+msgstr ""
+
+msgid "Media size"
+msgstr ""
+
+msgid "Alexa"
+msgstr ""
+
+msgid "Page views"
+msgstr ""
+
+msgid "Emails"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "#"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
 msgstr ""
 
 msgid "Our Videos"
@@ -8194,129 +8178,203 @@ msgid ""
 "<span style=\"color:#000000\">Team</span>"
 msgstr ""
 
-msgid "New user group"
+msgid "New instance"
 msgstr ""
 
-msgid "Selected privileges"
+msgid "Edit instance"
 msgstr ""
 
-msgid "Toggle all privileges"
+msgid "Owner email"
 msgstr ""
 
-msgid "[% section.title %]"
+msgid "Created from"
 msgstr ""
 
-msgid "Users groups"
+msgid "(Human readable name)"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "Contact mail"
+msgstr ""
+
+msgid "No main domain"
+msgstr ""
+
+msgid "Instance domains cannot be empty."
+msgstr ""
+
+msgid "Domain expire date:"
+msgstr ""
+
+msgid "Billing"
+msgstr ""
+
+msgid "Add billing information"
+msgstr ""
+
+msgid "Last invoice date"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "pending activation"
+msgstr ""
+
+msgid "pending deactivation"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Alphanumeric, without spaces"
+msgstr ""
+
+msgid "Maximun activated users"
+msgstr ""
+
+msgid "0 for unlimited users"
+msgstr ""
+
+msgid "Minimum password level"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Weak"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Strong"
+msgstr ""
+
+msgid "Maximun number of emails sent by month"
+msgstr ""
+
+msgid "Piwik Statistics"
+msgstr ""
+
+msgid "Page ID:"
 msgstr ""
 
 msgid ""
-"There is no available groups yet or <br/>your search don't match your "
-"criteria"
+"You can get your Piwik Site information from <a href=\"https://piwik."
+"openhost.es/admin\">our Piwik server</a>."
 msgstr ""
 
-msgid "Edit group"
+msgid "Server url"
 msgstr ""
 
-msgid "Initializing"
+msgid "Select modules"
 msgstr ""
 
-msgid ""
-"Your browser was unable to load all of Opennemas's resources. They may have "
-"been blocked by your firewall, proxy or browser configuration."
+msgid "Filter by name, domain or contact"
 msgstr ""
 
-msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
+msgid "Last activity"
 msgstr ""
 
-msgid "Instance"
-msgstr ""
-
-msgid "Notification"
-msgstr ""
-
-msgid "Opennemas manager"
-msgstr ""
-
-msgid "Use manager account to sign in."
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "Command output"
-msgstr ""
-
-msgid "Command name:"
-msgstr ""
-
-msgid "Command name"
-msgstr ""
-
-msgid "Params"
-msgstr ""
-
-msgid "Cleans the cache for an specific instance"
+msgid "No rank"
 msgstr ""
 
 msgid ""
-"Select the desired instance where clean cache and compile files in.\n"
-"                                <br>Select 'All' for cleaning all the cache/"
-"compile files."
+"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
 msgstr ""
 
-msgid "Execute"
+msgid "Hi"
 msgstr ""
 
-msgid "Zend Opcache status"
+msgid "Your newspaper is already live:"
 msgstr ""
 
-msgid "Opcache summary"
+msgid "Webpage:"
 msgstr ""
 
-msgid "Detailed statistics"
+msgid "Admin panel:"
 msgstr ""
 
-msgid "Scripts"
+msgid ""
+"For security reasons we advise you to change your password after first login "
+"to Admin Panel."
 msgstr ""
 
-msgid "Path"
+msgid ""
+"If you have doubts about frontpage management or need a quick walk through "
+"we have <strong>video demo</strong> 3 minutes long"
 msgstr ""
 
-msgid "Memory"
+msgid ""
+"How to create/edit <strong>articles</strong> and place them in a frontpage"
 msgstr ""
 
-msgid "Hits"
+msgid ""
+"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
+"articles&nbsp;"
 msgstr ""
 
-msgid "New notification"
+msgid "How to compose a&nbsp;<strong>frontpage</strong>"
 msgstr ""
 
-msgid "Edit notification"
+msgid "We also have help page \"First Steps in Opennemas\" that should help"
 msgstr ""
 
-msgid "Style"
+msgid "A new instance has been created"
 msgstr ""
 
-msgid "Fixed"
+msgid "You can access your newspaper with the information bellow"
 msgstr ""
 
-msgid "Notification always visible"
+msgid "Newspaper URL"
 msgstr ""
 
-msgid "Starts"
+msgid "Sincerely"
 msgstr ""
 
-msgid "Click to set date"
+msgid "There was an error while creating an instance with the following data:"
 msgstr ""
 
-msgid "Ends"
+msgid "Instance name"
 msgstr ""
 
-msgid "Last access"
+msgid "Instance internal_name"
 msgstr ""
 
-msgid "Start"
+msgid "Instance contact_mail"
 msgstr ""
 
-msgid "End"
+msgid "Instance domains"
 msgstr ""
+
+msgid "We seem to have lost you in the clouds."
+msgstr ""
+
+msgid "The page your looking for is not here"
+msgstr ""
+
+msgid "Help &amp; FAQ"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "New user"
+msgstr ""
+
+msgid "User group"
+msgstr ""
+
+msgid "User type"
+msgstr ""
+
+msgid ""
+"There is no users created yet or <br/>your search don't match your criteria"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Please, fill your billing information below."
+#~ msgstr "Não foi possível gravar as informações da imagem."
