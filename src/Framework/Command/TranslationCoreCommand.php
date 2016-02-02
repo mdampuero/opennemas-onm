@@ -95,6 +95,7 @@ EOF
 
         $phpFiles = array(
             SRC_PATH.'*/*/*.php',
+            SRC_PATH.'*/*/*/*.php',
             SRC_PATH.'*/Resources/Menu.php',
             SITE_LIBS_PATH.'core/*.php',
             SITE_LIBS_PATH.'models/*.php',
