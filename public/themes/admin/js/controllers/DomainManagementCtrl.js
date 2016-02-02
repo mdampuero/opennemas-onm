@@ -259,6 +259,10 @@
          *   Maps the domain.
          */
         $scope.map = function() {
+          if (!$scope.domain) {
+            return;
+          }
+
           var domain = 'www.' + $scope.domain;
 
           if ($scope.domains.indexOf(domain) === -1) {
@@ -269,7 +273,7 @@
 
               $http.get(url).success(function() {
                 $scope.domains.push(domain);
-                $scope.domain.name = '';
+                $scope.domain = '';
                 $scope.loading = false;
               }).error(function(response) {
                 $scope.loading = false;
@@ -277,7 +281,7 @@
               });
             } else {
               $scope.domains.push(domain);
-              $scope.domain.name = '';
+              $scope.domain = '';
             }
           }
         };
