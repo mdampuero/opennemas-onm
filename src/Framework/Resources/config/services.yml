@@ -221,6 +221,9 @@ services:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ @entity_repository ]
 
+    content_cache:
+        class: Framework\Cache\ContentCache
+
     view:
         alias: onm_templating
 
