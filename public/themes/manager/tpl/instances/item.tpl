@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_instances_list') %]">
-              <i class="fa fa-cubes fa-lg"></i>
+              <i class="fa fa-cubes"></i>
               {t}Instances{/t}
             </a>
           </h4>

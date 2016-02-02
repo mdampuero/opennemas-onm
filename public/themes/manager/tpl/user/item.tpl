@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_users_list') %]">
-              <i class="fa fa-user fa-lg"></i>
+              <i class="fa fa-user"></i>
               {t}Users{/t}
             </a>
           </h4>
@@ -48,16 +48,6 @@
     <div class="row">
       <div class="col-sm-7">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <span class="semi-bold" ng-if="user.id">
-                [% user.name %]
-              </span>
-              <span class="semi-bold" ng-if="!user.id">
-                {t}New user{/t}
-              </span>
-            </h4>
-          </div>
           <div class="grid-body">
             <div class="form-group">
               <label class="control-label" for="name">

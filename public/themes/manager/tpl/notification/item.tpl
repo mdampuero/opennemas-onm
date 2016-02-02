@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
-              <i class="fa fa-bell fa-lg"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
+              <i class="fa fa-bell"></i>
               {t}Notifications{/t}
             </a>
           </h4>
@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!notification.id">
+            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!notification.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="notification.id">
+            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="notification.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -48,16 +48,6 @@
     <div class="row">
       <div class="col-md-8">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <span class="semi-bold" ng-if="notification.id">
-                [% notification.title.en %]
-              </span>
-              <span class="semi-bold" ng-if="!notification.id">
-                {t}New notification{/t}
-              </span>
-            </h4>
-          </div>
           <div class="grid-body notification-form no-padding">
             <div class="row p-l-15 p-r-15 p-t-15">
               <div class="col-lg-6">
@@ -104,7 +94,13 @@
               </div>
             </div>
             <ul class="fake-tabs">
-              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">[% value%]</li>
+              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">
+                [% value%]
+                <span class="orb" ng-class="{ 'orb-danger': countStringsLeft(key) > 0, 'orb-success': countStringsLeft(key) === 0 }">
+                  <i class="fa fa-check" ng-if="countStringsLeft(key) === 0"></i>
+                  <span ng-if="countStringsLeft(key) > 0">[% countStringsLeft(key) %]</span>
+                </span>
+              </li>
             </ul>
             <div class="row p-l-15 p-r-15 p-t-15">
               <div class="col-md-12">

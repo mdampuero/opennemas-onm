@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
-              <i class="fa fa-users fa-lg"></i>
+              <i class="fa fa-users"></i>
               {t}User Groups{/t}
             </a>
           </h4>
@@ -46,11 +46,6 @@
 <div class="content">
   <form name="groupForm" novalidate>
     <div class="grid simple">
-      <div class="grid-title">
-        <h4>
-          <span class="semi-bold">[% group.name %]</span>
-        </h4>
-      </div>
       <div class="grid-body">
         <div class="form-group">
           <label class="form-label">

@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
-              <i class="fa fa-users fa-lg"></i>
+              <i class="fa fa-users"></i>
               {t}Users groups{/t}
             </a>
           </h4>
