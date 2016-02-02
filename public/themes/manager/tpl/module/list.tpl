@@ -15,7 +15,7 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <a ng-href="[% routing.ngGenerate('manager_module_create') %]" class="btn btn-success">
-              <i class="fa fa-plus fa-lg"></i>
+              <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>
           </li>
@@ -46,7 +46,7 @@
           </ui-select>
           </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="refresh()">
+          <button class="btn btn-link" ng-click="list()">
             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
           </button>
         </li>
@@ -178,38 +178,38 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="text-center" ng-show="isEnabled('image')" width="120">
+              <th class="text-center" ng-show="isColumnEnabled('image')" width="120">
                 {t}Image{/t}
               </th>
-              <th ng-show="isEnabled('name')">
+              <th ng-show="isColumnEnabled('name')">
                 {t}Name{/t}
               </th>
-              <th class="pointer" ng-click="sort('uuid')" ng-show="isEnabled('uuid')" width="250">
+              <th class="pointer" ng-click="sort('uuid')" ng-show="isColumnEnabled('uuid')" width="250">
                 {t}UUID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('uuid') == 'asc', 'fa fa-caret-down': isOrderedBy('uuid') == 'desc'}"></i>
               </th>
-              <th ng-show="isEnabled('category')" width="150">
+              <th ng-show="isColumnEnabled('category')" width="150">
                 {t}Category{/t}
               </th>
-              <th class="text-center" ng-show="isEnabled('translations')" width="60">
+              <th class="text-center" ng-show="isColumnEnabled('translations')" width="60">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('author')" ng-show="isEnabled('author')" width="250">
+              <th class="pointer text-center" ng-click="sort('author')" ng-show="isColumnEnabled('author')" width="250">
                 {t}Author{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('author') == 'asc', 'fa fa-caret-down': isOrderedBy('author') == 'desc'}"></i>
               </th>
-              <th class="text-center"  ng-show="isEnabled('price')" width="150">
+              <th class="text-center"  ng-show="isColumnEnabled('price')" width="150">
                 {t}Price{/t}
               </th>
-              <th class="pointer text-center" ng-click="sort('created')" ng-show="isEnabled('created')" width="200">
+              <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="200">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('updated')" ng-show="isEnabled('updated')" width="200">
+              <th class="pointer text-center" ng-click="sort('updated')" ng-show="isColumnEnabled('updated')" width="200">
                 {t}Updated{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isEnabled('enabled')" width="50">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="50">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
@@ -229,10 +229,10 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isEnabled('image')">
+              <td ng-show="isColumnEnabled('image')">
                 <dynamic-image class="img-thumbnail" path="[% item.images[0] %]" raw="true"></dynamic-image>
               </td>
-              <td ng-show="isEnabled('name')">
+              <td ng-show="isColumnEnabled('name')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
                   [% item.name['en'] %]
                 </a>
@@ -245,16 +245,16 @@
                   </button>
                 </div>
               </td>
-              <td ng-show="isEnabled('uuid')">
+              <td ng-show="isColumnEnabled('uuid')">
                 [% item.uuid %]
               </td>
-              <td ng-show="isEnabled('category')">
+              <td ng-show="isColumnEnabled('category')">
                 <span ng-if="item.metas.category === 'module'">{t}Module{/t}</span>
                 <span ng-if="item.metas.category === 'pack'">{t}Pack{/t}</span>
                 <span ng-if="item.metas.category === 'partner'">{t}Partner{/t}</span>
                 <span ng-if="item.metas.category === 'service'">{t}Service{/t}</span>
               </td>
-              <td class="text-center" ng-show="isEnabled('translations')">
+              <td class="text-center" ng-show="isColumnEnabled('translations')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
                   <i class="fa fa-check""countStringsLeft(item) === 0"></i>
                 </span>
@@ -262,22 +262,22 @@
                   [% countStringsLeft(item) %]
                 </span>
               </td>
-              <td class="text-center" ng-show="isEnabled('author')">
+              <td class="text-center" ng-show="isColumnEnabled('author')">
                 [% item.author %]
               </td>
-              <td class="text-center" ng-show="isEnabled('price')">
+              <td class="text-center" ng-show="isColumnEnabled('price')">
                 <div ng-repeat="price in item.metas.price">
                   [% price.value ? price.value : 0 %] €<span ng-if="price.type === 'monthly'">/{t}month{/t}</span><span ng-if="price.type === 'yearly'">/{t}year{/t}</span><span ng-if="price.type === 'item'">/{t}item{/t}</span>
 
                 </div>
               </td>
-              <td class="text-center" ng-show="isEnabled('created')">
+              <td class="text-center" ng-show="isColumnEnabled('created')">
                 [% item.created %]
               </td>
-              <td class="text-center" ng-show="isEnabled('updated')">
+              <td class="text-center" ng-show="isColumnEnabled('updated')">
                 [% item.updated %]
               </td>
-              <td class="text-center" ng-show="isEnabled('enabled')">
+              <td class="text-center" ng-show="isColumnEnabled('enabled')">
                 <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.enabled == '1' ? '0' : '1')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.enabled == '1', 'fa-times text-error': !item.loading && item.enabled == '0' }"></i>
                 </button>

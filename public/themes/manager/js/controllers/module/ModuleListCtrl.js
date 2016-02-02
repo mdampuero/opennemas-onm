@@ -6,6 +6,7 @@
      * @ngdoc controller
      * @name  ModuleListCtrl
      *
+     * @requires $controller
      * @requires $modal
      * @requires $scope
      * @requires itemService
@@ -18,8 +19,15 @@
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ListCtrl', {
+          $scope:   $scope,
+          $timeout: $timeout,
+          data:     data
+        }));
+
         /**
          * @memberOf ModuleListCtrl
          *
@@ -28,9 +36,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = {
-          name_like: []
-        };
+        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf ModuleListCtrl
@@ -50,53 +56,11 @@
          * @memberOf ModuleListCtrl
          *
          * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   The list of selected elements.
-         *
-         * @type {Array}
-         */
-        $scope.selected = {
-          all: false,
-          items: []
-        };
-
-        /**
-         * @memberOf ModuleListCtrl
-         *
-         * @description
          *   The listing order.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{
-          name: 'uuid',
-          value: 'desc'
-        }];
-
-        /**
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   The current pagination status.
-         *
-         * @type {Object}
-         */
-        $scope.pagination = {
-          epp: data.epp ? parseInt(data.epp) : 25,
-          page: data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
+        $scope.orderBy = [{ name: 'id', value: 'asc' }];
 
         /**
          * @function countStringsLeft
@@ -127,57 +91,6 @@
           }
 
           return left;
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Checks if a columns is selected.
-         *
-         * @param {String} id The columns name.
-         */
-        $scope.isEnabled = function(id) {
-          return $scope.columns.selected.indexOf(id) !== -1;
-        };
-
-        /**
-         * @function isOrderedBy
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Checks if the listing is ordered by the given field name.
-         *
-         * @param string name The field name.
-         *
-         * @return mixed The order value, if the order exists. Otherwise,
-         *               returns false.
-         */
-        $scope.isOrderedBy = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i < $scope.orderBy.length) {
-            return $scope.orderBy[i].value;
-          }
-
-          return false;
-        };
-
-        /**
-         * @function isSelected
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Checks if an module is selected.
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-          return $scope.selected.items.indexOf(id) !== -1;
         };
 
         /**
@@ -216,7 +129,7 @@
 
           modal.result.then(function(response) {
             messenger.post(response);
-            list();
+            $scope.list();
           });
         };
 
@@ -270,222 +183,18 @@
               messenger.post(response);
             }
 
-            list();
+            $scope.list();
           });
         };
 
         /**
-         * @function isEnabled
+         * @function list
          * @memberOf ModuleListCtrl
          *
          * @description
-         *   Reloads the listing.
+         *   Reloads the list.
          */
-        $scope.refresh = function() {
-          list();
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Reloads the list on keypress.
-         *
-         * @param  Object event The even object.
-         */
-        $scope.searchByKeypress = function(event) {
-          if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
-            } else {
-              list();
-            }
-          }
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Selects/unselects all modules.
-         */
-        $scope.selectAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(module) {
-              return module.id;
-            });
-          } else {
-            $scope.selected.items = [];
-          }
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Enables/disables an module.
-         *
-         * @param boolean enabled Module enabled value.
-         */
-        $scope.setEnabled = function(module, enabled) {
-          module.loading = 1;
-
-          itemService.patch('manager_ws_module_patch', module.id,
-            { enabled: enabled }).success(function(response) {
-              module.loading = 0;
-              module.enabled = enabled;
-
-              messenger.post({ message: response, type: 'success' });
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-            });
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Enables/disables the selected modules.
-         *
-         * @param integer enabled The enabled value.
-         */
-        $scope.setEnabledSelected = function(enabled) {
-          for (var i = 0; i < $scope.items.length; i++) {
-            var id = $scope.items[i].id;
-            if ($scope.selected.items.indexOf(id) !== -1) {
-              $scope.items[i].loading = 1;
-            }
-          }
-
-          var data = { selected: $scope.selected.items, enabled: enabled };
-
-          itemService.patchSelected('manager_ws_modules_patch', data)
-            .success(function(response) {
-              // Update modules changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                var id = $scope.items[i].id;
-
-                if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].enabled = enabled;
-                  delete $scope.items[i].loading;
-                }
-              }
-
-              if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
-
-                $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
-
-              if (response.success.length > 0) {
-                list();
-              }
-            }).error(function(response) {
-              // Update modules changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                delete $scope.items[i].loading;
-              }
-
-              if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
-
-                $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
-            });
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Changes the sort order.
-         *
-         * @param string name Field name.
-         */
-        $scope.sort = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i >= $scope.orderBy.length) {
-            $scope.orderBy.push({
-              name: name,
-              value: 'asc'
-            });
-          } else {
-            if ($scope.orderBy[i].value === 'asc') {
-              $scope.orderBy[i].value = 'desc';
-            } else {
-              $scope.orderBy.splice(i, 1);
-            }
-          }
-
-          $scope.pagination.page = 1;
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Toggles column filters container.
-         */
-        $scope.toggleColumns = function() {
-          $scope.columns.collapsed = !$scope.columns.collapsed;
-
-          if (!$scope.columns.collapsed) {
-            $scope.scrollTop();
-          }
-        };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.columns = null;
-          $scope.pagination.epp = null;
-          $scope.items = null;
-          $scope.selected = null;
-          $scope.orderBy = null;
-          $scope.pagination.page = null;
-          $scope.pagination.total = null;
-        });
-
-        // Refresh the list of elements when some parameter changes
-        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            list();
-          }
-        }, true);
-
-        // Updates the columns stored in localStorage.
-        $scope.$watch('columns', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            webStorage.local.add('modules-columns', $scope.columns);
-          }
-        }, true);
-
-        /**
-         * Searches modules given a criteria.
-         *
-         * @return Object The function to execute past 500 ms.
-         */
-        function list() {
+        $scope.list = function () {
           $scope.loading = 1;
 
           // Search by name, domains and contact mail
@@ -519,7 +228,95 @@
               $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
           );
-        }
+        };
+
+        /**
+         * @function setEnabled
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Enables/disables an module.
+         *
+         * @param boolean enabled Module enabled value.
+         */
+        $scope.setEnabled = function(module, enabled) {
+          module.loading = 1;
+
+          itemService.patch('manager_ws_module_patch', module.id,
+            { enabled: enabled }).success(function(response) {
+              module.loading = 0;
+              module.enabled = enabled;
+
+              messenger.post({ message: response, type: 'success' });
+            }).error(function(response) {
+              messenger.post({ message: response, type: 'error' });
+            });
+        };
+
+        /**
+         * @function setEnabledSelected
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Enables/disables the selected modules.
+         *
+         * @param integer enabled The enabled value.
+         */
+        $scope.setEnabledSelected = function(enabled) {
+          for (var i = 0; i < $scope.items.length; i++) {
+            var id = $scope.items[i].id;
+            if ($scope.selected.items.indexOf(id) !== -1) {
+              $scope.items[i].loading = 1;
+            }
+          }
+
+          var data = { selected: $scope.selected.items, enabled: enabled };
+
+          itemService.patchSelected('manager_ws_modules_patch', data)
+            .success(function(response) {
+              // Update modules changed successfully
+              for (var i = 0; i < $scope.items.length; i++) {
+                var id = $scope.items[i].id;
+
+                if (response.success.indexOf(id) !== -1) {
+                  $scope.items[i].enabled = enabled;
+                  delete $scope.items[i].loading;
+                }
+              }
+
+              if (response.messages) {
+                messenger.post(response.messages);
+
+                $scope.selected = { all: false, items: [] };
+              } else {
+                messenger.post(response);
+              }
+
+              if (response.success.length > 0) {
+                $scope.list();
+              }
+            }).error(function(response) {
+              // Update modules changed successfully
+              for (var i = 0; i < $scope.items.length; i++) {
+                delete $scope.items[i].loading;
+              }
+
+              if (response.messages) {
+                messenger.post(response.messages);
+
+                $scope.selected = { all: false, items: [] };
+              } else {
+                messenger.post(response);
+              }
+            });
+        };
+
+        // Updates the columns stored in localStorage.
+        $scope.$watch('columns', function(newValues, oldValues) {
+          if (newValues !== oldValues) {
+            webStorage.local.add('modules-columns', $scope.columns);
+          }
+        }, true);
 
         // Initialize filters from URL
         var filters = itemService.decodeFilters();
@@ -530,10 +327,6 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('modules-columns')) {
           $scope.columns = webStorage.local.get('modules-columns');
-        }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
         }
       }
     ]);

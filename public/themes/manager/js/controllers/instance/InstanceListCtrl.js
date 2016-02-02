@@ -15,11 +15,19 @@
      * @requires data
      *
      * @description
-     *   Handles all actions in instances listing.
+     *   Handles all actions in instances list.
      */
     .controller('InstanceListCtrl', [
-      '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ListCtrl', {
+          $scope:   $scope,
+          $timeout: $timeout,
+          data:     data
+        }));
+
         /**
          * @memberOf InstanceListCtrl
          *
@@ -28,9 +36,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = {
-          name_like: []
-        };
+        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf InstanceListCtrl
@@ -52,102 +58,11 @@
          * @memberOf InstanceListCtrl
          *
          * @description
-         *   The list of elements.
+         *   The list order.
          *
          * @type {Object}
          */
-        $scope.items = data.results;
-
-        /**
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   The list of selected elements.
-         *
-         * @type {Array}
-         */
-        $scope.selected = {
-          all: false,
-          items: []
-        };
-
-        /**
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   The listing order.
-         *
-         * @type {Object}
-         */
-        $scope.orderBy = [{
-          name: 'last_login',
-          value: 'desc'
-        }];
-
-        /**
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   The current pagination status.
-         *
-         * @type {Object}
-         */
-        $scope.pagination = {
-          epp: data.epp ? parseInt(data.epp) : 25,
-          page: data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Checks if a columns is selected.
-         *
-         * @param {String} id The columns name.
-         */
-        $scope.isEnabled = function(id) {
-          return $scope.columns.selected.indexOf(id) !== -1;
-        };
-
-        /**
-         * @function isOrderedBy
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Checks if the listing is ordered by the given field name.
-         *
-         * @param string name The field name.
-         *
-         * @return mixed The order value, if the order exists. Otherwise,
-         *               returns false.
-         */
-        $scope.isOrderedBy = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i < $scope.orderBy.length) {
-            return $scope.orderBy[i].value;
-          }
-
-          return false;
-        };
-
-        /**
-         * @function isSelected
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Checks if an instance is selected.
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-          return $scope.selected.items.indexOf(id) !== -1;
-        };
+        $scope.orderBy = [{ name: 'last_login', value: 'desc' }];
 
         /**
          * @function delete
@@ -156,7 +71,7 @@
          * @description
          *   Confirm delete action.
          *
-         * @param {Object instance The instance to delete.
+         * @param {Object} instance The instance to delete.
          */
         $scope.delete = function(instance) {
           var modal = $modal.open({
@@ -185,7 +100,7 @@
 
           modal.result.then(function(response) {
             messenger.post(response);
-            list();
+            $scope.list();
           });
         };
 
@@ -207,7 +122,7 @@
 
                 for (var i = 0; i < $scope.items.length; i++) {
                   if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
+                        $scope.items[i].id) !== -1) {
                     selected.push($scope.items[i]);
                   }
                 }
@@ -220,11 +135,11 @@
               success: function() {
                 return function(modalInstance) {
                   itemService.deleteSelected('manager_ws_instances_delete',
-                    $scope.selected.items).success(function(response) {
-                      modalInstance.close(response);
-                    }).error(function(response) {
-                      modalInstance.close(response);
-                    });
+                      $scope.selected.items).success(function(response) {
+                        modalInstance.close(response);
+                      }).error(function(response) {
+                        modalInstance.close(response);
+                      });
                 };
               }
             }
@@ -239,55 +154,50 @@
               messenger.post(response);
             }
 
-            list();
+            $scope.list();
           });
         };
 
         /**
-         * @function isEnabled
+         * @function list
          * @memberOf InstanceListCtrl
          *
          * @description
-         *   Reloads the listing.
+         *   Reloads the list.
          */
-        $scope.refresh = function() {
-          list();
-        };
+        $scope.list = function () {
+          $scope.loading = 1;
 
-        /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Reloads the list on keypress.
-         *
-         * @param  Object event The even object.
-         */
-        $scope.searchByKeypress = function(event) {
-          if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
-            } else {
-              list();
+          // Search by name, domains and contact mail
+          if ($scope.criteria.name_like) {
+            $scope.criteria.domains_like =
+              $scope.criteria.contact_mail_like =
+              $scope.criteria.name_like;
+          }
+
+          var cleaned = itemService.cleanFilters($scope.criteria);
+
+          var data = {
+            criteria: cleaned,
+            orderBy: $scope.orderBy,
+            epp: $scope.pagination.epp, // elements per page
+            page: $scope.pagination.page
+          };
+
+          itemService.encodeFilters($scope.criteria, $scope.orderBy,
+            $scope.pagination.epp, $scope.pagination.page);
+
+          itemService.list('manager_ws_instances_list', data).then(
+            function(response) {
+              $scope.items = response.data.results;
+              $scope.pagination.total = response.data.total;
+
+              $scope.loading = 0;
+
+              // Scroll top
+              $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
-          }
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Selects/unselects all instances.
-         */
-        $scope.selectAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(instance) {
-              return instance.id;
-            });
-          } else {
-            $scope.selected.items = [];
-          }
+          );
         };
 
         /**
@@ -345,10 +255,7 @@
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
+                messenger.post(response.messages);
 
                 $scope.selected = { all: false, items: [] };
               } else {
@@ -356,7 +263,7 @@
               }
 
               if (response.success.length > 0) {
-                list();
+                $scope.list();
               }
             }).error(function(response) {
               // Update instances changed successfully
@@ -365,10 +272,7 @@
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
+                messenger.post(response.messages);
 
                 $scope.selected = { all: false, items: [] };
               } else {
@@ -377,136 +281,12 @@
             });
         };
 
-        /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Changes the sort order.
-         *
-         * @param string name Field name.
-         */
-        $scope.sort = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i >= $scope.orderBy.length) {
-            $scope.orderBy.push({
-              name: name,
-              value: 'asc'
-            });
-          } else {
-            if ($scope.orderBy[i].value === 'asc') {
-              $scope.orderBy[i].value = 'desc';
-            } else {
-              $scope.orderBy.splice(i, 1);
-            }
-          }
-
-          $scope.pagination.page = 1;
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   Toggles column filters container.
-         */
-        $scope.toggleColumns = function() {
-          $scope.columns.collapsed = !$scope.columns.collapsed;
-
-          if (!$scope.columns.collapsed) {
-            $scope.scrollTop();
-          }
-        };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.columns = null;
-          $scope.pagination.epp = null;
-          $scope.items = null;
-          $scope.selected = null;
-          $scope.orderBy = null;
-          $scope.pagination.page = null;
-          $scope.pagination.total = null;
-        });
-
-        // Reloads the list when filters change.
-        $scope.$watch('criteria', function(newValues, oldValues) {
-          // Change page when scrolling in grid mode
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          if (newValues !== oldValues) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
-            } else {
-              $scope.searchTimeout = $timeout(function() {
-                list();
-              }, 500);
-            }
-          }
-        }, true);
-
-
-        // Refresh the list of elements when some parameter changes
-        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            list();
-          }
-        }, true);
-
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
             webStorage.local.add('instances-columns', $scope.columns);
           }
         }, true);
-
-        /**
-         * Searches instances given a criteria.
-         *
-         * @return Object The function to execute past 500 ms.
-         */
-        function list() {
-          $scope.loading = 1;
-
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
-          var cleaned = itemService.cleanFilters($scope.criteria);
-
-          var data = {
-            criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
-          };
-
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
-
-          itemService.list('manager_ws_instances_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
-        }
 
         // Initialize filters from URL
         var filters = itemService.decodeFilters();
