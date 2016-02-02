@@ -99,4 +99,13 @@ div.dropdown-menu {
   display: none;
   opacity: 1;
   visibility: visible;
+
+  & > li > a {
+    transition: background-color .0001s linear,  color .0001s linear !important;
+  }
+
+  & > li.active > a {
+    background-color: @info-color;
+    color: #fff;
+  }
 }
