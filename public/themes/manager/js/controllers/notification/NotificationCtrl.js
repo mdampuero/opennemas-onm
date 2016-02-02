@@ -85,6 +85,31 @@
         };
 
         /**
+         * @function countStringsLeft
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Counts the number of remaining strings for a language.
+         *
+         * @param {String} lang The language to check.
+         *
+         * @return {Integer} The number of remaining strings.
+         */
+        $scope.countStringsLeft = function(lang) {
+          var left = 0;
+
+          if (!$scope.notification.title || !$scope.notification.title[lang]) {
+            left++;
+          }
+
+          if (!$scope.notification.body || !$scope.notification.body[lang]) {
+            left++;
+          }
+
+          return left;
+        };
+
+        /**
          * @function save
          * @memberOf NotificationCtrl
          *
