@@ -9,20 +9,20 @@
   <meta name="generator" content="OpenNemas - News Management System">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#22262e">
-  <link rel="manifest" href="backend_manifest.json">
+  <link rel="manifest" href="/backend_manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+
+  <link href="/assets/images/favicon.png" rel="icon">
+  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/launcher-icons/IOS-60@2x.png">
 
   {block name="meta"}
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
   {/block}
-
-  <link href="{$params.COMMON_ASSET_DIR}images/favicon.png" rel="icon">
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -188,6 +188,16 @@
                             <a href="{url name=admin_album_create}">
                               <i class="fa fa-stack-overflow"></i>
                               <span class="title">{t}Album{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
+                      {is_module_activated name="VIDEO_MANAGER"}
+                        {acl isAllowed="VIDEO_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=admin_videos_create}">
+                              <i class="fa fa-film"></i>
+                              <span class="title">{t}Video{/t}</span>
                             </a>
                           </div>
                         {/acl}

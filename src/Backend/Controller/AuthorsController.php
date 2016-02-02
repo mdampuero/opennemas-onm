@@ -111,7 +111,7 @@ class AuthorsController extends Controller
                 'id_user_group'   => array(3),
                 'ids_category'    => array(),
                 'activated'       => 0,
-                'type'            => 0,
+                'type'            => 1,
                 'deposit'         => 0,
                 'token'           => null,
             );

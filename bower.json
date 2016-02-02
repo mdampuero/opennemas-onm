@@ -13,6 +13,7 @@
     "angular-bootstrap": "0.13.4",
     "angular-bootstrap-multiselect": "0.3.0",
     "angular-checklist-model": "0.2.4",
+    "angular-file-model": "0.3.1",
     "angular-file-upload": "1.1.5",
     "angular-google-chart": "0.0.11",
     "angular-help-overlay": "0.1.0",

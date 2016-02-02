@@ -38,6 +38,13 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $photoInt = $smarty->tpl_vars['photoInt']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+        } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
+            // Articles with inner video
+            $videoInt = $smarty->tpl_vars['videoInt']->value;
+            if (strpos($videoInt->thumb, 'http')  === false) {
+                $videoInt->thumb = SITE_URL.$videoInt->thumb;
+            }
+            $output []= '<meta property="og:image" content="'.$videoInt->thumb.'" />';
         } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
             // Opinions
             $photo = $smarty->tpl_vars['photo']->value;
@@ -60,6 +67,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
                 $content->thumb = SITE_URL.$content->thumb;
             }
             $output []= '<meta property="og:image" content="'.$content->thumb.'" />';
+        } elseif (isset($content->img1) && ($content->img1 > 0)) {
+            $photoFront = getService('entity_repository')->find('Photo', $content->img1);
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+            $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (array_key_exists('default_image', $params)) {
             // Default
             $output []= '<meta property="og:image" content="'.$params['default_image'].'" />';

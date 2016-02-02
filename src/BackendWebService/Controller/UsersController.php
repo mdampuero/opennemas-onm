@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -481,6 +482,15 @@ class UsersController extends ContentController
         foreach ($photos as $photo) {
             $extra['photos'][$photo->id] = $photo;
         }
+
+        $extra['billing'] = [];
+        foreach ($this->get('instance')->metas as $key => $value) {
+            if (strpos($key, 'billing') !== false) {
+                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+            }
+        }
+
+        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
 
         return $extra;
     }

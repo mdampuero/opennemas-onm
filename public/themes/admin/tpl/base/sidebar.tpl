@@ -34,7 +34,7 @@
     <ul class="collapsed notification-list" ng-class="{ 'collapsed': mode != 'notifications'}">
       <li class="list-title">
         <span class="title">
-          <a href="{url name=backend_notifications_list}">{t}Notifications{/t}<a>
+          <a href="{url name=backend_notifications_list}">{t}Notifications{/t}</a>
         </span>
       </li>
       <li class="notification notification-[% item.style %]" ng-repeat="item in notifications">

@@ -76,7 +76,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $instance = $this->container->get('instance');
         $response = $event->getResponse();
 
-        if ($instance->users === 1
+        if ($instance->users == 1
             && $instance->page_views < 45000
             && $instance->media_size < 450
         ) {
@@ -101,8 +101,13 @@ class NotificationSubscriber implements EventSubscriberInterface
         $epp      = $event->getArgument('epp');
         $page     = $event->getArgument('page');
 
+        $response = $event->getResponse();
+        if (!is_array($response)) {
+            $response = [];
+        }
+
         $response = array_merge(
-            $event->getResponse(),
+            $response,
             $this->container->get('core.service.notification')
                 ->getList($criteria, $order, $epp, $page)
         );

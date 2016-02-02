@@ -48,11 +48,9 @@ class AssetBag
      */
     public function __construct($config, $instance)
     {
-        $this->config = $config;
-
-        $this->sitePath  = SITE_PATH;
-        $this->themePath = $this->sitePath . 'themes' . DS .
-            $this->parseThemeName($instance->settings['TEMPLATE_USER']);
+        $this->config       = $config;
+        $this->currentTheme = $instance->settings['TEMPLATE_USER'];
+        $this->sitePath     = SITE_PATH;
     }
 
     /**
@@ -162,7 +160,8 @@ class AssetBag
      */
     private function parseBundleName($bundle)
     {
-        return strtolower(preg_replace('/bundle/i', '', $bundle));
+        return $this->sitePath . $this->config['folders']['bundles'] . DS
+            . strtolower(preg_replace('/bundle/i', '', $bundle));
     }
 
     /**
@@ -181,43 +180,38 @@ class AssetBag
         $theme = substr($src, 1, strpos($src, '/') - 1);
         $asset = substr($src, strpos($src, '/'));
 
-        if ($theme === 'Theme') {
-            return [ $this->themePath . $asset ];
+        if (strpos($theme, 'Theme') !== false) {
+            $path = $this->parseThemeName($theme) . $asset;
         }
 
         if ($theme === 'Common') {
-            return [ $this->sitePath . $this->config['folders']['common']
-                    . $asset ];
+            $path = $this->sitePath . $this->config['folders']['common']
+                . $asset;
         }
 
-        $index = 'themes';
-        $theme = $this->parseThemeName($theme);
-
-        if (strpos($theme, 'bundle') !== false) {
-            $index = 'bundles';
-            $theme = $this->parseBundleName($theme);
+        if (strpos($theme, 'Bundle') !== false) {
+            $path = $this->parseBundleName($theme) . $asset;
         }
 
-        $path = $this->sitePath . $this->config['folders'][$index] . DS
-            . $theme . str_replace('*', '', $asset);
+        if (strpos($asset, '*') !== false) {
+            $path = str_replace('*', '', $path);
 
-        if (is_file($path)) {
-            return [ $path ];
-        }
+            if (!is_dir($path)) {
+                return false;
+            }
 
-        if (is_dir($path)) {
             $finder = new Finder();
             $finder->files()->in($path);
 
             $path = [];
             foreach ($finder as $file) {
-                $path[] = $file->getRealPath();
+                $path[] = str_replace(DS . DS, DS, $file->getPathname());
             }
 
             return $path;
         }
 
-        return false;
+        return [ $path ];
     }
 
     /**
@@ -229,8 +223,14 @@ class AssetBag
      */
     private function parseThemeName($theme)
     {
-        $theme = preg_replace('/[a-z]{2,63}\.[a-z0-9\-]+\.theme\./', '', $theme);
+        if ($theme === 'Theme') {
+            $theme = $this->currentTheme;
+        }
 
-        return strtolower(preg_replace('/theme/i', '', $theme));
+        $theme = preg_replace('/[a-z]{2,63}\.[a-z0-9\-]+\.theme\./', '', $theme);
+        $theme = strtolower(preg_replace('/theme/i', '', $theme));
+
+        return $this->sitePath . $this->config['folders']['themes'] . DS
+                . $theme;
     }
 }
