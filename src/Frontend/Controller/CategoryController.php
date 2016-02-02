@@ -15,6 +15,7 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -45,31 +46,40 @@ class CategoryController extends Controller
         );
 
         if (empty($category)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
+
+        $sm = $this->get('setting_repository');
+        $itemsPerPage = $sm->get('items_in_blog', 8);
+
+        $em = $this->get('entity_repository');
+        $order = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'category_name'     => [ [ 'value' => $category->name ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'fk_content_type'   => [ [ 'value' => [1,7,9], 'operator' => 'IN' ] ],
+            'in_litter'         => [ [ 'value' => 0 ] ],
+        ];
+
+        $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
+        $total = count($articles)+1;
+
+        $expires = $this->get('content_cache')
+            ->getEarlierStarttimeOfScheduledContents($articles);
+
+        if (!empty($expires)) {
+            $lifetime = strtotime($expires) - time();
+
+            if ($lifetime < $this->view->getCacheLifetime()) {
+                $this->view->setCacheLifetime($lifetime);
+            }
+        }
+
+        $cm = new \ContentManager;
+        $articles = $cm->getInTime($articles);
 
         $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $sm = $this->get('setting_repository');
-            $itemsPerPage = $sm->get('items_in_blog', 8);
-
-            $em = $this->get('entity_repository');
-            $filters = [
-                'category_name'     => [ [ 'value' => $category->name ] ],
-                'content_status'    => [ [ 'value' => 1 ] ],
-                'fk_content_type'   => [ [ 'value' => [1,7,9], 'operator' => 'IN' ] ],
-                'in_litter'         => [ [ 'value' => 0 ] ],
-                'starttime'         => [
-                    'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ]
-            ];
-
-            $order = [ 'starttime' => 'DESC' ];
-
-            $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
-
             $imageIdsList = [];
             foreach ($articles as &$content) {
                 if (isset($content->img1) && !empty($content->img1)) {
@@ -110,8 +120,6 @@ class CategoryController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
-            $total = count($articles)+1;
-
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $itemsPerPage,
@@ -145,7 +153,8 @@ class CategoryController extends Controller
                 'cache_id'        => $cacheId,
                 'actual_category' => $categoryName,
                 'advertisements'  => $this->getInnerAds($category->id),
-                'x-tags'          => 'category-frontpage,'.$categoryName.','.$page
+                'x-tags'          => 'category-frontpage,'.$categoryName.','.$page,
+                'x-cache-for'     => $expires,
             ]
         );
     }
@@ -176,7 +185,7 @@ class CategoryController extends Controller
         }
 
         if (empty($wsUrl)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         $ccm = \ContentCategoryManager::get_instance();
