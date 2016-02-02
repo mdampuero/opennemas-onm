@@ -428,9 +428,15 @@ class ModuleController extends Controller
     public function updateAction(Request $request, $id)
     {
         try {
-            $em = $this->get('orm.manager');
-            $module = $em ->getRepository('manager.extension')
-                ->find($id);
+            $em     = $this->get('orm.manager');
+            $module = $em ->getRepository('manager.extension')->find($id);
+            $path   = $this->getParameter('paths.extensions_assets_path');
+
+            $imagesToDelete = [];
+
+            if (!empty($module->images)) {
+                $imagesToDelete = $module->images;
+            }
 
             $keys = array_unique(array_merge(
                 array_keys($request->request->all()),
@@ -440,12 +446,12 @@ class ModuleController extends Controller
             unset($keys[array_search('_method', $keys)]);
 
             foreach ($keys as $key) {
+                $module->{$key} = null;
+
                 if ($request->request->get($key)
                     && !is_null($request->request->get($key))
                 ) {
                     $module->{$key} = $request->request->filter($key);
-                } else {
-                    $module->{$key} = null;
                 }
             }
 
@@ -461,24 +467,31 @@ class ModuleController extends Controller
             }
 
             $fs = new Filesystem();
-            if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
-                $fs->mkdir(SITE_PATH . 'media/core/modules');
+            if (!$fs->exists(SITE_PATH . $path)) {
+                $fs->mkdir(SITE_PATH . $path);
             }
 
             $i = 1;
             foreach ($request->files as $file) {
-                $module->images[] = '/media/core/modules/' . $module->id
-                    . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
+                $filename = $module->id . '_' . $i . '.'
+                    . $file[0]->getClientOriginalExtension();
 
-                $file[0]->move(
-                    SITE_PATH . '/media/core/modules',
-                    $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
-                );
+                $module->images[] = $path . $filename;
+
+                $file[0]->move(SITE_PATH . $path, $filename);
 
                 $i++;
             }
 
             $em->persist($module);
+
+            if (!empty($module->images)) {
+                $imagesToDelete = array_diff($imagesToDelete, $module->images);
+            }
+
+            foreach ($imagesToDelete as $image) {
+                $fs->remove(SITE_PATH . $image);
+            }
 
             return new JsonResponse(_('Module saved successfully'));
         } catch (InstanceNotFoundException $e) {
