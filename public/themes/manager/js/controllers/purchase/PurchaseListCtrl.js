@@ -6,6 +6,7 @@
      * @ngdoc controller
      * @name  PurchaseListCtrl
      *
+     * @requires $controller
      * @requires $modal
      * @requires $scope
      * @requires itemService
@@ -18,8 +19,15 @@
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ListCtrl', {
+          $scope:   $scope,
+          $timeout: $timeout,
+          data:     data
+        }));
+
         /**
          * @memberOf PurchaseListCtrl
          *
@@ -42,33 +50,8 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [
-            'name', 'domains', 'last_login', 'created',
-            'articles', 'alexa', 'activated'
-          ]
+          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'created' ]
         };
-
-        /**
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   The list of selected elements.
-         *
-         * @type {Array}
-         */
-        $scope.selected = { all: false, items: [] };
 
         /**
          * @memberOf PurchaseListCtrl
@@ -79,20 +62,6 @@
          * @type {Object}
          */
         $scope.orderBy = [{ name: 'created', value: 'desc' }];
-
-        /**
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   The current pagination status.
-         *
-         * @type {Object}
-         */
-        $scope.pagination = {
-          epp: data.epp ? parseInt(data.epp) : 25,
-          page: data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
 
         var e = null;
 
@@ -131,57 +100,6 @@
         };
 
         /**
-         * @function isEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Checks if a columns is selected.
-         *
-         * @param {String} id The columns name.
-         */
-        $scope.isEnabled = function(id) {
-          return $scope.columns.selected.indexOf(id) !== -1;
-        };
-
-        /**
-         * @function isOrderedBy
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Checks if the listing is ordered by the given field name.
-         *
-         * @param string name The field name.
-         *
-         * @return mixed The order value, if the order exists. Otherwise,
-         *               returns false.
-         */
-        $scope.isOrderedBy = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i < $scope.orderBy.length) {
-            return $scope.orderBy[i].value;
-          }
-
-          return false;
-        };
-
-        /**
-         * @function isSelected
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Checks if an purchase is selected.
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-          return $scope.selected.items.indexOf(id) !== -1;
-        };
-
-        /**
          * @function delete
          * @memberOf PurchaseListCtrl
          *
@@ -217,7 +135,7 @@
 
           modal.result.then(function(response) {
             messenger.post(response);
-            list();
+            $scope.list();
           });
         };
 
@@ -271,19 +189,51 @@
               messenger.post(response);
             }
 
-            list();
+            $scope.list();
           });
         };
 
         /**
-         * @function isEnabled
+         * @function refresh
          * @memberOf PurchaseListCtrl
          *
          * @description
-         *   Reloads the listing.
+         *   Reloads the list.
          */
-        $scope.refresh = function() {
-          list();
+        $scope.list = function () {
+          $scope.loading = 1;
+
+          // Search by name, domains and contact mail
+          if ($scope.criteria.name_like) {
+            $scope.criteria.domains_like =
+              $scope.criteria.contact_mail_like =
+              $scope.criteria.name_like;
+          }
+
+          var cleaned = itemService.cleanFilters($scope.criteria);
+
+          var data = {
+            criteria: cleaned,
+            orderBy: $scope.orderBy,
+            epp: $scope.pagination.epp, // elements per page
+            page: $scope.pagination.page
+          };
+
+          itemService.encodeFilters($scope.criteria, $scope.orderBy,
+            $scope.pagination.epp, $scope.pagination.page);
+
+          itemService.list('manager_ws_modules_list', data).then(
+            function(response) {
+              $scope.items = response.data.results;
+              $scope.pagination.total = response.data.total;
+              $scope.extra = response.data.extra;
+
+              $scope.loading = 0;
+
+              // Scroll top
+              $('.page-content').animate({ scrollTop: '0px' }, 1000);
+            }
+          );
         };
 
         $scope.resetFilters = function() {
@@ -296,43 +246,7 @@
         }
 
         /**
-         * @function isEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Reloads the list on keypress.
-         *
-         * @param  Object event The even object.
-         */
-        $scope.searchByKeypress = function(event) {
-          if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
-            } else {
-              list();
-            }
-          }
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Selects/unselects all purchases.
-         */
-        $scope.selectAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(purchase) {
-              return purchase.id;
-            });
-          } else {
-            $scope.selected.items = [];
-          }
-        };
-
-        /**
-         * @function isEnabled
+         * @function setEnabled
          * @memberOf PurchaseListCtrl
          *
          * @description
@@ -355,7 +269,7 @@
         };
 
         /**
-         * @function isEnabled
+         * @function setEnabledSelected
          * @memberOf PurchaseListCtrl
          *
          * @description
@@ -371,7 +285,7 @@
             }
           }
 
-          var data = { selected: $scope.selected.items, activated: enabled };
+          var data = { selected: $scope.selected.items, enabled: enabled };
 
           itemService.patchSelected('manager_ws_purchases_patch', data)
             .success(function(response) {
@@ -380,16 +294,13 @@
                 var id = $scope.items[i].id;
 
                 if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].activated = enabled;
+                  $scope.items[i].enabled = enabled;
                   delete $scope.items[i].loading;
                 }
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
+                messenger.post(response.messages);
 
                 $scope.selected = { all: false, items: [] };
               } else {
@@ -397,7 +308,7 @@
               }
 
               if (response.success.length > 0) {
-                list();
+                $scope.list();
               }
             }).error(function(response) {
               // Update purchases changed successfully
@@ -406,10 +317,7 @@
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
+                messenger.post(response.messages);
 
                 $scope.selected = { all: false, items: [] };
               } else {
@@ -418,118 +326,12 @@
             });
         };
 
-        /**
-         * @function isEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Changes the sort order.
-         *
-         * @param string name Field name.
-         */
-        $scope.sort = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i >= $scope.orderBy.length) {
-            $scope.orderBy.push({
-              name: name,
-              value: 'asc'
-            });
-          } else {
-            if ($scope.orderBy[i].value === 'asc') {
-              $scope.orderBy[i].value = 'desc';
-            } else {
-              $scope.orderBy.splice(i, 1);
-            }
-          }
-
-          $scope.pagination.page = 1;
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Toggles column filters container.
-         */
-        $scope.toggleColumns = function() {
-          $scope.columns.collapsed = !$scope.columns.collapsed;
-
-          if (!$scope.columns.collapsed) {
-            $scope.scrollTop();
-          }
-        };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.columns = null;
-          $scope.pagination.epp = null;
-          $scope.items = null;
-          $scope.selected = null;
-          $scope.orderBy = null;
-          $scope.pagination.page = null;
-          $scope.pagination.total = null;
-        });
-
-        // Refresh the list of elements when some parameter changes
-        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            list();
-          }
-        }, true);
-
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
             webStorage.local.add('purchases-columns', $scope.columns);
           }
         }, true);
-
-        /**
-         * Searches purchases given a criteria.
-         *
-         * @return Object The function to execute past 500 ms.
-         */
-        function list() {
-          $scope.loading = 1;
-
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
-          var cleaned = itemService.cleanFilters($scope.criteria);
-
-          var data = {
-            criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
-          };
-
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
-
-          itemService.list('manager_ws_purchases_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
-
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
-        }
 
         // Initialize filters from URL
         var filters = itemService.decodeFilters();
