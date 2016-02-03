@@ -50,7 +50,7 @@
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
                   <span class="input-group-addon">www.</span>
-                  <input autofocus class="form-control typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue | limitTo: 5" type="text" {if $create}typeahead-editable="false"{/if} typeahead-popup-template-url="suggestions">
+                  <input autofocus class="form-control typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue | limitTo: 5" type="text" typeahead-popup-template-url="suggestions">
                   <span class="input-group-btn">
                     <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
                       <span ng-if="!loading">
