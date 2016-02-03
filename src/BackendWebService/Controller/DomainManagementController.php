@@ -2,10 +2,12 @@
 
 namespace BackendWebService\Controller;
 
+use Onm\Framework\Controller\Controller;
+use Pdp\Parser;
+use Pdp\PublicSuffixListManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
-use Onm\Framework\Controller\Controller;
 
 class DomainManagementController extends Controller
 {
@@ -20,7 +22,14 @@ class DomainManagementController extends Controller
     {
         $domain = $request->query->get('domain');
 
-        if (empty($domain) || !$this->checkDomainAvailable($domain)) {
+        if (empty($domain) || !$this->isTLDValid($domain)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not valid'), $domain),
+                400
+            );
+        }
+
+        if (!$this->isDomainAvailable($domain)) {
             return new JsonResponse(
                 sprintf(_('The domain %s is not available'), $domain),
                 400
@@ -38,7 +47,7 @@ class DomainManagementController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function checkValidAction(Request $request)
+    public function checkConfiguredAction(Request $request)
     {
         $domain   = $request->query->get('domain');
         $end      = substr($domain, strrpos($domain, '.') + 1);
@@ -46,7 +55,7 @@ class DomainManagementController extends Controller
 
         $expected = "{$instance->internal_name}.{$end}.opennemas.net";
 
-        if (empty($domain) || !$this->checkDomainValid($domain, $expected)) {
+        if (empty($domain) || !$this->isDomainValid($domain, $expected)) {
             return new JsonResponse(
                 sprintf(_('Your domain has to point to %s'), $expected),
                 400
@@ -54,6 +63,28 @@ class DomainManagementController extends Controller
         }
 
         return new JsonResponse(_('Your domain is configured correctly'));
+    }
+
+    /**
+     * Checks if the domain is configured correcty basing on information from
+     * dig command.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkValidAction(Request $request)
+    {
+        $domain = $request->query->get('domain');
+
+        if (empty($domain) || !$this->isTLDValid($domain)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not valid'), $domain),
+                400
+            );
+        }
+
+        return new JsonResponse(_('Your domain is valid'));
     }
 
     /**
@@ -149,9 +180,24 @@ class DomainManagementController extends Controller
      * @return boolean True if the domain is available to purchase. Otherwise,
      *                 returns false.
      */
-    private function checkDomainAvailable($domain)
+    private function isDomainAvailable($domain)
     {
         return empty($this->getTarget($domain));
+    }
+
+    /**
+     * Checks if the given domain is valid.
+     *
+     * @param string $domain The domain to check
+     *
+     * @return boolean True if the TLD is valid. Otherwise, returns false.
+     */
+    private function isTLDValid($domain)
+    {
+        $pslManager = new PublicSuffixListManager();
+        $parser     = new Parser($pslManager->getList());
+
+        return $parser->isSuffixValid($domain);
     }
 
     /**
