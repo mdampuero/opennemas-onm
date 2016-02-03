@@ -7,7 +7,7 @@ use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Validation;
+use Framework\ORM\Core\Metadata;
 use Framework\ORM\Entity\Payment;
 use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
@@ -44,12 +44,12 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
 
         $this->loader->expects($this->any())->method('load')
-            ->willReturn([ 'validation' => [] ]);
+            ->willReturn([ 'metadata' => [] ]);
 
         $this->em = new EntityManager($this->container);
 
         $this->em->config['connection']['foo'] = true;
-        $this->em->config['validation']['Entity'] = new Validation([
+        $this->em->config['metadata']['Entity'] = new Metadata([
             'mapping' => [
                 'persisters' => [
                     'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],

@@ -2,14 +2,14 @@
 
 namespace Framework\Tests\ORM\Entity;
 
-use Framework\ORM\Core\Validation;
+use Framework\ORM\Core\Metadata;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->data   = [ 'foo' => 'bar', 'parameters' => [] ];
-        $this->validation = new Validation($this->data);
+        $this->validation = new Metadata($this->data);
     }
 
     public function testGet()
@@ -26,7 +26,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $this->validation->getData());
     }
 
-    public function testGetDbalValidation()
+    public function testGetDbalSchema()
     {
         $this->assertInstanceOf(
             'Doctrine\DBAL\Schema\Schema',

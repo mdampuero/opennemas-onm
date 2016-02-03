@@ -4,7 +4,7 @@ namespace Framework\Tests\ORM\Core\Validator;
 
 use Framework\ORM\Core\Exception\InvalidSchemaException;
 use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Validation;
+use Framework\ORM\Core\Metadata;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Entity\Theme;
 use Framework\ORM\Core\Validation\Validator;
@@ -16,7 +16,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->client = new Client([ 'foo' => 'bar', 'baz' => 'qux' ]);
 
         $this->validations = [
-            new Validation([
+            new Metadata([
                 'name' => 'client',
                 'properties' => [
                     'foo'    => 'string',
@@ -28,7 +28,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     'garply' => [ 'grault' ]
                 ]
             ]),
-            new Validation([ 'name' => 'extension' ]),
+            new Metadata([ 'name' => 'extension' ]),
         ];
 
         // Mock constructor only

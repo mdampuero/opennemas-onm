@@ -9,7 +9,7 @@
  */
 namespace Framework\ORM\Core\Loader;
 
-use Framework\ORM\Core\Validation;
+use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Connection;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
@@ -82,7 +82,7 @@ class Loader
      */
     public function loadEntity($data)
     {
-        return new Validation($data['entity']);
+        return new Metadata($data['entity']);
     }
 
     /**

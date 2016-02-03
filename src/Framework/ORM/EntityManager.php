@@ -30,8 +30,8 @@ class EntityManager
         $this->config    = $container->get('orm.loader')->load();
         $this->container = $container;
 
-        if (array_key_exists('validation', $this->config)) {
-            $this->validator->configure($this->config['validation']);
+        if (array_key_exists('metadata', $this->config)) {
+            $this->validator->configure($this->config['metadata']);
         }
     }
 
@@ -47,8 +47,8 @@ class EntityManager
     public function getPersister(Entity $entity, $persister = null)
     {
         $available = [];
-        if (array_key_exists($entity->getClassName(), $this->config['validation'])) {
-            $available = $this->config['validation'][$entity->getClassName()]
+        if (array_key_exists($entity->getClassName(), $this->config['metadata'])) {
+            $available = $this->config['metadata'][$entity->getClassName()]
                 ->mapping['persisters'];
         }
 
@@ -89,8 +89,8 @@ class EntityManager
         $entity = \classify($entity[count($entity) - 1]);
 
         $available = [];
-        if (array_key_exists($entity, $this->config['validation'])) {
-            $available = $this->config['validation'][$entity]
+        if (array_key_exists($entity, $this->config['metadata'])) {
+            $available = $this->config['metadata'][$entity]
                 ->mapping['repositories'];
         }
 
