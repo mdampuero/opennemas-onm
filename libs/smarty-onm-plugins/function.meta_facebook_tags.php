@@ -37,6 +37,9 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             // Articles
             $photoInt = $smarty->tpl_vars['photoInt']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
+            if (isset($photoInt->media_url)) {
+                $imageUrl = $photoInt->media_url.$photoInt->path_file.$photoInt->name;
+            }
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
             // Articles with inner video
