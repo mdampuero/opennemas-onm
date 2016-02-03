@@ -44,4 +44,3 @@ angular.module('BackendApp.directives', []);
 angular.module('BackendApp.filters', []);
 angular.module('BackendApp.interceptors', []);
 angular.module('BackendApp.services', []);
-

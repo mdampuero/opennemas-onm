@@ -69,7 +69,14 @@ class SystemSettingsController extends Controller
             array(
                 'configs'   => $configurations,
                 'timezones' => \DateTimeZone::listIdentifiers(),
-                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+                'languages' => array(
+                    'en_US' => _("English"),
+                    'es_ES' => _("Spanish"),
+                    'gl_ES' => _("Galician"),
+                    // 'it_IT' => _("Italian"),
+                    // 'pt_PT' => _("Portuguesse"),
+                    // 'fr_FR' => _("French"),
+                ),
             )
         );
     }

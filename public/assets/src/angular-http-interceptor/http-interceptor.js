@@ -10,33 +10,36 @@
 
   angular.module('http-interceptor', ['http-interceptor-buffer'])
 
-  .factory('httpInterceptor', ['$modal', '$rootScope','httpBuffer', function($modal, $rootScope, httpBuffer) {
-    return {
-      /**
-       * Call this function to indicate that authentication was successfull and trigger a
-       * retry of all deferred requests.
-       * @param data an optional argument to pass on to $broadcast which may be useful for
-       * example if you need to pass through details of the user that was logged in
-       */
-      loginConfirmed: function(data, configUpdater) {
-        var updater = configUpdater || function(config) { return config; };
-        $rootScope.$broadcast('auth-login-confirmed', data);
+  .factory('httpInterceptor', [
+    '$modal', '$rootScope','httpBuffer',
+    function($modal, $rootScope, httpBuffer) {
+      return {
+        /**
+         * Call this function to indicate that authentication was successfull and trigger a
+         * retry of all deferred requests.
+         * @param data an optional argument to pass on to $broadcast which may be useful for
+         * example if you need to pass through details of the user that was logged in
+         */
+        loginConfirmed: function(data, configUpdater) {
+          var updater = configUpdater || function(config) { return config; };
+          $rootScope.$broadcast('auth-login-confirmed', data);
 
-        httpBuffer.retryAll(updater, data.token);
-      },
+          httpBuffer.retryAll(updater, data.token);
+        },
 
-      /**
-       * Call this function to indicate that authentication should not proceed.
-       * All deferred requests will be abandoned or rejected (if reason is provided).
-       * @param data an optional argument to pass on to $broadcast.
-       * @param reason if provided, the requests are rejected; abandoned otherwise.
-       */
-      loginCancelled: function(data, reason) {
-        httpBuffer.rejectAll(reason);
-        $rootScope.$broadcast('auth-login-cancelled', data);
-      }
-    };
-  }])
+        /**
+         * Call this function to indicate that authentication should not proceed.
+         * All deferred requests will be abandoned or rejected (if reason is provided).
+         * @param data an optional argument to pass on to $broadcast.
+         * @param reason if provided, the requests are rejected; abandoned otherwise.
+         */
+        loginCancelled: function(data, reason) {
+          httpBuffer.rejectAll(reason);
+          $rootScope.$broadcast('auth-login-cancelled', data);
+        }
+      };
+    }
+  ])
 
   /**
    * $http interceptor.

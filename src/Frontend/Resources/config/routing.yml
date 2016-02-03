@@ -427,6 +427,19 @@ frontend_video_frontpage:
     requirements:
         page: "([0-9]+)?"
 
+frontend_video_page_frontpage:
+    path: /video/page/{page}
+    defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
+    requirements:
+        page: "([0-9]+)?"
+
+frontend_video_page_frontpage_category:
+    path: /video/{category_name}/page/{page}
+    defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
+    requirements:
+        category_name: "[a-z0-9\-]+"
+        page: "([0-9]+)?"
+
 frontend_video_ajax_paginated:
     path: /video/more
     defaults: { _controller: FrontendBundle:Videos:ajaxPaginated }
