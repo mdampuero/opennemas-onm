@@ -41,10 +41,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->properties['required']      = $reflection->getProperty('required');
         $this->properties['rulesets']      = $reflection->getProperty('rulesets');
         $this->methods['isArray']          = $reflection->getMethod('isArray');
+        $this->methods['isBoolean']        = $reflection->getMethod('isBoolean');
+        $this->methods['isDateinterval']   = $reflection->getMethod('isDateinterval');
+        $this->methods['isDatetime']       = $reflection->getMethod('isDatetime');
         $this->methods['isEnum']           = $reflection->getMethod('isEnum');
-        $this->methods['isFloat']         = $reflection->getMethod('isFloat');
+        $this->methods['isFloat']          = $reflection->getMethod('isFloat');
         $this->methods['isInteger']        = $reflection->getMethod('isInteger');
-        $this->methods['isNumeric']        = $reflection->getMethod('isNumeric');
+        $this->methods['isObject']         = $reflection->getMethod('isObject');
         $this->methods['isString']         = $reflection->getMethod('isString');
         $this->methods['loadValidation']   = $reflection->getMethod('loadValidation');
         $this->methods['validateProperty'] = $reflection->getMethod('validateProperty');
@@ -108,13 +111,33 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isArray']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    public function testIsBoolean()
+    {
+        $this->assertTrue($this->methods['isBoolean']->invokeArgs($this->validator, [ true ]));
+        $this->assertFalse($this->methods['isBoolean']->invokeArgs($this->validator, [ 'foo' ]));
+    }
+
+    public function testIsDateInterval()
+    {
+        $this->assertTrue($this->methods['isDateinterval']->invokeArgs($this->validator, [ new \DateInterval('P1D') ]));
+        $this->assertFalse($this->methods['isDateinterval']->invokeArgs($this->validator, [ 1 ]));
+        $this->assertFalse($this->methods['isDateinterval']->invokeArgs($this->validator, [ 'foo' ]));
+    }
+
+    public function testIsDateTime()
+    {
+        $this->assertTrue($this->methods['isDatetime']->invokeArgs($this->validator, [ new \Datetime('now') ]));
+        $this->assertFalse($this->methods['isDatetime']->invokeArgs($this->validator, [ 1 ]));
+        $this->assertFalse($this->methods['isDatetime']->invokeArgs($this->validator, [ 'foo' ]));
+    }
+
     public function testIsEnum()
     {
         $this->assertTrue($this->methods['isEnum']->invokeArgs($this->validator, [ 'grault', 'client', 'garply' ]));
         $this->assertFalse($this->methods['isEnum']->invokeArgs($this->validator, [ 'norf', 'client', 'foo' ]));
     }
 
-    public function testIsDouble()
+    public function testIsFloat()
     {
         $this->assertTrue($this->methods['isFloat']->invokeArgs($this->validator, [ 1.1 ]));
         $this->assertFalse($this->methods['isFloat']->invokeArgs($this->validator, [ [] ]));
@@ -128,12 +151,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isInteger']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
-    public function testIsNumeric()
+    public function testIsObject()
     {
-        $this->assertTrue($this->methods['isNumeric']->invokeArgs($this->validator, [ 1 ]));
-        $this->assertTrue($this->methods['isNumeric']->invokeArgs($this->validator, [ 1.1 ]));
-        $this->assertFalse($this->methods['isNumeric']->invokeArgs($this->validator, [ [] ]));
-        $this->assertFalse($this->methods['isNumeric']->invokeArgs($this->validator, [ 'foo' ]));
+        $this->assertTrue($this->methods['isObject']->invokeArgs($this->validator, [ $this->client ]));
+        $this->assertFalse($this->methods['isObject']->invokeArgs($this->validator, [ 1 ]));
+        $this->assertFalse($this->methods['isObject']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
     public function testIsString()

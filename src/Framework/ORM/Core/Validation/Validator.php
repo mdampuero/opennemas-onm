@@ -50,11 +50,14 @@ class Validator
      * @var array
      */
     protected $types = [
-        'array'    => [ 'array', 'array_json', 'simple_array' ],
-        'datetime' => [ 'date', 'dateinterval', 'datetime', 'datetimetz', 'time' ],
-        'integer'  => [ 'bigint', 'integer', 'smallint' ],
-        'float'    => [ 'decimal', 'float' ],
-        'string'   => [ 'binary', 'blob', 'gui', 'string', 'text' ]
+        'array'        => [ 'array', 'array_json', 'simple_array' ],
+        'boolean'      => [ 'boolean' ],
+        'dateinterval' => [ 'dateinterval' ],
+        'datetime'     => [ 'date', 'datetime', 'datetimetz', 'time' ],
+        'float'        => [ 'decimal', 'float' ],
+        'integer'      => [ 'bigint', 'integer', 'smallint' ],
+        'object'       => [ 'object' ],
+        'string'       => [ 'binary', 'blob', 'guid', 'string', 'text' ]
     ];
 
     /**
@@ -116,24 +119,6 @@ class Validator
     }
 
     /**
-     * Returns the equivalent PHP type for Doctrine type.
-     *
-     * @param string $type The Doctrine type.
-     *
-     * @return string The PHP equivalent type.
-     */
-    protected function convertType($type)
-    {
-        foreach ($this->types as $target => $types) {
-            if (in_array($type, $types)) {
-                return $target;
-            }
-        }
-
-        return $type;
-    }
-
-    /**
      * Checks if the value is an array.
      *
      * @param mixed $value The value to check.
@@ -143,6 +128,44 @@ class Validator
     protected function isArray($value)
     {
         return is_array($value);
+    }
+
+    /**
+     * Checks if the value is boolean.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is boolean. Otherwise, return false.
+     */
+    protected function isBoolean($value)
+    {
+        return is_bool($value);
+    }
+
+    /**
+     * Checks if the value is an instance of DateInterval.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is an instance of DateInterval.
+     *                 Otherwise, return false.
+     */
+    protected function isDateinterval($value)
+    {
+        return $value instanceof \DateInterval;
+    }
+
+    /**
+     * Checks if the value is an instance of DateTime.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is an instance of DateTime.
+     *                 Otherwise, return false.
+     */
+    protected function isDatetime($value)
+    {
+        return $value instanceof \DateTime;
     }
 
     /**
@@ -189,15 +212,15 @@ class Validator
     }
 
     /**
-     * Checks if the value is numeric.
+     * Checks if the value is an object.
      *
      * @param mixed $value The value to check.
      *
-     * @return boolean True if the value is numeric. Otherwise, return false.
+     * @return boolean True if the value is an object. Otherwise, return false.
      */
-    protected function isNumeric($value)
+    protected function isObject($value)
     {
-        return is_numeric($value);
+        return is_object($value);
     }
 
     /**
@@ -210,6 +233,33 @@ class Validator
     protected function isString($value)
     {
         return is_string($value);
+    }
+
+    /**
+     * Loads validation rules from a validation object.
+     *
+     * @param Validation $validation The path to validation rules file.
+     */
+    protected function loadValidation($validation)
+    {
+        $ruleset = \underscore($validation->name);
+
+        if (array_key_exists($ruleset, $this->properties)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The validation rules for entity %s already exist',
+                    $ruleset
+                )
+            );
+        }
+
+        $this->rulesets[] = $ruleset;
+
+        foreach ($validation->getData() as $key => $value) {
+            if ($key !== 'name') {
+                $this->{$key}[$ruleset] = $value;
+            }
+        }
     }
 
     /**
@@ -232,10 +282,11 @@ class Validator
         }
 
         foreach ($types as $type) {
-            $checkType = 'is' . ucfirst($this->convertType($type));
+            $checkType = 'is' . ucfirst($type);
 
             if (method_exists($this, $checkType)
-                && $this->{$checkType}($value, $ruleset, $property)) {
+                && $this->{$checkType}($value, $ruleset, $property)
+            ) {
                 return true;
             }
         }
@@ -293,33 +344,6 @@ class Validator
                     \classify($ruleset)
                 )
             );
-        }
-    }
-
-    /**
-     * Loads validation rules from a validation object.
-     *
-     * @param Validation $validation The path to validation rules file.
-     */
-    protected function loadValidation($validation)
-    {
-        $ruleset = \underscore($validation->name);
-
-        if (array_key_exists($ruleset, $this->properties)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The validation rules for entity %s already exist',
-                    $ruleset
-                )
-            );
-        }
-
-        $this->rulesets[] = $ruleset;
-
-        foreach ($validation->getData() as $key => $value) {
-            if ($key !== 'name') {
-                $this->{$key}[$ruleset] = $value;
-            }
         }
     }
 }
