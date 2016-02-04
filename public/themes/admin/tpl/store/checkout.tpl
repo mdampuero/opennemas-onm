@@ -163,8 +163,11 @@
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.vat.$dirty && billingForm.vat.$valid && validVat"></i>
                             <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" tooltip="{t}This is not a valid vat{/t}"></i>
-                            <input class="form-control" id="vat" name="vat" ng-model="billing.vat" placeholder="{t}VAT Number{/t}" ng-required="(billing.company != null && billing.company != '') || (billing.country == 'ES' && !validVat)" type="text">
+                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" tooltip="{t}This is not a valid VAT identification number{/t}"></i>
+                            <input class="form-control" id="vat" name="vat" ng-model="billing.vat" placeholder="{t}VAT identification number{/t}" ng-required="(billing.company != null && billing.company != '') || (billing.country == 'ES' && !validVat)" type="text">
+                          </div>
+                          <div class="help m-t-5">
+                            <a href="https://en.wikipedia.org/wiki/VAT_identification_number" target="_blank">{t}What is a VAT identification number?{/t}</a>
                           </div>
                         </div>
                       </div>
