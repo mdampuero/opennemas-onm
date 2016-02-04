@@ -142,9 +142,8 @@
                     <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid || !validPhone, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid && validPhone }">
                       <div class="input-with-icon right">
                         <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid && validPhone"></i>
-                        <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.required" tooltip="{t}This field is required{/t}"></i>
                         <i class="fa fa-times text-danger" ng-if="!validPhone" tooltip="{t}This is not a valid phone{/t}"></i>
-                        <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" required="required" type="text">
+                        <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" type="text">
                       </div>
                     </div>
                   </div>
