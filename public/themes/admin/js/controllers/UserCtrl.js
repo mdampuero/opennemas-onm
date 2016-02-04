@@ -10,7 +10,12 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     $scope.confirmUser = function() {
-      if ($scope.user.activated == '1' && $scope.user.type == '0') {
+      if (
+        $scope.activated != '1' ||
+        ($scope.activated == '1' && $scope.type == '1') &&
+        $scope.user.activated == '1' &&
+        $scope.user.type == '0'
+      ) {
         var modal = $modal.open({
           templateUrl: 'modal-update-selected',
           backdrop: 'static',

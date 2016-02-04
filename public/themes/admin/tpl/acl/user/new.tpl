@@ -62,7 +62,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json}">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json};activated=user.activated;type=user.type">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
