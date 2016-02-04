@@ -13,6 +13,15 @@
   </style>
 {/block}
 
+{block name="footer-js" append}
+  {javascripts}
+    <script type="text/javascript">
+      window.onbeforeunload = function() {
+        return "{t}You are leaving the current page.{/t}";
+      }
+    </script>
+  {/javascripts}
+{/block}
 {block name="content"}
   <div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="page-navbar actions-navbar">

@@ -8,6 +8,15 @@
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
 {/block}
+{block name="footer-js" append}
+  {javascripts}
+    <script type="text/javascript">
+      window.onbeforeunload = function() {
+        return "{t}You are leaving the current page.{/t}";
+      }
+    </script>
+  {/javascripts}
+{/block}
 
 {block name="content"}
   <div class="page-navbar actions-navbar">
