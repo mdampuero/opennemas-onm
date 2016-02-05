@@ -11,9 +11,17 @@
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
-      window.onbeforeunload = function() {
-        return "{t}You are leaving the current page.{/t}";
-      }
+      $(document).on('keydown', function (e) {
+        if (e.which === 8 && !$(e.target).is('input, textarea')) {
+          window.onbeforeunload = function() {
+            return "{t}You are leaving the current page.{/t}";
+          }
+        }
+      });
+
+      $(document).on('click', function (e) {
+        window.onbeforeunload = null;
+      });
     </script>
   {/javascripts}
 {/block}
