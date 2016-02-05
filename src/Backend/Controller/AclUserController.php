@@ -68,6 +68,7 @@ class AclUserController extends Controller
             );
         }
 
+        array_unshift($groupsOptions, [ 'name' => _('Not assigned'), 'value' => 'empty' ]);
         array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
