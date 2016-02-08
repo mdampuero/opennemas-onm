@@ -71,6 +71,11 @@ abstract class DatabasePersister extends Persister
                 && array_key_exists($key, $this->metadata->mapping['columns'])
             ) {
                 $from = $this->metadata->properties[$key];
+
+                if ($from === 'enum') {
+                    $from = gettype($entity->{$key});
+                }
+
                 $to   = \classify($this->metadata->mapping['columns'][$key]['type']);
 
                 $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
