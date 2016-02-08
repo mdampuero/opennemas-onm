@@ -12,22 +12,6 @@ namespace Framework\ORM\Core\DataMapper;
 class ArrayDataMapper
 {
     /**
-     * Unserializes an array.
-     *
-     * @param string $value The serialized array.
-     *
-     * @return string The array.
-     */
-    public function fromArray($value)
-    {
-        if (empty($value)) {
-            return [];
-        }
-
-        return @unserialize($value);
-    }
-
-    /**
      * Returns an array from a JSON string.
      *
      * @param string $value The array as JSON string.
@@ -60,19 +44,19 @@ class ArrayDataMapper
     }
 
     /**
-     * Serializes an array.
+     * Unserializes an array.
      *
-     * @param array $value The array to serialize.
+     * @param string $value The serialized array.
      *
-     * @return string The serialized array.
+     * @return string The array.
      */
-    public function toArray($value)
+    public function fromString($value)
     {
-        if (empty($value) || !is_array($value)) {
-            return null;
+        if (empty($value)) {
+            return [];
         }
 
-        return @serialize($value);
+        return @unserialize($value);
     }
 
     /**
@@ -105,5 +89,21 @@ class ArrayDataMapper
         }
 
         return implode(',', $value);
+    }
+
+    /**
+     * Serializes an array.
+     *
+     * @param array $value The array to serialize.
+     *
+     * @return string The serialized array.
+     */
+    public function toString($value)
+    {
+        if (empty($value) || !is_array($value)) {
+            return null;
+        }
+
+        return @serialize($value);
     }
 }
