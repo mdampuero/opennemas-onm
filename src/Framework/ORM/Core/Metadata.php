@@ -66,12 +66,4 @@ class Metadata extends DataObject implements Validable
 
         return $schema;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParentClassName()
-    {
-        return false;
-    }
 }

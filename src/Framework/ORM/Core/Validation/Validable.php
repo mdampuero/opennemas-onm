@@ -24,11 +24,4 @@ interface Validable
      * @return array The data to validate.
      */
     public function getData();
-
-    /**
-     * Returns the parent class name without namespace.
-     *
-     * @return string The parent class name without namespace.
-     */
-    public function getParentClassName();
 }
