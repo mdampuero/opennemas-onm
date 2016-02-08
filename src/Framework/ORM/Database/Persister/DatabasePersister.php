@@ -57,7 +57,7 @@ abstract class DatabasePersister extends Persister
      *
      * @param Entity $entity The entity.
      *
-     * @return array The converted data.
+     * @return array The converted data and metas.
      */
     protected function databasify(Entity $entity)
     {
@@ -93,6 +93,7 @@ abstract class DatabasePersister extends Persister
             $data[$key] = $mapper->{$method}($value);
         }
 
+        // Meta keys (unknown properties)
         $unknown = array_diff(
             array_keys($data),
             array_keys($this->metadata->mapping['columns'])
@@ -102,5 +103,48 @@ abstract class DatabasePersister extends Persister
         $data  = array_diff_key($data, array_flip($unknown));
 
         return [ $data, $metas ];
+    }
+
+    /**
+     * Persits the entity metas.
+     *
+     * @param integer $id    The entity id.
+     * @param array   $metas The entity metas.
+     */
+    protected function persistMetas($id, $metas = [])
+    {
+        $entity = \underscore($this->metadata->name);
+
+        // Update metas
+        if (!empty($metas)) {
+            $sql = rtrim("REPLACE INTO {$entity}_meta VALUES "
+                . str_repeat('(?,?,?),', count($metas)), ',');
+
+            $params = [];
+            $types  = [];
+
+            foreach ($metas as $key => $value) {
+                $params = array_merge($params, [ $id, $key, $value ]);
+                $types  = array_merge(
+                    $types,
+                    [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
+                );
+            }
+
+            $this->conn->executeQuery($sql, $params, $types);
+        }
+
+        // Remove old metas
+        $sql    = "DELETE FROM {$entity}_meta WHERE {$entity}_id=?";
+        $params = [ $id ];
+        $types  = [ \PDO::PARAM_INT ];
+
+        if (!empty($metas)) {
+            $sql .= " AND meta_key NOT IN (?)";
+            $params[] = array_keys($metas);
+            $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+        }
+
+        $this->conn->executeQuery($sql, $params, $types);
     }
 }
