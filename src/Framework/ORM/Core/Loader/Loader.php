@@ -61,7 +61,6 @@ class Loader
 
             foreach ($parents as $parent) {
                 $this->mergeItems($item, $items[$parent]);
-                var_dump($item);
             }
         }
 
@@ -156,14 +155,28 @@ class Loader
     protected function mergeValues($key, $a, $b)
     {
         if (in_array($key, [ 'enum', 'properties', 'required' ])) {
-            $a = empty($a) ? [] : $a;
-            $b = empty($b) ? [] : $b;
+            $a = !empty($a) ? $a : [];
+            $b = !empty($b) ? $b : [];
 
             return array_merge($a, $b);
         }
 
         if ($key === 'mapping') {
-            return array_merge_recursive($b, $a);
+            $mapping = [];
+            $keys    = array_merge(array_keys($a), array_keys($b));
+
+            foreach ($keys as $key) {
+                $x = array_key_exists($key, $a) ? $a[$key] : [];
+                $y = array_key_exists($key, $b) ? $b[$key] : [];
+
+                $mapping[$key] = !empty($y) ? $y : $x;
+
+                if ($key !== 'table') {
+                    $mapping[$key] = array_merge($x, $y);
+                }
+            }
+
+            return $mapping;
         }
 
         return $b;
