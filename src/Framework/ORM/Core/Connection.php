@@ -1,0 +1,124 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Framework\ORM\Core;
+
+use Framework\Component\Data\DataBuffer;
+use Framework\ORM\Core\Validation\Validable;
+
+class Connection extends DataBuffer implements Validable
+{
+    /**
+     * The connection configuration.
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * The database connection.
+     *
+     * @var Doctrine\DBAL\Connection
+     */
+    protected $conn = null;
+
+    /**
+     * The current environment.
+     *
+     * @var string
+     */
+    protected $env;
+
+
+    /**
+     * Initializes the Connection.
+     *
+     * @param array  $config The connection configuration.
+     * @param string $env    The current environment.
+     */
+    public function __construct($config, $env)
+    {
+        $this->config = $config;
+
+        parent::__construct($env);
+    }
+
+    /**
+     * Redirects all the calls to the doctrine connection.
+     *
+     * @param string $method the method to call.
+     * @param array  $params the list of parameters to pass to the method.
+     *
+     * @return mixed The result of the method call.
+     */
+    public function __call($method, $params)
+    {
+        $conn = $this->getConnection();
+
+        $this->addToBuffer($method, $params);
+
+        $rs = call_user_func_array([ $conn, $method ], $params);
+
+        return $rs;
+    }
+
+    public function __get($property)
+    {
+        if (array_key_exists($property, $this->config)) {
+            return $this->config[$property];
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassName()
+    {
+        return 'Connection';
+    }
+
+    /**
+     * Returns the current database connection.
+     *
+     * @return Doctrine\DBAL\Connection The current database connection.
+     */
+    public function getConnection()
+    {
+        if (!is_object($this->conn)) {
+            $config     = new \Doctrine\DBAL\Configuration();
+            $this->conn = \Doctrine\DBAL\DriverManager::getConnection(
+                $this->config,
+                $config
+            );
+        }
+
+        return $this->conn;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData()
+    {
+        return $this->config;
+    }
+
+    /**
+     * Closes and deletes the current connection.
+     */
+    public function resetConnection()
+    {
+        if (is_object($this->connection)) {
+            $this->connection->close();
+            $this->connection = null;
+        }
+    }
+}
