@@ -95,15 +95,10 @@ class Validator
      */
     public function validate(Validable $entity)
     {
-        $data     = $entity->getData();
-        $rulesets = [
-            \underscore($entity->getClassName()),
-            \underscore($entity->getParentClassName())
-        ];
+        $data    = $entity->getData();
+        $ruleset = \underscore($entity->getClassName());
 
-        $rulesets = array_intersect($this->rulesets, $rulesets);
-
-        if (empty($rulesets)) {
+        if (empty($ruleset)) {
             throw new InvalidEntityException(
                 sprintf(
                     _("Unable to validate entity of type '%s'"),
@@ -112,10 +107,8 @@ class Validator
             );
         }
 
-        foreach ($rulesets as $ruleset) {
-            $this->validateRequired($ruleset, $data);
-            $this->validateData($ruleset, $data);
-        }
+        $this->validateRequired($ruleset, $data);
+        $this->validateData($ruleset, $data);
     }
 
     /**
