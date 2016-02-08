@@ -40,14 +40,35 @@ class Loader
     {
         $finder = new Finder();
         $loaded = [];
+        $items  = [];
 
         $finder->files()->in($this->path)->name('*.yml');
 
+        // Load items
         foreach ($finder as $file) {
             $item = $this->loadItem($file->getRealPath());
-            $type = \underscore($item->getClassName());
 
-            $loaded[$type][$item->name] = $item;
+            $items[$item->name] = $item;
+        }
+
+        // Merge items
+        foreach ($items as $item) {
+            $parents = $item->parent ? $item->parent : [];
+
+            if (!is_array($parents)) {
+                $parents = [ $parents ];
+            }
+
+            foreach ($parents as $parent) {
+                $this->mergeItems($item, $items[$parent]);
+                var_dump($item);
+            }
+        }
+
+        // Sort items
+        foreach ($items as $i) {
+            $type = \underscore($i->getClassName());
+            $loaded[$type][$i->name] = $i;
         }
 
         return $loaded;
@@ -95,5 +116,56 @@ class Loader
     public function loadConnection($data)
     {
         return new Connection($data['connection'], $this->env);
+    }
+
+    /**
+     * Merges a item with their parents.
+     *
+     * @param mixed $item   The item.
+     * @param mixed $parent The item parent.
+     */
+    protected function mergeItems($item, $parent)
+    {
+        $keys = array_merge(
+            array_keys($item->getData()),
+            array_keys($parent->getData())
+        );
+
+        foreach ($keys as $key) {
+            $item->{$key} = $this->mergeValues(
+                $key,
+                $parent->{$key},
+                $item->{$key}
+            );
+        }
+
+        // Remove possible duplicated values
+        if (count($item->mapping['table']) > 1) {
+            $item->mapping['table'] = $item->mapping['table'][0];
+        }
+    }
+
+    /**
+     * Merges two values.
+     *
+     * @param mixed $a The first value.
+     * @param mixed $b The second value.
+     *
+     * @return type Description
+     */
+    protected function mergeValues($key, $a, $b)
+    {
+        if (in_array($key, [ 'enum', 'properties', 'required' ])) {
+            $a = empty($a) ? [] : $a;
+            $b = empty($b) ? [] : $b;
+
+            return array_merge($a, $b);
+        }
+
+        if ($key === 'mapping') {
+            return array_merge_recursive($b, $a);
+        }
+
+        return $b;
     }
 }
