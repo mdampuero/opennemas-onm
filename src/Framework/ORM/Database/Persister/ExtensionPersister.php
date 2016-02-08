@@ -22,10 +22,10 @@ class ExtensionPersister extends DatabasePersister
 
         $this->conn->insert('extension', $data);
 
-        $entity->id = $this->mconn->lastInsertId();
+        $entity->id = $this->conn->lastInsertId();
 
-        if ($this->metadata[$entity->getClassName()]->mapping['metas']) {
-            $this->persistMetas($metas);
+        if ($this->metadata->mapping['metas']) {
+            $this->persistMetas($entity->id, $metas);
         }
     }
 
@@ -50,7 +50,7 @@ class ExtensionPersister extends DatabasePersister
         $this->cache->delete($entity->getCachedId());
 
         if ($this->metadata[$entity->getClassName()]->mapping['metas']) {
-            $this->persistMetas($metas);
+            $this->persistMetas($entity->id, $metas);
         }
     }
 }
