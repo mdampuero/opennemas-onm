@@ -55,19 +55,19 @@ abstract class DatabasePersister extends Persister
     /**
      * Convert entity data to valid database values.
      *
-     * @param Entity $entity The entity.
+     * @param array $source The entity data.
      *
      * @return array The converted data and metas.
      */
-    protected function databasify(Entity $entity)
+    protected function databasify($source)
     {
         if (!array_key_exists('columns', $this->metadata->mapping)) {
             throw new \Exception();
         }
 
         $data = [];
-        foreach ($entity->getData() as $key => $value) {
-            $from = gettype($entity->{$key});
+        foreach ($source as $key => $value) {
+            $from = gettype($value);
             $to   = 'string';
 
             if (array_key_exists($key, $this->metadata->properties)

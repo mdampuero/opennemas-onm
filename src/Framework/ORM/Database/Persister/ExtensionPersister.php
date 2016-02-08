@@ -18,7 +18,7 @@ class ExtensionPersister extends DatabasePersister
      */
     public function create(Entity &$entity)
     {
-        list($data, $metas) = $this->databasify($entity);
+        list($data, $metas) = $this->databasify($entity->getData());
 
         $this->conn->insert('extension', $data);
 
@@ -43,7 +43,7 @@ class ExtensionPersister extends DatabasePersister
      */
     public function update(Entity $entity)
     {
-        list($data, $metas) = $this->databasify($entity);
+        list($data, $metas) = $this->databasify($entity->getData());
         unset($data['id']);
 
         $this->conn->update('extension', $data, [ 'id' => $entity->id ]);
