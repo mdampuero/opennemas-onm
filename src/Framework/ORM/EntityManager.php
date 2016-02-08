@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Framework\ORM;
 
 use Framework\ORM\Braintree\BraintreeManager;
@@ -20,7 +27,7 @@ class EntityManager
     protected $validator;
 
     /**
-     * Initializes the FreshBooks api.
+     * Initializes the EntityManager.
      *
      * @param ServiceContainer $container The service container.
      */
@@ -59,9 +66,11 @@ class EntityManager
 
         $persisters = [];
         foreach ($available as $params) {
-            $class = '\\' . $params['class'];
-            $args  = $this->parseArgs($params['arguments']);
-            $class = new \ReflectionClass($class);
+            $class  = '\\' . $params['class'];
+            $args   = $this->parseArgs($params['arguments']);
+            $class  = new \ReflectionClass($class);
+
+            $args[] = $this->config['metadata'][$entity->getClassName()];
 
             $persisters[] = $class->newInstanceArgs($args);
         }
@@ -123,6 +132,8 @@ class EntityManager
      */
     public function persist(Entity $entity, $persister = null)
     {
+        $this->validator->validate($entity);
+
         $persister = $this->getPersister($entity, $persister);
 
         if ($entity->exists()) {
