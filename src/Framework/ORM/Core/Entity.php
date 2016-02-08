@@ -57,18 +57,6 @@ class Entity extends DataObject implements Validable
     }
 
     /**
-     * Returns the parent class name without namespace.
-     *
-     * @return string The parent class name without namespace.
-     */
-    public function getParentClassName()
-    {
-        $class = get_parent_class($this);
-
-        return substr($class, strrpos($class, '\\') + 1);
-    }
-
-    /**
      * Merge the current entity data with the given data.
      *
      * @return array The data to merge.
