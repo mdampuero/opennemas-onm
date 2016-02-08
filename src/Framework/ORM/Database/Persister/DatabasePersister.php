@@ -67,27 +67,40 @@ abstract class DatabasePersister extends Persister
 
         $data = [];
         foreach ($entity->getData() as $key => $value) {
+            $from = gettype($entity->{$key});
+            $to   = 'string';
+
             if (array_key_exists($key, $this->metadata->properties)
-                && array_key_exists($key, $this->metadata->mapping['columns'])
+                && $this->metadata->properties[$key] !== 'enum'
             ) {
                 $from = $this->metadata->properties[$key];
-
-                if ($from === 'enum') {
-                    $from = gettype($entity->{$key});
-                }
-
-                $to   = \classify($this->metadata->mapping['columns'][$key]['type']);
-
-                $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
-                    . 'DataMapper';
-
-                $mapper = new $mapper();
-                $method = 'to' . ucfirst($to);
-
-                $data[$key] = $mapper->{$method}($value);
             }
+
+            if (array_key_exists($key, $this->metadata->mapping['columns'])) {
+                $to = \classify($this->metadata->mapping['columns'][$key]['type']);
+            }
+
+            if (empty($to) && $from === 'array') {
+                $to = 'array';
+            }
+
+            $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
+                . 'DataMapper';
+
+            $mapper = new $mapper();
+            $method = 'to' . ucfirst($to);
+
+            $data[$key] = $mapper->{$method}($value);
         }
 
-        return $data;
+        $unknown = array_diff(
+            array_keys($data),
+            array_keys($this->metadata->mapping['columns'])
+        );
+
+        $metas = array_intersect_key($data, array_flip($unknown));
+        $data  = array_diff_key($data, array_flip($unknown));
+
+        return [ $data, $metas ];
     }
 }
