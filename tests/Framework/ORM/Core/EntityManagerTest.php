@@ -1,15 +1,15 @@
 <?php
 
-namespace Framework\Tests\ORM;
+namespace Tests\Framework\ORM\Core;
 
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Core\ChainElement;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Entity\Client;
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\EntityManager;
 use Framework\ORM\Core\Metadata;
 use Framework\ORM\Entity\Payment;
-use Framework\ORM\EntityManager;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Core\Exception\InvalidPersisterException;
 
@@ -122,7 +122,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($entity, [ true ]);
 
-        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+        $em = $this->getMockBuilder('\Framework\ORM\Core\EntityManager')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getPersister' ])
             ->getMock();
@@ -137,7 +137,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+        $em = $this->getMockBuilder('\Framework\ORM\Core\EntityManager')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getPersister' ])
             ->getMock();
@@ -152,7 +152,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $em = $this->getMockBuilder('\Framework\ORM\EntityManager')
+        $em = $this->getMockBuilder('\Framework\ORM\Core\EntityManager')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getPersister' ])
             ->getMock();

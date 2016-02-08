@@ -16,5 +16,5 @@ services:
         arguments: [ @cache, @dbal_connection, @cache_manager, @dbal_connection_manager ]
 
     orm.manager:
-        class: Framework\ORM\EntityManager
+        class: Framework\ORM\Core\EntityManager
         arguments: [ @service_container ]

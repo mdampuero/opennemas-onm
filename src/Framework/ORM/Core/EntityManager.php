@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM;
+namespace Framework\ORM\Core;
 
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Database\DatabaseManager;
@@ -113,6 +113,8 @@ class EntityManager
             $class = '\\' . $params['class'];
             $args  = $this->parseArgs($params['arguments']);
             $class = new \ReflectionClass($class);
+
+            $args[] = $this->config['metadata'][$entity];
 
             $repositories[] = $class->newInstanceArgs($args);
         }
