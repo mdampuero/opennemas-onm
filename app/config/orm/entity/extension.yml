@@ -30,7 +30,7 @@ entity:
 
     mapping:
         table: extension
-        meta: true
+        metas: true
         repositories:
             database:
                 class:     Framework\ORM\Database\Repository\ExtensionRepository
