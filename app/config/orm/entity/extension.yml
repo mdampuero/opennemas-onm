@@ -1,0 +1,91 @@
+entity:
+    name: Extension
+    enum:
+        type: [ module, theme, widget ]
+
+    required:
+        - uuid
+        - author
+        - created
+        - enabled
+        - name
+        - type
+        - updated
+
+    properties:
+        about:       array
+        author:      string
+        created:     datetime
+        description: array
+        enabled:     boolean
+        images:      array
+        name:        string
+        parameters:  array
+        price:       array
+        type:        enum
+        updated:     datetime
+        uuid:        string
+        url:         string
+        version:     string
+
+    mapping:
+        table: extension
+        meta: true
+        repositories:
+            database:
+                class:     Framework\ORM\Database\Repository\ExtensionRepository
+                arguments: [ @cache, @dbal_connection ]
+        persisters:
+            database:
+                class:     Framework\ORM\Database\Persister\ExtensionPersister
+                arguments: [ @cache, @orm.connection.manager ]
+        columns:
+            id:
+                type: bigint
+                options: { default: null, autoincrement: true }
+            uuid:
+                type:    string
+                options: { default: null, length: 100, notnull: true }
+            name:
+                type: text
+                options: { default: null, length: 65532, notnull: false }
+            type:
+                type:    string
+                options: { default: null, length: 40 }
+            author:
+                type: string
+                options: { default: null, length: 140, notnull: false }
+            url:
+                type: string
+                options: { default: null, length: 140, notnull: false }
+            description:
+                type:    text
+                options: { default: null, length: 65532, notnull: false }
+            about:
+                type:    text
+                options: { default: null, length: 65532, notnull: false }
+            images:
+                type: simple_array
+                options: { default: null, length: 65532, notnull: false }
+            created:
+                type: datetimetz
+                options: { default: null, notnull: false }
+            updated:
+                type: datetimetz
+                options: { default: null, notnull: false }
+            enabled:
+                type: boolean
+                options: { default: false }
+        index:
+            -
+                name: PRIMARY
+                columns: [ id ]
+                primary: true
+                unique: true
+                flags: {  }
+            -
+                name: type
+                columns: [ type ]
+                primary: false
+                unique: false
+                flags: { }
