@@ -2,40 +2,34 @@
 
 namespace Framework\ORM\Database\Persister;
 
+use Framework\ORM\Core\Connection;
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Persister;
-use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 
 abstract class DatabasePersister extends Persister
 {
     /**
-     * The cache service for instance.
+     * The cache service.
      *
-     * @var DbalWrapper
+     * @var CacheInterface
      */
-    protected $icache;
+    protected $cache;
 
     /**
-     * The database connection for instance.
+     * The database connection.
      *
-     * @var DbalWrapper
+     * @var Framework\ORM\Core\Connection
      */
-    protected $iconn;
+    protected $conn;
 
     /**
-     * The cache service for manager.
+     * The entity metadata.
      *
-     * @var DbalWrapper
+     * @var Metadata.
      */
-    protected $mcache;
-
-    /**
-     * The database connection for manager.
-     *
-     * @var DbalWrapper
-     */
-    protected $mconn;
+    protected $metadata;
 
     /**
      * The source name.
@@ -47,19 +41,15 @@ abstract class DatabasePersister extends Persister
     /**
      * Initializes a new DatabasePersister.
      *
-     * @param CacheInterface $icache The cache service for instance.
-     * @param DbalWrapper    $iconn  The dabase connection for instance.
-     * @param CacheInterface $mcache The cache service for manager.
-     * @param DbalWrapper    $mconn  The dabase connection for manager
-     * @param DbalWrapper    $source The source name.
+     * @param CacheInterface $cache    The cache service.
+     * @param Connection     $conn     The database connection.
+     * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct(CacheInterface $icache, DbalWrapper $iconn, CacheInterface $mcache, DbalWrapper $mconn, $source)
+    public function __construct(CacheInterface $cache, Connection $conn, Metadata $metadata)
     {
-        $this->icache = $icache;
-        $this->iconn  = $iconn;
-        $this->mcache = $mcache;
-        $this->mconn  = $mconn;
-        $this->source = $source;
+        $this->cache    = $cache;
+        $this->conn     = $conn;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -69,16 +59,28 @@ abstract class DatabasePersister extends Persister
      *
      * @return array The converted data.
      */
-    public function dbfy(Entity $entity)
+    protected function databasify(Entity $entity)
     {
+        if (!array_key_exists('columns', $this->metadata->mapping)) {
+            throw new \Exception();
+        }
+
         $data = [];
-
         foreach ($entity->getData() as $key => $value) {
-            if (is_array($value)) {
-                $value = @serialize($value);
-            }
+            if (array_key_exists($key, $this->metadata->properties)
+                && array_key_exists($key, $this->metadata->mapping['columns'])
+            ) {
+                $from = $this->metadata->properties[$key];
+                $to   = \classify($this->metadata->mapping['columns'][$key]['type']);
 
-            $data[$key] = $value;
+                $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
+                    . 'DataMapper';
+
+                $mapper = new $mapper();
+                $method = 'to' . ucfirst($to);
+
+                $data[$key] = $mapper->{$method}($value);
+            }
         }
 
         return $data;
