@@ -14,6 +14,9 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-microphone fa-lg"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question"></i>
+              </a>
               {t}News agency{/t}
             </h4>
           </li>
