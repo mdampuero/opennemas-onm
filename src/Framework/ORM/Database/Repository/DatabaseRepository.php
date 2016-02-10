@@ -293,4 +293,38 @@ class DatabaseRepository extends Repository
 
         $entity->refresh();
     }
+
+    /**
+     * Convert database values to valid entity values.
+     *
+     * @param array $source The data from database.
+     *
+     * @return array The converted data.
+     */
+    protected function objectify($source)
+    {
+        if (!array_key_exists('columns', $this->metadata->mapping)) {
+            throw new \Exception();
+        }
+
+        $data = [];
+        foreach ($source as $key => $value) {
+            if (array_key_exists($key, $this->metadata->properties)
+                && array_key_exists($key, $this->metadata->mapping['columns'])
+            ) {
+                $from = \classify($this->metadata->mapping['columns'][$key]['type']);
+                $to   = $this->metadata->properties[$key];
+
+                $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($to)
+                    . 'DataMapper';
+
+                $mapper = new $mapper();
+                $method = 'from' . ucfirst($from);
+
+                $data[$key] = $mapper->{$method}($value);
+            }
+        }
+
+        return $data;
+    }
 }
