@@ -12,6 +12,7 @@ namespace Framework\ORM\Core;
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Database\DatabaseManager;
 use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Schema\Dumper;
 use Framework\ORM\Core\Validation\Validator;
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Core\Exception\InvalidPersisterException;
@@ -34,11 +35,19 @@ class EntityManager
     public function __construct($container)
     {
         $this->validator = new Validator();
+        $this->dumper    = new Dumper();
         $this->config    = $container->get('orm.loader')->load();
         $this->container = $container;
 
         if (array_key_exists('metadata', $this->config)) {
             $this->validator->configure($this->config['metadata']);
+        }
+
+        if (array_key_exists('schema', $this->config)) {
+            $this->dumper->configure(
+                $this->config['schema'],
+                $this->config['metadata']
+            );
         }
     }
 
