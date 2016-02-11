@@ -9,8 +9,9 @@
  */
 namespace Framework\ORM\Core\Loader;
 
-use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Connection;
+use Framework\ORM\Core\Metadata;
+use Framework\ORM\Core\Schema\Schema;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -49,27 +50,25 @@ class Loader
             $item = $this->loadItem($file->getRealPath());
 
             if (!empty($item)) {
-                $items[$item->name] = $item;
+                $type = \underscore($item->getClassName());
+                $loaded[$type][$item->name] = $item;
             }
         }
 
         // Merge items
-        foreach ($items as $item) {
-            $parents = $item->parent ? $item->parent : [];
+        foreach ($loaded as $type => $items) {
+            foreach ($items as $item) {
+                $parents = $item->parent ? $item->parent : [];
 
-            if (!is_array($parents)) {
-                $parents = [ $parents ];
+                if (!is_array($parents)) {
+                    $parents = [ $parents ];
+                }
+
+                foreach ($parents as $parent) {
+                    $this->mergeItems($item, $items[$parent]);
+                }
             }
 
-            foreach ($parents as $parent) {
-                $this->mergeItems($item, $items[$parent]);
-            }
-        }
-
-        // Sort items
-        foreach ($items as $i) {
-            $type = \underscore($i->getClassName());
-            $loaded[$type][$i->name] = $i;
         }
 
         return $loaded;
@@ -98,6 +97,18 @@ class Loader
     }
 
     /**
+     * Returns a new database connection from data.
+     *
+     * @param array $data The data to load.
+     *
+     * @return Connection The loaded database connection.
+     */
+    public function loadConnection($data)
+    {
+        return new Connection($data['connection'], $this->env);
+    }
+
+    /**
      * Returns a new entity from data.
      *
      * @param array $data The data to load.
@@ -110,16 +121,17 @@ class Loader
     }
 
     /**
-     * Returns a new database connection from data.
+     * Returns a new entity from data.
      *
      * @param array $data The data to load.
      *
-     * @return Connection The loaded database connection.
+     * @return Entity The loaded entity.
      */
-    public function loadConnection($data)
+    public function loadSchema($data)
     {
-        return new Connection($data['connection'], $this->env);
+        return new Schema($data['schema']);
     }
+
 
     /**
      * Merges a item with their parents.
@@ -153,6 +165,14 @@ class Loader
      */
     protected function mergeValues($key, $a, $b)
     {
+        if (empty($a)) {
+            return $b;
+        }
+
+        if (empty($b)) {
+            return $a;
+        }
+
         if (in_array($key, [ 'enum', 'properties', 'required' ])) {
             $a = !empty($a) ? $a : [];
             $b = !empty($b) ? $b : [];
