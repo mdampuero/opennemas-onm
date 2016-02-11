@@ -58,8 +58,6 @@ class Entity extends DataObject implements Validable
 
     /**
      * Merge the current entity data with the given data.
-     *
-     * @return array The data to merge.
      */
     public function merge($data)
     {
