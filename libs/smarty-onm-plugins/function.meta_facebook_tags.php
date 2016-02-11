@@ -83,7 +83,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         }
 
-        if (!is_null($imageUrl)) {
+        if (!is_null($imageUrl) && file_exists($imageUrl)) {
             list($width, $height) = getimagesize($imageUrl);
             $output []= '<meta property="og:image:width" content="'.$width.'"/>';
             $output []= '<meta property="og:image:height" content="'.$height.'"/>';
