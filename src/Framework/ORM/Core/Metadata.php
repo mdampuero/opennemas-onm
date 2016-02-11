@@ -9,7 +9,6 @@
  */
 namespace Framework\ORM\Core;
 
-use Doctrine\DBAL\Schema\Schema as DbalSchema;
 use Framework\Component\Data\DataObject;
 use Framework\ORM\Core\Validation\Validable;
 
