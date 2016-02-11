@@ -20,7 +20,7 @@ class BasePersister extends Persister
     /**
      * The database connection.
      *
-     * @var Framework\ORM\Core\Connection
+     * @var Connection
      */
     protected $conn;
 
