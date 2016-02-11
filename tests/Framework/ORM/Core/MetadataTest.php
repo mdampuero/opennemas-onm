@@ -1,6 +1,13 @@
 <?php
-
-namespace Framework\Tests\ORM\Entity;
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Framework\ORM\Core;
 
 use Framework\ORM\Core\Metadata;
 
@@ -24,14 +31,6 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetData()
     {
         $this->assertEquals($this->data, $this->validation->getData());
-    }
-
-    public function testGetDbalSchema()
-    {
-        $this->assertInstanceOf(
-            'Doctrine\DBAL\Schema\Schema',
-            $this->validation->getDbalSchema()
-        );
     }
 
     public function testSet()
