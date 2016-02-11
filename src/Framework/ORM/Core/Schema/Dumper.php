@@ -9,10 +9,11 @@
  */
 namespace Framework\ORM\Core\Schema;
 
+use Doctrine\DBAL\Schema\Schema;
 use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Exception\InvalidSchemaException;
 
-class SchemaDumper
+class Dumper
 {
     /**
      * The list of allowed option value types.
@@ -23,7 +24,7 @@ class SchemaDumper
         'autoincrement'       => [ 'boolean' ],
         'comment'             => [ 'integer', 'string' ],
         'customSchemaOptions' => [ 'array' ],
-        'default'             => [ 'integer', 'string' ],
+        'default'             => [ 'boolean', 'integer', 'string' ],
         'fixed'               => [ 'boolean' ],
         'length'              => [ 'integer' ],
         'notnull'             => [ 'boolean' ],
@@ -69,17 +70,66 @@ class SchemaDumper
     ];
 
     /**
-     * Returns a schema for doctrine DBAL basing on the current schema.
+     * Initializes the Dumper.
+     *
+     * @param array $schemas   The list of schemas.
+     * @param array $metadatas The list of entity metadata.
      */
-    public function dump(Metadata $metadata)
+    public function __construct($schemas = [], $metadata = [])
     {
-        $schema = new DbalSchema();
+        if (empty($schemas)) {
+            return;
+        }
 
-        foreach ($this->data['parameters'] as $table => $definition) {
-            $table = $schema->createTable($table);
+        $this->configure($schemas, $metadata);
+    }
+
+    /**
+     * Configures the dumper.
+     *
+     * @param array $schemas  The list of schemas.
+     * @param array $metadata The list of entity metadata.
+     */
+    public function configure($schemas, $metadata)
+    {
+        $this->schemas = $schemas;
+
+        $entities = [];
+        foreach ($schemas as $schema) {
+            $entities = array_unique(array_merge($entities, $schema->entities));
+        }
+
+        $this->metadata = array_filter($metadata, function ($a) use ($entities) {
+            return in_array($a->name, $entities);
+        });
+    }
+
+    /**
+     * Returns a database schema from a schema name.
+     *
+     * @param string $name The schema name.
+     *
+     * @return Schema The database schema.
+     */
+    public function dump($name)
+    {
+        if (!array_key_exists($name, $this->schemas)) {
+            throw new \InvalidArgumentException(
+                sprintf(_("Unable to dump schema '%s'"), $name)
+            );
+        }
+
+        $schema = new Schema();
+
+        foreach ($this->schemas[$name]->entities as $entity) {
+            $metadata = $this->metadata[$entity];
+
+            $this->validate($metadata->mapping);
+
+            $table = $schema->createTable($metadata->mapping['table']);
 
             // Add column definitions
-            foreach ($definition['columns'] as $field => $value) {
+            foreach ($metadata->mapping['columns'] as $field => $value) {
                 $options = [];
 
                 if (array_key_exists('options', $value)) {
@@ -90,7 +140,7 @@ class SchemaDumper
             }
 
             // Add index definitions
-            foreach ($definition['index'] as $field => $value) {
+            foreach ($metadata->mapping['index'] as $field => $value) {
                 if (!array_key_exists('name', $value)) {
                     $value['name'] = null;
                 }
@@ -115,25 +165,19 @@ class SchemaDumper
     /**
      * Validates the schema.
      *
-     * @param Schema The configuration to validate.
+     * @param array $data The schema data.
      *
      * @throws InvalidSchemaException If the schema is not valid.
      */
-    public function validate(Entity $schema)
+    public function validate($data)
     {
-        parent::validate($schema);
-
-        $data = $schema->getData();
-
-        foreach ($data['parameters'] as $name => $table) {
-            if (!preg_match('/[a-z0-9_]+/', $name)) {
-                throw new InvalidSchemaException(
-                    sprintf(_("Invalid table name '%s'"), $name)
-                );
-            }
-
-            $this->validateTable($name, $table);
+        if (!preg_match('/[a-z0-9_]+/', $data['table'])) {
+            throw new InvalidSchemaException(
+                sprintf(_("Invalid table name '%s'"), $data['table'])
+            );
         }
+
+        $this->validateTable($data['table'], $data);
     }
 
     /**
