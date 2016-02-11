@@ -48,7 +48,9 @@ class Loader
         foreach ($finder as $file) {
             $item = $this->loadItem($file->getRealPath());
 
-            $items[$item->name] = $item;
+            if (!empty($item)) {
+                $items[$item->name] = $item;
+            }
         }
 
         // Merge items
@@ -88,9 +90,11 @@ class Loader
 
         $method = 'load' . ucfirst(array_keys($data)[0]);
 
-        if (method_exists($this, $method)) {
-            return $this->{$method}($data);
+        if (!method_exists($this, $method)) {
+            return false;
         }
+
+        return $this->{$method}($data);
     }
 
     /**
@@ -137,11 +141,6 @@ class Loader
                 $item->{$key}
             );
         }
-
-        // Remove possible duplicated values
-        if (count($item->mapping['table']) > 1) {
-            $item->mapping['table'] = $item->mapping['table'][0];
-        }
     }
 
     /**
@@ -161,24 +160,24 @@ class Loader
             return array_merge($a, $b);
         }
 
-        if ($key === 'mapping') {
-            $mapping = [];
-            $keys    = array_merge(array_keys($a), array_keys($b));
-
-            foreach ($keys as $key) {
-                $x = array_key_exists($key, $a) ? $a[$key] : [];
-                $y = array_key_exists($key, $b) ? $b[$key] : [];
-
-                $mapping[$key] = !empty($y) ? $y : $x;
-
-                if ($key !== 'table') {
-                    $mapping[$key] = array_merge($x, $y);
-                }
-            }
-
-            return $mapping;
+        if ($key !== 'mapping') {
+            return empty($b) ? $a : $b;
         }
 
-        return $b;
+        $mapping = [];
+        $keys    = array_merge(array_keys($a), array_keys($b));
+
+        foreach ($keys as $key) {
+            $x = array_key_exists($key, $a) ? $a[$key] : [];
+            $y = array_key_exists($key, $b) ? $b[$key] : [];
+
+            $mapping[$key] = !empty($y) ? $y : $x;
+
+            if ($key !== 'table') {
+                $mapping[$key] = array_merge($x, $y);
+            }
+        }
+
+        return $mapping;
     }
 }

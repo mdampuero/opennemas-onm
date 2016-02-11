@@ -10,13 +10,71 @@
 namespace Framework\Tests\ORM\Core\Loader;
 
 use Framework\ORM\Core\Loader\Loader;
-use Framework\Fixture\FixtureLoader;
+use Framework\ORM\Core\Metadata;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->loader = new Loader(__DIR__ . '/../../../../../app/config/orm', 'dev');
+    }
+
     public function testLoader()
     {
-        $loader = new Loader(__DIR__ . '/../../../../../app/config/orm', 'dev');
-        $this->assertNotEmpty($loader->load());
+        $this->assertNotEmpty($this->loader->load());
+    }
+
+    public function testMergeItems()
+    {
+        $item   = new Metadata([ 'mapping' => [ 'table' => 'foo' ] ]);
+        $parent = new Metadata([ 'mapping' => [ 'table' => 'bar' ] ]);
+
+        $method = new \ReflectionMethod($this->loader, 'mergeItems');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->loader, [ $item, $parent ]);
+
+        $this->assertEquals('foo', $item->mapping['table']);
+    }
+
+    public function testMergeValues()
+    {
+        $method = new \ReflectionMethod($this->loader, 'mergeValues');
+        $method->setAccessible(true);
+
+        $this->assertEquals('foo', $method->invokeArgs($this->loader, [ 'key', 'foo', false ]));
+        $this->assertEquals('bar', $method->invokeArgs($this->loader, [ 'key', 'foo', 'bar' ]));
+        $this->assertEquals(
+            [ 'foo' => 'integer', 'bar' => 'string'],
+            $method->invokeArgs(
+                $this->loader,
+                [ 'properties', [ 'foo' => 'integer' ], [ 'bar' => 'string' ] ]
+            )
+        );
+
+        $this->assertEquals(
+            [ 'table' => 'bar', 'norf' => [ 'glork', 'glorp' ] ],
+            $method->invokeArgs(
+                $this->loader,
+                [
+                    'mapping',
+                    [ 'table' => 'foo', 'norf' => [ 'glork' ] ],
+                    [ 'table' => 'bar', 'norf' => [ 'glorp' ] ]
+                ]
+            )
+        );
+
+        $this->assertEquals(
+            [ 'table' => 'foo', 'norf' => [ 'glork' ] ],
+            $method->invokeArgs(
+                $this->loader,
+                [
+                    'mapping',
+                    [ 'table' => 'foo', 'norf' => [ 'glork' ] ],
+                    []
+                ]
+            )
+        );
+
     }
 }
