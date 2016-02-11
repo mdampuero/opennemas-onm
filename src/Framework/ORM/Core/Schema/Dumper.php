@@ -2,17 +2,17 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Validator;
+namespace Framework\ORM\Core\Schema;
 
-use Framework\ORM\Core\Entity;
+use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Exception\InvalidSchemaException;
 
-class SchemaValidator extends Validator
+class SchemaDumper
 {
     /**
      * The list of allowed option value types.
@@ -67,6 +67,50 @@ class SchemaValidator extends Validator
         'string',
         'text',
     ];
+
+    /**
+     * Returns a schema for doctrine DBAL basing on the current schema.
+     */
+    public function dump(Metadata $metadata)
+    {
+        $schema = new DbalSchema();
+
+        foreach ($this->data['parameters'] as $table => $definition) {
+            $table = $schema->createTable($table);
+
+            // Add column definitions
+            foreach ($definition['columns'] as $field => $value) {
+                $options = [];
+
+                if (array_key_exists('options', $value)) {
+                    $options = $value['options'];
+                }
+
+                $table->addColumn($field, $value['type'], $options);
+            }
+
+            // Add index definitions
+            foreach ($definition['index'] as $field => $value) {
+                if (!array_key_exists('name', $value)) {
+                    $value['name'] = null;
+                }
+
+                if (array_key_exists('primary', $value)
+                    && !empty($value['primary'])
+                ) {
+                    $table->setPrimaryKey($value['columns'], $value['name']);
+                } elseif (array_key_exists('unique', $value)
+                    && !empty($value['unique'])
+                ) {
+                    $table->addUniqueIndex($value['columns'], $value['name']);
+                } else {
+                    $table->addIndex($value['columns'], $value['name']);
+                }
+            }
+        }
+
+        return $schema;
+    }
 
     /**
      * Validates the schema.
