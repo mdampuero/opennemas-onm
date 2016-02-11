@@ -37,7 +37,7 @@ entity:
                 arguments: [ @cache, @dbal_connection ]
         persisters:
             database:
-                class:     Framework\ORM\Database\Persister\ExtensionPersister
+                class:     Framework\ORM\Database\Persister\BasePersister
                 arguments: [ @cache, @orm.connection.manager ]
         columns:
             id:

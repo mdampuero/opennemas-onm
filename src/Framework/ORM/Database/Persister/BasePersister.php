@@ -8,7 +8,7 @@ use Framework\ORM\Core\Metadata;
 use Framework\ORM\Core\Persister;
 use Onm\Cache\CacheInterface;
 
-abstract class DatabasePersister extends Persister
+class BasePersister extends Persister
 {
     /**
      * The cache service.
@@ -50,6 +50,56 @@ abstract class DatabasePersister extends Persister
         $this->cache    = $cache;
         $this->conn     = $conn;
         $this->metadata = $metadata;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function create(Entity &$entity)
+    {
+        list($data, $metas) = $this->databasify($entity->getData());
+
+        $this->conn->insert(\underscore($entity->getClassName()), $data);
+
+        $entity->id = $this->conn->lastInsertId();
+
+        if ($this->metadata->mapping['metas']) {
+            $this->persistMetas($entity->id, $metas);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Entity $entity)
+    {
+        $this->conn->delete(
+            \underscore($entity->getClassName()),
+            [ 'id' => $entity->id ]
+        );
+
+        $this->cache->delete($entity->getCachedId());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Entity $entity)
+    {
+        list($data, $metas) = $this->databasify($entity->getData());
+        unset($data['id']);
+
+        $this->conn->update(
+            \underscore($entity->getClassName()),
+            $data,
+            [ 'id' => $entity->id ]
+        );
+
+        $this->cache->delete($entity->getCachedId());
+
+        if ($this->metadata[$entity->getClassName()]->mapping['metas']) {
+            $this->persistMetas($entity->id, $metas);
+        }
     }
 
     /**
