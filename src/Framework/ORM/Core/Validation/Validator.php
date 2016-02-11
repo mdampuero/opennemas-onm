@@ -89,7 +89,7 @@ class Validator
     /**
      * Validates the entity.
      *
-     * @param Entity $entity The entity to validate.
+     * @param Validable $entity The entity to validate.
      *
      * @throws InvalidEntityException If the entity is not valid.
      */
@@ -98,7 +98,7 @@ class Validator
         $data    = $entity->getData();
         $ruleset = \underscore($entity->getClassName());
 
-        if (empty($ruleset)) {
+        if (empty($ruleset) || !in_array($ruleset, $this->rulesets)) {
             throw new InvalidEntityException(
                 sprintf(
                     _("Unable to validate entity of type '%s'"),
