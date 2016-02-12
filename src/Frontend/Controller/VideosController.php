@@ -174,7 +174,9 @@ class VideosController extends Controller
                 ]
             ]);
 
-            $pagination = $pagination->links;
+            if (isset($pagination->links)) {
+                $pagination = $pagination->links;
+            }
 
             // New pagination for video frontpage
             $route = [ 'name' => 'frontend_video_page_frontpage' ];
