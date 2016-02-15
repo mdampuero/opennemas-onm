@@ -75,7 +75,7 @@
               {$config['categories']|implode:", "}
             </td>
             <td class="hidden-xs">
-              <div class="colorpicker_viewer" style="background-color:#{$config['site_color']};"></div>
+              <div class="colorpicker_viewer" style="background-color:{$config['site_color']};">&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </td>
           </tr>
           {/foreach}

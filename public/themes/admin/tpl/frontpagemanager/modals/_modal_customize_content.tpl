@@ -21,65 +21,33 @@
           <div class="form-group background">
             <label class="col-sm-3 form-label" for="bg-color">{t}Background Color{/t}</label>
             <div class="col-sm-9">
-              <input type="text" id="bg-color" name="bg-color" value="">
-              <select name="colorpicker-background">
-                <option value="#ffffff">{t}White{/t}</option>
-                <option value="#e8edfa">{t}Light Blue{/t}</option>
-                <option value="#f1e5e5">{t}Light Red{/t}</option>
-                <option value="#ffe5d1">{t}Light Orange{/t}</option>
-                <option value="#ece5f1">{t}Light purple{/t}</option>
-                <option value="#e3f7e2">{t}Light green{/t}</option>
-                <option value="#fcfbdf">{t}Light yellow{/t}</option>
-                <option value="#7bd148">{t}Green{/t}</option>
-                <option value="#5484ed">{t}Bold blue{/t}</option>
-                <option value="#a4bdfc">{t}Blue{/t}</option>
-                <option value="#46d6db">{t}Turquoise{/t}</option>
-                <option value="#7ae7bf">{t}Light green{/t}</option>
-                <option value="#51b749">{t}Bold green{/t}</option>
-                <option value="#fbd75b">{t}Yellow{/t}</option>
-                <option value="#ffb878">{t}Orange{/t}</option>
-                <option value="#ff887c">{t}Red{/t}</option>
-                <option value="#dc2127">{t}Bold red{/t}</option>
-                <option value="#dbadff">{t}Purple{/t}</option>
-                <option value="#e1e1e1">{t}Gray{/t}</option>
-                <option value="#000000">{t}Black{/t}</option>
-                <option value="#fbd75b">{t}Yellow{/t}</option>
-                <option value="#ffb878">{t}Orange{/t}</option>
-                <option value="#ff887c">{t}Red{/t}</option>
-                <option value="#980101">{t}Bold red{/t}</option>
-              </select>
+              <div class="input-group">
+                <span class="input-group-addon" ng-style="{ 'background-color': bg_color }">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <input class="form-control" colorpicker="hex" id="bg-color" name="bg-color" ng-model="bg_color" type="text">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" ng-click="bg_color='#ffffff'" type="button">
+                    {t}Reset{/t}
+                  </button>
+                </span>
+              </div>
             </div>
           </div>
           <div class="form-group fontcolor">
             <label class="col-sm-3 form-label" for="font-color">{t}Title font color{/t}</label>
             <div class="col-sm-9">
-              <input type="text" id="font-color" name="font-color" value="">
-              <select name="colorpicker-font">
-                <option value="#000000">{t}Black{/t}</option>
-                <option value="#7bd148">{t}Green{/t}</option>
-                <option value="#5484ed">{t}Bold blue{/t}</option>
-                <option value="#a4bdfc">{t}Blue{/t}</option>
-                <option value="#46d6db">{t}Turquoise{/t}</option>
-                <option value="#7ae7bf">{t}Light green{/t}</option>
-                <option value="#51b749">{t}Bold green{/t}</option>
-                <option value="#fbd75b">{t}Yellow{/t}</option>
-                <option value="#ffb878">{t}Orange{/t}</option>
-                <option value="#ff887c">{t}Red{/t}</option>
-                <option value="#dc2127">{t}Bold red{/t}</option>
-                <option value="#dbadff">{t}Purple{/t}</option>
-                <option value="#e1e1e1">{t}Gray{/t}</option>
-                <option value="#ffffff">{t}White{/t}</option>
-                <option value="#7bd148">{t}Green{/t}</option>
-                <option value="#5484ed">{t}Bold blue{/t}</option>
-                <option value="#a4bdfc">{t}Blue{/t}</option>
-                <option value="#46d6db">{t}Turquoise{/t}</option>
-                <option value="#7ae7bf">{t}Light green{/t}</option>
-                <option value="#51b749">{t}Bold green{/t}</option>
-                <option value="#fbd75b">{t}Yellow{/t}</option>
-                <option value="#ffb878">{t}Orange{/t}</option>
-                <option value="#ff887c">{t}Red{/t}</option>
-                <option value="#980101">{t}Bold red{/t}</option>
-              </select>
+              <div class="input-group">
+                <span class="input-group-addon" ng-style="{ 'background-color': font_color }">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <input class="form-control" colorpicker="hex" id="font-color" name="font-color" ng-model="font_color" type="text">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" ng-click="font_color='#000000'" type="button">
+                    {t}Reset{/t}
+                  </button>
+                </span>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -168,24 +136,3 @@
     </div>
   </div>
 </div>
-
-{stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}">
-{/stylesheets}
-
-{javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
-  <script>
-    $('#modal-element-customize-content').on('shown.bs.modal', function (e) {
-      $('select[name="colorpicker-background"]').simplecolorpicker({
-        picker: true
-      }).change(function() {
-        $('#bg-color').val($('select[name="colorpicker-background"]').val());
-      });
-      $('select[name="colorpicker-font"]').simplecolorpicker({
-       picker: true
-     }).change(function() {
-      $('#font-color').val($('select[name="colorpicker-font"]').val());
-    });
-   });
-  </script>
-{/javascripts}

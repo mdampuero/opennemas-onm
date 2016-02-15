@@ -6,6 +6,7 @@ angular.module(
     'angulartics',
     'angulartics.google.analytics',
     'checklist-model',
+    'colorpicker.module',
     'ngAnimate',
     'ngSanitize',
     'ngTouch',

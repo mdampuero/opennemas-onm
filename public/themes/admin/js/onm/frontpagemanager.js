@@ -357,13 +357,11 @@ jQuery(function($) {
             modal.find('.modal-body #font-weight').val('Auto');
         }
         if (title['color'] !== undefined) {
-            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
             modal.find('.modal-body input#font-color').val(title['color']);
-            //$('select[name="colorpicker-font"]').simplecolorpicker('selectColor', title['color']);
-            $('select[name="colorpicker-font"]').val(title['color']);
-        } else {
-            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
-            modal.find('.modal-body #font-color').val('#000000');
+            modal.find('.modal-body input#font-color').trigger('input');
+       } else {
+            modal.find('.modal-body input#font-color').val('#000000');
+            modal.find('.modal-body input#font-color').trigger('input');
         }
 
         if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
@@ -381,13 +379,11 @@ jQuery(function($) {
 
         if (element.data('bg').length>0) {
             var bgcolor = element.data('bg').substring(17,24);
-            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
             modal.find('.modal-body input#bg-color').val(bgcolor);
-           $('select[name="colorpicker-background"]').val(bgcolor);
-           // $('select[name="colorpicker-background"]').simplecolorpicker('selectColor', bgcolor);
+            modal.find('.modal-body input#bg-color').trigger('input');
         } else {
-            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
-            modal.find('.modal-body #bg-color').val('#ffffff');
+            modal.find('.modal-body input#bg-color').val('#ffffff');
+            modal.find('.modal-body input#bg-color').trigger('input');
         }
         modal.modal('show');
         e.preventDefault();
@@ -460,11 +456,18 @@ jQuery(function($) {
                 dataType: 'json',
                 data: { 'id': elementID, 'properties' : properties, 'content_type': element.data('class')}
             }).done(function(data) {
-                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
+                    element.css('color', '');
+                    element.css('font-weight', '');
+                    element.css('font-size', '');
+                    element.css('font-family', '');
+                    element.css('background-color', bgcolor);
                     element.data('bg', 'background-color:'+bgcolor);
                     element.data('format', format);
                     element.data('title', jsonTitle);
 
+                    for (var key in titleValues) {
+                      element.css(key, titleValues[key]);
+                    }
             }).fail(function(data) {
                 //data.message
             });
