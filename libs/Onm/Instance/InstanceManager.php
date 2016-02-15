@@ -664,7 +664,10 @@ class InstanceManager extends BaseManager
         $namespace = $this->cache->getNamespace();
 
         $this->cache->setNamespace($instance->internal_name);
-        $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
+        $this->sm->setConfig([
+            'database'     => $instance->getDatabaseName(),
+            'cache_prefix' => $instance->internal_name
+        ]);
 
         // Build external parameters
         $instance->external['site_name']    = $instance->name;
