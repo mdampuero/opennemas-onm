@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
+  {stylesheets}
     <style>
       #connect {
         cursor:pointer;
@@ -18,7 +18,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js"}
+  {javascripts}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('#connect').on('click',function(e){
@@ -37,37 +37,6 @@
           }).success(function(data) {
             $('#categories').html(data).show();
             $('#loading').hide();
-          });
-        });
-
-        $(document).ready(function($) {
-          var color = $('.colorpicker_viewer');
-          var inpt  = $('#color');
-          var btn   = $('.reset-button');
-
-          inpt.ColorPicker({
-            onSubmit: function(hsb, hex, rgb, el) {
-              $(el).val(hex);
-              $(el).ColorPickerHide();
-            },
-            onChange: function (hsb, hex, rgb) {
-              inpt.val(hex);
-              color.css('background-color', '#' + hex);
-              color.css('border-color', '#' + hex);
-            },
-            onBeforeShow: function () {
-              $(this).ColorPickerSetColor(this.value);
-            }
-          })
-          .bind('keyup', function(){
-            $(this).ColorPickerSetColor(this.value);
-          });
-
-          btn.on('click', function(e, ui){
-            inpt.val( '{setting name="site_color"}' );
-            color.css('background-color', '#' + '{setting name="site_color"}');
-            color.css('border-color', '#' + '{setting name="site_color"}');
-            e.preventDefault();
           });
         });
       });
@@ -147,13 +116,13 @@
           <div class="form-group">
             <label for="site_color" class="form-label">{t}Site color{/t}</label>
             <div class="input-group">
-              <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$site['site_color']|default:"#000"|trim}">
+              <span class="input-group-addon" ng-style="{ 'background-color': site_color }">
                 &nbsp;&nbsp;&nbsp;&nbsp;
               </span>
-              <input class="form-control" size="6" type="text" id="color" name="site_color" value="{$site['site_color']|default:"#000"|trim}">
+              <input class="form-control" colorpicker="hex" id="color" name="site_color" ng-init="site_color='{$site['site_color']|default:""}'" ng-model="site_color" type="text">
               <span class="input-group-btn">
-                <button class="btn btn-default reset-button">
-                  {t}Reset color{/t}
+                <button class="btn btn-default" ng-click="site_color='{$site['site_color']|default:""}'">
+                  {t}Reset{/t}
                 </button>
               </span>
             </div>
