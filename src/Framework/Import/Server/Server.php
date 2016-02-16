@@ -101,36 +101,37 @@ abstract class Server
         $ch = curl_init();
 
         $auth = $this->params['username'] . ':' . $this->params['password'];
-        $httpCode = '';
+        $httpCode = 0;
         $maxRedirects = 0;
         $maxRedirectsAllowed = 3;
 
         do {
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-            curl_setopt($ch, CURLOPT_USERPWD, $auth);
-            curl_setopt($ch, CURLOPT_HEADER, 1);
+            curl_setopt_array(
+                $ch,
+                [
+                    CURLOPT_URL => $url,
+                    CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                    CURLOPT_USERPWD => $auth,
+                    CURLOPT_RETURNTRANSFER => 1,
+                ]
+            );
+
             $content = curl_exec($ch);
-
-            $response = explode("\r\n\r\n", $content);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            $content = $response[count($response) -1];
-
             if ($httpCode == 301 || $httpCode == 302) {
-                $matches = array();
-                preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
-                $url = trim(array_pop($matches));
+                $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
+
+                continue;
             }
 
-            $maxRedirects++;
+            $body = $content;
 
+            $maxRedirects++;
         } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
 
         curl_close($ch);
 
-        return $content;
+        return $body;
     }
 
     /**
