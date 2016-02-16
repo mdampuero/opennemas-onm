@@ -116,8 +116,7 @@ EOF
                     $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
 
                 } catch (\Exception $e) {
-                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
-                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
+                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }
             }
         }
