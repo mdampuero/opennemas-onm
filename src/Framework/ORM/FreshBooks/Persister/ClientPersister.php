@@ -1,9 +1,17 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Framework\ORM\FreshBooks\Persister;
 
 use Framework\ORM\Entity\Entity;
 use Framework\ORM\Exception\ClientNotFoundException;
+use Symfony\Component\Intl\Intl;
 
 class ClientPersister extends FreshBooksPersister
 {
@@ -11,14 +19,15 @@ class ClientPersister extends FreshBooksPersister
      * Saves a new client in FreshBooks.
      *
      * @param Entity $entity The client to save.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws RuntimeException If the the client can not be saved.
      */
-    public function create(Entity &$entity, $next = true)
+    public function create(Entity &$entity)
     {
+        $data = $this->clean($entity);
+
         $this->api->setMethod('client.create');
-        $this->api->post([ 'client' => $entity->getData() ]);
+        $this->api->post([ 'client' => $data ]);
         $this->api->request();
 
         if ($this->api->success()) {
@@ -26,11 +35,7 @@ class ClientPersister extends FreshBooksPersister
 
             $entity->client_id = $response['client_id'];
 
-            if ($next && $this->hasNext()) {
-                $this->next()->create($entity);
-            }
-
-            return $this;
+            return;
         }
 
         throw new \RuntimeException($this->api->getError());
@@ -40,22 +45,17 @@ class ClientPersister extends FreshBooksPersister
      * Removes the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
-    public function remove(Entity $entity, $next = true)
+    public function remove(Entity $entity)
     {
         $this->api->setMethod('client.delete');
         $this->api->post([ 'client_id' => $entity->client_id ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($next && $this->hasNext()) {
-                $this->next()->remove($entity);
-            }
-
-            return $this;
+            return;
         }
 
         throw new ClientNotFoundException(
@@ -69,22 +69,19 @@ class ClientPersister extends FreshBooksPersister
      * Updates the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws ClientNotFoundException If the client does not exist.
      */
-    public function update(Entity $entity, $next = true)
+    public function update(Entity $entity)
     {
+        $data = $this->clean($entity);
+
         $this->api->setMethod('client.update');
-        $this->api->post([ 'client' => $entity->getData() ]);
+        $this->api->post([ 'client' => $data ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($next && $this->hasNext()) {
-                $this->next()->update($entity);
-            }
-
-            return $this;
+            return;
         }
 
         throw new ClientNotFoundException(
@@ -92,5 +89,43 @@ class ClientPersister extends FreshBooksPersister
             $this->source,
             $this->api->getError()
         );
+    }
+
+    /**
+     * Cleans the data for Freshbooks.
+     *
+     * @param Entity $entity The entity data.
+     *
+     * @return array The cleaned data.
+     */
+    protected function clean($entity)
+    {
+        $countries = Intl::getRegionBundle()->getCountryNames('en');
+
+        $map = [
+            'address'     => 'p_street1',
+            'city'        => 'p_city',
+            'company'     => 'organization',
+            'country'     => 'p_country',
+            'phone'       => 'work_phone',
+            'postal_code' => 'p_code',
+            'state'       => 'p_state',
+        ];
+
+        $data = [];
+        foreach ($entity->getData() as $property => $value) {
+            $key = $property;
+            if (array_key_exists($property, $map)) {
+                $key = $map[$property];
+            }
+
+            if ($property === 'country') {
+                $value = $countries[$value];
+            }
+
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 }

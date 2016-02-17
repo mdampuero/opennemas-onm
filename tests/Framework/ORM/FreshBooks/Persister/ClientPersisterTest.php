@@ -1,6 +1,13 @@
 <?php
-
-namespace Framework\Tests\ORM\FreshBooks\Repository;
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Framework\ORM\FreshBooks\Repository;
 
 use Framework\ORM\Entity\Client;
 use Framework\ORM\FreshBooks\Persister\ClientPersister;
@@ -94,8 +101,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
 
-        $r = $this->persister->remove($this->existingClient);
-        $this->assertEquals($this->persister, $r);
+        $this->persister->remove($this->existingClient);
     }
 
     /**
@@ -124,7 +130,19 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
 
-        $r = $this->persister->update($this->existingClient);
-        $this->assertEquals($this->persister, $r);
+        $this->persister->update($this->existingClient);
+    }
+
+    public function testClean()
+    {
+        $reflection = new \ReflectionClass(get_class($this->persister));
+        $method = $reflection->getMethod('clean');
+        $method->setAccessible(true);
+
+        $client = new Client([ 'address' => 'foo',  'country' => 'ES' ]);
+        $this->assertEquals(
+            [ 'p_street1' => 'foo', 'p_country' => 'Spain' ],
+            $method->invokeArgs($this->persister, [ $client ])
+        );
     }
 }
