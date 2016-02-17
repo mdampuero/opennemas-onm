@@ -20,11 +20,6 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = new ClientRepository($this->api, 'FreshBooks');
     }
 
-    public function testContructor()
-    {
-        $this->assertEquals($this->repository->getApi(), $this->api);
-    }
-
     /**
      * @expectedException Framework\ORM\Exception\ClientNotFoundException
      */

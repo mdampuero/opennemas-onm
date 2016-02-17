@@ -19,11 +19,6 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = new InvoiceRepository($this->api, 'FreshBooks');
     }
 
-    public function testContructor()
-    {
-        $this->assertEquals($this->repository->getApi(), $this->api);
-    }
-
     /**
      * @expectedException Framework\ORM\Exception\InvoiceNotFoundException
      */
