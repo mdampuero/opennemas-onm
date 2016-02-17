@@ -447,6 +447,7 @@ class AdsController extends Controller
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
                 'tradedoubler_id' => $formValues->getDigits('tradedoubler_id'),
+                'iadbox_id' => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
             foreach ($settings as $key => $value) {
@@ -463,7 +464,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
-            $configurationsKeys = ['ads_settings', 'revive_ad_server', 'tradedoubler_id'];
+            $configurationsKeys = ['ads_settings', 'revive_ad_server', 'tradedoubler_id', 'iadbox_id'];
             $configurations = s::get($configurationsKeys);
 
             return $this->render(
