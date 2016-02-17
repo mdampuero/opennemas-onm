@@ -88,6 +88,22 @@
         </div>
       </div>
     </div>
+    {is_module_activated name="IADBOX_MANAGER"}
+    <div class="grid simple">
+      <div class="grid-title">
+        <h5>{t}Iadbox integration{/t}</h5>
+      </div>
+      <div class="grid-body">
+        <div class="form-group">
+          <label for="iadbox_id" class="form-label">{t}Iadbox ID{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="iadbox_id" value="{$configs['iadbox_id']}">
+            <div class="help-block">{t}Iadbox affiliate ID{/t}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {/is_module_activated}
   </div>
 </form>
 {/block}
