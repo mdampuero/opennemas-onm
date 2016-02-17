@@ -303,7 +303,7 @@ function debug()
     }
 }
 
-function getPiwikCodeForInstance()
+function getPiwikCode($useImage = false)
 {
     $config = getService('setting_repository')->get('piwik');
 
@@ -312,9 +312,20 @@ function getPiwikCodeForInstance()
         || !array_key_exists('server_url', $config)
         || empty(trim($config['page_id']))
     ) {
-        return $output;
+        return '';
     }
 
+    if ($useImage) {
+        $code = generatePiwikImageCode($config);
+    } else {
+        $code = generatePiwikScriptCode($config);
+    }
+
+    return $code;
+}
+
+function generatePiwikScriptCode($config)
+{
     $httpsHost = preg_replace("/http:/", "https:", $config['server_url']);
 
     $code = '<!-- Piwik -->
@@ -342,8 +353,21 @@ function getPiwikCodeForInstance()
     return $code;
 }
 
+function generatePiwikImageCode($config)
+{
+    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0" alt="" />';
 
-function getGoogleAnalyticsCode()
+    $code .= sprintf(
+        $imgCode,
+        $config['server_url'],
+        $config['page_id'],
+        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+    );
+
+    return $code;
+}
+
+function getGoogleAnalyticsCode($useImage = false)
 {
     $config = getService('setting_repository')->get('google_analytics');
 
@@ -376,13 +400,12 @@ function getGoogleAnalyticsCode()
 
 function generateGAScriptCode($config)
 {
+    $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
     foreach ($config as $key => $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
         ) {
-            $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
-
             if ($key == 0) {
                 $code .= "_gaq.push(['_setAccount', '" . trim($account['api_key']) . "']);\n";
                 if (array_key_exists('base_domain', $account)
@@ -418,9 +441,11 @@ function generateGAScriptCode($config)
     return $code;
 }
 
-function genarateGAImageCode($configs) {
-    $imgCode = '<img src="http://www.google-analytics.com/__utm.gif?utmwv=4&utmn=%s&utmdt=Newsletter [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=__utma%3D999.999.999.999.999.1%3B" style="border:0" alt="" />\n';
+function genarateGAImageCode($config)
+{
+    $imgCode = '<img src="http://www.google-analytics.com/__utm.gif?utmwv=4&utmn=%s&utmdt=Newsletter [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=%s" style="border:0" alt="" />'."\n";
 
+    $code = '';
     foreach ($config as $key => $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
@@ -433,10 +458,11 @@ function genarateGAImageCode($configs) {
                 urlencode(SITE_URL),
                 urlencode(SITE_URL.'newsletter/'.date("Ymd")),
                 urlencode('newsletter/'.date("Ymd")),
-                $account['api_key']
+                $account['api_key'],
+                '__utma%3D999.999.999.999.999.1%3B'
             );
         }
     }
 
-   return $code;
+    return $code;
 }
