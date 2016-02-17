@@ -4,6 +4,7 @@ namespace Framework\Tests\ORM\FreshBooks;
 
 use Framework\ORM\FreshBooks\FreshBooksManager;
 use Framework\ORM\Entity\Client;
+use Framework\ORM\Entity\Entity;
 use Framework\ORM\Entity\Payment;
 use Freshbooks\FreshBooksApi;
 
@@ -12,11 +13,6 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->manager = new FreshBooksManager(null, null);
-    }
-
-    public function testContructor()
-    {
-        $this->assertInstanceOf('Freshbooks\FreshBooksApi', $this->manager->getApi());
     }
 
     /**
@@ -38,7 +34,7 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterInvalid()
     {
-        $entity = new Payment();
+        $entity = $this->getMock('Framework\ORM\Entity\Client');
         $cp = $this->manager->getPersister($entity);
         $this->assertInstanceOf('Framework\ORM\FreshBooks\Persister\FreshBooksPersister', $cp);
     }
