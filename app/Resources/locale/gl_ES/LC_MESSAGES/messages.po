@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-02 17:23+0100\n"
-"PO-Revision-Date: 2016-02-03 13:30+0200\n"
+"POT-Creation-Date: 2016-02-17 14:53+0000\n"
+"PO-Revision-Date: 2016-02-17 15:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -26,6 +26,9 @@ msgid ""
 msgstr ""
 "Alcanzouse o máximo de usuarios permitidos. Se queres crear máis usuarios "
 "contacta connosco."
+
+msgid "Not assigned"
+msgstr "Non asignado"
 
 msgid "All"
 msgstr "Todos"
@@ -1441,16 +1444,6 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Non se puido eliminar o boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletín."
-
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
@@ -1486,6 +1479,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como lida correctamente"
@@ -2129,6 +2132,30 @@ msgstr "Campo «%s» non válido"
 msgid "Database error."
 msgstr "Erro de base de datos."
 
+msgid "trashed"
+msgstr "en lixo"
+
+msgid "pending"
+msgstr "pendente"
+
+msgid "available"
+msgstr "dispoñibel"
+
+msgid "not scheduled"
+msgstr "non planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tempo"
+
+msgid "postponed"
+msgstr "adiado"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -2160,30 +2187,6 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
-
-msgid "trashed"
-msgstr "en lixo"
-
-msgid "pending"
-msgstr "pendente"
-
-msgid "available"
-msgstr "dispoñibel"
-
-msgid "not scheduled"
-msgstr "non planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tempo"
-
-msgid "postponed"
-msgstr "adiado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -3645,8 +3648,8 @@ msgstr ""
 "<p>Por un custo moi pequeno terás o noso experto equipo en liña e poderás "
 "facer todo tipo de preguntas sobre o teu proxecto e/ou recibir formación "
 "individual.</p>\n"
-"<p>Por favor recorda que garantizamos soporte GRATUITO vía incidencias e e-"
-"mails.</p>"
+"<p>Por favor recorda que garantizamos soporte GRATUITO vía incidencias e "
+"e-mails.</p>"
 
 msgid "Support Pro"
 msgstr "Asistencia Pro"
@@ -3693,8 +3696,8 @@ msgstr ""
 "<p>40 horas (2h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts</p>"
@@ -3720,8 +3723,8 @@ msgstr ""
 "<p>60 horas (3h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts/Skype</p>"
@@ -3745,8 +3748,8 @@ msgstr ""
 "<p>80 horas (4h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3785,8 +3788,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3827,8 +3830,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en plantillas</"
-"li>\n"
+"                            <li>Cambios estándar de HTML/CSS en "
+"plantillas</li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -4739,41 +4742,8 @@ msgstr "Cor"
 msgid "Color to distinguish between other agencies"
 msgstr "Cor para distinguir entre as distintas axencias de novas"
 
-msgid "Dark Gray"
-msgstr "Gris escuro"
-
-msgid "Black"
-msgstr "Negro"
-
-msgid "Bold red"
-msgstr "Vermello escuro"
-
-msgid "Green"
-msgstr "Verde"
-
-msgid "Blue"
-msgstr "Azul"
-
-msgid "Turquoise"
-msgstr "Turquesa"
-
-msgid "Light green"
-msgstr "Verde claro"
-
-msgid "Bold green"
-msgstr "Verde escuro"
-
-msgid "Yellow"
-msgstr "Amarelo"
-
-msgid "Orange"
-msgstr "Laranxa"
-
-msgid "Red"
-msgstr "Vermello"
-
-msgid "Purple"
-msgstr "Violeta"
+msgid "Reset"
+msgstr "Restabelecer"
 
 msgid "Connection"
 msgstr "Conexión"
@@ -5656,9 +5626,6 @@ msgstr "Correo electrónico"
 msgid "Backend access"
 msgstr "Acceso ao panel"
 
-msgid "Not assigned"
-msgstr "Non asignado"
-
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
 
@@ -5770,6 +5737,9 @@ msgstr "Identificador fiscal"
 msgid "Phone"
 msgstr "Teléfono"
 
+msgid "You are leaving the current page."
+msgstr "Está saíndo da páxina."
+
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Volve á <a href=\"%1\">tenda</a> e proba de novo"
 
@@ -5792,6 +5762,15 @@ msgstr ""
 
 msgid "Contact information"
 msgstr "Información de contacto"
+
+msgid "This is not a valid VAT identification number"
+msgstr "Este non é un número de identificación fiscal válido"
+
+msgid "VAT identification number"
+msgstr "Número de identificación fiscal"
+
+msgid "What is a VAT identification number?"
+msgstr "Que é un número de identificación fiscal?"
 
 msgid "Purchase summary"
 msgstr "Resumo da compra"
@@ -6793,6 +6772,15 @@ msgstr "Tradedoubler ID"
 msgid "Only the ID from Tradedoubler validation tag"
 msgstr "Só o ID da etiqueta de validación de Tradedoubler"
 
+msgid "Iadbox integration"
+msgstr "Integración de Iadbox"
+
+msgid "Iadbox ID"
+msgstr "ID de iadbox"
+
+msgid "Iadbox affiliate ID"
+msgstr "ID de afiliado de Iadbox"
+
 msgid "Unable to find any advertisement that matches your search."
 msgstr "Non se puideron atopar publicidades que coincidan coa súa busca."
 
@@ -6825,9 +6813,6 @@ msgstr "URL do sitio"
 
 msgid "http://example.com"
 msgstr "http://exemplo.gal"
-
-msgid "Reset color"
-msgstr "Restabelecer cor"
 
 msgid "Username or password are incorrect"
 msgstr "O usuario ou o contrasinal son incorrectos"
@@ -7001,9 +6986,6 @@ msgstr "Rexistro e redirección de dominio"
 
 msgid "Domain mapping"
 msgstr "Redirección de dominio"
-
-msgid "Summary"
-msgstr "Resumo"
 
 msgid "Terms of create a new domain"
 msgstr "Termos da creación dun novo dominio"
@@ -7599,6 +7581,9 @@ msgstr "Sinatura"
 
 msgid "Pretitle"
 msgstr "Antetitulo"
+
+msgid "Summary"
+msgstr "Resumo"
 
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
@@ -8286,30 +8271,6 @@ msgstr "Disposición da imaxe en portada"
 msgid "Background Color"
 msgstr "Color de fondo"
 
-msgid "White"
-msgstr "Branco"
-
-msgid "Light Blue"
-msgstr "Azul claro"
-
-msgid "Light Red"
-msgstr "Vermello claro"
-
-msgid "Light Orange"
-msgstr "Laranxa claro"
-
-msgid "Light purple"
-msgstr "Violeta claro"
-
-msgid "Light yellow"
-msgstr "Amarelo claro"
-
-msgid "Bold blue"
-msgstr "Azul escuro"
-
-msgid "Gray"
-msgstr "Gris"
-
 msgid "Title font color"
 msgstr "Cor do tipo de letra do titulo"
 
@@ -8357,9 +8318,6 @@ msgstr "image-middle-left"
 
 msgid "Left image"
 msgstr "Imaxe á esquerda"
-
-msgid "Reset"
-msgstr "Restabelecer"
 
 msgid "Archive this element"
 msgstr "Arquivar este elemento"
@@ -9298,6 +9256,69 @@ msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
 
+#~ msgid "Dark Gray"
+#~ msgstr "Gris escuro"
+
+#~ msgid "Black"
+#~ msgstr "Negro"
+
+#~ msgid "Bold red"
+#~ msgstr "Vermello escuro"
+
+#~ msgid "Green"
+#~ msgstr "Verde"
+
+#~ msgid "Blue"
+#~ msgstr "Azul"
+
+#~ msgid "Turquoise"
+#~ msgstr "Turquesa"
+
+#~ msgid "Light green"
+#~ msgstr "Verde claro"
+
+#~ msgid "Bold green"
+#~ msgstr "Verde escuro"
+
+#~ msgid "Yellow"
+#~ msgstr "Amarelo"
+
+#~ msgid "Orange"
+#~ msgstr "Laranxa"
+
+#~ msgid "Red"
+#~ msgstr "Vermello"
+
+#~ msgid "Purple"
+#~ msgstr "Violeta"
+
+#~ msgid "Reset color"
+#~ msgstr "Restabelecer cor"
+
+#~ msgid "White"
+#~ msgstr "Branco"
+
+#~ msgid "Light Blue"
+#~ msgstr "Azul claro"
+
+#~ msgid "Light Red"
+#~ msgstr "Vermello claro"
+
+#~ msgid "Light Orange"
+#~ msgstr "Laranxa claro"
+
+#~ msgid "Light purple"
+#~ msgstr "Violeta claro"
+
+#~ msgid "Light yellow"
+#~ msgstr "Amarelo claro"
+
+#~ msgid "Bold blue"
+#~ msgstr "Azul escuro"
+
+#~ msgid "Gray"
+#~ msgstr "Gris"
+
 #, fuzzy
 #~ msgid "Please, fill your billing information below."
 #~ msgstr "Non tes ningunha información de facturación"
@@ -9464,9 +9485,6 @@ msgstr ""
 #~ msgid "No notifications for now"
 #~ msgstr "Non hai notificacións por agora"
 
-#~ msgid "This is a notification"
-#~ msgstr "This is a notification"
-
 #~ msgid "Delete polls"
 #~ msgstr "Eliminar enquisas"
 
@@ -9601,10 +9619,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Trading address:"
 #~ msgstr "Enderezo da rolda de correo"
-
-#, fuzzy
-#~ msgid "Registration number"
-#~ msgstr "Data de rexistro"
 
 #, fuzzy
 #~ msgid "Registered Office"
