@@ -34,16 +34,6 @@ class BraintreeManager
     }
 
     /**
-     * Returns the Braintree factory.
-     *
-     * @return BraintreeFactory The Braintree factory.
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
      * Returns a new persister to persit an entity.
      *
      * @param string $name The entity to persist.

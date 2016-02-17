@@ -1,11 +1,17 @@
 <?php
-
-namespace Framework\Tests\ORM\Braintree;
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Framework\ORM\Braintree;
 
 use CometCult\BraintreeBundle\Factory\BraintreeFactory;
 use Framework\ORM\Braintree\BraintreeManager;
 use Framework\ORM\Entity\Client;
-use Framework\ORM\Entity\Payment;
 
 class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,14 +23,6 @@ class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->manager = new BraintreeManager($factory);
-    }
-
-    public function testContructor()
-    {
-        $this->assertInstanceOf(
-            'CometCult\BraintreeBundle\Factory\BraintreeFactory',
-            $this->manager->getFactory()
-        );
     }
 
     /**
@@ -46,7 +44,7 @@ class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterInvalid()
     {
-        $entity = new Payment();
+        $entity = $this->getMock('Framework\ORM\Entity\Client');
         $cp = $this->manager->getPersister($entity);
         $this->assertInstanceOf('Framework\ORM\Braintree\Persister\BraintreePersister', $cp);
     }
