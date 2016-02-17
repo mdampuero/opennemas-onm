@@ -28,7 +28,7 @@ class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Framework\ORM\Exception\InvalidRepositoryException
      */
-    public function tesGetRepositoryInvalid()
+    public function testGetRepositoryInvalid()
     {
         $this->manager->getRepository('invalid_repository');
     }
