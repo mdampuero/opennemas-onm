@@ -74,7 +74,7 @@ abstract class DatabasePersister extends Persister
         $data = [];
 
         foreach ($entity->getData() as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value) || is_object($value)) {
                 $value = @serialize($value);
             }
 
