@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Framework\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
@@ -34,28 +35,29 @@ class DomainManagementController extends Controller
      */
     public function addAction(Request $request)
     {
-        $billing = [];
+        $client = [];
+        $params = [];
 
         $instance = $this->get('instance');
 
-        if (!empty($instance->metas)) {
-            foreach ($instance->metas as $key => $value) {
-                if (strpos($key, 'billing_') !== false) {
-                    $billing[str_replace('billing_', '', $key)] = $value;
-                }
-            }
+        if (array_key_exists('client', $instance->metas)) {
+            $params = [ 'customerId' => $instance->metas['client']->client_id ];
+            $client = $instance->metas['client']->getData();
         }
 
-        $countries = array_flip(Intl::getRegionBundle()->getCountryNames());
-        $taxes     = $this->get('vat')->getTaxes();
+        $countries    = array_flip(Intl::getRegionBundle()->getCountryNames());
+        $taxes        = $this->get('vat')->getTaxes();
+        $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
+        $token        = $tokenFactory::generate($params);
 
         return $this->render(
             'domain_management/add.tpl',
             [
-                'billing'   => $billing,
+                'client'    => $client,
                 'create'    => $request->query->get('create'),
                 'countries' => $countries,
-                'taxes'     => $taxes
+                'taxes'     => $taxes,
+                'token'     => $token
             ]
         );
     }
