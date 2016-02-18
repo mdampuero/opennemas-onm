@@ -84,7 +84,7 @@ class NewsMLComponentPhoto extends NewsML
             && !empty($bodies[0]->DataContent->p)
         ) {
             foreach ($bodies[0]->DataContent->p as $p) {
-                $body .= "<p>$p</p>";
+                $body .= $p;
             }
         }
 
