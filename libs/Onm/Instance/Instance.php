@@ -232,6 +232,20 @@ class Instance
     public $support_plan = '';
 
     /**
+     * Unserializes the instance metas on wake up.
+     */
+    public function __wakeup()
+    {
+        foreach ($this->metas as $value) {
+            $data = @unserialize($value);
+
+            if ($data) {
+                $value = $data;
+            }
+        }
+    }
+
+    /**
      * Initializes all the application values for the instance.
      */
     public function boot()
