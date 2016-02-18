@@ -54,7 +54,7 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   Flag to edit billing information.
+         *   Flag to edit client information.
          *
          * @type {Boolean}
          */
@@ -121,9 +121,9 @@
           $scope.saving = true;
           var url = routing.generate('backend_ws_domain_save');
           var data = {
-            billing: $scope.billing,
+            client: $scope.client,
             create:  $scope.create,
-            domains: $scope.domains
+            domains: $scope.domains,
           };
 
           $http.post(url, data).success(function() {
@@ -251,9 +251,9 @@
           }
         };
 
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing', function(nv) {
-          if (!nv || !nv.name) {
+        // Updates the edit flag when client changes.
+        $scope.$watch('client', function(nv) {
+          if (!nv || !nv.first_name) {
             $scope.edit = true;
             $scope.validPhone = false;
             $scope.validVat   = false;
@@ -268,35 +268,35 @@
           }
         });
 
-        // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.company, billing.country, billing.vat]', function() {
-          if (!$scope.billing) {
+        // Updates the edit flag when client changes.
+        $scope.$watch('[client.company, client.country, client.vat_number]', function() {
+          if (!$scope.client) {
             return;
           }
 
           $scope.vatTax = 0;
 
           // Individual customer
-          if (!$scope.billing.company && $scope.billing.country &&
-              $scope.taxes[$scope.billing.country]) {
-            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+          if (!$scope.client.company && $scope.client.country &&
+              $scope.taxes[$scope.client.country]) {
+            $scope.vatTax = $scope.taxes[$scope.client.country].value;
             return;
           }
 
           // Spanish company
-          if ($scope.billing.company && $scope.billing.country === 'ES' &&
-              $scope.taxes[$scope.billing.country]) {
-            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+          if ($scope.client.company && $scope.client.country === 'ES' &&
+              $scope.taxes[$scope.client.country]) {
+            $scope.vatTax = $scope.taxes[$scope.client.country].value;
           }
         }, true);
 
-        $scope.$watch('billing.country', function(nv, ov) {
+        $scope.$watch('client.country', function(nv, ov) {
           if (!nv) {
             return;
           }
 
           var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.billing.country, phone: $scope.billing.phone });
+              { country: $scope.client.country, phone: $scope.client.phone });
 
           $http.get(url).success(function() {
             $scope.validPhone = true;
@@ -305,7 +305,7 @@
           });
 
           url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.billing.country, vat: $scope.billing.vat });
+              { country: $scope.client.country, vat: $scope.client.vat_number });
 
           $http.get(url).success(function() {
             $scope.validVat = true;
@@ -315,14 +315,14 @@
         }, true);
 
 
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing.phone', function(nv, ov) {
+        // Updates the edit flag when client changes.
+        $scope.$watch('client.phone', function(nv, ov) {
           if (nv === ov) {
             return;
           }
 
-          if (!$scope.billing || !$scope.billing.country ||
-              !$scope.billing.phone) {
+          if (!$scope.client || !$scope.client.country ||
+              !$scope.client.phone) {
             $scope.validPhone = false;
             return;
           }
@@ -332,7 +332,7 @@
           }
 
           var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.billing.country, phone: $scope.billing.phone });
+              { country: $scope.client.country, phone: $scope.client.phone });
 
           $scope.searchTimeout = $timeout(function() {
             $http.get(url).success(function() {
@@ -343,14 +343,14 @@
           }, 500);
         }, true);
 
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing.vat', function(nv, ov) {
+        // Updates the edit flag when client changes.
+        $scope.$watch('client.vat_number', function(nv, ov) {
           if (nv === ov) {
             return;
           }
 
-          if (!$scope.billing || !$scope.billing.country ||
-              !$scope.billing.vat) {
+          if (!$scope.client || !$scope.client.country ||
+              !$scope.client.vat_number) {
             $scope.validVat = false;
             return;
           }
@@ -360,7 +360,7 @@
           }
 
           var url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.billing.country, vat: $scope.billing.vat });
+              { country: $scope.client.country, vat: $scope.client.vat_number });
 
           $scope.searchTimeout = $timeout(function() {
             $http.get(url).success(function() {
