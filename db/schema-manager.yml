@@ -314,3 +314,39 @@ users:
             primary: true
             unique: true
             flags: {  }
+purchase:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        client:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        lines:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        client_id:
+            type: string
+            options: { default: null, length: 60 }
+        payment_id:
+            type: string
+            options: { default: null, length: 60 }
+        invoice_id:
+            type: string
+            options: { default: null, length: 60 }
+        date:
+            type: datetime
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: client_id
+            columns: [ client_id ]
+            primary: false
+            unique: false
+            flags: { fulltext: true }
