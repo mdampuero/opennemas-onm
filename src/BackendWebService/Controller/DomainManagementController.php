@@ -2,6 +2,9 @@
 
 namespace BackendWebService\Controller;
 
+use Framework\ORM\Entity\Client;
+use Framework\ORM\Entity\Payment;
+use Framework\ORM\Entity\Purchase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
@@ -123,19 +126,70 @@ class DomainManagementController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $billing  = $request->request->get('billing');
         $domains  = $request->request->get('domains');
         $create   = $request->request->get('create');
+        $nonce    = $request->request->get('nonce');
         $instance = $this->get('instance');
+        $date     = new \Datetime('now');
+        $price    = $create ? 18.00 : 12.00;
 
-        foreach ($billing as $key => $value) {
-            $instance->metas['billing_' . $key] = $value;
+        $client = $instance->getClient();
+
+        if (empty($client)) {
+            $client = $this->createClient($request->request->get('client'));
         }
 
-        $this->get('instance_manager')->persist($instance);
+        $vatTax = $this->get('vat')->getVatFromCode($client->country);
 
-        $this->sendEmailToCustomer($billing, $domains, $instance, $create);
-        $this->sendEmailToSales($billing, $domains, $instance, $create);
+        $payment = new Payment([
+            'client_id' => $client->client_id,
+            'amount'    => count($domains) * $price + (count($domains) * ($vatTax / 100) * $price),
+            'date'      => $date->format('Y-m-d'),
+            'type'      => 'Check'
+        ]);
+
+        if (!empty($nonce)) {
+            $payment->nonce = $nonce;
+        }
+
+        $this->get('orm.manager')->persist($payment, 'Braintree');
+
+        $invoice = new \Framework\ORM\Entity\Invoice([
+            'client_id' => $client->client_id,
+            'date'      => '2016-02-17',
+            'status'    => 'sent',
+            'lines'     => [
+                'line' => [
+                    [
+                        'name'      => 'Domain + redirection',
+                        'unit_cost' => $price,
+                        'quantity'  => 1,
+                        'tax1_name'  => 'IVA',
+                        'tax1_percent' => $vatTax
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
+        $payment->invoice_id = $invoice->invoice_id;
+
+        $payment->notes = 'Braintree Transaction Id:' . $payment->payment_id;
+
+        $this->get('orm.manager')->persist($payment, 'FreshBooks');
+
+        $order = new Purchase([
+            'client'     => $client,
+            'payment_id' => $payment->payment_id,
+            'invoice_id' => $invoice->invoice_id,
+            'created'    => $date->format('Y-m-d H:i:s'),
+            'details'    => $invoice->lines,
+        ]);
+
+        $this->get('orm.manager')->persist($order);
+
+        $this->sendEmailToCustomer($client->getData(), $domains, $instance, $create);
+        $this->sendEmailToSales($client->getData(), $domains, $instance, $create);
 
         return new JsonResponse(_('Domain added successfully'));
     }
@@ -152,6 +206,27 @@ class DomainManagementController extends Controller
     private function checkDomainAvailable($domain)
     {
         return empty($this->getTarget($domain));
+    }
+
+    /**
+     * Creates the client from the client data.
+     *
+     * @param array $data The client data.
+     *
+     * @return Client The client.
+     */
+    private function createClient($billing)
+    {
+        $client = new Client($billing);
+
+        $this->get('orm.manager')->persist($client, 'FreshBooks');
+        $this->get('orm.manager')->persist($client, 'Braintree');
+
+        $instance = $this->get('instance');
+        $instance->metas['client'] = $client;
+        $this->get('instance_manager')->persist($instance);
+
+        return $client;
     }
 
     /**
