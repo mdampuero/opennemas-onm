@@ -466,7 +466,9 @@ jQuery(function($) {
                     element.data('title', jsonTitle);
 
                     for (var key in titleValues) {
-                      element.css(key, titleValues[key]);
+                      if (key == 'color' || key == 'background-color') {
+                        element.css(key, titleValues[key]);
+                      }
                     }
             }).fail(function(data) {
                 //data.message
