@@ -10,6 +10,7 @@
 {/block}
 {block name="footer-js" append}
   {javascripts}
+    <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
     <script type="text/javascript">
       $(document).on('keydown', function (e) {
         if (e.which === 8 && !$(e.target).is('input, textarea')) {
@@ -50,12 +51,12 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="grid simple">
           <div class="grid-body clearfix">
-            <div ng-show="step != 4">
+            <div ng-show="step != 5">
               <h4 class="semi-bold">1. {t}Domains{/t}</h4>
               <p>
                 {if !$create}
@@ -125,7 +126,7 @@
                 </div>
               </div>
             </div>
-            <div class="m-t-30 ng-cloak" ng-show="domains.length > 0 && step != 4">
+            <div class="m-t-30 ng-cloak" ng-show="domains.length > 0 && step != 5">
               <h4 class="semi-bold">2. {t}Billing information{/t}</h4>
               <p>{t escape=off}If you need to update this information please <a href="mailto:sales@openhost.es">contact us</a>.{/t}</p>
               <div class="ng-cloak p-b-30" ng-show="edit">
@@ -252,7 +253,7 @@
                 </div>
               </div>
             </div>
-            <div class="p-t-15 ng-cloak" ng-show="step != 4 && domains.length > 0">
+            <div class="p-t-15 ng-cloak" ng-show="step != 5 && domains.length > 0">
               <h4 class="semi-bold">3. {t}Purchase summary{/t}</h4>
               <div class="p-t-5 pull-left">
                 <h4 class="semi-bold">[% client.first_name %]</h4>
@@ -303,8 +304,17 @@
                 </tbody>
               </table>
             </div>
-            <div class="ng-cloak" ng-show="domains.length > 0 && step != 4">
-              <h4 class="semi-bold">4. {if $create}{t}Terms of create a new domain{/t}{else}{t}Terms of redirection{/t}{/if}</h4>
+            <div class="p-t-15 ng-cloak" ng-show="step != 5 && domains.length > 0">
+              <h4 class="semi-bold">4. Payment</h4>
+              <form class="text-center" id="checkout" method="post" action="/checkout">
+                <div id="payment-form"></div>
+                <button class="btn btn-info m-t-15" type="submit">
+                  {t}Add payment method{/t}
+                </button>
+              </form>
+            </div>
+            <div class="p-t-30 ng-cloak" ng-show="domains.length > 0 && step != 5">
+              <h4 class="semi-bold">5. {if $create}{t}Terms of create a new domain{/t}{else}{t}Terms of redirection{/t}{/if}</h4>
               {if $create}
                 <ul>
                   <li>{t}Payment: the registration and redirection service requires payment in advance. This amount cannot be divided into several payments.{/t}</li>
@@ -335,12 +345,12 @@
                     </label>
                   </div>
                 </div>
-                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms || !validPhone || !validVat">
+                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms || !validPhone || !validVat || (!nonce && !client.client_id)">
                   {t}Confirm{/t}
                 </button>
               </div>
             </div>
-            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-show="step == 4">
+            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center" ng-show="step == 5">
               <i class="fa fa-heart fa-3x"></i>
               <h3 class="p-b-30">{t}Thank you for your request!{/t}</h3>
               <p class="p-b-15">

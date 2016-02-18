@@ -124,10 +124,11 @@
             client: $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
+            nonce:   $scope.nonce
           };
 
           $http.post(url, data).success(function() {
-            $scope.step = 4;
+            $scope.step = 5;
             $scope.domains = [];
           });
         };
@@ -290,7 +291,7 @@
           }
         }, true);
 
-        $scope.$watch('client.country', function(nv, ov) {
+        $scope.$watch('client.country', function(nv) {
           if (!nv) {
             return;
           }
@@ -372,7 +373,7 @@
         }, true);
 
         // Updates domain price when create flag changes
-        $scope.$watch('create', function(nv, ov) {
+        $scope.$watch('create', function(nv) {
           if (nv === 1) {
             $scope.price = 18;
           }
@@ -390,5 +391,21 @@
             $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);
+
+        // Configure braintree
+        $scope.$watch('clientToken', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.clientToken && typeof braintree !== 'undefined') {
+            braintree.setup($scope.clientToken, 'dropin', {
+              container: 'payment-form',
+              onPaymentMethodNonceReceived: function (event, nonce) {
+                $scope.nonce = nonce;
+              },
+            });
+          }
+        });
     }]);
 })();
