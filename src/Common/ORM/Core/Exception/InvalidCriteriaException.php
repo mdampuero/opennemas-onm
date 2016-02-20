@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Core\Exception;
+namespace Common\ORM\Core\Exception;
 
 class InvalidCriteriaException extends \Exception
 {

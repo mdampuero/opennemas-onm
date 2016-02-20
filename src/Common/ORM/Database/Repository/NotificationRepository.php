@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Database\Repository;
+namespace Common\ORM\Database\Repository;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class NotificationRepository extends DatabaseRepository
 {

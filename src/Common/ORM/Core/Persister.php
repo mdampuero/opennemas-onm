@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\ORM\Core;
+namespace Common\ORM\Core;
 
-use Framework\ORM\Core\ChainElement;
-use Framework\ORM\Core\Entity;
+use Common\ORM\Core\ChainElement;
+use Common\ORM\Core\Entity;
 
 abstract class Persister extends ChainElement
 {

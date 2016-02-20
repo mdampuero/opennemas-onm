@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\ORM\FreshBooks\Repository;
+namespace Common\ORM\FreshBooks\Repository;
 
-use Framework\ORM\Core\Repository;
+use Common\ORM\Core\Repository;
 use Freshbooks\FreshBooksApi;
 
 abstract class FreshBooksRepository extends Repository

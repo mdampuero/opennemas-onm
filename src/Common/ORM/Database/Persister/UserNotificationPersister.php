@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Database\Persister;
+namespace Common\ORM\Database\Persister;
 
-use Framework\ORM\Core\Entity;
+use Common\ORM\Core\Entity;
 
 class UserNotificationPersister extends DatabasePersister
 {

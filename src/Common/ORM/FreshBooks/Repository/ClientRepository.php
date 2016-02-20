@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\ORM\FreshBooks\Repository;
+namespace Common\ORM\FreshBooks\Repository;
 
-use Framework\ORM\Entity\Client;
-use Framework\ORM\Core\Exception\EntityNotFoundException;
-use Framework\ORM\Core\Exception\InvalidCriteriaException;
+use Common\ORM\Entity\Client;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Core\Exception\InvalidCriteriaException;
 
 class ClientRepository extends FreshBooksRepository
 {

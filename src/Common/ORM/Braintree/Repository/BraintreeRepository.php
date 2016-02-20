@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\ORM\Braintree\Repository;
+namespace Common\ORM\Braintree\Repository;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Repository;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Repository;
 
 abstract class BraintreeRepository extends Repository
 {

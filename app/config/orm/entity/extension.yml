@@ -33,11 +33,11 @@ entity:
         metas: true
         repositories:
             database:
-                class:     Framework\ORM\Database\Repository\BaseRepository
+                class:     Common\ORM\Database\Repository\BaseRepository
                 arguments: [ @cache, @dbal_connection ]
         persisters:
             database:
-                class:     Framework\ORM\Database\Persister\BasePersister
+                class:     Common\ORM\Database\Persister\BasePersister
                 arguments: [ @cache, @orm.connection.manager ]
         columns:
             id:

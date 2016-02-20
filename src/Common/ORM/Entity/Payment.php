@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\ORM\Entity;
+namespace Common\ORM\Entity;
 
-use Framework\ORM\Core\Entity;
+use Common\ORM\Core\Entity;
 
 class Payment extends Entity
 {

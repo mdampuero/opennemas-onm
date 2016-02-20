@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\ORM\Database\Persister;
+namespace Common\ORM\Database\Persister;
 
-use Framework\ORM\Core\Connection;
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Metadata;
-use Framework\ORM\Core\Persister;
+use Common\ORM\Core\Connection;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Metadata;
+use Common\ORM\Core\Persister;
 use Onm\Cache\CacheInterface;
 
 class BasePersister extends Persister

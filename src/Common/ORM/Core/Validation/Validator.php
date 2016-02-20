@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core\Validation;
+namespace Common\ORM\Core\Validation;
 
-use Framework\ORM\Core\Validation\Validable;
-use Framework\ORM\Core\Exception\InvalidEntityException;
+use Common\ORM\Core\Validation\Validable;
+use Common\ORM\Core\Exception\InvalidEntityException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 

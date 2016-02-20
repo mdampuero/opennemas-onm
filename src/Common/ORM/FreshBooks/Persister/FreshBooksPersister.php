@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\ORM\FreshBooks\Persister;
+namespace Common\ORM\FreshBooks\Persister;
 
-use Framework\ORM\Core\Persister;
+use Common\ORM\Core\Persister;
 use Freshbooks\FreshBooksApi;
 
 abstract class FreshBooksPersister extends Persister

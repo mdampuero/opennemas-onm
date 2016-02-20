@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\ORM\Braintree\Persister;
+namespace Common\ORM\Braintree\Persister;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class ClientPersister extends BraintreePersister
 {

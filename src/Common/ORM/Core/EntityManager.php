@@ -7,16 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core;
+namespace Common\ORM\Core;
 
-use Framework\ORM\Braintree\BraintreeManager;
-use Framework\ORM\Database\DatabaseManager;
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Schema\Dumper;
-use Framework\ORM\Core\Validation\Validator;
-use Framework\ORM\FreshBooks\FreshBooksManager;
-use Framework\ORM\Core\Exception\InvalidPersisterException;
-use Framework\ORM\Core\Exception\InvalidRepositoryException;
+use Common\ORM\Braintree\BraintreeManager;
+use Common\ORM\Database\DatabaseManager;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Schema\Dumper;
+use Common\ORM\Core\Validation\Validator;
+use Common\ORM\FreshBooks\FreshBooksManager;
+use Common\ORM\Core\Exception\InvalidPersisterException;
+use Common\ORM\Core\Exception\InvalidRepositoryException;
 
 class EntityManager
 {

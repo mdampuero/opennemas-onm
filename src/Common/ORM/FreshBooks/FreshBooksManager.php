@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\ORM\FreshBooks;
+namespace Common\ORM\FreshBooks;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Exception\InvalidPersisterException;
-use Framework\ORM\Core\Exception\InvalidRepositoryException;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\InvalidPersisterException;
+use Common\ORM\Core\Exception\InvalidRepositoryException;
 use Freshbooks\FreshBooksApi;
 
 class FreshBooksManager

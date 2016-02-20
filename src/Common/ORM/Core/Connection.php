@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core;
+namespace Common\ORM\Core;
 
 use Framework\Component\Data\DataBuffer;
-use Framework\ORM\Core\Validation\Validable;
+use Common\ORM\Core\Validation\Validable;
 
 class Connection extends DataBuffer implements Validable
 {

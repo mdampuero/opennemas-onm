@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core\Schema;
+namespace Common\ORM\Core\Schema;
 
 use Framework\Component\Data\DataObject;
-use Framework\ORM\Core\Validation\Validable;
+use Common\ORM\Core\Validation\Validable;
 
 class Schema extends DataObject implements Validable
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\ORM\FreshBooks\Persister;
+namespace Common\ORM\FreshBooks\Persister;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class ClientPersister extends FreshBooksPersister
 {

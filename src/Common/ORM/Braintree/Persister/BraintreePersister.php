@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\ORM\Braintree\Persister;
+namespace Common\ORM\Braintree\Persister;
 
-use Framework\ORM\Core\Entity;
-use Framework\ORM\Core\Persister;
+use Common\ORM\Core\Entity;
+use Common\ORM\Core\Persister;
 
 abstract class BraintreePersister extends Persister
 {

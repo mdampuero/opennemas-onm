@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\ORM\Core;
+namespace Common\ORM\Core;
 
 class ChainElement
 {

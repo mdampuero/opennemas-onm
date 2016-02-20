@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\ORM\Core;
+namespace Common\ORM\Core;
 
-use Framework\ORM\Core\ChainElement;
+use Common\ORM\Core\ChainElement;
 
 class Repository extends ChainElement
 {

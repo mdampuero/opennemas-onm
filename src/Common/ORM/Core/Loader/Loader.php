@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Core\Loader;
+namespace Common\ORM\Core\Loader;
 
-use Framework\ORM\Core\Connection;
-use Framework\ORM\Core\Metadata;
-use Framework\ORM\Core\Schema\Schema;
+use Common\ORM\Core\Connection;
+use Common\ORM\Core\Metadata;
+use Common\ORM\Core\Schema\Schema;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
