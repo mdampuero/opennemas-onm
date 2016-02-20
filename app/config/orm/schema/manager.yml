@@ -1,0 +1,4 @@
+schema:
+    name: manager
+    entities:
+        - Extension
