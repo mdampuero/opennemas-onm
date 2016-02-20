@@ -9,7 +9,7 @@
  */
 namespace Framework\Service;
 
-use Framework\ORM\Entity\Notification;
+use Common\ORM\Entity\Notification;
 
 class NotificationService
 {

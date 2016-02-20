@@ -9,7 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
-use Framework\ORM\Entity\Notification;
+use Common\ORM\Entity\Notification;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

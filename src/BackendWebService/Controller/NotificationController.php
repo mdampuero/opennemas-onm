@@ -9,9 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Core\Exception\EntityNotFoundException;
-use Framework\ORM\Entity\Notification;
-use Framework\ORM\Entity\UserNotification;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Entity\Notification;
+use Common\ORM\Entity\UserNotification;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
