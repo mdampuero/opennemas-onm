@@ -35,6 +35,12 @@ class SidebarController extends Controller
                     'click' => true
                 ],
                 [
+                    'name' => _('Purchases'),
+                    'icon' => 'fa-shopping-cart',
+                    'route' => 'manager_purchases_list',
+                    'click' => 'true'
+                ],
+                [
                     'name' => _('Reports'),
                     'icon' => 'fa-files-o',
                     'route' => 'manager_reports_list',
