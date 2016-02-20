@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use Framework\ORM\Core\Exception\EntityNotFoundException;
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
-class DatabaseRepository extends Repository
+class BaseRepository extends Repository
 {
     /**
      * The cache object.
