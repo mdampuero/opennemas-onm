@@ -1,20 +1,20 @@
 services:
     orm.loader:
-        class: Framework\ORM\Core\Loader\Loader
+        class: Common\ORM\Core\Loader\Loader
         arguments: [ %orm.config_path%, %kernel.environment% ]
 
     orm.manager.braintree:
-        class: Framework\ORM\Braintree\BraintreeManager
+        class: Common\ORM\Braintree\BraintreeManager
         arguments: [ @comet_cult_braintree.factory ]
 
     orm.manager.fresh_books:
-        class: Framework\ORM\FreshBooks\FreshBooksManager
+        class: Common\ORM\FreshBooks\FreshBooksManager
         arguments: [ %freshbooks.domain%, %freshbooks.token% ]
 
     orm.manager.database:
-        class: Framework\ORM\Database\DatabaseManager
+        class: Common\ORM\Database\DatabaseManager
         arguments: [ @cache, @dbal_connection, @cache_manager, @dbal_connection_manager ]
 
     orm.manager:
-        class: Framework\ORM\Core\EntityManager
+        class: Common\ORM\Core\EntityManager
         arguments: [ @service_container ]
