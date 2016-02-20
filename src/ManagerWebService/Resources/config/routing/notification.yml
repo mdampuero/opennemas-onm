@@ -13,7 +13,7 @@ manager_ws_notification_delete:
         expose: true
 
 manager_ws_notification_new:
-    path:     /notification/new
+    path:     /notifications/new
     defaults: { _controller: ManagerWebServiceBundle:Notification:new }
     methods:  [ GET ]
     options:
