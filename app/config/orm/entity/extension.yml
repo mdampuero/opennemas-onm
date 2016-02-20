@@ -33,7 +33,7 @@ entity:
         metas: true
         repositories:
             database:
-                class:     Framework\ORM\Database\Repository\ExtensionRepository
+                class:     Framework\ORM\Database\Repository\BaseRepository
                 arguments: [ @cache, @dbal_connection ]
         persisters:
             database:
