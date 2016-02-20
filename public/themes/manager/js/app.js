@@ -19,6 +19,7 @@ angular.module(
     'onm.history',
     'onm.item',
     'onm.messenger',
+    'onm.pagination',
     'onm.resizable',
     'onm.routing',
     'onm.sidebar',

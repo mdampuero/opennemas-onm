@@ -4,10 +4,6 @@ manager_welcome:
     options:
         expose: true
 
-manager_playground:
-    path:  /manager/playground/{action}
-    defaults: { _controller: ManagerBundle:Playground:default }
-
 manager_instance:
     prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/instance.yml
@@ -23,6 +19,10 @@ manager_notification:
 manager_opcache:
     prefix:   /manager/
     resource: @ManagerBundle/Resources/config/routing/opcache.yml
+
+manager_purchase:
+    prefix:   /manager/
+    resource: @ManagerBundle/Resources/config/routing/purchase.yml
 
 manager_report:
     prefix:   /manager

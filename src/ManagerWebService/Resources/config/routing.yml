@@ -23,6 +23,10 @@ manager_ws_opcache:
     resource: @ManagerWebServiceBundle/Resources/config/routing/opcache.yml
     prefix:   /
 
+manager_ws_purchase:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/purchase.yml
+    prefix:   /
+
 manager_ws_report:
     resource: @ManagerWebServiceBundle/Resources/config/routing/report.yml
     prefix:   /
