@@ -42,6 +42,8 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
                 $imageUrl = $photoInt->media_url.$photoInt->path_file.$photoInt->name;
             }
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+            $output []= '<meta property="og:image:width" content="'.$photoInt->width.'"/>';
+            $output []= '<meta property="og:image:height" content="'.$photoInt->height.'"/>';
         } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
             // Articles with inner video
             $videoInt = $smarty->tpl_vars['videoInt']->value;
@@ -55,6 +57,8 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $photo = $smarty->tpl_vars['photo']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+            $output []= '<meta property="og:image:width" content="'.$photo->width.'"/>';
+            $output []= '<meta property="og:image:height" content="'.$photo->height.'"/>';
         } elseif (isset($content->author->photo->path_img) &&
                 !empty($content->author->photo->path_img) &&
                 $content->content_type_name == 'opinion'
@@ -77,16 +81,12 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $photoFront = getService('entity_repository')->find('Photo', $content->img1);
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+            $output []= '<meta property="og:image:width" content="'.$photoFront->width.'"/>';
+            $output []= '<meta property="og:image:height" content="'.$photoFront->height.'"/>';
         } elseif (array_key_exists('default_image', $params)) {
             // Default
             $imageUrl = $params['default_image'];
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        }
-
-        if (!is_null($imageUrl) && file_exists($imageUrl)) {
-            list($width, $height) = getimagesize($imageUrl);
-            $output []= '<meta property="og:image:width" content="'.$width.'"/>';
-            $output []= '<meta property="og:image:height" content="'.$height.'"/>';
         }
     }
 

@@ -262,7 +262,13 @@ class AssetController extends Controller
 
             // RenderColorMenu - ADDED RENDER COLOR MENU
             $configColor = s::get('site_color');
-            $siteColor   = (!empty($configColor) ? '#'.$configColor : '#005689');
+            if (!empty($configColor)) {
+                if (!preg_match('@^#@', $configColor)) {
+                    $siteColor = '#'.$configColor;
+                }
+            } else {
+                $siteColor = '#005689';
+            }
 
             $selectedCategories = array();
             foreach ($ccm->categories as &$category) {
@@ -287,8 +293,8 @@ class AssetController extends Controller
             }
 
             $this->view->assign([
-                'categories'             => $selectedCategories,
-                'site_color'             => $siteColor,
+                'categories' => $selectedCategories,
+                'site_color' => $siteColor,
             ]);
         }
 

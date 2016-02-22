@@ -6,8 +6,8 @@ asset_image:
     path: /asset/{parameters}/{real_path}
     defaults: { _controller: FrontendBundle:Asset:image }
     requirements:
-        parameters : "[^/]+"
-        real_path : ".+"
+        parameters : '[^/]+'
+        real_path : '.+'
     options:
         expose: true
 
@@ -15,19 +15,19 @@ category_frontpage:
     path: /blog/section/{category_name}
     defaults: { _controller: FrontendBundle:Category:category }
     requirements:
-        category: "[a-z0-9\-]+"
+        category: '[a-z0-9\-]+'
 
 categ_sync_frontpage:
     path: /extseccion/blog/{category_name}
     defaults: { _controller: FrontendBundle:Category:extCategory }
     requirements:
-        category: "[a-z0-9\-]+"
+        category: '[a-z0-9\-]+'
 
 tag_frontpage:
     path: /tag/{tag_name}
     defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
-        tag_name: "[A-Za-z0-9\-.]+"
+        tag_name: '[A-Za-z0-9\-.]+'
 
 frontend_paywall_showcase:
     path: /paywall
@@ -117,7 +117,7 @@ frontend_author_frontpage:
     path: /author/{slug}
     defaults: { _controller: FrontendBundle:User:authorFrontpage }
     requirements:
-        slug: "[A-Za-z\d-.]+"
+        slug: '[A-Za-z\d-.]+'
 
 frontend_frontpage_authors:
     path: /authors
@@ -127,7 +127,7 @@ frontend_external_author_frontpage:
     path: /extauthor/{slug}
     defaults: { _controller: FrontendBundle:User:extAuthorFrontpage }
     requirements:
-        slug: "[A-Za-z\d-]+"
+        slug: '[A-Za-z\d-]+'
 
 # Common content management routes
 frontend_ad_get:
@@ -146,19 +146,19 @@ frontend_rss_opinion_author:
     path: /rss/opinion/{author}
     defaults: { _controller: FrontendBundle:Rss:generalRSS, category_name:opinion }
     requirements:
-        author: "\d+"
+        author: '\d+'
 
 frontend_rss_author:
     path: /rss/author/{author_slug}
     defaults: { _controller: FrontendBundle:Rss:authorRSS }
     requirements:
-        author_slug: "[A-Za-z\d-.]+"
+        author_slug: '[A-Za-z\d-.]+'
 
 frontend_rss_category:
     path: /rss/{category_name}
     defaults: { _controller: FrontendBundle:Rss:generalRSS }
     requirements:
-        category_name    : "[A-Za-z\d-]+"
+        category_name    : '[A-Za-z\d-]+'
 
 frontend_rss:
     path: /rss
@@ -172,44 +172,44 @@ frontend_sitemapnews:
     path: /sitemapnews.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:news, _format: xml }
     requirements:
-        _format: "xml|xml.gz"
+        _format: 'xml|xml.gz'
 
 frontend_sitemapweb:
     path: /sitemapweb.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:web, _format:xml }
     requirements:
-        _format: "xml|xml.gz"
+        _format: 'xml|xml.gz'
 
 frontend_sitemapimage:
     path: /sitemapimage.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:image, _format:xml }
     requirements:
-        _format: "xml|xml.gz"
+        _format: 'xml|xml.gz'
 
 frontend_sitemapvideo:
     path: /sitemapvideo.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:video, _format:xml }
     requirements:
-        _format: "xml|xml.gz"
+        _format: 'xml|xml.gz'
 
 frontend_sitemapindex:
     path: /sitemap.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:index, _format:xml }
     requirements:
-        _format: "xml|xml.gz"
+        _format: 'xml|xml.gz'
 
 frontend_staticpage:
     path: /estaticas/{slug}.{_format}
     defaults: { _controller: FrontendBundle:StaticPages:show, _format:html }
     requirements:
         _format : html|htm
-        slug    : "[A-Za-z\d-]+"
+        slug    : '[A-Za-z\d-]+'
 
 frontend_search_internal:
     path: /search
     defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
-        tag_name: "[A-Za-z0-9\-.]+"
+        tag_name: '[A-Za-z0-9\-.]+'
 
 frontend_search_google:
     path: /search/google
@@ -251,15 +251,15 @@ frontend_book_show:
     path: /libro/{id}.{_format}
     defaults: { _controller: FrontendBundle:Books:show, _format: html }
     requirements:
-        id : "([0-9]+)"
+        id : '([0-9]+)'
 
 frontend_book_show_with_slug:
     path: /libro/{category_name}/{slug}/{id}.{_format}
     defaults: { _controller: FrontendBundle:Books:show, _format:html }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "([a-z0-9\-]+)?"
-        id           : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        slug         : '([a-z0-9\-]+)?'
+        id           : '([0-9]+)'
 
 frontend_books_widget:
     path: /libros/widget
@@ -277,105 +277,105 @@ frontend_album_frontpage:
     path: /album/{page}
     defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }
     requirements:
-        page: "([0-9]+)?"
+        page: '([0-9]+)?'
 
 frontend_album_frontpage_category:
     path: /album/{category_name}
     defaults: { _controller: FrontendBundle:Albums:frontpage }
     requirements:
-        category_name: "[a-z0-9\-]+"
+        category_name: '[a-z0-9\-]+'
 
 frontend_album_show_with_date_slug:
     path: /album/{category_name}/{date}/{slug}/{album_id}.{_format}
     defaults: { _controller: FrontendBundle:Albums:show, _format : html, page :1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
-        slug         : "[a-z0-9\-]+"
-        album_id     : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
+        slug         : '[a-z0-9\-]+'
+        album_id     : '([0-9]+)'
 
 frontend_album_show:
     path: /album/{category_name}/{slug}/{album_id}.{_format}
     defaults: { _controller: FrontendBundle:Albums:show, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        album_id     : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        album_id     : '([0-9]+)'
 
 frontend_monograph_frontpage:
     path: /especiales/{page}
     defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
-        page: "([0-9]+)?"
+        page: '([0-9]+)?'
 
 frontend_monograph_frontpage_category:
     path: /especiales/{category_name}/{page}
     defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        page         : "([0-9]+)?"
+        category_name: '[a-z0-9\-]+'
+        page         : '([0-9]+)?'
 
 frontend_monograph_show:
     path: /especiales/{category_name}/{slug}/{special_id}.{_format}
     defaults: { _controller: FrontendBundle:Monographs:show, _format:html, page:1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        special_id   : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        special_id   : '([0-9]+)'
 
 frontend_poll_frontpage:
     path: /{component}/{page}
     defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
     requirements:
-        page     : "([0-9]+)?"
-        component: "encuesta|poll|enquerito|enquisa"
+        page     : '([0-9]+)?'
+        component: 'encuesta|poll|enquerito|enquisa'
 
 frontend_poll_vote:
     path: /poll/addvote/{id}
     defaults: { _controller: FrontendBundle:Polls:addVote }
     requirements:
-        id           : "([0-9]+)"
+        id           : '([0-9]+)'
 
 frontend_poll_frontpage_category:
     path: /{component}/{category_name}/{page}
     defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        page         : "([0-9]+)?"
-        component    : "encuesta|poll|enquerito|enquisa"
+        category_name: '[a-z0-9\-]+'
+        page         : '([0-9]+)?'
+        component    : 'encuesta|poll|enquerito|enquisa'
 
 frontend_poll_show:
     path: /{component}/{category_name}/{slug}/{id}.{_format}
     defaults: { _controller: FrontendBundle:Polls:show, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        id           : "([0-9]+)"
-        component: "encuesta|poll|enquerito|enquisa"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        id           : '([0-9]+)'
+        component: 'encuesta|poll|enquerito|enquisa'
 
 
 frontend_archive_content:
     path: /archive/content/{year}/{month}/{day}/{category_name}
     defaults: { _controller: FrontendBundle:Archive:archive, category_name: home }
     requirements:
-        year      : "[0-9]+"
-        month     : "[0-9]+"
-        day       : "[0-9]+"
+        year      : '[0-9]+'
+        month     : '[0-9]+'
+        day       : '[0-9]+'
 
 frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}
     defaults: { _controller: FrontendBundle:Archive:digitalFrontpage, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        year      : "([0-9]+)"
-        month     : "([0-9]+)"
-        day       : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        year      : '([0-9]+)'
+        month     : '([0-9]+)'
+        day       : '([0-9]+)'
 
 frontend_archive:
     path: /archive/{component}
     defaults: { _controller: FrontendBundle:Archive:archive }
     requirements:
-        component  : "content|digital"
+        component  : 'content|digital'
 
 frontend_participa_frontpage:
     path: /participa
@@ -401,9 +401,9 @@ frontend_letter_show:
     path: /cartas-al-director/{author}/{slug}/{id}.{_format}
     defaults: { _controller: FrontendBundle:Letter:show, _format: html }
     requirements:
-        author  : "([a-z0-9\-]+)"
-        slug    : "[a-z0-9\-]+"
-        video_id: "([0-9]+)"
+        author  : '([a-z0-9\-]+)'
+        slug    : '[a-z0-9\-]+'
+        video_id: '([0-9]+)'
 
 frontend_letter_save:
     path: /cartas-al-director/save
@@ -413,32 +413,32 @@ frontend_video_ajax_more:
     path: /video/more/{category}
     defaults: { _controller: FrontendBundle:Videos:ajaxMore, page: 1 }
     requirements:
-        category: "([0-9]+)"
+        category: '([0-9]+)'
 
 frontend_video_ajax_incategory:
     path: /video/incategory/{category}
     defaults: { _controller: FrontendBundle:Videos:ajaxInCategory, page: 1 }
     requirements:
-        category: "([0-9]+)"
+        category: '([0-9]+)'
 
 frontend_video_frontpage:
     path: /video/{page}
     defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
     requirements:
-        page: "([0-9]+)?"
+        page: '([0-9]+)?'
 
 frontend_video_page_frontpage:
     path: /video/page/{page}
     defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
     requirements:
-        page: "([0-9]+)?"
+        page: '([0-9]+)?'
 
 frontend_video_page_frontpage_category:
     path: /video/{category_name}/page/{page}
     defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        page: "([0-9]+)?"
+        category_name: '[a-z0-9\-]+'
+        page: '([0-9]+)?'
 
 frontend_video_ajax_paginated:
     path: /video/more
@@ -448,34 +448,34 @@ frontend_video_frontpage_category:
     path: /video/{category_name}/{page}
     defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        page         : "([0-9]+)?"
+        category_name: '[a-z0-9\-]+'
+        page         : '([0-9]+)?'
 
 frontend_video_show_with_slug:
     path: /video/{category_name}/{slug}/{video_id}.{_format}
     defaults: { _controller: FrontendBundle:Videos:show, _format: html }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        video_id     : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        video_id     : '([0-9]+)'
 
 frontend_video_show_with_date_slug:
     path: /video/{category_name}/{date}/{slug}/{video_id}.{_format}
     defaults: { _controller: FrontendBundle:Videos:show, _format: html }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
-        slug         : "[a-z0-9\-]+"
-        video_id     : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
+        slug         : '[a-z0-9\-]+'
+        video_id     : '([0-9]+)'
 
 frontend_article_show:
     path: /articulo/{category_name}/{slug}/{article_id}.{_format}
     defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        article_id   : "([0-9]+)"
-        _format      : "html|htm"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
 
 frontend_article_external_link:
     path: /redirect
@@ -485,44 +485,44 @@ frontend_external_article_show:
     path: /extarticulo/{category_name}/{slug}/{article_id}.{_format}
     defaults: { _controller: FrontendBundle:Articles:extShow, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        article_id   : "([0-9]+)"
-        _format      : "html|htm"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
 
 frontend_article_show_gl:
     path: /artigo/{category_name}/{slug}/{article_id}.{_format}
     defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        article_id   : "([0-9]+)"
-        _format      : "html|htm"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
 
 frontend_article_show_old_with_date:
     path: /articulo/{category_name}/{date}/{slug}/{article_id}.{_format}
     defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        article_id   : "([0-9]+)"
-        _format      : "html|htm"
-        date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
+        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
 
 frontend_content_print:
     path: /content/print/{slug}/{content_id}.{_format}
     defaults: { _controller: FrontendBundle:Contents:print, _format: html,  page: 1 }
     requirements:
-        slug         : "[a-z0-9\-]+"
-        content_id   : "([0-9]+)"
+        slug         : '[a-z0-9\-]+'
+        content_id   : '([0-9]+)'
 
 frontend_external_content_print:
     path: /content/extprint/{category_name}/{slug}/{content_id}.{_format}
     defaults: { _controller: FrontendBundle:Contents:extPrint, _format: html, page: 1 }
     requirements:
-        category_name: "[a-z0-9\-]+"
-        slug         : "[a-z0-9\-]+"
-        content_id   : "([0-9]+)"
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        content_id   : '([0-9]+)'
 
 frontend_content_share_by_mail:
     path: /content/share-by-email/{content_id}
@@ -543,24 +543,24 @@ frontend_newstand_frontpage_date:
     path: /portadas-papel/{year}/{month}/{day}
     defaults: { _controller: FrontendBundle:NewStand:frontpage, month: 0, day: 1 }
     requirements:
-        year  : "[0-9]{4}"
-        month : "[0-9]{1,2}"
-        day   : "[0-3][0-9]"
+        year  : '[0-9]{4}'
+        month : '[0-9]{1,2}'
+        day   : '[0-3][0-9]'
 
 frontend_newstand_frontpage_category:
     path: /portadas-papel/{category_name}/{year}/{month}
     defaults: { _controller: FrontendBundle:NewStand:frontpage }
     requirements:
-        category_name : "[a-z0-9\-]+"
-        year          : "([0-9]{4})"
-        month         : "([0-9]{1,2})"
+        category_name : '[a-z0-9\-]+'
+        year          : '([0-9]{4})'
+        month         : '([0-9]{1,2})'
 
 frontend_newstand_show:
     path: /portadas-papel/{category_name}/{id}.{_format}
     defaults: { _controller: FrontendBundle:NewStand:show, _format: html }
     requirements:
-        category_name : "[a-z0-9\-]+"
-        id            : "([0-9]+)"
+        category_name : '[a-z0-9\-]+'
+        id            : '([0-9]+)'
 
 frontend_opinion_editorial_frontpage:
     path: /editorial
@@ -570,55 +570,55 @@ frontend_opinion_author_frontpage:
     path: /opinion/autor/{author_id}/{author_slug}
     defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor }
     requirements:
-        author_slug   : "(.*)?"
-        author_id     : "([0-9]+)"
+        author_slug   : '(.*)?'
+        author_id     : '([0-9]+)'
 
 
 frontend_opinion_external_author_frontpage:
     path: /extopinion/autor/{author_id}/{author_slug}
     defaults: { _controller: FrontendBundle:Opinions:extFrontpageAuthor }
     requirements:
-           author_slug   : "(.*)?"
-           author_id     : "([0-9]+)"
+           author_slug   : '(.*)?'
+           author_id     : '([0-9]+)'
 
 frontend_opinion_show_with_author_slug:
     path: /opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
     defaults: { _controller: FrontendBundle:Opinions:show, author_name: author, _format: html }
     requirements:
-        author_name   : "[a-z0-9\-.]+"
-        opinion_title : "[a-z0-9\-]+"
-        opinion_id    : "[a-z0-9\-]+"
+        author_name   : '[a-z0-9\-.]+'
+        opinion_title : '[a-z0-9\-]+'
+        opinion_id    : '[a-z0-9\-]+'
 
 frontend_opinion_show_with_author_slug_and_date:
     path: /opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}
     defaults: { _controller: FrontendBundle:Opinions:show, author_name:author, _format: html }
     requirements:
-        author_name  : "[a-z0-9\-.]+"
-        opinion_title: "[a-z0-9\-]+"
-        opinion_id   : "[a-z0-9\-]+"
-        date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
+        author_name  : '[a-z0-9\-.]+'
+        opinion_title: '[a-z0-9\-]+'
+        opinion_id   : '[a-z0-9\-]+'
+        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
 
 frontend_opinion_show:
     path: /opinion/{opinion_title}/{opinion_id}.{_format}
     defaults: { _controller: FrontendBundle:Opinions:show, _format : html }
     requirements:
-        opinion_title: "[a-z0-9\-]+"
-        opinion_id   : "[a-z0-9\-]+"
+        opinion_title: '[a-z0-9\-]+'
+        opinion_id   : '[a-z0-9\-]+'
 
 frontend_opinion_external_show_with_author_slug:
     path: /extopinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
     defaults: { _controller: FrontendBundle:Opinions:extShow, author_name:author, _format: html }
     requirements:
-        author_name   : "[a-z0-9\-.]+"
-        opinion_title : "[a-z0-9\-]+"
-        opinion_id    : "[a-z0-9\-]+"
+        author_name   : '[a-z0-9\-.]+'
+        opinion_title : '[a-z0-9\-]+'
+        opinion_id    : '[a-z0-9\-]+'
 
 frontend_opinion_external_show:
     path: /extopinion/{opinion_title}/{opinion_id}.{_format}
     defaults: { _controller: FrontendBundle:Opinions:extShow, _format : html }
     requirements:
-        opinion_title: "[a-z0-9\-.]+"
-        opinion_id   : "[a-z0-9\-]+"
+        opinion_title: '[a-z0-9\-.]+'
+        opinion_id   : '[a-z0-9\-]+'
 
 frontend_opinion_frontpage:
     path: /opinion
@@ -637,15 +637,15 @@ frontend_blog_author_frontpage:
     path: /blog/author/{author_slug}
     defaults: { _controller: FrontendBundle:Blogs:frontpageAuthor }
     requirements:
-        author_slug : "[a-z0-9\-.]+"
+        author_slug : '[a-z0-9\-.]+'
 
 frontend_blog_show:
     path: /blog/{author_name}/{blog_title}/{blog_id}.{_format}
     defaults: { _controller: FrontendBundle:Blogs:show, _format: html, author_name: author }
     requirements:
-        author_name : "[a-z0-9\-.]+"
-        blog_title  : "[a-z0-9\-]+"
-        blog_id     : "[a-z0-9\-]+"
+        author_name : '[a-z0-9\-.]+'
+        blog_title  : '[a-z0-9\-]+'
+        blog_id     : '[a-z0-9\-]+'
 
 frontend_frontpage_home:
     path: /home
@@ -655,34 +655,34 @@ frontend_frontpage:
     path: /{category}
     defaults: { _controller: FrontendBundle:Frontpages:show, category : home }
     requirements:
-        category: "(^[mobile])"
+        category: '(^[mobile])'
 
 frontend_frontpage_category:
     path: /seccion/{category}
     defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
     requirements:
-        category: "[a-z0-9\-]+"
+        category: '[a-z0-9\-]+'
 
 frontend_css_global:
     path: dynamic/css/global.{cb}.css
     defaults: { _controller: FrontendBundle:Asset:globalCss }
     requirements:
-        cb : "[0-9]+"
+        cb : '[0-9]+'
 
 frontend_css_frontpage_category:
     path: dynamic/css/frontpage/{category}.{cb}.css
     defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
     requirements:
-        category : "[a-z0-9\-]+"
-        cb : "[0-9]+"
+        category : '[a-z0-9\-]+'
+        cb : '[0-9]+'
 
 
 frontend_externalfrontpage_category:
     path: /extseccion/{category}
     defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
-        category : "[a-z0-9\-]+"
+        category : '[a-z0-9\-]+'
 
 frontend_framework:
-    resource: @FrontendBundle/Resources/config/routing/framework.yml
+    resource: '@FrontendBundle/Resources/config/routing/framework.yml'
     prefix: /

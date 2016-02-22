@@ -14,19 +14,19 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
-        arguments: [ @instance_manager, @cache, @cache_manager ]
+        arguments: [ '@instance_manager', '@cache', '@cache_manager' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
     kernel.listener.user_listener:
         class: Framework\EventListener\UserListener
-        arguments: [ @security.token_storage, @onm_user_provider, @router, @session ]
+        arguments: [ '@security.token_storage', '@onm_user_provider', '@router', '@session' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
-        arguments: [ @service_container, @setting_repository ]
+        arguments: [ '@service_container', '@setting_repository' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -42,7 +42,7 @@ services:
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
+        arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
         tags:
             - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
@@ -69,7 +69,7 @@ services:
 
     kernel.listener.hooks_subscriber:
         class: Framework\EventListener\HooksSubscriber
-        arguments: [ @service_container, @cache, @logger ]
+        arguments: [ '@service_container', '@cache', '@logger' ]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -89,7 +89,7 @@ services:
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
-        arguments: [ @dbal_connection ]
+        arguments: [ '@dbal_connection' ]
         tags:
             -
                 name:     data_collector
@@ -100,7 +100,7 @@ services:
     collector.cache:
         class: Framework\DataCollector\CacheCollector
         public: false
-        arguments: [ @cache ]
+        arguments: [ '@cache' ]
         tags:
             -
                 name:     data_collector
@@ -126,66 +126,66 @@ services:
 
     category_repository:
         class: Repository\CategoryManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     content_views_repository:
         class: Repository\ContentViewsManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     frontpage_repository:
         class: Repository\FrontpageManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     menu_repository:
         class: Repository\MenuManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     advertisement_repository:
         class: Repository\AdvertisementManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     opinion_repository:
         class: Repository\OpinionManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     widget_repository:
         class: Repository\WidgetManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     usergroup_repository:
         class: Repository\UserGroupManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ '@db_conn', '@cache', %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
-        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@entity_repository', '@cache', %cache_prefix% ]
 
     acl_checker:
         class: Onm\Security\Acl
 
     google_recaptcha:
         class: Onm\Recaptcha
-        arguments: [ @setting_repository, %recaptcha_private_key% ]
+        arguments: [ '@setting_repository', %recaptcha_private_key% ]
 
     recaptcha:
         class: Captcha\Captcha
@@ -201,15 +201,15 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @dbal_connection, @cache_manager, @setting_repository ]
+        arguments: [ '@dbal_connection', '@cache_manager', '@setting_repository' ]
 
     instance:
         class: Onm\Instance\Instance
-        factory: [@kernel.listener.instanceloader, getInstance]
+        factory: [ '@kernel.listener.instanceloader', getInstance ]
 
     onm_templating:
         class: Onm\Templating\Templating
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
 
     template_cache_manager:
         class: Onm\Templating\Cache\Manager
@@ -219,7 +219,7 @@ services:
 
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
-        arguments: [ @entity_repository ]
+        arguments: [ '@entity_repository' ]
 
     content_cache:
         class: Framework\Cache\ContentCache
@@ -237,7 +237,7 @@ services:
 
     onm.validator.instance:
         class: Onm\Validator\InstanceValidator
-        arguments: [ @instance_manager ]
+        arguments: [ '@instance_manager' ]
 
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
@@ -245,19 +245,19 @@ services:
 
     paginator:
         class: Framework\Component\Paginator\Paginator
-        arguments: [ @router ]
+        arguments: [ '@router' ]
 
     onm.framework_status:
         class: Onm\Framework\Status
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
 
     related_contents:
         class: RelatedContent
-        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@entity_repository', '@cache', %cache_prefix% ]
 
     core.event_dispatcher:
         class: Framework\Component\EventDispatcher\EventDispatcher
-        arguments: [ @event_dispatcher ]
+        arguments: [ '@event_dispatcher' ]
 
     vat:
         class: Framework\VAT\VATService

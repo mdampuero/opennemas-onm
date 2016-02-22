@@ -205,4 +205,3 @@
 
 </div>
 {/block}
-{/block}

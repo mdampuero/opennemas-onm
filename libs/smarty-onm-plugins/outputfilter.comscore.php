@@ -8,7 +8,7 @@
  * Purpose:  Prints ComScore analytics code
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_comscore($output, &$smarty)
+function smarty_outputfilter_comscore($output, $smarty)
 {
     $request = getService('request');
     $uri     = $request->getUri();

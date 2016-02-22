@@ -149,7 +149,7 @@ body {
 .ui-widget {font-family: 'Open sans'}
 .ui-widget-header {background: #22252d;color: #fff;border:0;border-radius:0;}
 .ui-tabs-panel, .tabs > div {border:0 none !important;}
-.ui-dialog .ui-icon-closethick {background:url(../images/tb-close.png) top left no-repeat;}
+.ui-dialog .ui-icon-closethick {background:url(/themes/admin/images/tb-close.png) top left no-repeat;}
 .ui-sortable-helper {z-index:9999 !important;}
 .ui-widget input {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;}
 
