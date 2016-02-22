@@ -55,7 +55,7 @@
         "google/recaptcha": "1.1",
         "hwi/oauth-bundle": "0.4.*",
         "imagine/imagine": "0.6.*",
-	"jeremykendall/php-domain-parser": "~2.0",
+        "jeremykendall/php-domain-parser": "~2.0",
         "league/csv": "~8.0",
         "lexik/jwt-authentication-bundle": "dev-master",
         "luracast/restler": "3.0.0",
@@ -76,11 +76,11 @@
         "phploc/phploc": "3.0.*",
         "phpmd/phpmd": "2.3.*",
         "phpunit/phpunit": "5.2.*",
+        "sami/sami": "~3.2",
         "sebastian/phpcpd": "2.0.*",
         "sensio/generator-bundle": "~3.0",
         "squizlabs/php_codesniffer": "2.*",
-        "symfony/phpunit-bridge": "~2.7",
-        "theseer/phpdox": "0.8.*"
+        "symfony/phpunit-bridge": "~2.7"
     },
     "repositories": [
         {
