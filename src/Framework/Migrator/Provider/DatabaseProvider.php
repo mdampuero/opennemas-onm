@@ -100,7 +100,6 @@ class DatabaseProvider extends MigrationProvider
                 $id[$schema['source']['id']],
                 $schema['translation']['name']
             )) {
-
                 // Build sql statement 'SELECT' chunk
                 $sql = 'SELECT ';
                 foreach ($schema['fields'] as $key => $field) {
@@ -159,7 +158,6 @@ class DatabaseProvider extends MigrationProvider
 
                 if (isset($schema['relations'])
                         && count($schema['relations']) > 0) {
-
                     foreach ($schema['relations'] as $key => $relation) {
                         if ($key < count($schema['relations'])) {
                             $sql .= ' AND (';
@@ -218,11 +216,17 @@ class DatabaseProvider extends MigrationProvider
         $sql = '';
         if (array_keys($condition) !== range(0, count($condition) - 1)) {
             // Associative array
-            $sql .= $condition['table'] . '.' . $condition['field']
-                . (array_key_exists('operator', $condition) ?
-                    $condition['operator'] . '\'' . $condition['value'] . '\''
-                    : ' LIKE \'%' . $condition['value'] . '%\''
-                );
+            $sql .= $condition['table'] . '.' . $condition['field'].' ';
+            // Check operators
+            if (array_key_exists('operator', $condition)) {
+                if (in_array($condition['operator'], ['IN', 'NOT IN'])) {
+                    $sql .= $condition['operator'] . ' ('. $condition['value'] . ')';
+                } else {
+                    $sql .= $condition['operator'] . ' \'' . $condition['value'] . '\'';
+                }
+            } else {
+                $sql .= ' LIKE \'%' . $condition['value'] . '%\'';
+            }
         } else {
             // Non-associative array
             $sql .= '(';

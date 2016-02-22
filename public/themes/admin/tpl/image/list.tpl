@@ -9,6 +9,9 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-picture-o"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221735-opennemas-c%C3%B3mo-subir-im%C3%A1genes-para-mis-art%C3%ADculos" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question"></i>
+              </a>
               {t}Images{/t}
             </h4>
           </li>

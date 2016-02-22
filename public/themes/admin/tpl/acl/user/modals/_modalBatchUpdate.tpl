@@ -1,5 +1,5 @@
-<div ng-init="template.extra.billing.name ? template.step = 2 : template.step = 1">
-  <div ng-if="template.step != 2 || !template.extra.billing || !template.extra.billing.name">
+<div ng-init="(!template.backend_access || template.extra.billing.name) ? template.step = 2 : template.step = 1">
+  <div ng-if="template.step != 2">
     <form name="billingForm" ng-init="template.checkPhone(template);template.checkVat(template)">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
@@ -107,7 +107,7 @@
       </div>
     </form>
   </div>
-  <div ng-if="template.extra.billing.name && template.step === 2">
+  <div ng-if="template.step === 2">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
       <h4 class="modal-title">

@@ -1,16 +1,10 @@
-# #-#-#-#-#  opennemas_code_strings.pot (opennemas VERSION)  #-#-#-#-#
-# English translations for opennemas package.
-# Copyright (C) 2015 THE opennemas'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the opennemas package.
-# Fran <fran@openhost.es>, 2015.
-# Sandra Pereira <sandra@openhost.es>, 2015, 2016.
 # Fran Dieguez <frandieguez@gnome.org>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: opennemas master\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-26 02:24+0100\n"
-"PO-Revision-Date: 2016-01-26 02:23+0200\n"
+"POT-Creation-Date: 2016-02-02 17:23+0100\n"
+"PO-Revision-Date: 2016-02-02 17:30+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: fr\n"
@@ -19,6 +13,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
+"X-Pootle-Path: /fr/opennemas/fr.po\n"
+"X-Pootle-Revision: 331\n"
 
 #, fuzzy
 msgid ""
@@ -126,10 +122,10 @@ msgstr "Groupe d'utilisateurs mis à jour avec succès"
 
 #, php-format
 msgid "Unable to update the user group with id \"%d\""
-msgstr ""
+msgstr "Impossible de mettre à jour le groupe de l'utilisateur avec Id \"%d\""
 
 msgid "User group deleted successfully."
-msgstr ""
+msgstr "Groupe de l'utilisateur supprimé."
 
 #, php-format
 msgid "Unable to delete the user group with id \"%d\""
@@ -336,7 +332,7 @@ msgid "Album - frontpage"
 msgstr "Album - Couverture"
 
 msgid "Album - inner"
-msgstr ""
+msgstr "Album intérieure"
 
 msgid "Poll - frontpage"
 msgstr "Sondage - Couverture"
@@ -396,7 +392,7 @@ msgid "Settings saved."
 msgstr "Paramètres sauvegardés."
 
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 msgid "Professional"
 msgstr "Professionnel"
@@ -406,7 +402,7 @@ msgid "Advanced"
 msgstr "Advance"
 
 msgid "Expert"
-msgstr ""
+msgstr "Pack Expert"
 
 msgid "Unlimited"
 msgstr "Illimité"
@@ -660,7 +656,7 @@ msgid "Unable to update the letter."
 msgstr "Impossible de mettre à jour la lettre."
 
 msgid "Opinion"
-msgstr ""
+msgstr "Opinion"
 
 msgid "Bloggers"
 msgstr "Les blogueurs"
@@ -704,7 +700,7 @@ msgid "Unable to find a menu with the id \"%s\""
 msgstr "Impossible de trouver un menu avec l'id \"% s\""
 
 msgid "Menu data sent not valid."
-msgstr ""
+msgstr "Données de menu envoyés pas valable."
 
 msgid "Menu updated successfully."
 msgstr "Menu mis à jour avec succès."
@@ -866,7 +862,7 @@ msgid "Opinion data sent not valid."
 msgstr "Des données d'opinion envoyés pas valable."
 
 msgid "Opinion successfully updated."
-msgstr ""
+msgstr "Opinion mis à jour avec succès."
 
 msgid "Unable to update the opinion."
 msgstr "Impossible de mettre à jour l'opinion."
@@ -1005,12 +1001,6 @@ msgstr "Espagnol"
 msgid "Galician"
 msgstr "Galicienne"
 
-msgid "Italian"
-msgstr ""
-
-msgid "Portuguesse"
-msgstr ""
-
 msgid ""
 "The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
 "size."
@@ -1055,7 +1045,7 @@ msgid "Unable to find the video with the id \"%d\""
 msgstr "Impossible de trouver la vidéo avec l'id \"%d\""
 
 msgid "Can't get video information. Check the url"
-msgstr ""
+msgstr "Vous ne pouvez pas obtenir des informations vidéo. Vérifiez l'url"
 
 msgid "Please check the video url, seems to be incorrect"
 msgstr "S'il vous plaît vérifier l'URL de la vidéo, semble être incorrect"
@@ -1083,7 +1073,7 @@ msgid "Dashboard"
 msgstr "Tableau de bord"
 
 msgid "My newspaper"
-msgstr ""
+msgstr "Mon journal"
 
 msgid "Website"
 msgstr "Site web"
@@ -1095,22 +1085,22 @@ msgid "Advertisements"
 msgstr "publicité"
 
 msgid "Widgets"
-msgstr ""
+msgstr "Widgets"
 
 msgid "Sidebars"
 msgstr "Encadrés"
 
 msgid "Menus"
-msgstr ""
+msgstr "Menus"
 
 msgid "Contents"
 msgstr "Contenu"
 
 msgid "Articles"
-msgstr ""
+msgstr "Articles"
 
 msgid "Opinions"
-msgstr ""
+msgstr "Opinions"
 
 msgid "Comments"
 msgstr "Commentaires"
@@ -1143,7 +1133,7 @@ msgid "Videos"
 msgstr "Vidéos"
 
 msgid "Albums"
-msgstr ""
+msgstr "Albums"
 
 msgid "Books"
 msgstr "Livres"
@@ -1164,7 +1154,7 @@ msgid "Keywords"
 msgstr "Mot-clé"
 
 msgid "Paywall"
-msgstr ""
+msgstr "Paywall"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -1185,7 +1175,7 @@ msgid "System"
 msgstr "Système"
 
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 msgid "Users & Groups"
 msgstr "Utilisateurs et Groupes"
@@ -1203,16 +1193,16 @@ msgid "Cache manager"
 msgstr "Gestionnaire de Cache"
 
 msgid "SQL error log"
-msgstr ""
+msgstr "SQL erreur log"
 
 msgid "Store"
-msgstr ""
+msgstr "Magasin"
 
 msgid "Themes"
-msgstr ""
+msgstr "Thème"
 
 msgid "Domains"
-msgstr ""
+msgstr "Domaines"
 
 msgid "Help & Support"
 msgstr "Aidez-moi et Support"
@@ -1257,7 +1247,7 @@ msgid "Mobile article inner"
 msgstr "Article intérieure à mobile"
 
 msgid "Mobile frontpage"
-msgstr ""
+msgstr "Mobile Couverture"
 
 msgid "Mobile opinion inner"
 msgstr "opinion intérieure à mobile"
@@ -1282,7 +1272,7 @@ msgstr "Opinion Couverture"
 
 #, php-format
 msgid "Page %s"
-msgstr ""
+msgstr "Page %s"
 
 msgid "Opinion inner"
 msgstr "Opinion intérieure"
@@ -1291,7 +1281,7 @@ msgid "Blog inner"
 msgstr "Blog intérieure"
 
 msgid "RSS Author"
-msgstr ""
+msgstr "Auteur RSS"
 
 msgid "Homepage"
 msgstr "Page d'accueil"
@@ -1415,11 +1405,11 @@ msgid "The domain %s is not available"
 msgstr "Widget %s non disponible"
 
 msgid "Your domain is configured correctly"
-msgstr ""
+msgstr "Votre domaine est correctement configuré"
 
 #, php-format
 msgid "Your domain has to point to %s"
-msgstr ""
+msgstr "Votre domaine doit pointer vers % s"
 
 #, fuzzy, php-format
 msgid "Domain deleted successfully"
@@ -1462,10 +1452,10 @@ msgid "Last sync was %d minutes ago."
 msgstr "Dernière synchronisation était il ya %d minutes."
 
 msgid "Text"
-msgstr ""
+msgstr "Texte"
 
 msgid "Photo"
-msgstr ""
+msgstr "Photo"
 
 #, php-format
 msgid "Source identifier \"%d\" not valid"
@@ -1522,7 +1512,7 @@ msgstr "Avec succès changé d'état souscrit pour %d abonnés"
 msgid "Please specify a subscriptor id to change the activated state."
 msgstr "S'il vous plaît spécifier un numéro d'abonné de changer l'état activé."
 
-#, php-format
+#, fuzzy, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Avec succès changé d'état activé pour ½d abonnés"
 
@@ -1539,10 +1529,10 @@ msgid "%d notifications marked as read successfully"
 msgstr "%d élément(s) restaurés avec succès"
 
 msgid "Yesterday"
-msgstr ""
+msgstr "Hier"
 
 msgid "Today"
-msgstr ""
+msgstr "Aujourd'hui"
 
 msgid "Unable to save the positions."
 msgstr "Impossible d'enregistrer les positions."
@@ -1566,7 +1556,7 @@ msgid "Created"
 msgstr "Créé"
 
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 msgid "Pick the item to insert"
 msgstr "Choisissez l'élément à insérer"
@@ -1695,7 +1685,7 @@ msgid "Application upgraded"
 msgstr "Mise à niveau de l'application"
 
 msgid "The XML could not be parsed"
-msgstr ""
+msgstr "Le XML ne peuvent être analysés"
 
 #, fuzzy
 msgid "Unable to create a server"
@@ -1705,20 +1695,26 @@ msgstr "Impossible de créer le menu"
 msgid ""
 "You have %s pending comments. Click <a href=\"%s\">here</a> to moderate."
 msgstr ""
+"Vous avez %s attendant commentaires. Cliquez  <a href=\"%s\">ici</a> à "
+"modérée."
 
 msgid "Usage of your newspaper"
-msgstr ""
+msgstr "Utilisation de votre journal"
 
-#, php-format
+#, fuzzy, php-format
 msgid ""
 "You have %d activated users. Note that <a href=\"http://help.opennemas.com/"
 "knowledgebase/articles/566172-pricing-opennemas-user-licenses\" target="
 "\"_blank\" title=\"Learn more\">the cost is %s € user/month</a>"
 msgstr ""
+"Vous avez %d utilisateurs activés. <a Target=\"_blank\" noter que title="
+"\"Learn href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
+"pricing-opennemas-user-licenses\" more\"> le coût est de € l'utilisateur de"
+"% / mois </ a>"
 
 #, php-format
 msgid "This month you're recording %d page views. "
-msgstr ""
+msgstr "Ce mois-ci vous enregistrez de pages vues %d"
 
 #, php-format
 msgid ""
@@ -1726,17 +1722,23 @@ msgid ""
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € pv/month</a>."
 msgstr ""
+"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Learn more\"> pv %s €  mois du coût </a>."
 
 #, php-format
 msgid "Your are using %d Mb of storage. "
-msgstr ""
+msgstr "Vous utilisez %d Mb de stockage."
 
-#, php-format
+#, fuzzy, php-format
 msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € Mb/month</a>."
 msgstr ""
+"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Découvrez Plus\">le coût est € s% Mb / mois </a>."
 
 msgid "Already voted."
 msgstr "Déjà voté."
@@ -1762,7 +1764,7 @@ msgstr ""
 "Votre commentaire a été rejetée en raison de l'utilisation des insultes."
 
 msgid "Your comment was accepted. Refresh the page to see it."
-msgstr ""
+msgstr "Votre commentaire a été acceptée. Actualisez la page pour le voir."
 
 msgid "Your comment was accepted and now we have to moderate it."
 msgstr "Votre commentaire a été accepté et maintenant nous devons modérer."
@@ -1848,7 +1850,7 @@ msgid "Subscription form"
 msgstr "Formulaire d'abonnement"
 
 msgid "You have been subscribed to our newsletter."
-msgstr ""
+msgstr "Vous avez été abonné à notre newsletter."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Vous vous êtes désabonné de la newsletter."
@@ -1861,38 +1863,44 @@ msgstr "Désolé, cet e-mail est pas dans notre base de données"
 
 msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
 msgstr ""
+"Le reCAPTCHA n'a pas été entré correctement. Essayez d'authentifier à "
+"nouveau."
 
 msgid "The email address is already in use."
-msgstr ""
+msgstr "L'adresse email est déjà utilisée."
 
 msgid "The user name is already in use."
-msgstr ""
+msgstr "Le nom d'utilisateur est deja pris."
 
 #, php-format
 msgid "New user account in %s"
-msgstr ""
+msgstr "Nouveau compte d'utilisateur dans %s"
 
 msgid "An error has occurred. Try to complete the form with valid data."
 msgstr ""
+"Une erreur est survenue. Essayez de compléter le formulaire avec des données "
+"valides."
 
 msgid "Unable to send your registration email. Please try it later."
 msgstr ""
+"Impossible d'envoyer votre e-mail d'inscription. S'il vous plaît essayer "
+"plus tard."
 
 msgid "Data updated successfully"
-msgstr ""
+msgstr "Données mises à jour avec succès"
 
 msgid "Unable to update the user."
-msgstr ""
+msgstr "Impossible de mettre à jour l'utilisateur."
 
 msgid "The user does not exists."
-msgstr ""
+msgstr "L'utilisateur n'a pas existe."
 
 msgid "Log in succesful."
-msgstr ""
+msgstr "Connexion réussie."
 
 #, php-format
 msgid "Welcome to %s"
-msgstr ""
+msgstr "Bienvenue à %s"
 
 #, fuzzy
 msgid "Unable to send your welcome email."
@@ -1912,29 +1920,29 @@ msgstr ""
 
 #, php-format
 msgid "%s - Premium subscription activated"
-msgstr ""
+msgstr "%s - Abonnement premium activé"
 
 msgid "Printing your newspaper..."
-msgstr ""
+msgstr "Impression de votre journal..."
 
 msgid "Cloning journalists..."
-msgstr ""
+msgstr "Clonage journalistes..."
 
 msgid "Writing articles using Wikipedia..."
-msgstr ""
+msgstr "Rédaction d'articles à l'aide de Wikipedia..."
 
 msgid "Spinning up the rotary..."
-msgstr ""
+msgstr "Filature jusqu'à la rotative ..."
 
 msgid "Reinventing Gutenberg machine..."
-msgstr ""
+msgstr "Réinventer la machine Gutenberg ..."
 
 #, fuzzy
 msgid "Instance saved successfully"
 msgstr "Contenu enregistré avec succès"
 
 msgid "The instance already exists"
-msgstr ""
+msgstr "L'instance existe déjà"
 
 #, fuzzy
 msgid "Unable to create the database for the instance"
@@ -1985,19 +1993,19 @@ msgid "Unable to find the entity with id \"%s\""
 msgstr "Impossible de trouver l'élément avec id \"%s\""
 
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 msgid "Information"
-msgstr ""
+msgstr "Informations"
 
 msgid "Success"
-msgstr ""
+msgstr "Succès"
 
 msgid "Warning"
-msgstr ""
+msgstr "Avertissement"
 
 msgid "Help"
-msgstr ""
+msgstr "Aidez-moi"
 
 #, fuzzy
 msgid "Instances not used in last month"
@@ -2006,39 +2014,41 @@ msgstr "Instance non trouvée"
 msgid ""
 "Generates a report listing instances that were not used in the last month."
 msgstr ""
+"Génère un rapport énumérant les cas qui ne sont pas utilisés dans le dernier "
+"mois."
 
 msgid "Instances created in the last month"
-msgstr ""
+msgstr "Les instances créées dans le dernier mois"
 
 msgid "Generates a report listing instances created in the last month."
-msgstr ""
+msgstr "Génère un rapport énumérant les instances créées dans le dernier mois."
 
 #, fuzzy
 msgid "Instances"
 msgstr "Instances Sync"
 
 msgid "Notifications"
-msgstr ""
+msgstr "Notifications"
 
 msgid "Reports"
-msgstr ""
+msgstr "Rapports"
 
 msgid "Framework"
-msgstr ""
+msgstr "Cadre"
 
 #, fuzzy
 msgid "Commands"
 msgstr "Commentaires"
 
 msgid "OpCache Status"
-msgstr ""
+msgstr "Statut OpCache"
 
 #, fuzzy
 msgid "User groups"
 msgstr "Groupes d'utilisateurs"
 
 msgid "Show/hide sidebar"
-msgstr ""
+msgstr "Afficher/Masquer la barre latérale"
 
 #, fuzzy
 msgid "User saved successfully"
@@ -2085,7 +2095,7 @@ msgid "Unable to find the current user"
 msgstr "Impossible de trouver l'élément avec id \"%s\""
 
 msgid "User group name cannot be empty"
-msgstr ""
+msgstr "Nom de groupe de l'utilisateur ne peut pas être vide"
 
 #, fuzzy
 msgid "Unable to create a new usergroup"
@@ -2108,14 +2118,55 @@ msgid "User group updated successfully"
 msgstr "Groupe d'utilisateurs mis à jour avec succès"
 
 msgid "Error when creating a new instance"
-msgstr ""
+msgstr "Erreur lors de la création d'une nouvelle instance"
 
 msgid "A new opennemas instance has been created"
-msgstr ""
+msgstr "Une nouvelle instance de opennemas a été créé"
 
 #, php-format
 msgid "Your newspaper is now live"
+msgstr "Votre journal est vivent maintenant"
+
+msgid "First"
 msgstr ""
+
+#, fuzzy
+msgid "Last"
+msgstr "Nom"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Previous"
+msgstr "Précédent"
+
+#, php-format
+msgid "The client with id '%d' was not found in %s"
+msgstr ""
+
+#, php-format
+msgid "The criteria (%s) is not valid in %s"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The persister '%s' does not exist in %s"
+msgstr "L'utilisateur n'a pas existe."
+
+#, fuzzy, php-format
+msgid "The repository '%s' does not exist in %s"
+msgstr "L'utilisateur n'a pas existe."
+
+#, php-format
+msgid "The invoice with id '%d' was not found in %s"
+msgstr ""
+
+#, php-format
+msgid "The payment with id '%d' was not found in %s"
+msgstr ""
+
+#, fuzzy
+msgid "Unable to load plugins. No folder specified."
+msgstr "Impossible d'enregistrer les positions pour le widget de supplément."
 
 msgid "Advertisement"
 msgstr "Publicité"
@@ -2146,7 +2197,7 @@ msgstr "Statut pas valable"
 
 #, php-format
 msgid "Field '%s' not valid"
-msgstr ""
+msgstr "Le champ '%s' est non valable"
 
 msgid "Database error."
 msgstr "Base de données erreur"
@@ -2197,19 +2248,19 @@ msgid "available"
 msgstr "Fichier non disponible"
 
 msgid "not scheduled"
-msgstr ""
+msgstr "non prévu"
 
 msgid "scheduled"
-msgstr ""
+msgstr "planifié"
 
 msgid "dued"
-msgstr ""
+msgstr "échéance"
 
 msgid "in time"
-msgstr ""
+msgstr "à l'heure"
 
 msgid "postponed"
-msgstr ""
+msgstr "reporté"
 
 msgid "Cover"
 msgstr "Couverture"
@@ -2298,7 +2349,7 @@ msgid "Manage home frontpage"
 msgstr "Gestionnaire drapeau frontpage"
 
 msgid "Send to trash and restore"
-msgstr ""
+msgstr "Envoyer à la corbeille et restaurer"
 
 msgid "List articles in arquive"
 msgstr "Liste des articles dans les archives"
@@ -2395,13 +2446,13 @@ msgid "Config News Agency importer"
 msgstr "Config Nouvelles Agence importateur"
 
 msgid "Administer synchronization between Opennemas"
-msgstr ""
+msgstr "Administrer la synchronisation entre Opennemas"
 
 msgid "Administer instances"
-msgstr ""
+msgstr "Administrer les instances"
 
 msgid "Administer paywall"
-msgstr ""
+msgstr "Administrer paywall"
 
 msgid "Edit user own profile"
 msgstr "Modifier l'utilisateur propre profil"
@@ -2438,55 +2489,57 @@ msgid "Widget %s not available"
 msgstr "Widget %s non disponible"
 
 msgid "Frontpage mobile version"
-msgstr ""
+msgstr "Couverture: Version mobile "
 
 #, fuzzy
 msgid "Inner Article"
 msgstr "Article"
 
 msgid "Inner Article mobile version"
-msgstr ""
+msgstr "Article intérieure: version mobile"
 
 msgid "Inner Opinion"
-msgstr ""
+msgstr "Opinion intérieure"
 
 msgid "Name of the newspaper must be longer than 5 characters"
-msgstr ""
+msgstr "Nom du journal doit être supérieure à 5 caractères"
 
 msgid ""
 "Url must be longer than 4 characters and only must content characters and "
 "numbers"
 msgstr ""
+"Url doit être supérieure à 4 caractères et ne doit contenter caractères et "
+"chiffres"
 
 msgid "The url that you entered is already in use"
-msgstr ""
+msgstr "L'url que vous avez entré est déjà utilisé"
 
 #, fuzzy
 msgid "Please enter a valid url"
 msgstr "S'il vous plaît sélectionnez une réponse valable à une sondage."
 
 msgid "Your newspaper name cointains disallowed words."
-msgstr ""
+msgstr "Votre nom d'un journal contient des mots non autorisées."
 
 msgid "Your desired address contains disallowed words."
-msgstr ""
+msgstr "Votre adresse souhaitée contient des mots non autorisées."
 
 msgid "Your user name contains disallowed words."
-msgstr ""
+msgstr "Votre nom d'utilisateur contient des mots non autorisées."
 
 #, fuzzy
 msgid "There was an error while validating your data against disallowed words."
 msgstr "Il y avait une erreur lors de la mise à jour du widget."
 
 msgid "The email that you entered is already in use"
-msgstr ""
+msgstr "L'e-mail que vous avez entré est déjà utilisé"
 
 #, fuzzy
 msgid "Advanced search"
 msgstr "Advance"
 
 msgid "Advanced article options"
-msgstr ""
+msgstr "Options de l'article"
 
 #, fuzzy
 msgid "Frontpage Customization"
@@ -2501,7 +2554,7 @@ msgid "Subscription"
 msgstr "Formulaire d'abonnement"
 
 msgid "Cronicas customizations"
-msgstr ""
+msgstr "Personnalisations Crónicas"
 
 #, fuzzy
 msgid "Contact"
@@ -2512,7 +2565,7 @@ msgid "Frontpages Manager"
 msgstr "Couverture Gestionnaire"
 
 msgid "iadbox"
-msgstr ""
+msgstr "iadbox"
 
 #, fuzzy
 msgid "Import XMLs"
@@ -2527,20 +2580,20 @@ msgid "Letters"
 msgstr "Courrier"
 
 msgid "Library"
-msgstr ""
+msgstr "Catalogue"
 
 #, fuzzy
 msgid "News Agency importer"
 msgstr "Config Nouvelles Agence importateur"
 
 msgid "Articles Synchronization"
-msgstr ""
+msgstr "Articles synchronisation"
 
 msgid "Promotional bar"
-msgstr ""
+msgstr "Bar promotionnel"
 
 msgid "Schedules"
-msgstr ""
+msgstr "Des horaires"
 
 #, fuzzy
 msgid "System wide settings"
@@ -2583,26 +2636,29 @@ msgid "Support 8"
 msgstr "Aidez-moi et Support"
 
 msgid "Support 8+"
-msgstr ""
+msgstr "Soutien 8+"
 
 #, fuzzy
 msgid "Instance synchronization"
 msgstr "Instance non trouvée"
 
 msgid "UserVoice integration"
-msgstr ""
+msgstr "l'intégration UserVoice"
 
 msgid "Basic pack"
-msgstr ""
+msgstr "Pack Basic"
 
 msgid "Publishing your news is FREE!"
-msgstr ""
+msgstr "Publication de votre nouvelles est GRATUIT!"
 
 msgid ""
 "<p>This pack does not require any payment information and it allows you to "
 "access our platform to test it as much as to publish your newspaper for free "
 "and on the spot!</p>"
 msgstr ""
+"<p> Ce pack ne nécessite aucune information de paiement et il vous permet "
+"d'accéder à notre plateforme de tester autant que de publier votre journal "
+"gratuitement et sur place! </ p>"
 
 msgid ""
 "<p>Includes:</p>\n"
@@ -2614,8 +2670,13 @@ msgid ""
 "                        <li>Images and files uploading</li>\n"
 "                        <li>Utilities: Trash, Search Advanced...</li>"
 msgstr ""
+"<p> Comprend: </ p> \\ n<ul> \\ n<li> Gestionnaire FrontPage </ li> \\ n<li> "
+"gestionnaire de Widget </ li> \\ n<li> Gestionnaire des articles d'opinion "
+"</ li> \\ n<li> Commentaires gestionnaire </ li> \\ n<li> Images et "
+"téléchargement de fichiers </ li> \\ n<li> Utilitaires: Trash, Recherche "
+"avancée ... </ li> "
 
-#, php-format
+#, fuzzy, php-format
 msgid ""
 "<ul>\n"
 "                            <li>%d x  User (1)</li>\n"
@@ -2626,6 +2687,10 @@ msgid ""
 "                            <li>Online Support (Tickets SLA %d business "
 "days)</li></ul>"
 msgstr ""
+" <ul> \\ n<li>%d x utilisateur (1) </ li> \\ n<li> %s Stockage (2) </ li> \\ "
+"n% s<li>%s (articles, opinions, commentaires) (2) </ li> \\ n<li>% de pages "
+"vues/mois  (2) </ li> \\ n<li> Support en ligne (billets SLA% d jours "
+"ouvrables) </ li> </ ul>"
 
 msgid ""
 "<p><small>1. To add more users refer to <a href=\"http://help.opennemas.com/"
@@ -2637,6 +2702,15 @@ msgid ""
 "Space</a>.</small></p><p><small>All prices above do not include VAT (21%).</"
 "small></p>"
 msgstr ""
+"<p> <small> 1. Pour ajouter plus d'utilisateurs se réfèrent à <ahref="
+"\"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
+"licencias-de-usuario\" target = \"_ blank\"> Licence d'utilisation Page </"
+"a>. </ small> </ p> <p> <small> 2. Pour plus d'informations à propos de "
+"stockage ou de pages vues s'il vous plaît aller à notre page <ahref=\"http://"
+"help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-"
+"views-y-espacio-ocupado\" target = \"_ blank\"> pages vues et l'espace de "
+"stockage </a>. </ small> </ p> <p> <small> Tous les prix ci-dessus ne "
+"comprennent pas la TVA (21%). </ small> </ p>"
 
 #, fuzzy
 msgid "Professional pack"
@@ -2646,6 +2720,8 @@ msgid ""
 "Our best selling solution, it allows to manage a professional newspaper and "
 "start gaining money with it!"
 msgstr ""
+"Notre meilleure solution de vente, il permet de gérer un journal "
+"professionnel et commencer à gagner de l'argent avec elle!"
 
 #, php-format
 msgid ""
@@ -2655,6 +2731,11 @@ msgid ""
 "                        <p>This offer gives you more than 40% discount (if "
 "purchased separately modules have a value of 85EUR/month).</p>"
 msgstr ""
+"<p> Ce pack est pensé pour les professionnels qui commencent leur journal "
+"indépendant et le besoin de gérer la publicité de croître et de publier des "
+"sondages d'engager avec leur public. </ p> \\ n<p> Cette offre vous donne "
+"plus de 40% de réduction (si acheté séparément modules ont une valeur de 85 "
+"EUR / mois). </ p>"
 
 msgid ""
 "<li>Advertisement manager</li>\n"
@@ -3802,9 +3883,6 @@ msgstr ""
 msgid "Pick contents"
 msgstr "Contenu"
 
-msgid "Next"
-msgstr "Suivant"
-
 msgid "Email subject"
 msgstr ""
 
@@ -3852,9 +3930,6 @@ msgstr ""
 
 msgid "Recipient selection"
 msgstr ""
-
-msgid "Previous"
-msgstr "Précédent"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr ""
@@ -5066,12 +5141,20 @@ msgstr ""
 msgid "Billing information"
 msgstr ""
 
-msgid "Enable users has a cost."
+msgid ""
+"Activate the access to Backend means to add a User to your platform and has "
+"a cost of 12€/month."
 msgstr ""
 
-#, fuzzy
-msgid "Please, fill your billing information below."
-msgstr "Impossible d'enregistrer les informations de votre image"
+msgid ""
+"If you have questions please have a look to our help article and/or contact "
+"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
+msgstr ""
+
+msgid ""
+"Please, fill billing information below, we will send you an invoice for all "
+"activated users at the end of the month."
+msgstr ""
 
 msgid "This field is required"
 msgstr ""
@@ -5133,6 +5216,10 @@ msgstr ""
 msgid "Are you sure you want to create a new user?"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to update the user?"
+msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
 msgid ""
 "Are you sure you want to disable [% template.selected.contents.length %] "
 "user(s)?"
@@ -5143,18 +5230,13 @@ msgid ""
 "user(s)?"
 msgstr ""
 
-msgid ""
-"Enable this users will cost you [% Math.round(template.selected.contents."
-"length * 40) / 100 %] €/day."
-msgstr ""
-
-msgid "Create this user will cost you 12 €/month."
-msgstr ""
-
 msgid "I understand and accept the charges."
 msgstr ""
 
 msgid "Yes, save it"
+msgstr ""
+
+msgid "Yes, update it"
 msgstr ""
 
 msgid "Editing user"
@@ -5163,10 +5245,6 @@ msgstr ""
 #, fuzzy
 msgid "Creating user"
 msgstr "Créer"
-
-#, fuzzy
-msgid "User info"
-msgstr "Groupes d'utilisateurs"
 
 msgid "Display name"
 msgstr ""
@@ -5197,17 +5275,6 @@ msgstr ""
 msgid "Confirm password"
 msgstr ""
 
-#, fuzzy
-msgid "User group:"
-msgstr "Groupes d'utilisateurs"
-
-msgid "Select"
-msgstr ""
-
-#, fuzzy
-msgid "selected"
-msgstr "Rejecté"
-
 msgid "Additional data"
 msgstr ""
 
@@ -5227,23 +5294,22 @@ msgid "Gender:"
 msgstr "Sexe"
 
 #, fuzzy
-msgid "User type"
-msgstr "Groupes d'utilisateurs"
-
-#, fuzzy
-msgid "Backend"
+msgid "Has backend access"
 msgstr "Backend Gestionnaire"
-
-#, fuzzy
-msgid "Frontend"
-msgstr "Couverture"
-
-#, fuzzy
-msgid "Deactivated"
-msgstr "Activé"
 
 msgid "Used to enable or disable user access to control panel."
 msgstr ""
+
+#, fuzzy
+msgid "User group:"
+msgstr "Groupes d'utilisateurs"
+
+msgid "Select"
+msgstr ""
+
+#, fuzzy
+msgid "selected"
+msgstr "Rejecté"
 
 msgid "Social Networks"
 msgstr ""
@@ -5269,8 +5335,20 @@ msgid "Paywall time limit:"
 msgstr ""
 
 #, fuzzy
+msgid "Backend"
+msgstr "Backend Gestionnaire"
+
+#, fuzzy
+msgid "Frontend"
+msgstr "Couverture"
+
+#, fuzzy
 msgid "Group"
 msgstr "Groupes d'utilisateurs"
+
+#, fuzzy
+msgid "Deactivated"
+msgstr "Activé"
 
 #, fuzzy
 msgid "Unable to find any user that matches your search."
@@ -5927,6 +6005,10 @@ msgstr ""
 
 msgid "Creating author"
 msgstr ""
+
+#, fuzzy
+msgid "User info"
+msgstr "Groupes d'utilisateurs"
 
 msgid "Twitter user"
 msgstr ""
@@ -8574,8 +8656,9 @@ msgstr "Email"
 msgid "Enabled"
 msgstr ""
 
+#, fuzzy
 msgid "#"
-msgstr ""
+msgstr "#"
 
 msgid "Start"
 msgstr ""
@@ -8825,28 +8908,20 @@ msgstr ""
 msgid "User group"
 msgstr "Groupes d'utilisateurs"
 
+#, fuzzy
+msgid "User type"
+msgstr "Groupes d'utilisateurs"
+
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
 
-#~ msgid "Unable to find an element with the id \"%d\""
-#~ msgstr "Impossible de trouver un élément avec l'id \"%d\""
+#~ msgid "Italian"
+#~ msgstr "Italien"
 
-#~ msgid ""
-#~ "This content was imported before. You may cause a content duplication "
-#~ "while importing it."
-#~ msgstr ""
-#~ "Ce contenu a été importé avant. Vous pouvez provoquer une duplication de "
-#~ "contenu tout en importer."
+#~ msgid "Portuguesse"
+#~ msgstr "Portugais"
 
-#~ msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
-#~ msgstr "Si vous êtes sûr <a href=\"%s\"> essaient de le déverrouiller </a>"
-
-#~ msgid "Files for \"%s\" cleaned."
-#~ msgstr "Fichiers pour \"%s\" nettoyés."
-
-#~ msgid "Market"
-#~ msgstr "Marché"
-
-#~ msgid "Sorry, that email is already subscribed to our newsletter"
-#~ msgstr "Désolé, cet e-mail est déjà abonné à notre newsletter"
+#, fuzzy
+#~ msgid "Please, fill your billing information below."
+#~ msgstr "Impossible d'enregistrer les informations de votre image"

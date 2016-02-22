@@ -68,6 +68,7 @@ class AclUserController extends Controller
             );
         }
 
+        array_unshift($groupsOptions, [ 'name' => _('Not assigned'), 'value' => 'empty' ]);
         array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
@@ -440,9 +441,21 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
+        $extra = [ 'billing' => [] ];
+
+        $extra['billing'] = [];
+        foreach ($this->get('instance')->metas as $key => $value) {
+            if (strpos($key, 'billing') !== false) {
+                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+            }
+        }
+
+        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+
         return $this->render(
             'acl/user/new.tpl',
             array(
+                'extra'                     => $extra,
                 'user'                      => $user,
                 'user_groups'               => $userGroup->find(),
                 'content_categories'        => $tree,

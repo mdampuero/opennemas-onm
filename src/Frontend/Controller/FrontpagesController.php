@@ -54,7 +54,8 @@ class FrontpagesController extends Controller
         $cm = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
-        $expires = $this->getExpireForFrontpage($contentsInHomepage);
+        $expires = $this->get('content_cache')
+            ->getEarlierStarttimeOfScheduledContents($contentsInHomepage);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
@@ -264,28 +265,5 @@ class FrontpagesController extends Controller
         }
 
         return $advertisements;
-    }
-
-    /**
-     * Gets the expire time for the frontpage basing on its contents.
-     *
-     * @param array $contents Contents in frontpage.
-     *
-     * @return string The expire time for the frontpage.
-     */
-    private function getExpireForFrontpage($contents)
-    {
-        $current = date('Y-m-d H:i:s');
-        $expires = null;
-        foreach ($contents as $content) {
-            if ($content->starttime > $current
-                && (empty($expires)
-                    || $content->starttime < $expires)
-            ) {
-                $expires = $content->starttime;
-            }
-        }
-
-        return $expires;
     }
 }

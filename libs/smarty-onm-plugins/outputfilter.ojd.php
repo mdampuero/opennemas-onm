@@ -8,7 +8,7 @@
  * Purpose:  Prints OJD analytics code
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_ojd($output, &$smarty)
+function smarty_outputfilter_ojd($output, $smarty)
 {
     $request = getService('request');
     $uri     = $request->getUri();

@@ -1080,20 +1080,20 @@ admin_client_send_upgrade_mail:
 # Routing refactoring starts here
 backend_domain_mapping:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/domain_management.yml
+    resource: '@BackendBundle/Resources/config/routing/domain_management.yml'
 
 backend_store:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/store.yml
+    resource: '@BackendBundle/Resources/config/routing/store.yml'
 
 backend_news_agency_server:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/news_agency_server.yml
+    resource: '@BackendBundle/Resources/config/routing/news_agency_server.yml'
 
 backend_notification:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/notification.yml
+    resource: '@BackendBundle/Resources/config/routing/notification.yml'
 
 backend_theme:
     prefix: /
-    resource: @BackendBundle/Resources/config/routing/theme.yml
+    resource: '@BackendBundle/Resources/config/routing/theme.yml'

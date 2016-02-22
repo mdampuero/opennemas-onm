@@ -8,7 +8,7 @@
  * Purpose:  Handles all the css includes and print them into .
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_css_includes($output, Smarty_Internal_Template $smarty)
+function smarty_outputfilter_css_includes($output, $smarty)
 {
     $manager = getService('core.service.assetic.stylesheet_manager');
     $bag     = getService('core.service.assetic.asset_bag');

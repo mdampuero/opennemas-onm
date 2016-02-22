@@ -20,7 +20,7 @@ class HttpOpennemas extends Http
     public function checkParameters($params)
     {
         if (array_key_exists('url', $params)
-            && preg_match('@http://(.*)/ws/agency@', $params['url']) === 1
+            && preg_match('@http(s)?://(.*)/ws/agency@', $params['url']) === 1
         ) {
             return true;
         }

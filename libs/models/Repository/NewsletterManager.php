@@ -187,12 +187,10 @@ class NewsletterManager extends BaseManager
 
         $tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
-        $configurations = s::get(
-            array(
-                'newsletter_maillist',
-                'newsletter_subscriptionType',
-            )
-        );
+        $configurations = s::get([
+            'newsletter_maillist',
+            'newsletter_subscriptionType',
+        ]);
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');

@@ -1,44 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css,
-    @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
   {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
-    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+  {javascripts src="@Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
     <script>
       $(document).ready(function($) {
-        var color = $('.colorpicker_viewer');
-        var inpt  = $('#color');
         var btn   = $('.onm-button');
-
-        inpt.ColorPicker({
-          onSubmit: function(hsb, hex, rgb, el) {
-            $(el).val(hex);
-            $(el).ColorPickerHide();
-          },
-          onChange: function (hsb, hex, rgb) {
-            inpt.val(hex);
-            color.css('background-color', '#' + hex);
-            color.css('border-color', '#' + hex);
-          },
-          onBeforeShow: function () {
-            $(this).ColorPickerSetColor(this.value);
-          }
-        })
-        .bind('keyup', function(){
-          $(this).ColorPickerSetColor(this.value);
-        });
-
-        btn.on('click', function(e, ui){
-          inpt.val( '{setting name="site_color"}' );
-          color.css('background-color', '#' + '{setting name="site_color"}');
-          color.css('border-color', '#' + '{setting name="site_color"}');
-          e.preventDefault();
-        });
 
         $('.fileinput').fileinput({
           name: 'logo_path',
@@ -243,15 +214,13 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$category->color|default:$smarty.capture.websiteColor|trim}">
+                    <span class="input-group-addon" ng-style="{ 'background-color': color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
-                    <input class="form-control" readonly="readonly" size="6" type="text" id="color" name="color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default onm-button">
-                        {t}Reset color{/t}
-                      </button>
-                    </span>
+                    <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" ng-model="color" type="text">
+                    <div class="input-group-btn">
+                      <button class="btn btn-default" ng-click="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" type="button">{t}Reset{/t}</button>
+                    </div>
                   </div>
                 </div>
               </div>
