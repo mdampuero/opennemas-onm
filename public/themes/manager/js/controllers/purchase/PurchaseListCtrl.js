@@ -18,8 +18,8 @@
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, itemService, routing, messenger, webStorage, data) {
+      '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         /**
          * @memberOf PurchaseListCtrl
          *
@@ -31,8 +31,6 @@
         $scope.criteria = {
           name_like: []
         };
-
-        $scope.picker = 'asdf';
 
         /**
          * @memberOf PurchaseListCtrl
@@ -94,6 +92,42 @@
           epp: data.epp ? parseInt(data.epp) : 25,
           page: data.page ? parseInt(data.page) : 1,
           total: data.total
+        };
+
+        var e = null;
+
+        /**
+         * @function closeColumns
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Hides the dropdown to toggle table columns.
+         */
+        $scope.closeColumns = function() {
+          if (e) {
+            $timeout.cancel(e);
+          }
+
+          e = $timeout(function () {
+            $scope.open = false;
+          }, 500);
+        };
+
+        /**
+         * @function openColumns
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Shows the dropdown to toggle table columns.
+         */
+        $scope.openColumns = function() {
+          if (e) {
+            $timeout.cancel(e);
+          }
+
+          e = $timeout(function () {
+            $scope.open = true;
+          }, 500);
         };
 
         /**
@@ -251,6 +285,15 @@
         $scope.refresh = function() {
           list();
         };
+
+        $scope.resetFilters = function() {
+          $scope.criteria   = { name_like: [ { value: '', operator: 'like' } ] };
+          $scope.orderBy    = [ { name: 'created', value: 'desc' } ];
+
+          $scope.pagination.page = 1;
+
+          $scope.refresh();
+        }
 
         /**
          * @function isEnabled
@@ -502,6 +545,11 @@
         if (webStorage.local.get('token')) {
           $scope.token = webStorage.local.get('token');
         }
+
+        // Prevent dropdown from closing
+        $('.dropdown-menu').on('click', '.checkbox,label', function(e) {
+          e.stopPropagation();
+        })
       }
     ]);
 })();
