@@ -314,6 +314,58 @@ users:
             primary: true
             unique: true
             flags: {  }
+client:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, notnull: true }
+        first_name:
+            type: string
+            options: { default: null, length: 100, notnull: true }
+        last_name:
+            type: string
+            options: { default: null, length: 100, notnull: true }
+        email:
+            type: string
+            options: { default: null, length: 255, notnull: true }
+        company:
+            type: string
+            options: { default: null, length: 100 }
+        phone:
+            type: string
+            options: { default: null, length: 50 }
+        vat_number:
+            type: string
+            options: { default: null, length: 20, notnull: true }
+        address:
+            type: string
+            options: { default: null, length: 255, notnull: true }
+        postal_code:
+            type: string
+            options: { default: null, length: 20 }
+        city:
+            type: string
+            options: { default: null, length: 100 }
+        state:
+            type: string
+            options: { default: null, length: 100 }
+        country:
+            type: string
+            options: { default: null, length: 2 }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: email
+            columns: [ email ]
+            primary: false
+            unique: true
+            flags: {  }
+
 purchase:
     columns:
         id:
