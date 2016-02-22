@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "angular-jsdoc": "git://github.com/openhost/angular-jsdoc.git",
+    "apidoc": "~0.15.1",
     "gulp": "~3.9.0",
     "gulp-livereload": "~3.8.1",
     "gulp-batch": "*",
