@@ -104,6 +104,7 @@ function get_tooltip_title(elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
     var $url = frontpage_urls.quick_info + '?id=' + id;
+    var title = '';
 
     content = content_states[id];
     if (content === undefined) {
@@ -112,16 +113,15 @@ function get_tooltip_title(elem) {
             async: false
         }).done(function(data) {
             content_states[id] = data;
-            if (content_states.hasOwnProperty('id') && content_states[id].hasOwnProperty('title')) {
-                return content_states[id].title;
-            } else {
-                return null;
+            if (content_states[id].hasOwnProperty('title')) {
+                title = content_states[id].title;
             }
         });
-        return null;
     } else {
-        return content.title;
+        title = content.title;
     }
+
+    return title;
 }
 
 function remove_element(element) {
