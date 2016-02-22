@@ -123,10 +123,11 @@ class EntityManager
      * @param string $name The repository name.
      *
      * @return Repository The repository.
+     * @param string $source The persister name.
      *
      * @throws InvalidRepositoryException If the repository does not exist.
      */
-    public function getRepository($name)
+    public function getRepository($name, $source = null)
     {
         $entity = explode('.', $name);
         $entity = $entity[count($entity) - 1];
@@ -138,8 +139,14 @@ class EntityManager
             $entity
         );
 
+        $sources = $this->sources;
+
+        if (!empty($source)) {
+            $sources = [ $source => 0 ];
+        }
+
         $repositories = [];
-        foreach ($this->sources as $source => $priority) {
+        foreach ($sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
                 ucfirst($entity) . 'Repository';
             if (class_exists($repository)) {
