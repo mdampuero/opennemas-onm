@@ -22,35 +22,35 @@
      * <!-- Datetime picker with format -->
      * <input datetime-picker="YY-MM-DD" ng-model="date">
      */
-    .directive('datetimePicker', function () {
+    .directive('datetimePicker', [ '$timeout', function ($timeout) {
       return {
         restrict: 'A',
         scope: {
-          'ngModel': '='
+          'ngModel': '=',
+          'datetimePicker': '='
         },
         link: function ($scope, element, $attrs) {
           var format = 'YYYY-MM-DD HH:mm:ss';
 
           if ($attrs.datetimePicker) {
-            format = $attrs.datetimePicker;
+            format = $attrs.datetimePickerFormat;
           }
 
           element.datetimepicker({ format: format });
 
-          var picker = element.data('DateTimePicker');
+          $scope.datetimePicker = element.data('DateTimePicker');
 
           element.on('dp.change', function() {
-            $scope.$apply(function() {
               $scope.ngModel = null;
 
-              if (picker.date()) {
-                var date = moment(picker.date());
-                $scope.ngModel = date.format(format);
+              if ($scope.datetimePicker.date()) {
+                $timeout(function() {
+                  var date = moment($scope.datetimePicker.date());
+                  $scope.ngModel = date.format(format);
+                })
               }
-            });
           });
         }
       };
-    });
+    }]);
 })();
-
