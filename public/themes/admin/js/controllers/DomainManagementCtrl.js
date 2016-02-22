@@ -401,7 +401,7 @@
           if ($scope.clientToken && typeof braintree !== 'undefined') {
             braintree.setup($scope.clientToken, 'dropin', {
               container: 'payment-form',
-              onPaymentMethodNonceReceived: function (event, nonce) {
+              paymentMethodNonceReceived: function (event, nonce) {
                 $scope.nonce = nonce;
               },
             });
