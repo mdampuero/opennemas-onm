@@ -55,6 +55,7 @@
         "google/recaptcha": "1.1",
         "hwi/oauth-bundle": "0.4.*",
         "imagine/imagine": "0.6.*",
+	"jeremykendall/php-domain-parser": "~2.0",
         "league/csv": "~8.0",
         "lexik/jwt-authentication-bundle": "dev-master",
         "luracast/restler": "3.0.0",

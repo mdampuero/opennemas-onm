@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc3b2f8d506d5b61e86d4d57ac7f9e2d",
-    "content-hash": "8cef1c2c50f8cbc4f28057be102289fe",
+    "hash": "437cac430a7f6a99414f800d50a41ae9",
+    "content-hash": "e72f6326000274b9d64158d4b6453487",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1575,6 +1575,67 @@
                 "sql"
             ],
             "time": "2014-01-12 16:20:24"
+        },
+        {
+            "name": "jeremykendall/php-domain-parser",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykendall/php-domain-parser.git",
+                "reference": "29c8dfd8fc55bb90c98fb531eab6c138093e7bbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykendall/php-domain-parser/zipball/29c8dfd8fc55bb90c98fb531eab6c138093e7bbe",
+                "reference": "29c8dfd8fc55bb90c98fb531eab6c138093e7bbe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "~1.4",
+                "phpunit/phpunit": "~4.4"
+            },
+            "bin": [
+                "bin/parse",
+                "bin/pdp-psl"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pdp\\": "src/"
+                },
+                "files": [
+                    "src/pdp-parse-url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kendall",
+                    "homepage": "http://about.me/jeremykendall",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/jeremykendall/php-domain-parser/graphs/contributors"
+                }
+            ],
+            "description": "Public Suffix List based URL parsing implemented in PHP.",
+            "homepage": "https://github.com/jeremykendall/php-domain-parser",
+            "keywords": [
+                "Public Suffix List",
+                "domain parsing",
+                "url parsing"
+            ],
+            "time": "2015-02-16 12:45:33"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -4444,16 +4505,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.2.8",
+            "version": "5.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0b2946c107cd2d8f0ec1244edffc37fceed96f5f"
+                "reference": "b12b9c37e382c096b93c3f26e7395775f59a5eea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0b2946c107cd2d8f0ec1244edffc37fceed96f5f",
-                "reference": "0b2946c107cd2d8f0ec1244edffc37fceed96f5f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b12b9c37e382c096b93c3f26e7395775f59a5eea",
+                "reference": "b12b9c37e382c096b93c3f26e7395775f59a5eea",
                 "shasum": ""
             },
             "require": {
@@ -4514,7 +4575,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-02-18 07:45:20"
+            "time": "2016-02-19 11:43:07"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4890,16 +4951,16 @@
         },
         {
             "name": "sebastian/git",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/git.git",
-                "reference": "a50659f5dc0a4ea9c713c123043f3fb9125bc1b1"
+                "reference": "38638de3e94830a5cd7a5956135589b967609cd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/git/zipball/a50659f5dc0a4ea9c713c123043f3fb9125bc1b1",
-                "reference": "a50659f5dc0a4ea9c713c123043f3fb9125bc1b1",
+                "url": "https://api.github.com/repos/sebastianbergmann/git/zipball/38638de3e94830a5cd7a5956135589b967609cd5",
+                "reference": "38638de3e94830a5cd7a5956135589b967609cd5",
                 "shasum": ""
             },
             "require": {
@@ -4931,7 +4992,7 @@
             "keywords": [
                 "git"
             ],
-            "time": "2016-02-17 07:50:52"
+            "time": "2016-02-21 15:02:23"
         },
         {
             "name": "sebastian/global-state",
