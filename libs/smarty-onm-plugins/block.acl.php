@@ -11,7 +11,7 @@
 */
 use Onm\Security\Acl;
 
-function smarty_block_acl($params, $content, &$smarty, $open) {
+function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $open) {
     if( $open ) {
         // NADA
     } else {

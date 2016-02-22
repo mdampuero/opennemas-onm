@@ -5,7 +5,7 @@
  * @param array $params
  * @param Template $tpl Template class which extends of Smarty
 */
-function smarty_insert_renderbanner($params, &$smarty)
+function smarty_insert_renderbanner($params, $smarty)
 {
     // Get required params
     $type     = $params['type'];
