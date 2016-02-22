@@ -29,7 +29,7 @@ class ClientPersister extends BraintreePersister
         $response = $cr::create($data);
 
         if ($response->success) {
-            $entity->client_id = $response->customer->id;
+            $entity->id = $response->customer->id;
 
             return;
         }
@@ -47,13 +47,13 @@ class ClientPersister extends BraintreePersister
     public function remove(Entity $entity)
     {
         $cr       = $this->factory->get('customer');
-        $response = $cr::delete($entity->client_id);
+        $response = $cr::delete($entity->id);
 
         if ($response->success) {
             return;
         }
 
-        throw new ClientNotFoundException($entity->client_id, $this->source);
+        throw new ClientNotFoundException($entity->id, $this->source);
     }
 
     /**
@@ -68,13 +68,13 @@ class ClientPersister extends BraintreePersister
         $cr   = $this->factory->get('customer');
         $data = $this->clean($entity);
 
-        $response = $cr::update($entity->client_id, $data);
+        $response = $cr::update($entity->id, $data);
 
         if ($response->success) {
             return;
         }
 
-        throw new ClientNotFoundException($entity->client_id, $this->source);
+        throw new ClientNotFoundException($entity->id, $this->source);
     }
 
     /**
@@ -87,7 +87,7 @@ class ClientPersister extends BraintreePersister
     private function clean($entity)
     {
         $data = [
-            'id'        => $entity->client_id,
+            'id'        => $entity->id,
             'firstName' => $entity->first_name,
             'lastName'  => $entity->last_name,
             'email'     => $entity->email,

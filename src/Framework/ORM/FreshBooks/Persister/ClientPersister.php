@@ -33,7 +33,7 @@ class ClientPersister extends FreshBooksPersister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            $entity->client_id = $response['client_id'];
+            $entity->id = $response['client_id'];
 
             return;
         }
@@ -51,7 +51,7 @@ class ClientPersister extends FreshBooksPersister
     public function remove(Entity $entity)
     {
         $this->api->setMethod('client.delete');
-        $this->api->post([ 'client_id' => $entity->client_id ]);
+        $this->api->post([ 'client_id' => $entity->id ]);
         $this->api->request();
 
         if ($this->api->success()) {
@@ -59,7 +59,7 @@ class ClientPersister extends FreshBooksPersister
         }
 
         throw new ClientNotFoundException(
-            $entity->client_id,
+            $entity->id,
             $this->source,
             $this->api->getError()
         );
@@ -85,7 +85,7 @@ class ClientPersister extends FreshBooksPersister
         }
 
         throw new ClientNotFoundException(
-            $entity->client_id,
+            $entity->id,
             $this->source,
             $this->api->getError()
         );
