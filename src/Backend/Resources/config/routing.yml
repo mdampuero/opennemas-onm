@@ -905,15 +905,15 @@ admin_importer_xmlfile_import:
 # Template cache controller routes
 admin_tpl_manager:
     path:     /system/cachemanager
-    defaults: { _controller  : BackendBundle:CacheManager:default }
-
-admin_tpl_manager_config:
-    path:     /system/cachemanager/config
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
-admin_tpl_manager_deleteall:
-    path:     /system/cachemanager/deleteall
-    defaults: { _controller  : BackendBundle:CacheManager:deleteAll }
+admin_tpl_manager_clearcache:
+    path:     /system/cachemanager/clearcache
+    defaults: { _controller  : BackendBundle:CacheManager:clearCache }
+
+admin_tpl_manager_clearcompiled:
+    path:     /system/cachemanager/clear-compiled-templates
+    defaults: { _controller  : BackendBundle:CacheManager:clearCompiledTemplates }
 
 # Database error controller routes
 admin_databaseerrors:

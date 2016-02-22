@@ -58,10 +58,6 @@ backend_ws_keywords:
     resource: '@BackendWebServiceBundle/Resources/config/routing/keywords.yml'
     prefix:   /
 
-backend_ws_cachemanager:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/cachemanager.yml'
-    prefix:   /
-
 backend_ws_newsletter:
     resource: '@BackendWebServiceBundle/Resources/config/routing/newsletter.yml'
     prefix:   /
