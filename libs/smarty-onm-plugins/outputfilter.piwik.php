@@ -8,7 +8,7 @@
  * Purpose:  Prints Piwik code
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_piwik($output, &$smarty)
+function smarty_outputfilter_piwik($output, $smarty)
 {
     $request = getService('request');
     $uri     = $request->getUri();

@@ -1,7 +1,7 @@
 <?php
 use \Onm\Settings as s;
 
-function smarty_outputfilter_generate_fb_admin_tag($output, &$smarty)
+function smarty_outputfilter_generate_fb_admin_tag($output, $smarty)
 {
     // Get facebook settings
     $facebookSettings = s::get('facebook');

@@ -8,7 +8,7 @@
  * Purpose:  Prints the canonical url in a <link> tag
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_canonical_url($output, &$smarty)
+function smarty_outputfilter_canonical_url($output, $smarty)
 {
     // Check if is user template
     if ($smarty->smarty->theme != "admin" && $smarty->smarty->theme != "manager") {

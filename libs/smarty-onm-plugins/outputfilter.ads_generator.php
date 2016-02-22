@@ -10,7 +10,7 @@ use Onm\Settings as s;
  * Purpose:  Generates all the script tags for OpenX based ads.
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $smarty)
+function smarty_outputfilter_ads_generator($output, $smarty)
 {
     // Don't render any advertisement if module is not activated
     // Just render default onm ads from file
