@@ -18,11 +18,13 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-input no-boarder">
-          <span class="add-on">
-            <span class="fa fa-search fa-lg"></span>
-          </span>
-          <input class="no-boarder" ng-model="criteria.title" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
+        <li class="quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="input-min-45 input-200" ng-model="criteria.title" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
+          </div>
         </li>
       </ul>
     </div>
