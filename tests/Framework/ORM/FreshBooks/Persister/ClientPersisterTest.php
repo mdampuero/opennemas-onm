@@ -55,7 +55,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     {
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'id'          => '123',
+            'client_id'   => '123',
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -71,7 +71,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->create($this->unexistingClient);
         $this->assertEquals(
             $response['client_id'],
-            $this->unexistingClient->client_id
+            $this->unexistingClient->id
         );
     }
 
