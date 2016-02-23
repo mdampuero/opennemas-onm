@@ -222,7 +222,7 @@
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
             $scope.pagination.epp, $scope.pagination.page);
 
-          itemService.list('manager_ws_modules_list', data).then(
+          itemService.list('manager_ws_purchases_list', data).then(
             function(response) {
               $scope.items = response.data.results;
               $scope.pagination.total = response.data.total;
@@ -242,7 +242,7 @@
 
           $scope.pagination.page = 1;
 
-          $scope.refresh();
+          $scope.list();
         }
 
         /**
