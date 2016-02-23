@@ -209,15 +209,13 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('name')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.client.last_name %], [% item.client.first_name %]
-                </a>
+                [% item.client.last_name %], [% item.client.first_name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Edit{/t}">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
-                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                  <button class="btn-link text-danger" ng-click="delete(item)" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>

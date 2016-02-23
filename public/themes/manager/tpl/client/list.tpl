@@ -165,7 +165,7 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('email') == 'asc', 'fa fa-caret-down': isOrderedBy('email') == 'desc'}"></i>
               </th>
               <th class="pointer text-center " ng-click="sort('vat_number')" ng-show="isColumnEnabled('vat_number')" width="120">
-                {t}VAT number{/t}
+                {t}VAT No.{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('vat_number') == 'asc', 'fa fa-caret-down': isOrderedBy('vat_number') == 'desc'}"></i>
               </th>
               <th class="pointer text-center" ng-click="sort('phone')" ng-show="isColumnEnabled('phone')" width="150">
@@ -209,15 +209,13 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('name')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.last_name %], [% item.first_name %]
-                </a>
+                [% item.last_name %], [% item.first_name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Edit{/t}">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_client_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
-                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>
