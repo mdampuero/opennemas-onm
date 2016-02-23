@@ -221,9 +221,10 @@ class DomainManagementController extends Controller
 
         $this->get('orm.manager')->persist($client, 'FreshBooks');
         $this->get('orm.manager')->persist($client, 'Braintree');
+        $this->get('orm.manager')->persist($client, 'Database');
 
         $instance = $this->get('instance');
-        $instance->metas['client'] = $client;
+        $instance->metas['client'] = $client->id;
         $this->get('instance_manager')->persist($instance);
 
         return $client;
