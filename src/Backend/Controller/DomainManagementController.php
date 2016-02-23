@@ -40,9 +40,13 @@ class DomainManagementController extends Controller
 
         $instance = $this->get('instance');
 
-        if (array_key_exists('client', $instance->metas)) {
-            $params = [ 'customerId' => $instance->metas['client']->client_id ];
-            $client = $instance->metas['client']->getData();
+        if (array_key_exists('client', $instance->metas)
+            && !empty($instance->metas['client'])
+        ) {
+            $params = [ 'customerId' => $instance->metas['client'] ];
+            $client = $this->get('orm.manager')
+                ->getRepository('client', 'Database')
+                ->find($instance->metas['client']);
         }
 
         $countries    = array_flip(Intl::getRegionBundle()->getCountryNames());
