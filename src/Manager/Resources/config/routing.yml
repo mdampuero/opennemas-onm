@@ -4,6 +4,10 @@ manager_welcome:
     options:
         expose: true
 
+manager_client:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/client.yml'
+
 manager_instance:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/instance.yml'

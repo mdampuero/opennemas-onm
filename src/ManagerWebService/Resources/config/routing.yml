@@ -7,6 +7,10 @@ manager_ws_auth:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/auth.yml'
     prefix: /
 
+manager_ws_client:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/client.yml
+    prefix:   /
+
 manager_ws_command:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/command.yml'
     prefix:   /
