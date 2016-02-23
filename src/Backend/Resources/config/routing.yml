@@ -890,18 +890,6 @@ admin_news_agency_batch_import:
         expose: true
 
 # Importer XML file controller routes
-admin_importer_xmlfile:
-    path:     /importer/xml-file
-    defaults: { _controller  : BackendBundle:ImporterXmlfile:default }
-
-admin_importer_xmlfile_config:
-    path:     /importer/xml-file/config
-    defaults: { _controller  : BackendBundle:ImporterXmlfile:config }
-
-admin_importer_xmlfile_import:
-    path:     /importer/xml-file/import
-    defaults: { _controller  : BackendBundle:ImporterXmlfile:import }
-
 # Template cache controller routes
 admin_tpl_manager:
     path:     /system/cachemanager
@@ -1021,23 +1009,6 @@ admin_acl_user_recover_pass:
 admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
     defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
-
-# Media uploader routes
-admin_media_uploader:
-    path:     /media-uploader
-    defaults: { _controller  : BackendBundle:MediaUploader:show }
-
-admin_media_uploader_update_content:
-    path:     /media-uploader/update-content
-    defaults: { _controller  : BackendBundle:MediaUploader:updateContent }
-
-admin_media_uploader_browser:
-    path:     /media-uploader/browser
-    defaults: { _controller  : BackendBundle:MediaUploader:browser }
-
-admin_media_uploader_months:
-    path:     /media-uploader/months
-    defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
 # Getting started routes
 admin_getting_started:
