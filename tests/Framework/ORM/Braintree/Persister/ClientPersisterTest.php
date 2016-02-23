@@ -97,7 +97,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $response->customer->id,
-            $this->unexistingClient->client_id
+            $this->unexistingClient->id
         );
     }
 
@@ -246,8 +246,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('clean');
         $method->setAccessible(true);
 
+
         $client = new Client([
-            'client_id'    => '1',
+            'id'           => '1',
             'first_name'   => 'John',
             'last_name'    => 'Doe',
             'email'        => 'johndoe@example.org',
