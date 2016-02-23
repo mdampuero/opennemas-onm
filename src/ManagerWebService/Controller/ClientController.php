@@ -88,7 +88,8 @@ class ClientController extends Controller
     protected function getTemplateParams()
     {
         return [
-            'countries' => Intl::getRegionBundle()->getCountryNames()
+            'countries' => Intl::getRegionBundle()
+                ->getCountryNames(CURRENT_LANGUAGE_SHORT)
         ];
     }
 }
