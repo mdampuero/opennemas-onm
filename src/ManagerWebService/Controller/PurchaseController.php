@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ManagerWebService\Controller;
 
 use Framework\ORM\Entity\Purchase;
@@ -7,64 +14,61 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ * Handles the Purchase resource.
+ */
 class PurchaseController extends Controller
 {
     /**
-     * Returns the list of instances as JSON.
+     * @api {get} /purchases List of purchases
+     * @apiName GetPurchases
+     * @apiGroup Purchase
      *
-     * @param Request $request The request object.
+     * @apiParam {String} client  The client's name or email.
+     * @apiParam {String} from    The start date.
+     * @apiParam {String} to      The finish date.
+     * @apiParam {String} orderBy The values to sort by.
+     * @apiParam {Number} epp     The number of elements per page.
+     * @apiParam {Number} page    The current page.
      *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Integer} epp     The number of elements per page.
+     * @apiSuccess {Integer} page    The current page.
+     * @apiSuccess {Integer} total   The total number of elements.
+     * @apiSuccess {Array}   results The list of purchases.
      */
     public function listAction(Request $request)
     {
+        $q        = $request->query->filter('q');
         $epp      = $request->query->getDigits('epp', 10);
         $page     = $request->query->getDigits('page', 1);
         $criteria = $request->query->filter('criteria') ? : [];
         $orderBy  = $request->query->filter('orderBy') ? : [];
         $extra    = $this->getTemplateParams();
 
-        $order = array();
+        $order = [];
         foreach ($orderBy as $value) {
             $order[$value['name']] = $value['value'];
         }
 
-        if (!empty($criteria)) {
-            $criteria['union'] = 'OR';
-        }
+        $repository = $this->get('orm.manager')
+            ->getRepository('manager.purchase');
 
-        $nr = $this->get('orm.manager')->getRepository('manager.purchase');
+        $ids       = [];
+        $purchases = $repository->findBy($criteria, $order, $epp, $page);
+        $total     = $repository->countBy($criteria);
 
-        $purchases = $nr->findBy($criteria, $order, $epp, $page);
-
-        $ids = [];
+        // Clean purchases
         foreach ($purchases as &$purchase) {
-            $ids[] = $purchase->instance_id;
-
+            $ids[]    = $purchase->instance_id;
             $purchase = $purchase->getData();
         }
 
-        $ids       = array_unique(array_diff($ids, [ -1, 0 ]));
-        $instances = [];
+        // Find instances by ids
         if (!empty($ids)) {
-            $instances = $this->get('instance_manager')->findBy([
+            $extra['instances'] = $this->get('instance_manager')->findBy([
                 'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
             ]);
         }
-
-        //$extra['instances'] = [
-            //'-1' => [ 'name' => _('Manager'), 'value' => -1 ],
-            //'0'  => [ 'name' => _('All'), 'value' => 0 ]
-        //];
-
-        //foreach ($instances as $instance) {
-            //$extra['instances'][$instance->id] = [
-                //'name'  => $instance->internal_name,
-                //'value' => $instance->id,
-            //];
-        //}
-
-        $total = $nr->countBy($criteria);
 
         return new JsonResponse([
             'epp'     => $epp,
@@ -75,7 +79,12 @@ class PurchaseController extends Controller
         ]);
     }
 
-    public function getTemplateParams()
+    /**
+     * Returns an array with extra parameters for template.
+     *
+     * @return array Array of extra parameters for template.
+     */
+    protected function getTemplateParams()
     {
         return [
             'braintree'  => [
