@@ -27,7 +27,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister = new ClientPersister($this->api, 'FreshBooks');
 
         $this->existingClient = new Client([
-            'client_id'  => 1,
+            'id'         => 1,
             'first_name' => 'John',
             'last_name'  => 'Doe'
         ]);
@@ -55,7 +55,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     {
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'client_id'      => '123',
+            'id'          => '123',
         ];
 
         $this->api->method('success')->willReturn(true);
