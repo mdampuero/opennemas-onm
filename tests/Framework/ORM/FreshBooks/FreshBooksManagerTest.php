@@ -63,7 +63,10 @@ class FreshBooksManagerTest extends \PHPUnit_Framework_TestCase
 
         $fm->expects($this->once())->method('getPersister')->willReturn($p);
 
-        $fm->persist(new Client([ 'client_id' => 1]));
+        $client = new Client([ 'id' => 1]);
+        $client->refresh();
+
+        $fm->persist($client);
     }
 
     public function testPersistWithUnexistingEntity()
