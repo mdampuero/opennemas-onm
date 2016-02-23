@@ -316,6 +316,7 @@
     @ManagerTheme/js/routing.js,
 
     @ManagerTheme/js/controllers/*,
+    @ManagerTheme/js/module/*,
 
     @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}
