@@ -73,7 +73,9 @@ class BraintreeManagerTest extends \PHPUnit_Framework_TestCase
 
         $bm->expects($this->once())->method('getPersister')->willReturn($p);
 
-        $bm->persist(new Client([ 'client_id' => 1]));
+        $client = new Client([ 'id' => 1]);
+        $client->refresh();
+        $bm->persist($client);
     }
 
     public function testPersistWithUnexistingEntity()
