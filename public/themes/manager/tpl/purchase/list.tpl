@@ -11,10 +11,10 @@
           </h4>
         </li>
       </ul>
-      <div class="all-actions pull-right">
+      <div class="all-actions hidden pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_purchase_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
             </a>
@@ -35,7 +35,7 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by name{/t}" type="text">
+            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by client{/t}" type="text">
             <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
               <i class="fa fa-times"></i>
             </span>
@@ -90,7 +90,10 @@
           </button>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="refresh()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-refresh fa-lg" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
@@ -116,6 +119,12 @@
             <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
             <label for="checkbox-name">
               {t}Name{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-total" checklist-model="columns.selected" checklist-value="'total'" type="checkbox">
+            <label for="checkbox-total">
+              {t}Total{/t}
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
@@ -159,23 +168,27 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('client')" ng-show="isEnabled('name')">
+              <th class="pointer" ng-click="sort('client')" ng-show="isColumnEnabled('name')">
                 {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('client') == 'asc', 'fa fa-caret-down': isOrderedBy('client') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('client_id')" ng-show="isEnabled('client_id')" width="120">
+              <th class="pointer" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
+                {t}Total{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('client_id')" ng-show="isColumnEnabled('client_id')" width="120">
                 {t}Client ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('client_id') == 'asc', 'fa fa-caret-down': isOrderedBy('client_id') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('payment_id')" ng-show="isEnabled('payment_id')" width="120">
+              <th class="pointer text-center" ng-click="sort('payment_id')" ng-show="isColumnEnabled('payment_id')" width="120">
                 {t}Payment ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('payment_id') == 'asc', 'fa fa-caret-down': isOrderedBy('payment_id') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('invoice_id')" ng-show="isEnabled('invoice_id')" width="120">
+              <th class="pointer text-center" ng-click="sort('invoice_id')" ng-show="isColumnEnabled('invoice_id')" width="120">
                 {t}Invoice ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('invoice_id') == 'asc', 'fa fa-caret-down': isOrderedBy('invoice_id') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('created')" ng-show="isEnabled('created')" width="250">
+              <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="250">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
               </th>
@@ -195,7 +208,7 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isEnabled('name')">
+              <td ng-show="isColumnEnabled('name')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
                   [% item.client.last_name %], [% item.client.first_name %]
                 </a>
@@ -208,22 +221,27 @@
                   </button>
                 </div>
               </td>
-              <td class="text-center" ng-show="isEnabled('client_id')">
+              <td class="text-right" ng-show="isColumnEnabled('total')">
+                <a ng-href="[% extra.freshbooks.url %]/showUser?userid=[% item.total %]" target="_blank">
+                  [% item.total ? item.total : '0' %] €
+                </a>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% extra.freshbooks.url %]/showUser?userid=[% item.client.client_id %]" target="_blank">
                   [% item.client.client_id %]
                 </a>
               </td>
-              <td class="text-center" ng-show="isEnabled('payment_id')">
+              <td class="text-center" ng-show="isColumnEnabled('payment_id')">
                 <a ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% item.payment_id %]" target="_blank">
                   [% item.payment_id %]
                 </a>
               </td>
-              <td class="text-center" ng-show="isEnabled('invoice_id')">
+              <td class="text-center" ng-show="isColumnEnabled('invoice_id')">
                 <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" target="_blank">
                   [% item.invoice_id %]
                 </a>
               </td>
-              <td class="text-center" ng-show="isEnabled('created')">
+              <td class="text-center" ng-show="isColumnEnabled('created')">
                 [% item.created %]
               </td>
             </tr>

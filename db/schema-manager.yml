@@ -374,9 +374,12 @@ purchase:
         client:
             type: text
             options: { default: null, length: 65532, notnull: true }
-        lines:
+        details:
             type: text
             options: { default: null, length: 65532, notnull: true }
+        total:
+            type: float
+            options: { default: 0, notnull: true }
         client_id:
             type: string
             options: { default: null, length: 60 }
