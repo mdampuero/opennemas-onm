@@ -160,7 +160,7 @@
             <tr ng-mouseover="header = 1" ng-mouseleave="header = 0">
               <th width="15">
                 <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                   <label for="select-all"></label>
                 </div>
               </th>
