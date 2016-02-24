@@ -91,7 +91,7 @@ class ClientPersister extends BraintreePersister
             'firstName' => $entity->first_name,
             'lastName'  => $entity->last_name,
             'email'     => $entity->email,
-            'company'   => $entity->organization,
+            'company'   => $entity->company,
             'phone'     => $entity->phone,
         ];
 

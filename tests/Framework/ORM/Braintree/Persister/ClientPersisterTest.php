@@ -248,13 +248,13 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 
 
         $client = new Client([
-            'id'           => '1',
-            'first_name'   => 'John',
-            'last_name'    => 'Doe',
-            'email'        => 'johndoe@example.org',
-            'organization' => 'Foobar, Inc.',
-            'phone'        => '123456789',
-            'extra'        => 'foo'
+            'id'         => '1',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'johndoe@example.org',
+            'company'    => 'Foobar, Inc.',
+            'phone'      => '123456789',
+            'extra'      => 'foo'
         ]);
 
         $this->assertEquals(

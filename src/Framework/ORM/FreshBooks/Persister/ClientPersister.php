@@ -103,6 +103,7 @@ class ClientPersister extends FreshBooksPersister
         $countries = Intl::getRegionBundle()->getCountryNames('en');
 
         $map = [
+            'id'          => 'client_id',
             'address'     => 'p_street1',
             'city'        => 'p_city',
             'company'     => 'organization',
@@ -115,11 +116,12 @@ class ClientPersister extends FreshBooksPersister
         $data = [];
         foreach ($entity->getData() as $property => $value) {
             $key = $property;
+;
             if (array_key_exists($property, $map)) {
                 $key = $map[$property];
             }
 
-            if ($property === 'country') {
+            if ($property === 'country' && !empty($value)) {
                 $value = $countries[$value];
             }
 
