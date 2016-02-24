@@ -37,11 +37,19 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-input no-boarder">
-          <span class="add-on">
-            <span class="fa fa-search fa-lg"></span>
-          </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text" style="width:250px;"/>
+        <li class="quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <i class="fa fa-search fa-lg"></i>
+            </span>
+            <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name_like[0].value = null" ng-show="criteria.name_like[0].value">
+              <i class="fa fa-times"></i>
+            </span>
+          </div>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -68,14 +76,6 @@
         </li>
       </ul>
       <ul class="nav quick-section pull-right">
-        <li class="quicklinks toggle-columns">
-          <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html="'{t}Columns{/t}'" tooltip-placement="left">
-            <i class="fa fa-columns"></i>
-          </div>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
         <li class="quicklinks form-inline pagination-links">
           <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </li>
@@ -84,12 +84,9 @@
   </div>
 </div>
 <div class="content">
-  <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
-    <div class="row">
-      <div class="col-xs-12 title">
-        <h5>{t}Columns{/t}</h5>
-      </div>
-    </div>
+  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+    <h5>{t}Columns{/t}</h5>
     <div class="row">
       <div class="col-sm-6 col-md-3 column">
         <div>

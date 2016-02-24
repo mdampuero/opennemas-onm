@@ -78,74 +78,79 @@
   </form>
 </div>
 <div class="content">
-  <div class="grid simple">
-    <div class="grid-body no-padding">
-      <div class="dropdown dropdown-table-columns" ng-class="{ 'dropdown-table-columns-hidden': !header, 'open': open }" ng-mouseover="header = 1; openColumns()" ng-mouseleave="header = 0;closeColumns()">
-        <button class="btn btn-white dropdown-toggle" data-toggle="dropdown"  tooltip="{t}Columns{/t}" type="button">
-          <i class="fa fa-th-list"></i>
-        </button>
-        <div class="dropdown-menu pull-right" ng-mouseleave="closeColumns()">
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-            <label for="checkbox-name">
-              {t}Name{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-email" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
-            <label for="checkbox-email">
-              {t}Email{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-vat-number" checklist-model="columns.selected" checklist-value="'vat_number'" type="checkbox">
-            <label for="checkbox-vat-number">
-              {t}Vat number{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-phone" checklist-model="columns.selected" checklist-value="'phone'" type="checkbox">
-            <label for="checkbox-phone">
-              {t}Phone{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-address" checklist-model="columns.selected" checklist-value="'address'" type="checkbox">
-            <label for="checkbox-address">
-              {t}Address{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-postal-code" checklist-model="columns.selected" checklist-value="'postal_code'" type="checkbox">
-            <label for="checkbox-postal-code">
-              {t}Postal code{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-city" checklist-model="columns.selected" checklist-value="'city'" type="checkbox">
-            <label for="checkbox-city">
-              {t}City{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-state" checklist-model="columns.selected" checklist-value="'state'" type="checkbox">
-            <label for="checkbox-state">
-              {t}State{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default">
-            <input id="checkbox-country" checklist-model="columns.selected" checklist-value="'country'" type="checkbox">
-            <label for="checkbox-country">
-              {t}Country{/t}
-            </label>
-          </div>
+  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+    <h5>{t}Columns{/t}</h5>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+          <label for="checkbox-name">
+            {t}Name{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-email" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
+          <label for="checkbox-email">
+            {t}Email{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-vat-number" checklist-model="columns.selected" checklist-value="'vat_number'" type="checkbox">
+          <label for="checkbox-vat-number">
+            {t}Vat number{/t}
+          </label>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-phone" checklist-model="columns.selected" checklist-value="'phone'" type="checkbox">
+          <label for="checkbox-phone">
+            {t}Phone{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-address" checklist-model="columns.selected" checklist-value="'address'" type="checkbox">
+          <label for="checkbox-address">
+            {t}Address{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-postal-code" checklist-model="columns.selected" checklist-value="'postal_code'" type="checkbox">
+          <label for="checkbox-postal-code">
+            {t}Postal code{/t}
+          </label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-city" checklist-model="columns.selected" checklist-value="'city'" type="checkbox">
+          <label for="checkbox-city">
+            {t}City{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-state" checklist-model="columns.selected" checklist-value="'state'" type="checkbox">
+          <label for="checkbox-state">
+            {t}State{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default">
+          <input id="checkbox-country" checklist-model="columns.selected" checklist-value="'country'" type="checkbox">
+          <label for="checkbox-country">
+            {t}Country{/t}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid simple">
+    <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
           <thead ng-show="items.length >= 0">
-            <tr ng-mouseover="header = 1" ng-mouseleave="header = 0">
+            <tr>
               <th width="15">
                 <div class="checkbox checkbox-default">
                   <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
