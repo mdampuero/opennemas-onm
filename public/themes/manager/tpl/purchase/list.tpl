@@ -220,9 +220,7 @@
                 </div>
               </td>
               <td class="text-right" ng-show="isColumnEnabled('total')">
-                <a ng-href="[% extra.freshbooks.url %]/showUser?userid=[% item.total %]" target="_blank">
-                  [% item.total ? item.total : '0' %] €
-                </a>
+                [% item.total ? item.total : '0' %] €
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% extra.freshbooks.url %]/showUser?userid=[% item.client.client_id %]" target="_blank">
