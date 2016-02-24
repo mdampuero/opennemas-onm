@@ -21,8 +21,6 @@ class ClientPersister extends DatabasePersister
         $data = $this->dbfy($entity);
 
         $this->mconn->insert('client', $data);
-
-        $entity->id = $this->mconn->lastInsertId();
     }
 
     /**
