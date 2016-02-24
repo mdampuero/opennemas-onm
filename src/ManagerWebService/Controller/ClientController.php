@@ -81,15 +81,120 @@ class ClientController extends Controller
     }
 
     /**
+     * @api {get} /clients/new Get data to create a client.
+     * @apiName NewClient
+     * @apiGroup Client
+     *
+     * @apiSuccess {Array} client The client's data.
+     */
+    public function newAction()
+    {
+        return new JsonResponse([
+            'extra'  => $this->getTemplateParams()
+        ]);
+    }
+
+
+    /**
+     * @api {post} /clients Creates a client
+     * @apiName GetClient
+     * @apiGroup Client
+     *
+     * @apiParam {String} first_name  The client's first name.
+     * @apiParam {String} last_name   The client's last name.
+     * @apiParam {String} company     The client's company.
+     * @apiParam {String} vat_number  The client's VAT number.
+     * @apiParam {String} email       The client's email.
+     * @apiParam {String} phone       The client's phone.
+     * @apiParam {String} address     The client's address.
+     * @apiParam {String} postal code The client's postal code.
+     * @apiParam {String} city        The client's city.
+     * @apiParam {String} state       The client's state.
+     * @apiParam {String} country     The client's country.
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function saveAction(Request $request)
+    {
+        $client = new Client($request->request->all());
+
+        $this->get('orm.manager')->persist($client, 'FreshBooks');
+        $this->get('orm.manager')->persist($client, 'Braintree');
+        $this->get('orm.manager')->persist($client, 'Database');
+
+        return new JsonResponse(_('Client saved successfully'));
+    }
+
+    /**
+     * @api {get} /clients/:id Get a client
+     * @apiName GetClient
+     * @apiGroup Client
+     *
+     * @apiParam {Integer} id The client's id.
+     *
+     * @apiSuccess {Array} client The client's data.
+     */
+    public function showAction($id)
+    {
+        $client = $this->get('orm.manager')
+            ->getRepository('client', 'Database')
+            ->find($id);
+
+        return new JsonResponse([
+            'client' => $client->getData(),
+            'extra'  => $this->getTemplateParams()
+        ]);
+    }
+
+    /**
+     * @api {put} /clients/:id Get a client
+     * @apiName GetClient
+     * @apiGroup Client
+     *
+     * @apiParam {Integer} id The client's id.
+     * @apiParam {String}  first_name  The client's first name.
+     * @apiParam {String}  last_name   The client's last name.
+     * @apiParam {String}  company     The client's company.
+     * @apiParam {String}  vat_number  The client's VAT number.
+     * @apiParam {String}  email       The client's email.
+     * @apiParam {String}  phone       The client's phone.
+     * @apiParam {String}  address     The client's address.
+     * @apiParam {String}  postal code The client's postal code.
+     * @apiParam {String}  city        The client's city.
+     * @apiParam {String}  state       The client's state.
+     * @apiParam {String}  country     The client's country.
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function updateAction($id, Request $request)
+    {
+        $client = $this->get('orm.manager')
+            ->getRepository('client', 'Database')
+            ->find($id);
+
+        foreach ($request->request as $key => $value) {
+            $client->{$key} = $value;
+        }
+
+        $this->get('orm.manager')->persist($client, 'FreshBooks');
+        $this->get('orm.manager')->persist($client, 'Braintree');
+        $this->get('orm.manager')->persist($client, 'Database');
+
+        return new JsonResponse(_('Client saved successfully'));
+    }
+
+    /**
      * Returns an array with extra parameters for template.
      *
      * @return array Array of extra parameters for template.
      */
     protected function getTemplateParams()
     {
-        return [
-            'countries' => Intl::getRegionBundle()
-                ->getCountryNames(CURRENT_LANGUAGE_SHORT)
-        ];
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+
+        sort($countries);
+
+        return [ 'countries' => $countries ];
     }
 }
