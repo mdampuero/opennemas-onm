@@ -366,9 +366,8 @@ class SpecialsController extends Controller
                 $pos++;
             }
 
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
 
+            // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
             $cacheManager->delete('home|0');
