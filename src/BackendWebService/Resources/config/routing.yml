@@ -1,83 +1,79 @@
 backend_ws_advertisements:
-    resource: @BackendWebServiceBundle/Resources/config/routing/advertisements.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/advertisements.yml'
     prefix:   /
 
 backend_ws_comments:
-    resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/comments.yml'
     prefix:   /
 
 backend_ws_domain:
-    resource: @BackendWebServiceBundle/Resources/config/routing/domain.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/domain.yml'
     prefix:   /
 
 backend_ws_getting_started:
-    resource: @BackendWebServiceBundle/Resources/config/routing/getting_started.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
     prefix:   /
 
 backend_ws_store:
-    resource: @BackendWebServiceBundle/Resources/config/routing/store.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/store.yml'
     prefix:   /
 
 backend_ws_menus:
-    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'
     prefix:   /
 
 backend_ws_news_agency:
-    resource: @BackendWebServiceBundle/Resources/config/routing/news_agency.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/news_agency.yml'
     prefix:   /
 
 backend_ws_news_agency_server:
-    resource: @BackendWebServiceBundle/Resources/config/routing/news_agency_server.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/news_agency_server.yml'
     prefix:   /
 
 backend_ws_opinions:
-    resource: @BackendWebServiceBundle/Resources/config/routing/opinions.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/opinions.yml'
     prefix:   /
 
 backend_ws_picker:
-    resource: @BackendWebServiceBundle/Resources/config/routing/picker.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/picker.yml'
     prefix:   /
 
 backend_ws_theme:
-    resource: @BackendWebServiceBundle/Resources/config/routing/theme.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/theme.yml'
     prefix:   /
 
 backend_ws_users:
-    resource: @BackendWebServiceBundle/Resources/config/routing/users.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/users.yml'
     prefix:   /
 
 backend_ws_usergroups:
-    resource: @BackendWebServiceBundle/Resources/config/routing/usergroups.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/usergroups.yml'
     prefix:   /
 
 backend_ws_widgets:
-    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/widgets.yml'
     prefix:   /
 
 backend_ws_keywords:
-    resource: @BackendWebServiceBundle/Resources/config/routing/keywords.yml
-    prefix:   /
-
-backend_ws_cachemanager:
-    resource: @BackendWebServiceBundle/Resources/config/routing/cachemanager.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/keywords.yml'
     prefix:   /
 
 backend_ws_newsletter:
-    resource: @BackendWebServiceBundle/Resources/config/routing/newsletter.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/newsletter.yml'
     prefix:   /
 
 backend_ws_notification:
-    resource: @BackendWebServiceBundle/Resources/config/routing/notification.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/notification.yml'
     prefix:   /
 
 backend_ws_image:
-    resource: @BackendWebServiceBundle/Resources/config/routing/image.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/image.yml'
     prefix:   /
 
 backend_ws_newsletter_subscriptor:
-    resource: @BackendWebServiceBundle/Resources/config/routing/newsletter_subscriptors.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/newsletter_subscriptors.yml'
     prefix:   /
 
 backend_ws_content:
-    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing/content.yml'
     prefix:   /

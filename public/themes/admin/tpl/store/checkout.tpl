@@ -13,6 +13,23 @@
   </style>
 {/block}
 
+{block name="footer-js" append}
+  {javascripts}
+    <script type="text/javascript">
+      $(document).on('keydown', function (e) {
+        if (e.which === 8 && !$(e.target).is('input, textarea')) {
+          window.onbeforeunload = function() {
+            return "{t}You are leaving the current page.{/t}";
+          }
+        }
+      });
+
+      $(document).on('click', function (e) {
+        window.onbeforeunload = null;
+      });
+    </script>
+  {/javascripts}
+{/block}
 {block name="content"}
   <div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($billing)}billing = {json_encode($billing)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="page-navbar actions-navbar">
@@ -153,9 +170,8 @@
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid || !validPhone, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid && validPhone }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid && validPhone"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.phone.$invalid && billingForm.phone.$error.required" tooltip="{t}This field is required{/t}"></i>
                             <i class="fa fa-times text-danger" ng-if="!validPhone" tooltip="{t}This is not a valid phone{/t}"></i>
-                            <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" required="required" type="text">
+                            <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" type="text">
                           </div>
                         </div>
                       </div>
@@ -164,8 +180,11 @@
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.vat.$dirty && billingForm.vat.$valid && validVat"></i>
                             <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" tooltip="{t}This is not a valid vat{/t}"></i>
-                            <input class="form-control" id="vat" name="vat" ng-model="billing.vat" placeholder="{t}VAT Number{/t}" ng-required="(billing.company != null && billing.company != '') || (billing.country == 'ES' && !validVat)" type="text">
+                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" tooltip="{t}This is not a valid VAT identification number{/t}"></i>
+                            <input class="form-control" id="vat" name="vat" ng-model="billing.vat" placeholder="{t}VAT identification number{/t}" ng-required="(billing.company != null && billing.company != '') || (billing.country == 'ES' && !validVat)" type="text">
+                          </div>
+                          <div class="help m-t-5">
+                            <a href="https://en.wikipedia.org/wiki/VAT_identification_number" target="_blank">{t}What is a VAT identification number?{/t}</a>
                           </div>
                         </div>
                       </div>

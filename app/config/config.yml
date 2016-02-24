@@ -5,14 +5,14 @@ imports:
 
 parameters:
     cache_prefix: onm
-    available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
+    available_languages: {'en_US' : 'English', 'es_ES' : 'Español', 'gl_ES' : 'Galego'}
 
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
     secret:          %framework.secret%
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: '%kernel.root_dir%/config/routing.yml'
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
@@ -20,7 +20,7 @@ framework:
     templating:
         engines: ['twig', 'php']
         #assets_version: SomeVersionScheme
-    default_locale:  "%locale%"
+    default_locale:  %locale%
     trusted_proxies: %framework.trusted_proxies%
     trusted_hosts:   ~
     session:
@@ -45,7 +45,7 @@ opennemas:
         asset_compilation_in_dev: %opennemas.assetic.asset_compilation_in_dev%
 
         # Assetic folders
-        build_path:  "%kernel.cache_dir%/assetic"
+        build_path:  '%kernel.cache_dir%/assetic'
         output_path: build/assets
 
         # Template parameter
@@ -81,11 +81,11 @@ swiftmailer:
     password:  %mailer_password%
     spool:
         type: file
-        path: "%kernel.root_dir%/../tmp/spool"
-    logging:  "%kernel.debug%"
+        path: '%kernel.root_dir%/../tmp/spool'
+    logging:  '%kernel.debug%'
 
 monolog:
-    channels: ["main", "applog"]
+    channels: ['main', 'applog']
     handlers:
         main:
             type:  stream
@@ -98,7 +98,7 @@ monolog:
             channels: applog
 
 hwi_oauth:
-    firewall_name: backend
+    firewall_names: [ 'backend' ]
     resource_owners:
         facebook:
             type:          facebook

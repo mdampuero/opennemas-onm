@@ -10,7 +10,10 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     $scope.confirmUser = function() {
-      if ($scope.activated == '1') {
+      if (
+        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
+        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1')
+      ) {
         var modal = $modal.open({
           templateUrl: 'modal-update-selected',
           backdrop: 'static',
@@ -18,12 +21,13 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
           resolve: {
             template: function() {
               return {
-                name:     'create',
-                value:    1,
-                checkPhone:  $scope.checkPhone,
-                checkVat:    $scope.checkVat,
-                extra:       $scope.extra,
-                saveBilling: $scope.saveBilling,
+                name:           $scope.user.id ? 'update' : 'create',
+                backend_access: true,
+                value:          1,
+                checkPhone:     $scope.checkPhone,
+                checkVat:       $scope.checkVat,
+                extra:          $scope.extra,
+                saveBilling:    $scope.saveBilling,
               };
             },
             success: function() {

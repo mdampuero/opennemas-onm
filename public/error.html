@@ -18,19 +18,19 @@
 
       /* ANIMATIONS */
       @keyframes fadeout {
-        0%{opacity:0;transform:scale(1,1);}
+        0%{opacity:0;}
         1%{opacity:1;}
         5%{opacity:0;}
-        10%{opacity:1;transform:scale(1,1);}
-        20%{opacity:0;transform:scale(.1,.1);}
+        10%{opacity:1;}
+        20%{opacity:0;}
         100%{opacity:0;}
       }
       @-webkit-keyframes fadeout {
-        0%{opacity:0;-webkit-transform:scale(1,1);}
+        0%{opacity:0;}
         1%{opacity:1;}
         5%{opacity:0;}
-        10%{opacity:1;-webkit-transform:scale(1,1);}
-        20%{opacity:0;-webkit-transform:scale(.1,.1);}
+        10%{opacity:1;}
+        20%{opacity:0;}
         100%{opacity:0;}
       }
       @-moz-keyframes fadeout {
@@ -65,50 +65,9 @@
         11%{opacity:0;}
         100%{opacity:0;}
       }
-      @keyframes pupils {
-        0%{transform:scale(1,1);}
-        5%{transform:scale(1,1);}
-        10%{transform:scale(1.5,1.5);}
-        30%{transform:scale(1,1);}
-        100%{transform:scale(1,1);}
-      }
-      @-webkit-keyframes pupils {
-        0%{-webkit-transform:scale(1,1);}
-        5%{-webkit-transform:scale(1,1);}
-        10%{-webkit-transform:scale(1.5,1.5);}
-        30%{-webkit-transform:scale(1,1);}
-        100%{-webkit-transform:scale(1,1);}
-      }
-      @-moz-keyframes pupils {
-        0%{-moz-transform:scale(1,1);}
-        5%{-moz-transform:scale(1,1);}
-        10%{-moz-transform:scale(1,1);}
-        30%{-moz-transform:scale(1,1);}
-        100%{-moz-transform:scale(1,1);}
-      }
 
-      #spark_1, #spark_2, #spark_3, #spark_4, #spark_5, #spark_6, #spark_7, #spark_8, #spark_9, #spark_10, #spark_11, #spark_12 {
+      #spark_6, #spark_7, #spark_11 {
         transform-origin:center center;
-      }
-      #spark_1 {
-        -webkit-animation:fadeout 3000ms 0ms ease-out infinite;
-        animation:fadeout 3000ms 0ms ease-out infinite;
-      }
-      #spark_2 {
-        animation:fadeout 4000ms 100ms ease-out infinite;
-        -webkit-animation:fadeout 4000ms 100ms ease-out infinite;
-      }
-      #spark_3 {
-        animation:fadeout 4100ms 150ms ease-out infinite;
-        -webkit-animation:fadeout 4100ms 150ms ease-out infinite;
-      }
-      #spark_4 {
-        animation:fadeout 3500ms 250ms ease-out infinite;
-        -webkit-animation:fadeout 3500ms 250ms ease-out infinite;
-      }
-      #spark_5 {
-        animation:fadeout 2900ms 270ms ease-out infinite;
-        -webkit-animation:fadeout 2900ms 270ms ease-out infinite;
       }
       #spark_6 {
         animation:fadeout 2500ms 350ms ease-out infinite;
@@ -118,37 +77,13 @@
         animation:fadeout 4150ms 380ms ease-out infinite;
         -webkit-animation:fadeout 4150ms 380ms ease-out infinite;
       }
-      #spark_8 {
-        animation:fadeout 3400ms 450ms ease-out infinite;
-        -webkit-animation:fadeout 3400ms 450ms ease-out infinite;
-      }
-      #spark_9 {
-        animation:fadeout 2800ms 600ms ease-out infinite;
-        -webkit-animation:fadeout 2800ms 600ms ease-out infinite;
-      }
-      #spark_10 {
-        animation:fadeout 2500ms 420ms ease-out infinite;
-        -webkit-animation:fadeout 2500ms 420ms ease-out infinite;
-      }
       #spark_11 {
         animation:fadeout 4250ms 380ms ease-out infinite;
         -webkit-animation:fadeout 4250ms 380ms ease-out infinite;
       }
-      #spark_12 {
-        animation:fadeout 3190ms 375ms ease-out infinite;
-        -webkit-animation:fadeout 3190ms 375ms ease-out infinite;
-      }
       #eyeslashes {
         animation: blink 7190ms 375ms ease-out infinite;
         -webkit-animation: blink 7190ms 375ms ease-out infinite;
-      }
-      #pupil_l, #pupil_r {
-        animation: pupils 7190ms 375ms ease-out infinite;
-        -webkit-animation: pupils 7190ms 375ms ease-out infinite;
-        -moz-animation: pupils 7190ms 375ms ease-out infinite;
-        transform-origin: center center;
-        -webkit-transform-origin: center center;
-        -moz-transform-origin: center center;
       }
 
       .left { text-align: left; }
@@ -381,7 +316,7 @@
                     />
                   <path fill="#EFF3EB" stroke="#EFF3EB" d="M334.3,148.4c-0.1,0.5-0.4,0.8-1,1.2C333.5,148.9,333.7,148.5,334.3,148.4
                     C334.3,148.4,334.3,148.4,334.3,148.4z"/>
-                  <polygon fill="#EFF3EB" stroke="#EFF3EB" points="333.2,150.1 333.2,150.2 333.1,150.2 			"/>
+                  <polygon fill="#EFF3EB" stroke="#EFF3EB" points="333.2,150.1 333.2,150.2 333.1,150.2      "/>
                   <path fill="#EFF3EB" stroke="#EFF3EB" d="M306.8,220.9c3.1,1.3,6.4,1.4,9.6,0.3c3.1-1.1,5.2-3.1,6.2-6.3c0.1-0.4,0.1-0.8,0.7-1.2
                     c-0.1,3.1-1.1,5.8-3.4,7.7c-3.8,3.1-8.4,3.2-12.4,0.3C307.1,221.5,306.8,221.3,306.8,220.9L306.8,220.9z"/>
                   <path fill="#EFF3EB" stroke="#EFF3EB" d="M306.8,220.9C306.7,220.9,306.7,220.9,306.8,220.9C306.7,220.9,306.8,220.9,306.8,220.9
@@ -915,18 +850,18 @@
                 <g opacity="0.8">
 
                     <polyline opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " points="
-                    565.4,470.5 571.7,470.9 577.1,467 583.3,455.4 593.2,448.7 604.5,448.7 615,441.2 			"/>
+                    565.4,470.5 571.7,470.9 577.1,467 583.3,455.4 593.2,448.7 604.5,448.7 615,441.2       "/>
                   <path opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " d="
                     M565,471.1l13.3,6.4c0,0,7.3-0.5,8,0c0.7,0.5,0.6,6.5,0.6,6.5l6.1,2.9l5.8,1.5"/>
 
                     <polyline opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " points="
-                    565,471.9 562.2,480.3 553.3,489 554,497 554,506 547.6,508.8 547.6,513.7 548.7,515.8 			"/>
+                    565,471.9 562.2,480.3 553.3,489 554,497 554,506 547.6,508.8 547.6,513.7 548.7,515.8       "/>
 
                     <polyline opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " points="
-                    563.5,471.4 549,475.9 536.8,479.8 533.9,491.7 526.6,500.8 515,500.3 504.4,499.7 499.7,502.1 			"/>
+                    563.5,471.4 549,475.9 536.8,479.8 533.9,491.7 526.6,500.8 515,500.3 504.4,499.7 499.7,502.1       "/>
 
                     <polyline opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " points="
-                    564.2,470 543.2,471.4 536.1,465.9 525.4,462.7 515.4,466.8 503.2,465.2 500.6,461.7 			"/>
+                    564.2,470 543.2,471.4 536.1,465.9 525.4,462.7 515.4,466.8 503.2,465.2 500.6,461.7       "/>
                   <path opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " d="
                     M564.8,469.6l4-12.9c0,0-7.2-4.3-7.4-4.7c-0.3-0.5,2.1-9.2,2.1-9.2l2.5-3.7l-0.7-2.2l-0.4-1.5"/>
                   <path opacity="0.8" fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" enable-background="new    " d="
@@ -934,21 +869,21 @@
                   <path stroke="#000000" stroke-width="0.5626" stroke-miterlimit="10" d="M564.2,470l-1.3,0.3l0.7,1l0.7,0.6c0,0,0.6,0.6,0.8,0
                     c0.3-0.6-0.4-0.2,0-0.8c0.4-0.7,0.4-0.7,0.4-0.7l-0.6-0.8L564.2,470z"/>
                   <polyline fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" points="565,468.1 563.1,465.3
-                    560.7,462.5 556.4,462.3 552.7,459.1 552.9,457.5 553.9,453.9 552.9,449.1 548.7,448.6 542.5,444.8 			"/>
+                    560.7,462.5 556.4,462.3 552.7,459.1 552.9,457.5 553.9,453.9 552.9,449.1 548.7,448.6 542.5,444.8       "/>
                   <path fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" d="M567.6,466.6c0,0,3.9-0.7,4.5-1.5
                     c0.6-0.7,5.4-7,5.4-7h2.4l1.7,0.7"/>
                   <polyline fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" points="573.1,469.9 576.6,470.9
-                    577.3,473.1 578.4,475.1 578.3,477.5 			"/>
+                    577.3,473.1 578.4,475.1 578.3,477.5       "/>
                   <path fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" d="M568.9,473.2c0,0,0.3,3.6,0.7,4.3
                     c0.5,0.7-2,3.9-2,3.9l-2.6-0.7l-4.4,1"/>
                   <polyline fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" points="564.1,475.2 558.8,476.3
-                    556.4,474.5 554,474.4 			"/>
+                    556.4,474.5 554,474.4       "/>
                   <path fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" d="M557.6,473.2l-2.1-1l-4.3,0.4
                     c0,0-3.3,0-3.5-0.1s-4.6,0-4.6,0l-3.1-2.1l-1.8-1.4l-0.6-1.8"/>
                   <polyline fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" points="561.3,469.9 557.6,466
-                    548.4,462.9 543.1,466.2 539.1,466.4 534.5,464.1 533.3,465.1 			"/>
+                    548.4,462.9 543.1,466.2 539.1,466.4 534.5,464.1 533.3,465.1       "/>
                   <polyline fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" points="571.3,461.7 572.1,452.9
-                    567.6,449.6 563.5,452.5 561.9,449 			"/>
+                    567.6,449.6 563.5,452.5 561.9,449       "/>
                   <path fill="none" stroke="#12427C" stroke-width="0.5626" stroke-miterlimit="10" d="M569.7,477.1l4.7,3.8c0,0,4-0.5,4.7-0.6
                     c0.7-0.1,2.7,1.8,3.3,1.6c0.6-0.2,1.4-4.8,1.4-4.8"/>
                 </g>
@@ -981,22 +916,6 @@
               </g>
             </g>
             <g id="sparks_layer">
-              <g id="spark_1">
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M339.3,363.9v3.7"/>
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M341.4,368.9l3-1.8"/>
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M344.4,373.2l-3-1.7"/>
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M339.3,372.7v4.4"/>
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M333.9,373.3l3.2-1.9"/>
-                <path fill="none" stroke="#FFDFF0" stroke-miterlimit="10" d="M337,368.9l-2.5-1.4"/>
-              </g>
-              <g id="spark_5">
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M347.2,362.3v3"/>
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M348.9,366.3l2.4-1.4"/>
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M351.2,369.6l-2.3-1.4"/>
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M347.2,369.4v3.4"/>
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M342.8,369.7l2.5-1.5"/>
-                <path fill="none" stroke="#FDF5BF" stroke-miterlimit="10" d="M345.3,366.3l-2-1.1"/>
-              </g>
               <g id="spark_6">
                 <path fill="none" stroke="#FFFACF" stroke-miterlimit="10" d="M363.1,355.5v5.1"/>
                 <path fill="none" stroke="#FFFACF" stroke-miterlimit="10" d="M366,362.3l4.1-2.3"/>
@@ -1004,22 +923,6 @@
                 <path fill="none" stroke="#FFFACF" stroke-miterlimit="10" d="M363.1,367.5v5.9"/>
                 <path fill="none" stroke="#FFFACF" stroke-miterlimit="10" d="M355.7,368.2l4.3-2.4"/>
                 <path fill="none" stroke="#FFFACF" stroke-miterlimit="10" d="M360,362.2l-3.3-2"/>
-              </g>
-              <g id="spark_2">
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M347.3,368.3l4.2-1.3"/>
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M352.2,364.2l-3-2.8"/>
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M355.8,359.4l-0.9,3.9"/>
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M357.2,365.3l4.8-1.5"/>
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M359.7,371.1l-3.2-2.9"/>
-                <path fill="none" stroke="#C7FFFC" stroke-miterlimit="10" d="M353.7,369.1l-0.7,3.3"/>
-              </g>
-              <g id="spark_10">
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M443.6,254l-4-2.7"/>
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M436.7,252.7l-0.3,4.5"/>
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M430.1,252.9l4-2"/>
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M434.2,247.7l-4.7-3.1"/>
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M437.4,241.5l-0.3,4.7"/>
-                <path fill="none" stroke="#B3FFF2" stroke-miterlimit="10" d="M439.9,248.1l3.3-1.7"/>
               </g>
               <g id="spark_11">
                 <path fill="none" stroke="#FEF9D9" stroke-miterlimit="10" d="M440.8,246.1l4.3,2.3"/>
@@ -1029,22 +932,6 @@
                 <path fill="none" stroke="#FEF9D9" stroke-miterlimit="10" d="M448.2,258.3l-0.1-4.7"/>
                 <path fill="none" stroke="#FEF9D9" stroke-miterlimit="10" d="M445.1,251.8l-3.3,2"/>
               </g>
-              <g id="spark_12">
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M437.2,253l2.7-2.1"/>
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M439.5,248.6l-3-1.1"/>
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M440.8,244.2l0.5,3.1"/>
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M443.5,248l3.1-2.4"/>
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M447,251.6l-3.1-1.2"/>
-                <path fill="none" stroke="#D3FFFC" stroke-miterlimit="10" d="M442,251.8l0.4,2.6"/>
-              </g>
-              <g id="spark_3">
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M542.3,353.8l-0.4,5.3"/>
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M544.9,361.1l4.4-2.1"/>
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M548.7,367.2l-4-2.7"/>
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M541.6,366.2l-0.4,6"/>
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M534,366.5l4.6-2.2"/>
-                <path fill="none" stroke="#47EAFF" stroke-miterlimit="10" d="M538.8,360.5l-3.3-2.2"/>
-              </g>
               <g id="spark_7">
                 <path fill="none" stroke="#F99FFF" stroke-miterlimit="10" d="M514.1,363.6l-0.3,4.1"/>
                 <path fill="none" stroke="#F99FFF" stroke-miterlimit="10" d="M516,369.2l3.3-1.7"/>
@@ -1052,30 +939,6 @@
                 <path fill="none" stroke="#F99FFF" stroke-miterlimit="10" d="M513.5,373.2l-0.3,4.7"/>
                 <path fill="none" stroke="#F99FFF" stroke-miterlimit="10" d="M507.5,373.4l3.5-1.8"/>
                 <path fill="none" stroke="#F99FFF" stroke-miterlimit="10" d="M511.4,368.8l-2.6-1.8"/>
-              </g>
-              <g id="spark_4">
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M518.4,363.6l3-1"/>
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M521.9,360.4l-2.2-1.9"/>
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M524.4,356.9l-0.6,2.8"/>
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M525.5,361.1l3.4-1.2"/>
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M527.4,365.3l-2.3-2"/>
-                <path fill="none" stroke="#F7D600" stroke-miterlimit="10" d="M523,364l-0.5,2.4"/>
-              </g>
-              <g id="spark_8">
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M527.5,368.8l5.1-1.8"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M533.3,363.5l-3.8-3.3"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M537.6,357.5l-0.9,4.8"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M539.4,364.6l5.9-2"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M542.8,371.7l-3.9-3.4"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M535.3,369.4l-0.7,4"/>
-              </g>
-              <g id="spark_9">
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M426.7,254.8l2.3-3.1"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M428,249.4l-3.5-0.5"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M428.2,244.1l1.4,3.3"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M432.1,247.5l2.7-3.5"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M436.9,250.4l-3.7-0.5"/>
-                <path fill="none" stroke="#FEF8D1" stroke-miterlimit="10" d="M431.5,252.1l1.1,2.7"/>
               </g>
             </g>
           </svg>

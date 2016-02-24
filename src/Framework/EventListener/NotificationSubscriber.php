@@ -101,17 +101,16 @@ class NotificationSubscriber implements EventSubscriberInterface
         $epp      = $event->getArgument('epp');
         $page     = $event->getArgument('page');
 
-        $response = [];
-        if (is_array($event->getResponse())) {
-            $response = array_merge(
-                $event->getResponse(),
-                $this->container->get('core.service.notification')
-                    ->getList($criteria, $order, $epp, $page)
-            );
-        } else {
-            $response = $this->container->get('core.service.notification')
-                    ->getList($criteria, $order, $epp, $page);
+        $response = $event->getResponse();
+        if (!is_array($response)) {
+            $response = [];
         }
+
+        $response = array_merge(
+            $response,
+            $this->container->get('core.service.notification')
+                ->getList($criteria, $order, $epp, $page)
+        );
 
         $event->setResponse($response);
     }

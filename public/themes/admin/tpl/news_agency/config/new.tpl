@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-{stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
-{/stylesheets}
-{/block}
-
 {block name="content"}
 <form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off">
   <div class="page-navbar actions-navbar">
@@ -14,6 +9,9 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-microphone fa-lg"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question"></i>
+              </a>
               {t}News agency{/t}
             </h4>
           </li>
@@ -76,21 +74,15 @@
           <label for="color" class="form-label">{t}Color{/t}</label>
           <span class="help">{t}Color to distinguish between other agencies{/t}</span>
           <div class="controls">
-            <input type="hidden" id="color" name="color" value="{$server['color']|default:'#424E51'}" class="form-control"/>
-            <select name="colorpicker">
-              <option value="#424E51">{t}Dark Gray{/t}</option>
-              <option value="#000000">{t}Black{/t}</option>
-              <option value="#980101">{t}Bold red{/t}</option>
-              <option value="#7bd148">{t}Green{/t}</option>
-              <option value="#0000FF">{t}Blue{/t}</option>
-              <option value="#46d6db">{t}Turquoise{/t}</option>
-              <option value="#7ae7bf">{t}Light green{/t}</option>
-              <option value="#51b749">{t}Bold green{/t}</option>
-              <option value="#fbd75b">{t}Yellow{/t}</option>
-              <option value="#FF8C00">{t}Orange{/t}</option>
-              <option value="#dc2127">{t}Red{/t}</option>
-              <option value="#dbadff">{t}Purple{/t}</option>
-            </select>
+            <div class="input-group">
+              <span class="input-group-addon" ng-style="{ 'background-color': color }">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+              <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$server['color']|default:"" }'" ng-model="color" type="text">
+              <div class="input-group-btn">
+                <button class="btn btn-default" ng-click="color='{$server['color']|default:""}'" type="button">{t}Reset{/t}</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -182,12 +174,6 @@
             passInput.prop('type','password');
             btn.html('{t}Show password{/t}');
           }
-        });
-
-        $('select[name="colorpicker"]').simplecolorpicker(
-            'selectColor', $('#color').val()
-            ).on('change', function() {
-          $('#color').val($('select[name="colorpicker"]').val());
         });
       });
     </script>

@@ -62,7 +62,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json}">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json};activated=user.activated;type=user.type">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -107,9 +107,6 @@
     <div class="row">
       <div class="col-md-8">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}User info{/t}</h4>
-          </div>
           <div class="grid-body">
             <div class="row">
               <div class="col-sm-8">
@@ -220,43 +217,6 @@
           </div>
         </div>
         {acl isAllowed="USER_ADMIN"}
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Privileges{/t}</h4>
-          </div>
-          <div class="grid-body">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
-                <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
-                  <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
-                </div>
-                <div class="m-t-10 m-b-10">
-                  <span class="badge m-r-5" ng-repeat="group in selectedGroups">
-                    [% group.name %]
-                    <input type="hidden" name="id_user_group[]" value="[% group.id %]">
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
-                <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
-                  <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
-                </div>
-                <div class="m-t-10 m-b-10">
-                  <span class="badge m-r-5" ng-repeat="category in selectedCategories">
-                    [% category.title %]
-                    <input type="hidden" name="ids_category[]" value="[% category.id %]">
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/acl}
-        {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
         <div class="grid simple" ng-if="user.type == 1">
           <div class="grid-title">
@@ -295,7 +255,7 @@
                   {t}Gender:{/t}
                 </label>
                 <div class="controls">
-                  <select name="meta[gender]" id="meta_gender" class="form-control">
+                  <select name="meta[gender]" id="meta_gender">
                     {html_options options=$gender_options selected=$user->meta['gender']}
                   </select>
                 </div>
@@ -316,40 +276,63 @@
               <div class="grid-body">
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
-                  <label class="form-label" for="usertype">
-                    {t}User type{/t}
-                  </label>
-                  <div class="controls">
-                    <select id="usertype" name="type">
-                      <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                      <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-                    </select>
+                  <div class="checkbox">
+                    <input id="activated" name="activated" ng-model="user.activated" ng-true-value="'1'" ng-false-value="'0'" ng-checked="user.activated == 1" type="checkbox" value="1"/>
+                    <label class="form-label" for="activated">
+                      {t}Activated{/t}
+                    </label>
                   </div>
                 </div>
                 {/acl}
-                <div class="form-group">
-                  <label class="form-label" for="meta">
-                    {t}User language{/t}
-                  </label>
-                  <div class="controls">
-                    {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                    <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
-                  </div>
-                </div>
+
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
-                  <label class="form-label" for="activated">
-                    {t}Status{/t}
-                  </label>
-                  <div class="controls">
-                    <select id="activated" name="activated" ng-model="activated">
-                      <option value="0" {if ($user->activated eq "0")}selected{/if}>{t}Deactivated{/t}</option>
-                      <option value="1" {if ($user->activated eq "1")}selected{/if}>{t}Activated{/t}</option>
-                    </select>
-                    <div class="help-block">{t}Used to enable or disable user access to control panel.{/t}</div>
+                  <div class="checkbox">
+                    <input id="type" name="type" ng-checked="user.type == 0" ng-model="user.type" ng-true-value="'0'" ng-false-value="'1'" type="checkbox" value="0"/>
+                    <label class="form-label" for="type">
+                      {t}Has backend access{/t}
+                    </label>
+                    <div class="help m-t-5">{t}Used to enable or disable user access to control panel.{/t}</div>
                   </div>
                 </div>
                 {/acl}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="grid simple">
+            <div class="grid-title">
+              <h4>{t}Privileges{/t}</h4>
+            </div>
+            <div class="grid-body">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
+                  <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
+                    <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                  </div>
+                  <div class="m-t-10 m-b-10">
+                    <span class="badge m-r-5" ng-repeat="group in selectedGroups">
+                      [% group.name %]
+                      <input type="hidden" name="id_user_group[]" value="[% group.id %]">
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
+                  <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
+                    <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                  </div>
+                  <div class="m-t-10 m-b-10">
+                    <span class="badge m-r-5" ng-repeat="category in selectedCategories">
+                      [% category.title %]
+                      <input type="hidden" name="ids_category[]" value="[% category.id %]">
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -379,15 +362,24 @@
           </div>
         </div>
         {/if}
-        {acl isAllowed="USER_ADMIN"}
-        {is_module_activated name="PAYWALL"}
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">
               <div class="grid-title">
-                <h4>{t}Paywall{/t}</h4>
+                <h4>{t}Options{/t}</h4>
               </div>
               <div class="grid-body">
+                <div class="form-group">
+                  <label class="form-label" for="meta">
+                    {t}User language{/t}
+                  </label>
+                  <div class="controls">
+                    {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
+                    <div class="help-blockacl/user/modals/_modalBatchUpdate.tpl">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                  </div>
+                </div>
+                {acl isAllowed="USER_ADMIN"}
+                {is_module_activated name="PAYWALL"}
                 <div class="form-group">
                   <label class="form-label" for="paywall_time_limit">
                     {t}Paywall time limit:{/t}
@@ -396,12 +388,12 @@
                     <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->meta['paywall_time_limit']}"/>
                   </div>
                 </div>
+                {/is_module_activated}
+                {/acl}
               </div>
             </div>
           </div>
         </div>
-        {/is_module_activated}
-        {/acl}
       </div>
     </div>
   </div>

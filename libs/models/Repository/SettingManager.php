@@ -78,6 +78,8 @@ class SettingManager extends BaseManager
             $this->cache->setNamespace($config['cache_prefix']);
         }
 
+        $this->autoloaded = [];
+
         return true;
     }
 

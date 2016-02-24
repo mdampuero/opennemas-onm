@@ -1,15 +1,15 @@
 services:
     orm.loader:
         class: Framework\ORM\Loader\Loader
-        arguments: [ @service_container, %plugins% ]
+        arguments: [ '@service_container', %plugins% ]
 
     orm.loader.theme:
         class: Framework\ORM\Loader\ThemeLoader
-        arguments: [ @orm.validator.theme ]
+        arguments: [ '@orm.validator.theme' ]
 
     orm.manager.braintree:
         class: Framework\ORM\Braintree\BraintreeManager
-        arguments: [ @comet_cult_braintree.factory ]
+        arguments: [ '@comet_cult_braintree.factory' ]
 
     orm.manager.freshbooks:
         class: Framework\ORM\FreshBooks\FreshBooksManager
@@ -17,11 +17,11 @@ services:
 
     orm.manager.database:
         class: Framework\ORM\Database\DatabaseManager
-        arguments: [ @cache, @dbal_connection, @cache_manager, @dbal_connection_manager ]
+        arguments: [ '@cache', '@dbal_connection', '@cache_manager', '@dbal_connection_manager' ]
 
     orm.manager:
         class: Framework\ORM\EntityManager
-        arguments: [ @orm.manager.braintree, @orm.manager.database, @orm.manager.freshbooks ]
+        arguments: [ '@orm.manager.braintree', '@orm.manager.database', '@orm.manager.freshbooks' ]
 
     orm.validator:
         class: Framework\ORM\Validator\Validator

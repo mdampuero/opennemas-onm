@@ -68,6 +68,7 @@ class AclUserController extends Controller
             );
         }
 
+        array_unshift($groupsOptions, [ 'name' => _('Not assigned'), 'value' => 'empty' ]);
         array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
@@ -257,8 +258,8 @@ class AclUserController extends Controller
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
-            'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
+            'activated'       => (int) $request->request->filter('activated', '0', FILTER_SANITIZE_STRING),
+            'type'            => (int) $request->request->filter('type', '1', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
             'ids_category'    => $request->request->get('ids_category'),
@@ -375,8 +376,8 @@ class AclUserController extends Controller
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => $request->request->get('id_user_group', array()),
                 'ids_category'    => $request->request->get('ids_category', array()),
-                'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
-                'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+                'activated'       => $request->request->filter('activated', '0', FILTER_SANITIZE_STRING),
+                'type'            => $request->request->filter('type', '1', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
             );
@@ -440,9 +441,21 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
+        $extra = [ 'billing' => [] ];
+
+        $extra['billing'] = [];
+        foreach ($this->get('instance')->metas as $key => $value) {
+            if (strpos($key, 'billing') !== false) {
+                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+            }
+        }
+
+        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+
         return $this->render(
             'acl/user/new.tpl',
             array(
+                'extra'                     => $extra,
                 'user'                      => $user,
                 'user_groups'               => $userGroup->find(),
                 'content_categories'        => $tree,

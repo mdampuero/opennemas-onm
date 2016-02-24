@@ -274,10 +274,14 @@ class UsersController extends ContentController
 
         if ($search && array_key_exists('fk_user_group', $search)) {
             foreach ($search['fk_user_group'] as $key => $value) {
-                $filter = array('operator' => 'regexp');
-                $filter['value'] = '^' . $value['value'] . ',|^'
-                    . $value['value'] . '$|,' . $value['value']
-                    . ',|,' . $value['value'] . '$';
+                if ($value['value'] == 'empty') {
+                    $filter['value'] = '';
+                } else {
+                    $filter = array('operator' => 'regexp');
+                    $filter['value'] = '^' . $value['value'] . ',|^'
+                        . $value['value'] . '$|,' . $value['value']
+                        . ',|,' . $value['value'] . '$';
+                }
                 $search['fk_user_group'][$key] = $filter;
             }
         }
