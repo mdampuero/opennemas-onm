@@ -205,8 +205,6 @@
 
           var cleaned = itemService.cleanFilters($scope.criteria);
 
-          console.log($scope.criteria);
-
           var data = {
             criteria: cleaned,
             orderBy: $scope.orderBy,
