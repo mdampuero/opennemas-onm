@@ -38,7 +38,6 @@ class PurchaseController extends Controller
      */
     public function listAction(Request $request)
     {
-        $q        = $request->query->filter('q');
         $epp      = $request->query->getDigits('epp', 10);
         $page     = $request->query->getDigits('page', 1);
         $criteria = $request->query->filter('criteria') ? : [];
@@ -52,6 +51,39 @@ class PurchaseController extends Controller
 
         $repository = $this->get('orm.manager')
             ->getRepository('manager.purchase');
+
+        if (array_key_exists('client', $criteria)) {
+            $value = $criteria['client'][0]['value'];
+
+            $criteria['client_id'] =
+                $criteria['payment_id'] =
+                $criteria['invoice_id'] = [
+                    [ 'value' => $value, 'operator' => 'like' ]
+                ];
+
+            $criteria['union'] = 'OR';
+
+            unset($criteria['name']);
+        }
+
+        if (array_key_exists('from', $criteria)) {
+            $criteria['created'][] = [ 'value' => $criteria['from'][0]['value'] . ' 00:00:00', 'operator' => '>=' ];
+
+            unset($criteria['from']);
+        }
+
+        if (array_key_exists('to', $criteria)) {
+            $criteria['created'][] =
+                [ 'value' => $criteria['to'][0]['value'] . ' 23:59:59', 'operator' => '<=' ];
+
+            unset($criteria['to']);
+        }
+
+        if (array_key_exists('from', $criteria)
+            && array_key_exists('to', $criteria)
+        ) {
+            $criteria['created']['union'] = 'AND';
+        }
 
         $ids       = [];
         $purchases = $repository->findBy($criteria, $order, $epp, $page);

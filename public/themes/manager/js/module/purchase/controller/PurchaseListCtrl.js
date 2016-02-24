@@ -203,14 +203,9 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
           var cleaned = itemService.cleanFilters($scope.criteria);
+
+          console.log($scope.criteria);
 
           var data = {
             criteria: cleaned,

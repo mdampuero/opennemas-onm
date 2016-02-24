@@ -35,8 +35,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by client{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
+            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.client_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.client_like[0].value" placeholder="{t}Search by client{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.client_like[0].value = null" ng-show="criteria.client_like[0].value">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -50,8 +50,8 @@
               <i class="fa fa-calendar m-r-5"></i>
               {t}From{/t}
             </span>
-            <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from }" ng-model="criteria.from" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from = null" ng-show="criteria.from">
+            <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from[0].value }" ng-model="criteria.from[0].value" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from[0].value = null" ng-show="criteria.from[0].value">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -65,8 +65,8 @@
               <i class="fa fa-calendar m-r-5"></i>
               {t}To{/t}
             </span>
-            <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to }" ng-model="criteria.to" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to = null" ng-show="criteria.to">
+            <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to[0].value }" ng-model="criteria.to[0].value" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to[0].value = null" ng-show="criteria.to[0].value">
               <i class="fa fa-times"></i>
             </span>
           </div>
