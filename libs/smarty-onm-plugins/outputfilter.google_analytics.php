@@ -23,7 +23,7 @@ function smarty_outputfilter_google_analytics($output, &$smarty)
         && !preg_match('/\/comments/', $uri)
     ) {
         $code   = getGoogleAnalyticsCode();
-        $output = preg_replace('@(<body.*>)@', '${1}'.$code, $output);
+        $output = preg_replace('@(</head>)@', $code.'${1}', $output);
     }
 
     return $output;
