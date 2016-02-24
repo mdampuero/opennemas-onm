@@ -50,7 +50,8 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'first_name', 'last_name', 'address', 'city', 'state' ]
+          selected: [ 'name', 'email', 'address', 'city',
+            'state', 'country' ]
         };
 
         /**
@@ -74,23 +75,20 @@
          */
         $scope.delete = function(client) {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-client',
-                  item: client
-                };
+                return { };
               },
               success: function() {
-                return function(modalClient) {
+                return function(m) {
                   itemService.delete('manager_ws_client_delete', client.id)
                     .success(function(response) {
-                      modalClient.close({ message: response, type: 'success'});
+                      m.close({ message: response, type: 'success'});
                     }).error(function(response) {
-                      modalClient.close({ message: response, type: 'error'});
+                      m.close({ message: response, type: 'error'});
                     });
                 };
               }
@@ -112,24 +110,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-clients',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalClient) {
