@@ -44,3 +44,26 @@
 .btn-link.text-danger {
   color: @error-color;
 }
+
+.btn-loading {
+  .fa {
+    width: 15px;
+    height: 15px;
+    text-align: center
+  }
+
+  .fa-circle-o-notch.fa-spin {
+    border: 3px solid #fff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    display: inline-block;
+    height: 15px;
+    margin-top: 2px;
+    margin-bottom: -2px;
+    width: 15px;
+
+    &:before {
+      content: "";
+    }
+  }
+}
