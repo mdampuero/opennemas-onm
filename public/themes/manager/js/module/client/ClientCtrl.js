@@ -49,6 +49,8 @@
          *   Saves the client.
          */
         $scope.save = function() {
+          $scope.saving = 1;
+
           itemService.save('manager_ws_client_save', $scope.client)
             .then(function (response) {
               messenger.post({ message: response.data, type: 'success' });
