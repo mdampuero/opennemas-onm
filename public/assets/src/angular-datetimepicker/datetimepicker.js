@@ -36,7 +36,7 @@
             format = $attrs.datetimePickerFormat;
           }
 
-          element.datetimepicker({ format: format });
+          element.datetimepicker({ useCurrent: false, format: format });
 
           $scope.datetimePicker = element.data('DateTimePicker');
 
