@@ -139,9 +139,37 @@ class ClientController extends Controller
         $orderBy  = $request->query->filter('orderBy') ? : [];
         $extra    = $this->getTemplateParams();
 
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+
         $order = [];
         foreach ($orderBy as $value) {
             $order[$value['name']] = $value['value'];
+        }
+
+        if (array_key_exists('name', $criteria)) {
+            $value = $criteria['name'][0]['value'];
+
+            $criteria['first_name'] =
+                $criteria['last_name'] =
+                $criteria['email'] =
+                $criteria['address'] =
+                $criteria['city'] =
+                $criteria['state'] = [
+                    [ 'value' => $value, 'operator' => 'like' ]
+                ];
+
+            $key = array_search(str_replace('%', '', $value), $countries);
+
+            if (!empty($key)) {
+                $criteria['country'] = [
+                    [ 'value' => $key, 'operator' => 'like' ]
+                ];
+            }
+
+            $criteria['union'] = 'OR';
+
+            unset($criteria['name']);
         }
 
         $repository = $this->get('orm.manager')

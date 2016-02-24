@@ -35,8 +35,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by name or address{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
+            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.name_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name_like[0].value = null" ng-show="criteria.name_like[0].value">
               <i class="fa fa-times"></i>
             </span>
           </div>
