@@ -294,7 +294,7 @@
             var url = routing.generate('backend_ws_domain_check_available',
                 { domain: domain });
 
-            if ($scope.create) {
+            if (!$scope.create) {
               var url = routing.generate('backend_ws_domain_check_valid',
                   { domain: domain });
             }
