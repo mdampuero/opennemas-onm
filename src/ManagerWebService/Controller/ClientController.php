@@ -21,6 +21,99 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ClientController extends Controller
 {
     /**
+     * @api {delete} /clients/:id Delete a client
+     * @apiName DeleteClient
+     * @apiGroup Client
+     *
+     * @apiParam {Integer} id The client's id.
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function deleteAction($id)
+    {
+        $client = $this->get('orm.manager')
+            ->getRepository('client', 'Database')
+            ->find($id);
+
+        $this->get('orm.manager')->remove($client, 'FreshBooks');
+        $this->get('orm.manager')->remove($client, 'Braintree');
+        $this->get('orm.manager')->remove($client, 'Database');
+
+        return new JsonResponse(_('Client removed successfully'));
+    }
+
+    /**
+     * @api {delete} /clients/:id Delete a client
+     * @apiName DeleteClient
+     * @apiGroup Client
+     *
+     * @apiParam {Integer} id The client's id.
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $error      = [];
+        $messages   = [];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
+
+         if (!is_array($selected)
+            || (is_array($selected) && count($selected) == 0)
+        ) {
+            return new JsonResponse(
+                _('Unable to find the instances for the given criteria'),
+                404
+            );
+        }
+
+        $em       = $this->get('orm.manager');
+        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+        $clients  = $em->getRepository('client', 'Database')->findBy($criteria);
+
+        foreach ($clients as $client) {
+            try {
+                $em->remove($client, 'FreshBooks');
+                $em->remove($client, 'Braintree');
+                $em->remove($client, 'Database');
+                $updated++;
+            } catch (EntityNotFoundException $e) {
+                $error[]    = $client->id;
+                $messages[] = [
+                    'message' => sprintf(_('Unable to find the client with id "%s"'), $client->id),
+                    'type'    => 'error'
+                ];
+            } catch (\Exception $e) {
+                $error[]    = $client->id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error'
+                ];
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages = [
+                'message' => sprintf(_('%s clients deleted successfully.'), count($updated)),
+                'type'    => 'success'
+            ];
+        }
+
+        // Return the proper status code
+        if (count($error) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($error) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages ],
+            $statusCode
+        );
+    }
+
+    /**
      * @api {get} /clients List of clients
      * @apiName GetClients
      * @apiGroup Client
@@ -94,7 +187,6 @@ class ClientController extends Controller
         ]);
     }
 
-
     /**
      * @api {post} /clients Creates a client
      * @apiName GetClient
@@ -122,7 +214,18 @@ class ClientController extends Controller
         $this->get('orm.manager')->persist($client, 'Braintree');
         $this->get('orm.manager')->persist($client, 'Database');
 
-        return new JsonResponse(_('Client saved successfully'));
+        $response =  new JsonResponse(_('Client saved successfully'), 201);
+
+        // Add permanent URL for the current notification
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_client_show',
+                [ 'id' => $client->id ]
+            )
+        );
+
+        return $response;
     }
 
     /**
@@ -193,7 +296,7 @@ class ClientController extends Controller
         $countries = Intl::getRegionBundle()
             ->getCountryNames(CURRENT_LANGUAGE_SHORT);
 
-        sort($countries);
+        asort($countries);
 
         return [ 'countries' => $countries ];
     }
