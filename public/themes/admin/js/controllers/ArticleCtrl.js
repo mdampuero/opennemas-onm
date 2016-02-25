@@ -75,6 +75,11 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
         ) {
           $scope.img1_footer = $scope.photo1.description;
         }
+
+        // Set inner image if empty
+        if (angular.isUndefined($scope.photo2)) {
+          $scope.photo2 = $scope.photo1;
+        }
       }
     }, true);
 
@@ -133,6 +138,11 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       if ($scope.video1) {
         $scope.fk_video     = $scope.video1.id;
         $scope.footer_video = $scope.video1.description;
+
+        // Set inner video if empty
+        if (angular.isUndefined($scope.video2)) {
+          $scope.video2 = $scope.video1;
+        }
       }
     }, true);
 
@@ -159,6 +169,13 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('relatedInFrontpage', function(nv, ov) {
+      // Set inner related if empty or equal to front
+      if (!$scope.relatedInInner||
+        $scope.relatedInner == $scope.relatedFront
+      ) {
+        $scope.relatedInInner = angular.copy(nv);
+      }
+
       var items           = [];
       $scope.relatedFront = [];
 

@@ -292,11 +292,11 @@
 
           if ($scope.domains.indexOf(domain) === -1) {
             var url = routing.generate('backend_ws_domain_check_available',
-                { domain: domain });
+                { domain: domain, create: $scope.create });
 
             if (!$scope.create) {
               var url = routing.generate('backend_ws_domain_check_valid',
-                  { domain: domain });
+                  { domain: domain, create: $scope.create });
             }
 
             $scope.loading = true;
