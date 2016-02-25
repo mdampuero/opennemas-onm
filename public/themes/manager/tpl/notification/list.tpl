@@ -14,8 +14,8 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
-              <i class="fa fa-plus fa-lg"></i>
+            <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+              <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
             </a>
           </li>
@@ -29,11 +29,19 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-input no-boarder">
-          <span class="add-on">
-            <span class="fa fa-search fa-lg"></span>
-          </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
+        <li class="quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <i class="fa fa-search fa-lg"></i>
+            </span>
+            <input class="input-min-45 input-150"  ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by title{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
+              <i class="fa fa-times"></i>
+            </span>
+          </div>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -44,18 +52,18 @@
               <div ng-bind-html="item | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
-          </li>
+        </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="criteria = {  title_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'title', value: 'desc' } ]; pagination = { page: 1, epp: 25 }">
-            <i class="fa fa-trash-o fa-lg"></i>
+          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+            <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()">
-            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
       </ul>
@@ -71,6 +79,64 @@
   </div>
 </div>
 <div class="content">
+  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+    <h5>{t}Columns{/t}</h5>
+    <div class="row">
+      <div class="col-sm-6 col-md-3 column">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-title" checklist-model="columns.selected" checklist-value="'title'" type="checkbox">
+          <label for="checkbox-title">
+            {t}Title{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+          <label for="checkbox-instance">
+            {t}Instance{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-type" checklist-model="columns.selected" checklist-value="'type'" type="checkbox">
+          <label for="checkbox-type">
+            {t}Type{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-style" checklist-model="columns.selected" checklist-value="'style'" type="checkbox">
+          <label for="checkbox-style">
+            {t}Style{/t}
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3 column">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
+          <label for="checkbox-l10n">
+            {t}L10n{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-start" checklist-model="columns.selected" checklist-value="'start'" type="checkbox">
+          <label for="checkbox-start">
+            {t}Start{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
+          <label for="checkbox-end">
+            {t}End{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
+          <label for="checkbox-fixed">
+            {t}Fixed{/t}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">
@@ -88,32 +154,36 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isColumnEnabled('name')">
+              <th class="pointer" ng-click="sort('title')" ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('instance')" width="10">
+              <th class="pointer text-center" ng-click="sort('instance_id')" ng-show="isColumnEnabled('instance')" width="130">
                 {t}Instance{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance_id') == 'asc', 'fa fa-caret-down': isOrderedBy('instance_id') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('type')" width="100" width=10>
+              <th class="pointer text-center" ng-click="sort('type')" ng-show="isColumnEnabled('type')" width="75">
                 {t}Type{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
               </th>
-              <th class="text-center" width="60">
+              <th class="pointer text-center" ng-click="sort('style')" ng-show="isColumnEnabled('style')" width="100">
+                {t}Style{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('style') == 'asc', 'fa fa-caret-down': isOrderedBy('style') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-show="isColumnEnabled('l10n')" width="60">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="250">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="75">
                 {t}Fixed{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -131,26 +201,29 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isColumnEnabled('name')">
+              <td ng-show="isColumnEnabled('title')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
                   [% item.title['en'] %]
                 </a>
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>
-              <td>
+              <td class="text-center" ng-show="isColumnEnabled('instance')">
                 [% extra.instances[item.instance_id].name %]
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('type')">
                 <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-comment': item.type === 'comment', 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type !== 'comment' && item.type !== 'media' && item.type !== 'email' && item.type !== 'help' && item.type !== 'user', 'fa-users': item.type === 'user' }"></i>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('type')">
+                [% item.style %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('l10n')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
                   <i class="fa fa-check""countStringsLeft(item) === 0"></i>
                 </span>
@@ -158,13 +231,13 @@
                   [% countStringsLeft(item) %]
                 </span>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('start')">
                 [% item.start %]
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('end')">
                 [% item.end %]
               </td>
-              <td>
+              <td ng-show="isColumnEnabled('fixed')">
                 <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.fixed == '1' ? '0' : '1')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.fixed == '1', 'fa-times text-error': !item.loading && item.fixed == '0' }"></i>
                 </button>

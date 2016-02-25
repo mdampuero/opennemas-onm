@@ -157,9 +157,9 @@
 
           var data = {
             criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+            orderBy:  $scope.orderBy,
+            epp:      $scope.pagination.epp, // elements per page
+            page:     $scope.pagination.page
           };
 
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
@@ -188,12 +188,10 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria   = { name_like: [ { value: '', operator: 'like' } ] };
-          $scope.orderBy    = [ { name: 'created', value: 'desc' } ];
+          $scope.orderBy    = [ { name: 'id', value: 'asc' } ];
 
           $scope.pagination.page = 1;
-
-          $scope.list();
-        }
+        };
 
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {

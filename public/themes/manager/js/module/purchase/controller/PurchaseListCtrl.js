@@ -63,42 +63,6 @@
          */
         $scope.orderBy = [{ name: 'created', value: 'desc' }];
 
-        var e = null;
-
-        /**
-         * @function closeColumns
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Hides the dropdown to toggle table columns.
-         */
-        $scope.closeColumns = function() {
-          if (e) {
-            $timeout.cancel(e);
-          }
-
-          e = $timeout(function () {
-            $scope.open = false;
-          }, 500);
-        };
-
-        /**
-         * @function openColumns
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Shows the dropdown to toggle table columns.
-         */
-        $scope.openColumns = function() {
-          if (e) {
-            $timeout.cancel(e);
-          }
-
-          e = $timeout(function () {
-            $scope.open = true;
-          }, 500);
-        };
-
         /**
          * @function delete
          * @memberOf PurchaseListCtrl
@@ -214,94 +178,18 @@
           );
         };
 
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
         $scope.resetFilters = function() {
           $scope.criteria   = { name_like: [ { value: '', operator: 'like' } ] };
           $scope.orderBy    = [ { name: 'created', value: 'desc' } ];
 
           $scope.pagination.page = 1;
-
-          $scope.list();
-        }
-
-        /**
-         * @function setEnabled
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Enables/disables an purchase.
-         *
-         * @param boolean enabled Purchase activated value.
-         */
-        $scope.setEnabled = function(purchase, enabled) {
-          purchase.loading = 1;
-
-          itemService.patch('manager_ws_purchase_patch', purchase.id,
-            { activated: enabled }).success(function(response) {
-              purchase.loading = 0;
-              purchase.activated = enabled;
-
-              messenger.post({ message: response, type: 'success' });
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-            });
-        };
-
-        /**
-         * @function setEnabledSelected
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Enables/disables the selected purchases.
-         *
-         * @param integer enabled The activated value.
-         */
-        $scope.setEnabledSelected = function(enabled) {
-          for (var i = 0; i < $scope.items.length; i++) {
-            var id = $scope.items[i].id;
-            if ($scope.selected.items.indexOf(id) !== -1) {
-              $scope.items[i].loading = 1;
-            }
-          }
-
-          var data = { selected: $scope.selected.items, enabled: enabled };
-
-          itemService.patchSelected('manager_ws_purchases_patch', data)
-            .success(function(response) {
-              // Update purchases changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                var id = $scope.items[i].id;
-
-                if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].enabled = enabled;
-                  delete $scope.items[i].loading;
-                }
-              }
-
-              if (response.messages) {
-                messenger.post(response.messages);
-
-                $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
-
-              if (response.success.length > 0) {
-                $scope.list();
-              }
-            }).error(function(response) {
-              // Update purchases changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                delete $scope.items[i].loading;
-              }
-
-              if (response.messages) {
-                messenger.post(response.messages);
-
-                $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
-            });
         };
 
         // Updates the columns stored in localStorage.
