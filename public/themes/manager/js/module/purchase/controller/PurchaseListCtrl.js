@@ -115,10 +115,7 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-purchase',
-                  item: purchase
-                };
+                return { };
               },
               success: function() {
                 return function(modalPurchase) {
@@ -153,19 +150,7 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-purchases',
-                  selected: selected
-                };
+                return { selected: $scope.selected.item.length };
               },
               success: function() {
                 return function(modalPurchase) {
