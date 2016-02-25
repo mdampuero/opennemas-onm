@@ -29,11 +29,19 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-input no-boarder">
-          <span class="add-on">
-            <span class="fa fa-search fa-lg"></span>
-          </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid_like[0].value" type="text" style="width:250px;"/>
+        <li class="quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <i class="fa fa-search fa-lg"></i>
+            </span>
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid_like[0].value }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid_like[0].value" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.uuid_like[0].value = null" ng-show="criteria.uuid_like[0].value">
+              <i class="fa fa-times"></i>
+            </span>
+          </div>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -44,22 +52,22 @@
               <div ng-bind-html="item | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
-          </li>
-        <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()">
-            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-          </button>
         </li>
-      </ul>
-      <ul class="nav quick-section pull-right">
-        <li class="quicklinks toggle-columns">
-          <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html="'{t}Columns{/t}'" tooltip-placement="left">
-            <i class="fa fa-columns"></i>
-          </div>
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-fire fa-lg"></i>
+          </button>
         </li>
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
+          </button>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
           <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </li>
@@ -68,6 +76,7 @@
   </div>
 </div>
 <div class="content">
+  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
   <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
     <div class="row">
       <div class="col-xs-12 title">
@@ -168,7 +177,7 @@
         <table class="table table-hover no-margin">
           <thead ng-if="items.length >= 0">
             <tr>
-              <th style="width:15px;">
+              <th width="15">
                 <div class="checkbox checkbox-default">
                   <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                   <label for="select-all"></label>
@@ -237,11 +246,11 @@
                   [% item.name['en'] %]
                 </a>
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_module_show', { id: item.id }) %]" title="{t}Edit{/t}">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_module_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
-                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                    <i class="fa fa-trash- m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>
