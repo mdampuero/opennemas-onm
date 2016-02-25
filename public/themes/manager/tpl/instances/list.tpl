@@ -134,6 +134,12 @@
       </div>
       <div class="col-sm-6 col-md-3 column">
         <div class="checkbox check-default p-b-5">
+          <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
+          <label for="checkbox-support">
+            {t}Support plan{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
           <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
           <label for="checkbox-contents">
             {t}Contents{/t}
@@ -158,21 +164,15 @@
           </label>
         </div>
         <div class="checkbox check-default p-b-5">
-          <input id="checkbox-albumns" checklist-model="columns.selected" checklist-value="'albumns'" type="checkbox">
-          <label for="checkbox-albumns">
+          <input id="checkbox-albums" checklist-model="columns.selected" checklist-value="'albums'" type="checkbox">
+          <label for="checkbox-albums">
             {t}Albums{/t}
           </label>
         </div>
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
           <label for="checkbox-photos">
-            {t}Photo{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
-          <label for="checkbox-support">
-            {t}Support plan{/t}
+            {t}Photos{/t}
           </label>
         </div>
       </div>
@@ -216,6 +216,18 @@
       </div>
       <div class="col-sm-6 col-md-3 column">
         <div class="checkbox check-default p-b-5">
+          <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
+          <label for="checkbox-users">
+            {t}Users{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
+          <label for="checkbox-emails">
+            {t}Emails{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
           <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
           <label for="checkbox-media-size">
             {t}Media size{/t}
@@ -231,18 +243,6 @@
           <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
           <label for="checkbox-page-views">
             {t}Page views{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
-          <label for="checkbox-users">
-            {t}Users{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
-          <label for="checkbox-emails">
-            {t}Emails{/t}
           </label>
         </div>
         <div class="checkbox check-default p-b-5">
@@ -298,77 +298,77 @@
               <th class="text-center" ng-show="isColumnEnabled('database')">
                 {t}Database{/t}
               </th>
-              <th class="text-center pointer" ng-click="sort('contents')" ng-show="isColumnEnabled('contents')">
-                <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('articles')" ng-show="isColumnEnabled('articles')">
-                {t}Articles{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('articles') == 'asc', 'fa fa-caret-down': isOrderedBy('articles') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('opinions')" ng-show="isColumnEnabled('opinions')">
-                {t}Opinions{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opinions') == 'asc', 'fa fa-caret-down': isOrderedBy('opinions') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="isColumnEnabled('advertisements')">
-                {t}Advertisements{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('advertisements') == 'asc', 'fa fa-caret-down': isOrderedBy('advertisements') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('albums')" ng-show="isColumnEnabled('albums')">
-                {t}Albums{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('albums') == 'asc', 'fa fa-caret-down': isOrderedBy('albums') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('photos')" ng-show="isColumnEnabled('photos')">
-                {t}Photos{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('photos') == 'asc', 'fa fa-caret-down': isOrderedBy('photos') == 'desc'}"></i>
-              </th>
               <th class="text-center pointer" ng-click="sort('support')" ng-show="isColumnEnabled('support')">
                 {t}Support plan{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('support') == 'asc', 'fa fa-caret-down': isOrderedBy('support') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('videos')" ng-show="isColumnEnabled('videos')">
-                {t}Videos{/t}
+              <th class="text-center pointer" ng-click="sort('contents')" ng-show="isColumnEnabled('contents')" width="80">
+                <i class="fa fa-folder-open-o" tooltip="{t}Contents{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('articles')" ng-show="isColumnEnabled('articles')" width="80">
+                <i class="fa fa-file-text" tooltip="{t}Articles{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('articles') == 'asc', 'fa fa-caret-down': isOrderedBy('articles') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('opinions')" ng-show="isColumnEnabled('opinions')" width="80">
+                <i class="fa fa-quote-right" tooltip="{t}Opinions{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opinions') == 'asc', 'fa fa-caret-down': isOrderedBy('opinions') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="isColumnEnabled('advertisements')" width="80">
+                <i class="fa fa-bullhorn" tooltip="{t}Advertisements{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('advertisements') == 'asc', 'fa fa-caret-down': isOrderedBy('advertisements') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('albums')" ng-show="isColumnEnabled('albums')" width="80">
+                <i class="fa fa-stack-overflow" tooltip="{t}Albums{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('albums') == 'asc', 'fa fa-caret-down': isOrderedBy('albums') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('photos')" ng-show="isColumnEnabled('photos')" width="80">
+                <i class="fa fa-picture-o" tooltip="{t}Photos{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('photos') == 'asc', 'fa fa-caret-down': isOrderedBy('photos') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('videos')" ng-show="isColumnEnabled('videos')" width="80">
+                <i class="fa fa-film" tooltip="{t}Videos{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('videos') == 'asc', 'fa fa-caret-down': isOrderedBy('videos') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('widgets')" ng-show="isColumnEnabled('widgets')">
-                {t}Widgets{/t}
+              <th class="text-center pointer" ng-click="sort('widgets')" ng-show="isColumnEnabled('widgets')" width="80">
+                <i class="fa fa-puzzle-piece" tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="isColumnEnabled('static_pages')">
-                {t}Static pages{/t}
+              <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="isColumnEnabled('static_pages')" width="80">
+                <i class="fa fa-file-o" tooltip="{t}Static pages{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('static_pages') == 'asc', 'fa fa-caret-down': isOrderedBy('static_pages') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('attachments')" ng-show="isColumnEnabled('attachments')">
-                {t}Attachments{/t}
+              <th class="text-center pointer" ng-click="sort('attachments')" ng-show="isColumnEnabled('attachments')" width="80">
+                <i class="fa fa-paperclip" tooltip="{t}Attachments{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('attachments') == 'asc', 'fa fa-caret-down': isOrderedBy('attachments') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('polls')" ng-show="isColumnEnabled('polls')">
-                {t}Polls{/t}
+              <th class="text-center pointer" ng-click="sort('polls')" ng-show="isColumnEnabled('polls')" width="80">
+                <i class="fa fa-pie-chart" tooltip="{t}Polls{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('polls') == 'asc', 'fa fa-caret-down': isOrderedBy('polls') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('letters')" ng-show="isColumnEnabled('letters')">
-                {t}Letters{/t}
+              <th class="text-center pointer" ng-click="sort('letters')" ng-show="isColumnEnabled('letters')" width="80">
+                <i class="fa fa-envelope" tooltip="{t}Letter{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('letters') == 'asc', 'fa fa-caret-down': isOrderedBy('letters') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')">
-                {t}Media size{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('alexa')" ng-show="isColumnEnabled('alexa')">
-                {t}Alexa{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('alexa') == 'asc', 'fa fa-caret-down': isOrderedBy('alexa') == 'desc'}"></i>
-              </th>
-              <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')">
-                {t}Page views{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
-              </th>
               <th class="text-center pointer" ng-click="sort('users')" ng-show="isColumnEnabled('users')">
-                {t}Users{/t}
+                <i class="fa fa-users" tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('emails')" ng-show="isColumnEnabled('emails')">
-                {t}Emails{/t}
+                <i class="fa fa-mail-forward" tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="120">
+                <i class="fa fa-database" tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('alexa')" ng-show="isColumnEnabled('alexa')" width="120">
+                <i class="fa fa-line-chart" tooltip="{t}Alexa{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('alexa') == 'asc', 'fa fa-caret-down': isOrderedBy('alexa') == 'desc'}"></i>
+              </th>
+              <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="120">
+                <i class="fa fa-eye" tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('activated')" ng-show="isColumnEnabled('activated')" style="width: 60px">
                 <span>
@@ -438,61 +438,59 @@
               <td class="text-center" ng-show="isColumnEnabled('database')">
                 [% item.settings.BD_DATABASE %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('contents')">
-                <span tooltip-html="'{t}Articles{/t}: [% item.articles %]<br>{t}Ads{/t}: [% item.advertisements %]<br>{t}Files{/t}: [% item.attachments %]<br>{t}Opinions{/t}:  [% item.opinions %]<br>{t}Albums{/t}:  [% item.albums %]<br>{t}Images{/t}:  [% item.photos %]<br>{t}Videos{/t}:  [% item.videos %]<br>{t}Polls{/t}:  [% item.polls %]<br>{t}Widgets{/t}:  [% item.widgets %]<br>{t}Static pages{/t}:  [% item.static_pages %]<br>{t}Letters{/t}:  [% item.letters %]'">
-                  [% item.contents %]
-                </span>
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('articles')">
-                [% item.articles %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('opinions')">
-                [% item.opinions %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('advertisements')">
-                [% item.advertisements %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('albums')">
-                [% item.albums %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('photos')">
-                [% item.photos %]
-              </td>
               <td class="text-center" ng-show="isColumnEnabled('support')">
                 [% item.support_plan %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('videos')">
+              <td class="text-center" ng-show="isColumnEnabled('contents')" title="{t}Contents{/t}">
+                [% item.contents %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('articles')" title="{t}Articles{/t}">
+                [% item.articles %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('opinions')" title="{t}Opinions{/t}">
+                [% item.opinions %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('advertisements')" title="{t}Advertisements{/t}">
+                [% item.advertisements %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('albums')" title="{t}Albums{/t}">
+                [% item.albums %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('photos')" title="{t}Photos{/t}">
+                [% item.photos %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('videos')" title="{t}Videos{/t}">
                 [% item.videos %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('widgets')">
+              <td class="text-center" ng-show="isColumnEnabled('widgets')" title="{t}Widgets{/t}">
                 [% item.widgets %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('static_pages')">
+              <td class="text-center" ng-show="isColumnEnabled('static_pages')" title="{t}Static pages{/t}">
                 [% item.static_pages %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('attachments')">
+              <td class="text-center" ng-show="isColumnEnabled('attachments')" title="{t}Attachments{/t}">
                 [% item.attachments %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('polls')">
+              <td class="text-center" ng-show="isColumnEnabled('polls')" title="{t}Polls{/t}">
                 [% item.polls %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('letters')">
+              <td class="text-center" ng-show="isColumnEnabled('letters')" title="{t}Letters{/t}">
                 [% item.letters %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('media_size')">
-                [% item.media_size | number : 2 %] Mb
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('alexa')">
-                [% item.alexa == 100000000 ? '{t}No rank{/t}' : item.alexa %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('page_views')">
-                [% item.page_views %]
-              </td>
-              <td class="text-center" ng-show="isColumnEnabled('users')">
+              <td class="text-center" ng-show="isColumnEnabled('users')" title="{t}Users{/t}">
                 [% item.users %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('emails')">
+              <td class="text-center" ng-show="isColumnEnabled('emails')" title="{t}Emails{/t}">
                 [% item.emails %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('media_size')" title="{t}Media size{/t}">
+                [% item.media_size | number : 2 %] Mb
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('alexa')" title="{t}Alexa{/t}">
+                [% item.alexa == 100000000 ? '{t}No rank{/t}' : item.alexa %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('page_views')" title="{t}Page views{/t}">
+                [% item.page_views %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('activated')">
                 <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.activated == '1' ? '0' : '1')">
@@ -505,9 +503,6 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-left pagination-info" ng-if="items.length > 0">
-        {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
-      </div>
       <div class="pull-right" ng-if="items.length > 0">
         <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
