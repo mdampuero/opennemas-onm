@@ -386,7 +386,7 @@ function getGoogleAnalyticsCode($useImage = false)
         || !array_key_exists('api_key', $config[0])
         || empty(trim($config[0]['api_key']))
     ) {
-        return '';
+        $config = [];
     }
 
     if ($useImage) {

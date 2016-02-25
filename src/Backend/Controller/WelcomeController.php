@@ -45,26 +45,11 @@ class WelcomeController extends Controller
             return $this->redirect($this->generateUrl('admin_getting_started'));
         }
 
-        $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
-        $availableModules = array_values($availableModules);
-        shuffle($availableModules);
-        $availableModules = array_splice($availableModules, 0, 5);
-
         $youtubeVideoIds = $this->getYoutubeVideoIds();
-
-        $user = $this->getUser();
-        $tourDone = $user->getMeta('initial_tour_done');
-
-        $terms = s::get('terms_accepted');
 
         return $this->render(
             'welcome/index.tpl',
-            [
-                'terms_accepted'    => $terms,
-                'modules'           => $availableModules,
-                'youtube_videos'    => $youtubeVideoIds,
-                'initial_tour_done' => $tourDone,
-            ]
+            [ 'youtube_videos' => $youtubeVideoIds ]
         );
     }
 

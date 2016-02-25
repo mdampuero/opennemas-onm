@@ -34,6 +34,16 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
+         *   The domain to add.
+         *
+         * @type {Object}
+         */
+        $scope.domain = '';
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
          *   Array of domains.
          *
          * @type {Array}
@@ -81,6 +91,16 @@
         $scope.step = 1;
 
         /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   The suggestions list.
+         *
+         * @type {Array}
+         */
+        $scope.suggests = [];
+
+        /**
          * @memberOf StoreCheckoutCtrl
          *
          * @description
@@ -109,6 +129,16 @@
          * @type {Boolean}
          */
         $scope.vatTax = 0;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   The width of the suggetion list container.
+         *
+         * @type {Integer}
+         */
+        $scope.width = $('.typeahead').width();
 
         /**
          * @function confirm
@@ -145,6 +175,44 @@
         };
 
         /**
+         * @function expand
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Creates a suggestion list basing on a domain without TLD.
+         *
+         * @param {String} domain The input domain.
+         */
+        $scope.getSuggestions = function(domain) {
+          var name = domain;
+          var tld  = '';
+
+          if (domain.lastIndexOf('.') !== -1) {
+            name = domain.substring(0, domain.lastIndexOf('.'));
+            tld  = domain.substring(domain.lastIndexOf('.'));
+          }
+
+          var tlds = [
+            '.com', '.net', '.co.uk', '.es', '.cat', '.ch', '.cz', '.de',
+            '.dk', '.at', '.be', '.eu', '.fi', '.fr', '.in', '.info', '.it',
+            '.li', '.lt', '.mobi', '.name', '.nl', '.nu', '.org', '.pl',
+            '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
+          ];
+
+          var suggestions = [];
+
+          for (var i = 0; i < tlds.length; i++) {
+            if (!tld || tlds[i] !== tld) {
+              suggestions.push(name + tlds[i]);
+            }
+          }
+
+          $('.suggestions').width($scope.width - 24);
+
+          return suggestions;
+        };
+
+        /**
          * @function isRight
          * @memberOf DomainManagementCtrl
          *
@@ -170,11 +238,13 @@
          *                   false.
          */
         $scope.isValid = function() {
-          if ($scope.domains.indexOf('www.' + $scope.domain) !== -1) {
+          var domain = 'www.' + $scope.domain;
+
+          if ($scope.domains.indexOf(domain) !== -1) {
             return false;
           }
 
-          return /^(\w+\.)+\w+$/.test($scope.domain);
+          return /^(\w+)+(\.\w+)*$/.test(domain);
         };
 
         /**
@@ -215,29 +285,32 @@
          *   Maps the domain.
          */
         $scope.map = function() {
+          if (!$scope.domain) {
+            return;
+          }
+
           var domain = 'www.' + $scope.domain;
 
           if ($scope.domains.indexOf(domain) === -1) {
-            if ($scope.create) {
-              $scope.loading = true;
-              var url = routing.generate('backend_ws_domain_check_available',
-                  { domain: domain });
+            var url = routing.generate('backend_ws_domain_check_available',
+                { domain: domain, create: $scope.create });
 
-              $http.get(url).success(function() {
-                $scope.domains.push(domain);
-                $scope.domain = '';
-                $scope.loading = false;
-              }).error(function(response) {
-                $scope.loading = false;
-                messenger.post({ message: response, type: 'error' });
-              });
-            } else {
+            if (!$scope.create) {
+              var url = routing.generate('backend_ws_domain_check_valid',
+                  { domain: domain, create: $scope.create });
+            }
+
+            $scope.loading = true;
+            $http.get(url).success(function() {
               $scope.domains.push(domain);
               $scope.domain = '';
-            }
+              $scope.loading = false;
+            }).error(function(response) {
+              $scope.loading = false;
+              messenger.post({ message: response, type: 'error' });
+            });
           }
         };
-
 
         /**
          * @function map
@@ -314,7 +387,6 @@
             $scope.validVat = false;
           });
         }, true);
-
 
         // Updates the edit flag when client changes.
         $scope.$watch('client.phone', function(nv, ov) {

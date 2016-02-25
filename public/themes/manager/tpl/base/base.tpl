@@ -37,11 +37,12 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/animate.css/animate.min.css,
-      @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
+      @Common/src/angular-dynamic-image/less/main.less,
+      @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/less/main.less,
@@ -100,6 +101,12 @@
                     <a ng-href="[% routing.ngGenerate('manager_instance_create') %]">
                       <i class="fa fa-cube"></i>
                       <span class="title">{t}Instance{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_module_create') %]">
+                      <i class="fa fa-plug"></i>
+                      <span class="title">{t}Module{/t}</span>
                     </a>
                   </div>
                   <div class="quick-item">
@@ -285,6 +292,7 @@
     @Common/components/angular-animate/angular-animate.min.js,
     @Common/components/angular-sanitize/angular-sanitize.min.js,
     @Common/components/angular-checklist-model/checklist-model.js,
+    @Common/components/angular-file-model/angular-file-model.js,
     @Common/components/angular-ui-select/dist/select.min.js,
     @Common/components/angular-webstorage/angular-webstorage.min.js,
     @Common/components/angular-google-chart/ng-google-chart.js,
@@ -296,15 +304,21 @@
     @Common/components/angular-touch/angular-touch.min.js,
     @Common/components/angular-translate/angular-translate.min.js,
     @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+    @Common/components/swfobject/swfobject/swfobject.js,
+    @Common/components/angular-swfobject/angular-swfobject.js,
 
     @Common/src/angular-authentication/authService.js,
     @Common/src/angular-datetimepicker/datetimepicker.js,
     @Common/src/angular-form-autofill/formAutoFill.js,
     @Common/src/angular-gravatar/gravatar.js,
+
+    @Common/src/angular-cleaner/cleaner.js,
+    @Common/src/angular-dynamic-image/js/dynamic-image.js,
     @Common/src/angular-onm-editor/onm-editor.js,
     @Common/src/angular-onm-pagination/js/onm-pagination.js,
     @Common/src/angular-history/history.js,
     @Common/src/angular-http-interceptor/http-interceptor.js,
+    @Common/src/angular-image-preview/js/image-preview.js,
     @Common/src/angular-item-service/itemService.js,
     @Common/src/angular-messenger/messenger.js,
     @Common/src/angular-resizable/resizable.js,

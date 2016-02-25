@@ -5,6 +5,7 @@ namespace BackendWebService\Controller;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Framework\ORM\Entity\Extension;
 
 class StoreController extends Controller
 {
@@ -130,7 +131,13 @@ class StoreController extends Controller
      */
     public function listAction()
     {
-        $modules   = \Onm\Module\ModuleManager::getAvailableModulesGrouped();
+        $modules   = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findBy([
+                'enabled' => [ [ 'value' => 1 ] ],
+                'type'    => [ [ 'value' => 'module' ] ]
+            ]);
+
         $activated = $this->get('instance')->activated_modules;
 
         if (in_array('ALBUM_MANAGER', $activated)
@@ -139,52 +146,26 @@ class StoreController extends Controller
             $activated[] = 'MEDIA_MANAGER';
         }
 
-        // Remove internal modules
-        $modules = array_filter($modules, function ($a) {
-            if (array_key_exists('type', $a) && $a['type'] === 'internal') {
-                return false;
+        $modules = array_map(function (&$a) {
+            foreach ([ 'about', 'description', 'name' ] as $key) {
+                if (!empty($a->{$key})) {
+                    $lang = $a->{$key}['en'];
+
+                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a->{$key})
+                        && !empty($a->{$key}[CURRENT_LANGUAGE_SHORT])
+                    ) {
+                        $lang = $a->{$key}[CURRENT_LANGUAGE_SHORT];
+                    }
+
+                    $a->{$key} = $lang;
+                }
             }
 
-            // Remove ALBUM_MANAGER, PHOTO_MANAGER and VIDEO_MANAGER
-            if (array_key_exists('id', $a)
-                && ($a['id'] === 'ALBUM_MANAGER'
-                    || $a['id'] === 'VIDEO_MANAGER')
-            ) {
-                return false;
-            }
-
-            return true;
-        });
-
-        array_push(
-            $modules,
-            [
-                'id'               => 'MEDIA_MANAGER',
-                'plan'             => 'PROFESSIONAL',
-                'name'             => _('Media'),
-                'type'             => 'module',
-                'thumbnail'        => 'module-multimedia.jpg',
-                'description'      => _('Add Video and Image Galleries to your content.'),
-                'long_description' => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>
-                    <p>Our video manager is the same as youtube one, perfect consistency and performance.</p>'),
-                'price' => [
-                    'month' => 35
-                ]
-            ]
-        );
-
-        $packs = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes = \Onm\Module\ModuleManager::getAvailableThemes();
-
-        $results = array_merge($modules, $packs);
-        foreach ($results as &$result) {
-            if (empty($result['author'])) {
-                $result['author'] = '<a href="https://www.opennemas.com/about" target="_blank">Opennemas</a>';
-            }
-        }
+            return $a->getData();
+        }, $modules);
 
         return new JsonResponse(
-            [ 'results' => $results, 'activated' => $activated ]
+            [ 'results' => $modules, 'activated' => $activated ]
         );
     }
 

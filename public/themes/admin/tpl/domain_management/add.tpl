@@ -67,11 +67,10 @@
               </p>
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
-                  <span class="input-group-addon">www</span>
-                  <input autofocus class="form-control" ng-model="domain" placeholder="{t}Enter a domain{/t}" type="text"  ng-keyup="mapByKeyPress($event)">
+                  <span class="input-group-addon">www.</span>
+                  <input autofocus class="form-control typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue | limitTo: 5" type="text" typeahead-popup-template-url="suggestions">
                   <span class="input-group-btn">
-                    <span class="arrow"></span>
-                    <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid()">
+                    <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
                       <span ng-if="!loading">
                         {t}Map it{/t}
                       </span>
@@ -384,5 +383,12 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="suggestions">
+      <ul class="dropdown-menu suggestions" ng-style="{ top: position().top + 'px', left: position().left + 'px', display: 'block' }" ng-show="isOpen() && !moveInProgress">
+        <li ng-repeat="match in matches track by $index" ng-class="{ active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="[% ::match.id %]">
+          <a><span ng-bind-html="match.label"></span></a>
+        </li>
+      </ul>
+    </script>
   </div>
 {/block}

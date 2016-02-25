@@ -11,10 +11,8 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
 
     $scope.confirmUser = function() {
       if (
-        $scope.activated != '1' ||
-        ($scope.activated == '1' && $scope.type == '1') &&
-        $scope.user.activated == '1' &&
-        $scope.user.type == '0'
+        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
+        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1')
       ) {
         var modal = $modal.open({
           templateUrl: 'modal-update-selected',
