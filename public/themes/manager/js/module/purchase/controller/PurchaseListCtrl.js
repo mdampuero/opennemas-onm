@@ -110,7 +110,7 @@
          */
         $scope.delete = function(purchase) {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/purchase:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -148,7 +148,7 @@
          */
         $scope.deleteSelected = function() {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/purchase:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
