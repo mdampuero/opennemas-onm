@@ -21,8 +21,9 @@ class DomainManagementController extends Controller
     public function checkAvailableAction(Request $request)
     {
         $domain = $request->query->get('domain');
+        $create = $request->query->get('create');
 
-        if (empty($domain) || !$this->isTLDValid($domain)) {
+        if (empty($domain) || !$this->isTLDValid($domain, $create)) {
             return new JsonResponse(
                 sprintf(_('The domain %s is not valid'), $domain),
                 400
@@ -76,8 +77,9 @@ class DomainManagementController extends Controller
     public function checkValidAction(Request $request)
     {
         $domain = $request->query->get('domain');
+        $create = $request->query->get('create');
 
-        if (empty($domain) || !$this->isTLDValid($domain)) {
+        if (empty($domain) || !$this->isTLDValid($domain, $create)) {
             return new JsonResponse(
                 sprintf(_('The domain %s is not valid'), $domain),
                 400
@@ -188,14 +190,30 @@ class DomainManagementController extends Controller
     /**
      * Checks if the given domain is valid.
      *
-     * @param string $domain The domain to check
+     * @param string $domain The domain to check.
+     * @param string $create Whether it is a creation or a redirection.
      *
      * @return boolean True if the TLD is valid. Otherwise, returns false.
      */
-    private function isTLDValid($domain)
+    private function isTLDValid($domain, $create = false)
     {
         $pslManager = new PublicSuffixListManager();
         $parser     = new Parser($pslManager->getList());
+
+        if ($create) {
+            $tlds = [
+                '.com', '.net', '.co.uk', '.es', '.cat', '.ch', '.cz', '.de',
+                '.dk', '.at', '.be', '.eu', '.fi', '.fr', '.in', '.info', '.it',
+                '.li', '.lt', '.mobi', '.name', '.nl', '.nu', '.org', '.pl',
+                '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
+            ];
+
+            $tld = substr($domain, strrpos($domain, '.'));
+
+            if (!in_array($tld, $tlds)) {
+                return false;
+            }
+        }
 
         return $parser->isSuffixValid($domain);
     }
