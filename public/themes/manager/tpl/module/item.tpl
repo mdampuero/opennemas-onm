@@ -49,13 +49,16 @@
           <div class="grid-body module-form">
             <div class="form-group" ng-class="{ 'has-error': moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid), 'has-success': moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid }">
               <div class="clearfix">
-                <label class="form-label pull-left" for="uuid">{t}UUID{/t}</label>
+                <label class="form-label pull-left" for="uuid">
+                  {t}UUID{/t}
+                  <span class="text-danger">*</span>
+                </label>
               </div>
               <div class="controls">
                 <div class="input-with-icon right">
                   <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
                   <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" tooltip="{t}This UUID is invalid{/t}"></i>
-                  <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" placeholder="es.openhost.module.example" type="text">
+                  <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" typeahead-min-length="3" placeholder="es.openhost.module.example" type="text">
                 </div>
               </div>
             </div>
@@ -84,27 +87,35 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="price">{t}Price{/t}</label>
+              <label class="form-label" for="price">
+                {t}Price{/t}
+                <span class="text-danger">*</span>
+              </label>
               <div class="controls">
                 <div class="m-b-15 row" ng-repeat="price in module.metas.price">
-                  <div class="col-xs-3">
-                    <input class="form-control text-right" id="price-[% $index %]" name="price-[% $index %]" ng-model="price.value" type="text">
-                  </div>
-                  <div class="col-xs-7">
-                    <select class="form-control" id="price-type-[% $index %]" name="price-type-[% $index %]" ng-model="price.type">
-                      <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
-                      <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
-                      <option value="single">{t}Single{/t} (€)</option>
-                      <option value="item">{t}Item{/t} (€/{t}item{/t})</option>
-                    </select>
-                  </div>
-                  <div class="col-xs-2">
-                    <button class="btn btn-block btn-success" ng-click="addPrice()" ng-if="$index === 0" type="button">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                    <button class="btn btn-block btn-danger" ng-click="removePrice($index)" ng-if="$index > 0" type="button">
-                      <i class="fa fa-lg fa-trash-o"></i>
-                    </button>
+                  <div class="form-group" ng-class="{ 'has-error': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index], 'has-success': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index].$valid }">
+                    <div class="col-xs-3">
+                      <div class="input-with-icon left">
+                        <i class="fa fa-times text-danger" ng-if="moduleForm['price_' + $index].$dirty && (moduleForm['price_' + $index].$invalid)" tooltip="{t}This UUID is invalid{/t}"></i>
+                        <input class="form-control text-right" id="price-[% $index %]" name="price_[% $index %]" ng-model="price.value" required="required" type="number">
+                      </div>
+                    </div>
+                    <div class="col-xs-7">
+                      <select class="form-control" id="price-type-[% $index %]" name="price-type-[% $index %]" ng-model="price.type">
+                        <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
+                        <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
+                        <option value="single">{t}Single{/t} (€)</option>
+                        <option value="item">{t}Item{/t} (€/{t}item{/t})</option>
+                      </select>
+                    </div>
+                    <div class="col-xs-2">
+                      <button class="btn btn-block btn-success" ng-click="addPrice()" ng-if="$index === 0" type="button">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                      <button class="btn btn-block btn-danger" ng-click="removePrice($index)" ng-if="$index > 0" type="button">
+                        <i class="fa fa-lg fa-trash-o"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -115,7 +126,7 @@
               </div>
               <div class="controls">
                 <tags-input ng-model="module.metas.modules_included">
-                  <auto-complete source="autocomplete($query)"></auto-complete>
+                  <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
             </div>
@@ -125,7 +136,7 @@
               </div>
               <div class="controls">
                 <tags-input ng-model="module.metas.modules_in_conflict">
-                  <auto-complete source="autocomplete($query)"></auto-complete>
+                  <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
             </div>
@@ -193,6 +204,7 @@
                 <div class="form-group">
                   <label class="form-label">
                     {t}Name{/t}
+                    <span class="text-danger">*</span>
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.title[language].$invalid }">
                     <input class="form-control" id="name" name="name" ng-model="module.name[language]" required type="text">
