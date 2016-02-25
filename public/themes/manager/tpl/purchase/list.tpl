@@ -108,51 +108,55 @@
   </form>
 </div>
 <div class="content">
-  <div class="grid simple">
-    <div class="grid-body no-padding">
-      <div class="dropdown dropdown-table-columns" ng-class="{ 'dropdown-table-columns-hidden': !header, 'open': open }" ng-mouseover="header = 1; openColumns()" ng-mouseleave="header = 0;closeColumns()">
-        <button class="btn btn-white dropdown-toggle" data-toggle="dropdown"  tooltip="{t}Columns{/t}" type="button">
-          <i class="fa fa-th-list"></i>
-        </button>
-        <div class="dropdown-menu pull-right" ng-mouseleave="closeColumns()">
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-            <label for="checkbox-name">
-              {t}Name{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-total" checklist-model="columns.selected" checklist-value="'total'" type="checkbox">
-            <label for="checkbox-total">
-              {t}Total{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
-            <label for="checkbox-client_id">
-              {t}Client ID{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-invoice-id" checklist-model="columns.selected" checklist-value="'invoice_id'" type="checkbox">
-            <label for="checkbox-invoice-id">
-              {t}Invoice ID{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
-            <label for="checkbox-payment-id">
-              {t}Payment ID{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default">
-            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-            <label for="checkbox-created">
-              {t}Created{/t}
-            </label>
-          </div>
+  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+    <h5>{t}Columns{/t}</h5>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+          <label for="checkbox-name">
+            {t}Name{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-total" checklist-model="columns.selected" checklist-value="'total'" type="checkbox">
+          <label for="checkbox-total">
+            {t}Total{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
+          <label for="checkbox-client_id">
+            {t}Client ID{/t}
+          </label>
         </div>
       </div>
+      <div class="col-md-3">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-invoice-id" checklist-model="columns.selected" checklist-value="'invoice_id'" type="checkbox">
+          <label for="checkbox-invoice-id">
+            {t}Invoice ID{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
+          <label for="checkbox-payment-id">
+            {t}Payment ID{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default">
+          <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+          <label for="checkbox-created">
+            {t}Created{/t}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid simple">
+    <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">

@@ -82,7 +82,7 @@
   <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
     <h5>{t}Columns{/t}</h5>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
           <label for="checkbox-name">
@@ -102,7 +102,7 @@
           </label>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-phone" checklist-model="columns.selected" checklist-value="'phone'" type="checkbox">
           <label for="checkbox-phone">
@@ -122,7 +122,7 @@
           </label>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-city" checklist-model="columns.selected" checklist-value="'city'" type="checkbox">
           <label for="checkbox-city">
