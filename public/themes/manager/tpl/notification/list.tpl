@@ -34,7 +34,7 @@
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-150"  ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by title{/t}" type="text">
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by title{/t}" type="text">
             <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
               <i class="fa fa-times"></i>
             </span>
@@ -54,7 +54,7 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
@@ -144,7 +144,7 @@
         <table class="table table-hover no-margin">
           <thead ng-if="items.length >= 0">
             <tr>
-              <th style="width:15px;">
+              <th width="15">
                 <div class="checkbox checkbox-default">
                   <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                   <label for="select-all"></label>
