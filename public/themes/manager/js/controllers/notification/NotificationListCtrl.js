@@ -188,7 +188,7 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria = { title_like: [ { value: '', operator: 'like' } ]};
-          $scope.orderBy  = [ { name: 'title', value: 'desc' } ];
+          $scope.orderBy  = [ { name: 'start', value: 'desc' } ];
 
           $scope.pagination.page = 1;
         };
