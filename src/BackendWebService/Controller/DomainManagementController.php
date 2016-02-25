@@ -184,7 +184,7 @@ class DomainManagementController extends Controller
      */
     private function isDomainAvailable($domain)
     {
-        return empty($this->getTarget($domain));
+        return $this->getTarget($domain) === $domain;
     }
 
     /**
@@ -227,13 +227,7 @@ class DomainManagementController extends Controller
      */
     private function getTarget($domain)
     {
-        $output = dns_get_record($domain, DNS_CNAME);
-
-        if (empty($output)) {
-            return '';
-        }
-
-        return $output[0]['target'];
+        return gethostbyname($domain);
     }
 
     /**
