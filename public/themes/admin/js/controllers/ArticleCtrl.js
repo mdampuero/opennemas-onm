@@ -169,6 +169,13 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('relatedInFrontpage', function(nv, ov) {
+      // Set inner related if empty or equal to front
+      if (!$scope.relatedInInner||
+        $scope.relatedInner == $scope.relatedFront
+      ) {
+        $scope.relatedInInner = angular.copy(nv);
+      }
+
       var items           = [];
       $scope.relatedFront = [];
 
