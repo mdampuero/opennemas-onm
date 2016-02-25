@@ -22,8 +22,8 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_instance_create') %]">
-              <i class="fa fa-plus"></i>
+            <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_instance_create') %]">
+              <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
             </a>
           </li>
@@ -63,7 +63,7 @@
           </li>
         <li class="quicklinks">
           <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; list()">
-            <i class="fa fa-trash-o fa-lg"></i>
+            <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
@@ -71,7 +71,7 @@
         </li>
         <li class="quicklinks">
           <button class="btn btn-link" ng-click="list()">
-            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+            <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
       </ul>
@@ -447,11 +447,11 @@
                   [% item.name %]
                 </a>
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.id }) %]" title="{t}Edit{/t}">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
-                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>

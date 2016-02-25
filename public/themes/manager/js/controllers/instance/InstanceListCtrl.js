@@ -75,15 +75,12 @@
          */
         $scope.delete = function(instance) {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-instance',
-                  item: instance
-                };
+                return { };
               },
               success: function() {
                 return function(modalInstance) {
@@ -113,24 +110,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                        $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-instances',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalInstance) {
