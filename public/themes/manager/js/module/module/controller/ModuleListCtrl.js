@@ -104,15 +104,12 @@
          */
         $scope.delete = function(module) {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-module',
-                  item: module
-                };
+                return { };
               },
               success: function() {
                 return function(modalModule) {
@@ -142,24 +139,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $modal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-modules',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalModule) {
@@ -199,8 +184,7 @@
 
           // Search by name, domains and contact mail
           if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
+            $scope.criteria.uuid_like =
               $scope.criteria.name_like;
           }
 
@@ -228,6 +212,20 @@
               $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
           );
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { name_like: [ { value: '', operator: 'like' } ]};
+          $scope.orderBy  = [ { name: 'id', value: 'asc' } ];
+
+          $scope.pagination.page = 1;
         };
 
         /**
