@@ -1,3 +1,0 @@
-orm_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: OrmBundle:Default:index }
