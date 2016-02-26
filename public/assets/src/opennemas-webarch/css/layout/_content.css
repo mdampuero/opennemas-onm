@@ -73,6 +73,7 @@
 .table-wrapper {
   overflow-x: auto;
   position: relative;
+  white-space: nowrap;
 }
 
 @media (max-width: 991px) and (min-width: 768px){

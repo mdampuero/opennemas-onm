@@ -53,6 +53,36 @@
          * @memberOf InstanceCtrl
          *
          * @description
+         *  Array that maps an UUID with an index in the array of modules.
+         *
+         * @type {Array}
+         */
+        $scope.map = {};
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *  Array of modules grouped by pack.
+         *
+         * @type {Array}
+         */
+        $scope.modulesByPack = {};
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *  Array of packs.
+         *
+         * @type {Array}
+         */
+        $scope.packs = [];
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
          *   The template parameters.
          *
          * @type {Object}
@@ -71,6 +101,16 @@
           all: false,
           plan: {}
         };
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *  Array of support modules
+         *
+         * @type {Array}
+         */
+        $scope.supportModules = [];
 
         /**
          * @function addDomain
@@ -112,17 +152,31 @@
          * @return boolean True if all modules of the plan are selected.
          *                 Otherwise, return false.
          */
-        $scope.isPlanSelected = function(plan) {
-          for (var module in $scope.template.available_modules) {
-            module = $scope.template.available_modules[module];
-            if (module.plan === plan) {
-              if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
-                return false;
-              }
+        $scope.areAllSelected = function() {
+          for (var i = 0; i < $scope.selected.plan.length; i++) {
+            if (!$scope.selected.plan[i]) {
+              return false;
             }
           }
 
           return true;
+        };
+
+        /**
+         * @function isPlanSelected
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Checks if all modules of the plan are selected.
+         *
+         * @param string  plan The plan to check.
+         *
+         * @return boolean True if all modules of the plan are selected.
+         *                 Otherwise, return false.
+         */
+        $scope.isPlanSelected = function(plan) {
+          return _.difference($scope.modulesByPack[plan],
+              $scope.instance.activated_modules).length ===0;
         };
 
         /**
@@ -195,53 +249,18 @@
          * @description
          *   Selects/unselects all modules.
          */
-        $scope.selectAll = function() {
-          if (!$scope.selected.all) {
-            $scope.selected.all = true;
-
-            // Add modules to instance
-            for (var module in $scope.template.available_modules) {
-              module = $scope.template.available_modules[module];
-
-              if (module.plan !== 'Support' &&
-                  $scope.instance.activated_modules.indexOf(module.id) === -1) {
-                $scope.instance.activated_modules.push(module.id);
-              }
-            }
-
-            // Update selected flag for each plan
-            for (var i = 0; i < $scope.template.plans.length; i++) {
-              $scope.selected.plan[$scope.template.plans[i]] = true;
+        $scope.toggleAll = function() {
+          if ($scope.selected.all) {
+            for (var i in $scope.selected.plan) {
+              $scope.selected.plan[i] = true;
+              $scope.togglePlan(i);
             }
           } else {
-            $scope.selected.all = false;
             $scope.selected.plan = {};
             $scope.instance.activated_modules = [];
           }
 
-          $scope.updateSupport($scope.instance.support_plan);
-        };
-
-        /**
-         * @function toggleChanges
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   Add/remove modules from changed_in_modules array.
-         *
-         * @param string  moduleId The id of the module.
-         */
-        $scope.toggleChanges = function(module) {
-          if ($scope.instance.changes_in_modules.indexOf(module.id) !== -1) {
-            $scope.instance.changes_in_modules.splice(
-              $scope.instance.changes_in_modules.indexOf(module.id),
-              1
-              );
-          } else if ($scope.changed_modules.indexOf(module.id) !== -1 &&
-            $scope.instance.changes_in_modules.indexOf(module.id) === -1
-            ) {
-            $scope.instance.changes_in_modules.push(module.id);
-          }
+          //$scope.updateSupport($scope.instance.support_plan);
         };
 
         /**
@@ -254,18 +273,12 @@
          * @param string plan The selected plan.
          */
         $scope.togglePlan = function(plan) {
-          for (var module in $scope.template.available_modules) {
-            module = $scope.template.available_modules[module];
-            if (module.plan === plan) {
-              if ($scope.selected.plan[plan]) {
-                if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
-                  $scope.instance.activated_modules.push(module.id);
-                }
-              } else {
-                $scope.instance.activated_modules.splice(
-                  $scope.instance.activated_modules.indexOf(module.id), 1);
-              }
-            }
+          if ($scope.selected.plan[plan]) {
+            $scope.instance.activated_modules = _.uniq(_.concat(
+              $scope.instance.activated_modules, $scope.modulesByPack[plan]));
+          } else {
+            $scope.instance.activated_modules = _.difference(
+              $scope.instance.activated_modules, $scope.modulesByPack[plan]);
           }
         };
 
@@ -317,10 +330,10 @@
             }
           } else {
             // Select Base plan as default
-            for (var i = 0; i < data.template.available_modules.length; i++) {
-              if (data.template.available_modules[i].plan == 'Base') {
+            for (var i = 0; i < data.template.modules.length; i++) {
+              if (data.template.modules[i].plan == 'Base') {
                 $scope.instance.activated_modules.push(
-                  data.template.available_modules[i].id);
+                  data.template.modules[i].id);
               }
             }
           }
@@ -343,8 +356,8 @@
          *
          */
         $scope.updateSupport = function(id) {
-          for (var i = 0; i < data.template.available_modules.length; i++) {
-            var module = data.template.available_modules[i];
+          for (var i = 0; i < data.template.modules.length; i++) {
+            var module = data.template.modules[i];
 
             if (module.plan === 'Support') {
               var index = $scope.instance.activated_modules.indexOf(module.id);
@@ -368,18 +381,81 @@
           true
         );
 
-        // Initializes the selected flags
-        for (var i = 0; i < $scope.template.plans.length; i++) {
-          var plan = $scope.template.plans[i];
-          var modulesInPlan = $filter('filter')($scope.template.available_modules, { plan: plan });
-          $scope.selected.plan[plan] = true;
+        $scope.$watch('instance.support_plan', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
 
-          for (var j = 0; j < modulesInPlan.length; j++) {
-            if ($scope.instance.activated_modules.indexOf(modulesInPlan[j].id) === -1) {
-              $scope.selected.plan[plan] = false;
+          if ($scope.instance.activated_modules.indexOf(ov) !== -1) {
+            $scope.instance.activated_modules
+              .splice($scope.instance.activated_modules.indexOf(ov), 1);
+          }
+
+          if ($scope.instance.activated_modules.indexOf(nv) === -1) {
+            $scope.instance.activated_modules.push(nv);
+          }
+        }, true);
+
+        $scope.$watch('instance.activated_modules', function() {
+          var all = true;
+
+          // Initializes the selected flags
+          for (var i = 0; i < $scope.packs.length; i++) {
+            var pack = $scope.packs[i];
+
+            $scope.selected.plan[pack] = _.difference($scope.modulesByPack[pack],
+                $scope.instance.activated_modules) == 0;
+
+            all = all && $scope.selected.plan[pack];
+          }
+          $scope.selected.all = all;
+        },true);
+
+        var modules = [];
+        var modulesInAPack = [];
+        for (var i = 0; i < $scope.template.modules.length; i++) {
+          var module = $scope.template.modules[i];
+
+          // Generate a map of modules for easy-access
+          $scope.map[module.uuid] = i;
+
+          modules.push(module.uuid);
+
+          // Ignore grouping for PACKS and SUPPORT
+          if (/SUPPORT_/.test(module.uuid)) {
+            $scope.supportModules.push(module.uuid);
+          }
+
+          // Ignore grouping for PACKS and SUPPORT
+          if (module.metas.modules_included || /SUPPORT_/.test(module.uuid)) {
+            modulesInAPack.push(module.uuid);
+          }
+
+          // If it is a pack
+          if (module.metas && module.metas.modules_included) {
+            $scope.packs.push(module.uuid);
+
+            // Get modules that this pack adds to the previous pack
+            $scope.modulesByPack[module.uuid] = _.difference(
+                module.metas.modules_included, modulesInAPack);
+
+            // Other packs, get all modules in the pack
+            if (module.uuid !== 'BASIC_PACK' &&
+                module.uuid !== 'PROFESSIONAL_PACK' &&
+                module.uuid !== 'ADVANCED_PACK' &&
+                module.uuid !== 'EXPERT_PACK') {
+              $scope.modulesByPack[module.uuid] = module.metas.modules_included;
             }
+
+            modulesInAPack = modulesInAPack.concat(module.metas.modules_included);
           }
         }
+
+        // Initialize flags and group modules for OTHER_PACK
+        $scope.packs.push('OTHER_PACK');
+        $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
+        $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
+            $scope.instance.activated_modules) == 0;
       }
     ]);
 })();
