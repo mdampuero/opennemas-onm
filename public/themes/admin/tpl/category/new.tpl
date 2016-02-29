@@ -46,9 +46,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" data-text="{t}Saving{/t}...">
                   <span class="fa fa-save"></span>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
