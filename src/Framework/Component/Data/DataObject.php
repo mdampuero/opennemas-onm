@@ -83,4 +83,14 @@ class DataObject
     {
         return $this->data;
     }
+
+    /**
+     * Sets the entity data.
+     *
+     * @param array The raw data.
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 }
