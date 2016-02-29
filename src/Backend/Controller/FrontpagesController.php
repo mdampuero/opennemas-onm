@@ -336,11 +336,7 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        // TODO: remove cache cleaning actions
-        $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-        $cacheManager->delete($section . '|RSS');
-        $cacheManager->delete($section . '|0');
+        $this->dispatchEvent('frontpage.save_position', array('category' => $category));
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }
