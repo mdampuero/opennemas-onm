@@ -29,6 +29,12 @@ $(document).ready(function() {
 
     $('.nav-pills, .nav-tabs').tabdrop();
 
+    $('#formulario').on('submit', function(){
+      var btn = $('.btn.btn-primary');
+      btn.attr('disabled', true);
+      $('.btn.btn-primary .text').html(btn.data('text'));
+    });
+
     if ($('#formulario').length > 0 ||
         $('form[name="billingForm"]').length > 0
     ) {

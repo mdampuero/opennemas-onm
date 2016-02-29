@@ -108,8 +108,8 @@
           </li>
           <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
-            <a id="button_savepositions" href="#" class="btn btn-primary"  title="{t}Save changes{/t}">
-              <span class="fa fa-save"></span> <span class="hidden-xs">{t}Save changes{/t}</span>
+            <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}">
+              <span class="fa fa-save"></span> <span class="hidden-xs text">{t}Save changes{/t}</span>
             </a>
           </li>
         </ul>

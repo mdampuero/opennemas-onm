@@ -28,40 +28,40 @@
 {/block}
 
 {block name="content"}
-  <form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST"  enctype="multipart/form-data">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-newspaper-o"></i>
-                            {t}Covers{/t}
-                        </h4>
-                    </li>
-                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-                    <li class="quicklinks hidden-xs">
-                        <h5>{if !isset($cover->id)}{t}Creating ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h5>
-                    </li>
-                </ul>
-                <div class="all-actions pull-right">
-                    <ul class="nav quick-section">
-                        <li class="quicklinks">
-                            <a class="btn btn-link" href="{url name=admin_kioskos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
-                                <span class="fa fa-reply"></span>
-                            </a>
-                        </li>
-                        <li class="quicklinks"><span class="h-seperate"></span></li>
-                        <li class="quicklinks">
-                            <button class="btn btn-primary" type="submit">
-                                <span class="fa fa-save"></span>
-                                {t}Save{/t}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST"  enctype="multipart/form-data">
+  <div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-newspaper-o"></i>
+              {t}Covers{/t}
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs">
+            <h5>{if !isset($cover->id)}{t}Creating ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h5>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_kioskos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                <span class="fa fa-reply"></span>
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                <span class="fa fa-save"></span>
+                <span class="text">{t}Update{/t}</span>
+              </button>
+            </li>
+          </ul>
         </div>
+      </div>
+    </div>
     </div>
     <div class="content">
       <div class="row">

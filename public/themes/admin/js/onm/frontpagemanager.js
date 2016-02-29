@@ -548,11 +548,12 @@ jQuery(function($) {
         $('#content-provider').dialog('open');
     });
 
-    $('#button_savepositions').on('click', function(e, ui) {
+    $('#button_savepositions').on('click', function(e) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
         var new_version_available = check_available_new_version(false);
+        var btn = $(this);
 
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
@@ -562,17 +563,23 @@ jQuery(function($) {
         } else {
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,
-                async: false,
+                async: true,
                 type: 'POST',
                 dataType: 'json',
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
-                beforeSend: function(xhr) {
+                beforeSend: function() {
                     //showMessage('Saving', 'info', 1);
+                    btn.attr('disabled', true);
+                    btn.find('.text').html(btn.data('text'));
+                },
+                complete: function() {
+                    btn.attr('disabled', false);
+                    btn.find('.text').html(btn.data('title'));
                 }
             }).done(function(data) {
                 showMessage(data.message, 'success', 5, new Date().getTime());
                 frontpage_info.last_saved = data.date;
-            }).fail(function(data, ajaxOptions, thrownError) {
+            }).fail(function(data) {
                 var response = $.parseJSON(data.responseText);
                 showMessage(response.message, 'error', 5, new Date().getTime());
             });
