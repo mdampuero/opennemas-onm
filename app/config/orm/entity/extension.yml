@@ -15,11 +15,12 @@ entity:
     properties:
         about:       array
         author:      string
+        category:    string
         created:     datetime
         description: array
         enabled:     boolean
         images:      array
-        name:        string
+        name:        array
         parameters:  array
         price:       array
         type:        enum
@@ -34,7 +35,7 @@ entity:
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ @cache, @dbal_connection ]
+                arguments: [ @cache, @orm.connection.manager ]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
@@ -47,7 +48,7 @@ entity:
                 type:    string
                 options: { default: null, length: 100, notnull: true }
             name:
-                type: text
+                type:    text
                 options: { default: null, length: 65532, notnull: false }
             type:
                 type:    string
@@ -65,7 +66,7 @@ entity:
                 type:    text
                 options: { default: null, length: 65532, notnull: false }
             images:
-                type: simple_array
+                type:    text
                 options: { default: null, length: 65532, notnull: false }
             created:
                 type: datetimetz
