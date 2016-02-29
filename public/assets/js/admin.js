@@ -29,6 +29,22 @@ $(document).ready(function() {
 
     $('.nav-pills, .nav-tabs').tabdrop();
 
+    if ($('#formulario').length > 0 ||
+        $('form[name="billingForm"]').length > 0
+    ) {
+      $(document).on('keydown', function (e) {
+        if (e.which === 8 && !$(e.target).is('input, textarea')) {
+          window.onbeforeunload = function() {
+            return leaveMessage;
+          }
+        }
+      });
+
+      $(document).on('click', function (e) {
+        window.onbeforeunload = null;
+      });
+    }
+
     // Hide alerts after 5 seconds
     window.setInterval(function() {
       $('.messages .alert').slideDown(2000, function(){
