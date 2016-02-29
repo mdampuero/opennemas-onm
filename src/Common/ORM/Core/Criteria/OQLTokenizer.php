@@ -10,7 +10,7 @@
 namespace Common\ORM\Core\Criteria;
 
 /**
- * OQLTokenizer parses and splits OQL queries into tokens.
+ * The OQLTokenizer class parses and splits OQL queries into tokens.
  */
 class OQLTokenizer
 {
@@ -49,7 +49,7 @@ class OQLTokenizer
         'T_FLOAT'        => '/-?[0-9]+\.[0-9]+/',
         'T_INTEGER'      => '/-?[0-9]+/',
         'T_STRING'       => '/\'[^\']*\'|\"[^\"]*\"/',
-        'T_FIELD'        => '/[a-zA-Z0-9]+/',
+        'T_FIELD'        => '/[a-zA-Z0-9\_\.]+/',
     ];
 
     /**

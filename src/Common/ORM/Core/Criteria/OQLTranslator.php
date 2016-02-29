@@ -9,6 +9,10 @@
  */
 namespace Common\ORM\Core\Criteria;
 
+/**
+ * The OQLTranslator class translates the internal representation of an OQL
+ * query to conditions, parameters and types ready to use by SQL queries.
+ */
 class OQLTranslator
 {
     /**
@@ -58,6 +62,10 @@ class OQLTranslator
      */
     public function translate($oql)
     {
+        if (empty($oql)) {
+            return [ [], [], [] ];
+        }
+
         $tokenizer = new OQLTokenizer();
         $tokens    = $tokenizer->tokenize($oql);
 
