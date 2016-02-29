@@ -370,13 +370,6 @@ $menuXml = [
                 "module_name" => "CACHE_MANAGER",
                 "privilege"   => "ONLY_MASTERS",
             ],
-            [
-                "id"          => "log_sql",
-                "title"       => _("SQL error log"),
-                "icon"        => "fa fa-code",
-                "link"        => url('admin_databaseerrors'),
-                "privilege"   => "ONLY_MASTERS",
-            ],
         ],
     ],
     [
