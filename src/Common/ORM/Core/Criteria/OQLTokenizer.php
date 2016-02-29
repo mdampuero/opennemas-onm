@@ -84,6 +84,8 @@ class OQLTokenizer
 
         $this->checkOQL($translated);
 
+        $this->rebuildArrays($tokens, $translated);
+
         $map = [];
         for ($i = 0; $i < count($tokens); $i++) {
             $map[] = [ $tokens[$i], $translated[$i] ];
@@ -190,6 +192,28 @@ class OQLTokenizer
         }
 
         return false;
+    }
+
+    /**
+     * Rebuild arrays from individual tokens.
+     *
+     * @param array $tokens     Array of tokens.
+     * @param array $translated Array of token translations.
+     */
+    protected function rebuildArrays(&$tokens, &$translated)
+    {
+        $start = array_search('G_OBRACKET', $translated);
+        $end   = array_search('G_CBRACKET', $translated);
+
+        while ($start !== false && $end !== false) {
+            $array  = array_slice($tokens, $start, $end - $start + 1);
+
+            array_splice($translated, $start, $end - $start + 1, 'T_ARRAY');
+            array_splice($tokens, $start, $end - $start + 1, implode('', $array));
+
+            $start = array_search('G_OBRACKET', $translated);
+            $end   = array_search('G_CBRACKET', $translated);
+        }
     }
 
     /**
