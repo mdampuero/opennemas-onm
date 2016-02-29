@@ -2,141 +2,136 @@
 
 {block name="footer-js" append}
 {capture name=url}{url name=admin_system_settings}{/capture}
-  {javascripts}
-    <script type="text/javascript">
-      jQuery(document).ready(function($){
-          var newsletterType = $('#newsletter_subscriptionType');
-          var reCaptcha = '{$missing_recaptcha}';
+{javascripts}
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    var newsletterType = $('#newsletter_subscriptionType');
+    var reCaptcha = '{$missing_recaptcha}';
 
-          //If selected manage newsletter by e-mail, show e-mail address field
-          newsletterType.on('change', function() {
-              var divExternal= $('.external-config');
-              var divInternal = $('.internal-config');
-              if ($(this).val() == 'submit') {
-                  divExternal.css('display', 'table-row');
-                  divInternal.css('display', 'none');
-              } else {
-                  divExternal.css('display', 'none');
-                  divInternal.css('display', 'table-row');
-              }
-          });
+    //If selected manage newsletter by e-mail, show e-mail address field
+    newsletterType.on('change', function() {
+      var divExternal= $('.external-config');
+      var divInternal = $('.internal-config');
+      if ($(this).val() == 'submit') {
+        divExternal.css('display', 'table-row');
+        divInternal.css('display', 'none');
+      } else {
+        divExternal.css('display', 'none');
+        divInternal.css('display', 'table-row');
+      }
+    });
 
-          //If newsletter is activated and recaptcha is missing don't send form
-          if (reCaptcha) {
-              if ($('#warnings-validation')) {
-                  $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-              }
-              $('#formulario').on('submit', function(){
-                  return false;
-              });
-          }
+    //If newsletter is activated and recaptcha is missing don't send form
+    if (reCaptcha) {
+      if ($('#warnings-validation')) {
+        $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
+      }
+      $('#formulario').on('submit', function(){
+        return false;
       });
-    </script>
-  {/javascripts}
+    }
+  });
+</script>
+{/javascripts}
 {/block}
 
 {block name="content"}
 <form action="{url name=admin_newsletter_config}" method="POST" id="formulario">
-<div class="page-navbar actions-navbar">
+  <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t}
-                    </h4>
-                </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
-                    <h5>{t}Configuration{/t}</h5>
-                </li>
-            </ul>
-            <div class="all-actions pull-right">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
-                            <span class="fa fa-reply"></span>
-                        </a>
-                    </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
-                        <button class="btn btn-primary" type="submit">
-                            {t}Save{/t}
-                        </button>
-                    </li>
-                </ul>
-            </div>
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-home fa-lg"></i>
+              {t}Newsletters{/t}
+            </h4>
+          </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
+          <li class="quicklinks">
+            <h5>{t}Configuration{/t}</h5>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
+                <span class="fa fa-reply"></span>
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
+                <span class="fa fa-save"></span>
+                <span class="text">{t}Save{/t}</span>
+              </button>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-</div>
-
-<div class="content">
+  </div>
+  <div class="content">
     <div class="grid simple">
-        <div class="grid-body">
-            <div class="col-md-7">
-                <div class="form-group">
-                    <label for="name" class="form-label">{t}Newsletter subject{/t}</label>
-                    <span class="help">{t}The subject of the emails in this newsletter{/t}</span>
-                    <div class="controls">
-                        <input type="text" required id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="form-control" placeholder="{t}Your newsletter subject{/t}"/>
-                    </div>
-                 </div>
-                <div class="form-group">
-                    <label for="sender" class="form-label">{t}Email from{/t}</label>
-                    <span class="help">{t escape=off}Email sender{/t} (From)</span>
-                    <div class="controls">
-                        <input type="text" required id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="form-control" placeholder="noreply@your_domain_name.com"/>
-                    </div>
-                </div>
-                 <div class="form-group">
-                    <label for="newsletter_maillist_link" class="form-label">{t}Newsletter links points to{/t}</label>
-                    <div class="help">{t}You can choose if you prefer that the links of the contents of the newsletter point within the content or contents on the frontpage{/t}</div>
-                    <div class="controls">
-                        <select name="newsletter_maillist[link]" id="newsletter_maillist_link">
-                            <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
-                            <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
-                        </select>
-                    </div>
-                </div>
+      <div class="grid-body">
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="name" class="form-label">{t}Newsletter subject{/t}</label>
+            <span class="help">{t}The subject of the emails in this newsletter{/t}</span>
+            <div class="controls">
+              <input type="text" required id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="form-control" placeholder="{t}Your newsletter subject{/t}"/>
             </div>
-
-            <div class="col-md-7">
-                <div class="form-group">
-                    <label for="newsletter_subscriptionType" class="form-label">{t}Newsletter type{/t}</label>
-                    <div class="help">
-                        {capture name=subscriptors}{url name=admin_newsletter_subscriptors}{/capture}
-                        {t escape=off 1=$smarty.capture.subscriptors}Whether to manage new subscriptions by an external maillist or using the <a href="%1" target="_blank"> Opennemas-managed list of subscribers</a>.{/t}
-                    </div>
-                    <div class="controls">
-                        <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
-                            <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
-                            <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="external-config" {if $configs['newsletter_subscriptionType'] neq 'submit'}style="display:none"{/if}>
-
-                    <div class="form-group">
-                        <label for="email" class="form-label">{t}Mailing list address{/t}</label>
-                        <div class="controls">
-                            <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
-                            <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-group" >
-                        <label for="subscription" class="form-label">{t}Mail address to receive new subscriptions{/t}</label>
-                        <div class="controls">
-                            <input type="email" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="form-group">
+            <label for="sender" class="form-label">{t}Email from{/t}</label>
+            <span class="help">{t escape=off}Email sender{/t} (From)</span>
+            <div class="controls">
+              <input type="text" required id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="form-control" placeholder="noreply@your_domain_name.com"/>
             </div>
+          </div>
+          <div class="form-group">
+            <label for="newsletter_maillist_link" class="form-label">{t}Newsletter links points to{/t}</label>
+            <div class="help">{t}You can choose if you prefer that the links of the contents of the newsletter point within the content or contents on the frontpage{/t}</div>
+            <div class="controls">
+              <select name="newsletter_maillist[link]" id="newsletter_maillist_link">
+                <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
+                <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
+              </select>
+            </div>
+          </div>
         </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="newsletter_subscriptionType" class="form-label">{t}Newsletter type{/t}</label>
+            <div class="help">
+              {capture name=subscriptors}{url name=admin_newsletter_subscriptors}{/capture}
+              {t escape=off 1=$smarty.capture.subscriptors}Whether to manage new subscriptions by an external maillist or using the <a href="%1" target="_blank"> Opennemas-managed list of subscribers</a>.{/t}
+            </div>
+            <div class="controls">
+              <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
+                <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
+                <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
+              </select>
+            </div>
+          </div>
+          <div class="external-config" {if $configs['newsletter_subscriptionType'] neq 'submit'}style="display:none"{/if}>
+            <div class="form-group">
+              <label for="email" class="form-label">{t}Mailing list address{/t}</label>
+              <div class="controls">
+                <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
+                <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
+              </div>
+            </div>
+            <div class="form-group" >
+              <label for="subscription" class="form-label">{t}Mail address to receive new subscriptions{/t}</label>
+              <div class="controls">
+                <input type="email" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-</div>
+  </div>
 </form>
 {/block}

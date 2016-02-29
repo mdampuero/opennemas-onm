@@ -28,7 +28,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -55,17 +55,17 @@
             <li class="quicklinks">
               {if isset($video->id)}
               {acl isAllowed="VIDEO_UPDATE"}
-              <button class="btn btn-primary" type="submit">
-                <span class="fa fa-save"></span>
-                {t}Save{/t}
-              </button>
+                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                  <i class="fa fa-save"></i>
+                  <span class="text">{t}Update{/t}</span>
+                </button>
               {/acl}
               {else}
               {acl isAllowed="VIDEO_CREATE"}
-              <button class="btn btn-primary" type="submit">
-                <span class="fa fa-save"></span>
-                {t}Save{/t}
-              </button>
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                  <i class="fa fa-save"></i>
+                  <span class="text">{t}Save{/t}</span>
+                </button>
               {/acl}
               {/if}
             </li>
@@ -74,7 +74,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="row">
       <div class="col-md-8">
@@ -94,7 +93,6 @@
         <div class="grid simple">
           <div class="grid-title">{t}Attributes{/t}</div>
           <div class="grid-body">
-
             {acl isAllowed="VIDEO_AVAILABLE"}
             <div class="form-group">
               <div class="checkbox">
@@ -105,7 +103,6 @@
               </div>
             </div>
             {/acl}
-
             {is_module_activated name="COMMENT_MANAGER"}
             <div class="form-group">
               <div class="checkbox">
@@ -116,14 +113,12 @@
               </div>
             </div>
             {/is_module_activated}
-
             <div class="form-group">
               <label for="category" class="form-label">{t}Category{/t}</label>
               <div class="controls">
                 {include file="common/selector_categories.tpl" name="category" item=$video}
               </div>
             </div>
-
             <div class="form-group">
               <label for="fk_author" class="form-label">{t}Author{/t}</label>
               <div class="controls">
@@ -150,7 +145,6 @@
             </div>
           </div>
         </div>
-
         {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
         <div class="row">
           <div class="col-md-12">
@@ -159,7 +153,6 @@
                 <h4>{t}Subscription{/t}</h4>
               </div>
               <div class="grid-body">
-
                 <div class="checkbox">
                   <input {if (is_array($video->params) && $video->params["only_registered"] == "1")}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
                   <label for="only_registered">
@@ -171,7 +164,6 @@
           </div>
         </div>
         {/is_module_activated}
-
         {if $type == "script" || $type == "external" || (isset($video) && ($video->author_name == 'script' || $video->author_name == 'external'))}
         <div class="grid simple">
           <div class="grid-title">

@@ -65,9 +65,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" value="1">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -76,7 +76,6 @@
       </div>
     </div>
     <div class="content">
-
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
           <tabset>

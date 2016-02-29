@@ -36,8 +36,9 @@
                 </li>
                 {acl isAllowed="PHOTO_UPDATE"}
                 <li class="quicklinks">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                    <span class="fa fa-save"></span>
+                    <span class="text">{t}Update{/t}</span>
                   </button>
                 </li>
                 {/acl}
