@@ -46,4 +46,14 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($method->invokeArgs($this->translator, [ 'T_STRING' ]));
         $this->assertFalse($method->invokeArgs($this->translator, [ 'foo' ]));
     }
+
+    public function testTranslateToken()
+    {
+        $method = new \ReflectionMethod($this->translator, 'translateToken');
+        $method->setAccessible(true);
+
+        $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', false ]));
+        $this->assertEquals([ 'foo', null, null ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', true ]));
+        $this->assertEquals([ '!=', null, null ], $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ]));
+    }
 }

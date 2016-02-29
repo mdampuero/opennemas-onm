@@ -33,7 +33,7 @@ class OQLTranslator
         'O_LIKE'         => 'like ',
         'O_NOT_EQUALS'   => '!=',
         'O_NOT_IN'       => 'not in',
-        'O_NOT_LIKE'     => '!~',
+        'O_NOT_LIKE'     => 'not like',
         'O_NOT_REGEX'    => 'not regex',
         'O_REGEX'        => 'regex ',
     ];
@@ -63,27 +63,28 @@ class OQLTranslator
 
         $params = [];
         $types  = [];
-        $sql    = [];
+        $sqls   = [];
+        $isLike = false;
         foreach ($tokens as $token) {
-            $isOperator  = $this->isOperator($token[1]);
-            $isParameter = $this->isParameter($token[1]);
+            list($sql, $param, $type) =
+                $this->translateToken($token[0], $token[1], $isLike);
 
-            if (!$isOperator && !$isParameter) {
-                $sql[] = $token[0];
+            if (!empty($sql)) {
+                $sqls[] = $sql;
             }
 
-            if ($isOperator) {
-                $sql[] = $this->operators[$token[1]];
+            if (!empty($param)) {
+                $params[] = $param;
             }
 
-            if ($isParameter) {
-                $params[] = $token[0];
-                $types[]  = $this->params[$token[1]];
-                $sql[]    = '?';
+            if (!empty($type)) {
+                $types[] = $type;
             }
+
+            $isLike = $token[1] === 'O_LIKE' || $token[1] === 'O_NOT_LIKE';
         }
 
-        return [ implode(' ', $sql), $params, $types ];
+        return [ implode(' ', $sqls), $params, $types ];
     }
 
     /**
@@ -108,5 +109,32 @@ class OQLTranslator
     protected function isParameter($str)
     {
         return in_array($str, array_keys($this->params));
+    }
+
+    /**
+     * Translates a token.
+     *
+     * @param string  $str          The token to translate.
+     * @param string  $type         The token type.
+     * @param boolean $previousLike Whether the previous translation was a
+     *                              like/not like operator.
+     *
+     * @return array An array with the translation, the parameter value and the
+     *               parameter type..
+     */
+    protected function translateToken($str, $type, $previousLike)
+    {
+        if (!$this->isOperator($type)
+            && (!$this->isParameter($type)
+            || $this->isParameter($type) && $previousLike)
+        ) {
+            return [ $str, null, null ];
+        }
+
+        if ($this->isOperator($type)) {
+            return [ $this->operators[$type], null, null ];
+        }
+
+        return [ '?', $str, $this->params[$type] ];
     }
 }
