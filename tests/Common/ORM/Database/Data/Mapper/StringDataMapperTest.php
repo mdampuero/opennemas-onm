@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\DataMapper;
+namespace Tests\Common\ORM\Database\Data\Mapper;
 
-use Common\ORM\Core\DataMapper\StringDataMapper;
+use Common\ORM\Database\Data\Mapper\StringDataMapper;
 
 class StringDataMapperTest extends \PHPUnit_Framework_TestCase
 {

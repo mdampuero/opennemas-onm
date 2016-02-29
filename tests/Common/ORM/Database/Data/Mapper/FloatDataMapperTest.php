@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\DataMapper;
+namespace Tests\Common\ORM\Database\Data\Mapper;
 
-use Common\ORM\Core\DataMapper\FloatDataMapper;
+use Common\ORM\Database\Data\Mapper\FloatDataMapper;
 
 class FloatDataMapperTest extends \PHPUnit_Framework_TestCase
 {

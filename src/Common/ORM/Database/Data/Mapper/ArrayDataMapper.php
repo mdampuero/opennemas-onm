@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\DataMapper;
+namespace Common\ORM\Database\Data\Mapper;
 
 class ArrayDataMapper
 {
@@ -60,6 +60,18 @@ class ArrayDataMapper
     }
 
     /**
+     * Unserializes an array.
+     *
+     * @param string $value The serialized array.
+     *
+     * @return string The array.
+     */
+    public function fromText($value)
+    {
+        return $this->fromString($value);
+    }
+
+    /**
      * Converts an array to a JSON string.
      *
      * @param array $value The array to convert.
@@ -105,5 +117,17 @@ class ArrayDataMapper
         }
 
         return @serialize($value);
+    }
+
+    /**
+     * Serializes an array.
+     *
+     * @param array $value The array to serialize.
+     *
+     * @return string The serialized array.
+     */
+    public function toText($value)
+    {
+        return $this->toString($value);
     }
 }
