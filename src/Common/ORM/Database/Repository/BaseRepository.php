@@ -9,41 +9,37 @@
  */
 namespace Common\ORM\Database\Repository;
 
+use Common\ORM\Core\Criteria\OQLTranslator;
+use Common\ORM\Database\Data\Converter\Converter;
+use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
+use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Repository;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 
 class BaseRepository extends Repository
 {
     /**
-     * The cache object.
+     * The cache service.
      *
      * @var CacheInterface
      */
     protected $cache;
 
     /**
-     * The cache separator.
-     *
-     * @var string
-     */
-    protected $cacheSeparator = '-';
-
-    /**
-     * The value to save in cache when the entity is not in database.
-     *
-     * @var string
-     */
-    protected $lostValue = '-lost-';
-
-    /**
      * The database connection.
      *
-     * @var DbalWrapper
+     * @var Connection
      */
     protected $conn;
+
+    /**
+     * The value to save in cache when the entity is not found.
+     *
+     * @var string
+     */
+    protected $miss = '-miss-';
 
     /**
      * The source name.
@@ -55,15 +51,17 @@ class BaseRepository extends Repository
     /**
      * Initializes a new DatabasePersister.
      *
-     * @param CacheInterface $cache  The cache service.
-     * @param DbalWrapper    $conn   The database connection.
-     * @param DbalWrapper    $source The source name.
+     * @param CacheInterface $cache    The cache service.
+     * @param Connection     $conn     The database connection.
+     * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct(CacheInterface $cache, DbalWrapper $conn, $source)
+    public function __construct(CacheInterface $cache, Connection $conn, Metadata $metadata)
     {
-        $this->cache  = $cache;
-        $this->conn   = $conn;
-        $this->source = $source;
+        $this->cache      = $cache;
+        $this->conn       = $conn;
+        $this->converter  = new Converter($metadata);
+        $this->metadata   = $metadata;
+        $this->translator = new OQLTranslator();
     }
 
     /**
@@ -73,16 +71,16 @@ class BaseRepository extends Repository
      *
      * @return integer The number of entities.
      */
-    public function countBy($criteria)
+    public function countBy($oql = '')
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $sql = "select count(id) from `{$this->metadata->mapping['table']}`";
+        list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
-        // Executing the SQL
-        $sql = 'SELECT COUNT(id) FROM `' . $this->getCachePrefix() .
-            '` WHERE ' . $filterSQL;
+        if (!empty($filter)) {
+            $sql .= " where $filter";
+        }
 
-        $rs = $this->conn->fetchArray($sql);
+        $rs  = $this->conn->fetchArray($sql, $params, $types);
 
         if (!$rs) {
             return false;
@@ -91,51 +89,36 @@ class BaseRepository extends Repository
         return (integer) $rs[0];
     }
 
-
     /**
      * Finds an entity by id.
      *
-     * @param integer $id The entity id.
+     * @param mixed $id The entity id.
      *
      * @return Entity The entity.
      *
-     * @throws EntityNotFoundException If the entity is not found.
+     * @throws EntityNotFoundException If the entity was not found.
      */
     public function find($id)
     {
         if (empty($id)) {
-            throw new EntityNotFoundException();
+            throw new \Exception();
         }
 
-        $cacheId = $id;
+        $id      = $this->normalizeId($id);
+        $cacheId = $this->metadata->getCachePrefix()
+            . implode($this->metadata->getCacheSeparator, $id);
 
-        if (is_array($cacheId)) {
-            $cacheId = implode($this->cacheSeparator, $cacheId);
-        }
+        if (($entity = $this->cache->fetch($cacheId)) === false) {
+            $class = 'Common\\ORM\\Entity\\' . $this->metadata->name;
 
-        $cacheId = $this->getCachePrefix() . $this->cacheSeparator .  $cacheId;
-
-        if (!$this->hasCache()
-            || ($entity = $this->cache->fetch($cacheId)) === false
-            || !is_object($entity)
-        ) {
-            $class = 'Framework\\ORM\\Entity\\' . $this->getEntityName();
-
-            $entity = new $class();
-
-            if (!is_array($id)) {
-                $id = [ 'id' => $id ];
-            }
-
-            foreach ($id as $key => $value) {
-                $entity->{$key} = $value;
-            }
-
+            $entity = new $class($id);
             $this->refresh($entity);
 
-            if ($this->hasCache()) {
-                $this->cache->save($cacheId, $entity);
-            }
+            $this->cache->save($cacheId, $entity);
+        }
+
+        if ($entity === $this->miss) {
+            throw new \Exception();
         }
 
         return $entity;
@@ -152,29 +135,20 @@ class BaseRepository extends Repository
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($oql = '')
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $sql = "select id from `{$this->metadata->mapping['table']}`";
+        list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
-        $orderBySQL  = '`id` ASC';
-
-        if (!empty($order)) {
-            $orderBySQL = $this->getOrderBySQL($order);
+        if (!empty($filter)) {
+            $sql .= ' where ' . $filter;
         }
 
-        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
+        $rs = $this->conn->fetchAll($sql, $params, $types);
 
-        // Executing the SQL
-        $sql = "SELECT id FROM `" . $this->getCachePrefix() . "` "
-            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-
-        $rs = $this->conn->fetchAll($sql);
-
-        $ids = array();
-        foreach ($rs as $item) {
-            $ids[] = $item['id'];
-        }
+        $ids = array_map(function ($a) {
+            return $a['id'];
+        }, $rs);
 
         return $this->findMulti($ids);
     }
@@ -188,72 +162,23 @@ class BaseRepository extends Repository
      */
     public function findMulti($data)
     {
-        $ids  = array();
-        $keys = array();
-        foreach ($data as $value) {
-            $ids[]  = $this->getCachePrefix() . $this->cacheSeparator . $value;
-            $keys[] = $value;
+        // Build cache ids
+        $ids = array_map(function ($a) {
+            return $this->metadata->getCachePrefix() . $a;
+        }, $data);
+
+        $entities = $this->cache->fetch($ids);
+        $miss     = array_diff($ids, array_keys($entities));
+
+        // Get missed entities from database
+        foreach ($miss as $cacheId) {
+            $id = str_replace($this->metadata->getCachePrefix(), '', $cacheId);
+
+            $entities[$cacheId] = $this->find($id);
         }
 
-        $entities = array_values($this->cache->fetch($ids));
-
-        $cachedIds = array();
-        foreach ($entities as $entity) {
-            $cachedIds[] = $entity->getCachedId();
-        }
-
-        $missedIds = array_diff($ids, $cachedIds);
-
-        foreach ($missedIds as $entity) {
-            $cacheId = explode($this->cacheSeparator, $entity);
-            array_shift($cacheId);
-
-            $entity = $this->find($cacheId[0]);
-            if ($entity) {
-                $entities[] = $entity;
-            }
-        }
-
-        $ordered = array();
-        foreach ($keys as $id) {
-            $i = 0;
-            while ($i < count($entities) && $entities[$i]->id != $id) {
-                $i++;
-            }
-
-            if ($i < count($entities)) {
-                $ordered[] = $entities[$i];
-            }
-        }
-
-        return $ordered;
-    }
-
-    /**
-     * Returns the cache prefix for entities search by this repository.
-     *
-     * @return string The cache prefix.
-     */
-    public function getCachePrefix()
-    {
-        $prefix = $this->getEntityName();
-        $prefix = preg_replace('/([a-z])([A-Z])/', '$1_$2', $prefix);
-
-        return strtolower($prefix);
-    }
-
-    /**
-     * Returns the entity class name for the current repository.
-     *
-     * @return string The entity class name.
-     */
-    public function getEntityName()
-    {
-        $name = get_class($this);
-        $name = substr($name, strrpos($name, '\\') + 1);
-        $name = str_replace('Repository', '', $name);
-
-        return $name;
+        // Keep original order
+        return array_merge(array_flip($ids), $entities);
     }
 
     /**
@@ -263,68 +188,82 @@ class BaseRepository extends Repository
      */
     public function refresh(Entity &$entity)
     {
-        if (empty($entity->id)) {
-            throw new EntityNotFoundException(
-                "Could not find entity with id = 'null'"
-            );
+        $filters = [];
+        foreach ($entity->getData() as $key => $value) {
+            $filters[] = "$key = $value";
         }
 
-        $sql = 'SELECT * FROM ' . $this->getCachePrefix() . ' WHERE id = '
-            . $entity->id;
+        if (empty($filters)) {
+            $entity = $this->miss;
+            return;
+        }
+
+        $sql = 'select * from ' . $this->metadata->mapping['table'] . ' where '
+            .  implode(' and ', $filters);
 
         $rs = $this->conn->fetchAssoc($sql);
 
         if (!$rs) {
-            throw new EntityNotFoundException(
-                'Could not find ' . $this->getCachePrefix() . ' with id = \''.
-                $entity->id .'\''
-            );
+            $entity = $this->miss;
+            return;
         }
 
-        foreach ($rs as $key => $value) {
-            $entity->{$key} = $value;
+        if ($this->metadata->mapping['metas']) {
+            $rs = array_merge($rs, $this->getMetas($entity));
 
-            $value = @unserialize($value);
-
-            if ($value) {
-                $entity->{$key} = $value;
+            if (!$rs) {
+                $entity = $this->miss;
+                return;
             }
         }
 
+        $entity->setData($this->converter->objectify($rs));
         $entity->refresh();
     }
 
     /**
-     * Convert database values to valid entity values.
+     * Returns an array of metas for the current entity.
      *
-     * @param array $source The data from database.
+     * @param Entity $entity The entity.
      *
-     * @return array The converted data.
+     * @return array The array of metas.
      */
-    protected function objectify($source)
+    protected function getMetas($entity)
     {
-        if (!array_key_exists('columns', $this->metadata->mapping)) {
-            throw new \Exception();
+        $metas   = [];
+        $keys    = $this->metadata->getIdKeys();
+        $filters = [];
+
+        // Build filters for SQL
+        foreach ($keys as $key) {
+            $filters[] = $this->metadata->mapping['table'] . '_' . $key
+                . '=' . $entity->{$key};
         }
 
-        $data = [];
-        foreach ($source as $key => $value) {
-            if (array_key_exists($key, $this->metadata->properties)
-                && array_key_exists($key, $this->metadata->mapping['columns'])
-            ) {
-                $from = \classify($this->metadata->mapping['columns'][$key]['type']);
-                $to   = $this->metadata->properties[$key];
+        $sql = 'select * from ' . $this->metadata->mapping['table']
+            . '_meta where ' . implode(' and ', $filters);
 
-                $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($to)
-                    . 'DataMapper';
+        $rs = $this->conn->fetchAll($sql);
 
-                $mapper = new $mapper();
-                $method = 'from' . ucfirst($from);
-
-                $data[$key] = $mapper->{$method}($value);
-            }
+        foreach ($rs as $value) {
+            $metas[$value['meta_key']] = $value['meta_value'];
         }
 
-        return $data;
+        return $metas;
+    }
+
+    /**
+     * Returns the normalized id.
+     *
+     * @param mixed $id The entity id as string or array.
+     *
+     * @return array The normalized id.
+     */
+    protected function normalizeId($id)
+    {
+        $keys = !is_array($id) ? $this->metadata->getIdKeys() : array_keys($id);
+        $id   = !is_array($id) ? [ $id ] : $id;
+
+        return array_combine($keys, $id);
     }
 }
