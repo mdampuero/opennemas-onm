@@ -32,17 +32,17 @@ class OQLTokenizer
         'M_LIMIT'        => '/\s*limit\s*/',
         'M_OFFSET'       => '/\s*offset\s*/',
         'M_ORDER'        => '/\s*order by\s*/',
-        'O_EQUALS'       => '/\s*=\s*/',
-        'O_GREAT'        => '/\s*>\s*/',
         'O_GREAT_EQUALS' => '/\s*>=\s*/',
-        'O_IN'           => '/\s*in\s*/',
-        'O_LESS'         => '/\s*<\s*/',
         'O_LESS_EQUALS'  => '/\s*<=\s*/',
-        'O_LIKE'         => '/\s*~\s*/',
         'O_NOT_EQUALS'   => '/\s*!=\s*/',
         'O_NOT_IN'       => '/\s*!in\s*/',
         'O_NOT_LIKE'     => '/\s*!~\s*/',
         'O_NOT_REGEX'    => '/\s*!in\s*/',
+        'O_EQUALS'       => '/\s*=\s*/',
+        'O_GREAT'        => '/\s*>\s*/',
+        'O_IN'           => '/\s*in\s*/',
+        'O_LESS'         => '/\s*<\s*/',
+        'O_LIKE'         => '/\s*~\s*/',
         'O_REGEX'        => '/\s*\^\s*/',
         'T_BOOL'         => '/true|false/',
         'T_NULL'         => '/null/',
@@ -59,7 +59,7 @@ class OQLTokenizer
      */
     protected $sentences = [
         'T_CONNECTOR' => '/C_AND|C_OR/',
-        'T_OPERATOR'  => '/O_EQUALS|O_GREAT|O_GREAT_EQUALS|O_IN|O_LESS|O_LESS_EQUALS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_LIKE|O_NOT_REGEX|O_REGEX/',
+        'T_OPERATOR'  => '/O_GREAT_EQUALS|O_LESS_EQUALS|O_EQUALS|O_GREAT|O_IN|O_LESS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_LIKE|O_NOT_REGEX|O_REGEX/',
         'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL)*\s*G_CBRACKET/',
         'S_LIMIT'     => '/M_LIMIT T_INTEGER/',
@@ -131,7 +131,7 @@ class OQLTokenizer
         $end    = strlen($query);
         $tokens = [];
 
-        while (!empty($query) && $end > 0) {
+        while ($query !== '' && $end > 0) {
             $token = substr($query, 0, $end--);
 
             if ($this->isToken($token)) {
