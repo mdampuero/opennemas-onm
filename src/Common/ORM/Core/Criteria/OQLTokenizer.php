@@ -39,8 +39,13 @@ class OQLTokenizer
         'O_LESS'         => '/\s*<\s*/',
         'O_LESS_EQUALS'  => '/\s*<=\s*/',
         'O_LIKE'         => '/\s*~\s*/',
-        'O_NOT'          => '/\s*!\s*/',
+        'O_NOT_EQUALS'   => '/\s*!=\s*/',
+        'O_NOT_IN'       => '/\s*!in\s*/',
+        'O_NOT_LIKE'     => '/\s*!~\s*/',
+        'O_NOT_REGEX'    => '/\s*!in\s*/',
         'O_REGEX'        => '/\s*\^\s*/',
+        'T_BOOL'         => '/true|false/',
+        'T_NULL'         => '/null/',
         'T_FLOAT'        => '/-?[0-9]+\.[0-9]+/',
         'T_INTEGER'      => '/-?[0-9]+/',
         'T_STRING'       => '/\'[^\']*\'|\"[^\"]*\"/',
@@ -54,8 +59,8 @@ class OQLTokenizer
      */
     protected $sentences = [
         'T_CONNECTOR' => '/C_AND|C_OR/',
-        'T_OPERATOR'  => '/O_NOT\s*T_OPERATOR|O_EQUALS|O_GREAT|O_GREAT_EQUALS|O_IN|O_LESS|O_LESS_EQUALS|O_LIKE|O_REGEX/',
-        'T_LITERAL'   => '/T_ARRAY|T_FLOAT|T_INTEGER|T_STRING/',
+        'T_OPERATOR'  => '/O_EQUALS|O_GREAT|O_GREAT_EQUALS|O_IN|O_LESS|O_LESS_EQUALS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_LIKE|O_NOT_REGEX|O_REGEX/',
+        'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL)*\s*G_CBRACKET/',
         'S_LIMIT'     => '/M_LIMIT T_INTEGER/',
         'S_OFFSET'    => '/M_OFFSET T_INTEGER/',
@@ -83,8 +88,6 @@ class OQLTokenizer
         }
 
         $this->checkOQL($translated);
-
-        $this->rebuildArrays($tokens, $translated);
 
         $map = [];
         for ($i = 0; $i < count($tokens); $i++) {
@@ -192,28 +195,6 @@ class OQLTokenizer
         }
 
         return false;
-    }
-
-    /**
-     * Rebuild arrays from individual tokens.
-     *
-     * @param array $tokens     Array of tokens.
-     * @param array $translated Array of token translations.
-     */
-    protected function rebuildArrays(&$tokens, &$translated)
-    {
-        $start = array_search('G_OBRACKET', $translated);
-        $end   = array_search('G_CBRACKET', $translated);
-
-        while ($start !== false && $end !== false) {
-            $array  = array_slice($tokens, $start, $end - $start + 1);
-
-            array_splice($translated, $start, $end - $start + 1, 'T_ARRAY');
-            array_splice($tokens, $start, $end - $start + 1, implode('', $array));
-
-            $start = array_search('G_OBRACKET', $translated);
-            $end   = array_search('G_CBRACKET', $translated);
-        }
     }
 
     /**

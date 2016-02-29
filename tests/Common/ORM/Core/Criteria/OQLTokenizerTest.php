@@ -27,13 +27,16 @@ class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
             [ 'and', 'C_AND' ],
             [ '(', 'G_OPARENTHESIS' ],
             [ 'baz', 'T_FIELD' ],
-            [ '!', 'O_NOT' ],
-            [ '=', 'O_EQUALS' ],
+            [ '!=', 'O_NOT_EQUALS' ],
             [ '"qux"', 'T_STRING' ],
             [ 'or', 'C_OR' ],
             [ 'baz', 'T_FIELD' ],
             [ 'in', 'O_IN' ],
-            [ '[1,2]', 'T_ARRAY' ],
+            [ '[', 'G_OBRACKET' ],
+            [ '1', 'T_INTEGER' ],
+            [ ',', 'COMMA' ],
+            [ '2', 'T_INTEGER' ],
+            [ ']', 'G_CBRACKET' ],
             [ ')', 'G_CPARENTHESIS' ],
             [ 'order by', 'M_ORDER' ],
             [ 'foo', 'T_FIELD' ],
@@ -63,7 +66,7 @@ class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'getTokens');
         $method->setAccessible(true);
 
-        $tokens = [ 'foo', '=', '"bar"', 'and', '(', 'baz', '!', '=', '"qux"', 'or', 'baz' ,'in', '[', '1', ',' ,'2', ']', ')' ];
+        $tokens = [ 'foo', '=', '"bar"', 'and', '(', 'baz', '!=', '"qux"', 'or', 'baz' ,'in', '[', '1', ',' ,'2', ']', ')' ];
         $oql    = 'foo="bar" and (baz!="qux" or baz in [1,2])';
 
         $this->assertEquals($tokens, $method->invokeArgs($this->translator, [ $oql ]));
@@ -99,20 +102,6 @@ class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($method->invokeArgs($this->translator, [ '[' ]));
 
         $this->assertFalse($method->invokeArgs($this->translator, [ 'foo*bar' ]));
-    }
-
-    public function testRebuildArrays()
-    {
-        $method = new \ReflectionMethod($this->translator, 'rebuildArrays');
-        $method->setAccessible(true);
-
-        $tokens     = [ '[', '1', ',', '2', ',', '3', ']' ];
-        $translated = [ 'G_OBRACKET', 'T_INTEGER', 'COMMA', 'T_INTEGER', 'COMMA', 'T_INTEGER', 'G_CBRACKET' ];
-
-        $method->invokeArgs($this->translator, [ &$tokens, &$translated ]);
-
-        $this->assertEquals([ '[1,2,3]' ], $tokens);
-        $this->assertEquals([ 'T_ARRAY' ], $translated);
     }
 
     public function testTranslateSentence()
