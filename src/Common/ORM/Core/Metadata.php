@@ -15,6 +15,58 @@ use Common\ORM\Core\Validation\Validable;
 class Metadata extends DataObject implements Validable
 {
     /**
+     * Returns the cache prefix for the current entity.
+     *
+     * @return string The cache prefix.
+     */
+    public function getCachePrefix()
+    {
+        if (!empty($this->cachePrefix)) {
+            return $this->cachePrefix;
+        }
+
+        return \underscore($this->name) . $this->getCacheSeparator();
+    }
+
+    /**
+     * Returns the cache separator for the current entity.
+     *
+     * @return string The cache separator.
+     */
+    public function getCacheSeparator()
+    {
+        if (!empty($this->cacheSeparator)) {
+            return $this->cacheSeparator;
+        }
+
+        return '-';
+    }
+
+    /**
+     * Returns the key names for the current entity.
+     *
+     * @param type variable Description
+     *
+     * @return type Description
+     */
+    public function getIdKeys()
+    {
+        if (!array_key_exists('index', $this->mapping)
+            || empty($this->mapping['index'])
+        ) {
+            return false;
+        }
+
+        foreach ($this->mapping['index'] as $index) {
+            if ($index['name'] === 'PRIMARY') {
+                return $index['columns'];
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getClassName()
