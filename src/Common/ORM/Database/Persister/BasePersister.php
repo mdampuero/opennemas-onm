@@ -6,6 +6,7 @@ use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Persister;
+use Common\ORM\Database\Data\Converter\Converter;
 use Onm\Cache\CacheInterface;
 
 class BasePersister extends Persister
@@ -16,6 +17,13 @@ class BasePersister extends Persister
      * @var CacheInterface
      */
     protected $cache;
+
+    /**
+     * The entity converter.
+     *
+     * @var Converter
+     */
+    protected $converter;
 
     /**
      * The database connection.
@@ -47,9 +55,10 @@ class BasePersister extends Persister
      */
     public function __construct(CacheInterface $cache, Connection $conn, Metadata $metadata)
     {
-        $this->cache    = $cache;
-        $this->conn     = $conn;
-        $this->metadata = $metadata;
+        $this->cache     = $cache;
+        $this->conn      = $conn;
+        $this->converter = new Converter($metadata);
+        $this->metadata  = $metadata;
     }
 
     /**
@@ -57,7 +66,7 @@ class BasePersister extends Persister
      */
     public function create(Entity &$entity)
     {
-        list($data, $metas) = $this->databasify($entity->getData());
+        list($data, $metas) = $this->converter->databasify($entity->getData());
 
         $this->conn->insert(\underscore($entity->getClassName()), $data);
 
@@ -86,7 +95,7 @@ class BasePersister extends Persister
      */
     public function update(Entity $entity)
     {
-        list($data, $metas) = $this->databasify($entity->getData());
+        list($data, $metas) = $this->converter->databasify($entity->getData());
         unset($data['id']);
 
         $this->conn->update(
@@ -100,59 +109,6 @@ class BasePersister extends Persister
         if ($this->metadata[$entity->getClassName()]->mapping['metas']) {
             $this->persistMetas($entity->id, $metas);
         }
-    }
-
-    /**
-     * Convert entity data to valid database values.
-     *
-     * @param array $source The entity data.
-     *
-     * @return array The converted data and metas.
-     */
-    protected function databasify($source)
-    {
-        if (!array_key_exists('columns', $this->metadata->mapping)) {
-            throw new \Exception();
-        }
-
-        $data = [];
-        foreach ($source as $key => $value) {
-            $from = gettype($value);
-            $to   = 'string';
-
-            if (array_key_exists($key, $this->metadata->properties)
-                && $this->metadata->properties[$key] !== 'enum'
-            ) {
-                $from = $this->metadata->properties[$key];
-            }
-
-            if (array_key_exists($key, $this->metadata->mapping['columns'])) {
-                $to = \classify($this->metadata->mapping['columns'][$key]['type']);
-            }
-
-            if (empty($to) && $from === 'array') {
-                $to = 'array';
-            }
-
-            $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
-                . 'DataMapper';
-
-            $mapper = new $mapper();
-            $method = 'to' . ucfirst($to);
-
-            $data[$key] = $mapper->{$method}($value);
-        }
-
-        // Meta keys (unknown properties)
-        $unknown = array_diff(
-            array_keys($data),
-            array_keys($this->metadata->mapping['columns'])
-        );
-
-        $metas = array_intersect_key($data, array_flip($unknown));
-        $data  = array_diff_key($data, array_flip($unknown));
-
-        return [ $data, $metas ];
     }
 
     /**
