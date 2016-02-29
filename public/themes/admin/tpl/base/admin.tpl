@@ -236,7 +236,36 @@
                       {/is_module_activated}
                     </div>
                   </li>
-                 {/block}
+                {/block}
+                {block name="master_actions_block"}
+                {acl isAllowed="ONLY_MASTERS"}
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                  <li class="quicklinks sysops-actions dropdown">
+                    <a href="#" data-toggle="dropdown">
+                      <i class="fa fa-rebel text-danger master-user"></i>
+                      {t}Sysops{/t}
+                    </a>
+                    <ul  class="dropdown-menu on-left" role="menu">
+                      <li>
+
+                        <a href="{url name=admin_tpl_manager}"><i class="fa fa-database"></i>Cache manager</a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcache}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcompiled}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                {/acl}
+                {/block}
               </ul>
             </div>
             <div class="pull-right ">
