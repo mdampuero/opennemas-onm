@@ -38,7 +38,7 @@ class NotificationController extends Controller
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $criteria = 'instance_id IN (0, ' . $id . ')' . ' AND (start <= \''
+        $criteria = 'instances LIKE "%' . $id . '%" AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!empty($read)) {
