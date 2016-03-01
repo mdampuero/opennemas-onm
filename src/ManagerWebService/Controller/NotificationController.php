@@ -262,6 +262,19 @@ class NotificationController extends Controller
                 ->getRepository('manager.notification')
                 ->find($id);
 
+            if (empty($notification->instances)) {
+                $notification->instances = [];
+            }
+
+            $em = $this->get('instance_manager')
+
+            $instances = [];
+            foreach ($notification->instances as $id) {
+                $instances[] = $em->find($id)->internal_name;
+            }
+
+            $notification->instances = $instances;
+
             $extra = $this->getTemplateParams();
 
             unset($extra['types']['-1']);
@@ -349,14 +362,14 @@ class NotificationController extends Controller
         $instances = $this->get('instance_manager')->findBy([]);
 
         $params['instances'] = [
-            '-1' => [ 'name' => 'Manager', 'value' => '-1' ],
-            '0'  => [ 'name' => _('All'), 'value' => '0' ]
+            [ 'name' => 'Manager', 'id' => -1 ],
+            [ 'name' => _('All'), 'id' => 0 ]
         ];
 
         foreach ($instances as $instance) {
-            $params['instances'][$instance->id] = [
+            $params['instances'][] = [
                 'name'  => $instance->internal_name,
-                'value' => $instance->id
+                'id' => $instance->id
             ];
         }
 

@@ -76,7 +76,9 @@
                 <div class="form-group">
                   <label for="template" class="form-label">{t}Instance{/t}</label>
                   <div class="controls">
-                    <select id="style" ng-model="notification.instance_id" ng-options="value.value as value.name for (key, value) in extra.instances"></select>
+                    <tags-input add-from-autocomplete-only="true" ng-model="notification.instances" display-property="name" >
+                      <auto-complete source="test($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                    </tags-input>
                   </div>
                 </div>
               </div>
@@ -158,17 +160,11 @@
             <div class="notifications">
               <ul class="notification-list notification-list-preview">
                 <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]">
-                  <div class="notification-title">
-                    [% notification.title[language] %]
-                    <span class="notification-list-item-close pull-right pointer" ng-if="notification.fixed == 0">
-                      <i class="fa fa-times"></i>
-                    </span>
-                  </div>
                   <div class="notification-icon">
                     <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
                   </div>
                   <div class="notification-body">
-                    <div ng-bind-html="notification.body[language]"></div>
+                    <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.notification.body[language]"></div>
                   </div>
                 </li>
               </ul>

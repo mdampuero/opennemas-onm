@@ -148,9 +148,9 @@ notification:
         body:
             type:    text
             options: { default: null, length: 65532, notnull: false }
-        instance_id:
-            type: bigint
-            options: { default: null }
+        instances:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         start:
             type: datetime
             options: { default: null, notnull: false }

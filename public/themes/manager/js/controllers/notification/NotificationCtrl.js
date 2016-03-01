@@ -44,7 +44,7 @@
             es: '',
             gl: '',
           },
-          instance_id: '0',
+          instances: [],
           fixed: '0',
           style: 'info',
           title: {
@@ -105,6 +105,11 @@
 
           $scope.saving = 1;
 
+          $scope.notification.instances = $scope.notification.instances
+            .map(function(a) {
+              return a.id;
+            });
+
           if ($scope.notification.start && angular.isObject($scope.notification.start)) {
             $scope.notification.start = $scope.notification.start.toString();
           }
@@ -155,6 +160,11 @@
 
           $scope.saving = 1;
 
+          $scope.notification.instances = $scope.notification.instances
+            .map(function(a) {
+              return a.id;
+            });
+
           itemService.update('manager_ws_notification_update', $scope.notification.id,
             $scope.notification).success(function (response) {
               messenger.post({ message: response, type: 'success' });
@@ -173,6 +183,19 @@
         if (data.notification) {
           $scope.notification = data.notification;
         }
+
+        $scope.test = function(query) {
+          var tags = [];
+
+          for (var i = 0; i < $scope.extra.instances.length;  i++) {
+            var instance = $scope.extra.instances[i];
+            if (!query || instance.name.indexOf(query.toLowerCase()) !== -1) {
+              tags.push(instance);
+            }
+          }
+
+          return tags;
+        };
       }
     ]);
 })();
