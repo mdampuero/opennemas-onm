@@ -44,8 +44,10 @@
 
   .notification-list-item {
     border-radius: 3px;
+    cursor: pointer;
     display: block;
-    padding: 8px 10px;
+    padding: 20px 10px;
+    position: relative;
     margin-bottom: 8px;
     transition: 0.25s ease-in all;
     width: 100%;
@@ -75,25 +77,40 @@
 .notification-item-error,
 .notification-list-item-error {
   background-color: fade(@error-color, 15%);
+
+  &:hover {
+    background-color: fade(@error-color, 25%);
+  }
 }
 
 .notification-item-info,
 .notification-list-item-info {
   background-color: fade(@info-color, 15%);
+
+  &:hover {
+    background-color: fade(@info-color, 25%);
+  }
 }
 
 .notification-item-success,
 .notification-list-item-success {
   background-color: fade(@success-color, 15%);
+
+  &:hover {
+    background-color: fade(@success-color, 25%);
+  }
 }
 
 .notification-item-warning,
 .notification-list-item-warning {
   background-color: fade(@warning-color, 15%);
+
+  &:hover {
+    background-color: fade(@warning-color, 25%);
+  }
 }
 
 .notification-body {
-  font-size: 90%;
   margin: 0;
   padding-left: 50px;
 }
@@ -103,8 +120,10 @@
   border-radius: 100%;
   float: left;
   height: 40px;
+  margin-top: -20px;
   padding: 10px;
-  position: relative;
+  position: absolute;
+  top: 50%;
   width: 40px;
 
   .fa {
