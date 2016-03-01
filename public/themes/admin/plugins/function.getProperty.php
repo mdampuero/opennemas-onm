@@ -30,6 +30,12 @@ function smarty_function_getProperty($params, &$smarty)
             if (!empty($value)) {
                 if ($property == 'bgcolor') {
                     $output .= "background-color:{$value};";
+                } elseif ($property == 'title' && !empty($params['style'])) {
+                    foreach (json_decode($value, true) as $p => $v) {
+                        if (in_array($p, [ 'color', 'background-color' ])) {
+                            $output .= "$p: $v; ";
+                        }
+                    }
                 } else {
                     $output .= "{$value}";
                 }
@@ -39,4 +45,3 @@ function smarty_function_getProperty($params, &$smarty)
 
     return $output.$end;
 }
-

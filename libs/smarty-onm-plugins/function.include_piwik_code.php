@@ -1,7 +1,14 @@
 <?php
-use \Onm\Settings as s;
 
 function smarty_function_include_piwik_code($params, &$smarty)
 {
-    return "";
+    // Fetch parameters
+    $onlyImage = (isset($params['onlyimage']) ? $params['onlyimage'] : null);
+
+    $code = '';
+    if (!is_null($onlyImage) && $onlyImage=="true") {
+        $code = getPiwikCode(true);
+    }
+
+    return $code;
 }

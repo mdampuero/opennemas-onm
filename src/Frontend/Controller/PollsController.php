@@ -315,6 +315,7 @@ class PollsController extends Controller
     protected function cleanCache($categoryName, $pollID)
     {
 
+        // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 

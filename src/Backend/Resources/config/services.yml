@@ -5,19 +5,19 @@ parameters:
 services:
     login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
-        arguments: [ @security.token_storage, @instance, @router, @session, @google_recaptcha ]
+        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha' ]
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
-        arguments: [ @security.token_storage, @router, @session ]
+        arguments: [ '@security.token_storage', '@router', '@session' ]
     onm_oauth_user_provider:
         class:     %onm_oauth_user_provider.class%
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
     onm_password_encoder:
         class:     Backend\Security\OnmPasswordEncoder
     onm_user_provider:
         class:     %onm_user_provider.class%
-        arguments: [ @cache, @instance_manager, @user_repository ]
+        arguments: [ '@cache', '@instance_manager', '@user_repository' ]
     check_module_access:
         class:     Backend\EventListener\AnnotationListener
-        arguments: [ @router, @annotation_reader ]
+        arguments: [ '@router', '@annotation_reader' ]
         tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]

@@ -31,14 +31,22 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-user fa-lg"></i>
+                <i class="fa fa-user fa-lg page-navbar-icon"></i>
                 {t}Authors{/t}
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question"></i>
+                </a>
               </h4>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks visible-xs">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <h5>
                 {if isset($user->id)}
                 {t}Editing author{/t}

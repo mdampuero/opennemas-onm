@@ -1,12 +1,12 @@
 services:
     core.subscriber.comment:
         class: Framework\EventListener\CommentSubscriber
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.notification:
         class: Framework\EventListener\NotificationSubscriber
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_subscriber }

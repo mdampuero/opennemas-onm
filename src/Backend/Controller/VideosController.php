@@ -196,6 +196,8 @@ class VideosController extends Controller
                 try {
                     $videoId = $video->create($videoData);
 
+
+                    // TODO: remove cache cleaning actions
                     $cacheManager = $this->get('template_cache_manager');
                     $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
                     $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -214,6 +216,7 @@ class VideosController extends Controller
                         $videoId = $video->create($_POST);
 
                         // Clean cache album home and frontpage for category
+                        // TODO: remove cache cleaning actions
                         $cacheManager = $this->get('template_cache_manager');
                         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
                         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -338,6 +341,7 @@ class VideosController extends Controller
             }
 
             // Clean cache home and frontpage for category
+            // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -550,6 +554,7 @@ class VideosController extends Controller
             }
 
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
             $cacheManager->delete('home|1');

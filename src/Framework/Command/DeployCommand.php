@@ -49,6 +49,10 @@ EOF
         $this->input = $input;
         $this->output = $output;
 
+        // Get the time when we have deployed the app. Used in later use.
+        // Avoids != deployment times in different servers.
+        $time = time();
+
         chdir($this->basePath);
 
         $this->executeMaintenance('enable');
@@ -77,7 +81,7 @@ EOF
             $this->cleanCache();
         }
 
-        $this->generateDeployFile();
+        $this->generateDeployFile($time);
 
         $this->cleanOpCodeCache();
     }
@@ -87,9 +91,11 @@ EOF
      *
      * @return void
      **/
-    public function generateDeployFile()
+    public function generateDeployFile($time = null)
     {
-        $time = time();
+        if (empty($time)) {
+            $time = '00000000';
+        }
         $contents = "<?php define('DEPLOYED_AT', '$time');";
 
         file_put_contents(APPLICATION_PATH.'/.deploy.php', $contents);

@@ -135,11 +135,12 @@ class Video extends Content
             return;
         }
 
-        $this->pk_video    = $rs->fields['pk_video'];
-        $this->video_url   = $rs->fields['video_url'];
-        $this->author_name = $rs->fields['author_name'];
-        $this->information = unserialize($rs->fields['information']);
-        $this->thumb       = $this->getThumb();
+        $this->pk_video       = $rs->fields['pk_video'];
+        $this->video_url      = $rs->fields['video_url'];
+        $this->author_name    = $rs->fields['author_name'];
+        $this->category_title = $this->loadCategoryTitle($rs->fields['pk_video']);
+        $this->information    = unserialize($rs->fields['information']);
+        $this->thumb          = $this->getThumb();
     }
 
     /**

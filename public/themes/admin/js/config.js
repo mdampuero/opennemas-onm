@@ -1,4 +1,7 @@
-angular.module('BackendApp')
+(function(){
+  'use strict';
+
+  angular.module('BackendApp')
   .config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[%').endSymbol('%]');
   }).config(function ($httpProvider) {
@@ -69,3 +72,5 @@ angular.module('BackendApp')
     // Enable CKEditor for all environments (browsers)
     EditorProvider.setCompatible(true);
   });
+
+})();

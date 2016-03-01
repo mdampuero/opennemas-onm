@@ -104,7 +104,7 @@ class NotificationService
         $notification->end         = date('Y-m-d H:i:s', time() + 86400);
 
         $notification->title = [
-                CURRENT_LANGUAGE_SHORT => _('Instance information')
+                CURRENT_LANGUAGE_SHORT => _('Usage of your newspaper')
         ];
 
         $notification->body = [
@@ -158,21 +158,25 @@ class NotificationService
         $body = '';
 
         if ($instance->users > 1) {
-            $body .= sprintf(
-                _('<li>You have %d activated users. The cost is %d €/day or %s €/month'),
-                $instance->users,
-                ($instance->users - 1) * 0.40,
-                ($instance->users - 1) * 10
-            );
+            $body .=
+                '<li>'
+                .sprintf(
+                    _('You have %d activated users. Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" target="_blank" title="Learn more">the cost is %s € user/month</a>'),
+                    $instance->users,
+                    12
+                )
+                .'</li>';
         }
 
         if ($instance->page_views > 45000) {
-            $body .= sprintf(_('<li>You have %d page views'), $instance->page_views);
+            $body .=
+                '<li>'
+                .sprintf(_('This month you\'re recording %d page views. '), $instance->page_views);
 
             if ($instance->page_views > 50000) {
                 $body .= sprintf(
-                    _(' The cost is %d €/month'),
-                    number_format($instance->page_views * 0.000075, 2)
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € pv/month</a>.'),
+                    number_format(0.00009, 5)
                 );
             }
 
@@ -180,15 +184,16 @@ class NotificationService
         }
 
         if ($instance->media_size > 450) {
-            $body .= sprintf(
-                _('<li>Your storage size is %d MB'),
-                round($instance->media_size)
+
+            $body .= '<li>'.sprintf(
+                _('Your are using %d Mb of storage. '),
+                $instance->media_size
             );
 
             if ($instance->media_size > 500) {
                 $body .= sprintf(
-                    _(' The cost is %d €/month'),
-                    number_format($instance->media_size * 0.01, 2)
+                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € Mb/month</a>.'),
+                    0.01
                 );
             }
 

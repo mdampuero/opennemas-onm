@@ -6,6 +6,7 @@ angular.module(
     'angulartics',
     'angulartics.google.analytics',
     'checklist-model',
+    'colorpicker.module',
     'ngAnimate',
     'ngSanitize',
     'ngTouch',
@@ -44,4 +45,3 @@ angular.module('BackendApp.directives', []);
 angular.module('BackendApp.filters', []);
 angular.module('BackendApp.interceptors', []);
 angular.module('BackendApp.services', []);
-

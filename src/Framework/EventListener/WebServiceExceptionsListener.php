@@ -42,8 +42,7 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
             return false;
         }
 
-        $handling = true;
-
+        $handling  = true;
         $exception = $event->getException();
 
         $uri = $event->getRequest()->getRequestUri();
@@ -51,13 +50,10 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         if (!($exception instanceof AuthenticationException)
             && strpos($uri, '/managerws') !== false
         ) {
-            $response = new JsonResponse(
-                array(
-                    'text' => _($exception->getMessage())
-                )
-            );
 
-            $event->setResponse($response);
+            $event->setResponse(
+                new JsonResponse([ 'text' => $exception->getMessage() ])
+            );
 
             $handling = false;
         }

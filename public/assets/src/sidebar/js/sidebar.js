@@ -26,7 +26,8 @@
      * @description
      *   Factory to create and configure new sidebar instances.
      */
-    .factory('Sidebar', ['$http', '$location', '$window', 'history', 'routing',
+    .factory(
+      'Sidebar', ['$http', '$location', '$window', 'history', 'routing',
       function($http, $location, $window, history, routing) {
         /**
          * Default template for the sidebar.

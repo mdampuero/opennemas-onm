@@ -203,7 +203,7 @@ class InstanceManager extends BaseManager
     {
         // Executing the SQL
         $sql = "SELECT id FROM `instances` "
-            ."WHERE MONTH(created) = MONTH(NOW())";
+            ."WHERE created > DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         $this->conn->selectDatabase('onm-instances');
         $rs = $this->conn->fetchAll($sql);
@@ -276,7 +276,7 @@ class InstanceManager extends BaseManager
     {
         // Executing the SQL
         $sql = "SELECT id FROM `instances` "
-            ."WHERE last_login IS NULL OR MONTH(last_login) < MONTH(NOW())";
+            ."WHERE last_login IS NULL OR last_login < DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         $this->conn->selectDatabase('onm-instances');
         $rs = $this->conn->fetchAll($sql);
@@ -664,7 +664,10 @@ class InstanceManager extends BaseManager
         $namespace = $this->cache->getNamespace();
 
         $this->cache->setNamespace($instance->internal_name);
-        $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
+        $this->sm->setConfig([
+            'database'     => $instance->getDatabaseName(),
+            'cache_prefix' => $instance->internal_name
+        ]);
 
         // Build external parameters
         $instance->external['site_name']    = $instance->name;

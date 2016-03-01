@@ -1034,6 +1034,7 @@ class MigrationSaver
                 'relationship' => '',
                 'text'         => '',
                 'position'     => 0,
+                'posinterior'  => 0,
                 'verportada'   => 0,
                 'verinterior'  => 0
             ];
@@ -1869,8 +1870,19 @@ class MigrationSaver
      */
     protected function updateRelated($values)
     {
-        $sql = "REPLACE INTO related_contents SET `pk_content1`=?, `pk_content2`=?"
-            ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?"
+        $sql = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, [$values['pk_content1'],$values['pk_content2']]);
+
+        if (!$rss) {
+            $this->output->writeln(
+                'Delete - updateRelated: ' . $this->targetConnection->ErrorMsg()
+            );
+        }
+
+        $sql = "INSERT INTO related_contents  SET `pk_content1`=?, `pk_content2`=?,"
+            ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?,"
             ."`verinterior`=?";
 
         $values = [
@@ -1885,7 +1897,14 @@ class MigrationSaver
         ];
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $this->targetConnection->Execute($stmt, $values);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
+
+        if (!$rss) {
+            $this->output->writeln(
+                'Insert - updateRelated: ' . $this->targetConnection->ErrorMsg()
+            );
+        }
+
     }
 
 

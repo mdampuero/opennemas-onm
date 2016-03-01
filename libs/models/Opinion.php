@@ -99,7 +99,10 @@ class Opinion extends Content
                         $authorName = 'author';
                     }
 
-                    if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                    if (is_array($author->meta) &&
+                        array_key_exists('is_blog', $author->meta) &&
+                        $author->meta['is_blog'] == 1
+                    ) {
                         $type = 'blog';
                     }
                 }

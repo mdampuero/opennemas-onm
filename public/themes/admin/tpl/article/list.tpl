@@ -9,9 +9,17 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-file-text-o"></i>
+              <i class="fa fa-file-text-o page-navbar-icon"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question"></i>
+              </a>
               {t}Articles{/t}
             </h4>
+          </li>
+          <li class="quicklinks visible-xs">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <i class="fa fa-question fa-lg"></i>
+            </a>
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -29,7 +37,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">

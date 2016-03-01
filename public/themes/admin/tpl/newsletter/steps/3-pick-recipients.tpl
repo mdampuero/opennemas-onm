@@ -45,7 +45,7 @@
       <div class="grid-title">
         {t}Please select your desired persons to sent the newsletter to.{/t}
       </div>
-      <div class="grid-body" ng-init="source.items = {json_encode($accounts)|clear_json}">
+      <div class="grid-body" ng-init="source.items = {json_encode($accounts)|clear_json};init(source.items)">
         <div class="row">
           <div class="col-sm-5">
             <button class="btn btn-default btn-mini pull-right" ng-click="addRecipients()" ng-disabled="source.selected.length == 0" type="button">
@@ -57,17 +57,20 @@
             </button>
             <div class="form-group">
               <label class="control-label">
-                {t}Select receivers{/t}
+                {t}Select receivers{/t} - <span class="ng-cloak">([% source.items.length %])</span>
               </label>
               <div class="controls ng-cloak">
-                <div class="m-b-10" ng-repeat="option in source.items">
-                  <div class="checkbox">
-                    <input id="checkbox-left-[% $index %]" checklist-model="source.selected" checklist-value="option" type="checkbox">
-                    <label for="checkbox-left-[% $index %]">
-                      [% option.email %]
-                    </label>
+                <div class="recipients-box">
+                  <div class="m-b-10" ng-repeat="option in sourcePagedItems">
+                    <div class="checkbox">
+                      <input id="checkbox-left-[% $index %]" checklist-model="source.selected" checklist-value="option" type="checkbox">
+                      <label for="checkbox-left-[% $index %]">
+                        [% option.email %]
+                      </label>
+                    </div>
                   </div>
                 </div>
+                <pagination ng-model="sourceCurrentPage" total-items="source.items.length" max-size="maxSize" boundary-links="true" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
               </div>
             </div>
           </div>
@@ -81,17 +84,20 @@
             </button>
             <div class="form-group">
               <label class="control-label">
-                {t}Receivers{/t}
+                {t}Receivers{/t} - <span class="ng-cloak">([% target.items.length %])</span>
               </label>
               <div class="controls ng-cloak">
-                <div class="m-b-10" ng-repeat="item in target.items">
-                  <div class="checkbox">
-                    <input id="checkbox-right-[% $index %]" checklist-model="target.selected" checklist-value="item" type="checkbox">
-                    <label for="checkbox-right-[% $index %]">
-                      [% item.email %]
-                    </label>
+                <div class="recipients-box">
+                  <div class="m-b-10" ng-repeat="item in targetPagedItems">
+                    <div class="checkbox">
+                      <input id="checkbox-right-[% $index %]" checklist-model="target.selected" checklist-value="item" type="checkbox">
+                      <label for="checkbox-right-[% $index %]">
+                        [% item.email %]
+                      </label>
+                    </div>
                   </div>
                 </div>
+                <pagination ng-model="targetCurrentPage" total-items="target.items.length" max-size="maxSize" boundary-links="true" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
               </div>
             </div>
           </div>

@@ -10,28 +10,28 @@ manager_playground:
 
 manager_instance:
     prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/instance.yml
+    resource: '@ManagerBundle/Resources/config/routing/instance.yml'
 
 manager_commands:
     prefix:   /manager/
-    resource: @ManagerBundle/Resources/config/routing/command.yml
+    resource: '@ManagerBundle/Resources/config/routing/command.yml'
 
 manager_notification:
     prefix:   /manager/
-    resource: @ManagerBundle/Resources/config/routing/notification.yml
+    resource: '@ManagerBundle/Resources/config/routing/notification.yml'
 
 manager_opcache:
     prefix:   /manager/
-    resource: @ManagerBundle/Resources/config/routing/opcache.yml
+    resource: '@ManagerBundle/Resources/config/routing/opcache.yml'
 
 manager_report:
     prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/report.yml
+    resource: '@ManagerBundle/Resources/config/routing/report.yml'
 
 manager_user:
     prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/user.yml
+    resource: '@ManagerBundle/Resources/config/routing/user.yml'
 
 manager_usergroup:
     prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/usergroup.yml
+    resource: '@ManagerBundle/Resources/config/routing/usergroup.yml'

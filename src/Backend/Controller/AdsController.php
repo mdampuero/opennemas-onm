@@ -435,19 +435,20 @@ class AdsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {
-
             $formValues = $request->request;
 
-            $settings = array(
-                'ads_settings' => array(
+            $settings = [
+                'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
                     'no_generics'     => $formValues->getDigits('ads_settings_no_generics'),
-                ),
-                'revive_ad_server' => array(
+                ],
+                'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
-                ),
-            );
+                ],
+                'tradedoubler_id' => $formValues->getDigits('tradedoubler_id'),
+                'iadbox_id' => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
+            ];
 
             foreach ($settings as $key => $value) {
                 s::set($key, $value);
@@ -458,14 +459,17 @@ class AdsController extends Controller
                 _('Settings saved successfully.')
             );
 
+            // Delete caches for frontpages
+            $this->dispatchEvent('setting.update');
+
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
-            $configurationsKeys = array('ads_settings','revive_ad_server');
+            $configurationsKeys = ['ads_settings', 'revive_ad_server', 'tradedoubler_id', 'iadbox_id'];
             $configurations = s::get($configurationsKeys);
 
             return $this->render(
                 'advertisement/config.tpl',
-                array('configs'   => $configurations,)
+                [ 'configs'   => $configurations ]
             );
         }
     }

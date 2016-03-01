@@ -36,7 +36,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="grid simple">
       <div class="grid-body">
@@ -61,14 +60,11 @@
         </div>
       </div>
     </div>
-
     <div class="grid simple">
       <div class="grid-title">
         <h5>{t}OpenX/Revive Ad server integration{/t}</h5>
       </div>
       <div class="grid-body">
-
-
         <div class="form-group">
           <label for="revive_ad_server_url" class="form-label">{t}Ad server base url{/t}</label>
           <div class="controls">
@@ -78,6 +74,36 @@
         </div>
       </div>
     </div>
+    <div class="grid simple">
+      <div class="grid-title">
+        <h5>{t}Tradedoubler integration{/t}</h5>
+      </div>
+      <div class="grid-body">
+        <div class="form-group">
+          <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="number" name="tradedoubler_id" value="{$configs['tradedoubler_id']}">
+            <div class="help-block">{t}Only the ID from Tradedoubler validation tag{/t}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {is_module_activated name="IADBOX_MANAGER"}
+    <div class="grid simple">
+      <div class="grid-title">
+        <h5>{t}Iadbox integration{/t}</h5>
+      </div>
+      <div class="grid-body">
+        <div class="form-group">
+          <label for="iadbox_id" class="form-label">{t}Iadbox ID{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="iadbox_id" value="{$configs['iadbox_id']}">
+            <div class="help-block">{t}Iadbox affiliate ID{/t}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {/is_module_activated}
   </div>
 </form>
 {/block}

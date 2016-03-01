@@ -104,7 +104,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             && !$options['media_size']
             && !$options['created']
         ) {
-            $this->output->writeln('<error>Please provide --instnace-stats --alexa, --views, --media-size or --created</error>');
+            $this->output->writeln('<error>Please provide --instance-stats --alexa, --views, --media-size or --created</error>');
             return 1;
         }
 
@@ -146,59 +146,82 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         // Update instance stats
         if ($options['instance_stats']) {
             if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("\t- Getting instance stats (emails, users, content numbers)");
+                $this->output->write("\t- Getting instance stats (emails, users, content numbers) ");
             }
+
             $this->getInstanceStats($i);
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln("<fg=green>DONE</>");
+            }
         }
 
         // Update created data
         if ($options['created']) {
             if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("\t- Getting instance creational date");
+                $this->output->write("\t- Getting instance creational date ");
             }
+
             $this->getCreatedDate($i);
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln("<fg=green>DONE</>");
+            }
         }
 
-        // Get Piwik config and last invoice date
-        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_login\'';
-        $rs  = $this->im->getConnection()->fetchAll($sql);
 
-        $piwik = null;
+        // Get the page views from Piwik
+        if ($options['views']) {
+            if ($this->output->isVeryVerbose()) {
+                $this->output->write("\t- Getting page num views ");
+            }
+            $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
+            $rs  = $this->im->getConnection()->fetchAll($sql);
 
-        if ($rs !== false && !empty($rs)) {
-            foreach ($rs as $value) {
-                if ($value['name'] == 'piwik') {
-                    $piwik = unserialize($value['value']);
-                } else {
-                    $i->last_login = unserialize($value['value']);
+            if ($rs !== false && !empty($rs)) {
+                $piwik = unserialize($rs[0]['value']);
+
+                if (is_array($piwik) && array_key_exists('page_id', $piwik)) {
+                    $i->page_views = $this->getPageViews($piwik['page_id']);
                 }
+
+                $message = "<fg=green>DONE</>";
+            } else {
+
+                $message = "<error>FAILED</error>"."Piwik code not available";
+            }
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln($message);
             }
         }
 
         $this->im->getConnection()->close();
 
-        // Get the page views from Piwik
-        if ($options['views'] && !empty($piwik)) {
-            if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("\t- Getting page num views");
-            }
-            $i->page_views = $this->getPageViews($piwik['page_id']);
-        }
-
         // Check domain's rank in Alexa
         if ($options['alexa'] && !empty($i->domains)) {
             if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("\t- Getting rank from alexa");
+                $this->output->write("\t- Getting rank from alexa ");
             }
+
             $i->alexa = $this->getAlexa($i->getMainDomain());
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln("<fg=green>DONE</>");
+            }
         }
 
         // Get media size
         if ($options['media_size']) {
             if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("\t- Getting media size");
+                $this->output->write("\t- Getting media size ");
             }
+
             $this->getMediaSize($i);
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln("<fg=green>DONE</>");
+            }
         }
     }
 
@@ -261,6 +284,14 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         if ($rs) {
             $i->emails = $rs[0];
+        }
+
+        // Get last login date
+        $sql = 'SELECT * FROM settings WHERE name=\'last_login\'';
+        $rs  = $this->im->getConnection()->fetchAll($sql);
+
+        if ($rs !== false && !empty($rs)) {
+            $i->last_login = unserialize($rs[0]['value']);
         }
 
         // Get the creation date of the last created content

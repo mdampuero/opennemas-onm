@@ -449,6 +449,42 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $scope.selected.lastSelected = item;
     };
 
+    $scope.saveBilling = function(template) {
+      var url = routing.generate('backend_ws_store_billing');
+      var data = $scope.extra.billing;
+      $http.post(url, data).success(function() {
+        template.step = 2;
+      });
+    };
+
+    $scope.checkPhone = function(t) {
+      var url = routing.generate('backend_ws_store_check_phone',
+          { country: $scope.extra.billing.country, phone: $scope.extra.billing.phone });
+
+      $http.get(url).success(function() {
+        t.validPhone = true;
+      }).error(function() {
+        t.validPhone = false;
+      });
+    };
+
+    $scope.checkVat = function(t) {
+      if (!$scope.extra.billing || !$scope.extra.billing.country ||
+          !$scope.extra.billing.phone) {
+        t.validPhone = false;
+        return;
+      }
+
+      var url = routing.generate('backend_ws_store_check_vat',
+          { country: $scope.extra.billing.country, vat: $scope.extra.billing.vat });
+
+      $http.get(url).success(function() {
+        t.validVat = true;
+      }).error(function() {
+        t.validVat = false;
+      });
+    };
+
     /**
      * Sort by function
      *
@@ -548,9 +584,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         resolve: {
           template: function() {
             return {
-              name:     name,
-              value:    value,
-              selected: $scope.selected
+              checkPhone:  $scope.checkPhone,
+              checkVat:    $scope.checkVat,
+              extra:       $scope.extra,
+              name:        name,
+              saveBilling: $scope.saveBilling,
+              selected:    $scope.selected,
+              value:       value
             };
           },
           success: function() {
@@ -558,7 +598,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
               // Load shared variable
               var selected = $scope.selected.contents;
 
-              updateItemsStatus(loading, 1);
+              $scope.updateItemsStatus(loading, 1);
 
               var url = routing.generate(route,
                 { contentType: $scope.criteria.content_type_name });
@@ -574,9 +614,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.renderMessages(response.data.messages);
 
           if (response.status === 200) {
-            updateItemsStatus(loading, 0, name, value);
+            $scope.updateItemsStatus(loading, 0, name, value);
           }
         }
+
+        $scope.selected.contents = [];
+        $scope.selected.all = false;
       });
     };
 
@@ -1099,7 +1142,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param  string  name    Name of the property to update.
      * @param  mixed   value   Value of the property to update.
      */
-    function updateItemsStatus(loading, status, name, value) {
+    $scope.updateItemsStatus = function(loading, status, name, value) {
       // Load shared variables
       var contents = $scope.contents;
       var selected = $scope.selected.contents;
