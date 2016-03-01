@@ -251,18 +251,14 @@
                       </div>
                       <ul class="notification-list" ng-show="notifications.length > 0">
                         <scrollable>
-                        <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
-                          <div class="notification-title">
-                            [% notification.title %]
-                            <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
-                              <i class="fa fa-times"></i>
-                            </span>
-                          </div>
-                          <div class="notification-icon">
-                            <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
-                          </div>
-                          <div class="notification-body" ng-bind-html="notification.body"></div>
-                        </li>
+                        <a class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]" ng-repeat="notification in notifications">
+                          <li>
+                            <div class="notification-icon">
+                              <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
+                            </div>
+                            <div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body"></div>
+                          </li>
+                        </a>
                         </scrollable>
                       </ul>
                       <div class="dropdown-footer clearfix">
