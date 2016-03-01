@@ -75,7 +75,7 @@
     "jquery.tagsinput": "1.3.6",
     "jquery2": "jquery#2.1.1",
     "jqueryui-touch-punch": "*",
-    "jqvmap": "stable",
+    "jqvmap": "*",
     "jvectormap": "2.0.2",
     "messenger": "1.4.1",
     "metrojs": "https://github.com/drewgreenwell/MetroJS.git#0.9.6",
