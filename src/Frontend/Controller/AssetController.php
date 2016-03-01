@@ -260,14 +260,15 @@ class AssetController extends Controller
         ) {
             $ccm = \ContentCategoryManager::get_instance();
 
-            // RenderColorMenu - ADDED RENDER COLOR MENU
+            // RenderColorMenu
+            $siteColor = '#005689';
             $configColor = s::get('site_color');
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
                     $siteColor = '#'.$configColor;
+                } else {
+                    $siteColor = $configColor;
                 }
-            } else {
-                $siteColor = '#005689';
             }
 
             $selectedCategories = array();
