@@ -161,11 +161,11 @@ class VideosController extends Controller
             }
 
             // Pagination for block more videos (ajax)
-            $url = [ 'name' => 'frontend_video_page_frontpage' ];
+            $url = [ 'name' => 'frontend_video_ajax_paginated' ];
             $total = count($othersVideos)+1;
             if ($this->category != 0) {
                 $url = [
-                    'name' => 'frontend_video_page_frontpage',
+                    'name' => 'frontend_video_ajax_paginated',
                     'params' => [ 'category_name' => $this->category_name ]
                 ];
                 $total = count($allVideos)+1;
