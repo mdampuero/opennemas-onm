@@ -29,7 +29,7 @@ class NotificationController extends Controller
     {
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
-        $epp  = $request->query->getDigits('epp', 10);
+        $epp  = $request->query->getDigits('epp', 100);
         $id   = $this->get('instance')->id;
         $page = $request->query->getDigits('page', 1);
 
@@ -223,8 +223,20 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        $notification['title'] = $notification['title'][CURRENT_LANGUAGE_SHORT];
-        $notification['body']  = $notification['body'][CURRENT_LANGUAGE_SHORT];
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])) {
+            $notification['title'] =
+                $notification['title'][CURRENT_LANGUAGE_SHORT];
+        } else {
+            $notification['title'] = array_pop($notification['title']);
+        }
+
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])) {
+            $notification['body'] =
+                $notification['body'][CURRENT_LANGUAGE_SHORT];
+        } else {
+            $notification['body']  = array_pop($notification['body']);
+        }
+
         $notification['read']  = 0;
 
         $date = \DateTime::createFromFormat(
