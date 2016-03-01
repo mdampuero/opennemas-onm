@@ -458,7 +458,7 @@ function genarateGAImageCode($config)
                 urlencode(SITE_URL),
                 urlencode(SITE_URL.'newsletter/'.date("Ymd")),
                 urlencode('newsletter/'.date("Ymd")),
-                $account['api_key'],
+                trim($account['api_key']),
                 '__utma%3D999.999.999.999.999.1%3B'
             );
         }
