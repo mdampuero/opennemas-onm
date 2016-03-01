@@ -7,7 +7,6 @@ angular.module(
     'http-interceptor',
     'ManagerApp.controllers',
     'ngAnimate',
-    'ngQuickDate',
     'ngRoute',
     'ngSanitize',
     'ngTagsInput',
