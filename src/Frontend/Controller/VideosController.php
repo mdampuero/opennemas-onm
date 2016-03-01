@@ -85,7 +85,7 @@ class VideosController extends Controller
             $totalVideosFrontpage       = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
             $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
             $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
-            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
+            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:0;
             $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
 
             if ($this->category_name != 'home') {
@@ -160,18 +160,24 @@ class VideosController extends Controller
                 }
             }
 
-
             // Pagination for block more videos (ajax)
+            $url = [ 'name' => 'frontend_video_page_frontpage' ];
+            $total = count($othersVideos)+1;
+            if ($this->category != 0) {
+                $url = [
+                    'name' => 'frontend_video_page_frontpage',
+                    'params' => [ 'category_name' => $this->category_name ]
+                ];
+                $total = count($allVideos)+1;
+            }
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
                 'epp'         => $totalVideosMoreFrontpage,
                 'page'        => $this->page,
-                'total'       => count($othersVideos)+1,
-                'route'       => [
-                    'name'   => 'frontend_video_ajax_paginated',
-                ]
+                'total'       => $total,
+                'route'       => $url
             ]);
 
             if (isset($pagination->links)) {
@@ -192,7 +198,7 @@ class VideosController extends Controller
                 'maxLinks'    => 0,
                 'epp'         => $totalVideosMoreFrontpage,
                 'page'        => $this->page,
-                'total'       => count($othersVideos)+1,
+                'total'       => $total,
                 'route'       => $route
             ]);
 
