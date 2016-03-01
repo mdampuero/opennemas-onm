@@ -16,7 +16,7 @@ manager_ws_instance:
     prefix:   /
 
 manager_ws_module:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/module.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/module.yml'
     prefix:   /
 
 manager_ws_notification:
