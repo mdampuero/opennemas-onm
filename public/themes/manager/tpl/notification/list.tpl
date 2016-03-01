@@ -381,7 +381,9 @@
                 </div>
               </td>
               <td>
-                [% extra.instances[item.instance_id].name %]
+                <div ng-repeat="id in item.instances">
+                  [% extra.instances[id].name %]
+                </div>
               </td>
               <td class="text-center">
                 <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-comment': item.type === 'comment', 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type !== 'comment' && item.type !== 'media' && item.type !== 'email' && item.type !== 'help' && item.type !== 'user', 'fa-users': item.type === 'user' }"></i>

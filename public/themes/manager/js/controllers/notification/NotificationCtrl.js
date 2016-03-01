@@ -160,13 +160,15 @@
 
           $scope.saving = 1;
 
-          $scope.notification.instances = $scope.notification.instances
+          var data = angular.copy($scope.notification);
+
+          data.instances = data.instances
             .map(function(a) {
               return a.id;
             });
 
           itemService.update('manager_ws_notification_update', $scope.notification.id,
-            $scope.notification).success(function (response) {
+            data).success(function (response) {
               messenger.post({ message: response, type: 'success' });
               $scope.saving = 0;
             }).error(function(response) {

@@ -175,8 +175,11 @@ class NotificationController extends Controller
 
         $ids = [];
         foreach ($notifications as &$notification) {
-            $ids[] = $notification->instance_id;
+            if (empty($notification->instances)) {
+                $notification->instances = [];
+            }
 
+            $ids = array_merge($ids, $notification->instances);
             $notification = $notification->getData();
         }
 
@@ -266,16 +269,22 @@ class NotificationController extends Controller
                 $notification->instances = [];
             }
 
-            $em = $this->get('instance_manager')
+            $extra = $this->getTemplateParams();
+            $em = $this->get('instance_manager');
 
             $instances = [];
             foreach ($notification->instances as $id) {
-                $instances[] = $em->find($id)->internal_name;
+                if ($id == 0) {
+                    $instances[] = [ 'name' => _('All'), 'id' => $id ];
+                } elseif ($id == -1) {
+                    $instances[] = [ 'name' => 'Manager', 'id' => $id ];
+                } else {
+                    $instances[] = [ 'name' => $em->find($id)->internal_name, 'id' => $id ];
+                }
             }
 
             $notification->instances = $instances;
 
-            $extra = $this->getTemplateParams();
 
             unset($extra['types']['-1']);
 
