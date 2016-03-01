@@ -16,6 +16,10 @@ manager_commands:
     prefix:   /manager/
     resource: '@ManagerBundle/Resources/config/routing/command.yml'
 
+manager_module:
+    prefix:   /manager/
+    resource: @ManagerBundle/Resources/config/routing/module.yml
+
 manager_notification:
     prefix:   /manager/
     resource: '@ManagerBundle/Resources/config/routing/notification.yml'

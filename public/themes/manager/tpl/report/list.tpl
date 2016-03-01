@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_reports_list') %]">
-              <i class="fa fa-files-o fa-lg"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_reports_list') %]">
+              <i class="fa fa-files-o"></i>
               {t}Reports{/t}
             </a>
           </h4>
@@ -18,11 +18,11 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-form no-boarder">
+        <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-model="criteria.title" placeholder="Filter report by name" type="text" style="width:250px;"/>
+          <input class="no-boarder" ng-model="criteria.title" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
         </li>
       </ul>
     </div>
@@ -37,7 +37,7 @@
           <thead>
             <tr>
               <th>{t}Report{/t}</th>
-              <th class="text-right">{t}Action{/t}</th>
+              <th class="text-center" width="150">{t}Action{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -51,8 +51,8 @@
                   [% item.description %]
                 </div>
               </td>
-              <td class="text-right">
-                <a class="btn btn-primary" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+              <td class="text-center">
+                <a class="btn btn-success" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
                   <i class="fa fa-download"></i>
                   {t}Download{/t}
                 </a>

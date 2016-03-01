@@ -38,6 +38,8 @@ sensio_framework_extra:
     security: { annotations: true }
 
 opennemas:
+    paths:
+        extensions_assets_path: /media/core/extensions
     assetic:
         # Force compilation
         asset_compilation_in_dev: %opennemas.assetic.asset_compilation_in_dev%

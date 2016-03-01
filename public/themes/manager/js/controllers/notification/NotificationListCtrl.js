@@ -6,6 +6,7 @@
      * @ngdoc controller
      * @name  NotificationListCtrl
      *
+     * @requires $controller
      * @requires $modal
      * @requires $scope
      * @requires itemService
@@ -18,8 +19,16 @@
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($modal, $scope, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ListCtrl', {
+          $scope:   $scope,
+          $timeout: $timeout,
+          data:     data
+        }));
+
         /**
          * @memberOf NotificationListCtrl
          *
@@ -28,9 +37,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = {
-          name_like: []
-        };
+        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf NotificationListCtrl
@@ -52,31 +59,6 @@
          * @memberOf NotificationListCtrl
          *
          * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   The list of selected elements.
-         *
-         * @type {Array}
-         */
-        $scope.selected = {
-          all: false,
-          items: []
-        };
-
-        /**
-         * @memberOf NotificationListCtrl
-         *
-         * @description
          *   The listing order.
          *
          * @type {Object}
@@ -87,68 +69,30 @@
         }];
 
         /**
-         * @memberOf NotificationListCtrl
+         * @function countStringsLeft
+         * @memberOf ModuleListCtrl
          *
          * @description
-         *   The current pagination status.
+         *   Counts the number of remaining strings for a language.
          *
-         * @type {Object}
+         * @param {Object} item The item to check.
+         *
+         * @return {Integer} The number of remaining strings.
          */
-        $scope.pagination = {
-          epp: data.epp ? parseInt(data.epp) : 25,
-          page: data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
+        $scope.countStringsLeft = function(item) {
+          var left = 0;
 
-        /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Checks if a columns is selected.
-         *
-         * @param {String} id The columns name.
-         */
-        $scope.isEnabled = function(id) {
-          return $scope.columns.selected.indexOf(id) !== -1;
-        };
+          for (var lang in $scope.extra.languages) {
+            if (!item.title || !item.title[lang]) {
+              left++;
+            }
 
-        /**
-         * @function isOrderedBy
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Checks if the listing is ordered by the given field name.
-         *
-         * @param string name The field name.
-         *
-         * @return mixed The order value, if the order exists. Otherwise,
-         *               returns false.
-         */
-        $scope.isOrderedBy = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
+            if (!item.body || !item.body[lang]) {
+              left++;
+            }
           }
 
-          if (i < $scope.orderBy.length) {
-            return $scope.orderBy[i].value;
-          }
-
-          return false;
-        };
-
-        /**
-         * @function isSelected
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Checks if an notification is selected.
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-          return $scope.selected.items.indexOf(id) !== -1;
+          return left;
         };
 
         /**
@@ -246,54 +190,50 @@
         };
 
         /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
+         * @function list
+         * @memberOf InstanceListCtrl
          *
          * @description
-         *   Reloads the listing.
+         *   Reloads the list.
          */
-        $scope.refresh = function() {
-          list();
-        };
+        $scope.list = function () {
+          $scope.loading = 1;
 
-        /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Reloads the list on keypress.
-         *
-         * @param  Object event The even object.
-         */
-        $scope.searchByKeypress = function(event) {
-          if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
-            } else {
-              list();
+          // Search by name, domains and contact mail
+          if ($scope.criteria.name_like) {
+            $scope.criteria.domains_like =
+              $scope.criteria.contact_mail_like =
+              $scope.criteria.name_like;
+          }
+
+          var cleaned = itemService.cleanFilters($scope.criteria);
+
+          var data = {
+            criteria: cleaned,
+            orderBy: $scope.orderBy,
+            epp: $scope.pagination.epp, // elements per page
+            page: $scope.pagination.page
+          };
+
+          itemService.encodeFilters($scope.criteria, $scope.orderBy,
+            $scope.pagination.epp, $scope.pagination.page);
+
+          itemService.list('manager_ws_notifications_list', data).then(
+            function(response) {
+              $scope.items = response.data.results;
+              $scope.pagination.total = response.data.total;
+              $scope.extra = response.data.extra;
+
+              $scope.loading = 0;
+
+              // Scroll top
+              $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
-          }
+          );
         };
 
         /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Selects/unselects all notifications.
-         */
-        $scope.selectAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(notification) {
-              return notification.id;
-            });
-          } else {
-            $scope.selected.items = [];
-          }
-        };
-
-        /**
-         * @function isEnabled
+         * @function setEnabled
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -316,7 +256,7 @@
         };
 
         /**
-         * @function isEnabled
+         * @function setEnabledSelected
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -379,118 +319,12 @@
             });
         };
 
-        /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Changes the sort order.
-         *
-         * @param string name Field name.
-         */
-        $scope.sort = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i >= $scope.orderBy.length) {
-            $scope.orderBy.push({
-              name: name,
-              value: 'asc'
-            });
-          } else {
-            if ($scope.orderBy[i].value === 'asc') {
-              $scope.orderBy[i].value = 'desc';
-            } else {
-              $scope.orderBy.splice(i, 1);
-            }
-          }
-
-          $scope.pagination.page = 1;
-        };
-
-        /**
-         * @function isEnabled
-         * @memberOf NotificationListCtrl
-         *
-         * @description
-         *   Toggles column filters container.
-         */
-        $scope.toggleColumns = function() {
-          $scope.columns.collapsed = !$scope.columns.collapsed;
-
-          if (!$scope.columns.collapsed) {
-            $scope.scrollTop();
-          }
-        };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.columns = null;
-          $scope.pagination.epp = null;
-          $scope.items = null;
-          $scope.selected = null;
-          $scope.orderBy = null;
-          $scope.pagination.page = null;
-          $scope.pagination.total = null;
-        });
-
-        // Refresh the list of elements when some parameter changes
-        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            list();
-          }
-        }, true);
-
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
             webStorage.local.add('notifications-columns', $scope.columns);
           }
         }, true);
-
-        /**
-         * Searches notifications given a criteria.
-         *
-         * @return Object The function to execute past 500 ms.
-         */
-        function list() {
-          $scope.loading = 1;
-
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
-          var cleaned = itemService.cleanFilters($scope.criteria);
-
-          var data = {
-            criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
-          };
-
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
-
-          itemService.list('manager_ws_notifications_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
-
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
-        }
 
         // Initialize filters from URL
         var filters = itemService.decodeFilters();
@@ -502,11 +336,6 @@
         if (webStorage.local.get('notifications-columns')) {
           $scope.columns = webStorage.local.get('notifications-columns');
         }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
-        }
       }
     ]);
 })();
-

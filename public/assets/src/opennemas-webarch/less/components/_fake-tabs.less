@@ -1,5 +1,5 @@
 .fake-tabs {
-  background: @background-color;
+  background: #fff;
   border-top: 1px solid @border-color;
   border-bottom: 1px solid @border-color;
   height: 50px;
@@ -7,11 +7,16 @@
   padding: 0;
   margin: 0;
 
+  &.no-b-t {
+    border-top: 1px solid transparent;
+  }
+
   li {
     cursor: pointer;
     border: 1px solid transparent;
     float: left;
     padding: 15px;
+    position: relative;
     height: 50px;
     margin-top: -1px;
     text-align: center;

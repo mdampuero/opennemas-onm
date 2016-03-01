@@ -1,0 +1,71 @@
+manager_ws_module_check:
+    path:     /modules/check/{uuid}
+    defaults: { _controller: ManagerWebServiceBundle:Module:check }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+
+manager_ws_module_create:
+    path:     /modules
+    defaults: { _controller: ManagerWebServiceBundle:Module:create }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_module_delete:
+    path:     /modules/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Module:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_module_new:
+    path:     /module/new
+    defaults: { _controller: ManagerWebServiceBundle:Module:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_module_patch:
+    path:     /modules/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Module:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_module_show:
+    path:     /modules/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Module:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_module_update:
+    path:     /modules/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Module:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    methods:  [ GET ]
+
+manager_ws_modules_delete:
+    path:     /modules
+    defaults: { _controller: ManagerWebServiceBundle:Module:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_modules_list:
+    path:     /modules
+    defaults: { _controller: ManagerWebServiceBundle:Module:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_modules_patch:
+    path:     /modules
+    defaults: { _controller: ManagerWebServiceBundle:Module:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
