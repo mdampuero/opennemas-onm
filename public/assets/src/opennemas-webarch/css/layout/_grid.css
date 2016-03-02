@@ -5,6 +5,10 @@
   padding: 15px;
 }
 
+.grid.simple .grid-body {
+  border-color: #e5e5e5;
+}
+
 .grid-body.blue {
   background-color: #0090d9 !important;
 }

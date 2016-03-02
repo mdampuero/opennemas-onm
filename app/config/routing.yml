@@ -1,49 +1,45 @@
 backend:
-    resource: @BackendBundle/Resources/config/routing.yml
+    resource: '@BackendBundle/Resources/config/routing.yml'
     prefix:   /admin
 
 backend_webservice:
-    resource: @BackendWebServiceBundle/Resources/config/routing.yml
+    resource: '@BackendWebServiceBundle/Resources/config/routing.yml'
     prefix:   /admin/entityws
 
 frontendmobile:
-    resource: @FrontendMobileBundle/Resources/config/routing.yml
-    prefix:   /mobile
+    resource: '@FrontendMobileBundle/Resources/config/routing.yml'
+    prefix:   /
 
 manager_webservice:
-    resource: @ManagerWebServiceBundle/Resources/config/routing.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing.yml'
     prefix:   /managerws
 
 manager:
-    resource: @ManagerBundle/Resources/config/routing.yml
+    resource: '@ManagerBundle/Resources/config/routing.yml'
     prefix:   /
 
 webservice:
-    resource: @WebServiceBundle/Resources/config/routing.yml
+    resource: '@WebServiceBundle/Resources/config/routing.yml'
     prefix:   /ws
 
 frontend:
-    resource: @FrontendBundle/Resources/config/routing.yml
+    resource: '@FrontendBundle/Resources/config/routing.yml'
     prefix:   /
 
 fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
 
 # base paths
 admin_welcome:
     path: '/admin'
     defaults: { _controller  : BackendBundle:Welcome:default }
 
-frontendmobile_root:
-    path: '/mobile'
-    defaults: { _controller : FrontendMobileBundle:Frontpages:show }
-
 hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    resource: '@HWIOAuthBundle/Resources/config/routing/redirect.xml'
     prefix:   /admin/connect
 
 hwi_oauth_login:
-    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    resource: '@HWIOAuthBundle/Resources/config/routing/login.xml'
     prefix:   /admin/login
 
 facebook_login:

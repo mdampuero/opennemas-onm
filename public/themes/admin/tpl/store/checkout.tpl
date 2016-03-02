@@ -124,7 +124,7 @@
                   <p>{t escape=off}If you need to update this information please <a href="mailto:sales@openhost.es">contact us</a>.{/t}</p>
                   <div class="ng-cloak p-b-30" ng-show="edit">
                     <h5 class="m-t-20">{t}Contact information{/t}</h5>
-                    <form name="billingForm">
+                    <form name="billingForm" id="formulario">
                       <div class="row">
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.name.$invalid, 'has-success': billingForm.name.$dirty && billingForm.name.$valid }">
                           <div class="input-with-icon right">

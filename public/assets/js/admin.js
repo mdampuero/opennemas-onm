@@ -35,19 +35,26 @@ $(document).ready(function() {
       $('.btn.btn-primary .text').html(btn.data('text'));
     });
 
-    if ($('#formulario').length > 0 ||
-        $('form[name="billingForm"]').length > 0
-    ) {
-      $(document).on('keydown', function (e) {
-        if (e.which === 8 && !$(e.target).is('input, textarea')) {
-          window.onbeforeunload = function() {
+    if ($('#formulario').length > 0) {
+      // Get form values and set unsaved
+      var ov = $('#formulario').serialize();
+      var unsaved = true;
+      // Check for CKEditor changes
+      for (var i in CKEDITOR.instances) {
+        CKEDITOR.instances[i].on('change', function() {
+          ov = null;
+        });
+      }
+      // Bind the event
+      $(window).bind('beforeunload', function(e) {
+        var nv = $('#formulario').serialize();
+        if((ov != nv) && unsaved){
             return leaveMessage;
-          }
         }
       });
-
-      $(document).on('click', function (e) {
-        window.onbeforeunload = null;
+      // Allow to save changes
+      $('#formulario').on('submit', function(){
+        unsaved = false;
       });
     }
 

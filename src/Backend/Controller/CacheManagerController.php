@@ -29,61 +29,7 @@ use Onm\Settings as s;
 class CacheManagerController extends Controller
 {
     /**
-     * Lists cache files and perform searches across them
-     *
-     * @param Request $request the request object
-     *
-     * @return string the string response
-     *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
-    public function defaultAction(Request $request)
-    {
-        $types = [
-            [ 'name' => _('All'), 'value' => '-1' ],
-            [ 'name' => _('Frontpages'), 'value' => 'frontpages' ],
-            [ 'name' => _('Article - inner'), 'value' => 'articles' ],
-            [ 'name' => _('Mobile - frontpages'), 'value' => 'mobilepages' ],
-            [ 'name' => _('RSS'), 'value' => 'rss' ],
-            [ 'name' => _('Opinion - Authors'), 'value' => 'frontpage-opinions' ],
-            [ 'name' => _('Opinion - inner'), 'value' => 'opinions' ],
-            [ 'name' => _('Video - frontpage'), 'value' => 'video-frontpage' ],
-            [ 'name' => _('Video - inner'), 'value' => 'video-inner' ],
-            [ 'name' => _('Album - frontpage'), 'value' => 'gallery-frontpage' ],
-            [ 'name' => _('Album - inner'), 'value' => 'gallery-inner' ],
-            [ 'name' => _('Poll - frontpage'), 'value' => 'poll-frontpage' ],
-            [ 'name' => _('Poll - inner'), 'value' => 'poll-inner' ]
-        ];
-
-        return $this->render(
-            'tpl_manager/list.tpl',
-            [ 'types' => $types ]
-        );
-    }
-
-    /**
-     * Deletes all the frontend cache files
-     * DANGER: this action has really CPU expensive
-     *
-     * @return string the result string
-     *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
-    public function deleteAllAction()
-    {
-        // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
-        $frontpageTemplate->clearAllCache();
-
-        return $this->redirect($this->generateUrl('admin_tpl_manager'));
-    }
-
-    /**
-     * Show the configuration form and stores it information
+     * Show the configuration form and stores its information
      *
      * @param Request $request the request object
      *
@@ -95,17 +41,13 @@ class CacheManagerController extends Controller
      **/
     public function configAction(Request $request)
     {
-        // Initialization of the frontend template object
+        // Init template cache config manager with frontend user template
         $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $configDir         = $frontpageTemplate ->config_dir[0];
+        $configContainer   = $this->container->get('template_cache_config_manager');
+        $configManager     = $configContainer->setConfigDir($configDir);
 
-        // Initialization of the template cache manager
-        $this->cacheManager = $this->get('template_cache_manager');
-        $this->cacheManager->setSmarty($frontpageTemplate);
-
-        $configDir       = $frontpageTemplate ->config_dir[0];
-        $configContainer = $this->container->get('template_cache_config_manager');
-        $configManager   = $configContainer->setConfigDir($configDir);
-
+        // If the request is post then save the configuration with the data provided
         if ($this->request->getMethod() == 'POST') {
             $config = array();
             $cacheGroups         = $request->request->get('groups');
@@ -125,88 +67,60 @@ class CacheManagerController extends Controller
             // Save changes on file
             $saved = $configManager->save($config);
 
+            $flashBag = $this->get('session')->getFlashBag();
             if ($saved) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Cache configuration saved successfully.')
-                );
+                $flashBag->add('success', _('Cache configuration saved successfully.'));
             } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to save the cache configuration.')
-                );
+                $flashBag->add('error', _('Unable to save the cache configuration.'));
             }
 
-            return $this->redirect(
-                $this->generateUrl('admin_tpl_manager_config')
-            );
+            return $this->redirect($this->generateUrl('admin_tpl_manager_config'));
         } else {
+            // Load cache manager config and show the form with that info
             $config = $configManager->load();
 
             return $this->render(
-                'tpl_manager/config.tpl',
+                'cache_manager/config.tpl',
                 ['config' => $config]
             );
         }
     }
 
     /**
-     * Builds the search filter for listing the listing cache action
+     * Deletes all the frontend cache files
+     * DANGER: this action is really CPU expensive
      *
-     * @param Request $request the request object
+     * @return string the result string
      *
-     * @return array
+     * @Security("has_role('CACHE_TPL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="CACHE_MANAGER")
      **/
-    private function buildFilter($request)
+    public function clearCacheAction()
     {
-        $section      = $request->query->get('section', null);
-        $type         = $request->query->get('type', null);
-        $page         = $request->query->get('page', 1);
-        $itemsPerPage = $request->query->get('items_page', 15);
-        if (empty($itemsPerPage)) {
-            $itemsPerPage = 15;
-        }
+        // Initialization of the frontend template object
+        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate->clearAllCache();
 
-        // If section is defined include it in filter and params
-        $filter = '';
-        $params = array();
-        if (isset($section) && !empty($section)) {
-            $filter  .= '^'.preg_quote($section).'\^.*?';
-            $params[] = 'section='.$section;
-        }
+        return $this->redirect($this->generateUrl('admin_tpl_manager'));
+    }
 
-        // If cache file type is defined include it in filter and params
-        if (isset($type) && !empty($type)) {
-            $regexp = array(
-                'frontpages'         => 'frontpage\.tpl\.php$',
-                'opinions'           => 'opinion\.tpl\.php$',
-                'frontpage-opinions' => 'opinion_author_index\.tpl\.php$',
-                'articles'           => 'article\.tpl\.php$',
-                'rss'                => '\^RSS[0-9]*\^',
-                'mobilepages'        => 'frontpage-mobile\.tpl\.php$',
-                'poll'               => 'poll\.tpl\.php$',
-                'video-frontpage'    => 'video_frontpage\.tpl\.php$',
-                'video-inner'        => 'video_inner\.tpl\.php$',
-                'gallery-frontpage'  => 'album_frontpage\.tpl\.php$',
-                'gallery-inner'      => 'album\.tpl\.php$',
-                'poll-frontpage'     => 'poll_frontpage\.tpl\.php$',
-                'poll-inner'         => 'poll.tpl\.php$',
-            );
-            $filter  .= $regexp[ $_REQUEST['type'] ];
-            $params[] = 'type='.$_REQUEST['type'];
-        }
+    /**
+     * Deletes all the frontend cache files
+     * DANGER: this action is really CPU expensive
+     *
+     * @return string the result string
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="CACHE_MANAGER")
+     **/
+    public function clearCompiledTemplatesAction()
+    {
+        // Initialization of the frontend template object
+        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate->clearCompiledTemplate();
 
-        // If page is defined include it in params and page
-        if (!empty($page)) {
-            $params[] = 'page='.$page;
-        }
-
-        $params[] = 'items_page='.$itemsPerPage;
-        if (!empty($filter)) {
-            $filter = '@'.$filter.'@';
-        }
-
-        // return $filter and URI $params
-        return array($filter, implode('&', $params), $page, $itemsPerPage);
+        return $this->redirect($this->generateUrl('admin_tpl_manager'));
     }
 }

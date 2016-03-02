@@ -80,7 +80,7 @@
               <div class="form-group">
                 <label for="description" class="form-label">{t}Description{/t}</label>
                 <div class="controls">
-                  <textarea name="description" id="description" onm-editor onm-editor-preset="simple">{$special->description|clearslash}</textarea>
+                  <textarea name="description" id="description" ng-model="description" onm-editor onm-editor-preset="simple">{$special->description|clearslash}</textarea>
                 </div>
               </div>
             </div>

@@ -8,7 +8,7 @@
  * Purpose:  Prints Google Analytics code
  * -------------------------------------------------------------
  */
-function smarty_outputfilter_google_analytics($output, &$smarty)
+function smarty_outputfilter_google_analytics($output, $smarty)
 {
     $request = getService('request');
     $uri     = $request->getUri();
