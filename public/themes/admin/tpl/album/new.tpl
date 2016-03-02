@@ -101,7 +101,7 @@
                   {t}Description{/t}
                 </label>
                 <div class="controls">
-                  <textarea class="form-control" id="description" name="description" onm-editor onm-editor-preset="simple">{$album->description|clearslash}</textarea>
+                  <textarea class="form-control" id="description" name="description" ng-model="description" onm-editor onm-editor-preset="simple">{$album->description|clearslash}</textarea>
                 </div>
               </div>
             </div>
