@@ -29,7 +29,7 @@ class NotificationController extends Controller
     {
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
-        $epp  = $request->query->getDigits('epp', 100);
+        $epp  = $request->query->getDigits('epp', 10);
         $id   = $this->get('instance')->id;
         $page = $request->query->getDigits('page', 1);
 
@@ -38,7 +38,8 @@ class NotificationController extends Controller
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $criteria = 'instances LIKE "%' . $id . '%" AND (start <= \''
+        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
+            .  'instances LIKE \'%"0"%\' AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!empty($read)) {
@@ -61,6 +62,7 @@ class NotificationController extends Controller
                 $this->convertNotification($notification);
             }
         }
+
         return new JsonResponse([
             'epp'     => $epp,
             'page'    => $page,
@@ -78,27 +80,20 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $criteria = $request->query->filter('search') ? : [];
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
+        $id   = $this->get('instance')->id;
+        $date = date('Y-m-d H:i:s');
 
-        $id = $this->get('instance')->id;
-
-        $criteria['instance_id'] = [
-            [ 'value' => [ 0, $id ], 'operator' => 'IN' ]
-        ];
-
-        $criteria['start'] = [
-            [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<' ]
-        ];
+        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
+            .  'instances LIKE \'%"0"%\' AND (start <= \''
+            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
             [
                 'criteria' => $criteria,
-                'epp'      => $epp,
+                'epp'      => null,
                 'order'    => [ 'fixed' => 'desc' ],
-                'page'     => $page
+                'page'     => null
             ]
         );
 
@@ -112,8 +107,8 @@ class NotificationController extends Controller
             ->dispatch('notifications.count', [ 'criteria' => $criteria ]);
 
         return new JsonResponse([
-            'epp'     => $epp,
-            'page'    => $page,
+            'epp'     => $total,
+            'page'    => 1,
             'results' => $notifications,
             'total'   => $total
         ]);
@@ -221,18 +216,22 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])) {
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
+            && !empty($notification['title'][CURRENT_LANGUAGE_SHORT])
+        ) {
             $notification['title'] =
                 $notification['title'][CURRENT_LANGUAGE_SHORT];
         } else {
-            $notification['title'] = array_pop($notification['title']);
+            $notification['title'] = $notification['title']['en'];
         }
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])) {
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
+            && !empty($notification['body'][CURRENT_LANGUAGE_SHORT])
+        ) {
             $notification['body'] =
                 $notification['body'][CURRENT_LANGUAGE_SHORT];
         } else {
-            $notification['body']  = array_pop($notification['body']);
+            $notification['body']  = $notification['body']['en'];
         }
 
         $notification['read']  = 0;
