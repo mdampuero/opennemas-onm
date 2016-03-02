@@ -223,9 +223,6 @@ class NotificationController extends Controller
     {
         $extra = $this->getTemplateParams();
 
-        unset($extra['types']['-1']);
-        unset($extra['styles']['-1']);
-
         return new JsonResponse([ 'extra' => $extra ]);
     }
 
@@ -350,20 +347,12 @@ class NotificationController extends Controller
     private function getTemplateParams()
     {
         $params = [
-            'styles' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
-                'error'   => [ 'name' => _('Error'), 'value' => 'error' ],
-                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'success' => [ 'name' => _('Success'), 'value' => 'success' ],
-                'warning' => [ 'name' => _('Warning'), 'value' => 'warning' ]
-            ],
-            'types' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
+            'icons' => [
                 'comment' => [ 'name' => _('Comments'), 'value' => 'comment' ],
-                'email'   => [ 'name' => _('Email'), 'value' => 'email' ],
-                'help'    => [ 'name' => _('Help'), 'value' => 'help' ],
+                'email'   => [ 'name' => _('Email'), 'value' => 'envelope' ],
+                'help'    => [ 'name' => _('Help'), 'value' => 'support' ],
                 'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'media'   => [ 'name' => _('Media'), 'value' => 'media' ],
+                'media'   => [ 'name' => _('Media'), 'value' => 'database' ],
                 'user'    => [ 'name' => _('Users'), 'value' => 'user' ]
             ]
         ];

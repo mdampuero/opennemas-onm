@@ -65,8 +65,7 @@ class NotificationController extends Controller
             'epp'     => $epp,
             'page'    => $page,
             'results' => $notifications,
-            'total'   => count($notifications),
-            'extra'   => $this->getTemplateParams()
+            'total'   => count($notifications)
         ]);
     }
 
@@ -116,8 +115,7 @@ class NotificationController extends Controller
             'epp'     => $epp,
             'page'    => $page,
             'results' => $notifications,
-            'total'   => $total,
-            'extra'   => $this->getTemplateParams()
+            'total'   => $total
         ]);
     }
 
@@ -257,25 +255,5 @@ class NotificationController extends Controller
 
         $notification['time'] = $date->format('H:i');
         $notification['am'] = $date->format('a');
-    }
-
-    /**
-     * Returns an array of parameters to use in template.
-     *
-     * @return array The array of parameters.
-     */
-    private function getTemplateParams()
-    {
-        $params = [
-            'types' => [
-                [ 'name' => 'All', 'value' => '' ],
-                [ 'name' => 'Email', 'value' => 'email' ],
-                [ 'name' => 'Help', 'value' => 'help' ],
-                [ 'name' => 'Media', 'value' => 'media' ],
-                [ 'name' => 'User', 'value' => 'user' ]
-            ]
-        ];
-
-        return $params;
     }
 }
