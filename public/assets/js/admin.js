@@ -36,15 +36,21 @@ $(document).ready(function() {
     });
 
     if ($('#formulario').length > 0) {
+      // Get form values and set unsaved
+      var ov = $('#formulario').serialize();
+      var unsaved = true;
+      // Check for CKEditor changes
+      for (var i in CKEDITOR.instances) {
+        CKEDITOR.instances[i].on('change', function() {
+          ov = null;
+        });
+      }
       // Bind the event
-      $(window).bind('beforeunload', function() {
-        if(unsaved){
-          return leaveMessage;
+      $(window).bind('beforeunload', function(e) {
+        var nv = $('#formulario').serialize();
+        if((ov != nv) && unsaved){
+            return leaveMessage;
         }
-      });
-      // Detect changes on form
-      $(':input').on('change', function(){
-        unsaved = true;
       });
       // Allow to save changes
       $('#formulario').on('submit', function(){
