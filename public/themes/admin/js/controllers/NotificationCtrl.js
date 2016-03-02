@@ -127,7 +127,7 @@
 
         // Updates the notification dropdown status
         $scope.$watch(function() {
-          return $('.notifications.dropdown').attr('class');
+          return $('.dropdown-notifications').attr('class');
         }, function(nv, ov){
           $scope.isOpen = false;
           if (nv.indexOf('open') !== -1) {
