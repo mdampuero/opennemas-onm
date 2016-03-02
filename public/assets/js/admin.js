@@ -35,19 +35,20 @@ $(document).ready(function() {
       $('.btn.btn-primary .text').html(btn.data('text'));
     });
 
-    if ($('#formulario').length > 0 ||
-        $('form[name="billingForm"]').length > 0
-    ) {
-      $(document).on('keydown', function (e) {
-        if (e.which === 8 && !$(e.target).is('input, textarea')) {
-          window.onbeforeunload = function() {
-            return leaveMessage;
-          }
+    if ($('#formulario').length > 0) {
+      // Bind the event
+      $(window).bind('beforeunload', function() {
+        if(unsaved){
+          return leaveMessage;
         }
       });
-
-      $(document).on('click', function (e) {
-        window.onbeforeunload = null;
+      // Detect changes on form
+      $(':input').on('change', function(){
+        unsaved = true;
+      });
+      // Allow to save changes
+      $('#formulario').on('submit', function(){
+        unsaved = false;
       });
     }
 
