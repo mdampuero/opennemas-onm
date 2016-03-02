@@ -160,12 +160,9 @@ notification:
         creator:
             type: string
             options: { default: '', length: 255 }
-        type:
-            type:    string
-            options: { default: null, length: 40 }
         style:
-            type:    string
-            options: { default: 'info', length: 40 }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         fixed:
             type: boolean
             options: { default: 0 }
@@ -179,18 +176,6 @@ notification:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: type
-            columns: [ type ]
-            primary: false
-            unique: false
-            flags: { }
-        -
-            name: instance_id
-            columns: [ instance_id ]
-            primary: false
-            unique: false
-            flags: { }
 settings:
     columns:
         name:
