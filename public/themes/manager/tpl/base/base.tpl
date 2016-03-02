@@ -138,10 +138,10 @@
                 </div>
                 <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu dropdown-menu-right no-padding">
                 <li class="text-danger">
-                  <span class="dropdown-static-item">
-                    {t}This user is a master{/t}
+                    <span class="fake-a fake-a-static text-danger">
+                    {t}You are a master{/t}
                   </span>
                 </li>
                 <li class="divider"></li>

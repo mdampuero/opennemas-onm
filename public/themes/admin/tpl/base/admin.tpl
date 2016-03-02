@@ -320,7 +320,7 @@
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                      <i class="fa fa-rebel text-danger master-user"></i>
+                      <i class="fa fa-rebel text-danger"></i>
                     {/if}
                     <span class="title">
                       {$smarty.session.realname}
@@ -330,11 +330,11 @@
                     </div>
                     <i class="fa fa-angle-down"></i>
                   </span>
-                  <ul class="dropdown-menu on-right" role="menu">
+                  <ul class="dropdown-menu dropdown-menu-right no-padding" role="menu">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
                       <li class="text-danger">
-                        <span class="dropdown-static-item">
-                          {t}This user is a master{/t}
+                        <span class="fake-a fake-a-static text-danger">
+                          {t}You are a master{/t}
                         </span>
                       </li>
                       <li class="divider"></li>
