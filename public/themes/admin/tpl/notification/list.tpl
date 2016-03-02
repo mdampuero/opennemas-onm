@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="NotificationCtrl" ng-init="list()">
+  <div ng-app="BackendApp" ng-controller="NotificationCtrl" ng-init="disableForced();list();">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
-              <i class="fa fa-bell fa-lg"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
+              <i class="fa fa-bell"></i>
               {t}Notifications{/t}
             </a>
           </h4>
@@ -31,11 +31,8 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!notification.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-            </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="notification.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-success text-uppercase" ng-click="!notification.id ? save() : update()" ng-disabled="saving">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
         </ul>
@@ -48,37 +45,77 @@
     <div class="row">
       <div class="col-md-8">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <span class="semi-bold" ng-if="notification.id">
-                [% notification.title.en %]
-              </span>
-              <span class="semi-bold" ng-if="!notification.id">
-                {t}New notification{/t}
-              </span>
-            </h4>
-          </div>
           <div class="grid-body notification-form no-padding">
             <div class="row p-l-15 p-r-15 p-t-15">
               <div class="col-lg-6">
-                <div class="form-group">
-                  <label for="template" class="form-label">{t}Type{/t}</label>
-                  <div class="controls">
-                    <select id="style" ng-model="notification.type" ng-options="value.value as value.name for (key, value) in extra.types"></select>
+                <div class="row">
+                  <div class="form-group col-lg-4">
+                    <label for="template" class="form-label">{t}Icon{/t}</label>
+                    <div class="controls dropdown">
+                      <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">
+                        <span ng-if="!notification.style.icon">{t}Pick an icon...{/t}</span>
+                        <span ng-if="notification.style.icon">
+                          <i class="fa fa-lg fa-[% notification.style.icon %]"></i>
+                        </span>
+                        <i class="fa fa-caret-down m-l-10"></i>
+                      </button>
+                      <ul class="dropdown-menu no-padding">
+                        <li ng-click="notification.style.icon = null">
+                          <span class="fake-a text-center">
+                            {t}No icon{/t}
+                          </span>
+                        </li>
+                        <li ng-repeat="icon in extra.icons" ng-click="notification.style.icon = '[% icon.value %]'">
+                          <span class="fake-a text-center">
+                            <i class="fa fa-2x fa-[% icon.value %] m-r-5"></i>
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-7">
+                    <label for="template" class="form-label">{t}Background{/t}</label>
+                    <div class="controls">
+                      <div class="input-group">
+                        <span class="input-group-addon" ng-style="{ 'background-color': notification.style.background_color }">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                        <input class="form-control" colorpicker="hex" ng-model="notification.style.background_color" type="text">
+                        <div class="input-group-btn">
+                          <button class="btn btn-default" ng-click="notification.style.background_color= null" type="button">{t}Reset{/t}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-7">
+                    <label for="template" class="form-label">{t}Font color{/t}</label>
+                    <div class="controls">
+                      <div class="input-group">
+                        <span class="input-group-addon" ng-style="{ 'background-color': notification.style.font_color }">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                        <input class="form-control" colorpicker="hex" ng-model="notification.style.font_color" type="text">
+                        <div class="input-group-btn">
+                          <button class="btn btn-default" ng-click="notification.style.font_color= null" type="button">{t}Reset{/t}</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="template" class="form-label">{t}Style{/t}</label>
                   <div class="controls">
-                    <select id="style" ng-model="notification.style" ng-options="key as value.name for (key, value) in extra.styles"></select>
+                    <div class="checkbox">
+                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <label for="fixed">{t}Fixed{/t} ({t}Notification always visible in dropdown{/t})</label>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="template" class="form-label">{t}Instance{/t}</label>
                   <div class="controls">
-                    <tags-input add-from-autocomplete-only="true" ng-model="notification.instances" display-property="name" >
-                      <auto-complete source="test($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
-                    </tags-input>
+                    <div class="checkbox">
+                      <input id="forced" name="fixed" ng-model="notification.forced" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <label for="forced">{t}Forced{/t} ({t}Notification always visible before content{/t})</label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -102,19 +139,11 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label for="template" class="form-label">{t}Instance{/t}</label>
                   <div class="controls">
-                    <div class="checkbox">
-                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
-                      <label for="fixed">{t}Fixed{/t} ({t}Notification always visible in dropdown{/t})</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="controls">
-                    <div class="checkbox">
-                      <input id="forced" name="fixed" ng-model="notification.forced" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
-                      <label for="forced">{t}Forced{/t} ({t}Notification always visible before content{/t})</label>
-                    </div>
+                    <tags-input add-from-autocomplete-only="true" ng-model="notification.instances" display-property="name" >
+                      <auto-complete source="test($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                    </tags-input>
                   </div>
                 </div>
               </div>
@@ -159,11 +188,14 @@
           <div class="grid-body no-padding">
             <div class="notifications">
               <ul class="notification-list notification-list-preview">
-                <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]">
-                  <div class="notification-icon">
-                    <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
+                <li class="clearfix notification-list-item [% notification.style.icon ? 'notification-list-item-with-icon' : '' %] notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-style="{ 'background-color': notification.style.background_color }">
+                  <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0 && notification.forced == 0">
+                    <i class="fa fa-times"></i>
+                  </span>
+                  <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ color: notification.style.background_color }">
+                    <i class="fa fa-[% notification.style.icon %]"></i>
                   </div>
-                  <div class="notification-body">
+                  <div class="notification-body" ng-style="{ 'color': notification.style.font_color }">
                     <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.notification.body[language]"></div>
                   </div>
                 </li>
@@ -180,8 +212,8 @@
                         <strong>[% notification.am %]</strong>
                       </span>
                     </time>
-                    <div class="cbp_tmicon animated bounceIn" ng-class="{ 'danger': notification.style === 'error', 'primary': notification.style === 'success','success': notification.style === 'info','warning': notification.style === 'warning' }">
-                      <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
+                    <div class="cbp_tmicon animated bounceIn" ng-style="{ 'background-color': notification.style.background_color, 'color': notification.style.font_color }">
+                      <i class="fa fa-[% notification.style.icon %]"></i>
                     </div>
                     <div class="cbp_tmlabel">
                       <div class="p-t-15 p-l-30 p-r-30 p-b-30">

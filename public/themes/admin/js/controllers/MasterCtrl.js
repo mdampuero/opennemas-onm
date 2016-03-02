@@ -18,6 +18,14 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
   '$compile', '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
   function ($compile, $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
     'use strict';
+
+    /**
+     * Flag to enable/disable forced notifications.
+     *
+     * @type Boolean
+     */
+    $scope.forced = true;
+
     /**
      * The current language.
      *
@@ -38,6 +46,13 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @type Object
      */
     $scope.sidebar = Sidebar.init();
+
+    /**
+     * Disables forced notifications.
+     */
+    $scope.disableForced = function() {
+      $scope.forced = false;
+    };
 
     /**
      * Configures the language, translates the pagination texts and
@@ -89,42 +104,38 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         $scope.bounce = true;
 
-        var i = 0;
-        while (i < response.results.length && !$scope.notification) {
-          if (response.results[i].forced == 1) {
-            $scope.notification = response.results[i];
+        if ($scope.forced) {
+          var i = 0;
+          while (i < response.results.length && !$scope.notification) {
+            if (response.results[i].forced == 1) {
+              $scope.notification = response.results[i];
+            }
+
+            i++;
           }
 
-          i++;
-        }
-
-        if ($scope.notification) {
-          var tpl = '<div class="notification-item notification-item-[% notification.style ? notification.style : \'success\' %]" ng-class="{ \'notification-item-visible\': notification.visible }">' +
-            '<div class="clearfix notification-item-content">' +
-              '<div class="notification-title">' +
-                '[% notification.title %]' +
-                '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead(notification.id)" ng-if="notification.fixed == 0">' +
-                  '<i class="fa fa-times"></i>' +
-                '</span>' +
+          if ($scope.notification) {
+            var tpl = '<div class="notification-item" ng-class="{ \'notification-item-visible\': notification.visible, \'notification-item-with-icon\': notification.style.icon }" ng-style="{ \'background-color\': notification.style.background_color }">' +
+              '<div class="clearfix notification-item-content">' +
+              '<div class="notification-icon" ng-style="{ \'color\': notification.style.background_color }">' +
+              '<i class="fa fa-[% notification.style.icon %]"></i>' +
               '</div>' +
-              '<div class="notification-icon">' +
-                '<i class="fa" ng-class="{ \'fa-comment\': notification.type === \'comment\', \'fa-database\': notification.type === \'media\', \'fa-envelope\': notification.type === \'email\', \'fa-support\': notification.type === \'help\', \'fa-info\': notification.type !== \'comment\' && notification.type !== \'media\' && notification.type !== \'email\' && notification.type !== \'help\' && notification.type !== \'user\', \'fa-users\': notification.type === \'user\' }"></i>' +
-              '</div>' +
-              '<div class="notification-body" ng-bind-html="notification.body"></div>' +
-            '</div>'+
-          '</div>';
+              '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
+              '</div>'+
+              '</div>';
 
-          var e = $compile(tpl)($scope);
-          $('.content').prepend(e);
+            var e = $compile(tpl)($scope);
+            $('.content').prepend(e);
+
+            $timeout(function() {
+              $scope.notification.visible = true;
+            }, 1000);
+          }
 
           $timeout(function() {
-            $scope.notification.visible = true;
+            $scope.bounce = false;
           }, 1000);
         }
-
-        $timeout(function() {
-          $scope.bounce = false;
-        }, 1000);
       });
     };
 
