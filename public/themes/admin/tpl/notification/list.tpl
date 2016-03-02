@@ -26,22 +26,6 @@
               </span>
               <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks dropdown hidden-xs ng-cloak">
-              <ui-select name="type" theme="select2" ng-model="criteria.type">
-                <ui-select-match>
-                  <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
-                </ui-select-match>
-                <ui-select-choices repeat="item.value as item in extra.types | filter: { name: $select.search }">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
-          </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </ul>
         </div>
       </div>
