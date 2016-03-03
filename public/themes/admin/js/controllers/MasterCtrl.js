@@ -24,7 +24,14 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @type Boolean
      */
-    $scope.forced = true;
+    $scope.force = true;
+
+    /**
+     * Array of forced notifications
+     *
+     * @type Array
+     */
+    $scope.forced = [];
 
     /**
      * The current language.
@@ -51,7 +58,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * Disables forced notifications.
      */
     $scope.disableForced = function() {
-      $scope.forced = false;
+      $scope.force = false;
     };
 
     /**
@@ -99,36 +106,38 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       var url = routing.generate('backend_ws_notifications_latest');
 
       $http.get(url).success(function(response) {
-        $scope.notifications = response.results;
-        anTinycon.setBubble(response.total);
+        $scope.notifications = response.results.filter(function (a) {
+          return !a.forced || parseInt(a.forced) !== 1;
+        });
+
+        anTinycon.setBubble($scope.notifications.length);
 
         $scope.bounce = true;
 
-        if ($scope.forced) {
-          var i = 0;
-          while (i < response.results.length && !$scope.notification) {
-            if (response.results[i].forced == 1) {
-              $scope.notification = response.results[i];
-            }
+        if ($scope.force) {
+          $scope.forced = response.results.filter(function (a) {
+            return parseInt(a.forced) === 1;
+          });
 
-            i++;
-          }
-
-          if ($scope.notification) {
-            var tpl = '<div class="notification-item" ng-class="{ \'notification-item-visible\': notification.visible, \'notification-item-with-icon\': notification.style.icon }" ng-style="{ \'background-color\': notification.style.background_color }">' +
-              '<div class="clearfix notification-item-content">' +
-              '<div class="notification-icon" ng-style="{ \'color\': notification.style.background_color }">' +
-              '<i class="fa fa-[% notification.style.icon %]"></i>' +
-              '</div>' +
-              '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
+          if ($scope.forced.length > 0) {
+            var tpl = '<div ng-repeat="notification in forced track by $index">' +
+              '<div class="notification-item" ng-class="{ \'notification-item-visible\': notification.visible, \'notification-item-with-icon\': notification.style.icon }" ng-style="{ \'background-color\': notification.style.background_color }">' +
+                '<div class="clearfix notification-item-content">' +
+                '<div class="notification-icon" ng-style="{ \'color\': notification.style.background_color }">' +
+                '<i class="fa fa-[% notification.style.icon %]"></i>' +
+                '</div>' +
+                '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
+                '</div>'+
               '</div>'+
-              '</div>';
+            '</div>';
 
             var e = $compile(tpl)($scope);
             $('.content').prepend(e);
 
             $timeout(function() {
-              $scope.notification.visible = true;
+              angular.forEach($scope.forced, function (value) {
+                value.visible = true;
+              });
             }, 1000);
           }
 
