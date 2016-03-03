@@ -72,59 +72,6 @@
           });
         };
 
-        /**
-         * @function markAsRead
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   Marks a notification as read.
-         *
-         * @param {Integer} index The index of the notification to mark.
-         */
-        $scope.markAsRead = function(index) {
-          var notification = $scope.notifications[index];
-
-          var url = routing.generate('backend_ws_notification_patch',
-              { id: notification.id });
-
-          $http.patch(url).success(function() {
-            $scope.notifications.splice(index, 1);
-            $scope.pulse = true;
-            $timeout(function() { $scope.pulse = false; }, 1000);
-          });
-        };
-
-        /**
-         * @function markFixedAsRead
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   Marks fixed notifications as read.
-         */
-        $scope.markFixedAsRead = function() {
-          var fixed = $scope.fixed.map(function(a) {
-            return a.id;
-          });
-
-          if ($scope.isOpen || fixed.length === 0) {
-            return;
-          }
-
-          var data = { ids: fixed };
-          var url  = routing.generate('backend_ws_notifications_patch');
-
-          $http.patch(url, data).success(function() {
-            for (var i = 0; i < $scope.notifications.length; i++) {
-              if ($scope.notifications[i].fixed == 1) {
-                $scope.notifications[i].read = 1;
-              }
-            }
-
-            $scope.pulse = true;
-            $timeout(function() { $scope.pulse = false; }, 1000);
-          });
-        };
-
         // Updates the notification dropdown status
         $scope.$watch(function() {
           return $('.dropdown-notifications').attr('class');

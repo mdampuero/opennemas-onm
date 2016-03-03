@@ -15,8 +15,8 @@
  * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$compile', '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
-  function ($compile, $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
+  '$compile', '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar', 'webStorage',
+  function ($compile, $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar, webStorage) {
     'use strict';
 
     /**
@@ -116,11 +116,27 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         if ($scope.force) {
           $scope.forced = response.results.filter(function (a) {
-            return parseInt(a.forced) === 1;
+            if (parseInt(a.forced) !== 1) {
+              return false;
+            }
+
+            var expire = webStorage.get('notification-' + a.id);
+
+            if (!expire) {
+              return true;
+            }
+
+            var now = moment();
+            expire = moment(expire);
+
+            return now.unix() > expire.unix();
           });
 
           if ($scope.forced.length > 0) {
             var tpl = '<div class="notification-list-item" ng-class="{ \'notification-list-item-hidden\': !notification.visible, \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced track by $index" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
+              '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)">' +
+                '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
+              '</span>' +
               '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
                 '<div class="notification-icon" ng-if="notification.style.icon" ng-style="{ \'color\': notification.style.background_color }">' +
                   '<i class="fa fa-[% notification.style.icon %]"></i>' +
@@ -156,7 +172,18 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @param {Integer} index The index of the notification to mark.
      */
-    $scope.markAsRead = function(id) {
+    $scope.markAsRead = function(index) {
+      var notification = $scope.notifications[index];
+
+      if (notification.fixed) {
+        return;
+      }
+
+      if (parseInt(notification.forced) === 1) {
+        $scope.markForcedAsRead(index);
+        return;
+      }
+
       var url = routing.generate('backend_ws_notification_patch', { id: id });
 
       $http.patch(url).success(function() {
@@ -178,6 +205,22 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
           $timeout(function() { $scope.pulse = false; }, 1000);
         }
       });
+    };
+
+    $scope.markForcedAsRead = function (index) {
+      var notification = $scope.forced[index];
+      var id           = 'notification-' + notification.id;
+      var date         = new Date();
+
+      date.setDate(date.getDate() + 1);
+      date = moment(date).format('YYYY-MM-DD HH:mm:ss');
+      webStorage.local.add(id, date);
+
+      notification.visible = false;
+
+      $scope.forced.splice(index, 1);
+      $scope.pulse = true;
+      $timeout(function() { $scope.pulse = false; }, 1000);
     };
 
     $scope.xsOnly = function(event, callback, args) {
