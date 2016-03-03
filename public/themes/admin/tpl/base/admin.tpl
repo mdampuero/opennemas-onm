@@ -262,17 +262,17 @@
                       </div>
                       <ul class="notification-list" ng-show="notifications.length > 0">
                         <scrollable>
-                          <a class="clearfix notification-list-item" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }"  ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
-                            <li>
-                              <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
-                                <i class="fa fa-times"></i>
-                              </span>
+                          <li class="clearfix notification-list-item" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
+                            <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
+                              <i class="fa fa-times"></i>
+                            </span>
+                            <a ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]">
                               <div class="notification-icon" ng-if="notification.style.icon">
                                 <i class="fa fa-[% notification.style.icon %]" style="color: [% notification.style.background_color %] !important;"></i>
                               </div>
                               <div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ 'color': notification.style.font_color }"></div>
-                            </li>
-                          </a>
+                            </a>
+                          </li>
                         </scrollable>
                       </ul>
                       <div class="dropdown-footer clearfix">
