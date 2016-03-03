@@ -28,8 +28,8 @@
   }
 
   li {
-    a,
-    .fake-a {
+    & > a,
+    & > .fake-a {
       border-radius: 3px;
       color: #2a2e36;
       cursor: pointer;
@@ -94,17 +94,11 @@
 }
 
 .dropdown-menu > li > a:hover,
-.dropdown-menu li a:hover,
-.dropdown-menu li .fake-a:hover,
+.dropdown-menu > li > .fake-a:hover,
 .dropdown-menu > li > a:focus,
-.dropdown-menu li a:focus,
-.dropdown-menu li .fake-a:focus,
-.dropdown-submenu:hover > a,
-.dropdown-submenu:focus > a {
+.dropdown-menu > li > .fake-a:focus {
   background-color: fade(@info-color, 10%);
 }
-
-
 
 .dropdown-footer,
 .dropdown-title {
