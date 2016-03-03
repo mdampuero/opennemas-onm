@@ -60,13 +60,21 @@ class NotificationService
         $notification->fixed       = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
-        $notification->style       = 'info';
+        $notification->style       = [
+            'background_color' => '#3fccbb',
+            'font_color'       => '#ffffff',
+            'icon'             => 'comment'
+        ];
         $notification->type        = 'comment';
         $notification->start       = date('Y-m-d H:i:s');
         $notification->end         = date('Y-m-d H:i:s', time() + 86400);
 
         $notification->title = [
-            CURRENT_LANGUAGE_SHORT => _('Comments'),
+            CURRENT_LANGUAGE_SHORT => sprintf(
+                _('You have %s pending comments. Click <a href="%s">here</a> to moderate.'),
+                $comments,
+                $this->container->get('router')->generate('admin_comments')
+            )
         ];
 
         $notification->body = [
@@ -92,7 +100,7 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = time();
+        $notification->id          = 'media';
         $notification->instance_id = $instance->id;
         $notification->creator     = 'cron.update_instances';
         $notification->fixed       = 1;
@@ -130,14 +138,18 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = time();
+        $notification->id          = 'users';
         $notification->instance_id = $instance->id;
         $notification->creator     = 'cron.update_instances';
         $notification->fixed       = 1;
         $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
-        $notification->style       = 'danger';
+        $notification->style       = [
+            'background_color' => '#f35958',
+            'font_color'       => '#ffffff',
+            'icon'             => 'user'
+        ];
         $notification->type        = 'info';
         $notification->start       = date('Y-m-d H:i:s');
         $notification->end         = date('Y-m-d H:i:s', time() + 86400);
@@ -168,7 +180,7 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = time();
+        $notification->id          = 'views';
         $notification->instance_id = $instance->id;
         $notification->creator     = 'cron.update_instances';
         $notification->fixed       = 1;
