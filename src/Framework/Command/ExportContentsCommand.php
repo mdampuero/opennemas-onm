@@ -264,6 +264,7 @@ EOF
             } else {
                 // Count contents
                 $countContents = $this->er->countBy($filters);
+                $this->total = $countContents;
                 $iterations = (int)($countContents/$perPage)+1;
                 // Fetch contents paginated
                 $i = 1;
@@ -273,7 +274,6 @@ EOF
                     $this->processContents($contents);
                     unset($contents);
                     gc_collect_cycles();
-                    $this->output->write("$i - $iterations\n");
                 }
             }
         }
@@ -297,7 +297,7 @@ EOF
     public function processContents($contents)
     {
         foreach ($contents as $content) {
-            $this->output->write(".");
+            $this->output->write('Processing '.$content->content_type_name.' ');
             // Load category related information
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
@@ -316,6 +316,7 @@ EOF
             switch ($content->content_type_name) {
                 case 'album':
                     $this->albumsCounter++;
+                    $this->output->writeln($this->albumsCounter. " of ".$this->total. '(id: '.$content->id.')');
                     $photos = array();
                     $photos = $content->_getAttachedPhotos($content->id);
 
@@ -364,85 +365,103 @@ EOF
                 case 'opinion':
                     if ($content->content_type_name == 'article') {
                         $this->articlesCounter++;
+                        $this->output->writeln($this->articlesCounter. " of ".$this->total. '(id: '.$content->id.')');
                     } else {
                         $this->opinionsCounter++;
+                        $this->output->writeln($this->opinionsCounter. " of ".$this->total. '(id: '.$content->id.')');
                     }
                     $imageId = $content->img1;
                     $imageInnerId = $content->img2;
 
                     if (!empty($imageId)) {
-                        $image[] = $this->er->find('Photo', $imageId);
-                        // Load attached and related contents from array
-                        $content->loadFrontpageImageFromHydratedArray($image);
-                        // Add DateTime with format Y-m-d H:i:s
-                        $content->img1->created_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $content->img1->created
-                            );
-                        $content->img1->updated_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $content->img1->changed
-                            );
-                        if (!mb_check_encoding($content->img1->description)) {
-                            $content->img1->description = utf8_encode($content->img1->description);
-                        }
-                        $content->img1_source = $this->mediaPath.DS.'images'.$content->img1_path;
+                        $image = $this->er->find('Photo', $imageId);
 
-                        $isCopied = $this->copyImage(
-                            $content->img1_source,
-                            $this->targetDir.DS.'images'.$content->img1->path_file,
-                            $content->img1->name
-                        );
-
-                        $this->imagesCounter++;
-
-                        if (!$isCopied) {
-                            $this->imagesCounter--;
-                            $this->output->writeln(
-                                "\tImage <info>".$content->img1->name.
-                                "</info> from ".$content->content_type_name." <info>".$content->id.
-                                "</info> not copied'"
+                        if (is_null($image)) {
+                            $this->output->write(
+                                "\t<error>Image ".$content->img1." not found</error>"
                             );
+                            $content->img1 = 0;
+                        } else {
+                            // Load attached and related contents from array
+                            $content->loadFrontpageImageFromHydratedArray([$image]);
+                            // Add DateTime with format Y-m-d H:i:s
+                            $content->img1->created_datetime =
+                                \DateTime::createFromFormat(
+                                    'Y-m-d H:i:s',
+                                    $content->img1->created
+                                );
+                            $content->img1->updated_datetime =
+                                \DateTime::createFromFormat(
+                                    'Y-m-d H:i:s',
+                                    $content->img1->changed
+                                );
+                            if (!mb_check_encoding($content->img1->description)) {
+                                $content->img1->description = utf8_encode($content->img1->description);
+                            }
+                            $content->img1_source = $this->mediaPath.DS.'images'.$content->img1_path;
+
+                            $isCopied = $this->copyImage(
+                                $content->img1_source,
+                                $this->targetDir.DS.'images'.$content->img1->path_file,
+                                $content->img1->name
+                            );
+
+                            $this->imagesCounter++;
+
+                            if (!$isCopied) {
+                                $this->imagesCounter--;
+                                $this->output->writeln(
+                                    "\tImage <info>".$content->img1->name.
+                                    "</info> from ".$content->content_type_name." <info>".$content->id.
+                                    "</info> not copied'"
+                                );
+                            }
                         }
                     }
 
                     if (!empty($imageInnerId)) {
-                        $image[] = $this->er->find('Photo', $imageInnerId);
-                        // Load attached and related contents from array
-                        $content->loadInnerImageFromHydratedArray($image);
-                        // Add DateTime with format Y-m-d H:i:s
-                        $content->img2->created_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $content->img2->created
-                            );
-                        $content->img2->updated_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $content->img2->changed
-                            );
-                        if (!mb_check_encoding($content->img2->description)) {
-                            $content->img2->description = utf8_encode($content->img2->description);
-                        }
-                        $content->img2_source = $this->mediaPath.DS.'images'.$content->img2_path;
+                        $image = $this->er->find('Photo', $imageInnerId);
 
-                        $isCopied = $this->copyImage(
-                            $content->img2_source,
-                            $this->targetDir.DS.'images'.$content->img2->path_file,
-                            $content->img2->name
-                        );
-
-                        $this->imagesCounter++;
-
-                        if (!$isCopied) {
-                            $this->imagesCounter--;
+                        if (is_null($image)) {
                             $this->output->writeln(
-                                "\tImage <info>".$content->img2->name.
-                                "</info> from ".$content->content_type_name." <info>".$content->id.
-                                "</info> not copied'"
+                                "\t<error>Image ".$content->img2." not found</error>"
                             );
+                            $content->img2 = 0;
+                        } else {
+                            // Load attached and related contents from array
+                            $content->loadInnerImageFromHydratedArray([$image]);
+                            // Add DateTime with format Y-m-d H:i:s
+                            $content->img2->created_datetime =
+                                \DateTime::createFromFormat(
+                                    'Y-m-d H:i:s',
+                                    $content->img2->created
+                                );
+                            $content->img2->updated_datetime =
+                                \DateTime::createFromFormat(
+                                    'Y-m-d H:i:s',
+                                    $content->img2->changed
+                                );
+                            if (!mb_check_encoding($content->img2->description)) {
+                                $content->img2->description = utf8_encode($content->img2->description);
+                            }
+                            $content->img2_source = $this->mediaPath.DS.'images'.$content->img2_path;
+
+                            $isCopied = $this->copyImage(
+                                $content->img2_source,
+                                $this->targetDir.DS.'images'.$content->img2->path_file,
+                                $content->img2->name
+                            );
+
+                            $this->imagesCounter++;
+
+                            if (!$isCopied) {
+                                $this->imagesCounter--;
+                                $this->output->writeln(
+                                    "\tImage <info>".$content->img2->name.
+                                    "</info> from ".$content->content_type_name." <info>".$content->id.
+                                    "</info> not copied'"
+                                );
+                            }
                         }
                     }
                     break;
@@ -460,6 +479,7 @@ EOF
             // Convert content to NewsML
             if ($content->content_type_name == 'video') {
                 $this->videosCounter++;
+                $this->output->writeln($this->videosCounter. " of ".$this->total. '(id: '.$content->id.')');
                 $newsMLString = $this->convertVideoToNewsML($content);
             } else {
                 $newsMLString = $this->convertToNewsML($content);
