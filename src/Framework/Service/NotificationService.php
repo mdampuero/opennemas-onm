@@ -55,13 +55,14 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = time();
-        $notification->instance_id = $this->container->get('instance')->id;
-        $notification->fixed       = 1;
+        $notification->id          = 'comments';
+        $notification->instances   = [ $this->container->get('instance')->id ];
+        $notification->fixed       = 0;
+        $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
         $notification->style       = [
-            'background_color' => '#3fccbb',
+            'background_color' => '#0090d9',
             'font_color'       => '#ffffff',
             'icon'             => 'comment'
         ];
@@ -101,9 +102,9 @@ class NotificationService
         $notification = new Notification();
 
         $notification->id          = 'media';
-        $notification->instance_id = $instance->id;
+        $notification->instances   = [ $instance->id ];
         $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 1;
+        $notification->fixed       = 0;
         $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
@@ -139,9 +140,9 @@ class NotificationService
         $notification = new Notification();
 
         $notification->id          = 'users';
-        $notification->instance_id = $instance->id;
+        $notification->instances   = [ $instance->id ];
         $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 1;
+        $notification->fixed       = 0;
         $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
@@ -181,9 +182,9 @@ class NotificationService
         $notification = new Notification();
 
         $notification->id          = 'views';
-        $notification->instance_id = $instance->id;
+        $notification->instances   = [ $instance->id ];
         $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 1;
+        $notification->fixed       = 0;
         $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
