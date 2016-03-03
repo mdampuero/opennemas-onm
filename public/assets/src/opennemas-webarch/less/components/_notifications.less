@@ -60,13 +60,17 @@
   .notification-list-item {
     border-radius: 3px;
     border: 1px solid @border-color;
-    cursor: pointer;
     display: block;
-    padding: 20px 10px;
     position: relative;
     margin-bottom: 8px;
     transition: 0.25s ease-in all;
     width: 100%;
+
+    & > a {
+      cursor: pointer;
+      margin: 0;
+      padding: 15px;
+    }
 
     &:last-child {
       margin-bottom: 0;
@@ -173,7 +177,21 @@
   padding-bottom: 10px;
 }
 
-// Force hover state
-.notification-list > .notification-list-item > .title .notification-list-item-close:hover i {
-  color: #000 !important;
+.notification-list-item-close {
+  height: 32px;
+  margin-top: -16px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  top: 50%;
+  width: 32px;
+
+  i {
+    font-size: 18px !important;
+  }
+
+  &:hover i {
+    color: #000 !important;
+  }
 }
