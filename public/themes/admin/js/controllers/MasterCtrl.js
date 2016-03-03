@@ -120,15 +120,14 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
           });
 
           if ($scope.forced.length > 0) {
-            var tpl = '<div ng-repeat="notification in forced track by $index">' +
-              '<div class="notification-item" ng-class="{ \'notification-item-visible\': notification.visible, \'notification-item-with-icon\': notification.style.icon }" ng-style="{ \'background-color\': notification.style.background_color }">' +
-                '<div class="clearfix notification-item-content">' +
-                '<div class="notification-icon" ng-style="{ \'color\': notification.style.background_color }">' +
-                '<i class="fa fa-[% notification.style.icon %]"></i>' +
+            var tpl = '<div class="notification-list-item" ng-class="{ \'notification-list-item-hidden\': !notification.visible, \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced track by $index" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
+              '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
+                '<div class="notification-icon" ng-if="notification.style.icon" ng-style="{ \'color\': notification.style.background_color }">' +
+                  '<i class="fa fa-[% notification.style.icon %]"></i>' +
                 '</div>' +
                 '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
-                '</div>'+
-              '</div>'+
+                '</div>' +
+              '</a>' +
             '</div>';
 
             var e = $compile(tpl)($scope);

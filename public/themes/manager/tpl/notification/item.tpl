@@ -226,16 +226,18 @@
           <div class="grid-body no-padding">
             <div class="notifications">
               <ul class="notification-list notification-list-preview">
-                <li class="clearfix notification-list-item [% notification.style.icon ? 'notification-list-item-with-icon' : '' %] notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-style="{ 'background-color': notification.style.background_color }">
-                  <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0 && notification.forced == 0">
-                    <i class="fa fa-times"></i>
+                <li class="clearfix notification-list-item [% notification.style.icon ? 'notification-list-item-with-icon' : '' %]" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
+                  <span class="notification-list-item-close pull-right pointer" ng-if="notification.fixed == 0 && notification.forced == 0">
+                    <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                   </span>
-                  <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ color: notification.style.background_color }">
-                    <i class="fa fa-[% notification.style.icon %]"></i>
-                  </div>
-                  <div class="notification-body" ng-style="{ 'color': notification.style.font_color }">
-                    <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.notification.body[language]"></div>
-                  </div>
+                  <a>
+                    <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ color: notification.style.background_color }">
+                      <i class="fa fa-[% notification.style.icon %]"></i>
+                    </div>
+                    <div class="notification-body" ng-style="{ 'color': notification.style.font_color }">
+                      <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.notification.body[language]"></div>
+                    </div>
+                  </a>
                 </li>
               </ul>
             </div>

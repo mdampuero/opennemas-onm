@@ -17,132 +17,6 @@
   }
 }
 
-.notification-item {
-  transition: all .5s;
-  margin: 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  position: relative;
-  visibility: hidden;
-  border-radius: 4px;
-
-  .notification-item-content {
-    padding: 15px;
-  }
-}
-
-.notification-item-with-icon,
-.notification-list-item-with-icon {
-  .notification-body {
-    padding-left: 50px;
-  }
-}
-
-.notification-item-visible {
-  opacity: 1;
-  max-height: 500px;
-  margin-bottom: 15px;
-  visibility: visible;
-}
-
-.notification-list {
-  list-style: none;
-  height: 275px;
-  margin: 0;
-  padding: 0;
-  padding-right: 3px;
-
-  .nano > .nano-content {
-    padding-right: 12px;
-  }
-
-  .notification-list-item {
-    border-radius: 3px;
-    border: 1px solid @border-color;
-    display: block;
-    position: relative;
-    margin-bottom: 8px;
-    transition: 0.25s ease-in all;
-    width: 100%;
-
-    & > a {
-      cursor: pointer;
-      margin: 0;
-      padding: 15px;
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &.ng-leave.ng-leave-active {
-      opacity: 0;
-      margin-left: 100px;
-    }
-  }
-}
-
-.notification-list-placeholder {
-  height: 275px;
-  padding-top: 80px;
-  text-align: center;
-}
-
-.notification-list-preview {
-  height: auto;
-  padding: 30px;
-}
-
-.notification-item-error,
-.notification-list-item-error {
-  background-color: fade(@error-color, 15%);
-
-  &:hover {
-    background-color: fade(@error-color, 25%);
-  }
-}
-
-.notification-item-info,
-.notification-list-item-info {
-  background-color: fade(@info-color, 15%);
-
-  &:hover {
-    background-color: fade(@info-color, 25%);
-  }
-}
-
-.notification-item-success,
-.notification-list-item-success {
-  background-color: fade(@success-color, 15%);
-
-  &:hover {
-    background-color: fade(@success-color, 25%);
-  }
-}
-
-.notification-item-warning,
-.notification-list-item-warning {
-  background-color: fade(@warning-color, 15%);
-
-  &:hover {
-    background-color: fade(@warning-color, 25%);
-  }
-}
-
-.notification-body {
-  margin: 0;
-
-  a {
-    color: inherit;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
 .notification-icon {
   background: #fff;
   border-radius: 100%;
@@ -166,24 +40,45 @@
   }
 }
 
-.notifications-orb {
-  background-color: @info-color;
-  border-radius: 100%;
-  color: #fff;
-  display: inline-block;
-  font-weight: bold;
-  height: 18px;
-  line-height: 1.25em;
-  position: absolute;
-  right: 0;
-  top: 0;
-  text-align: center;
-  width: 18px;
+.notification-list {
+  list-style: none;
+  height: 275px;
+  margin: 0;
+  padding: 0;
+  padding-right: 3px;
+
+  .nano > .nano-content {
+    padding-right: 12px;
+  }
 }
 
-.notification-title {
-  font-weight: bold;
-  padding-bottom: 10px;
+.notification-list-item {
+  background-color: #fff;
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 15px;
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+  transition: 0.25s ease-in all;
+  width: 100%;
+
+  & > a {
+    cursor: pointer;
+    display: block;
+    margin: 0 !important;
+    padding: 15px !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.ng-leave.ng-leave-active {
+    opacity: 0;
+    margin-left: 100px;
+  }
 }
 
 .notification-list-item-close {
@@ -203,4 +98,61 @@
   &:hover i {
     color: #000 !important;
   }
+}
+
+.notification-list-item-hidden {
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.notification-list-item-with-icon {
+  .notification-body {
+    padding-left: 50px;
+  }
+}
+
+.notification-list-placeholder {
+  height: 275px;
+  padding-top: 80px;
+  text-align: center;
+}
+
+
+.notification-list-preview {
+  height: auto;
+  padding: 30px;
+}
+
+.notification-body {
+  margin: 0;
+
+  a {
+    color: inherit;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.notifications-orb {
+  background-color: @info-color;
+  border-radius: 100%;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  height: 18px;
+  line-height: 1.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  width: 18px;
+}
+
+.notification-title {
+  font-weight: bold;
+  padding-bottom: 10px;
 }
