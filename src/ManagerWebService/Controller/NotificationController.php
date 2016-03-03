@@ -364,6 +364,12 @@ class NotificationController extends Controller
             [ 'name' => _('All'), 'id' => 0 ]
         ];
 
+        $params['languages'] = [
+            'en' => _('English'),
+            'es' => _('Spanish'),
+            'gl' => _('Galician'),
+        ];
+
         foreach ($instances as $instance) {
             $params['instances'][] = [
                 'name'  => $instance->internal_name,

@@ -34,12 +34,6 @@
         $("#endtime").on("dp.change",function (e) {
           $('#starttime').data("DateTimePicker").maxDate(e.date);
         });
-
-        $('#formulario').on('submit', function(){
-          var btn = $('.btn.btn-primary');
-          btn.attr('disabled', true);
-          $('.btn.btn-primary .text').html(btn.data('text'));
-        });
       });
     </script>
   {/javascripts}
@@ -106,7 +100,7 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..."type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>

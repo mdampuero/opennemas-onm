@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off">
+<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -40,8 +40,9 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" action="submit">
-              {t}Save{/t}
+            <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
+              <span class="fa fa-save"></span>
+              <span class="text">{t}Save{/t}</span>
             </button>
           </li>
         </ul>

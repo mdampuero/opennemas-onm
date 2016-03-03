@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_users_list') %]">
-              <i class="fa fa-cubes fa-lg"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_users_list') %]">
+              <i class="fa fa-user"></i>
               {t}Users{/t}
             </a>
           </h4>
@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="user.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -48,16 +48,6 @@
     <div class="row">
       <div class="col-sm-7">
         <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <span class="semi-bold" ng-if="user.id">
-                [% user.name %]
-              </span>
-              <span class="semi-bold" ng-if="!user.id">
-                {t}New user{/t}
-              </span>
-            </h4>
-          </div>
           <div class="grid-body">
             <div class="form-group">
               <label class="control-label" for="name">

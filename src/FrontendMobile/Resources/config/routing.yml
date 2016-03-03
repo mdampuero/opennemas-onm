@@ -1,47 +1,51 @@
+frontendmobile_root:
+    path: '/mobile'
+    defaults: { _controller : FrontendMobileBundle:Mobile:redirectToFrontpage }
+
 frontendmobile_redirect_web:
-    path: /redirect_web
-    defaults: { _controller: FrontendMobileBundle:Frontpages:redirectCompleteWeb }
+    path: /mobile/redirect_web
+    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToFrontpage }
 
-frontendmobile_opinion_frontpage:
-    path: /opinion
-    defaults: { _controller: FrontendMobileBundle:Opinions:frontpage }
+frontendmobile_latestnews:
+    path: /mobile/ultimas-noticias
+    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToFrontpage }
 
-frontendmobile_opinion_frontpage2:
-    path: /seccion/opinion
-    defaults: { _controller: FrontendMobileBundle:Opinions:frontpage }
+frontendmobile_latestnews2:
+    path: /mobile/ultimas
+    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToFrontpage }
 
 frontendmobile_frontpages_category:
-    path: /seccion/{category}
-    defaults: { _controller: FrontendMobileBundle:Frontpages:show, category: null }
+    path: /mobile/seccion/{category}
+    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToCategoryFrontpage, category: null }
     requirements:
         category : '[a-z0-9\-\._]+'
 
 frontendmobile_frontpages_category:
-    path: /seccion/{category}/{subcategory}
-    defaults: { _controller: FrontendMobileBundle:Frontpages:show, category: null, subcategory : null }
+    path: /mobile/seccion/{category}/{subcategory}
+    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToCategoryFrontpage, category: null, subcategory : null }
     requirements:
         category    : '[a-z0-9\-\._]+'
         subcategory : '[a-z0-9\-\._]+'
 
-frontendmobile_latestnews:
-    path: /ultimas-noticias
-    defaults: { _controller: FrontendMobileBundle:Frontpages:latestNews }
+frontendmobile_opinion_frontpage:
+    path: /mobile/opinion
+    defaults: { _controller: FrontendMobileBundle:Mobile:opinionFrontpageRedirect }
 
-frontendmobile_latestnews2:
-    path: /ultimas
-    defaults: { _controller: FrontendMobileBundle:Frontpages:latestNews }
+frontendmobile_opinion_frontpage2:
+    path: /mobile/seccion/opinion
+    defaults: { _controller: FrontendMobileBundle:Mobile:opinionFrontpageRedirect }
 
 frontendmobile_opinion_show:
-    path: /opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendMobileBundle:Opinions:show, _format: html }
+    path: /mobile/opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
+    defaults: { _controller: FrontendMobileBundle:Mobile:opinionInnerRedirect, _format: html }
     requirements:
         author_name    : '[a-zA-Z0-9\-]+'
         opinion_title  : '[a-z0-9\-]+'
         opinion_id     : '[a-z0-9\-]+'
 
 frontendmobile_article_show:
-    path: /{component}/{category_name}/{slug}/{article_id}.{_format}
-    defaults: { _controller: FrontendMobileBundle:Articles:show, component: articulo, _format: html, page: 1 }
+    path: /mobile/{component}/{category_name}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendMobileBundle:Mobile:articleInnerRedirect, component: articulo, _format: html, page: 1 }
     requirements:
         component     : 'articulo|artigo|article'
         category_name : '[a-z0-9\-]+'

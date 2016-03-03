@@ -1,7 +1,7 @@
   <div class="error-body modal-body module-dialog">
     <div class="row">
       <div class="col-xs-4">
-        <img class="img-responsive m-b-15" ng-src="/assets/images/store/[% template.item.thumbnail %]">
+        <img class="img-responsive m-b-15" ng-src="[% template.item.images[0] %]">
         <div class="module-icon">
           <i class="fa fa-lg" ng-class="{ 'fa-cube': template.item.type == 'module', 'fa-dropbox': template.item.type == 'pack', 'fa-thumbs-o-up': template.item.type == 'partner', 'fa-support': template.item.type == 'service', 'fa-eye': template.item.type == 'theme'}"></i>
         </div>
@@ -39,8 +39,8 @@
       </div>
     </div>
     <hr class="inverted">
-    <div class="description" ng-bind-html="template.item.description" ng-if="!template.item.long_description"></div>
-    <div class="description" ng-bind-html="template.item.long_description" ng-if="template.item.long_description"></div>
+    <div class="description" ng-bind-html="template.item.description" ng-if="!template.item.about"></div>
+    <div class="description" ng-bind-html="template.item.about" ng-if="template.item.about"></div>
     <hr class="inverted">
     {*<h4 class="text-center uppercase">
       {t}Screenshots and videos{/t}

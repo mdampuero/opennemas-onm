@@ -903,14 +903,6 @@ admin_tpl_manager_clearcompiled:
     path:     /system/cachemanager/clear-compiled-templates
     defaults: { _controller  : BackendBundle:CacheManager:clearCompiledTemplates }
 
-# Database error controller routes
-admin_databaseerrors:
-    path:     /system/databaseerrors
-    defaults: { _controller  : BackendBundle:DatabaseErrors:default }
-admin_databaseerrors_purge:
-    path:     /system/databaseerrors/purge
-    defaults: { _controller  : BackendBundle:DatabaseErrors:purge }
-
 # User management routes
 admin_acl_user:
     path:     /acl/users

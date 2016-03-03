@@ -4,15 +4,17 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <i class="fa fa-bell fa-lg"></i>
-            {t}Notifications{/t}
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
+              <i class="fa fa-bell"></i>
+              {t}Notifications{/t}
+            </a>
           </h4>
         </li>
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a ng-href="[% routing.ngGenerate('manager_notification_create') %]" class="btn btn-primary">
+            <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
               <i class="fa fa-plus fa-lg"></i>
               {t}Create{/t}
             </a>
@@ -27,14 +29,11 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-form no-boarder">
+        <li class="m-r-10 input-prepend inside search-input no-boarder">
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
+          <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" ng-model="criteria.title_like[0].value" type="text" style="width:250px;"/>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -46,11 +45,8 @@
             </ui-select-choices>
           </ui-select>
           </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
-        </li>
         <li class="quicklinks">
-          <button class="btn btn-white" ng-click="criteria = {  title_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'title', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
+          <button class="btn btn-link" ng-click="criteria = {  title_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'title', value: 'desc' } ]; pagination = { page: 1, epp: 25 }">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
@@ -58,258 +54,23 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-white" ng-click="refresh()">
+          <button class="btn btn-link" ng-click="list()">
             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
           </button>
         </li>
       </ul>
       <ul class="nav quick-section pull-right">
-        <li class="quicklinks toggle-columns">
-          <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html="'{t}Columns{/t}'" tooltip-placement="left">
-            <i class="fa fa-columns"></i>
-          </div>
-        </li>
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks form-inline pagination-links">
-          <div class="btn-group">
-            <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
-              <i class="fa fa-chevron-left"></i>
-            </button>
-            <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
-              <i class="fa fa-chevron-right"></i>
-            </button>
-          </div>
+          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </li>
       </ul>
     </div>
   </div>
 </div>
 <div class="content">
-  <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
-    <div class="row">
-      <div class="col-xs-12 title">
-        <h5>{t}Columns{/t}</h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-            <label for="checkbox-name">
-              {t}Name{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'domains'" type="checkbox">
-            <label for="checkbox-domains">
-              {t}Domains{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
-            <label for="checkbox-domain-expire">
-              {t}Domain expire{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
-            <label for="checkbox-contact">
-              {t}Contact{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'last_login'" type="checkbox">
-            <label for="checkbox-last-access">
-              {t}Last access{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-            <label for="checkbox-created">
-              {t}Created{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-database" checklist-model="columns.selected" checklist-value="'database'" type="checkbox">
-            <label for="checkbox-database">
-              {t}Database{/t}
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
-            <label for="checkbox-contents">
-              {t}Contents{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
-            <label for="checkbox-articles">
-              {t}Articles{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-opinions" checklist-model="columns.selected" checklist-value="'opinions'" type="checkbox">
-            <label for="checkbox-opinions">
-              {t}Opinions{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-advertisements" checklist-model="columns.selected" checklist-value="'advertisements'" type="checkbox">
-            <label for="checkbox-advertisements">
-              {t}Advertisements{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-albumns" checklist-model="columns.selected" checklist-value="'albumns'" type="checkbox">
-            <label for="checkbox-albumns">
-              {t}Albums{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
-            <label for="checkbox-photos">
-              {t}Photo{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
-            <label for="checkbox-support">
-              {t}Support plan{/t}
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
-            <label for="checkbox-videos">
-              {t}Videos{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-widgets" checklist-model="columns.selected" checklist-value="'widgets'" type="checkbox">
-            <label for="checkbox-widgets">
-              {t}Widgets{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-static-pages" checklist-model="columns.selected" checklist-value="'static_pages'" type="checkbox">
-            <label for="checkbox-static-pages">
-              {t}Static pages{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-attachments" checklist-model="columns.selected" checklist-value="'attachments'" type="checkbox">
-            <label for="checkbox-attachments">
-              {t}Attachments{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-polls" checklist-model="columns.selected" checklist-value="'polls'" type="checkbox">
-            <label for="checkbox-polls">
-              {t}Polls{/t}
-            </label>
-          </div>
-        </div>
-        <div class="checkbox check-default">
-          <input id="checkbox-letters" checklist-model="columns.selected" checklist-value="'letters'" type="checkbox">
-          <label for="checkbox-letters">
-            {t}Letters{/t}
-          </label>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
-            <label for="checkbox-media-size">
-              {t}Media size{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-alexa" checklist-model="columns.selected" checklist-value="'alexa'" type="checkbox">
-            <label for="checkbox-alexa">
-              {t}Alexa{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
-            <label for="checkbox-page-views">
-              {t}Page views{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
-            <label for="checkbox-users">
-              {t}Users{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
-            <label for="checkbox-emails">
-              {t}Emails{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-activated" checklist-model="columns.selected" checklist-value="'activated'" type="checkbox">
-            <label for="checkbox-activated">
-              {t}Enabled{/t}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">
@@ -319,7 +80,7 @@
             <tr>
               <th style="width:15px;">
                 <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                   <label for="select-all"></label>
                 </div>
               </th>
@@ -327,7 +88,7 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isEnabled('name')">
+              <th class="pointer" ng-click="sort('title')" ng-show="isColumnEnabled('name')">
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
@@ -338,6 +99,9 @@
               <th class="pointer" ng-click="sort('type')" width="100" width=10>
                 {t}Type{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
+              </th>
+              <th class="text-center" width="60">
+                l10n
               </th>
               <th class="pointer text-center" ng-click="sort('start')" width="250">
                 {t}Start{/t}
@@ -367,7 +131,7 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isEnabled('name')">
+              <td ng-show="isColumnEnabled('name')">
                 <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
                   [% item.title['en'] %]
                 </a>
@@ -389,6 +153,14 @@
                 <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-comment': item.type === 'comment', 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type !== 'comment' && item.type !== 'media' && item.type !== 'email' && item.type !== 'help' && item.type !== 'user', 'fa-users': item.type === 'user' }"></i>
               </td>
               <td class="text-center">
+                <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
+                  <i class="fa fa-check""countStringsLeft(item) === 0"></i>
+                </span>
+                <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
+                  [% countStringsLeft(item) %]
+                </span>
+              </td>
+              <td class="text-center">
                 [% item.start %]
               </td>
               <td class="text-center">
@@ -405,11 +177,8 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-left pagination-info" ng-if="items.length > 0">
-        {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
-      </div>
       <div class="pull-right" ng-if="items.length > 0">
-        <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
   </div>

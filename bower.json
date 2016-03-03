@@ -79,6 +79,7 @@
     "jqueryui-touch-punch": "*",
     "jqvmap": "*",
     "jvectormap": "2.0.2",
+    "lodash": "4.5.1",
     "messenger": "1.4.1",
     "metrojs": "https://github.com/drewgreenwell/MetroJS.git#0.9.6",
     "mixitup": "2.1.8",

@@ -13,7 +13,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" ng-controller="SpecialCtrl">
+  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" ng-controller="SpecialCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -41,16 +41,16 @@
             <li class="quicklinks">
               {if !is_null($special->id)}
                 {acl isAllowed="SPECIAL_UPDATE"}
-                  <button type="submit" class="btn btn-primary">
-                    <span class="fa fa-save"></span>
-                    {t}Update{/t}
+                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                    <i class="fa fa-save"></i>
+                    <span class="text">{t}Update{/t}</span>
                   </button>
                 {/acl}
               {else}
                 {acl isAllowed="SPECIAL_CREATE"}
-                  <button type="submit" class="btn btn-primary">
-                    <span class="fa fa-save"></span>
-                    {t}Save{/t}
+                  <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                    <i class="fa fa-save"></i>
+                    <span class="text">{t}Save{/t}</span>
                   </button>
                 {/acl}
               {/if}
