@@ -134,7 +134,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
           if ($scope.forced.length > 0) {
             var tpl = '<div class="notification-list-item" ng-class="{ \'notification-list-item-hidden\': !notification.visible, \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced track by $index" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
-              '<span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)">' +
+              '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)">' +
                 '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
               '</span>' +
               '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
@@ -175,39 +175,27 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     $scope.markAsRead = function(index) {
       var notification = $scope.notifications[index];
 
-      if (notification.fixed) {
-        return;
-      }
-
-      if (parseInt(notification.forced) === 1) {
-        $scope.markForcedAsRead(index);
-        return;
-      }
-
-      var url = routing.generate('backend_ws_notification_patch', { id: id });
+      var url = routing.generate('backend_ws_notification_patch',
+          { id: notification.id });
 
       $http.patch(url).success(function() {
-        $scope.notification.visible = false;
-
-        $timeout(function() {
-          $scope.notification = null;
-        }, 1000);
-
-        var i = 0;
-        while (i < $scope.notifications.length &&
-            $scope.notifications[i].id !== id) {
-          i++;
-        }
-
-        if (i < $scope.notifications.length) {
-          $scope.notifications.splice(i, 1);
-          $scope.pulse = true;
-          $timeout(function() { $scope.pulse = false; }, 1000);
-        }
+        $scope.notifications.splice(index, 1);
+        $scope.pulse = true;
+        $timeout(function() { $scope.pulse = false; }, 1000);
       });
     };
 
+    /**
+     * @function markAsRead
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Marks a forced notification as read.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
     $scope.markForcedAsRead = function (index) {
+      console.log('mark forced')
       var notification = $scope.forced[index];
       var id           = 'notification-' + notification.id;
       var date         = new Date();
