@@ -237,7 +237,7 @@
                     <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                   </span>
                   <a>
-                    <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ color: notification.style.background_color }">
+                    <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ 'background-color': notification.style.font_color, 'color': notification.style.background_color }">
                       <i class="fa fa-[% notification.style.icon %]"></i>
                     </div>
                     <div class="notification-body" ng-style="{ 'color': notification.style.font_color }">

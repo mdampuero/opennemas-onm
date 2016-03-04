@@ -133,27 +133,23 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
           });
 
           if ($scope.forced.length > 0) {
-            var tpl = '<div class="notification-list-item" ng-class="{ \'notification-list-item-hidden\': !notification.visible, \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced track by $index" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
-              '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)">' +
-                '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
-              '</span>' +
-              '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
-                '<div class="notification-icon" ng-if="notification.style.icon" ng-style="{ \'color\': notification.style.background_color }">' +
-                  '<i class="fa fa-[% notification.style.icon %]"></i>' +
-                '</div>' +
-                '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
-                '</div>' +
-              '</a>' +
-            '</div>';
+            var tpl = '<ul class="notification-list notification-list-auto">' +
+              '<li class="notification-list-item" ng-class="{ \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
+                '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)">' +
+                  '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
+                '</span>' +
+                '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
+                  '<div class="notification-icon" ng-if="notification.style.icon" ng-style="{ \'background-color\': notification.style.font_color, \'color\': notification.style.background_color }">' +
+                    '<i class="fa fa-[% notification.style.icon %]"></i>' +
+                  '</div>' +
+                  '<div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ \'color\': notification.style.font_color }"></div>' +
+                  '</div>' +
+                '</a>' +
+              '</li>' +
+            '</ul>';
 
             var e = $compile(tpl)($scope);
             $('.content').prepend(e);
-
-            $timeout(function() {
-              angular.forEach($scope.forced, function (value) {
-                value.visible = true;
-              });
-            }, 1000);
           }
 
           $timeout(function() {
@@ -195,7 +191,6 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markForcedAsRead = function (index) {
-      console.log('mark forced')
       var notification = $scope.forced[index];
       var id           = 'notification-' + notification.id;
       var date         = new Date();
@@ -204,11 +199,12 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       date = moment(date).format('YYYY-MM-DD HH:mm:ss');
       webStorage.local.add(id, date);
 
-      notification.visible = false;
-
-      $scope.forced.splice(index, 1);
       $scope.pulse = true;
-      $timeout(function() { $scope.pulse = false; }, 1000);
+      $scope.forced.splice(index, 1);
+
+      $timeout(function() {
+        $scope.pulse = false;
+      }, 250);
     };
 
     $scope.xsOnly = function(event, callback, args) {

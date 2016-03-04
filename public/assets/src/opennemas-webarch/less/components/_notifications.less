@@ -46,8 +46,11 @@
   margin: 0;
   padding: 0;
   padding-right: 3px;
-  transition: all .25s;
   width: 100%;
+
+  &.notification-list-auto {
+    height: auto;
+  }
 
   .nano > .nano-content {
     padding-right: 12px;
@@ -63,7 +66,7 @@
   max-height: 500px;
   overflow: hidden;
   position: relative;
-  transition: 0.25s ease-in all;
+  transition: .25s ease-in all;
   width: 100%;
 
   & > a {
@@ -73,13 +76,16 @@
     padding: 15px !important;
   }
 
-  &:last-child {
-    margin-bottom: 0;
+  &.ng-enter {
+    margin: 0;
+    max-height: 0;
+    opacity: 0;
   }
 
   &.ng-leave.ng-leave-active {
+    margin: 0 0 0 100px;
+    max-height: 0;
     opacity: 0;
-    margin-left: 100px;
   }
 }
 
@@ -100,12 +106,6 @@
   &:hover i {
     color: #000 !important;
   }
-}
-
-.notification-list-item-hidden {
-  max-height: 0;
-  opacity: 0;
-  visibility: hidden;
 }
 
 .notification-list-item-with-icon {
