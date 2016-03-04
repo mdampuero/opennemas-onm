@@ -47,6 +47,10 @@ class NotificationController extends Controller
                 . ' )';
         }
 
+        if (!$this->getUser()->isAdmin()) {
+            $criteria .= ' AND users != 1';
+        }
+
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
             [
@@ -86,6 +90,10 @@ class NotificationController extends Controller
         $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
             .  'instances LIKE \'%"0"%\' AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+
+        if (!$this->getUser()->isAdmin()) {
+            $criteria .= ' AND users != 1';
+        }
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
