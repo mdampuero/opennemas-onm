@@ -47,9 +47,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.init = function(language) {
             $translate.use(language);
-
-            paginationConfig.nextText     = $filter('translate')('Next');
-            paginationConfig.previousText = $filter('translate')('Previous');
         };
 
         /**

@@ -50,7 +50,7 @@ angular.module('ManagerApp')
     $httpProvider.defaults.transformRequest = [function(data) {
       return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
-  }).config(function ($translateProvider, paginationConfig) {
+  }).config(function ($translateProvider) {
     $translateProvider.translations('en', {
       Next:     'Next',
       Previous:   'Previous',
