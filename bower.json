@@ -10,7 +10,7 @@
   "dependencies": {
     "angular": "1.5.0",
     "angular-animate": "1.5.0",
-    "angular-bootstrap": "1.2.1",
+    "angular-bootstrap": "1.2.2",
     "angular-bootstrap-multiselect": "0.3.5",
     "angular-checklist-model": "0.9.0",
     "angular-bootstrap-colorpicker": "3.0.24",
@@ -68,7 +68,7 @@
     "messenger": "1.4.2",
     "modernizr": "2.8.3",
     "moment": "2.11.2",
-    "moment-timezone": "0.5.0",
+    "moment-timezone": "0.5.1",
     "nanoscroller": "0.8.7",
     "nestable": "*",
     "ng-tags-input": "3.0.0",
