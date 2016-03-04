@@ -78,8 +78,8 @@
     <div class="content">
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
-          <tabset>
-            <tab heading="{t}General{/t}">
+          <uib-tabset>
+            <uib-tab heading="{t}General{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -119,8 +119,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Appearance{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Appearance{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -236,8 +236,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}SEO{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}SEO{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -288,8 +288,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Internal{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Internal{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -387,8 +387,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}External services{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
@@ -853,8 +853,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-          </tabset>
+            </uib-tab>
+          </uib-tabset>
         </div>
       </div>
     </div>

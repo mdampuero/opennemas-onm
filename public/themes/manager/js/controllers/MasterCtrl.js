@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Controller to implement common actions.
  *
@@ -6,14 +8,14 @@
  * @param Object routing The routing service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
-    '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
+    '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'routing', 'history', 'webStorage', 'messenger',
-    'paginationConfig', 'cfpLoadingBar',
+    'cfpLoadingBar',
     function (
-        $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
+        $filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, routing,
-        history, webStorage, messenger, paginationConfig, cfpLoadingBar
+        history, webStorage, messenger, cfpLoadingBar
     ) {
         /**
          * The routing service.
@@ -155,7 +157,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $scope.auth.inprogress = true;
 
                 if ($scope.auth.modal) {
-                    var modal = $modal.open({
+                    var modal = $uibModal.open({
                         templateUrl: 'modal-login',
                         backdrop: 'static',
                         controller: 'LoginModalCtrl',
@@ -252,7 +254,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $scope.$on('application-need-upgrade', function (event, args) {
-            var modal = $modal.open({
+            $uibModal.open({
                 templateUrl: 'modal-upgrade',
                 controller: 'MasterCtrl',
                 backdrop: 'static'

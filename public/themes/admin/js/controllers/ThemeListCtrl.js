@@ -19,8 +19,8 @@
      *   Handles actions for themes store.
      */
     .controller('ThemeListCtrl', [
-      '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($analytics, $http, $location, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$location', '$uibModal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $location, $uibModal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * The available modules.
          *
@@ -221,7 +221,7 @@
          * @param {Object} item The item to detail.
          */
         $scope.showDetails = function(item) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-details',
             windowClass: 'modal-details-theme',
             controller: 'modalCtrl',

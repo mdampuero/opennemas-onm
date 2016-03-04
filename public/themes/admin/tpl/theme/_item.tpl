@@ -2,22 +2,24 @@
   <div class="grid-title no-border no-padding"></div>
   <div class="grid-body" ng-click="showDetails(item);$event.stopPropagation()">
     <div class="p-b-50" ng-click="$event.stopPropagation()">
-      <carousel class="carousel-minimal" ng-if="item.screenshots.length > 0">
-        <slide ng-repeat="screenshot in item.screenshots">
+      <uib-carousel active="active"  class="carousel-minimal" ng-if="item.screenshots.length > 0">
+        <uib-slide ng-repeat="screenshot in item.screenshots">
           <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
-        </slide>
-      </carousel>
-      <carousel class="carousel-minimal" ng-if="!item.screenshots">
-        <slide>
+        </uib-slide>
+      </uib-carousel>
+
+
+      <uib-carousel class="carousel-minimal" ng-if="!item.screenshots">
+        <uib-slide>
           <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
-        </slide>
-        <slide>
+        </uib-slide>
+        <uib-slide>
           <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
-        </slide>
-        <slide>
+        </uib-slide>
+        <uib-slide>
           <img class="img-responsive" ng-click="showDetails(item)" src="http://placehold.it/1024x768">
-        </slide>
-      </carousel>
+        </uib-slide>
+      </uib-carousel>
     </div>
     <div class="clearfix p-t-5 p-b-10">
       <h4 class="uppercase pull-left">[% item.name %]</h4>

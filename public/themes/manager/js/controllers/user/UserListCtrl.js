@@ -7,7 +7,7 @@
      * @name UserListCtrl
      *
      * @requires $controller
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requiers $timeout
      * @requires itemService
@@ -19,8 +19,8 @@
      *   Handles all actions in users listing.
      */
     .controller('UserListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'data',
-      function ($controller, $modal, $scope, $timeout, itemService, routing, messenger, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'data',
+      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -59,7 +59,7 @@
          *   Confirm delete action.
          */
         $scope.delete = function(user) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-confirm',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -96,7 +96,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-confirm',
             backdrop: 'static',
             controller: 'modalCtrl',

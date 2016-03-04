@@ -7,7 +7,7 @@
      * @name  NotificationListCtrl
      *
      * @requires $controller
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
@@ -105,7 +105,7 @@
          * @param {Object notification The notification to delete.
          */
         $scope.delete = function(notification) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-confirm',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -143,7 +143,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-confirm',
             backdrop: 'static',
             controller: 'modalCtrl',

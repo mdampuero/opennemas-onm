@@ -154,15 +154,15 @@
           <br>
           <p class="text-white">{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <carousel interval="10000">
+          <uib-carousel interval="10000" active="active" style="height: 420px">
             {foreach $youtube_videos  as $videoId}
-            <slide>
-              <div class="video-container">
+            <uib-slide>
+              <div class="video-container" style="margin:auto;">
                 <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" type="text/html" allowfullscreen></iframe>
               </div>
-            </slide>
+            </uib-slide>
             {/foreach}
-          </carousel>
+          </uib-carousel>
         </div>
       </div>
     </div>

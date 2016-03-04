@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
-    '$http', '$modalInstance', '$scope', 'authService', 'routing', 'vcRecaptchaService', 'data',
-    function ($http, $modalInstance, $scope, authService, routing, vcRecaptchaService, data) {
+    '$http', '$uibModalInstance', '$scope', 'authService', 'routing', 'vcRecaptchaService', 'data',
+    function ($http, $uibModalInstance, $scope, authService, routing, vcRecaptchaService, data) {
         /**
          * Login attempts
          *
@@ -23,7 +23,7 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
          * Closes the current modal.
          */
         $scope.close = function() {
-            $modalInstance.close({ success: false });
+            $uibModalInstance.close({ success: false });
         };
 
         /**

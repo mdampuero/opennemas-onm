@@ -6,7 +6,7 @@
      * @ngdoc controller
      * @name  modalCtrl
      *
-     * @requires $modalInstance
+     * @requires $uibModalInstance
      * @requires $scope
      * @requires template
      * @requires success
@@ -15,8 +15,8 @@
      *   Handles actions for confirmation modal windows.
      */
     .controller('modalCtrl', [
-      '$modalInstance', '$scope', 'template', 'success',
-      function ($modalInstance, $scope, template, success) {
+      '$uibModalInstance', '$scope', 'template', 'success',
+      function ($uibModalInstance, $scope, template, success) {
         /**
          * memberOf modalCtrl
          *
@@ -35,7 +35,7 @@
          *   Close the modal without returning response.
          */
         $scope.dismiss = function() {
-          $modalInstance.dismiss();
+          $uibModalInstance.dismiss();
         };
 
         /**
@@ -50,9 +50,9 @@
 
           var getType = {};
           if (success && getType.toString.call(success) === '[object Function]') {
-            success($modalInstance, $scope.template);
+            success($uibModalInstance, $scope.template);
           } else {
-            $modalInstance.close(true);
+            $uibModalInstance.close(true);
           }
         };
 

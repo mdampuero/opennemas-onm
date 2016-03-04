@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
-  '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager', '$controller',
-  function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager, $controller) {
+  '$http', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager', '$controller',
+  function($http, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager, $controller) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -13,7 +13,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
      * Permanently removes a contents by using a confirmation dialog
      */
     $scope.removePermanently = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-cache-remove',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -51,7 +51,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-cache-batch-remove',
         backdrop: 'static',
         controller: 'modalCtrl',

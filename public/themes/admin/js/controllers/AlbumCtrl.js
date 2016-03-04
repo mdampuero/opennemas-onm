@@ -2,8 +2,8 @@ angular.module('BackendApp.controllers')
   /**
    * Handle actions for article inner.
   */
-  .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope', '$modal',
-  function($controller, $rootScope, $scope, $modal) {
+  .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope', '$uibModal',
+  function($controller, $rootScope, $scope, $uibModal) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -47,7 +47,7 @@ angular.module('BackendApp.controllers')
     $scope.validatePhotosAndCover = function($event) {
       if (!$scope.photos || !$scope.cover) {
         $event.preventDefault();
-        var modal = $modal.open({
+        var modal = $uibModal.open({
           templateUrl: 'modal-edit-album-error',
           backdrop: 'static',
           controller: 'modalCtrl',
