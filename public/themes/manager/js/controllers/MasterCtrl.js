@@ -206,8 +206,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             $scope.auth.modal      = false;
             $scope.auth.status     = true;
 
-            webStorage.local.add('token', args.token);
-            webStorage.local.add('user', args.user);
+            webStorage.local.set('token', args.token);
+            webStorage.local.set('user', args.user);
         });
 
         /**

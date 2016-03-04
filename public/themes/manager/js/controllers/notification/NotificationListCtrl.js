@@ -322,7 +322,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.add('notifications-columns', $scope.columns);
+            webStorage.local.set('notifications-columns', $scope.columns);
           }
         }, true);
 

@@ -157,7 +157,7 @@
             return;
           }
 
-          webStorage.local.add('cart', nv);
+          webStorage.local.set('cart', nv);
 
           for (var i = 0; i < nv.length; i++) {
             if (nv[i].price && nv[i].price.month) {

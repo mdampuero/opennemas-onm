@@ -314,7 +314,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.add('modules-columns', $scope.columns);
+            webStorage.local.set('modules-columns', $scope.columns);
           }
         }, true);
 

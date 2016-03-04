@@ -258,7 +258,7 @@
             return;
           }
 
-          webStorage.local.add('cart', nv);
+          webStorage.local.set('cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
