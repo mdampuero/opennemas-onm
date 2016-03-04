@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Handles all actions in users listing.
  *
@@ -53,10 +55,10 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
                 .then(function (response) {
                     messenger.post({
                         message: response.data,
-                        type: response.status == 201  ? 'success' : 'error'
+                        type: response.status === 201  ? 'success' : 'error'
                     });
 
-                    if (response.status == 201) {
+                    if (response.status === 201) {
                         // Get new user id
                         var url = response.headers()['location'];
                         var id  = url.substr(url.lastIndexOf('/') + 1);
@@ -95,7 +97,7 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
                 $scope.user).then(function (response) {
                     messenger.post({
                         message: response.data,
-                        type: response.status == 200 ? 'success' : 'error'
+                        type: response.status === 200 ? 'success' : 'error'
                     });
 
                     $scope.saving = 0;
@@ -116,6 +118,6 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
         $scope.$on('$destroy', function() {
             $scope.user     = null;
             $scope.template = null;
-        })
+        });
     }
 ]);

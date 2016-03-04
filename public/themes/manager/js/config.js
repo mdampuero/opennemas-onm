@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('ManagerApp')
   .config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[%').endSymbol('%]');

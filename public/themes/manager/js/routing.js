@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('ManagerApp')
   .config(function($routeProvider, routingProvider) {
     $routeProvider

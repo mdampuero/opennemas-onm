@@ -223,26 +223,27 @@
                 var data = {
                     selected: $scope.selected.items,
                     activated: enabled
-                }
+                };
 
                 itemService.patchSelected('manager_ws_users_patch', data).then(function (response) {
-                    if (response.status == 200 || response.status == 207) {
+                    if (response.status === 200 || response.status === 207) {
                         // Update users changed successfully
                         for (var i = 0; i < $scope.items.length; i++) {
                             var id = $scope.items[i].id;
 
-                            if (response.data.success.ids.indexOf(id) != -1) {
+                            if (response.data.success.ids.indexOf(id) !== -1) {
                                 $scope.items[i].activated = enabled;
                                 delete $scope.items[i].loading;
                             }
                         }
 
                         // Show success message
-                        if (response.data.success.ids.length > 0)
-                        messenger.post({
-                            message: response.data.success.message,
-                            type: 'success'
-                        });
+                        if (response.data.success.ids.length > 0) {
+                          messenger.post({
+                              message: response.data.success.message,
+                              type: 'success'
+                          });
+                        }
 
                         // Show errors
                         for (var i = 0; i < response.data.errors.length; i++) {

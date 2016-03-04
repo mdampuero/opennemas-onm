@@ -213,8 +213,9 @@
           if ($scope.module.metas.modules_included) {
             $scope.module.metas.modules_included =
               $scope.module.metas.modules_included.map(function(e) {
-                if (e instanceof Object)
-                return e.text;
+                if (e instanceof Object) {
+                  return e.text;
+                }
               });
           }
 
