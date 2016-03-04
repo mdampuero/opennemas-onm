@@ -22,7 +22,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_instance_create') %]">
+            <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_instance_create') %]">
               <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>
