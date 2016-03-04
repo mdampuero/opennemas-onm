@@ -218,8 +218,6 @@ extension_meta:
             unique: false
             flags: {  }
 
-
-
 notification:
     columns:
         id:
@@ -232,6 +230,9 @@ notification:
             type:    text
             options: { default: null, length: 65532, notnull: false }
         instances:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        users:
             type: text
             options: { default: null, length: 65532, notnull: false }
         start:
