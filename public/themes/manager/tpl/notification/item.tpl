@@ -47,95 +47,93 @@
         <div class="grid simple">
           <div class="grid-body notification-form no-padding">
             <div class="row p-l-15 p-r-15 p-t-15">
-              <div class="col-lg-6">
-                <div class="row">
-                  <div class="form-group col-lg-4">
-                    <label for="template" class="form-label">{t}Icon{/t}</label>
-                    <div class="controls dropdown">
-                      <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">
-                        <span ng-if="!notification.style.icon">{t}Pick an icon...{/t}</span>
-                        <span ng-if="notification.style.icon">
-                          <i class="fa fa-lg fa-[% notification.style.icon %]"></i>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Icon{/t}</label>
+                  <div class="controls dropdown">
+                    <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">
+                      <span ng-if="!notification.style.icon">{t}Pick an icon...{/t}</span>
+                      <span ng-if="notification.style.icon">
+                        <i class="fa fa-lg fa-[% notification.style.icon %]"></i>
+                      </span>
+                      <i class="fa fa-caret-down m-l-10"></i>
+                    </button>
+                    <ul class="dropdown-menu no-padding">
+                      <li ng-click="notification.style.icon = null">
+                        <span class="fake-a text-center">
+                          {t}No icon{/t}
                         </span>
-                        <i class="fa fa-caret-down m-l-10"></i>
-                      </button>
-                      <ul class="dropdown-menu no-padding">
-                        <li ng-click="notification.style.icon = null">
-                          <span class="fake-a text-center">
-                            {t}No icon{/t}
-                          </span>
-                        </li>
-                        <li ng-repeat="icon in extra.icons" ng-click="notification.style.icon = '[% icon.value %]'">
-                          <span class="fake-a text-center">
-                            <i class="fa fa-2x fa-[% icon.value %] m-r-5"></i>
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
+                      </li>
+                      <li ng-repeat="icon in extra.icons" ng-click="notification.style.icon = '[% icon.value %]'">
+                        <span class="fake-a text-center">
+                          <i class="fa fa-2x fa-[% icon.value %] m-r-5"></i>
+                        </span>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="form-group col-lg-7">
-                    <label for="template" class="form-label">{t}Background{/t}</label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <span class="dropdown input-group-btn">
-                          <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" style="background-color: [% notification.style.background_color %] !important;" type="button">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-colors no-padding">
-                            <li ng-click="notification.style.background_color='#0aa699'" style="background-color: #0aa699;"></li>
-                            <li ng-click="notification.style.background_color='#fdd01c'" style="background-color: #fdd01c;"></li>
-                            <li ng-click="notification.style.background_color='#f35958'" style="background-color: #f35958;"></li>
-                            <li ng-click="notification.style.background_color='#0090d9'" style="background-color: #0090d9;"></li>
-                            <li ng-click="notification.style.background_color='#d1dade'" style="background-color: #d1dade;"></li>
-                            <li ng-click="notification.style.background_color='#0dd6c5'" style="background-color: #0dd6c5;"></li>
-                            <li ng-click="notification.style.background_color='#fdda4f'" style="background-color: #fdda4f;"></li>
-                            <li ng-click="notification.style.background_color='#f68888'" style="background-color: #f68888;"></li>
-                            <li ng-click="notification.style.background_color='#0daeff'" style="background-color: #0daeff;"></li>
-                            <li ng-click="notification.style.background_color='#e5e5e5'" style="background-color: #e5e5e5;"></li>
-                            <li ng-click="notification.style.background_color='#3cf3ea'" style="background-color: #3cf3ea;"></li>
-                            <li ng-click="notification.style.background_color='#feea9a'" style="background-color: #feea9a;"></li>
-                            <li ng-click="notification.style.background_color='#fccfcf'" style="background-color: #fccfcf;"></li>
-                            <li ng-click="notification.style.background_color='#5ac7ff'" style="background-color: #5ac7ff;"></li>
-                            <li ng-click="notification.style.background_color='#e5e9ec'" style="background-color: #e5e9ec;"></li>
-                          </ul>
-                        </span>
-                        <input class="form-control" colorpicker="hex" ng-model="notification.style.background_color" type="text">
-                        <div class="input-group-btn">
-                          <button class="btn btn-default" ng-click="notification.style.background_color= null" type="button">{t}Reset{/t}</button>
-                        </div>
+                </div>
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Background{/t}</label>
+                  <div class="controls">
+                    <div class="input-group">
+                      <span class="dropdown input-group-btn">
+                        <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" style="background-color: [% notification.style.background_color %] !important;" type="button">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-colors no-padding">
+                          <li ng-click="notification.style.background_color='#0aa699'" style="background-color: #0aa699;"></li>
+                          <li ng-click="notification.style.background_color='#fdd01c'" style="background-color: #fdd01c;"></li>
+                          <li ng-click="notification.style.background_color='#f35958'" style="background-color: #f35958;"></li>
+                          <li ng-click="notification.style.background_color='#0090d9'" style="background-color: #0090d9;"></li>
+                          <li ng-click="notification.style.background_color='#d1dade'" style="background-color: #d1dade;"></li>
+                          <li ng-click="notification.style.background_color='#0dd6c5'" style="background-color: #0dd6c5;"></li>
+                          <li ng-click="notification.style.background_color='#fdda4f'" style="background-color: #fdda4f;"></li>
+                          <li ng-click="notification.style.background_color='#f68888'" style="background-color: #f68888;"></li>
+                          <li ng-click="notification.style.background_color='#0daeff'" style="background-color: #0daeff;"></li>
+                          <li ng-click="notification.style.background_color='#e5e5e5'" style="background-color: #e5e5e5;"></li>
+                          <li ng-click="notification.style.background_color='#3cf3ea'" style="background-color: #3cf3ea;"></li>
+                          <li ng-click="notification.style.background_color='#feea9a'" style="background-color: #feea9a;"></li>
+                          <li ng-click="notification.style.background_color='#fccfcf'" style="background-color: #fccfcf;"></li>
+                          <li ng-click="notification.style.background_color='#5ac7ff'" style="background-color: #5ac7ff;"></li>
+                          <li ng-click="notification.style.background_color='#e5e9ec'" style="background-color: #e5e9ec;"></li>
+                        </ul>
+                      </span>
+                      <input class="form-control" colorpicker="hex" ng-model="notification.style.background_color" type="text">
+                      <div class="input-group-btn">
+                        <button class="btn btn-default" ng-click="notification.style.background_color= null" type="button">{t}Reset{/t}</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-lg-7">
-                    <label for="template" class="form-label">{t}Font color{/t}</label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <span class="dropdown input-group-btn">
-                          <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" style="background-color: [% notification.style.font_color %] !important;" type="button">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-colors no-padding">
-                            <li ng-click="notification.style.font_color='#0aa699'" style="background-color: #0aa699;"></li>
-                            <li ng-click="notification.style.font_color='#fdd01c'" style="background-color: #fdd01c;"></li>
-                            <li ng-click="notification.style.font_color='#f35958'" style="background-color: #f35958;"></li>
-                            <li ng-click="notification.style.font_color='#0090d9'" style="background-color: #0090d9;"></li>
-                            <li ng-click="notification.style.font_color='#d1dade'" style="background-color: #d1dade;"></li>
-                            <li ng-click="notification.style.font_color='#0dd6c5'" style="background-color: #0dd6c5;"></li>
-                            <li ng-click="notification.style.font_color='#fdda4f'" style="background-color: #fdda4f;"></li>
-                            <li ng-click="notification.style.font_color='#f68888'" style="background-color: #f68888;"></li>
-                            <li ng-click="notification.style.font_color='#0daeff'" style="background-color: #0daeff;"></li>
-                            <li ng-click="notification.style.font_color='#e5e5e5'" style="background-color: #e5e5e5;"></li>
-                            <li ng-click="notification.style.font_color='#3cf3ea'" style="background-color: #3cf3ea;"></li>
-                            <li ng-click="notification.style.font_color='#feea9a'" style="background-color: #feea9a;"></li>
-                            <li ng-click="notification.style.font_color='#fccfcf'" style="background-color: #fccfcf;"></li>
-                            <li ng-click="notification.style.font_color='#5ac7ff'" style="background-color: #5ac7ff;"></li>
-                            <li ng-click="notification.style.font_color='#e5e9ec'" style="background-color: #e5e9ec;"></li>
-                          </ul>
-                        </span>
-                        <input class="form-control" colorpicker="hex" ng-model="notification.style.font_color" type="text">
-                        <div class="input-group-btn">
-                          <button class="btn btn-default" ng-click="notification.style.font_color= null" type="button">{t}Reset{/t}</button>
-                        </div>
+                </div>
+                <div class="form-group">
+                  <label for="template" class="form-label">{t}Font color{/t}</label>
+                  <div class="controls">
+                    <div class="input-group">
+                      <span class="dropdown input-group-btn">
+                        <button class="btn btn-white dropdown-toggle" data-toggle="dropdown" style="background-color: [% notification.style.font_color %] !important;" type="button">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-colors no-padding">
+                          <li ng-click="notification.style.font_color='#0aa699'" style="background-color: #0aa699;"></li>
+                          <li ng-click="notification.style.font_color='#fdd01c'" style="background-color: #fdd01c;"></li>
+                          <li ng-click="notification.style.font_color='#f35958'" style="background-color: #f35958;"></li>
+                          <li ng-click="notification.style.font_color='#0090d9'" style="background-color: #0090d9;"></li>
+                          <li ng-click="notification.style.font_color='#d1dade'" style="background-color: #d1dade;"></li>
+                          <li ng-click="notification.style.font_color='#0dd6c5'" style="background-color: #0dd6c5;"></li>
+                          <li ng-click="notification.style.font_color='#fdda4f'" style="background-color: #fdda4f;"></li>
+                          <li ng-click="notification.style.font_color='#f68888'" style="background-color: #f68888;"></li>
+                          <li ng-click="notification.style.font_color='#0daeff'" style="background-color: #0daeff;"></li>
+                          <li ng-click="notification.style.font_color='#e5e5e5'" style="background-color: #e5e5e5;"></li>
+                          <li ng-click="notification.style.font_color='#3cf3ea'" style="background-color: #3cf3ea;"></li>
+                          <li ng-click="notification.style.font_color='#feea9a'" style="background-color: #feea9a;"></li>
+                          <li ng-click="notification.style.font_color='#fccfcf'" style="background-color: #fccfcf;"></li>
+                          <li ng-click="notification.style.font_color='#5ac7ff'" style="background-color: #5ac7ff;"></li>
+                          <li ng-click="notification.style.font_color='#e5e9ec'" style="background-color: #e5e9ec;"></li>
+                        </ul>
+                      </span>
+                      <input class="form-control" colorpicker="hex" ng-model="notification.style.font_color" type="text">
+                      <div class="input-group-btn">
+                        <button class="btn btn-default" ng-click="notification.style.font_color= null" type="button">{t}Reset{/t}</button>
                       </div>
                     </div>
                   </div>
@@ -157,9 +155,9 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-md-6 col-md-offset-1">
                 <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-sm-6">
                     <div class="form-group">
                       <label class="form-label">{t}Starts{/t}</label>
                       <div class="controls">
@@ -167,12 +165,20 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-6">
+                  <div class="col-sm-6">
                     <div class="form-group">
                       <label class="form-label">{t}Ends{/t}</label>
                       <div class="controls">
                         <input class="form-control" datetime-picker ng-model="notification.end" placeholder="{t}Click to set date{/t}" type="datetime"/>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input id="users" name="users" ng-model="notification.users" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <label for="users">{t}Show only for admins{/t}</label>
                     </div>
                   </div>
                 </div>
