@@ -3,7 +3,6 @@
  * -------------------------------------------------------------
  * File:        function.structured_data_tags.php
  */
-use \Onm\Settings as s;
 
 function smarty_function_structured_data_tags($params, &$smarty) {
 
@@ -60,8 +59,8 @@ function smarty_function_structured_data_tags($params, &$smarty) {
         // Get image size
         $imageWidth = $imageHeight = 0;
         if (!empty($imageUrl)) {
-            $imageSize = getimagesize($imageUrl);
-            if (array_key_exists(0, $imageSize) && array_key_exists(1, $imageSize)) {
+            $imageSize = @getimagesize($imageUrl);
+            if (is_array($imageSize) && array_key_exists(0, $imageSize) && array_key_exists(1, $imageSize)) {
                 $imageWidth = $imageSize[0];
                 $imageHeight = $imageSize[1];
             }
@@ -73,53 +72,70 @@ function smarty_function_structured_data_tags($params, &$smarty) {
         $logoWidth = $logoHeight = 0;
         if (!empty($logo)) {
             $logoUrl = "http://".SITE.'/'.MEDIA_DIR_URL.'sections/'.$logo;
-            $logoSize = getimagesize($logoUrl);
-            if (array_key_exists(0, $logoSize) && array_key_exists(1, $logoSize)) {
+            $logoSize = @getimagesize($logoUrl);
+            if (is_array($logoSize) && array_key_exists(0, $logoSize) && array_key_exists(1, $logoSize)) {
                 $logoWidth = $logoSize[0];
                 $logoHeight = $logoSize[1];
             }
         }
 
+        // Get author if exists otherwise get agency
+        $author = (!is_null($user->name)) ? $user->name : $content->agency;
+        if (empty($author)) {
+            $author = getService('setting_repository')->get('site_name');
+        }
+
+
         // Generate tags
-        $output = '<script type="application/ld+json">
-            {
-                "@context" : "http://schema.org",
-                "@type" : "Article",
-                "mainEntityOfPage": {
-                    "@type": "WebPage",
-                    "@id": "'.$url.'"
-                },
-                "headline": "'.$content->title.'",
-                "name" : "'.$title.'",
-                "author" : {
-                    "@type" : "Person",
-                    "name" : "'.$user->name.'"
-                },
-                "datePublished" : "'.$content->created.'",
-                "dateModified": "'.$content->changed.'",
-                "image": {
-                    "@type": "ImageObject",
-                    "url": "'.$imageUrl.'",
-                    "height": '.$imageWidth.',
-                    "width": '.$imageHeight.'
-                },
-                "articleSection" : "'.$category->title.'",
-                "keywords" : "'.$content->metadata.'",
-                "url" : "'.$url.'",
-                "publisher" : {
-                    "@type" : "Organization",
-                    "name" : "'.getService("setting_repository")->get("site_name").'",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "'.$logoUrl.'",
-                        "width": '.$logoWidth.',
-                        "height": '.$logoHeight.'
+        $output = '<script type="application/ld+json">';
+        $output .= '{
+                        "@context" : "http://schema.org",
+                        "@type" : "Article",
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": "'.$url.'"
+                        },';
+        $output .= '
+                        "headline": "'.$content->title.'",
+                        "name" : "'.$title.'",';
+        $output .= '
+                        "author" : {
+                            "@type" : "Person",
+                            "name" : "'.$author.'"
+                        },';
+        $output .= '
+                        "datePublished" : "'.$content->created.'",
+                        "dateModified": "'.$content->changed.'",';
+
+        if (!empty($imageUrl)) {
+            $output .= '
+                        "image": {
+                            "@type": "ImageObject",
+                            "url": "'.$imageUrl.'",
+                            "height": '.$imageWidth.',
+                            "width": '.$imageHeight.'
+                        },';
+        }
+
+        $output .= '
+                        "articleSection" : "'.$category->title.'",
+                        "keywords" : "'.$content->metadata.'",
+                        "url" : "'.$url.'",
+                        "publisher" : {
+                            "@type" : "Organization",
+                            "name" : "'.getService("setting_repository")->get("site_name").'",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": "'.$logoUrl.'",
+                                "width": '.$logoWidth.',
+                                "height": '.$logoHeight.'
+                            }
+                        },
+                        "description": "'.strip_tags($summary).'"
                     }
-                },
-                "description": "'.strip_tags($summary).'"
-            }
-            </script>';
+                    </script>';
     }
 
-    return str_replace(["\r", "\n"], " ", $output);
+    return $output;
+    // return str_replace(["\r", "\n"], " ", $output);
 }
