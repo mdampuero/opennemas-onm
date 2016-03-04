@@ -92,9 +92,9 @@
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('instance')" width="10">
+              <th class="pointer" ng-click="sort('instances')" width="10">
                 {t}Instance{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instances') == 'asc', 'fa fa-caret-down': isOrderedBy('instances') == 'desc'}"></i>
               </th>
               <th class="text-center" width="60">
                 l10n
