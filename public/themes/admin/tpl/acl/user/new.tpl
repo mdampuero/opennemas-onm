@@ -47,7 +47,7 @@
         {acl isAllowed='USER_ADMIN'}
           {is_module_activated name='PAYWALL'}
             $('#paywall_time_limit').datetimepicker({
-              format: 'YYYY-MM-D HH:mm:ss'
+              format: 'YYYY-MM-DD HH:mm:ss'
             });
           {/is_module_activated}
         {/acl}

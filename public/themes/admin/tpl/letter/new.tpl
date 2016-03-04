@@ -5,7 +5,7 @@
     <script>
       jQuery(document).ready(function($) {
         $('#created').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $('#title').on('change', function(e, ui) {
