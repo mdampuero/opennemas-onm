@@ -134,7 +134,7 @@
         });
 
         $("#modal-image-location").modal({
-          backdrop: 'static', //Show a grey back drop
+          backdrop: false,
           keyboard: true, //Can close on escape
           show: false
         }).on('shown.bs.modal', function() {
