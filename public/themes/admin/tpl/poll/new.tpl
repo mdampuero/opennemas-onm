@@ -11,7 +11,7 @@
         });
 
         $('#closetime').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
       });
     </script>

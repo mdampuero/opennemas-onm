@@ -11,7 +11,7 @@
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('#date').datetimepicker({
-          format: 'YYYY-MM-D'
+          format: 'YYYY-MM-DD'
         });
 
         $('#title').on('change', function(e, ui) {
