@@ -139,14 +139,14 @@
           <ul class="nav quick-section">
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
-                <i class="fa fa-rebel text-danger master-user"></i>
+                <i class="fa fa-rebel text-danger pull-left"></i>
                 <span class="title">
                   [% user.name %]
                 </span>
+                <i class="fa fa-angle-down"></i>
                 <div class="profile-pic">
                   <gravatar ng-model="user.email" size="25"></gravatar>
                 </div>
-                <i class="fa fa-angle-down"></i>
               </span>
               <ul class="dropdown-menu dropdown-menu-right no-padding">
                 <li class="text-danger">

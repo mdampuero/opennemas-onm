@@ -45,7 +45,7 @@
           opacity 0.1s linear 0s;
 
           &.fa-rebel {
-            margin: 3px 4px 0 0 !important;
+            margin: 3px 10px 0 0 !important;
           }
         }
 
@@ -79,8 +79,12 @@
   }
 
   .user-info {
+    min-width: 180px;
+    text-align: right !important;
+
     .link  {
       padding-right: 12px;
+      width: 100%;
 
       & > .title {
         float: left;
@@ -92,16 +96,15 @@
 
       & > .profile-pic {
         border-radius: 100%;
-        float: left;
+        float: right;
         height: 25px;
-        margin-left: 10px;
-        margin-top: -3px;
+        margin: -3px 0 0 10px;
         overflow: hidden;
         width: 25px;
       }
 
       & > i {
-        float: left;
+        float: right;
         margin-right: 0 !important;
         margin-top: 4px !important;
         margin-left: 10px !important;

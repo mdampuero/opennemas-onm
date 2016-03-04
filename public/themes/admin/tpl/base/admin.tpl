@@ -270,7 +270,7 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
+                {if is_object($smarty.session._sf2_attributes.user)}
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markFixedAsRead()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
@@ -353,17 +353,17 @@
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                      <i class="fa fa-rebel text-danger"></i>
+                      <i class="fa fa-rebel pull-left m-r-5"></i>
                     {/if}
-                    <span class="title">
-                      {$smarty.session.realname}
-                    </span>
+                    <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
                       {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
                     </div>
-                    <i class="fa fa-angle-down"></i>
+                    <span class="title">
+                      {$smarty.session.realname}
+                    </span>
                   </span>
-                  <ul class="dropdown-menu dropdown-menu-right no-padding" role="menu">
+                  <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
                       <li class="text-danger">
                         <span class="fake-a fake-a-static text-danger">
