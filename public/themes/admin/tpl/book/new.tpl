@@ -4,7 +4,7 @@
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script type="text/javascript">
       $('#date').datetimepicker({
-        format: 'YYYY-MM-D HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss'
       });
 
       jQuery('#title').on('change', function(e, ui) {
