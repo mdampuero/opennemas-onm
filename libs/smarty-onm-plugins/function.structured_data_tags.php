@@ -136,6 +136,5 @@ function smarty_function_structured_data_tags($params, &$smarty) {
                     </script>';
     }
 
-    return $output;
-    // return str_replace(["\r", "\n"], " ", $output);
+    return str_replace(["\r", "\n"], " ", $output);
 }
