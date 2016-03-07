@@ -60,7 +60,7 @@ class Converter
             }
 
             $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
-                . ucfirst($from) . 'DataMapper';
+                . ucfirst(strtolower($from)) . 'DataMapper';
 
             $mapper = new $mapper();
             $method = 'to' . ucfirst($to);
@@ -103,8 +103,8 @@ class Converter
                     $from = \classify($this->metadata->mapping['columns'][$key]['type']);
                 }
 
-                $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\' . ucfirst($to)
-                    . 'DataMapper';
+                $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
+                    . ucfirst(strtolower($to)) . 'DataMapper';
 
                 $mapper = new $mapper($this->metadata);
                 $method = 'from' . ucfirst($from);
