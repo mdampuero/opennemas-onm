@@ -22,7 +22,7 @@ class Metadata extends DataObject implements Validable
     public function getCachePrefix()
     {
         if (!empty($this->cachePrefix)) {
-            return $this->cachePrefix;
+            return $this->cachePrefix . $this->getCacheSeparator();
         }
 
         return \underscore($this->name) . $this->getCacheSeparator();
@@ -40,6 +40,14 @@ class Metadata extends DataObject implements Validable
         }
 
         return '-';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassName()
+    {
+        return 'Metadata';
     }
 
     /**
@@ -64,13 +72,5 @@ class Metadata extends DataObject implements Validable
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClassName()
-    {
-        return 'Metadata';
     }
 }
