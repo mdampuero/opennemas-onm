@@ -106,7 +106,7 @@ class BasePersister extends Persister
 
         $this->cache->delete($entity->getCachedId());
 
-        if ($this->metadata[$entity->getClassName()]->mapping['metas']) {
+        if ($this->metadata->mapping['metas']) {
             $this->persistMetas($entity->id, $metas);
         }
     }
