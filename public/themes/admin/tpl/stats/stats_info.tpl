@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<div class="content my-account-page" ng-app="BackendApp" ng-controller="AccountCtrl">
+<div class="content my-account-page" ng-controller="AccountCtrl" ng-init="init({json_encode($instance)|clear_json}, {json_encode($plans)|clear_json}, {json_encode($available_modules)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -65,7 +65,7 @@
                   {t}Plan{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper last transparent">
+                  <div class="wrapper last">
                     <div class="item-count ng-cloak">
                       <span ng-if="countActivatedModulesForPlan('Profesional') == 0 || countActivatedModulesForPlan('Gold') == 0 || countActivatedModulesForPlan('Other') == 0">{t}Base{/t}</span>
                       <span ng-if="countActivatedModulesForPlan('Profesional') > 0 || countActivatedModulesForPlan('Gold') > 0 || countActivatedModulesForPlan('Other') > 0">{t}Base + Modules{/t}</span>
@@ -82,7 +82,7 @@
                   {t}Support plan{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper last transparent">
+                  <div class="wrapper last">
                     <div class="item-count">
                       {$instance->support_plan} <i class="fa fa-info-circle" tooltip="{t}Support by tickets{/t}" tooltip-placement="bottom"></i>
                     </div>
@@ -100,7 +100,7 @@
                   {t}Storage size{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper last transparent">
+                  <div class="wrapper last">
                     <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
                   </div>
                 </div>
@@ -114,7 +114,7 @@
                   {t}Page views this month{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper last transparent">
+                  <div class="wrapper last">
                     <span class="item-count">
                       {t}coming soon... work in progress...{/t}
                       <!-- {$instance->page_views|number_format}
@@ -134,25 +134,25 @@
                   {t}Users{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper transparent">
+                  <div class="wrapper">
                     <span class="item-title">{t}Activated{/t}</span>
                     <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
                 <!-- <div class="widget-stats">
-                  <div class="wrapper transparent">
+                  <div class="wrapper">
                     <span class="item-title">{t}Available{/t}</span>
                     <span class="item-count">{$max_users - $instance->users}</span>
                   </div>
                 </div> -->
                 <div class="widget-stats">
-                  <div class="wrapper last transparent">
+                  <div class="wrapper last">
                     <span class="item-title">{t}Max{/t}</span>
                     <span class="item-count">{$max_users}</span>
                   </div>
                 </div>
                 {if $max_users > 0}
-                <div class="progress transparent progress-small no-radius m-t-20" style="width:90%">
+                <div class="progress progress-small no-radius m-t-20" style="width:90%">
                   <div class="progress-bar progress-bar-white animate-progress-bar" data-percentage="{($instance->users * 100) / $max_users}%" style="width: {($instance->users * 100) / $max_users}%;"></div>
                 </div>
                 <div class="description">
@@ -254,7 +254,7 @@
     <div class="row">
       <div class="col-xs-12 m-b-15 ng-cloak">
         <div class="tiles white">
-          <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = (json_encode({$hasChanges}) ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {json_encode($plans)|clear_json};modules = {json_encode($available_modules)|clear_json}">
+          <div class="tiles-body" style="overflow: auto;">
             <div class="tiles-title text-uppercase text-black">
               {t}Activated plans & modules{/t}
             </div>
