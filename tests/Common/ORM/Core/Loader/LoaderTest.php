@@ -43,6 +43,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals('foo', $method->invokeArgs($this->loader, [ 'key', 'foo', false ]));
+        $this->assertEquals('foo', $method->invokeArgs($this->loader, [ 'key', false, 'foo' ]));
         $this->assertEquals('bar', $method->invokeArgs($this->loader, [ 'key', 'foo', 'bar' ]));
         $this->assertEquals(
             [ 'foo' => 'integer', 'bar' => 'string'],
