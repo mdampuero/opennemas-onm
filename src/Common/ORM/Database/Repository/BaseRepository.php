@@ -73,7 +73,7 @@ class BaseRepository extends Repository
      */
     public function countBy($oql = '')
     {
-        $sql = "select count(id) from `{$this->metadata->mapping['table']}`";
+        $sql = "select count(id) from `{$this->metadata->getTable()}`";
         list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
         if (!empty($filter)) {
@@ -140,7 +140,7 @@ class BaseRepository extends Repository
         $keys = $this->metadata->getIdKeys();
 
         $sql = "select " . implode(',', $keys)
-            . " from `{$this->metadata->mapping['table']}`";
+            . " from `{$this->metadata->getTable()}`";
 
         list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
@@ -236,17 +236,17 @@ class BaseRepository extends Repository
     protected function getMetas($entity)
     {
         $metas   = [];
-        $keys    = $this->metadata->getIdKeys();
+        $keys     = $this->metadata->getIdKeys();
+        $metaKeys = $this->metadata->getMetaKeys();
         $filters = [];
 
         // Build filters for SQL
-        foreach ($keys as $key) {
-            $filters[] = $this->metadata->mapping['table'] . '_' . $key
-                . '=' . $entity->{$key};
+        foreach ($metaKeys as $key => $value) {
+            $filters[] = $value . '=' . $entity->{$key};
         }
 
-        $sql = 'select * from ' . $this->metadata->mapping['table']
-            . '_meta where ' . implode(' and ', $filters);
+        $sql = 'select * from ' . $this->metadata->getMetaTable()
+            . ' where ' . implode(' and ', $filters);
 
         $rs = $this->conn->fetchAll($sql);
 
