@@ -31,7 +31,6 @@
           $scope.instance = instance;
           $scope.plans    = plans;
           $scope.modules  = modules;
-          console.log($scope.instance);
         };
 
         /**
