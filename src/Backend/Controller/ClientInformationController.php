@@ -122,6 +122,8 @@ class ClientInformationController extends Controller
         $maxUsers = $this->get('setting_repository')->get('max_users');
 
         $instance->activated_modules = array_values($instance->activated_modules);
+        $instance->settings = [];
+        $instance->theme = null;
 
         $billing = [];
 
