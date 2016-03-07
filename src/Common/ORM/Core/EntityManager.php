@@ -81,7 +81,11 @@ class EntityManager
 
             $args[] = $this->config['metadata'][$entity->getClassName()];
 
-            $persisters[] = $class->newInstanceArgs($args);
+            if (!empty($args)) {
+                $persisters[] = $class->newInstance();
+            } else {
+                $persisters[] = $class->newInstance($args);
+            }
         }
 
         if (!empty($persisters)) {
@@ -125,7 +129,11 @@ class EntityManager
 
             $args[] = $this->config['metadata'][$entity];
 
-            $repositories[] = $class->newInstanceArgs($args);
+            if (!empty($args)) {
+                $repositories[] = $class->newInstance();
+            } else {
+                $repositories[] = $class->newInstance($args);
+            }
         }
 
         if (!empty($repositories)) {

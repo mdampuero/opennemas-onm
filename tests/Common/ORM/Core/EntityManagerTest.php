@@ -27,12 +27,35 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'load' ])
             ->getMock();
 
-        $this->persister = $this->getMockBuilder('Persister')
+        $config = [
+            'connection' => [ 'foo' => true ],
+            'metadata'   => [
+                'Entity' => new Metadata([
+                    'name'       => 'Entity',
+                    'properties' => [ 'foo' => 'string', 'bar' => 'integer' ],
+                    'mapping'    => [
+                        'persisters' => [
+                            'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
+                        ],
+                        'repositories' => [
+                            'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
+                        ]
+                    ]
+                ])
+            ],
+            'schema' => []
+        ];
+
+        $this->loader->expects($this->any())->method('load')->willReturn($config);
+
+        $this->persister = $this->getMockBuilder('MockPersister')
+            ->setMockClassName('Persister')
             ->disableOriginalConstructor()
             ->setMethods([ 'create', 'remove', 'update' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Repository')
+        $this->repository = $this->getMockBuilder('MockRepository')
+            ->setMockClassName('Repository')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -42,23 +65,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->container->expects($this->any())->method('getParameter')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-
-        $this->loader->expects($this->any())->method('load')
-            ->willReturn([ 'metadata' => [] ]);
-
         $this->em = new EntityManager($this->container);
-
-        $this->em->config['connection']['foo'] = true;
-        $this->em->config['metadata']['Entity'] = new Metadata([
-            'mapping' => [
-                'persisters' => [
-                    'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
-                ],
-                'repositories' => [
-                    'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
-                ]
-            ]
-        ]);
     }
 
     public function serviceContainerCallback()
@@ -122,45 +129,21 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($entity, [ true ]);
 
-        $em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getPersister' ])
-            ->getMock();
-
-        $em->method('getPersister')->willReturn($this->persister);
-        $this->persister->expects($this->once())->method('update');
-
-        $em->persist($entity);
+        $this->em->persist($entity);
     }
 
     public function testPersistWithUnexistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getPersister' ])
-            ->getMock();
-
-        $em->method('getPersister')->willReturn($this->persister);
-        $this->persister->expects($this->once())->method('create');
-
-        $em->persist($entity);
+        $this->em->persist($entity);
     }
 
     public function testRemoveWithExistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
 
-        $em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getPersister' ])
-            ->getMock();
-
-        $em->method('getPersister')->willReturn($this->persister);
-        $this->persister->expects($this->once())->method('remove');
-
-        $em->remove($entity);
+        $this->em->remove($entity);
     }
 
     public function testBuildChainWithoutElements()
