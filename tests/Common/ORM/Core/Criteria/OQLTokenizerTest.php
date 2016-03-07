@@ -51,7 +51,7 @@ class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException Common\ORM\Core\Exception\InvalidQueryException
      */
     public function testCheckOQL()
     {
@@ -73,7 +73,7 @@ class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException Common\ORM\Core\Exception\InvalidTokenException
      */
     public function testTokenizeError()
     {

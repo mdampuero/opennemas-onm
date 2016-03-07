@@ -9,6 +9,9 @@
  */
 namespace Common\ORM\Core\Criteria;
 
+use Common\ORM\Core\Exception\InvalidTokenException;
+use Common\ORM\Core\Exception\InvalidQueryException;
+
 /**
  * The OQLTokenizer class parses and splits OQL queries into tokens.
  */
@@ -109,7 +112,7 @@ class OQLTokenizer
 
             // Can't build sentence from tokens
             if ($sentence === $tokens) {
-                throw new \Exception('You have an error near ' . implode(' ', $tokens));
+                throw new InvalidQueryException($tokens[0]);
             }
 
             $tokens = $sentence;
@@ -143,7 +146,7 @@ class OQLTokenizer
         }
 
         if (!empty($query)) {
-            throw new \Exception('Invalid token ' . $query);
+            throw new InvalidTokenException($query);
         }
 
         return $tokens;
