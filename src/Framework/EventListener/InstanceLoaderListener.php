@@ -130,6 +130,9 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
             $dbalConnection = getService('dbal_connection');
             $dbalConnection->selectDatabase($databaseName);
+
+            getService('orm.manager')->config['connection']['instance']
+                ->selectDatabase($this->instance->getDatabaseName());
         } else {
             $databaseName               = $this->instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn_manager');
