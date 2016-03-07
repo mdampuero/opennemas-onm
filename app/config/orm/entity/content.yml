@@ -23,7 +23,7 @@ entity:
         in_litter:           boolean
         metadata:            string
         params:              string
-        id:                  integer
+        pk_content:          integer
         position:            integer
         slug:                string
         starttime:           datetime
@@ -31,8 +31,11 @@ entity:
         urn_source:          string
         with_comment:        boolean
     mapping:
-        table: content
-        metas: true
+        table: contents
+        metas:
+            table: contentmeta
+            ids:
+                pk_content: fk_content
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
@@ -42,7 +45,7 @@ entity:
                 class:     Common\ORM\Database\Persister\BasePersister
                 arguments: [ @cache, @orm.connection.instance ]
         columns:
-            id:
+            pk_content:
                 type: bigint
                 options: { default: null, unsigned: true, autoincrement: true }
             fk_content_type:
@@ -64,16 +67,16 @@ entity:
                 type: string
                 options: { default: null, notnull: false, length: 255 }
             starttime:
-                type: datetime
+                type: datetimetz
                 options: { default: null, notnull: false }
             endtime:
-                type: datetime
+                type: datetimetz
                 options: { default: null, notnull: false }
             created:
-                type: datetime
+                type: datetimetz
                 options: { default: null, notnull: false }
             changed:
-                type: datetime
+                type: datetimetz
                 options: { default: null, notnull: false }
             content_status:
                 type: integer
@@ -126,7 +129,7 @@ entity:
         index:
             -
                 name: PRIMARY
-                columns: [ id ]
+                columns: [ pk_content ]
                 primary: true
                 unique: true
                 flags: {  }
