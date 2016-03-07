@@ -54,6 +54,8 @@ class DataObject
      */
     public function __isset($property)
     {
+        $property = \underscore($property);
+
         if (array_key_exists($property, $this->data)) {
             return true;
         }
