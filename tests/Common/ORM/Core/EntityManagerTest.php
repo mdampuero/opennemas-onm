@@ -51,12 +51,13 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->persister = $this->getMockBuilder('MockPersister')
             ->setMockClassName('Persister')
             ->disableOriginalConstructor()
-            ->setMethods([ 'create', 'remove', 'update' ])
+            ->setMethods([ '__construct', 'create', 'remove', 'update' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('MockRepository')
             ->setMockClassName('Repository')
             ->disableOriginalConstructor()
+            ->setMethods([ '__construct' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
