@@ -168,7 +168,8 @@ class BaseRepository extends Repository
     {
         // Build cache ids
         $ids = array_map(function ($a) {
-            return $this->metadata->getCachePrefix() . $a;
+            return $this->metadata->getCachePrefix()
+                . implode($this->metadata->getCacheSeparator(), $a);
         }, $data);
 
         $entities = $this->cache->fetch($ids);
