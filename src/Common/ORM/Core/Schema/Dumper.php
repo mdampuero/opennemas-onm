@@ -9,10 +9,13 @@
  */
 namespace Common\ORM\Core\Schema;
 
-use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Exception\InvalidSchemaException;
 
+/**
+ * The Dumper class translates the ORM configuration to a Schema.
+ */
 class Dumper
 {
     /**
@@ -41,6 +44,13 @@ class Dumper
     protected $required = [
         'parameters' => [ 'array' ]
     ];
+
+    /**
+     * The array of schemas.
+     *
+     * @var array
+     */
+    protected $schemas = [];
 
     /**
      * The list of allowed types.
@@ -119,7 +129,7 @@ class Dumper
             );
         }
 
-        $schema = new Schema();
+        $schema = new DoctrineSchema();
 
         foreach ($this->schemas[$name]->entities as $entity) {
             $metadata = $this->metadata[$entity];
@@ -141,10 +151,6 @@ class Dumper
 
             // Add index definitions
             foreach ($metadata->mapping['index'] as $field => $value) {
-                if (!array_key_exists('name', $value)) {
-                    $value['name'] = null;
-                }
-
                 if (array_key_exists('primary', $value)
                     && !empty($value['primary'])
                 ) {
@@ -171,7 +177,13 @@ class Dumper
      */
     public function validate($data)
     {
-        if (!preg_match('/[a-z0-9_]+/', $data['table'])) {
+        if (!array_key_exists('table', $data) || empty($data['table'])) {
+            throw new InvalidSchemaException(_("Empty table name"));
+        }
+
+        if (!preg_match('/[a-z0-9_]+/', $data['table'], $matches)
+            || $matches[0] !== $data['table']
+        ) {
             throw new InvalidSchemaException(
                 sprintf(_("Invalid table name '%s'"), $data['table'])
             );
@@ -367,7 +379,7 @@ class Dumper
             || empty($config['columns'])
         ) {
             throw new InvalidSchemaException(
-                sprintf(_("No fields found for table '%s'"), $config)
+                sprintf(_("No fields found for table '%s'"), $name)
             );
         }
 
