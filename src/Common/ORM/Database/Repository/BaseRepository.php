@@ -137,7 +137,11 @@ class BaseRepository extends Repository
      */
     public function findBy($oql = '')
     {
-        $sql = "select id from `{$this->metadata->mapping['table']}`";
+        $keys = $this->metadata->getIdKeys();
+
+        $sql = "select " . implode(',', $keys)
+            . " from `{$this->metadata->mapping['table']}`";
+
         list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
         if (!empty($filter)) {
@@ -146,8 +150,8 @@ class BaseRepository extends Repository
 
         $rs = $this->conn->fetchAll($sql, $params, $types);
 
-        $ids = array_map(function ($a) {
-            return $a['id'];
+        $ids = array_map(function ($a) use ($keys) {
+            return array_intersect_key($a, array_flip($keys));
         }, $rs);
 
         return $this->findMulti($ids);
