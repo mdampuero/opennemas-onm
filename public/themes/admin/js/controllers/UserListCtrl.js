@@ -30,7 +30,7 @@ angular.module('BackendApp.controllers').controller('UserListCtrl', [
 
       var i = 0;
       while (i < selected.length && !backend_access) {
-        if (selected[i++].type == 0) {
+        if (selected[i++].type == 0 && value == 1) {
           backend_access = true;
         }
       }
