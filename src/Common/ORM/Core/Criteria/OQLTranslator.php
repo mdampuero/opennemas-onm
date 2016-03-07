@@ -9,6 +9,9 @@
  */
 namespace Common\ORM\Core\Criteria;
 
+use Common\ORM\Core\Exception\InvalidTokenException;
+use Common\ORM\Core\Metadata;
+
 /**
  * The OQLTranslator class translates the internal representation of an OQL
  * query to conditions, parameters and types ready to use by SQL queries.
@@ -20,7 +23,7 @@ class OQLTranslator
      *
      * @var array
      */
-    protected $operators = [
+    protected $translations = [
         'C_AND'          => 'and',
         'COMMA'          => ',',
         'C_OR'           => 'or',
@@ -28,6 +31,10 @@ class OQLTranslator
         'G_CBRACKET'     => ')',
         'G_OPARENTHESIS' => '(',
         'G_CPARENTHESIS' => ')',
+        'M_ASC'          => 'asc',
+        'M_DESC'         => 'desc',
+        'M_ORDER'        => 'order by',
+        'M_LIMIT'        => 'limit',
         'O_EQUALS'       => '=',
         'O_GREAT'        => '>',
         'O_GREAT_EQUALS' => '>=',
@@ -54,6 +61,16 @@ class OQLTranslator
         'T_NULL'    => \PDO::PARAM_NULL,
         'T_STRING'  => \PDO::PARAM_STR,
     ];
+
+    /**
+     * Initializes the OQLTranslator.
+     *
+     * @param Metadata $metadata The entity metadata.
+     */
+    public function __construct(Metadata $metadata)
+    {
+        $this->metadata = $metadata;
+    }
 
     /**
      * List of parameters.
@@ -96,15 +113,17 @@ class OQLTranslator
     }
 
     /**
-     * Checks if the string is an operator.
+     * Checks if the string is a valid field basing on the entity metadata.
      *
-     * @param string $str The string to check.
+     * @param string $str  The string to check.
+     * @param string $type The token type.
      *
-     * @return boolean True if the string is an operator.
+     * @return boolean True if the string is a field.
      */
-    protected function isOperator($str)
+    protected function isField($str, $type)
     {
-        return in_array($str, array_keys($this->operators));
+        return $type === 'T_FIELD'
+            && in_array($str, $this->metadata->properties);
     }
 
     /**
@@ -120,6 +139,18 @@ class OQLTranslator
     }
 
     /**
+     * Checks if the string is a translatable token.
+     *
+     * @param string $str The string to check.
+     *
+     * @return boolean True if the string is translatable.
+     */
+    protected function isTranslatable($str)
+    {
+        return in_array($str, array_keys($this->translations));
+    }
+
+    /**
      * Translates a token.
      *
      * @param string  $str          The token to translate.
@@ -132,17 +163,20 @@ class OQLTranslator
      */
     protected function translateToken($str, $type, $previousLike)
     {
-        if (!$this->isOperator($type)
-            && (!$this->isParameter($type)
-            || $this->isParameter($type) && $previousLike)
+        if ($this->isTranslatable($type)) {
+            return [ $this->translations[$type], null, null ];
+        }
+
+        if ($this->isParameter($type) && !$previousLike) {
+            return [ '?', $str, $this->params[$type] ];
+        }
+
+        if ($this->isField($str, $type)
+            || ($this->isParameter($type) && $previousLike)
         ) {
             return [ $str, null, null ];
         }
 
-        if ($this->isOperator($type)) {
-            return [ $this->operators[$type], null, null ];
-        }
-
-        return [ '?', $str, $this->params[$type] ];
+        throw new InvalidTokenException($str, $this->metadata->name);
     }
 }
