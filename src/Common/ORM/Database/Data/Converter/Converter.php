@@ -59,8 +59,8 @@ class Converter
                 $to = 'array';
             }
 
-            $mapper = '\\Framework\\ORM\\Core\\DataMapper\\' . ucfirst($from)
-                . 'DataMapper';
+            $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
+                . ucfirst($from) . 'DataMapper';
 
             $mapper = new $mapper();
             $method = 'to' . ucfirst($to);
