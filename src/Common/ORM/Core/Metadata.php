@@ -73,4 +73,69 @@ class Metadata extends DataObject implements Validable
 
         return false;
     }
+
+    /**
+     * Returns an array with the correspondence between the keys of the entity
+     * table and the keys of the table of metas.
+     *
+     * @return array Array of key correspondences.
+     */
+    public function getMetaKeys()
+    {
+        if (array_key_exists('metas', $this->mapping)
+            && array_key_exists('ids', $this->mapping['metas'])
+        ) {
+            return $this->mapping['metas']['ids'];
+        }
+
+        $keys = [];
+        foreach ($this->getIdKeys() as $key) {
+            $keys[$key] = $this->getTable() . '_' . $key;
+
+        }
+
+        return $keys;
+    }
+
+    /**
+     * Returns the name of the table of metas.
+     *
+     * @return string The name of the table of metas
+     */
+    public function getMetaTable()
+    {
+        if (array_key_exists('metas', $this->mapping)
+            && array_key_exists('table', $this->mapping['metas'])
+        ) {
+            return $this->mapping['metas']['table'];
+        }
+
+        return $this->getTable() . '_meta';
+    }
+
+    /**
+     * Returns the name of the table of metas.
+     *
+     * @return string The name of the table of metas
+     */
+    public function getTable()
+    {
+        if (array_key_exists('table', $this->mapping)) {
+            return $this->mapping['table'];
+        }
+
+        return \underscore($this->name);
+    }
+
+    /**
+     * Checks if the current entity has metas.
+     *
+     * @return boolean True if the current entity has metas. Otherwise, returns
+     *                 false.
+     */
+    public function hasMetas()
+    {
+        return array_key_exists('metas', $this->mapping)
+            && !empty($this->mapping['metas']);
+    }
 }

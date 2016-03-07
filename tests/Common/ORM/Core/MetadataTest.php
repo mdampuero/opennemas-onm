@@ -63,6 +63,42 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([ 'id' ], $this->metadata->getIdKeys());
     }
 
+    public function testGetMetaKeys()
+    {
+        $this->metadata->mapping['index'] = [
+            [ 'name' => 'id', 'columns' => [ 'id' ], 'primary' => true ]
+        ];
+
+        $this->assertEquals([ 'id' => 'foo_id' ], $this->metadata->getMetaKeys());
+
+        $this->metadata->mapping['metas'] = ['ids' => [ 'id' => 'bar' ] ];
+        $this->assertEquals([ 'id' => 'bar' ], $this->metadata->getMetaKeys());
+    }
+
+    public function testGetMetaTable()
+    {
+        $this->assertEquals('foo_meta', $this->metadata->getMetaTable());
+
+        $this->metadata->mapping['metas'] = ['table' => 'foo_table_meta' ];
+        $this->assertEquals('foo_table_meta', $this->metadata->getMetaTable());
+    }
+
+    public function testGetTable()
+    {
+        $this->assertEquals('foo', $this->metadata->getTable());
+
+        $this->metadata->mapping['table'] = 'foo_table';
+        $this->assertEquals('foo_table', $this->metadata->getTable());
+    }
+
+    public function testHasMetas()
+    {
+        $this->assertFalse($this->metadata->hasMetas());
+
+        $this->metadata->mapping['metas'] = ['table' => 'foo_table_meta' ];
+        $this->assertTrue($this->metadata->hasMetas());
+    }
+
     public function testSet()
     {
         $this->metadata->qux = 'norf';
