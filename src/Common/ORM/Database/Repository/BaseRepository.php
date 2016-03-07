@@ -61,7 +61,7 @@ class BaseRepository extends Repository
         $this->conn       = $conn;
         $this->converter  = new Converter($metadata);
         $this->metadata   = $metadata;
-        $this->translator = new OQLTranslator();
+        $this->translator = new OQLTranslator($metadata);
     }
 
     /**
