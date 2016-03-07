@@ -68,11 +68,11 @@ class BasePersister extends Persister
     {
         list($data, $metas) = $this->converter->databasify($entity->getData());
 
-        $this->conn->insert(\underscore($entity->getClassName()), $data);
+        $this->conn->insert($this->metadata->getTable(), $data);
 
         $entity->id = $this->conn->lastInsertId();
 
-        if ($this->metadata->mapping['metas']) {
+        if ($this->metadata->hasMetas()) {
             $this->persistMetas($entity->id, $metas);
         }
     }
@@ -82,8 +82,13 @@ class BasePersister extends Persister
      */
     public function remove(Entity $entity)
     {
+        $ids = array_intersect_key(
+            $this->metadata->getIdKeys(),
+            $entity->getData()
+        );
+
         $this->conn->delete(
-            \underscore($entity->getClassName()),
+            $this->metadata->getTable(),
             [ 'id' => $entity->id ]
         );
 
@@ -96,18 +101,18 @@ class BasePersister extends Persister
     public function update(Entity $entity)
     {
         list($data, $metas) = $this->converter->databasify($entity->getData());
-        unset($data['id']);
 
-        $this->conn->update(
-            \underscore($entity->getClassName()),
-            $data,
-            [ 'id' => $entity->id ]
-        );
+        $keys = array_flip($this->metadata->getIdKeys());
+
+        $id   = array_intersect_key($entity->getData(), $keys);
+        $data = array_diff_key($data, $keys);
+
+        $this->conn->update($this->metadata->getTable(), $data, $id);
 
         $this->cache->delete($entity->getCachedId());
 
-        if ($this->metadata->mapping['metas']) {
-            $this->persistMetas($entity->id, $metas);
+        if ($this->metadata->hasMetas()) {
+            $this->persistMetas($id, $metas);
         }
     }
 
@@ -117,38 +122,84 @@ class BasePersister extends Persister
      * @param integer $id    The entity id.
      * @param array   $metas The entity metas.
      */
-    protected function persistMetas($id, $metas = [])
+    protected function persistMetas($id, $metas)
     {
-        $entity = \underscore($this->metadata->name);
-
-        // Update metas
+        // Ignore metas with value = null
         if (!empty($metas)) {
-            $sql = rtrim("REPLACE INTO {$entity}_meta VALUES "
-                . str_repeat('(?,?,?),', count($metas)), ',');
-
-            $params = [];
-            $types  = [];
-
-            foreach ($metas as $key => $value) {
-                $params = array_merge($params, [ $id, $key, $value ]);
-                $types  = array_merge(
-                    $types,
-                    [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
-                );
-            }
-
-            $this->conn->executeQuery($sql, $params, $types);
+            $metas = array_filter($metas, function ($a) {
+                return !is_null($a);
+            });
         }
 
-        // Remove old metas
-        $sql    = "DELETE FROM {$entity}_meta WHERE {$entity}_id=?";
-        $params = [ $id ];
-        $types  = [ \PDO::PARAM_INT ];
+        // Update metas
+        $this->saveMetas($id, $metas);
 
-        if (!empty($metas)) {
-            $sql .= " AND meta_key NOT IN (?)";
-            $params[] = array_keys($metas);
+        // Remove old metas
+        $this->removeMetas($id, array_keys($metas));
+    }
+
+    /**
+     * Deletes old metas.
+     *
+     * @param array $id    The entity id.
+     * @param array $metas The meta keys to keep.
+     */
+    protected function removeMetas($id, $keep)
+    {
+        $sql  = "delete from {$this->metadata->getMetaTable()} where ";
+        $keys = $this->metadata->getMetaKeys();
+
+        $joins  = [];
+        $params = [];
+        $types  = [];
+        foreach ($id as $key => $value) {
+            $joins[]  = $keys[$key] . '= ?';
+            $params[] = $value;
+            $types[]  = is_string($value) ? \PDO::PARAM_STR : \PDO::PARAM_INT;
+        }
+
+        $sql .= implode(' and ', $joins);
+
+        if (!empty($keep)) {
+            $sql .= " and meta_key not in (?)";
+            $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+        }
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Saves new metas.
+     *
+     * @param array $id    The entity id.
+     * @param array $metas The metas to save.
+     */
+    protected function saveMetas($id, $metas)
+    {
+        if (empty($metas)) {
+            return;
+        }
+
+        $sql = "replace into {$this->metadata->getMetaTable()} values "
+            . str_repeat(
+                '(' . str_repeat('?,', count($id)) . '?,?),',
+                count($metas)
+            );
+
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+        foreach ($metas as $key => $value) {
+            $params = array_merge(
+                $params,
+                array_merge(array_values($id), [ $key, $value ])
+            );
+
+            $types  = array_merge(
+                $types,
+                [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
+            );
         }
 
         $this->conn->executeQuery($sql, $params, $types);
