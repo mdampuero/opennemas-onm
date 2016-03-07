@@ -12,15 +12,23 @@ namespace Common\ORM\Core\Exception;
 class InvalidTokenException extends \Exception
 {
     /**
-     * Creates a new exception from criteria, source and error message.
+     * Initializes the InvalidTokenException.
      *
      * @param string $token  The token.
      * @param string $entity The entity name.
      */
-    public function __construct($token , $entity)
+    public function __construct($token , $entity = '')
     {
-        $message = _("The token '%s' is not valid for entities of type '%s'");
+        $message = sprintf(_("The token '%s' is not valid"), $token);
 
-        parent::__construct(sprintf($message, $token, $entity));
+        if (!empty($entity)) {
+            $message = sprintf(
+                _("The token '%s' is not valid for entities of type '%s'"),
+                $token,
+                $entity
+            );
+        }
+
+        parent::__construct($message);
     }
 }
