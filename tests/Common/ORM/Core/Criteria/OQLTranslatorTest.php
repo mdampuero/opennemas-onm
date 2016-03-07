@@ -18,7 +18,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new Metadata([
             'name'       => 'Foobar',
-            'properties' => [ 'foo', 'baz' ]
+            'properties' => [ 'foo' => 'string', 'baz' => 'integer' ]
         ]);
 
         $this->translator = new OQLTranslator($metadata);

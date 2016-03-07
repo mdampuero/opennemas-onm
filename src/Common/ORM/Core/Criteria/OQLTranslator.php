@@ -123,7 +123,7 @@ class OQLTranslator
     protected function isField($str, $type)
     {
         return $type === 'T_FIELD'
-            && in_array($str, $this->metadata->properties);
+            && array_key_exists($str, $this->metadata->properties);
     }
 
     /**
@@ -168,6 +168,11 @@ class OQLTranslator
         }
 
         if ($this->isParameter($type) && !$previousLike) {
+            // Remove quotes for strings
+            if ($type === 'T_STRING') {
+                $str = str_replace([ '\'', '\"' ], '', $str);
+            }
+
             return [ '?', $str, $this->params[$type] ];
         }
 
