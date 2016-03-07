@@ -12,6 +12,9 @@ namespace Common\ORM\Core;
 use Framework\Component\Data\DataBuffer;
 use Common\ORM\Core\Validation\Validable;
 
+/**
+ * The Connection class represents a database connection.
+ */
 class Connection extends DataBuffer implements Validable
 {
     /**
@@ -93,10 +96,9 @@ class Connection extends DataBuffer implements Validable
     public function getConnection()
     {
         if (!is_object($this->conn)) {
-            $config     = new \Doctrine\DBAL\Configuration();
             $this->conn = \Doctrine\DBAL\DriverManager::getConnection(
                 $this->config,
-                $config
+                new \Doctrine\DBAL\Configuration()
             );
         }
 
@@ -120,5 +122,17 @@ class Connection extends DataBuffer implements Validable
             $this->connection->close();
             $this->connection = null;
         }
+    }
+
+    /**
+     * Changes the database name.
+     *
+     * @param string $database The database name.
+     */
+    public function selectDatabase($database)
+    {
+        $this->config['dbname'] = $database;
+
+        $this->resetConnection();
     }
 }
