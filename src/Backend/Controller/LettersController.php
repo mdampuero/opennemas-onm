@@ -58,7 +58,7 @@ class LettersController extends Controller
             $letter = new \Letter();
 
             $data = [
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -66,7 +66,7 @@ class LettersController extends Controller
                 'params'         => $request->request->get('params'),
                 'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'body'           => $request->request->filter('body', ''),
+                'body'           => $request->request->get('body', ''),
             ];
 
             if ($letter->create($data)) {
@@ -151,7 +151,7 @@ class LettersController extends Controller
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),

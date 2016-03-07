@@ -104,6 +104,7 @@ function get_tooltip_title(elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
     var $url = frontpage_urls.quick_info + '?id=' + id;
+    var title = '';
 
     content = content_states[id];
     if (content === undefined) {
@@ -112,16 +113,15 @@ function get_tooltip_title(elem) {
             async: false
         }).done(function(data) {
             content_states[id] = data;
-            if (content_states.hasOwnProperty('id') && content_states[id].hasOwnProperty('title')) {
-                return content_states[id].title;
-            } else {
-                return null;
+            if (content_states[id].hasOwnProperty('title')) {
+                title = content_states[id].title;
             }
         });
-        return null;
     } else {
-        return content.title;
+        title = content.title;
     }
+
+    return title;
 }
 
 function remove_element(element) {
@@ -357,13 +357,11 @@ jQuery(function($) {
             modal.find('.modal-body #font-weight').val('Auto');
         }
         if (title['color'] !== undefined) {
-            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
             modal.find('.modal-body input#font-color').val(title['color']);
-            //$('select[name="colorpicker-font"]').simplecolorpicker('selectColor', title['color']);
-            $('select[name="colorpicker-font"]').val(title['color']);
-        } else {
-            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
-            modal.find('.modal-body #font-color').val('#000000');
+            modal.find('.modal-body input#font-color').trigger('input');
+       } else {
+            modal.find('.modal-body input#font-color').val('#000000');
+            modal.find('.modal-body input#font-color').trigger('input');
         }
 
         if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
@@ -381,13 +379,11 @@ jQuery(function($) {
 
         if (element.data('bg').length>0) {
             var bgcolor = element.data('bg').substring(17,24);
-            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
             modal.find('.modal-body input#bg-color').val(bgcolor);
-           $('select[name="colorpicker-background"]').val(bgcolor);
-           // $('select[name="colorpicker-background"]').simplecolorpicker('selectColor', bgcolor);
+            modal.find('.modal-body input#bg-color').trigger('input');
         } else {
-            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
-            modal.find('.modal-body #bg-color').val('#ffffff');
+            modal.find('.modal-body input#bg-color').val('#ffffff');
+            modal.find('.modal-body input#bg-color').trigger('input');
         }
         modal.modal('show');
         e.preventDefault();
@@ -460,11 +456,20 @@ jQuery(function($) {
                 dataType: 'json',
                 data: { 'id': elementID, 'properties' : properties, 'content_type': element.data('class')}
             }).done(function(data) {
-                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
+                    element.css('color', '');
+                    element.css('font-weight', '');
+                    element.css('font-size', '');
+                    element.css('font-family', '');
+                    element.css('background-color', bgcolor);
                     element.data('bg', 'background-color:'+bgcolor);
                     element.data('format', format);
                     element.data('title', jsonTitle);
 
+                    for (var key in titleValues) {
+                      if (key == 'color' || key == 'background-color') {
+                        element.css(key, titleValues[key]);
+                      }
+                    }
             }).fail(function(data) {
                 //data.message
             });
@@ -543,11 +548,12 @@ jQuery(function($) {
         $('#content-provider').dialog('open');
     });
 
-    $('#button_savepositions').on('click', function(e, ui) {
+    $('#button_savepositions').on('click', function(e) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
         var new_version_available = check_available_new_version(false);
+        var btn = $(this);
 
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
@@ -557,17 +563,23 @@ jQuery(function($) {
         } else {
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,
-                async: false,
+                async: true,
                 type: 'POST',
                 dataType: 'json',
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
-                beforeSend: function(xhr) {
+                beforeSend: function() {
                     //showMessage('Saving', 'info', 1);
+                    btn.attr('disabled', true);
+                    btn.find('.text').html(btn.data('text'));
+                },
+                complete: function() {
+                    btn.attr('disabled', false);
+                    btn.find('.text').html(btn.data('title'));
                 }
             }).done(function(data) {
                 showMessage(data.message, 'success', 5, new Date().getTime());
                 frontpage_info.last_saved = data.date;
-            }).fail(function(data, ajaxOptions, thrownError) {
+            }).fail(function(data) {
                 var response = $.parseJSON(data.responseText);
                 showMessage(response.message, 'error', 5, new Date().getTime());
             });

@@ -17,7 +17,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
+  <form id="formulario" action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -51,9 +51,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" class="btn btn-primary">
+                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
                   <span class="fa fa-save"></span>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>

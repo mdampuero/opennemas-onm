@@ -133,9 +133,9 @@ class PollsController extends Controller
             $poll = new \Poll();
 
             $data = [
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'favorite'       => $request->request->getDigits('favorite', 0),
                 'with_comment'   => $request->request->getDigits('with_comment', 0),
@@ -243,9 +243,9 @@ class PollsController extends Controller
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'visualization'  => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'favorite'       => $request->request->getDigits('favorite', 0),

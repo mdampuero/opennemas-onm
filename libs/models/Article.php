@@ -312,6 +312,8 @@ class Article extends Content
             ? ''
             : $data['img2_footer'];
 
+        // Start transaction
+        $GLOBALS['application']->conn->BeginTrans();
         parent::update($data);
 
         $sql = "UPDATE articles "
@@ -330,8 +332,12 @@ class Article extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return;
+            $GLOBALS['application']->conn->RollbackTrans();
+            return false;
         }
+
+        // Finish transaction
+        $GLOBALS['application']->conn->CommitTrans();
 
         // Drop related and insert new ones
         getService('related_contents')->delete($data['id']);

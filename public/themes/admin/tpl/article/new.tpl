@@ -34,12 +34,6 @@
         $("#endtime").on("dp.change",function (e) {
           $('#starttime').data("DateTimePicker").maxDate(e.date);
         });
-
-        $('#formulario').on('submit', function(){
-          var btn = $('.btn.btn-primary');
-          btn.attr('disabled', true);
-          $('.btn.btn-primary .text').html(btn.data('text'));
-        });
       });
     </script>
   {/javascripts}
@@ -54,9 +48,17 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-file-text-o"></i>
+                <i class="fa fa-file-text-o page-navbar-icon"></i>
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question"></i>
+                </a>
                 {t}Articles{/t}
               </h4>
+            </li>
+            <li class="quicklinks visible-xs">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question fa-lg"></i>
+              </a>
             </li>
             <li class="quicklinks seperate hidden-xs">
               <span class="h-seperate"></span>
@@ -98,7 +100,7 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..."type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>

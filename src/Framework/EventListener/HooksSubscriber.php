@@ -17,7 +17,6 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class HooksSubscriber implements EventSubscriberInterface
 {
-
     /**
      * Initializes the object
      *

@@ -75,7 +75,7 @@
 
           for (var i = 0; i < source.length; i++) {
             if (source[i].type !== 'internal' &&
-                $scope.activated.indexOf(source[i].id) === -1) {
+                $scope.activated.indexOf(source[i].uuid) === -1) {
               return false;
             }
           }
@@ -102,7 +102,7 @@
 
           for (var i = 0; i < source.length; i++) {
             if (source[i].type !== 'internal' &&
-                $scope.activated.indexOf(source[i].id) !== -1) {
+                $scope.activated.indexOf(source[i].uuid) !== -1) {
               return false;
             }
           }
@@ -123,13 +123,19 @@
          *                   returns false.
          */
         $scope.isActivated = function(item) {
-          if (item.id === 'MEDIA_MANAGER') {
-            return $scope.activated.indexOf('ALBUM_MANAGER') !== -1 &&
-              $scope.activated.indexOf('IMAGE_MANAGER') !== -1 &&
-              $scope.activated.indexOf('VIDEO_MANAGER') !== -1;
+          if ($scope.activated.indexOf(item.uuid) !== -1) {
+            return true;
           }
 
-          return $scope.activated.indexOf(item.id) !== -1;
+          if (item.metas && item.metas.modules_included) {
+            var notActivated = item.metas.modules_included.filter(function(a) {
+              return $scope.activated.indexOf(a) === -1;
+            });
+
+            return notActivated.length === 0;
+          }
+
+          return false;
         };
 
         /**
@@ -149,8 +155,43 @@
             return false;
           }
 
+          var itemsInCart = [];
           for (var i = 0; i < $scope.cart.length; i++) {
-            if ($scope.cart[i].id === item.id) {
+            itemsInCart.push($scope.cart[i].uuid);
+
+            if ($scope.cart[i].metas && $scope.cart[i].metas.modules_included) {
+              itemsInCart = itemsInCart.concat(
+                  $scope.cart[i].metas.modules_included);
+            }
+          }
+
+          // Item in cart
+          if (itemsInCart.indexOf(item.uuid) !== -1) {
+            return true;
+          }
+
+          return false;
+        };
+
+        /**
+         * @function isFree
+         * @memberOf StoreListCtrl
+         *
+         * @description
+         *   Checks if a module is free.
+         *
+         * @param {Object} module The module to check
+         *
+         * @return {Boolean} True if the module is free. Otherwise, returns
+         *                   false.
+         */
+        $scope.isFree = function(module) {
+          if (!module.metas || !module.metas.price) {
+            return true;
+          }
+
+          for (var i = 0; i < module.metas.price.length; i++) {
+            if (module.metas.price[i].value == 0) {
               return true;
             }
           }
@@ -181,13 +222,25 @@
             for (var i = 0; i < response.results.length; i++) {
               var module = response.results[i];
 
-              if (response.activated.indexOf(module.id) !== -1) {
+              if ($scope.isFree(module) &&
+                  module.metas.category !== 'partner') {
+                $scope.free.push(module);
+              } else if (response.activated.indexOf(module.uuid) !== -1) {
                 $scope.purchased.push(module);
               } else {
-                $scope[module.type].push(module);
+                if (module.metas && module.metas.modules_included) {
+                  // Check submodules
+                  var activated = module.metas.modules_included.filter(function(a) {
+                    return response.activated.indexOf(a) === -1;
+                  });
 
-                if (module.price.month === 0) {
-                  $scope.free.push(module);
+                  if (activated.length === 0) {
+                    $scope.purchased.push(module);
+                  } else {
+                    $scope[module.metas.category].push(module);
+                  }
+                }  else {
+                  $scope[module.metas.category].push(module);
                 }
               }
             }

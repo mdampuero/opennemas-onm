@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
-use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -283,58 +282,7 @@ class OpinionsController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $params = $request->request->get('params', []);
-            $opinion = new \Opinion();
-
-            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-            $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-            $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-            $data = array(
-                'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'category'            => 'opinion',
-                'content_status'      => (empty($contentStatus)) ? 0 : 1,
-                'in_home'             => (empty($inhome)) ? 0 : 1,
-                'with_comment'        => (empty($withComment)) ? 0 : 1,
-                'summary'             => $request->request->filter('summary', ''),
-                'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-                'fk_author'           => $request->request->getDigits('fk_author'),
-                'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-                'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                => $request->request->filter('body', ''),
-                'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-                'fk_publisher'        => $_SESSION['userid'],
-                'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'params'              => [
-                    'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                ]
-            );
-
-            if ($opinion->create($data)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Opinion successfully created.')
-                );
-
-                // Clear caches
-                dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the new opinion.')
-                );
-            }
-
-            return $this->redirect(
-                $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
-            );
-        } else {
+        if ('POST' !== $request->getMethod()) {
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -346,6 +294,57 @@ class OpinionsController extends Controller
                 )
             );
         }
+
+        $params = $request->request->get('params', []);
+        $opinion = new \Opinion();
+
+        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
+        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
+
+        $data = array(
+            'body'                => $request->request->get('body', ''),
+            'category'            => 'opinion',
+            'content_status'      => (empty($contentStatus)) ? 0 : 1,
+            'endtime'             => $request->request->get('endtime', ''),
+            'fk_author'           => $request->request->getDigits('fk_author'),
+            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
+            'fk_publisher'        => $_SESSION['userid'],
+            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
+            'img1'                => $request->request->getDigits('img1', ''),
+            'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2'                => $request->request->getDigits('img2', ''),
+            'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'in_home'             => (empty($inhome)) ? 0 : 1,
+            'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'           => $request->request->get('starttime', ''),
+            'summary'             => $request->request->get('summary', ''),
+            'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
+            'with_comment'        => (empty($withComment)) ? 0 : 1,
+            'params'              => [
+                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+            ]
+        );
+
+        if ($opinion->create($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Opinion successfully created.')
+            );
+
+            // Clear caches
+            dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to create the new opinion.')
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+        );
     }
 
     /**
@@ -365,88 +364,94 @@ class OpinionsController extends Controller
 
         $opinion = new \Opinion($id);
 
-        if ($opinion->id != null) {
-            if (!Acl::isAdmin()
-                && !Acl::check('CONTENT_OTHER_UPDATE')
-                && !$opinion->isOwner($_SESSION['userid'])
-            ) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("You can't modify this opinion because you don't have enought privileges.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_opinions'));
-            }
-
-            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-            $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-            $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-            // Check empty data
-            if (count($request->request) < 1) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Opinion data sent not valid.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'id'                  => $id,
-                'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'category'            => 'opinion',
-                'content_status'      => (empty($contentStatus)) ? 0 : 1,
-                'in_home'             => (empty($inhome)) ? 0 : 1,
-                'with_comment'        => (empty($withComment)) ? 0 : 1,
-                'summary'             => $request->request->filter('summary', ''),
-                'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-                'fk_author'           => $request->request->getDigits('fk_author'),
-                'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-                'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                => $request->request->filter('body', ''),
-                'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-                'fk_publisher'        => $_SESSION['userid'],
-                'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'params'              => [
-                    'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                ]
+        if (is_null($opinion->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
             );
 
-            if ($opinion->update($data)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Opinion successfully updated.')
-                );
+            return $this->redirect($this->generateUrl('admin_opinions'));
+        }
 
-                $author = new \User($data['fk_author']);
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && !$opinion->isOwner($_SESSION['userid'])
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this opinion because you don't have enought privileges.")
+            );
 
-                // Clear caches
-                dispatchEventWithParams(
-                    'opinion.update',
-                    array(
-                        'authorSlug' => $author->username,
-                        'authorId'   => $data['fk_author'],
-                        'opinionId'  => $opinion->id,
-                    )
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to update the opinion.')
-                );
-            }
+            return $this->redirect($this->generateUrl('admin_opinions'));
+        }
 
-            return $this->redirect(
-                $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
+        $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
+
+        // Check empty data
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Opinion data sent not valid.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
+        }
+
+        $data = array(
+            'body'                => $request->request->get('body', ''),
+            'category'            => 'opinion',
+            'content_status'      => (empty($contentStatus)) ? 0 : 1,
+            'endtime'             => $request->request->get('endtime', ''),
+            'fk_author'           => $request->request->getDigits('fk_author'),
+            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
+            'fk_publisher'        => $_SESSION['userid'],
+            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
+            'id'                  => $id,
+            'img1'                => $request->request->getDigits('img1', ''),
+            'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2'                => $request->request->getDigits('img2', ''),
+            'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'in_home'             => (empty($inhome)) ? 0 : 1,
+            'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'           => $request->request->get('starttime', ''),
+            'summary'             => $request->request->get('summary', ''),
+            'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
+            'with_comment'        => (empty($withComment)) ? 0 : 1,
+            'params'              => [
+                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+            ],
+        );
+
+        if ($opinion->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Opinion successfully updated.')
+            );
+
+            $author = new \User($data['fk_author']);
+
+            // Clear caches
+            dispatchEventWithParams(
+                'opinion.update',
+                array(
+                    'authorSlug' => $author->username,
+                    'authorId'   => $data['fk_author'],
+                    'opinionId'  => $opinion->id,
+                )
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to update the opinion.')
             );
         }
 
+        return $this->redirect(
+            $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+        );
     }
 
     /**

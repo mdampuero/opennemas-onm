@@ -33,7 +33,7 @@ class OpennemasExtension extends Extension implements PrependExtensionInterface
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -42,15 +42,14 @@ class OpennemasExtension extends Extension implements PrependExtensionInterface
             $container->setParameter('assetic', $config['assetic']);
         }
 
-        if (array_key_exists('orm', $config)) {
-            foreach ($config['orm'] as $key => $value) {
-                if ($key === 'config_path') {
-                    $rootDir = $container->getParameter('kernel.root_dir');
-                    $value   = $rootDir . DS . str_replace($rootDir, '', $value);
-                }
-
-                $container->setParameter('orm.' . $key, $value);
+        if (array_key_exists('paths', $config)) {
+            foreach ($config['paths'] as $key => $value) {
+                $container->setParameter('paths.' . $key, $value);
             }
+        }
+
+        if (array_key_exists('plugins', $config)) {
+            $container->setParameter('plugins', $config['plugins']);
         }
     }
 

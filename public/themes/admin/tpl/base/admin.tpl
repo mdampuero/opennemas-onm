@@ -9,20 +9,20 @@
   <meta name="generator" content="OpenNemas - News Management System">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#22262e">
-  <link rel="manifest" href="backend_manifest.json">
+  <link rel="manifest" href="/backend_manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+
+  <link href="/assets/images/favicon.png" rel="icon">
+  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/launcher-icons/IOS-60@2x.png">
 
   {block name="meta"}
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
   {/block}
-
-  <link href="{$params.COMMON_ASSET_DIR}images/favicon.png" rel="icon">
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -32,6 +32,7 @@
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
+      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
@@ -75,6 +76,7 @@
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
+      var leaveMessage = '{t}You are leaving the current page.{/t}';
     </script>
   {/block}
 </head>
@@ -192,6 +194,16 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
+                      {is_module_activated name="VIDEO_MANAGER"}
+                        {acl isAllowed="VIDEO_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=admin_videos_create}">
+                              <i class="fa fa-film"></i>
+                              <span class="title">{t}Video{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
                       {is_module_activated name="KIOSKO_MANAGER"}
                         {acl isAllowed="KIOSKO_CREATE"}
                           <div class="quick-item">
@@ -224,7 +236,36 @@
                       {/is_module_activated}
                     </div>
                   </li>
-                 {/block}
+                {/block}
+                {block name="master_actions_block"}
+                {acl isAllowed="ONLY_MASTERS"}
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                  <li class="quicklinks sysops-actions dropdown">
+                    <a href="#" data-toggle="dropdown">
+                      <i class="fa fa-rebel text-danger master-user"></i>
+                      {t}Sysops{/t}
+                    </a>
+                    <ul  class="dropdown-menu on-left" role="menu">
+                      <li>
+
+                        <a href="{url name=admin_tpl_manager}"><i class="fa fa-database"></i>Cache manager</a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcache}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcompiled}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                {/acl}
+                {/block}
               </ul>
             </div>
             <div class="pull-right ">
@@ -429,6 +470,7 @@
       @Common/components/angular/angular.min.js,
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-checklist-model/checklist-model.js,
+      @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-file-upload/angular-file-upload.min.js,
       @Common/components/angular-webstorage/angular-webstorage.min.js,
       @Common/components/angular-google-chart/ng-google-chart.js,

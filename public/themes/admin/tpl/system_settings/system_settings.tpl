@@ -2,8 +2,7 @@
 
 {block name="header-css" append}
 {stylesheets
-  src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css,
-      @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+  src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
     <style type="text/css">
       .colorpicker {
         z-index: 10;
@@ -13,28 +12,9 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
-      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
-      @Common/js/onm/md5.min.js"}
+  {javascripts src="@Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
-        //Color Picker jQuery
-        $('#site_color').ColorPicker({
-          onSubmit: function(hsb, hex, rgb, el) {
-            $(el).val(hex);
-            $(el).ColorPickerHide();
-          },
-          onChange: function (hsb, hex, rgb) {
-            $('#site_color').val(hex);
-            $('#colorpicker_viewer').css('background-color', '#' + hex);
-          },
-          onBeforeShow: function () {
-            $(this).ColorPickerSetColor(this.value);
-          }
-        }).bind('keyup', function(){
-          $(this).ColorPickerSetColor(this.value);
-        });
-
         $('#allow_logo').on('click', function(){
           if($(this).is(':checked')) {
             $('#site_logo_block').show();
@@ -85,9 +65,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" value="1">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -96,7 +76,6 @@
       </div>
     </div>
     <div class="content">
-
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
           <tabset>
@@ -154,10 +133,13 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']|default:"fff"}">
+                          <span class="input-group-addon" ng-style="{ 'background-color': site_color }">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
-                          <input class="form-control" id="site_color" name="site_color" type="text" value="{$configs['site_color']|default:""}">
+                          <input class="form-control" id="site_color" name="site_color" colorpicker="hex" ng-model="site_color" type="text" ng-init="site_color='{$configs['site_color']|default:""}'">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" ng-click="site_color='{$configs['site_color']|default:""}'" type="button">{t}Reset{/t}</button>
+                          </div>
                         </div>
                       </div>
                     </div>

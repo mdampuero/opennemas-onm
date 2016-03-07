@@ -46,6 +46,25 @@ class NewsMLComponentPhotoOpennemas extends NewsMLComponentPhoto
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSummary($data)
+    {
+        $summaries = $data->xpath('/NewsComponent//p');
+
+        $summary = '';
+        if (is_array($summaries) && !empty($summaries)) {
+            foreach ($summaries as $s) {
+                $summary .= (string) $s;
+            }
+
+            $summary = iconv(mb_detect_encoding($summary), "UTF-8", $summary);
+        }
+
+        return $summary;
+    }
+
+    /**
      * Returns the filename from the parsed data.
      *
      * @param SimpleXMLObject $data The parsed data.

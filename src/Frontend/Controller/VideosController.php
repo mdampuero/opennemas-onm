@@ -35,11 +35,6 @@ class VideosController extends Controller
      **/
     public function init()
     {
-
-        if (!\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
-            throw new ResourceNotFoundException();
-        }
-
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
@@ -70,6 +65,9 @@ class VideosController extends Controller
     /**
      * Renders the video frontpage
      *
+     * Pagination with ajax use $pagination
+     * Normal pagination use $pager
+     *
      * @return Response the response object
      **/
     public function frontpageAction()
@@ -87,7 +85,7 @@ class VideosController extends Controller
             $totalVideosFrontpage       = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
             $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
             $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
-            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
+            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:0;
             $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
 
             if ($this->category_name != 'home') {
@@ -112,21 +110,6 @@ class VideosController extends Controller
                     . $this->category . '',
                     'ORDER BY created DESC LIMIT '.$totalVideosMoreFrontpage
                 );
-
-                // Pagination for block more videos
-                $pagination = $this->get('paginator')->get([
-                    'boundary'    => false,
-                    'directional' => true,
-                    'maxLinks'    => 0,
-                    'epp'         => $totalVideosMoreFrontpage,
-                    'page'        => $this->page,
-                    'total'       => count($othersVideos)+1,
-                    'route'       => [
-                        'name'   => 'frontend_video_ajax_paginated',
-                    ]
-                ]);
-
-                $this->view->assign('pagination', $pagination);
 
                 if (count($frontVideos) > 0) {
                     foreach ($frontVideos as &$video) {
@@ -159,21 +142,6 @@ class VideosController extends Controller
                     $this->page,
                     $totalVideosFrontpageOffset
                 );
-
-                // Pagination for block more videos
-                $pagination = $this->get('paginator')->get([
-                    'boundary'    => false,
-                    'directional' => true,
-                    'maxLinks'    => 0,
-                    'epp'         => $totalVideosMoreFrontpage,
-                    'page'        => $this->page,
-                    'total'       => count($othersVideos)+1,
-                    'route'       => [
-                        'name'   => 'frontend_video_ajax_paginated',
-                    ]
-                ]);
-
-                $this->view->assign('pagination', $pagination);
             }
 
             if (count($videos) > 0) {
@@ -192,11 +160,55 @@ class VideosController extends Controller
                 }
             }
 
+            // Pagination for block more videos (ajax)
+            $url = [ 'name' => 'frontend_video_ajax_paginated' ];
+            $total = count($othersVideos)+1;
+            if ($this->category != 0) {
+                $url = [
+                    'name' => 'frontend_video_ajax_paginated',
+                    'params' => [ 'category_name' => $this->category_name ]
+                ];
+                $total = count($allVideos)+1;
+            }
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $totalVideosMoreFrontpage,
+                'page'        => $this->page,
+                'total'       => $total,
+                'route'       => $url
+            ]);
+
+            if (isset($pagination->links)) {
+                $pagination = $pagination->links;
+            }
+
+            // New pagination for video frontpage
+            $route = [ 'name' => 'frontend_video_page_frontpage' ];
+            if ($this->category != 0) {
+                $route = [
+                    'name' => 'frontend_video_page_frontpage_category',
+                    'params' => [ 'category_name' => $this->category_name ]
+                ];
+            }
+            $pager = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $totalVideosMoreFrontpage,
+                'page'        => $this->page,
+                'total'       => $total,
+                'route'       => $route
+            ]);
+
             $this->view->assign(
                 array(
                     'videos'        => $videos,
                     'others_videos' => $othersVideos,
-                    'page'          => '1'
+                    'page'          => '1',
+                    'pager'         => $pager,
+                    'pagination'    => $pagination,
                 )
             );
         }
@@ -219,6 +231,74 @@ class VideosController extends Controller
                 )
             );
         }
+    }
+
+    /**
+     * Renders the video frontpage
+     *
+     * @return Response the response object
+     **/
+    public function frontpagePaginatedAction()
+    {
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
+
+        // If is not cached process this action
+        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
+        if (($this->view->caching == 0)
+                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+        ) {
+            // Fetch video settings
+            $videosSettings = $this->get('setting_repository')->get('video_settings');
+            $itemsPerPage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
+
+            $order   = [ 'created' => 'DESC' ];
+            $filters = [
+                'content_type_name' => [[ 'value' => 'video' ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            ];
+
+            $route = [ 'name' => 'frontend_video_page_frontpage' ];
+            if ($this->category != 0) {
+                $filters['category_name'] = [ [ 'value' => $this->category_name ] ];
+                $route = [
+                    'name' => 'frontend_video_page_frontpage_category',
+                    'params' => [ 'category_name' => $this->category_name ]
+                ];
+            }
+
+            $er          = $this->get('entity_repository');
+            $videos      = $er->findBy($filters, $order, $itemsPerPage, $this->page);
+            $countVideos = $er->countBy($filters);
+
+            $pager = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $itemsPerPage,
+                'page'        => $this->page,
+                'total'       => $countVideos,
+                'route'       => $route
+            ]);
+
+            $this->view->assign(
+                [
+                    'videos' => $videos,
+                    'pager'  => $pager,
+                ]
+            );
+        }
+
+        return $this->render(
+            'video/video_frontpage.tpl',
+            [
+                'cache_id'     => $cacheID,
+                'categoryName' => $this->category_name,
+                'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
+            ]
+        );
+
     }
 
     /**

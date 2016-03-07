@@ -2,23 +2,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
+  <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   {block name="header-css"}
-  {stylesheets src="
-  @Common/components/font-awesome/css/font-awesome.min.css,
-  @Common/components/bootstrap/dist/css/bootstrap.min.css,
-  @AdminTheme/less/_social.less" filters="cssrewrite,less"}
-  <link rel="stylesheet" href="{$asset_url}">
-  {/stylesheets}
+    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
+        @AdminTheme/less/_social.less" filters="cssrewrite,less"}
+      <style>
+        html, body {
+          background: none;
+          margin:0 auto;
+          min-height:0;
+          overflow-y:hidden;
+          padding:0;
+        }
+      </style>
+    {/stylesheets}
   {/block}
-  <style>
-    html, body {
-      background: none;
-      margin:0 auto;
-      min-height:0;
-      overflow-y:hidden;
-      padding:0;
-    }
-  </style>
 </head>
 <body>
   <div class="social-connections text-center">

@@ -18,7 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TranslationCoreCommand extends Command
 {
-    public $supportedLanguages = array('es_ES', 'gl_ES'/*, 'pt_BR'*/);
+    public $supportedLanguages = array(
+        'es_ES',
+        'gl_ES',
+        // 'it_IT',
+        // 'fr_FR',
+        // 'pt_PT',
+    );
 
     public $localeFolder = 'Resources/locale';
 
@@ -89,6 +95,7 @@ EOF
 
         $phpFiles = array(
             SRC_PATH.'*/*/*.php',
+            SRC_PATH.'*/*/*/*.php',
             SRC_PATH.'*/Resources/Menu.php',
             SITE_LIBS_PATH.'core/*.php',
             SITE_LIBS_PATH.'models/*.php',

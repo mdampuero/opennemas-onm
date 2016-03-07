@@ -26,9 +26,17 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-stack-overflow"></i>
+                <i class="fa fa-stack-overflow page-navbar-icon"></i>
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question"></i>
+                </a>
                 {t}Albums{/t}
               </h4>
+            </li>
+            <li class="quicklinks visible-xs">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question fa-lg"></i>
+              </a>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
@@ -56,16 +64,16 @@
               <li class="quicklinks">
                 {if isset($album->id)}
                   {acl isAllowed="ALBUM_UPDATE"}
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
                       <i class="fa fa-save"></i>
-                      {t}Save{/t}
+                      <span class="text">{t}Update{/t}</span>
                     </button>
                   {/acl}
                 {else}
                   {acl isAllowed="ALBUM_CREATE"}
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                       <i class="fa fa-save"></i>
-                      {t}Save{/t}
+                      <span class="text">{t}Save{/t}</span>
                     </button>
                   {/acl}
                 {/if}

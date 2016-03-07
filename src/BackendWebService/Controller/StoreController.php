@@ -5,6 +5,7 @@ namespace BackendWebService\Controller;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Framework\ORM\Entity\Extension;
 
 class StoreController extends Controller
 {
@@ -56,8 +57,8 @@ class StoreController extends Controller
         // Get names for filtered modules to use in template
         $purchased = array_intersect_key($available, array_flip($modules));
 
-        $this->sendEmailToSales($instance, $purchased);
-        $this->sendEmailToCustomer($instance, $purchased);
+        $this->sendEmailToSales($billing, $purchased, $instance);
+        $this->sendEmailToCustomer($purchased, $instance);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
@@ -130,7 +131,13 @@ class StoreController extends Controller
      */
     public function listAction()
     {
-        $modules   = \Onm\Module\ModuleManager::getAvailableModulesGrouped();
+        $modules   = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findBy([
+                'enabled' => [ [ 'value' => 1 ] ],
+                'type'    => [ [ 'value' => 'module' ] ]
+            ]);
+
         $activated = $this->get('instance')->activated_modules;
 
         if (in_array('ALBUM_MANAGER', $activated)
@@ -139,61 +146,57 @@ class StoreController extends Controller
             $activated[] = 'MEDIA_MANAGER';
         }
 
-        // Remove internal modules
-        $modules = array_filter($modules, function ($a) {
-            if (array_key_exists('type', $a) && $a['type'] === 'internal') {
-                return false;
+        $modules = array_map(function (&$a) {
+            foreach ([ 'about', 'description', 'name' ] as $key) {
+                if (!empty($a->{$key})) {
+                    $lang = $a->{$key}['en'];
+
+                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a->{$key})
+                        && !empty($a->{$key}[CURRENT_LANGUAGE_SHORT])
+                    ) {
+                        $lang = $a->{$key}[CURRENT_LANGUAGE_SHORT];
+                    }
+
+                    $a->{$key} = $lang;
+                }
             }
 
-            // Remove ALBUM_MANAGER, PHOTO_MANAGER and VIDEO_MANAGER
-            if (array_key_exists('id', $a)
-                && ($a['id'] === 'ALBUM_MANAGER'
-                    || $a['id'] === 'VIDEO_MANAGER')
-            ) {
-                return false;
-            }
-
-            return true;
-        });
-
-        array_push(
-            $modules,
-            [
-                'id'               => 'MEDIA_MANAGER',
-                'plan'             => 'PROFESSIONAL',
-                'name'             => _('Media'),
-                'thumbnail'        => 'module-multimedia.jpg',
-                'description'      => _('Add Video and Image Galleries to your content. '),
-                'long_description' => _('<p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
-                'type'             => 'module',
-                'price' => [
-                    'month' => 35
-                ]
-            ]
-        );
-
-        $packs = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes = \Onm\Module\ModuleManager::getAvailableThemes();
-
-        $results = array_merge($modules, $packs);
-        foreach ($results as &$result) {
-            if (empty($result['author'])) {
-                $result['author'] = '<a href="https://www.opennemas.com/about" target="_blank">Opennemas</a>';
-            }
-        }
+            return $a->getData();
+        }, $modules);
 
         return new JsonResponse(
-            [ 'results' => $results, 'activated' => $activated ]
+            [ 'results' => $modules, 'activated' => $activated ]
         );
+    }
+
+    /**
+     * Saves the billing information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveBillingAction(Request $request)
+    {
+        $billing  = $request->request->all();
+        $instance = $this->get('instance');
+
+        foreach ($billing as $key => $value) {
+            $instance->metas['billing_' . $key] = $value;
+        }
+
+        $this->get('instance_manager')->persist($instance);
+
+        return new JsonResponse(_('Billing information saved successfully'));
     }
 
     /**
      * Sends an email to the customer.
      *
-     * @param Instance $instance The instance to upgrade.
      * @param array    $modules  The requested modules.
+     * @param Instance $instance The instance to upgrade.
      */
-    private function sendEmailToCustomer($instance, $modules)
+    private function sendEmailToCustomer($modules, $instance)
     {
         $params = $this->container
             ->getParameter("manager_webservice");
@@ -222,8 +225,9 @@ class StoreController extends Controller
      *
      * @param Instance $instance The instance to upgrade.
      * @param array    $modules  The requested modules.
+     * @param array    $billing  The billing information.
      */
-    private function sendEmailToSales($instance, $modules)
+    private function sendEmailToSales($billing, $modules, $instance)
     {
         $params = $this->container
             ->getParameter("manager_webservice");
@@ -237,6 +241,7 @@ class StoreController extends Controller
                 $this->renderView(
                     'store/email/_purchaseToSales.tpl',
                     [
+                        'billing'  => $billing,
                         'instance' => $instance,
                         'modules'  => $modules,
                         'user'     => $this->getUser()

@@ -22,7 +22,8 @@
      * @description
      *   Service to load images from objects.
      */
-    .provider('DynamicImage', ['routingProvider',
+    .provider('DynamicImage', [
+      'routingProvider',
       function(routingProvider) {
         /**
          * Template for the dynamic image.
@@ -386,7 +387,7 @@
                       img.width, maxHeight, maxWidth);
 
                   $scope.$apply();
-                }
+                };
 
                 img.src = nv;
               }
@@ -400,4 +401,5 @@
         };
       }
     ]);
+
 })();

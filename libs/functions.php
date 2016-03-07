@@ -302,3 +302,167 @@ function debug()
         call_user_func_array('var_dump', $functionArgs);
     }
 }
+
+function getPiwikCode($useImage = false)
+{
+    $config = getService('setting_repository')->get('piwik');
+
+    if (!is_array($config)
+        || !array_key_exists('page_id', $config)
+        || !array_key_exists('server_url', $config)
+        || empty(trim($config['page_id']))
+    ) {
+        return '';
+    }
+
+    if ($useImage) {
+        $code = generatePiwikImageCode($config);
+    } else {
+        $code = generatePiwikScriptCode($config);
+    }
+
+    return $code;
+}
+
+function generatePiwikScriptCode($config)
+{
+    $httpsHost = preg_replace("/http:/", "https:", $config['server_url']);
+
+    $code = '<!-- Piwik -->
+        <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push([\'trackPageView\']);
+        _paq.push([\'enableLinkTracking\']);
+        (function() {
+            var u = (("https:" == document.location.protocol) ? "'.
+            $httpsHost . '" : "' . $config['server_url'] .'");
+            _paq.push([\'setTrackerUrl\', u+\'piwik.php\']);
+            _paq.push([\'setSiteId\', ' . $config['page_id'].']);
+            var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
+            g.type=\'text/javascript\';
+            g.async=true; g.defer=true;
+            g.src=u+\'piwik.js\'; s.parentNode.insertBefore(g,s);
+        })();
+        </script>
+        <noscript>
+            <img src="'. $config['server_url'] .'piwik.php?idsite='.
+            $config['page_id'] .'" style="border:0" alt="" />
+        </noscript>
+        <!-- End Piwik Tracking Code -->';
+
+    return $code;
+}
+
+function generatePiwikImageCode($config)
+{
+    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0" alt="" />';
+
+    $code .= sprintf(
+        $imgCode,
+        $config['server_url'],
+        $config['page_id'],
+        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+    );
+
+    return $code;
+}
+
+function getGoogleAnalyticsCode($useImage = false)
+{
+    $config = getService('setting_repository')->get('google_analytics');
+
+    // Keep compatibility with old analytics store format
+    if (is_array($config)
+        && array_key_exists('api_key', $config)
+    ) {
+        $oldConfig = $config;
+        $config = [];
+        $config[]= $oldConfig;
+    }
+
+    if (!is_array($config)
+        || !array_key_exists('0', $config)
+        || !is_array($config[0])
+        || !array_key_exists('api_key', $config[0])
+        || empty(trim($config[0]['api_key']))
+    ) {
+        $config = [];
+    }
+
+    if ($useImage) {
+        $code = genarateGAImageCode($config);
+    } else {
+        $code = generateGAScriptCode($config);
+    }
+
+    return $code;
+}
+
+function generateGAScriptCode($config)
+{
+    $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
+    foreach ($config as $key => $account) {
+        if (is_array($account)
+            && array_key_exists('api_key', $account)
+            && !empty(trim($account['api_key']))
+        ) {
+            if ($key == 0) {
+                $code .= "_gaq.push(['_setAccount', '" . trim($account['api_key']) . "']);\n";
+                if (array_key_exists('base_domain', $account)
+                    && !empty(trim($account['base_domain']))
+                ) {
+                    $code .= "_gaq.push(['_setDomainName', '". trim($account['base_domain']) ."']);\n";
+                }
+                $code .= "_gaq.push(['_trackPageview']);\n";
+            } else {
+                $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
+                if (array_key_exists('base_domain', $account)
+                    && !empty(trim($account['base_domain']))
+                ) {
+                    $code .= "_gaq.push(['account{$key}._setDomainName', '". trim($account['base_domain']) ."']);\n";
+                }
+                $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
+            }
+        }
+    }
+
+    // Add opennemas Account
+    $code .= "_gaq.push(['onm._setAccount', 'UA-40838799-5']);\n";
+    $code .= "_gaq.push(['onm._trackPageview']);\n";
+
+    // Load ga.js script
+    $code .= "(function() {\n"
+        . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
+        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n"
+        . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);\n"
+        . "})();\n"
+        . "</script>\n";
+
+    return $code;
+}
+
+function genarateGAImageCode($config)
+{
+    $imgCode = '<img src="http://www.google-analytics.com/__utm.gif?utmwv=4&utmn=%s&utmdt=Newsletter [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=%s" style="border:0" alt="" />'."\n";
+
+    $code = '';
+    foreach ($config as $key => $account) {
+        if (is_array($account)
+            && array_key_exists('api_key', $account)
+            && !empty(trim($account['api_key']))
+        ) {
+            $code .= sprintf(
+                $imgCode,
+                rand(0, 0x7fffffff),
+                date('d/m/Y'),
+                urlencode(SITE_URL),
+                urlencode(SITE_URL.'newsletter/'.date("Ymd")),
+                urlencode('newsletter/'.date("Ymd")),
+                trim($account['api_key']),
+                '__utma%3D999.999.999.999.999.1%3B'
+            );
+        }
+    }
+
+    return $code;
+}

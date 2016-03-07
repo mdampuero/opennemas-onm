@@ -119,7 +119,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
-                <i class="fa fa-lg fa-cube hidden-sm"></i>
+                <i class="fa fa-cube hidden-sm m-r-5"></i>
                 {t}Modules{/t}
               </button>
             </li>
@@ -128,7 +128,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
-                <i class="fa fa-lg fa-support hidden-sm"></i>
+                <i class="fa fa-support hidden-sm m-r-5"></i>
                 {t}Services{/t}
               </button>
             </li>
@@ -137,7 +137,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'">
-                <i class="fa fa-lg fa-thumbs-o-up hidden-sm"></i>
+                <i class="fa fa-thumbs-o-up hidden-sm m-r-5"></i>
                 {t}Partners{/t}
               </button>
             </li>
@@ -146,7 +146,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }" ng-click="type = 'free'">
-                <i class="fa fa-ban fa-circle-o hidden-sm"></i>
+                <i class="fa fa-ban fa-circle-o hidden-sm m-r-5"></i>
                 {t}Free{/t}
               </button>
             </li>
@@ -155,7 +155,7 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
-                <i class="fa fa-lg fa-star hidden-sm"></i>
+                <i class="fa fa-star-o hidden-sm m-r-5"></i>
                 {t}My selection{/t}
               </button>
             </li>
@@ -201,7 +201,7 @@
         <div class="grid-body no-padding">
           <div class="clearfix">
             <div class="col-xs-4 col-sm-4 module-image-wrapper" ng-click="showDetails(item)">
-              <img class="module-image pull-left" ng-src="/assets/images/store/[%item.thumbnail%]">
+              <img class="module-image pull-left" ng-src="[% item.images[0] %]">
               <div class="module-icon">
                 <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-thumbs-o-up': item.type == 'partner', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
               </div>
@@ -215,16 +215,17 @@
                 </div>
               </div>
               <div class="text-right price">
-                <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month">
-                    <strong>[% item.price.month %]</strong>
-                    <small> € / {t}month{/t}</small>
-                  </span>
-                  <span ng-if="!item.price.month && item.price.single">
-                    <strong>[% item.price.single %]</strong>
-                    <small> € </small>
-                  </span>
-                  <span ng-if="item.price.month == 0"><strong>{t}Free{/t}</strong></span>
+                <h3 class="no-margin" ng-show="item.metas.price">
+                  <div ng-repeat="price in item.metas.price">
+                    <span ng-if="price.value">
+                      <strong>[% price.value %]</strong>
+                      <small ng-if="price.type === 'monthly'">€/{t}month{/t}</small>
+                      <small ng-if="price.type === 'yearly'">€/{t}year{/t}</small>
+                      <small ng-if="price.type === 'single'">€</small>
+                      <small ng-if="price.type === 'item'">€/{t}item{/t}</small>
+                    </span>
+                    <span ng-if="price.value == 0"><strong>{t}Free{/t}</strong></span>
+                  </div>
                 </h3>
               </div>
             </div>
@@ -235,7 +236,7 @@
                 {t}More info{/t}
             </div>
             <div class="col-xs-12 col-sm-6">
-              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)" ng-if="item.price.month !== 0">
+              <button class="add-to-cart btn btn-block" ng-class="{ 'btn-success': !isActivated(item) && !isInCart(item), 'btn-default': isActivated(item) || isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
                 <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
                 <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
                 <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>

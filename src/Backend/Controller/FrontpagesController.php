@@ -336,10 +336,7 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-        $cacheManager->delete($section . '|RSS');
-        $cacheManager->delete($section . '|0');
+        $this->dispatchEvent('frontpage.save_position', array('category' => $category));
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }
@@ -357,19 +354,23 @@ class FrontpagesController extends Controller
      **/
     public function lastVersionAction(Request $request)
     {
-        $dateRequest = $request->query->filter('date', null, FILTER_SANITIZE_STRING);
-        $category    = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $dateRequest = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+        $category    = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
 
-        if ($category == 'home') {
-            $category = 0;
+        $newVersionAvailable = false;
+        if (!empty($dateRequest)) {
+            if ($category == 'home') {
+                $category = 0;
+            }
+
+            $date = s::get('frontpage_'.$category.'_last_saved');
+
+            $frontpageVersion = new \DateTime($date);
+            $requestVersion = new \DateTime($dateRequest);
+
+            $newVersionAvailable = $frontpageVersion > $requestVersion;
         }
 
-        $date = s::get('frontpage_'.$category.'_last_saved');
-
-        $frontpageVersion = new \DateTime($date);
-        $requestVersion = new \DateTime($dateRequest);
-
-        $newVersionAvailable = $frontpageVersion > $requestVersion;
 
         return new Response(json_encode($newVersionAvailable));
     }

@@ -29,6 +29,18 @@ class SidebarController extends Controller
                     'click' => true
                 ],
                 [
+                    'name'  => _('Extensions'),
+                    'icon'  => 'fa-puzzle-piece',
+                    'items' => [
+                        [
+                            'name'  => _('Modules'),
+                            'icon'  => 'fa-plug',
+                            'route' => 'manager_modules_list',
+                            'click' => true
+                        ]
+                    ]
+                ],
+                [
                     'name' => _('Notifications'),
                     'icon' => 'fa-bell',
                     'route' => 'manager_notifications_list',

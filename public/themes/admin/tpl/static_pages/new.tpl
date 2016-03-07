@@ -1,16 +1,24 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl">
+  <form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-file-o"></i>
+                <i class="fa fa-file-o page-navbar-icon"></i>
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question"></i>
+                </a>
                 {t}Static Pages{/t}
               </h4>
+            </li>
+            <li class="quicklinks visible-xs">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question fa-lg"></i>
+              </a>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
@@ -34,8 +42,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
-                  <span class="fa fa-save"></span> {t}Save{/t}
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                  <i class="fa fa-save"></i>
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>

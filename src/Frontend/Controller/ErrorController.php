@@ -69,7 +69,7 @@ class ErrorController extends Controller
                             'page'               => $page,
                             'advertisements'     => $ads,
                             'x-tags'             => 'not_found',
-                            'x-cache-for'        => '1d'
+                            'x-cache-for'        => '+1 day'
                         )
                     );
                 }

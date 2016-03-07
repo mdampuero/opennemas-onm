@@ -29,6 +29,35 @@ $(document).ready(function() {
 
     $('.nav-pills, .nav-tabs').tabdrop();
 
+    $('#formulario').on('submit', function(){
+      var btn = $('.btn.btn-primary');
+      btn.attr('disabled', true);
+      $('.btn.btn-primary .text').html(btn.data('text'));
+    });
+
+    if ($('#formulario').length > 0) {
+      // Get form values and set unsaved
+      var ov = $('#formulario').serialize();
+      var unsaved = true;
+      // Check for CKEditor changes
+      for (var i in CKEDITOR.instances) {
+        CKEDITOR.instances[i].on('change', function() {
+          ov = null;
+        });
+      }
+      // Bind the event
+      $(window).bind('beforeunload', function(e) {
+        var nv = $('#formulario').serialize();
+        if((ov != nv) && unsaved){
+            return leaveMessage;
+        }
+      });
+      // Allow to save changes
+      $('#formulario').on('submit', function(){
+        unsaved = false;
+      });
+    }
+
     // Hide alerts after 5 seconds
     window.setInterval(function() {
       $('.messages .alert').slideDown(2000, function(){

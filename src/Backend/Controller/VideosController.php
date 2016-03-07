@@ -159,9 +159,9 @@ class VideosController extends Controller
                     'file_path'      => $_FILES["video_file"]["tmp_name"],
                     'category'       => $category,
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->filter('description', ''),
+                    'description'    => $requestPost->get('description', ''),
                     'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                     'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                     'params'         => $request->request->get('params', []),
@@ -183,9 +183,9 @@ class VideosController extends Controller
                 $videoData = array(
                     'category'       => $category,
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->filter('description', ''),
+                    'description'    => $requestPost->get('description', ''),
                     'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                     'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                     'information'    => $information,
@@ -196,6 +196,8 @@ class VideosController extends Controller
                 try {
                     $videoId = $video->create($videoData);
 
+
+                    // TODO: remove cache cleaning actions
                     $cacheManager = $this->get('template_cache_manager');
                     $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
                     $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -214,6 +216,7 @@ class VideosController extends Controller
                         $videoId = $video->create($_POST);
 
                         // Clean cache album home and frontpage for category
+                        // TODO: remove cache cleaning actions
                         $cacheManager = $this->get('template_cache_manager');
                         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
                         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -313,9 +316,9 @@ class VideosController extends Controller
                         'id'             => $id,
                         'category'       => $category,
                         'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                        'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                        'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                         'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                        'description'    => $requestPost->filter('description', ''),
+                        'description'    => $requestPost->get('description', ''),
                         'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
                         'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                         'information'    => $information,
@@ -338,6 +341,7 @@ class VideosController extends Controller
             }
 
             // Clean cache home and frontpage for category
+            // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
@@ -550,6 +554,7 @@ class VideosController extends Controller
             }
 
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
             $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
             $cacheManager->delete('home|1');

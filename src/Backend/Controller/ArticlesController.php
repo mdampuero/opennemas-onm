@@ -127,104 +127,7 @@ class ArticlesController extends Controller
      **/
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $article = new \Article();
-
-            $params = $request->request->get('params');
-            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-            $inhome        = $request->request->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
-            $frontpage     = $request->request->filter('frontpage', '', FILTER_SANITIZE_STRING);
-            $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-            $data = array(
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'title_int'      => $request->request->filter('title_int', '', FILTER_SANITIZE_STRING),
-                'content_status'                 => (empty($contentStatus)) ? 0 : 1,
-                'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
-                'with_comment'                   => (empty($withComment)) ? 0 : 1,
-                'frontpage'                   => (empty($frontpage)) ? 0 : 1,
-                'category'  => $request->request->getDigits('category'),
-                'agency'    => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-                'params' =>  array(
-                    'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                    'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                    'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                    'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                    'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                    'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                    'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                    'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                    'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                    'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                    'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                    'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-                    'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                    'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                    'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                    'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                ),
-                'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'summary'           => $request->request->filter('summary', ''),
-                'body'              => $request->request->filter('body', ''),
-                'img1'              => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'       => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'              => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'       => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'fk_video'          => $request->request->filter('fk_video', '', FILTER_SANITIZE_STRING),
-                'footer_video2'     => $request->request->filter('footer_video2', '', FILTER_SANITIZE_STRING),
-                'fk_video2'         => $request->request->filter('fk_video2', '', FILTER_SANITIZE_STRING),
-                'slug'              => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(
-                    $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
-                ),
-                'relatedInner'      => json_decode(
-                    $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
-                ),
-                'relatedHome'       => json_decode(
-                    $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
-                ),
-                'fk_author'         => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            );
-
-            if ($article->create($data)) {
-                if ($data['promoted_to_category_frontpage'] == 1
-                    && !$article->isInFrontpageOfCategory($data['category'])
-                ) {
-                    $article->promoteToCategoryFrontpage($data['category']);
-                    // Clear frontpage cache
-                    dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-                }
-
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Article successfully created.')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the new article.')
-                );
-            }
-
-            // Return user to list if has no update acl
-            if (Acl::check('ARTICLE_UPDATE')) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_article_show',
-                        array('id' => $article->id)
-                    )
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_articles')
-                );
-            }
-
-        } else {
+        if ('POST' !== $request->getMethod()) {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -249,6 +152,98 @@ class ArticlesController extends Controller
                     'authors'        => $authors,
                     'commentsConfig' => s::get('comments_config')
                 )
+            );
+        }
+
+        $article = new \Article();
+
+        $postReq = $request->request;
+
+        $params        = $postReq->get('params');
+        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
+        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
+        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
+
+        $data = array(
+            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'           => $postReq->filter('body', ''),
+            'category'       => $postReq->getDigits('category'),
+            'content_status' => (empty($contentStatus)) ? 0 : 1,
+            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING),
+            'fk_video'       => $postReq->getDigits('fk_video', ''),
+            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
+            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'frontpage'      => (empty($frontpage)) ? 0 : 1,
+            'img1'           => $postReq->getDigits('img1', ''),
+            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2'           => $postReq->getDigits('img2', ''),
+            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING),
+            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'summary'        => $postReq->filter('summary', ''),
+            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'with_comment'   => (empty($withComment)) ? 0 : 1,
+            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
+            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
+            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
+            'fk_author'      => $postReq->getDigits('fk_author', 0),
+            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
+            'params' =>  array(
+                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
+                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
+                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
+                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
+                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
+                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
+                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
+                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
+                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
+                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
+            ),
+        );
+
+        if ($article->create($data)) {
+            if ($data['promoted_to_category_frontpage'] == 1
+                && !$article->isInFrontpageOfCategory($data['category'])
+            ) {
+                $article->promoteToCategoryFrontpage($data['category']);
+                // Clear frontpage cache
+                dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Article successfully created.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to create the new article.')
+            );
+        }
+
+        // Return user to list if has no update acl
+        if (Acl::check('ARTICLE_UPDATE')) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_article_show',
+                    array('id' => $article->id)
+                )
+            );
+        } else {
+            return $this->redirect(
+                $this->generateUrl('admin_articles')
             );
         }
     }
@@ -413,119 +408,130 @@ class ArticlesController extends Controller
 
         $article = new \Article($id);
 
-        if ($article->id != null) {
-            if (!Acl::isAdmin()
-                && !Acl::check('CONTENT_OTHER_UPDATE')
-                && !$article->isOwner($_SESSION['userid'])
-            ) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("You can't modify this article because you don't have enought privileges.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_articles'));
-            }
-
-            if (count($request->request) < 1) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Article data sent not valid.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
-            }
-
-            $article = new \Article();
-
-            $params = $request->request->get('params');
-            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-            $inhome        = $request->request->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
-            $frontpage     = $request->request->filter('frontpage', '', FILTER_SANITIZE_STRING);
-            $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-            $data = array(
-                'id'             => $id,
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'title_int'      => $request->request->filter('title_int', '', FILTER_SANITIZE_STRING),
-                'content_status' => (empty($contentStatus)) ? 0 : 1,
-                'with_comment'   => (empty($withComment)) ? 0 : 1,
-                'frontpage'      => (empty($frontpage)) ? 0 : 1,
-                'category'       => $request->request->getDigits('category'),
-                'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'summary'        => $request->request->filter('summary', ''),
-                'body'           => $request->request->filter('body', ''),
-                'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'    => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'           => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'    => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'fk_video'       => $request->request->filter('fk_video', '', FILTER_SANITIZE_STRING),
-                'footer_video2'  => $request->request->filter('footer_video2', '', FILTER_SANITIZE_STRING),
-                'fk_video2'      => $request->request->filter('fk_video2', '', FILTER_SANITIZE_STRING),
-                'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'        => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'   => json_decode($request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)),
-                'relatedInner'   => json_decode($request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)),
-                'relatedHome'    => json_decode($request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)),
-                'fk_author'      => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-                'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
-                'params'         => array(
-                    'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                    'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                    'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                    'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                    'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                    'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                    'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                    'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                    'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                    'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                    'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                    'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-                    'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                    'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                    'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                    'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                ),
+        if ($article->id == null) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Unable to update the article.")
             );
-
-            if ($article->update($data)) {
-                if ($data['content_status'] == 0) {
-                    $article->dropFromAllHomePages();
-                }
-
-                // Promote content to category frontpate if user wants to and is not already promoted
-                if ($data['promoted_to_category_frontpage'] == 1
-                    && !$article->isInFrontpageOfCategory($data['category'])
-                ) {
-                    $article->promoteToCategoryFrontpage($data['category']);
-                }
-
-                // Clear caches
-                dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-                dispatchEventWithParams('frontpage.save_position', array('category' => 0));
-
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Article successfully updated.")
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Unable to update the article.")
-                );
-            }
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                )
+                $this->generateUrl('admin_articles')
             );
         }
+
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && !$article->isOwner($_SESSION['userid'])
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this article because you don't have enought privileges.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_articles'));
+        }
+
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Article data sent not valid.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
+        }
+
+        $article = new \Article();
+
+        $postReq = $request->request;
+
+        $params        = $postReq->get('params');
+        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
+        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
+        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
+
+        $data = array(
+            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'           => $postReq->filter('body', ''),
+            'category'       => $postReq->getDigits('category'),
+            'content_status' => (empty($contentStatus)) ? 0 : 1,
+            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'fk_author'      => $postReq->filter('fk_author', 0, FILTER_VALIDATE_INT),
+            'fk_video'       => $postReq->getDigits('fk_video', ''),
+            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
+            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'frontpage'      => (empty($frontpage)) ? 0 : 1,
+            'id'             => $id,
+            'img1'           => $postReq->getDigits('img1', ''),
+            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2'           => $postReq->getDigits('img2', ''),
+            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
+            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
+            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
+            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'summary'        => $postReq->filter('summary', ''),
+            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'with_comment'   => (empty($withComment)) ? 0 : 1,
+            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
+            'params'         => array(
+                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
+                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
+                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
+                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
+                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
+                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
+                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
+                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
+                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
+                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
+            ),
+        );
+
+        if ($article->update($data)) {
+            if ($data['content_status'] == 0) {
+                $article->dropFromAllHomePages();
+            }
+
+            // Promote content to category frontpate if user wants to and is not already promoted
+            if ($data['promoted_to_category_frontpage'] == 1
+                && !$article->isInFrontpageOfCategory($data['category'])
+            ) {
+                $article->promoteToCategoryFrontpage($data['category']);
+            }
+
+            // Clear caches
+            dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
+            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Article successfully updated.")
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Unable to update the article.")
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_article_show',
+                array('id' => $article->id)
+            )
+        );
     }
 
     /**
@@ -861,9 +867,9 @@ class ArticlesController extends Controller
             $relationes[$key] = $value['id'];
         }
 
-        $relat = $cm->cache->getContents($relationes);
+        $relat = $cm->getContents($relationes);
         $relat = $cm->getInTime($relat);
-        $relat = $cm->cache->getAvailable($relat);
+        $relat = $cm->getAvailable($relat);
 
         foreach ($relat as $ril) {
             $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
@@ -879,12 +885,14 @@ class ArticlesController extends Controller
         $this->view->assign([
             'relationed'            => $relat,
             'suggested'             => $machineSuggestedContents,
-            'actual_category_title' => $actual_category_title,
             'contentId'             => $article->id,
-            'article'               => $article,
             'category_name'         => $category_name,
+            'actual_category'       => $category_name,
+            'article'               => $article,
+            'content'               => $article,
+            'actual_category_title' => $actual_category_title,
             'photoInt'              => $photoInt,
-            'videoInt'              => $videoInt
+            'videoInt'              => $videoInt,
         ]);
 
         $this->get('session')->set(

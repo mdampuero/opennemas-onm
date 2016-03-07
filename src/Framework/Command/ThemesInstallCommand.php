@@ -95,7 +95,7 @@ EOF
      **/
     public function installAllThemes()
     {
-        $themes = 'africainteligencia base basic bastet bragi cplandora cronicas estrelladigital flashnews '
+        $themes = 'africainteligencia base basic bastet bragi cplandora cronicas estrelladigital flashnews forseti '
             .'hathor horus idealgallego khepri laregion lavozdelanzarote lrinternacional marruecosnegocios '
             .'nemty odin prontoar retrincos selket sercoruna sermos sobek tecnofisis televisionlr vidar zisa';
 

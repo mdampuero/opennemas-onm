@@ -257,11 +257,11 @@ class FilesController extends Controller
         }
 
         $data = array(
-            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'path'           => $directoryDate.$fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
-            'description'    => $request->request->filter('description', null),
+            'description'    => $request->request->get('description', ''),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
             'fk_publisher'   => $_SESSION['userid'],
         );
@@ -348,7 +348,7 @@ class FilesController extends Controller
 
         $file = new \Attachment($id);
         $data = array(
-            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
             'id'             => $id,

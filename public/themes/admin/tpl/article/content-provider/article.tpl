@@ -1,6 +1,6 @@
-<div data-content-id="{$content->id}" data-class="Article" {getProperty item=$content category=$params['category'] property='bgcolor' style="true"}
+<div data-content-id="{$content->id}" data-class="Article" {getProperty item=$content category=$params['category'] property='bgcolor, title' style="true"}
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
-    data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
+    data-bg='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">

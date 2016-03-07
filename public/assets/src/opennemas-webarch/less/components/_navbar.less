@@ -33,20 +33,57 @@
     padding: 11px 0 8px;
   }
 
-  .btn-link:active,
-  .btn-link:focus,
-  .btn-link:hover {
-    color: #22262e;
-  }
+  .nav > li {
+    a {
+      color: #505458;
 
-  .btn-primary,
-  .btn-primary:hover,
-  .btn-primary:focus {
-    color: #fff;
+      &:hover {
+        color: #000;
+      }
+    }
+
+    .btn-link:active,
+    .btn-link:focus,
+    .btn-link:hover {
+      color: #22262e;
+    }
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-success,
+    .btn-success:hover,
+    .btn-success:focus {
+      color: #fff;
+    }
   }
 
   .dropdown-menu {
     margin-top: 10px !important;
+  }
+
+  .help-icon {
+    background-color: @info-color !important;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    position: absolute;
+    padding: 0 !important;
+    margin: 0;
+    left: 5px;
+    top: 15px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+
+    .fa {
+      color: #fff !important;
+      line-height: 1.25em;
+      margin: 0;
+    }
+
+    &:hover {
+      background-color: darken(@info-color, 10%) !important;
+    }
   }
 
   .h-seperate {
@@ -88,6 +125,10 @@
       }
     }
   }
+}
+
+.page-navbar-icon {
+  margin-right: 15px !important;
 }
 
 .actions-navbar {
@@ -225,12 +266,49 @@ div[ng-view].ng-leave-active .selected-navbar {
   }
 
   .page-navbar {
-    top: 50px;
+    top: 0px;
+
+    &.actions-navbar {
+      background: #22252d;
+      color: #fff;
+    }
+
+    .help-icon {
+      left: 10px;
+      position: relative;
+      top: 7px;
+
+      .fa {
+        line-height: .75em;
+      }
+    }
+
+    .nav > li {
+      a, .btn-link {
+        color: #fff;
+
+        &:hover {
+          color: #ddd;
+        }
+      }
+    }
 
     &.selected-navbar.collapsed {
       opacity: 0;
       top: -50px;
     }
+
+    h1, h2, h3, h4, h5 {
+      color: #fff;
+    }
+
+    .quick-section .h-seperate {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .page-navbar-icon {
+    margin-right: 5px !important;
   }
 
   .actions-navbar {

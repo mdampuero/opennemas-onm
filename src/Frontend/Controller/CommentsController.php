@@ -206,51 +206,55 @@ class CommentsController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $body        = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
-        $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
-        $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
-        $contentId   = $request->request->getDigits('content-id');
-        $ip          = getUserRealIP();
+        $body         = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
+        $authorName   = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
+        $authorEmail  = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
+        $contentId    = $request->request->getDigits('content-id');
+        $ip           = getUserRealIP();
 
         $httpCode = 400;
 
         if (!empty($body)
             && !empty($authorName)
-            && !empty($authorEmail)
             && !empty($contentId)
         ) {
-            // Prevent XSS attack
-
-            $comment = new \Comment();
-            if (\Repository\CommentManager::hasBadWordsComment($authorName.' '.$body)) {
-                $message = _('Your comment was rejected due insults usage.');
+            // Validate email if not empty
+            if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL) &&
+                !empty($authorEmail)
+            ) {
+                $message = _('Please enter a valid email address');
             } else {
-                try {
-                    $data = array(
-                        'content_id'   => $contentId,
-                        'body'         => $body,
-                        'author'       => $authorName,
-                        'author_email' => $authorEmail,
-                        'author_ip'    => $ip
-                    );
-                    $data = array_map('strip_tags', $data);
+                $comment = new \Comment();
+                if (\Repository\CommentManager::hasBadWordsComment($authorName.' '.$body)) {
+                    $message = _('Your comment was rejected due insults usage.');
+                } else {
+                    try {
+                        $data = array(
+                            'content_id'   => $contentId,
+                            'body'         => $body,
+                            'author'       => $authorName,
+                            'author_email' => $authorEmail,
+                            'author_ip'    => $ip
+                        );
+                        $data = array_map('strip_tags', $data);
 
-                    // Check moderation option
-                    $commentsOpt = s::get('comments_config');
-                    if (is_array($commentsOpt)
-                        && array_key_exists('moderation', $commentsOpt)
-                        && $commentsOpt['moderation'] == 0
-                    ) {
-                        $data['status'] = \Comment::STATUS_ACCEPTED;
-                        $message = _('Your comment was accepted. Refresh the page to see it.');
-                    } else {
-                        $message = _('Your comment was accepted and now we have to moderate it.');
+                        // Check moderation option
+                        $commentsOpt = s::get('comments_config');
+                        if (is_array($commentsOpt)
+                            && array_key_exists('moderation', $commentsOpt)
+                            && $commentsOpt['moderation'] == 0
+                        ) {
+                            $data['status'] = \Comment::STATUS_ACCEPTED;
+                            $message = _('Your comment was accepted. Refresh the page to see it.');
+                        } else {
+                            $message = _('Your comment was accepted and now we have to moderate it.');
+                        }
+
+                        $comment->create($data);
+                        $httpCode = 200;
+                    } catch (\Exception $e) {
+                        $message = $e->getMessage();
                     }
-
-                    $comment->create($data);
-                    $httpCode = 200;
-                } catch (\Exception $e) {
-                    $message = $e->getMessage();
                 }
             }
         } else {

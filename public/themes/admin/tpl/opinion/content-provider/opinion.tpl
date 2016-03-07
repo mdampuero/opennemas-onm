@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Opinion" {getProperty item=$content category=$params['category'] property='bgcolor' style='true'}
+<div data-content-id="{$content->id}" data-class="Opinion" {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'

@@ -72,6 +72,7 @@ class FormController extends Controller
         $verify           = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
         $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
         $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
+        $formType         = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
         $message          = null;
         $class            = "";
 
@@ -169,8 +170,9 @@ class FormController extends Controller
         return $this->render(
             'static_pages/form.tpl',
             array(
-                'message' => $message,
-                'class'   => $class,
+                'message'  => $message,
+                'class'    => $class,
+                'formType' => $formType,
             )
         );
     }

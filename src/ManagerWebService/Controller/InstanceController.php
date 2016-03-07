@@ -622,7 +622,28 @@ class InstanceController extends Controller
      */
     private function templateParams()
     {
-        $themes = $this->get('orm.loader')->getPlugins();
+        $themes  = $this->get('orm.loader')->getPlugins();
+        $modules = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findBy([ 'type' => [ [ 'value' => 'module' ] ] ], []);
+
+        $modules = array_map(function (&$a) {
+            foreach ([ 'about', 'description', 'name' ] as $key) {
+                if (!empty($a->{$key})) {
+                    $lang = $a->{$key}['en'];
+
+                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a->{$key})
+                        && !empty($a->{$key}[CURRENT_LANGUAGE_SHORT])
+                    ) {
+                        $lang = $a->{$key}[CURRENT_LANGUAGE_SHORT];
+                    }
+
+                    $a->{$key} = $lang;
+                }
+            }
+
+            return $a->getData();
+        }, $modules);
 
         foreach ($themes as &$theme) {
             $theme = $theme->getData();
@@ -644,7 +665,7 @@ class InstanceController extends Controller
             'templates' => im::getAvailableTemplates(),
             'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
-            'available_modules' => mm::getAvailableModulesGrouped(),
+            'modules'   => $modules,
         ];
     }
 }

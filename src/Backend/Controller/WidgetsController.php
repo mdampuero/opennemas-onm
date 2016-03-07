@@ -126,11 +126,11 @@ class WidgetsController extends Controller
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
-                'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING),
+                'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
+                'description'    => $post->get('description', ''),
                 'content'        => $post->filter('content', ''),
                 'params'          => json_decode($post->get('parsedParams', null)),
             );
@@ -200,11 +200,11 @@ class WidgetsController extends Controller
         $widgetData = array(
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
-            'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING),
+            'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
+            'description'     => $post->get('description', ''),
             'content'         => $post->filter('content', ''),
             'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),

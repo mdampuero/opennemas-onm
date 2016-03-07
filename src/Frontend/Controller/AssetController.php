@@ -260,9 +260,16 @@ class AssetController extends Controller
         ) {
             $ccm = \ContentCategoryManager::get_instance();
 
-            // RenderColorMenu - ADDED RENDER COLOR MENU
+            // RenderColorMenu
+            $siteColor = '#005689';
             $configColor = s::get('site_color');
-            $siteColor   = (!empty($configColor) ? '#'.$configColor : '#005689');
+            if (!empty($configColor)) {
+                if (!preg_match('@^#@', $configColor)) {
+                    $siteColor = '#'.$configColor;
+                } else {
+                    $siteColor = $configColor;
+                }
+            }
 
             $selectedCategories = array();
             foreach ($ccm->categories as &$category) {
@@ -287,8 +294,8 @@ class AssetController extends Controller
             }
 
             $this->view->assign([
-                'categories'             => $selectedCategories,
-                'site_color'             => $siteColor,
+                'categories' => $selectedCategories,
+                'site_color' => $siteColor,
             ]);
         }
 

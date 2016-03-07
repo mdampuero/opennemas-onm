@@ -362,21 +362,6 @@ $menuXml = [
                 "module_name" => "OPINION_MANAGER",
                 "privilege"   => "AUTHOR_ADMIN",
             ],
-            [
-                "id"          => "cache_manager",
-                "title"       => _("Cache manager"),
-                "icon"        => "fa fa-database",
-                "link"        => url('admin_tpl_manager'),
-                "module_name" => "CACHE_MANAGER",
-                "privilege"   => "ONLY_MASTERS",
-            ],
-            [
-                "id"          => "log_sql",
-                "title"       => _("SQL error log"),
-                "icon"        => "fa fa-code",
-                "link"        => url('admin_databaseerrors'),
-                "privilege"   => "ONLY_MASTERS",
-            ],
         ],
     ],
     [
@@ -418,16 +403,12 @@ $menuXml = [
                 "title"       => _("FAQ"),
                 "link"        => 'http://help.opennemas.com',
                 "icon"        => "fa fa-question-circle",
-                "module_name" => "CACHE_MANAGER",
-                "privilege"   => "CACHE_ADMIN",
             ],
             [
                 "id"          => "support",
                 "title"       => _("Contact support"),
                 "icon"        => "fa fa-support",
                 "link"        => 'javascript:UserVoice.showPopupWidget();',
-                "module_name" => "LOG_SQL",
-                "privilege"   => "ONLY_MASTERS",
             ],
         ]
     ]

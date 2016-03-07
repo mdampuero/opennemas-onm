@@ -8,37 +8,41 @@ manager_ws_auth:
     prefix: /
 
 manager_ws_command:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/command.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/command.yml'
     prefix:   /
 
 manager_ws_instance:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/instance.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/instance.yml'
+    prefix:   /
+
+manager_ws_module:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/module.yml'
     prefix:   /
 
 manager_ws_notification:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/notification.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/notification.yml'
     prefix:   /
 
 manager_ws_opcache:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/opcache.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/opcache.yml'
     prefix:   /
 
 manager_ws_report:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/report.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/report.yml'
     prefix:   /
 
 manager_ws_sidebar:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/sidebar.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/sidebar.yml'
     prefix:   /
 
 manager_ws_template:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/template.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/template.yml'
     prefix:   /
 
 manager_ws_user:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/user.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/user.yml'
     prefix:   /
 
 manager_ws_usergroup:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/usergroup.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/usergroup.yml'
     prefix:   /

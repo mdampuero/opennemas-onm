@@ -12,6 +12,7 @@
  * @package Model
  */
 use Onm\StringUtils;
+use Framework\Component\MIME\MimeTypeTool;
 
 /**
  * Photo class
@@ -173,7 +174,8 @@ class Photo extends Content
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName = $date->format("YmdHis"). $micro . "." . strtolower($filePathInfo['extension']);
+        $finalPhotoFileName = $date->format("YmdHis"). $micro . "."
+            . MimeTypeTool::getExtension($filePath);
         $fileInformation    = new MediaItem($filePath);
 
         if (!array_key_exists('urn_source', $data)

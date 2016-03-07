@@ -1,5 +1,12 @@
+backend_ws_store_billing:
+    path:     /store/billing
+    defaults: { _controller: BackendWebServiceBundle:Store:saveBilling }
+    methods:  [ POST ]
+    options:
+        expose: true
+
 backend_ws_store_checkout:
-    path:     /store
+    path:     /store/checkout
     defaults: { _controller: BackendWebServiceBundle:Store:checkout }
     methods:  [ POST ]
     options:

@@ -15,18 +15,23 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+            // Base symfony deps
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             // new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
+            // Opennemas third-party deps
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new CometCult\BraintreeBundle\CometCultBraintreeBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
+            // Opennemas internal bundles
             new Backend\BackendBundle(),
             new BackendWebService\BackendWebServiceBundle(),
             new Framework\OnmFrameworkBundle(),
@@ -35,7 +40,6 @@ class AppKernel extends Kernel
             new Manager\ManagerBundle(),
             new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
-            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Common\ORM\OrmBundle(),
         );
 
