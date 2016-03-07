@@ -57,7 +57,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->metadata->getIdKeys());
 
         $this->metadata->mapping['index'] = [
-            [ 'name' => 'PRIMARY', 'columns' => [ 'id' ] ]
+            [ 'name' => 'id', 'columns' => [ 'id' ], 'primary' => true ]
         ];
 
         $this->assertEquals([ 'id' ], $this->metadata->getIdKeys());

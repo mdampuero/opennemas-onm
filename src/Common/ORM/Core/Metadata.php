@@ -66,7 +66,7 @@ class Metadata extends DataObject implements Validable
         }
 
         foreach ($this->mapping['index'] as $index) {
-            if ($index['name'] === 'PRIMARY') {
+            if (array_key_exists('primary', $index) && $index['primary']) {
                 return $index['columns'];
             }
         }
