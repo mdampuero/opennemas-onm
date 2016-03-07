@@ -205,6 +205,20 @@ class Validator
     }
 
     /**
+     * Checks if the value is null.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is null. Otherwise, return false.
+     */
+    protected function isNull($ruleset, $property, $value)
+    {
+        return (empty($this->required)
+            || !array_key_exists($ruleset, $this->required))
+            && is_null($value);
+    }
+
+    /**
      * Checks if the value is an object.
      *
      * @param mixed $value The value to check.
@@ -280,6 +294,10 @@ class Validator
             if (method_exists($this, $checkType)
                 && $this->{$checkType}($value, $ruleset, $property)
             ) {
+                return true;
+            }
+
+            if ($this->isNull($ruleset, $property, $value)) {
                 return true;
             }
         }
