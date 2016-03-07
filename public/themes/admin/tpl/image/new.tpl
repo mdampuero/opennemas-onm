@@ -107,7 +107,7 @@
         $('[rel="tooltip"]').tooltip({ position: 'left' });
 
         $('.date').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $('.geocode_button').on('click', function(e,ui){
