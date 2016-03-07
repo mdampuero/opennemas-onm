@@ -1,12 +1,22 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\FreshBooks\Repository;
 
 use Common\ORM\Entity\Invoice;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
-class InvoiceRepository extends FreshBooksRepository
+/**
+ * The ClientRepository class searches Invoices in FreshBooks.
+ */
+class InvoiceRepository extends BaseRepository
 {
     /**
      * Find a invoice by id.
@@ -69,7 +79,7 @@ class InvoiceRepository extends FreshBooksRepository
             return $invoices;
         }
 
-        throw new InvalidCriteriaException($criteria, $this->source, $this->api->getError());
+        throw new InvalidCriteriaException($criteria, 'FreshBooks', $this->api->getError());
     }
 
     /**
@@ -89,6 +99,6 @@ class InvoiceRepository extends FreshBooksRepository
             return $this->api->getResponse();
         }
 
-        throw new EntityNotFoundException('Invoice', $id, $this->source, $this->api->getError());
+        throw new EntityNotFoundException('Invoice', $id, 'FreshBooks', $this->api->getError());
     }
 }

@@ -17,12 +17,11 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new ClientRepository($this->api, 'FreshBooks');
-    }
+        $this->repository = new ClientRepository('foo', 'bar');
 
-    public function testContructor()
-    {
-        $this->assertEquals($this->repository->getApi(), $this->api);
+        $property = new \ReflectionProperty($this->repository, 'api');
+        $property->setAccessible(true);
+        $property->setValue($this->repository, $this->api);
     }
 
     /**

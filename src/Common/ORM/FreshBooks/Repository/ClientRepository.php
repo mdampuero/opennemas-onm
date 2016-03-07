@@ -1,12 +1,22 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\FreshBooks\Repository;
 
 use Common\ORM\Entity\Client;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
-class ClientRepository extends FreshBooksRepository
+/**
+ * The ClientRepository class searches Clients in FreshBooks.
+ */
+class ClientRepository extends BaseRepository
 {
     /**
      * Find a client by id.
@@ -100,6 +110,6 @@ class ClientRepository extends FreshBooksRepository
             return $clients;
         }
 
-        throw new InvalidCriteriaException($criteria, $this->source, $this->api->getError());
+        throw new InvalidCriteriaException($criteria, 'Braintree', $this->api->getError());
     }
 }
