@@ -3,18 +3,6 @@ services:
         class: Common\ORM\Core\Loader\Loader
         arguments: [ %orm.config_path%, %kernel.environment% ]
 
-    orm.manager.braintree:
-        class: Common\ORM\Braintree\BraintreeManager
-        arguments: [ @comet_cult_braintree.factory ]
-
-    orm.manager.fresh_books:
-        class: Common\ORM\FreshBooks\FreshBooksManager
-        arguments: [ %freshbooks.domain%, %freshbooks.token% ]
-
-    orm.manager.database:
-        class: Common\ORM\Database\DatabaseManager
-        arguments: [ @cache, @dbal_connection, @cache_manager, @dbal_connection_manager ]
-
     orm.manager:
         class: Common\ORM\Core\EntityManager
         arguments: [ @service_container ]
