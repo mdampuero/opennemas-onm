@@ -211,7 +211,7 @@
                           <div class="input-with-icon right">
                             <select class="form-control" id="country" name="country" ng-model="billing.country" placeholder="{t}Country{/t}" required="required">
                               <option value="">{t}Select a country{/t}...</option>
-                              <option value="[% country.key %]" ng-repeat="country in countries | orderBy" ng-selected="[% billing.country === country.key %]">[% country.name %]</option>
+                              <option value="[% value %]" ng-repeat="(key,value) in countries" ng-selected="[% billing.country === value %]">[% key %]</option>
                             </select>
                           </div>
                         </div>
