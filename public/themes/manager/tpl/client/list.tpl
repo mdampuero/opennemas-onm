@@ -104,6 +104,12 @@
       </div>
       <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
+          <input id="checkbox-company" checklist-model="columns.selected" checklist-value="'company'" type="checkbox">
+          <label for="checkbox-company">
+            {t}Company{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
           <input id="checkbox-phone" checklist-model="columns.selected" checklist-value="'phone'" type="checkbox">
           <label for="checkbox-phone">
             {t}Phone{/t}
@@ -115,14 +121,14 @@
             {t}Address{/t}
           </label>
         </div>
+      </div>
+      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-postal-code" checklist-model="columns.selected" checklist-value="'postal_code'" type="checkbox">
           <label for="checkbox-postal-code">
             {t}Postal code{/t}
           </label>
         </div>
-      </div>
-      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-city" checklist-model="columns.selected" checklist-value="'city'" type="checkbox">
           <label for="checkbox-city">
@@ -135,6 +141,8 @@
             {t}State{/t}
           </label>
         </div>
+      </div>
+      <div class="col-md-3">
         <div class="checkbox check-default">
           <input id="checkbox-country" checklist-model="columns.selected" checklist-value="'country'" type="checkbox">
           <label for="checkbox-country">
@@ -168,6 +176,10 @@
               <th class="pointer" ng-click="sort('email')" ng-show="isColumnEnabled('email')" width="250">
                 {t}Email{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('email') == 'asc', 'fa fa-caret-down': isOrderedBy('email') == 'desc'}"></i>
+              </th>
+              <th class="text-left pointer" ng-click="sort('company')" ng-show="isColumnEnabled('company')" width="200">
+                {t}Company{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('company') == 'asc', 'fa fa-caret-down': isOrderedBy('company') == 'desc'}"></i>
               </th>
               <th class="pointer text-center " ng-click="sort('vat_number')" ng-show="isColumnEnabled('vat_number')" width="120">
                 {t}VAT No.{/t}
@@ -226,6 +238,9 @@
               </td>
               <td ng-show="isColumnEnabled('email')">
                 [% item.email %]
+              </td>
+              <td class="text-left" ng-show="isColumnEnabled('company')">
+                [% item.company %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('vat_number')">
                 [% item.vat_number %]
