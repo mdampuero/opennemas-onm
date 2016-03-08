@@ -24,7 +24,7 @@
       <div class="row ng-cloak" ng-if="!loading">
         <div class="col-lg-8 col-md-10 col-sm-12">
           <ul class="cbp_tmtimeline">
-            <li ng-repeat="notification in notifications">
+            <li id="notification-[% notification.id %]" ng-repeat="notification in notifications" on-repeat-finish>
               <time class="cbp_tmtime">
                 <span class="date">[% notification.day %]</span>
                 <span class="time">
