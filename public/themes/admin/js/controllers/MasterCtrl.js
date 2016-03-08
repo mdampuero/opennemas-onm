@@ -308,5 +308,12 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         }
       }
     });
+
+    // Prevent empty links to change angular route
+    $('a').bind('click', function (e) {
+      if ($(this).attr('href') === '#') {
+        e.preventDefault();
+      }
+    });
   }
 ]);
