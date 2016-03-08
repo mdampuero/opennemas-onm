@@ -118,7 +118,7 @@ class BaseRepository extends Repository
         }
 
         if ($entity === $this->miss) {
-            throw new \Exception();
+            throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
         return $entity;
@@ -194,8 +194,12 @@ class BaseRepository extends Repository
     public function refresh(Entity &$entity)
     {
         $filters = [];
+        $params  = [];
+        $types   = [];
         foreach ($entity->getData() as $key => $value) {
-            $filters[] = "$key = $value";
+            $params[]  = $value;
+            $filters[] = "$key = ?";
+            $types[]   = is_string($value) ? \PDO::PARAM_STR : \PDO::PARAM_INT;
         }
 
         if (empty($filters)) {
@@ -203,10 +207,10 @@ class BaseRepository extends Repository
             return;
         }
 
-        $sql = 'select * from ' . $this->metadata->mapping['table'] . ' where '
+        $sql = 'select * from ' . $this->metadata->getTable() . ' where '
             .  implode(' and ', $filters);
 
-        $rs = $this->conn->fetchAssoc($sql);
+        $rs = $this->conn->fetchAssoc($sql, $params, $types);
 
         if (!$rs) {
             $entity = $this->miss;
