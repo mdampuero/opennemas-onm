@@ -41,7 +41,6 @@ class NotificationSubscriber implements EventSubscriberInterface
     {
         return [
             'notifications.get' => [
-                [ 'getNotificationFromInstance', 10 ],
                 [ 'getNotifications', 5 ]
             ],
             'notifications.getRead' => [
