@@ -46,7 +46,11 @@ class DomainManagementController extends Controller
             }
         }
 
-        $countries = array_flip(Intl::getRegionBundle()->getCountryNames());
+        $countries = [];
+        $countriesRaw = array_flip(Intl::getRegionBundle()->getCountryNames());
+        foreach ($countriesRaw as $countryName => $countryKey) {
+            $countries []= ['name' => $countryName, 'key' => $countryKey];
+        }
         $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
