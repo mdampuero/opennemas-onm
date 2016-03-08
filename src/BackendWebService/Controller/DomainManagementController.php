@@ -166,7 +166,9 @@ class DomainManagementController extends Controller
         $date     = new \Datetime('now');
         $price    = $create ? 18.00 : 12.00;
 
-        $client = $instance->getClient();
+        $client = $this->get('orm.manager')
+            ->getRepository('manager.client', 'Database')
+            ->find($instance->getClient());
 
         if (empty($client)) {
             $client = $this->createClient($request->request->get('client'));
@@ -175,7 +177,7 @@ class DomainManagementController extends Controller
         $vatTax = $this->get('vat')->getVatFromCode($client->country);
 
         $payment = new Payment([
-            'client_id' => $client->client_id,
+            'client_id' => $client->id,
             'amount'    => count($domains) * $price + (count($domains) * ($vatTax / 100) * $price),
             'date'      => $date->format('Y-m-d'),
             'type'      => 'Check'
@@ -188,7 +190,7 @@ class DomainManagementController extends Controller
         $this->get('orm.manager')->persist($payment, 'Braintree');
 
         $invoice = new \Framework\ORM\Entity\Invoice([
-            'client_id' => $client->client_id,
+            'client_id' => $client->id,
             'date'      => '2016-02-17',
             'status'    => 'sent',
             'lines'     => [
