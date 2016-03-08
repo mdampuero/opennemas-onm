@@ -344,7 +344,7 @@
                     </label>
                   </div>
                 </div>
-                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms || !validPhone || !validVat || (!nonce && !client.client_id)">
+                <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="domains.length === 0 || billingForm.$invalid || !terms || !validPhone || !validVat || (!nonce && !client.id)">
                   {t}Confirm{/t}
                 </button>
               </div>
