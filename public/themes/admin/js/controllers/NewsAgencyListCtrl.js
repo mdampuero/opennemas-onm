@@ -8,7 +8,7 @@
      *
      * @requires $controller
      * @requires $http
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires $timeout
      * @requires itemService
@@ -20,8 +20,8 @@
      *   Controller for News Agency listing.
      */
     .controller('NewsAgencyListCtrl', [
-      '$controller', '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger',
-      function($controller, $http, $modal, $scope, $timeout, itemService, routing, messenger) {
+      '$controller', '$http', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger',
+      function($controller, $http, $uibModal, $scope, $timeout, itemService, routing, messenger) {
         /**
          * The array of imported elements.
          *
@@ -49,7 +49,7 @@
          * @param {Object} contents The contents to import.
          */
         $scope._import = function(contents) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-import-selected',
             controller: 'NewsAgencyModalCtrl',
             resolve: {
@@ -139,7 +139,7 @@
             related.push($scope.extra.related[content.related[i]]);
           }
 
-          $modal.open({
+          $uibModal.open({
             templateUrl: 'modal-view-content',
             windowClass: 'modal-news-agency-preview',
             controller: 'modalCtrl',

@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>
@@ -109,7 +109,7 @@
                       </select>
                     </div>
                     <div class="col-xs-2">
-                      <button class="btn btn-block btn-success" ng-click="addPrice()" ng-if="$index === 0" type="button">
+                      <button class="btn btn-block btn-primary" ng-click="addPrice()" ng-if="$index === 0" type="button">
                         <i class="fa fa-plus"></i>
                       </button>
                       <button class="btn btn-block btn-danger" ng-click="removePrice($index)" ng-if="$index > 0" type="button">

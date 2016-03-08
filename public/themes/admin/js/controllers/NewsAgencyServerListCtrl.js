@@ -8,7 +8,7 @@
      *
      * @requires $controller
      * @requires $http
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -18,8 +18,8 @@
      *   Controller for server list in news agency.
      */
     .controller('NewsAgencyServerListCtrl', [
-      '$controller', '$http', '$modal', '$scope', 'itemService', 'routing', 'messenger',
-      function($controller, $http, $modal, $scope, itemService, routing, messenger) {
+      '$controller', '$http', '$uibModal', '$scope', 'itemService', 'routing', 'messenger',
+      function($controller, $http, $uibModal, $scope, itemService, routing, messenger) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));

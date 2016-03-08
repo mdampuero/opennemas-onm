@@ -8,28 +8,26 @@
     }
   },
   "dependencies": {
-    "bower": "~1.4.1",
-    "less": "~2.2.0",
-    "uglify-js": "~2.4.16",
-    "uglifycss": "~0.0.11"
+    "bower": "~1.7.7",
+    "less": "~2.6.0",
+    "uglify-js": "~2.6.2",
+    "uglifycss": "0.0.20"
   },
   "devDependencies": {
-    "openhost-jsdoc": "~0.3.5",
     "apidoc": "~0.15.1",
-    "gulp": "~3.9.0",
-    "gulp-livereload": "~3.8.1",
+    "gulp": "~3.9.1",
     "gulp-batch": "*",
-    "jasmine-core": "~2.3.*",
-    "jsdoc": "~3.3.*",
-    "jshint": "~2.5.*",
-    "jshint": "~2.5.*",
-    "karma": "~0.12.*",
-    "karma-cli": "~0.0.*",
-    "karma-html-reporter": "~0.2.*",
-    "karma-jasmine": "~0.3.*",
-    "karma-junit-reporter": "~0.2.*",
-    "karma-phantomjs-launcher": "~0.1.*",
-    "less": "~2.2.0",
-    "node-notifier": "~4.3.1"
+    "gulp-livereload": "~3.8.1",
+    "jasmine-core": "~2.4.1",
+    "jsdoc": "~3.4.0",
+    "jshint": "~2.9.1",
+    "karma": "~0.13.21",
+    "karma-html-reporter": "~0.2.7",
+    "karma-jasmine": "~0.3.7",
+    "karma-junit-reporter": "^0.3.8",
+    "karma-phantomjs-launcher": "~1.0.0",
+    "node-notifier": "^4.5.0",
+    "openhost-jsdoc": "~0.3.5",
+    "phantomjs-prebuilt": "~2.1.4"
   }
 }

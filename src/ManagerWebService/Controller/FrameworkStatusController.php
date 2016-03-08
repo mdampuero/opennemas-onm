@@ -44,13 +44,13 @@ class FrameworkStatusController extends Controller
 
         $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
         if ($action == 'reset') {
-            opcache_reset();
+            \opcache_reset();
             return $this->redirect($this->generateUrl('manager_framework_opcache_status'));
         }
 
         // Fetch configuration and status information from OpCache
-        $config = opcache_get_configuration();
-        $status = opcache_get_status();
+        $config = \opcache_get_configuration();
+        $status = \opcache_get_status();
 
         $mem          = $status['memory_usage'];
         $opcacheStats = $status['opcache_statistics'];

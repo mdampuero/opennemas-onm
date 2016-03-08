@@ -78,7 +78,7 @@
                   <div class="shopping-cart-placeholder" ng-if="cart.length > 0">
                     <scrollable>
                       <ul class="cart-list">
-                        <li class="clearfix" ng-repeat="item in cart track by $index | orderBy: name">
+                        <li class="clearfix" ng-repeat="item in cart">
                           <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
                           <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
                           <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">

@@ -1,7 +1,8 @@
+'use strict';
 
 angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
-    '$http', '$modalInstance', '$scope', 'authService', 'routing', 'vcRecaptchaService', 'data',
-    function ($http, $modalInstance, $scope, authService, routing, vcRecaptchaService, data) {
+    '$http', '$uibModalInstance', '$scope', 'authService', 'routing', 'vcRecaptchaService', 'data',
+    function ($http, $uibModalInstance, $scope, authService, routing, vcRecaptchaService, data) {
         /**
          * Login attempts
          *
@@ -22,7 +23,7 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
          * Closes the current modal.
          */
         $scope.close = function() {
-            $modalInstance.close({ success: false });
+            $uibModalInstance.close({ success: false });
         };
 
         /**
@@ -35,12 +36,12 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
                 _username: $scope.user.username,
                 _password: $scope.user.password,
                 _token:    $scope.user.token,
-            }
+            };
 
             authService.login('manager_ws_auth_check', data,$scope.attempts)
                 .then(function (response) {
                     if (response.data.success) {
-                        $modalInstance.close({
+                        $uibModalInstance.close({
                             success: true,
                             user: response.data.user
                         });
@@ -52,6 +53,6 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
 
                     $scope.loading = 0;
                 });
-        }
+        };
     }
 ]);

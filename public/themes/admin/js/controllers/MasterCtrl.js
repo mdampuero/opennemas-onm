@@ -4,7 +4,7 @@
  * @param Object $filter          The filter service.
  * @param Object $http            The http service.
  * @param Object $location        The location service.
- * @param Object $modal           The modal service.
+ * @param Object $uibModal           The modal service.
  * @param Object $rootScope       The rootScope object.
  * @param Object $scope           The current scope.
  * @param Object $translate       The translation service.
@@ -15,8 +15,8 @@
  * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
-  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar) {
+  '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', /*'uibpaginationConfig',*/ 'messenger', 'routing', 'Sidebar',
+  function ($filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, /*paginationConfig,*/ messenger, routing, Sidebar) {
     'use strict';
     /**
      * The current language.
@@ -49,8 +49,8 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       $scope.lang = language;
       $translate.use(language);
 
-      paginationConfig.nextText     = $filter('translate')('Next');
-      paginationConfig.previousText = $filter('translate')('Previous');
+      // paginationConfig.nextText     = $filter('translate')('Next');
+      // paginationConfig.previousText = $filter('translate')('Previous');
 
       if ($('body').hasClass('unpinned-on-server')) {
         $scope.sidebar.pinned    = false;
@@ -104,7 +104,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {String} name The modal name.
      */
     $scope.open = function(name, selected) {
-      $modal.open({
+      $uibModal.open({
         templateUrl: name,
         backdrop: 'static',
         controller: 'modalCtrl',

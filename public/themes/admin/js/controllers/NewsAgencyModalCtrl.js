@@ -7,7 +7,7 @@
      * @name  NewsAgencyModalCtrl
      *
      * @requires $http
-     * @requires $modalInstance
+     * @requires $uibModalInstance
      * @requires $scope
      * @requires routing
      * @requires template
@@ -15,8 +15,8 @@
      * @description
      *   description
      */
-    .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$modalInstance', '$scope', '$window', 'routing', 'template',
-      function ($controller, $http, $modalInstance, $scope, $window, routing, template) {
+    .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$uibModalInstance', '$scope', '$window', 'routing', 'template',
+      function ($controller, $http, $uibModalInstance, $scope, $window, routing, template) {
         /**
          * @memberOf NewsAgencyModalCtrl
          *
@@ -40,7 +40,7 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('modalCtrl', {
           $scope: $scope,
-          $modalInstance: $modalInstance,
+          $uibModalInstance: $uibModalInstance,
           template: template,
           success: null
         }));
@@ -105,12 +105,12 @@
                 $scope.imported = true;
                 template.messages = response.data.messages;
               } else {
-                $modalInstance.close(response.data);
+                $uibModalInstance.close(response.data);
               }
             }
           }, function() {
             $scope.loading = false;
-            $modalInstance.close(false);
+            $uibModalInstance.close(false);
           });
         };
 

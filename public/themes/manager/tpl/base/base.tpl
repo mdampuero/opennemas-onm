@@ -286,7 +286,6 @@
     @Common/components/select2/select2.min.js,
 
     @Common/js/onm/md5.min.js,
-    @Common/js/onm/scripts.js,
 
     @FosJsRoutingBundle/js/router.js,
     @Common/js/routes.js,

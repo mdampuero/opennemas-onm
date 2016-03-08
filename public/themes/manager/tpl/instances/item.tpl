@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
+            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -168,7 +168,7 @@
                 <div class="input-group new-domain" ng-class="{ 'error-control': formValidated && instance.domains.length == 0 }">
                   <input class="form-control " name="new-domain" ng-model="new_domain" type="text">
                   <div class="input-group-btn">
-                    <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                    <button class="btn btn-default" ng-click="addDomain();" type="button"><i class="fa fa-plus"></i> {t}Add{/t}</button>
                   </div>
                 </div>
                 <div class="new-domain">

@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
-  '$controller', '$http', '$modal', '$scope', 'routing',
-  function($controller, $http, $modal, $scope, routing) {
+  '$controller', '$http', '$uibModal', '$scope', 'routing',
+  function($controller, $http, $uibModal, $scope, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -26,7 +26,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
      * Removes the selected contents from this frontpage
      */
     $scope.removeSelectedContents = function () {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-drop-selected',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -67,7 +67,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
      * Archives the selected contents from all the frontpages
      */
     $scope.archiveSelectedContents = function () {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-archive-selected',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -166,7 +166,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         {category: category});
 
       $http.post(url, data).success(function() {
-        $modal.open({
+        $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
           controller: 'modalCtrl',

@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>

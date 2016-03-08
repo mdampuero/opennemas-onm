@@ -1,7 +1,7 @@
 
 angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
-  '$modalInstance', '$scope',
-  function ($modalInstance, $scope) {
+  '$uibModalInstance', '$scope',
+  function ($uibModalInstance, $scope) {
     'use strict';
 
     $scope.selected = [];
@@ -21,7 +21,7 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
           submenu: []
         };
 
-        $modalInstance.close({ items: [ item ] });
+        $uibModalInstance.close({ items: [ item ] });
 
         return;
       }
@@ -55,14 +55,14 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
         items.push(item);
       }
 
-      $modalInstance.close({ items: items });
+      $uibModalInstance.close({ items: items });
     };
 
     /**
      * Closes the current modal
      */
      $scope.close = function() {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
 
     /**

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Controller to implement common actions.
  *
@@ -6,14 +8,14 @@
  * @param Object routing The routing service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
-    '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
+    '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'routing', 'history', 'webStorage', 'messenger',
-    'paginationConfig', 'cfpLoadingBar',
+    'cfpLoadingBar',
     function (
-        $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
+        $filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, routing,
-        history, webStorage, messenger, paginationConfig, cfpLoadingBar
+        history, webStorage, messenger, cfpLoadingBar
     ) {
         /**
          * The routing service.
@@ -45,9 +47,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.init = function(language) {
             $translate.use(language);
-
-            paginationConfig.nextText     = $filter('translate')('Next');
-            paginationConfig.previousText = $filter('translate')('Previous');
         };
 
         /**
@@ -64,7 +63,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         httpInterceptor.loginConfirmed(response.data);
                         fakeLogin();
                     } else {
@@ -84,7 +83,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * Logs the user out.
          */
         $scope.logout = function() {
-            var modal = $modal.open({
+            var modal = $uibModal.open({
                 templateUrl: 'modal-confirm',
                 controller:  'modalCtrl',
                 resolve: {
@@ -128,7 +127,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * Scrolls the page to top.
          */
         $scope.scrollTop = function() {
-            $("body").animate({ scrollTop: 0 }, 250);
+            $('body').animate({ scrollTop: 0 }, 250);
         };
 
         /**
@@ -155,7 +154,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $scope.auth.inprogress = true;
 
                 if ($scope.auth.modal) {
-                    var modal = $modal.open({
+                    var modal = $uibModal.open({
                         templateUrl: 'modal-login',
                         backdrop: 'static',
                         controller: 'LoginModalCtrl',
@@ -201,23 +200,23 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
             $scope.user            = args.user;
             $scope.auth.inprogress = false;
-            $scope.auth.modal      = false
+            $scope.auth.modal      = false;
             $scope.auth.status     = true;
 
-            webStorage.local.add('token', args.token);
-            webStorage.local.add('user', args.user);
+            webStorage.local.set('token', args.token);
+            webStorage.local.set('user', args.user);
         });
 
         /**
          * Submits a fake login form and force browsers to save credentials.
          */
         function fakeLogin() {
-            var iframe    = document.getElementById("fake-login");
+            var iframe    = document.getElementById('fake-login');
             var iframedoc = iframe.contentWindow ? iframe.contentWindow.document : iframe.contentDocument;
 
-            var fakeForm     = iframedoc.getElementById("fake-login-form");
-            var fakeUsername = iframedoc.getElementById("username");
-            var fakePassword = iframedoc.getElementById("password");
+            var fakeForm     = iframedoc.getElementById('fake-login-form');
+            var fakeUsername = iframedoc.getElementById('username');
+            var fakePassword = iframedoc.getElementById('password');
 
             fakeUsername.value = $scope.username;
             fakePassword.value = $scope.password;
@@ -237,7 +236,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            if ($location.path().indexOf('framework') != -1) {
+            if ($location.path().indexOf('framework') !== -1) {
                 return false;
             }
 
@@ -252,7 +251,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $scope.$on('application-need-upgrade', function (event, args) {
-            var modal = $modal.open({
+            $uibModal.open({
                 templateUrl: 'modal-upgrade',
                 controller: 'MasterCtrl',
                 backdrop: 'static'
@@ -274,8 +273,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
         webStorage.prefix('ONM-');
         if (webStorage.local.get('token') && webStorage.local.get('user')) {
-            $http.defaults.headers.common.Authorization = 'Bearer '
-                + webStorage.local.get('token');
+            $http.defaults.headers.common.Authorization = 'Bearer ' +
+              webStorage.local.get('token');
             $scope.user = webStorage.local.get('user');
             $scope.loaded = true;
         }
