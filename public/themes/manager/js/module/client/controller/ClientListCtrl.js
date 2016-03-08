@@ -7,7 +7,7 @@
      * @name  ClientListCtrl
      *
      * @requires $controller
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -74,7 +74,7 @@
          * @param {Object client The client to delete.
          */
         $scope.delete = function(client) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
