@@ -503,6 +503,7 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
+      @Common/src/angular-repeat-finish/repeat-finish.js,
       @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-scroll/angular-scroll.js,
