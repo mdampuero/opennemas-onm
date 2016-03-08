@@ -156,9 +156,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       // Save new valid emails
       for (var i = 0; i < emails.length; i++) {
         if (pattern.test(emails[i]) &&
-            currentEmails.indexOf(emails[i]) === -1) {
+            currentEmails.indexOf(emails[i]) === -1
+        ) {
           $scope.target.items.push({ email: emails[i], name: emails[i] });
           $scope.moreEmails = $scope.moreEmails.replace(emails[i] + '\n', '');
+          $scope.sourcePageChanged();
+          $scope.targetPageChanged();
         }
 
         if (!pattern.test(emails[i])) {
