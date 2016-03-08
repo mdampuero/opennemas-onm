@@ -147,7 +147,7 @@ class Attachment extends Content
             }
         }
 
-        return true;
+        return $this->id;
     }
 
     /**

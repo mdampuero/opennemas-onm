@@ -61,10 +61,10 @@
             {acl isAllowed="ALBUM_WIDGET"}
             {if $category eq 'widget'}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+              <button class="btn btn-white" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                 <i class="fa fa-save"></i>
                 {t}Save positions{/t}
-              </a>
+              </button>
             </li>
             <li class="quicklinks">
               <span class="h-seperate"></span>
@@ -73,10 +73,10 @@
             {/acl}
             {acl isAllowed="ALBUM_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_album_create}" title="{t}New album{/t}" >
+              <button class="btn btn-primary" href="{url name=admin_album_create}" title="{t}New album{/t}" >
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
-              </a>
+              </button>
             </li>
             {/acl}
           </ul>

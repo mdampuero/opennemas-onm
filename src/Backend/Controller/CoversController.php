@@ -218,7 +218,7 @@ class CoversController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_kioskos', array('category' => $postInfo->getDigits('category')))
+                $this->generateUrl('admin_kiosko_show', array('id' => $kiosko->id))
             );
 
         } catch (\Exception $e) {
