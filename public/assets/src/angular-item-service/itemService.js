@@ -6,15 +6,15 @@
    *
    * @param Object $http     Http service
    * @param Object $location Location service
-   * @param Object $modal    Modal service
+   * @param Object $uibModal    Modal service
    * @param Object routing   Onm routing service.
    *
    * @return Object The item service.
    */
   angular.module('onm.item', [/*'onm.oqlEncoder'*/])
     .factory('itemService', [
-      '$http', '$location', '$modal', 'routing', /*'oqlEncoder',*/
-      function($http, $location, $modal, routing/*, oqlEncoder*/) {
+      '$http', '$location', 'routing', /*'oqlEncoder',*/
+      function($http, $location, routing/*, oqlEncoder*/) {
         /**
          * The item service.
          *

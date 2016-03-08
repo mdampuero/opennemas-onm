@@ -54,9 +54,9 @@
               <li class="quicklinks"><span class="h-seperate"></span></li>
               {acl isAllowed="ATTACHMENT_CREATE"}
                 <li class="quicklinks">
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
                     <span class="fa fa-save"></span>
-                    {t}Save{/t}
+                    <span class="text">{t}Save{/t}</span>
                   </button>
                 </li>
               {/acl}
@@ -80,7 +80,7 @@
               <div class="form-group">
                 <label for="description" class="form-label">{t}Description{/t}</label>
                 <div class="controls">
-                  <textarea id="description" name="description" class="form-control" required="required" class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
+                  <textarea id="description" name="description" class="form-control" ng-model="summary" required="required" class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
                 </div>
               </div>
             </div>

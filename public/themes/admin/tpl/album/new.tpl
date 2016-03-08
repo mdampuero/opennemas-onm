@@ -64,16 +64,16 @@
               <li class="quicklinks">
                 {if isset($album->id)}
                   {acl isAllowed="ALBUM_UPDATE"}
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
                       <i class="fa fa-save"></i>
-                      {t}Save{/t}
+                      <span class="text">{t}Update{/t}</span>
                     </button>
                   {/acl}
                 {else}
                   {acl isAllowed="ALBUM_CREATE"}
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                       <i class="fa fa-save"></i>
-                      {t}Save{/t}
+                      <span class="text">{t}Save{/t}</span>
                     </button>
                   {/acl}
                 {/if}
@@ -101,7 +101,7 @@
                   {t}Description{/t}
                 </label>
                 <div class="controls">
-                  <textarea class="form-control" id="description" name="description" onm-editor onm-editor-preset="simple">{$album->description|clearslash}</textarea>
+                  <textarea class="form-control" id="description" name="description" ng-model="description" onm-editor onm-editor-preset="simple">{$album->description|clearslash}</textarea>
                 </div>
               </div>
             </div>

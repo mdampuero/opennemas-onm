@@ -19,14 +19,14 @@
       <ul class="nav quick-section pull-right">
         {acl isAllowed="KIOSKO_AVAILABLE"}
         <li class="quicklinks">
-          <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
             <i class="fa fa-check fa-lg"></i>
-          </a>
+          </button>
         </li>
         <li class="quicklinks">
-          <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
             <i class="fa fa-times fa-lg"></i>
-          </a>
+          </button>
         </li>
         {/acl}
         {if $category neq 'widget'}
@@ -35,15 +35,15 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
             <i class="fa fa-home fa-lg"></i>
-          </a>
+          </button>
         </li>
         <li class="quicklinks hidden-xs">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
             <i class="fa fa-home fa-lg"></i>
             <i class="fa fa-times fa-sub text-danger"></i>
-          </a>
+          </button>
         </li>
         {/acl}
         {/if}
@@ -52,9 +52,9 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
             <i class="fa fa-trash-o fa-lg"></i>
-          </a>
+          </button>
         </li>
         {/acl}
       </ul>

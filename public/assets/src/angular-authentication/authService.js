@@ -6,14 +6,14 @@
    *
    * @param Object $http     Http service
    * @param Object $location Location service
-   * @param Object $modal    Modal service
+   * @param Object $uibModal    Modal service
    * @param Object routing   Onm routing service.
    *
    * @return Object The item service.
    */
   angular.module('onm.auth', []).factory('authService', [
-    '$http', '$location', '$modal', 'routing', 'vcRecaptchaService',
-    function ($http, $location, $modal, routing, vcRecaptchaService) {
+    '$http', '$location', '$uibModal', 'routing', 'vcRecaptchaService',
+    function ($http, $location, $uibModal, routing, vcRecaptchaService) {
       /**
        * The item service.
        *

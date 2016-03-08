@@ -31,6 +31,7 @@
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
@@ -40,13 +41,12 @@
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/select2/select2.css,
-      @Common/components/spinkit/css/spinkit.css,
       @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
-      @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
+      @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-ui-select/dist/select.min.css,
@@ -56,6 +56,7 @@
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
+      @Common/components/spinkit/css/spinkit.css,
       @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
@@ -76,6 +77,7 @@
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
+      var leaveMessage = '{t}You are leaving the current page.{/t}';
     </script>
   {/block}
 </head>
@@ -235,7 +237,36 @@
                       {/is_module_activated}
                     </div>
                   </li>
-                 {/block}
+                {/block}
+                {block name="master_actions_block"}
+                {acl isAllowed="ONLY_MASTERS"}
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                  <li class="quicklinks sysops-actions dropdown">
+                    <a href="#" data-toggle="dropdown">
+                      <i class="fa fa-rebel text-danger master-user"></i>
+                      {t}Sysops{/t}
+                    </a>
+                    <ul  class="dropdown-menu on-left" role="menu">
+                      <li>
+
+                        <a href="{url name=admin_tpl_manager}"><i class="fa fa-database"></i>Cache manager</a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcache}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_tpl_manager_clearcompiled}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                {/acl}
+                {/block}
               </ul>
             </div>
             <div class="pull-right ">
@@ -416,8 +447,9 @@
   <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
   <![endif]-->
   {block name="global-js"}
+      <!-- @Common/components/modernizr/modernizr.js, -->
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    {javascripts src="@Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
+    {javascripts src="@Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
@@ -431,7 +463,6 @@
       @Common/components/select2/select2.min.js,
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
-      @Common/components/modernizr/modernizr.js,
       @Common/js/onm/md5.min.js,
       @Common/js/onm/scripts.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
@@ -441,9 +472,8 @@
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-checklist-model/checklist-model.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
-      @Common/components/angular-file-upload/angular-file-upload.min.js,
+      @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
       @Common/components/angular-webstorage/angular-webstorage.min.js,
-      @Common/components/angular-google-chart/ng-google-chart.js,
       @Common/components/angular-nanoscroller/scrollable.js,
       @Common/components/angular-loading-bar/build/loading-bar.min.js,
       @Common/components/angular-sanitize/angular-sanitize.min.js,

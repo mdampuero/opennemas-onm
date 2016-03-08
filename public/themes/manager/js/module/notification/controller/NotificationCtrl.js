@@ -8,7 +8,7 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$filter', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $modal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, data) {
         /**
          * @memberOf NotificationCtrl
          *

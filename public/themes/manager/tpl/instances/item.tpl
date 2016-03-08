@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-success" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
+            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -168,7 +168,7 @@
                 <div class="input-group new-domain" ng-class="{ 'error-control': formValidated && instance.domains.length == 0 }">
                   <input class="form-control " name="new-domain" ng-model="new_domain" type="text">
                   <div class="input-group-btn">
-                    <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                    <button class="btn btn-default" ng-click="addDomain();" type="button"><i class="fa fa-plus"></i> {t}Add{/t}</button>
                   </div>
                 </div>
                 <div class="new-domain">
@@ -335,33 +335,26 @@
           <div class="grid-title">
             <h4>{t}Modules{/t}</h4>
           </div>
-          <div class="grid-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="checkbox check-default check-title">
-                  <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
-                </div>
+          <div class="grid-body no-padding">
+            <div class="table-wrapper p-b-15 p-l-15 p-r-15 p-t-15">
+              <div class="checkbox check-default check-title">
+                <input id="checkbox-all" ng-model="selected.all" ng-change="toggleAll()" type="checkbox">
+                <label for="checkbox-all">
+                  <h5>{t}Select all{/t}</h5>
+                </label>
               </div>
-            </div>
-            <div class="row">
-              <div class="instance-plan" ng-repeat="planName in template.plans">
+              <div class="instance-plan" ng-repeat="puuid in packs">
                 <div class="checkbox check-default check-title">
-                  <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
-                  <label for="checkbox-[% planName %]">
-                    <h5>Plan [% planName %]</h5>
+                  <input id="checkbox-[% puuid %]" ng-model="selected.plan[puuid]" ng-change="togglePlan(puuid)" type="checkbox">
+                  <label for="checkbox-[% puuid %]">
+                    <h5>[% template.modules[map[puuid]] ? template.modules[map[puuid]].name : '{t}Other{/t}' %]</h5>
                   </label>
                 </div>
-                <div class="m-b-5" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                <div class="m-b-5" ng-repeat="muuid in modulesByPack[puuid]">
                   <div class="checkbox check-default">
-                    <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
-                    <label for="checkbox-[% module.id %]">
-                      [% module.name %]
-                      <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) == -1 ">
-                        ({t}pending activation{/t})
-                      </span>
-                      <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) != -1 ">
-                        ({t}pending deactivation{/t})
-                      </span>
+                    <input id="checkbox-[% muuid %]" checklist-model="instance.activated_modules" checklist-value="muuid" type="checkbox">
+                    <label for="checkbox-[% muuid %]">
+                      [% template.modules[map[muuid]].name %]
                     </label>
                   </div>
                 </div>
@@ -370,7 +363,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Themes{/t}</h4>
@@ -389,7 +382,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+      <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -402,11 +395,11 @@
             </h4>
           </div>
           <div class="grid-body support-list">
-            <div class="form-group" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}">
+            <div class="form-group" ng-repeat="uuid in supportModules">
               <div class="radio" ng-init="initializeSupportPlan()">
-                <input id="[% support.id %]" ng-change="updateSupport(support.id)" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
-                <label for="[% support.id %]" tooltip="[% support.description %]" tooltip-placement="right">
-                  [% support.name %]
+                <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
+                <label for="[% uuid %]" tooltip-html="template.modules[map[uuid]].description" tooltip-placement="right">
+                  [% template.modules[map[uuid]].name %]
                 </label>
               </div>
             </div>

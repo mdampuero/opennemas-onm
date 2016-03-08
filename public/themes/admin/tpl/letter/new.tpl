@@ -5,7 +5,7 @@
     <script>
       jQuery(document).ready(function($) {
         $('#created').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $('#title').on('change', function(e, ui) {
@@ -17,7 +17,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
+  <form id="formulario" action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -51,9 +51,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" class="btn btn-primary">
+                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
                   <span class="fa fa-save"></span>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -75,7 +75,7 @@
               <div class="form-group">
                 <label for="body" class="form-label">{t}Body{/t}</label>
                 <div class="controls">
-                  <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
+                  <textarea name="body" id="body" ng-model="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
                 </div>
               </div>
               <h4>{t}Author information{/t}</h4>

@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
-  '$controller', '$http', '$modal', '$rootScope', '$sce', '$scope',
-  function($controller, $http, $modal, $rootScope, $sce, $scope) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$sce', '$scope',
+  function($controller, $http, $uibModal, $rootScope, $sce, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -184,7 +184,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * Opens a modal to confirm newsletter sending.
      */
     $scope.send = function() {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-confirm-send',
         backdrop: 'static',
         controller: 'modalCtrl',

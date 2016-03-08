@@ -46,9 +46,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" data-text="{t}Saving{/t}...">
                   <span class="fa fa-save"></span>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -202,6 +202,10 @@
                     <option value="15"
                     {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
                     {/is_module_activated}
+                    {acl isAllowed="ONLY_MASTERS"}
+                    <option value="0"
+                    {if isset($category) && ($category->internal_category eq 0)} selected="selected"{/if}>{t}Internal{/t}</option>
+                    {/acl}
                   </select>
                 </div>
               </div>

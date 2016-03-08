@@ -65,9 +65,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" value="1">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -76,11 +76,10 @@
       </div>
     </div>
     <div class="content">
-
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
-          <tabset>
-            <tab heading="{t}General{/t}">
+          <uib-tabset>
+            <uib-tab heading="{t}General{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -114,14 +113,14 @@
                         {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
                       </span>
                       <div class="controls">
-                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
+                        <textarea class="form-control" onm-editor onm-editor-preset="simple" ng-model="site_footer" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Appearance{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Appearance{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -237,8 +236,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}SEO{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}SEO{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -289,8 +288,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Internal{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Internal{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -388,8 +387,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}External services{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
@@ -854,8 +853,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-          </tabset>
+            </uib-tab>
+          </uib-tabset>
         </div>
       </div>
     </div>

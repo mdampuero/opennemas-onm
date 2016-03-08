@@ -56,6 +56,9 @@
           {is_module_activated name="BOOK_MANAGER"}
             <li role="presentation"><a href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">{t}For books{/t}</a></li>
           {/is_module_activated}
+          {acl isAllowed="ONLY_MASTERS"}
+            <li role="presentation"><a href="#tab8" aria-controls="tab8" role="tab" data-toggle="tab">{t}Internal{/t}</a></li>
+          {/acl}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -290,6 +293,39 @@
               </table>
             </div>
           {/is_module_activated}
+          {acl isAllowed="ONLY_MASTERS"}
+            <div role="tabpanel" class="tab-pane" id="tab8">
+              <table class="table table-hover no-margin">
+                <thead>
+                  <tr>
+                    <th>{t}Title{/t}</th>
+                    <th>{t}Internal name{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    {acl isAllowed="CATEGORY_AVAILABLE"}
+                    <th style="width:15px;">{t}Published{/t}</th>
+                    {/acl}
+                  </tr>
+                </thead>
+                <tbody>
+                  {section name=c loop=$categorys}
+                  {if $categorys[c]->internal_category eq '0'}
+                  {include file="category/_partials/print_list_category.tpl"
+                  category=$categorys[c]
+                  subcategorys=$subcategorys[c]
+                  num_contents=$num_contents[c]
+                  num_sub_contents=$num_sub_contents[c]}
+                  {/if}
+                  {sectionelse}
+                  <tr>
+                    <td class="empty">
+                      {t}No available categories for listing{/t}
+                    </td>
+                  </tr>
+                  {/section}
+                </tbody>
+              </table>
+            </div>
+          {/acl}
         </div>
       </div>
     </div>

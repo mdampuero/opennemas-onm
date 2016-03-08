@@ -11,7 +11,7 @@
         });
 
         $('#closetime').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
       });
     </script>
@@ -19,7 +19,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl">
+  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -48,9 +48,9 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                   <i class="fa fa-save"></i>
-                  {t}Save{/t}
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>

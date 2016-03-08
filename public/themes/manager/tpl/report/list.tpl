@@ -54,7 +54,7 @@
                 </div>
               </td>
               <td class="text-center">
-                <a class="btn btn-success" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+                <a class="btn btn-primary" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
                   <i class="fa fa-download"></i>
                   {t}Download{/t}
                 </a>

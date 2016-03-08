@@ -51,9 +51,9 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="PHOTO_DELETE"}
           <li class="quicklinks">
-            <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
               <i class="fa fa-trash-o fa-lg"></i>
-            </a>
+            </button>
           </li>
           {/acl}
         </ul>

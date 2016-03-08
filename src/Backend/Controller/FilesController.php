@@ -282,6 +282,13 @@ class FilesController extends Controller
                 'success',
                 _("File created successfuly.")
             );
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_file_show',
+                    array('id' => $attachment->id)
+                )
+            );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',

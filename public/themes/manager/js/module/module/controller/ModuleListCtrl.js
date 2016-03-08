@@ -7,7 +7,7 @@
      * @name  ModuleListCtrl
      *
      * @requires $controller
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -103,7 +103,7 @@
          * @param {Object module The module to delete.
          */
         $scope.delete = function(module) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -138,7 +138,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',

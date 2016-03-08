@@ -29,14 +29,14 @@
             </div>
             <ul class="dropdown-menu">
               <li>
-                <a href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>
+                <button href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>
                   {t}Widget home{/t}
-                </a>
+                </button>
               </li>
               <li>
-                <a href="{url name=admin_videos}" {if $category != 'widget'}class="active"{/if}>
+                <button href="{url name=admin_videos}" {if $category != 'widget'}class="active"{/if}>
                   {t}Listing{/t}
-                </a>
+                </button>
               </li>
             </ul>
           </li>
@@ -54,19 +54,19 @@
             {acl isAllowed="VIDEO_WIDGET"}
             {if $category eq 'widget'}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+              <button class="btn btn-white" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                 {t}Save positions{/t}
-              </a>
+              </button>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {/if}
             {/acl}
             {acl isAllowed="VIDEO_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1">
+              <button class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
-              </a>
+              </button>
             </li>
             {/acl}
           </ul>

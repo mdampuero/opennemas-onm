@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ArticleCtrl', [
-  '$controller', '$http', '$modal', '$rootScope', '$scope', 'routing',
-  function($controller, $http, $modal, $rootScope, $scope, routing) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
+  function($controller, $http, $uibModal, $rootScope, $scope, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -26,7 +26,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       var url  = routing.generate(previewUrl);
 
       $http.post(url, data).success(function() {
-        $modal.open({
+        $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
           controller: 'modalCtrl',
@@ -77,7 +77,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
         }
 
         // Set inner image if empty
-        if (angular.isUndefined($scope.photo2)) {
+        if (angular.isUndefined($scope.photo2) && nv != ov) {
           $scope.photo2 = $scope.photo1;
         }
       }
@@ -140,7 +140,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
         $scope.footer_video = $scope.video1.description;
 
         // Set inner video if empty
-        if (angular.isUndefined($scope.video2)) {
+        if (angular.isUndefined($scope.video2) && nv != ov) {
           $scope.video2 = $scope.video1;
         }
       }
@@ -170,8 +170,8 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      */
     $scope.$watch('relatedInFrontpage', function(nv, ov) {
       // Set inner related if empty or equal to front
-      if (!$scope.relatedInInner||
-        $scope.relatedInner == $scope.relatedFront
+      if ((!$scope.relatedInInner||
+        $scope.relatedInner == $scope.relatedFront) && nv != ov
       ) {
         $scope.relatedInInner = angular.copy(nv);
       }

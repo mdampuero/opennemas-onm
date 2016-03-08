@@ -8,7 +8,7 @@
      *
      * @requires $analytics
      * @requires $http
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires messenger
      * @requires routing
@@ -17,8 +17,8 @@
      * @description
      *   Controller to handle actions in checkout
      */
-    .controller('StoreCheckoutCtrl', ['$analytics', '$http', '$modal', '$scope', '$timeout', 'messenger', 'routing', 'webStorage',
-      function ($analytics, $http, $modal, $scope, $timeout, messenger, routing, webStorage) {
+    .controller('StoreCheckoutCtrl', ['$analytics', '$http', '$uibModal', '$scope', '$timeout', 'messenger', 'routing', 'webStorage',
+      function ($analytics, $http, $uibModal, $scope, $timeout, messenger, routing, webStorage) {
         /**
          * @memberOf StoreCheckoutCtrl
          *
@@ -157,7 +157,7 @@
             return;
           }
 
-          webStorage.local.add('cart', nv);
+          webStorage.local.set('cart', nv);
 
           for (var i = 0; i < nv.length; i++) {
             if (nv[i].price && nv[i].price.month) {

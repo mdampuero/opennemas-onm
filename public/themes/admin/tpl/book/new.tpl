@@ -4,7 +4,7 @@
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script type="text/javascript">
       $('#date').datetimepicker({
-        format: 'YYYY-MM-D HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss'
       });
 
       jQuery('#title').on('change', function(e, ui) {
@@ -16,8 +16,7 @@
 
 
 {block name="content"}
-<form action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl">
-
+<form id="formulario" action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -52,17 +51,17 @@
             <li class="quicklinks">
               {if isset($book->id)}
               {acl isAllowed="BOOK_UPDATE"}
-              <button class="btn btn-primary" href="{url name=admin_books_update id=$book->id}" name="continue" value="1">
-                <span class="fa fa-save"></span>
-                {t}Save{/t}
+              <button class="btn btn-primary" data-text="{t}Updating{/t}..." href="{url name=admin_books_update id=$book->id}" name="continue" value="1">
+                <i class="fa fa-save"></i>
+                <span class="text">{t}Update{/t}</span>
               </button>
               {/acl}
               {else}
               {acl isAllowed="BOOK_CREATE"}
-              <button class="btn btn-primary" href="{url name=admin_books_create}" name="continue" value="1">
-               <span class="fa fa-save"></span>
-               {t}Save{/t}
-             </button>
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." href="{url name=admin_books_create}" name="continue" value="1">
+                <i class="fa fa-save"></i>
+                <span class="text">{t}Save{/t}</span>
+              </button>
              {/acl}
              {/if}
            </ul>
@@ -86,7 +85,7 @@
             <div class="form-group">
               <label for="description" class="form-label">{t}Description{/t}</label>
               <div class="controls">
-                <textarea onm-editor onm-editor-preset="simple" id="description" name="description" rows="3" class="form-control">{$book->description|clearslash}</textarea>
+                <textarea onm-editor onm-editor-preset="simple" id="description" ng-model="description" name="description" rows="3" class="form-control">{$book->description|clearslash}</textarea>
               </div>
             </div>
 
@@ -160,7 +159,7 @@
               <label for="starttime" class="form-label">{t}Date{/t}</label>
               <div class="controls">
                 <div class="input-group">
-                  <input class="form-control" type="datetime" id="date" name="starttime" value="{$book->starttime}">
+                  <input class="form-control" type="datetime" id="date" name="starttime" value="{if $book->starttime neq '0000-00-00 00:00:00'}{$book->starttime}{/if}">
                   <span class="input-group-addon add-on">
                     <span class="fa fa-calendar"></span>
                   </span>

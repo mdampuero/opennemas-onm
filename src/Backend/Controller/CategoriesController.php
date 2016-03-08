@@ -51,9 +51,7 @@ class CategoriesController extends Controller
 
         $i = 0;
         foreach ($allcategorys as $category) {
-            if ($category->internal_category !=0
-                && $category->fk_content_category == 0
-            ) {
+            if ($category->fk_content_category == 0) {
                 if (isset($groups['articles'][$category->pk_content_category])) {
                     $contentsCount[$i]['articles'] =
                         $groups['articles'][$category->pk_content_category];
@@ -78,7 +76,7 @@ class CategoriesController extends Controller
                     $j++;
                 }
                 $subcategorys[$i]=$resul;
-                 $i++;
+                    $i++;
             }
         }
 

@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl">
+  <form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -42,8 +42,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
-                  <span class="fa fa-save"></span> {t}Save{/t}
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                  <i class="fa fa-save"></i>
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -88,7 +89,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea class="form-control" name="body" id="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
+                  <textarea class="form-control" name="body" id="body" ng-model="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
                 </div>
               </div>
             </div>

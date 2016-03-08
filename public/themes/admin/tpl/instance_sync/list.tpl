@@ -58,7 +58,7 @@
           <tr>
             <td>
               <strong>{$siteUrl}</strong>
-              <div class="visible-xs">{t}Categories to sync{/t}: {$config['categories']|implode:", "}</div>
+              <div class="visible-xs">{t}Categories to sync{/t}: {if !empty($config['categories'])}{$config['categories']|implode:", "}{/if}</div>
               <div class="visible-xs">
                 <div class="colorpicker_viewer" style="background-color:#{$config['site_color']};"></div>
               </div>
@@ -72,7 +72,7 @@
               </div>
             </td>
             <td class="hidden-xs">
-              {$config['categories']|implode:", "}
+              {if !empty($config['categories'])}{$config['categories']|implode:", "}{/if}
             </td>
             <td class="hidden-xs">
               <div class="colorpicker_viewer" style="background-color:{$config['site_color']};">&nbsp;&nbsp;&nbsp;&nbsp;</div>

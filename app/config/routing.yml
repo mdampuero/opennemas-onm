@@ -8,7 +8,7 @@ backend_webservice:
 
 frontendmobile:
     resource: '@FrontendMobileBundle/Resources/config/routing.yml'
-    prefix:   /mobile
+    prefix:   /
 
 manager_webservice:
     resource: '@ManagerWebServiceBundle/Resources/config/routing.yml'
@@ -33,10 +33,6 @@ fos_js_routing:
 admin_welcome:
     path: '/admin'
     defaults: { _controller  : BackendBundle:Welcome:default }
-
-frontendmobile_root:
-    path: '/mobile'
-    defaults: { _controller : FrontendMobileBundle:Frontpages:show }
 
 hwi_oauth_redirect:
     resource: '@HWIOAuthBundle/Resources/config/routing/redirect.xml'

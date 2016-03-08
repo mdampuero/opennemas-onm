@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-17 14:53+0000\n"
-"PO-Revision-Date: 2016-02-17 15:57+0200\n"
+"POT-Creation-Date: 2016-03-02 18:38+0000\n"
+"PO-Revision-Date: 2016-03-02 20:59+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -303,42 +303,6 @@ msgstr ""
 "Produciuse un erro ao subir o ficheiro. Por favor, contacte co administrador "
 "do sistema."
 
-msgid "Frontpages"
-msgstr "Portadas"
-
-msgid "Article - inner"
-msgstr "Artigo - interior"
-
-msgid "Mobile - frontpages"
-msgstr "Móbil - portada"
-
-msgid "RSS"
-msgstr "RSS"
-
-msgid "Opinion - Authors"
-msgstr "Opinión - Autores"
-
-msgid "Opinion - inner"
-msgstr "Opinión - interior"
-
-msgid "Video - frontpage"
-msgstr "Vídeo - portada"
-
-msgid "Video - inner"
-msgstr "Video - interior"
-
-msgid "Album - frontpage"
-msgstr "Álbum - portada"
-
-msgid "Album - inner"
-msgstr "Álbum - interior"
-
-msgid "Poll - frontpage"
-msgstr "Enquisas - portada"
-
-msgid "Poll - inner"
-msgstr "Enquisa - interior"
-
 msgid "Cache configuration saved successfully."
 msgstr "Configuración de caché gardada correctamente."
 
@@ -520,9 +484,6 @@ msgstr "Capa «%s» foi eliminada correctamente."
 msgid "You must give an id to delete the cover."
 msgstr "Debes fornecer un identificador para eliminar unha portada."
 
-msgid "SQL errors registered in database cleaned sucessfully."
-msgstr "Errores SQL registrados en la base de datos limpiados correctamente."
-
 msgid "Instance not found"
 msgstr "Instancia non atopada"
 
@@ -559,6 +520,9 @@ msgstr "Artigo actualizado correctamente."
 #, php-format
 msgid "There was a problem while saving the file information."
 msgstr "Produciuse un erro ao gardar a información do ficheiro."
+
+msgid "Frontpages"
+msgstr "Portadas"
 
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
@@ -1164,12 +1128,6 @@ msgstr "Grupos de usuarios"
 msgid "Authors"
 msgstr "Autores"
 
-msgid "Cache manager"
-msgstr "Xestor de caché"
-
-msgid "SQL error log"
-msgstr "Rexistro de erros de SQL"
-
 msgid "Store"
 msgstr "Tenda"
 
@@ -1201,77 +1159,6 @@ msgstr ""
 "Non se puido atopar un usuario asociado á conta da rede social. Teña en "
 "conta que primeiro ten que asociala coa súa conta de usuario en Opennemas."
 
-msgid "Item deleted successfully"
-msgstr "Elemento eliminado correctamente"
-
-#, php-format
-msgid "Unable to delete the item \"%s\""
-msgstr "Non foi posíbel eliminar o elemento co identificador «%s»"
-
-msgid "No items selected"
-msgstr "Non se seleccionaron elementos"
-
-msgid "Unknown cache file"
-msgstr "Ficheiro de caché descoñecido"
-
-msgid "Article inner"
-msgstr "Artigo: interior"
-
-msgid "Mobile article inner"
-msgstr "Móbil: artigo interior"
-
-msgid "Mobile frontpage"
-msgstr "Móbil: portada"
-
-msgid "Mobile opinion inner"
-msgstr "Móbil: opinión interior"
-
-msgid "Mobile opinion frontpage"
-msgstr "Móvil: portada opinión"
-
-msgid "Video frontpage"
-msgstr "Portada de vídeo"
-
-msgid "Video inner"
-msgstr "Vídeo interior"
-
-msgid "Album frontpage"
-msgstr "Portada de álbum"
-
-msgid "Album inner"
-msgstr "Álbum interior"
-
-msgid "Opinion frontpage"
-msgstr "Portada de opinión"
-
-#, php-format
-msgid "Page %s"
-msgstr "Páxina %s"
-
-msgid "Opinion inner"
-msgstr "Opinión interior"
-
-msgid "Blog inner"
-msgstr "Blog interior"
-
-msgid "RSS Author"
-msgstr "RSS de author"
-
-msgid "Homepage"
-msgstr "Portada principal"
-
-msgid "Poll inner"
-msgstr "Enquisa:interior"
-
-msgid "Poll frontpage"
-msgstr "Portada de enquisas"
-
-msgid "Custom CSS"
-msgstr "CSS personalizado"
-
-msgid "Sitemap: "
-msgstr "Mapa do sitio:"
-
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Non se puido eliminar o elemento co identificador «%d»"
@@ -1291,6 +1178,9 @@ msgstr "Non se puido actualizar o elemento co identificador «%d»"
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d elemento(s) actualizado(s) correctamente"
+
+msgid "Item deleted successfully"
+msgstr "Elemento eliminado correctamente"
 
 msgid "Item updated successfully"
 msgstr "Elemento actualizado correctamente"
@@ -1377,6 +1267,10 @@ msgid "Positions saved successfully"
 msgstr "Posicións gardadas correctamente"
 
 #, php-format
+msgid "The domain %s is not valid"
+msgstr "O dominio %s non é válido"
+
+#, php-format
 msgid "The domain %s is not available"
 msgstr "O dominio %s non está dispoñíbel"
 
@@ -1386,6 +1280,9 @@ msgstr "O teu dominio está configurado correctamente"
 #, php-format
 msgid "Your domain has to point to %s"
 msgstr "O teu dominio apunta a %s"
+
+msgid "Your domain is valid"
+msgstr "O seu dominio non é válido"
 
 #, php-format
 msgid "Domain deleted successfully"
@@ -1397,25 +1294,6 @@ msgstr "Non foi posíbel eliminar o dominio %s"
 
 msgid "Domain added successfully"
 msgstr "Datos engaddo correctamente"
-
-msgid "Your request could not been registered"
-msgstr "A túa solicitude non foi enviada"
-
-msgid "Your request has been registered"
-msgstr "A túa solicitude foi enviada"
-
-msgid "Add Video and Image Galleries to your content. "
-msgstr "Engade vídeos e galerías ao teu contido."
-
-msgid ""
-"<p>This module will allow you to create Photo Galleries, add video from "
-"YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the "
-"most interesting fact is that the video manager is the same as youtube one, "
-"perfect consistency and performance.</p>"
-msgstr ""
-"<p>Este módulo permítelle crear galerías, engade vídeos de Youtube, Vimeo, "
-"Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o xestor de "
-"vídeos é o mesmo que Youtube, consistencia e rendemento perfecto</p>"
 
 #, php-format
 msgid "%d contents imported successfully"
@@ -1573,18 +1451,11 @@ msgstr ""
 "Solte ficheiros aquí para subilos ou prema no botón «Engadir ficheiros…» de "
 "arriba."
 
-msgid "Add Video and Image Galleries to your content."
-msgstr "Engade vídeos e galerías ao teu contido."
+msgid "Your request could not been registered"
+msgstr "A túa solicitude non foi enviada"
 
-msgid ""
-"<p>This module will allow you to create Photo Galleries, add video from "
-"YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>\n"
-"                    <p>Our video manager is the same as youtube one, perfect "
-"consistency and performance.</p>"
-msgstr ""
-"<p>Este módulo permítelle crear galerías, engadir vídeos de Youtube, Vimeo, "
-"Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o xestor de "
-"vídeos é o mesmo que Youtube, consistencia e rendemento perfecto</p>"
+msgid "Your request has been registered"
+msgstr "A túa solicitude foi enviada"
 
 msgid "Billing information saved successfully"
 msgstr "Información de facturación actualizada correctamente."
@@ -1922,6 +1793,42 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+#, php-format
+msgid "A module with the uuid %d already exists"
+msgstr "Xa existe un módulo co UUID %d"
+
+#, php-format
+msgid "A module with uuid '%s' already exists"
+msgstr "Xa existe un módulo co UUID «%s»"
+
+msgid "Module saved successfully"
+msgstr "Módulo gardado con éxito"
+
+msgid "Module deleted successfully."
+msgstr "Módulo eliminado correctamente."
+
+#, php-format
+msgid "%s modules deleted successfully."
+msgstr "%s módulos eliminados correctamente."
+
+msgid "Manager"
+msgstr "Xestor"
+
+#, php-format
+msgid "Unable to find the module with id \"%s\""
+msgstr "Non se puido atopar o módulo co identificador «%s»"
+
+msgid "Unable to find the modules for the given criteria"
+msgstr "Non se atoparon módulos para o criterio fornecido"
+
+#, php-format
+msgid "%s modules updated successfully."
+msgstr "%s módulos actualizados correctamente."
+
+#, php-format
+msgid "Unable to find the entity with id \"%s\""
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
 msgid "Notification saved successfully"
 msgstr "Notificación gardada correctamente"
 
@@ -1931,13 +1838,6 @@ msgstr "Notificación eliminada correctamente."
 #, php-format
 msgid "%s notifications deleted successfully."
 msgstr "%s notificacións eliminadas correctamente."
-
-msgid "Manager"
-msgstr "Xestor"
-
-#, php-format
-msgid "Unable to find the entity with id \"%s\""
-msgstr "Non se puido atopar a entidade co identificador «%s»"
 
 msgid "Error"
 msgstr "Erro"
@@ -1970,6 +1870,12 @@ msgstr "Xera un informe que mostra as instancias creadas no último mes."
 
 msgid "Instances"
 msgstr "Instancias"
+
+msgid "Extensions"
+msgstr "Extensións"
+
+msgid "Modules"
+msgstr "Modulos"
 
 msgid "Notifications"
 msgstr "Notificacións"
@@ -2419,6 +2325,9 @@ msgstr "Móbil: artigo interior"
 msgid "Inner Opinion"
 msgstr "Opinión: interior"
 
+msgid "RSS"
+msgstr "RSS"
+
 msgid "Name of the newspaper must be longer than 5 characters"
 msgstr "O nome do periódico debe conter cando menos 5 caracteres"
 
@@ -2460,6 +2369,9 @@ msgstr "Personalizar portadas"
 
 msgid "Authors Blog"
 msgstr "Blogs de Autores"
+
+msgid "Cache manager"
+msgstr "Xestor de caché"
 
 msgid "Subscription"
 msgstr "Suscrición"
@@ -2512,11 +2424,11 @@ msgstr "Páxinas estáticas"
 msgid "Basic support"
 msgstr "Asistencia básica"
 
+msgid "Training and Advisory Services"
+msgstr "Soporte Asesoramiento e Formación"
+
 msgid "Profesional support"
 msgstr "Asistencia profesional"
-
-msgid "Support 1"
-msgstr "Asistencia 1"
 
 msgid "Support 2"
 msgstr "Asistencia 2"
@@ -3204,11 +3116,10 @@ msgstr "Módulo para xestionar as páxinas das cachés"
 msgid "Create, update and delete categories for contents."
 msgstr "Crear, actualizar e eliminar categorías para os contidos"
 
-#, fuzzy
 msgid ""
 "<p>Module included in the Basic pack (FREE) of opennemas, it allows users to "
 "create and manage categories of content.</p>"
-msgstr "<p>Permítelle crear e xestionar categorías de contido</p>"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -3218,11 +3129,10 @@ msgstr ""
 "Permítelle aos seus lectores deixar comentarios usando o  noso sistema de "
 "comentarios ou conectándose a Facebook ou Disqus."
 
-#, fuzzy
 msgid ""
 "<p>Module included in the FREE version, it allows users to add comments to "
 "any content generated by newspaper."
-msgstr "<p>Permítelle crear e xestionar categorías de contido</p>"
+msgstr ""
 
 msgid "Module for managing Cronicas customizations"
 msgstr "Módulo para xestionar as personalizacións de Crónicas"
@@ -3620,9 +3530,6 @@ msgstr ""
 msgid "No support"
 msgstr "Sen asistencia"
 
-msgid "Training and Advisory Services"
-msgstr "Soporte Asesoramiento e Formación"
-
 msgid ""
 "Ask all your questions, walk through Opennemas and/or receive personal "
 "training via phone"
@@ -3924,96 +3831,6 @@ msgstr "hai 1 mes"
 msgid "%d months ago"
 msgstr "hai %d meses"
 
-msgid "Cache Manager"
-msgstr "Xestor de caché"
-
-msgid "Settings"
-msgstr "Preferencias"
-
-msgid "Go back"
-msgstr "Atrás"
-
-msgid "Save"
-msgstr "Gardar"
-
-msgid "Cache group"
-msgstr "Grupo de caché"
-
-msgid "Expire time"
-msgstr "Tempo de expiración"
-
-msgid "seconds"
-msgstr "segundos"
-
-msgid "Remove all"
-msgstr "Eliminar todos"
-
-msgid "Clear selection"
-msgstr "Limpar selección"
-
-msgid "Type"
-msgstr "Tipo"
-
-msgid "View"
-msgstr "Ver"
-
-msgid "Loading"
-msgstr "Cargando"
-
-msgid "No cache files were generated for now."
-msgstr "Aún no hai ningún archivo de caché generado."
-
-msgid ""
-"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>  "
-"and come back here"
-msgstr ""
-"Visita algunas páginas de <a href=\"%1\" title=\"Visit your site\">su sitio "
-"web</a> e volva aquí"
-
-msgid "Resource"
-msgstr "Recurso"
-
-msgid "Valid until"
-msgstr "Válido até"
-
-msgid "Size"
-msgstr "Tamaño"
-
-msgid "View page"
-msgstr "Ver páxina"
-
-msgid "Delete cache file"
-msgstr "Eliminar ficheiro de caché"
-
-msgid "Delete cache elements"
-msgstr "Eliminar elementos da caché"
-
-msgid ""
-"Are you sure you want to delete [% template.selected.length %] cache "
-"elements?"
-msgstr ""
-"Tes certeza que queres eliminar [% template.selected.length %] elemento(s) "
-"de caché?"
-
-msgid "Yes, remove all"
-msgstr "Si, eliminalos todos"
-
-msgid "No"
-msgstr "Non"
-
-msgid "Delete cache element"
-msgstr "Eliminar elemento da caché"
-
-msgid ""
-"Are you sure you want to delete the cache element \"[% template.content."
-"title %]\"."
-msgstr ""
-"Tes certeza que queres eliminar o elemento de caché «[% template.content."
-"title %]»?"
-
-msgid "Yes, remove"
-msgstr "Si, eliminar"
-
 msgid "Instance not activated - Opennemas"
 msgstr "Instancia non activada - Opennemas"
 
@@ -4039,6 +3856,9 @@ msgstr ""
 
 msgid "Yes, delete"
 msgstr "Si, eliminar"
+
+msgid "No"
+msgstr "Non"
 
 msgid "Delete selected items"
 msgstr "Eliminar os elementos seleccionados"
@@ -4075,6 +3895,12 @@ msgstr "Editando subscritor"
 msgid "Go back to list"
 msgstr "Volver á lista"
 
+msgid "Saving"
+msgstr "Gardando"
+
+msgid "Save"
+msgstr "Gardar"
+
 msgid "Surname"
 msgstr "Nome"
 
@@ -4103,6 +3929,9 @@ msgstr "Suscricións"
 msgid "Go back to newsletter manager"
 msgstr "Volver ao xestor de boletín"
 
+msgid "Clear selection"
+msgstr "Limpar selección"
+
 msgid "Activate"
 msgstr "Activar"
 
@@ -4123,6 +3952,12 @@ msgstr "Non subscrito"
 
 msgid "Status"
 msgstr "Estado"
+
+msgid "View"
+msgstr "Ver"
+
+msgid "Loading"
+msgstr "Cargando"
 
 msgid "No available subscriptors."
 msgstr "Non hai subscritores dispoñíbeis."
@@ -4423,6 +4258,12 @@ msgstr "Edición de ePapel"
 msgid "Go Back"
 msgstr "Atrás"
 
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Update"
+msgstr "Actualizar"
+
 msgid "Date"
 msgstr "Data"
 
@@ -4434,6 +4275,9 @@ msgstr "Prezo"
 
 msgid "Split decimals with a dot"
 msgstr "Divide os decimais con un punto"
+
+msgid "Type"
+msgstr "Tipo"
 
 msgid "Item"
 msgstr "Elemento"
@@ -4494,6 +4338,9 @@ msgstr "Ordenar elementos"
 
 msgid "You must put %1 covers in the HOME"
 msgstr "Debes ter %d portadas na portada principal"
+
+msgid "Settings"
+msgstr "Preferencias"
 
 msgid "Order newsstand frontpage by"
 msgstr "Ordenar portada de Kiosko segundo"
@@ -4601,6 +4448,9 @@ msgstr "Editar widget «[% content.title %]»"
 msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
+msgid "You are leaving the current page."
+msgstr "Está saíndo da páxina."
+
 msgid "Instance information"
 msgstr "Información da instancia"
 
@@ -4609,6 +4459,9 @@ msgstr "Páxina"
 
 msgid "Author"
 msgstr "Autor"
+
+msgid "Sysops"
+msgstr "Sysops"
 
 msgid "There are no notifications for now."
 msgstr "Non hai notificacións por agora."
@@ -4675,6 +4528,9 @@ msgstr "Editar carta"
 
 msgid "Creating letter"
 msgstr "Creando carta"
+
+msgid "Go back"
+msgstr "Atrás"
 
 msgid "Body"
 msgstr "Corpo"
@@ -5131,6 +4987,9 @@ msgstr ""
 
 msgid " You will not be able to restore it back."
 msgstr "Non poderá restauralos de novo."
+
+msgid "Yes, remove"
+msgstr "Si, eliminar"
 
 msgid ""
 "Are you sure that do you want send to the trash \"[% template.content.title "
@@ -5678,9 +5537,6 @@ msgstr "Última actualización"
 msgid "Packs"
 msgstr "Packs"
 
-msgid "Modules"
-msgstr "Modulos"
-
 msgid "Services"
 msgstr "Servizos"
 
@@ -5707,6 +5563,12 @@ msgstr "Mercar"
 
 msgid "No items available to purchase"
 msgstr "Non hai elementos dispoñibles para comprar"
+
+msgid "year"
+msgstr "ano"
+
+msgid "item"
+msgstr "elemento"
 
 msgid "More info"
 msgstr "Máis información"
@@ -5736,9 +5598,6 @@ msgstr "Identificador fiscal"
 
 msgid "Phone"
 msgstr "Teléfono"
-
-msgid "You are leaving the current page."
-msgstr "Está saíndo da páxina."
 
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Volve á <a href=\"%1\">tenda</a> e proba de novo"
@@ -6324,6 +6183,24 @@ msgstr "Non se puideron atopar autores que coincidan coa súa busca."
 msgid "No biography set"
 msgstr "No ten biografía estabelecida"
 
+msgid "Cache Manager"
+msgstr "Xestor de caché"
+
+msgid "Remove cache"
+msgstr "Eliminar caché"
+
+msgid "Remove compiled templates"
+msgstr "Eliminar plantills compiladas"
+
+msgid "Cache group"
+msgstr "Grupo de caché"
+
+msgid "Expire time"
+msgstr "Tempo de expiración"
+
+msgid "seconds"
+msgstr "segundos"
+
 msgid "Creating video"
 msgstr "Creando vídeo"
 
@@ -6687,8 +6564,14 @@ msgstr "e tipos de páxina"
 msgid "Inner article"
 msgstr "Artigo interior"
 
+msgid "Video frontpage"
+msgstr "Portada de vídeo"
+
 msgid "Inner video"
 msgstr "Video: interior"
+
+msgid "Opinion frontpage"
+msgstr "Portada de opinión"
 
 msgid "Inner opinion"
 msgstr "Interior de opinión"
@@ -6974,9 +6857,6 @@ msgstr "Escriba un dominio"
 
 msgid "Map it"
 msgstr "Redirixilo"
-
-msgid "year"
-msgstr "ano"
 
 msgid "Requested domains"
 msgstr "Dominios solicitados"
@@ -7366,33 +7246,6 @@ msgstr "estándar"
 msgid "widget"
 msgstr "widget"
 
-msgid "Refresh the list for getting newest error list"
-msgstr "Actualizar a lista para obter a lista de erros actualizada"
-
-msgid "Refresh list"
-msgstr "Recargar lista"
-
-msgid "Clean"
-msgstr "Limpar"
-
-msgid "Filter"
-msgstr "Filtrar"
-
-msgid "Creation date"
-msgstr "Data de creación"
-
-msgid "Error explanation"
-msgstr "Explicación do erro"
-
-msgid "Execution time"
-msgstr "Tempo de execución"
-
-msgid "There is no SQL errors registered in database."
-msgstr "Non hai ningún erro SQL rexistrado na base de datos."
-
-msgid "Come back later."
-msgstr "Volva máis tarde."
-
 msgid "Edit uploaded"
 msgstr "Editar elementos subidos"
 
@@ -7524,6 +7377,9 @@ msgstr "Buscar por descrición"
 msgid "Resolution"
 msgstr "Resolución"
 
+msgid "Size"
+msgstr "Tamaño"
+
 msgid "No available images for this search"
 msgstr "Non hai imaxes dispoñibeis para esta busca"
 
@@ -7532,6 +7388,9 @@ msgstr "Descrición non dispoñíbel"
 
 msgid "No tags"
 msgstr "Sen etiquetas"
+
+msgid "Remove all"
+msgstr "Eliminar todos"
 
 msgid "Restore"
 msgstr "Restaurar"
@@ -7558,20 +7417,14 @@ msgstr ""
 "Tes certeza que queres eliminar de forma permanente todos os contidos do "
 "lixo?"
 
+msgid "Yes, remove all"
+msgstr "Si, eliminalos todos"
+
 msgid "Creating article"
 msgstr "Creando artigo"
 
 msgid "Editing article"
 msgstr "Editar artigo"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
-
-msgid "Saving"
-msgstr "Gardando"
 
 msgid "Inner title"
 msgstr "Titulo interior:"
@@ -7656,6 +7509,9 @@ msgstr "Escoller un vídeo"
 
 msgid "File name"
 msgstr "Nome de ficheiro"
+
+msgid "Creation date"
+msgstr "Data de creación"
 
 msgid "Footer text for inner video:"
 msgstr "Texto inferior para o vídeo interior:"
@@ -8774,12 +8630,6 @@ msgstr ""
 msgid "Edit group"
 msgstr "Editar grupo"
 
-msgid "Showing"
-msgstr "Mostrando"
-
-msgid "of"
-msgstr "de"
-
 msgid "Initializing"
 msgstr "Iniciando"
 
@@ -8808,6 +8658,63 @@ msgstr "Use unha conta do xestor para iniciar sesión."
 msgid "Login"
 msgstr "Iniciar sesión"
 
+msgid "New module"
+msgstr "Novo módulo"
+
+msgid "Edit module"
+msgstr "Editar módulo"
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "This UUID is invalid"
+msgstr "Este UUID é válido"
+
+msgid "Select a category..."
+msgstr "Seleccione unha categoría…"
+
+msgid "Pack"
+msgstr "Pack"
+
+msgid "Partner"
+msgstr "Socio"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Yearly"
+msgstr "Anual"
+
+msgid "Single"
+msgstr "Único"
+
+msgid "Modules included"
+msgstr "Módulos incluídos"
+
+msgid "Modules in conflict"
+msgstr "Módulos en conflito"
+
+msgid "Search by UUID"
+msgstr "Buscar por UUID"
+
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Translations"
+msgstr "Traducións"
+
+msgid "Enabled"
+msgstr "Activada"
+
+msgid "#"
+msgstr "#"
+
+msgid "Translations completed"
+msgstr "Tradución completa"
+
+msgid "translations left"
+msgstr "traducciones sen completar"
+
 msgid "Download CSV of selected"
 msgstr "Descargar CSV dos seleccionados"
 
@@ -8831,6 +8738,12 @@ msgstr "Eliminar notificación"
 
 msgid "Delete notifications"
 msgstr "Eliminar notificacións"
+
+msgid "Delete module"
+msgstr "Eliminar módulo"
+
+msgid "Delete modules"
+msgstr "Eliminar módulo"
 
 msgid "Do you really want to exit from backend?"
 msgstr "Tes certeza que queres sair do panel de administración?"
@@ -8858,6 +8771,9 @@ msgstr "Tes certeza que queres eliminar a notificación?"
 
 msgid "Do you really want to delete the selected notifications?"
 msgstr "Tes certeza que queres eliminar as notificacións seleccionadas?"
+
+msgid "Do you really want to delete the selected modules?"
+msgstr "Tes certeza que queres eliminar os módulos seleccionados?"
 
 msgid "log out"
 msgstr "saír"
@@ -8926,8 +8842,7 @@ msgstr "Limpa a cache para unha instancia especificada"
 
 msgid ""
 "Select the desired instance where clean cache and compile files in.\n"
-"                                <br>Select 'All' for cleaning all the cache/"
-"compile files."
+"                  <br>Select 'All' for cleaning all the cache/compile files."
 msgstr ""
 "Seleccione a instancia onde desexa limpar ficheiros de caché e compiles.\n"
 "<br>\n"
@@ -8966,36 +8881,6 @@ msgstr "Prema para estabelecer unha data"
 
 msgid "Ends"
 msgstr "Remata"
-
-msgid "Columns"
-msgstr "Columnas"
-
-msgid "Domain expire"
-msgstr "Expiración do dominio:"
-
-msgid "Last access"
-msgstr "Último accesso"
-
-msgid "Database"
-msgstr "Base de datos"
-
-msgid "Media size"
-msgstr "Tamaño do media"
-
-msgid "Alexa"
-msgstr "Alexa"
-
-msgid "Page views"
-msgstr "Páx. vistas"
-
-msgid "Emails"
-msgstr "Correos-e"
-
-msgid "Enabled"
-msgstr "Activada"
-
-msgid "#"
-msgstr "#"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -9059,6 +8944,9 @@ msgstr "Nome do propietario"
 msgid "Created from"
 msgstr "Creado o"
 
+msgid "Media size"
+msgstr "Tamaño do media"
+
 msgid "(Human readable name)"
 msgstr "(Nome lexibel por humanos)"
 
@@ -9089,17 +8977,14 @@ msgstr "Data da última factura"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-msgid "pending activation"
-msgstr "activación pendente"
-
-msgid "pending deactivation"
-msgstr "desactivación pendente"
-
 msgid "Support"
 msgstr "Asistencia técnica"
 
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
+
+msgid "Database"
+msgstr "Base de datos"
 
 msgid "Maximun activated users"
 msgstr "Número máximo de usuarios activados"
@@ -9144,14 +9029,32 @@ msgstr "URL do servidor"
 msgid "Select modules"
 msgstr "Módulos seleccionados"
 
-msgid "Filter by name, domain or contact"
+msgid "Search by name, domain or contact"
 msgstr "Filtrar por nome, dominio ou contacto"
+
+msgid "Domain expire"
+msgstr "Expiración do dominio:"
 
 msgid "Last activity"
 msgstr "Última actividade"
 
+msgid "Alexa"
+msgstr "Alexa"
+
+msgid "Page views"
+msgstr "Páx. vistas"
+
+msgid "Emails"
+msgstr "Correos-e"
+
 msgid "No rank"
 msgstr "Sen calificar"
+
+msgid "Showing"
+msgstr "Mostrando"
+
+msgid "of"
+msgstr "de"
 
 msgid ""
 "Welcome to Opennemas! Learn how to publish your news in just few seconds!"
@@ -9250,11 +9153,217 @@ msgstr "Grupo de usuarios"
 msgid "User type"
 msgstr "Tipo de usuario"
 
+msgid "Search by name or username"
+msgstr "Buscar por nome ou nome de usuario"
+
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Article - inner"
+#~ msgstr "Artigo - interior"
+
+#~ msgid "Mobile - frontpages"
+#~ msgstr "Móbil - portada"
+
+#~ msgid "Opinion - Authors"
+#~ msgstr "Opinión - Autores"
+
+#~ msgid "Opinion - inner"
+#~ msgstr "Opinión - interior"
+
+#~ msgid "Video - frontpage"
+#~ msgstr "Vídeo - portada"
+
+#~ msgid "Video - inner"
+#~ msgstr "Video - interior"
+
+#~ msgid "Album - frontpage"
+#~ msgstr "Álbum - portada"
+
+#~ msgid "Album - inner"
+#~ msgstr "Álbum - interior"
+
+#~ msgid "Poll - frontpage"
+#~ msgstr "Enquisas - portada"
+
+#~ msgid "Poll - inner"
+#~ msgstr "Enquisa - interior"
+
+#~ msgid "SQL errors registered in database cleaned sucessfully."
+#~ msgstr ""
+#~ "Errores SQL registrados en la base de datos limpiados correctamente."
+
+#~ msgid "SQL error log"
+#~ msgstr "Rexistro de erros de SQL"
+
+#~ msgid "Unable to delete the item \"%s\""
+#~ msgstr "Non foi posíbel eliminar o elemento co identificador «%s»"
+
+#~ msgid "No items selected"
+#~ msgstr "Non se seleccionaron elementos"
+
+#~ msgid "Unknown cache file"
+#~ msgstr "Ficheiro de caché descoñecido"
+
+#~ msgid "Article inner"
+#~ msgstr "Artigo: interior"
+
+#~ msgid "Mobile article inner"
+#~ msgstr "Móbil: artigo interior"
+
+#~ msgid "Mobile frontpage"
+#~ msgstr "Móbil: portada"
+
+#~ msgid "Mobile opinion inner"
+#~ msgstr "Móbil: opinión interior"
+
+#~ msgid "Mobile opinion frontpage"
+#~ msgstr "Móvil: portada opinión"
+
+#~ msgid "Video inner"
+#~ msgstr "Vídeo interior"
+
+#~ msgid "Album frontpage"
+#~ msgstr "Portada de álbum"
+
+#~ msgid "Album inner"
+#~ msgstr "Álbum interior"
+
+#~ msgid "Page %s"
+#~ msgstr "Páxina %s"
+
+#~ msgid "Opinion inner"
+#~ msgstr "Opinión interior"
+
+#~ msgid "Blog inner"
+#~ msgstr "Blog interior"
+
+#~ msgid "RSS Author"
+#~ msgstr "RSS de author"
+
+#~ msgid "Homepage"
+#~ msgstr "Portada principal"
+
+#~ msgid "Poll inner"
+#~ msgstr "Enquisa:interior"
+
+#~ msgid "Poll frontpage"
+#~ msgstr "Portada de enquisas"
+
+#~ msgid "Custom CSS"
+#~ msgstr "CSS personalizado"
+
+#~ msgid "Sitemap: "
+#~ msgstr "Mapa do sitio:"
+
+#~ msgid "Add Video and Image Galleries to your content. "
+#~ msgstr "Engade vídeos e galerías ao teu contido."
+
+#~ msgid ""
+#~ "<p>This module will allow you to create Photo Galleries, add video from "
+#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the "
+#~ "most interesting fact is that the video manager is the same as youtube "
+#~ "one, perfect consistency and performance.</p>"
+#~ msgstr ""
+#~ "<p>Este módulo permítelle crear galerías, engade vídeos de Youtube, "
+#~ "Vimeo, Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o "
+#~ "xestor de vídeos é o mesmo que Youtube, consistencia e rendemento "
+#~ "perfecto</p>"
+
+#~ msgid "Add Video and Image Galleries to your content."
+#~ msgstr "Engade vídeos e galerías ao teu contido."
+
+#~ msgid ""
+#~ "<p>This module will allow you to create Photo Galleries, add video from "
+#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>\n"
+#~ "                    <p>Our video manager is the same as youtube one, "
+#~ "perfect consistency and performance.</p>"
+#~ msgstr ""
+#~ "<p>Este módulo permítelle crear galerías, engadir vídeos de Youtube, "
+#~ "Vimeo, Dailymotion e 10 orixes máis</p><p>E o máis interesante é que o "
+#~ "xestor de vídeos é o mesmo que Youtube, consistencia e rendemento "
+#~ "perfecto</p>"
+
+#~ msgid "Support 1"
+#~ msgstr "Asistencia 1"
+
+#~ msgid "No cache files were generated for now."
+#~ msgstr "Aún no hai ningún archivo de caché generado."
+
+#~ msgid ""
+#~ "Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</"
+#~ "a>  and come back here"
+#~ msgstr ""
+#~ "Visita algunas páginas de <a href=\"%1\" title=\"Visit your site\">su "
+#~ "sitio web</a> e volva aquí"
+
+#~ msgid "Resource"
+#~ msgstr "Recurso"
+
+#~ msgid "Valid until"
+#~ msgstr "Válido até"
+
+#~ msgid "View page"
+#~ msgstr "Ver páxina"
+
+#~ msgid "Delete cache file"
+#~ msgstr "Eliminar ficheiro de caché"
+
+#~ msgid "Delete cache elements"
+#~ msgstr "Eliminar elementos da caché"
+
+#~ msgid ""
+#~ "Are you sure you want to delete [% template.selected.length %] cache "
+#~ "elements?"
+#~ msgstr ""
+#~ "Tes certeza que queres eliminar [% template.selected.length %] "
+#~ "elemento(s) de caché?"
+
+#~ msgid "Delete cache element"
+#~ msgstr "Eliminar elemento da caché"
+
+#~ msgid ""
+#~ "Are you sure you want to delete the cache element \"[% template.content."
+#~ "title %]\"."
+#~ msgstr ""
+#~ "Tes certeza que queres eliminar o elemento de caché «[% template.content."
+#~ "title %]»?"
+
+#~ msgid "Refresh the list for getting newest error list"
+#~ msgstr "Actualizar a lista para obter a lista de erros actualizada"
+
+#~ msgid "Refresh list"
+#~ msgstr "Recargar lista"
+
+#~ msgid "Clean"
+#~ msgstr "Limpar"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrar"
+
+#~ msgid "Error explanation"
+#~ msgstr "Explicación do erro"
+
+#~ msgid "Execution time"
+#~ msgstr "Tempo de execución"
+
+#~ msgid "There is no SQL errors registered in database."
+#~ msgstr "Non hai ningún erro SQL rexistrado na base de datos."
+
+#~ msgid "Come back later."
+#~ msgstr "Volva máis tarde."
+
+#~ msgid "Last access"
+#~ msgstr "Último accesso"
+
+#~ msgid "pending activation"
+#~ msgstr "activación pendente"
+
+#~ msgid "pending deactivation"
+#~ msgstr "desactivación pendente"
 
 #~ msgid "Dark Gray"
 #~ msgstr "Gris escuro"
@@ -9747,9 +9856,6 @@ msgstr ""
 #~ msgid "File:"
 #~ msgstr "Ficheiro:"
 
-#~ msgid "Dimensions:"
-#~ msgstr "Dimensións:"
-
 #~ msgid "Weight:"
 #~ msgstr "Peso:"
 
@@ -10224,9 +10330,6 @@ msgstr ""
 #~ msgid "XML file importer"
 #~ msgstr "Importador de XML"
 
-#~ msgid "Module configuration"
-#~ msgstr "Configuración do módulo"
-
 #~ msgid "Title:"
 #~ msgstr "Titulo:"
 
@@ -10554,9 +10657,6 @@ msgstr ""
 
 #~ msgid "Delete this user"
 #~ msgstr "Eliminar este usuario"
-
-#~ msgid "Remove image"
-#~ msgstr "Eliminar imaxe"
 
 #~ msgid ""
 #~ "There is no user created yet or <br/>not results for your searching "
@@ -11920,9 +12020,6 @@ msgstr ""
 
 #~ msgid "%d years"
 #~ msgstr "%d anos"
-
-#~ msgid "Transaction details"
-#~ msgstr "Detalles da transacción"
 
 #~ msgid "Statistics Google Analytics"
 #~ msgstr "Estatísticas de Google Analytics"

@@ -6,7 +6,8 @@
      * @ngdoc controller
      * @name  NotificationListCtrl
      *
-     * @requires $modal
+     * @requires $controller
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -18,8 +19,8 @@
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
@@ -65,6 +66,33 @@
         $scope.orderBy = [{ name: 'start', value: 'desc' }];
 
         /**
+         * @function countStringsLeft
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Counts the number of remaining strings for a language.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Integer} The number of remaining strings.
+         */
+        $scope.countStringsLeft = function(item) {
+          var left = 0;
+
+          for (var lang in $scope.extra.languages) {
+            if (!item.title || !item.title[lang]) {
+              left++;
+            }
+
+            if (!item.body || !item.body[lang]) {
+              left++;
+            }
+          }
+
+          return left;
+        };
+
+        /**
          * @function delete
          * @memberOf NotificationListCtrl
          *
@@ -74,7 +102,7 @@
          * @param {Object notification The notification to delete.
          */
         $scope.delete = function(notification) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -109,7 +137,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -144,8 +172,8 @@
         };
 
         /**
-         * @function refresh
-         * @memberOf PurchaseListCtrl
+         * @function list
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   Reloads the list.
@@ -194,7 +222,7 @@
         };
 
         /**
-         * @function isEnabled
+         * @function setEnabled
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -217,7 +245,7 @@
         };
 
         /**
-         * @function isEnabled
+         * @function setEnabledSelected
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -291,11 +319,6 @@
         if (webStorage.local.get('notifications-columns')) {
           $scope.columns = webStorage.local.get('notifications-columns');
         }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
-        }
       }
     ]);
 })();
-

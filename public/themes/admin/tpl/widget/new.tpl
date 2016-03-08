@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content" append}
-  <form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id}{else}{url name=admin_widget_create}{/if}" method="post" ng-controller="WidgetCtrl">
+  <form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id}{else}{url name=admin_widget_create}{/if}" method="post" ng-controller="WidgetCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -36,8 +36,9 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                  <i class="fa fa-save"></i>
+                  <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
             </ul>
@@ -82,7 +83,7 @@
             </div>
             <div class="controls">
               <div ng-show="renderlet !== 'intelligentwidget'">
-                <textarea onm-editor onm-editor-preset="simple" name="content" class="form-control">{$widget->content|default:""}</textarea>
+                <textarea onm-editor onm-editor-preset="simple" ng-model="content" name="content" class="form-control">{$widget->content|default:""}</textarea>
               </div>
               <div ng-show="renderlet == 'intelligentwidget'">
                 <select name="intelligent_type" id="intelligent_type" ng-model="intelligent_type">

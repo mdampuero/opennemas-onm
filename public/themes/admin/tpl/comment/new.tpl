@@ -25,9 +25,9 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" id="save-exit" title="{t}Update{/t}" class="btn btn-primary">
+                <button type="submit" id="save-exit" title="{t}Update{/t}" data-text="{t}Updating{/t}..." class="btn btn-primary">
                   <span class="fa fa-save"></span>
-                  {t}Update{/t}
+                  <span class="text">{t}Update{/t}</span>
                 </button>
               </li>
             </ul>

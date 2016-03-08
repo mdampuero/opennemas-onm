@@ -6,15 +6,15 @@
    * @name  AdvertisementCtrl
    *
    * @requires $controller
-   * @requires $modal
+   * @requires $uibModal
    * @requires $scope
    *
    * @description
    *   Handles actions for advertisement inner.
    */
   angular.module('BackendApp.controllers').controller('AdvertisementCtrl', [
-    '$controller', '$modal', '$scope', 'messenger',
-    function($controller, $modal, $scope, messenger) {
+    '$controller', '$uibModal', '$scope', 'messenger',
+    function($controller, $uibModal, $scope, messenger) {
       // Initialize the super class and extend it.
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -97,7 +97,7 @@
         var matches = str.match(pattern);
 
         if (pattern.test(str)) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-dfp-detected',
             controller: 'modalCtrl',
             resolve: {

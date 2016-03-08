@@ -5,7 +5,7 @@
     <script>
       jQuery(document).ready(function ($){
         $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $("#starttime").on("dp.change",function (e) {
@@ -85,9 +85,9 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <button class="btn btn-primary" type="submit">
+                            <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
                                 <i class="fa fa-save"></i>
-                                {t}Save{/t}
+                                <span class="text">{t}Save{/t}</span>
                             </button>
                         </li>
                     </div>
@@ -120,7 +120,7 @@
                                 {t}Summary{/t}
                             </label>
                             <div class="controls">
-                                <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                                <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -135,7 +135,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" class="form-control" onm-editor onm-editor-preset="standard">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" ng-model="body" class="form-control" onm-editor onm-editor-preset="standard">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" value="{$publisher|default:""}"/>
@@ -235,7 +235,7 @@
                                     </label>
                                     <div class="controls">
                                         <div class="input-group">
-                                          <input class="form-control" id="starttime" name="starttime" type="datetime" value="{$opinion->starttime}" type="datetime" >
+                                          <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $opinion->starttime neq '0000-00-00 00:00:00'}{$opinion->starttime}{/if}" type="datetime" >
                                           <span class="input-group-addon add-on">
                                             <span class="fa fa-calendar"></span>
                                           </span>
@@ -249,7 +249,7 @@
                                     </label>
                                     <div class="controls">
                                       <div class="input-group">
-                                        <input class="form-control" id="endtime" name="endtime" type="datetime" value="{$opinion->endtime}" type="datetime">
+                                        <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $opinion->endtime neq '0000-00-00 00:00:00'}{$opinion->endtime}{/if}" type="datetime">
                                         <span class="input-group-addon add-on">
                                           <span class="fa fa-calendar"></span>
                                         </span>
