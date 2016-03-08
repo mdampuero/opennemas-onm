@@ -296,7 +296,7 @@
                             <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
                               <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                             </span>
-                            <a ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]">
+                            <a ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]#[% notification.id %]" target="_self">
                               <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ 'background-color': notification.style.font_color }">
                                 <i class="fa fa-[% notification.style.icon %]" style="color: [% notification.style.background_color %] !important;"></i>
                               </div>
