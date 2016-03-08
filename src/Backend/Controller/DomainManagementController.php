@@ -45,7 +45,7 @@ class DomainManagementController extends Controller
         ) {
             $params = [ 'customerId' => $instance->metas['client'] ];
             $client = $this->get('orm.manager')
-                ->getRepository('client', 'Database')
+                ->getRepository('manager.client', 'Database')
                 ->find($instance->metas['client']);
         }
 
@@ -57,7 +57,7 @@ class DomainManagementController extends Controller
         return $this->render(
             'domain_management/add.tpl',
             [
-                'client'    => $client,
+                'client'    => $client->getData(),
                 'create'    => $request->query->get('create'),
                 'countries' => $countries,
                 'taxes'     => $taxes,
