@@ -140,7 +140,6 @@
          *   Checks the types of the contents to import.
          */
         $scope.check = function() {
-          console.log('check');
           for (var i = 0; i < $scope.template.contents.length;  i++) {
             if ($scope.template.contents[i].type === 'photo') {
               $scope.photos++;
