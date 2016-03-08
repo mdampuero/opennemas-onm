@@ -1,3 +1,6 @@
+parameters:
+    orm.config_path: %kernel.root_dir%/config/orm
+
 services:
     orm.loader:
         class: Common\ORM\Core\Loader\Loader
