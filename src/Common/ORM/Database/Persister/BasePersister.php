@@ -70,10 +70,17 @@ class BasePersister extends Persister
 
         $this->conn->insert($this->metadata->getTable(), $data);
 
-        $entity->id = $this->conn->lastInsertId();
+        $keys = $this->metadata->getIdKeys();
+
+        if (count($keys) === 1) {
+            $entity->{$keys[0]} = $this->conn->lastInsertId();
+        }
+
+        $keys = array_flip($keys);
+        $id   = array_intersect_key($entity->getData(), $keys);
 
         if ($this->metadata->hasMetas()) {
-            $this->persistMetas($entity->id, $metas);
+            $this->persistMetas($id, $metas);
         }
     }
 
