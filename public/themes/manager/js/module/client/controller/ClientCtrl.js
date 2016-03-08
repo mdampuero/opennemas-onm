@@ -8,7 +8,6 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $modal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('ClientCtrl', [
-      '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($location, $modal, $scope, itemService, routing, messenger, data) {
+      '$location', '$scope', 'itemService', 'routing', 'messenger', 'data',
+      function ($location, $scope, itemService, routing, messenger, data) {
         /**
          * @memberOf ClientCtrl
          *

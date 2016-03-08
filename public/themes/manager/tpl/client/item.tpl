@@ -120,7 +120,7 @@
             <div class="controls">
               <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
                 <option value="">{t}Select a country{/t}...</option>
-                <option value="[% key %]" ng-repeat="(key,value) in extra.countries | orderBy" ng-selected="[% billing.country === value %]">[% value %]</option>
+                <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% billing.country === value %]">[% value %]</option>
               </select>
             </div>
           </div>
