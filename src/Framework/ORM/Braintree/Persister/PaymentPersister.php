@@ -63,7 +63,7 @@ class PaymentPersister extends BraintreePersister
     {
         $data = [
             'customerId' => $entity->client_id,
-            'amount'     => $entity->amount,
+            'amount'     => str_replace(',', '.', (string) $entity->amount),
             'options'    => [
                 'submitForSettlement' => true
             ]
