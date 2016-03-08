@@ -31,6 +31,7 @@
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
