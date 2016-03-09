@@ -122,8 +122,9 @@ class InvoicePersister extends FreshBooksPersister
      */
     public function clean(Entity $entity)
     {
-        $cleaned =
-            array_diff_key($entity->getData(), array_flip($this->invalid));
+        $cleaned = array_diff_key($entity->getData(), array_flip($this->invalid));
+
+        $cleaned['lines']= [ 'line' => [ $cleaned['lines'] ] ];
 
         if (array_key_exists('lines', $cleaned)
             && array_key_exists('line', $cleaned['lines'])
