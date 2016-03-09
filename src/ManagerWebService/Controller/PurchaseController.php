@@ -70,14 +70,20 @@ class PurchaseController extends Controller
         }
 
         if (array_key_exists('from', $criteria)) {
-            $criteria['created'][] = [ 'value' => $criteria['from'][0]['value'] . ' 00:00:00', 'operator' => '>=' ];
+            $criteria['created'][] = [
+                'value' => $criteria['from'][0]['value'] . ' 00:00:00',
+                'operator' => '>='
+            ];
 
             unset($criteria['from']);
         }
 
         if (array_key_exists('to', $criteria)) {
             $criteria['created'][] =
-                [ 'value' => $criteria['to'][0]['value'] . ' 23:59:59', 'operator' => '<=' ];
+                [
+                    'value' => $criteria['to'][0]['value'] . ' 23:59:59',
+                    'operator' => '<='
+                ];
 
             unset($criteria['to']);
         }
@@ -95,6 +101,7 @@ class PurchaseController extends Controller
         // Clean purchases
         foreach ($purchases as &$purchase) {
             $purchase->client = $purchase->client->getData();
+
             $ids[]    = $purchase->instance_id;
             $purchase = $purchase->getData();
         }
