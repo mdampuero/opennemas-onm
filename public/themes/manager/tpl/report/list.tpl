@@ -31,11 +31,15 @@
   </div>
 </div>
 <div class="content">
-  <div class="grid simple">
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
+  </div>
+  <div class="grid simple" ng-if="items.length > 0">
     <div class="grid-body no-padding">
       <div class="grid-overlay" ng-if="loading"></div>
       <div class="table-wrapper">
-        <table class="table table-hover no-margin">
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>{t}Report{/t}</th>
@@ -43,10 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-if="items.length == 0">
-              <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
-            </tr>
-            <tr ng-if="items.length >= 0" ng-repeat="item in items|filter:criteria" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items">
               <td>
                 [% item.title %]
                 <div class="help-block">
@@ -54,8 +55,8 @@
                 </div>
               </td>
               <td class="text-center">
-                <a class="btn btn-primary" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
-                  <i class="fa fa-download"></i>
+                <a class="btn btn-success text-uppercase" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+                  <i class="fa fa-download m-r-5"></i>
                   {t}Download{/t}
                 </a>
               </td>
@@ -63,12 +64,6 @@
           </tbody>
         </table>
       </div>
-      <div class="text-center" ng-if="items.length == 0">
-        {t escape=off}There is no reports created yet or <br/>your search don't match your criteria{/t}
-      </div>
     </div>
   </div>
 </div>
-<script type="text/ng-template" id="modal-confirm">
-  {include file="common/modal_confirm.tpl"}
-</script>
