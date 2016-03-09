@@ -31,8 +31,8 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
+            <button class="btn btn-loading btn-success text text-uppercase" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>
           </li>

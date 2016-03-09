@@ -31,11 +31,11 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
         </ul>
