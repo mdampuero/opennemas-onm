@@ -195,9 +195,7 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria  = { name_like: [ { value: '', operator: 'like' } ] };
-          //$scope.orderBy  = [ { name: 'last_login', value: 'desc' } ];
-
-          //$scope.pagination.page= 1;
+          $scope.orderBy  = [ { name: 'last_login', value: 'desc' } ];
         };
 
         /**
