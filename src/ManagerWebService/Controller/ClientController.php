@@ -326,6 +326,15 @@ class ClientController extends Controller
 
         asort($countries);
 
-        return [ 'countries' => $countries ];
+        return [
+            'braintree'  => [
+                'url'         => $this->getparameter('braintree.url'),
+                'merchant_id' => $this->getparameter('braintree.merchant_id')
+            ],
+            'countries'  => $countries,
+            'freshbooks' => [
+                'url' => $this->getparameter('freshbooks.url')
+            ]
+        ];
     }
 }
