@@ -10,9 +10,10 @@
 namespace ManagerWebService\Controller;
 
 use Framework\ORM\Entity\Purchase;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Intl\Intl;
 
 /**
  * Handles the Purchase resource.
@@ -43,6 +44,8 @@ class PurchaseController extends Controller
         $criteria = $request->query->filter('criteria') ? : [];
         $orderBy  = $request->query->filter('orderBy') ? : [];
         $extra    = $this->getTemplateParams();
+
+        unset($extra['countries']);
 
         $order = [];
         foreach ($orderBy as $value) {
@@ -91,6 +94,7 @@ class PurchaseController extends Controller
 
         // Clean purchases
         foreach ($purchases as &$purchase) {
+            $purchase->client = $purchase->client->getData();
             $ids[]    = $purchase->instance_id;
             $purchase = $purchase->getData();
         }
@@ -118,13 +122,19 @@ class PurchaseController extends Controller
      */
     protected function getTemplateParams()
     {
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+
+        asort($countries);
+
         return [
             'braintree'  => [
-                'url' => $this->getParameter('braintree.url'),
-                'merchant_id' => $this->getParameter('braintree.merchant_id')
+                'url'         => $this->getparameter('braintree.url'),
+                'merchant_id' => $this->getparameter('braintree.merchant_id')
             ],
+            'countries'  => $countries,
             'freshbooks' => [
-                'url' => $this->getParameter('freshbooks.url')
+                'url' => $this->getparameter('freshbooks.url')
             ]
         ];
     }
