@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_purchases_list') %]">
-              <i class="fa fa-shopping-cart"></i>
+              <i class="fa fa-shopping-bag"></i>
               {t}Purchases{/t}
             </a>
           </h4>
@@ -227,8 +227,8 @@
                 [% item.total ? item.total : '0' %] €
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
-                <a ng-href="[% extra.freshbooks.url %]/showUser?userid=[% item.client.client_id %]" target="_blank">
-                  [% item.client.client_id %]
+                <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]">
+                  [% item.client.id %]
                 </a>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('payment_id')">
