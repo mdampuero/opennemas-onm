@@ -138,9 +138,6 @@
             <tbody>
               <tr ng-if="contents.length == 0">
                 <td class="empty" colspan="10">
-                  <p>
-                    <img src="{$params.IMAGE_DIR}/search/search-images.png">
-                  </p>
                   {t escape=off}No available images for this search{/t}
                 </td>
               </tr>
