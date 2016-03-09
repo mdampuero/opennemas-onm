@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_modules_list') %]">
-              <i class="fa fa-plug"></i>
+              <i class="fa fa-flip-horizontal fa-plug"></i>
               {t}Modules{/t}
             </a>
           </h4>
@@ -76,106 +76,110 @@
   </div>
 </div>
 <div class="content">
-  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
-  <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
-    <div class="row">
-      <div class="col-xs-12 title">
-        <h5>{t}Columns{/t}</h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-image" checklist-model="columns.selected" checklist-value="'image'" type="checkbox">
-            <label for="checkbox-image">
-              {t}Image{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-            <label for="checkbox-name">
-              {t}Name{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-uuid" checklist-model="columns.selected" checklist-value="'uuid'" type="checkbox">
-            <label for="checkbox-uuid">
-              {t}UUID{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-category" checklist-model="columns.selected" checklist-value="'category'" type="checkbox">
-            <label for="checkbox-category">
-              {t}Category{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-translations" checklist-model="columns.selected" checklist-value="'translations'" type="checkbox">
-            <label for="checkbox-translations">
-              {t}Translations{/t}
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-author" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
-            <label for="checkbox-author">
-              {t}Author{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-price" checklist-model="columns.selected" checklist-value="'price'" type="checkbox">
-            <label for="checkbox-price">
-              {t}Price{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-            <label for="checkbox-created">
-              {t}Created{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
-            <label for="checkbox-updated">
-              {t}Updated{/t}
-            </label>
-          </div>
-        </div>
-        <div>
-          <div class="checkbox check-default">
-            <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
-            <label for="checkbox-enabled">
-              {t}Enabled{/t}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
   </div>
-  <div class="grid simple">
+  <div class="grid simple" ng-if="items.length > 0">
+    <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()" ng-if="items.length > 0"></div>
+    <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }" ng-if="items.length > 0">
+      <div class="row">
+        <div class="col-xs-12 title">
+          <h5>{t}Columns{/t}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-3 column">
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-image" checklist-model="columns.selected" checklist-value="'image'" type="checkbox">
+              <label for="checkbox-image">
+                {t}Image{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+              <label for="checkbox-name">
+                {t}Name{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-uuid" checklist-model="columns.selected" checklist-value="'uuid'" type="checkbox">
+              <label for="checkbox-uuid">
+                {t}UUID{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-category" checklist-model="columns.selected" checklist-value="'category'" type="checkbox">
+              <label for="checkbox-category">
+                {t}Category{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-translations" checklist-model="columns.selected" checklist-value="'translations'" type="checkbox">
+              <label for="checkbox-translations">
+                {t}Translations{/t}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-author" checklist-model="columns.selected" checklist-value="'author'" type="checkbox">
+              <label for="checkbox-author">
+                {t}Author{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-price" checklist-model="columns.selected" checklist-value="'price'" type="checkbox">
+              <label for="checkbox-price">
+                {t}Price{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+              <label for="checkbox-created">
+                {t}Created{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
+              <label for="checkbox-updated">
+                {t}Updated{/t}
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="checkbox check-default">
+              <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+              <label for="checkbox-enabled">
+                {t}Enabled{/t}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
-          <thead ng-if="items.length >= 0">
+          <thead>
             <tr>
               <th width="15">
                 <div class="checkbox checkbox-default">
@@ -225,10 +229,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-if="items.length == 0">
-              <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
-            </tr>
-            <tr ng-if="items.length >= 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
                 <div class="checkbox check-default">
                   <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
@@ -297,7 +298,7 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-right" ng-if="items.length > 0">
+      <div class="pull-right">
         <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>

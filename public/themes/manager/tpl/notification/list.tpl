@@ -79,70 +79,74 @@
   </div>
 </div>
 <div class="content">
-  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
-  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
-    <h5>{t}Columns{/t}</h5>
-    <div class="row">
-      <div class="col-sm-6 col-md-3 column">
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-title" checklist-model="columns.selected" checklist-value="'title'" type="checkbox">
-          <label for="checkbox-title">
-            {t}Title{/t}
-          </label>
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
+  </div>
+  <div class="grid simple" ng-if="items.length > 0">
+    <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()" ng-if="items.length > 0"></div>
+    <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }" ng-if="items.length > 0">
+      <h5>{t}Columns{/t}</h5>
+      <div class="row">
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-title" checklist-model="columns.selected" checklist-value="'title'" type="checkbox">
+            <label for="checkbox-title">
+              {t}Title{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+            <label for="checkbox-instance">
+              {t}Instance{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-type" checklist-model="columns.selected" checklist-value="'type'" type="checkbox">
+            <label for="checkbox-type">
+              {t}Type{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-style" checklist-model="columns.selected" checklist-value="'style'" type="checkbox">
+            <label for="checkbox-style">
+              {t}Style{/t}
+            </label>
+          </div>
         </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
-          <label for="checkbox-instance">
-            {t}Instance{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-type" checklist-model="columns.selected" checklist-value="'type'" type="checkbox">
-          <label for="checkbox-type">
-            {t}Type{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-style" checklist-model="columns.selected" checklist-value="'style'" type="checkbox">
-          <label for="checkbox-style">
-            {t}Style{/t}
-          </label>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3 column">
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
-          <label for="checkbox-l10n">
-            {t}L10n{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-start" checklist-model="columns.selected" checklist-value="'start'" type="checkbox">
-          <label for="checkbox-start">
-            {t}Start{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
-          <label for="checkbox-end">
-            {t}End{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
-          <label for="checkbox-fixed">
-            {t}Fixed{/t}
-          </label>
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
+            <label for="checkbox-l10n">
+              {t}L10n{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-start" checklist-model="columns.selected" checklist-value="'start'" type="checkbox">
+            <label for="checkbox-start">
+              {t}Start{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
+            <label for="checkbox-end">
+              {t}End{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
+            <label for="checkbox-fixed">
+              {t}Fixed{/t}
+            </label>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
-          <thead ng-if="items.length >= 0">
+          <thead>
             <tr>
               <th width="15">
                 <div class="checkbox checkbox-default">
@@ -188,10 +192,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-if="items.length == 0">
-              <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
-            </tr>
-            <tr ng-if="items.length >= 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
                 <div class="checkbox check-default">
                   <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
@@ -248,7 +249,7 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-right" ng-if="items.length > 0">
+      <div class="pull-right">
         <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>

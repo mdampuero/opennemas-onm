@@ -108,60 +108,63 @@
   </form>
 </div>
 <div class="content">
-  <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
-  <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
-    <h5>{t}Columns{/t}</h5>
-    <div class="row">
-      <div class="col-md-3">
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-          <label for="checkbox-name">
-            {t}Name{/t}
-          </label>
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
+  </div>
+  <div class="grid simple" ng-if="items.length > 0">
+    <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+    <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+      <h5>{t}Columns{/t}</h5>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+            <label for="checkbox-name">
+              {t}Name{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-total" checklist-model="columns.selected" checklist-value="'total'" type="checkbox">
+            <label for="checkbox-total">
+              {t}Total{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
+            <label for="checkbox-client_id">
+              {t}Client ID{/t}
+            </label>
+          </div>
         </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-total" checklist-model="columns.selected" checklist-value="'total'" type="checkbox">
-          <label for="checkbox-total">
-            {t}Total{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
-          <label for="checkbox-client_id">
-            {t}Client ID{/t}
-          </label>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-invoice-id" checklist-model="columns.selected" checklist-value="'invoice_id'" type="checkbox">
-          <label for="checkbox-invoice-id">
-            {t}Invoice ID{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default p-b-5">
-          <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
-          <label for="checkbox-payment-id">
-            {t}Payment ID{/t}
-          </label>
-        </div>
-        <div class="checkbox check-default">
-          <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-          <label for="checkbox-created">
-            {t}Created{/t}
-          </label>
+        <div class="col-md-3">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-invoice-id" checklist-model="columns.selected" checklist-value="'invoice_id'" type="checkbox">
+            <label for="checkbox-invoice-id">
+              {t}Invoice ID{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
+            <label for="checkbox-payment-id">
+              {t}Payment ID{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default">
+            <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+            <label for="checkbox-created">
+              {t}Created{/t}
+            </label>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
-          <thead ng-show="items.length >= 0">
-            <tr ng-mouseover="header = 1" ng-mouseleave="header = 0">
+          <thead>
+            <tr>
               <th width="15">
                 <div class="checkbox checkbox-default">
                   <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
@@ -199,10 +202,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-if="items.length == 0">
-              <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
-            </tr>
-            <tr ng-if="items.length >= 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
                 <div class="checkbox check-default">
                   <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
@@ -250,7 +250,7 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-right" ng-if="items.length > 0">
+      <div class="pull-right">
         <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
