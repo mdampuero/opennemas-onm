@@ -8,7 +8,7 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -16,11 +16,11 @@
      * @requires data
      *
      * @description
-     *   Handles actions for notification edition form
+     *   Handles actions for purchase edition form
      */
     .controller('PurchaseCtrl', [
-      '$filter', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $modal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, data) {
         /**
          * @memberOf PurchaseCtrl
          *
@@ -34,11 +34,11 @@
          * @memberOf PurchaseCtrl
          *
          * @description
-         *   The notification object.
+         *   The purchase object.
          *
          * @type {Object}
          */
-        $scope.notification = {
+        $scope.purchase = {
           body: {
             en: '',
             es: '',
@@ -89,10 +89,10 @@
          * @memberOf PurchaseCtrl
          *
          * @description
-         *   Creates a new notification.
+         *   Creates a new purchase.
          */
         $scope.save = function() {
-          if ($scope.notificationForm.$invalid) {
+          if ($scope.purchaseForm.$invalid) {
             $scope.formValidated = 1;
 
             messenger.post({
@@ -105,25 +105,25 @@
 
           $scope.saving = 1;
 
-          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
-            $scope.notification.start = $scope.notification.start.toString();
+          if ($scope.purchase.start && angular.isObject($scope.purchase.start)) {
+            $scope.purchase.start = $scope.purchase.start.toString();
           }
 
-          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
-            $scope.notification.end = $scope.notification.end.toString();
+          if ($scope.purchase.end && angular.isObject($scope.purchase.end)) {
+            $scope.purchase.end = $scope.purchase.end.toString();
           }
 
-          itemService.save('manager_ws_notification_create', $scope.notification)
+          itemService.save('manager_ws_purchase_create', $scope.purchase)
             .then(function (response) {
               messenger.post({ message: response.data, type: 'success' });
 
               if (response.status === 201) {
-                // Get new notification id
+                // Get new purchase id
                 var url = response.headers()['location'];
                 var id  = url.substr(url.lastIndexOf('/') + 1);
 
                 url = routing.ngGenerateShort(
-                  'manager_notification_show', { id: id });
+                  'manager_purchase_show', { id: id });
                 $location.path(url);
               }
 
@@ -139,10 +139,10 @@
          * @memberOf PurchaseCtrl
          *
          * @description
-         *   Updates an notification.
+         *   Updates an purchase.
          */
         $scope.update = function() {
-          if ($scope.notificationForm.$invalid) {
+          if ($scope.purchaseForm.$invalid) {
             $scope.formValidated = 1;
 
             messenger.post({
@@ -155,8 +155,8 @@
 
           $scope.saving = 1;
 
-          itemService.update('manager_ws_notification_update', $scope.notification.id,
-            $scope.notification).success(function (response) {
+          itemService.update('manager_ws_purchase_update', $scope.purchase.id,
+            $scope.purchase).success(function (response) {
               messenger.post({ message: response, type: 'success' });
               $scope.saving = 0;
             }).error(function(response) {
@@ -166,12 +166,12 @@
         };
 
         $scope.$on('$destroy', function() {
-          $scope.notification = null;
+          $scope.purchase = null;
         });
 
 
-        if (data.notification) {
-          $scope.notification = data.notification;
+        if (data.purchase) {
+          $scope.purchase = data.purchase;
         }
       }
     ]);
