@@ -182,13 +182,14 @@
         $scope.list = function () {
           $scope.loading = 1;
 
+          var criteria = angular.copy($scope.criteria);
+
           // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.uuid_like =
-              $scope.criteria.name_like;
+          if (criteria.name_like) {
+            criteria.uuid_like = criteria.name_like;
           }
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          var cleaned = itemService.cleanFilters(criteria);
 
           var data = {
             criteria: cleaned,
@@ -224,8 +225,6 @@
         $scope.resetFilters = function() {
           $scope.criteria = { name_like: [ { value: '', operator: 'like' } ]};
           $scope.orderBy  = [ { name: 'id', value: 'asc' } ];
-
-          $scope.pagination.page = 1;
         };
 
         /**
