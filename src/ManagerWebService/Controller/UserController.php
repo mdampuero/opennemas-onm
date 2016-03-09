@@ -221,7 +221,7 @@ class UserController extends Controller
         return new JsonResponse(
             array(
                 'epp'      => $epp,
-                'template' => array(
+                'extra'    => array(
                     'flatGroups' => $flatGroups,
                     'groups'     => $groups
                 ),
