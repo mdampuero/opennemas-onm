@@ -123,6 +123,27 @@ class PurchaseController extends Controller
     }
 
     /**
+     * @api {get} /purchases/:id Show a purchase
+     * @apiName GetPurchase
+     * @apiGroup Purchase
+     *
+     * @apiSuccess {Array} purchase The purchases.
+     */
+    public function showAction($id)
+    {
+        $purchase = $this->get('orm.manager')
+            ->getRepository('manager.purchase', 'Database')
+            ->find($id);
+
+        $purchase->client = $purchase->client->getData();
+
+        return new JsonResponse([
+            'purchase' => $purchase->getData(),
+            'extra'    => $this->getTemplateParams()
+        ]);
+    }
+
+    /**
      * Returns an array with extra parameters for template.
      *
      * @return array Array of extra parameters for template.
