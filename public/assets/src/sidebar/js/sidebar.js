@@ -192,7 +192,7 @@
            * @return boolean True if the URL is active. Otherwise, return false.
            */
           sidebar.isActive = function(url) {
-            return $location.path() === url.replace('#', '');
+            return $location.path().indexOf(url.replace('#', '')) !== -1;
           };
 
           /**
@@ -333,7 +333,8 @@
             // Spinner
             if (item.route) {
               spinner = ' ng-class="{ \'fa-spin fa-circle-o-notch\': ngModel.isChanging(\'' +
-                item.route + '\')}"';
+                item.route + '\'), \'' + item.icon + '\': !ngModel.isChanging(\'' +
+                item.route + '\') }"';
             }
 
             // Arrow & sub-menu
