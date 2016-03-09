@@ -7,7 +7,7 @@
      * @name  PurchaseListCtrl
      *
      * @requires $controller
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$controller', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -73,7 +73,7 @@
          * @param {Object purchase The purchase to delete.
          */
         $scope.delete = function(purchase) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/purchase:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -108,7 +108,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/purchase:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
