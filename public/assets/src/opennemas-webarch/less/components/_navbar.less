@@ -284,6 +284,16 @@ div[ng-view].ng-leave-active .selected-navbar {
     &.actions-navbar {
       background: #22252d;
       color: #fff;
+
+      .nav > li {
+        a, .btn-link {
+          color: #fff;
+
+          &:hover {
+            color: #ddd;
+          }
+        }
+      }
     }
 
     .help-icon {
@@ -293,16 +303,6 @@ div[ng-view].ng-leave-active .selected-navbar {
 
       .fa {
         line-height: .75em;
-      }
-    }
-
-    .nav > li {
-      a, .btn-link {
-        color: #fff;
-
-        &:hover {
-          color: #ddd;
-        }
       }
     }
 
