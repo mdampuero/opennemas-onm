@@ -114,7 +114,7 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { selected: $scope.selected.item.length };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalPurchase) {
