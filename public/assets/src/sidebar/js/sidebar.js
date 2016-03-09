@@ -192,6 +192,10 @@
            * @return boolean True if the URL is active. Otherwise, return false.
            */
           sidebar.isActive = function(url) {
+            if (url === '') {
+              return $location.path() === '/';
+            }
+
             return $location.path().indexOf(url.replace('#', '')) !== -1;
           };
 
