@@ -57,7 +57,7 @@
               <div class="controls">
                 <div class="input-with-icon right">
                   <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
-                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" tooltip="{t}This UUID is invalid{/t}"></i>
+                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
                   <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" typeahead-min-length="3" placeholder="es.openhost.module.example" type="text">
                 </div>
               </div>
@@ -96,7 +96,7 @@
                   <div class="form-group" ng-class="{ 'has-error': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index], 'has-success': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index].$valid }">
                     <div class="col-xs-3">
                       <div class="input-with-icon left">
-                        <i class="fa fa-times text-danger" ng-if="moduleForm['price_' + $index].$dirty && (moduleForm['price_' + $index].$invalid)" tooltip="{t}This UUID is invalid{/t}"></i>
+                        <i class="fa fa-times text-danger" ng-if="moduleForm['price_' + $index].$dirty && (moduleForm['price_' + $index].$invalid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
                         <input class="form-control text-right" id="price-[% $index %]" name="price_[% $index %]" ng-model="price.value" required="required" type="number">
                       </div>
                     </div>

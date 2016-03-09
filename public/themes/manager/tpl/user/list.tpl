@@ -64,7 +64,7 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
             <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
@@ -72,7 +72,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>

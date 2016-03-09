@@ -54,7 +54,7 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
@@ -62,7 +62,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
@@ -225,10 +225,10 @@
                 [% item.style %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('l10n')">
-                <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
+                <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" uib-tooltip="{t}Translations completed{/t}">
                   <i class="fa fa-check""countStringsLeft(item) === 0"></i>
                 </span>
-                <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
+                <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" uib-tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
                   [% countStringsLeft(item) %]
                 </span>
               </td>

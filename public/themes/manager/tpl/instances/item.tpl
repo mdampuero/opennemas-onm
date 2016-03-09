@@ -181,7 +181,7 @@
             <div class="form-group">
               <label class="form-label">{t}Domain expire date:{/t}</label>
               <div class="controls">
-                <input class="form-control" datetime-picker ng-model="instance.domain_expire" type="text">
+                <input class="form-control" datetime-picker="domainPicker" ng-model="instance.domain_expire" type="text">
               </div>
             </div>
           </div>
@@ -272,7 +272,7 @@
                 <div class="col-md-6 form-group">
                   <label class="form-label">{t}Last invoice date{/t}</label>
                   <div class="controls">
-                    <input class="form-control" datetime-picker ng-model="instance.metas.billing_invoice_date" type="text">
+                    <input class="form-control" datetime-picker="invoicePicker" ng-model="instance.metas.billing_invoice_date" type="text">
                   </div>
                 </div>
               </div>
@@ -398,7 +398,7 @@
             <div class="form-group" ng-repeat="uuid in supportModules">
               <div class="radio" ng-init="initializeSupportPlan()">
                 <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
-                <label for="[% uuid %]" tooltip-html="template.modules[map[uuid]].description" tooltip-placement="right">
+                <label for="[% uuid %]">
                   [% template.modules[map[uuid]].name %]
                 </label>
               </div>

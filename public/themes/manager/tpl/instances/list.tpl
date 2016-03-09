@@ -62,7 +62,7 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="resetFilters()" tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
             <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
@@ -70,7 +70,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
@@ -307,71 +307,71 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('support') == 'asc', 'fa fa-caret-down': isOrderedBy('support') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('contents')" ng-show="isColumnEnabled('contents')" width="80">
-                <i class="fa fa-folder-open-o" tooltip="{t}Contents{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-folder-open-o" uib-tooltip="{t}Contents{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('articles')" ng-show="isColumnEnabled('articles')" width="80">
-                <i class="fa fa-file-text" tooltip="{t}Articles{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-file-text" uib-tooltip="{t}Articles{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('articles') == 'asc', 'fa fa-caret-down': isOrderedBy('articles') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('opinions')" ng-show="isColumnEnabled('opinions')" width="80">
-                <i class="fa fa-quote-right" tooltip="{t}Opinions{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-quote-right" uib-tooltip="{t}Opinions{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opinions') == 'asc', 'fa fa-caret-down': isOrderedBy('opinions') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="isColumnEnabled('advertisements')" width="80">
-                <i class="fa fa-bullhorn" tooltip="{t}Advertisements{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-bullhorn" uib-tooltip="{t}Advertisements{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('advertisements') == 'asc', 'fa fa-caret-down': isOrderedBy('advertisements') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('albums')" ng-show="isColumnEnabled('albums')" width="80">
-                <i class="fa fa-stack-overflow" tooltip="{t}Albums{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-stack-overflow" uib-tooltip="{t}Albums{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('albums') == 'asc', 'fa fa-caret-down': isOrderedBy('albums') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('photos')" ng-show="isColumnEnabled('photos')" width="80">
-                <i class="fa fa-picture-o" tooltip="{t}Photos{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-picture-o" uib-tooltip="{t}Photos{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('photos') == 'asc', 'fa fa-caret-down': isOrderedBy('photos') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('videos')" ng-show="isColumnEnabled('videos')" width="80">
-                <i class="fa fa-film" tooltip="{t}Videos{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-film" uib-tooltip="{t}Videos{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('videos') == 'asc', 'fa fa-caret-down': isOrderedBy('videos') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('widgets')" ng-show="isColumnEnabled('widgets')" width="80">
-                <i class="fa fa-puzzle-piece" tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-puzzle-piece" uib-tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="isColumnEnabled('static_pages')" width="80">
-                <i class="fa fa-file-o" tooltip="{t}Static pages{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-file-o" uib-tooltip="{t}Static pages{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('static_pages') == 'asc', 'fa fa-caret-down': isOrderedBy('static_pages') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('attachments')" ng-show="isColumnEnabled('attachments')" width="80">
-                <i class="fa fa-paperclip" tooltip="{t}Attachments{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-paperclip" uib-tooltip="{t}Attachments{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('attachments') == 'asc', 'fa fa-caret-down': isOrderedBy('attachments') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('polls')" ng-show="isColumnEnabled('polls')" width="80">
-                <i class="fa fa-pie-chart" tooltip="{t}Polls{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-pie-chart" uib-tooltip="{t}Polls{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('polls') == 'asc', 'fa fa-caret-down': isOrderedBy('polls') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('letters')" ng-show="isColumnEnabled('letters')" width="80">
-                <i class="fa fa-envelope" tooltip="{t}Letter{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-envelope" uib-tooltip="{t}Letter{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('letters') == 'asc', 'fa fa-caret-down': isOrderedBy('letters') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('users')" ng-show="isColumnEnabled('users')">
-                <i class="fa fa-users" tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-users" uib-tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('emails')" ng-show="isColumnEnabled('emails')">
-                <i class="fa fa-mail-forward" tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-mail-forward" uib-tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="120">
-                <i class="fa fa-database" tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-database" uib-tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('alexa')" ng-show="isColumnEnabled('alexa')" width="120">
-                <i class="fa fa-line-chart" tooltip="{t}Alexa{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-line-chart" uib-tooltip="{t}Alexa{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('alexa') == 'asc', 'fa fa-caret-down': isOrderedBy('alexa') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="120">
-                <i class="fa fa-eye" tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
+                <i class="fa fa-eye" uib-tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
               </th>
               <th class="text-center pointer" ng-click="sort('activated')" ng-show="isColumnEnabled('activated')" style="width: 60px">
