@@ -3,6 +3,7 @@
 namespace BackendWebService\Controller;
 
 use Framework\ORM\Entity\Client;
+use Framework\ORM\Entity\Invoice;
 use Framework\ORM\Entity\Payment;
 use Framework\ORM\Entity\Purchase;
 use Onm\Framework\Controller\Controller;
@@ -189,22 +190,22 @@ class DomainManagementController extends Controller
 
         $this->get('orm.manager')->persist($payment, 'Braintree');
 
-        $invoice = new \Framework\ORM\Entity\Invoice([
+        $invoice = new Invoice([
             'client_id' => $client->id,
-            'date'      => '2016-02-17',
+            'date'      => date('Y-m-d'),
             'status'    => 'sent',
-            'lines'     => [
-                'line' => [
-                    [
-                        'name'      => 'Domain + redirection',
-                        'unit_cost' => $price,
-                        'quantity'  => 1,
-                        'tax1_name'  => 'IVA',
-                        'tax1_percent' => $vatTax
-                    ]
-                ]
-            ]
+            'lines'     => []
         ]);
+
+        foreach ($domains as $domain) {
+            $invoice->lines[] = [
+                'name'      => 'Domain + redirection: ' . $domain,
+                'unit_cost' => $price,
+                'quantity'  => 1,
+                'tax1_name'  => 'IVA',
+                'tax1_percent' => $vatTax
+            ];
+        }
 
         $this->get('orm.manager')->persist($invoice, 'FreshBooks');
         $payment->invoice_id = $invoice->invoice_id;
@@ -218,6 +219,7 @@ class DomainManagementController extends Controller
             'payment_id' => $payment->payment_id,
             'invoice_id' => $invoice->invoice_id,
             'created'    => $date->format('Y-m-d H:i:s'),
+            'total'      => $payment->amount,
             'details'    => $invoice->lines,
         ]);
 
