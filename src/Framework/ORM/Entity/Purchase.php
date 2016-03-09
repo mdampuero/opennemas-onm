@@ -26,8 +26,6 @@ class Purchase extends Entity
      */
     public function getData()
     {
-        $this->client = $this->client->getData();
-
         return $this->data;
     }
 }
