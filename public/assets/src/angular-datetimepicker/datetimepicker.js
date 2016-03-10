@@ -38,16 +38,20 @@
 
           element.datetimepicker({ useCurrent: false, format: format });
 
-          $scope.datetimePicker = element.data('DateTimePicker');
+          var picker = element.data('DateTimePicker');
+
+          if ($attrs.datetimePicker) {
+            $scope.datetimePicker = picker;
+          }
 
           element.on('dp.change', function() {
               $scope.ngModel = null;
 
-              if ($scope.datetimePicker.date()) {
+              if (picker.date()) {
                 $timeout(function() {
-                  var date = moment($scope.datetimePicker.date());
+                  var date = moment(picker.date());
                   $scope.ngModel = date.format(format);
-                })
+                });
               }
           });
         }
