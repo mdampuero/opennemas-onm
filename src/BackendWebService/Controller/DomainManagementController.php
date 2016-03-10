@@ -171,10 +171,6 @@ class DomainManagementController extends Controller
             ->getRepository('manager.client', 'Database')
             ->find($instance->getClient());
 
-        if (empty($client)) {
-            $client = $this->createClient($request->request->get('client'));
-        }
-
         $vatTax = $this->get('vat')->getVatFromCode($client->country);
 
         $payment = new Payment([
@@ -243,28 +239,6 @@ class DomainManagementController extends Controller
     private function isDomainAvailable($domain)
     {
         return $this->getTarget($domain) === $domain;
-    }
-
-    /**
-     * Creates the client from the client data.
-     *
-     * @param array $data The client data.
-     *
-     * @return Client The client.
-     */
-    private function createClient($billing)
-    {
-        $client = new Client($billing);
-
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
-
-        $instance = $this->get('instance');
-        $instance->metas['client'] = $client->id;
-        $this->get('instance_manager')->persist($instance);
-
-        return $client;
     }
 
     /**
