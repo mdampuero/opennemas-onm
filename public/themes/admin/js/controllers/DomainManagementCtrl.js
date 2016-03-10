@@ -64,11 +64,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   Flag to edit client information.
+         *  The current payment method.
          *
-         * @type {Boolean}
+         * @type {String}
          */
-        $scope.edit = false;
+        $scope.payment = '';
 
         /**
          * @memberOf DomainManagementCtrl
@@ -313,6 +313,27 @@
         };
 
         /**
+         * @function saveClient
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Saves client information.
+         */
+        $scope.saveClient = function () {
+          $scope.loading = true;
+
+          var url  = routing.generate('backend_ws_client_save');
+
+          $http.post(url, $scope.client).success(function() {
+            $scope.loading = false;
+            $scope.step++;
+          }).error(function(response) {
+            $scope.loading = false;
+            messenger.post(response);
+          });
+        };
+
+        /**
          * @function map
          * @memberOf DomainManagementCtrl
          *
@@ -325,124 +346,13 @@
           }
         };
 
-        // Updates the edit flag when client changes.
-        $scope.$watch('client', function(nv) {
-          if (!nv || !nv.first_name) {
-            $scope.edit = true;
-            $scope.validPhone = false;
-            $scope.validVat   = false;
+        $scope.next = function() {
+          $scope.step++;
+
+          if ($scope.step === 2 && $scope.client) {
+            $scope.step++;
           }
-        });
-
-        // Updates vat and total values when vat tax changes
-        $scope.$watch('validVat', function(nv) {
-          if (nv === true) {
-            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-            $scope.total = $scope.subtotal + $scope.vat;
-          }
-        });
-
-        // Updates the edit flag when client changes.
-        $scope.$watch('[client.company, client.country, client.vat_number]', function() {
-          if (!$scope.client) {
-            return;
-          }
-
-          $scope.vatTax = 0;
-
-          // Individual customer
-          if (!$scope.client.company && $scope.client.country &&
-              $scope.taxes[$scope.client.country]) {
-            $scope.vatTax = $scope.taxes[$scope.client.country].value;
-            return;
-          }
-
-          // Spanish company
-          if ($scope.client.company && $scope.client.country === 'ES' &&
-              $scope.taxes[$scope.client.country]) {
-            $scope.vatTax = $scope.taxes[$scope.client.country].value;
-          }
-        }, true);
-
-        $scope.$watch('client.country', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.client.country, phone: $scope.client.phone });
-
-          $http.get(url).success(function() {
-            $scope.validPhone = true;
-          }).error(function() {
-            $scope.validPhone = false;
-          });
-
-          url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.client.country, vat: $scope.client.vat_number });
-
-          $http.get(url).success(function() {
-            $scope.validVat = true;
-          }).error(function() {
-            $scope.validVat = false;
-          });
-        }, true);
-
-        // Updates the edit flag when client changes.
-        $scope.$watch('client.phone', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if (!$scope.client || !$scope.client.country ||
-              !$scope.client.phone) {
-            $scope.validPhone = false;
-            return;
-          }
-
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.client.country, phone: $scope.client.phone });
-
-          $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
-              $scope.validPhone = true;
-            }).error(function() {
-              $scope.validPhone = false;
-            });
-          }, 500);
-        }, true);
-
-        // Updates the edit flag when client changes.
-        $scope.$watch('client.vat_number', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if (!$scope.client || !$scope.client.country ||
-              !$scope.client.vat_number) {
-            $scope.validVat = false;
-            return;
-          }
-
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          var url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.client.country, vat: $scope.client.vat_number });
-
-          $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
-              $scope.validVat = true;
-            }).error(function() {
-              $scope.validVat = false;
-            });
-          }, 500);
-        }, true);
+        };
 
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv) {
@@ -471,11 +381,53 @@
           }
 
           if ($scope.clientToken && typeof braintree !== 'undefined') {
-            braintree.setup($scope.clientToken, 'dropin', {
-              container: 'payment-form',
-              paymentMethodNonceReceived: function (event, nonce) {
-                $scope.nonce = nonce;
+            console.log('configure');
+            braintree.setup($scope.clientToken, 'custom', {
+              id: 'checkout',
+              hostedFields: {
+                number: {
+                  selector: '#card-number'
+                },
+                cvv: {
+                  selector: '#cvv'
+                },
+                expirationDate: {
+                  selector: '#expiration-date'
+                }
               },
+              paypal: {
+                container: 'paypal-container',
+                onCancelled: function() {
+                  $scope.$apply(function() {
+                    $scope.nonce   = null;
+                    $scope.payment = null;
+                  });
+                },
+                onSuccess: function (nonce, email) {
+                  $scope.$apply(function() {
+                    $scope.nonce   = nonce;
+                    $scope.payment = 'paypal';
+                    console.log('paypal', $scope.nonce);
+                  });
+
+                  return false;
+                }
+              },
+              onError: function (error) {
+                console.log(error);
+                $scope.$apply(function() {
+                  $scope.error = error.message;
+                });
+              },
+              onPaymentMethodReceived: function (nonce) {
+                $scope.$apply(function() {
+                  $scope.nonce  = nonce.nonce;
+                  $scope.payment = 'card';
+                  console.log('card', $scope.nonce);
+                });
+
+                return false;
+              }
             });
           }
         });
