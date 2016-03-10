@@ -116,7 +116,7 @@ class ClientPersister extends FreshBooksPersister
         $data = [];
         foreach ($entity->getData() as $property => $value) {
             $key = $property;
-;
+
             if (array_key_exists($property, $map)) {
                 $key = $map[$property];
             }
