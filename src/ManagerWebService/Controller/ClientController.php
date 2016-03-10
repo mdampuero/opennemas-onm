@@ -43,11 +43,11 @@ class ClientController extends Controller
     }
 
     /**
-     * @api {delete} /clients/:id Delete a client
-     * @apiName DeleteClient
+     * @api {delete} /clients/ Delete selected clients
+     * @apiName DeleteClients
      * @apiGroup Client
      *
-     * @apiParam {Integer} id The client's id.
+     * @apiParam {Integer} selected The clients ids.
      *
      * @apiSuccess {String} message The success message.
      */
@@ -57,9 +57,9 @@ class ClientController extends Controller
         $messages   = [];
         $selected   = $request->request->get('selected', null);
         $statusCode = 200;
-        $updated    = [];
+        $updated    = 0;
 
-         if (!is_array($selected)
+        if (!is_array($selected)
             || (is_array($selected) && count($selected) == 0)
         ) {
             return new JsonResponse(
@@ -93,15 +93,15 @@ class ClientController extends Controller
             }
         }
 
-        if (count($updated) > 0) {
+        if ($updated > 0) {
             $messages = [
-                'message' => sprintf(_('%s clients deleted successfully.'), count($updated)),
+                'message' => sprintf(_('%d clients deleted successfully.'), $updated),
                 'type'    => 'success'
             ];
         }
 
         // Return the proper status code
-        if (count($error) > 0 && count($updated) > 0) {
+        if (count($error) > 0 && $updated > 0) {
             $statusCode = 207;
         } elseif (count($error) > 0) {
             $statusCode = 409;
