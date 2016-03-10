@@ -37,16 +37,23 @@ class DomainManagementController extends Controller
     {
         $client = [];
         $params = [];
+        $tax    = 0;
+        $token  = null;
 
         $instance = $this->get('instance');
 
         if (array_key_exists('client', $instance->metas)
             && !empty($instance->metas['client'])
         ) {
-            $params = [ 'customerId' => $instance->metas['client'] ];
-            $client = $this->get('orm.manager')
-                ->getRepository('manager.client', 'Database')
-                ->find($instance->metas['client']);
+            try {
+                $client = $this->get('orm.manager')
+                    ->getRepository('manager.client', 'Database')
+                    ->find($instance->metas['client']);
+
+                $params = [ 'customerId' => $client->id ];
+                $client = $client->getData();
+            } catch (\Exception $e) {
+            }
         }
 
         $countries    = array_flip(Intl::getRegionBundle()->getCountryNames());
@@ -57,7 +64,8 @@ class DomainManagementController extends Controller
         return $this->render(
             'domain_management/add.tpl',
             [
-                'client'    => $client->getData(),
+                'client'    => $client,
+                'tax'       => $tax,
                 'create'    => $request->query->get('create'),
                 'countries' => $countries,
                 'taxes'     => $taxes,
