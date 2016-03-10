@@ -310,7 +310,7 @@
               var instance = Editor.init(isTextarea, element[0], options);
               var blocked = false;
 
-              if (scope.ngModel !== 'undefined') {
+              if (attrs.ngModel && scope.ngModel !== 'undefined') {
                 instance.on('key', function() {
                   instance.fire('change');
                 });
