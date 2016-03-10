@@ -18,27 +18,22 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\StringUtils;
-use Onm\Settings as s;
 
 /**
- * Defines the frontend controller for the articles content type
+ * Defines the frontend controller for Amp HTML content
  *
  * @package Frontend_Controllers
  **/
 class AmpController extends Controller
 {
     /**
-     * undocumented function
-     *
-     * @return void
-     * @author
+     * Load site configuration before executing the action
      **/
     public function init()
     {
         // RenderColorMenu
         $siteColor = '#005689';
-        $configColor = s::get('site_color');
+        $configColor = getService('setting_repository')->get('site_color');
         if (!empty($configColor)) {
             if (!preg_match('@^#@', $configColor)) {
                 $siteColor = '#'.$configColor;
@@ -57,6 +52,7 @@ class AmpController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
      **/
     public function showAction(Request $request)
     {
