@@ -21,6 +21,94 @@ use Symfony\Component\Intl\Intl;
 class PurchaseController extends Controller
 {
     /**
+     * @api {delete} /purchases/:id Delete a purchase
+     * @apiName DeletePurchase
+     * @apiGroup Purchase
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function deleteAction($id)
+    {
+        $purchase = $this->get('orm.manager')
+            ->getRepository('purchase', 'Database')
+            ->find($id);
+
+        $this->get('orm.manager')->remove($purchase, 'Database');
+
+        return new JsonResponse(_('Purchased removed successfully'));
+    }
+
+    /**
+     * @api {delete} /purchases/ Delete selected purchases
+     * @apiName DeletePuchases
+     * @apiGroup Purchase
+     *
+     * @apiParam {Integer} selected The clients ids.
+     *
+     * @apiSuccess {String} message The success message.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $error      = [];
+        $messages   = [];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = 0;
+
+        if (empty($selected) || !is_array($selected)) {
+            $msg->add(
+                _('Unable to find the instances for the given criteria'),
+                'error',
+                400
+            );
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        $em       = $this->get('orm.manager');
+        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+        $purchases  = $em->getRepository('purchase', 'Database')->findBy($criteria);
+
+        foreach ($purchases as $purchase) {
+            try {
+                $em->remove($purchase, 'Database');
+                $updated++;
+            } catch (EntityNotFoundException $e) {
+                $error[]    = $purchase->id;
+                $messages[] = [
+                    'message' => sprintf(_('Unable to find the purchase with id "%s"'), $client->id),
+                    'type'    => 'error'
+                ];
+            } catch (\Exception $e) {
+                $error[]    = $purchase->id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error'
+                ];
+            }
+        }
+
+        if ($updated > 0) {
+            $messages = [
+                'message' => sprintf(_('%d purchases deleted successfully.'), $updated),
+                'type'    => 'success'
+            ];
+        }
+
+        // Return the proper status code
+        if (count($error) > 0 && $updated > 0) {
+            $statusCode = 207;
+        } elseif (count($error) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages ],
+            $statusCode
+        );
+    }
+
+    /**
      * @api {get} /purchases List of purchases
      * @apiName GetPurchases
      * @apiGroup Purchase
