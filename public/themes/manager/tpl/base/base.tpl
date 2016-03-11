@@ -31,6 +31,7 @@
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
+      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger.css,
@@ -138,19 +139,19 @@
           <ul class="nav quick-section">
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
-                <i class="fa fa-rebel text-danger master-user"></i>
+                <i class="fa fa-rebel text-danger pull-left"></i>
                 <span class="title">
                   [% user.name %]
                 </span>
+                <i class="fa fa-angle-down"></i>
                 <div class="profile-pic">
                   <gravatar ng-model="user.email" size="25"></gravatar>
                 </div>
-                <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu dropdown-menu-right no-padding">
                 <li class="text-danger">
-                  <span class="dropdown-static-item">
-                    {t}This user is a master{/t}
+                    <span class="fake-a fake-a-static text-danger">
+                    {t}You are a master{/t}
                   </span>
                 </li>
                 <li class="divider"></li>
@@ -271,7 +272,6 @@
     {javascripts src="
     @Common/components/jquery/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,
-    @Common/components/bootstrap/dist/js/bootstrap.min.js,
     @Common/components/breakpoints/breakpoints.js,
     @Common/components/ckeditor/ckeditor.js,
     @Common/components/fastclick/lib/fastclick.js,
@@ -293,6 +293,7 @@
     @Common/components/angular-animate/angular-animate.min.js,
     @Common/components/angular-sanitize/angular-sanitize.min.js,
     @Common/components/angular-checklist-model/checklist-model.js,
+    @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
     @Common/components/angular-file-model/angular-file-model.js,
     @Common/components/angular-ui-select/dist/select.min.js,
     @Common/components/angular-webstorage/angular-webstorage.min.js,

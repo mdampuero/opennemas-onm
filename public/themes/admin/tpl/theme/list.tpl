@@ -69,7 +69,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="dropdown-menu on-right">
+                <div class="dropdown-menu dropdown-menu-right">
                   <div class="shopping-cart-placeholder" ng-if="!cart || cart.length == 0">
                     <h5 class="text-center">
                       {t}Your shopping cart is empty{/t}

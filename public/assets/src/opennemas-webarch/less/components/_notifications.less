@@ -1,80 +1,20 @@
-.notifications {
-  .dropdown-menu {
-    margin-left: -200px;
-    padding-right: 0;
-    width: 400px;
-  }
+.cbp_tmtimeline > li .cbp_tmicon {
+  box-shadow: none;
+  height: 56px;
+  line-height: 56px;
+  margin-top: -8px;
+  margin-left: -33px;
+  width: 56px;
+}
+
+.dropdown-menu-notifications {
+  margin-left: -270px;
+  padding-right: 0;
+  width: 540px;
 
   .dropdown-title {
     padding-right: 15px;
   }
-}
-
-.notification-list {
-  list-style: none;
-  height: 275px;
-  margin: 0;
-  padding: 0;
-  padding-right: 3px;
-
-  .nano > .nano-content {
-    padding-right: 12px;
-  }
-
-  .notification-list-item {
-    border-radius: 3px;
-    display: block;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    transition: 0.25s ease-in all;
-    width: 100%;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &.ng-leave.ng-leave-active {
-      opacity: 0;
-      margin-left: 100px;
-    }
-  }
-}
-
-.notification-list-placeholder {
-  height: 275px;
-  padding-top: 80px;
-  text-align: center;
-}
-
-.notification-list-preview {
-  height: auto;
-  padding: 30px;
-}
-
-.notification-content-error,
-.notification-list-item-error {
-  background-color: fade(@error-color, 15%);
-}
-
-.notification-content-info,
-.notification-list-item-info {
-  background-color: fade(@info-color, 15%);
-}
-
-.notification-content-success,
-.notification-list-item-success {
-  background-color: fade(@success-color, 15%);
-}
-
-.notification-content-warning,
-.notification-list-item-warning {
-  background-color: fade(@warning-color, 15%);
-}
-
-.notification-body {
-  font-size: 90%;
-  margin: 0;
-  padding-left: 50px;
 }
 
 .notification-icon {
@@ -82,8 +22,10 @@
   border-radius: 100%;
   float: left;
   height: 40px;
+  margin-top: -20px;
   padding: 10px;
-  position: relative;
+  position: absolute;
+  top: 50%;
   width: 40px;
 
   .fa {
@@ -95,6 +37,115 @@
     text-align: center;
     top: 50%;
     width: 20px;
+  }
+}
+
+.notification-list {
+  list-style: none;
+  height: 275px;
+  margin: 0;
+  padding: 0;
+  padding-right: 3px;
+  width: 100%;
+
+  &.notification-list-auto {
+    height: auto;
+  }
+
+  .nano > .nano-content {
+    padding-right: 12px;
+  }
+}
+
+.notification-list-item {
+  background-color: #fff;
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 15px;
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+  transition: .25s ease-in all;
+  width: 100%;
+
+  & > a {
+    cursor: pointer;
+    display: block;
+    margin: 0 !important;
+    padding: 15px !important;
+  }
+
+  &.ng-enter {
+    border: 0;
+    margin: 0;
+    max-height: 0;
+    opacity: 0;
+  }
+
+  &.ng-leave.ng-leave-active {
+    border: 0;
+    margin: 0 0 0 100px;
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+.notification-list-item-close {
+  height: 32px;
+  margin-top: -16px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  top: 50%;
+  width: 32px;
+
+  i {
+    font-size: 18px !important;
+  }
+
+  &:hover i {
+    color: #000 !important;
+  }
+}
+
+.notification-list-item-with-icon {
+  .notification-body {
+    padding-left: 50px;
+  }
+}
+
+.notification-list-placeholder {
+  height: 275px;
+  padding-top: 80px;
+  position: absolute;
+  text-align: center;
+  top: 42px;
+  transition: all .25s;
+  width: 100%;
+
+  &.ng-hide.ng-hide-remove {
+    opacity: 0;
+  }
+}
+
+
+.notification-list-preview {
+  height: auto;
+  padding: 30px;
+}
+
+.notification-body {
+  margin: 0;
+
+  a {
+    color: inherit;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -116,9 +167,4 @@
 .notification-title {
   font-weight: bold;
   padding-bottom: 10px;
-}
-
-// Force hover state
-.notification-list > .notification-list-item > .title .notification-list-item-close:hover i {
-  color: #000 !important;
 }

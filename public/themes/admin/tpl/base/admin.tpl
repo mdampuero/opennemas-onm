@@ -81,10 +81,10 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}');getLatest()" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
   {block name="body"}
     <div class="overlay"></div>
-    <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl">
+    <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
       <div class="navbar-inner">
         <div class="header-seperation">
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
@@ -271,19 +271,19 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
-                {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isAdmin()}
-                  <li class="quicklinks notifications dropdown" ng-click="markFixedAsRead()">
+                {if is_object($smarty.session._sf2_attributes.user)}
+                  <li class="quicklinks dropdown dropdown-notifications" ng-click="markFixedAsRead()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
                         [% unread.length %]
                       </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
+                    <div class="dropdown-menu dropdown-menu-notifications dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
                       <div class="dropdown-title clearfix">
                           {t}Notifications{/t}
                       </div>
-                      <div class="notification-list-placeholder" ng-show="!notifications || notifications.length == 0">
+                      <div class="notification-list-placeholder" ng-class="{ 'no-animate': notifications.length > 0 }" ng-show="!notifications || notifications.length == 0">
                         <span class="fa fa-bell fa-2x"></span>
                         <h5>
                           {t}There are no notifications for now.{/t} <br>
@@ -291,20 +291,19 @@
                           {t 1=$smarty.capture.notifications_url escape=off}Check your previous notifications <a href="%1">here</a>.{/t}
                         </h5>
                       </div>
-                      <ul class="notification-list" ng-show="notifications.length > 0">
+                      <ul class="notification-list">
                         <scrollable>
-                        <li class="clearfix notification-list-item notification-list-item-[% notification.style ? notification.style : 'success' %]" ng-repeat="notification in notifications">
-                          <div class="notification-title">
-                            [% notification.title %]
+                          <li class="clearfix notification-list-item" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
                             <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
-                              <i class="fa fa-times"></i>
+                              <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                             </span>
-                          </div>
-                          <div class="notification-icon">
-                            <i class="fa" ng-class="{ 'fa-comment': notification.type === 'comment', 'fa-database': notification.type === 'media', 'fa-envelope': notification.type === 'email', 'fa-support': notification.type === 'help', 'fa-info': notification.type !== 'comment' && notification.type !== 'media' && notification.type !== 'email' && notification.type !== 'help' && notification.type !== 'user', 'fa-users': notification.type === 'user' }"></i>
-                          </div>
-                          <div class="notification-body" ng-bind-html="notification.body"></div>
-                        </li>
+                            <a ng-href="[% routing.ngGenerateShort('backend_notifications_list') %]#[% notification.id %]" target="_self">
+                              <div class="notification-icon" ng-if="notification.style.icon" ng-style="{ 'background-color': notification.style.font_color }">
+                                <i class="fa fa-[% notification.style.icon %]" style="color: [% notification.style.background_color %] !important;"></i>
+                              </div>
+                              <div class="notification-body" ng-bind-html="notification.title ? notification.title : notification.body" ng-style="{ 'color': notification.style.font_color }"></div>
+                            </a>
+                          </li>
                         </scrollable>
                       </ul>
                       <div class="dropdown-footer clearfix">
@@ -355,21 +354,21 @@
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                      <i class="fa fa-rebel text-danger master-user"></i>
+                      <i class="fa fa-rebel pull-left m-r-5"></i>
                     {/if}
-                    <span class="title">
-                      {$smarty.session.realname}
-                    </span>
+                    <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
                       {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
                     </div>
-                    <i class="fa fa-angle-down"></i>
+                    <span class="title">
+                      {$smarty.session.realname}
+                    </span>
                   </span>
-                  <ul class="dropdown-menu on-right" role="menu">
+                  <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
                     {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
                       <li class="text-danger">
-                        <span class="dropdown-static-item">
-                          {t}This user is a master{/t}
+                        <span class="fake-a fake-a-static text-danger">
+                          {t}You are a master{/t}
                         </span>
                       </li>
                       <li class="divider"></li>
@@ -380,7 +379,6 @@
                         {t}Go to newspaper{/t}
                       </a>
                     </li>
-                    <li class="divider"></li>
                     <li>
                       {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
                         <a ng-href="/manager#/user/{$smarty.session.userid}/show">
@@ -396,7 +394,6 @@
                         {/acl}
                       {/if}
                     </li>
-                    <li class="divider"></li>
                     <li>
                       <a href="{url name=admin_getting_started}">
                         <i class="fa fa-rocket"></i>
@@ -505,6 +502,7 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
+      @Common/src/angular-repeat-finish/repeat-finish.js,
       @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-scroll/angular-scroll.js,
