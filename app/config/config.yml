@@ -59,10 +59,8 @@ opennemas:
         # Filters configuration
         filters:
             uglifyjs:
-                bin:     %kernel.root_dir%/../node_modules/.bin/uglifyjs
-                node:    /usr/bin/nodejs
-                options:
-                    mangle: true
+                bin:  %kernel.root_dir%/../node_modules/.bin/uglifyjs
+                node: /usr/bin/nodejs
             uglifycss:
                 bin:  %kernel.root_dir%/../node_modules/.bin/uglifycss
                 node: /usr/bin/nodejs

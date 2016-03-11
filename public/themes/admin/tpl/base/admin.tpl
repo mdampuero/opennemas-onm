@@ -65,7 +65,7 @@
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less,uglifycss"}
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
@@ -518,7 +518,7 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-      @Common/js/admin.js" filters="uglifyjs"}
+      @Common/js/admin.js"}
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
