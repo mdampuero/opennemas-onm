@@ -48,15 +48,22 @@ class StylesheetManager extends AssetManager
                             $this->config['filters']['uglifycss']['node']
                         )
                     );
+
                     break;
                 case 'less':
-                    $fm->set(
-                        'less',
-                        new LessFilter(
-                            $this->config['filters']['less']['node'],
-                            $this->config['filters']['less']['node_paths']
-                        )
+                    $filter = new LessFilter(
+                        $this->config['filters']['less']['node'],
+                        $this->config['filters']['less']['node_paths']
                     );
+
+                    if ($this->env === 'dev') {
+                        $filter->addTreeOption('sourceMap', [
+                            'sourceMapFileInline' => true
+                        ]);
+                    }
+
+                    $fm->set('less', $filter);
+
                     break;
                 default:
                     throw new FilterException();
