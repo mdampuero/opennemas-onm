@@ -13,14 +13,13 @@
      * @requires itemService
      * @requires routing
      * @requires messenger
-     * @requires data
      *
      * @description
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
+      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -78,16 +77,6 @@
          * @type {Array}
          */
         $scope.packs = [];
-
-        /**
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.template = data.template;
 
         /**
          * @memberOf InstanceCtrl
@@ -319,31 +308,7 @@
               messenger.post({ message: response, type: 'error' });
               $scope.saving = 0;
             });
-          };
-
-          if (data.instance) {
-            // Initialize instance
-            $scope.instance = data.instance;
-
-            if (!$scope.instance.metas) {
-              $scope.instance.metas = {};
-            }
-          } else {
-            // Select Base plan as default
-            for (var i = 0; i < data.template.modules.length; i++) {
-              if (data.template.modules[i].plan == 'Base') {
-                $scope.instance.activated_modules.push(
-                  data.template.modules[i].id);
-              }
-            }
-          }
-
-          $scope.$on('$destroy', function() {
-            $scope.instance = null;
-            $scope.changed_modules = null;
-            $scope.template = null;
-            $scope.selected = null;
-          });
+        };
 
         /**
          * @function updateSupport
@@ -411,51 +376,91 @@
           $scope.selected.all = all;
         },true);
 
-        var modules = [];
-        var modulesInAPack = [];
-        for (var i = 0; i < $scope.template.modules.length; i++) {
-          var module = $scope.template.modules[i];
+        $scope.initModules = function() {
+          var modules = [];
+          var modulesInAPack = [];
+          for (var i = 0; i < $scope.template.modules.length; i++) {
+            var module = $scope.template.modules[i];
 
-          // Generate a map of modules for easy-access
-          $scope.map[module.uuid] = i;
+            // Generate a map of modules for easy-access
+            $scope.map[module.uuid] = i;
 
-          modules.push(module.uuid);
+            modules.push(module.uuid);
 
-          // Ignore grouping for PACKS and SUPPORT
-          if (/SUPPORT_/.test(module.uuid)) {
-            $scope.supportModules.push(module.uuid);
-          }
-
-          // Ignore grouping for PACKS and SUPPORT
-          if (module.metas.modules_included || /SUPPORT_/.test(module.uuid)) {
-            modulesInAPack.push(module.uuid);
-          }
-
-          // If it is a pack
-          if (module.metas && module.metas.modules_included) {
-            $scope.packs.push(module.uuid);
-
-            // Get modules that this pack adds to the previous pack
-            $scope.modulesByPack[module.uuid] = _.difference(
-                module.metas.modules_included, modulesInAPack);
-
-            // Other packs, get all modules in the pack
-            if (module.uuid !== 'BASIC_PACK' &&
-                module.uuid !== 'PROFESSIONAL_PACK' &&
-                module.uuid !== 'ADVANCED_PACK' &&
-                module.uuid !== 'EXPERT_PACK') {
-              $scope.modulesByPack[module.uuid] = module.metas.modules_included;
+            // Ignore grouping for PACKS and SUPPORT
+            if (/SUPPORT_/.test(module.uuid)) {
+              $scope.supportModules.push(module.uuid);
             }
 
-            modulesInAPack = modulesInAPack.concat(module.metas.modules_included);
+            // Ignore grouping for PACKS and SUPPORT
+            if (module.metas.modules_included || /SUPPORT_/.test(module.uuid)) {
+              modulesInAPack.push(module.uuid);
+            }
+
+            // If it is a pack
+            if (module.metas && module.metas.modules_included) {
+              $scope.packs.push(module.uuid);
+
+              // Get modules that this pack adds to the previous pack
+              $scope.modulesByPack[module.uuid] = _.difference(
+                  module.metas.modules_included, modulesInAPack);
+
+              // Other packs, get all modules in the pack
+              if (module.uuid !== 'BASIC_PACK' &&
+                  module.uuid !== 'PROFESSIONAL_PACK' &&
+                  module.uuid !== 'ADVANCED_PACK' &&
+                  module.uuid !== 'EXPERT_PACK') {
+                $scope.modulesByPack[module.uuid] = module.metas.modules_included;
+              }
+
+              modulesInAPack = modulesInAPack.concat(module.metas.modules_included);
+            }
           }
+
+          // Initialize flags and group modules for OTHER_PACK
+          $scope.packs.push('OTHER_PACK');
+          $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
+          $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
+              $scope.instance.activated_modules) == 0;
         }
 
-        // Initialize flags and group modules for OTHER_PACK
-        $scope.packs.push('OTHER_PACK');
-        $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
-        $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
-            $scope.instance.activated_modules) == 0;
+        console.log($routeParams);
+
+        $scope.$on('$destroy', function() {
+          $scope.instance = null;
+          $scope.changed_modules = null;
+          $scope.template = null;
+          $scope.selected = null;
+        });
+
+        if ($routeParams.id) {
+          itemService.show('manager_ws_instance_show', $routeParams.id).then(
+            function(response) {
+              $scope.template = response.data.template;
+              $scope.instance = response.data.instance;
+
+              if (!$scope.instance.metas) {
+                $scope.instance.metas = {};
+              }
+            }
+          );
+        } else {
+          itemService.new('manager_ws_instance_new').then(
+            function(response) {
+              $scope.template = response.data.template;
+
+              // Select Base plan as default
+              for (var i = 0; i < response.data.template.modules.length; i++) {
+                if (response.data.template.modules[i].plan == 'Base') {
+                  $scope.instance.activated_modules.push(
+                      response.data.template.modules[i].id);
+                }
+              }
+
+              $scope.initModules();
+            }
+          );
+        }
       }
     ]);
 })();

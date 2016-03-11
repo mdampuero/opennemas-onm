@@ -67,7 +67,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
     <div class="row">
       <div class="col-xs-12 title">

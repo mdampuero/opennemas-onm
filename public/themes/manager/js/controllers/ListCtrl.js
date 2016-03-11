@@ -8,34 +8,13 @@
      *
      * @requires $scope
      * @requires $timeout
-     * @requires data
      *
      * @description
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout', 'data',
-      function($scope, $timeout, data) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Extra data
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
+      '$scope', '$timeout',
+      function($scope, $timeout) {
         /**
          * @memberOf ListCtrl
          *
@@ -44,11 +23,7 @@
          *
          * @type {Object}
          */
-        $scope.pagination = {
-          epp:   data.epp ? parseInt(data.epp) : 25,
-          page:  data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
+        $scope.pagination = { epp: 25, page: 1, total: 0 };
 
         /**
          * @memberOf ListCtrl

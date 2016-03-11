@@ -43,7 +43,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="template">
   <form name="instanceForm" novalidate>
     <div class="row">
       <div class="col-xs-12">
