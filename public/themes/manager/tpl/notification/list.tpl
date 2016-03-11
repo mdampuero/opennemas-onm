@@ -70,7 +70,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">

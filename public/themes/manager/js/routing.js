@@ -67,53 +67,17 @@
           .when(routingProvider.ngGenerateShort('manager_notifications_list'), {
             templateUrl: '/managerws/template/notification:list.' + appVersion + '.tpl',
             controller: 'NotificationListCtrl',
-            resolve: {
-              data: function() {
-                // Default filters
-                var data = {
-                  orderBy: [{
-                    name: 'start',
-                    value: 'desc'
-                  }],
-                  epp: 25
-                };
-
-                return itemServiceProvider.list('manager_ws_notifications_list', data).then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            },
             reloadOnSearch: false
           })
           .when(routingProvider.ngGenerateShort('manager_notification_create'), {
             templateUrl: '/managerws/template/notification:item.' + appVersion + '.tpl',
             controller: 'NotificationCtrl',
-            resolve: {
-              data: function(itemServiceProvider) {
-                return itemServiceProvider.new('manager_ws_notification_new').then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            }
           })
           .when(routingProvider.ngGenerateShort('manager_notification_show', {
             id: '\:id'
           }), {
             templateUrl: '/managerws/template/notification:item.' + appVersion + '.tpl',
             controller: 'NotificationCtrl',
-            resolve: {
-              data: function() {
-                return itemServiceProvider.show('manager_ws_notification_show', $route.current.params.id).then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            }
           })
           .when(routingProvider.ngGenerateShort('manager_opcache_status'), {
             templateUrl: '/managerws/template/framework:opcache_status.' + appVersion + '.tpl',

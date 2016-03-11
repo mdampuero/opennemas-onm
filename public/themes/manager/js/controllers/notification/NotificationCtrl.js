@@ -19,8 +19,8 @@
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
+      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger) {
         /**
          * @memberOf NotificationCtrl
          *
@@ -43,7 +43,7 @@
           body: {
             en: '',
             es: '',
-            gl: ''
+            gl: '',
           },
           instances: [],
           fixed: '0',
@@ -60,16 +60,6 @@
           es: 'Spanish',
           gl: 'Galician'
         };
-
-        /**
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
 
         /**
          * @function changeLanguage
@@ -122,7 +112,7 @@
 
             messenger.post({
               message: $filter('translate')('FormErrors'),
-              type: 'error'
+              type:    'error'
             });
 
             return false;
@@ -142,28 +132,25 @@
             $scope.notification.end = $scope.notification.end.toString();
           }
 
-          itemService.save('manager_ws_notification_create', $scope.notification).then(function(response) {
-            messenger.post({
-              message: response.data,
-              type: 'success'
-            });
+          itemService.save('manager_ws_notification_create', $scope.notification)
+            .then(function (response) {
+              messenger.post({ message: response.data, type: 'success' });
 
-            if (response.status === 201) {
-              var url = response.headers()['location'];
-              var id = url.substr(url.lastIndexOf('/') + 1);
-              url = routing.ngGenerateShort('manager_notification_show', {
-                id: id
-              });
-              $location.path(url)
-            }
-            $scope.saving = 0
-          }, function(response) {
-            $scope.saving = 0;
-            messenger.post({
-              message: response,
-              type: 'error'
+              if (response.status === 201) {
+                // Get new notification id
+                var url = response.headers()['location'];
+                var id  = url.substr(url.lastIndexOf('/') + 1);
+
+                url = routing.ngGenerateShort(
+                  'manager_notification_show', { id: id });
+                $location.path(url);
+              }
+
+              $scope.saving = 0;
+            }, function(response) {
+              $scope.saving = 0;
+              messenger.post({ message: response, type: 'error' });
             });
-          });
         };
 
         /**
@@ -179,36 +166,25 @@
 
             messenger.post({
               message: $filter('translate')('FormErrors'),
-              type: 'error'
+              type:    'error'
             });
 
             return false;
           }
 
           $scope.saving = 1;
-console.log($scope.notification);
+
           var data = angular.copy($scope.notification);
           data.instances = data.instances.map(function(a) {
             return a.id;
           });
 
-          console.log($scope.notification);
-
-          itemService.update('manager_ws_notification_update',
-            $scope.notification.id, data).success(
-              function(response) {
-                messenger.post({
-                  message: response,
-                  type: 'success'
-                });
-
-                $scope.saving = 0;
-              }).error(function(response) {
-              messenger.post({
-                message: response,
-                type: 'error'
-              });
-
+          itemService.update('manager_ws_notification_update', $scope.notification.id,
+            $scope.notification).success(function (response) {
+              messenger.post({ message: response, type: 'success' });
+              $scope.saving = 0;
+            }).error(function(response) {
+              messenger.post({ message: response, type: 'error' });
               $scope.saving = 0;
             });
         };
@@ -216,15 +192,6 @@ console.log($scope.notification);
         $scope.$on('$destroy', function() {
           $scope.notification = null;
         });
-
-        if (data.notification) {
-          $scope.notification = data.notification;
-
-          if (!$scope.notification.style) {
-            console.log($scope.notification.style);
-            $scope.notification.style = { background_color: null, color: null };
-          }
-        }
 
         $scope.test = function(query) {
           var tags = [];
@@ -238,6 +205,21 @@ console.log($scope.notification);
 
           return tags;
         };
+
+        if ($routeParams.id) {
+          itemService.show('manager_ws_notification_show', $routeParams.id).then(
+            function(response) {
+              $scope.extra        = response.data.extra;
+              $scope.notification = response.data.notification;
+            }
+          );
+        } else {
+          itemService.new('manager_ws_notification_new').then(
+            function(response) {
+              $scope.extra = response.data.extra;
+            }
+          );
+        }
       }
     ]);
 })();
