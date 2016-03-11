@@ -65,7 +65,7 @@
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less,uglifycss"}
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
@@ -517,7 +517,11 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
+<<<<<<< HEAD
       @AdminTheme/js/admin.js" filters="uglifyjs"}
+=======
+      @Common/js/admin.js"}
+>>>>>>> 42442c46208f1d9bdf9ad23a8f5523e4a16cdd54
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}

@@ -389,7 +389,9 @@ function getGoogleAnalyticsCode($useImage = false)
         $config = [];
     }
 
-    if ($useImage) {
+    if ($useImage === 'amp') {
+        $code = genarateGAAmpCode($config);
+    } elseif ($useImage) {
         $code = genarateGAImageCode($config);
     } else {
         $code = generateGAScriptCode($config);
@@ -461,6 +463,41 @@ function genarateGAImageCode($config)
                 trim($account['api_key']),
                 '__utma%3D999.999.999.999.999.1%3B'
             );
+        }
+    }
+
+    return $code;
+}
+
+function genarateGAAmpCode($config)
+{
+    $code = '';
+    foreach ($config as $key => $account) {
+        if (is_array($account)
+            && array_key_exists('api_key', $account)
+            && !empty(trim($account['api_key']))
+        ) {
+            $code .= '<amp-analytics type="googleanalytics" id="analytics%1 ">
+<script type="application/json">
+{
+  "vars": {
+    "account": "'.trim($account['api_key']).'"  // Replace with your property ID.
+  },
+  "triggers": {
+    "trackPageview": {  // Trigger names can be any string. trackPageview is not a required name.
+      "on": "visible",
+      "request": "pageview"
+    }
+  }
+}
+</script>
+</amp-analytics>'."\n";
+            // $code .= sprintf(
+            //     $imgCode,
+            //     $key,
+
+            // );
+        // var_dump($code, $account['api_key']);die();
         }
     }
 

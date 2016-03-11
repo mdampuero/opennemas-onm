@@ -22,8 +22,15 @@ function smarty_outputfilter_google_analytics($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        $code   = getGoogleAnalyticsCode();
-        $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+        $isAmp = preg_match('@\.amp\.html$@', $uri);
+        if ($isAmp && false) {
+            $code   = getGoogleAnalyticsCode('amp');
+            $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
+        } else {
+            $code   = getGoogleAnalyticsCode();
+            $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+        }
+
     }
 
     return $output;
