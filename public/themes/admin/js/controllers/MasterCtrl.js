@@ -10,13 +10,12 @@
  * @param Object $translate       The translation service.
  * @param Object $timeout         The timeout service.
  * @param Object $window          The window object.
- * @param Object paginationConfig The pagination configuration object.
  * @param Object routing          The routing service.
  * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$compile', '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'paginationConfig', 'messenger', 'routing', 'Sidebar', 'webStorage',
-  function ($compile, $filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, paginationConfig, messenger, routing, Sidebar, webStorage) {
+  '$compile', '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'anTinycon', 'messenger', 'routing', 'Sidebar', 'webStorage',
+  function ($compile, $filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout, $window, anTinycon, messenger, routing, Sidebar, webStorage) {
     'use strict';
 
     /**
@@ -70,9 +69,6 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     $scope.init = function(language) {
       $scope.lang = language;
       $translate.use(language);
-
-      // paginationConfig.nextText     = $filter('translate')('Next');
-      // paginationConfig.previousText = $filter('translate')('Previous');
 
       if ($('body').hasClass('unpinned-on-server')) {
         $scope.sidebar.pinned    = false;
