@@ -5,7 +5,6 @@
     @AdminTheme/less/_frontpagemanager.less" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
-  <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
   <style>
     @media (max-width: 767px) {
       .page-content .filters-navbar ~ .content {
