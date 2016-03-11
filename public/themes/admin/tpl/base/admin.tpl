@@ -517,11 +517,7 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-<<<<<<< HEAD
-      @AdminTheme/js/admin.js" filters="uglifyjs"}
-=======
-      @Common/js/admin.js"}
->>>>>>> 42442c46208f1d9bdf9ad23a8f5523e4a16cdd54
+      @AdminTheme/js/admin.js"}
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
