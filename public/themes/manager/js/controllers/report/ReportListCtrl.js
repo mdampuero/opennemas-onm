@@ -13,8 +13,8 @@
      *   Handles actions for report listing.
      */
     .controller('ReportListCtrl', [
-      '$scope', 'webStorage', 'data',
-      function ($scope, webStorage, data) {
+      '$scope', 'webStorage', 'itemService',
+      function ($scope, webStorage, itemService) {
         /**
          * The criteria to search.
          *
@@ -22,12 +22,13 @@
          */
         $scope.criteria = {};
 
-        /**
-         * List of available users.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
+        $scope.list = function() {
+          itemService.list('manager_ws_reports_list', {}).then(
+            function(response) {
+              $scope.items = response.data.results;
+            }
+          );
+        };
 
         /**
          * Marks variables to delete for garbage collector;
@@ -40,6 +41,8 @@
         if (webStorage.local.get('token')) {
           $scope.token = webStorage.local.get('token');
         }
+
+        $scope.list();
       }
     ]);
 })();
