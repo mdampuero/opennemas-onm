@@ -142,6 +142,7 @@ abstract class AssetManager
 
         // Apply filters to each file
         foreach ($assets as $path => $filters) {
+            $filters    = $this->cleanFilters($filters);
             $target     = $this->getTargetPath($path);
             $targetPath = $this->config['root'] . $target;
 
@@ -183,6 +184,24 @@ abstract class AssetManager
         $writer->writeAsset($cached);
 
         return [ $this->createAssetSrc($target) ];
+    }
+
+    /**
+     * Returns the allowed filters basing on the current environtment.
+     *
+     * @param array $filters The list of filters.
+     *
+     * @return array The allowed filters for the current environment.
+     */
+    protected function cleanFilters($filters)
+    {
+        if ($this->env !== 'dev') {
+            return $filters;
+        }
+
+        return array_filter($filters, function ($a) {
+            return strpos($a, 'uglify') === false;
+        });
     }
 
     /**
