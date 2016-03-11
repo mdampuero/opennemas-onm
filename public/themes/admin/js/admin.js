@@ -1,4 +1,38 @@
 // Auxiliar functions for login backend actions
+function fill_tags_improved(raw_info, tags_input, url) {
+    jQuery.ajax({
+        url: url + '?data=' + raw_info,
+        async: false,
+        success: function(data){
+            tags_input.importTags(data);
+        }
+    });
+}
+
+function fill_tags(raw_info, target_element, url) {
+    jQuery.ajax({
+        url: url + '?data=' + raw_info
+    }).done(function(data) {
+        var tags = data.split(',');
+        for (var i = 0; i < tags.length; i++) {
+          jQuery(target_element).tagsinput('add', tags[i]);
+        }
+    });
+}
+
+function load_ajax_in_container(url, container) {
+    jQuery.ajax({
+        url: url,
+        async: true,
+        beforeSend: function() {
+            container.html('<div class="spinner"></div>Loading request...');
+        },
+        success: function(data) {
+            container.html(data);
+        }
+    });
+}
+
 $(document).ready(function() {
     $('.sidebar li > a').on('click', function (e) {
       var item = $(this).parent();

@@ -464,7 +464,6 @@
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
       @Common/js/onm/md5.min.js,
-      @Common/js/onm/scripts.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
       @FosJsRoutingBundle/js/router.js,
       @Common/js/routes.js,
@@ -518,7 +517,7 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-      @Common/js/admin.js" filters="uglifyjs"}
+      @AdminTheme/js/admin.js" filters="uglifyjs"}
     {/javascripts}
     {block name="footer-js"}{/block}
     {browser_update}
