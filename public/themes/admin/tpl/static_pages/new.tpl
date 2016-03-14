@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
+  <form action="{if isset($page->id)}{url name=backend_static_pages_update id=$page->id}{else}{url name=backend_static_pages_save}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -36,7 +36,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_static_pages}" title="{t}Go back{/t}">
+                <a class="btn btn-link" href="{url name=backend_static_pages_list}" title="{t}Go back{/t}">
                   <span class="fa fa-reply"></span>
                 </a>
               </li>
@@ -122,7 +122,7 @@
         </div>
       </div>
       <input type="hidden" name="filter[title]" value="{$smarty.request.filter.title|default:""}" />
-      <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+      <input type="hidden" name="id" id="id" value="{$page->pk_content|default:""}" />
   </form>
   {/block}
   {block name="footer-js" append}
@@ -140,7 +140,7 @@
             if ((slugy.length <= 0) && (previous !== slugy)) {
 
               $.ajax({
-                url:  '{url name=admin_static_pages_build_slug id=$page->id|default:0}',
+                url:  '{url name=backend_static_pages_build_slug id=$page->id|default:0}',
                 type: 'POST',
                 data: { id: '{$page->id|default:0}', slug: slugy, title: $('#title').val() },
                 success: function(data){

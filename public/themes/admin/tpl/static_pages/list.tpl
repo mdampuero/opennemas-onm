@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div action="{url name=admin_static_pages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('static_page', { title_like: '', content_status: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div action="{url name=backend_static_pages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('static_page', { title_like: '', content_status: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -25,7 +25,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="STATIC_PAGE_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_static_pages_create}" title="{t}Create new page{/t}">
+              <a class="btn btn-primary" href="{url name=backend_static_pages_create}" title="{t}Create new page{/t}">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>
@@ -166,7 +166,7 @@
                </span>
                <div class="listing-inline-actions">
                 {acl isAllowed="STATIC_PAGE_UPDATE"}
-                <a class="link" href="[% edit(content.id, 'admin_static_page_show') %]">
+                <a class="link" href="[% edit(content.pk_content, 'backend_static_page_show') %]">
                   <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
                 {/acl}
