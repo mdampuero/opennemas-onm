@@ -37,15 +37,18 @@ class StaticPagesController extends Controller
     public function showAction(Request $request)
     {
         $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
+        $oql = 'content_type_name = "static_page" and slug = "%s"';
 
-        $content = \StaticPage::getPageBySlug($slug);
+        $content = $this->get('orm.manager')->getRepository('Content')
+            ->findOneBy(sprintf($oql, $slug));
 
         // if static page doesn't exist redirect to 404 error page.
-        if (is_null($content) || (!$content->content_status)) {
+        if (empty($content) || !$content->content_status) {
             throw new ResourceNotFoundException();
         }
 
-        $ads = $this->getAds();
+        $ads         = $this->getAds();
+        $content->id = $content->pk_content;
 
         $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
