@@ -170,7 +170,7 @@ class EntityManager
      */
     public function remove(Entity $entity, $persister = null)
     {
-        $this->getPersister($entity, $persister)->remove();
+        $this->getPersister($entity, $persister)->remove($entity);
     }
 
     /**
