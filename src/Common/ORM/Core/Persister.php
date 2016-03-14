@@ -1,11 +1,18 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\Core;
 
-use Common\ORM\Core\ChainElement;
-use Common\ORM\Core\Entity;
-
-abstract class Persister extends ChainElement
+/**
+ * The Persister class defines methods that every persister has to implement.
+ */
+abstract class Persister
 {
     /**
      * Saves the new entity.
