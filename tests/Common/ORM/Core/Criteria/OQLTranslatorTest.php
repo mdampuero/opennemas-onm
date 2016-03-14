@@ -31,7 +31,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         list($sql, $params, $types) = $this->translator->translate($oql);
 
         $this->assertEquals('foo = ? and ( baz != ? or baz in ( ? , ? ) ) order by foo asc limit ?', $sql);
-        $this->assertEquals([ '"bar"', '"qux"', '1' ,'2', '20' ], $params);
+        $this->assertEquals([ 'bar', 'qux', '1' ,'2', '20' ], $params);
         $this->assertEquals([ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ], $types);
 
         list($sql, $params, $types) = $this->translator->translate('');
