@@ -65,11 +65,7 @@ class BaseRepository extends Repository
     }
 
     /**
-     * Returns the number of entities that match the criteria.
-     *
-     * @param array $criteria The criteria.
-     *
-     * @return integer The number of entities.
+     * {@inheritdoc}
      */
     public function countBy($oql = '')
     {
@@ -90,13 +86,7 @@ class BaseRepository extends Repository
     }
 
     /**
-     * Finds an entity by id.
-     *
-     * @param mixed $id The entity id.
-     *
-     * @return Entity The entity.
-     *
-     * @throws EntityNotFoundException If the entity was not found.
+     * {@inheritdoc}
      */
     public function find($id)
     {
@@ -125,15 +115,7 @@ class BaseRepository extends Repository
     }
 
     /**
-     * Finds enties given a criteria.
-     *
-     * @param array   $criteria        The criteria.
-     * @param array   $order           The order applied in the search.
-     * @param integer $elementsPerPage The max number of elements.
-     * @param integer $page            The current page.
-     * @param integer $offset          The offset to start with.
-     *
-     * @return array The matched elements.
+     * {@inheritdoc}
      */
     public function findBy($oql = '')
     {
@@ -162,7 +144,7 @@ class BaseRepository extends Repository
      *
      * @param array $data Array of entity ids.
      *
-     * @return array Array of entities.
+     * @return array The array of entities.
      */
     public function findMulti($data)
     {
@@ -184,6 +166,21 @@ class BaseRepository extends Repository
 
         // Keep original order
         return array_merge(array_flip($ids), $entities);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneBy($oql = '')
+    {
+        $oql = preg_replace('/limit\s*\d+/', '', $oql) . ' limit 1';
+        $rs  = $this->findBy($oql);
+
+        if (!empty($rs)) {
+            return array_pop($rs);
+        }
+
+        return $rs;
     }
 
     /**
@@ -240,11 +237,9 @@ class BaseRepository extends Repository
     protected function getMetas($entity)
     {
         $metas   = [];
-        $keys     = $this->metadata->getIdKeys();
         $metaKeys = $this->metadata->getMetaKeys();
         $filters = [];
 
-        // Build filters for SQL
         foreach ($metaKeys as $key => $value) {
             $filters[] = $value . '=' . $entity->{$key};
         }
