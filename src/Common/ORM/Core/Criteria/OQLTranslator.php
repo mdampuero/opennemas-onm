@@ -170,7 +170,7 @@ class OQLTranslator
         if ($this->isParameter($type) && !$previousLike) {
             // Remove quotes for strings
             if ($type === 'T_STRING') {
-                $str = str_replace([ '\'', '\"' ], '', $str);
+                $str = str_replace([ '\'', '"' ], '', $str);
             }
 
             return [ '?', $str, $this->params[$type] ];
