@@ -93,6 +93,6 @@ class DataObject
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $this->data = array_merge($this->data, $data);
     }
 }
