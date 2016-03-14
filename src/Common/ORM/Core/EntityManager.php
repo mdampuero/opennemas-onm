@@ -50,6 +50,24 @@ class EntityManager
     }
 
     /**
+     * Returns a converted configured for the entity.
+     *
+     * @param string $entity The entity.
+     *
+     * @return Converter A converter for the entity.
+     */
+    public function getConverter($entity)
+    {
+        if (!array_key_exists('metadata', $this->config)
+            || !array_key_exists($entity, $this->config['metadata'])
+        ) {
+            throw new InvalidPersisterException();
+        }
+
+        return new Converter($this->config['metadata'][$entity]);
+    }
+
+    /**
      * Returns an array of available persisters for an entity.
      *
      * @param string $entity The entity to persist.
