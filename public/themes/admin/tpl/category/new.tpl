@@ -218,7 +218,10 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <span class="input-group-addon" ng-style="{ 'background-color': color }">
+                    <span class="input-group-addon" ng-if="color.indexOf('#') > -1" ng-style="{ 'background-color': color }">
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span class="input-group-addon" ng-if="color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
                     <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" ng-model="color" type="text">
