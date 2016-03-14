@@ -63,10 +63,10 @@
             {/acl}
             {acl isAllowed="VIDEO_CREATE"}
             <li class="quicklinks">
-              <button class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1">
+              <a class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
-              </button>
+              </a>
             </li>
             {/acl}
           </ul>
