@@ -373,7 +373,7 @@
                       <li class="divider"></li>
                     {/if}
                     <li>
-                      <a href="/">
+                      <a href="/" target="_blank">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>
