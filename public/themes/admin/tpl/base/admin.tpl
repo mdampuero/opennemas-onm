@@ -27,36 +27,39 @@
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
   {block name="header-css"}
-    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
-      @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
-      @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
+    {stylesheets src="
+      @Common/components/bootstrap/dist/css/bootstrap.min.css,
+      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
-      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
-      @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/messenger/build/css/messenger.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
-      @Common/components/select2/select2.css,
-      @Common/components/animate.css/animate.min.css,
-      @Common/src/webarch/css/style.css,
-      @Common/src/webarch/css/responsive.css,
-      @Common/src/webarch/css/custom-icon-set.css,
-      @Common/src/webarch/css/magic_space.css,
-      @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-ui-select/dist/select.min.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/messenger/build/css/messenger.css,
+      @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
+      @Common/components/animate.css/animate.min.css,
+      @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
+      @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+      @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
+      @Common/components/messenger/build/css/messenger-theme-flat.css,
+      @Common/components/messenger/build/css/messenger.css,
+      @Common/components/messenger/build/css/messenger.css,
+      @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/ng-tags-input/ng-tags-input.min.css,
+      @Common/components/ng-tags-input/ng-tags-input.min.css,
+      @Common/components/pace/themes/blue/pace-theme-minimal.css,
+      @Common/components/select2/select2.css,
+      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite"}
+    {/stylesheets}
+    {stylesheets src="
+      @Common/src/webarch/css/custom-icon-set.css,
+      @Common/src/webarch/css/magic_space.css,
+      @Common/src/webarch/css/responsive.css,
+      @Common/src/webarch/css/style.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
-      @Common/components/spinkit/css/spinkit.css,
       @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
@@ -69,10 +72,6 @@
     {/stylesheets}
   {/block}
   {block name="header-js"}
-    {javascripts src="@Common/components/jquery/jquery.min.js,
-      @Common/components/bootstrap/dist/js/bootstrap.min.js"
-    filters="uglifyjs"}
-    {/javascripts}
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
@@ -446,68 +445,73 @@
   {block name="global-js"}
       <!-- @Common/components/modernizr/modernizr.js, -->
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    {javascripts src="@Common/components/jquery-ui/jquery-ui.min.js,
-      @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
-      @Common/components/breakpoints/breakpoints.js,
+    {javascripts src="
+      @Common/components/jquery/jquery.min.js,
+      @Common/components/bootstrap/dist/js/bootstrap.min.js,
+      @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
+      @Common/components/breakpoints/breakpoints.js,
       @Common/components/ckeditor/ckeditor.js,
       @Common/components/fastclick/lib/fastclick.js,
-      @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
+      @Common/components/jquery-ui/jquery-ui.min.js,
+      @Common/components/jquery-validation/dist/jquery.validate.js,
+      @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/messenger/build/js/messenger.min.js,
       @Common/components/messenger/build/js/messenger-theme-flat.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+      @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
       @Common/components/select2/select2.min.js,
-      @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
-      @Common/js/onm/md5.min.js,
-      @Common/components/jquery-validation/dist/jquery.validate.js,
-      @FosJsRoutingBundle/js/router.js,
-      @Common/js/routes.js,
       @Common/components/angular/angular.min.js,
       @Common/components/angular-animate/angular-animate.min.js,
-      @Common/components/angular-checklist-model/checklist-model.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
+      @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
+      @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+      @Common/components/angular-checklist-model/checklist-model.js,
       @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
-      @Common/components/angular-webstorage/angular-webstorage.min.js,
-      @Common/components/angular-nanoscroller/scrollable.js,
       @Common/components/angular-loading-bar/build/loading-bar.min.js,
-      @Common/components/angular-sanitize/angular-sanitize.min.js,
-      @Common/components/angulartics/dist/angulartics.min.js,
-      @Common/components/angulartics/dist/angulartics-ga.min.js,
+      @Common/components/angular-nanoscroller/scrollable.js,
       @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
       @Common/components/angular-route/angular-route.min.js,
-      @Common/components/ng-tags-input/ng-tags-input.min.js,
+      @Common/components/angular-sanitize/angular-sanitize.min.js,
+      @Common/components/angular-swfobject/angular-swfobject.js,
       @Common/components/angular-touch/angular-touch.min.js,
       @Common/components/angular-translate/angular-translate.min.js,
-      @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
-      @Common/components/angular-swfobject/angular-swfobject.js,
       @Common/components/angular-ui-select/dist/select.min.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
-      @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
+      @Common/components/angular-webstorage/angular-webstorage.min.js,
+      @Common/components/angulartics/dist/angulartics-ga.min.js,
+      @Common/components/angulartics/dist/angulartics.min.js,
+      @Common/components/ng-tags-input/ng-tags-input.min.js,
       @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
-      @Common/src/opennemas-webarch/js/core.js,
+      @FosJsRoutingBundle/js/router.js" filters="uglifyjs"}
+    {/javascripts}
+    {javascripts src="
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
+      @Common/src/angular-history/history.js,
+      @Common/src/angular-item-service/itemService.js,
+      @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
-      @Common/src/angular-query-manager/query-manager.js,
-      @Common/src/angular-item-service/itemService.js,
-      @Common/src/angular-renderer/renderer.js,
-      @Common/src/angular-routing/routing.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
+      @Common/src/angular-query-manager/query-manager.js,
+      @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,
-      @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-resizable/resizable.js,
+      @Common/src/angular-routing/routing.js,
       @Common/src/angular-scroll/angular-scroll.js,
-      @Common/src/angular-history/history.js,
       @Common/src/sidebar/js/sidebar.js,
+      @Common/js/onm/md5.min.js,
+      @Common/js/routes.js,
+
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,
       @AdminTheme/js/controllers/*,
@@ -515,10 +519,12 @@
       @AdminTheme/js/filters/*,
       @AdminTheme/js/interceptors/*,
       @AdminTheme/js/services/*,
-      @AdminTheme/js/admin.js"}
+      @AdminTheme/js/admin.js,
+
+      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}
-    {block name="footer-js"}{/block}
-    {browser_update}
-    {uservoice_widget}
   {/block}
+  {block name="footer-js"}{/block}
+  {browser_update}
+  {uservoice_widget}
 </body>
