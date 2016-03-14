@@ -12,6 +12,9 @@ namespace Common\ORM\Core;
 use Framework\Component\Data\DataObject;
 use Common\ORM\Core\Validation\Validable;
 
+/**
+ * The Metadata class defines an Entity from data model.
+ */
 class Metadata extends DataObject implements Validable
 {
     /**
