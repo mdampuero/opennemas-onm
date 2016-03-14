@@ -9,14 +9,12 @@
  */
 namespace Common\ORM\Core;
 
-use Common\ORM\Braintree\BraintreeManager;
-use Common\ORM\Database\DatabaseManager;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Validation\Validator;
-use Common\ORM\FreshBooks\FreshBooksManager;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 use Common\ORM\Core\Exception\InvalidRepositoryException;
+use Common\ORM\Database\Data\Converter\Converter;
 
 class EntityManager
 {
