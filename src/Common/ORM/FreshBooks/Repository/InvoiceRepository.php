@@ -19,6 +19,14 @@ use Common\ORM\Core\Exception\InvalidCriteriaException;
 class InvoiceRepository extends BaseRepository
 {
     /**
+     * {@inheritdoc}
+     */
+    public function countBy($oql = '')
+    {
+        throw new \Exception();
+    }
+
+    /**
      * Find a invoice by id.
      *
      * @param integer $id The invoice id.
@@ -80,6 +88,14 @@ class InvoiceRepository extends BaseRepository
         }
 
         throw new InvalidCriteriaException($criteria, 'FreshBooks', $this->api->getError());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneBy($oql = '')
+    {
+        throw new \Exception();
     }
 
     /**

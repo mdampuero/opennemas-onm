@@ -9,6 +9,14 @@ use Common\ORM\Core\Exception\InvalidCriteriaException;
 class ClientRepository extends BraintreeRepository
 {
     /**
+     * {@inheritdoc}
+     */
+    public function countBy($oql = '')
+    {
+        throw new \Exception();
+    }
+
+    /**
      * Find a client by id.
      *
      * @param integer $id     The client id.
@@ -84,6 +92,14 @@ class ClientRepository extends BraintreeRepository
         }
 
         throw new InvalidCriteriaException($criteria, $this->source);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneBy($oql = '')
+    {
+        throw new \Exception();
     }
 
     /**
