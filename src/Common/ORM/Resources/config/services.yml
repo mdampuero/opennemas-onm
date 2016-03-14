@@ -4,8 +4,8 @@ parameters:
 services:
     orm.loader:
         class: Common\ORM\Core\Loader\Loader
-        arguments: [ %orm.config_path%, %kernel.environment% ]
+        arguments: [ '%orm.config_path%', '%kernel.environment%' ]
 
     orm.manager:
         class: Common\ORM\Core\EntityManager
-        arguments: [ @service_container ]
+        arguments: [ '@service_container' ]
