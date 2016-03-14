@@ -15,6 +15,19 @@ use Common\ORM\Core\Validation\Validable;
 class Metadata extends DataObject implements Validable
 {
     /**
+     * Returns the cache id for an entity.
+     *
+     * @param Entity $entity The entity.
+     *
+     * @return string The cache id.
+     */
+    public function getCacheId(Entity $entity)
+    {
+        return $this->getCachePrefix()
+            . implode('_', $this->getId($entity));
+    }
+
+    /**
      * Returns the cache prefix for the current entity.
      *
      * @return string The cache prefix.
@@ -48,6 +61,21 @@ class Metadata extends DataObject implements Validable
     public function getClassName()
     {
         return 'Metadata';
+    }
+
+    /**
+     * Returns the entity id.
+     *
+     * @param Entity $entity The entity.
+     *
+     * @return string The entity id.
+     */
+    public function getId(Entity $entity)
+    {
+        return array_intersect_key(
+            $entity->getData(),
+            array_flip($this->getIdKeys())
+        );
     }
 
     /**
@@ -137,5 +165,20 @@ class Metadata extends DataObject implements Validable
     {
         return array_key_exists('metas', $this->mapping)
             && !empty($this->mapping['metas']);
+    }
+
+    /**
+     * Returns the normalized id.
+     *
+     * @param mixed $id The entity id as string or array.
+     *
+     * @return array The normalized id.
+     */
+    public function normalizeId($id)
+    {
+        $keys = !is_array($id) ? $this->getIdKeys() : array_keys($id);
+        $id   = !is_array($id) ? [ $id ] : $id;
+
+        return array_combine($keys, $id);
     }
 }

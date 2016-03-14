@@ -104,7 +104,7 @@ class BaseRepository extends Repository
             throw new \Exception();
         }
 
-        $id      = $this->normalizeId($id);
+        $id      = $this->metadata->normalizeId($id);
         $cacheId = $this->metadata->getCachePrefix()
             . implode($this->metadata->getCacheSeparator, $id);
 
@@ -259,20 +259,5 @@ class BaseRepository extends Repository
         }
 
         return $metas;
-    }
-
-    /**
-     * Returns the normalized id.
-     *
-     * @param mixed $id The entity id as string or array.
-     *
-     * @return array The normalized id.
-     */
-    protected function normalizeId($id)
-    {
-        $keys = !is_array($id) ? $this->metadata->getIdKeys() : array_keys($id);
-        $id   = !is_array($id) ? [ $id ] : $id;
-
-        return array_combine($keys, $id);
     }
 }
