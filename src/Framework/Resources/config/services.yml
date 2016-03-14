@@ -254,5 +254,8 @@ services:
         class: Framework\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
 
+    core.messenger:
+        class: Framework\Messenger\Messenger
+
     vat:
         class: Framework\VAT\VATService
