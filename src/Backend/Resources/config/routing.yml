@@ -61,29 +61,6 @@ admin_frontpage_last_version:
     path:     /frontpages/{category}/exists-new-version
     defaults: { _controller  : BackendBundle:Frontpages:lastVersion }
 
-# Static Pages controller
-admin_static_pages:
-    path:     /static-pages
-    defaults: { _controller  : BackendBundle:StaticPages:list }
-
-admin_static_page_show:
-    path:     /static-pages/{id}/show
-    defaults: { _controller  : BackendBundle:StaticPages:show }
-    options:
-        expose: true
-
-admin_static_pages_create:
-    path:     /static-pages/create
-    defaults: { _controller  : BackendBundle:StaticPages:create }
-
-admin_static_pages_update:
-    path:     /static-pages/{id}/update
-    defaults: { _controller  : BackendBundle:StaticPages:update }
-
-admin_static_pages_build_slug:
-    path:     /static-pages/{id}/build-slug
-    defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
-
 # Widget manager routes
 admin_widgets:
     path:     /widgets
@@ -1052,6 +1029,10 @@ backend_news_agency_server:
 backend_notification:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_static_pages:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/static_page.yml'
 
 backend_store:
     prefix: /
