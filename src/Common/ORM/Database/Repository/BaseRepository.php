@@ -69,7 +69,11 @@ class BaseRepository extends Repository
      */
     public function countBy($oql = '')
     {
-        $sql = "select count(id) from `{$this->metadata->getTable()}`";
+        $keys = $this->metadata->getIdKeys();
+
+        $sql = 'select count(' . implode(',', $keys)
+            . ") from `{$this->metadata->getTable()}`";
+
         list($filter, $params, $types) = $this->translator->translate(trim($oql));
 
         if (!empty($filter)) {
