@@ -133,7 +133,10 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" ng-style="{ 'background-color': site_color }">
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') > -1" ng-style="{ 'background-color': site_color }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + site_color }">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
                           <input class="form-control" id="site_color" name="site_color" colorpicker="hex" ng-model="site_color" type="text" ng-init="site_color='{$configs['site_color']|default:""}'">
