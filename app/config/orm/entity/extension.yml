@@ -35,11 +35,11 @@ entity:
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ @cache, @orm.connection.manager ]
+                arguments: [ '@cache', '@orm.connection.manager' ]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ @cache, @orm.connection.manager ]
+                arguments: [ '@cache', '@orm.connection.manager' ]
         columns:
             id:
                 type: bigint
