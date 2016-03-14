@@ -466,6 +466,18 @@ function genarateGAImageCode($config)
         }
     }
 
+    // Add GA Image for onm UA tracking code
+    $code .= sprintf(
+        $imgCode,
+        rand(0, 0x7fffffff),
+        date('d/m/Y'),
+        urlencode(SITE_URL),
+        urlencode(SITE_URL.'newsletter/'.date("Ymd")),
+        urlencode('newsletter/'.date("Ymd")),
+        trim('UA-40838799-5'),
+        '__utma%3D999.999.999.999.999.1%3B'
+    );
+
     return $code;
 }
 
