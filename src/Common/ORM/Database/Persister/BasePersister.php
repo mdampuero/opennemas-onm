@@ -89,17 +89,10 @@ class BasePersister extends Persister
      */
     public function remove(Entity $entity)
     {
-        $ids = array_intersect_key(
-            $this->metadata->getIdKeys(),
-            $entity->getData()
-        );
+        $id = $this->metadata->getId($entity);
 
-        $this->conn->delete(
-            $this->metadata->getTable(),
-            [ 'id' => $entity->id ]
-        );
-
-        $this->cache->delete($entity->getCachedId());
+        $this->conn->delete($this->metadata->getTable(), $id);
+        $this->cache->delete($this->metadata->getCacheId($entity));
     }
 
     /**
@@ -116,11 +109,11 @@ class BasePersister extends Persister
 
         $this->conn->update($this->metadata->getTable(), $data, $id);
 
-        $this->cache->delete($entity->getCachedId());
-
         if ($this->metadata->hasMetas()) {
             $this->persistMetas($id, $metas);
         }
+
+        $this->cache->delete($this->metadata->getCacheId($entity));
     }
 
     /**
@@ -203,7 +196,7 @@ class BasePersister extends Persister
                 array_merge(array_values($id), [ $key, $value ])
             );
 
-            $types  = array_merge(
+            $types = array_merge(
                 $types,
                 [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
             );
