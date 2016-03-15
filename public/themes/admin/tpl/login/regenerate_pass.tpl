@@ -98,7 +98,7 @@
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
       @Common/components/modernizr/modernizr.js,
       @Common/js/onm/md5.min.js,
-      @Common/js/admin.js
+      @AdminTheme/js/admin.js
     "}
       <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}

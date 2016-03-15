@@ -157,7 +157,7 @@ class UsersController extends ContentController
 
         foreach ($ids as $id) {
             if (!is_null($id)) {
-                $user = new \User();
+                $user = new \User($id);
                 if ($enabled) {
                     $user->activateUser($id);
                 } else {

@@ -113,7 +113,7 @@
                         {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
                       </span>
                       <div class="controls">
-                        <textarea class="form-control" onm-editor onm-editor-preset="simple" ng-model="site_footer" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
+                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
                       </div>
                     </div>
                   </div>
@@ -133,7 +133,10 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" ng-style="{ 'background-color': site_color }">
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') > -1" ng-style="{ 'background-color': site_color }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + site_color }">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
                           <input class="form-control" id="site_color" name="site_color" colorpicker="hex" ng-model="site_color" type="text" ng-init="site_color='{$configs['site_color']|default:""}'">
@@ -447,7 +450,7 @@
                                       <div class="input-group">
                                         <input class="form-control" name="google_analytics[[% $index %]][base_domain]" type="text" ng-model="code.base_domain" ng-value="[% code.base_domain %]">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, [% $index %])" type="button">
+                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, $index)" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </span>

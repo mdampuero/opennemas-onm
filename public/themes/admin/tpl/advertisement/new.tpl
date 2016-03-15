@@ -143,7 +143,7 @@
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" ng-value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -153,7 +153,7 @@
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
+                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" ng-value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -165,7 +165,7 @@
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" value="[% size.width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -176,9 +176,9 @@
                       </label>
                       <div class="controls">
                         <div ng-class="{ 'input-group': $index > 0 }">
-                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" value="[% size.height %]" ng-required="with_script != 2" min="0">
+                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
                           <span class="input-group-btn" ng-show="$index > 0">
-                            <button class="btn btn-danger" ng-click="removeInput(sizes, [% $index %])" type="button">
+                            <button class="btn btn-danger" ng-click="removeInput(sizes, $index )" type="button">
                                 <i class="fa fa-trash-o"></i>
                             </button>
                           </span>

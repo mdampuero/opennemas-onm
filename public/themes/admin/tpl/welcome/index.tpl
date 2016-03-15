@@ -154,7 +154,7 @@
           <br>
           <p class="text-white">{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <uib-carousel interval="10000" active="active" style="height: 420px">
+          <uib-carousel interval="10000" active="active">
             {foreach $youtube_videos as $videoId name=youtube_videos}
             <uib-slide index="{$smarty.foreach.youtube_videos.index}">
               <div class="video-container">

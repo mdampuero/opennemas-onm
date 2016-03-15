@@ -392,6 +392,7 @@ class AdsController extends Controller
         $itemsPerPage = 8;
 
         $filters = array(
+            'type_advertisement' => array(array('value' => 37)),
             'content_type_name'  => array(array('value' => 'advertisement')),
             'in_litter'          => array(array('value' => 1, 'operator' => '!='))
         );
