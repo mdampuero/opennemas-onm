@@ -126,6 +126,15 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'theme-addons', 'btn-white': type != 'theme-addons' }" ng-click="type = 'theme-addons'">
+                <i class="fa fa-pencil m-r-5"></i>
+                {t}Theme addons{/t}
+              </button>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
             <li class="quicklinks module-filter">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
                 <i class="fa fa-star-o m-r-5"></i>
@@ -185,6 +194,10 @@
           </div>
         </div>
         <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && !loading && items.length > 0">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
+          </div>
+        </div>
+        <div class="row clearfix ng-cloak" ng-show="type != 'theme-addon' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
         </div>

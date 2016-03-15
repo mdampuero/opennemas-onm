@@ -23,7 +23,7 @@ function smarty_outputfilter_google_analytics($output, $smarty)
         && !preg_match('/\/comments/', $uri)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
-        if ($isAmp && false) {
+        if ($isAmp) {
             $code   = getGoogleAnalyticsCode('amp');
             $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
         } else {

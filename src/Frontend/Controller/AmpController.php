@@ -82,8 +82,8 @@ class AmpController extends Controller
 
         // Advertisements for single article NO CACHE
         $actualCategoryId = $this->ccm->get_id($categoryName);
-        // $ads = $this->getAds($actualCategoryId);
-        // $this->view->assign('advertisements', $ads);
+        $ads = $this->getAds($actualCategoryId);
+        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
         if ($this->view->caching == 0
@@ -163,5 +163,19 @@ class AmpController extends Controller
                 'x-cacheable'     => $cacheable
             ]
         );
+    }
+
+    /**
+     * Fetches advertisements for article inner
+     *
+     * @param string category the category identifier
+     *
+     * @return array the list of advertisements for this page
+     **/
+    public static function getAds($category = 'home')
+    {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        return \Advertisement::findForPositionIdsAndCategory([1051], $category);
     }
 }

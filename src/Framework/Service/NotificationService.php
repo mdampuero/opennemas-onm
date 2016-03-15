@@ -59,7 +59,6 @@ class NotificationService
         $notification->instances   = [ $this->container->get('instance')->id ];
         $notification->fixed       = 0;
         $notification->forced      = 1;
-        $notification->generated   = 1;
         $notification->read        = 0;
         $notification->style       = [
             'background_color' => '#0090d9',

@@ -131,7 +131,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
           if ($scope.forced.length > 0) {
             var tpl = '<ul class="notification-list notification-list-auto">' +
               '<li class="notification-list-item" ng-class="{ \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
-                '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)" ng-if="notification.fixed == 1">' +
+                '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)" ng-if="notification.fixed != 1">' +
                   '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
                 '</span>' +
                 '<a ng-href="[% routing.ngGenerateShort(\'backend_notifications_list\') %]">' +
