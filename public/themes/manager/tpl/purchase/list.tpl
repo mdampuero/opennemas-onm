@@ -224,10 +224,10 @@
                 </div>
               </td>
               <td class="text-right" ng-show="isColumnEnabled('total')">
-                [% item.total ? item.total : '0' %] €
+                [% item.total | number : 2 %] €
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
-                <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]">
+                <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]" target="_blank">
                   [% item.client.id %]
                 </a>
               </td>
