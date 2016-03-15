@@ -355,7 +355,7 @@ function generatePiwikScriptCode($config)
 
 function generatePiwikImageCode($config)
 {
-    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0" alt="" />';
+    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
     $code .= sprintf(
         $imgCode,
@@ -489,7 +489,7 @@ function genarateGAAmpCode($config)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
         ) {
-            $code .= '<amp-analytics type="googleanalytics" id="analytics%1 ">
+            $code .= '<amp-analytics type="googleanalytics" id="analytics'.$key.'">
 <script type="application/json">
 {
   "vars": {
@@ -504,12 +504,6 @@ function genarateGAAmpCode($config)
 }
 </script>
 </amp-analytics>'."\n";
-            // $code .= sprintf(
-            //     $imgCode,
-            //     $key,
-
-            // );
-        // var_dump($code, $account['api_key']);die();
         }
     }
 
