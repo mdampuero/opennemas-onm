@@ -24,7 +24,7 @@ function smarty_outputfilter_piwik($output, $smarty)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {
-            $code   = getPiwikCode(true);
+            $code   = getPiwikCode('amp');
             $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
         } else {
             $code   = getPiwikCode();

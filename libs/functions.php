@@ -315,7 +315,10 @@ function getPiwikCode($useImage = false)
         return '';
     }
 
-    if ($useImage) {
+
+    if ($useImage === 'amp') {
+        $code = genarateGAAmpCode($config);
+    } elseif ($useImage) {
         $code = generatePiwikImageCode($config);
     } else {
         $code = generatePiwikScriptCode($config);
@@ -349,6 +352,20 @@ function generatePiwikScriptCode($config)
             $config['page_id'] .'" style="border:0" alt="" />
         </noscript>
         <!-- End Piwik Tracking Code -->';
+
+    return $code;
+}
+
+function generatePiwikAmpCode($config)
+{
+    $imgCode = '<img-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s"></amp-pixel>';
+
+    $code .= sprintf(
+        $imgCode,
+        $config['server_url'],
+        $config['page_id'],
+        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+    );
 
     return $code;
 }
@@ -493,10 +510,10 @@ function genarateGAAmpCode($config)
 <script type="application/json">
 {
   "vars": {
-    "account": "'.trim($account['api_key']).'"  // Replace with your property ID.
+    "account": "'.trim($account['api_key']).'"
   },
   "triggers": {
-    "trackPageview": {  // Trigger names can be any string. trackPageview is not a required name.
+    "trackPageview": {
       "on": "visible",
       "request": "pageview"
     }
