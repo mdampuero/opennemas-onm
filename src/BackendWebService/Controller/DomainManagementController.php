@@ -163,6 +163,7 @@ class DomainManagementController extends Controller
         $domains  = $request->request->get('domains');
         $create   = $request->request->get('create');
         $nonce    = $request->request->get('nonce');
+        $total    = $request->request->get('total');
         $instance = $this->get('instance');
         $date     = new \Datetime('now');
         $price    = $create ? 18.00 : 12.00;
@@ -175,7 +176,7 @@ class DomainManagementController extends Controller
 
         $payment = new Payment([
             'client_id' => $client->id,
-            'amount'    => count($domains) * $price + (count($domains) * ($vatTax / 100) * $price),
+            'amount'    => str_replace(',', '.', (string) round($total, 2)),
             'date'      => $date->format('Y-m-d'),
             'type'      => 'Check'
         ]);

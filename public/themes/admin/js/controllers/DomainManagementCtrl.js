@@ -174,7 +174,8 @@
             client:  $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
-            nonce:   $scope.nonce
+            nonce:   $scope.nonce,
+            total:   $scope.total
           };
 
           $http.post(url, data).success(function() {
@@ -407,8 +408,8 @@
           $scope.total = $scope.subtotal + $scope.vat;
         });
 
-        $scope.$watch('payment', function(nv) {
-          if (nv === 'card') {
+        $scope.$watch('nonce', function(nv) {
+          if (nv && $scope.payment === 'card') {
             $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
             $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
           }
