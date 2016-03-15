@@ -161,6 +161,20 @@
         $scope.width = $('.uib-typeahead').width();
 
         /**
+         * @function cancelCreditCard
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Cancels credit card payment.
+         */
+        $scope.cancelCreditCard = function() {
+          $scope.nonce    = null;
+          $scope.payment  = null;
+          $scope.total   -= $scope.fee;
+          $scope.fee      = 0;
+        };
+
+        /**
          * @function confirm
          * @memberOf DomainManagementCtrl
          *
@@ -300,6 +314,17 @@
          */
         $scope.removeFromList = function(index) {
           $scope.domains.splice(index, 1);
+        };
+
+        /**
+         * @function selectedCreditCard
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Selects credit card payment.
+         */
+        $scope.selectCreditCard = function() {
+          $scope.payment = 'card';
         };
 
         /**

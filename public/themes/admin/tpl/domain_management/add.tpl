@@ -235,7 +235,7 @@
                 <div class="braintree-payment-buttons clearfix">
                   <h5>Pay with</h5>
                   <div id="paypal-container" ng-class="{ 'pull-left': !payment }" ng-show="(!payment && !nonce) || (nonce && payment == 'paypal')"></div>
-                  <button class="btn btn-info btn-credit-card no-animate pull-left m-l-15" ng-click="payment = 'card'" ng-show="!payment && !nonce" type="button">
+                  <button class="btn btn-info btn-credit-card no-animate pull-left m-l-15" ng-click="selectCreditCard()" ng-show="!payment && !nonce" type="button">
                     <i class="fa fa-credit-card fa-lg m-r-5"></i>
                     <strong>{t}Credit card{/t}</strong>
                   </button>
@@ -243,7 +243,7 @@
                 <div class="braintree-fake-method" ng-show="payment === 'card' && nonce">
                   <i class="fa fa-credit-card"></i>
                   <strong>{t}Credit card{/t}</strong>
-                  <span class="btn btn-link" ng-click="nonce = null; payment = null;">
+                  <span class="btn btn-link" ng-click="cancelCreditCard()">
                     {t}Cancel{/t}
                   </span>
                 </div>
