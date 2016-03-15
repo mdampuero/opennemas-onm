@@ -464,7 +464,7 @@ purchase:
         invoice_id:
             type: string
             options: { default: null, length: 60 }
-        date:
+        created:
             type: datetime
             options: { default: null }
     index:
