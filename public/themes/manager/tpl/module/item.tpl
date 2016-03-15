@@ -71,6 +71,7 @@
                   <option value="pack">{t}Pack{/t}</option>
                   <option value="partner">{t}Partner{/t}</option>
                   <option value="service">{t}Service{/t}</option>
+                  <option value="theme-addon">{t}Theme addon{/t}</option>
                 </select>
               </div>
             </div>
