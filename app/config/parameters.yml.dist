@@ -124,14 +124,14 @@ parameters:
 
     backend_analytics.enabled: false
 
+    braintree.environment: sandbox
+    braintree.merchant_id: numeric_id
+    braintree.private_key: long_alphanum_token
+    braintree.public_key: short_alphanum_token
+    braintree.url: https://sandbox.braintreegateway.com
     freshbooks.domain: company_name
     freshbooks.token: long_alphanum_token
     freshbooks.url: https://%freshbooks.domain%.freshbooks.com
-    braintree.environment: sandbox
-    braintree.merchant_id: numeric_id
-    braintree.url: https://sandbox.braintreegateway.com
-    braintree.public_key: short_alphanum_token
-    braintree.private_key: long_alphanum_token
 
     panorama:
         youtube:
