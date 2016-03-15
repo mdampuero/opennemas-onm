@@ -18,8 +18,17 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$uibModal', '$scope', '$timeout', 'messenger', 'routing',
-      function($http, $location, $uibModal, $scope, $timeout, messenger, routing) {
+      '$http', '$location', '$scope', '$timeout', '$uibModal', '$window', 'messenger', 'routing',
+      function($http, $location, $scope, $timeout, $uibModal, $window, messenger, routing) {
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *  Flag for card request loading
+         *
+         * @type {boolean}
+         */
+        $scope.cardLoading = false;
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -148,18 +157,22 @@
          *  Requests the purchase and shows a confirmation message.
          */
         $scope.confirm = function() {
-          $scope.saving = true;
+          $scope.loading = true;
           var url = routing.generate('backend_ws_domain_save');
           var data = {
-            client: $scope.client,
+            client:  $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
             nonce:   $scope.nonce
           };
 
           $http.post(url, data).success(function() {
-            $scope.step = 5;
+            $scope.step = 4;
+            $scope.loading = false;
             $scope.domains = [];
+          }).error(function(response) {
+            $scope.loading = false;
+            messenger.post(response);
           });
         };
 
@@ -324,7 +337,8 @@
 
           var url  = routing.generate('backend_ws_client_save');
 
-          $http.post(url, $scope.client).success(function() {
+          $http.post(url, $scope.client).success(function(response) {
+            $scope.client = response.client;
             $scope.loading = false;
             $scope.step++;
           }).error(function(response) {
@@ -346,12 +360,30 @@
           }
         };
 
+        /**
+         * @function next
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Goes to the next step.
+         */
         $scope.next = function() {
           $scope.step++;
 
           if ($scope.step === 2 && $scope.client) {
             $scope.step++;
           }
+        };
+
+        /**
+         * @function toggleCardLoading
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Toggles cardLoading flag.
+         */
+        $scope.toggleCardLoading = function() {
+          $scope.cardLoading = !$scope.cardLoading;
         };
 
         // Updates domain price when create flag changes
@@ -381,8 +413,7 @@
           }
 
           if ($scope.clientToken && typeof braintree !== 'undefined') {
-            console.log('configure');
-            braintree.setup($scope.clientToken, 'custom', {
+            $window.braintree.setup($scope.clientToken, 'custom', {
               id: 'checkout',
               hostedFields: {
                 number: {
@@ -395,6 +426,22 @@
                   selector: '#expiration-date'
                 }
               },
+              onError: function (error) {
+                $scope.toggleCardLoading();
+                $scope.$apply(function() {
+                  $scope.error = error.message;
+                });
+              },
+              onPaymentMethodReceived: function (nonce) {
+                $scope.toggleCardLoading();
+                $scope.$apply(function() {
+                  $scope.error   = null;
+                  $scope.nonce   = nonce.nonce;
+                  $scope.payment = 'card';
+                });
+
+                return false;
+              },
               paypal: {
                 container: 'paypal-container',
                 onCancelled: function() {
@@ -403,30 +450,14 @@
                     $scope.payment = null;
                   });
                 },
-                onSuccess: function (nonce, email) {
+                onSuccess: function (nonce) {
                   $scope.$apply(function() {
                     $scope.nonce   = nonce;
                     $scope.payment = 'paypal';
-                    console.log('paypal', $scope.nonce);
                   });
 
                   return false;
                 }
-              },
-              onError: function (error) {
-                console.log(error);
-                $scope.$apply(function() {
-                  $scope.error = error.message;
-                });
-              },
-              onPaymentMethodReceived: function (nonce) {
-                $scope.$apply(function() {
-                  $scope.nonce  = nonce.nonce;
-                  $scope.payment = 'card';
-                  console.log('card', $scope.nonce);
-                });
-
-                return false;
               }
             });
           }
