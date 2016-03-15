@@ -183,23 +183,19 @@
       </div>
       <div class="col-sm-6 col-xs-12">
         <div class="grid simple">
-          <button class="btn btn-white btn-mini m-t-10 m-r-10 pull-right" ng-click="edit_billing = !edit_billing" ng-show="!edit_billing && instance.metas.billing_name" type="button">
-            <i class="fa fa-edit"></i>
-            {t}Edit{/t}
-          </button>
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
           </div>
           <div class="grid-body">
-            <div class="grid-body-wrapper" ng-show="client">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-addon">
-                    <i class="fa fa-search"></i>
-                  </span>
-                  <input class="form-control" ng-model="search" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
-                </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa" ng-class="{ 'fa-search': !loading, 'fa-circle-o-notch fa-spin': loading }"></i>
+                </span>
+                <input class="form-control" ng-model="search" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
               </div>
+            </div>
+            <div ng-if="client">
               <div class="row p-b-15">
                 <h4>{t}Contact information{/t}</h4>
                 <div class="col-sm-6">
@@ -241,6 +237,16 @@
                 </div>
                 <div class="col-sm-4">
                   <strong>{t}Country{/t}:</strong> [% client.country %]
+                </div>
+              </div>
+              <div class="row p-t-30">
+                <div class="col-sm-4 col-sm-offset-4">
+                  <button class="btn btn-danger btn-block" ng-click="instance.metas.client = null">
+                    <h4 class="text-white">
+                      <i class="fa fa-times"></i>
+                      {t}Remove{/t}
+                    </h4>
+                  </button>
                 </div>
               </div>
             </div>

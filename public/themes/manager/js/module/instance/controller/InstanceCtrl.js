@@ -460,6 +460,13 @@
           $scope.selected.all = all;
         },true);
 
+        // Remove client when instance meta is deleted
+        $scope.$watch('instance.metas.client', function(nv) {
+          if (!nv) {
+            $scope.client = null;
+          }
+        });
+
         var modules = [];
         var modulesInAPack = [];
         for (var i = 0; i < $scope.template.modules.length; i++) {
