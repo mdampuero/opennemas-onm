@@ -53,12 +53,6 @@
               <div class="col-lg-2 col-md-3 col-sm-4" ng-if="instance.id">
                 <dl ng-if="instance.id">
                   <dt>
-                    <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
-                  </dt>
-                  <dd>
-                    <a href="mailto:[% instance.contact_mail %]">[% instance.contact_mail %]</a>
-                  </dd>
-                  <dt>
                     <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
                   </dt>
                   <dd>
@@ -197,131 +191,56 @@
             <h4>{t}Billing{/t}</h4>
           </div>
           <div class="grid-body">
-            <div class="grid-body-wrapper" ng-show="!edit_billing">
-              <div ng-show="instance.metas.billing_name">
-                <div class="row p-b-15">
-                  <div class="col-sm-6">
-                    <strong>{t}Name{/t}:</strong> [% instance.metas.billing_name %]
-                  </div>
-                  <div class="col-sm-6" ng-if="instance.metas.billing_company_name">
-                    <strong>{t}Company{/t}:</strong> [% instance.metas.billing_company %]
-                  </div>
-                </div>
-                <div class="row p-b-15">
-                  <div class="col-sm-6">
-                    <strong>{t}VAT{/t}</strong> [% instance.metas.billing_vat %]
-                  </div>
-                </div>
-                <div class="row p-b-15">
-                  <div class="col-sm-6">
-                    <strong>{t}Email{/t}:</strong> [% instance.metas.billing_email %]
-                  </div>
-                  <div class="col-sm-6">
-                    <strong>{t}Phone{/t}:</strong> [% instance.metas.billing_phone %]
-                  </div>
-                </div>
-                <div class="row p-b-15">
-                  <div class="col-sm-8">
-                    <strong>{t}Address{/t}:</strong> [% instance.metas.billing_address %]
-                  </div>
-                  <div class="col-sm-4">
-                    <strong>{t}Postal code{/t}:</strong> [% instance.metas.billing_postal_code %]
-                  </div>
-                </div>
-                <div class="row p-b-15">
-                  <div class="col-sm-4">
-                    <strong>{t}City{/t}:</strong> [% instance.metas.billing_city %]
-                  </div>
-                  <div class="col-sm-4">
-                    <strong>{t}State{/t}:</strong> [% instance.metas.billing_state %]
-                  </div>
-                  <div class="col-sm-4">
-                    <strong>{t}Country{/t}:</strong> [% instance.metas.billing_country %]
-                  </div>
+            <div class="grid-body-wrapper" ng-show="client">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                  <input class="form-control" ng-model="search" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
                 </div>
               </div>
-              <div class="text-center" ng-show="!instance.metas.billing_name">
-                <h4 class="pointer" ng-click="edit_billing = 1">
-                  <i class="fa fa-plus"></i>
-                  {t}Add billing information{/t}
-                </h4>
-              </div>
-            </div>
-            <div class="grid-body-wrapper" ng-animate="'animate'" ng-show="edit_billing">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label class="form-label" for="contact-name">{t}Name{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="contact-name" ng-model="instance.metas.billing_name" type="text">
-                  </div>
+              <div class="row p-b-15">
+                <h4>{t}Contact information{/t}</h4>
+                <div class="col-sm-6">
+                  <strong>{t}Name{/t}:</strong>
+                  [% client.last_name%], [% client.first_name %]
                 </div>
-                <div class="col-md-6 form-group">
-                  <label class="form-label" for="company">{t}Company{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="company" ng-model="instance.metas.billing_company" type="text">
-                  </div>
+                <div class="col-sm-6" ng-if="client.company">
+                  <strong>{t}Company{/t}:</strong> [% client.company %]
                 </div>
               </div>
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label class="form-label" for="nif">VAT</label>
-                  <div class="controls">
-                    <input class="form-control" id="nif" ng-model="instance.metas.billing_vat" type="text">
-                  </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}Email{/t}:</strong> [% client.email %]
                 </div>
-                <div class="col-md-6 form-group">
-                  <label class="form-label">{t}Last invoice date{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" datetime-picker="invoicePicker" ng-model="instance.metas.billing_invoice_date" type="text">
-                  </div>
+                <div class="col-sm-6">
+                  <strong>{t}Phone{/t}:</strong> [% client.phone %]
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label class="form-label" for="contact-email">{t}Email{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="contact-email" ng-model="instance.metas.billing_email" type="text">
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label class="form-label" for="phone">{t}Phone number{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="phone" ng-model="instance.metas.billing_phone" type="text">
-                  </div>
+              <div class="row p-b-15">
+                <div class="col-sm-6">
+                  <strong>{t}VAT{/t}</strong> [% client.vat %]
                 </div>
               </div>
-              <div class="row">
-                <div class="form-group col-md-8">
-                  <label class="form-label" for="address">{t}Address{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="address" ng-model="instance.metas.billing_address" type="text">
-                  </div>
+              <div class="row p-b-15">
+                <h4>{t}Address{/t}</h4>
+                <div class="col-sm-8">
+                  <strong>{t}Address{/t}:</strong> [% client.address %]
                 </div>
-                <div class="form-group col-sm-4">
-                  <label class="form-label" for="postal-code">{t}Postal code{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="postal-code" ng-model="instance.metas.billing_postal_code" type="text">
-                  </div>
+                <div class="col-sm-4">
+                  <strong>{t}Postal code{/t}:</strong> [% client.postal_code %]
                 </div>
               </div>
-              <div class="row">
-                <div class="form-group col-md-4 col-sm-4">
-                  <label class="form-label" for="city">{t}City{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="city" ng-model="instance.metas.billing_city" type="text">
-                  </div>
+              <div class="row p-b-15">
+                <div class="col-sm-4">
+                  <strong>{t}City{/t}:</strong> [% client.city %]
                 </div>
-                <div class="form-group col-md-4 col-sm-4">
-                  <label class="form-label" for="state">{t}State{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="state" ng-model="instance.metas.billing_state" type="text">
-                  </div>
+                <div class="col-sm-4">
+                  <strong>{t}State{/t}:</strong> [% client.state %]
                 </div>
-                <div class="form-group col-md-4 col-sm-4">
-                  <label class="form-label" for="country">{t}Country{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="country" ng-model="instance.metas.billing_country" type="text">
-                  </div>
+                <div class="col-sm-4">
+                  <strong>{t}Country{/t}:</strong> [% client.country %]
                 </div>
               </div>
             </div>
@@ -485,3 +404,8 @@
     </div>
   </form>
 </div>
+<script type="text/ng-template" id="client">
+  <a>
+    [% match.model.last_name %], [% match.model.first_name %] ([% match.model.email %])
+  </a>
+</script>

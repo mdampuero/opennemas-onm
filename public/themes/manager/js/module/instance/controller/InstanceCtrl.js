@@ -128,6 +128,33 @@
         };
 
         /**
+         * @function getClients
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Gets a list of clients to use in typeahead by name or email.
+         *
+         * @param {string} search The name or email.
+         */
+        $scope.getClients = function(search) {
+          $scope.loading = 1;
+
+          var data = {
+            criteria: {
+              name: [ { value: '%' + search + '%', operator: 'like' } ]
+            },
+          };
+
+          return itemService.list('manager_ws_clients_list', data).then(
+            function(response) {
+              $scope.clients = response.data.results;
+              $scope.loading = 0;
+
+              return response.data.results;
+            });
+        };
+
+        /**
          * @function initializeSupportPlan
          * @memberOf InstanceCtrl
          *
@@ -243,6 +270,21 @@
         };
 
         /**
+         * @function selectClient
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Updates the client on typeahead select.
+         *
+         * @param {Object} item The selected client.
+         */
+        $scope.selectClient = function(item) {
+          $scope.instance.metas.client = item.id;
+          $scope.client = item;
+          $scope.search = '';
+        };
+
+        /**
          * @function selectAll
          * @memberOf InstanceCtrl
          *
@@ -327,6 +369,13 @@
 
             if (!$scope.instance.metas) {
               $scope.instance.metas = {};
+            }
+
+            if ($scope.instance.metas.client) {
+              itemService.show('manager_ws_client_show', $scope.instance.metas.client)
+                .success(function(response) {
+                  $scope.client = response.client;
+                });
             }
           } else {
             // Select Base plan as default
