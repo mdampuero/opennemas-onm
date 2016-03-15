@@ -64,7 +64,7 @@
                           {t}No icon{/t}
                         </span>
                       </li>
-                      <li ng-repeat="icon in extra.icons" ng-click="notification.style.icon = '[% icon.value %]'">
+                      <li ng-repeat="icon in extra.icons" ng-click="notification.style.icon = icon.value">
                         <span class="fake-a text-center">
                           <i class="fa fa-2x fa-[% icon.value %] m-r-5"></i>
                         </span>
