@@ -61,7 +61,7 @@
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Domains{/t}</h5>
             </li>
-            <li class="col-xs-3 text-center" ng-class="{ 'active': step == 2 }" ng-if="!client">
+            <li class="text-center" ng-class="{ 'active': step == 2 }" ng-if="!client">
               <span class="step">2</span>
               <h5 class="m-t-15">{t}Billing information{/t}</h5>
             </li>
