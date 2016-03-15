@@ -126,7 +126,7 @@ parameters:
 
     freshbooks.domain: company_name
     freshbooks.token: long_alphanum_token
-    freshbooks.url: https://fakeinc-receivables.freshbooks.com
+    freshbooks.url: https://%freshbooks.domain%.freshbooks.com
     braintree.environment: sandbox
     braintree.merchant_id: numeric_id
     braintree.url: https://sandbox.braintreegateway.com
