@@ -56,7 +56,7 @@ class DomainManagementController extends Controller
             }
         }
 
-        $countries    = array_flip(Intl::getRegionBundle()->getCountryNames());
+        $countries    = Intl::getRegionBundle()->getCountryNames();
         $taxes        = $this->get('vat')->getTaxes();
         $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
         $token        = $tokenFactory::generate($params);

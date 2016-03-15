@@ -52,16 +52,16 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+  <div class="content" ng-controller="DomainManagementCtrl" ng-init="{if !empty($client)}clientValid = true; client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
-          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-3': client }">
+          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-3': clientValid }">
             <li class="text-center" ng-class="{ 'active': step == 1 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Domains{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 2 }" ng-if="!client">
+            <li class="text-center" ng-class="{ 'active': step == 2 }" ng-if="!clientValid">
               <span class="step">2</span>
               <h5 class="m-t-15">{t}Billing information{/t}</h5>
             </li>
@@ -76,7 +76,7 @@
           </ul>
         </div>
         <div class="fake-form-wizard-steps ng-cloak">
-          <div class="fake-wizard-steps text-center" ng-class="{ 'col-xs-3': !client, 'col-xs-4': client, 'col-xs-offset-3': !client && step == 2, 'col-xs-offset-6': !client && step == 3, 'col-xs-offset-9': !client && step == 4, 'col-xs-offset-4': client && step == 3, 'col-xs-offset-8': client && step == 4 }">
+          <div class="fake-wizard-steps text-center" ng-class="{ 'col-xs-3': !clientValid, 'col-xs-4': clientValid, 'col-xs-offset-3': !clientValid && step == 2, 'col-xs-offset-6': !clientValid && step == 3, 'col-xs-offset-9': !clientValid && step == 4, 'col-xs-offset-4': clientValid && step == 3, 'col-xs-offset-8': clientValid && step == 4 }">
             <div class="step">
               <i class="fa fa-truck fa-flip-horizontal fa-lg"></i>
             </div>
@@ -168,30 +168,7 @@
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
-              <div ng-show="!client.country">
-                <h5>{t}Where are you from?{/t}</h5>
-                <div class="form-group col-sm-4">
-                  <div class="input-with-icon right">
-                    <select class="form-control" id="country" name="country" ng-model="client.country" placeholder="{t}Country{/t}" required="required">
-                      <option value="">{t}Select a country{/t}...</option>
-                      <option value="[% value %]" ng-repeat="(key,value) in countries" ng-selected="[% billing.country === value %]">[% key %]</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="ng-cloak p-b-30" ng-show="client.country">
-                {include file='client/form.tpl'}
-                <div class="row m-t-50 ng-cloak">
-                  <div class="col-sm-6 col-sm-offset-3">
-                    <button class="btn btn-block btn-loading btn-success" ng-click="saveClient()">
-                      <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
-                      <h4 class="text-uppercase text-white">
-                        {t}Next{/t}
-                      </h4>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              {include file='client/form.tpl'}
             </div>
           </div>
         </div>
@@ -200,7 +177,7 @@
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
               <div class="p-t-5 pull-left">
-                <h4 class="semi-bold">[% client.first_name %]</h4>
+                <h4 class="semi-bold">[% client.last_name %], [% client.first_name %]</h4>
                 <address>
                   <strong ng-if="client.company">[% client.company %]</strong><br>
                   [% client.address %]<br>
@@ -234,7 +211,7 @@
                       <td class="text-right">[% price %] €</td>
                     </tr>
                     <tr>
-                      <td rowspan="3">
+                      <td rowspan="[% payment === 'card' && nonce ? 4 : 3 %]">
                       </td>
                       <td class="text-right"><strong>Subtotal</strong></td>
                       <td class="text-right">[% subtotal %] €</td>
@@ -243,9 +220,13 @@
                       <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
                       <td class="text-right">[% vat %] €</td>
                     </tr>
+                    <tr ng-if="payment === 'card' && nonce">
+                      <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
+                      <td class="text-right">[% fee | number : 2 %] €</td>
+                    </tr>
                     <tr>
                       <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
-                      <td class="text-right"><strong>[% total %] €</strong></td>
+                      <td class="text-right"><strong>[% total | number : 2 %] €</strong></td>
                     </tr>
                   </tbody>
                 </table>

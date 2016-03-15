@@ -18,17 +18,28 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$scope', '$timeout', '$uibModal', '$window', 'messenger', 'routing',
-      function($http, $location, $scope, $timeout, $uibModal, $window, messenger, routing) {
+      '$http', '$location', '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'messenger', 'routing',
+      function($http, $location, $rootScope, $scope, $timeout, $uibModal, $window, messenger, routing) {
         /**
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *  Flag for card request loading
+         *  Flag for card request loading.
          *
          * @type {boolean}
          */
         $scope.cardLoading = false;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *  Flag for valid client.
+         *
+         * @type {boolean}
+         */
+        $scope.clientValid = false;
+
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -326,28 +337,6 @@
         };
 
         /**
-         * @function saveClient
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Saves client information.
-         */
-        $scope.saveClient = function () {
-          $scope.loading = true;
-
-          var url  = routing.generate('backend_ws_client_save');
-
-          $http.post(url, $scope.client).success(function(response) {
-            $scope.client = response.client;
-            $scope.loading = false;
-            $scope.step++;
-          }).error(function(response) {
-            $scope.loading = false;
-            messenger.post(response);
-          });
-        };
-
-        /**
          * @function map
          * @memberOf DomainManagementCtrl
          *
@@ -401,10 +390,35 @@
 
           if (nv.length > 0) {
             $scope.subtotal = $scope.price * nv.length;
-            $scope.vat      = Math.round($scope.subtotal * $scope.vatTax)/100;
-            $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);
+
+        $scope.$watch('step', function(nv) {
+          if (nv !== 3) {
+            return;
+          }
+
+          if ($scope.client.country === 'ES' || (!$scope.client.company &&
+                $scope.countries[$scope.client.country])) {
+            $scope.vatTax = $scope.taxes[$scope.client.country].value;
+          }
+
+          $scope.vat   = Math.round($scope.subtotal * $scope.vatTax)/100;
+          $scope.total = $scope.subtotal + $scope.vat;
+        });
+
+        $scope.$watch('payment', function(nv) {
+          if (nv === 'card') {
+            $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
+            $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
+          }
+        });
+
+        // Get client after saving
+        $rootScope.$on('client-saved', function (event, args) {
+          $scope.client = args;
+          $scope.next();
+        });
 
         // Configure braintree
         $scope.$watch('clientToken', function(nv) {
