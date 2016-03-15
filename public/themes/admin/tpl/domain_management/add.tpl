@@ -56,7 +56,7 @@
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
-          <ul class="wizard-steps wizard-steps-3 form-wizard">
+          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-3': client }">
             <li class="text-center" ng-class="{ 'active': step == 1 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Domains{/t}</h5>
