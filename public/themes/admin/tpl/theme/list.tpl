@@ -128,8 +128,8 @@
             </li>
             <li class="quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'addons', 'btn-white': type != 'addons' }" ng-click="type = 'addons'">
-                <i class="fa fa-pencil m-r-5"></i>
-                {t}Theme addons{/t}
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Addons{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
