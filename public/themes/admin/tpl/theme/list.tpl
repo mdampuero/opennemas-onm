@@ -127,7 +127,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'theme-addons', 'btn-white': type != 'theme-addons' }" ng-click="type = 'theme-addons'">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'addons', 'btn-white': type != 'addons' }" ng-click="type = 'addons'">
                 <i class="fa fa-pencil m-r-5"></i>
                 {t}Theme addons{/t}
               </button>
@@ -197,10 +197,6 @@
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type != 'theme-addon' && !loading && items.length > 0">
-          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
-          </div>
-        </div>
         <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }">
             <div class="item-wrapper" ng-include="'exclusive-item'"></div>
@@ -216,6 +212,9 @@
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="theme/_details.tpl"}
+    </script>
+    <script type="text/ng-template" id="module-modal-details">
+      {include file="store/modal/_details.tpl"}
     </script>
   </div>
 {/block}

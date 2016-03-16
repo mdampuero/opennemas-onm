@@ -170,6 +170,7 @@
           $http.get(url).success(function(response) {
             $scope.active     = response.active;
             $scope.exclusive  = response.exclusive;
+            $scope.addons     = response.addons;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
@@ -222,8 +223,8 @@
          */
         $scope.showDetails = function(item) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-details',
-            windowClass: 'modal-details-theme',
+            templateUrl: item.type === 'theme-addon' ? 'module-modal-details' : 'modal-details',
+            windowClass: item.type === 'theme-addon' ? 'modal-details' : 'modal-details-theme',
             controller: 'modalCtrl',
             resolve: {
               template: function() {

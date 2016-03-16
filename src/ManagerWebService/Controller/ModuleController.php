@@ -78,7 +78,6 @@ class ModuleController extends Controller
         $module->description = json_decode($module->description, true);
         $module->metas       = json_decode($module->metas, true);
         $module->name        = json_decode($module->name, true);
-        $module->type        = 'module';
         $module->updated     = date('Y-m-d H:i:s');
 
         if (!empty($request->files->count())) {
@@ -430,7 +429,7 @@ class ModuleController extends Controller
         try {
             $em     = $this->get('orm.manager');
             $module = $em ->getRepository('manager.extension')->find($id);
-            $path   = $this->getParameter('paths.extensions_assets_path');
+            $path   = $this->getParameter('paths.extensions_assets_path') . DS;
 
             $imagesToDelete = [];
 
@@ -459,7 +458,6 @@ class ModuleController extends Controller
             $module->description = json_decode($module->description, true);
             $module->metas       = json_decode($module->metas, true);
             $module->name        = json_decode($module->name, true);
-            $module->type        = 'module';
             $module->updated     = date('Y-m-d H:i:s');
 
             if (!empty($request->files->count())) {

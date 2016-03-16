@@ -7,19 +7,13 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-8">
-      <uib-carousel class="carousel-big" ng-if="template.item.screenshots.length > 0">
-        <uib-slide ng-repeat="screenshot in template.item.screenshots">
+      <uib-carousel active="1" class="carousel-big" ng-if="template.item.screenshots.length > 0">
+        <uib-slide index="$index" ng-repeat="screenshot in template.item.screenshots">
           <img class="img-responsive" ng-src="[% '/asset/thumbnail,1024,768' + template.item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
-      <uib-carousel class="carousel-big" ng-if="!template.item.screenshots">
-        <uib-slide>
-          <img class="img-responsive" src="http://placehold.it/1024x768">
-        </uib-slide>
-        <uib-slide>
-          <img class="img-responsive" src="http://placehold.it/1024x768">
-        </uib-slide>
-        <uib-slide>
+      <uib-carousel active="1" class="carousel-big" ng-if="!template.item.screenshots">
+        <uib-slide index="1">
           <img class="img-responsive" src="http://placehold.it/1024x768">
         </uib-slide>
       </uib-carousel>
