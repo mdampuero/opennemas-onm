@@ -643,7 +643,10 @@ class Advertisement extends Content
         if ($this->with_script == 1) {
             if (preg_match('/<iframe/', $this->script) || isset($this->default_ad)) {
                 $content = $this->script;
-            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto') !== false) {
+            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false
+            ) {
                 $content = $this->script;
             } else {
                 // Check for external advertisement Script
