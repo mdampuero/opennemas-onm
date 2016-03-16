@@ -193,7 +193,7 @@
           };
 
           $http.post(url, data).success(function() {
-            $scope.step = 4;
+            $scope.next();
             $scope.loading = false;
             $scope.domains = [];
           }).error(function(response) {
@@ -433,12 +433,12 @@
           $scope.total = $scope.subtotal + $scope.vat;
         });
 
-        $scope.$watch('nonce', function(nv) {
-          if (nv && $scope.payment === 'card') {
+        $scope.$watch('payment', function(nv) {
+          if (nv && nv.type === 'CreditCard') {
             $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
             $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
           }
-        });
+        }, true);
 
         // Get client after saving
         $rootScope.$on('client-saved', function (event, args) {
@@ -453,52 +453,31 @@
           }
 
           if ($scope.clientToken && typeof braintree !== 'undefined') {
-            $window.braintree.setup($scope.clientToken, 'custom', {
-              id: 'checkout',
-              hostedFields: {
-                number: {
-                  selector: '#card-number'
-                },
-                cvv: {
-                  selector: '#cvv'
-                },
-                expirationDate: {
-                  selector: '#expiration-date'
-                }
+            $window.braintree.setup($scope.clientToken, 'dropin', {
+              container: 'braintree-container',
+              paypal: {
+                container: 'braintree-container'
               },
-              onError: function (error) {
-                $scope.toggleCardLoading();
+              onPaymentMethodReceived: function(obj) {
                 $scope.$apply(function() {
-                  $scope.error = error.message;
-                });
-              },
-              onPaymentMethodReceived: function (nonce) {
-                $scope.toggleCardLoading();
-                $scope.$apply(function() {
-                  $scope.error   = null;
-                  $scope.nonce   = nonce.nonce;
-                  $scope.payment = 'card';
+                  $scope.payment        = obj;
+                  $scope.paymentLoading = false;
+
+                  $scope.next();
                 });
 
                 return false;
-              },
-              paypal: {
-                container: 'paypal-container',
-                onCancelled: function() {
-                  $scope.$apply(function() {
-                    $scope.nonce   = null;
-                    $scope.payment = null;
-                  });
-                },
-                onSuccess: function (nonce) {
-                  $scope.$apply(function() {
-                    $scope.nonce   = nonce;
-                    $scope.payment = 'paypal';
-                  });
-
-                  return false;
-                }
               }
+            });
+
+            $('#braintree-form').submit(function(e) {
+              e.preventDefault();
+
+              $scope.$apply(function() {
+                $scope.paymentLoading = true;
+              });
+
+              return false;
             });
           }
         });

@@ -57,20 +57,44 @@
   border-color: @error-color;
 }
 
-.braintree-payment-buttons {
-  width: 500px;
-}
-
 .fake-form-wizard-steps {
   padding-right: 15px;
   position: absolute;
   top: -4px;
   width: 100%;
+  z-index: 100;
 
   .fake-wizard-steps {
     padding: 0 !important;
     transition: all .5s ease-in-out;
-    z-index: 100;
+    width: 25%;
+
+    &.fake-wizard-steps-active-3 {
+      margin-left: 25%;
+    }
+    &.fake-wizard-steps-active-4 {
+      margin-left: 50%;
+    }
+    &.fake-wizard-steps-active-5 {
+      margin-left: 75%;
+    }
+
+    &.fake-wizard-steps-5 {
+      width: 20%;
+
+      &.fake-wizard-steps-active-2 {
+        margin-left: 20%;
+      }
+      &.fake-wizard-steps-active-3 {
+        margin-left: 40%;
+      }
+      &.fake-wizard-steps-active-4 {
+        margin-left: 60%;
+      }
+      &.fake-wizard-steps-active-5 {
+        margin-left: 80%;
+      }
+    }
 
     .step {
       background-color: #0090d9;
@@ -92,9 +116,9 @@
   }
 }
 
-.wizard-steps-3 {
+.wizard-steps-5 {
   li {
-    max-width: 33.3333333333%;
-    min-width: 33.3333333333%;
+    max-width: 20%;
+    min-width: 20%;
   }
 }

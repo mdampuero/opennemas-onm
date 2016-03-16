@@ -56,7 +56,7 @@
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
-          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-3': clientValid }">
+          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-5': !clientValid }">
             <li class="text-center" ng-class="{ 'active': step == 1 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Domains{/t}</h5>
@@ -67,16 +67,20 @@
             </li>
             <li class="text-center" ng-class="{ 'active': step == 3 }">
               <span class="step">[% client ? '2' : '3' %]</span>
-              <h5 class="m-t-15">{t}Check & payment{/t}</h5>
+              <h5 class="m-t-15">{t}Payment{/t}</h5>
             </li>
             <li class="text-center" ng-class="{ 'active': step == 4 }">
               <span class="step">[% client ? '3' : '4' %]</span>
+              <h5 class="m-t-15">{t}Check{/t}</h5>
+            </li>
+            <li class="text-center" ng-class="{ 'active': step == 5 }">
+              <span class="step">[% client ? '4' : '5' %]</span>
               <h5 class="m-t-15">{t}Finish{/t}</h5>
             </li>
           </ul>
         </div>
         <div class="fake-form-wizard-steps ng-cloak">
-          <div class="fake-wizard-steps text-center" ng-class="{ 'col-xs-3': !clientValid, 'col-xs-4': clientValid, 'col-xs-offset-3': !clientValid && step == 2, 'col-xs-offset-6': !clientValid && step == 3, 'col-xs-offset-9': !clientValid && step == 4, 'col-xs-offset-4': clientValid && step == 3, 'col-xs-offset-8': clientValid && step == 4 }">
+          <div class="fake-wizard-steps text-center fake-wizard-steps-active-[% step %]" ng-class="{ 'fake-wizard-steps-5': !clientValid }">
             <div class="step">
               <i class="fa fa-truck fa-flip-horizontal fa-lg"></i>
             </div>
@@ -86,14 +90,14 @@
           <div class="grid-body clearfix">
             <div>
               <h4 class="semi-bold">{t}Domains{/t}</h4>
-              <h5>
+              <p class="m-b-15 m-t-15">
                 {if !$create}
                   {t}I have an existing domain and I want to redirect it to my Opennemas digital newspaper.{/t}
                 {else}
                   {t}I do not have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
                 {/if}
-              </h5>
-              <div class="row m-t-15">
+              </p>
+              <div class="row">
                 <div class="col-sm-9">
                   <div class="input-group">
                     <span class="input-group-addon">www.</span>
@@ -174,6 +178,28 @@
         </div>
         <div class="grid simple ng-hide" ng-show="step == 3">
           <div class="grid-body">
+            <h4 class="semi-bold">{t}Payment{/t}</h4>
+            <p class="m-b-15 m-t-15">
+              {t}Select the payment method.{/t}
+              {t}You'll have a chance to review your order before it's placed.{/t}
+            </p>
+            <form id="braintree-form">
+              <div class="braintree">
+                <div id="braintree-container"></div>
+                <div class="row m-t-50 ng-cloak">
+                  <div class="col-sm-6 col-sm-offset-3">
+                    <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
+                      <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="paymentLoading"></i>
+                      <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="grid simple ng-hide" ng-show="step == 4">
+          <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
               <div class="p-t-5 pull-left">
@@ -211,7 +237,7 @@
                       <td class="text-right">[% price %] €</td>
                     </tr>
                     <tr>
-                      <td rowspan="[% payment === 'card' && nonce ? 4 : 3 %]">
+                      <td rowspan="[% payment.type === 'CreditCard' && payment.nonce ? 4 : 3 %]">
                       </td>
                       <td class="text-right"><strong>Subtotal</strong></td>
                       <td class="text-right">[% subtotal %] €</td>
@@ -220,7 +246,7 @@
                       <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
                       <td class="text-right">[% vat %] €</td>
                     </tr>
-                    <tr ng-if="payment === 'card' && nonce">
+                    <tr ng-if="payment.type === 'CreditCard' && payment.nonce">
                       <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
                       <td class="text-right">[% fee | number : 2 %] €</td>
                     </tr>
@@ -231,50 +257,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="braintree clearfix ng-cloak">
-                <div class="braintree-payment-buttons clearfix">
-                  <h5>Pay with</h5>
-                  <div id="paypal-container" ng-class="{ 'pull-left': !payment }" ng-show="(!payment && !nonce) || (nonce && payment == 'paypal')"></div>
-                  <button class="btn btn-info btn-credit-card no-animate pull-left m-l-15" ng-click="selectCreditCard()" ng-show="!payment && !nonce" type="button">
-                    <i class="fa fa-credit-card fa-lg m-r-5"></i>
-                    <strong>{t}Credit card{/t}</strong>
-                  </button>
-                </div>
-                <div class="braintree-fake-method" ng-show="payment === 'card' && nonce">
-                  <i class="fa fa-credit-card"></i>
-                  <strong>{t}Credit card{/t}</strong>
-                  <span class="btn btn-link" ng-click="cancelCreditCard()">
-                    {t}Cancel{/t}
-                  </span>
-                </div>
-                <form class="col-md-8 col-md-offset-2" id="checkout" method="post" action="/checkout" ng-hide="nonce || payment !== 'card'">
-                  <p class="text-danger" ng-if="error">[% error %]</p>
-                  <div class="form-group">
-                    <label class="form-label" for="card-number">Card Number</label>
-                    <div class="form-control" id="card-number"></div>
-                  </div>
-                  <div class="form-group row">
-                    <div class="col-md-4">
-                      <label class="form-label" for="cvv">CVV</label>
-                      <div id="cvv" class="form-control"></div>
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label" for="expiration-date">Expiration Date</label>
-                      <div id="expiration-date" class="form-control"></div>
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <button class="btn btn-link" id="submit" ng-click="payment = null" type="button">
-                      <i class="fa fa-times m-r-5"></i>{t}Cancel{/t}
-                    </button>
-                    <button class="btn btn-info btn-loading" id="submit" ng-click="toggleCardLoading()" type="submit">
-                      <i class="fa" ng-class="{ 'fa-check': !cardLoading, 'fa-circle-o-notch fa-spin': cardLoading }"></i>
-                      {t}Confirm{/t}
-                    </button>
-                  </div>
-                </form>
-              </div>
-              <div class="row m-t-50 ng-cloak" ng-show="nonce">
+              <div class="row m-t-50 ng-cloak" ng-show="payment.nonce">
                 <div class="col-sm-6 col-sm-offset-3">
                   <div class="text-center p-t-30">
                     <div class="form-group">
@@ -289,7 +272,7 @@
                         </label>
                       </div>
                     </div>
-                    <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="domains.length === 0 || !terms || !client.id || !nonce || loading">
+                    <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="domains.length === 0 || !terms || !client || !payment || loading">
                       <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
                       <h4 class="text-uppercase text-white">
                         {t}Confirm{/t}
@@ -301,7 +284,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4">
+        <div class="grid simple ng-hide" ng-show="step == 5">
           <div class="grid-body">
             <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>
