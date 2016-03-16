@@ -26,7 +26,7 @@
       </h4>
     </div>
     <div>
-     <a ng-if="type !== 'purchased'" class="m-t-10 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Open live demo in a new tab{/t}">
+      <a ng-if="type !== 'purchased'" class="m-t-10 pull-left" href="[% item.parameters.preview_url %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Open live demo in a new tab{/t}">
         <h5 class="uppercase">
           <i class="fa fa-globe"></i>
           {t}Live demo{/t}
