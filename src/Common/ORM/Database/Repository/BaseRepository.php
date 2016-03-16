@@ -69,12 +69,17 @@ class BaseRepository extends Repository
      */
     public function countBy($oql = '')
     {
-        $keys = $this->metadata->getIdKeys();
+        $keys   = $this->metadata->getIdKeys();
+        $tables = $this->translator->tables;
 
-        $sql = 'select count(' . implode(',', $keys)
-            . ") from `{$this->metadata->getTable()}`";
+        list($tables, $filter, $params, $types) =
+            $this->translator->translate(trim($oql));
 
-        list($filter, $params, $types) = $this->translator->translate(trim($oql));
+        $sql = sprintf(
+            'select count(%s) from %s',
+            implode(',', $keys),
+            implode(',', $tables)
+        );
 
         if (!empty($filter)) {
             $sql .= " where $filter";
@@ -125,10 +130,14 @@ class BaseRepository extends Repository
     {
         $keys = $this->metadata->getIdKeys();
 
-        $sql = "select " . implode(',', $keys)
-            . " from `{$this->metadata->getTable()}`";
+        list($tables, $filter, $params, $types) =
+            $this->translator->translate(trim($oql));
 
-        list($filter, $params, $types) = $this->translator->translate(trim($oql));
+        $sql = sprintf(
+            'select %s from %s',
+            implode(',', $keys),
+            implode(',', $tables)
+        );
 
         if (!empty($filter)) {
             $sql .= ' where ' . $filter;
