@@ -63,7 +63,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-12">
                 <div class="form-group">
                   <label class="form-label" for="type">{t}Type{/t}</label>
                   <div class="controls">
@@ -77,7 +77,9 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+            </div>
+            <div class="row" ng-show="module.type == 'module'">
+              <div class="col-sm-12">
                 <div class="form-group">
                   <label class="form-label" for="category">{t}Category{/t}</label>
                   <div class="controls">
@@ -87,7 +89,6 @@
                       <option value="pack">{t}Pack{/t}</option>
                       <option value="partner">{t}Partner{/t}</option>
                       <option value="service">{t}Service{/t}</option>
-                      <option value="theme-addon">{t}Theme addon{/t}</option>
                     </select>
                   </div>
                 </div>
