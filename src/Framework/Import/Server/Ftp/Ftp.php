@@ -47,7 +47,7 @@ class Ftp extends Server
 
         // if there is a ftp login configuration use it
         if (array_key_exists('username', $this->params)) {
-            $logged = ftp_login(
+            $logged = @ftp_login(
                 $this->conn,
                 $this->params['username'],
                 $this->params['password']
