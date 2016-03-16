@@ -44,6 +44,17 @@ class ArrayDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->mapper->fromString(''));
     }
 
+    public function testFromText()
+    {
+        $this->assertEquals(
+            [ 'foo' => 'bar'],
+            $this->mapper->fromText('a:1:{s:3:"foo";s:3:"bar";}')
+        );
+
+        $this->assertEmpty($this->mapper->fromText(null));
+        $this->assertEmpty($this->mapper->fromText(''));
+    }
+
     public function testToArrayJson()
     {
         $this->assertEquals(
@@ -75,5 +86,16 @@ class ArrayDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->toString(null));
         $this->assertEmpty($this->mapper->toString(''));
+    }
+
+    public function testToText()
+    {
+        $this->assertEquals(
+            'a:1:{s:3:"foo";s:3:"bar";}',
+            $this->mapper->toText([ 'foo' => 'bar'])
+        );
+
+        $this->assertEmpty($this->mapper->toText(null));
+        $this->assertEmpty($this->mapper->toText(''));
     }
 }

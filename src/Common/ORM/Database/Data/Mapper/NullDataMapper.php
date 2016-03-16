@@ -17,10 +17,36 @@ class NullDataMapper
      */
     public function __call($method, $params)
     {
-        if (empty($params) || is_null($params[0]) || $params[0] === '') {
-            return null;
-        }
+        return null;
+    }
 
-        return (string) $params[0];
+    /**
+     * Converts null to an empty array.
+     *
+     * @return array Empty array.
+     */
+    public function toArray()
+    {
+        return [];
+    }
+
+    /**
+     * Converts null to an empty integer.
+     *
+     * @return integer Empty integer (0).
+     */
+    public function toInteger()
+    {
+        return 0;
+    }
+
+    /**
+     * Converts null to an empty string.
+     *
+     * @return integer Empty string.
+     */
+    public function toString()
+    {
+        return '';
     }
 }
