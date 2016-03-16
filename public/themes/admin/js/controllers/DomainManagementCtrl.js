@@ -188,7 +188,7 @@
             client:  $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
-            nonce:   $scope.nonce,
+            nonce:   $scope.payment.nonce,
             total:   $scope.total
           };
 
