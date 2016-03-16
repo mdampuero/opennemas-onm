@@ -88,6 +88,19 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Common\ORM\Core\Exception\InvalidConverterException
+     */
+    public function testGetConvererInvalid()
+    {
+        $this->em->getConverter('Foobar');
+    }
+
+    public function testGetConvererValid()
+    {
+        $this->assertNotEmpty($this->em->getConverter('Entity'));
+    }
+
+    /**
      * @expectedException \Common\ORM\Core\Exception\InvalidPersisterException
      */
     public function testGetPersisterInvalid()

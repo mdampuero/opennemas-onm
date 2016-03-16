@@ -12,6 +12,7 @@ namespace Common\ORM\Core;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Validation\Validator;
+use Common\ORM\Core\Exception\InvalidConverterException;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 use Common\ORM\Core\Exception\InvalidRepositoryException;
 use Common\ORM\Database\Data\Converter\Converter;
@@ -61,7 +62,7 @@ class EntityManager
         if (!array_key_exists('metadata', $this->config)
             || !array_key_exists($entity, $this->config['metadata'])
         ) {
-            throw new InvalidPersisterException();
+            throw new InvalidConverterException($entity);
         }
 
         return new Converter($this->config['metadata'][$entity]);
@@ -97,11 +98,7 @@ class EntityManager
 
             $args[] = $this->config['metadata'][$entity->getClassName()];
 
-            if (empty($args)) {
-                $persisters[] = $class->newInstance();
-            } else {
-                $persisters[] = $class->newInstanceArgs($args);
-            }
+            $persisters[] = $class->newInstanceArgs($args);
         }
 
         if (!empty($persisters)) {
@@ -145,11 +142,7 @@ class EntityManager
 
             $args[] = $this->config['metadata'][$entity];
 
-            if (empty($args)) {
-                $repositories[] = $class->newInstance();
-            } else {
-                $repositories[] = $class->newInstanceArgs($args);
-            }
+            $repositories[] = $class->newInstanceArgs($args);
         }
 
         if (!empty($repositories)) {
