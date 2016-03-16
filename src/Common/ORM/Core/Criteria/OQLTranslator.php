@@ -54,7 +54,7 @@ class OQLTranslator
      *
      * @var array
      */
-    protected $params = [
+    protected $pdoParams = [
         'T_BOOL'    => \PDO::PARAM_BOOL,
         'T_FLOAT'   => \PDO::PARAM_STR,
         'T_INTEGER' => \PDO::PARAM_INT,
@@ -80,36 +80,39 @@ class OQLTranslator
     public function translate($oql)
     {
         if (empty($oql)) {
-            return [ [], [], [] ];
+            return [ [], [], [], [] ];
         }
+
+        $this->tables = [ $this->metadata->getTable() ];
 
         $tokenizer = new OQLTokenizer();
         $tokens    = $tokenizer->tokenize($oql);
 
-        $params = [];
-        $types  = [];
-        $sqls   = [];
-        $isLike = false;
+        $this->params = [];
+        $this->types  = [];
+        $this->sqls   = [];
+        $this->isLike = false;
         foreach ($tokens as $token) {
             list($sql, $param, $type) =
-                $this->translateToken($token[0], $token[1], $isLike);
+                $this->translateToken($token[0], $token[1], $this->isLike);
 
             if (!empty($sql)) {
-                $sqls[] = $sql;
+                $this->sqls[] = $sql;
             }
 
             if (!empty($param)) {
-                $params[] = $param;
+                $this->params[] = $param;
             }
 
             if (!empty($type)) {
-                $types[] = $type;
+                $this->types[] = $type;
             }
 
-            $isLike = $token[1] === 'O_LIKE' || $token[1] === 'O_NOT_LIKE';
+            $this->isLike = $token[1] === 'O_LIKE'
+                || $token[1] === 'O_NOT_LIKE';
         }
 
-        return [ implode(' ', $sqls), $params, $types ];
+        return [ $this->tables, implode(' ', $this->sqls), $this->params, $this->types ];
     }
 
     /**
@@ -122,8 +125,19 @@ class OQLTranslator
      */
     protected function isField($str, $type)
     {
-        return $type === 'T_FIELD'
-            && array_key_exists($str, $this->metadata->properties);
+        if ($type !== 'T_FIELD') {
+            return false;
+        }
+
+        if (array_key_exists($str, $this->metadata->properties)) {
+            return true;
+        }
+
+        if ($this->metadata->hasMetas()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -135,7 +149,7 @@ class OQLTranslator
      */
     protected function isParameter($str)
     {
-        return in_array($str, array_keys($this->params));
+        return in_array($str, array_keys($this->pdoParams));
     }
 
     /**
@@ -151,6 +165,64 @@ class OQLTranslator
     }
 
     /**
+     * Translates a field.
+     *
+     * @param string $str The field to translate.
+     *
+     * @return array An array with the translation.
+     */
+    protected function translateField($str)
+    {
+        // Seach by meta_key
+        if (!array_key_exists($str, $this->metadata->properties)) {
+            if ($this->metadata->hasMetas()) {
+                $this->tables[] = $this->metadata->getMetaTable();
+
+                // Push join condition
+                $keys = $this->metadata->getMetaKeys();
+                foreach ($keys as $tableId => $metaId) {
+                    $this->sqls[] = $tableId . ' = '. $metaId;
+                }
+
+                // Push meta-based filters
+                $this->sqls[] = "and meta_key = ? and meta_value";
+                $this->params[] = $str;
+                $this->types[] = \PDO::PARAM_STR;
+            }
+
+            return;
+        }
+
+        return [ $str, null, null ];
+    }
+
+    /**
+     * Translates a parameter.
+     *
+     * @param string  $str          The parameter to translate.
+     * @param string  $type         The parameter type.
+     * @param boolean $previousLike Whether the previous translation was a
+     *                              like/not like operator.
+     *
+     * @return array An array with the translation, the parameter value and the
+     *               parameter type.
+     */
+    protected function translateParameter($str, $type, $previousLike)
+    {
+        // Remove quotes for strings
+        if ($type === 'T_STRING') {
+            $str = str_replace([ '\'', '"' ], '', $str);
+        }
+
+        // Surround with %
+        if ($previousLike) {
+            $str = "%$str%";
+        }
+
+        return [ '?', $str, $this->pdoParams[$type] ];
+    }
+
+    /**
      * Translates a token.
      *
      * @param string  $str          The token to translate.
@@ -159,7 +231,7 @@ class OQLTranslator
      *                              like/not like operator.
      *
      * @return array An array with the translation, the parameter value and the
-     *               parameter type..
+     *               parameter type.
      */
     protected function translateToken($str, $type, $previousLike)
     {
@@ -167,19 +239,12 @@ class OQLTranslator
             return [ $this->translations[$type], null, null ];
         }
 
-        if ($this->isParameter($type) && !$previousLike) {
-            // Remove quotes for strings
-            if ($type === 'T_STRING') {
-                $str = str_replace([ '\'', '"' ], '', $str);
-            }
-
-            return [ '?', $str, $this->params[$type] ];
+        if ($this->isParameter($type)) {
+            return $this->translateParameter($str, $type, $previousLike);
         }
 
-        if ($this->isField($str, $type)
-            || ($this->isParameter($type) && $previousLike)
-        ) {
-            return [ $str, null, null ];
+        if ($this->isField($str, $type)) {
+            return $this->translateField($str);
         }
 
         throw new InvalidTokenException($str, $this->metadata->name);

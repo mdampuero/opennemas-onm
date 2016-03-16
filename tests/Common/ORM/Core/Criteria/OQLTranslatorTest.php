@@ -16,25 +16,31 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $metadata = new Metadata([
+        $this->metadata = new Metadata([
             'name'       => 'Foobar',
-            'properties' => [ 'foo' => 'string', 'baz' => 'integer' ]
+            'properties' => [ 'foo' => 'string', 'baz' => 'integer' ],
+            'mapping'    => [
+                'table' => 'foobar',
+                'metas' => [ 'table' => 'foobar_meta' ],
+                'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+            ]
         ]);
 
-        $this->translator = new OQLTranslator($metadata);
+        $this->translator = new OQLTranslator($this->metadata);
     }
 
     public function testTranslate()
     {
-        $oql = 'foo = "bar" and (baz != "qux" or baz in [1,2]) order by foo asc limit 20';
+        $oql = 'foo = "bar" and norf = "gorp" and (baz != "qux" or baz in [1,2]) order by foo asc limit 20';
 
-        list($sql, $params, $types) = $this->translator->translate($oql);
+        list($tables, $sql, $params, $types) = $this->translator->translate($oql);
+        $this->assertEquals([ 'foobar', 'foobar_meta' ], $tables);
+        $this->assertEquals('foo = ? and foo = foobar_foo and meta_key = ? and meta_value = ? and ( baz != ? or baz in ( ? , ? ) ) order by foo asc limit ?', $sql);
+        $this->assertEquals([ 'bar', 'norf', 'gorp', 'qux', '1' ,'2', '20' ], $params);
+        $this->assertEquals([ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ], $types);
 
-        $this->assertEquals('foo = ? and ( baz != ? or baz in ( ? , ? ) ) order by foo asc limit ?', $sql);
-        $this->assertEquals([ 'bar', 'qux', '1' ,'2', '20' ], $params);
-        $this->assertEquals([ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ], $types);
-
-        list($sql, $params, $types) = $this->translator->translate('');
+        list($tables, $sql, $params, $types) = $this->translator->translate('');
+        $this->assertEmpty($tables);
         $this->assertEmpty($sql);
         $this->assertEmpty($params);
         $this->assertEmpty($types);
@@ -46,7 +52,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertTrue($method->invokeArgs($this->translator, [ 'foo', 'T_FIELD' ]));
-        $this->assertFalse($method->invokeArgs($this->translator, [ 'mumble', 'T_FIELD' ]));
+        $this->assertTrue($method->invokeArgs($this->translator, [ 'mumble', 'T_FIELD' ]));
         $this->assertFalse($method->invokeArgs($this->translator, [ 'mumble', 'T_STRING' ]));
     }
 
@@ -74,7 +80,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', false ]));
-        $this->assertEquals([ 'foo', null, null ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', true ]));
+        $this->assertEquals([ '?', '%foo%', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', true ]));
         $this->assertEquals([ '!=', null, null ], $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ]));
     }
 
@@ -83,6 +89,9 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslateInvalidToken()
     {
+        unset($this->metadata->mapping['metas']);
+        $this->translator = new OQLTranslator($this->metadata);
+
         $method = new \ReflectionMethod($this->translator, 'translateToken');
         $method->setAccessible(true);
 
