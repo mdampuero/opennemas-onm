@@ -93,7 +93,7 @@ class Metadata extends DataObject implements Validable
         if (!array_key_exists('index', $this->mapping)
             || empty($this->mapping['index'])
         ) {
-            return false;
+            return [];
         }
 
         foreach ($this->mapping['index'] as $index) {
@@ -102,7 +102,7 @@ class Metadata extends DataObject implements Validable
             }
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -115,6 +115,7 @@ class Metadata extends DataObject implements Validable
     {
         if (array_key_exists('metas', $this->mapping)
             && array_key_exists('ids', $this->mapping['metas'])
+            && !empty($this->mapping['metas']['ids'])
         ) {
             return $this->mapping['metas']['ids'];
         }

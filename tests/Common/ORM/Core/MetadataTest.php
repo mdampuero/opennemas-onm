@@ -9,14 +9,25 @@
  */
 namespace Tests\Common\ORM\Core;
 
+use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 
 class MetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->data     = [ 'name' => 'Foo', 'mapping' => [] ];
-        $this->metadata = new Metadata($this->data);
+        $this->metadata = new Metadata([
+            'name' => 'Foo',
+            'mapping' => [
+                'index' => [ [ 'columns' => [ 'id' ], 'primary' => true ] ]
+            ]
+        ]);
+    }
+
+    public function testGetCacheId()
+    {
+        $entity = new Entity([ 'id' => 1 ]);
+        $this->assertEquals('foo-1', $this->metadata->getCacheId($entity));
     }
 
     public function testGetCachePrefix()
@@ -35,26 +46,20 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('_', $this->metadata->getCacheSeparator());
     }
 
-    public function testGet()
+    public function testGetId()
     {
-        $this->assertEmpty($this->metadata->baz);
-
-        foreach ($this->data as $key => $value) {
-            $this->assertEquals($value, $this->metadata->{$key});
-        }
+        $entity = new Entity([ 'id' => 1, 'foo' => 'bar' ]);
+        $this->assertEquals([ 'id' => 1 ], $this->metadata->getId($entity));
+        $this->assertEmpty($this->metadata->getId(new Entity()));
     }
 
-    public function testGetData()
+    public function testGetIdKeys()
     {
-        $this->assertEquals($this->data, $this->metadata->getData());
-    }
-
-    public function testIdKeys()
-    {
-        $this->assertFalse($this->metadata->getIdKeys());
+        $this->metadata->mapping['index'] = [];
+        $this->assertEmpty($this->metadata->getIdKeys());
 
         $this->metadata->mapping['index'] = [ [ 'name' => 'id' ] ];
-        $this->assertFalse($this->metadata->getIdKeys());
+        $this->assertEmpty($this->metadata->getIdKeys());
 
         $this->metadata->mapping['index'] = [
             [ 'name' => 'id', 'columns' => [ 'id' ], 'primary' => true ]
@@ -99,10 +104,9 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->metadata->hasMetas());
     }
 
-    public function testSet()
+    public function testNormalizeId()
     {
-        $this->metadata->qux = 'norf';
-
-        $this->assertEquals('norf', $this->metadata->qux);
+        $this->assertEquals([ 'id' => 1 ], $this->metadata->normalizeId(1));
+        $this->assertEquals([ 'id' => 1 ], $this->metadata->normalizeId([ 'id' => 1 ]));
     }
 }
