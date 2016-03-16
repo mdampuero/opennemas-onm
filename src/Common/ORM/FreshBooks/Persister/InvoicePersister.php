@@ -57,10 +57,6 @@ class InvoicePersister extends BasePersister
 
             $entity->invoice_id = $response['invoice_id'];
 
-            if ($this->hasNext()) {
-                $this->next()->create($entity);
-            }
-
             return $this;
         }
 
@@ -81,10 +77,6 @@ class InvoicePersister extends BasePersister
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($this->hasNext()) {
-                $this->next()->remove($entity);
-            }
-
             return $this;
         }
 
@@ -109,10 +101,6 @@ class InvoicePersister extends BasePersister
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($this->hasNext()) {
-                $this->next()->update($entity);
-            }
-
             return $this;
         }
 

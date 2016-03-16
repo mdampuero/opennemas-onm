@@ -21,11 +21,10 @@ class ClientPersister extends BasePersister
      * Saves a new client in FreshBooks.
      *
      * @param Entity $entity The client to save.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws RuntimeException If the the client can not be saved.
      */
-    public function create(Entity &$entity, $next = true)
+    public function create(Entity &$entity)
     {
         $this->api->setMethod('client.create');
         $this->api->post([ 'client' => $entity->getData() ]);
@@ -35,10 +34,6 @@ class ClientPersister extends BasePersister
             $response = $this->api->getResponse();
 
             $entity->client_id = $response['client_id'];
-
-            if ($next && $this->hasNext()) {
-                $this->next()->create($entity);
-            }
 
             return $this;
         }
@@ -50,22 +45,17 @@ class ClientPersister extends BasePersister
      * Removes the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws EntityNotFoundException If the client does not exist.
      */
-    public function remove(Entity $entity, $next = true)
+    public function remove(Entity $entity)
     {
         $this->api->setMethod('client.delete');
         $this->api->post([ 'client_id' => $entity->client_id ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($next && $this->hasNext()) {
-                $this->next()->remove($entity);
-            }
-
-            return $this;
+                 return $this;
         }
 
         throw new EntityNotFoundException(
@@ -79,22 +69,17 @@ class ClientPersister extends BasePersister
      * Updates the client in FreshBooks.
      *
      * @param Entity $entity The client to update.
-     * @param boolean $next  Whether to continue to the next persister.
      *
      * @throws EntityNotFoundException If the client does not exist.
      */
-    public function update(Entity $entity, $next = true)
+    public function update(Entity $entity)
     {
         $this->api->setMethod('client.update');
         $this->api->post([ 'client' => $entity->getData() ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            if ($next && $this->hasNext()) {
-                $this->next()->update($entity);
-            }
-
-            return $this;
+                 return $this;
         }
 
         throw new EntityNotFoundException(

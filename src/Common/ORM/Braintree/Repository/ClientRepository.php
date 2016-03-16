@@ -19,15 +19,13 @@ class ClientRepository extends BraintreeRepository
     /**
      * Find a client by id.
      *
-     * @param integer $id     The client id.
-     * @param Client  $client The client.
-     * @param boolean $next   Whether to continue to the next repository.
+     * @param integer $id The client id.
      *
      * @return Client The client.
      *
      * @throws EntityNotFoundException When the client id is invalid.
      */
-    public function find($id, $client = null, $next = true)
+    public function find($id)
     {
         try {
             $cr = $this->factory->get('customer');
@@ -35,17 +33,7 @@ class ClientRepository extends BraintreeRepository
 
             $data = $this->responseToData($response);
 
-            if (empty($client)) {
-                $client = new Client($data);
-            } else {
-                $client->merge($data);
-            }
-
-            if ($next && $this->hasNext()) {
-                return $this->next()->find($id, $client);
-            }
-
-            return $client;
+            return new Client($data);
         } catch (\Exception $e) {
             throw new EntityNotFoundException($id, $this->source, $e->getMessage());
         }
@@ -58,11 +46,10 @@ class ClientRepository extends BraintreeRepository
      *
      * @param array   $criteria The criteria.
      * @param mixed   $clients  The clients from the previous repository.
-     * @param boolean $next     Whether to continue to the next repository.
      *
      * @return array The list of clients.
      */
-    public function findBy($criteria = null, $clients = null, $next = true)
+    public function findBy($criteria = null)
     {
         $bcriteria = $this->arrayToCriteria($criteria);
 
@@ -70,20 +57,9 @@ class ClientRepository extends BraintreeRepository
             $cr = $this->factory->get('customer');
             $response = $cr::search($bcriteria);
 
-            if (empty($clients)) {
-                $clients = [];
-            }
-
+            $clients = [];
             foreach ($response->_ids as $id) {
-                if (empty($clients[$id])) {
-                    $clients[$id] = $this->find($id, null, false);
-                } else {
-                    $this->find($id, $clients[$id], false);
-                }
-            }
-
-            if ($next && $this->hasNext()) {
-                return $this->next()->findBy($criteria, $clients);
+                $clients[$id] = $this->find($id);
             }
 
             return $clients;

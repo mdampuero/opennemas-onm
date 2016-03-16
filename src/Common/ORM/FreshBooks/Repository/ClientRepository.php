@@ -29,15 +29,13 @@ class ClientRepository extends BaseRepository
     /**
      * Find a client by id.
      *
-     * @param integer $id     The client id.
-     * @param Client  $client The client.
-     * @param boolean $next   Whether to continue to the next repository.
+     * @param integer $id The client id.
      *
      * @return Client The client.
      *
      * @throws EntityNotFoundException When the client id is invalid.
      */
-    public function find($id, $client = null, $next = true)
+    public function find($id)
     {
         $this->api->setMethod('client.get');
         $this->api->post([ 'client_id' => $id ]);
@@ -46,17 +44,7 @@ class ClientRepository extends BaseRepository
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            if (empty($client)) {
-                $client = new Client($response['client']);
-            } else {
-                $client->merge($response['client']);
-            }
-
-            if ($next && $this->hasNext()) {
-                return $this->next()->find($id, $client);
-            }
-
-            return $client;
+            return new Client($response['client']);
         }
 
         throw new EntityNotFoundException('Client', $id, $this->api->getError());
@@ -65,13 +53,11 @@ class ClientRepository extends BaseRepository
     /**
      * Finds a list of clients basing on a criteria.
      *
-     * @param array   $criteria The criteria.
-     * @param mixed   $clients  The clients from the previous repository.
-     * @param boolean $next     Whether to continue to the next repository.
+     * @param array $criteria The criteria.
      *
      * @return array The list of clients.
      */
-    public function findBy($criteria = null, $clients = null, $next = true)
+    public function findBy($criteria = null)
     {
         $this->api->setMethod('client.list');
         $this->api->post($criteria);
@@ -103,16 +89,8 @@ class ClientRepository extends BaseRepository
                 foreach ($response as $data) {
                     $id = $data['client_id'];
 
-                    if (empty($clients[$id])) {
-                        $clients[$id] = new Client($data);
-                    } else {
-                        $clients[$id]->merge($data);
-                    }
+                    $clients[$id] = new Client($data);
                 }
-            }
-
-            if ($this->hasNext()) {
-                return $this->next()->findBy($criteria, $clients);
             }
 
             return $clients;

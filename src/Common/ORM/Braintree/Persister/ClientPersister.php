@@ -24,10 +24,6 @@ class ClientPersister extends BraintreePersister
         if ($response->success) {
             $entity->client_id = $response->customer->id;
 
-            if ($this->hasNext()) {
-                $this->next()->create($entity);
-            }
-
             return $this;
         }
 
@@ -47,10 +43,6 @@ class ClientPersister extends BraintreePersister
         $response = $cr::delete($entity->client_id);
 
         if ($response->success) {
-            if ($this->hasNext()) {
-                $this->next()->remove($entity);
-            }
-
             return $this;
         }
 
@@ -72,10 +64,6 @@ class ClientPersister extends BraintreePersister
         $response = $cr::update($entity->client_id, $data);
 
         if ($response->success) {
-            if ($this->hasNext()) {
-                $this->next()->remove($entity);
-            }
-
             return $this;
         }
 
