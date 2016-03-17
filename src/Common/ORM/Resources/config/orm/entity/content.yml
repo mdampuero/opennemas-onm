@@ -1,7 +1,7 @@
 entity:
     name: Content
     enum:
-        content_type_name: [ "static_page" ]
+        content_type_name: [ static_page ]
     properties:
         available:           boolean
         body:                string
