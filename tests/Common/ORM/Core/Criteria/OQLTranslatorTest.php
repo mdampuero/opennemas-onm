@@ -39,8 +39,8 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([ 'bar', 'norf', 'gorp', 'qux', '1' ,'2', '20' ], $params);
         $this->assertEquals([ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ], $types);
 
-        list($tables, $sql, $params, $types) = $this->translator->translate('');
-        $this->assertEmpty($tables);
+        list($tables, $sql, $params, $types) = $this->translator->translate();
+        $this->assertEquals([ 'foobar' ], $tables);
         $this->assertEmpty($sql);
         $this->assertEmpty($params);
         $this->assertEmpty($types);

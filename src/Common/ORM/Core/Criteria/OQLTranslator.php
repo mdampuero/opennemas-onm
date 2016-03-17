@@ -73,25 +73,28 @@ class OQLTranslator
     }
 
     /**
-     * List of parameters.
+     * Translates an OQL query and returns the parameters to build a SQL query.
      *
-     * @var array
+     * @param string $oql The OQL query.
+     *
+     * @return array A list with tables, conditions, parameters and types to use
+     *               to build a SQL query.
      */
-    public function translate($oql)
+    public function translate($oql = '')
     {
-        if (empty($oql)) {
-            return [ [], [], [], [] ];
-        }
-
         $this->tables = [ $this->metadata->getTable() ];
-
-        $tokenizer = new OQLTokenizer();
-        $tokens    = $tokenizer->tokenize($oql);
-
         $this->params = [];
         $this->types  = [];
         $this->sqls   = [];
         $this->isLike = false;
+
+        if (empty($oql)) {
+            return [ $this->tables, '', [], [] ];
+        }
+
+        $tokenizer = new OQLTokenizer();
+        $tokens    = $tokenizer->tokenize($oql);
+
         foreach ($tokens as $token) {
             list($sql, $param, $type) =
                 $this->translateToken($token[0], $token[1], $this->isLike);
