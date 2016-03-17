@@ -29,7 +29,7 @@ function smarty_outputfilter_piwik($output, $smarty)
             $code = getPiwikCode();
         }
 
-        $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
+        $output = preg_replace('@(<body.*>)@', '${1}'."\n".$code, $output);
     }
 
     return $output;
