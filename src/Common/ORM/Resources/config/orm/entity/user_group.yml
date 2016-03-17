@@ -1,0 +1,35 @@
+entity:
+    name: UserGroup
+    properties:
+        pk_user_group: integer
+        name:          string
+    mapping:
+        table: user_groups
+        repositories:
+            instance:
+                class:     Common\ORM\Database\Repository\BaseRepository
+                arguments: [ '@cache', '@orm.connection.instance' ]
+            manager:
+                class:     Common\ORM\Database\Repository\BaseRepository
+                arguments: [ '@cache', '@orm.connection.manager' ]
+        persisters:
+            instance:
+                class:     Common\ORM\Database\Persister\BasePersister
+                arguments: [ '@cache', '@orm.connection.instance' ]
+            manager:
+                class:     Common\ORM\Database\Persister\BasePersister
+                arguments: [ '@cache', '@orm.connection.manager' ]
+        columns:
+            pk_user_group:
+                type: integer
+                options: { default: null, unsigned: true, autoincrement: true }
+            name:
+                type: string
+                options: { default: null, notnull: false, length: 50 }
+        index:
+            -
+                name: PRIMARY
+                columns: [ pk_user_group ]
+                primary: true
+                unique: true
+                flags: {  }
