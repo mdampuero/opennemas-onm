@@ -190,4 +190,3 @@ entity:
             -
                 name: urn_source
                 columns: [urn_source]
-
