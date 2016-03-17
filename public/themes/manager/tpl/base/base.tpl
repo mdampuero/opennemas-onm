@@ -316,6 +316,7 @@
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-history/history.js,
       @Common/src/angular-http-interceptor/http-interceptor.js,
+      @Common/src/angular-http/http.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,

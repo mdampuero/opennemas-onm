@@ -21,6 +21,7 @@ angular.module(
     'onm.form-autofill-fix',
     'onm.gravatar',
     'onm.history',
+    'onm.http',
     'onm.imagePreview',
     'onm.item',
     'onm.messenger',
