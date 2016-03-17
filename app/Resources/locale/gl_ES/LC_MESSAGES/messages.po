@@ -3,22 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Fran Diéguez <frandieguez@gnome.org>, 2011.
 # sandra <sandra@openhost.es>, 2013.
-# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Diego Blanco <diego@openhost.es>, 2014, 2015, 2016.
+# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-02 18:38+0000\n"
-"PO-Revision-Date: 2016-03-02 20:59+0200\n"
+"POT-Creation-Date: 2016-03-17 15:32+0100\n"
+"PO-Revision-Date: 2016-03-17 15:37+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: gnome-l10n-gl@gnome.org\n"
+"Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 msgid ""
 "You have reach the maximum users allowed. If you want to create more users, "
@@ -308,6 +309,12 @@ msgstr "Configuración de caché gardada correctamente."
 
 msgid "Unable to save the cache configuration."
 msgstr "Non se puido gardar a configuración de caché."
+
+msgid "Smarty cache removed for the instance."
+msgstr "Caché de smarty eliminada para a instancia."
+
+msgid "Smarty compiled templates removed for the instance."
+msgstr "Plantillas compiladas de smarty eliminadas para a instancia."
 
 msgid "Category created successfully."
 msgstr "Categoria creada correctamente."
@@ -1322,6 +1329,16 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletín."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
@@ -1357,16 +1374,6 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Non se puido eliminar o boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como lida correctamente"
@@ -1534,14 +1541,29 @@ msgid ""
 msgstr ""
 "Tes %s comentarios pendentes. Preme <a href=\"%s\">aquí</a> para moderalos."
 
-msgid "Usage of your newspaper"
-msgstr "Uso do teu periódico"
+#, php-format
+msgid "Your are using %d Mb of storage."
+msgstr "Estás usando %d Mb de almacenamento."
 
 #, php-format
 msgid ""
-"You have %d activated users. Note that <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/566172-pricing-opennemas-user-licenses\" target="
-"\"_blank\" title=\"Learn more\">the cost is %s € user/month</a>"
+"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Learn more\">the cost %s € Mb/month</a>."
+msgstr ""
+"Note que <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
+"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" title="
+"\"Descubre más\">o custo é de %s € Mb/mes</a>."
+
+#, php-format
+msgid "You have %d activated users."
+msgstr "Ten %d usuarios activos."
+
+#, fuzzy, php-format
+msgid ""
+"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
+"pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Learn more\">the "
+"cost is %s € user/month</a>."
 msgstr ""
 "Tes %d usuarios activos. Nota que <a href=\"http://help.opennemas.com/"
 "knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario\" "
@@ -1556,20 +1578,6 @@ msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € pv/month</a>."
-msgstr ""
-"Note que <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
-"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" title="
-"\"Descubre más\">o custo é de %s € Mb/mes</a>."
-
-#, php-format
-msgid "Your are using %d Mb of storage. "
-msgstr "Estás usando %d Mb de almacenamento. "
-
-#, php-format
-msgid ""
-"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
-"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
-"\"Learn more\">the cost %s € Mb/month</a>."
 msgstr ""
 "Note que <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
 "precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" title="
@@ -1839,20 +1847,11 @@ msgstr "Notificación eliminada correctamente."
 msgid "%s notifications deleted successfully."
 msgstr "%s notificacións eliminadas correctamente."
 
-msgid "Error"
-msgstr "Erro"
+msgid "Help"
+msgstr "Axuda"
 
 msgid "Information"
 msgstr "Información"
-
-msgid "Success"
-msgstr "Éxito"
-
-msgid "Warning"
-msgstr "Aviso"
-
-msgid "Help"
-msgstr "Axuda"
 
 msgid "Instances not used in last month"
 msgstr "Instancias non usadas no último mes"
@@ -2038,30 +2037,6 @@ msgstr "Campo «%s» non válido"
 msgid "Database error."
 msgstr "Erro de base de datos."
 
-msgid "trashed"
-msgstr "en lixo"
-
-msgid "pending"
-msgstr "pendente"
-
-msgid "available"
-msgstr "dispoñibel"
-
-msgid "not scheduled"
-msgstr "non planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tempo"
-
-msgid "postponed"
-msgstr "adiado"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2093,6 +2068,30 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
+
+msgid "trashed"
+msgstr "en lixo"
+
+msgid "pending"
+msgstr "pendente"
+
+msgid "available"
+msgstr "dispoñibel"
+
+msgid "not scheduled"
+msgstr "non planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tempo"
+
+msgid "postponed"
+msgstr "adiado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -2357,6 +2356,9 @@ msgstr ""
 
 msgid "The email that you entered is already in use"
 msgstr "O enderezo que escribiu xa está en uso"
+
+msgid "Accelerated Mobile Pages integration"
+msgstr "Integración de Accelerated Mobile Pages"
 
 msgid "Advanced search"
 msgstr "Busca avanzada"
@@ -3555,8 +3557,8 @@ msgstr ""
 "<p>Por un custo moi pequeno terás o noso experto equipo en liña e poderás "
 "facer todo tipo de preguntas sobre o teu proxecto e/ou recibir formación "
 "individual.</p>\n"
-"<p>Por favor recorda que garantizamos soporte GRATUITO vía incidencias e "
-"e-mails.</p>"
+"<p>Por favor recorda que garantizamos soporte GRATUITO vía incidencias e e-"
+"mails.</p>"
 
 msgid "Support Pro"
 msgstr "Asistencia Pro"
@@ -3603,8 +3605,8 @@ msgstr ""
 "<p>40 horas (2h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en "
-"plantillas</li>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts</p>"
@@ -3630,8 +3632,8 @@ msgstr ""
 "<p>60 horas (3h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en "
-"plantillas</li>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
 "                        </ul>\n"
 "                        <p>Asistencia fornecida mediante correos/tickets e "
 "Google Hangouts/Skype</p>"
@@ -3655,8 +3657,8 @@ msgstr ""
 "<p>80 horas (4h día durante 1 mes).</p>\n"
 "                        <p>Exemplos de uso da asistencia:</p>\n"
 "                        <ul>\n"
-"                            <li>Cambios estándar de HTML/CSS en "
-"plantillas</li>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3695,8 +3697,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en "
-"plantillas</li>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3737,8 +3739,8 @@ msgstr ""
 "                        <ul>\n"
 "                            <li>Creación e solicitudes de cambios en "
 "widgets</li>\n"
-"                            <li>Cambios estándar de HTML/CSS en "
-"plantillas</li>\n"
+"                            <li>Cambios estándar de HTML/CSS en plantillas</"
+"li>\n"
 "                            <li>Solicitudes de cambios na disposición de "
 "plantillas de portada</li>\n"
 "                            <li>Titulos de categoría, nova estrutura para "
@@ -3834,8 +3836,8 @@ msgstr "hai %d meses"
 msgid "Instance not activated - Opennemas"
 msgstr "Instancia non activada - Opennemas"
 
-msgid "Maintenance mode."
-msgstr "Modo mantemento."
+msgid "We are improving our platform."
+msgstr "Estamos mellorando a nosa plataforma."
 
 msgid ""
 "We are doing some maintenance in the Opennemas platform, please wait a few "
@@ -4493,8 +4495,8 @@ msgstr "Videotitoriais"
 msgid "Use videos to get walkthrough guides"
 msgstr "Use os vídeos para obter guías paso a paso"
 
-msgid "This user is a master"
-msgstr "Este usuario é master"
+msgid "You are a master"
+msgstr "Eres un master"
 
 msgid "Go to newspaper"
 msgstr "Ir ao meu periódico"
@@ -5534,6 +5536,21 @@ msgstr "Imaxes e vídeos"
 msgid "Last updated"
 msgstr "Última actualización"
 
+msgid "year"
+msgstr "ano"
+
+msgid "item"
+msgstr "elemento"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "More info"
+msgstr "Máis información"
+
+msgid "Added to cart"
+msgstr "No carro"
+
 msgid "Packs"
 msgstr "Packs"
 
@@ -5542,9 +5559,6 @@ msgstr "Servizos"
 
 msgid "Partners"
 msgstr "Socios"
-
-msgid "Free"
-msgstr "Gratis"
 
 msgid "My selection"
 msgstr "A miña selección"
@@ -5563,18 +5577,6 @@ msgstr "Mercar"
 
 msgid "No items available to purchase"
 msgstr "Non hai elementos dispoñibles para comprar"
-
-msgid "year"
-msgstr "ano"
-
-msgid "item"
-msgstr "elemento"
-
-msgid "More info"
-msgstr "Máis información"
-
-msgid "Added to cart"
-msgstr "No carro"
 
 msgid "You have requested the following purchases for your newspaper \"%1\""
 msgstr "Solicitaches os seguintes elementos para o teu periódico \"%1\""
@@ -6585,8 +6587,14 @@ msgstr "Album: interior"
 msgid "Poll Inner"
 msgstr "Enquisa interior"
 
+msgid "AMP pages"
+msgstr "Páxinas AMP"
+
 msgid "and inside the position"
 msgstr "e na posición"
+
+msgid "AMP inner article - Button 1"
+msgstr "Artigo interior AMP - Botón 1"
 
 msgid "Advertisment"
 msgstr "Publicidade"
@@ -7199,6 +7207,9 @@ msgstr "Exclusivo"
 msgid "My themes"
 msgstr "Os meus temas"
 
+msgid "Addons"
+msgstr "Engadidos"
+
 msgid "No themes available"
 msgstr "Non hai temas dispoñíbeis"
 
@@ -7246,70 +7257,6 @@ msgstr "estándar"
 msgid "widget"
 msgstr "widget"
 
-msgid "Edit uploaded"
-msgstr "Editar elementos subidos"
-
-msgid ""
-"Please click in the \"Edit uploaded\" button from above to edit latest "
-"upload photo's data"
-msgstr ""
-"Prema o botón «Editar elementos subidos» para editar os datos das últimas "
-"imaxes subidas"
-
-msgid ""
-"Drop files anywhere here to upload or click on the \"Select Files\" button "
-"above."
-msgstr ""
-"Solte ficheiros aquí para subilos ou prema no botón «Seleccionar ficheiros» "
-"de arriba."
-
-msgid "User notes"
-msgstr "Notas para o usuario"
-
-msgid "Include files to upload by:"
-msgstr "Pode incluir ficheiros para subir mediante:"
-
-msgid ""
-"You can <strong>drag &amp; drop</strong> files from your desktop on this "
-"webpage with Google Chrome, Mozilla Firefox and Apple Safari."
-msgstr ""
-"<strong>Arrastrando e soltando</strong> os ficheiros desde o teu escritorio "
-"nesta páxina web se usas Google Chrome, Mozilla Firefox e Apple Safari."
-
-msgid ""
-"If you are using Internet Explorer click in \"Add Files...\" buton and "
-"select the files you want to upload."
-msgstr ""
-"Se está usando Internet Explorer preme no botón «Engadir ficheiros…» e "
-"selecciona os ficheiros que queres subir."
-
-msgid "The maximum file size for uploads is <strong>%1 MB</strong>."
-msgstr "O tamaño de ficheiro máximo para subir é <strong>%1 MB</strong>."
-
-msgid "Only image files (<strong>JPG, GIF, PNG</strong>) are allowed."
-msgstr "Só se permiten ficheiros de imaxe (<strong>JPG, GIF, PNG</strong>)."
-
-msgid "File is too big"
-msgstr "O ficheiro é demasiado grande"
-
-msgid "File is too small"
-msgstr "O ficheiro é demasiado pequeno"
-
-msgid "Filetype not allowed"
-msgstr "Tipo de ficheiro non permitido"
-
-msgid "Max number of files exceeded"
-msgstr "Superouse o número máximo de ficheiros"
-
-msgid "Uploaded bytes exceed file size"
-msgstr "Os bytes subidos exceden o tamaño de ficheiro"
-
-msgid "Empty file upload result"
-msgstr "Resultado de subida de ficheiro baleiro"
-
-msgid "Iniciar"
-msgstr "Iniciar"
-
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
 
@@ -7340,6 +7287,9 @@ msgstr "Xeolocalizar foto coa miña posición"
 
 msgid "Assign location"
 msgstr "Asignar localización"
+
+msgid "View original"
+msgstr "Ver orixinal"
 
 msgid "Original filename:"
 msgstr "Nome do ficheiro orixinal:"
@@ -8670,6 +8620,15 @@ msgstr "UUID"
 msgid "This UUID is invalid"
 msgstr "Este UUID é válido"
 
+msgid "Select a type..."
+msgstr "Seleccione unha tipo…"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Theme addon"
+msgstr "Engadido de tema"
+
 msgid "Select a category..."
 msgstr "Seleccione unha categoría…"
 
@@ -8864,13 +8823,33 @@ msgstr "Nova notificación"
 msgid "Edit notification"
 msgstr "Editar notificación"
 
-msgid "Style"
-msgstr "Estilo"
+msgid "Icon"
+msgstr "Icona"
+
+msgid "Pick an icon..."
+msgstr "Seleccione un tipo…"
+
+msgid "No icon"
+msgstr "Sen icona"
+
+msgid "Background"
+msgstr "Fondo"
+
+msgid "Font color"
+msgstr "Cor do tipo de letra"
 
 msgid "Fixed"
 msgstr "Fixa"
 
-msgid "Notification always visible"
+#, fuzzy
+msgid "Notification always visible in dropdown"
+msgstr "Notificación sempre visíbel"
+
+msgid "Forced"
+msgstr "Forzado"
+
+#, fuzzy
+msgid "Notification always visible before content"
 msgstr "Notificación sempre visíbel"
 
 msgid "Starts"
@@ -8881,6 +8860,9 @@ msgstr "Prema para estabelecer unha data"
 
 msgid "Ends"
 msgstr "Remata"
+
+msgid "Show only for admins"
+msgstr "Mostrar só aos administradores"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -9132,17 +9114,14 @@ msgstr "Email de contacto da instancia"
 msgid "Instance domains"
 msgstr "Dominios da instancia"
 
+msgid "Error"
+msgstr "Erro"
+
 msgid "We seem to have lost you in the clouds."
 msgstr "Semella que te perdemos nas nubes."
 
 msgid "The page your looking for is not here"
 msgstr "A páxina que estás buscando non está aquí"
-
-msgid "Help &amp; FAQ"
-msgstr "Axuda e FAQ"
-
-msgid "Privacy"
-msgstr "Privacidade"
 
 msgid "New user"
 msgstr "Novo usuario"
@@ -9161,6 +9140,95 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Usage of your newspaper"
+#~ msgstr "Uso do teu periódico"
+
+#~ msgid "Success"
+#~ msgstr "Éxito"
+
+#~ msgid "Warning"
+#~ msgstr "Aviso"
+
+#~ msgid "Maintenance mode."
+#~ msgstr "Modo mantemento."
+
+#~ msgid "This user is a master"
+#~ msgstr "Este usuario é master"
+
+#~ msgid "Edit uploaded"
+#~ msgstr "Editar elementos subidos"
+
+#~ msgid ""
+#~ "Please click in the \"Edit uploaded\" button from above to edit latest "
+#~ "upload photo's data"
+#~ msgstr ""
+#~ "Prema o botón «Editar elementos subidos» para editar os datos das últimas "
+#~ "imaxes subidas"
+
+#~ msgid ""
+#~ "Drop files anywhere here to upload or click on the \"Select Files\" "
+#~ "button above."
+#~ msgstr ""
+#~ "Solte ficheiros aquí para subilos ou prema no botón «Seleccionar "
+#~ "ficheiros» de arriba."
+
+#~ msgid "User notes"
+#~ msgstr "Notas para o usuario"
+
+#~ msgid "Include files to upload by:"
+#~ msgstr "Pode incluir ficheiros para subir mediante:"
+
+#~ msgid ""
+#~ "You can <strong>drag &amp; drop</strong> files from your desktop on this "
+#~ "webpage with Google Chrome, Mozilla Firefox and Apple Safari."
+#~ msgstr ""
+#~ "<strong>Arrastrando e soltando</strong> os ficheiros desde o teu "
+#~ "escritorio nesta páxina web se usas Google Chrome, Mozilla Firefox e "
+#~ "Apple Safari."
+
+#~ msgid ""
+#~ "If you are using Internet Explorer click in \"Add Files...\" buton and "
+#~ "select the files you want to upload."
+#~ msgstr ""
+#~ "Se está usando Internet Explorer preme no botón «Engadir ficheiros…» e "
+#~ "selecciona os ficheiros que queres subir."
+
+#~ msgid "The maximum file size for uploads is <strong>%1 MB</strong>."
+#~ msgstr "O tamaño de ficheiro máximo para subir é <strong>%1 MB</strong>."
+
+#~ msgid "Only image files (<strong>JPG, GIF, PNG</strong>) are allowed."
+#~ msgstr "Só se permiten ficheiros de imaxe (<strong>JPG, GIF, PNG</strong>)."
+
+#~ msgid "File is too big"
+#~ msgstr "O ficheiro é demasiado grande"
+
+#~ msgid "File is too small"
+#~ msgstr "O ficheiro é demasiado pequeno"
+
+#~ msgid "Filetype not allowed"
+#~ msgstr "Tipo de ficheiro non permitido"
+
+#~ msgid "Max number of files exceeded"
+#~ msgstr "Superouse o número máximo de ficheiros"
+
+#~ msgid "Uploaded bytes exceed file size"
+#~ msgstr "Os bytes subidos exceden o tamaño de ficheiro"
+
+#~ msgid "Empty file upload result"
+#~ msgstr "Resultado de subida de ficheiro baleiro"
+
+#~ msgid "Iniciar"
+#~ msgstr "Iniciar"
+
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#~ msgid "Help &amp; FAQ"
+#~ msgstr "Axuda e FAQ"
+
+#~ msgid "Privacy"
+#~ msgstr "Privacidade"
 
 #~ msgid "Article - inner"
 #~ msgstr "Artigo - interior"
@@ -11446,14 +11514,8 @@ msgstr ""
 #~ "Pode obter as súas chaves de reCAPTCHA desde <a href=\"https://www.google."
 #~ "com/recaptcha/admin/create\">o sitio web de reCAPTCHA</a>."
 
-#~ msgid "Your data are"
-#~ msgstr "Os seus datos son"
-
 #~ msgid "Batch delete"
 #~ msgstr "Eliminar en lote"
-
-#~ msgid "Per page"
-#~ msgstr "Por páxina"
 
 #~ msgid "Unpublished"
 #~ msgstr "Non publicado"
@@ -12494,9 +12556,6 @@ msgstr ""
 
 #~ msgid "Directory %s is not writable."
 #~ msgstr "Non é posíbel escribir no cartafol «%s»."
-
-#~ msgid "View recipients"
-#~ msgstr "Ver destinatarios"
 
 #~ msgid "Opinion: frontpage"
 #~ msgstr "Opinion: portada"
