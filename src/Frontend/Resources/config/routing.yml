@@ -198,13 +198,6 @@ frontend_sitemapindex:
     requirements:
         _format: 'xml|xml.gz'
 
-frontend_staticpage:
-    path: /estaticas/{slug}.{_format}
-    defaults: { _controller: FrontendBundle:StaticPages:show, _format:html }
-    requirements:
-        _format : html|htm
-        slug    : '[A-Za-z\d-]+'
-
 frontend_search_internal:
     path: /search
     defaults: { _controller: FrontendBundle:Tags:tags }
@@ -685,4 +678,8 @@ frontend_externalfrontpage_category:
 
 frontend_framework:
     resource: '@FrontendBundle/Resources/config/routing/framework.yml'
+    prefix: /
+
+frontend_static_page:
+    resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
     prefix: /
