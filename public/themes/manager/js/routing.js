@@ -269,11 +269,7 @@ angular.module('ManagerApp')
         resolve: {
           data: function(itemService) {
             var data = {
-              orderBy: [{
-                name: 'name',
-                value: 'asc'
-              }],
-              epp: 25
+              oql: 'order by pk_user_group asc limit 25'
             };
 
             return itemService.list('manager_ws_user_groups_list', data).then(

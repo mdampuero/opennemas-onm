@@ -1,21 +1,22 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace ManagerWebService\Controller;
 
+use Common\ORM\Entity\UserGroup;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Onm\Framework\Controller\Controller;
-
+/**
+ * Displays, saves, modifies and removes user groups.
+ */
 class UserGroupController extends Controller
 {
     /**
@@ -27,27 +28,16 @@ class UserGroupController extends Controller
      */
     public function createAction(Request $request)
     {
-        $userGroup = new \UserGroup();
+        $userGroup = new UserGroup($request->request->all());
 
-        $data = array(
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        );
-
-        if (!$data['name']) {
-            return new JsonResponse(_('User group name cannot be empty'), 400);
-        }
-
-        if (!$userGroup->create($data)) {
-            return new JsonResponse(_('Unable to create a new usergroup'), 409);
-        }
+        $this->get('orm.manager')->persist($userGroup);
 
         $response =  new JsonResponse(_('User group saved successfully'), 201);
         $response->headers->set(
             'Location',
             $this->generateUrl(
                 'manager_ws_user_group_show',
-                [ 'id' =>$userGroup->id ]
+                [ 'id' => $userGroup->pk_user_group ]
             )
         );
 
@@ -63,13 +53,10 @@ class UserGroupController extends Controller
      */
     public function deleteAction($id)
     {
-        $userGroup = new \UserGroup();
-        if (!$userGroup->delete($id)) {
-            return new JsonResponse(
-                sprintf(_('Unable to delete the user group with id "%d"'), $id),
-                409
-            );
-        }
+        $em        = $this->get('orm.manager');
+        $userGroup = $em->getRepository('UserGroup')->find($id);
+
+        $em->remove($userGroup);
 
         return new JsonResponse(_('User group deleted successfully.'));
     }
@@ -139,25 +126,20 @@ class UserGroupController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : array();
-        $orderBy  = $request->query->filter('orderBy') ? : array();
+        $oql = $request->query->get('oql', '');
 
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $repository = $this->get('orm.manager')->getRepository('UserGroup');
 
-        $um     = $this->get('usergroup_repository');
-        $groups = $um->findBy($criteria, $order, $epp, $page);
-        $total  = $um->countBy($criteria);
+        $total      = $repository->countBy($oql);
+        $userGroups = $repository->findBy($oql);
+
+        $userGroups =  array_map(function ($a) {
+            return $a->getData();
+        }, $userGroups);
 
         return new JsonResponse(
             array(
-                'epp'     => $epp,
-                'page'    => $page,
-                'results' => $groups,
+                'results' => $userGroups,
                 'total'   => $total,
             )
         );
@@ -170,16 +152,14 @@ class UserGroupController extends Controller
      */
     public function newAction()
     {
-        return new JsonResponse(
-            array(
-                'group'     => null,
-                'template' => $this->templateParams()
-            )
-        );
+        return new JsonResponse([
+            'group'     => null,
+            'template' => $this->templateParams()
+        ]);
     }
 
     /**
-     * Returns a group as JSON.
+     * Displays an user group.
      *
      * @param integer $id The group id.
      *
@@ -187,14 +167,14 @@ class UserGroupController extends Controller
      */
     public function showAction($id)
     {
-        $group = $this->get('usergroup_repository')->find($id);
+        $group = $this->get('orm.manager')
+            ->getRepository('UserGroup')
+            ->find($id);
 
-        return new JsonResponse(
-            array(
-                'group'    => $group,
-                'template' => $this->templateParams()
-            )
-        );
+        return new JsonResponse([
+            'group'    => $group->getData(),
+            'template' => $this->templateParams()
+        ]);
     }
 
     /**
@@ -206,27 +186,16 @@ class UserGroupController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $data = array(
-            'id'         => $id,
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        );
+        $em   = $this->get('orm.manager');
+        $data = $em->getConverter('UserGroup')
+            ->objectify($request->request->all());
 
-        if (!$data['name']) {
-            return new JsonResponse(_('User group name cannot be empty'), 400);
-        }
+        $userGroup = $em->getRepository('UserGroup')->find($id);
+        $userGroup->setData($data);
 
-        $userGroup = new \UserGroup();
-        if ($userGroup->update($data)) {
-            $this->get('usergroup_repository')->deleteCache($id);
+        $em->persist($userGroup);
 
-            return new JsonResponse(_('User group updated successfully'));
-        } else {
-            return new JsonResponse(
-                sprintf(_('Unable to update the user group with id "%d"'), $id),
-                409
-            );
-        }
+        return new JsonResponse(_('User group updated successfully'));
     }
 
     /**

@@ -33,10 +33,10 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
+          <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
         </li>
         <li class="quicklinks hidden-xs">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -46,7 +46,7 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; epp = 25">
+          <button class="btn btn-link" ng-click="criteria = {  name: '', orderBy: { name: 'asc' }, page: 1, epp: 25}">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
@@ -61,7 +61,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="pagination.total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -93,20 +93,20 @@
                 {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
               </td>
             </tr>
-            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
               <td>
                 <div class="checkbox check-default">
-                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
+                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
               </td>
               <td>
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.id }); %]" title="{t}Edit group{/t}">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" title="{t}Edit group{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -117,8 +117,8 @@
       </div>
     </div>
     <div class="grid-footer clearfix">
-      <div class="pull-right" ng-if="items.length > 0">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+      <div class="pull-right">
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
   </div>

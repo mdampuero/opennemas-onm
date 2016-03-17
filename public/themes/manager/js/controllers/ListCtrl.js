@@ -86,13 +86,9 @@
          *                 returns false.
          */
         $scope.isOrderedBy = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
-          }
-
-          if (i < $scope.orderBy.length) {
-            return $scope.orderBy[i].value;
+          if ($scope.criteria && $scope.criteria.orderBy &&
+              $scope.criteria.orderBy[name]) {
+            return $scope.criteria.orderBy[name].value;
           }
 
           return false;

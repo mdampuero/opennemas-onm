@@ -241,7 +241,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
 
             $scope.saving = 1;
 
-            itemService.update('manager_ws_user_group_update', $scope.group.id,
+            itemService.update('manager_ws_user_group_update', $scope.group.pk_user_group,
                 $scope.group).then(function (response) {
                     messenger.post({
                         message: response.data,
