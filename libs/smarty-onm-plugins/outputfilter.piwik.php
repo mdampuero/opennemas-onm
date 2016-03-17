@@ -23,7 +23,7 @@ function smarty_outputfilter_piwik($output, $smarty)
         && !preg_match('/\/comments/', $uri)
     ) {
         $code   = getPiwikCode();
-        $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+        $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
     }
 
     return $output;
