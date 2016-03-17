@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
-  '$controller', '$http', '$modal', '$rootScope', '$sce', '$scope',
-  function($controller, $http, $modal, $rootScope, $sce, $scope) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$sce', '$scope',
+  function($controller, $http, $uibModal, $rootScope, $sce, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -156,9 +156,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       // Save new valid emails
       for (var i = 0; i < emails.length; i++) {
         if (pattern.test(emails[i]) &&
-            currentEmails.indexOf(emails[i]) === -1) {
+            currentEmails.indexOf(emails[i]) === -1
+        ) {
           $scope.target.items.push({ email: emails[i], name: emails[i] });
           $scope.moreEmails = $scope.moreEmails.replace(emails[i] + '\n', '');
+          $scope.sourcePageChanged();
+          $scope.targetPageChanged();
         }
 
         if (!pattern.test(emails[i])) {
@@ -184,7 +187,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * Opens a modal to confirm newsletter sending.
      */
     $scope.send = function() {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-confirm-send',
         backdrop: 'static',
         controller: 'modalCtrl',

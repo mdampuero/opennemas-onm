@@ -470,6 +470,14 @@ frontend_article_show:
         article_id   : '([0-9]+)'
         _format      : 'html|htm'
 
+frontend_article_show_amp:
+    path: /articulo/{category_name}/{slug}/{article_id}.amp.html
+    defaults: { _controller: FrontendBundle:Amp:show, page: 1 }
+    requirements:
+        category_name: '[a-z0-9\-]+'
+        slug         : '[a-z0-9\-]+'
+        article_id   : '([0-9]+)'
+
 frontend_article_external_link:
     path: /redirect
     defaults: { _controller: FrontendBundle:Articles:externalLink }

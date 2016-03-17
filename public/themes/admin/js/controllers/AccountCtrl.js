@@ -26,6 +26,13 @@
          */
         $scope.selected = {};
 
+
+        $scope.init = function(instance, plans, modules) {
+          $scope.instance = instance;
+          $scope.plans    = plans;
+          $scope.modules  = modules;
+        };
+
         /**
          * @function changed
          * @memberOf AccountCtrl

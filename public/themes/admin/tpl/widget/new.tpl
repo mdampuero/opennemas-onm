@@ -83,7 +83,7 @@
             </div>
             <div class="controls">
               <div ng-show="renderlet !== 'intelligentwidget'">
-                <textarea onm-editor onm-editor-preset="simple" name="content" class="form-control">{$widget->content|default:""}</textarea>
+                <textarea onm-editor onm-editor-preset="simple" ng-model="content" name="content" class="form-control">{$widget->content|default:""}</textarea>
               </div>
               <div ng-show="renderlet == 'intelligentwidget'">
                 <select name="intelligent_type" id="intelligent_type" ng-model="intelligent_type">

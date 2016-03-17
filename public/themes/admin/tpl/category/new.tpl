@@ -202,6 +202,10 @@
                     <option value="15"
                     {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
                     {/is_module_activated}
+                    {acl isAllowed="ONLY_MASTERS"}
+                    <option value="0"
+                    {if isset($category) && ($category->internal_category eq 0)} selected="selected"{/if}>{t}Internal{/t}</option>
+                    {/acl}
                   </select>
                 </div>
               </div>
@@ -214,7 +218,10 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <span class="input-group-addon" ng-style="{ 'background-color': color }">
+                    <span class="input-group-addon" ng-if="color.indexOf('#') > -1" ng-style="{ 'background-color': color }">
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span class="input-group-addon" ng-if="color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
                     <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" ng-model="color" type="text">

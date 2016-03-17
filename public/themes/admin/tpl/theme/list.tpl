@@ -69,7 +69,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="dropdown-menu on-right">
+                <div class="dropdown-menu dropdown-menu-right">
                   <div class="shopping-cart-placeholder" ng-if="!cart || cart.length == 0">
                     <h5 class="text-center">
                       {t}Your shopping cart is empty{/t}
@@ -78,7 +78,7 @@
                   <div class="shopping-cart-placeholder" ng-if="cart.length > 0">
                     <scrollable>
                       <ul class="cart-list">
-                        <li class="clearfix" ng-repeat="item in cart track by $index | orderBy: name">
+                        <li class="clearfix" ng-repeat="item in cart">
                           <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
                           <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
                           <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
@@ -121,6 +121,15 @@
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'exclusive', 'btn-white': type != 'exclusive' }" ng-click="type = 'exclusive'">
                 <i class="fa fa-pencil m-r-5"></i>
                 {t}Exclusive{/t}
+              </button>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'addons', 'btn-white': type != 'addons' }" ng-click="type = 'addons'">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Addons{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
@@ -184,8 +193,12 @@
             </div>
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
+          </div>
+        </div>
+        <div class="row clearfix ng-cloak" ng-show="type == 'addons' && !loading && items.length > 0">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item-module'">
           </div>
         </div>
         <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
@@ -203,6 +216,12 @@
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="theme/_details.tpl"}
+    </script>
+    <script type="text/ng-template" id="item-module">
+      {include file="store/partials/_item.tpl"}
+    </script>
+    <script type="text/ng-template" id="module-modal-details">
+      {include file="store/modal/_details.tpl"}
     </script>
   </div>
 {/block}

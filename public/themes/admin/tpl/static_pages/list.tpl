@@ -57,22 +57,22 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="STATIC_PAGE_AVAILABLE"}
           <li class="quicklinks">
-            <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
               <i class="fa fa-check fa-lg"></i>
-            </a>
+            </button>
           </li>
           <li class="quicklinks">
-            <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
               <i class="fa fa-times fa-lg"></i>
-            </a>
+            </button>
           </li>
           {/acl}
           {acl isAllowed="STATIC_PAGE_DELETE"}
           <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
-            <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()">
+            <button class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()">
               <i class="fa fa-trash-o fa-lg"></i>
-            </a>
+            </button>
           </li>
           {/acl}
         </ul>

@@ -5,7 +5,7 @@
     <script>
       jQuery(document).ready(function($) {
         $('#created').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $('#title').on('change', function(e, ui) {
@@ -75,7 +75,7 @@
               <div class="form-group">
                 <label for="body" class="form-label">{t}Body{/t}</label>
                 <div class="controls">
-                  <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
+                  <textarea name="body" id="body" ng-model="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
                 </div>
               </div>
               <h4>{t}Author information{/t}</h4>

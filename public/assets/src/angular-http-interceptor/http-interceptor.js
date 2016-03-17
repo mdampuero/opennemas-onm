@@ -11,8 +11,8 @@
   angular.module('http-interceptor', ['http-interceptor-buffer'])
 
   .factory('httpInterceptor', [
-    '$modal', '$rootScope','httpBuffer',
-    function($modal, $rootScope, httpBuffer) {
+    '$uibModal', '$rootScope','httpBuffer',
+    function($uibModal, $rootScope, httpBuffer) {
       return {
         /**
          * Call this function to indicate that authentication was successfull and trigger a

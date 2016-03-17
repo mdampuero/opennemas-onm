@@ -78,8 +78,8 @@
     <div class="content">
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
-          <tabset>
-            <tab heading="{t}General{/t}">
+          <uib-tabset>
+            <uib-tab heading="{t}General{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -119,8 +119,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Appearance{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Appearance{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -133,7 +133,10 @@
                       </span>
                       <div class="controls">
                         <div class="input-group">
-                          <span class="input-group-addon" ng-style="{ 'background-color': site_color }">
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') > -1" ng-style="{ 'background-color': site_color }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <span class="input-group-addon" ng-if="site_color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + site_color }">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                           </span>
                           <input class="form-control" id="site_color" name="site_color" colorpicker="hex" ng-model="site_color" type="text" ng-init="site_color='{$configs['site_color']|default:""}'">
@@ -236,8 +239,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}SEO{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}SEO{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -288,8 +291,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}Internal{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}Internal{/t}">
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -387,8 +390,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-            <tab heading="{t}External services{/t}">
+            </uib-tab>
+            <uib-tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
@@ -447,7 +450,7 @@
                                       <div class="input-group">
                                         <input class="form-control" name="google_analytics[[% $index %]][base_domain]" type="text" ng-model="code.base_domain" ng-value="[% code.base_domain %]">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, [% $index %])" type="button">
+                                            <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, $index)" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </span>
@@ -853,8 +856,8 @@
                   </div>
                 </div>
               </div>
-            </tab>
-          </tabset>
+            </uib-tab>
+          </uib-tabset>
         </div>
       </div>
     </div>

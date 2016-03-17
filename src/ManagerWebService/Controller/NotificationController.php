@@ -175,8 +175,11 @@ class NotificationController extends Controller
 
         $ids = [];
         foreach ($notifications as &$notification) {
-            $ids[] = $notification->instance_id;
+            if (empty($notification->instances)) {
+                $notification->instances = [];
+            }
 
+            $ids = array_merge($ids, $notification->instances);
             $notification = $notification->getData();
         }
 
@@ -220,9 +223,6 @@ class NotificationController extends Controller
     {
         $extra = $this->getTemplateParams();
 
-        unset($extra['types']['-1']);
-        unset($extra['styles']['-1']);
-
         return new JsonResponse([ 'extra' => $extra ]);
     }
 
@@ -262,7 +262,26 @@ class NotificationController extends Controller
                 ->getRepository('manager.notification')
                 ->find($id);
 
+            if (empty($notification->instances)) {
+                $notification->instances = [];
+            }
+
             $extra = $this->getTemplateParams();
+            $em = $this->get('instance_manager');
+
+            $instances = [];
+            foreach ($notification->instances as $id) {
+                if ($id == 0) {
+                    $instances[] = [ 'name' => _('All'), 'id' => $id ];
+                } elseif ($id == -1) {
+                    $instances[] = [ 'name' => 'Manager', 'id' => $id ];
+                } else {
+                    $instances[] = [ 'name' => $em->find($id)->internal_name, 'id' => $id ];
+                }
+            }
+
+            $notification->instances = $instances;
+
 
             unset($extra['types']['-1']);
 
@@ -328,20 +347,12 @@ class NotificationController extends Controller
     private function getTemplateParams()
     {
         $params = [
-            'styles' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
-                'error'   => [ 'name' => _('Error'), 'value' => 'error' ],
-                'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'success' => [ 'name' => _('Success'), 'value' => 'success' ],
-                'warning' => [ 'name' => _('Warning'), 'value' => 'warning' ]
-            ],
-            'types' => [
-                '-1'      => [ 'name' => _('All'), 'value' => '-1' ],
+            'icons' => [
                 'comment' => [ 'name' => _('Comments'), 'value' => 'comment' ],
-                'email'   => [ 'name' => _('Email'), 'value' => 'email' ],
-                'help'    => [ 'name' => _('Help'), 'value' => 'help' ],
+                'email'   => [ 'name' => _('Email'), 'value' => 'envelope' ],
+                'help'    => [ 'name' => _('Help'), 'value' => 'support' ],
                 'info'    => [ 'name' => _('Information'), 'value' => 'info' ],
-                'media'   => [ 'name' => _('Media'), 'value' => 'media' ],
+                'media'   => [ 'name' => _('Media'), 'value' => 'database' ],
                 'user'    => [ 'name' => _('Users'), 'value' => 'user' ]
             ]
         ];
@@ -349,8 +360,8 @@ class NotificationController extends Controller
         $instances = $this->get('instance_manager')->findBy([]);
 
         $params['instances'] = [
-            '-1' => [ 'name' => 'Manager', 'value' => '-1' ],
-            '0'  => [ 'name' => _('All'), 'value' => '0' ]
+            [ 'name' => 'Manager', 'id' => -1 ],
+            [ 'name' => _('All'), 'id' => 0 ]
         ];
 
         $params['languages'] = [
@@ -360,9 +371,9 @@ class NotificationController extends Controller
         ];
 
         foreach ($instances as $instance) {
-            $params['instances'][$instance->id] = [
+            $params['instances'][] = [
                 'name'  => $instance->internal_name,
-                'value' => $instance->id
+                'id' => $instance->id
             ];
         }
 

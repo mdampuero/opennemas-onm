@@ -22,5 +22,3 @@ function smarty_modifier_clearslash($string)
 	$string = str_replace("\\", '', $string);
     return stripslashes($string);
 }
-
-?>

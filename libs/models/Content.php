@@ -1035,6 +1035,7 @@ class Content
         } else {
             $author  = getService('user_repository')->find($this->fk_author);
         }
+        $authorName = (is_object($author)) ? $author->name : '';
 
         if ($this->id !== null) {
             $views = getService('content_views_repository')->getViews($this->id);
@@ -1050,7 +1051,7 @@ class Content
                 'endtime'         => $this->endtime,
                 'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
                 'state'           => $this->getL10nStatus($status),
-                'last_author'     => $author->name,
+                'last_author'     => $authorName,
             );
         }
     }

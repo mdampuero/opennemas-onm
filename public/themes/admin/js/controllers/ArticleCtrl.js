@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ArticleCtrl', [
-  '$controller', '$http', '$modal', '$rootScope', '$scope', 'routing',
-  function($controller, $http, $modal, $rootScope, $scope, routing) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
+  function($controller, $http, $uibModal, $rootScope, $scope, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -26,7 +26,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       var url  = routing.generate(previewUrl);
 
       $http.post(url, data).success(function() {
-        $modal.open({
+        $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
           controller: 'modalCtrl',

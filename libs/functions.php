@@ -315,7 +315,10 @@ function getPiwikCode($useImage = false)
         return '';
     }
 
-    if ($useImage) {
+
+    if ($useImage === 'amp') {
+        $code = genarateGAAmpCode($config);
+    } elseif ($useImage) {
         $code = generatePiwikImageCode($config);
     } else {
         $code = generatePiwikScriptCode($config);
@@ -353,9 +356,23 @@ function generatePiwikScriptCode($config)
     return $code;
 }
 
+function generatePiwikAmpCode($config)
+{
+    $imgCode = '<img-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s"></amp-pixel>';
+
+    $code .= sprintf(
+        $imgCode,
+        $config['server_url'],
+        $config['page_id'],
+        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+    );
+
+    return $code;
+}
+
 function generatePiwikImageCode($config)
 {
-    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0" alt="" />';
+    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
     $code .= sprintf(
         $imgCode,
@@ -389,7 +406,9 @@ function getGoogleAnalyticsCode($useImage = false)
         $config = [];
     }
 
-    if ($useImage) {
+    if ($useImage === 'amp') {
+        $code = genarateGAAmpCode($config);
+    } elseif ($useImage) {
         $code = genarateGAImageCode($config);
     } else {
         $code = generateGAScriptCode($config);
@@ -461,6 +480,47 @@ function genarateGAImageCode($config)
                 trim($account['api_key']),
                 '__utma%3D999.999.999.999.999.1%3B'
             );
+        }
+    }
+
+    // Add GA Image for onm UA tracking code
+    $code .= sprintf(
+        $imgCode,
+        rand(0, 0x7fffffff),
+        date('d/m/Y'),
+        urlencode(SITE_URL),
+        urlencode(SITE_URL.'newsletter/'.date("Ymd")),
+        urlencode('newsletter/'.date("Ymd")),
+        trim('UA-40838799-5'),
+        '__utma%3D999.999.999.999.999.1%3B'
+    );
+
+    return $code;
+}
+
+function genarateGAAmpCode($config)
+{
+    $code = '';
+    foreach ($config as $key => $account) {
+        if (is_array($account)
+            && array_key_exists('api_key', $account)
+            && !empty(trim($account['api_key']))
+        ) {
+            $code .= '<amp-analytics type="googleanalytics" id="analytics'.$key.'">
+<script type="application/json">
+{
+  "vars": {
+    "account": "'.trim($account['api_key']).'"
+  },
+  "triggers": {
+    "trackPageview": {
+      "on": "visible",
+      "request": "pageview"
+    }
+  }
+}
+</script>
+</amp-analytics>'."\n";
         }
     }
 

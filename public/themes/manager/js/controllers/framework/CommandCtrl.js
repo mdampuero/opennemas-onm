@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Handles all actions in commands listing.
  *

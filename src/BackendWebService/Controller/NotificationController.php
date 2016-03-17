@@ -38,12 +38,17 @@ class NotificationController extends Controller
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $criteria = 'instance_id IN (0, ' . $id . ')' . ' AND (start <= \''
+        $criteria = '(instances LIKE \'%"' . $id . '"%\' OR '
+            .  'instances LIKE \'%"0"%\') AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!empty($read)) {
             $criteria .= ' AND id NOT IN ( ' . implode(', ', array_keys($read))
                 . ' )';
+        }
+
+        if (!$this->getUser()->isAdmin()) {
+            $criteria .= ' AND users != 1';
         }
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
@@ -61,12 +66,12 @@ class NotificationController extends Controller
                 $this->convertNotification($notification);
             }
         }
+
         return new JsonResponse([
             'epp'     => $epp,
             'page'    => $page,
             'results' => $notifications,
-            'total'   => count($notifications),
-            'extra'   => $this->getTemplateParams()
+            'total'   => count($notifications)
         ]);
     }
 
@@ -79,27 +84,24 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $criteria = $request->query->filter('search') ? : [];
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
+        $id   = $this->get('instance')->id;
+        $date = date('Y-m-d H:i:s');
 
-        $id = $this->get('instance')->id;
+        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
+            .  'instances LIKE \'%"0"%\' AND (start <= \''
+            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
-        $criteria['instance_id'] = [
-            [ 'value' => [ 0, $id ], 'operator' => 'IN' ]
-        ];
-
-        $criteria['start'] = [
-            [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<' ]
-        ];
+        if (!$this->getUser()->isAdmin()) {
+            $criteria .= ' AND users != 1';
+        }
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
             [
                 'criteria' => $criteria,
-                'epp'      => $epp,
+                'epp'      => null,
                 'order'    => [ 'fixed' => 'desc' ],
-                'page'     => $page
+                'page'     => null
             ]
         );
 
@@ -113,11 +115,10 @@ class NotificationController extends Controller
             ->dispatch('notifications.count', [ 'criteria' => $criteria ]);
 
         return new JsonResponse([
-            'epp'     => $epp,
-            'page'    => $page,
+            'epp'     => $total,
+            'page'    => 1,
             'results' => $notifications,
-            'total'   => $total,
-            'extra'   => $this->getTemplateParams()
+            'total'   => $total
         ]);
     }
 
@@ -223,8 +224,24 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        $notification['title'] = $notification['title'][CURRENT_LANGUAGE_SHORT];
-        $notification['body']  = $notification['body'][CURRENT_LANGUAGE_SHORT];
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
+            && !empty($notification['title'][CURRENT_LANGUAGE_SHORT])
+        ) {
+            $notification['title'] =
+                $notification['title'][CURRENT_LANGUAGE_SHORT];
+        } else {
+            $notification['title'] = $notification['title']['en'];
+        }
+
+        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
+            && !empty($notification['body'][CURRENT_LANGUAGE_SHORT])
+        ) {
+            $notification['body'] =
+                $notification['body'][CURRENT_LANGUAGE_SHORT];
+        } else {
+            $notification['body']  = $notification['body']['en'];
+        }
+
         $notification['read']  = 0;
 
         $date = \DateTime::createFromFormat(
@@ -245,25 +262,5 @@ class NotificationController extends Controller
 
         $notification['time'] = $date->format('H:i');
         $notification['am'] = $date->format('a');
-    }
-
-    /**
-     * Returns an array of parameters to use in template.
-     *
-     * @return array The array of parameters.
-     */
-    private function getTemplateParams()
-    {
-        $params = [
-            'types' => [
-                [ 'name' => 'All', 'value' => '' ],
-                [ 'name' => 'Email', 'value' => 'email' ],
-                [ 'name' => 'Help', 'value' => 'help' ],
-                [ 'name' => 'Media', 'value' => 'media' ],
-                [ 'name' => 'User', 'value' => 'user' ]
-            ]
-        ];
-
-        return $params;
     }
 }

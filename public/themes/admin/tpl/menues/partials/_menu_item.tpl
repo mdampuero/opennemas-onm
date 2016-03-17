@@ -33,7 +33,7 @@
   <span class="h-seperate"></span>
   <span class="input-wrapper no-padding">
     <i class="fa fa-pencil"></i>
-    <input ng-model="item.title" type="text">
+    <input ng-model="item.title" type="text" data-nodrag>
   </span>
   <button data-nodrag class="btn btn-white pull-right" ng-click="removeItem($index{if $subitem}, parentIndex{/if})" type="button">
     <i class="fa fa-trash-o text-danger"></i>

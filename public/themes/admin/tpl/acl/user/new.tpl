@@ -1,13 +1,17 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
+  {/stylesheets}
+{/block}
+
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
       @Common/js/jquery/jquery.validate.min.js,
       @Common/js/jquery/jquery.multiselect.js,
       @Common/js/jquery/localization/messages_es.js,
       @Common/js/onm/jquery.password-strength.js,
-      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
-      @Common/js/admin.js "}
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
     <script>
       jQuery(document).ready(function($){
         // Password strength checker
@@ -47,18 +51,13 @@
         {acl isAllowed='USER_ADMIN'}
           {is_module_activated name='PAYWALL'}
             $('#paywall_time_limit').datetimepicker({
-              format: 'YYYY-MM-D HH:mm:ss'
+              format: 'YYYY-MM-DD HH:mm:ss'
             });
           {/is_module_activated}
         {/acl}
       });
     </script>
   {/javascripts}
-{/block}
-
-{block name="header-css" append}
-  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
-  {/stylesheets}
 {/block}
 
 {block name="content"}

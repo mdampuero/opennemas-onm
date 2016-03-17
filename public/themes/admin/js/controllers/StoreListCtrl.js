@@ -19,8 +19,8 @@
      *   Handles actions for store.
      */
     .controller('StoreListCtrl', [
-      '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($analytics, $http, $location, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$location', '$uibModal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $location, $uibModal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * The available modules.
          *
@@ -279,7 +279,7 @@
          * @param {Object} item The item to detail.
          */
         $scope.showDetails = function(item) {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-details',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -311,7 +311,7 @@
             return;
           }
 
-          webStorage.local.add('cart', nv);
+          webStorage.local.set('cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {

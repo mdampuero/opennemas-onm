@@ -89,7 +89,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea class="form-control" name="body" id="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
+                  <textarea class="form-control" name="body" id="body" ng-model="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
                 </div>
               </div>
             </div>

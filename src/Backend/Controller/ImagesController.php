@@ -73,30 +73,6 @@ class ImagesController extends Controller
     }
 
     /**
-     * Show the page for upload new images.
-     *
-     * @return Response          The response object.
-     *
-     * @Security("has_role('PHOTO_CREATE')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
-     */
-    public function newAction()
-    {
-        $maxUpload      = (int) (ini_get('upload_max_filesize'));
-        $maxPost        = (int) (ini_get('post_max_size'));
-        $memoryLimit    = (int) (ini_get('memory_limit'));
-        $maxAllowedSize = min($maxUpload, $maxPost, $memoryLimit);
-
-        return $this->render(
-            'image/create.tpl',
-            array(
-                'max_allowed_size' => $maxAllowedSize,
-            )
-        );
-    }
-
-    /**
      * Displays the image information given its id.
      *
      * @param  Request  $request The request object.

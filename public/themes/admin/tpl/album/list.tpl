@@ -61,10 +61,10 @@
             {acl isAllowed="ALBUM_WIDGET"}
             {if $category eq 'widget'}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+              <button class="btn btn-white" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                 <i class="fa fa-save"></i>
                 {t}Save positions{/t}
-              </a>
+              </button>
             </li>
             <li class="quicklinks">
               <span class="h-seperate"></span>

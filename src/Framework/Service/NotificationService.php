@@ -55,18 +55,26 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = time();
-        $notification->instance_id = $this->container->get('instance')->id;
-        $notification->fixed       = 1;
-        $notification->generated   = 1;
+        $notification->id          = 'comments';
+        $notification->instances   = [ $this->container->get('instance')->id ];
+        $notification->fixed       = 0;
+        $notification->forced      = 1;
         $notification->read        = 0;
-        $notification->style       = 'info';
+        $notification->style       = [
+            'background_color' => '#0090d9',
+            'font_color'       => '#ffffff',
+            'icon'             => 'comment'
+        ];
         $notification->type        = 'comment';
         $notification->start       = date('Y-m-d H:i:s');
         $notification->end         = date('Y-m-d H:i:s', time() + 86400);
 
         $notification->title = [
-            CURRENT_LANGUAGE_SHORT => _('Comments'),
+            CURRENT_LANGUAGE_SHORT => sprintf(
+                _('You have %s pending comments. Click <a href="%s">here</a> to moderate.'),
+                $comments,
+                $this->container->get('router')->generate('admin_comments')
+            )
         ];
 
         $notification->body = [
@@ -82,34 +90,119 @@ class NotificationService
     }
 
     /**
-     * Creates a non-persisted notification basing on the instance information.
+     * Creates a non-persisted notification basing on the instance media.
      *
      * @param Instance $instance The instance.
      *
      * @return Notification The notification.
      */
-    public function getFromInstance($instance)
+    public function getFromMedia($instance)
     {
         $notification = new Notification();
 
-        $notification->id          = time();
-        $notification->instance_id = $instance->id;
+        $notification->id          = 'media';
+        $notification->instances   = [ $instance->id ];
         $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 1;
+        $notification->fixed       = 0;
+        $notification->forced      = 1;
         $notification->generated   = 1;
         $notification->read        = 0;
-        $notification->style       = 'warning';
+        $notification->style       = 'danger';
         $notification->type        = 'info';
         $notification->start       = date('Y-m-d H:i:s');
         $notification->end         = date('Y-m-d H:i:s', time() + 86400);
 
         $notification->title = [
-                CURRENT_LANGUAGE_SHORT => _('Usage of your newspaper')
+            CURRENT_LANGUAGE_SHORT =>
+                sprintf(_('Your are using %d Mb of storage.'), $instance->media_size)
+        ];
+
+        $notification->body = [
+            CURRENT_LANGUAGE_SHORT => '<li>'
+                . sprintf(_('Your are using %d Mb of storage.'), $instance->media_size)
+                . sprintf(_('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € Mb/month</a>.'), 0.01)
+            . '</li>'
+        ];
+
+        return $notification;
+    }
+
+    /**
+     * Creates a non-persisted notification basing on the instance users.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return Notification The notification.
+     */
+    public function getFromUsers($instance)
+    {
+        $notification = new Notification();
+
+        $notification->id          = 'users';
+        $notification->instances   = [ $instance->id ];
+        $notification->creator     = 'cron.update_instances';
+        $notification->fixed       = 0;
+        $notification->forced      = 1;
+        $notification->generated   = 1;
+        $notification->read        = 0;
+        $notification->style       = [
+            'background_color' => '#f35958',
+            'font_color'       => '#ffffff',
+            'icon'             => 'user'
+        ];
+        $notification->type        = 'info';
+        $notification->start       = date('Y-m-d H:i:s');
+        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->title = [
+            CURRENT_LANGUAGE_SHORT =>
+                sprintf(_('You have %d activated users.'), $instance->users)
+        ];
+
+        $notification->body = [
+            CURRENT_LANGUAGE_SHORT => '<li>'
+                . sprintf(_('You have %d activated users.'), $instance->users)
+                . sprintf(_('Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" target="_blank" title="Learn more">the cost is %s € user/month</a>.'), 12)
+            . '</li>'
+        ];
+
+        return $notification;
+    }
+
+    /**
+     * Creates a non-persisted notification basing on the page views.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return Notification The notification.
+     */
+    public function getFromViews($instance)
+    {
+        $notification = new Notification();
+
+        $notification->id          = 'views';
+        $notification->instances   = [ $instance->id ];
+        $notification->creator     = 'cron.update_instances';
+        $notification->fixed       = 0;
+        $notification->forced      = 1;
+        $notification->generated   = 1;
+        $notification->read        = 0;
+        $notification->style       = 'danger';
+        $notification->type        = 'info';
+        $notification->start       = date('Y-m-d H:i:s');
+        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->title = [
+            CURRENT_LANGUAGE_SHORT =>
+                sprintf(_('This month you\'re recording %d page views. '), $instance->page_views)
         ];
 
         $notification->body = [
             CURRENT_LANGUAGE_SHORT =>
-                $this->getBody($instance, CURRENT_LANGUAGE_SHORT),
+                '<li>'
+                .sprintf(_('This month you\'re recording %d page views. '), $instance->page_views)
+                .sprintf(_('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € pv/month</a>.'), number_format(0.00009, 5))
+                .'</li>'
         ];
 
         return $notification;
@@ -144,62 +237,5 @@ class NotificationService
         return $this->container->get('orm.manager')
             ->getRepository('manager.notification')
             ->findBy($criteria, $order, $epp, $page);
-    }
-
-    /**
-     * Returns the notification body for the instance.
-     *
-     * @param Instance $instance The instance.
-     *
-     * @return string The notification body.
-     */
-    private function getBody($instance)
-    {
-        $body = '';
-
-        if ($instance->users > 1) {
-            $body .=
-                '<li>'
-                .sprintf(
-                    _('You have %d activated users. Note that <a href="http://help.opennemas.com/knowledgebase/articles/566172-pricing-opennemas-user-licenses" target="_blank" title="Learn more">the cost is %s € user/month</a>'),
-                    $instance->users,
-                    12
-                )
-                .'</li>';
-        }
-
-        if ($instance->page_views > 45000) {
-            $body .=
-                '<li>'
-                .sprintf(_('This month you\'re recording %d page views. '), $instance->page_views);
-
-            if ($instance->page_views > 50000) {
-                $body .= sprintf(
-                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € pv/month</a>.'),
-                    number_format(0.00009, 5)
-                );
-            }
-
-            $body .= '</li>';
-        }
-
-        if ($instance->media_size > 450) {
-
-            $body .= '<li>'.sprintf(
-                _('Your are using %d Mb of storage. '),
-                $instance->media_size
-            );
-
-            if ($instance->media_size > 500) {
-                $body .= sprintf(
-                    _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-opennemas-page-views-and-storage-space" target="_blank" title="Learn more">the cost %s € Mb/month</a>.'),
-                    0.01
-                );
-            }
-
-            $body .= '</li>';
-        }
-
-        return '<ul>' . $body . '</ul>';
     }
 }

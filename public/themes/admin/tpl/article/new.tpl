@@ -25,7 +25,7 @@
         });
 
         $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $("#starttime").on("dp.change",function (e) {
@@ -206,7 +206,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -221,7 +221,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea name="body" id="body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                  <textarea name="body" id="body" ng-model="body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                 </div>
               </div>
             </div>
@@ -358,7 +358,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="starttime" name="starttime" type="datetime" value="{$article->starttime}">
+                            <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -374,7 +374,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="endtime" name="endtime" type="datetime" value="{$article->endtime}">
+                            <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
