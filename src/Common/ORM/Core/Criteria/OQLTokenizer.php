@@ -23,7 +23,7 @@ class OQLTokenizer
      * @var array
      */
     protected $tokens = [
-        'COMMA'          => '/,/',
+        'COMMA'          => '/\s*,\s*/',
         'C_AND'          => '/\s*and\s*/',
         'C_OR'           => '/\s*or\s*/',
         'G_CPARENTHESIS' => '/\)/',
@@ -67,10 +67,10 @@ class OQLTokenizer
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL)*\s*G_CBRACKET/',
         'S_LIMIT'     => '/M_LIMIT T_INTEGER/',
         'S_OFFSET'    => '/M_OFFSET T_INTEGER/',
-        'S_ORDER'     => '/M_ORDER\s*T_FIELD\s*(M_ASC|M_DESC)/',
+        'S_ORDER'     => '/M_ORDER\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
         'S_MODIFIER'  => '/S_ORDER|S_OFFSET\s*(S_LIMIT)?|S_LIMIT\s*(S_OFFSET)?/',
         'S_CONDITION' => '/T_FIELD\s*T_OPERATOR\s*(T_FIELD|T_LITERAL)|T_LITERAL\s*T_OPERATOR\s*T_FIELD|G_OPARENTHESIS\s*S_CONDITION\s*G_CPARENTHESIS|S_CONDITION(\s*T_CONNECTOR\s*S_CONDITION)+/',
-        'OQL'         => '/G_OPARENTHESIS\s*OQL\s*G_CPARENTHESIS|OQL(\s*T_CONNECTOR\s*OQL)+|S_CONDITION(\s*S_MODIFIER)*|OQL(\s*S_MODIFIER)+/',
+        'OQL'         => '/G_OPARENTHESIS\s*OQL\s*G_CPARENTHESIS|OQL(\s*T_CONNECTOR\s*OQL)+|S_CONDITION(\s*S_MODIFIER)*|OQL(\s*S_MODIFIER)+|OQL\s*OQL|^S_MODIFIER\s*(\s*S_MODIFIER)*$/',
     ];
 
     /**
