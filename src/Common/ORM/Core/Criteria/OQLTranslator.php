@@ -35,6 +35,7 @@ class OQLTranslator
         'M_DESC'         => 'desc',
         'M_ORDER'        => 'order by',
         'M_LIMIT'        => 'limit',
+        'M_OFFSET'       => 'offset',
         'O_EQUALS'       => '=',
         'O_GREAT'        => '>',
         'O_GREAT_EQUALS' => '>=',
