@@ -101,8 +101,8 @@ class EntityManager
             $persisters[] = $class->newInstanceArgs($args);
         }
 
-        if (!empty($persisters)) {
-            return $this->buildChain($persisters);
+        if (!empty($persisters) && is_array($persisters)) {
+            return $persisters[0];
         }
 
         throw new InvalidPersisterException($entity->getClassName(), 'any source');
@@ -145,8 +145,8 @@ class EntityManager
             $repositories[] = $class->newInstanceArgs($args);
         }
 
-        if (!empty($repositories)) {
-            return $this->buildChain($repositories);
+        if (!empty($repositories) && is_array($repositories)) {
+            return $repositories[0];
         }
 
         throw new InvalidRepositoryException($entity, 'any source');
@@ -182,30 +182,6 @@ class EntityManager
     public function remove(Entity $entity, $persister = null)
     {
         $this->getPersister($entity, $persister)->remove($entity);
-    }
-
-    /**
-     * Creates a chain from an array of elements.
-     *
-     * @param array $elements Elements in chain.
-     *
-     * @return ChainElement The first element in chain.
-     */
-    private function buildChain($elements)
-    {
-        if (empty($elements)) {
-            return null;
-        }
-
-        $first = array_shift($elements);
-
-        $current = $first;
-        foreach ($elements as $element) {
-            $current->add($element);
-            $current = $element;
-        }
-
-        return $first;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Tests\Common\ORM\Core;
 
 use Common\ORM\Braintree\BraintreeManager;
-use Common\ORM\Core\ChainElement;
 use Common\ORM\Database\DatabaseManager;
 use Common\ORM\Entity\Client;
 use Common\ORM\Core\Entity;
@@ -158,32 +157,6 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->remove($entity);
-    }
-
-    public function testBuildChainWithoutElements()
-    {
-        $reflection = new \ReflectionClass(get_class($this->em));
-        $method = $reflection->getMethod('buildChain');
-        $method->setAccessible(true);
-
-        $this->assertEmpty($method->invokeArgs($this->em, [ [] ]));
-    }
-
-    public function testBuildChainWithElements()
-    {
-        $a = new ChainElement();
-        $b = new ChainElement();
-
-        $elements = [ $a, $b ];
-
-        $reflection = new \ReflectionClass(get_class($this->em));
-        $method = $reflection->getMethod('buildChain');
-        $method->setAccessible(true);
-
-        $chain = $method->invokeArgs($this->em, [ $elements ]);
-        $this->assertEquals($a, $chain);
-        $this->assertEquals($b, $a->next());
-        $this->assertFalse($b->hasNext());
     }
 
     public function testParseArgs()
