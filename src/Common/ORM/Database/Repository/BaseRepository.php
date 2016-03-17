@@ -69,8 +69,7 @@ class BaseRepository extends Repository
      */
     public function countBy($oql = '')
     {
-        $keys   = $this->metadata->getIdKeys();
-        $tables = $this->translator->tables;
+        $keys = $this->metadata->getIdKeys();
 
         list($tables, $filter, $params, $types) =
             $this->translator->translate(trim($oql));
@@ -82,7 +81,11 @@ class BaseRepository extends Repository
         );
 
         if (!empty($filter)) {
-            $sql .= " where $filter";
+            if (!preg_match('/^\s*(order|limit|offset)/', $filter)) {
+                $sql .= " where";
+            }
+
+            $sql .= " $filter";
         }
 
         $rs  = $this->conn->fetchArray($sql, $params, $types);
@@ -140,7 +143,11 @@ class BaseRepository extends Repository
         );
 
         if (!empty($filter)) {
-            $sql .= ' where ' . $filter;
+            if (!preg_match('/^\s*(order|limit|offset)/', $filter)) {
+                $sql .= " where";
+            }
+
+            $sql .= " $filter";
         }
 
         $rs = $this->conn->fetchAll($sql, $params, $types);
@@ -227,7 +234,7 @@ class BaseRepository extends Repository
             return;
         }
 
-        if ($this->metadata->mapping['metas']) {
+        if ($this->metadata->hasMetas()) {
             $rs = array_merge($rs, $this->getMetas($entity));
 
             if (!$rs) {
