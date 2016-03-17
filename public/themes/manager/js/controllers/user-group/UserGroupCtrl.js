@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Handles all actions in user groups listing.
  *
@@ -92,15 +94,16 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
             for (var key in $scope.template.modules[module]) {
                     var id = $scope.template.modules[module][key].id;
 
-                if (!$scope.group.privileges
-                        || $scope.group.privileges.indexOf(id) == -1) {
+                if (!$scope.group.privileges ||
+                    $scope.group.privileges.indexOf(id) === -1
+                ) {
                     $scope.selected.all[module] = 0;
-                    return false
+                    return false;
                 }
             }
 
             return true;
-        }
+        };
 
         /**
          * Checks if a privilege is selected.
@@ -111,13 +114,14 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          *                 false.
          */
         $scope.isSelected = function(id) {
-            if (!$scope.group.privileges
-                    || $scope.group.privileges.indexOf(id) == -1) {
-                return false
+            if (!$scope.group.privileges ||
+                $scope.group.privileges.indexOf(id) == -1
+            ) {
+                return false;
             }
 
-            return true
-        }
+            return true;
+        };
 
         /**
          * Creates a new user group.
@@ -140,10 +144,10 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 .then(function (response) {
                     messenger.post({
                         message: response.data,
-                        type: response.status == 201  ? 'success' : 'error'
+                        type: response.status === 201  ? 'success' : 'error'
                     });
 
-                    if (response.status == 201) {
+                    if (response.status === 201) {
                         // Get new instance id
                         var url = response.headers()['location'];
                         var id  = url.substr(url.lastIndexOf('/') + 1);
@@ -171,7 +175,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 for (var key in $scope.template.modules[module]) {
                     var id = $scope.template.modules[module][key].id;
 
-                    if ($scope.group.privileges.indexOf(id) == -1) {
+                    if ($scope.group.privileges.indexOf(id) === -1) {
                         $scope.group.privileges.push(id);
                     }
                 }
@@ -179,10 +183,10 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 for (var key in $scope.template.modules[module]) {
                     var id = $scope.template.modules[module][key].id;
 
-                    if ($scope.group.privileges.indexOf(id) != -1) {
+                    if ($scope.group.privileges.indexOf(id) !== -1) {
                         $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
                     }
-                };
+                }
             }
         };
 
@@ -217,8 +221,8 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                         $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
                     }
                 }
-            };
-        }
+            }
+        };
 
         /**
          * Updates an user group.
@@ -241,7 +245,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 $scope.group).then(function (response) {
                     messenger.post({
                         message: response.data,
-                        type: response.status == 200 ? 'success' : 'error'
+                        type: response.status === 200 ? 'success' : 'error'
                     });
 
                     $scope.saving = 0;
@@ -270,8 +274,8 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
             for (var module in $scope.template.modules) {
                 for (var i = 0; i < $scope.template.modules[module].length; i++) {
                     $scope.modules.push($scope.template.modules[module][i]);
-                };
-            };
+                }
+            }
         }
     }
 ]);

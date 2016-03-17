@@ -12,7 +12,7 @@
  */
 angular.module('BackendApp.controllers').controller('ContentModalCtrl',
   function ContentModalCtrl(
-    $http, $scope, $modalInstance, fosJsRouting, messenger, sharedVars, index, route
+    $http, $scope, $uibModalInstance, fosJsRouting, messenger, sharedVars, index, route
   ) {
     'use strict';
     $scope.route = route;
@@ -37,7 +37,7 @@ angular.module('BackendApp.controllers').controller('ContentModalCtrl',
      * Closes the current modal.
      */
      $scope.close = function () {
-      $modalInstance.dismiss('close');
+      $uibModalInstance.dismiss('close');
     };
 
     /**
@@ -85,7 +85,7 @@ angular.module('BackendApp.controllers').controller('ContentModalCtrl',
           }
         }
 
-        $modalInstance.close();
+        $uibModalInstance.close();
 
             // Disable spinner
             $scope.deleting = 0;
@@ -148,7 +148,7 @@ angular.module('BackendApp.controllers').controller('ContentModalCtrl',
         }
       }
 
-      $modalInstance.close();
+      $uibModalInstance.close();
           // Disable spinner
           $scope.deleting = 0;
         }).error(function() {

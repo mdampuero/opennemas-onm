@@ -74,7 +74,7 @@ class CacheManagerController extends Controller
                 $flashBag->add('error', _('Unable to save the cache configuration.'));
             }
 
-            return $this->redirect($this->generateUrl('admin_tpl_manager_config'));
+            return $this->redirect($this->generateUrl('admin_tpl_manager'));
         } else {
             // Load cache manager config and show the form with that info
             $config = $configManager->load();
@@ -102,6 +102,9 @@ class CacheManagerController extends Controller
         $frontpageTemplate = new \Template(TEMPLATE_USER);
         $frontpageTemplate->clearAllCache();
 
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Smarty cache removed for the instance.'));
+
         return $this->redirect($this->generateUrl('admin_tpl_manager'));
     }
 
@@ -120,6 +123,9 @@ class CacheManagerController extends Controller
         // Initialization of the frontend template object
         $frontpageTemplate = new \Template(TEMPLATE_USER);
         $frontpageTemplate->clearCompiledTemplate();
+
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Smarty compiled templates removed for the instance.'));
 
         return $this->redirect($this->generateUrl('admin_tpl_manager'));
     }

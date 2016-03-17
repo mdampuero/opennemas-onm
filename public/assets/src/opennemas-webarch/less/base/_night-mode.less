@@ -1,0 +1,147 @@
+@nightmode-background-color-dark: #2B2E35;
+@nightmode-background-color-darker: #14171B;
+
+@nightmode-border-color-dark: #333;
+
+@nightmode-text-color-dark: #999;
+
+.night-mode {
+    table, thead, tbody,
+    .table-wrapper {
+        border-color: @nightmode-background-color-dark;
+    }
+
+    .table-hover tbody tr:hover > td,
+    .table-hover tbody tr:hover > th {
+        background-color: @nightmode-background-color-darker;
+    }
+
+    .page-content {
+        background-color: @nightmode-background-color-dark;
+    }
+
+    .actions-navbar {
+        border-top: 1px solid @nightmode-border-color-dark;
+    }
+
+    .page-navbar {
+        background-color: #1b1e24;
+        border-bottom: 1px solid @nightmode-border-color-dark;
+        color: White;
+    }
+
+    .page-navbar h4 {
+        color: White;
+    }
+
+
+    #frontpagemanager {
+        .placeholder {
+            box-shadow: 0px 0px 0px 1px #1b1e24;
+            margin-bottom: 6px;
+        }
+
+        .placeholder > div.title,
+        .static {
+            background-color: @nightmode-background-color-dark;
+            border-radius: 0px;
+            color: White;
+        }
+
+        .placeholder div.content {
+            background: @nightmode-background-color-dark;
+            border-radius: 0;
+        }
+
+        .placeholder div.content-provider-element {
+            background: #1b1e24;
+            border: 0 none;
+            color: @nightmode-text-color-dark;
+        }
+    }
+
+    .angular-ui-tree-handle {
+        background-color: transparent;
+        border-color: @nightmode-background-color-dark;
+    }
+
+    .grid-body td {
+        border-top: 1px solid @nightmode-border-color-dark;
+    }
+
+    .grid.simple .grid-body h4 {
+        color: @nightmode-text-color-dark;
+    }
+
+    .grid.simple .grid-title,
+    .grid.simple .grid-body,
+    .grid.simple .grid-footer,
+    .tab-content, .uib-tab.active a {
+        background-color: #1b1e24;
+        border-color: @nightmode-background-color-dark;
+        color: #777a80;
+    }
+
+    .input-group .input-group-addon {
+        border-color: @nightmode-background-color-dark;
+        color: @nightmode-text-color-dark;
+    }
+
+    .menu-item input {
+        color: @nightmode-text-color-dark;
+    }
+
+    .nav-tabs,.uib-tab:not(.active) a {
+        background-color: @nightmode-background-color-darker;
+    }
+
+    .newsletter-manager .recipients-box {
+        border-color: @nightmode-background-color-dark;
+    }
+
+    .panel-heading {
+        background-color: @nightmode-background-color-darker;
+        color: @nightmode-text-color-dark;
+    }
+
+    .bootstrap-tagsinput input,
+    .btn-white, .btn-default, .bootstrap-tagsinput,
+    .form-control,
+    .input-group .input-group-addon input,
+    .pagination-controls input,
+    .search-input .add-on,
+    .search-input input,
+    .welcome-page .merchant .btn,
+    .welcome-page .merchant .thumbnail,
+    textarea, select, .checkbox label:before {
+        background-color: @nightmode-background-color-dark;
+        border-color: @nightmode-background-color-dark;
+        color: @nightmode-text-color-dark;
+    }
+
+    button.btn.btn-white {
+        background-color: @nightmode-background-color-darker;
+        border-color: @nightmode-background-color-darker;
+    }
+
+    .thumbnail, .img-thumbnail {
+        background: none;
+        border-color: @nightmode-text-color-dark;
+        color: @nightmode-text-color-dark;
+    }
+
+    ::-webkit-scrollbar {
+        background: #000;
+        height: 12px;
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: #000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 1ex;
+        background: @nightmode-background-color-darker;
+    }
+}

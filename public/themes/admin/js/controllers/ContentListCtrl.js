@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$modal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
-  function($http, $modal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
+  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
+  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
     'use strict';
 
     /**
@@ -577,7 +577,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-update-selected',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -627,7 +627,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Permanently removes a keyword by using a confirmation dialog
      */
     $scope.deleteKeyword = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -668,7 +668,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -706,7 +706,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Permanently removes a keyword by using a confirmation dialog
      */
     $scope.delete = function(content, route) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -741,7 +741,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Permanently removes a menu by using a confirmation dialog
      */
     $scope.deleteConfig = function(url) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-remove-config',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -764,7 +764,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Permanently removes a menu by using a confirmation dialog
      */
     $scope.removeMenu = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -805,7 +805,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-batch-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -846,7 +846,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-batch-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -884,7 +884,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Permanently removes a contents by using a confirmation dialog
      */
     $scope.removePermanently = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -925,7 +925,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-batch-remove-permanently',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -966,7 +966,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * Takes out of trash a content by using a confirmation dialog
      */
     $scope.restoreFromTrash = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-restore-from-trash',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -1007,7 +1007,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-batch-restore',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -1050,7 +1050,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param mixed content The content to send to trash.
      */
     $scope.sendToTrash = function(content) {
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
         controller: 'modalCtrl',
@@ -1091,7 +1091,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Enable spinner
       $scope.deleting = 1;
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
         controller: 'modalCtrl',

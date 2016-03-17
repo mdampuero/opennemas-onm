@@ -8,7 +8,7 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
@@ -19,8 +19,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$modal', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $http, $location, $modal, $scope, $timeout, Cleaner, itemService, routing, messenger, data) {
+      '$filter', '$http', '$location', '$uibModal', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
+      function ($filter, $http, $location, $uibModal, $scope, $timeout, Cleaner, itemService, routing, messenger, data) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -213,8 +213,9 @@
           if ($scope.module.metas.modules_included) {
             $scope.module.metas.modules_included =
               $scope.module.metas.modules_included.map(function(e) {
-                if (e instanceof Object)
-                return e.text;
+                if (e instanceof Object) {
+                  return e.text;
+                }
               });
           }
 

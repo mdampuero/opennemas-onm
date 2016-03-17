@@ -8,7 +8,7 @@
      *
      * @requires $http
      * @requires $location
-     * @requires $modal
+     * @requires $uibModal
      * @requires $scope
      * @requires $timeout
      * @requires routing
@@ -18,8 +18,8 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$modal', '$scope', '$timeout', 'messenger', 'routing',
-      function($http, $location, $modal, $scope, $timeout, messenger, routing) {
+      '$http', '$location', '$uibModal', '$scope', '$timeout', 'messenger', 'routing',
+      function($http, $location, $uibModal, $scope, $timeout, messenger, routing) {
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -138,7 +138,7 @@
          *
          * @type {Integer}
          */
-        $scope.width = $('.typeahead').width();
+        $scope.width = $('.uib-typeahead').width();
 
         /**
          * @function confirm
@@ -206,7 +206,7 @@
             }
           }
 
-          $('.suggestions').width($scope.width - 24);
+          $('.uib-typeahead + .dropdown-menu').width($scope.width - 24);
 
           return suggestions;
         };

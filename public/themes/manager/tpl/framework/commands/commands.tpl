@@ -50,7 +50,7 @@
                 <input type="hidden" name="command" value="clean:smarty-cache">
               </td>
               <td class="right">
-                <a ng-href="[% routing.ngGenerate('manager_command_output', { command: 'clean:smarty-cache', data: [theme] }) %]" type="submit" class="btn btn-success"><i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Execute{/t}</a>
+                <a ng-href="[% routing.ngGenerate('manager_command_output', { command: 'clean:smarty-cache', data: [theme] }) %]" type="submit" class="btn btn-primary"><i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Execute{/t}</a>
               </td>
             </tr>
           </form>
@@ -60,7 +60,7 @@
             <td></td>
             <td class="right">
               <div class="btn-group">
-                <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_command_output', { command: command.name, data: [] }) %]">
+                <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_command_output', { command: command.name, data: [] }) %]">
                   <i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   {t}Execute{/t}
                 </a>

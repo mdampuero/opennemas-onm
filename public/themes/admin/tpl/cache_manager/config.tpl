@@ -74,12 +74,11 @@
               </td>
               [% selected.groups %]
               <td>
-                <img src="{$params.IMAGE_DIR}template_manager/elements/[% item.icon %]"/>
                 [% item.name %]
               </td>
 
               <td class="right">
-                <input type="text" size="5" name="lifetime[[% group %]]" ng-model="item.cache_lifetime" ng-value="item.cache_lifetime"/>
+                <input type="number" min="0" max="99999" size="5" name="lifetime[[% group %]]" ng-model="item.cache_lifetime" ng-value="item.cache_lifetime"/>
               </td>
             </tr>
          </tbody>

@@ -49,10 +49,10 @@
             {if $category eq 'widget'}
             {acl isAllowed="ATTACHMENT_FRONTS"}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" id="save-widget-positions" title="{t}Save positions{/t}" ng-click="savePositions('backend_ws_contents_save_positions')">
+              <button class="btn btn-white" id="save-widget-positions" title="{t}Save positions{/t}" ng-click="savePositions('backend_ws_contents_save_positions')">
                 <span class="fa fa-save"></span>
                 {t}Save positions{/t}
-              </a>
+              </button>
             </li>
             <li class="quicklinks">
               <span class="h-seperate"></span>

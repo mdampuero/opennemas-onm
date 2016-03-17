@@ -145,6 +145,7 @@ class ModuleManager
     {
         if (!isset(self::$availableModules)) {
             self::$availableModules = array(
+                'AMP_MODULE'                 => _('Accelerated Mobile Pages integration'),
                 'ADS_MANAGER'                => _('Advertisement'),
                 'ADVANCED_SEARCH'            => _('Advanced search'),
                 'ALBUM_MANAGER'              => _('Albums'),
@@ -1400,7 +1401,6 @@ class ModuleManager
             throw new ModuleException("Module '{$module} is not available");
         } else {
             // Finally return if that module is activated
-
             return in_array($module, self::getActivatedModules());
         }
     }

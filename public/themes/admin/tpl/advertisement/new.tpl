@@ -143,7 +143,7 @@
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" ng-value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -153,7 +153,7 @@
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
+                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" ng-value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -165,7 +165,7 @@
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" value="[% size.width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -176,9 +176,9 @@
                       </label>
                       <div class="controls">
                         <div ng-class="{ 'input-group': $index > 0 }">
-                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" value="[% size.height %]" ng-required="with_script != 2" min="0">
+                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
                           <span class="input-group-btn" ng-show="$index > 0">
-                            <button class="btn btn-danger" ng-click="removeInput(sizes, [% $index %])" type="button">
+                            <button class="btn btn-danger" ng-click="removeInput(sizes, $index )" type="button">
                                 <i class="fa fa-trash-o"></i>
                             </button>
                           </span>
@@ -353,7 +353,10 @@
                     <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Newsletter{/t}</option>
+                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="AMP_MODULE"}
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1100}selected{/if}>{t}AMP pages{/t}</option>
                     {/is_module_activated}
                     <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                   </select>
@@ -406,6 +409,22 @@
                     {is_module_activated name="NEWSLETTER_MANAGER"}
                     <div class="ng-cloak" ng-show="position == 'publi-newsletter'">
                       {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                    </div>
+                    {/is_module_activated}
+                    {is_module_activated name="AMP_MODULE"}
+                    <div class="ng-cloak" ng-show="position == 'publi-amp'">
+                      <div class="col-md-9">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="amp-inner-button1" name="type_advertisement" type="radio" value="1051" {if isset($advertisement) && $advertisement->type_advertisement == 1051}checked="checked" {/if}/>
+                              <label for="amp-inner-button1">
+                                {t}AMP inner article - Button 1{/t}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     {/is_module_activated}
                     <div class="ng-cloak" ng-show="position == 'publi-others'">

@@ -625,7 +625,7 @@ class InstanceController extends Controller
         $themes  = $this->get('orm.loader')->getPlugins();
         $modules = $this->get('orm.manager')
             ->getRepository('manager.extension')
-            ->findBy([ 'type' => [ [ 'value' => 'module' ] ] ], []);
+            ->findBy([ 'type' => [ 'union' => 'OR', [ 'value' => 'module' ], [ 'value' => 'theme-addon' ] ] ], []);
 
         $modules = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {

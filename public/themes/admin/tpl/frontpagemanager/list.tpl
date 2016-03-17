@@ -2,11 +2,9 @@
 
 {block name="header-css" append}
   {stylesheets src="@AdminTheme/less/_frontpage.less,
-    @AdminTheme/css/frontpagemanager.css,
-    @AdminTheme/css/jquery/colorbox.css" filters="cssrewrite,less"}
+    @AdminTheme/less/_frontpagemanager.less" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
-  <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
   <style>
     @media (max-width: 767px) {
       .page-content .filters-navbar ~ .content {
@@ -17,8 +15,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery.colorbox-min.js,
-    @AdminTheme/js/onm/frontpagemanager.js"}
+  {javascripts src="@AdminTheme/js/onm/frontpagemanager.js"}
   <script type="text/javascript">
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",

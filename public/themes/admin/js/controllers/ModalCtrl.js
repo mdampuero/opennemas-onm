@@ -1,7 +1,7 @@
 
 angular.module('BackendApp.controllers').controller('modalCtrl', [
-  '$modalInstance', '$scope', 'template', 'success',
-  function ($modalInstance, $scope, template, success) {
+  '$uibModalInstance', '$scope', 'template', 'success',
+  function ($uibModalInstance, $scope, template, success) {
     'use strict';
 
     $scope.template = template;
@@ -12,7 +12,7 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
      * Closes the current modal
      */
     $scope.close = function(response) {
-      $modalInstance.close(response);
+      $uibModalInstance.close(response);
     };
 
     /**
@@ -23,12 +23,12 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
 
         var getType = {};
         if (success && getType.toString.call(success) === '[object Function]') {
-            success($modalInstance, $scope.template).then(function (response) {
-                $modalInstance.close(response);
+            success($uibModalInstance, $scope.template).then(function (response) {
+                $uibModalInstance.close(response);
                 $scope.loading = 0;
             });
         } else {
-            $modalInstance.close(true);
+            $uibModalInstance.close(true);
         }
     };
 

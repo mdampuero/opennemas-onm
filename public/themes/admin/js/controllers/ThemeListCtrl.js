@@ -19,8 +19,8 @@
      *   Handles actions for themes store.
      */
     .controller('ThemeListCtrl', [
-      '$analytics', '$http', '$location', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
-      function($analytics, $http, $location, $modal, $scope, $timeout, routing, messenger, webStorage) {
+      '$analytics', '$http', '$location', '$uibModal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($analytics, $http, $location, $uibModal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * The available modules.
          *
@@ -170,6 +170,7 @@
           $http.get(url).success(function(response) {
             $scope.active     = response.active;
             $scope.exclusive  = response.exclusive;
+            $scope.addons     = response.addons;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
@@ -221,9 +222,9 @@
          * @param {Object} item The item to detail.
          */
         $scope.showDetails = function(item) {
-          var modal = $modal.open({
-            templateUrl: 'modal-details',
-            windowClass: 'modal-details-theme',
+          var modal = $uibModal.open({
+            templateUrl: item.type === 'theme-addon' ? 'module-modal-details' : 'modal-details',
+            windowClass: item.type === 'theme-addon' ? 'modal-details' : 'modal-details-theme',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
@@ -258,7 +259,7 @@
             return;
           }
 
-          webStorage.local.add('cart', nv);
+          webStorage.local.set('cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {

@@ -65,12 +65,12 @@
               <ol ui-tree-nodes ng-model="newsletterContents" type="container">
                 <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in newsletterContents" collapsed="false">
                   <div class="newsletter-container-title clearfix" ui-tree-handle>
-                    <div class="input-group title pull-left">
+                    <div class="input-group title pull-left" data-nodrag>
                       <input ng-model="container.title" type="text" class="form-control">
                       <div class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil"></i></div>
                     </div>
                     <div class="container-actions pull-right">
-                      <button type="button" class="btn btn-white" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
+                      <button type="button" class="btn btn-white" data-nodrag content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
                         <i class="fa fa-plus"></i>
                         {t}Add contents{/t}
                       </button>

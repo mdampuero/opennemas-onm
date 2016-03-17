@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('UserCtrl', [
-  '$controller', '$http', '$modal', '$scope', 'routing',
-  function($controller, $http, $modal, $scope, routing) {
+  '$controller', '$http', '$uibModal', '$scope', 'routing',
+  function($controller, $http, $uibModal, $scope, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -14,7 +14,7 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
         ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
         ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1')
       ) {
-        var modal = $modal.open({
+        var modal = $uibModal.open({
           templateUrl: 'modal-update-selected',
           backdrop: 'static',
           controller: 'modalCtrl',

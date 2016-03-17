@@ -67,7 +67,7 @@
               <div class="clearfix">
                 <div class="input-group pull-left" style="width:80%;">
                   <span class="input-group-addon">www.</span>
-                  <input autofocus class="form-control typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue | limitTo: 5" type="text" typeahead-popup-template-url="suggestions">
+                  <input autofocus class="form-control uib-typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" uib-typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue" type="text">
                   <span class="input-group-btn">
                     <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
                       <span ng-if="!loading">
@@ -216,7 +216,7 @@
                       <div class="input-with-icon right">
                         <select class="form-control" id="country" name="country" ng-model="billing.country" placeholder="{t}Country{/t}" required="required">
                           <option value="">{t}Select a country{/t}...</option>
-                          <option value="[% value %]" ng-repeat="(key,value) in countries | orderBy" ng-selected="[% billing.country === value %]">[% key %]</option>
+                          <option value="[% value %]" ng-repeat="(key,value) in countries" ng-selected="[% billing.country === value %]">[% key %]</option>
                         </select>
                       </div>
                     </div>
@@ -366,12 +366,5 @@
         </div>
       </div>
     </div>
-    <script type="text/ng-template" id="suggestions">
-      <ul class="dropdown-menu suggestions" ng-style="{ top: position().top + 'px', left: position().left + 'px', display: 'block' }" ng-show="isOpen() && !moveInProgress">
-        <li ng-repeat="match in matches track by $index" ng-class="{ active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="[% ::match.id %]">
-          <a><span ng-bind-html="match.label"></span></a>
-        </li>
-      </ul>
-    </script>
   </div>
 {/block}

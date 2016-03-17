@@ -12,13 +12,6 @@ jQuery.fn.flash = function(color, duration )
     this.animate({ color: current }, duration / 2);
 };
 
-// Prototype free code, must be cleaned
-function salir(msg,url) {
-    if (confirm(msg)) {
-        location.href = url;
-    }
-}
-
 function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
         url: url + '?data=' + raw_info

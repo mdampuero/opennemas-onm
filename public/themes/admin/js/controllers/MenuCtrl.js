@@ -8,7 +8,7 @@
      *
      * @requires $controller
      * @requires $http
-     * @requires $modal
+     * @requires $uibModal
      * @requires $rootScope
      * @requires $scope
      * @requires routing
@@ -16,8 +16,8 @@
      * @description
      *   Handle actions for article inner.
      */
-    .controller('MenuCtrl', ['$controller', '$http', '$modal', '$rootScope', '$scope', 'routing',
-      function($controller, $http, $modal, $rootScope, $scope, routing) {
+    .controller('MenuCtrl', ['$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
+      function($controller, $http, $uibModal, $rootScope, $scope, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -39,7 +39,7 @@
          *   Opens a modal window to add item to menu.
          */
         $scope.open = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-add-item',
             backdrop: 'static',
             controller: 'MenuModalCtrl'

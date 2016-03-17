@@ -2,6 +2,8 @@
  * Formats a date.
  */
 angular.module('BackendApp.filters').filter('moment', function() {
+  'use strict';
+
     /**
      * Formats a date.
      *
