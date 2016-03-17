@@ -24,6 +24,7 @@ angular.module(
     'onm.imagePreview',
     'onm.item',
     'onm.messenger',
+    'onm.oql',
     'onm.pagination',
     'onm.resizable',
     'onm.routing',
