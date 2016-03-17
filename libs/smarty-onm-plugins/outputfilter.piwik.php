@@ -22,7 +22,13 @@ function smarty_outputfilter_piwik($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        $code   = getPiwikCode();
+        $isAmp = preg_match('@\.amp\.html$@', $uri);
+        if ($isAmp) {
+            $code = getPiwikCode('amp');
+        } else {
+            $code = getPiwikCode();
+        }
+
         $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
     }
 
