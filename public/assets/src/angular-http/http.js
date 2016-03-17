@@ -11,7 +11,7 @@
    *   The `onm.http` module provides a service to symplify HTTP requests when
    *   using Symfony with FOSJsRoutingBundle.
    */
-  angular.module('orm.http', [ 'onm.routing' ])
+  angular.module('onm.http', [ 'onm.routing' ])
     /**
      * @ngdoc Service
      * @name  http
@@ -144,7 +144,7 @@
          * @return {String} The generated URL.
          */
         this.getUrl = function(route) {
-          if (!(route instanceof 'Object')) {
+          if (!(route instanceof Object)) {
             route = { name: route, params: {} };
           }
 
