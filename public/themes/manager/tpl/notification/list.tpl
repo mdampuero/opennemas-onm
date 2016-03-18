@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="instance"}
+{include file='common/selected_navbar.tpl' list="notification"}
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -168,18 +168,18 @@
                 [% item.end %]
               </td>
               <td class="text-center">
-                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed ? '0' : '1')" type="button">
-                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.fixedLoading && item.fixed == '1', 'fa-times text-error': !item.fixedLoading && item.fixed == '0', 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
                 </button>
               </td>
               <td class="text-center">
-                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced ? '0' : '1')" type="button">
-                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.forcedLoading && item.forced == '1', 'fa-times text-error': !item.forcedLoading && item.forced == '0', 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
                 </button>
               </td>
               <td class="text-center">
-                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled ? '0' : '1')" type="button">
-                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0', 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
                 </button>
               </td>
             </tr>
