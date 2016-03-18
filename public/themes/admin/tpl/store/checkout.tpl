@@ -92,15 +92,18 @@
                 <ul class="cart-list cart-list-big">
                   <li class="clearfix" ng-repeat="item in cart">
                     <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
-                    <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
-                    <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
+                    <img class="img-responsive pull-left" ng-if="!item.thumbnail && item.images.length > 0" ng-src="[% '/asset/scale,300,300' + item.path + '/' + item.images[0] %]">
+                    <img class="img-responsive pull-left" ng-if="!item.thunbnail && item.screenshots.length > 0 && item.type == 'theme'" ng-src="[% '/asset/scale,300,300' + item.path + '/' + item.screenshots[0] %]">
+                    <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.images || item.images.length == 0) && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                     <div class="p-l-100">
                       <h5>[% item.name %]</h5>
                       <div class="description" ng-bind-html="item.description[lang] ? item.description[lang] : item.description"></div>
                       <div class="text-right p-r-15 p-b-15">
                         <div class="price">
                           <h4 class="no-margin">
-                            <strong>[% item.price.month %]</strong><small> € / {t}month{/t}</small>
+                            <strong ng-if="item.price > 0">[% item.price.month %]</strong>
+                            <strong ng-if="item.meta_price > 0">[% item.meta.price.month %]</strong>
+                            <small> € / {t}month{/t}</small>
                           </h4>
                         </div>
                       </div>
