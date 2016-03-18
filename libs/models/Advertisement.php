@@ -624,7 +624,7 @@ class Advertisement extends Content
         $width  = $params['width'];
         $height = $params['height'];
 
-        if (array_key_exists('width', $this->params) && !is_null($this->params['width'])
+        if (is_array($this->params) && array_key_exists('width', $this->params) && !is_null($this->params['width'])
             && array_key_exists('height', $this->params) && !is_null($this->params['height'])
         ) {
             if (is_array($this->params['width'])
