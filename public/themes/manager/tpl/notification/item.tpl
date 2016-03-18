@@ -263,9 +263,7 @@
                     </div>
                     <div class="cbp_tmlabel">
                       <div class="p-t-15 p-l-30 p-r-30 p-b-30">
-                        <h4>
-                          [% notification.title[language] %]
-                        </h4>
+                        <h4 ng-bind-html="notification.title[language]"></h4>
                         <div class="text-default" ng-bind-html="notification.body[language]"></div>
                       </div>
                     </div>
