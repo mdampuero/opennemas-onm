@@ -92,9 +92,9 @@
           $scope.saving = true;
           var url = routing.generate('backend_ws_store_checkout');
           var modules = $scope.cart.map(function(e) {
-            var id = e.id;
+            var id = e.uuid;
             if (!id) {
-              id = e.uuid;
+              id = e.id;
             }
             return id;
           });
