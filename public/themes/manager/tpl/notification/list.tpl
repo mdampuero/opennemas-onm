@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="instance"}
+{include file='common/selected_navbar.tpl' list="notification"}
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -99,21 +99,25 @@
               <th class="text-center" width="60">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" width="210">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" width="210">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('fixed')" width="85">
                 {t}Fixed{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('forced')" width="85">
                 {t}Forced{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('enabled')" width="85">
+                {t}Enabled{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -164,10 +168,19 @@
                 [% item.end %]
               </td>
               <td class="text-center">
-                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.fixed == '1', 'fa-times text-error': !item.loading && item.fixed == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
+                </button>
               </td>
               <td class="text-center">
-                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.forced == '1', 'fa-times text-error': !item.loading && item.forced == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
+                </button>
               </td>
             </tr>
           </tbody>

@@ -233,46 +233,55 @@
         };
 
         /**
-         * @function setEnabled
+         * @function patch
          * @memberOf NotificationListCtrl
          *
          * @description
          *   Enables/disables an notification.
          *
-         * @param boolean enabled Notification activated value.
+         * @param {String}  notification The notification object.
+         * @param {String}  property     The property name.
+         * @param {Boolean} value        The property value.
          */
-        $scope.setEnabled = function(notification, enabled) {
-          notification.loading = 1;
+        $scope.patch = function(notification, property, value) {
+          var data = {};
 
-          itemService.patch('manager_ws_notification_patch', notification.id,
-            { activated: enabled }).success(function(response) {
-              notification.loading = 0;
-              notification.activated = enabled;
+          notification[property + 'Loading'] = 1;
+          data[property] = value;
+
+          itemService.patch('manager_ws_notification_patch', notification.id, data)
+            .success(function(response) {
+              notification[property + 'Loading'] = 0;
+              notification[property] = value;
 
               messenger.post({ message: response, type: 'success' });
             }).error(function(response) {
+              notification[property + 'Loading'] = 0;
               messenger.post({ message: response, type: 'error' });
             });
         };
 
         /**
-         * @function setEnabledSelected
+         * @function patchSelected
          * @memberOf NotificationListCtrl
          *
          * @description
          *   Enables/disables the selected notifications.
          *
-         * @param integer enabled The activated value.
+         * @param {String}  notification The notification object.
+         * @param {String}  property     The property name.
+         * @param {Boolean} value        The property value.
          */
-        $scope.setEnabledSelected = function(enabled) {
+        $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
             if ($scope.selected.items.indexOf(id) !== -1) {
-              $scope.items[i].loading = 1;
+              $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
-          var data = { selected: $scope.selected.items, activated: enabled };
+          var data = { selected: $scope.selected.items };
+          data[property] = value;
 
           itemService.patchSelected('manager_ws_notifications_patch', data)
             .success(function(response) {
@@ -281,17 +290,13 @@
                 var id = $scope.items[i].id;
 
                 if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].activated = enabled;
-                  delete $scope.items[i].loading;
+                  $scope.items[i][property] = value;
+                  delete $scope.items[i][property + 'Loading'];
                 }
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
-
+                messenger.post(response.messages);
                 $scope.selected = { all: false, items: [] };
               } else {
                 messenger.post(response);
@@ -303,15 +308,11 @@
             }).error(function(response) {
               // Update notifications changed successfully
               for (var i = 0; i < $scope.items.length; i++) {
-                delete $scope.items[i].loading;
+                delete $scope.items[i][property + 'Loading'];
               }
 
               if (response.messages) {
-                // TODO: Remove when merging feature/ONM-352
-                for (var i = 0; i < response.messages.length; i++) {
-                  messenger.post(response.messages[i]);
-                }
-
+                messenger.post(response.messages);
                 $scope.selected = { all: false, items: [] };
               } else {
                 messenger.post(response);

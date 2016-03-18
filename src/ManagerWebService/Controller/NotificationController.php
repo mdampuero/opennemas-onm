@@ -235,6 +235,17 @@ class NotificationController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
+        $em           = $this->get('orm.manager');
+        $params       = $request->request->all();
+        $notification = $em->getRepository('manager.notification')->find($id);
+
+        foreach ($params as $key => $value) {
+            $notification->{$key} = $value;
+        }
+
+        $em->persist($notification);
+
+        return new JsonResponse(_('Notification saved successfully'));
     }
 
     /**
@@ -246,6 +257,64 @@ class NotificationController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
+        $error      = [];
+        $messages   = [];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
+
+        if (is_array($selected) && count($selected) == 0) {
+            return new JsonResponse(
+                _('Unable to find the notifications for the given criteria'),
+                404
+            );
+        }
+
+        $em = $this->get('orm.manager');
+
+        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+
+        $notifications = $em->getRepository('manager.notification')->findBy($criteria);
+
+        foreach ($notifications as $notification) {
+            try {
+                foreach ($request->request->all() as $key => $value) {
+                    if ($key !== 'selected') {
+                        $notification->{$key} = $request->request->get($key);
+                    }
+                }
+
+                $em->persist($notification);
+                $updated[] = $notification->id;
+            } catch (\Exception $e) {
+                $error[]    = $notification->id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error',
+                ];
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages[] = [
+                'message' => sprintf(
+                    _('%s notifications updated successfully.'),
+                    count($updated)
+                ),
+                'type' => 'success'
+            ];
+        }
+
+        if (count($error) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($error) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
+            $statusCode
+        );
     }
 
     /**

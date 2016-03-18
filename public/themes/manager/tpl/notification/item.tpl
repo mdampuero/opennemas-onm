@@ -154,6 +154,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input id="enabled" name="fixed" ng-model="notification.enabled" ng-false-value="0" ng-true-value="1" type="checkbox">
+                      <label for="enabled">{t}Enabled{/t}</label>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6 col-md-offset-1">
                 <div class="row">
@@ -263,9 +271,7 @@
                     </div>
                     <div class="cbp_tmlabel">
                       <div class="p-t-15 p-l-30 p-r-30 p-b-30">
-                        <h4>
-                          [% notification.title[language] %]
-                        </h4>
+                        <h4 ng-bind-html="notification.title[language]"></h4>
                         <div class="text-default" ng-bind-html="notification.body[language]"></div>
                       </div>
                     </div>
