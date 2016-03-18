@@ -168,13 +168,19 @@
                 [% item.end %]
               </td>
               <td class="text-center">
-                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.fixed == '1', 'fa-times text-error': !item.loading && item.fixed == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed ? '0' : '1')" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.fixedLoading && item.fixed == '1', 'fa-times text-error': !item.fixedLoading && item.fixed == '0', 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
+                </button>
               </td>
               <td class="text-center">
-                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.forced == '1', 'fa-times text-error': !item.loading && item.forced == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced ? '0' : '1')" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.forcedLoading && item.forced == '1', 'fa-times text-error': !item.forcedLoading && item.forced == '0', 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
+                </button>
               </td>
               <td class="text-center">
-                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.enabled == '1', 'fa-times text-error': !item.loading && item.enabled == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled ? '0' : '1')" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0', 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
+                </button>
               </td>
             </tr>
           </tbody>

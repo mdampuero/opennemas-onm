@@ -235,6 +235,17 @@ class NotificationController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
+        $em           = $this->get('orm.manager');
+        $params       = $request->request->all();
+        $notification = $em->getRepository('manager.notification')->find($id);
+
+        foreach ($params as $key => $value) {
+            $notification->{$key} = $value;
+        }
+
+        $em->persist($notification);
+
+        return new JsonResponse(_('Notification saved successfully'));
     }
 
     /**

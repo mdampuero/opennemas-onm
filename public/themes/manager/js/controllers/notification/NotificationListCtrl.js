@@ -241,16 +241,20 @@
          *
          * @param boolean enabled Notification activated value.
          */
-        $scope.setEnabled = function(notification, enabled) {
-          notification.loading = 1;
+        $scope.patch = function(notification, property, value) {
+          var data = {};
 
-          itemService.patch('manager_ws_notification_patch', notification.id,
-            { activated: enabled }).success(function(response) {
-              notification.loading = 0;
-              notification.activated = enabled;
+          notification[property + 'Loading'] = 1;
+          data[property] = value;
+
+          itemService.patch('manager_ws_notification_patch', notification.id, data)
+            .success(function(response) {
+              notification[property + 'Loading'] = 0;
+              notification[property] = value;
 
               messenger.post({ message: response, type: 'success' });
             }).error(function(response) {
+              notification[property + 'Loading'] = 0;
               messenger.post({ message: response, type: 'error' });
             });
         };
