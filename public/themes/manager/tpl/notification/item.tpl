@@ -154,6 +154,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input id="enabled" name="fixed" ng-model="notification.enabled" ng-false-value="0" ng-true-value="1" type="checkbox">
+                      <label for="enabled">{t}Enabled{/t}</label>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6 col-md-offset-1">
                 <div class="row">

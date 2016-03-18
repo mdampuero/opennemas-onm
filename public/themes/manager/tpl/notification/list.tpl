@@ -99,21 +99,25 @@
               <th class="text-center" width="60">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" width="210">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" width="210">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('fixed')" width="85">
                 {t}Fixed{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('forced')" width="85">
                 {t}Forced{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('enabled')" width="85">
+                {t}Enabled{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -168,6 +172,9 @@
               </td>
               <td class="text-center">
                 <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.forced == '1', 'fa-times text-error': !item.loading && item.forced == '0' }"></i>
+              </td>
+              <td class="text-center">
+                <i class="fa" ng-class="{ 'fa-check text-success' : !item.loading &&item.enabled == '1', 'fa-times text-error': !item.loading && item.enabled == '0' }"></i>
               </td>
             </tr>
           </tbody>
