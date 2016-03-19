@@ -55,10 +55,6 @@ class Converter
                 $to = \classify($this->metadata->mapping['columns'][$key]['type']);
             }
 
-            if (empty($to) && $from === 'array') {
-                $to = 'array';
-            }
-
             $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
                 . ucfirst(strtolower($from)) . 'DataMapper';
 
@@ -96,20 +92,19 @@ class Converter
         $data = [];
         foreach ($source as $key => $value) {
             if (array_key_exists($key, $this->metadata->properties)) {
-                $from = \classify(gettype($value));
-                $to   = $this->metadata->properties[$key];
+                $data[$key] = $value;
+                $from = \classify(strtolower(gettype($value)));
+                $to   = \classify($this->metadata->properties[$key]);
 
-                if (array_key_exists($key, $this->metadata->mapping['columns'])) {
-                    $from = \classify($this->metadata->mapping['columns'][$key]['type']);
+                if ($from !== $to) {
+                    $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
+                        . ucfirst(strtolower($to)) . 'DataMapper';
+
+                    $mapper = new $mapper($this->metadata);
+                    $method = 'from' . ucfirst($from);
+
+                    $data[$key] = $mapper->{$method}($value);
                 }
-
-                $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
-                    . ucfirst(strtolower($to)) . 'DataMapper';
-
-                $mapper = new $mapper($this->metadata);
-                $method = 'from' . ucfirst($from);
-
-                $data[$key] = $mapper->{$method}($value);
             }
         }
 
