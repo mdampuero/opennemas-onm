@@ -36,6 +36,6 @@ manager_user:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/user.yml'
 
-manager_usergroup:
+manager_user_group:
     prefix:   /manager
-    resource: '@ManagerBundle/Resources/config/routing/usergroup.yml'
+    resource: '@ManagerBundle/Resources/config/routing/user_group.yml'
