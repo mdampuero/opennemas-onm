@@ -1,4 +1,4 @@
 schema:
     name: manager
     entities:
-        - Extension
+        - UserGroup
