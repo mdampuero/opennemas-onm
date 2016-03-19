@@ -28,6 +28,16 @@ class ArrayDataMapper
     }
 
     /**
+     * Returns an empty array.
+     *
+     * @return array The empty array.
+     */
+    public function fromNull()
+    {
+        return [];
+    }
+
+    /**
      * Converts an array to a comma-separated string.
      *
      * @param string $value The comma-separated string.
