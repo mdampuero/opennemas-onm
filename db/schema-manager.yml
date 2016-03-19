@@ -275,36 +275,6 @@ settings:
             primary: true
             unique: true
             flags: {  }
-user_groups:
-    columns:
-        pk_user_group:
-            type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
-        name:
-            type: string
-            options: { default: null, notnull: false, length: 50 }
-    index:
-        -
-            name: PRIMARY
-            columns: [ pk_user_group ]
-            primary: true
-            unique: true
-            flags: {  }
-user_groups_privileges:
-    columns:
-        pk_fk_user_group:
-            type: integer
-            options: { default: null, unsigned: true }
-        pk_fk_privilege:
-            type: integer
-            options: { default: null, unsigned: true }
-    index:
-        -
-            name: PRIMARY
-            columns: [ pk_fk_user_group, pk_fk_privilege ]
-            primary: true
-            unique: true
-            flags: {  }
 usermeta:
     columns:
         user_id:

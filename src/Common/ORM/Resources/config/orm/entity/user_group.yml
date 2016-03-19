@@ -1,10 +1,11 @@
 entity:
     name: UserGroup
     properties:
-        pk_user_group: integer
-        name:          string
+        id:         integer
+        name:       string
+        privileges: array
     mapping:
-        table: user_groups
+        table: user_group
         repositories:
             instance:
                 class:     Common\ORM\Database\Repository\BaseRepository
@@ -20,16 +21,19 @@ entity:
                 class:     Common\ORM\Database\Persister\BasePersister
                 arguments: [ '@cache', '@orm.connection.manager' ]
         columns:
-            pk_user_group:
+            id:
                 type: integer
                 options: { default: null, unsigned: true, autoincrement: true }
             name:
                 type: string
                 options: { default: null, notnull: false, length: 50 }
+            privileges:
+                type: text
+                options: { default: null, length: 65532, notnull: false }
         index:
             -
                 name: PRIMARY
-                columns: [ pk_user_group ]
+                columns: [ id ]
                 primary: true
                 unique: true
                 flags: {  }
