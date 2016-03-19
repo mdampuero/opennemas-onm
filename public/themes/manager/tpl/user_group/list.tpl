@@ -93,20 +93,20 @@
                 {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
               </td>
             </tr>
-            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
                 <div class="checkbox check-default">
-                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
+                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
               </td>
               <td>
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" title="{t}Edit group{/t}">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.id }); %]" title="{t}Edit group{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>

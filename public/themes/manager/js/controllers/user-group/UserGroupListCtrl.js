@@ -62,11 +62,16 @@
               },
               success: function() {
                 return function(modalInstance) {
-                  return itemService.delete('manager_ws_user_group_delete', id)
-                    .success(function(response) {
-                      modalInstance.close({ message: response, type: 'success'});
-                    }).error(function(response) {
-                      modalInstance.close({ message: response, type: 'error'});
+                  var route = {
+                    name: 'manager_ws_user_group_delete',
+                    params: { id: id }
+                  };
+
+                  return http.delete(route)
+                    .then(function(response) {
+                      modalInstance.close({ data: response.data, success: true });
+                    }, function(response) {
+                      modalInstance.close({ data: response.data, success: false });
                     });
                 };
               }
@@ -74,8 +79,11 @@
           });
 
           modal.result.then(function (response) {
-            messenger.post(response);
-            $scope.list();
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
           });
         };
 
@@ -99,11 +107,14 @@
               },
               success: function() {
                 return function(modalInstance) {
-                  return itemService.deleteSelected('manager_ws_user_groups_delete',
-                      $scope.selected.items).success(function(response) {
-                        modalInstance.close(response);
-                    }).error(function(response) {
-                        modalInstance.close(response);
+                  var route = 'manager_ws_user_groups_delete';
+                  var data  = { ids: $scope.selected.items };
+
+                  return http.delete(route, data)
+                    .then(function(response) {
+                        modalInstance.close({ data: response.data, success: true });
+                    }, function(response) {
+                      modalInstance.close({ data: response.data, success: false });
                     });
                 };
               }
@@ -111,15 +122,12 @@
           });
 
           modal.result.then(function (response) {
-            if (response.messages) {
-              messenger.post(response.messages);
+            messenger.post(response.data);
 
+            if (response.success) {
               $scope.selected = { all: false, items: [] };
-            } else {
-              messenger.post(response);
+              $scope.list();
             }
-
-            $scope.list();
           });
         };
 

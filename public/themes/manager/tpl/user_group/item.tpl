@@ -15,8 +15,8 @@
         </li>
         <li class="quicklinks">
           <h5>
-            <span ng-if="!group.id">{t}New user group{/t}</span>
-            <span ng-if="group.id">{t}Edit user group{/t}</span>
+            <span ng-if="!user_group.id">{t}New user group{/t}</span>
+            <span ng-if="user_group.id">{t}Edit user group{/t}</span>
           </h5>
         </li>
       </ul>
@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!group.pk_user_group">
+            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user_group.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="group.pk_user_group">
+            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user_group.id">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -53,7 +53,7 @@
             <span ng-show="groupForm.name.$invalid">*</span>
           </label>
           <div class="controls" ng-class="{ 'error-control': formValidated && groupForm.name.$invalid }">
-            <input class="form-control" name="name" ng-model="group.name" required type="text">
+            <input class="form-control" name="name" ng-model="user_group.name" required type="text">
             <span class="error" ng-show="formValidated && groupForm.name.$invalid">
               <label for="form1Amount" class="error">{t}This field is required{/t}</label>
             </span>
@@ -68,7 +68,7 @@
       <div class="grid-body">
         <!-- <div class="form-group">
           <label class="form-label">{t}Selected privileges{/t}</label>
-          <ui-select id="modules" multiple ng-model="group.privileges">
+          <ui-select id="modules" multiple ng-model="user_group.privileges">
           <ui-select-match>
           <strong>[% $item.module %]:</strong> [% $item.description %]
           </ui-select-match>
@@ -93,9 +93,9 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in template.modules[name]">
+                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in extra.modules[name]">
                     <div class="checkbox check-default">
-                      <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
+                      <input id="checkbox-[% name + '-' + $index %]" checklist-model="user_group.privileges" checklist-value="privilege.id" type="checkbox">
                       <label for="checkbox-[% name + '-' + $index %]">
                         [% privilege.description %]
                       </label>

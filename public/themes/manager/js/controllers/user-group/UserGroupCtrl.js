@@ -1,24 +1,31 @@
-'use strict';
+(function () {
+  'use strict';
 
-/**
- * Handles all actions in user groups listing.
- *
- * @param  Object $scope      The current scope.
- * @param  Object itemService The item service.
- * @param  Object data        The input data.
- *
- * @return Object The command controller.
- */
-angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
-    '$filter', '$location', '$scope', 'itemService', 'routing', 'messenger', 'data',
-    function ($filter, $location, $scope, itemService, routing, messenger, data) {
+  angular.module('ManagerApp.controllers')
+    /**
+     * @ngdoc controller
+     * @name  UserGroupCtrl
+     *
+     * @requires $location
+     * @requires $scope
+     * @requires http
+     * @requires routing
+     * @requires messenger
+     * @requires data
+     *
+     * @description
+     *   Handles all actions in user groups listing.
+     */
+    .controller('UserGroupCtrl', [
+      '$location', '$scope', 'http', 'routing', 'messenger', 'data',
+      function ($location, $scope, http, routing, messenger, data) {
         /**
          * List of available groups.
          *
          * @type Object
          */
-        $scope.group = {
-            privileges: []
+        $scope.user_group = {
+          privileges: []
         };
 
         /**
@@ -27,41 +34,41 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * @type array
          */
         $scope.sections = [
-            {
-                title: 'Web',
-                rows: [
-                    ['ADVERTISEMENT', 'WIDGET', 'MENU']
-                ]
-            },
-            {
-                title: 'Contents',
-                rows: [
-                    ['ARTICLE', 'OPINION', 'AUTHOR', 'COMMENT'],
-                    ['POLL', 'STATIC', 'SPECIAL', 'LETTER'],
-                    ['CATEGORY', 'CONTENT']
-                ]
-            },
-            {
-                title: 'Multimedia',
-                rows: [
-                    ['IMAGE', 'FILE', 'VIDEO', 'ALBUM'],
-                    ['KIOSKO', 'BOOK'],
-                ]
-            },
-            {
-                title: 'Utils',
-                rows: [
-                    ['SEARCH', 'NEWSLETTER', 'PCLAVE', 'PAYWALL'],
-                    ['INSTANCE_SYNC', 'SYNC_MANAGER', 'IMPORT', 'SCHEDULE'],
-                ]
-            },
-            {
-                title: 'System',
-                rows: [
-                    ['BACKEND', 'USER', 'GROUP', 'CACHE'],
-                    ['ONM']
-                ]
-            }
+        {
+          title: 'Web',
+          rows: [
+            ['ADVERTISEMENT', 'WIDGET', 'MENU']
+          ]
+        },
+        {
+          title: 'Contents',
+          rows: [
+            ['ARTICLE', 'OPINION', 'AUTHOR', 'COMMENT'],
+            ['POLL', 'STATIC', 'SPECIAL', 'LETTER'],
+            ['CATEGORY', 'CONTENT']
+          ]
+        },
+        {
+          title: 'Multimedia',
+          rows: [
+            ['IMAGE', 'FILE', 'VIDEO', 'ALBUM'],
+            ['KIOSKO', 'BOOK'],
+          ]
+        },
+        {
+          title: 'Utils',
+          rows: [
+            ['SEARCH', 'NEWSLETTER', 'PCLAVE', 'PAYWALL'],
+            ['INSTANCE_SYNC', 'SYNC_MANAGER', 'IMPORT', 'SCHEDULE'],
+          ]
+        },
+        {
+          title: 'System',
+          rows: [
+            ['BACKEND', 'USER', 'GROUP', 'CACHE'],
+            ['ONM']
+          ]
+        }
         ];
 
         /**
@@ -70,17 +77,17 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * @type Object
          */
         $scope.selected = {
-            all: {},
-            privileges: {},
-            allSelected: {}
+          all: {},
+          privileges: {},
+          allSelected: {}
         };
 
         /**
-         * The template parameters.
+         * The extra parameters.
          *
          * @type Object
          */
-        $scope.template = data.template;
+        $scope.extra = data.extra;
 
         /**
          * Checks if all module privileges are checked.
@@ -91,18 +98,18 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          *                 Otherwise, returns false.
          */
         $scope.allSelected = function(module) {
-            for (var key in $scope.template.modules[module]) {
-                    var id = $scope.template.modules[module][key].id;
+          for (var key in $scope.extra.modules[module]) {
+            var id = $scope.extra.modules[module][key].id;
 
-                if (!$scope.group.privileges ||
-                    $scope.group.privileges.indexOf(id) === -1
-                ) {
-                    $scope.selected.all[module] = 0;
-                    return false;
-                }
+            if (!$scope.user_group.privileges ||
+                $scope.user_group.privileges.indexOf(id) === -1
+               ) {
+              $scope.selected.all[module] = 0;
+              return false;
             }
+          }
 
-            return true;
+          return true;
         };
 
         /**
@@ -114,51 +121,40 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          *                 false.
          */
         $scope.isSelected = function(id) {
-            if (!$scope.group.privileges ||
-                $scope.group.privileges.indexOf(id) == -1
-            ) {
-                return false;
-            }
+          if (!$scope.user_group.privileges ||
+              $scope.user_group.privileges.indexOf(id) === -1
+             ) {
+            return false;
+          }
 
-            return true;
+          return true;
         };
 
         /**
          * Creates a new user group.
          */
         $scope.save = function() {
-            if ($scope.groupForm.$invalid) {
-                $scope.formValidated = 1;
+          $scope.saving = 1;
 
-                messenger.post({
-                    message: $filter('translate')('FormErrors'),
-                    type:    'error'
-                });
+          http.post('manager_ws_user_group_create', $scope.user_group)
+            .then(function (response) {
+              messenger.post(response.data);
 
-                return false;
-            }
+              if (response.status === 201) {
+                // Get new instance id
+                var url = response.headers().location;
+                var id  = url.substr(url.lastIndexOf('/') + 1);
 
-            $scope.saving = 1;
+                url = routing.ngGenerateShort(
+                    'manager_user_group_show', { id: id });
+                $location.path(url);
+              }
 
-            itemService.save('manager_ws_user_group_create', $scope.group)
-                .then(function (response) {
-                    messenger.post({
-                        message: response.data,
-                        type: response.status === 201  ? 'success' : 'error'
-                    });
-
-                    if (response.status === 201) {
-                        // Get new instance id
-                        var url = response.headers()['location'];
-                        var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                        url = routing.ngGenerateShort(
-                            'manager_user_group_show', { id: id });
-                        $location.path(url);
-                    }
-
-                    $scope.saving = 0;
-                });
+              $scope.saving = 0;
+            }, function(response) {
+              messenger.post(response.data);
+              $scope.saving = 0;
+            });
         };
 
         /**
@@ -167,115 +163,109 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * @param string module The module name.
          */
         $scope.selectAll = function(module) {
-            if (!$scope.group.privileges) {
-                $scope.group.privileges = [];
+          if (!$scope.user_group.privileges) {
+            $scope.user_group.privileges = [];
+          }
+
+          if ($scope.selected.all[module]) {
+            for (var key in $scope.extra.modules[module]) {
+              var id = $scope.extra.modules[module][key].id;
+
+              if ($scope.user_group.privileges.indexOf(id) === -1) {
+                $scope.user_group.privileges.push(id);
+              }
             }
+          } else {
+            for (var key in $scope.extra.modules[module]) {
+              var id = $scope.extra.modules[module][key].id;
 
-            if ($scope.selected.all[module]) {
-                for (var key in $scope.template.modules[module]) {
-                    var id = $scope.template.modules[module][key].id;
-
-                    if ($scope.group.privileges.indexOf(id) === -1) {
-                        $scope.group.privileges.push(id);
-                    }
-                }
-            } else {
-                for (var key in $scope.template.modules[module]) {
-                    var id = $scope.template.modules[module][key].id;
-
-                    if ($scope.group.privileges.indexOf(id) !== -1) {
-                        $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
-                    }
-                }
+              if ($scope.user_group.privileges.indexOf(id) !== -1) {
+                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
+              }
             }
+          }
         };
 
         /**
          * Selects/unselects all privileges
          */
         $scope.selectAllPrivileges = function() {
-            if (!$scope.group.privileges) {
-                $scope.group.privileges = [];
-            }
+          if (!$scope.user_group.privileges) {
+            $scope.user_group.privileges = [];
+          }
 
-            if (!$scope.selected.allSelected) {
-                for (var module in $scope.template.modules) {
-                    if (!$scope.selected.all[module]) {
-                        for (var key in $scope.template.modules[module]) {
-                            var id = $scope.template.modules[module][key].id;
+          if (!$scope.selected.allSelected) {
+            for (var module in $scope.extra.modules) {
+              if (!$scope.selected.all[module]) {
+                for (var key in $scope.extra.modules[module]) {
+                  var id = $scope.extra.modules[module][key].id;
 
-                            if ($scope.group.privileges.indexOf(id) == -1) {
-                                $scope.group.privileges.push(id);
-                            }
-                        }
-                        $scope.selected.allSelected = true;
-                    }
+                  if ($scope.user_group.privileges.indexOf(id) === -1) {
+                    $scope.user_group.privileges.push(id);
+                  }
                 }
-            } else {
-                $scope.selected.allSelected = false;
-                $scope.group.privileges = [];
-                for (var key in $scope.template.modules[module]) {
-                    var id = $scope.template.modules[module][key].id;
-
-                    if ($scope.group.privileges.indexOf(id) == -1) {
-                        $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
-                    }
-                }
+                $scope.selected.allSelected = true;
+              }
             }
+          } else {
+            $scope.selected.allSelected = false;
+            $scope.user_group.privileges = [];
+            for (var key in $scope.extra.modules[module]) {
+              var id = $scope.extra.modules[module][key].id;
+
+              if ($scope.user_group.privileges.indexOf(id) === -1) {
+                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
+              }
+            }
+          }
         };
 
         /**
          * Updates an user group.
          */
         $scope.update = function() {
-            if ($scope.groupForm.$invalid) {
-                $scope.formValidated = 1;
+          $scope.saving = 1;
 
-                messenger.post({
-                    message: $filter('translate')('FormErrors'),
-                    type:    'error'
-                });
+          var route = {
+            name: 'manager_ws_user_group_update',
+            params: { id: $scope.user_group.id }
+          };
 
-                return false;
-            }
-
-            $scope.saving = 1;
-
-            itemService.update('manager_ws_user_group_update', $scope.group.pk_user_group,
-                $scope.group).then(function (response) {
-                    messenger.post({
-                        message: response.data,
-                        type: response.status === 200 ? 'success' : 'error'
-                    });
-
-                    $scope.saving = 0;
-                });
+          http.put(route, $scope.user_group)
+            .then(function (response) {
+              messenger.post(response.data);
+              $scope.saving = 0;
+            }, function(response) {
+              messenger.post(response.data);
+              $scope.saving = 0;
+            });
         };
 
         /**
          * Frees up memory before controller destroy event
          */
         $scope.$on('$destroy', function() {
-            $scope.group    = null;
-            $scope.sections = null;
-            $scope.selected = null;
-            $scope.template = null;
+          $scope.user_group = null;
+          $scope.sections   = null;
+          $scope.selected   = null;
+          $scope.extra      = null;
         });
 
-        // Initialize group
-        if (data.group) {
-            $scope.group = data.group;
+        // Initialize user group
+        if (data.user_group) {
+          $scope.user_group = data.user_group;
         }
 
         // Process modules
-        if ($scope.template.modules) {
-            $scope.modules = [];
+        if ($scope.extra.modules) {
+          $scope.modules = [];
 
-            for (var module in $scope.template.modules) {
-                for (var i = 0; i < $scope.template.modules[module].length; i++) {
-                    $scope.modules.push($scope.template.modules[module][i]);
-                }
+          for (var module in $scope.extra.modules) {
+            for (var i = 0; i < $scope.extra.modules[module].length; i++) {
+              $scope.modules.push($scope.extra.modules[module][i]);
             }
+          }
         }
-    }
-]);
+      }
+    ]);
+})();

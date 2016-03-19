@@ -269,7 +269,7 @@ angular.module('ManagerApp')
         resolve: {
           data: function(itemService) {
             var data = {
-              oql: 'order by pk_user_group asc limit 25'
+              oql: 'order by id asc limit 25'
             };
 
             return itemService.list('manager_ws_user_groups_list', data).then(
