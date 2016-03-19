@@ -33,21 +33,26 @@ class EntityManager
      */
     public function __construct($container)
     {
-        $this->validator = new Validator();
-        $this->dumper    = new Dumper();
         $this->config    = $container->get('orm.loader')->load();
         $this->container = $container;
+    }
 
-        if (array_key_exists('metadata', $this->config)) {
-            $this->validator->configure($this->config['metadata']);
+    /**
+     * Returns a database connection by name.
+     *
+     * @param string $name The database connection name.
+     *
+     * @return Connection The database connection.
+     *
+     * @throws InvalidConnectionException If the connection does not exist.
+     */
+    public function getConnection($name)
+    {
+        if (!array_key_exists($name, $this->config['connection'])) {
+            throw new \Exception();
         }
 
-        if (array_key_exists('schema', $this->config)) {
-            $this->dumper->configure(
-                $this->config['schema'],
-                $this->config['metadata']
-            );
-        }
+        return $this->config['connection'][$name];
     }
 
     /**
@@ -66,6 +71,25 @@ class EntityManager
         }
 
         return new Converter($this->config['metadata'][$entity]);
+    }
+
+    /**
+     * Returns a schema dumper.
+     *
+     * @return Dumper The schema dumper.
+     */
+    public function getDumper()
+    {
+        $dumper = new Dumper();
+
+        if (array_key_exists('schema', $this->config)) {
+            $dumper->configure(
+                $this->config['schema'],
+                $this->config['metadata']
+            );
+        }
+
+        return $dumper;
     }
 
     /**
@@ -153,6 +177,22 @@ class EntityManager
     }
 
     /**
+     * Returns a Validator.
+     *
+     * @return Validator The validator.
+     */
+    public function getValidator()
+    {
+        $validator = new Validator();
+
+        if (array_key_exists('metadata', $this->config)) {
+            $validator->configure($this->config['metadata']);
+        }
+
+        return $validator;
+    }
+
+    /**
      * Persists an entity in FreshBooks.
      *
      * @param Entity $entity    The entity to remove.
@@ -160,7 +200,7 @@ class EntityManager
      */
     public function persist(Entity $entity, $persister = null)
     {
-        $this->validator->validate($entity);
+        $this->getValidator()->validate($entity);
 
         $persister = $this->getPersister($entity, $persister);
 
