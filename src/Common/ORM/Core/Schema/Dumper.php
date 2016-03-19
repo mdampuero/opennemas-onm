@@ -115,6 +115,20 @@ class Dumper
     }
 
     /**
+     * Returns the current database schema.
+     *
+     * @param string $database The database name.
+     *
+     * @return DoctrineSchema The database schema.
+     */
+    public function discover($conn, $database)
+    {
+        $conn->selectDatabase($database);
+
+        return $conn->getSchemaManager()->createSchema();
+    }
+
+    /**
      * Returns a database schema from a schema name.
      *
      * @param string $name The schema name.
