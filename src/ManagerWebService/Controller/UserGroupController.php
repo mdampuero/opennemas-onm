@@ -20,33 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 class UserGroupController extends Controller
 {
     /**
-     * Creates a new user group.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function createAction(Request $request)
-    {
-        $msg = $this->get('core.messenger');
-
-        $userGroup = new UserGroup($request->request->all());
-
-        $this->get('orm.manager')->persist($userGroup);
-        $msg->add(_('User group saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'manager_ws_user_group_show', [ 'id' => $userGroup->id ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
      * Deletes an user group.
      *
      * @param integer $id The user group id.
@@ -147,6 +120,33 @@ class UserGroupController extends Controller
             'user_group' => null,
             'extra'      => $this->templateParams()
         ]);
+    }
+
+    /**
+     * Saves a new user group.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $userGroup = new UserGroup($request->request->all());
+
+        $this->get('orm.manager')->persist($userGroup);
+        $msg->add(_('User group saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_user_group_show', [ 'id' => $userGroup->id ]
+            )
+        );
+
+        return $response;
     }
 
     /**

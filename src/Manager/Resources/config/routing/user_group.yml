@@ -1,12 +1,12 @@
+manager_user_group_create:
+    path: /user-groups/new
+    options:
+        expose: true
+
 manager_user_group_show:
     path: /user-groups/{id}
     requirements:
         id: \d+
-    options:
-        expose: true
-
-manager_user_group_create:
-    path: /user-groups/new
     options:
         expose: true
 

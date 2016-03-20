@@ -131,12 +131,12 @@
         };
 
         /**
-         * Creates a new user group.
+         * Saves a new user group.
          */
         $scope.save = function() {
           $scope.saving = 1;
 
-          http.post('manager_ws_user_group_create', $scope.user_group)
+          http.post('manager_ws_user_group_save', $scope.user_group)
             .then(function (response) {
               messenger.post(response.data);
 
