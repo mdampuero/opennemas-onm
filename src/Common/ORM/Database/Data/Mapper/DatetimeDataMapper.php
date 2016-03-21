@@ -41,6 +41,10 @@ class DatetimeDataMapper
             return null;
         }
 
+        if ($value instanceOf \DateTime) {
+            return $value;
+        }
+
         return \DateTime::createFromFormat('Y-m-d H:i:s', $value);
     }
 
@@ -67,6 +71,19 @@ class DatetimeDataMapper
         $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
         return $value;
+    }
+
+    /**
+     * Returns a DateTime from a date string in format Y-m-d H:i:s in the
+     * current timezone.
+     *
+     * @param string $value The date string.
+     *
+     * @return DateTime The datetime.
+     */
+    public function fromString($value)
+    {
+        return $this->fromDatetime($value);
     }
 
     /**

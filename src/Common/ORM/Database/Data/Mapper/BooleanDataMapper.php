@@ -24,7 +24,7 @@ class BooleanDataMapper
             return false;
         }
 
-        return $value === 1;
+        return true;
     }
 
     /**
@@ -44,6 +44,32 @@ class BooleanDataMapper
     }
 
     /**
+     * Returns false.
+     *
+     * @return boolean False.
+     */
+    public function fromNull()
+    {
+        return false;
+    }
+
+    /**
+     * Unserializes an boolean.
+     *
+     * @param string $value The serialized boolean.
+     *
+     * @return string The boolean.
+     */
+    public function fromString($value)
+    {
+        if (empty($value) || $value === '0') {
+            return false;
+        }
+
+        return $value === '1';
+    }
+
+    /**
      * Serializes an boolean.
      *
      * @param array $value The boolean to serialize.
@@ -53,10 +79,10 @@ class BooleanDataMapper
     public function toBoolean($value)
     {
         if (empty($value) || !is_bool($value)) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -73,5 +99,21 @@ class BooleanDataMapper
         }
 
         return 1;
+    }
+
+    /**
+     * Unserializes an boolean.
+     *
+     * @param string $value The serialized boolean.
+     *
+     * @return string The boolean.
+     */
+    public function toString($value)
+    {
+        if (empty($value)) {
+            return '0';
+        }
+
+        return '1';
     }
 }
