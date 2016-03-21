@@ -105,9 +105,9 @@
                   };
 
                   http.delete(route).then(function(response) {
-                    modalWindow.close({ message: response, type: 'success'});
+                    modalWindow.close({ data: response.data, success: true });
                   }, function(response) {
-                    modalWindow.close({ message: response, type: 'error'});
+                    modalWindow.close({ data: response.data, type: false });
                   });
                 };
               }
@@ -115,7 +115,7 @@
           });
 
           modal.result.then(function(response) {
-            messenger.post(response);
+            messenger.post(response.data);
 
             if (response.success) {
               $scope.list();
