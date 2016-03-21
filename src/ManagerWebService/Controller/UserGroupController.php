@@ -131,13 +131,14 @@ class UserGroupController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('UserGroup')
             ->objectify($request->request->all());
 
         $userGroup = new UserGroup($data);
 
-        $this->get('orm.manager')->persist($userGroup);
+        $em->persist($userGroup);
         $msg->add(_('User group saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
