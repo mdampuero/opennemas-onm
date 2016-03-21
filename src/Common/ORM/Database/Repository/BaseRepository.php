@@ -243,7 +243,7 @@ class BaseRepository extends Repository
             }
         }
 
-        $entity->setData($this->converter->objectify($rs));
+        $entity->setData($this->converter->objectify($rs, true));
         $entity->refresh();
     }
 
