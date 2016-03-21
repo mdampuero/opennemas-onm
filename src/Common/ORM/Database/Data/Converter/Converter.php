@@ -87,8 +87,6 @@ class Converter
 
         $data = [];
         foreach ($source as $key => $value) {
-            $data[$key] = $value;
-
             $from = \classify(strtolower(gettype($value)));
             $to   = 'String';
             if (array_key_exists($key, $this->metadata->properties)) {
@@ -99,9 +97,7 @@ class Converter
                 $from = \classify($this->metadata->mapping['columns'][$key]['type']);
             }
 
-            if ($from !== $to) {
-                $data[$key] = $this->convertFrom($to, $from, $value);
-            }
+            $data[$key] = $this->convertFrom($to, $from, $value);
         }
 
         return $data;
