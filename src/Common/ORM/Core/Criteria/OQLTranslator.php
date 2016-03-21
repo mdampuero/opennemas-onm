@@ -19,6 +19,20 @@ use Common\ORM\Core\Metadata;
 class OQLTranslator
 {
     /**
+     * Flag to enable/disable ignore mode.
+     *
+     * @var boolean
+     */
+    protected $ignoreMode = false;
+
+    /**
+     * List of operators that can be ignored.
+     *
+     * @var array
+     */
+    protected $ignorable = [ 'M_LIMIT',  'M_OFFSET', 'M_ORDER', 'M_ASC', 'M_DESC' ];
+
+    /**
      * List of operators.
      *
      * @var array
@@ -46,8 +60,8 @@ class OQLTranslator
         'O_NOT_EQUALS'   => '!=',
         'O_NOT_IN'       => 'not in',
         'O_NOT_LIKE'     => 'not like',
-        'O_NOT_REGEX'    => 'not regex',
-        'O_REGEX'        => 'regex ',
+        'O_NOT_REGEXP'   => 'not regexp',
+        'O_REGEXP'       => 'regexp ',
     ];
 
     /**
@@ -70,24 +84,28 @@ class OQLTranslator
      */
     public function __construct(Metadata $metadata)
     {
-        $this->metadata = $metadata;
+        $this->metadata= $metadata;
     }
 
     /**
      * Translates an OQL query and returns the parameters to build a SQL query.
      *
-     * @param string $oql The OQL query.
+     * @param string  $oql     The OQL query.
+     * @param boolean $exclude Whether to exclude some tokens.
      *
      * @return array A list with tables, conditions, parameters and types to use
      *               to build a SQL query.
      */
-    public function translate($oql = '')
+    public function translate($oql = '', $ignoreMode = false)
     {
-        $this->tables = [ $this->metadata->getTable() ];
-        $this->params = [];
-        $this->types  = [];
-        $this->sqls   = [];
-        $this->isLike = false;
+        $this->ignoreMode = $ignoreMode;
+        $this->tables     = [ $this->metadata->getTable() ];
+        $this->params     = [];
+        $this->types      = [];
+        $this->sqls       = [];
+
+        $isLike = false;
+        $ignore = false;
 
         if (empty($oql)) {
             return [ $this->tables, '', [], [] ];
@@ -98,7 +116,7 @@ class OQLTranslator
 
         foreach ($tokens as $token) {
             list($sql, $param, $type) =
-                $this->translateToken($token[0], $token[1], $this->isLike);
+                $this->translateToken($token[0], $token[1], $isLike, $ignore);
 
             if (!empty($sql)) {
                 $this->sqls[] = $sql;
@@ -112,8 +130,8 @@ class OQLTranslator
                 $this->types[] = $type;
             }
 
-            $this->isLike = $token[1] === 'O_LIKE'
-                || $token[1] === 'O_NOT_LIKE';
+            $isLike = $token[1] === 'O_LIKE' || $token[1] === 'O_NOT_LIKE';
+            $ignore = $this->isIgnorable($token[1]);
         }
 
         return [ $this->tables, implode(' ', $this->sqls), $this->params, $this->types ];
@@ -142,6 +160,18 @@ class OQLTranslator
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the token has to be ignored when ignore mode is enabled.
+     *
+     * @param string $token The token to check.
+     *
+     * @return boolean True if the token is ignorable.
+     */
+    protected function isIgnorable($token)
+    {
+        return in_array($token, $this->ignorable);
     }
 
     /**
@@ -201,21 +231,43 @@ class OQLTranslator
     }
 
     /**
+     * Translates an operator.
+     *
+     * @param string $str The parameter to translate.
+     *
+     * @return array An array with the translation, the parameter value and the
+     *               parameter type.
+     */
+    protected function translateOperator($type)
+    {
+        if ($this->ignoreMode && $this->isIgnorable($type)) {
+            return [ [], [], [] ];
+        }
+
+        return [ $this->translations[$type], null, null ];
+    }
+
+    /**
      * Translates a parameter.
      *
      * @param string  $str          The parameter to translate.
      * @param string  $type         The parameter type.
      * @param boolean $previousLike Whether the previous translation was a
      *                              like/not like operator.
+     * @param boolean $ignore       Whether the token should be ignored.
      *
      * @return array An array with the translation, the parameter value and the
      *               parameter type.
      */
-    protected function translateParameter($str, $type, $previousLike)
+    protected function translateParameter($str, $type, $previousLike, $ignore)
     {
+        if ($this->ignoreMode && $ignore) {
+            return [ [], [], [] ];
+        }
+
         // Remove quotes for strings
         if ($type === 'T_STRING') {
-            $str = str_replace([ '\'', '"' ], '', $str);
+            $str = str_replace($str[0], '', $str);
         }
 
         // Surround with %
@@ -233,18 +285,19 @@ class OQLTranslator
      * @param string  $type         The token type.
      * @param boolean $previousLike Whether the previous translation was a
      *                              like/not like operator.
+     * @param boolean $ignore       Whether the token should be ignored.
      *
      * @return array An array with the translation, the parameter value and the
      *               parameter type.
      */
-    protected function translateToken($str, $type, $previousLike)
+    protected function translateToken($str, $type, $previousLike, $ignore)
     {
-        if ($this->isTranslatable($type)) {
-            return [ $this->translations[$type], null, null ];
+        if ($this->isTranslatable($type, $ignore)) {
+            return $this->translateOperator($type, $ignore);
         }
 
         if ($this->isParameter($type)) {
-            return $this->translateParameter($str, $type, $previousLike);
+            return $this->translateParameter($str, $type, $previousLike, $ignore);
         }
 
         if ($this->isField($str, $type)) {
