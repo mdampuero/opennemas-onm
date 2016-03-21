@@ -42,14 +42,8 @@ class Converter
 
         $data = [];
         foreach ($source as $key => $value) {
-            $from = gettype($value);
-            $to   = 'string';
-
-            if (array_key_exists($key, $this->metadata->properties)
-                && $this->metadata->properties[$key] !== 'enum'
-            ) {
-                $from = $this->metadata->properties[$key];
-            }
+            $from = $this->metadata->properties[$key];
+            $to   = 'String';
 
             if (array_key_exists($key, $this->metadata->mapping['columns'])) {
                 $to = \classify($this->metadata->mapping['columns'][$key]['type']);
@@ -61,7 +55,7 @@ class Converter
             $mapper = new $mapper();
             $method = 'to' . ucfirst($to);
 
-            $data[$key] = $mapper->{$method}($value);
+            $data[$key] = $this->convertTo($from, $to, $value);
         }
 
         // Meta keys (unknown properties)
@@ -79,11 +73,13 @@ class Converter
     /**
      * Convert database values to valid entity values.
      *
-     * @param array $source The data from database.
+     * @param array  $source The data from database.
+     * @param strict $strict Whether to perform a strict conversion basing on
+     *                       metadata.
      *
      * @return array The converted data.
      */
-    public function objectify($source)
+    public function objectify($source, $strict = false)
     {
         if (!array_key_exists('columns', $this->metadata->mapping)) {
             return $source;
@@ -91,23 +87,103 @@ class Converter
 
         $data = [];
         foreach ($source as $key => $value) {
+            $data[$key] = $value;
+
+            $from = \classify(strtolower(gettype($value)));
+            $to   = 'String';
             if (array_key_exists($key, $this->metadata->properties)) {
-                $data[$key] = $value;
-                $from = \classify(strtolower(gettype($value)));
-                $to   = \classify($this->metadata->properties[$key]);
+                $to = \classify($this->metadata->properties[$key]);
+            }
 
-                if ($from !== $to) {
-                    $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
-                        . ucfirst(strtolower($to)) . 'DataMapper';
+            if ($strict && array_key_exists($key, $this->metadata->mapping['columns'])) {
+                $from = \classify($this->metadata->mapping['columns'][$key]['type']);
+            }
 
-                    $mapper = new $mapper($this->metadata);
-                    $method = 'from' . ucfirst($from);
-
-                    $data[$key] = $mapper->{$method}($value);
-                }
+            if ($from !== $to) {
+                $data[$key] = $this->convertFrom($to, $from, $value);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Converts object values to response values.
+     *
+     * @param array $data The data from object.
+     *
+     * @return array The converted data.
+     */
+    public function responsify($source)
+    {
+        $data = [];
+        foreach ($source as $key => $value) {
+            $data[$key] = $value;
+
+            if ($value instanceOf Entity) {
+                $data[$key] = $this->responsify($value->getData());
+            }
+
+            if ($value instanceOf \Datetime) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+            }
+
+            if (is_bool($value)) {
+                $data[$key] = $value ? 1 : 0;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Converts a value calling the given method from a data mapper.
+     *
+     * @param string $mapper The data mapper name.
+     * @param string $method The method to use to convert the value.
+     * @param mixed  $value  The value to convert.
+     *
+     * @return type Description
+     */
+    protected function convert($mapper, $method, $value)
+    {
+        $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
+            . ucfirst(strtolower($mapper)) . 'DataMapper';
+
+        $mapper = new $mapper($this->metadata);
+
+        return $mapper->{$method}($value);
+    }
+
+    /**
+     * Converts a value from type using a data mapper.
+     *
+     * @param string $mapper The data mapper name.
+     * @param string $type   The type to convert from.
+     * @param mixed  $value  The value to convert.
+     *
+     * @return mixed The converted value.
+     */
+    protected function convertFrom($mapper, $type, $value)
+    {
+        $method = 'from' . ucfirst($type);
+
+        return $this->convert($mapper, $method, $value);
+    }
+
+    /**
+     * Converts a value to type using a data mapper.
+     *
+     * @param string $mapper The data mapper name.
+     * @param string $type   The type to convert to.
+     * @param mixed  $value  The value to convert.
+     *
+     * @return mixed The converted value.
+     */
+    protected function convertTo($mapper, $type, $value)
+    {
+        $method = 'to' . ucfirst($type);
+
+        return $this->convert($mapper, $method, $value);
     }
 }
