@@ -81,11 +81,7 @@ class BaseRepository extends Repository
         );
 
         if (!empty($filter)) {
-            if (!preg_match('/^\s*(order|limit|offset)/', $filter)) {
-                $sql .= " where";
-            }
-
-            $sql .= " $filter";
+            $sql .= " where $filter";
         }
 
         $rs  = $this->conn->fetchArray($sql, $params, $types);
@@ -185,7 +181,7 @@ class BaseRepository extends Repository
         }
 
         // Keep original order
-        return array_merge(array_flip($ids), $entities);
+        return array_values(array_merge(array_flip($ids), $entities));
     }
 
     /**
