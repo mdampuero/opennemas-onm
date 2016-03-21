@@ -12,7 +12,7 @@
     </div>
     <div>
       <a class="btn btn-white" href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
-        <span class="fa fa-download"></span> {t}Download{/t}
+        <span class="fa fa-download"></span> {t}View original{/t}
       </a>
     </div>
     <br>

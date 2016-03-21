@@ -24,12 +24,12 @@ function smarty_outputfilter_piwik($output, $smarty)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {
-            $code   = getPiwikCode('amp');
-            $output = preg_replace('@(<body>)@', '${1}'."\n".$code, $output);
+            $code = getPiwikCode('amp');
         } else {
-            $code   = getPiwikCode();
-            $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+            $code = getPiwikCode();
         }
+
+        $output = preg_replace('@(<body.*>)@', '${1}'."\n".$code, $output);
     }
 
     return $output;

@@ -253,6 +253,9 @@ notification:
         forced:
             type: boolean
             options: { default: 0 }
+        enabled:
+            type: boolean
+            options: { default: 0 }
     index:
         -
             name: PRIMARY

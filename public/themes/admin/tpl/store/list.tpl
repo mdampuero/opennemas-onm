@@ -80,8 +80,9 @@
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart">
                           <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
-                          <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
-                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
+                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && item.images.length > 0" ng-src="[% '/asset/scale,200,200' + item.path + '/' + item.images[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.thunbnail && item.screenshots.length > 0 && item.type == 'theme'" ng-src="[% '/asset/scale,200,200' + item.path + '/' + item.screenshots[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.images || item.images.length == 0) && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
                             <div class="description" ng-bind-html="item.description[lang] ? item.description[lang] : item.description"></div>

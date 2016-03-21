@@ -141,7 +141,7 @@
                 <div class="form-group">
                   <div class="controls">
                     <div class="checkbox">
-                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <input id="fixed" name="fixed" ng-model="notification.fixed" ng-false-value="0" ng-true-value="1" type="checkbox">
                       <label for="fixed">{t}Fixed{/t} ({t}Notification always visible in dropdown{/t})</label>
                     </div>
                   </div>
@@ -149,8 +149,16 @@
                 <div class="form-group">
                   <div class="controls">
                     <div class="checkbox">
-                      <input id="forced" name="fixed" ng-model="notification.forced" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <input id="forced" name="fixed" ng-model="notification.forced" ng-false-value="0" ng-true-value="1" type="checkbox">
                       <label for="forced">{t}Forced{/t} ({t}Notification always visible before content{/t})</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input id="enabled" name="fixed" ng-model="notification.enabled" ng-false-value="0" ng-true-value="1" type="checkbox">
+                      <label for="enabled">{t}Enabled{/t}</label>
                     </div>
                   </div>
                 </div>
@@ -214,7 +222,7 @@
                     {t}Body{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.body[language].$invalid }">
-                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="body" name="body" ng-model="notification.body[language]" rows="5"></textarea>
+                    <textarea class="form-control" onm-editor onm-editor-preset="standard" id="body" name="body" ng-model="notification.body[language]" rows="5"></textarea>
                   </div>
                 </div>
               </div>
@@ -263,9 +271,7 @@
                     </div>
                     <div class="cbp_tmlabel">
                       <div class="p-t-15 p-l-30 p-r-30 p-b-30">
-                        <h4>
-                          [% notification.title[language] %]
-                        </h4>
+                        <h4 ng-bind-html="notification.title[language]"></h4>
                         <div class="text-default" ng-bind-html="notification.body[language]"></div>
                       </div>
                     </div>
