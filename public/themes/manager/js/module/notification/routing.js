@@ -10,13 +10,7 @@
           resolve: {
             data: function($routeParams, itemService) {
               // Default filters
-              var data = {
-                orderBy: [{
-                  name: 'start',
-                  value: 'desc'
-                }],
-                epp: 25
-              };
+              var data = { oql: 'order by id asc limit 25' };
 
               return itemService.list('manager_ws_notifications_list', data).then(
                 function(response) {

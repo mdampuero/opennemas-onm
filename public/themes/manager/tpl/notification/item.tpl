@@ -194,7 +194,7 @@
                   <label for="template" class="form-label">{t}Instance{/t}</label>
                   <div class="controls">
                     <tags-input add-from-autocomplete-only="true" ng-model="notification.instances" display-property="name" >
-                      <auto-complete source="test($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                      <auto-complete source="getInstances($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                     </tags-input>
                   </div>
                 </div>

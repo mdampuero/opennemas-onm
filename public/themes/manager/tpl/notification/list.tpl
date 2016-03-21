@@ -34,8 +34,8 @@
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by title{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title = null" ng-show="criteria.title">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -44,7 +44,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -72,7 +72,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -96,25 +96,11 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
             <label for="checkbox-instance">
-              {t}Instance{/t}
+              {t}Instances{/t}
             </label>
           </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-type" checklist-model="columns.selected" checklist-value="'type'" type="checkbox">
-            <label for="checkbox-type">
-              {t}Type{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-style" checklist-model="columns.selected" checklist-value="'style'" type="checkbox">
-            <label for="checkbox-style">
-              {t}Style{/t}
-            </label>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
             <label for="checkbox-l10n">
@@ -127,6 +113,8 @@
               {t}Start{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
             <label for="checkbox-end">
@@ -139,12 +127,23 @@
               {t}Fixed{/t}
             </label>
           </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-forced" checklist-model="columns.selected" checklist-value="'forced'" type="checkbox">
+            <label for="checkbox-forced">
+              {t}Forced{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+            <label for="checkbox-enabled">
+              {t}Enabled{/t}
+            </label>
+          </div>
         </div>
       </div>
     </div>
     <div class="grid-body no-padding">
       <div class="table-wrapper">
-        <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
           <thead>
             <tr>
@@ -158,15 +157,13 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isColumnEnabled('title')">
+              <th ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('instances')" ng-show="isColumnEnabled('instances')" width="130">
+              <th class="text-center" ng-show="isColumnEnabled('instances')" width="130">
                 {t}Instance{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instances') == 'asc', 'fa fa-caret-down': isOrderedBy('instances') == 'desc'}"></i>
               </th>
-              <th class="text-center" width="60">
+              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')">
                 l10n
               </th>
               <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
@@ -177,15 +174,15 @@
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="75">
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="100">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('forced')" width="85">
+              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="100">
                 {t}Forced{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" width="85">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="100">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
@@ -203,9 +200,7 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('title')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.title['en'] %]
-                </a>
+                <span ng-bind-html="item.title['en']"></span>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
@@ -220,7 +215,7 @@
                   [% extra.instances[id].name %]
                 </div>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('l10n')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" uib-tooltip="{t}Translations completed{/t}">
                   <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
                 </span>
@@ -234,17 +229,17 @@
               <td class="text-center" ng-show="isColumnEnabled('end')">
                 [% item.end %]
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('fixed')">
                 <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
                   <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
                 </button>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('forced')">
                 <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
                   <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
                 </button>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('enabled')">
                 <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
                   <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
                 </button>
@@ -256,7 +251,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

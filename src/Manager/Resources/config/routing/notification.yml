@@ -4,7 +4,7 @@ manager_notifications_list:
         expose: true
 
 manager_notification_show:
-    path: /notification/{id}/show
+    path: /notification/{id}
     requirements:
         id: \d+
     options:
