@@ -206,7 +206,8 @@
        * @return {String} The order query.
        */
       this.getOrderBy = function(criteria) {
-        if (!criteria || !criteria.orderBy || criteria.orderBy.length === 0) {
+        if (!criteria || !criteria.orderBy ||
+            Object.keys(criteria.orderBy).length === 0) {
           return '';
         }
 
