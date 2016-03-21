@@ -29,13 +29,4 @@ abstract class Persister
      * @throws EntityNotFoundException If the entity doesn't exist.
      */
     abstract public function remove(Entity $entity);
-
-    /**
-     * Updates an entity.
-     *
-     * @param Entity $entity The entity to update.
-     *
-     * @throws EntityNotFoundException If the entity doesn't exist.
-     */
-    abstract public function update(Entity $entity);
 }

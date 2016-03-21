@@ -61,6 +61,50 @@
         $scope.selected = { all: false, items: [] };
 
         /**
+         * @memberOf ListCtrl
+         *
+         * @description
+         *  Variable for timeout actions.
+         *
+         * @type {type}
+         */
+        $scope.tm = null;
+
+        /**
+         * @function closeColumns
+         * @memberOf ClientListCtrl
+         *
+         * @description
+         *   Hides the dropdown to toggle table columns.
+         */
+        $scope.closeColumns = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function () {
+            $scope.open = false;
+          }, 500);
+        };
+
+        /**
+         * @function openColumns
+         * @memberOf ClientListCtrl
+         *
+         * @description
+         *   Shows the dropdown to toggle table columns.
+         */
+        $scope.openColumns = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function () {
+            $scope.open = true;
+          }, 500);
+        };
+
+        /**
          * @function isColumnEnabled
          * @memberOf ListCtrl
          *

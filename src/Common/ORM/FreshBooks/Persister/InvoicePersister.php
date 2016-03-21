@@ -120,15 +120,14 @@ class InvoicePersister extends BasePersister
      */
     public function clean(Entity $entity)
     {
-        $cleaned =
-            array_diff_key($entity->getData(), array_flip($this->invalid));
+        $cleaned = array_diff_key($entity->getData(), array_flip($this->invalid));
 
-        if (array_key_exists('lines', $cleaned)
-            && array_key_exists('line', $cleaned['lines'])
-        ) {
-            foreach ($cleaned['lines']['line'] as &$line) {
+        if (array_key_exists('lines', $cleaned)) {
+            foreach ($cleaned['lines'] as &$line) {
                 unset($line['order']);
             }
+
+            $cleaned['lines'] = [ 'line' => [ $cleaned['lines'] ] ];
         }
 
         return $cleaned;

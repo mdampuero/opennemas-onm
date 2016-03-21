@@ -31,11 +31,11 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+              <i class="fa fa-save m-r-t" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
         </ul>
@@ -127,7 +127,7 @@
             <div class="grid-body">
               <div class="form-group">
                 <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                <input class="form-control" datetime-picker ng-model="user.meta.paywall_time_limit" ng-model="template.billing_invoice_date" type="text">
+                <input class="form-control" datetime-picker="picker" ng-model="user.meta.paywall_time_limit" type="text">
               </div>
             </div>
           </div>

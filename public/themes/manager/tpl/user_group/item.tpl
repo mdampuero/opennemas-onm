@@ -31,8 +31,9 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="user_group.id ? update() : save();" ng-disabled="saving">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-success text-uppercase" ng-click="user_group.id ? update() : save();" ng-disabled="saving">
+              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
+              {t}Save{/t}
             </button>
           </li>
         </ul>

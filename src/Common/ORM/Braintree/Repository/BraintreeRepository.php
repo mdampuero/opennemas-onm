@@ -32,14 +32,4 @@ abstract class BraintreeRepository extends Repository
         $this->factory = $factory;
         $this->source  = $source;
     }
-
-    /**
-     * Returns the Braintree factory object.
-     *
-     * @return Braintreefactory The Braintree factory object.
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
 }

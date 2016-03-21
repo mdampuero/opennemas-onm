@@ -1,23 +1,16 @@
 <?php
 /**
- * Defines the Instance class
- *
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Onm
  */
 namespace Onm\Instance;
 
-/**
- * Handles the instance operations
- *
- * @package Onm
- **/
+use Framework\ORM\Entity\Client;
+
 class Instance
 {
     /**
@@ -239,6 +232,20 @@ class Instance
     public $support_plan = '';
 
     /**
+     * Unserializes the instance metas on wake up.
+     */
+    public function __wakeup()
+    {
+        foreach ($this->metas as $value) {
+            $data = @unserialize($value);
+
+            if ($data) {
+                $value = $data;
+            }
+        }
+    }
+
+    /**
      * Initializes all the application values for the instance.
      */
     public function boot()
@@ -315,6 +322,24 @@ class Instance
     public function initTheme()
     {
         $this->theme = include_once TEMPLATE_USER_PATH . '/init.php';
+    }
+
+    /**
+     * Returns the instance Client object.
+     *
+     * @return Client The client.
+     */
+    public function getClient()
+    {
+        if (!array_key_exists('client', $this->metas)) {
+            return null;
+        }
+
+        if (is_array($this->metas['client'])) {
+            return $this->metas['client'];
+        }
+
+        return $this->metas['client'];
     }
 
     /**

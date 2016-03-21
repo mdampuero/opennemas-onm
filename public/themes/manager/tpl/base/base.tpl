@@ -107,7 +107,7 @@
                   </div>
                   <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_module_create') %]">
-                      <i class="fa fa-plug"></i>
+                      <i class="fa fa-flip-horizontal fa-plug"></i>
                       <span class="title">{t}Module{/t}</span>
                     </a>
                   </div>
@@ -118,13 +118,19 @@
                     </a>
                   </div>
                   <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_client_create') %]">
+                      <i class="fa fa-user"></i>
+                      <span class="title">{t}Client{/t}</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
                       <i class="fa fa-users"></i>
                       <span class="title">{t}Group{/t}</span>
                     </a>
                   </div>
-                </div>
-                <div class="clearfix quick-items-row">
                   <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_user_create') %]">
                       <i class="fa fa-user"></i>
@@ -331,6 +337,7 @@
       @ManagerTheme/js/config.js,
       @ManagerTheme/js/routing.js,
       @ManagerTheme/js/controllers/*,
+      @ManagerTheme/js/module/*,
 
       @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}

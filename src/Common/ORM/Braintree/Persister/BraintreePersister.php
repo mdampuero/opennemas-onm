@@ -32,14 +32,4 @@ abstract class BraintreePersister extends Persister
         $this->factory = $factory;
         $this->source  = $source;
     }
-
-    /**
-     * Returns the Braintree factory object.
-     *
-     * @return Braintreefactory The Braintree factory object.
-     */
-    public function getfactory()
-    {
-        return $this->factory;
-    }
 }

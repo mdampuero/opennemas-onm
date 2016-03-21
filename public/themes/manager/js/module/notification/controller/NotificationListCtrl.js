@@ -63,10 +63,7 @@
          *
          * @type {Object}
          */
-        $scope.orderBy = [{
-          name: 'start',
-          value: 'desc'
-        }];
+        $scope.orderBy = [{ name: 'start', value: 'desc' }];
 
         /**
          * @function countStringsLeft
@@ -106,15 +103,12 @@
          */
         $scope.delete = function(notification) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-notification',
-                  item: notification
-                };
+                return { };
               },
               success: function() {
                 return function(modalNotification) {
@@ -131,7 +125,7 @@
 
           modal.result.then(function(response) {
             messenger.post(response);
-            list();
+            $scope.list();
           });
         };
 
@@ -144,24 +138,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-notifications',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalNotification) {
@@ -185,13 +167,13 @@
               messenger.post(response);
             }
 
-            list();
+            $scope.list();
           });
         };
 
         /**
          * @function list
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   Reloads the list.
@@ -199,20 +181,13 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
           var cleaned = itemService.cleanFilters($scope.criteria);
 
           var data = {
             criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+            orderBy:  $scope.orderBy,
+            epp:      $scope.pagination.epp,
+            page:     $scope.pagination.page
           };
 
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
@@ -220,9 +195,9 @@
 
           itemService.list('manager_ws_notifications_list', data).then(
             function(response) {
-              $scope.items = response.data.results;
+              $scope.items            = response.data.results;
               $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
+              $scope.extra            = response.data.extra;
 
               $scope.loading = 0;
 
@@ -233,7 +208,21 @@
         };
 
         /**
-         * @function patch
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { title_like: [ { value: '', operator: 'like' } ]};
+          $scope.orderBy  = [ { name: 'start', value: 'desc' } ];
+
+          $scope.pagination.page = 1;
+        };
+
+        /**
+         * @function setEnabled
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -303,7 +292,7 @@
               }
 
               if (response.success.length > 0) {
-                list();
+                $scope.list();
               }
             }).error(function(response) {
               // Update notifications changed successfully

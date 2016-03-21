@@ -75,15 +75,12 @@
          */
         $scope.delete = function(instance) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-instance',
-                  item: instance
-                };
+                return { };
               },
               success: function() {
                 return function(modalInstance) {
@@ -113,24 +110,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                        $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-instances',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalInstance) {
@@ -169,19 +154,20 @@
           $scope.loading = 1;
 
           // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
+          var cleaned = angular.copy($scope.criteria)
+          if (cleaned.name_like) {
+            cleaned.domains_like =
+              cleaned.contact_mail_like =
+              cleaned.name_like;
           }
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          cleaned = itemService.cleanFilters(cleaned);
 
           var data = {
             criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+            orderBy:  $scope.orderBy,
+            epp:      $scope.pagination.epp,
+            page:     $scope.pagination.page
           };
 
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
@@ -189,7 +175,7 @@
 
           itemService.list('manager_ws_instances_list', data).then(
             function(response) {
-              $scope.items = response.data.results;
+              $scope.items            = response.data.results;
               $scope.pagination.total = response.data.total;
 
               $scope.loading = 0;
@@ -198,6 +184,18 @@
               $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
           );
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria  = { name_like: [ { value: '', operator: 'like' } ] };
+          $scope.orderBy  = [ { name: 'last_login', value: 'desc' } ];
         };
 
         /**
@@ -284,7 +282,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.set('instances-columns', $scope.columns);
+            webStorage.local.add('instances-columns', $scope.columns);
           }
         }, true);
 

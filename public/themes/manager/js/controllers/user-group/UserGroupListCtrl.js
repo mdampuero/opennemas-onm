@@ -34,11 +34,33 @@
          * @memberOf UserGroupListCtrl
          *
          * @description
+         *   The visible table columns.
+         *
+         * @type {Object}
+         */
+        $scope.columns = {
+          collapsed: 1,
+          selected:  [ 'name' ]
+        };
+        /**
+         * @memberOf UserGroupListCtrl
+         *
+         * @description
          *   The criteria to search.
          *
          * @type {Object}
          */
         $scope.criteria = { epp: 25, page: 1 };
+
+        /**
+         * @memberOf UserGroupListCtrl
+         *
+         * @description
+         *   The list order.
+         *
+         * @type {Object}
+         */
+        $scope.orderBy = [ { name: 'name', value: 'asc' } ];
 
         /**
          * @function delete
@@ -51,14 +73,12 @@
          */
         $scope.delete = function(id) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/user_group:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-user-group'
-                };
+                return { };
               },
               success: function() {
                 return function(modalInstance) {
@@ -96,14 +116,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/user_group:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-user-groups'
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalInstance) {
@@ -160,6 +178,18 @@
             $('.page-content').animate({ scrollTop: '0px' }, 1000);
           });
         };
+
+        // Updates the columns stored in localStorage.
+        $scope.$watch('columns', function(nv, ov) {
+          if (nv !== ov) {
+            webStorage.local.add('user-groups-columns', nv);
+          }
+        }, true);
+
+        // Get enabled columns from localStorage
+        if (webStorage.local.get('user-groups-columns')) {
+          $scope.columns = webStorage.local.get('user-groups-columns');
+        }
       }
     ]);
 })();

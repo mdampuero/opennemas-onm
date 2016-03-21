@@ -16,11 +16,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new InvoiceRepository('foo', 'bar');
-
-        $property = new \ReflectionProperty($this->repository, 'api');
-        $property->setAccessible(true);
-        $property->setValue($this->repository, $this->api);
+        $this->repository = new InvoiceRepository($this->api, 'FreshBooks');
     }
 
     /**

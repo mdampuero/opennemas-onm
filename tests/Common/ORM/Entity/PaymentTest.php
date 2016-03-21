@@ -31,6 +31,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $data   = [ 'payment_id' => '1' ];
         $entity = new Payment($data);
 
+        $entity->refresh();
+
         $this->assertTrue($entity->exists());
     }
 }

@@ -27,13 +27,11 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
             'invoice_id' => '123',
             'client_id'  => '1',
             'lines' => [
-                'line' => [
-                    [
-                        'order'    => 1,
-                        'name'     => 'test',
-                        'cost'     => 2,
-                        'quantity' => 3
-                    ]
+                [
+                    'order'    => 1,
+                    'name'     => 'test',
+                    'cost'     => 2,
+                    'quantity' => 3
                 ]
             ],
         ]);
@@ -41,13 +39,11 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->unexistingInvoice = new Invoice([
             'client_id'  => '1',
             'lines' => [
-                'line' => [
-                    [
-                        'order'    => 1,
-                        'name'     => 'test',
-                        'cost'     => 2,
-                        'quantity' => 3
-                    ]
+                [
+                    'order'    => 1,
+                    'name'     => 'test',
+                    'cost'     => 2,
+                    'quantity' => 3
                 ]
             ],
         ]);
@@ -162,13 +158,11 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $data = [
             'foo'   => 'bar',
             'lines' => [
-                'line' => [
-                    [
-                        'order'    => 1,
-                        'name'     => 'test',
-                        'cost'     => 2,
-                        'quantity' => 3
-                    ]
+                [
+                    'order'    => 1,
+                    'name'     => 'test',
+                    'cost'     => 2,
+                    'quantity' => 3
                 ]
             ],
             'url'   => 'http://example.org'
@@ -182,9 +176,11 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
                 'lines' => [
                     'line' => [
                         [
-                            'name' => 'test',
-                            'cost' => 2,
-                            'quantity' => 3
+                            [
+                                'name' => 'test',
+                                'cost' => 2,
+                                'quantity' => 3
+                            ]
                         ]
                     ]
                 ]

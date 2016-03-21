@@ -6,7 +6,7 @@
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
               <i class="fa fa-users"></i>
-              {t}Users groups{/t}
+              {t}User groups{/t}
             </a>
           </h4>
         </li>
@@ -14,8 +14,8 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
-              <i class="fa fa-plus"></i>
+            <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
+              <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
             </a>
           </li>
@@ -29,11 +29,19 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="m-r-10 input-prepend inside search-input no-boarder">
-          <span class="add-on">
-            <span class="fa fa-search fa-lg"></span>
-          </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text" style="width:250px;"/>
+        <li class="quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="input-min-45 input-250" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name = null" ng-show="criteria.name">
+              <i class="fa fa-times"></i>
+            </span>
+          </div>
+        </li>
+        <li class="quicklins">
+          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs">
           <ui-select name="view" theme="select2" ng-model="criteria.epp">
@@ -46,16 +54,16 @@
           </ui-select>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="criteria = {  name: '', orderBy: { name: 'asc' }, page: 1, epp: 25}">
-            <i class="fa fa-trash-o fa-lg"></i>
+          <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+            <i class="fa fa-fire fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="list()">
-            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+          <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
       </ul>
@@ -68,31 +76,48 @@
   </div>
 </div>
 <div class="content">
-  <div class="grid simple">
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
+  </div>
+  <div class="grid simple" ng-if="items.length > 0">
+    <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()"></div>
+    <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
+      <h5>{t}Columns{/t}</h5>
+      <div class="row">
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+            <label for="checkbox-name">
+              {t}Name{/t}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="grid-body no-padding">
       <div class="table-wrapper">
         <div class="grid-overlay" ng-if="loading"></div>
         <table class="table table-hover no-margin">
           <thead>
             <tr>
-              <th style="width:15px;">
+              <th width="15">
                 <div class="checkbox checkbox-default">
                   <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" ng-click="sort('name')">
+              <th class="pointer" ng-click="sort('id')" width="50">
+                #
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc'}"></i>
+              </th>
+              <th class="pointer" ng-click="sort('name')" ng-if="isColumnEnabled('name')">
                 {t}Group name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-if="items.length == 0">
-              <td class="text-center" colspan="10">
-                {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
-              </td>
-            </tr>
             <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
                 <div class="checkbox check-default">
@@ -101,6 +126,9 @@
                 </div>
               </td>
               <td>
+                [% item.id %]
+              </td>
+              <td ng-if="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
                   <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.id }); %]" title="{t}Edit group{/t}">
@@ -118,12 +146,8 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
   </div>
 </div>
-</div>
-<script type="text/ng-template" id="modal-confirm">
-  {include file="common/modal_confirm.tpl"}
-</script>

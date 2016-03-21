@@ -104,15 +104,12 @@
          */
         $scope.delete = function(module) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-module',
-                  item: module
-                };
+                return { };
               },
               success: function() {
                 return function(modalModule) {
@@ -142,24 +139,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-modules',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalModule) {
@@ -197,14 +182,14 @@
         $scope.list = function () {
           $scope.loading = 1;
 
+          var criteria = angular.copy($scope.criteria);
+
           // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
+          if (criteria.name_like) {
+            criteria.uuid_like = criteria.name_like;
           }
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          var cleaned = itemService.cleanFilters(criteria);
 
           var data = {
             criteria: cleaned,
@@ -228,6 +213,18 @@
               $('.page-content').animate({ scrollTop: '0px' }, 1000);
             }
           );
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { name_like: [ { value: '', operator: 'like' } ]};
+          $scope.orderBy  = [ { name: 'id', value: 'asc' } ];
         };
 
         /**
@@ -314,7 +311,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.set('modules-columns', $scope.columns);
+            webStorage.local.add('modules-columns', $scope.columns);
           }
         }, true);
 

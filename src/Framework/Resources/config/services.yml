@@ -238,6 +238,10 @@ services:
         class: Onm\Validator\InstanceValidator
         arguments: [ '@instance_manager' ]
 
+    onm.braintree.factory:
+        class: Framework\Braintree\BraintreeFactory
+        arguments: [ @comet_cult_braintree.factory ]
+
     paginator:
         class: Framework\Component\Paginator\Paginator
         arguments: [ '@router' ]

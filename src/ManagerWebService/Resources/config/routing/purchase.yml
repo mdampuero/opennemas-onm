@@ -1,0 +1,63 @@
+manager_ws_purchase_create:
+    path:     /purchases
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:create }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_purchase_delete:
+    path:     /purchases/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_purchase_new:
+    path:     /purchases/new
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_purchase_patch:
+    path:     /purchases/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_purchase_show:
+    path:     /purchases/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_purchase_update:
+    path:     /purchases/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    methods:  [ GET ]
+
+manager_ws_purchases_delete:
+    path:     /purchases
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_purchases_list:
+    path:     /purchases
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_purchases_patch:
+    path:     /purchases
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

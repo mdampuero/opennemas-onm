@@ -1,6 +1,13 @@
 <?php
-
-namespace Framework\Tests\ORM\Braintree\Repository;
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Framework\ORM\Braintree\Repository;
 
 use Common\ORM\Entity\Client;
 use Common\ORM\Braintree\Persister\ClientPersister;
@@ -9,7 +16,6 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->test = 'asdf';
         $this->existingClient = new Client([
             'client_id'  => 1,
             'first_name' => 'John',
@@ -91,7 +97,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $response->customer->id,
-            $this->unexistingClient->client_id
+            $this->unexistingClient->id
         );
     }
 
@@ -225,5 +231,42 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 
         $persister = new ClientPersister($factory, 'Braintree');
         $persister->update($this->existingClient);
+    }
+
+    public function testClean()
+    {
+        $factory = $this
+            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $persister  = new ClientPersister($factory, 'Braintree');
+        $reflection = new \ReflectionClass(get_class($persister));
+
+        $method = $reflection->getMethod('clean');
+        $method->setAccessible(true);
+
+
+        $client = new Client([
+            'id'         => '1',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'johndoe@example.org',
+            'company'    => 'Foobar, Inc.',
+            'phone'      => '123456789',
+            'extra'      => 'foo'
+        ]);
+
+        $this->assertEquals(
+            [
+                'id'        => '1',
+                'firstName' => 'John',
+                'lastName'  => 'Doe',
+                'email'     => 'johndoe@example.org',
+                'company'   => 'Foobar, Inc.',
+                'phone'     => '123456789'
+            ],
+            $method->invokeArgs($persister, [ $client ])
+        );
     }
 }
