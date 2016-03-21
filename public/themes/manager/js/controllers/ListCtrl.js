@@ -40,15 +40,11 @@
          * @memberOf ListCtrl
          *
          * @description
-         *   The current pagination status.
+         *   The number of elements.
          *
          * @type {Object}
          */
-        $scope.pagination = {
-          epp:   data.epp ? parseInt(data.epp) : 25,
-          page:  data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
+        $scope.total = data.total;
 
         /**
          * @memberOf ListCtrl
@@ -132,7 +128,7 @@
         $scope.isOrderedBy = function(name) {
           if ($scope.criteria && $scope.criteria.orderBy &&
               $scope.criteria.orderBy[name]) {
-            return $scope.criteria.orderBy[name].value;
+            return $scope.criteria.orderBy[name];
           }
 
           return false;
@@ -192,25 +188,22 @@
          * @param string name Field name.
          */
         $scope.sort = function(name) {
-          var i = 0;
-          while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-            i++;
+          if (!$scope.criteria.orderBy) {
+            $scope.criteria.orderBy = {};
           }
 
-          if (i >= $scope.orderBy.length) {
-            $scope.orderBy.push({
-              name: name,
-              value: 'asc'
-            });
-          } else {
-            if ($scope.orderBy[i].value === 'asc') {
-              $scope.orderBy[i].value = 'desc';
-            } else {
-              $scope.orderBy.splice(i, 1);
-            }
+          if ($scope.criteria.orderBy[name] === 'asc') {
+            $scope.criteria.orderBy[name] = 'desc';
+            return;
           }
 
-          $scope.pagination.page = 1;
+          if ($scope.criteria.orderBy[name] === 'desc') {
+            delete $scope.criteria.orderBy[name];
+            return;
+          }
+
+          $scope.criteria.orderBy[name] = 'asc';
+          $scope.criteria.page          = 1;
         };
 
         /**
@@ -257,26 +250,6 @@
 
         // Reloads the list when filters change.
         $scope.$watch('criteria', function(nv, ov) {
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          if (nv === ov) {
-            return;
-          }
-
-          if ($scope.pagination.page !== 1) {
-            $scope.pagination.page = 1;
-            return;
-          }
-
-          $scope.searchTimeout = $timeout(function() {
-            $scope.list();
-          }, 500);
-        }, true);
-
-        // Refresh the list of elements when some parameter changes
-        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(nv, ov) {
           if ($scope.searchTimeout) {
             $timeout.cancel($scope.searchTimeout);
           }
