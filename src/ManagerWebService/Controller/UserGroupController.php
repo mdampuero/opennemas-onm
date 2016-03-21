@@ -82,7 +82,7 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Returns the list of users as JSON.
+     * Returns the list of users.
      *
      * @param Request $request The request object.
      *
@@ -110,7 +110,7 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Returns the data to create a new group.
+     * Returns the data to create a new user group.
      *
      * @return JsonResponse The response object.
      */
@@ -131,9 +131,11 @@ class UserGroupController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $msg = $this->get('core.messenger');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('UserGroup')
+            ->objectify($request->request->all());
 
-        $userGroup = new UserGroup($request->request->all());
+        $userGroup = new UserGroup($data);
 
         $this->get('orm.manager')->persist($userGroup);
         $msg->add(_('User group saved successfully'), 'success', 201);
@@ -142,7 +144,7 @@ class UserGroupController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_ws_user_group_show', [ 'id' => $userGroup->id ]
+                'manager_user_group_show', [ 'id' => $userGroup->id ]
             )
         );
 

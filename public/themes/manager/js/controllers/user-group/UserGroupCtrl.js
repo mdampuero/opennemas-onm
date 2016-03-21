@@ -9,7 +9,6 @@
      * @requires $location
      * @requires $scope
      * @requires http
-     * @requires routing
      * @requires messenger
      * @requires data
      *
@@ -17,8 +16,8 @@
      *   Handles all actions in user groups listing.
      */
     .controller('UserGroupCtrl', [
-      '$location', '$scope', 'http', 'routing', 'messenger', 'data',
-      function ($location, $scope, http, routing, messenger, data) {
+      '$location', '$scope', 'http', 'messenger', 'data',
+      function ($location, $scope, http, messenger, data) {
         /**
          * List of available groups.
          *
@@ -141,16 +140,9 @@
               messenger.post(response.data);
 
               if (response.status === 201) {
-                // Get new instance id
-                var url = response.headers().location;
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                    'manager_user_group_show', { id: id });
+                var url = response.headers().location.replace('/manager', '');
                 $location.path(url);
               }
-
-              $scope.saving = 0;
             }, function(response) {
               messenger.post(response.data);
               $scope.saving = 0;

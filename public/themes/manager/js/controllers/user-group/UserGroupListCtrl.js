@@ -12,7 +12,6 @@
      * @requires $scope
      * @requires $timeout
      * @requires http
-     * @requires routing
      * @requires messenger
      * @requires oqlBuilder
      * @requires data
@@ -21,8 +20,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('UserGroupListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'routing', 'messenger', 'oqlBuilder', 'data',
-      function ($controller, $uibModal, $location, $scope, $timeout, http, routing, messenger, oqlBuilder, data) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage', 'data',
+      function ($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -42,6 +41,7 @@
           collapsed: 1,
           selected:  [ 'name' ]
         };
+
         /**
          * @memberOf UserGroupListCtrl
          *
@@ -53,23 +53,13 @@
         $scope.criteria = { epp: 25, page: 1 };
 
         /**
-         * @memberOf UserGroupListCtrl
-         *
-         * @description
-         *   The list order.
-         *
-         * @type {Object}
-         */
-        $scope.orderBy = [ { name: 'name', value: 'asc' } ];
-
-        /**
          * @function delete
          * @memberOf UserGroupListCtrl
          *
          * @description
          *   Confirm delete action.
          *
-         * @param {Object} group The group to delete.
+         * @param {Integer} id The group id.
          */
         $scope.delete = function(id) {
           var modal = $uibModal.open({
@@ -81,18 +71,17 @@
                 return { };
               },
               success: function() {
-                return function(modalInstance) {
+                return function(modalWindow) {
                   var route = {
                     name: 'manager_ws_user_group_delete',
                     params: { id: id }
                   };
 
-                  return http.delete(route)
-                    .then(function(response) {
-                      modalInstance.close({ data: response.data, success: true });
-                    }, function(response) {
-                      modalInstance.close({ data: response.data, success: false });
-                    });
+                  http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
@@ -124,16 +113,15 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalInstance) {
+                return function(modalWindow) {
                   var route = 'manager_ws_user_groups_delete';
                   var data  = { ids: $scope.selected.items };
 
-                  return http.delete(route, data)
-                    .then(function(response) {
-                        modalInstance.close({ data: response.data, success: true });
-                    }, function(response) {
-                      modalInstance.close({ data: response.data, success: false });
-                    });
+                  http.delete(route, data).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
@@ -161,8 +149,8 @@
 
           oqlBuilder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
 
-          var oql    = oqlBuilder.getOql($scope.criteria);
-          var route  = {
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
             name: 'manager_ws_user_groups_list',
             params: { oql: oql }
           };
@@ -170,13 +158,25 @@
           $location.search('oql', oql);
 
           http.get(route).then(function (response) {
-            $scope.items           = response.data.results;
-            $scope.pagination.total = response.data.total;
-            $scope.loading          = 0;
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
 
             // Scroll top
-            $('.page-content').animate({ scrollTop: '0px' }, 1000);
+            $('body').animate({ scrollTop: '0px' }, 1000);
           });
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { epp: 25, page: 1 };
         };
 
         // Updates the columns stored in localStorage.
