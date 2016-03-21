@@ -12,15 +12,17 @@ namespace Common\ORM\Database\Data\Mapper;
 class BooleanDataMapper
 {
     /**
-     * Unserializes an boolean.
+     * Converts between database and object values if no custom conversion
+     * exists.
      *
-     * @param string $value The serialized boolean.
+     * @param string $method The method name.
+     * @param array  $params The method parameters.
      *
-     * @return string The boolean.
+     * @return boolean The converted value.
      */
-    public function fromBoolean($value)
+    public function __call($method, $params)
     {
-        if (empty($value)) {
+        if (empty($params[0])) {
             return false;
         }
 

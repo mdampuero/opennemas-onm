@@ -14,6 +14,11 @@ class EnumDataMapper
     /**
      * Converts between database and object values if no custom conversion
      * exists.
+     *
+     * @param string $method The method name.
+     * @param array  $params The method parameters.
+     *
+     * @return string The converted string.
      */
     public function __call($method, $params)
     {

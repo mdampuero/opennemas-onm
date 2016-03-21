@@ -12,6 +12,24 @@ namespace Common\ORM\Database\Data\Mapper;
 class ArrayDataMapper
 {
     /**
+     * Converts between database and object values if no custom conversion
+     * exists.
+     *
+     * @param string $method The method name.
+     * @param array  $params The method parameters.
+     *
+     * @return array The converted array.
+     */
+    public function __call($method, $params)
+    {
+        if (empty($params[0]) || !is_array($params[0])) {
+            return [];
+        }
+
+        return $params[0];
+    }
+
+    /**
      * Returns an array from a JSON string.
      *
      * @param string $value The array as JSON string.
