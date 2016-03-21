@@ -72,7 +72,7 @@ class BaseRepository extends Repository
         $keys = $this->metadata->getIdKeys();
 
         list($tables, $filter, $params, $types) =
-            $this->translator->translate(trim($oql));
+            $this->translator->translate(trim($oql), true);
 
         $sql = sprintf(
             'select count(%s) from %s',
