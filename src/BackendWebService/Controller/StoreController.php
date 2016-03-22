@@ -55,11 +55,13 @@ class StoreController extends Controller
             $availableItems[$theme->uuid] = $theme->name;
         }
 
+        $instance = $this->get('instance');
+
         // Save new billing info for instance
         foreach ($billing as $key => $value) {
             $instance->metas['billing_' . $key] = $value;
         }
-        $instance         = $this->get('instance');
+
         $this->get('instance_manager')->persist($instance);
 
         // Get names for filtered modules to use in template
