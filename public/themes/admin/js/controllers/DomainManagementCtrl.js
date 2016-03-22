@@ -458,6 +458,12 @@
               paypal: {
                 container: 'braintree-container'
               },
+              onError: function() {
+                $scope.$apply(function() {
+                  $scope.payment = null;
+                  $scope.paymentLoading = false;
+                });
+              },
               onPaymentMethodReceived: function(obj) {
                 $scope.$apply(function() {
                   $scope.payment        = obj;
