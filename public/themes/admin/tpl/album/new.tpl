@@ -184,15 +184,15 @@
                   <input type="hidden" name="album_photos_id[]" ng-value="photo.id"/>
                   <input type="hidden" name="album_photos_footer[]" ng-value="photo.footer"/>
                   <div class="thumbnail-wrapper">
-                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }"></div>
-                    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }">
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
+                    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
-                        <button class="btn btn-link" ng-click="toggleOverlay('photo_[% $index %]')" type="button">
+                        <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ $index)" type="button">
                           <i class="fa fa-times fa-lg"></i>
                           {t}No{/t}
                         </button>
-                        <button class="btn btn-link" ng-click="removeItem('photos', $index);toggleOverlay('photo_[% $index %]')" type="button">
+                        <button class="btn btn-link" ng-click="removeItem('photos', $index);toggleOverlay('photo_'+ $index)" type="button">
                           <i class="fa fa-check fa-lg"></i>
                           {t}Yes{/t}
                         </button>
@@ -201,7 +201,7 @@
                     <div class="dynamic-image-placeholder">
                       <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,500,500">
                         <div class="thumbnail-actions">
-                          <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_[% $index %]', $index)">
+                          <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
                             <i class="fa fa-trash-o fa-2x"></i>
                           </div>
                         </div>
@@ -216,8 +216,8 @@
               <div class="album-thumbnail-placeholder">
                 <div class="img-thumbnail">
                   <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
-                    <i class="fa fa-plus fa-2x"></i>
-                    <h5>{t}Add images{/t}</h5>
+                    <i class="fa fa-plus fa-3x"></i>
+                    <h4>{t}Add images{/t}<h4>
                   </div>
                 </div>
               </div>
