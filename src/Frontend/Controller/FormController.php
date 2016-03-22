@@ -145,7 +145,7 @@ class FormController extends Controller
                     }
 
                     try {
-                        $mailer = $this->get('mailer');
+                        $mailer = $this->get('swiftmailer.mailer.direct');
                         $mailer->send($text);
 
                         $action = new \Action();
