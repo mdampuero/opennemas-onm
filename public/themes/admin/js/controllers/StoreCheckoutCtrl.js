@@ -150,7 +150,6 @@
         // Updates the total when the cart changes
         $scope.$watch('cart', function(nv) {
           $scope.subtotal = 0;
-          $scope.total    = 0;
 
           if (!nv || (nv instanceof Array && nv.length === 0)) {
             webStorage.local.remove('cart');
@@ -164,18 +163,22 @@
               $scope.subtotal += nv[i].price.month;
             }
           }
-
-          $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-          $scope.total = $scope.subtotal + $scope.vat;
         }, true);
 
         // Updates vat and total values when vat tax changes
         $scope.$watch('validVat', function(nv) {
           if (nv === true) {
-            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-            $scope.total = $scope.subtotal + $scope.vat;
+            $scope.vat = ($scope.subtotal * $scope.vatTax) / 100;
           }
         });
+
+        $scope.$watch('[ subtotal, vat ]', function() {
+          $scope.total = $scope.subtotal + $scope.vat;
+        }, true);
+
+        $scope.$watch('[ vatTax ]', function() {
+          $scope.vat = ($scope.subtotal * $scope.vatTax) / 100;
+        }, true);
 
         // Updates the edit flag when billing changes.
         $scope.$watch('[billing.company, billing.country, billing.vat]', function() {

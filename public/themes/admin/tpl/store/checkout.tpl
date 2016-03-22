@@ -307,7 +307,7 @@
                       </label>
                     </div>
                   </div>
-                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms || !validPhone || !validVat">
+                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms || !validVat">
                     {t}Confirm{/t}
                   </button>
                 </div>
