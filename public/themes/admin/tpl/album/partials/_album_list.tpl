@@ -122,7 +122,7 @@
     </div>
   </div>
 </div>
-<div class="content" ng-init="setMode('grid');init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-class="{ 'content-grid': mode === 'grid' }" ng-init="setMode('grid');init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="grid simple ng-cloak" ng-if="mode === 'list'">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
