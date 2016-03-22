@@ -2,25 +2,21 @@
   <div class="grid-title no-border no-padding"></div>
   <div class="grid-body" ng-click="showDetails(item);$event.stopPropagation()">
     <div class="p-b-50" ng-click="$event.stopPropagation()">
-      <uib-carousel active="a"  class="carousel-minimal" ng-if="item.screenshots.length > 0">
-        <uib-slide ng-repeat="screenshot in item.screenshots track by $index" index="$index">
+      <uib-carousel active="a"  class="carousel-minimal" ng-if="item.images.length > 0">
+        <uib-slide ng-repeat="screenshot in item.images track by $index" index="$index">
           <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
-      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.screenshots" src="http://placehold.it/1024x768">
+      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="http://placehold.it/1024x768">
     </div>
     <div class="clearfix p-t-5 p-b-10">
       <h4 class="uppercase pull-left">[% item.name %]</h4>
       <h4 class="text-right pull-right" ng-if="type !== 'purchased'">
-        <span ng-if="item.price.month">
-          <strong>[% item.price.month %]</strong>
-          <small>€ / {t}month{/t}</small>
+        <span ng-if="item.price">
+          <strong>[% (item.price | filter: { type: 'monthly' })[0].value %]</strong>
+          <small>€/{t}month{/t}</small>
         </span>
-        <span ng-if="!item.price.month && item.price.single">
-          <strong>[% item.price.single %]</strong>
-          <small>€</small>
-        </span>
-        <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && (!item.price || item.price.month == 0)">
+        <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && !item.price">
           {t}Free{/t}
         </span>
       </h4>
