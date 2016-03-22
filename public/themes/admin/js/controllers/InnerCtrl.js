@@ -21,6 +21,8 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
           Editor.get(target).insertHtml(html);
         }
 
+        Editor.get(target).fire('change');
+
         return;
       }
 
