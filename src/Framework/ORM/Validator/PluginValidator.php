@@ -36,10 +36,8 @@ class PluginValidator extends Validator
      * @var array
      */
     protected $required = [
-        'author'      => [ 'array', 'string' ],
-        'license'     => [ 'array', 'string' ],
+        'author'      => [ 'string' ],
         'name'        => [ 'string' ],
-        'text-domain' => [ 'string' ],
         'type'        => [ 'enum' ],
         'version'     => [ 'string' ],
     ];
