@@ -174,6 +174,10 @@ class StoreController extends Controller
                 }
             }
 
+            if (array_key_exists('price', $a->metas)) {
+                $a->price = $a->metas['price'];
+            }
+
             return $a->getData();
         }, $modules);
 
