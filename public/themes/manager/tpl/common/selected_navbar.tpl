@@ -23,6 +23,19 @@
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-times fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-check fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
         {/if}
         {if $list === 'notification'}
           <li class="quicklinks">
@@ -51,6 +64,8 @@
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
+        {/if}
+        {if $list === 'notification' || $list === 'extension'}
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
@@ -58,21 +73,6 @@
           </li>
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
-              <i class="fa fa-check fa-lg"></i>
-            </button>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-        {/if}
-        {if $list !== 'notification' && list !== 'user_group'}
-          <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
-              <i class="fa fa-times fa-lg"></i>
-            </button>
-          </li>
-          <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
