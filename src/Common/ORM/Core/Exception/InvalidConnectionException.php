@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Core\Exception;
 
-class InvalidConverterException extends \Exception
+class InvalidConnectionException extends \Exception
 {
     /**
      * Initializes the exception with a custom message.
@@ -18,7 +18,7 @@ class InvalidConverterException extends \Exception
      */
     public function __construct($class)
     {
-        $message = _('The converter for \'%s\' does not exist');
+        $message = _('The connection for \'%s\' does not exist');
 
         parent::__construct(sprintf($message, $class));
     }

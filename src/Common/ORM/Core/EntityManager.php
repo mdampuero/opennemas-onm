@@ -12,6 +12,7 @@ namespace Common\ORM\Core;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Validation\Validator;
+use Common\ORM\Core\Exception\InvalidConnectionException;
 use Common\ORM\Core\Exception\InvalidConverterException;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 use Common\ORM\Core\Exception\InvalidRepositoryException;
@@ -49,7 +50,7 @@ class EntityManager
     public function getConnection($name)
     {
         if (!array_key_exists($name, $this->config['connection'])) {
-            throw new \Exception();
+            throw new InvalidConnectionException($name);
         }
 
         return $this->config['connection'][$name];

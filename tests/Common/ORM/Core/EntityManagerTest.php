@@ -87,16 +87,34 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Common\ORM\Core\Exception\InvalidConnectionException
+     */
+    public function testGetConnectionInvalid()
+    {
+        $this->em->getConnection('Foobar');
+    }
+
+    public function testGetConnectionValid()
+    {
+        $this->assertNotEmpty($this->em->getConnection('foo'));
+    }
+
+    /**
      * @expectedException \Common\ORM\Core\Exception\InvalidConverterException
      */
-    public function testGetConvererInvalid()
+    public function testGetConverterInvalid()
     {
         $this->em->getConverter('Foobar');
     }
 
-    public function testGetConvererValid()
+    public function testGetConverterValid()
     {
         $this->assertNotEmpty($this->em->getConverter('Entity'));
+    }
+
+    public function testGetDumper()
+    {
+        $this->assertNotEmpty($this->em->getDumper());
     }
 
     /**
