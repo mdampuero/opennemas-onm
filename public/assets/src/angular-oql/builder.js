@@ -213,10 +213,10 @@
 
         var order = 'order by ';
         for(var key in criteria.orderBy) {
-          order += key + ' ' + criteria.orderBy[key];
+          order += key + ' ' + criteria.orderBy[key] + ', ';
         }
 
-        return order;
+        return order.replace(/, $/, '');
       };
     });
 })();
