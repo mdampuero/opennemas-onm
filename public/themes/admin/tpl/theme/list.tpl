@@ -194,15 +194,15 @@
             </div>
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-if="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type == 'addons' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-if="type == 'addons' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item-module'">
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-if="type == 'exclusive' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }">
             <div class="item-wrapper" ng-include="'exclusive-item'"></div>
           </div>
