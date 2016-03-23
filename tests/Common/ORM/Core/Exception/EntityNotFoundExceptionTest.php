@@ -15,5 +15,9 @@ class EntityNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(strpos($e->getMessage(), 'Entity') !== false);
         $this->assertTrue(strpos($e->getMessage(), '1') !== false);
         $this->assertTrue(strpos($e->getMessage(), 'error') !== false);
+
+        $e = new EntityNotFoundException('Entity', [ 'foo' => '1', 'bar' => 2 ], 'error');
+
+        $this->assertTrue(strpos($e->getMessage(), 'foo=1,bar=2') !== false);
     }
 }
