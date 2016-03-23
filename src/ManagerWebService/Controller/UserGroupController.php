@@ -51,7 +51,7 @@ class UserGroupController extends Controller
         $ids = $request->request->get('ids', []);
         $msg = $this->get('core.messenger');
 
-        if (!is_array($ids) || count($ids) === 0) {
+        if (!is_array($ids) || empty($ids)) {
             $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
@@ -82,7 +82,7 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Returns the list of users.
+     * Returns the list of user groups.
      *
      * @param Request $request The request object.
      *
@@ -93,12 +93,13 @@ class UserGroupController extends Controller
         $oql = $request->query->get('oql', '');
 
         $repository = $this->get('orm.manager')->getRepository('UserGroup');
+        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
 
         $total      = $repository->countBy($oql);
         $userGroups = $repository->findBy($oql);
 
-        $userGroups = array_map(function ($a) {
-            return $a->getData();
+        $userGroups = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
         }, $userGroups);
 
         return new JsonResponse(
@@ -116,10 +117,7 @@ class UserGroupController extends Controller
      */
     public function newAction()
     {
-        return new JsonResponse([
-            'user_group' => null,
-            'extra'      => $this->templateParams()
-        ]);
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -153,7 +151,7 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Displays an user group.
+     * Returns an user group.
      *
      * @param integer $id The group id.
      *
@@ -167,7 +165,7 @@ class UserGroupController extends Controller
 
         return new JsonResponse([
             'user_group' => $group->getData(),
-            'extra'      => $this->templateParams()
+            'extra'      => $this->getExtraData()
         ]);
     }
 
@@ -190,17 +188,17 @@ class UserGroupController extends Controller
 
         $em->persist($userGroup);
 
-        $msg->add(_('User group updated successfully'), 'success');
+        $msg->add(_('User group saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns a list of parameters for the template.
+     * Returns a list of extra data.
      *
-     * @return array Array of template parameters.
+     * @return array The extra data.
      */
-    private function templateParams()
+    private function getExtraData()
     {
         $privilege = new \Privilege();
 
