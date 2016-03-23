@@ -65,13 +65,6 @@ class ThemeController extends Controller
             $addon->description = $addon->description[CURRENT_LANGUAGE_SHORT];
             $addon->name        = $addon->name[CURRENT_LANGUAGE_SHORT];
 
-            $prices = array_filter($addon->metas['price'], function ($a) {
-                return $a['type'] === 'monthly';
-            });
-
-            $addon->screenshots = $addon->images;
-            $addon->price       = [ 'month' => array_pop($prices)['value'] ];
-
             $addon = $addon->getData();
         }
 
