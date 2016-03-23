@@ -211,7 +211,7 @@
         };
 
         /**
-         * @function setEnabled
+         * @function patch
          * @memberOf NotificationListCtrl
          *
          * @description
@@ -249,9 +249,8 @@
          * @description
          *   Enables/disables the selected notifications.
          *
-         * @param {String}  notification The notification object.
-         * @param {String}  property     The property name.
-         * @param {Boolean} value        The property value.
+         * @param {String}  property The property name.
+         * @param {Boolean} value    The property value.
          */
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
