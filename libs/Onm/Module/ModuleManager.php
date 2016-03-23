@@ -456,9 +456,7 @@ class ModuleManager
                         <li>Delivery time: Inmediate</li>
                     </ul>'
                 ),
-                'price' => [
-                    'month' => 0
-                ]
+                'price' => []
             ],
             // [
             //     'id'               => 'STANDARD_TEMPLATE',
@@ -529,8 +527,8 @@ class ModuleManager
                     </ul>'
                 ),
                 'price' => [
-                    'single' => 1450,
-                    'month' => 130
+                    [ 'value' => 130, 'type' =>  'monthly' ],
+                    [ 'value' => 1450, 'type' => 'single' ]
                 ]
             ],
             [
@@ -594,8 +592,8 @@ class ModuleManager
                     </ul>'
                 ),
                 'price' => [
-                    'single' => 3500,
-                    'month' => 350
+                    [ 'value' => 350, 'type' =>  'monthly' ],
+                    [ 'value' => 3500, 'type' => 'single' ]
                 ]
             ],
             [
@@ -647,8 +645,8 @@ class ModuleManager
                     </ul>'
                 ),
                 'price' => [
-                    'single' => 3500,
-                    'month'  => 350
+                    [ 'value' => 350, 'type' =>  'monthly' ],
+                    [ 'value' => 3500, 'type' => 'single' ]
                 ]
             ],
         ];
