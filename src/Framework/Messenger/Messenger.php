@@ -49,7 +49,7 @@ class Messenger
      */
     public function getCode()
     {
-        $code = $this->codes[0];
+        $code = empty($this->codes) ? 200 : $this->codes[0];
 
         // If different codes return 207 (multi-status)
         foreach ($this->codes as $c) {
