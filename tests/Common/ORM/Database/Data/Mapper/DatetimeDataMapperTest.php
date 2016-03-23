@@ -26,7 +26,7 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             new \DateTime('2000-01-01 10:00:10'),
-            $this->mapper->fromDatetime('2000-01-01 10:00:10')
+            $this->mapper->fromDatetime(new \DateTime('2000-01-01 10:00:10'))
         );
 
         $this->assertEmpty($this->mapper->fromDatetime(null));
@@ -42,6 +42,14 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromDatetimetz(null));
         $this->assertEmpty($this->mapper->fromDatetimetz(''));
+    }
+
+    public function testFromString()
+    {
+        $this->assertEquals(
+            new \DateTime('2000-01-01 10:00:10'),
+            $this->mapper->fromString('2000-01-01 10:00:10')
+        );
     }
 
     public function testFromTime()

@@ -9,6 +9,7 @@
  */
 namespace Common\ORM\Database\Data\Converter;
 
+use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 
 /**
@@ -36,7 +37,8 @@ class Converter
      */
     public function databasify($source)
     {
-        if (!array_key_exists('columns', $this->metadata->mapping)) {
+        if (!$this->metadata->mapping
+            || !array_key_exists('columns', $this->metadata->mapping)) {
             throw new \Exception();
         }
 
@@ -81,7 +83,9 @@ class Converter
      */
     public function objectify($source, $strict = false)
     {
-        if (!array_key_exists('columns', $this->metadata->mapping)) {
+        if (!$this->metadata->mapping
+            || !array_key_exists('columns', $this->metadata->mapping)
+        ) {
             return $source;
         }
 

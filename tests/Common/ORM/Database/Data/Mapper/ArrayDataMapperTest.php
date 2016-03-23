@@ -11,6 +11,12 @@ class ArrayDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->mapper = new ArrayDataMapper();
     }
 
+    public function testDefault()
+    {
+        $this->assertEmpty($this->mapper->fromDatetime(new \Datetime()));
+        $this->assertEquals([ 'foo', 'bar' ], $this->mapper->fromArray([ 'foo', 'bar' ]));
+    }
+
     public function testFromArrayJson()
     {
         $this->assertEquals(
@@ -20,6 +26,11 @@ class ArrayDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromArrayJson(null));
         $this->assertEmpty($this->mapper->fromArrayJson(''));
+    }
+
+    public function testFromNull()
+    {
+        $this->assertEmpty($this->mapper->fromNull());
     }
 
     public function testFromSimpleArray()
