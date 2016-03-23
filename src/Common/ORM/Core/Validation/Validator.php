@@ -214,7 +214,8 @@ class Validator
     protected function isNull($ruleset, $property, $value)
     {
         return (empty($this->required)
-            || !array_key_exists($ruleset, $this->required))
+            || !array_key_exists($ruleset, $this->required)
+            || !array_key_exists($property, $this->required[$ruleset]))
             && is_null($value);
     }
 
