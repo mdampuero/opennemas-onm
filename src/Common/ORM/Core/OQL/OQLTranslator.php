@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\Criteria;
+namespace Common\ORM\Core\OQL;
 
 use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Metadata;
@@ -258,7 +258,7 @@ class OQLTranslator
     protected function translateParameter($str, $type, $previousLike)
     {
         // Remove quotes for strings
-        if ($type === 'T_STRING') {
+        if ($type === 'T_STRING' && ($str[0] === '"' || $str[0] === "'")) {
             $str = str_replace($str[0], '', $str);
         }
 

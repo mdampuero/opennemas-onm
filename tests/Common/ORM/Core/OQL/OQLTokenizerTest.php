@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Core\Criteria;
+namespace Tests\Common\ORM\Core\OQL;
 
-use Common\ORM\Core\Criteria\OQLTokenizer;
+use Common\ORM\Core\OQL\OQLTokenizer;
 
 class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
 {

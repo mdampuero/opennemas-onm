@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Core\Criteria;
+namespace Tests\Common\ORM\Core\OQL;
 
-use Common\ORM\Core\Criteria\OQLTranslator;
+use Common\ORM\Core\OQL\OQLTranslator;
 use Common\ORM\Core\Metadata;
 
 class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
@@ -79,8 +79,8 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'translateToken');
         $method->setAccessible(true);
 
-        $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', false ]));
-        $this->assertEquals([ '?', '%foo%', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ 'foo', 'T_STRING', true ]));
+        $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', false ]));
+        $this->assertEquals([ '?', '%foo%', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', true ]));
         $this->assertEquals([ '!=', null, null ], $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ]));
     }
 

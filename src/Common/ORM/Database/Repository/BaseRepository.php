@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Database\Repository;
 
-use Common\ORM\Core\Criteria\OQLTranslator;
+use Common\ORM\Core\OQL\OQLTranslator;
 use Common\ORM\Database\Data\Converter\Converter;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
