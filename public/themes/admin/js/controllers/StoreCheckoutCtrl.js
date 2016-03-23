@@ -115,6 +115,33 @@
         };
 
         /**
+         * @function getPrice
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *   Returns the price of an item.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Float} The price.
+         */
+        $scope.getPrice = function(item) {
+          if (!item.price || item.price.length === 0) {
+            return 0;
+          }
+
+          var prices = item.price.filter(function(a) {
+            return a.type === 'monthly';
+          });
+
+          if (prices.length > 0) {
+            return parseFloat(prices[0].value);
+          }
+
+          return parseFloat(item.price[0].value);
+        };
+
+        /**
          * @function setStep
          * @memberOf StoreCheckoutCtrl
          *
@@ -159,9 +186,7 @@
           webStorage.local.set('cart', nv);
 
           for (var i = 0; i < nv.length; i++) {
-            if (nv[i].price && nv[i].price.month) {
-              $scope.subtotal += nv[i].price.month;
-            }
+            $scope.subtotal += $scope.getPrice(nv[i]);
           }
         }, true);
 
