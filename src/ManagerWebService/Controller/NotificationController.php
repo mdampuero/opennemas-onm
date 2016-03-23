@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Displays, saves, modifies and removes notifications.
+ * Returns, saves, modifies and removes notifications.
  */
 class NotificationController extends Controller
 {
@@ -161,8 +161,8 @@ class NotificationController extends Controller
         $data = $em->getConverter('Notification')
             ->objectify($request->request->all());
 
-        $notification = $em->getRepository('manager.notification')->find($id);
-        $notification->setData($data);
+        $notification = $em->getRepository('Notification')->find($id);
+        $notification->merge($data);
 
         $em->persist($notification);
 
@@ -197,20 +197,20 @@ class NotificationController extends Controller
 
         $notifications = $em->getRepository('Notification')->findBy($oql);
 
-        $updated = [];
+        $updated = 0;
         foreach ($notifications as $notification) {
             try {
                 $notification->merge($data);
                 $em->persist($notification);
-                $updated[] = $notification->id;
+                $updated++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error', 409);
             }
         }
 
-        if (count($updated) > 0) {
+        if ($updated > 0) {
             $msg->add(
-                sprintf(_('%s notifications saved successfully'), count($updated)),
+                sprintf(_('%s notifications saved successfully'), $updated),
                 'success'
             );
         }
