@@ -65,6 +65,10 @@ class ThemeController extends Controller
             $addon->description = $addon->description[CURRENT_LANGUAGE_SHORT];
             $addon->name        = $addon->name[CURRENT_LANGUAGE_SHORT];
 
+            if ($addon->metas && array_key_exists('price', $addon->metas)) {
+                $addon->price = $addon->metas['price'];
+            }
+
             $addon = $addon->getData();
         }
 
