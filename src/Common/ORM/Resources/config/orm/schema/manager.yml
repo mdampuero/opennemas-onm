@@ -1,5 +1,6 @@
 schema:
     name: manager
     entities:
+        - Extension
         - Notification
         - UserGroup

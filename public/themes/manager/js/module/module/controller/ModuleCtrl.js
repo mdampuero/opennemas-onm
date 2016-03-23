@@ -51,10 +51,11 @@
          */
         $scope.module = {
           about:       { en: '', es: '', gl: '' },
+          category:    'module',
           description: { en: '', es: '', gl: '' },
           images:      [],
-          metas:       { category: 'module', price: [ { 'value': 0, 'type': 'monthly' } ] },
           name:        { en: '', es: '', gl: '' },
+          price:       [ { 'value': 0, 'type': 'monthly' } ],
           type:        'module'
         };
 
@@ -66,11 +67,11 @@
          *   Adds a new price to the list.
          */
         $scope.addPrice = function() {
-          if (!$scope.module.metas.price) {
-            $scope.module.metas.price = [];
+          if (!$scope.module.price) {
+            $scope.module.price = [];
           }
 
-          $scope.module.metas.price.push({ value: 0, type: 'monthly' });
+          $scope.module.price.push({ value: 0, type: 'monthly' });
         };
 
         /**
@@ -117,9 +118,10 @@
           }
 
           tm = $timeout(function() {
-            $http.get(url).success(function() {
+            $http.get(url).then(function() {
               $scope.uuidValid = true;
-            }).error(function() {
+            }, function(response) {
+              messenger.post(response.data);
               $scope.uuidValid = false;
             });
           }, 500);
@@ -135,7 +137,7 @@
          * @param {Integer} index The position of the price in the list.
          */
         $scope.removePrice = function(index) {
-          $scope.module.metas.price.splice(index, 1);
+          $scope.module.price.splice(index, 1);
         };
 
         /**
@@ -203,26 +205,27 @@
           $scope.saving = 1;
 
           var data = new FormData();
-          var url  = routing.generate('manager_ws_module_create');
+          var url  = routing.generate('manager_ws_module_save');
 
           if ($scope.module.id) {
             url  = routing.generate('manager_ws_module_update', { id: $scope.module.id });
             data.append('_method', 'PUT');
           }
 
-          if ($scope.module.metas.modules_included) {
-            $scope.module.metas.modules_included =
-              $scope.module.metas.modules_included.map(function(e) {
-                if (e instanceof Object) {
-                  return e.text;
-                }
-              });
+          if ($scope.module.modules_in_conflict) {
+            $scope.module.modules_in_conflict = $scope.module
+              .modules_in_conflict.map(function(a) { return a.text; });
+          }
+
+          if ($scope.module.modules_included) {
+            $scope.module.modules_included = $scope.module.modules_included
+              .map(function(a) { return a.text; });
           }
 
           Cleaner.clean($scope.module);
 
           for (var key in $scope.module) {
-            if (key === 'name' || key === 'description' || key === 'about' || key === 'metas') {
+            if (key !== 'images') {
               data.append(key, JSON.stringify($scope.module[key]));
             } else if ($scope.module[key] instanceof Array) {
               for (var i = 0; i <  $scope.module[key].length; i++) {
@@ -286,11 +289,7 @@
             $scope.custom = true;
           }
 
-          for (var i in data.module) {
-            if (data.module[i]) {
-              $scope.module[i] = data.module[i];
-            }
-          }
+          $scope.module = angular.merge($scope.module, data.module);
         }
       }
     ]);

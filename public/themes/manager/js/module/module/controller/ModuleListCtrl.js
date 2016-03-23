@@ -8,35 +8,26 @@
      *
      * @requires $controller
      * @requires $uibModal
+     * @requires $location
      * @requires $scope
-     * @requires itemService
-     * @requires routing
+     * @requires $timeout
+     * @requires http
      * @requires messenger
+     * @requires oqlBuilder
      * @requires webStorage
-     * @requires data
      *
      * @description
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage', 'data',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder,  webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
           $timeout: $timeout,
           data:     data
         }));
-
-        /**
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   The criteria to search.
-         *
-         * @type {Object}
-         */
-        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf ModuleListCtrl
@@ -56,11 +47,11 @@
          * @memberOf ModuleListCtrl
          *
          * @description
-         *   The listing order.
+         *   The criteria to search.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{ name: 'id', value: 'asc' }];
+        $scope.criteria = { epp: 25, page: 1 };
 
         /**
          * @function countStringsLeft
@@ -100,9 +91,9 @@
          * @description
          *   Confirm delete action.
          *
-         * @param {Object module The module to delete.
+         * @param {Object} id The module id.
          */
-        $scope.delete = function(module) {
+        $scope.delete = function(id) {
           var modal = $uibModal.open({
             templateUrl: '/managerws/template/module:modal.' + appVersion + '.tpl',
             backdrop: 'static',
@@ -112,21 +103,28 @@
                 return { };
               },
               success: function() {
-                return function(modalModule) {
-                  itemService.delete('manager_ws_module_delete', module.id)
-                    .success(function(response) {
-                      modalModule.close({ message: response, type: 'success'});
-                    }).error(function(response) {
-                      modalModule.close({ message: response, type: 'error'});
-                    });
+                return function(modalWindow) {
+                  var route = {
+                    name: 'manager_ws_module_delete',
+                    params: { id: id }
+                  };
+
+                  http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            messenger.post(response);
-            $scope.list();
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
           });
         };
 
@@ -147,28 +145,27 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalModule) {
-                  itemService.deleteSelected('manager_ws_modules_delete',
-                    $scope.selected.items).success(function(response) {
-                      modalModule.close(response);
-                    }).error(function(response) {
-                      modalModule.close(response);
-                    });
+                return function(modalWindow) {
+                  var route = 'manager_ws_modules_delete';
+                  var data  = { ids: $scope.selected.items };
+
+                  http.delete(route, items).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }).error(function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            if (response.messages) {
-              messenger.post(response.messages);
+            messenger.post(response.data);
 
+            if (response.success) {
               $scope.selected = { all: false, items: [] };
-            } else {
-              messenger.post(response);
+              $scope.list();
             }
-
-            $scope.list();
           });
         };
 
@@ -182,37 +179,27 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          var criteria = angular.copy($scope.criteria);
+          oqlBuilder.configure({
+            placeholder: { uuid: 'uuid ~ "[value]" or name ~ "[value]"' }
+          });
 
-          // Search by name, domains and contact mail
-          if (criteria.name_like) {
-            criteria.uuid_like = criteria.name_like;
-          }
-
-          var cleaned = itemService.cleanFilters(criteria);
-
-          var data = {
-            criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_modules_list',
+            params: { oql: oql }
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
+          $location.search('oql', oql);
 
-          itemService.list('manager_ws_modules_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
+          return http.get(route).then(function(response) {
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
 
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
+            // Scroll top
+            $('body').animate({ scrollTop: '0px' }, 1000);
+          });
         };
 
         /**
@@ -223,88 +210,73 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria = { name_like: [ { value: '', operator: 'like' } ]};
-          $scope.orderBy  = [ { name: 'id', value: 'asc' } ];
+          $scope.criteria = { epp: 25, page: 1 };
         };
 
         /**
-         * @function setEnabled
-         * @memberOf ModuleListCtrl
+         * @function patch
+         * @memberOf NotificationListCtrl
          *
          * @description
-         *   Enables/disables an module.
+         *   Enables/disables an notification.
          *
-         * @param boolean enabled Module enabled value.
+         * @param {String}  notification The notification object.
+         * @param {String}  property     The property name.
+         * @param {Boolean} value        The property value.
          */
-        $scope.setEnabled = function(module, enabled) {
-          module.loading = 1;
+        $scope.patch = function(item, property, value) {
+          var data = {};
 
-          itemService.patch('manager_ws_module_patch', module.id,
-            { enabled: enabled }).success(function(response) {
-              module.loading = 0;
-              module.enabled = enabled;
+          item[property + 'Loading'] = 1;
+          data[property] = value;
 
-              messenger.post({ message: response, type: 'success' });
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-            });
+          var route = {
+            name: 'manager_ws_module_patch',
+            params: { id: item.id }
+          };
+
+          http.patch(route, data).then(function(response) {
+            item[property + 'Loading'] = 0;
+            item[property] = value;
+            messenger.post(response.data);
+          }, function(response) {
+            item[property + 'Loading'] = 0;
+            messenger.post(response.data);
+          });
         };
 
         /**
-         * @function setEnabledSelected
+         * @function patchSelected
          * @memberOf ModuleListCtrl
          *
          * @description
          *   Enables/disables the selected modules.
          *
-         * @param integer enabled The enabled value.
+         * @param {String}  property The property name.
+         * @param {Boolean} value    The property value.
          */
-        $scope.setEnabledSelected = function(enabled) {
+        $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
             if ($scope.selected.items.indexOf(id) !== -1) {
-              $scope.items[i].loading = 1;
+              $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
-          var data = { selected: $scope.selected.items, enabled: enabled };
+          var data = { ids: $scope.selected.items };
+          data[property] = value;
 
-          itemService.patchSelected('manager_ws_modules_patch', data)
-            .success(function(response) {
-              // Update modules changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                var id = $scope.items[i].id;
-
-                if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].enabled = enabled;
-                  delete $scope.items[i].loading;
-                }
-              }
-
-              if (response.messages) {
-                messenger.post(response.messages);
-
+          http.patch('manager_ws_modules_patch', data)
+            .then(function(response) {
+              $scope.list().then(function() {
+                messenger.post(response.data);
                 $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
-
-              if (response.success.length > 0) {
-                $scope.list();
-              }
-            }).error(function(response) {
-              // Update modules changed successfully
-              for (var i = 0; i < $scope.items.length; i++) {
-                delete $scope.items[i].loading;
-              }
-
-              if (response.messages) {
-                messenger.post(response.messages);
-
+              });
+            }, function(response) {
+              $scope.list().then(function() {
+                messenger.post(response.data);
                 $scope.selected = { all: false, items: [] };
-              } else {
-                messenger.post(response);
-              }
+              });
             });
         };
 
@@ -314,12 +286,6 @@
             webStorage.local.add('modules-columns', $scope.columns);
           }
         }, true);
-
-        // Initialize filters from URL
-        var filters = itemService.decodeFilters();
-        for (var name in filters) {
-          $scope[name] = filters[name];
-        }
 
         // Get enabled columns from localStorage
         if (webStorage.local.get('modules-columns')) {

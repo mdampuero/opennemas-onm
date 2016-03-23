@@ -2,20 +2,23 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <onm-devs@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace ManagerWebService\Controller;
 
-use Framework\ORM\Entity\Extension;
+use Common\ORM\Entity\Extension;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Returns, saves, modifies and removes extensions.
+ */
 class ModuleController extends Controller
 {
     /**
@@ -28,94 +31,26 @@ class ModuleController extends Controller
      */
     public function checkAction(Request $request, $uuid)
     {
+        $msg = $this->get('core.messenger');
+        $oql = sprintf('uuid = "%s"', $uuid);
+
         $module = $this->get('orm.manager')
-            ->getRepository('manager.extension')
-            ->findOneBy([ 'uuid' => [ [ 'value' => $uuid ] ] ]);
+            ->getRepository('Extension')
+            ->findOneBy($oql);
 
-        if (!$module || $request->query->get('id') === $module->id) {
-            return new JsonResponse('', 200);
+        if (!$module || $request->query->get('id') == $module->id) {
+            $msg->add(_('Valid uuid'), 'success');
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        return new JsonResponse(
-            sprintf(_('A module with the uuid %d already exists'), $uuid),
-            400
-        );
-    }
-
-    /**
-     * Creates a new module from the request.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function createAction(Request $request)
-    {
-        $em     = $this->get('orm.manager');
-        $module = new Extension();
-
-        foreach ($request->request as $key => $value) {
-            if (!is_null($value)) {
-                $module->{$key} = $request->request->get($key);
-            }
-        }
-
-        $count = $em->getRepository('manager.extension')
-            ->countBy([ 'uuid' => [ [ 'value' => $module->uuid ] ] ]);
-
-        if ($count > 0) {
-            return new JsonResponse(
-                sprintf(
-                    _("A module with uuid '%s' already exists"),
-                    $module->uuid
-                ),
-                400
-            );
-        }
-
-        $module->about       = json_decode($module->about, true);
-        $module->created     = date('Y-m-d H:i:s');
-        $module->description = json_decode($module->description, true);
-        $module->metas       = json_decode($module->metas, true);
-        $module->name        = json_decode($module->name, true);
-        $module->updated     = date('Y-m-d H:i:s');
-
-        if (!empty($request->files->count())) {
-            $module->images = [];
-        }
-
-        $fs = new Filesystem();
-        if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
-            $fs->mkdir(SITE_PATH . 'media/core/modules');
-        }
-
-        $i = 1;
-        foreach ($request->files as $file) {
-            $module->images[] = '/media/core/modules/' . $module->id
-                . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
-
-            $file[0]->move(
-                SITE_PATH . '/media/core/modules',
-                $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
-            );
-
-            $i++;
-        }
-
-        $em->persist($module);
-
-        $response = new JsonResponse(_('Module saved successfully'), 201);
-
-        // Add permanent URL for the current module
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'manager_ws_module_show',
-                [ 'id' => $module->id ]
-            )
+        $msg->add(
+            sprintf(_('A module with the uuid \'%s\' already exists'), $uuid),
+            'error',
+            409
         );
 
-        return $response;
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -127,16 +62,19 @@ class ModuleController extends Controller
      */
     public function deleteAction($id)
     {
-        $em = $this->get('orm.manager');
-        $module = $em->getRepository('manager.extension')->find($id);
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+
+        $module = $em->getRepository('Extension')->find($id);
 
         $em->remove($module);
+        $msg->add(_('Module deleted successfully.'), 'success');
 
-        return new JsonResponse(_('Module deleted successfully.'));
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Deletes the selected instances.
+     * Deletes the selected modules.
      *
      * @param Request $request The request object.
      *
@@ -144,68 +82,41 @@ class ModuleController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!is_array($selected)
-            || (is_array($selected) && count($selected) == 0)
-        ) {
-            return new JsonResponse(
-                _('Unable to find the instances for the given criteria'),
-                404
-            );
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+        $modules = $em->getRepository('Extension')->findBy($oql);
 
-        $modules = $em->getRepository('manager.extension')->findBy($criteria);
-
+        $deleted = 0;
         foreach ($modules as $module) {
             try {
                 $em->remove($module);
-                $updated++;
-            } catch (EntityNotFoundException $e) {
-                $error[]    = $id;
-                $messages[] = [
-                    'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                    'type'    => 'error'
-                ];
+                $deleted++;
             } catch (\Exception $e) {
-                $error[]    = $id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error'
-                ];
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if (count($updated) > 0) {
-            $messages = [
-                'message' => sprintf(_('%s modules deleted successfully.'), count($updated)),
-                'type'    => 'success'
-            ];
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s modules deleted successfully.'), $deleted),
+                'success'
+            );
         }
 
-        // Return the proper status code
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns the list of instances as JSON.
+     * Returns the list of modules.
      *
      * @param Request $request The request object.
      *
@@ -213,59 +124,21 @@ class ModuleController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : [];
-        $orderBy  = $request->query->filter('orderBy') ? : [];
-        $extra    = $this->getTemplateParams();
+        $oql   = $request->query->get('oql', '');
 
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $repository = $this->get('orm.manager')->getRepository('Extension');
+        $converter  = $this->get('orm.manager')->getConverter('Extension');
 
-        if (!empty($criteria)) {
-            $criteria['union'] = 'OR';
-        }
+        $extensions = $repository->findBy($oql);
+        $total      = $repository->countBy($oql);
 
-        $nr = $this->get('orm.manager')->getRepository('manager.extension');
-
-        $modules = $nr->findBy($criteria, $order, $epp, $page);
-
-        $ids = [];
-        foreach ($modules as &$module) {
-            $ids[] = $module->instance_id;
-
-            $module = $module->getData();
-        }
-
-        $ids       = array_unique(array_diff($ids, [ -1, 0 ]));
-        $instances = [];
-        if (!empty($ids)) {
-            $instances = $this->get('instance_manager')->findBy([
-                'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-            ]);
-        }
-
-        $extra['instances'] = [
-            '-1' => [ 'name' => _('Manager'), 'value' => -1 ],
-            '0'  => [ 'name' => _('All'), 'value' => 0 ]
-        ];
-
-        foreach ($instances as $instance) {
-            $extra['instances'][$instance->id] = [
-                'name'  => $instance->internal_name,
-                'value' => $instance->id,
-            ];
-        }
-
-        $total = $nr->countBy($criteria);
+        $extensions = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $extensions);
 
         return new JsonResponse([
-            'epp'     => $epp,
-            'extra'   => $extra,
-            'page'    => $page,
-            'results' => $modules,
+            'extra'   => $this->getExtraData(),
+            'results' => $extensions,
             'total'   => $total,
         ]);
     }
@@ -277,12 +150,7 @@ class ModuleController extends Controller
      */
     public function newAction()
     {
-        $extra = $this->getTemplateParams();
-
-        unset($extra['types']['-1']);
-        unset($extra['styles']['-1']);
-
-        return new JsonResponse([ 'extra' => $extra ]);
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -294,26 +162,19 @@ class ModuleController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+        $data = $em->getConverter('Extension')
+            ->objectify($request->request->all());
 
-        try {
-            $module = $em->getRepository('manager.extension')->find($id);
+        $module = $em->getRepository('Extension')->find($id);
+        $module->merge($data);
 
-            foreach ($request->request->all() as $key => $value) {
-                $module->{$key} = $request->request->get($key);
-            }
+        $em->persist($module);
 
-            $em->persist($module);
+        $msg->add(_('Module saved successfully'), 'success');
 
-            return new JsonResponse(_('Module saved successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the module with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
-        }
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -325,96 +186,132 @@ class ModuleController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
 
-        if (is_array($selected) && count($selected) == 0) {
-            return new JsonResponse(
-                _('Unable to find the modules for the given criteria'),
-                404
-            );
+        unset($params['ids']);
+
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em = $this->get('orm.manager');
+        $em   = $this->get('orm.manager');
+        $oql  = sprintf('id in [%s]', implode(',', $ids));
+        $data = $em->getConverter('Extension')->objectify($params);
 
-        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
+        $modules = $em->getRepository('Extension')->findBy($oql);
 
-        $modules = $em->getRepository('manager.extension')->findBy($criteria);
-
+        $updated = 0;
         foreach ($modules as $module) {
             try {
-                foreach ($request->request->all() as $key => $value) {
-                    if ($key !== 'selected') {
-                        $module->{$key} = $request->request->get($key);
-                    }
-                }
-
+                $module->merge($data);
                 $em->persist($module);
-                $updated[] = $module->id;
+                $updated++;
             } catch (\Exception $e) {
-                $error[]    = $module->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error',
-                ];
+                $msg->add($e->getMessage(), 'error', 409);
             }
         }
 
-        if (count($updated) > 0) {
-            $messages[] = [
-                'message' => sprintf(
-                    _('%s modules updated successfully.'),
-                    count($updated)
-                ),
-                'type' => 'success'
-            ];
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s modules saved successfully'), $updated),
+                'success'
+            );
         }
 
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns an instance as JSON.
+     * Saves a new module.
      *
-     * @param integer  $id The instance id.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $params = [];
+        foreach ($request->request->all() as $key => $value) {
+            $params[$key] = $value;
+
+            // Decode JSON strings
+            if ($key !== 'images') {
+                $params[$key] = json_decode($value, true);
+            }
+        }
+
+        $msg  = $this->get('core.messenger');
+        $em   = $this->get('orm.manager');
+        $data = $em->getConverter('Extension')
+            ->objectify($params);
+
+        $module = new Extension($data);
+
+        $module->created = new \DateTime('now');
+        $module->updated = new \DateTime('now');
+
+        $em->persist($module);
+
+        if (!empty($request->files->count())) {
+            $module->images = [];
+
+            $fs = new Filesystem();
+            if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
+                $fs->mkdir(SITE_PATH . 'media/core/modules');
+            }
+
+            $i = 1;
+            foreach ($request->files as $file) {
+                $filename = $module->id . '_' . $i++ . '.'
+                    . $file[0]->getClientOriginalExtension();
+
+                $module->images[] = '/media/core/modules/' . $filename;
+                $file[0]->move(SITE_PATH . '/media/core/modules', $filename);
+            }
+
+            $em->persist($module);
+        }
+
+        $msg->add(_('Module saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_module_show', [ 'id' => $module->id ]
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * Returns a module.
+     *
+     * @param integer $id The module id.
      *
      * @return Response The response object.
      */
     public function showAction($id)
     {
-        try {
-            $module = $this->get('orm.manager')
-                ->getRepository('manager.extension')
-                ->find($id);
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('Extension');
+        $module    = $em->getRepository('Extension')->find($id);
 
-            $extra = $this->getTemplateParams();
-
-            unset($extra['types']['-1']);
-
-            return new JsonResponse([
-                'extra'  => $extra,
-                'module' => $module->getData()
-            ]);
-        } catch (EntityNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the entity with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
+        // Convert prices to float
+        if ($module->price) {
+            foreach ($module->price as &$price) {
+                $price['value'] = (float) $price['value'];
+            }
         }
+
+        return new JsonResponse([
+            'extra'  => $extra = $this->getExtraData(),
+            'module' => $converter->responsify($module->getData())
+        ]);
     }
 
     /**
@@ -426,43 +323,31 @@ class ModuleController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        try {
-            $em     = $this->get('orm.manager');
-            $module = $em ->getRepository('manager.extension')->find($id);
-            $path   = $this->getParameter('paths.extensions_assets_path') . DS;
+        $params = [];
+        foreach ($request->request->all() as $key => $value) {
+            if ($key !== '_method') {
+                $params[$key] = $value;
 
-            $imagesToDelete = [];
-
-            if (!empty($module->images)) {
-                $imagesToDelete = $module->images;
-            }
-
-            $keys = array_unique(array_merge(
-                array_keys($request->request->all()),
-                array_keys($module->getData())
-            ));
-
-            unset($keys[array_search('_method', $keys)]);
-
-            foreach ($keys as $key) {
-                $module->{$key} = null;
-
-                if ($request->request->get($key)
-                    && !is_null($request->request->get($key))
-                ) {
-                    $module->{$key} = $request->request->filter($key);
+                // Decode JSON strings
+                if ($key !== 'images') {
+                    $params[$key] = json_decode($value, true);
                 }
             }
+        }
 
-            $module->about       = json_decode($module->about, true);
-            $module->description = json_decode($module->description, true);
-            $module->metas       = json_decode($module->metas, true);
-            $module->name        = json_decode($module->name, true);
-            $module->updated     = date('Y-m-d H:i:s');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Extension')->objectify($params);
 
-            if (!empty($request->files->count())) {
-                $module->images = [];
-            }
+        $module   = $em ->getRepository('manager.extension')->find($id);
+        $path     = $this->getParameter('paths.extensions_assets_path') . DS;
+        $toDelete = empty($module->images) ? [] : $module->images;
+
+        $module->setData($data);
+        $module->updated = new \DateTime('now');
+
+        if ($request->files->count() > 0) {
+            $module->images = [];
 
             $fs = new Filesystem();
             if (!$fs->exists(SITE_PATH . $path)) {
@@ -471,49 +356,39 @@ class ModuleController extends Controller
 
             $i = 1;
             foreach ($request->files as $file) {
-                $filename = $module->id . '_' . $i . '.'
+                $filename = $module->id . '_' . $i++ . '.'
                     . $file[0]->getClientOriginalExtension();
 
                 $module->images[] = $path . $filename;
-
                 $file[0]->move(SITE_PATH . $path, $filename);
-
-                $i++;
             }
-
-            $em->persist($module);
 
             if (!empty($module->images)) {
-                $imagesToDelete = array_diff($imagesToDelete, $module->images);
+                $toDelete = array_diff($toDelete, $module->images);
             }
 
-            foreach ($imagesToDelete as $image) {
+            foreach ($toDelete as $image) {
                 $fs->remove(SITE_PATH . $image);
             }
-
-            return new JsonResponse(_('Module saved successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the instance with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
         }
+
+        $em->persist($module);
+
+        $msg->add(_('Module saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns a list of parameters for the template.
+     * Returns a list of extra data.
      *
-     * @return array Array of template parameters.
+     * @return array The extra data.
      */
-    private function getTemplateParams()
+    private function getExtraData()
     {
-        $uuids = array_keys(ModuleManager::getAvailableModules());
-
         $modules = $this->get('orm.manager')
-            ->getRepository('manager.extension')
-            ->findBy([]);
+            ->getRepository('Extension')
+            ->findBy();
 
         $uuids = array_map(function ($a) {
             return $a->uuid;

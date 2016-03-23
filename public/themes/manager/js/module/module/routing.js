@@ -9,14 +9,7 @@
           controller: 'ModuleListCtrl',
           resolve: {
             data: function($routeParams, itemService) {
-              // Default filters
-              var data = {
-                epp: 25,
-                orderBy: [{
-                  name: 'uuid',
-                  value: 'asc'
-                }],
-              };
+              var data = { oql: 'order by id asc limit 25' };
 
               return itemService.list('manager_ws_modules_list', data).then(
                 function(response) {

@@ -83,7 +83,7 @@
                 <div class="form-group">
                   <label class="form-label" for="category">{t}Category{/t}</label>
                   <div class="controls">
-                    <select id="category" name="category" ng-model="module.metas.category">
+                    <select id="category" name="category" ng-model="module.category">
                       <option value="">{t}Select a category...{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="pack">{t}Pack{/t}</option>
@@ -112,7 +112,7 @@
                 <span class="text-danger">*</span>
               </label>
               <div class="controls">
-                <div class="m-b-15 row" ng-repeat="price in module.metas.price">
+                <div class="m-b-15 row" ng-repeat="price in module.price">
                   <div class="form-group" ng-class="{ 'has-error': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index], 'has-success': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index].$valid }">
                     <div class="col-xs-3">
                       <div class="input-with-icon left">
@@ -145,7 +145,7 @@
                 <label class="form-label" for="uuid">{t}Modules included{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.metas.modules_included">
+                <tags-input ng-model="module.modules_included">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
@@ -155,7 +155,7 @@
                 <label class="form-label" for="uuid">{t}Modules in conflict{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.metas.modules_in_conflict">
+                <tags-input ng-model="module.modules_in_conflict">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
