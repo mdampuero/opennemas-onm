@@ -14,7 +14,7 @@
      * @requires http
      * @requires messenger
      * @requires oqlBuilder
-     * @requires data
+     * @requires webStorage
      *
      * @description
      *   Handles all actions in user groups list.
