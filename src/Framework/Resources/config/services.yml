@@ -52,6 +52,7 @@ services:
 
     kernel.listener.webservice_exceptions:
         class: Framework\EventListener\WebServiceExceptionsListener
+        arguments: [ '@core.messenger' ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
