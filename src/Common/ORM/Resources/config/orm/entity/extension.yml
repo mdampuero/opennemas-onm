@@ -13,18 +13,22 @@ entity:
         - updated
 
     properties:
-        about:       array
-        author:      string
-        created:     datetime
-        description: array
-        enabled:     boolean
-        id:          integer
-        images:      array
-        name:        array
-        type:        enum
-        updated:     datetime
-        uuid:        string
-        url:         string
+        about:               array
+        author:              string
+        category:            string
+        created:             datetime
+        description:         array
+        enabled:             boolean
+        id:                  integer
+        images:              array
+        modules_in_conflict: array
+        modules_included:    array
+        name:                array
+        price:               array
+        type:                enum
+        updated:             datetime
+        uuid:                string
+        url:                 string
     mapping:
         table: extension
         metas:
