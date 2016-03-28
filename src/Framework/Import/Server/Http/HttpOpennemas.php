@@ -52,9 +52,14 @@ class HttpOpennemas extends Http
             );
         }
 
-        $xml   = simplexml_load_string($content);
-        $files = $xml->xpath('//content');
+        $xml = simplexml_load_string($content);
 
+        // Avoid errors when the content is not xml-parseable
+        if (!is_object($xml)) {
+            return [];
+        }
+
+        $files = $xml->xpath('//content');
         foreach ($files as $value) {
             $this->remoteFiles[] = [
                 'filename' => (string) $value->attributes()->id . '.xml',
