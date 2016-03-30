@@ -259,7 +259,7 @@
   </script>
 
   <script type="text/ng-template" id="modal-batch-restore">
-    {include file="common/modals/_modalBatchDelete.tpl"}
+    {include file="common/modals/_modalBatchRestoreFromTrash.tpl"}
   </script>
 
   <script type="text/ng-template" id="modal-batch-remove-permanently">
