@@ -105,7 +105,7 @@
                 <label for="path" class="form-label">{t}File path{/t}</label>
                 <div class="controls">
                   {if !is_null($attaches)}
-                    <a class="btn btn-white" target="_blank" href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}"><span class="fa fa-download"></span> {t}Download{/t}</a>
+                    <a class="btn btn-white" target="_blank" href="//{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}"><span class="fa fa-download"></span> {t}Download{/t}</a>
                     <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
                   {else}
                     <div class="fileinput fileinput-new input-group" data-provides="fileinput">

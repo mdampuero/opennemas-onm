@@ -14,7 +14,7 @@
 <div class="form-group">
   <label for="link" class="form-label">{t}Link{/t}</label>
   <div class="controls">
-    <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">{$smarty.const.SITE_URL}{$video->uri}</a>
+    <a href="//{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$video->uri}" target="_blank">//{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$video->uri}</a>
   </div>
 </div>
 {/if}
