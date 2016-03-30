@@ -129,8 +129,8 @@ albums_photos:
             type: integer
             options: { default: '1', notnull: false }
         description:
-            type: string
-            options: { default: null, notnull: false, length: 250 }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: pk_album_2
