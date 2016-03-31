@@ -47,12 +47,19 @@
         <span class="title">{$smarty.session.realname}</span>
       </li>
       <li>
-        {acl isAllowed="USER_EDIT_OWN_PROFILE"}
-        <a href="{url name=admin_acl_user_show id=me}">
-          <i class="fa fa-user"></i>
-          <span class="title">{t}Profile{/t}</span>
-        </a>
-        {/acl}
+        {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
+          <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session.userid}/show" target="_blank">
+            <i class="fa fa-user"></i>
+            <span class="title">{t}Profile{/t}</span>
+          </a>
+        {else}
+          {acl isAllowed="USER_EDIT_OWN_PROFILE"}
+          <a href="{url name=admin_acl_user_show id=me}">
+            <i class="fa fa-user"></i>
+            <span class="title">{t}Profile{/t}</span>
+          </a>
+          {/acl}
+        {/if}
       </li>
       <li>
         <a href="{url name=admin_getting_started}">
