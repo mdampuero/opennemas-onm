@@ -153,7 +153,7 @@ CREATE TABLE `albums_photos` (
   `pk_album` bigint(20) unsigned NOT NULL,
   `pk_photo` bigint(20) unsigned NOT NULL,
   `position` int(10) DEFAULT '1',
-  `description` varchar(250) DEFAULT NULL,
+  `description` text,
   KEY `pk_album_2` (`pk_album`,`pk_photo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

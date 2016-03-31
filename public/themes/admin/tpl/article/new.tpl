@@ -329,7 +329,7 @@
                       {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
                       <span class="help-block">
-                        <a href="{$smarty.const.SITE_URL}{$uri.0|clearslash}" target="_blank">
+                        <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$uri.0|clearslash}" target="_blank">
                           <i class="fa fa-external-link"></i> {t}Link{/t}
                         </a>
                       </span>

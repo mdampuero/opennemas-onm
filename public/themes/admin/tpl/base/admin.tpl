@@ -75,7 +75,7 @@
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
-      var instanceDomain = '{$smarty.const.SITE_URL}';
+      var instanceMainDomain = '{$smarty.const.INSTANCE_MAIN_DOMAIN}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
     </script>
