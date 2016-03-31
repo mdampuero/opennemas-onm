@@ -273,7 +273,7 @@ class Instance
 
         $mainDomain = $this->getMainDomain();
         if (!is_null($mainDomain)) {
-            define('INSTANCE_MAIN_DOMAIN', $mainDomain);
+            define('INSTANCE_MAIN_DOMAIN', 'http://'.$mainDomain);
         }
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 

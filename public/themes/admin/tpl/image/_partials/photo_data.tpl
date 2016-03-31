@@ -4,14 +4,14 @@
       {if preg_match('/^swf$/i', $photo->type_img)}
       <object>
         <param name="wmode" value="opaque" />
-        <embed src="//{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+        <embed src="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
       </object>
       {else}
       {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,330,330" onunload="GUnload()"}
       {/if}
     </div>
     <div>
-      <a class="btn btn-white" href="//{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
+      <a class="btn btn-white" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
         <span class="fa fa-download"></span> {t}View original{/t}
       </a>
     </div>

@@ -188,7 +188,7 @@
                         <i class="fa fa-trash-o"></i> {t}Remove{/t}
                       </button>
                       {/acl}
-                      <a class="link" href="//{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
+                      <a class="link" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
                         <i class="fa fa-external-link"></i> {t}Link{/t}
                       </a>
                     </div>
