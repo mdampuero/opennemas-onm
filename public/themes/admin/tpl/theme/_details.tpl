@@ -7,19 +7,13 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-8">
-      <uib-carousel class="carousel-big" ng-if="template.item.screenshots.length > 0">
-        <uib-slide ng-repeat="screenshot in template.item.screenshots">
+      <uib-carousel active="1" class="carousel-big" ng-if="template.item.images.length > 0">
+        <uib-slide index="$index" ng-repeat="screenshot in template.item.images">
           <img class="img-responsive" ng-src="[% '/asset/thumbnail,1024,768' + template.item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
-      <uib-carousel class="carousel-big" ng-if="!template.item.screenshots">
-        <uib-slide>
-          <img class="img-responsive" src="http://placehold.it/1024x768">
-        </uib-slide>
-        <uib-slide>
-          <img class="img-responsive" src="http://placehold.it/1024x768">
-        </uib-slide>
-        <uib-slide>
+      <uib-carousel active="1" class="carousel-big" ng-if="!template.item.images">
+        <uib-slide index="1">
           <img class="img-responsive" src="http://placehold.it/1024x768">
         </uib-slide>
       </uib-carousel>
@@ -70,15 +64,11 @@
         </div>
         <div class="col-xs-6">
           <h3 class="no-margin text-right" ng-if="!template.isPurchased(template.item)">
-            <span ng-if="template.item.price.month">
-              <strong>[% template.item.price.month %]</strong>
-              <small>€ / {t}month{/t}</small>
+            <span ng-if="template.item.price">
+              <strong>[% (template.item.price | filter: { type: 'monthly' })[0].value %]</strong>
+              <small>€/{t}month{/t}</small>
             </span>
-            <span ng-if="!template.item.price.month && template.item.price.single">
-              <strong>[% template.item.price.single %]</strong>
-              <small>€</small>
-            </span>
-            <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || template.item.price.month == 0)">
+            <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || !template.item.price)">
               {t}Free{/t}
             </span>
           </h3>

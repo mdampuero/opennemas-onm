@@ -5,7 +5,8 @@
     <script>
       jQuery(document).ready(function ($){
         $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss',
+          useCurrent: false
         });
 
         $("#starttime").on("dp.change",function (e) {

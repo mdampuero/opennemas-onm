@@ -624,7 +624,7 @@ class Advertisement extends Content
         $width  = $params['width'];
         $height = $params['height'];
 
-        if (array_key_exists('width', $this->params) && !is_null($this->params['width'])
+        if (is_array($this->params) && array_key_exists('width', $this->params) && !is_null($this->params['width'])
             && array_key_exists('height', $this->params) && !is_null($this->params['height'])
         ) {
             if (is_array($this->params['width'])
@@ -643,7 +643,10 @@ class Advertisement extends Content
         if ($this->with_script == 1) {
             if (preg_match('/<iframe/', $this->script) || isset($this->default_ad)) {
                 $content = $this->script;
-            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto') !== false) {
+            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false
+            ) {
                 $content = $this->script;
             } else {
                 // Check for external advertisement Script

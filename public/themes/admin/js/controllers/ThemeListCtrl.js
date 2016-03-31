@@ -68,12 +68,24 @@
         $scope.toggleCustom = function(item) {
           if (!item.customize) {
             item.name = item.name.replace('(Custom)', '');
-            item.price.single = 350;
-            item.price.month  = 35;
+
+            item.price.filter(function(a) {
+              return a.type === 'single';
+            })[0].value = 350;
+
+            item.price.filter(function(a) {
+              return a.type === 'monthly';
+            })[0].value = 35;
           } else {
             item.name = item.name + ' (Custom)';
-            item.price.single = 1450;
-            item.price.month  = 135;
+
+            item.price.filter(function(a) {
+              return a.type === 'single';
+            })[0].value = 1450;
+
+            item.price.filter(function(a) {
+              return a.type === 'monthly';
+            })[0].value = 135;
           }
         };
 
@@ -170,6 +182,7 @@
           $http.get(url).success(function(response) {
             $scope.active     = response.active;
             $scope.exclusive  = response.exclusive;
+            $scope.addons     = response.addons;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
@@ -222,8 +235,8 @@
          */
         $scope.showDetails = function(item) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-details',
-            windowClass: 'modal-details-theme',
+            templateUrl: item.type === 'theme-addon' ? 'module-modal-details' : 'modal-details',
+            windowClass: item.type === 'theme-addon' ? 'modal-details' : 'modal-details-theme',
             controller: 'modalCtrl',
             resolve: {
               template: function() {

@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-{javascripts src="@AdminTheme/js/onm/jquery-functions.js"}
-<script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
-{/block}
-
 {block name="content"}
 <div ng-app="BackendApp" ng-controller="ContentListCtrl">
 

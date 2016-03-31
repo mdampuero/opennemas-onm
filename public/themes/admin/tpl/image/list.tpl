@@ -106,7 +106,7 @@
       </div>
     </div>
   </div>
-  <div class="content clearfix">
+  <div class="content clearfix" ng-class="{ 'content-grid': mode === 'grid' }">
     <div class="grid simple ng-cloak" ng-if="mode === 'list'">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">

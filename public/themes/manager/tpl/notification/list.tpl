@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="instance"}
+{include file='common/selected_navbar.tpl' list="notification"}
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -92,28 +92,32 @@
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('instance')" width="10">
+              <th class="pointer" ng-click="sort('instances')" width="10">
                 {t}Instance{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance') == 'asc', 'fa fa-caret-down': isOrderedBy('instance') == 'desc'}"></i>
-              </th>
-              <th class="pointer" ng-click="sort('type')" width="100" width=10>
-                {t}Type{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('type') == 'asc', 'fa fa-caret-down': isOrderedBy('type') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instances') == 'asc', 'fa fa-caret-down': isOrderedBy('instances') == 'desc'}"></i>
               </th>
               <th class="text-center" width="60">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" width="210">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" width="210">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" width="10">
+              <th class="pointer text-center" ng-click="sort('fixed')" width="85">
                 {t}Fixed{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('forced')" width="85">
+                {t}Forced{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('enabled')" width="85">
+                {t}Enabled{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -145,14 +149,13 @@
                 </div>
               </td>
               <td>
-                [% extra.instances[item.instance_id].name %]
-              </td>
-              <td class="text-center">
-                <i class="fa text-[% item.style %] p-b-10 p-l-10 p-r-10 p-t-10" ng-class="{ 'fa-comment': item.type === 'comment', 'fa-database': item.type === 'media', 'fa-envelope': item.type === 'email', 'fa-support': item.type === 'help', 'fa-info': item.type !== 'comment' && item.type !== 'media' && item.type !== 'email' && item.type !== 'help' && item.type !== 'user', 'fa-users': item.type === 'user' }"></i>
+                <div ng-repeat="id in item.instances">
+                  [% extra.instances[id].name %]
+                </div>
               </td>
               <td class="text-center">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" tooltip="{t}Translations completed{/t}">
-                  <i class="fa fa-check""countStringsLeft(item) === 0"></i>
+                  <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
                 </span>
                 <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
                   [% countStringsLeft(item) %]
@@ -164,9 +167,19 @@
               <td class="text-center">
                 [% item.end %]
               </td>
-              <td>
-                <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.fixed == '1' ? '0' : '1')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.fixed == '1', 'fa-times text-error': !item.loading && item.fixed == '0' }"></i>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
                 </button>
               </td>
             </tr>

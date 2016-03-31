@@ -12,13 +12,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 function smarty_outputfilter_meta_amphtml($output, $smarty)
 {
-    if (\Onm\Module\ModuleManager::isActivated('AMP_VERSION')
+    if (\Onm\Module\ModuleManager::isActivated('AMP_MODULE')
+        && strstr(getService('request')->getUri(),'amp') === false
         && array_key_exists('content', $smarty->tpl_vars)
         && is_object($smarty->tpl_vars['content']->value)
         && $smarty->tpl_vars['content']->value->content_type_name == 'article'
     ) {
         $content = $smarty->tpl_vars['content']->value;
-        // SHITTY CODE: we need to create a proper way to generate urls from contents.
+        // SHITTY CODE: we need to create a proper way to generate urls for contents.
         $params = [
             'category_name' => $content->category_name,
             'slug'          => $content->slug,

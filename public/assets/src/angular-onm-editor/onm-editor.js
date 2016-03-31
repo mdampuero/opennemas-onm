@@ -318,7 +318,11 @@
                 instance.on('change', function() {
                   if (!blocked) {
                     scope.ngModel = instance.getData();
-                    scope.$apply();
+
+                    if (scope.$root.$$phase != '$apply' &&
+                        scope.$root.$$phase != '$digest') {
+                      scope.$apply();
+                    }
                   }
                 });
 

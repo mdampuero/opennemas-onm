@@ -57,6 +57,21 @@ class ThemeController extends Controller
             $theme['description'] = null;
         }
 
+        $addons = $this->get('orm.manager')->getRepository('manager.extension')
+            ->findBy([ 'type' => [ [ 'value' => 'theme-addon'] ] ]);
+
+        foreach ($addons as &$addon) {
+            $addon->about       = $addon->about[CURRENT_LANGUAGE_SHORT];
+            $addon->description = $addon->description[CURRENT_LANGUAGE_SHORT];
+            $addon->name        = $addon->name[CURRENT_LANGUAGE_SHORT];
+
+            if ($addon->metas && array_key_exists('price', $addon->metas)) {
+                $addon->price = $addon->metas['price'];
+            }
+
+            $addon = $addon->getData();
+        }
+
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
@@ -76,6 +91,7 @@ class ThemeController extends Controller
         return new JsonResponse(
             [
                 'active'    => $active,
+                'addons'    => $addons,
                 'exclusive' => $exclusive,
                 'purchased' => $purchased,
                 'themes'    => $themes

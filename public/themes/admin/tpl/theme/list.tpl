@@ -69,7 +69,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="dropdown-menu on-right">
+                <div class="dropdown-menu dropdown-menu-right">
                   <div class="shopping-cart-placeholder" ng-if="!cart || cart.length == 0">
                     <h5 class="text-center">
                       {t}Your shopping cart is empty{/t}
@@ -80,8 +80,9 @@
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart">
                           <img class="img-responsive pull-left" ng-if="item.thumbnail" ng-src="/assets/images/store/[%item.thumbnail%]">
-                          <img class="img-responsive pull-left" ng-if="item.screenshots.length > 0" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + item.screenshots[0] %]">
-                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
+                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && item.images.length > 0" ng-src="[% '/asset/scale,200,200' + item.path + '/' + item.images[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.thunbnail && item.screenshots.length > 0 && item.type == 'theme'" ng-src="[% '/asset/scale,200,200' + item.path + '/' + item.screenshots[0] %]">
+                          <img class="img-responsive pull-left" ng-if="!item.thumbnail && (!item.images || item.images.length == 0) && (!item.screenshots || item.screenshots.length == 0)" src="http://placehold.it/1024x768">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
                             <div class="description" ng-bind-html="item.description[lang]"></div>
@@ -121,6 +122,15 @@
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'exclusive', 'btn-white': type != 'exclusive' }" ng-click="type = 'exclusive'">
                 <i class="fa fa-pencil m-r-5"></i>
                 {t}Exclusive{/t}
+              </button>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'addons', 'btn-white': type != 'addons' }" ng-click="type = 'addons'">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Addons{/t}
               </button>
             </li>
             <li class="quicklinks hidden-xs">
@@ -184,11 +194,15 @@
             </div>
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type != 'exclusive' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-if="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
         </div>
-        <div class="row clearfix ng-cloak" ng-show="type == 'exclusive' && !loading && items.length > 0">
+        <div class="row clearfix ng-cloak" ng-if="type == 'addons' && !loading && items.length > 0">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item-module'">
+          </div>
+        </div>
+        <div class="row clearfix ng-cloak" ng-if="type == 'exclusive' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }">
             <div class="item-wrapper" ng-include="'exclusive-item'"></div>
           </div>
@@ -203,6 +217,12 @@
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="theme/_details.tpl"}
+    </script>
+    <script type="text/ng-template" id="item-module">
+      {include file="store/partials/_item.tpl"}
+    </script>
+    <script type="text/ng-template" id="module-modal-details">
+      {include file="store/modal/_details.tpl"}
     </script>
   </div>
 {/block}

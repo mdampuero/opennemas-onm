@@ -125,6 +125,11 @@ class Config
 
         $completeGroups = array_merge_recursive($config, $groups);
 
+        foreach ($completeGroups as &$value) {
+            $value['caching'] = (int) $value['caching'];
+            $value['cache_lifetime'] = (int) $value['cache_lifetime'];
+        }
+
         return $completeGroups;
     }
 

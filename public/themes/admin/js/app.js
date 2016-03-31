@@ -20,6 +20,7 @@ angular.module(
     'onm.queryManager',
     'onm.picker',
     'onm.renderer',
+    'onm.repeat-finish',
     'onm.scroll',
     'onm.pagination',
     'onm.resizable',

@@ -36,20 +36,22 @@ class JavascriptManager extends AssetManager
         foreach ($filters as $filter) {
             switch ($filter) {
                 case 'uglifyjs':
-                    $config = $this->config['filters'][$filter];
-                    $filter = new UglifyJs2Filter($config['bin'], $config['node']);
-
-                    if (array_key_exists('options', $config)
-                        && !empty($config['options'])
-                    ) {
-                        foreach ($config['options'] as $key => $value) {
-                            $method = 'set' . ucfirst($key);
-                            $filter->{$method}($value);
-                        }
-                    }
-
-                    $fm->set('uglifyjs', $filter);
-
+                    $fm->set(
+                        'uglifyjs',
+                        new UglifyJsFilter(
+                            $this->config['filters']['uglifyjs']['bin'],
+                            $this->config['filters']['uglifyjs']['node']
+                        )
+                    );
+                    break;
+                case 'uglifyjs2':
+                    $fm->set(
+                        'uglifyjs2',
+                        new UglifyJs2Filter(
+                            $this->config['filters']['uglifyjs2']['bin'],
+                            $this->config['filters']['uglifyjs2']['node']
+                        )
+                    );
                     break;
                 default:
                     throw new FilterException();

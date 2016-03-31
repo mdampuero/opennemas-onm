@@ -62,16 +62,36 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="category">{t}Category{/t}</label>
-              <div class="controls">
-                <select id="category" name="category" ng-model="module.metas.category">
-                  <option value="">{t}Select a category...{/t}</option>
-                  <option value="module">{t}Module{/t}</option>
-                  <option value="pack">{t}Pack{/t}</option>
-                  <option value="partner">{t}Partner{/t}</option>
-                  <option value="service">{t}Service{/t}</option>
-                </select>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label class="form-label" for="type">{t}Type{/t}</label>
+                  <div class="controls">
+                    <select id="type" name="type" ng-model="module.type">
+                      <option value="">{t}Select a type...{/t}</option>
+                      <option value="module">{t}Module{/t}</option>
+                      <option value="theme">{t}Theme{/t}</option>
+                      <option value="theme-addon">{t}Theme addon{/t}</option>
+                      <option value="Widget">{t}Widget{/t}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-show="module.type == 'module'">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label class="form-label" for="category">{t}Category{/t}</label>
+                  <div class="controls">
+                    <select id="category" name="category" ng-model="module.metas.category">
+                      <option value="">{t}Select a category...{/t}</option>
+                      <option value="module">{t}Module{/t}</option>
+                      <option value="pack">{t}Pack{/t}</option>
+                      <option value="partner">{t}Partner{/t}</option>
+                      <option value="service">{t}Service{/t}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-group">

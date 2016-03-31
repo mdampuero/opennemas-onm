@@ -45,7 +45,7 @@
     "ckeditor": "4.5.0",
     "datatables": "1.10.11",
     "datatables-responsive": "2.0.2",
-    "eonasdan-bootstrap-datetimepicker": "4.17.37",
+    "eonasdan-bootstrap-datetimepicker": "4.15.35",
     "fastclick": "1.0.6",
     "font-awesome": "4.5.0",
     "gmaps": "0.4.22",

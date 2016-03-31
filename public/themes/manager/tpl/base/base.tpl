@@ -27,16 +27,18 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
-      @Common/components/select2/select2.css,
-      @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/messenger/build/css/messenger.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/animate.css/animate.min.css,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+      @Common/components/messenger/build/css/messenger-theme-flat.css,
+      @Common/components/messenger/build/css/messenger.css,
+      @Common/components/nanoscroller/bin/css/nanoscroller.css,
+      @Common/components/ng-tags-input/ng-tags-input.min.css,
+      @Common/components/pace/themes/blue/pace-theme-minimal.css,
+      @Common/components/select2/select2.css,
+
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
@@ -138,19 +140,19 @@
           <ul class="nav quick-section">
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
-                <i class="fa fa-rebel text-danger master-user"></i>
+                <i class="fa fa-rebel text-danger pull-left"></i>
                 <span class="title">
                   [% user.name %]
                 </span>
+                <i class="fa fa-angle-down"></i>
                 <div class="profile-pic">
                   <gravatar ng-model="user.email" size="25"></gravatar>
                 </div>
-                <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu dropdown-menu-right no-padding">
                 <li class="text-danger">
-                  <span class="dropdown-static-item">
-                    {t}This user is a master{/t}
+                    <span class="fake-a fake-a-static text-danger">
+                    {t}You are a master{/t}
                   </span>
                 </li>
                 <li class="divider"></li>
@@ -269,70 +271,66 @@
   {block name="footer-js"}
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {javascripts src="
-    @Common/components/jquery/jquery.min.js,
-    @Common/components/bootstrap/dist/js/bootstrap.min.js,
-    @Common/components/bootstrap/dist/js/bootstrap.min.js,
-    @Common/components/breakpoints/breakpoints.js,
-    @Common/components/ckeditor/ckeditor.js,
-    @Common/components/fastclick/lib/fastclick.js,
+      @Common/components/jquery/jquery.min.js,
+      @Common/components/bootstrap/dist/js/bootstrap.min.js,
+      @Common/components/breakpoints/breakpoints.js,
+      @Common/components/ckeditor/ckeditor.js,
+      @Common/components/fastclick/lib/fastclick.js,
+      @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
+      @Common/components/lodash/dist/lodash.min.js,
+      @Common/components/messenger/build/js/messenger.min.js,
+      @Common/components/messenger/build/js/messenger-theme-flat.js,
+      @Common/components/moment/min/moment-with-locales.min.js,
+      @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+      @Common/components/select2/select2.min.js,
+      @Common/components/angular/angular.min.js,
+      @Common/components/angular-animate/angular-animate.min.js,
+      @Common/components/angular-sanitize/angular-sanitize.min.js,
+      @Common/components/angular-checklist-model/checklist-model.js,
+      @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
+      @Common/components/angular-file-model/angular-file-model.js,
+      @Common/components/angular-ui-select/dist/select.min.js,
+      @Common/components/angular-webstorage/angular-webstorage.min.js,
+      @Common/components/angular-google-chart/ng-google-chart.js,
+      @Common/components/angular-nanoscroller/scrollable.js,
+      @Common/components/angular-loading-bar/build/loading-bar.min.js,
+      @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
+      @Common/components/angular-route/angular-route.min.js,
+      @Common/components/ng-tags-input/ng-tags-input.min.js,
+      @Common/components/angular-touch/angular-touch.min.js,
+      @Common/components/angular-translate/angular-translate.min.js,
+      @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+      @Common/components/swfobject/swfobject/swfobject.js,
+      @Common/components/angular-swfobject/angular-swfobject.js,
+      @FosJsRoutingBundle/js/router.js" filters="uglifyjs"}
+    {/javascripts}
+    {javascripts src="
+      @Common/src/angular-authentication/authService.js,
+      @Common/src/angular-datetimepicker/datetimepicker.js,
+      @Common/src/angular-form-autofill/formAutoFill.js,
+      @Common/src/angular-gravatar/gravatar.js,
+      @Common/src/angular-cleaner/cleaner.js,
+      @Common/src/angular-dynamic-image/js/dynamic-image.js,
+      @Common/src/angular-onm-editor/onm-editor.js,
+      @Common/src/angular-onm-pagination/js/onm-pagination.js,
+      @Common/src/angular-history/history.js,
+      @Common/src/angular-http-interceptor/http-interceptor.js,
+      @Common/src/angular-image-preview/js/image-preview.js,
+      @Common/src/angular-item-service/itemService.js,
+      @Common/src/angular-messenger/messenger.js,
+      @Common/src/angular-resizable/resizable.js,
+      @Common/src/angular-routing/routing.js,
+      @Common/src/sidebar/js/sidebar.js,
+      @Common/js/onm/md5.min.js,
+      @Common/js/routes.js,
 
-    @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
-    @Common/components/lodash/dist/lodash.min.js,
-    @Common/components/messenger/build/js/messenger.min.js,
-    @Common/components/messenger/build/js/messenger-theme-flat.js,
-    @Common/components/moment/min/moment-with-locales.min.js,
-    @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
-    @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-    @Common/components/select2/select2.min.js,
+      @ManagerTheme/js/app.js,
+      @ManagerTheme/js/config.js,
+      @ManagerTheme/js/routing.js,
+      @ManagerTheme/js/controllers/*,
 
-    @Common/js/onm/md5.min.js,
-
-    @FosJsRoutingBundle/js/router.js,
-    @Common/js/routes.js,
-    @Common/components/angular/angular.min.js,
-    @Common/components/angular-animate/angular-animate.min.js,
-    @Common/components/angular-sanitize/angular-sanitize.min.js,
-    @Common/components/angular-checklist-model/checklist-model.js,
-    @Common/components/angular-file-model/angular-file-model.js,
-    @Common/components/angular-ui-select/dist/select.min.js,
-    @Common/components/angular-webstorage/angular-webstorage.min.js,
-    @Common/components/angular-google-chart/ng-google-chart.js,
-    @Common/components/angular-nanoscroller/scrollable.js,
-    @Common/components/angular-loading-bar/build/loading-bar.min.js,
-    @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
-    @Common/components/angular-route/angular-route.min.js,
-    @Common/components/ng-tags-input/ng-tags-input.min.js,
-    @Common/components/angular-touch/angular-touch.min.js,
-    @Common/components/angular-translate/angular-translate.min.js,
-    @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
-    @Common/components/swfobject/swfobject/swfobject.js,
-    @Common/components/angular-swfobject/angular-swfobject.js,
-
-    @Common/src/angular-authentication/authService.js,
-    @Common/src/angular-datetimepicker/datetimepicker.js,
-    @Common/src/angular-form-autofill/formAutoFill.js,
-    @Common/src/angular-gravatar/gravatar.js,
-
-    @Common/src/angular-cleaner/cleaner.js,
-    @Common/src/angular-dynamic-image/js/dynamic-image.js,
-    @Common/src/angular-onm-editor/onm-editor.js,
-    @Common/src/angular-onm-pagination/js/onm-pagination.js,
-    @Common/src/angular-history/history.js,
-    @Common/src/angular-http-interceptor/http-interceptor.js,
-    @Common/src/angular-image-preview/js/image-preview.js,
-    @Common/src/angular-item-service/itemService.js,
-    @Common/src/angular-messenger/messenger.js,
-    @Common/src/angular-resizable/resizable.js,
-    @Common/src/angular-routing/routing.js,
-    @Common/src/sidebar/js/sidebar.js,
-
-    @ManagerTheme/js/app.js,
-    @ManagerTheme/js/config.js,
-    @ManagerTheme/js/routing.js,
-
-    @ManagerTheme/js/controllers/*,
-
-    @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
+      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}
   {/block}
 </body>

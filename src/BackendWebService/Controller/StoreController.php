@@ -25,45 +25,56 @@ class StoreController extends Controller
             );
         }
 
-        $available = \Onm\Module\ModuleManager::getAvailableModules();
+        // Fetch user data
+        $modulesRequested = $request->request->get('modules');
+        $billing          = $request->request->get('billing');
+
+        // Fetch information about modules
+        $availableItems = [];
+        $modules   = $this->get('orm.manager')
+            ->getRepository('manager.extension')
+            ->findBy([
+                'enabled' => [ [ 'value' => 1 ] ],
+                'type'    => [ 'union' => 'OR', [ 'value' => 'module' ], [ 'value' => 'theme-addon' ] ]
+            ]);
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes    = $this->get('orm.loader')->getPlugins();
 
+        foreach ($modules as $module) {
+            $availableItems[$module->uuid] =
+                array_key_exists(CURRENT_LANGUAGE_SHORT, $module->name) ?
+                $module->name[CURRENT_LANGUAGE_SHORT] :
+                $module->name['en'];
+        }
+
         foreach ($packs as $pack) {
-            $available[$pack['id']] = $pack['name'];
+            $availableItems[$pack['id']] = $pack['name'];
         }
 
         foreach ($themes as $theme) {
-            $available[$theme->uuid] = $theme->name;
+            $availableItems[$theme->uuid] = $theme->name;
         }
 
         $instance = $this->get('instance');
-        $modules  = $request->request->get('modules');
-        $billing  = $request->request->get('billing');
 
-        $instance = $this->get('instance');
-
+        // Save new billing info for instance
         foreach ($billing as $key => $value) {
             $instance->metas['billing_' . $key] = $value;
         }
 
         $this->get('instance_manager')->persist($instance);
 
-        // Filter request to ignore invalid modules
-        $modules = array_filter($modules, function ($e) use ($available) {
-            return array_key_exists($e, $available);
-        });
-
         // Get names for filtered modules to use in template
-        $purchased = array_intersect_key($available, array_flip($modules));
+        $modulesRequested = array_intersect_key($availableItems, array_flip($modulesRequested));
 
-        $this->sendEmailToSales($billing, $purchased, $instance);
-        $this->sendEmailToCustomer($purchased, $instance);
+        // Send emails
+        $this->sendEmailToSales($billing, $modulesRequested, $instance);
+        $this->sendEmailToCustomer($modulesRequested, $instance);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
             . '(' . $this->getUser()->id  .') has purchased '
-            . implode(', ', $modules)
+            . implode(', ', $modulesRequested)
         );
 
         return new JsonResponse(_('Your request has been registered'));
@@ -159,6 +170,10 @@ class StoreController extends Controller
 
                     $a->{$key} = $lang;
                 }
+            }
+
+            if (array_key_exists('price', $a->metas)) {
+                $a->price = $a->metas['price'];
             }
 
             return $a->getData();

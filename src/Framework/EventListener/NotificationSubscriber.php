@@ -41,7 +41,6 @@ class NotificationSubscriber implements EventSubscriberInterface
     {
         return [
             'notifications.get' => [
-                [ 'getNotificationFromInstance', 10 ],
                 [ 'getNotifications', 5 ]
             ],
             'notifications.getRead' => [
@@ -76,15 +75,20 @@ class NotificationSubscriber implements EventSubscriberInterface
         $instance = $this->container->get('instance');
         $response = $event->getResponse();
 
-        if ($instance->users == 1
-            && $instance->page_views < 45000
-            && $instance->media_size < 450
-        ) {
-            return;
+        if ($instance->users > 1) {
+            $response[] = $this->container->get('core.service.notification')
+                ->getFromUsers($instance);
         }
 
-        $response[] = $this->container->get('core.service.notification')
-            ->getFromInstance($instance);
+        if ($instance->page_views > 50000) {
+            $response[] = $this->container->get('core.service.notification')
+                ->getFromView($instance);
+        }
+
+        if ($instance->media_size > 500) {
+            $response[] = $this->container->get('core.service.notification')
+                ->getFromMedia($instance);
+        }
 
         $event->setResponse($response);
     }

@@ -92,9 +92,9 @@
           $scope.saving = true;
           var url = routing.generate('backend_ws_store_checkout');
           var modules = $scope.cart.map(function(e) {
-            var id = e.id;
+            var id = e.uuid;
             if (!id) {
-              id = e.uuid;
+              id = e.id;
             }
             return id;
           });
@@ -112,6 +112,33 @@
               type: 'error'
             });
           });
+        };
+
+        /**
+         * @function getPrice
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *   Returns the price of an item.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Float} The price.
+         */
+        $scope.getPrice = function(item) {
+          if (!item.price || item.price.length === 0) {
+            return 0;
+          }
+
+          var prices = item.price.filter(function(a) {
+            return a.type === 'monthly';
+          });
+
+          if (prices.length > 0) {
+            return parseFloat(prices[0].value);
+          }
+
+          return parseFloat(item.price[0].value);
         };
 
         /**
@@ -150,7 +177,6 @@
         // Updates the total when the cart changes
         $scope.$watch('cart', function(nv) {
           $scope.subtotal = 0;
-          $scope.total    = 0;
 
           if (!nv || (nv instanceof Array && nv.length === 0)) {
             webStorage.local.remove('cart');
@@ -160,22 +186,24 @@
           webStorage.local.set('cart', nv);
 
           for (var i = 0; i < nv.length; i++) {
-            if (nv[i].price && nv[i].price.month) {
-              $scope.subtotal += nv[i].price.month;
-            }
+            $scope.subtotal += $scope.getPrice(nv[i]);
           }
-
-          $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-          $scope.total = $scope.subtotal + $scope.vat;
         }, true);
 
         // Updates vat and total values when vat tax changes
         $scope.$watch('validVat', function(nv) {
           if (nv === true) {
-            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-            $scope.total = $scope.subtotal + $scope.vat;
+            $scope.vat = ($scope.subtotal * $scope.vatTax) / 100;
           }
         });
+
+        $scope.$watch('[ subtotal, vat ]', function() {
+          $scope.total = $scope.subtotal + $scope.vat;
+        }, true);
+
+        $scope.$watch('[ vatTax ]', function() {
+          $scope.vat = ($scope.subtotal * $scope.vatTax) / 100;
+        }, true);
 
         // Updates the edit flag when billing changes.
         $scope.$watch('[billing.company, billing.country, billing.vat]', function() {
