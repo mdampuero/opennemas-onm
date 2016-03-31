@@ -22,7 +22,7 @@ function smarty_function_structured_data_tags($params, &$smarty) {
                 $summary = mb_substr($content->body, 0, 120)."...";
             }
         }
-        $url = "http://".SITE.'/'.$content->uri;
+        $url = SITE_URL.$content->uri;
 
         $category = getService('category_repository')->find($content->category);
         $user = getService('user_repository')->find($content->fk_author);
@@ -71,7 +71,7 @@ function smarty_function_structured_data_tags($params, &$smarty) {
         $logoUrl = '';
         $logoWidth = $logoHeight = 0;
         if (!empty($logo)) {
-            $logoUrl = "http://".SITE.'/'.MEDIA_DIR_URL.'sections/'.$logo;
+            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.$logo;
             $logoSize = @getimagesize($logoUrl);
             if (is_array($logoSize) && array_key_exists(0, $logoSize) && array_key_exists(1, $logoSize)) {
                 $logoWidth = $logoSize[0];
