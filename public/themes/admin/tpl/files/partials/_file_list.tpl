@@ -152,7 +152,7 @@
                     <i class="fa fa-trash-o"></i> {t}Remove{/t}
                   </button>
                   {/acl}
-                  <a class="link hidden-xs" href="//{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
+                  <a class="link hidden-xs" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
                     <span class="fa fa-download"></span>  {t}Download{/t}
                   </a>
                 </div>
