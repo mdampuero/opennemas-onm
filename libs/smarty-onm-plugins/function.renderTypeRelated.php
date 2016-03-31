@@ -27,6 +27,13 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             } else {
                 $class = 'class="res-file" ';
             }
+            // Generate correct attachment uri
+            if ($content->fullFilePath) {
+                $content->uri = $content->fullFilePath;
+            } else {
+                $path = ContentManager::getFilePathFromId($content->id);
+                $content->uri = 'media'.DS.INSTANCE_UNIQUE_NAME.DS.FILE_DIR.$path;
+            }
             break;
         case 4:
             //Opinion
@@ -56,14 +63,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
     $replace = array('', '', '');
     $titleCleaned = preg_replace($patterns, $replace, $content->title);
 
-    // Check if is attachment from synchronize
-    if ($content->fullFilePath) {
-        $content->uri = $content->fullFilePath;
-    } else {
-        $content->uri = '/'.$content->uri;
-    }
-
-    $html ='<a title="'.$titleCleaned.'" href="'.$content->uri .'"';
+    $html ='<a title="'.$titleCleaned.'" href="/'.$content->uri .'"';
     if ($content->fk_content_type==3) {
         $html.=' target="_blank"';
     }
