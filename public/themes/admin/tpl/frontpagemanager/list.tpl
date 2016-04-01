@@ -186,7 +186,7 @@
 <div class="content">
   <div id="warnings-validation"></div>
 
-  <div class="grid simple visible-xs">
+  <div class="grid simple visible-xs not-available-in-phone">
     <div class="grid-body center">
       <h5>{t escape=off}The frontpage manager is currently <strong>unavaible for your screen size</strong>{/t}</h5>
     </div>
