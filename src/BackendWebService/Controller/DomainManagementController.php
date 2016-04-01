@@ -184,7 +184,7 @@ class DomainManagementController extends Controller
      */
     private function isDomainAvailable($domain)
     {
-        return $this->getTarget($domain) === $domain;
+        return !checkdnsrr($domain, 'ANY');
     }
 
     /**
@@ -282,8 +282,12 @@ class DomainManagementController extends Controller
         $params = $this->container
             ->getParameter("manager_webservice");
 
+        $subject = $create ?
+            'Opennemas Domain domain registration request:' :
+            'Opennemas Domain mapping request';
+
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain mapping request')
+            ->setSubject($subject)
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->container->getParameter('sales_email'))
