@@ -119,7 +119,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -141,7 +141,7 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <li class="quicklinks hidden-xs">
+          <li class="quicklinks">
             <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </li>
         </ul>
@@ -189,7 +189,7 @@
                   </div>
                 </td>
                 <td style="">
-                  <span class="visible-xs visible-sm">
+                  <span class="visible-xs-inline-block visible-sm-inline-block">
                     <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                     <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script != 1 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
                     <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script != 1 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
