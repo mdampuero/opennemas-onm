@@ -249,6 +249,11 @@ class PurchaseController extends Controller
 
         $purchase->client = $purchase->client->getData();
 
+        // Remove payment line from purchase
+        if ($purchase->method === 'CreditCard') {
+            array_pop($purchase->details);
+        }
+
         return new JsonResponse([
             'purchase' => $purchase->getData(),
             'extra'    => $this->getTemplateParams()

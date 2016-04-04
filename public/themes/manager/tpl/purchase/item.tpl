@@ -153,7 +153,9 @@
                 <strong>{t}Total{/t}</strong>
               </div>
             </td>
-            <td class="text-right">[% purchase.total | number : 2 %] €</td>
+            <td class="text-right">
+              <strong>[% purchase.total | number : 2 %] €</strong>
+            </td>
           </tr>
         </table>
       </div>
