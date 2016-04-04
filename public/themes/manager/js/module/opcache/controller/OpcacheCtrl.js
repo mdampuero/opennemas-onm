@@ -15,24 +15,28 @@
     .controller('OpcacheCtrl', [
       '$scope', 'itemService',
       function ($scope, itemService) {
+        /**
+         * Formats a number into a computer space measure
+         */
+        function formatSpace(bytes, precision) {
+          if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
+            return '-';
+          }
+
+          if (typeof precision === 'undefined') {
+            precision = 1;
+          }
+
+          var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+          number = Math.floor(Math.log(bytes) / Math.log(1024));
+
+          return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+        }
+
         // Update the chart configuration when server data changes
         $scope.$watch('serverData', function(nv) {
-          /**
-           * Formats a number into a computer space measure
-           */
-          function formatSpace(bytes, precision) {
-            if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
-              return '-';
-            }
-
-            if (typeof precision === 'undefined') {
-              precision = 1;
-            }
-
-            var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
-            number = Math.floor(Math.log(bytes) / Math.log(1024));
-
-            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+          if (!nv) {
+            return;
           }
 
           $scope.chartObjectMem = {
@@ -70,7 +74,7 @@
               ],
               'rows': [
                 { c: [
-                  { v: 'Used keys (' + data.stats.num_cached_keys + ')' },
+                  { v: 'Used keys (' + nv.stats.num_cached_keys + ')' },
                   { v: nv.stats.num_cached_keys },
                 ] },
                 { c: [
