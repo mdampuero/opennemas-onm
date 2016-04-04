@@ -9,33 +9,6 @@
             .when('/', {
               templateUrl: '/managerws/template/index:index.' + appVersion + '.tpl'
             })
-          .when(routingProvider.ngGenerateShort('manager_commands'), {
-            templateUrl: '/managerws/template/framework:commands:commands.' + appVersion + '.tpl',
-            controller: 'CommandListCtrl',
-            resolve: {
-              data: function(itemServiceProvider) {
-                return itemServiceProvider.list('manager_ws_commands_list', {}).then(
-                  function(response) {
-                    return response.data;
-                  }
-                );
-              }
-            }
-          })
-          .when(routingProvider.ngGenerateShort('manager_command_output'), {
-            templateUrl: '/managerws/template/framework:commands:output.' + appVersion + '.tpl',
-            controller: 'CommandCtrl',
-            resolve: {
-              data: function() {
-                return itemServiceProvider.executeCommand('manager_ws_command_output',
-                    $route.current.params.command, $route.current.params.data).then(
-                      function(response) {
-                        return response.data;
-                      }
-                      );
-              }
-            }
-          })
           .when(routingProvider.ngGenerateShort('manager_modules_list'), {
             templateUrl: '/managerws/template/module:list.' + appVersion + '.tpl',
             controller: 'ModuleListCtrl',
