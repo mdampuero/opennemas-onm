@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in items">
+            <tr ng-repeat="item in items | filter: { title: criteria.title  }">
               <td>
                 [% item.title %]
                 <div class="help-block">
