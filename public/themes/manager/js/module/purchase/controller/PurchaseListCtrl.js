@@ -19,13 +19,12 @@
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -36,9 +35,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = {
-          name_like: []
-        };
+        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf PurchaseListCtrl
@@ -217,7 +214,9 @@
         // Prevent dropdown from closing
         $('.dropdown-menu').on('click', '.checkbox,label', function(e) {
           e.stopPropagation();
-        })
+        });
+
+        $scope.list();
       }
     ]);
 })();

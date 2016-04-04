@@ -19,19 +19,8 @@
      *   Handles actions for purchase edition form
      */
     .controller('PurchaseCtrl', [
-      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, webStorage, data) {
-
-        /**
-         * @memberOf PurchaseCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
+      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger', 'webStorage',
+      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger, webStorage) {
         /**
          * @memberOf PurchaseCtrl
          *
@@ -46,9 +35,7 @@
           $scope.purchase = null;
         });
 
-        if (data.purchase) {
-          $scope.purchase = data.purchase;
-
+        $scope.$watch('purchase', function() {
           $scope.subtotal = 0;
           $scope.tax      = 0;
           $scope.total    = 0;
@@ -56,11 +43,20 @@
           for (var i = 0; i < $scope.purchase.details.length; i++) {
             var line = $scope.purchase.details[i];
 
-            $scope.tax   += line.unit_cost * line.quantity * (line.tax1_percent / 100);
+            $scope.tax      += line.unit_cost * line.quantity * (line.tax1_percent / 100);
             $scope.subtotal += line.unit_cost * line.quantity;
           }
 
           $scope.total = $scope.subtotal + $scope.tax;
+        });
+
+        if ($routeParams.id) {
+          itemService.show('manager_ws_purchase_show', $routeParams.id).then(
+            function(response) {
+              $scope.purchase = response.data.purchase;
+              $scope.extra    = response.data.extra;
+            }
+          );
         }
       }
     ]);
