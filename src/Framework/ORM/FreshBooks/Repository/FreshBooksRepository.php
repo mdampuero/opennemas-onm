@@ -32,14 +32,4 @@ abstract class FreshBooksRepository extends Repository
         $this->api    = $api;
         $this->source = $source;
     }
-
-    /**
-     * Returns the FreshBooks API object.
-     *
-     * @return FreshBooksApi The FreshBooks API object.
-     */
-    public function getApi()
-    {
-        return $this->api;
-    }
 }

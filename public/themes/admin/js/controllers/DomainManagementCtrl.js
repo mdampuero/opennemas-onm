@@ -18,8 +18,28 @@
      *   description
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$uibModal', '$scope', '$timeout', 'messenger', 'routing',
-      function($http, $location, $uibModal, $scope, $timeout, messenger, routing) {
+      '$http', '$location', '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'messenger', 'routing',
+      function($http, $location, $rootScope, $scope, $timeout, $uibModal, $window, messenger, routing) {
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *  Flag for card request loading.
+         *
+         * @type {boolean}
+         */
+        $scope.cardLoading = false;
+
+        /**
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *  Flag for valid client.
+         *
+         * @type {boolean}
+         */
+        $scope.clientValid = false;
+
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -64,11 +84,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   Flag to edit billing information.
+         *  The current payment method.
          *
-         * @type {Boolean}
+         * @type {String}
          */
-        $scope.edit = false;
+        $scope.payment = '';
 
         /**
          * @memberOf DomainManagementCtrl
@@ -141,6 +161,20 @@
         $scope.width = $('.uib-typeahead').width();
 
         /**
+         * @function cancelCreditCard
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Cancels credit card payment.
+         */
+        $scope.cancelCreditCard = function() {
+          $scope.nonce    = null;
+          $scope.payment  = null;
+          $scope.total   -= $scope.fee;
+          $scope.fee      = 0;
+        };
+
+        /**
          * @function confirm
          * @memberOf DomainManagementCtrl
          *
@@ -148,17 +182,25 @@
          *  Requests the purchase and shows a confirmation message.
          */
         $scope.confirm = function() {
-          $scope.saving = true;
+          $scope.loading = true;
           var url = routing.generate('backend_ws_domain_save');
           var data = {
-            billing: $scope.billing,
+            client:  $scope.client,
             create:  $scope.create,
-            domains: $scope.domains
+            domains: $scope.domains,
+            fee:     $scope.fee,
+            method:  $scope.payment.type,
+            nonce:   $scope.payment.nonce,
+            total:   $scope.total
           };
 
           $http.post(url, data).success(function() {
-            $scope.step = 4;
+            $scope.next();
+            $scope.loading = false;
             $scope.domains = [];
+          }).error(function(response) {
+            $scope.loading = false;
+            messenger.post(response);
           });
         };
 
@@ -277,6 +319,17 @@
         };
 
         /**
+         * @function selectedCreditCard
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Selects credit card payment.
+         */
+        $scope.selectCreditCard = function() {
+          $scope.payment = 'card';
+        };
+
+        /**
          * @function map
          * @memberOf DomainManagementCtrl
          *
@@ -324,124 +377,48 @@
           }
         };
 
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing', function(nv) {
-          if (!nv || !nv.name) {
-            $scope.edit = true;
-            $scope.validPhone = false;
-            $scope.validVat   = false;
+        /**
+         * @function next
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Goes to the next step.
+         */
+        $scope.next = function() {
+          $scope.step++;
+
+          if ($scope.step === 2 && $scope.client) {
+            $scope.step++;
           }
-        });
+        };
 
-        // Updates vat and total values when vat tax changes
-        $scope.$watch('validVat', function(nv) {
-          if (nv === true) {
-            $scope.vat   = ($scope.subtotal * $scope.vatTax) / 100;
-            $scope.total = $scope.subtotal + $scope.vat;
-          }
-        });
-
-        // Updates the edit flag when billing changes.
-        $scope.$watch('[billing.company, billing.country, billing.vat]', function() {
-          if (!$scope.billing) {
-            return;
-          }
-
-          $scope.vatTax = 0;
-
-          // Individual customer
-          if (!$scope.billing.company && $scope.billing.country &&
-              $scope.taxes[$scope.billing.country]) {
-            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
-            return;
+        /**
+         * @function previous
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Goes to the previous step.
+         */
+        $scope.previous = function() {
+          if ($scope.step > 1) {
+            $scope.step--;
           }
 
-          // Spanish company
-          if ($scope.billing.company && $scope.billing.country === 'ES' &&
-              $scope.taxes[$scope.billing.country]) {
-            $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+          if ($scope.step === 2 && $scope.client) {
+            $scope.step--;
           }
-        }, true);
+        };
 
-        $scope.$watch('billing.country', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.billing.country, phone: $scope.billing.phone });
-
-          $http.get(url).success(function() {
-            $scope.validPhone = true;
-          }).error(function() {
-            $scope.validPhone = false;
-          });
-
-          url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.billing.country, vat: $scope.billing.vat });
-
-          $http.get(url).success(function() {
-            $scope.validVat = true;
-          }).error(function() {
-            $scope.validVat = false;
-          });
-        }, true);
-
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing.phone', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if (!$scope.billing || !$scope.billing.country ||
-              !$scope.billing.phone) {
-            $scope.validPhone = false;
-            return;
-          }
-
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          var url = routing.generate('backend_ws_store_check_phone',
-              { country: $scope.billing.country, phone: $scope.billing.phone });
-
-          $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
-              $scope.validPhone = true;
-            }).error(function() {
-              $scope.validPhone = false;
-            });
-          }, 500);
-        }, true);
-
-        // Updates the edit flag when billing changes.
-        $scope.$watch('billing.vat', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if (!$scope.billing || !$scope.billing.country ||
-              !$scope.billing.vat) {
-            $scope.validVat = false;
-            return;
-          }
-
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
-          }
-
-          var url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.billing.country, vat: $scope.billing.vat });
-
-          $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
-              $scope.validVat = true;
-            }).error(function() {
-              $scope.validVat = false;
-            });
-          }, 500);
-        }, true);
+        /**
+         * @function toggleCardLoading
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Toggles cardLoading flag.
+         */
+        $scope.toggleCardLoading = function() {
+          $scope.cardLoading = !$scope.cardLoading;
+        };
 
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv) {
@@ -458,9 +435,76 @@
 
           if (nv.length > 0) {
             $scope.subtotal = $scope.price * nv.length;
-            $scope.vat      = Math.round($scope.subtotal * $scope.vatTax)/100;
-            $scope.total    = $scope.subtotal + $scope.vat;
           }
         }, true);
+
+        $scope.$watch('step', function(nv) {
+          if (nv !== 3) {
+            return;
+          }
+
+          if ($scope.client.country === 'ES' || (!$scope.client.company &&
+                $scope.countries[$scope.client.country])) {
+            $scope.vatTax = $scope.taxes[$scope.client.country].value;
+          }
+
+          $scope.vat   = Math.round($scope.subtotal * $scope.vatTax)/100;
+          $scope.total = $scope.subtotal + $scope.vat;
+        });
+
+        $scope.$watch('payment', function(nv) {
+          if (nv && nv.type === 'CreditCard') {
+            $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
+            $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
+          }
+        }, true);
+
+        // Get client after saving
+        $rootScope.$on('client-saved', function (event, args) {
+          $scope.client = args;
+          $scope.next();
+        });
+
+        // Configure braintree
+        $scope.$watch('clientToken', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.clientToken && typeof braintree !== 'undefined') {
+            $window.braintree.setup($scope.clientToken, 'dropin', {
+              container: 'braintree-container',
+              paypal: {
+                container: 'braintree-container'
+              },
+              onError: function() {
+                $scope.$apply(function() {
+                  $scope.payment = null;
+                  $scope.paymentLoading = false;
+                });
+              },
+              onPaymentMethodReceived: function(obj) {
+                $scope.$apply(function() {
+                  $scope.payment        = obj;
+                  $scope.paymentLoading = false;
+
+                  $scope.next();
+                });
+
+                return false;
+              }
+            });
+
+            $('#braintree-form').submit(function(e) {
+              e.preventDefault();
+
+              $scope.$apply(function() {
+                $scope.paymentLoading = true;
+              });
+
+              return false;
+            });
+          }
+        });
     }]);
 })();

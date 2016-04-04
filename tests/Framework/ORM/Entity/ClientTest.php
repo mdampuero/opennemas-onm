@@ -39,8 +39,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testExistsWithExistingClient()
     {
-        $data   = [ 'client_id' => '1' ];
+        $data   = [ 'id' => '1' ];
         $entity = new Client($data);
+
+        $entity->refresh();
 
         $this->assertTrue($entity->exists());
     }

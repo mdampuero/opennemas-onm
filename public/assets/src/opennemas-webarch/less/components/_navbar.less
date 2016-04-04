@@ -221,14 +221,20 @@ div[ng-view].ng-leave-active .selected-navbar {
 }
 
 .column-filters {
-  height: 205px;
+  background: #fff;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  max-height: 250px;
   margin: 0;
   overflow: hidden;
-  padding: 0 15px;
-  transition: all .25s;
+  padding: 5px 15px 15px;
+  transition: all .5s;
 
   &.collapsed {
-    height: 0;
+    border-bottom: 0 solid @border-color;
+    border-top: 0 solid @border-color;
+    padding: 0 15px;
+    max-height: 0;
   }
 
   .column {
@@ -238,6 +244,13 @@ div[ng-view].ng-leave-active .selected-navbar {
   .title {
     padding: 0px 30px;
   }
+}
+.column-filters-toggle {
+  background: #fff no-repeat url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAACCAYAAABsfz2XAAAABGdBTUEAANjr9RwUqgAAACBjSFJNAACHDwAAjA0AAPmTAACE5QAAe4IAAOt1AAA/tAAAIlh1a16cAAAC/2lDQ1BJQ0MgUHJvZmlsZQAAOMuNVM1PE0EUfy3LYgLxIiI2xmw8aGOALGgUYkRbWpoC1qZ8CMTEbLfTdmW7XWe35SMcDBdvisa78SOe/AOI4eCNk4GEoDEhnjVGY4LhYrC+2Q92UfyYZHZ+895vfu/Nm50BqH8o6boaFABKmkkziagwPjEpNLyDIByFRghBoyQbeiSdHgJsjAu/te03EGDjevv+/r+2xhwxZIDAAcTlnCGXEM8A1I3JOjUBuDW0d0+bOuJ6xmmmmCDiYwwXbCwynLVxzOKMZPoQjyM+KBelHOIi4rasz17wYTsHqzUniEaoIgusFmlazisq8aX7D/d/tpJaceMdwt6km9EMjiexf8vT/lEcw1iH0Fxx5BriFsRRxUyOOPZxLZu6avMDt6fKgxmH8zxHYnG2T8TLRnU47nLmin0ph/PhpjSQRhxC/EM3045OsFVTU0O2frCXGPFh155X+pOOPa+r1n+A+sG7tJJheZ5A/FKi8YTD3yTaqLO2LpiTYoOIOxCHIQ0EKORBARUEyEACojgm0KrBR/QoIEMZWRS/LquAHtd7CyrIZSvHILoYqoQ9lQV6Q5FX733ds7rsi1KwopDdKAnf3ICpXWY76J7Cyvxyq6exwS1dX29amYcIaquWYgm7YukYPgVfDnltMeQpsAzJndR2ChbaPKv4VvwsboiPxWfipz/UqPBLjSK++MyzX/YEORPY3Qz3Z7E4CoyiV4FpK7YBEto0mEW+vucsrNXcca6TS3LdXA8I3CXuMtfLxXB2gRtyGXycj/EREPjTfA/fyQ8w7O6EP4W+HvzG95yA7Nur/wSJj0V8FWmHrFXzKWt11fIZ+AWTzJjsUvWV9VmqFIqm0CWK54UIPktESGpyR5sgqapguQyBEoPQKsl1AHvz7Ou4lbHeskDLqmczrwBc/IL/8Jpnm6wAvDAAjpz1bGG8U4cfASydkyu06tzvQOA1gJE/02XPmqL45ryv1bbwfjQ8ANi5X6t9f1Kr7TxF/U2AV+pPqSMK1r8mJ98AAAAJcEhZcwAACxIAAAsSAdLdfvwAAAFnaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA0LjQuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyI+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+QWRvYmUgRmlyZXdvcmtzIENTNjwveG1wOkNyZWF0b3JUb29sPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4Kw7ez5QAAACRJREFUGFdjaG9v/3/16tX/QMAAw/jEmBgYGBqhGBngEGNoBACn3Cctwm1N9AAAAABJRU5ErkJggg==') center 4px;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  cursor: pointer;
+  height: 10px;
 }
 
 .pinned .actions-navbar,
@@ -271,6 +284,16 @@ div[ng-view].ng-leave-active .selected-navbar {
     &.actions-navbar {
       background: #22252d;
       color: #fff;
+
+      .nav > li {
+        a, .btn-link {
+          color: #fff;
+
+          &:hover {
+            color: #ddd;
+          }
+        }
+      }
     }
 
     .help-icon {
@@ -280,16 +303,6 @@ div[ng-view].ng-leave-active .selected-navbar {
 
       .fa {
         line-height: .75em;
-      }
-    }
-
-    .nav > li {
-      a, .btn-link {
-        color: #fff;
-
-        &:hover {
-          color: #ddd;
-        }
       }
     }
 

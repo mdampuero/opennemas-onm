@@ -4,23 +4,22 @@
   angular.module('ManagerApp.controllers')
     /**
      * @ngdoc controller
-     * @name  ModuleListCtrl
+     * @name  InstanceListCtrl
      *
-     * @requires $controller
      * @requires $uibModal
      * @requires $scope
      * @requires itemService
      * @requires routing
      * @requires messenger
      * @requires webStorage
-     * @requires data
      *
      * @description
-     *   Handles all actions in modules listing.
+     *   Handles all actions in instances list.
      */
-    .controller('ModuleListCtrl', [
+    .controller('InstanceListCtrl', [
       '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
       function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
+
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -28,7 +27,7 @@
         }));
 
         /**
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
          *   The criteria to search.
@@ -38,7 +37,7 @@
         $scope.criteria = { name_like: [] };
 
         /**
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
          *   The visible table columns.
@@ -47,79 +46,47 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'enabled', 'created', 'image', 'l10n', 'name', 'updated',
-            'uuid' ]
+          selected: [
+            'name', 'domains', 'last_login', 'created',
+            'articles', 'alexa', 'activated'
+          ]
         };
 
         /**
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
-         *   The listing order.
+         *   The list order.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{ name: 'id', value: 'asc' }];
-
-        /**
-         * @function countStringsLeft
-         * @memberOf ModuleListCtrl
-         *
-         * @description
-         *   Counts the number of remaining strings for a language.
-         *
-         * @param {Object} item The item to check.
-         *
-         * @return {Integer} The number of remaining strings.
-         */
-        $scope.countStringsLeft = function(item) {
-          var left = 0;
-
-          for (var lang in $scope.extra.languages) {
-            if (!item.name || !item.name[lang]) {
-              left++;
-            }
-
-            if (!item.description || !item.description[lang]) {
-              left++;
-            }
-
-            if (!item.about || !item.about[lang]) {
-              left++;
-            }
-          }
-
-          return left;
-        };
+        $scope.orderBy = [{ name: 'last_login', value: 'desc' }];
 
         /**
          * @function delete
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
          *   Confirm delete action.
          *
-         * @param {Object module The module to delete.
+         * @param {Object} instance The instance to delete.
          */
-        $scope.delete = function(module) {
+        $scope.delete = function(instance) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-module',
-                  item: module
-                };
+                return { };
               },
               success: function() {
-                return function(modalModule) {
-                  itemService.delete('manager_ws_module_delete', module.id)
+                return function(modalInstance) {
+                  itemService.delete('manager_ws_instance_delete', instance.id)
                     .success(function(response) {
-                      modalModule.close({ message: response, type: 'success'});
+                      modalInstance.close({ message: response, type: 'success'});
                     }).error(function(response) {
-                      modalModule.close({ message: response, type: 'error'});
+                      modalInstance.close({ message: response, type: 'error'});
                     });
                 };
               }
@@ -134,40 +101,28 @@
 
         /**
          * @function deleteSelected
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                    $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-modules',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalModule) {
-                  itemService.deleteSelected('manager_ws_modules_delete',
-                    $scope.selected.items).success(function(response) {
-                      modalModule.close(response);
-                    }).error(function(response) {
-                      modalModule.close(response);
-                    });
+                return function(modalInstance) {
+                  itemService.deleteSelected('manager_ws_instances_delete',
+                      $scope.selected.items).success(function(response) {
+                        modalInstance.close(response);
+                      }).error(function(response) {
+                        modalInstance.close(response);
+                      });
                 };
               }
             }
@@ -188,7 +143,7 @@
 
         /**
          * @function list
-         * @memberOf ModuleListCtrl
+         * @memberOf InstanceListCtrl
          *
          * @description
          *   Reloads the list.
@@ -197,29 +152,29 @@
           $scope.loading = 1;
 
           // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
+          var cleaned = angular.copy($scope.criteria)
+          if (cleaned.name_like) {
+            cleaned.domains_like =
+              cleaned.contact_mail_like =
+              cleaned.name_like;
           }
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          cleaned = itemService.cleanFilters(cleaned);
 
           var data = {
             criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+            orderBy:  $scope.orderBy,
+            epp:      $scope.pagination.epp,
+            page:     $scope.pagination.page
           };
 
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
             $scope.pagination.epp, $scope.pagination.page);
 
-          itemService.list('manager_ws_modules_list', data).then(
+          itemService.list('manager_ws_instances_list', data).then(
             function(response) {
-              $scope.items = response.data.results;
+              $scope.items            = response.data.results;
               $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
 
               $scope.loading = 0;
 
@@ -230,21 +185,33 @@
         };
 
         /**
-         * @function setEnabled
-         * @memberOf ModuleListCtrl
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
          *
          * @description
-         *   Enables/disables an module.
-         *
-         * @param boolean enabled Module enabled value.
+         *   Resets all filters to the initial value.
          */
-        $scope.setEnabled = function(module, enabled) {
-          module.loading = 1;
+        $scope.resetFilters = function() {
+          $scope.criteria  = { name_like: [ { value: '', operator: 'like' } ] };
+          $scope.orderBy  = [ { name: 'last_login', value: 'desc' } ];
+        };
 
-          itemService.patch('manager_ws_module_patch', module.id,
-            { enabled: enabled }).success(function(response) {
-              module.loading = 0;
-              module.enabled = enabled;
+        /**
+         * @function isEnabled
+         * @memberOf InstanceListCtrl
+         *
+         * @description
+         *   Enables/disables an instance.
+         *
+         * @param boolean enabled Instance activated value.
+         */
+        $scope.setEnabled = function(instance, enabled) {
+          instance.loading = 1;
+
+          itemService.patch('manager_ws_instance_patch', instance.id,
+            { activated: enabled }).success(function(response) {
+              instance.loading = 0;
+              instance.activated = enabled;
 
               messenger.post({ message: response, type: 'success' });
             }).error(function(response) {
@@ -253,13 +220,13 @@
         };
 
         /**
-         * @function setEnabledSelected
-         * @memberOf ModuleListCtrl
+         * @function isEnabled
+         * @memberOf InstanceListCtrl
          *
          * @description
-         *   Enables/disables the selected modules.
+         *   Enables/disables the selected instances.
          *
-         * @param integer enabled The enabled value.
+         * @param integer enabled The activated value.
          */
         $scope.setEnabledSelected = function(enabled) {
           for (var i = 0; i < $scope.items.length; i++) {
@@ -269,16 +236,16 @@
             }
           }
 
-          var data = { selected: $scope.selected.items, enabled: enabled };
+          var data = { selected: $scope.selected.items, activated: enabled };
 
-          itemService.patchSelected('manager_ws_modules_patch', data)
+          itemService.patchSelected('manager_ws_instances_patch', data)
             .success(function(response) {
-              // Update modules changed successfully
+              // Update instances changed successfully
               for (var i = 0; i < $scope.items.length; i++) {
                 var id = $scope.items[i].id;
 
                 if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].enabled = enabled;
+                  $scope.items[i].activated = enabled;
                   delete $scope.items[i].loading;
                 }
               }
@@ -295,7 +262,7 @@
                 $scope.list();
               }
             }).error(function(response) {
-              // Update modules changed successfully
+              // Update instances changed successfully
               for (var i = 0; i < $scope.items.length; i++) {
                 delete $scope.items[i].loading;
               }
@@ -313,7 +280,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.set('modules-columns', $scope.columns);
+            webStorage.local.add('instances-columns', $scope.columns);
           }
         }, true);
 
@@ -324,8 +291,12 @@
         }
 
         // Get enabled columns from localStorage
-        if (webStorage.local.get('modules-columns')) {
-          $scope.columns = webStorage.local.get('modules-columns');
+        if (webStorage.local.get('instances-columns')) {
+          $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        if (webStorage.local.get('token')) {
+          $scope.token = webStorage.local.get('token');
         }
 
         $scope.list();

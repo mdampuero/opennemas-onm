@@ -38,6 +38,16 @@
           $scope.items    = null;
         });
 
+        $scope.$watch('criteria', function(nv) {
+          $scope.items = data.results.filter(function (e) {
+            if (!nv || !nv.title) {
+              return true;
+            }
+
+            return e.title.indexOf(nv.title) !== -1;
+          });
+        }, true);
+
         if (webStorage.local.get('token')) {
           $scope.token = webStorage.local.get('token');
         }

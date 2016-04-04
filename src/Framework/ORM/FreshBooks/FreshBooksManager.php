@@ -35,16 +35,6 @@ class FreshBooksManager
     }
 
     /**
-     * Returns the FreshBooks API object.
-     *
-     * @return FreshBooksApi The FreshBooks API object.
-     */
-    public function getApi()
-    {
-        return $this->api;
-    }
-
-    /**
      * Returns a new persister to persit an entity.
      *
      * @param string $name The entity to persist.

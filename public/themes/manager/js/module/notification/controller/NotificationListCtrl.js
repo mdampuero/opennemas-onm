@@ -4,8 +4,9 @@
   angular.module('ManagerApp.controllers')
     /**
      * @ngdoc controller
-     * @name  InstanceListCtrl
+     * @name  NotificationListCtrl
      *
+     * @requires $controller
      * @requires $uibModal
      * @requires $scope
      * @requires itemService
@@ -14,9 +15,9 @@
      * @requires webStorage
      *
      * @description
-     *   Handles all actions in instances list.
+     *   Handles all actions in notifications listing.
      */
-    .controller('InstanceListCtrl', [
+    .controller('NotificationListCtrl', [
       '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
       function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
 
@@ -27,7 +28,7 @@
         }));
 
         /**
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   The criteria to search.
@@ -37,7 +38,7 @@
         $scope.criteria = { name_like: [] };
 
         /**
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   The visible table columns.
@@ -53,43 +54,67 @@
         };
 
         /**
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
-         *   The list order.
+         *   The listing order.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{ name: 'last_login', value: 'desc' }];
+        $scope.orderBy = [{ name: 'start', value: 'desc' }];
+
+        /**
+         * @function countStringsLeft
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Counts the number of remaining strings for a language.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Integer} The number of remaining strings.
+         */
+        $scope.countStringsLeft = function(item) {
+          var left = 0;
+
+          for (var lang in $scope.extra.languages) {
+            if (!item.title || !item.title[lang]) {
+              left++;
+            }
+
+            if (!item.body || !item.body[lang]) {
+              left++;
+            }
+          }
+
+          return left;
+        };
 
         /**
          * @function delete
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   Confirm delete action.
          *
-         * @param {Object} instance The instance to delete.
+         * @param {Object notification The notification to delete.
          */
-        $scope.delete = function(instance) {
+        $scope.delete = function(notification) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-instance',
-                  item: instance
-                };
+                return { };
               },
               success: function() {
-                return function(modalInstance) {
-                  itemService.delete('manager_ws_instance_delete', instance.id)
+                return function(modalNotification) {
+                  itemService.delete('manager_ws_notification_delete', notification.id)
                     .success(function(response) {
-                      modalInstance.close({ message: response, type: 'success'});
+                      modalNotification.close({ message: response, type: 'success'});
                     }).error(function(response) {
-                      modalInstance.close({ message: response, type: 'error'});
+                      modalNotification.close({ message: response, type: 'error'});
                     });
                 };
               }
@@ -104,40 +129,28 @@
 
         /**
          * @function deleteSelected
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/notification:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                var selected = [];
-
-                for (var i = 0; i < $scope.items.length; i++) {
-                  if ($scope.selected.items.indexOf(
-                        $scope.items[i].id) !== -1) {
-                    selected.push($scope.items[i]);
-                  }
-                }
-
-                return {
-                  name: 'delete-instances',
-                  selected: selected
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalInstance) {
-                  itemService.deleteSelected('manager_ws_instances_delete',
-                      $scope.selected.items).success(function(response) {
-                        modalInstance.close(response);
-                      }).error(function(response) {
-                        modalInstance.close(response);
-                      });
+                return function(modalNotification) {
+                  itemService.deleteSelected('manager_ws_notifications_delete',
+                    $scope.selected.items).success(function(response) {
+                      modalNotification.close(response);
+                    }).error(function(response) {
+                      modalNotification.close(response);
+                    });
                 };
               }
             }
@@ -158,7 +171,7 @@
 
         /**
          * @function list
-         * @memberOf InstanceListCtrl
+         * @memberOf NotificationListCtrl
          *
          * @description
          *   Reloads the list.
@@ -166,29 +179,23 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          // Search by name, domains and contact mail
-          if ($scope.criteria.name_like) {
-            $scope.criteria.domains_like =
-              $scope.criteria.contact_mail_like =
-              $scope.criteria.name_like;
-          }
-
           var cleaned = itemService.cleanFilters($scope.criteria);
 
           var data = {
             criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+            orderBy:  $scope.orderBy,
+            epp:      $scope.pagination.epp,
+            page:     $scope.pagination.page
           };
 
           itemService.encodeFilters($scope.criteria, $scope.orderBy,
             $scope.pagination.epp, $scope.pagination.page);
 
-          itemService.list('manager_ws_instances_list', data).then(
+          itemService.list('manager_ws_notifications_list', data).then(
             function(response) {
-              $scope.items = response.data.results;
+              $scope.items            = response.data.results;
               $scope.pagination.total = response.data.total;
+              $scope.extra            = response.data.extra;
 
               $scope.loading = 0;
 
@@ -199,62 +206,84 @@
         };
 
         /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
          *
          * @description
-         *   Enables/disables an instance.
-         *
-         * @param boolean enabled Instance activated value.
+         *   Resets all filters to the initial value.
          */
-        $scope.setEnabled = function(instance, enabled) {
-          instance.loading = 1;
+        $scope.resetFilters = function() {
+          $scope.criteria = { title_like: [ { value: '', operator: 'like' } ]};
+          $scope.orderBy  = [ { name: 'start', value: 'desc' } ];
 
-          itemService.patch('manager_ws_instance_patch', instance.id,
-            { activated: enabled }).success(function(response) {
-              instance.loading = 0;
-              instance.activated = enabled;
+          $scope.pagination.page = 1;
+        };
+
+        /**
+         * @function setEnabled
+         * @memberOf NotificationListCtrl
+         *
+         * @description
+         *   Enables/disables an notification.
+         *
+         * @param {String}  notification The notification object.
+         * @param {String}  property     The property name.
+         * @param {Boolean} value        The property value.
+         */
+        $scope.patch = function(notification, property, value) {
+          var data = {};
+
+          notification[property + 'Loading'] = 1;
+          data[property] = value;
+
+          itemService.patch('manager_ws_notification_patch', notification.id, data)
+            .success(function(response) {
+              notification[property + 'Loading'] = 0;
+              notification[property] = value;
 
               messenger.post({ message: response, type: 'success' });
             }).error(function(response) {
+              notification[property + 'Loading'] = 0;
               messenger.post({ message: response, type: 'error' });
             });
         };
 
         /**
-         * @function isEnabled
-         * @memberOf InstanceListCtrl
+         * @function patchSelected
+         * @memberOf NotificationListCtrl
          *
          * @description
-         *   Enables/disables the selected instances.
+         *   Enables/disables the selected notifications.
          *
-         * @param integer enabled The activated value.
+         * @param {String}  notification The notification object.
+         * @param {String}  property     The property name.
+         * @param {Boolean} value        The property value.
          */
-        $scope.setEnabledSelected = function(enabled) {
+        $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
             if ($scope.selected.items.indexOf(id) !== -1) {
-              $scope.items[i].loading = 1;
+              $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
-          var data = { selected: $scope.selected.items, activated: enabled };
+          var data = { selected: $scope.selected.items };
+          data[property] = value;
 
-          itemService.patchSelected('manager_ws_instances_patch', data)
+          itemService.patchSelected('manager_ws_notifications_patch', data)
             .success(function(response) {
-              // Update instances changed successfully
+              // Update notifications changed successfully
               for (var i = 0; i < $scope.items.length; i++) {
                 var id = $scope.items[i].id;
 
                 if (response.success.indexOf(id) !== -1) {
-                  $scope.items[i].activated = enabled;
-                  delete $scope.items[i].loading;
+                  $scope.items[i][property] = value;
+                  delete $scope.items[i][property + 'Loading'];
                 }
               }
 
               if (response.messages) {
                 messenger.post(response.messages);
-
                 $scope.selected = { all: false, items: [] };
               } else {
                 messenger.post(response);
@@ -264,14 +293,13 @@
                 $scope.list();
               }
             }).error(function(response) {
-              // Update instances changed successfully
+              // Update notifications changed successfully
               for (var i = 0; i < $scope.items.length; i++) {
-                delete $scope.items[i].loading;
+                delete $scope.items[i][property + 'Loading'];
               }
 
               if (response.messages) {
                 messenger.post(response.messages);
-
                 $scope.selected = { all: false, items: [] };
               } else {
                 messenger.post(response);
@@ -282,7 +310,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.set('instances-columns', $scope.columns);
+            webStorage.local.set('notifications-columns', $scope.columns);
           }
         }, true);
 
@@ -293,16 +321,11 @@
         }
 
         // Get enabled columns from localStorage
-        if (webStorage.local.get('instances-columns')) {
-          $scope.columns = webStorage.local.get('instances-columns');
-        }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
+        if (webStorage.local.get('notifications-columns')) {
+          $scope.columns = webStorage.local.get('notifications-columns');
         }
 
         $scope.list();
       }
     ]);
 })();
-

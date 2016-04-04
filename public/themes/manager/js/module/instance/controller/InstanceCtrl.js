@@ -117,6 +117,33 @@
         };
 
         /**
+         * @function getClients
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Gets a list of clients to use in typeahead by name or email.
+         *
+         * @param {string} search The name or email.
+         */
+        $scope.getClients = function(search) {
+          $scope.loading = 1;
+
+          var data = {
+            criteria: {
+              name: [ { value: '%' + search + '%', operator: 'like' } ]
+            },
+          };
+
+          return itemService.list('manager_ws_clients_list', data).then(
+            function(response) {
+              $scope.clients = response.data.results;
+              $scope.loading = 0;
+
+              return response.data.results;
+            });
+        };
+
+        /**
          * @function initializeSupportPlan
          * @memberOf InstanceCtrl
          *
@@ -229,6 +256,21 @@
               $scope.saving = 0;
               messenger.post({ message: response, type: 'error' });
             });
+        };
+
+        /**
+         * @function selectClient
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Updates the client on typeahead select.
+         *
+         * @param {Object} item The selected client.
+         */
+        $scope.selectClient = function(item) {
+          $scope.instance.metas.client = item.id;
+          $scope.client = item;
+          $scope.search = '';
         };
 
         /**
@@ -376,6 +418,13 @@
           $scope.selected.all = all;
         },true);
 
+        // Remove client when instance meta is deleted
+        $scope.$watch('instance.metas.client', function(nv) {
+          if (!nv) {
+            $scope.client = null;
+          }
+        });
+
         $scope.initModules = function() {
           var modules = [];
           var modulesInAPack = [];
@@ -423,8 +472,6 @@
           $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
               $scope.instance.activated_modules) == 0;
         }
-
-        console.log($routeParams);
 
         $scope.$on('$destroy', function() {
           $scope.instance = null;

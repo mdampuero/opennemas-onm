@@ -1,0 +1,16 @@
+manager_clients_list:
+    path: /clients
+    options:
+        expose: true
+
+manager_client_show:
+    path: /clients/{id}/show
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_client_create:
+    path: /clients/create
+    options:
+        expose: true

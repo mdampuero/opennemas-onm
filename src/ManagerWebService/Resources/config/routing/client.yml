@@ -1,0 +1,63 @@
+manager_ws_client_delete:
+    path:     /clients/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Client:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_client_new:
+    path:     /clients/new
+    defaults: { _controller: ManagerWebServiceBundle:Client:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_client_patch:
+    path:     /clients/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Client:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_client_save:
+    path:     /clients
+    defaults: { _controller: ManagerWebServiceBundle:Client:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_client_show:
+    path:     /clients/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Client:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_client_update:
+    path:     /clients/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Client:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    methods:  [ GET ]
+
+manager_ws_clients_delete:
+    path:     /clients
+    defaults: { _controller: ManagerWebServiceBundle:Client:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_clients_list:
+    path:     /clients
+    defaults: { _controller: ManagerWebServiceBundle:Client:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_clients_patch:
+    path:     /clients
+    defaults: { _controller: ManagerWebServiceBundle:Client:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

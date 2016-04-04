@@ -490,7 +490,7 @@ class InstanceManager extends BaseManager
             $values = [];
             foreach ($instance->metas as $key => $value) {
                 if (is_array($value) || is_object($value)) {
-                    $value = serialize($value);
+                    $value = str_replace('\\', '\\\\', serialize($value));
                 }
 
                 $values[] = '(\'' . $instance->id . '\',\'' . $key . '\',\''

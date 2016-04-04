@@ -19,8 +19,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('UserGroupListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'data',
-      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -28,6 +28,18 @@
           data:     data
         }));
 
+        /**
+         * @memberOf UserGroupListCtrl
+         *
+         * @description
+         *   The visible table columns.
+         *
+         * @type {Object}
+         */
+        $scope.columns = {
+          collapsed: 1,
+          selected:  [ 'name' ]
+        };
         /**
          * @memberOf UserGroupListCtrl
          *
@@ -61,14 +73,12 @@
          */
         $scope.delete = function(group) {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/user_group:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-user-group'
-                };
+                return { };
               },
               success: function() {
                 return function(modalInstance) {
@@ -98,14 +108,12 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
+            templateUrl: '/managerws/template/user_group:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {
-                  name: 'delete-user-groups'
-                };
+                return { selected: $scope.selected.items.length };
               },
               success: function() {
                 return function(modalInstance) {
@@ -166,6 +174,24 @@
             }
           );
         };
+
+        // Updates the columns stored in localStorage.
+        $scope.$watch('columns', function(nv, ov) {
+          if (nv !== ov) {
+            webStorage.local.add('user-groups-columns', nv);
+          }
+        }, true);
+
+        // Initialize filters from URL
+        var filters = itemService.decodeFilters();
+        for(var name in filters) {
+          $scope[name] = filters[name];
+        }
+
+        // Get enabled columns from localStorage
+        if (webStorage.local.get('user-groups-columns')) {
+          $scope.columns = webStorage.local.get('user-groups-columns');
+        }
       }
     ]);
 })();

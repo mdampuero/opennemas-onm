@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 // Define path to application directory
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Composer\Autoload\ClassLoader;
 
@@ -102,5 +103,10 @@ $loader->setUseIncludePath(true);
 $loader->register();
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+AnnotationReader::addGlobalIgnoredName('api');
+AnnotationReader::addGlobalIgnoredName('apiName');
+AnnotationReader::addGlobalIgnoredName('apiGroup');
+AnnotationReader::addGlobalIgnoredName('apiParam');
+AnnotationReader::addGlobalIgnoredName('apiSuccess');
 
 return $loader;
