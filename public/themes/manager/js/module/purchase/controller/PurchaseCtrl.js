@@ -19,8 +19,8 @@
      *   Handles actions for purchase edition form
      */
     .controller('PurchaseCtrl', [
-      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, data) {
+      '$filter', '$location', '$uibModal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+      function ($filter, $location, $uibModal, $scope, itemService, routing, messenger, webStorage, data) {
 
         /**
          * @memberOf PurchaseCtrl
@@ -31,6 +31,16 @@
          * @type {Object}
          */
         $scope.extra = data.extra;
+
+        /**
+         * @memberOf PurchaseCtrl
+         *
+         * @description
+         *   The authorization token.
+         *
+         * @type {String}
+         */
+        $scope.token = webStorage.local.get('token');
 
         $scope.$on('$destroy', function() {
           $scope.purchase = null;

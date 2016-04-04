@@ -12,6 +12,13 @@ manager_ws_purchase_delete:
     options:
         expose: true
 
+manager_ws_purchase_get_pdf:
+    path:     /purchases/{id}.pdf
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:getPdf }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_purchase_new:
     path:     /purchases/new
     defaults: { _controller: ManagerWebServiceBundle:Purchase:new }
