@@ -188,6 +188,8 @@
             client:  $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
+            fee:     $scope.fee,
+            method:  $scope.payment.type,
             nonce:   $scope.payment.nonce,
             total:   $scope.total
           };

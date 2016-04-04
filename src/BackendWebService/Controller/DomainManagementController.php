@@ -162,7 +162,9 @@ class DomainManagementController extends Controller
     {
         $domains  = $request->request->get('domains');
         $create   = $request->request->get('create');
+        $fee      = $request->request->get('fee');
         $nonce    = $request->request->get('nonce');
+        $method   = $request->request->get('method');
         $total    = $request->request->get('total');
         $instance = $this->get('instance');
         $date     = new \Datetime('now');
@@ -211,16 +213,18 @@ class DomainManagementController extends Controller
 
         $this->get('orm.manager')->persist($payment, 'FreshBooks');
 
-        $order = new Purchase([
+        $purchase = new Purchase([
             'client'     => $client,
-            'payment_id' => $payment->payment_id,
-            'invoice_id' => $invoice->invoice_id,
             'created'    => $date->format('Y-m-d H:i:s'),
-            'total'      => $payment->amount,
             'details'    => $invoice->lines,
+            'fee'        => $fee,
+            'invoice_id' => $invoice->invoice_id,
+            'method'     => $method,
+            'payment_id' => $payment->payment_id,
+            'total'      => $payment->amount,
         ]);
 
-        $this->get('orm.manager')->persist($order);
+        $this->get('orm.manager')->persist($purchase);
 
         $this->sendEmailToCustomer($client->getData(), $domains, $instance, $create);
         $this->sendEmailToSales($client->getData(), $domains, $instance, $create);
