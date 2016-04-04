@@ -97,13 +97,13 @@
         <div class="grid simple">
           <div class="grid-body">
             <h4>{t}Payment{/t}</h4>
-            <button class="btn btn-block btn-white text-uppercase">
+            <a class="btn btn-block btn-white text-uppercase" ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% purchase.payment_id %]" target="_blank">
               <strong>Braintree</strong>
-            </button>
+            </a>
             <h4 class="p-t-30">{t}Invoice{/t}</h4>
-            <button class="btn btn-block btn-white text-uppercase">
+            <a class="btn btn-block btn-white text-uppercase text-success" ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% purchase.invoice_id %]" target="_blank">
               <strong>Freshbooks</strong>
-            </button>
+            </a>
           </div>
         </div>
       </div>
