@@ -9,11 +9,6 @@
             .when('/', {
               templateUrl: '/managerws/template/index:index.' + appVersion + '.tpl'
             })
-          .when(routingProvider.ngGenerateShort('manager_reports_list'), {
-            templateUrl: '/managerws/template/report:list.' + appVersion + '.tpl',
-            controller: 'ReportListCtrl',
-            reloadOnSearch: false
-          })
           .when(routingProvider.ngGenerateShort('manager_users_list'), {
             templateUrl: '/managerws/template/user:list.' + appVersion + '.tpl',
             controller: 'UserListCtrl',
