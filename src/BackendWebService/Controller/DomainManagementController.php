@@ -168,7 +168,9 @@ class DomainManagementController extends Controller
         $total    = $request->request->get('total');
         $instance = $this->get('instance');
         $date     = new \Datetime('now');
-        $price    = $create ? 18.00 : 12.00;
+
+        $price       = $create ? 18.00 : 12.00;
+        $description = $create ? _('Domain + redirection: ') : _('Redirection: ');
 
         $client = $this->get('orm.manager')
             ->getRepository('manager.client', 'Database')
@@ -198,18 +200,28 @@ class DomainManagementController extends Controller
 
         foreach ($domains as $domain) {
             $invoice->lines[] = [
-                'name'      => 'Domain + redirection: ' . $domain,
-                'unit_cost' => $price,
-                'quantity'  => 1,
-                'tax1_name'  => 'IVA',
+                'description'  => $description . $domain,
+                'unit_cost'    => $price,
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
                 'tax1_percent' => $vatTax
             ];
         }
 
-        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
-        $payment->invoice_id = $invoice->invoice_id;
+        if ($method === 'CreditCard') {
+            $invoice->lines[] = [
+                'description'  => _('Pay with credit card'),
+                'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
+                'tax1_percent' => 0
+            ];
+        }
 
-        $payment->notes = 'Braintree Transaction Id:' . $payment->payment_id;
+        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
+
+        $payment->invoice_id = $invoice->invoice_id;
+        $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
 
         $this->get('orm.manager')->persist($payment, 'FreshBooks');
 

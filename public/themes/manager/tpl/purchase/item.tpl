@@ -122,12 +122,12 @@
             </tr>
           </thead>
           <tr ng-repeat="line in purchase.details">
-            <td>[% line.name %]</td>
+            <td>[% line.description %]</td>
             <td class="text-right">[% line.quantity %]</td>
             <td class="text-right">[% line.unit_cost %] €</td>
           </tr>
           <tr>
-            <td rowspan="3"></td>
+            <td rowspan="[% purchase.method === 'CreditCard' ? 4 : 3 %]"></td>
             <td class="text-right">
               <strong>{t}Subtotal{/t}</strong>
             </td>
@@ -143,13 +143,17 @@
             </td>
             <td class="text-right">[% tax | number : 2 %] €</td>
           </tr>
+          <tr ng-if="purchase.method === 'CreditCard'">
+            <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
+            <td class="text-right">[% purchase.fee | number : 2 %] €</td>
+          </tr>
           <tr>
             <td class="text-right no-border">
               <div class="no-margin well well-small green">
                 <strong>{t}Total{/t}</strong>
               </div>
             </td>
-            <td class="text-right">[% total | number : 2 %] €</td>
+            <td class="text-right">[% purchase.total | number : 2 %] €</td>
           </tr>
         </table>
       </div>
