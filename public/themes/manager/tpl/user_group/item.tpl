@@ -43,7 +43,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="group">
   <form name="groupForm" novalidate>
     <div class="grid simple">
       <div class="grid-body">
@@ -93,7 +93,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in template.modules[name]">
+                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in extra.modules[name]">
                     <div class="checkbox check-default">
                       <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
                       <label for="checkbox-[% name + '-' + $index %]">

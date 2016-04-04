@@ -9,56 +9,6 @@
             .when('/', {
               templateUrl: '/managerws/template/index:index.' + appVersion + '.tpl'
             })
-          .when(routingProvider.ngGenerateShort('manager_user_groups_list'), {
-            templateUrl: '/managerws/template/user_group:list.' + appVersion + '.tpl',
-            controller: 'UserGroupListCtrl',
-            resolve: {
-              data: function(itemServiceProvider) {
-                var data = {
-                  orderBy: [{
-                    name: 'name',
-                    value: 'asc'
-                  }],
-                  epp: 25
-                };
-
-                return itemServiceProvider.list('manager_ws_user_groups_list', data).then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            },
-            reloadOnSearch: false
-          })
-          .when(routingProvider.ngGenerateShort('manager_user_group_create'), {
-            templateUrl: '/managerws/template/user_group:item.' + appVersion + '.tpl',
-            controller: 'UserGroupCtrl',
-            resolve: {
-              data: function(itemServiceProvider) {
-                return itemServiceProvider.new('manager_ws_user_group_new').then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            }
-          })
-          .when(routingProvider.ngGenerateShort('manager_user_group_show', {
-            id: '\:id'
-          }), {
-            templateUrl: '/managerws/template/user_group:item.' + appVersion + '.tpl',
-            controller: 'UserGroupCtrl',
-            resolve: {
-              data: function($route, itemServiceProvider) {
-                return itemServiceProvider.show('manager_ws_user_group_show', $route.current.params.id).then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            }
-          })
           .when('/404', {
             templateUrl: 'error',
           })
