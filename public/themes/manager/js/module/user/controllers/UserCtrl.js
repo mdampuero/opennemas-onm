@@ -103,7 +103,6 @@
         if ($routeParams.id) {
           itemService.show('manager_ws_user_show', $routeParams.id).then(
             function(response) {
-              console.log(response)
               $scope.user = response.data.user;
               $scope.extra = response.data.extra;
 
