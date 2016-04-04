@@ -83,6 +83,10 @@
          *                 Otherwise, returns false.
          */
         $scope.allSelected = function(module) {
+          if (!$scope.extra || !$scope.extra.modules) {
+            return;
+          }
+
           for (var key in $scope.extra.modules[module]) {
             var id = $scope.extra.modules[module][key].id;
 
@@ -254,7 +258,11 @@
           $scope.extra    = null;
         });
 
-        $scope.$watch('extra', function() {
+        $scope.$watch('extra', function(nv) {
+          if (!nv) {
+            return;
+          }
+
           // Process modules
           if ($scope.extra.modules) {
             $scope.modules = [];

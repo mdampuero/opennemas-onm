@@ -35,7 +35,11 @@
           $scope.purchase = null;
         });
 
-        $scope.$watch('purchase', function() {
+        $scope.$watch('purchase', function(nv) {
+          if (!nv) {
+            return;
+          }
+
           $scope.subtotal = 0;
           $scope.tax      = 0;
           $scope.total    = 0;
