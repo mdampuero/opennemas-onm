@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('ClientCtrl', [
-      '$location', '$scope', 'itemService', 'routing', 'messenger', 'data',
-      function ($location, $scope, itemService, routing, messenger, data) {
+      '$location', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, itemService, routing, messenger) {
         /**
          * @memberOf ClientCtrl
          *
@@ -28,17 +28,7 @@
          *
          * @type {Object}
          */
-        $scope.client = data.client;
-
-        /**
-         * @memberOf ClientCtrl
-         *
-         * @description
-         *  Extra data.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
+        $scope.client = {};
 
         /**
          * @function save
@@ -89,6 +79,17 @@
               $scope.saving = 0;
             });
         };
+
+        if ($routeParams.id) {
+          itemService.show('manager_ws_client_show', $routeParams.id).then(function(response) {
+            $scope.extra  = response.data.extra;
+            $scope.client = response.data.client;
+          });
+        } else {
+          itemService.show('manager_ws_client_new').then(function(response) {
+            $scope.extra  = response.data.extra;
+          });
+        }
       }
     ]);
 })();
