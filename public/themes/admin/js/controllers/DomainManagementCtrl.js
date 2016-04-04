@@ -393,6 +393,23 @@
         };
 
         /**
+         * @function previous
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Goes to the previous step.
+         */
+        $scope.previous = function() {
+          if ($scope.step > 1) {
+            $scope.step--;
+          }
+
+          if ($scope.step === 2 && $scope.client) {
+            $scope.step--;
+          }
+        };
+
+        /**
          * @function toggleCardLoading
          * @memberOf DomainManagementCtrl
          *

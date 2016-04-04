@@ -157,7 +157,7 @@
                 </div>
               </div>
               <div class="row m-t-50 ng-cloak" ng-if="domains.length > 0">
-                <div class="col-sm-6 col-sm-offset-3">
+                <div class="col-sm-4 col-sm-offset-4">
                   <button class="btn btn-block btn-success" ng-click="next()">
                     <h4 class="text-uppercase text-white">
                       {t}Next{/t}
@@ -186,8 +186,13 @@
             <form id="braintree-form">
               <div class="braintree">
                 <div id="braintree-container"></div>
-                <div class="row m-t-50 ng-cloak">
-                  <div class="col-sm-6 col-sm-offset-3">
+                <div class="row m-t-40 ng-cloak">
+                  <div class="col-sm-4 m-t-15">
+                    <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="paymentLoading" type="button">
+                      <h4 class="text-uppercase">{t}Previous{/t}</h4>
+                    </button>
+                  </div>
+                  <div class="col-sm-4 col-sm-offset-4 m-t-15">
                     <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
                       <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="paymentLoading"></i>
                       <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
@@ -257,28 +262,35 @@
                   </tbody>
                 </table>
               </div>
-              <div class="row m-t-50 ng-cloak" ng-show="payment.nonce">
-                <div class="col-sm-6 col-sm-offset-3">
-                  <div class="text-center p-t-30">
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <input id="terms" name="terms" ng-model="terms" type="checkbox">
-                        <label class="no-margin text-left" for="terms">
-                          {if $create}
-                          {t}I have read and accept the Terms of creating a new domain{/t}
-                          {else}
-                          {t}I have read and accept the Terms of redirection{/t}
-                          {/if}
-                        </label>
-                      </div>
-                    </div>
-                    <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="domains.length === 0 || !terms || !client || !payment || loading">
-                      <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
-                      <h4 class="text-uppercase text-white">
-                        {t}Confirm{/t}
-                      </h4>
-                    </button>
+              <div class="text-center p-t-30" ng-show="payment.nonce">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <input id="terms" name="terms" ng-model="terms" type="checkbox">
+                    <label class="no-margin text-left" for="terms">
+                      {if $create}
+                        {t}I have read and accept the Terms of creating a new domain{/t}
+                      {else}
+                        {t}I have read and accept the Terms of redirection{/t}
+                      {/if}
+                    </label>
                   </div>
+                </div>
+              </div>
+              <div class="row m-t-40 ng-cloak" ng-show="payment.nonce">
+                <div class="col-sm-4 m-t-15">
+                  <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="loading">
+                    <h4 class="text-uppercase">
+                      {t}Previous{/t}
+                    </h4>
+                  </button>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4 m-t-15">
+                  <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="domains.length === 0 || !terms || !client || !payment || loading">
+                    <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
+                    <h4 class="text-uppercase text-white">
+                      {t}Confirm{/t}
+                    </h4>
+                  </button>
                 </div>
               </div>
             </div>
