@@ -39,19 +39,6 @@
             templateUrl: '/managerws/template/notification:item.' + appVersion + '.tpl',
             controller: 'NotificationCtrl',
           })
-          .when(routingProvider.ngGenerateShort('manager_opcache_status'), {
-            templateUrl: '/managerws/template/framework:opcache_status.' + appVersion + '.tpl',
-            controller: 'OpcacheCtrl',
-            resolve: {
-              data: function(itemServiceProvider) {
-                return itemServiceProvider.fetchOpcacheStatus('manager_ws_opcache_status').then(
-                    function(response) {
-                      return response.data;
-                    }
-                    );
-              }
-            }
-          })
           .when(routingProvider.ngGenerateShort('manager_reports_list'), {
             templateUrl: '/managerws/template/report:list.' + appVersion + '.tpl',
             controller: 'ReportListCtrl',

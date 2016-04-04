@@ -12,7 +12,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="serverData">
   <div class="opcache-stats">
     <div class="alert alert-block alert-error fade in" ng-if="serverData.not_supported_message">
       <button type="button" class="close" data-dismiss="alert"></button>
