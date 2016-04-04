@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<div class="content ng-hide" ng-show="module">
+<div class="content ng-hide" ng-show="extra">
   <form name="moduleForm">
     <div class="row">
       <div class="col-md-4">
