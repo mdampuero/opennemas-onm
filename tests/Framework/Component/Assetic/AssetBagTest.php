@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests\Component\Assetic;
+namespace Tests\Framework\Component\Assetic;
 
 use Framework\Component\Assetic\AssetBag;
 use Onm\Instance\Instance;
@@ -47,17 +47,6 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('foo', $this->bag->getLiteralScripts());
     }
 
-    public function testAddStyle()
-    {
-        $style   = 'foo/bar.css';
-        $filters = [ 'baz' ];
-
-        $this->bag->addStyle($style, $filters);
-
-        $this->assertTrue(array_key_exists($style, $this->bag->getStyles()));
-        $this->assertTrue(in_array($filters, $this->bag->getStyles()));
-    }
-
     public function testAddScript()
     {
         $script  = 'foo/bar.js';
@@ -65,8 +54,19 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
 
         $this->bag->addScript($script, $filters);
 
-        $this->assertTrue(array_key_exists($script, $this->bag->getScripts()));
-        $this->assertTrue(in_array($filters, $this->bag->getScripts()));
+        $this->assertContains($script, $this->bag->getScripts()['default']);
+        $this->assertEquals($filters, $this->bag->getFilters()[$script]);
+    }
+
+    public function testAddStyle()
+    {
+        $style   = 'foo/bar.css';
+        $filters = [ 'baz' ];
+
+        $this->bag->addStyle($style, $filters);
+
+        $this->assertContains($style, $this->bag->getStyles()['default']);
+        $this->assertEquals($filters, $this->bag->getFilters()[$style]);
     }
 
     public function testParseBundleName()

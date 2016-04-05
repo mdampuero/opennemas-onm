@@ -78,6 +78,6 @@ class JavascriptManager extends AssetManager
             $filters = array_diff($filters, [ 'uglifyjs' ]);
         }
 
-        return array_intersect($filters, [ 'uglifyjs' ]);
+        return array_values(array_intersect($filters, [ 'uglifyjs' ]));
     }
 }

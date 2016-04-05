@@ -95,6 +95,8 @@ class StylesheetManager extends AssetManager
             $filters = array_diff($filters, [ 'uglifycss' ]);
         }
 
-        return array_intersect($filters, [ 'cssrewrite', 'less', 'uglifycss' ]);
+        return array_values(
+            array_intersect($filters, [ 'cssrewrite', 'less', 'uglifycss' ])
+        );
     }
 }

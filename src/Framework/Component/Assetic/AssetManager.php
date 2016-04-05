@@ -93,8 +93,7 @@ abstract class AssetManager
 
         // Get current instance theme path
         $this->themePath = $this->sitePath . 'themes' . DS .
-            $container->get('instance_manager')->current_instance
-            ->settings['TEMPLATE_USER'];
+            $container->get('instance')->settings['TEMPLATE_USER'];
 
         $this->am = new BaseAssetManager();
     }
@@ -257,14 +256,12 @@ abstract class AssetManager
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
+        $port = '';
         if ($request->headers->get('X-Forwarded-port')) {
             $port = $request->headers->get('X-Forwarded-port');
         }
 
-        $port = '';
-        if ($port != 80 && $port != 443) {
-            $port = ':' . $port;
-        }
+        $port = ($port != 80 && $port != 443) ? ':' . $port : '';
 
         $src = DS . $src;
 
