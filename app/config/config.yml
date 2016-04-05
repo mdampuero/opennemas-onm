@@ -61,12 +61,17 @@ opennemas:
             uglifyjs:
                 bin:  %kernel.root_dir%/../node_modules/.bin/uglifyjs
                 node: /usr/bin/nodejs
+                options:
+                    mangle: true
             uglifycss:
                 bin:  %kernel.root_dir%/../node_modules/.bin/uglifycss
                 node: /usr/bin/nodejs
             less:
                 node:  /usr/bin/nodejs
                 node_paths: [%kernel.root_dir%/../node_modules]
+                options:
+                    sourceMap:
+                        sourceMapFileInline: true
 
 # Twig Configuration
 twig:

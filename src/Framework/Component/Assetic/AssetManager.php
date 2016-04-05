@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -148,7 +148,9 @@ abstract class AssetManager
             if ($this->debug()
                 || (!$this->debug() && !file_exists($targetPath))
             ) {
-                $fm = $this->getFilterManager($filters);
+                $filters = $this->getFilters($path, $filters);
+                $fm      = $this->getFilterManager($filters);
+
                 $factory->setFilterManager($fm);
 
                 $asset = $factory->createAsset($path, $filters);
@@ -282,11 +284,21 @@ abstract class AssetManager
     }
 
     /**
-     * Initializes the filter manager with the current filters.
+     * Initializes the filter manager with the current filters for an asset.
      *
      * @param array $filters The array of filters.
      *
      * @return FilterManager The filter manager.
      */
     abstract protected function getFilterManager($filters);
+
+    /**
+     * Returns the valid filters for the asset.
+     *
+     * @param string $asset   The asset path.
+     * @param array  $filters The array of filters.
+     *
+     * @return array The valid filters.
+     */
+    abstract protected function getFilters($asset, $filters);
 }
