@@ -19,13 +19,12 @@
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -219,6 +218,8 @@
         $('.dropdown-menu').on('click', '.checkbox,label', function(e) {
           e.stopPropagation();
         });
+
+        $scope.list();
       }
     ]);
 })();

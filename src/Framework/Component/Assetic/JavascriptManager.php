@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,31 +33,51 @@ class JavascriptManager extends AssetManager
     {
         $fm = new FilterManager();
 
-        foreach ($filters as $filter) {
-            switch ($filter) {
+        foreach ($filters as $name) {
+            $filter = false;
+
+            switch ($name) {
                 case 'uglifyjs':
-                    $fm->set(
-                        'uglifyjs',
-                        new UglifyJsFilter(
-                            $this->config['filters']['uglifyjs']['bin'],
-                            $this->config['filters']['uglifyjs']['node']
-                        )
+                    $filter = new UglifyJs2Filter(
+                        $this->config['filters']['uglifyjs']['bin'],
+                        $this->config['filters']['uglifyjs']['node']
                     );
                     break;
-                case 'uglifyjs2':
-                    $fm->set(
-                        'uglifyjs2',
-                        new UglifyJs2Filter(
-                            $this->config['filters']['uglifyjs2']['bin'],
-                            $this->config['filters']['uglifyjs2']['node']
-                        )
-                    );
-                    break;
-                default:
-                    throw new FilterException();
             }
+
+            if ($filter !== false) {
+                $options = $this->config['filters'][$name]['options'];
+
+                foreach ($options as $key => $value) {
+                    $method = 'set' . ucfirst($key);
+                    $filter->{$method}($value);
+                }
+
+                $fm->set($name, $filter);
+            }
+
         }
 
         return $fm;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFilters($asset, $filters)
+    {
+        $ext = pathinfo($asset, PATHINFO_EXTENSION);
+
+        // Only handle *.js files
+        if ($ext !== 'js') {
+            return [];
+        }
+
+        // Uglify only on production
+        if ($this->debug()) {
+            $filters = array_diff($filters, [ 'uglifyjs' ]);
+        }
+
+        return array_values(array_intersect($filters, [ 'uglifyjs' ]));
     }
 }

@@ -13,19 +13,17 @@
      * @requires itemService
      * @requires routing
      * @requires messenger
-     * @requires data
      *
      * @description
      *   Handles all actions in users listing.
      */
     .controller('UserListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
+      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -173,9 +171,10 @@
 
           itemService.list('manager_ws_users_list', data).then(
             function (response) {
-              $scope.items   = response.data.results;
-              $scope.pagination.total   = response.data.total;
-              $scope.loading = 0;
+              $scope.extra            = response.data.extra;
+              $scope.items            = response.data.results;
+              $scope.pagination.total = response.data.total;
+              $scope.loading          = 0;
 
               // Scroll top
               $('.page-content').animate({ scrollTop: '0px' }, 1000);
@@ -265,18 +264,6 @@
           });
         };
 
-        /**
-         * Refresh the list of elements when some parameter changes.
-         *
-         * @param array newValues The new values
-         * @param array oldValues The old values
-         */
-        $scope.$watch('[criteria.fk_user_group]', function(newValues, oldValues) {
-          if (newValues !== oldValues) {
-            list();
-          }
-        }, true);
-
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(nv, ov) {
           if (nv !== ov) {
@@ -294,6 +281,8 @@
         if (webStorage.local.get('users-columns')) {
           $scope.columns = webStorage.local.get('users-columns');
         }
+
+        $scope.list();
       }
     ]);
 })();

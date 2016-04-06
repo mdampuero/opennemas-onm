@@ -14,6 +14,13 @@ use Symfony\Component\Finder\Finder;
 class AssetBag
 {
     /**
+     * The array of filters per file.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * Array of literal styles.
      *
      * @var array
@@ -78,16 +85,19 @@ class AssetBag
      *
      * @param string $path    The path to the file.
      * @param array  $filters The array of filters to apply.
+     * @param string $bag     The bag name.
      */
-    public function addScript($path, $filters = [])
+    public function addScript($path, $filters = [], $bag = 'default')
     {
         $scripts = $this->parsePath($path);
 
         if (!empty($scripts)) {
             foreach ($scripts as $script) {
                 if (!array_key_exists($script, $this->scripts)) {
-                    $this->scripts[$script] = $filters;
+                    $this->filters[$script] = $filters;
                 }
+
+                $this->scripts[$bag][] = $script;
             }
         }
     }
@@ -97,18 +107,31 @@ class AssetBag
      *
      * @param string $path    The path to the file.
      * @param array  $filters The array of filters to apply.
+     * @param string $bag     The bag name.
      */
-    public function addStyle($path, $filters = [])
+    public function addStyle($path, $filters = [], $bag = 'default')
     {
         $styles = $this->parsePath($path);
 
         if (!empty($styles)) {
             foreach ($styles as $style) {
                 if (!array_key_exists($style, $this->styles)) {
-                    $this->styles[$style] = $filters;
+                    $this->filters[$style] = $filters;
                 }
+
+                $this->styles[$bag][] = $style;
             }
         }
+    }
+
+    /**
+     * Returns the array of filters per file.
+     *
+     * @return array The array of filters per file.
+     */
+    public function getFilters()
+    {
+        return $this->filters;
     }
 
     /**

@@ -19,18 +19,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$uibModal', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $http, $location, $uibModal, $scope, $timeout, Cleaner, itemService, routing, messenger, data) {
-        /**
-         * @memberOf ModuleCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
+      '$filter', '$http', '$location', '$uibModal', '$routeParams', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger',
+      function ($filter, $http, $location, $uibModal, $routeParams, $scope, $timeout, Cleaner, itemService, routing, messenger) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -273,25 +263,32 @@
 
         // Check UUID on change
         $scope.$watch('module.uuid', function(nv, ov) {
-          if (nv === ov) {
+          if (!nv || nv === ov) {
             return;
           }
 
           $scope.check();
-        });
+        }, true);
 
-        // Initializes the module
-        if (data.module) {
-          if ($scope.extra.uuids.indexOf(data.module.uuid) === -1) {
-            $scope.custom = true;
-          }
+        if ($routeParams.id) {
+          itemService.show('manager_ws_module_show', $routeParams.id).then(
+            function(response) {
+              $scope.extra  = response.data.extra;
+              $scope.module = response.data.module;
 
-          for (var i in data.module) {
-            if (data.module[i]) {
-              $scope.module[i] = data.module[i];
+              if ($scope.extra.uuids.indexOf($scope.module.uuid) === -1) {
+                $scope.custom = true;
+              }
             }
-          }
+          );
+        } else {
+          itemService.new('manager_ws_module_new').then(
+            function(response) {
+              $scope.extra = response.data.extra;
+            }
+          );
         }
+
       }
     ]);
 })();

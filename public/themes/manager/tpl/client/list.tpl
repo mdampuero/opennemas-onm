@@ -77,7 +77,7 @@
   </div>
   </form>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()" ng-if="items.length > 0"></div>
   <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }" ng-if="items.length > 0">
     <h5>{t}Columns{/t}</h5>

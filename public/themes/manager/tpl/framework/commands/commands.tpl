@@ -12,7 +12,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="table-wrapper">
@@ -53,13 +53,13 @@
                 </td>
               </tr>
             </form>
-            <tr ng-repeat="command in commands">
-              <td>[% command.name %]</td>
-              <td>[% command.description %]</td>
+            <tr ng-repeat="item in items">
+              <td>[% item.name %]</td>
+              <td>[% item.description %]</td>
               <td></td>
               <td class="right">
                 <div class="btn-group">
-                  <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_command_output', { command: command.name, data: [] }) %]">
+                  <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_command_output', { command: item.name, data: [] }) %]">
                     <i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                     {t}Execute{/t}
                   </a>

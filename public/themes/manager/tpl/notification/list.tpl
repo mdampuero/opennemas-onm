@@ -78,7 +78,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
     <i class="fa fa-7x fa-user-secret"></i>
     <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
@@ -185,7 +185,7 @@
                 {t}Forced{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('forced')" width="85">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="85">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>

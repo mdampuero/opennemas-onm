@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -93,8 +93,7 @@ abstract class AssetManager
 
         // Get current instance theme path
         $this->themePath = $this->sitePath . 'themes' . DS .
-            $container->get('instance_manager')->current_instance
-            ->settings['TEMPLATE_USER'];
+            $container->get('instance')->settings['TEMPLATE_USER'];
 
         $this->am = new BaseAssetManager();
     }
@@ -117,9 +116,11 @@ abstract class AssetManager
     /**
      * Writes all the assets.
      *
-     * @param array The array of assets.
+     * @param array  $assets  The array of assets.
+     * @param array  $filters The array of filters per file.
+     * @param string $name    The name of the output file.
      */
-    public function writeAssets($assets)
+    public function writeAssets($assets, $assetFilters, $name)
     {
         if (empty($assets)) {
             return [];
@@ -141,14 +142,17 @@ abstract class AssetManager
         $writer  = new AssetWriter($this->config['root']);
 
         // Apply filters to each file
-        foreach ($assets as $path => $filters) {
+        foreach ($assets as $path) {
+            $filters    = $assetFilters[$path];
             $target     = $this->getTargetPath($path);
             $targetPath = $this->config['root'] . $target;
 
             if ($this->debug()
                 || (!$this->debug() && !file_exists($targetPath))
             ) {
-                $fm = $this->getFilterManager($filters);
+                $filters = $this->getFilters($path, $filters);
+                $fm      = $this->getFilterManager($filters);
+
                 $factory->setFilterManager($fm);
 
                 $asset = $factory->createAsset($path, $filters);
@@ -174,7 +178,7 @@ abstract class AssetManager
             return substr($a, 1);
         }, $parsed);
 
-        $target = $this->getTargetPath($assets);
+        $target = $this->getTargetPath($assets, $name);
 
         $assets = $factory->createAsset($parsed);
         $assets->setTargetPath($target);
@@ -206,33 +210,37 @@ abstract class AssetManager
     /**
      * Returns a target path from real asset paths.
      *
-     * @param mixed $asset The real path to asset.
+     * @param mixed  $asset The real path to asset.
+     * @param string $name  The target filename.
      *
      * @return string The target path for given assets.
      */
-    protected function getTargetPath($asset)
+    protected function getTargetPath($asset, $name = 'default')
     {
         $src = '';
 
+        // Get original filename when no output provided
         if (is_string($asset)) {
             $asset = DS . str_replace(SITE_PATH, '', $asset);
             $src   = $asset;
         }
 
+        // If array, remove path and implode for md5
         if (is_array($asset)) {
             $asset = array_map(function ($a) {
                 return DS . str_replace(SITE_PATH, '', $a);
-            }, array_keys($asset));
+            }, $asset);
 
             $asset = implode(',', $asset);
+            $src   = $name . '.' . $this->extension;
         }
 
         if (!empty($src)) {
             $src = basename($src);
-            $src = substr($src, 0, strrpos($src, '.')) . '.';
+            $src = substr($src, 0, strrpos($src, '.'));
         }
 
-        return $this->config['output_path'] . DS . $src
+        return $this->config['output_path'] . DS . $src . '.'
             . substr(md5($asset), 0, 8) . '.' . DEPLOYED_AT . '.xzy.'
             . $this->extension;
     }
@@ -248,14 +256,12 @@ abstract class AssetManager
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
+        $port = '';
         if ($request->headers->get('X-Forwarded-port')) {
             $port = $request->headers->get('X-Forwarded-port');
         }
 
-        $port = '';
-        if ($port != 80 && $port != 443) {
-            $port = ':' . $port;
-        }
+        $port = ($port != 80 && $port != 443) ? ':' . $port : '';
 
         $src = DS . $src;
 
@@ -282,11 +288,21 @@ abstract class AssetManager
     }
 
     /**
-     * Initializes the filter manager with the current filters.
+     * Initializes the filter manager with the current filters for an asset.
      *
      * @param array $filters The array of filters.
      *
      * @return FilterManager The filter manager.
      */
     abstract protected function getFilterManager($filters);
+
+    /**
+     * Returns the valid filters for the asset.
+     *
+     * @param string $asset   The asset path.
+     * @param array  $filters The array of filters.
+     *
+     * @return array The valid filters.
+     */
+    abstract protected function getFilters($asset, $filters);
 }

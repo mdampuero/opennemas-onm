@@ -19,13 +19,12 @@
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, data) {
+      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
+      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -325,6 +324,8 @@
         if (webStorage.local.get('modules-columns')) {
           $scope.columns = webStorage.local.get('modules-columns');
         }
+
+        $scope.list();
       }
     ]);
 })();
