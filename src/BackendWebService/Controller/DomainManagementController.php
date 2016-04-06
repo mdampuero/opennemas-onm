@@ -279,7 +279,7 @@ class DomainManagementController extends Controller
                 '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
             ];
 
-            $tld = substr($domain, strrpos($domain, '.'));
+            $tld = substr($domain, strpos($domain, '.', 4));
 
             if (!in_array($tld, $tlds)) {
                 return false;
