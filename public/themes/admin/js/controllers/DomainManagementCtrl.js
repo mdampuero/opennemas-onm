@@ -453,10 +453,13 @@
         });
 
         $scope.$watch('payment', function(nv) {
+          $scope.fee = 0;
+
           if (nv && nv.type === 'CreditCard') {
             $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
-            $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
           }
+
+          $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
         }, true);
 
         // Get client after saving
