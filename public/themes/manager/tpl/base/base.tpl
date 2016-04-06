@@ -186,6 +186,9 @@
   <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !auth.status }">
     <!-- BEGIN PAGE CONTAINER-->
     <div class="page-content">
+      <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
+        <span class="fa fa-bars fa-lg"></span>
+      </div>
       <div class="view" id="view" ng-view autoscroll="true"></div>
     </div>
     <!-- END PAGE CONTAINER -->
