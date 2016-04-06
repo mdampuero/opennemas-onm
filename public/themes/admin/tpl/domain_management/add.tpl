@@ -183,11 +183,13 @@
               {t}Select the payment method.{/t}
               {t}You'll have a chance to review your order before it's placed.{/t}
             </p>
-            <p class="m-b-30">
-              {t}Any problem with payment?{/t}
-              <a href="#" ng-click="open('payment-help')">
-                {t}Click here for a quick tips.{/t}
-              </a>
+            <p class="m-b-15 m-t-50 text-center">
+              <strong>
+                {t}Any problem with payment?{/t}
+                <a href="#" ng-click="open('payment-help')">
+                  {t}Click here for a quick tips.{/t}
+                </a>
+              </strong>
             </p>
             <form id="braintree-form">
               <div class="braintree">
