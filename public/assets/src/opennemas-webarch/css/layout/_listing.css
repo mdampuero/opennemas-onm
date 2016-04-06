@@ -1,3 +1,10 @@
+.table th,
+.table td {
+  white-space: nowrap;
+}
+.table thead tr .tooltip {
+  margin-top: 15px;
+}
 .table tr.row_selected td {
   background-color: #ffffcc !important;
 }

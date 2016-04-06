@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success text-uppercase" ng-click="!notification.id ? save() : update()" ng-disabled="saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!notification.id ? save() : update()" ng-disabled="saving">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -201,7 +201,13 @@
               </div>
             </div>
             <ul class="fake-tabs">
-              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">[% value%]</li>
+              <li ng-repeat="(key, value) in languages" ng-class="{ 'active': language === key }" ng-click="changeLanguage(key)">
+                [% value%]
+                <span class="orb" ng-class="{ 'orb-danger': countStringsLeft(key) > 0, 'orb-success': countStringsLeft(key) === 0 }">
+                  <i class="fa fa-check" ng-if="countStringsLeft(key) === 0"></i>
+                  <span ng-if="countStringsLeft(key) > 0">[% countStringsLeft(key) %]</span>
+                </span>
+              </li>
             </ul>
             <div class="row p-l-15 p-r-15 p-t-15">
               <div class="col-md-12">
