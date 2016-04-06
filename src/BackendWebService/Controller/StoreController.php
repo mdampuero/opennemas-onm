@@ -55,17 +55,17 @@ class StoreController extends Controller
             $availableItems[$theme->uuid] = $theme->name;
         }
 
+        $instance = $this->get('instance');
+
         // Save new billing info for instance
         foreach ($billing as $key => $value) {
             $instance->metas['billing_' . $key] = $value;
         }
-        $instance         = $this->get('instance');
+
         $this->get('instance_manager')->persist($instance);
 
         // Get names for filtered modules to use in template
-        $modulesRequested = array_filter($availableItems, function($key, $value) use($modulesRequested) {
-            return in_array($value, $modulesRequested);
-        }, ARRAY_FILTER_USE_BOTH);
+        $modulesRequested = array_intersect_key($availableItems, array_flip($modulesRequested));
 
         // Send emails
         $this->sendEmailToSales($billing, $modulesRequested, $instance);
@@ -170,6 +170,10 @@ class StoreController extends Controller
 
                     $a->{$key} = $lang;
                 }
+            }
+
+            if (array_key_exists('price', $a->metas)) {
+                $a->price = $a->metas['price'];
             }
 
             return $a->getData();

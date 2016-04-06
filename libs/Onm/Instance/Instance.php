@@ -278,6 +278,10 @@ class Instance
     {
         define('INSTANCE_UNIQUE_NAME', $this->internal_name);
 
+        $mainDomain = $this->getMainDomain();
+        if (!is_null($mainDomain)) {
+            define('INSTANCE_MAIN_DOMAIN', 'http://'.$mainDomain);
+        }
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
         $cachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . INSTANCE_UNIQUE_NAME;
@@ -365,8 +369,10 @@ class Instance
     {
         if ($this->main_domain && $this->main_domain > 0) {
             $domain = $this->domains[$this->main_domain - 1];
-        } else {
+        } elseif (is_array($this->domains) && !empty($this->domains)) {
             $domain = $this->domains[0];
+        } else {
+            $domain = null;
         }
 
         return $domain;

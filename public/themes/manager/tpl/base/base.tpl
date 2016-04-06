@@ -186,6 +186,9 @@
   <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !auth.status }">
     <!-- BEGIN PAGE CONTAINER-->
     <div class="page-content">
+      <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
+        <span class="fa fa-bars fa-lg"></span>
+      </div>
       <div class="view" id="view" ng-view autoscroll="true"></div>
     </div>
     <!-- END PAGE CONTAINER -->
@@ -309,7 +312,7 @@
       @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
       @Common/components/angular-swfobject/angular-swfobject.js,
-      @FosJsRoutingBundle/js/router.js" filters="uglifyjs"}
+      @FosJsRoutingBundle/js/router.js" filters="uglifyjs" output="vendor"}
     {/javascripts}
     {javascripts src="
       @Common/src/angular-authentication/authService.js,
@@ -339,7 +342,7 @@
       @ManagerTheme/js/controllers/*,
       @ManagerTheme/js/module/*,
 
-      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
+      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs" output="app"}
     {/javascripts}
   {/block}
 </body>

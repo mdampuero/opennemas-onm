@@ -145,7 +145,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
             '</ul>';
 
             var e = $compile(tpl)($scope);
-            $('.content').prepend(e);
+            $('.content').first().prepend(e);
           }
 
           $timeout(function() {

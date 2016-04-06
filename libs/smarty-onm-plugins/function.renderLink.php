@@ -62,5 +62,9 @@ function smarty_function_renderLink($params, &$smarty)
             break;
     }
 
+    if ($params['noslash'] == 1) {
+        $link = substr($link, 1);
+    }
+
     return $link;
 }

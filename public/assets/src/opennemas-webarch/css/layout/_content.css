@@ -19,6 +19,12 @@
   top: 85px;
 }
 
+.content-grid {
+  .notification-list {
+    padding-right: 250px;
+  }
+}
+
 .content-sidebar .thumbnail-wrapper {
   height: 200px;
   text-align: center;
@@ -97,6 +103,12 @@
     display: none;
   }
 
+  .content-grid {
+    .notification-list {
+      padding-right: 0;
+    }
+  }
+
   .page-content .content .row > [class^=col-],
   .page-content .content .row > [class*= col-] {
     padding-left: 15px;
@@ -107,6 +119,12 @@
 @media (max-width: 991px) {
   .content .content-wrapper {
     padding-right: 0;
+  }
+
+  .content-grid {
+    .notification-list {
+      padding-right: 0;
+    }
   }
 }
 

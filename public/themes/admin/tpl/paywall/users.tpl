@@ -13,10 +13,10 @@
                         {t}Paywall{/t}
                     </h4>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <h5>{t}Premium users{/t}</h5>
                 </li>
             </ul>
@@ -50,10 +50,10 @@
                     </span>
                     <input class="no-boarder" type="text" name="title" value="{$smarty.request.searchname|default:""}" placeholder="{t}Filter by name{/t}" />
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <div class="input-append">
                         <select id="order" name="order" class="span2">
                             {assign var=order value=$smarty.request.order}
@@ -64,10 +64,10 @@
                         </select>
                     </div>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <select id="usertype" name="type">
                         {assign var=type value=$smarty.request.type}
                         <option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
@@ -78,7 +78,7 @@
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="info">{t 1=$pagination->_totalItems}%1 users{/t}</span>
                 </li>
                 <li class="quicklinks form-inline pagination-links">
@@ -90,14 +90,10 @@
     </div>
 </div>
 <div class="content paywall">
-
-
     <div class="grid simple">
-
         <div class="grid-body no-padding">
             {include file="paywall/partials/user_listing.tpl" show_edit_button=true}
         </div>
-
     </div>
 </form>
 {/block}

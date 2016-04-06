@@ -12,19 +12,17 @@
      * @requires http
      * @requires messenger
      * @requires webStorage
-     * @requires data
      *
      * @description
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage', 'data',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage, data) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -288,6 +286,8 @@
         if (webStorage.local.get('notifications-columns')) {
           $scope.columns = webStorage.local.get('notifications-columns');
         }
+
+        $scope.list();
       }
     ]);
 })();

@@ -40,7 +40,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="extra">
   <form name="clientForm" novalidate>
     <div class="grid simple">
       <div class="grid-body client-form">

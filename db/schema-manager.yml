@@ -295,6 +295,12 @@ purchase:
         details:
             type: text
             options: { default: null, length: 65532, notnull: true }
+        method:
+            type: string
+            options: { default: null, length: 10 }
+        fee:
+            type: float
+            options: { default: 0, notnull: true }
         total:
             type: float
             options: { default: 0, notnull: true }

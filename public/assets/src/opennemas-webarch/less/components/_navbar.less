@@ -286,13 +286,13 @@ div[ng-view].ng-leave-active .selected-navbar {
       background: #22252d;
       color: #fff;
 
-      .nav > li {
-        a, .btn-link {
-          color: #fff;
+      .quick-section > li > h4 a,
+      .quick-section > li > h5 a,
+      .quick-section > li > a {
+        color: #fff;
 
-          &:hover {
-            color: #ddd;
-          }
+        &:hover {
+          color: #ddd;
         }
       }
     }
@@ -312,7 +312,11 @@ div[ng-view].ng-leave-active .selected-navbar {
       top: -50px;
     }
 
-    h1, h2, h3, h4, h5 {
+    .quick-section > .quicklinks > h1,
+    .quick-section > .quicklinks > h2,
+    .quick-section > .quicklinks > h3,
+    .quick-section > .quicklinks > h4,
+    .quick-section > .quicklinks > h5 {
       color: #fff;
     }
 

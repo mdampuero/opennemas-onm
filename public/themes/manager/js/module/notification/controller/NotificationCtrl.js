@@ -16,8 +16,8 @@
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$location', '$scope', 'http', 'routing', 'messenger', 'data',
-      function ($location, $scope, http, routing, messenger, data) {
+      '$location', '$scope', 'http', 'routing', 'messenger',
+      function ($location, $scope, http, routing, messenger) {
         /**
          * @memberOf NotificationCtrl
          *
@@ -57,16 +57,6 @@
           es: 'Spanish',
           gl: 'Galician'
         };
-
-        /**
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
 
         /**
          * @function changeLanguage
@@ -204,12 +194,19 @@
           $scope.notification = null;
         });
 
-        if (data.notification) {
-          $scope.notification = data.notification;
-
-          if (!$scope.notification.style) {
-            $scope.notification.style = { background_color: null, color: null };
-          }
+        if ($routeParams.id) {
+          itemService.show('manager_ws_notification_show', $routeParams.id).then(
+            function(response) {
+              $scope.extra        = response.data.extra;
+              $scope.notification = response.data.notification;
+            }
+          );
+        } else {
+          itemService.new('manager_ws_notification_new').then(
+            function(response) {
+              $scope.extra = response.data.extra;
+            }
+          );
         }
       }
     ]);

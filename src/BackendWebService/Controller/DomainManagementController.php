@@ -162,11 +162,15 @@ class DomainManagementController extends Controller
     {
         $domains  = $request->request->get('domains');
         $create   = $request->request->get('create');
+        $fee      = $request->request->get('fee');
         $nonce    = $request->request->get('nonce');
+        $method   = $request->request->get('method');
         $total    = $request->request->get('total');
         $instance = $this->get('instance');
         $date     = new \Datetime('now');
-        $price    = $create ? 18.00 : 12.00;
+
+        $price       = $create ? 18.00 : 12.00;
+        $description = $create ? _('Domain + redirection: ') : _('Redirection: ');
 
         $client = $this->get('orm.manager')
             ->getRepository('manager.client', 'Database')
@@ -196,31 +200,43 @@ class DomainManagementController extends Controller
 
         foreach ($domains as $domain) {
             $invoice->lines[] = [
-                'name'      => 'Domain + redirection: ' . $domain,
-                'unit_cost' => $price,
-                'quantity'  => 1,
-                'tax1_name'  => 'IVA',
+                'description'  => $description . $domain,
+                'unit_cost'    => $price,
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
                 'tax1_percent' => $vatTax
             ];
         }
 
-        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
-        $payment->invoice_id = $invoice->invoice_id;
+        if ($method === 'CreditCard') {
+            $invoice->lines[] = [
+                'description'  => _('Pay with credit card'),
+                'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
+                'tax1_percent' => 0
+            ];
+        }
 
-        $payment->notes = 'Braintree Transaction Id:' . $payment->payment_id;
+        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
+
+        $payment->invoice_id = $invoice->invoice_id;
+        $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
 
         $this->get('orm.manager')->persist($payment, 'FreshBooks');
 
-        $order = new Purchase([
+        $purchase = new Purchase([
             'client'     => $client,
-            'payment_id' => $payment->payment_id,
-            'invoice_id' => $invoice->invoice_id,
             'created'    => $date->format('Y-m-d H:i:s'),
-            'total'      => $payment->amount,
             'details'    => $invoice->lines,
+            'fee'        => $fee,
+            'invoice_id' => $invoice->invoice_id,
+            'method'     => $method,
+            'payment_id' => $payment->payment_id,
+            'total'      => $payment->amount,
         ]);
 
-        $this->get('orm.manager')->persist($order);
+        $this->get('orm.manager')->persist($purchase);
 
         $this->sendEmailToCustomer($client->getData(), $domains, $instance, $create);
         $this->sendEmailToSales($client->getData(), $domains, $instance, $create);
@@ -239,7 +255,7 @@ class DomainManagementController extends Controller
      */
     private function isDomainAvailable($domain)
     {
-        return $this->getTarget($domain) === $domain;
+        return !checkdnsrr($domain, 'ANY');
     }
 
     /**
@@ -263,7 +279,7 @@ class DomainManagementController extends Controller
                 '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
             ];
 
-            $tld = substr($domain, strrpos($domain, '.'));
+            $tld = substr($domain, strpos($domain, '.', 4));
 
             if (!in_array($tld, $tlds)) {
                 return false;
@@ -337,8 +353,12 @@ class DomainManagementController extends Controller
         $params = $this->container
             ->getParameter("manager_webservice");
 
+        $subject = $create ?
+            'Opennemas Domain domain registration request:' :
+            'Opennemas Domain mapping request';
+
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain mapping request')
+            ->setSubject($subject)
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($this->container->getParameter('sales_email'))

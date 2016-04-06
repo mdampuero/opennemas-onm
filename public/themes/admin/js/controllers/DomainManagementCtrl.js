@@ -151,16 +151,6 @@
         $scope.vatTax = 0;
 
         /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   The width of the suggetion list container.
-         *
-         * @type {Integer}
-         */
-        $scope.width = $('.uib-typeahead').width();
-
-        /**
          * @function cancelCreditCard
          * @memberOf DomainManagementCtrl
          *
@@ -188,6 +178,8 @@
             client:  $scope.client,
             create:  $scope.create,
             domains: $scope.domains,
+            fee:     $scope.fee,
+            method:  $scope.payment.type,
             nonce:   $scope.payment.nonce,
             total:   $scope.total
           };
@@ -246,7 +238,8 @@
             }
           }
 
-          $('.uib-typeahead + .dropdown-menu').width($scope.width - 24);
+          $('.uib-typeahead + .dropdown-menu')
+            .width($('.uib-typeahead').width() - 6);
 
           return suggestions;
         };
@@ -391,6 +384,23 @@
         };
 
         /**
+         * @function previous
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Goes to the previous step.
+         */
+        $scope.previous = function() {
+          if ($scope.step > 1) {
+            $scope.step--;
+          }
+
+          if ($scope.step === 2 && $scope.client) {
+            $scope.step--;
+          }
+        };
+
+        /**
          * @function toggleCardLoading
          * @memberOf DomainManagementCtrl
          *
@@ -434,10 +444,13 @@
         });
 
         $scope.$watch('payment', function(nv) {
+          $scope.fee = 0;
+
           if (nv && nv.type === 'CreditCard') {
             $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
-            $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
           }
+
+          $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
         }, true);
 
         // Get client after saving
@@ -457,6 +470,12 @@
               container: 'braintree-container',
               paypal: {
                 container: 'braintree-container'
+              },
+              onError: function() {
+                $scope.$apply(function() {
+                  $scope.payment = null;
+                  $scope.paymentLoading = false;
+                });
               },
               onPaymentMethodReceived: function(obj) {
                 $scope.$apply(function() {

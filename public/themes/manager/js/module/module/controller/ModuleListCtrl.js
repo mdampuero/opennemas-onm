@@ -20,13 +20,12 @@
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage', 'data',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder,  webStorage, data) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          data:     data
+          $timeout: $timeout
         }));
 
         /**
@@ -215,10 +214,10 @@
 
         /**
          * @function patch
-         * @memberOf NotificationListCtrl
+         * @memberOf ModuleListCtrl
          *
          * @description
-         *   Enables/disables an notification.
+         *   Enables/disables a module.
          *
          * @param {String}  notification The notification object.
          * @param {String}  property     The property name.
@@ -291,6 +290,8 @@
         if (webStorage.local.get('modules-columns')) {
           $scope.columns = webStorage.local.get('modules-columns');
         }
+
+        $scope.list();
       }
     ]);
 })();

@@ -30,7 +30,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="items">
   <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
     <i class="fa fa-7x fa-user-secret"></i>
     <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in items">
+            <tr ng-repeat="item in items | filter: { title: criteria.title  }">
               <td>
                 [% item.title %]
                 <div class="help-block">

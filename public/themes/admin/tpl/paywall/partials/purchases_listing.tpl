@@ -34,7 +34,7 @@
     {if count($purchases) > 0}
     <tfoot>
         <tr>
-            <td colspan="11" class="center">
+            <td colspan="11" class="center" style="margin:5px ">
                 <div class="pagination">
                     {$pagination->links}
                 </div>

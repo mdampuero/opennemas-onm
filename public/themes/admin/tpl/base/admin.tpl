@@ -75,6 +75,7 @@
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
+      var instanceMainDomain = '{$smarty.const.INSTANCE_MAIN_DOMAIN}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
     </script>
@@ -380,7 +381,7 @@
                     </li>
                     <li>
                       {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                        <a ng-href="/manager#/user/{$smarty.session.userid}/show">
+                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session.userid}/show" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>

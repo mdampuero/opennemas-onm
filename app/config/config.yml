@@ -61,12 +61,17 @@ opennemas:
             uglifyjs:
                 bin:  %kernel.root_dir%/../node_modules/.bin/uglifyjs
                 node: /usr/bin/nodejs
+                options:
+                    mangle: true
             uglifycss:
                 bin:  %kernel.root_dir%/../node_modules/.bin/uglifycss
                 node: /usr/bin/nodejs
             less:
                 node:  /usr/bin/nodejs
                 node_paths: [%kernel.root_dir%/../node_modules]
+                options:
+                    sourceMap:
+                        sourceMapFileInline: true
 
 # Twig Configuration
 twig:
@@ -75,14 +80,23 @@ twig:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
-    spool:
-        type: file
-        path: '%kernel.root_dir%/../tmp/spool'
-    logging:  '%kernel.debug%'
+    default_mailer: default
+    mailers:
+        default:
+            transport: %mailer_transport%
+            host:      %mailer_host%
+            username:  %mailer_user%
+            password:  %mailer_password%
+            spool:
+                type: file
+                path: '%kernel.root_dir%/../tmp/spool'
+            logging:  '%kernel.debug%'
+        direct:
+            transport: %mailer_transport%
+            host:      %mailer_host%
+            username:  %mailer_user%
+            password:  %mailer_password%
+            logging:  '%kernel.debug%'
 
 monolog:
     channels: ['main', 'applog']

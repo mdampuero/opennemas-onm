@@ -12,10 +12,10 @@
               {t}Paywall{/t}
             </h4>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks hidden-xs">
             <h5>{t}Purchases{/t}</h5>
           </li>
         </ul>
@@ -26,7 +26,7 @@
                 <span class="fa fa-reply"></span>
               </a>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
@@ -67,7 +67,7 @@
           </li>
           -->
         </ul>
-        <ul class="nav quick-section pull-right">
+        <ul class="nav quick-section pull-right hidden-xs">
           <li class="quicklinks">
             <span class="info">
               {t 1=$pagination->_totalItems}%1 purchases{/t}

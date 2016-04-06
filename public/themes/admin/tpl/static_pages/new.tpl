@@ -70,7 +70,7 @@
                   {t}URL{/t}
                 </label>
                 <span class="help">
-                  {t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html"><span class="fa fa-external-link"></span></a>
+                  {t}The slug component in the url{/t}: {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html"><span class="fa fa-external-link"></span></a>
                 </span>
                 <div class="controls">
                   <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}"  ng-model="slug" maxlength="120" tabindex="2" required="required"  />

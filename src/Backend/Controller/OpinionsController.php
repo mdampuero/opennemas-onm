@@ -517,7 +517,7 @@ class OpinionsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'opinion')),

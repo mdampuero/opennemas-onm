@@ -103,7 +103,7 @@ tr:hover .listing-inline-actions {
 
   .table > thead > tr > th:first-child,
   .table > tbody > tr > td:first-child {
-    padding-left: 15px !important;
+    padding-left: 25px !important;
   }
 
   .grid-footer .pagination-info {

@@ -42,7 +42,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="dropdown-menu on-right">
+                <div class="dropdown-menu dropdown-menu-right">
                   <div class="shopping-cart-placeholder" ng-if="!cart || cart.length == 0">
                     <h5 class="text-center">
                       {t}Your shopping cart is empty{/t}
@@ -52,7 +52,7 @@
                     <scrollable>
                     <ul class="cart-list">
                       <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                        <img class="img-responsive pull-left" ng-src="/assets/images/store/[% item.thumbnail %]">
+                        <img class="img-responsive pull-left" ng-src="[% '/asset/scale,300,300' + item.path + '/' + item.images[0] %]">
                         <span class="pull-left">
                           <h5>[% item.name %]</h5>
                           <p class="description">[% item.description %]</p>
@@ -101,9 +101,8 @@
                       <div class="text-right p-r-15 p-b-15">
                         <div class="price">
                           <h4 class="no-margin">
-                            <strong ng-if="item.price > 0">[% item.price.month %]</strong>
-                            <strong ng-if="item.meta_price > 0">[% item.meta.price.month %]</strong>
-                            <small> € / {t}month{/t}</small>
+                            <strong>[% getPrice(item) %]</strong>
+                            <small>€/{t}month{/t}</small>
                           </h4>
                         </div>
                       </div>
@@ -272,15 +271,15 @@
                     <thead>
                       <tr>
                         <th class="text-left uppercase">{t}Description{/t}</th>
-                        <th style="width:140px" class="text-right uppercase">{t}Unit price{/t}</th>
-                        <th style="width:90px" class="text-right uppercase">{t}Total{/t}</th>
+                        <th width="140" class="text-right uppercase">{t}Unit price{/t}</th>
+                        <th width="90" class="text-right uppercase">{t}Total{/t}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr ng-repeat="item in cart">
                         <td>[% item.name %]</td>
-                        <td class="text-right">[% item.price.month %] €</td>
-                        <td class="text-right">[% item.price.month %] €</td>
+                        <td class="text-right">[% getPrice(item) %] €</td>
+                        <td class="text-right">[% getPrice(item) %] €</td>
                       </tr>
                       <tr>
                         <td rowspan="3"></td>
@@ -307,7 +306,7 @@
                       </label>
                     </div>
                   </div>
-                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms || !validPhone || !validVat">
+                  <button class="btn btn-large btn-success text-center" ng-click="confirm()" ng-disabled="billingForm.$invalid || !terms || !validVat">
                     {t}Confirm{/t}
                   </button>
                 </div>

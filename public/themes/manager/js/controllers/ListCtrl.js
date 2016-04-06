@@ -8,44 +8,13 @@
      *
      * @requires $scope
      * @requires $timeout
-     * @requires data
      *
      * @description
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout', 'data',
-      function($scope, $timeout, data) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Extra data
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   The number of elements.
-         *
-         * @type {Object}
-         */
-        $scope.total = data.total;
-
+      '$scope', '$timeout',
+      function($scope, $timeout) {
         /**
          * @memberOf ListCtrl
          *

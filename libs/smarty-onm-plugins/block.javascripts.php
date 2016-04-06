@@ -20,7 +20,8 @@
  */
 function smarty_block_javascripts($params, $content, $template, &$repeat)
 {
-    $bag = getService('core.service.assetic.asset_bag');
+    $bag  = getService('core.service.assetic.asset_bag');
+    $name = array_key_exists('output', $params) ? $params['output'] : 'default';
 
     if ($repeat) { // Opening tag (first call only)
         $filters = [];
@@ -31,7 +32,7 @@ function smarty_block_javascripts($params, $content, $template, &$repeat)
 
         if (!empty($params['src'])) {
             foreach (explode(',', $params['src']) as $src) {
-                $bag->addScript(trim($src), $filters);
+                $bag->addScript(trim($src), $filters, $name);
             }
         }
     }

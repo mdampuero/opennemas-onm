@@ -13,24 +13,13 @@
      * @requires itemService
      * @requires routing
      * @requires messenger
-     * @requires data
      *
      * @description
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$uibModal', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger', 'data',
-      function ($filter, $http, $location, $uibModal, $scope, $timeout, Cleaner, itemService, routing, messenger, data) {
-        /**
-         * @memberOf ModuleCtrl
-         *
-         * @description
-         *   The template parameters.
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
+      '$filter', '$http', '$location', '$uibModal', '$routeParams', '$scope', '$timeout', 'Cleaner', 'itemService', 'routing', 'messenger',
+      function ($filter, $http, $location, $uibModal, $routeParams, $scope, $timeout, Cleaner, itemService, routing, messenger) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -54,8 +43,8 @@
           category:    'module',
           description: { en: '', es: '', gl: '' },
           images:      [],
+          metas:       { category: 'module', price: [ { 'value': 0, 'type': 'monthly' } ] },
           name:        { en: '', es: '', gl: '' },
-          price:       [ { 'value': 0, 'type': 'monthly' } ],
           type:        'module'
         };
 
@@ -67,11 +56,11 @@
          *   Adds a new price to the list.
          */
         $scope.addPrice = function() {
-          if (!$scope.module.price) {
-            $scope.module.price = [];
+          if (!$scope.module.metas.price) {
+            $scope.module.metas.price = [];
           }
 
-          $scope.module.price.push({ value: 0, type: 'monthly' });
+          $scope.module.metas.price.push({ value: 0, type: 'monthly' });
         };
 
         /**
@@ -137,7 +126,7 @@
          * @param {Integer} index The position of the price in the list.
          */
         $scope.removePrice = function(index) {
-          $scope.module.price.splice(index, 1);
+          $scope.module.metas.price.splice(index, 1);
         };
 
         /**
@@ -212,20 +201,20 @@
             data.append('_method', 'PUT');
           }
 
-          if ($scope.module.modules_in_conflict) {
-            $scope.module.modules_in_conflict = $scope.module
+          if ($scope.module.metas.modules_in_conflict) {
+            $scope.module.metas.modules_in_conflict = $scope.module.metas
               .modules_in_conflict.map(function(a) { return a.text; });
           }
 
-          if ($scope.module.modules_included) {
-            $scope.module.modules_included = $scope.module.modules_included
-              .map(function(a) { return a.text; });
+          if ($scope.module.metas.modules_included) {
+            $scope.module.metas.modules_included = $scope.module.metas.modules_included
+              .map(function(e) { return e.text; });
           }
 
           Cleaner.clean($scope.module);
 
           for (var key in $scope.module) {
-            if (key !== 'images') {
+            if (key === 'name' || key === 'description' || key === 'about' || key === 'metas') {
               data.append(key, JSON.stringify($scope.module[key]));
             } else if ($scope.module[key] instanceof Array) {
               for (var i = 0; i <  $scope.module[key].length; i++) {
@@ -276,20 +265,30 @@
 
         // Check UUID on change
         $scope.$watch('module.uuid', function(nv, ov) {
-          if (nv === ov) {
+          if (!nv || nv === ov) {
             return;
           }
 
           $scope.check();
-        });
+        }, true);
 
-        // Initializes the module
-        if (data.module) {
-          if ($scope.extra.uuids.indexOf(data.module.uuid) === -1) {
-            $scope.custom = true;
-          }
+        if ($routeParams.id) {
+          itemService.show('manager_ws_module_show', $routeParams.id).then(
+            function(response) {
+              $scope.extra  = response.data.extra;
+              $scope.module = response.data.module;
 
-          $scope.module = angular.merge($scope.module, data.module);
+              if ($scope.extra.uuids.indexOf($scope.module.uuid) === -1) {
+                $scope.custom = true;
+              }
+            }
+          );
+        } else {
+          itemService.new('manager_ws_module_new').then(
+            function(response) {
+              $scope.extra = response.data.extra;
+            }
+          );
         }
       }
     ]);
