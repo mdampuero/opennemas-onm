@@ -179,9 +179,15 @@
         <div class="grid simple ng-hide" ng-show="step == 3">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Payment{/t}</h4>
-            <p class="m-b-15 m-t-15">
+            <p class="m-t-15">
               {t}Select the payment method.{/t}
               {t}You'll have a chance to review your order before it's placed.{/t}
+            </p>
+            <p class="m-b-30">
+              {t}Any problem with payment?{/t}
+              <a href="#" ng-click="open('payment-help')">
+                {t}Click here for a quick tips.{/t}
+              </a>
             </p>
             <form id="braintree-form">
               <div class="braintree">
@@ -326,11 +332,14 @@
               </div>
               <h4 class="m-t-30">
                 {t}Have a wonderful day!{/t}
-                </p>
+              </h4>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script type="text/ng-template" id="payment-help">
+    {include file="store/modal/_payment.tpl"}
+  </script>
 {/block}
