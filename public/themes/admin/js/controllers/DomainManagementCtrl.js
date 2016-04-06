@@ -151,16 +151,6 @@
         $scope.vatTax = 0;
 
         /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   The width of the suggetion list container.
-         *
-         * @type {Integer}
-         */
-        $scope.width = $('.uib-typeahead').width();
-
-        /**
          * @function cancelCreditCard
          * @memberOf DomainManagementCtrl
          *
@@ -248,7 +238,8 @@
             }
           }
 
-          $('.uib-typeahead + .dropdown-menu').width($scope.width - 24);
+          $('.uib-typeahead + .dropdown-menu')
+            .width($('.uib-typeahead').width() - 6);
 
           return suggestions;
         };
