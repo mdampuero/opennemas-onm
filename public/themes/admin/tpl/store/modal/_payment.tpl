@@ -12,14 +12,14 @@
       <ol class="m-b-30">
         <li>
           {t}To pay with your paypal account click on the Paypal button.{/t}
-          <div><img src="/media/core/help/braintree_2.png" alt="Paypal"></div>
+          <div><img src="/themes/admin/images/help/braintree_2.png" alt="Paypal"></div>
         </li>
         <li>
           {t}A popup window will be opened in order to log in with your paypal account.{/t}
         </li>
         <li>
           {t}After logging in with your paypal account the popup window will automatically close and your account will appear as your selected payment method.{/t}
-          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/media/core/help/braintree_4.png" alt="Paypal"></div>
+          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_4.png" alt="Paypal"></div>
         </li>
         <li>
           {t}Click 'Next' button to continue with your purchase.{/t}
@@ -29,7 +29,7 @@
       <ol>
         <li>
           {t}To pay with your credit card fill the form with your credit card information.{/t}
-          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/media/core/help/braintree_3.png" alt="Paypal"></div>
+          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_3.png" alt="Paypal"></div>
         </li>
         <li>
           {t}While typing your credit card information will be automatically validated.{/t}
@@ -37,7 +37,7 @@
         </li>
         <li>
           {t}Click 'Next' button to select the credit card as your payment method and continue with the purchase.{/t}
-          <div class="m-t-5"><img class="img-responsive" src="/media/core/help/braintree_5.png" alt="Paypal"></div>
+          <div class="m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_5.png" alt="Paypal"></div>
         </li>
       </ol>
     </uib-tab>
@@ -49,15 +49,15 @@
       <ol>
         <li>
           {t}Click on 'Change payment method'.{/t}
-          <div class="m-t-5"><img class="img-responsive" src="/media/core/help/braintree_5.png" alt="Paypal"></div>
+          <div class="m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_5.png" alt="Paypal"></div>
         </li>
         <li>
           {t}A list with all payment method used will appear.{/t}
-          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/media/core/help/braintree_6.png" alt="Paypal"></div>
+          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_6.png" alt="Paypal"></div>
         </li>
         <li>
           {t}Select one of the listed payment methods or add a new payment method.{/t}
-          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/media/core/help/braintree_4.png" alt="Paypal"></div>
+          <div class="m-b-15 m-t-5"><img class="img-responsive" src="/themes/admin/images/help/braintree_4.png" alt="Paypal"></div>
         </li>
         <li>
           {t}Click 'Next' button to continue with your purchase.{/t}
