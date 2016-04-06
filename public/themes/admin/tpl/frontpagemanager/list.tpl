@@ -1,17 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_frontpage.less,
-    @AdminTheme/less/_frontpagemanager.less" filters="cssrewrite,less"}
+  {stylesheets src="@AdminTheme/less/_frontpagemanager.less" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
-  <style>
-    @media (max-width: 767px) {
-      .page-content .filters-navbar ~ .content {
-        margin-top: 60px;
-      }
-    }
-  </style>
 {/block}
 
 {block name="footer-js" append}
@@ -84,7 +76,7 @@
             <h5>
               {$categories[$category_id]['name']}
               {if $available_layouts > 1}
-                <small class="hidden-xs hidden-sm hidden-md">({$layout_theme['name']})</small>
+              <small class="hidden-xs hidden-sm hidden-md">({$layout_theme['name']})</small>
               {/if}
             </h5>
           </li>
@@ -92,174 +84,174 @@
         <div class="all-actions pull-right hidden-xs">
           <ul class="nav quick-section">
             <li class="quicklinks">
-             <a class="btn btn-white" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
-               <span class="fa fa-plus"></span> <span class="hidden-xs">{t}Add contents{/t}</span>
-             </a>
-           </li>
-           <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-           <li class="quicklinks">
-            <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{$categories[$category_id]['value']}')" title="{t}Preview frontpage with actual content positions{/t}" type="button">
-              <span class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></span>
-              {t}Preview{/t}
+              <a class="btn btn-white" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+                <span class="fa fa-plus"></span> <span class="hidden-xs">{t}Add contents{/t}</span>
+              </a>
+            </li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{$categories[$category_id]['value']}')" title="{t}Preview frontpage with actual content positions{/t}" type="button">
+                <span class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></span>
+                {t}Preview{/t}
+              </button>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}">
+                <span class="fa fa-save"></span> <span class="hidden-xs text">{t}Save changes{/t}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-navbar selected-navbar collapsed hidden-xs" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section pull-left">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+              <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
-          <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
-            <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}">
-              <span class="fa fa-save"></span> <span class="hidden-xs text">{t}Save changes{/t}</span>
-            </a>
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+            </h4>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="removeSelectedContents()" type="button">
+              <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="archiveSelectedContents()" type="button">
+              <i class="fa fa-inbox"></i> {t}Arquive{/t}
+            </button>
           </li>
         </ul>
       </div>
     </div>
   </div>
-</div>
 
-<div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
-  <div class="navbar navbar-inverse">
-    <div class="navbar-inner">
-      <ul class="nav quick-section pull-left">
-        <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
-            <i class="fa fa-arrow-left fa-lg"></i>
-          </button>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks">
-          <h4>
-            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
-          </h4>
-        </li>
-      </ul>
-      <ul class="nav quick-section pull-right">
-        <li class="quicklinks">
-          <button class="btn btn-link" ng-click="removeSelectedContents()" type="button">
-            <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
-          </button>
-        </li>
-        <li class="quicklinks">
-          <button class="btn btn-link" ng-click="archiveSelectedContents()" type="button">
-            <i class="fa fa-inbox"></i> {t}Arquive{/t}
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="page-navbar filters-navbar hidden-xs">
-  <div class="navbar navbar-inverse">
-    <div class="navbar-inner">
-      <ul class="nav quick-section">
-        <li class="quicklinks">
-          <span class="info">{t}Managing frontpage:{/t}</span>
-        </li>
-        <li class="quicklinks hidden-xs ng-cloak"  ng-init="category='{$categories[$category_id]['value']}'; categories = {json_encode(array_values($categories))|clear_json}">
-          <ui-select name="author" theme="select2" ng-model="category" ng-change=changeCategory($select.selected.id)>
-            <ui-select-match>
-              <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
-            </ui-select-match>
-            <ui-select-choices group-by="'group'" repeat="item.value as item in categories | filter: { name: $select.search }">
-              <div ng-bind-html="item.name | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-        </li>
-      </ul>
-      <ul class="nav quick-section pull-right">
-        {is_module_activated name="FRONTPAGES_LAYOUT"}
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks">
-          <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
-            <i class="fa fa-cog"></i>
-          </div>
-        </li>
-        {/is_module_activated}
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="content">
-  <div id="warnings-validation"></div>
-
-  <div class="grid simple visible-xs not-available-in-phone">
-    <div class="grid-body center">
-      <h5>{t escape=off}The frontpage manager is currently <strong>unavaible for your screen size</strong>{/t}</h5>
+  <div class="page-navbar filters-navbar hidden-xs">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <span class="info">{t}Managing frontpage:{/t}</span>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak"  ng-init="category='{$categories[$category_id]['value']}'; categories = {json_encode(array_values($categories))|clear_json}">
+            <ui-select name="author" theme="select2" ng-model="category" ng-change=changeCategory($select.selected.id)>
+              <ui-select-match>
+                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices group-by="'group'" repeat="item.value as item in categories | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          {is_module_activated name="FRONTPAGES_LAYOUT"}
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
+              <i class="fa fa-cog"></i>
+            </div>
+          </li>
+          {/is_module_activated}
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div id="frontpagemanager" data-category="{$category_id}" class="{$category_id} clearfix span-24 hidden-xs">
-    {$layout}
-  </div><!-- /frontpagemanager -->
+  <div class="content">
+    <div id="warnings-validation"></div>
 
-  <div id="content-provider" class="clearfix hidden-xs ng-cloak" title="{t}Available contents{/t}">
-    <div class="content-provider-block-wrapper clearfix">
-      <ul>
-        {is_module_activated name="ARTICLE_MANAGER"}
-        {if $category_id eq 0}
-        <li>
-          <a href="{url name=admin_articles_content_provider_suggested category=$category_id}">{t}Suggested{/t}</a>
-        </li>
-        {else}
-        <li>
-          <a href="{url name=admin_articles_content_provider_category category=$category_id}">{t}Others in category{/t}</a>
-        </li>
-        {/if}
-        {/is_module_activated}
-        <li>
-          <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
-        </li>
-
-        {is_module_activated name="WIDGET_MANAGER"}
-        <li>
-          <a href="{url name=admin_widgets_content_provider category=$category_id}">{t}Widgets{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="OPINION_MANAGER"}
-        <li>
-          <a href="{url name=admin_opinions_content_provider category=$category_id}">{t}Opinions{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="VIDEO_MANAGER"}
-        <li>
-          <a href="{url name=admin_videos_content_provider category=$category_id}">{t}Videos{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="ALBUM_MANAGER"}
-        <li>
-          <a href="{url name=admin_albums_content_provider category=$category_id}">{t}Albums{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="LETTER_MANAGER"}
-        <li>
-          <a href="{url name=admin_letters_content_provider category=$category_id}">{t}Letter{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="POLL_MANAGER"}
-        <li>
-          <a href="{url name=admin_polls_content_provider category=$category_id}">{t}Polls{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="ADS_MANAGER"}
-        <li>
-          <a href="{url name=admin_ads_content_provider category=$category_id}">{t}Advertisement{/t}</a>
-        </li>
-        {/is_module_activated}
-        {is_module_activated name="ADVANCED_SEARCH"}
-        <li>
-          <a href="{url name=admin_search_content_provider related=0}"><i class="fa fa-search"></i></a>
-        </li>
-        {/is_module_activated}
-      </ul>
+    <div class="grid simple visible-xs not-available-in-phone">
+      <div class="grid-body center">
+        <h5>{t escape=off}The frontpage manager is currently <strong>unavaible for your screen size</strong>{/t}</h5>
+      </div>
     </div>
-  </div><!-- /content-provider -->
-</div>
-<input type="hidden"  id="category" name="category" value="{$category_id}">
-<input type="hidden" name="id" id="id" value="{$id|default}" />
+
+    <div id="frontpagemanager" data-category="{$category_id}" class="{$category_id} clearfix span-24 hidden-xs">
+      {$layout}
+    </div><!-- /frontpagemanager -->
+
+    <div id="content-provider" class="clearfix hidden-xs ng-cloak" title="{t}Available contents{/t}">
+      <div class="content-provider-block-wrapper clearfix">
+        <ul>
+          {is_module_activated name="ARTICLE_MANAGER"}
+          {if $category_id eq 0}
+          <li>
+            <a href="{url name=admin_articles_content_provider_suggested category=$category_id}">{t}Suggested{/t}</a>
+          </li>
+          {else}
+          <li>
+            <a href="{url name=admin_articles_content_provider_category category=$category_id}">{t}Others in category{/t}</a>
+          </li>
+          {/if}
+          {/is_module_activated}
+          <li>
+            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+          </li>
+
+          {is_module_activated name="WIDGET_MANAGER"}
+          <li>
+            <a href="{url name=admin_widgets_content_provider category=$category_id}">{t}Widgets{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="OPINION_MANAGER"}
+          <li>
+            <a href="{url name=admin_opinions_content_provider category=$category_id}">{t}Opinions{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="VIDEO_MANAGER"}
+          <li>
+            <a href="{url name=admin_videos_content_provider category=$category_id}">{t}Videos{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="ALBUM_MANAGER"}
+          <li>
+            <a href="{url name=admin_albums_content_provider category=$category_id}">{t}Albums{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="LETTER_MANAGER"}
+          <li>
+            <a href="{url name=admin_letters_content_provider category=$category_id}">{t}Letter{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="POLL_MANAGER"}
+          <li>
+            <a href="{url name=admin_polls_content_provider category=$category_id}">{t}Polls{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="ADS_MANAGER"}
+          <li>
+            <a href="{url name=admin_ads_content_provider category=$category_id}">{t}Advertisement{/t}</a>
+          </li>
+          {/is_module_activated}
+          {is_module_activated name="ADVANCED_SEARCH"}
+          <li>
+            <a href="{url name=admin_search_content_provider related=0}"><i class="fa fa-search"></i></a>
+          </li>
+          {/is_module_activated}
+        </ul>
+      </div>
+    </div><!-- /content-provider -->
+  </div>
+  <input type="hidden"  id="category" name="category" value="{$category_id}">
+  <input type="hidden" name="id" id="id" value="{$id|default}" />
 </form>
 
 <script type="text/ng-template" id="modal-layout">

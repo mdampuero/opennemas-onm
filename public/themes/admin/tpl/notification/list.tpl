@@ -24,7 +24,7 @@
       <div class="row ng-cloak" ng-if="!loading">
         <div class="col-lg-8 col-md-10 col-sm-12">
           <ul class="cbp_tmtimeline">
-            <li id="notification-[% notification.id %]" ng-repeat="notification in notifications" on-repeat-finish>
+            <li id="notification-[% notification.id %]" ng-repeat="notification in notifications" on-repeat-finish class="notification-item">
               <time class="cbp_tmtime">
                 <span class="date">[% notification.day %]</span>
                 <span class="time">
@@ -32,7 +32,7 @@
                   <strong>[% notification.am %]</strong>
                 </span>
               </time>
-              <div class="cbp_tmicon animated bounceIn" ng-style="{ 'background-color': notification.style.background_color }">
+              <div class="notification-item-icon cbp_tmicon animated bounceIn" ng-style="{ 'background-color': notification.style.background_color }">
                 <i class="fa fa-[% notification.style.icon %]" ng-style="{ 'color': notification.style.font_color }"></i>
               </div>
               <div class="cbp_tmlabel">

@@ -191,8 +191,8 @@
         <input name="hasChanges" ng-value="hasChanges" type="hidden">
         <input name="modules" ng-value="activatedModules" type="hidden">
       </div>
-      <div class="col-sm-6">
-        <div class="tiles white m-b-15">
+      <div class="col-sm-6 col-xs-12 m-b-15">
+        <div class="tiles white clearfix">
           <div class="tiles-body">
             <div class="tiles-title text-uppercase text-black">
               {t}Billing information{/t}

@@ -1,3 +1,36 @@
+.layout-type {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: block;
+  float: left;
+  height: 100px;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  padding: 20px 10px;
+  text-align: center;
+  width: 120px;
+
+  &:hover {
+    background: #eee;
+  }
+}
+
+.content-action-buttons .popover {width: 450px;}
+
+// Modal customize contents in frontpage
+#modal-element-customize-content .dropdown-menu li {
+  width:20px;
+  height: 20px;
+  float: left;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .page-content .filters-navbar ~ .content {
+    margin-top: 60px;
+  }
+}
+
 body {
   overflow: initial;
 }
