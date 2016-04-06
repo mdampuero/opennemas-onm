@@ -27,7 +27,7 @@
                 {t}Subscriptors{/t}
               </a>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks">
               <a class="btn btn-primary" href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">
                 <i class="fa fa-plus"></i>

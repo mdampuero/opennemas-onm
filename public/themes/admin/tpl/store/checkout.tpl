@@ -248,7 +248,7 @@
                   {t}You have to complete your billing information to complete the purchase.{/t}
                 </p>
                 <div ng-show="billingForm.$valid">
-                  <div class="p-t-5 pull-left">
+                  <div class="p-t-5 col-sm-6">
                     <h4 class="semi-bold">[% billing.name %]</h4>
                     <address>
                       <strong ng-if="billing.company">[% billing.company %]</strong><br>
@@ -257,7 +257,7 @@
                       [% countries[billing.country] %]<br>
                     </address>
                   </div>
-                  <div class="pull-right">
+                  <div class="col-sm-6">
                     <img alt="" class="invoice-logo p-b-15" height="50" src="/assets/images/logos/opennemas-powered-horizontal.png">
                     <address>
                       <strong>Openhost, S.L.</strong><br>
@@ -267,35 +267,37 @@
                     </address>
                   </div>
                   <div class="clearfix"></div>
-                  <table class="m-t-30 table table-invoice">
-                    <thead>
-                      <tr>
-                        <th class="text-left uppercase">{t}Description{/t}</th>
-                        <th width="140" class="text-right uppercase">{t}Unit price{/t}</th>
-                        <th width="90" class="text-right uppercase">{t}Total{/t}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr ng-repeat="item in cart">
-                        <td>[% item.name %]</td>
-                        <td class="text-right">[% getPrice(item) %] €</td>
-                        <td class="text-right">[% getPrice(item) %] €</td>
-                      </tr>
-                      <tr>
-                        <td rowspan="3"></td>
-                        <td class="text-right"><strong>Subtotal</strong></td>
-                        <td class="text-right">[% subtotal %] €</td>
-                      </tr>
-                      <tr>
-                        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
-                        <td class="text-right">[% vat %] €</td>
-                      </tr>
-                      <tr>
-                        <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
-                        <td class="text-right"><strong>[% total %] €</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-wrapper">
+                    <table class="m-t-30 table table-invoice col-sm-12">
+                      <thead>
+                        <tr>
+                          <th class="text-left uppercase">{t}Description{/t}</th>
+                          <th width="140" class="text-right uppercase">{t}Unit price{/t}</th>
+                          <th width="90" class="text-right uppercase">{t}Total{/t}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="item in cart">
+                          <td>[% item.name %]</td>
+                          <td class="text-right">[% getPrice(item) %] €</td>
+                          <td class="text-right">[% getPrice(item) %] €</td>
+                        </tr>
+                        <tr>
+                          <td rowspan="3"></td>
+                          <td class="text-right"><strong>Subtotal</strong></td>
+                          <td class="text-right">[% subtotal %] €</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
+                          <td class="text-right">[% vat %] €</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
+                          <td class="text-right"><strong>[% total %] €</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div class="text-center">
                   <div class="form-group">
