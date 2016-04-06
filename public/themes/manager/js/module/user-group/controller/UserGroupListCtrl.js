@@ -176,7 +176,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(nv, ov) {
           if (nv !== ov) {
-            webStorage.local.add('user-groups-columns', nv);
+            webStorage.local.set('user-groups-columns', nv);
           }
         }, true);
 
