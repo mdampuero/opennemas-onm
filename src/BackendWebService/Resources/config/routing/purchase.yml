@@ -1,0 +1,6 @@
+backend_ws_purchase_get_pdf:
+    path: /purchases/{id}.pdf
+    defaults: { _controller: BackendWebServiceBundle:Purchase:getPdf }
+    methods:  [ GET ]
+    options:
+        expose: true
