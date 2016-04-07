@@ -37,7 +37,10 @@ class PurchaseController extends Controller
             'instance_id' => [ [ 'value' => $this->get('instance')->id ] ]
         ]);
 
-        var_dump($purchase);die();
+        if (!$purchase) {
+            throw new \Exception(_('Unable to find the purchase'));
+        }
+
         $pdf = $em->getRepository('invoice', 'FreshBooks')
             ->getPDF($purchase->invoice_id);
 
