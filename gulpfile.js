@@ -37,27 +37,37 @@
   });
 
   gulp.task('touch', function () {
-    exec('find -type f -name main.less | xargs touch');
+    exec('find public -type f -name main.less | xargs touch');
   });
 
   gulp.task('watch', function () {
     livereload.listen();
 
     // Executes tests and reload browser
-    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php',
-      'public/themes/**/*.tpl', 'tests/**/*.php'
-    ], batch(function (events, done) {
-      gulp.start('phpunit', done);
-      livereload.reload();
-    }));
+    gulp.watch(
+      ['app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php', 'public/themes/**/*.tpl', 'tests/**/*.php'],
+      {
+        interval: 1000, // default 100
+        debounceDelay: 1000, // default 500
+      },
+      batch(function (events, done) {
+        gulp.start('phpunit', done);
+        livereload.reload();
+      })
+    );
 
     // Executes tests and reload browser
-    gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
-      '!public/assets/src/**/main.less', '!public/themes/**/main.less',
-    ], batch(function (events, done) {
-        gulp.start('touch', done);
-        livereload.reload();
-    }));
+    gulp.watch(
+      ['public/assets/src/**/*.less', 'public/themes/**/*.less', '!public/assets/src/**/main.less', '!public/themes/**/main.less', ],
+      {
+        interval: 1000, // default 100
+        debounceDelay: 1000, // default 500
+      },
+      batch(function (events, done) {
+          gulp.start('touch', done);
+          livereload.reload();
+      })
+    );
   });
 
   gulp.task('default', [ 'watch' ]);
