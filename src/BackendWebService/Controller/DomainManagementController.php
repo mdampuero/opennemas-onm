@@ -226,14 +226,16 @@ class DomainManagementController extends Controller
         $this->get('orm.manager')->persist($payment, 'FreshBooks');
 
         $purchase = new Purchase([
-            'client'     => $client,
-            'created'    => $date->format('Y-m-d H:i:s'),
-            'details'    => $invoice->lines,
-            'fee'        => $fee,
-            'invoice_id' => $invoice->invoice_id,
-            'method'     => $method,
-            'payment_id' => $payment->payment_id,
-            'total'      => $payment->amount,
+            'client'      => $client,
+            'client_id'   => $client->id,
+            'created'     => $date->format('Y-m-d H:i:s'),
+            'details'     => $invoice->lines,
+            'fee'         => $fee,
+            'invoice_id'  => $invoice->invoice_id,
+            'instance_id' => $this->get('instance')->id,
+            'method'      => $method,
+            'payment_id'  => $payment->payment_id,
+            'total'       => $payment->amount,
         ]);
 
         $this->get('orm.manager')->persist($purchase);
