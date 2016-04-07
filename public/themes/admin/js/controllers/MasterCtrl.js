@@ -193,7 +193,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
       date.setDate(date.getDate() + 1);
       date = moment(date).format('YYYY-MM-DD HH:mm:ss');
-      webStorage.local.add(id, date);
+      webStorage.local.set(id, date);
 
       $scope.pulse = true;
       $scope.forced.splice(index, 1);

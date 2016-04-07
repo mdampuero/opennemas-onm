@@ -2,9 +2,6 @@
 
 namespace ManagerWebService\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-
 use Onm\Framework\Controller\Controller;
 use Onm\Exception\InstanceAlreadyExistsException;
 use Onm\Exception\InstanceNotFoundException;
@@ -16,6 +13,9 @@ use Onm\Instance\InstanceCreator;
 use Onm\Instance\Instance;
 use Onm\Instance\InstanceManager as im;
 use Onm\Module\ModuleManager as mm;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 
 class InstanceController extends Controller
 {
@@ -530,6 +530,9 @@ class InstanceController extends Controller
         try {
             $instance = $im->find($id);
             $theme    = $instance->settings['TEMPLATE_USER'];
+            $template = $this->templateParams();
+
+            $template['countries']= Intl::getRegionBundle()->getCountryNames();
 
             if (strpos($theme, 'es.openhost.theme.') === false) {
                 $theme = 'es.openhost.theme.' . $theme;
@@ -539,10 +542,21 @@ class InstanceController extends Controller
 
             $im->getExternalInformation($instance);
 
+            if (!empty($instance->getClient())) {
+                try {
+                    $client = $this->get('orm.manager')
+                        ->getRepository('client', 'Database')
+                        ->find($instance->getClient());
+
+                    $template['client'] = $client->getData();
+                } catch (\Exception $e) {
+                }
+            }
+
             return new JsonResponse(
                 array(
                     'instance' => $instance,
-                    'template' => $this->templateParams()
+                    'template' => $template,
                 )
             );
         } catch (InstanceNotFoundException $e) {

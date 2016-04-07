@@ -486,6 +486,10 @@
               $scope.template = response.data.template;
               $scope.instance = response.data.instance;
 
+              if ($scope.template.client) {
+                $scope.client = $scope.template.client;
+              }
+
               if (!$scope.instance.metas) {
                 $scope.instance.metas = {};
               }

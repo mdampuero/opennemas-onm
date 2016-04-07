@@ -18,10 +18,6 @@ backend_ws_getting_started:
     resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
     prefix:   /
 
-backend_ws_store:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/store.yml'
-    prefix:   /
-
 backend_ws_menus:
     resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'
     prefix:   /
@@ -40,6 +36,14 @@ backend_ws_opinions:
 
 backend_ws_picker:
     resource: '@BackendWebServiceBundle/Resources/config/routing/picker.yml'
+    prefix:   /
+
+backend_ws_purchase:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/purchase.yml'
+    prefix:   /
+
+backend_ws_store:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/store.yml'
     prefix:   /
 
 backend_ws_theme:

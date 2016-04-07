@@ -4,13 +4,13 @@ manager_purchases_list:
         expose: true
 
 manager_purchase_show:
-    path: /purchase/{id}/show
+    path: /purchases/{id}/show
     requirements:
         id: \d+
     options:
         expose: true
 
 manager_purchase_create:
-    path: /purchase/create
+    path: /purchases/create
     options:
         expose: true

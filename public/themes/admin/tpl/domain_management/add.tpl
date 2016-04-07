@@ -310,7 +310,7 @@
               <i class="fa fa-heart fa-3x"></i>
               <h3 class="p-b-30">{t}Thank you for your purchase!{/t}</h3>
               <p class="p-b-15">
-              {t}In the next 24 hours you will receive an email with payment instructions and the invoice.{/t}
+              {t}Check your email, we have sent you an email with the invoice and purchase details. We will review your purchase and activate your domain.{/t}
               </p>
               <p class="p-b-15">
               {t escape=off}Meanwhile, you can go to your <a href="{url name=admin_client_info_page}">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
