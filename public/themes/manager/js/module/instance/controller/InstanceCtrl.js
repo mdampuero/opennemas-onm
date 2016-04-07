@@ -216,7 +216,7 @@
          *   Creates a new instance.
          */
         $scope.save = function() {
-          if ($scope.instanceForm.$invalid) {
+          if ($scope.instanceForm.$invalid || !$scope.instance.domains[0]) {
             $scope.formValidated = 1;
 
             messenger.post({
