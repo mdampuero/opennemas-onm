@@ -172,78 +172,85 @@ class DomainManagementController extends Controller
         $price       = $create ? 18.00 : 12.00;
         $description = $create ? _('Domain + redirection: ') : _('Redirection: ');
 
-        $client = $this->get('orm.manager')
-            ->getRepository('manager.client', 'Database')
-            ->find($instance->getClient());
+        try {
+            $client = $this->get('orm.manager')
+                ->getRepository('manager.client', 'Database')
+                ->find($instance->getClient());
 
-        $vatTax = $this->get('vat')->getVatFromCode($client->country);
+            $vatTax = $this->get('vat')->getVatFromCode($client->country);
 
-        $payment = new Payment([
-            'client_id' => $client->id,
-            'amount'    => str_replace(',', '.', (string) round($total, 2)),
-            'date'      => $date->format('Y-m-d'),
-            'type'      => 'Check'
-        ]);
+            $payment = new Payment([
+                'client_id' => $client->id,
+                'amount'    => str_replace(',', '.', (string) round($total, 2)),
+                'date'      => $date->format('Y-m-d'),
+                'type'      => 'Check'
+            ]);
 
-        if (!empty($nonce)) {
-            $payment->nonce = $nonce;
+            if (!empty($nonce)) {
+                $payment->nonce = $nonce;
+            }
+
+            $this->get('orm.manager')->persist($payment, 'Braintree');
+
+            $invoice = new Invoice([
+                'client_id' => $client->id,
+                'date'      => date('Y-m-d'),
+                'status'    => 'sent',
+                'lines'     => []
+            ]);
+
+            foreach ($domains as $domain) {
+                $invoice->lines[] = [
+                    'description'  => $description . $domain,
+                    'unit_cost'    => $price,
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => $vatTax
+                ];
+            }
+
+            if ($method === 'CreditCard') {
+                $invoice->lines[] = [
+                    'description'  => _('Pay with credit card'),
+                    'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => 0
+                ];
+            }
+
+            $this->get('orm.manager')->persist($invoice, 'FreshBooks');
+
+            $payment->invoice_id = $invoice->invoice_id;
+            $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
+
+            $this->get('orm.manager')->persist($payment, 'FreshBooks');
+
+            $purchase = new Purchase([
+                'client'      => $client,
+                'client_id'   => $client->id,
+                'created'     => $date->format('Y-m-d H:i:s'),
+                'details'     => $invoice->lines,
+                'fee'         => $fee,
+                'invoice_id'  => $invoice->invoice_id,
+                'instance_id' => $this->get('instance')->id,
+                'method'      => $method,
+                'payment_id'  => $payment->payment_id,
+                'total'       => $payment->amount,
+            ]);
+
+            $this->get('orm.manager')->persist($purchase);
+
+            $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
+            $this->sendEmailToSales($client, $domains, $instance, $create);
+
+            return new JsonResponse(_('Domain added successfully'));
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+                'type' => 'error'
+            ], 404);
         }
-
-        $this->get('orm.manager')->persist($payment, 'Braintree');
-
-        $invoice = new Invoice([
-            'client_id' => $client->id,
-            'date'      => date('Y-m-d'),
-            'status'    => 'sent',
-            'lines'     => []
-        ]);
-
-        foreach ($domains as $domain) {
-            $invoice->lines[] = [
-                'description'  => $description . $domain,
-                'unit_cost'    => $price,
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => $vatTax
-            ];
-        }
-
-        if ($method === 'CreditCard') {
-            $invoice->lines[] = [
-                'description'  => _('Pay with credit card'),
-                'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => 0
-            ];
-        }
-
-        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
-
-        $payment->invoice_id = $invoice->invoice_id;
-        $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
-
-        $this->get('orm.manager')->persist($payment, 'FreshBooks');
-
-        $purchase = new Purchase([
-            'client'      => $client,
-            'client_id'   => $client->id,
-            'created'     => $date->format('Y-m-d H:i:s'),
-            'details'     => $invoice->lines,
-            'fee'         => $fee,
-            'invoice_id'  => $invoice->invoice_id,
-            'instance_id' => $this->get('instance')->id,
-            'method'      => $method,
-            'payment_id'  => $payment->payment_id,
-            'total'       => $payment->amount,
-        ]);
-
-        $this->get('orm.manager')->persist($purchase);
-
-        $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
-        $this->sendEmailToSales($client, $domains, $instance, $create);
-
-        return new JsonResponse(_('Domain added successfully'));
     }
 
     /**
