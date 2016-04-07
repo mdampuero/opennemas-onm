@@ -221,7 +221,7 @@ class UserController extends Controller
         return new JsonResponse(
             array(
                 'epp'      => $epp,
-                'template' => array(
+                'extra'    => array(
                     'flatGroups' => $flatGroups,
                     'groups'     => $groups
                 ),
@@ -241,8 +241,8 @@ class UserController extends Controller
     {
         return new JsonResponse(
             array(
-                'data'     => null,
-                'template' => $this->templateParams()
+                'user'  => null,
+                'extra' => $this->templateParams()
             )
         );
     }
@@ -372,8 +372,8 @@ class UserController extends Controller
 
         return new JsonResponse(
             array(
-                'data'     => $user,
-                'template' => $this->templateParams()
+                'user'  => $user,
+                'extra' => $this->templateParams()
             )
         );
     }
@@ -397,8 +397,8 @@ class UserController extends Controller
 
         return new JsonResponse(
             array(
-                'data'     => $user,
-                'template' => $this->templateParams()
+                'user'  => $user,
+                'extra' => $this->templateParams()
             )
         );
     }

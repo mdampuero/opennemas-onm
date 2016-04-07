@@ -90,7 +90,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks ng-cloak">
+            <li class="quicklinks ng-cloak hidden-xs">
               <ui-select name="view" theme="select2" ng-model="pagination.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -101,8 +101,8 @@
               </ui-select>
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-            <li class="quicklinks hidden-xs">
+          <ul class="nav quick-section pull-right ng-cloak hidden-xs" ng-if="contents.length > 0">
+            <li class="quicklinks">
               <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
             </li>
           </ul>

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('ManagerApp')
-  .config(function ($interpolateProvider) {
+  .config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[%').endSymbol('%]');
-  }).config(function ($httpProvider) {
+  }]).config(['$httpProvider', function ($httpProvider) {
     // Use x-www-form-urlencoded Content-Type
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -50,7 +50,7 @@ angular.module('ManagerApp')
     $httpProvider.defaults.transformRequest = [function(data) {
       return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
-  }).config(function ($translateProvider) {
+  }]).config(['$translateProvider', function ($translateProvider) {
     $translateProvider.translations('en', {
       Next:     'Next',
       Previous:   'Previous',
@@ -68,9 +68,9 @@ angular.module('ManagerApp')
     });
 
     $translateProvider.preferredLanguage('en');
-  }).config(function (routingProvider) {
+  }]).config(['routingProvider', function (routingProvider) {
     routingProvider.setBaseRoute('/manager');
-  }).value('googleChartApiConfig', {
+  }]).value('googleChartApiConfig', {
     version: '1',
     optionalSettings: {
       packages: ['corechart'],

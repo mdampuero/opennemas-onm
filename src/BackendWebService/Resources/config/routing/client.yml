@@ -1,0 +1,6 @@
+backend_ws_client_save:
+    path:     /client
+    defaults: { _controller: BackendWebServiceBundle:Client:save }
+    methods:  [ POST ]
+    options:
+        expose: true

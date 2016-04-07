@@ -42,7 +42,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterInvalid()
     {
-        $entity = new Payment();
+        $entity = $this->getMock('\Framework\ORM\Entity\Entity');
 
         $this->em->getPersister($entity);
     }
@@ -51,7 +51,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Client();
 
-        $persisters = $this->em->getPersister($entity);
+        $persisters = $this->em->getPersister($entity, 'Braintree');
 
         $this->assertTrue(0 < count($persisters));
     }
@@ -66,7 +66,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRepositoryValid()
     {
-        $persisters = $this->em->getRepository('client');
+        $persisters = $this->em->getRepository('client', 'Braintree');
 
         $this->assertTrue(0 < count($persisters));
     }
@@ -76,6 +76,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $ftp = $this
             ->getMockBuilder('Framework\ORM\FreshBooks\Persister\FreshBooksPersister')
             ->disableOriginalConstructor()
+            ->setMethods([ 'create', 'update', 'remove' ])
             ->getMock();
 
         $ftp->expects($this->once())->method('update')->willReturn(false);
@@ -96,7 +97,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
         $em = new EntityManager($bm, $dm, $fm);
 
-        $em->persist(new Invoice([ 'invoice_id' => 1 ]));
+        $entity = new Invoice([ 'invoice_id' => 1 ], 'Freshbooks');
+
+        $em->persist($entity);
     }
 
     public function testPersistWithUnexistingEntity()

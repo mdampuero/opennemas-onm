@@ -168,3 +168,20 @@
   font-weight: bold;
   padding-bottom: 10px;
 }
+
+.notification-item {
+  position:relative;
+}
+
+@media (max-width: 768px) {
+  .notification-item-icon {
+    position:absolute !important;
+    margin:0 !important;
+    top:-10px !important;
+    left:10px !important;
+  }
+
+  .notification-item .cbp_tmtime {
+    margin-left:70px
+  }
+}

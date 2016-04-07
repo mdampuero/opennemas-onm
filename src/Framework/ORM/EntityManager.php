@@ -81,18 +81,25 @@ class EntityManager
      * Returns an array of available persisters for an entity.
      *
      * @param string $entity The entity to persist.
+     * @param string $source The persister name.
      *
      * @return array Array of persisters.
      *
      * @throws InvalidPersisterException If the persister does not exist.
      */
-    public function getPersister(Entity $entity)
+    public function getPersister(Entity $entity, $source = null)
     {
         $class = get_class($entity);
         $class = substr($class, strrpos($class, '\\') + 1);
 
+        $sources = $this->sources;
+
+        if (!empty($source)) {
+            $sources = [ $source => 0 ];
+        }
+
         $persisters = [];
-        foreach ($this->sources as $source => $priority) {
+        foreach ($sources as $source => $priority) {
             $persister = __NAMESPACE__ . '\\' . $source . '\\Persister\\' .
                 ucfirst($class) . 'Persister';
 
@@ -116,10 +123,11 @@ class EntityManager
      * @param string $name The repository name.
      *
      * @return Repository The repository.
+     * @param string $source The persister name.
      *
      * @throws InvalidRepositoryException If the repository does not exist.
      */
-    public function getRepository($name)
+    public function getRepository($name, $source = null)
     {
         $entity = explode('.', $name);
         $entity = $entity[count($entity) - 1];
@@ -131,8 +139,14 @@ class EntityManager
             $entity
         );
 
+        $sources = $this->sources;
+
+        if (!empty($source)) {
+            $sources = [ $source => 0 ];
+        }
+
         $repositories = [];
-        foreach ($this->sources as $source => $priority) {
+        foreach ($sources as $source => $priority) {
             $repository = __NAMESPACE__ . '\\' . $source . '\\Repository\\' .
                 ucfirst($entity) . 'Repository';
             if (class_exists($repository)) {
@@ -158,10 +172,11 @@ class EntityManager
      * Persists an entity in FreshBooks.
      *
      * @param Entity $entity The entity to remove.
+     * @param string $source The source name.
      */
-    public function persist(Entity $entity)
+    public function persist(Entity $entity, $source = null)
     {
-        $persister = $this->getPersister($entity);
+        $persister = $this->getPersister($entity, $source);
 
         if ($entity->exists()) {
             $persister->update($entity);
@@ -174,12 +189,13 @@ class EntityManager
      * Removes an entity from FreshBooks.
      *
      * @param Entity $entity The entity to remove.
+     * @param string $source The source name.
      *
      * @throws EntityNotFoundException If entity does not exist
      */
-    public function remove(Entity $entity)
+    public function remove(Entity $entity, $source = null)
     {
-        $persister = $this->getPersister($entity);
+        $persister = $this->getPersister($entity, $source);
 
         $persister->remove($entity);
     }

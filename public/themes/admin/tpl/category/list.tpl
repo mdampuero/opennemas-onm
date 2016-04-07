@@ -34,35 +34,35 @@
     </div>
   </div>
   <div class="content">
-    <div class="grid simple">
+    <div class="grid simple ng-cloak">
       <div class="grid-body no-padding">
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{t}For articles{/t}</a></li>
+          <li role="presentation" class="active"><a href="#article" aria-controls="article" role="tab" data-toggle="tab">{t}For articles{/t}</a></li>
           {is_module_activated name="ALBUM_MANAGER"}
-            <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{t}For albums{/t}</a></li>
+            <li role="presentation"><a href="#album" aria-controls="album" role="tab" data-toggle="tab">{t}For albums{/t}</a></li>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
-            <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{t}For videos{/t}</a></li>
+            <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">{t}For videos{/t}</a></li>
           {/is_module_activated}
           {is_module_activated name="KIOSKO_MANAGER"}
-            <li role="presentation"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">{t}For ePapers{/t}</a></li>
+            <li role="presentation"><a href="#kiosko" aria-controls="kiosko" role="tab" data-toggle="tab">{t}For ePapers{/t}</a></li>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
-            <li role="presentation"><a href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">{t}For polls{/t}</a></li>
+            <li role="presentation"><a href="#poll" aria-controls="poll" role="tab" data-toggle="tab">{t}For polls{/t}</a></li>
           {/is_module_activated}
           {is_module_activated name="SPECIAL_MANAGER"}
-            <li role="presentation"><a href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">{t}For Specials{/t}</a></li>
+            <li role="presentation"><a href="#special" aria-controls="special" role="tab" data-toggle="tab">{t}For Specials{/t}</a></li>
           {/is_module_activated}
           {is_module_activated name="BOOK_MANAGER"}
-            <li role="presentation"><a href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">{t}For books{/t}</a></li>
+            <li role="presentation"><a href="#book" aria-controls="tab7" role="tab" data-toggle="tab">{t}For books{/t}</a></li>
           {/is_module_activated}
           {acl isAllowed="ONLY_MASTERS"}
-            <li role="presentation"><a href="#tab8" aria-controls="tab8" role="tab" data-toggle="tab">{t}Internal{/t}</a></li>
+            <li role="presentation"><a href="#master" aria-controls="master" role="tab" data-toggle="tab">{t}Internal{/t}</a></li>
           {/acl}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="tab1">
+          <div role="tabpanel" class="tab-pane active" id="article">
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
@@ -95,7 +95,7 @@
             </table>
           </div>
           {is_module_activated name="ALBUM_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab2">
+            <div role="tabpanel" class="tab-pane" id="album">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -128,7 +128,7 @@
             </div>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab3">
+            <div role="tabpanel" class="tab-pane" id="video">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -162,7 +162,7 @@
             </div>
           {/is_module_activated}
           {is_module_activated name="KIOSKO_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab4">
+            <div role="tabpanel" class="tab-pane" id="kiosko">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -195,7 +195,7 @@
             </div>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab5">
+            <div role="tabpanel" class="tab-pane" id="poll">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -228,7 +228,7 @@
             </div>
           {/is_module_activated}
           {is_module_activated name="SPECIAL_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab6">
+            <div role="tabpanel" class="tab-pane" id="special">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -261,7 +261,7 @@
             </div>
           {/is_module_activated}
           {is_module_activated name="BOOK_MANAGER"}
-            <div role="tabpanel" class="tab-pane" id="tab7">
+            <div role="tabpanel" class="tab-pane" id="book">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -294,7 +294,7 @@
             </div>
           {/is_module_activated}
           {acl isAllowed="ONLY_MASTERS"}
-            <div role="tabpanel" class="tab-pane" id="tab8">
+            <div role="tabpanel" class="tab-pane" id="master">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>

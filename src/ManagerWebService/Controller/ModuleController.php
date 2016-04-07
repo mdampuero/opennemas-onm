@@ -32,7 +32,7 @@ class ModuleController extends Controller
             ->getRepository('manager.extension')
             ->findOneBy([ 'uuid' => [ [ 'value' => $uuid ] ] ]);
 
-        if (!$module || $request->query->get('id') === $module->id) {
+        if (!$module || (int) $request->query->get('id') === $module->id) {
             return new JsonResponse('', 200);
         }
 

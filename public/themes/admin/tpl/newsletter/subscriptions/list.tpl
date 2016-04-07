@@ -8,25 +8,26 @@
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <h4>
+            <h4 class="hidden-xs">
               <i class="fa fa-home fa-lg"></i>
               {t}Newsletters{/t}
             </h4>
+            <h4 class="visible-xs">{t}Subscriptions{/t}</h4>
           </li>
-          <li class="quicklinks"><span class="h-seperate"></span></li>
-          <li class="quicklinks">
+          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs">
             <h5>{t}Subscriptions{/t}</h5>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-white" href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
+              <a class="btn btn-link" href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
                 <span class="fa fa-reply"></span>
                 <span class="hidden-xs">{t}Newsletters{/t}</span>
               </a>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks">
               <a href="{url name=admin_newsletter_subscriptor_create}" class="btn btn-primary" accesskey="N">
                 <span class="fa fa-plus"></span>

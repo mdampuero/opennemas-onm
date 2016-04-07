@@ -34,7 +34,7 @@ class SidebarController extends Controller
                     'items' => [
                         [
                             'name'  => _('Modules'),
-                            'icon'  => 'fa-plug',
+                            'icon'  => 'fa-flip-horizontal fa-plug',
                             'route' => 'manager_modules_list',
                             'click' => true
                         ]
@@ -45,6 +45,24 @@ class SidebarController extends Controller
                     'icon' => 'fa-bell',
                     'route' => 'manager_notifications_list',
                     'click' => true
+                ],
+                [
+                    'name' => _('Store'),
+                    'icon' => 'fa-shopping-cart',
+                    'items' => [
+                        [
+                            'name' => _('Clients'),
+                            'icon' => 'fa-user',
+                            'route' => 'manager_clients_list',
+                            'click' => 'true'
+                        ],
+                        [
+                            'name' => _('Purchases'),
+                            'icon' => 'fa-shopping-bag',
+                            'route' => 'manager_purchases_list',
+                            'click' => 'true'
+                        ],
+                    ]
                 ],
                 [
                     'name' => _('Reports'),

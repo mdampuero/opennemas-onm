@@ -172,8 +172,8 @@ class UserGroupController extends Controller
     {
         return new JsonResponse(
             array(
-                'group'     => null,
-                'template' => $this->templateParams()
+                'group' => null,
+                'extra' => $this->templateParams()
             )
         );
     }
@@ -191,8 +191,8 @@ class UserGroupController extends Controller
 
         return new JsonResponse(
             array(
-                'group'    => $group,
-                'template' => $this->templateParams()
+                'group' => $group,
+                'extra' => $this->templateParams()
             )
         );
     }

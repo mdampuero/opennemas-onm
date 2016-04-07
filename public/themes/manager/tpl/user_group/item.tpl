@@ -31,11 +31,11 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!group.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!group.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="group.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="group.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
         </ul>
@@ -43,7 +43,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="group">
   <form name="groupForm" novalidate>
     <div class="grid simple">
       <div class="grid-body">
@@ -93,7 +93,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in template.modules[name]">
+                  <div class="col-sm-12 m-b-5" ng-repeat="privilege in extra.modules[name]">
                     <div class="checkbox check-default">
                       <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
                       <label for="checkbox-[% name + '-' + $index %]">

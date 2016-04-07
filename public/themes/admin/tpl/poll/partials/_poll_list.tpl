@@ -123,7 +123,7 @@
         <table class="table table-hover no-margin">
           <thead>
            <tr>
-            <th class="checkbox-cell">
+            <th class="checkbox-cell" style="width:35px;">
               <div class="checkbox checkbox-default">
                 <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                 <label for="select-all"></label>

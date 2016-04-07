@@ -7,20 +7,29 @@
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <h4>
+            <h4 class=" hidden-xs">
               <i class="fa fa-home fa-lg"></i>
               {t}Newsletters{/t}
             </h4>
+            <h4 class="visible-xs">
+              <i class="fa fa-home fa-lg"></i>
+              {if !is_object($user)}
+              {t}Creating subscriptor{/t}
+              {else}
+              {t}Editing subscriptor{/t}
+              {/if}
+            </h4>
           </li>
-          <li class="quicklinks"><span class="h-seperate"></span></li>
-          <li class="quicklinks">
+          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs">
             <h5>{if !is_object($user)}
               {t}Creating subscriptor{/t}
               {else}
               {t}Editing subscriptor{/t}
-              {/if}</h5>
-            </li>
-          </ul>
+              {/if}
+            </h5>
+          </li>
+        </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
@@ -28,7 +37,7 @@
                   <span class="fa fa-reply"></span>
                 </a>
               </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
+              <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
               <li class="quicklinks">
                 <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
                   <span class="fa fa-save"></span>

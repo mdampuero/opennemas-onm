@@ -60,14 +60,14 @@ $menuXml = [
                 "privilege"   => "WIDGET_ADMIN",
             ],
 
-            [
-                "id"          => "sidebar_manager",
-                "title"       => _("Sidebars"),
-                "icon"        => "fa fa-indent fa-flip-horizontal",
-                "link"        => url('admin_sidebars'),
-                "module_name" => "SIDEBAR_MANAGER",
-                "privilege"   => "SIDEBAR_ADMIN",
-            ],
+            // [
+            //     "id"          => "sidebar_manager",
+            //     "title"       => _("Sidebars"),
+            //     "icon"        => "fa fa-indent fa-flip-horizontal",
+            //     "link"        => url('admin_sidebars'),
+            //     "module_name" => "SIDEBAR_MANAGER",
+            //     "privilege"   => "SIDEBAR_ADMIN",
+            // ],
 
             [
                 "id"          => "menu_manager",

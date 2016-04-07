@@ -8,34 +8,13 @@
      *
      * @requires $scope
      * @requires $timeout
-     * @requires data
      *
      * @description
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout', 'data',
-      function($scope, $timeout, data) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Extra data
-         *
-         * @type {Object}
-         */
-        $scope.extra = data.extra;
-
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   The list of elements.
-         *
-         * @type {Object}
-         */
-        $scope.items = data.results;
-
+      '$scope', '$timeout',
+      function($scope, $timeout) {
         /**
          * @memberOf ListCtrl
          *
@@ -44,11 +23,7 @@
          *
          * @type {Object}
          */
-        $scope.pagination = {
-          epp:   data.epp ? parseInt(data.epp) : 25,
-          page:  data.page ? parseInt(data.page) : 1,
-          total: data.total
-        };
+        $scope.pagination = { epp: 25, page: 1, total: 0 };
 
         /**
          * @memberOf ListCtrl
@@ -59,6 +34,50 @@
          * @type {Array}
          */
         $scope.selected = { all: false, items: [] };
+
+        /**
+         * @memberOf ListCtrl
+         *
+         * @description
+         *  Variable for timeout actions.
+         *
+         * @type {type}
+         */
+        $scope.tm = null;
+
+        /**
+         * @function closeColumns
+         * @memberOf ClientListCtrl
+         *
+         * @description
+         *   Hides the dropdown to toggle table columns.
+         */
+        $scope.closeColumns = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function () {
+            $scope.open = false;
+          }, 500);
+        };
+
+        /**
+         * @function openColumns
+         * @memberOf ClientListCtrl
+         *
+         * @description
+         *   Shows the dropdown to toggle table columns.
+         */
+        $scope.openColumns = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function () {
+            $scope.open = true;
+          }, 500);
+        };
 
         /**
          * @function isColumnEnabled

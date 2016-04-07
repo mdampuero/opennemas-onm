@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('BackendApp')
-  .config(function ($interpolateProvider) {
+  .config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[%').endSymbol('%]');
-  }).config(function ($httpProvider) {
+  }]).config(['$httpProvider', function ($httpProvider) {
     // Use x-www-form-urlencoded Content-Type
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -49,11 +49,11 @@
     $httpProvider.defaults.transformRequest = [function(data) {
       return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
-  }).config(function ($translateProvider) {
+  }]).config(['$translateProvider', function ($translateProvider) {
     $translateProvider.preferredLanguage('en');
-  }).config(function ($analyticsProvider) {
+  }]).config(['$analyticsProvider', function ($analyticsProvider) {
     $analyticsProvider.virtualPageviews(false);
-  }).config([ 'anTinyconProvider', function(anTinyconProvider){
+  }]).config(['anTinyconProvider', function(anTinyconProvider){
     anTinyconProvider.setOptions({
       width: 7,
       height: 9,
@@ -61,7 +61,7 @@
       colour: '#ffffff',
       fallback: true
     });
-  }]).config(function (EditorProvider) {
+  }]).config(['EditorProvider', function (EditorProvider) {
     // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
     EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
@@ -72,6 +72,5 @@
 
     // Enable CKEditor for all environments (browsers)
     EditorProvider.setCompatible(true);
-  });
-
+  }]);
 })();

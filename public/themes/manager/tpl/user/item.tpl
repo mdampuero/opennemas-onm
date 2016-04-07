@@ -31,11 +31,11 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+              <i class="fa fa-save m-r-t" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
         </ul>
@@ -43,7 +43,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="user">
   <form name="userForm" novalidate>
     <div class="row">
       <div class="col-sm-7">
@@ -127,7 +127,7 @@
             <div class="grid-body">
               <div class="form-group">
                 <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                <input class="form-control" datetime-picker ng-model="user.meta.paywall_time_limit" ng-model="template.billing_invoice_date" type="text">
+                <input class="form-control" datetime-picker="picker" ng-model="user.meta.paywall_time_limit" type="text">
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@
                   <ui-select-match>
                     [% $item.name %]
                   </ui-select-match>
-                  <ui-select-choices repeat="item.id as item in template.groups">
+                  <ui-select-choices repeat="item.id as item in extra.groups">
                     <div ng-bind-html="item.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
@@ -166,7 +166,7 @@
             </div>
             <div class="form-group">
               <label for="user-language">{t}User language{/t}</label>
-              <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
+              <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in extra.languages"></select>
               <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
             </div>
           </div>

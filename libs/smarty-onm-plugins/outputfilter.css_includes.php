@@ -12,8 +12,15 @@ function smarty_outputfilter_css_includes($output, $smarty)
 {
     $manager = getService('core.service.assetic.stylesheet_manager');
     $bag     = getService('core.service.assetic.asset_bag');
+    $styles  = $bag->getStyles();
 
-    $assets = $manager->writeAssets($bag->getStyles());
+    $assets = [];
+    foreach ($styles as $name => $files) {
+        $assets = array_merge(
+            $assets,
+            $manager->writeAssets($files, $bag->getFilters(), $name)
+        );
+    }
 
     $styles = '';
     if (!empty($assets)) {

@@ -107,7 +107,7 @@
                   </div>
                   <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_module_create') %]">
-                      <i class="fa fa-plug"></i>
+                      <i class="fa fa-flip-horizontal fa-plug"></i>
                       <span class="title">{t}Module{/t}</span>
                     </a>
                   </div>
@@ -118,13 +118,19 @@
                     </a>
                   </div>
                   <div class="quick-item">
+                    <a ng-href="[% routing.ngGenerate('manager_client_create') %]">
+                      <i class="fa fa-user"></i>
+                      <span class="title">{t}Client{/t}</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
                       <i class="fa fa-users"></i>
                       <span class="title">{t}Group{/t}</span>
                     </a>
                   </div>
-                </div>
-                <div class="clearfix quick-items-row">
                   <div class="quick-item">
                     <a ng-href="[% routing.ngGenerate('manager_user_create') %]">
                       <i class="fa fa-user"></i>
@@ -180,6 +186,9 @@
   <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !auth.status }">
     <!-- BEGIN PAGE CONTAINER-->
     <div class="page-content">
+      <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
+        <span class="fa fa-bars fa-lg"></span>
+      </div>
       <div class="view" id="view" ng-view autoscroll="true"></div>
     </div>
     <!-- END PAGE CONTAINER -->
@@ -303,7 +312,7 @@
       @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
       @Common/components/angular-swfobject/angular-swfobject.js,
-      @FosJsRoutingBundle/js/router.js" filters="uglifyjs"}
+      @FosJsRoutingBundle/js/router.js" filters="uglifyjs" output="vendor"}
     {/javascripts}
     {javascripts src="
       @Common/src/angular-authentication/authService.js,
@@ -329,8 +338,9 @@
       @ManagerTheme/js/config.js,
       @ManagerTheme/js/routing.js,
       @ManagerTheme/js/controllers/*,
+      @ManagerTheme/js/module/*,
 
-      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
+      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs" output="app"}
     {/javascripts}
   {/block}
 </body>

@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) OpenHost S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -34,35 +34,69 @@ class StylesheetManager extends AssetManager
     {
         $fm = new FilterManager();
 
-        foreach ($filters as $filter) {
-            switch ($filter) {
+        foreach ($filters as $name) {
+            $filter = false;
+
+            switch ($name) {
                 case 'cssrewrite':
-                    $fm->set('cssrewrite', new CssRewriteFilter());
+                    $filter = new CssRewriteFilter();
                     break;
 
                 case 'uglifycss':
-                    $fm->set(
-                        'uglifycss',
-                        new UglifyCssFilter(
-                            $this->config['filters']['uglifycss']['bin'],
-                            $this->config['filters']['uglifycss']['node']
-                        )
+                    $filter = new UglifyCssFilter(
+                        $this->config['filters']['uglifycss']['bin'],
+                        $this->config['filters']['uglifycss']['node']
                     );
                     break;
+
                 case 'less':
-                    $fm->set(
-                        'less',
-                        new LessFilter(
-                            $this->config['filters']['less']['node'],
-                            $this->config['filters']['less']['node_paths']
-                        )
+                    $filter = new LessFilter(
+                        $this->config['filters']['less']['node'],
+                        $this->config['filters']['less']['node_paths']
                     );
+
+                    if ($this->debug()) {
+                        $options = $this->config['filters'][$name]['options'];
+
+                        foreach ($options as $key => $value) {
+                            $filter->addTreeOption($key, $value);
+                        }
+                    }
                     break;
-                default:
-                    throw new FilterException();
+            }
+
+            if ($filter !== false) {
+                $fm->set($name, $filter);
             }
         }
 
         return $fm;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFilters($asset, $filters)
+    {
+        $ext = pathinfo($asset, PATHINFO_EXTENSION);
+
+        // Only handle *.css and *.less files
+        if ($ext !== 'css' && $ext !== 'less') {
+            return [];
+        }
+
+        // Less only for *.less files
+        if ($ext !== 'less') {
+            $filters = array_diff($filters, [ 'less' ]);
+        }
+
+        // Uglify only on production
+        if ($this->debug()) {
+            $filters = array_diff($filters, [ 'uglifycss' ]);
+        }
+
+        return array_values(
+            array_intersect($filters, [ 'cssrewrite', 'less', 'uglifycss' ])
+        );
     }
 }

@@ -91,6 +91,8 @@ class WebServiceController extends Controller
             'WIDGET_MANAGER'
         ];
 
+        $instance->metas = [ 'purchased' => [ 'es.openhost.theme.basic' ] ];
+
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone("UTC"));
         $instance->created = $date->format('Y-m-d H:i:s');

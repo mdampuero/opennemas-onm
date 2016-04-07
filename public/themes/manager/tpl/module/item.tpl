@@ -31,8 +31,8 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
-              <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
+            <button class="btn btn-loading btn-success text text-uppercase" ng-click="save();" ng-disabled="moduleForm.$invalid || !uuidValid || saving">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>
           </li>
@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<div class="content">
+<div class="content ng-hide" ng-show="extra">
   <form name="moduleForm">
     <div class="row">
       <div class="col-md-4">
@@ -57,7 +57,7 @@
               <div class="controls">
                 <div class="input-with-icon right">
                   <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
-                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" tooltip="{t}This UUID is invalid{/t}"></i>
+                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
                   <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" typeahead-min-length="3" placeholder="es.openhost.module.example" type="text">
                 </div>
               </div>
@@ -116,7 +116,7 @@
                   <div class="form-group" ng-class="{ 'has-error': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index], 'has-success': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index].$valid }">
                     <div class="col-xs-3">
                       <div class="input-with-icon left">
-                        <i class="fa fa-times text-danger" ng-if="moduleForm['price_' + $index].$dirty && (moduleForm['price_' + $index].$invalid)" tooltip="{t}This UUID is invalid{/t}"></i>
+                        <i class="fa fa-times text-danger" ng-if="moduleForm['price_' + $index].$dirty && (moduleForm['price_' + $index].$invalid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
                         <input class="form-control text-right" id="price-[% $index %]" name="price_[% $index %]" ng-model="price.value" required="required" type="number">
                       </div>
                     </div>
@@ -129,7 +129,7 @@
                       </select>
                     </div>
                     <div class="col-xs-2">
-                      <button class="btn btn-block btn-primary" ng-click="addPrice()" ng-if="$index === 0" type="button">
+                      <button class="btn btn-block btn-success" ng-click="addPrice()" ng-if="$index === 0" type="button">
                         <i class="fa fa-plus"></i>
                       </button>
                       <button class="btn btn-block btn-danger" ng-click="removePrice($index)" ng-if="$index > 0" type="button">

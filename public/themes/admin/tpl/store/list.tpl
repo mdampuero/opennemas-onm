@@ -6,6 +6,11 @@
   " filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
+  <style>
+  .content {
+    margin-top:50px !important;
+  }
+  </style>
 {/block}
 
 {block name="content"}
