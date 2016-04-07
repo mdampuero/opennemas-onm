@@ -329,7 +329,7 @@ class DomainManagementController extends Controller
             ->setSubject('Opennemas Domain mapping request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
-            ->setTo($this->getUser()->contact_mail)
+            ->setTo($client->email)
             ->setBody(
                 $this->renderView(
                     'domain_management/email/_purchaseToCustomer.tpl',
