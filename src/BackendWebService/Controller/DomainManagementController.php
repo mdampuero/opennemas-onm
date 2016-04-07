@@ -240,8 +240,8 @@ class DomainManagementController extends Controller
 
         $this->get('orm.manager')->persist($purchase);
 
-        $this->sendEmailToCustomer($client->getData(), $domains, $instance, $create);
-        $this->sendEmailToSales($client->getData(), $domains, $instance, $create);
+        $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
+        $this->sendEmailToSales($client, $domains, $instance, $create);
 
         return new JsonResponse(_('Domain added successfully'));
     }
@@ -306,12 +306,12 @@ class DomainManagementController extends Controller
     /**
      * Sends an email to the customer.
      *
-     * @param array    $billing  The billing information.
+     * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $instance The instance.
+     * @param Instance $purchase The purchase id.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToCustomer($billing, $domains, $instance, $create)
+    private function sendEmailToCustomer($client, $domains, $purchase, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
 
@@ -327,11 +327,15 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToCustomer.tpl',
                     [
-                        'billing'   => $billing,
+                        'client'    => $client,
                         'create'    => $create,
                         'countries' => $countries,
                         'domains'   => $domains,
-                        'instance'  => $instance
+                        'url'       => $this->get('router')->generate(
+                            'backend_ws_purchase_get_pdf',
+                            [ 'id' => $purchase ],
+                            true
+                        )
                     ]
                 ),
                 'text/html'
@@ -343,12 +347,12 @@ class DomainManagementController extends Controller
     /**
      * Sends an email to sales department.
      *
-     * @param array    $billing  The billing information.
+     * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($billing, $domains, $instance, $create)
+    private function sendEmailToSales($client, $domains, $instance, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
 
@@ -368,7 +372,7 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToSales.tpl',
                     [
-                        'billing'   => $billing,
+                        'client'    => $client,
                         'create'    => $create,
                         'countries' => $countries,
                         'domains'   => $domains,
