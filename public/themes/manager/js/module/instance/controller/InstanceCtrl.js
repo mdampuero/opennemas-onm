@@ -489,6 +489,8 @@
               if (!$scope.instance.metas) {
                 $scope.instance.metas = {};
               }
+
+              $scope.initModules();
             }
           );
         } else {
