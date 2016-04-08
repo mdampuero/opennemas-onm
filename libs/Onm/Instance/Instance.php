@@ -236,6 +236,10 @@ class Instance
      */
     public function __wakeup()
     {
+        if (property_exists($this, 'metas')) {
+            return;
+        }
+
         foreach ($this->metas as $value) {
             $data = @unserialize($value);
 
