@@ -46,7 +46,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
@@ -61,12 +61,12 @@
         </ul>
         <ul class="nav quick-section pull-right">
           <li class="quicklinks">
-            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 2, 'loading')" tooltip="{t}Activate{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 2, 'loading')" uib-tooltip="{t}Activate{/t}" tooltip-placement="bottom">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 3, 'loading')" tooltip="{t}Deactivate{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 3, 'loading')" uib-tooltip="{t}Deactivate{/t}" tooltip-placement="bottom">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
@@ -74,12 +74,12 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 1, 'loading_sub')" tooltip="{t}Subscribe{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 1, 'loading_sub')" uib-tooltip="{t}Subscribe{/t}" tooltip-placement="bottom">
               <i class="fa fa-envelope fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 0, 'loading_sub')" tooltip="{t}Unsubscribe{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 0, 'loading_sub')" uib-tooltip="{t}Unsubscribe{/t}" tooltip-placement="bottom">
               <i class="fa fa-envelope fa-lg"></i>
               <i class="fa fa-times fa-sub text-danger"></i>
             </button>
@@ -88,7 +88,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
               <span class="fa fa-trash-o fa-lg"></span>
             </button>
           </li>

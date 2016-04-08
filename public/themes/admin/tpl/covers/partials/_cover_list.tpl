@@ -3,7 +3,7 @@
     <div class="navbar-inner">
       <ul class="nav quick-section pull-left">
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
             <i class="fa fa-arrow-left fa-lg"></i>
           </button>
         </li>
@@ -19,12 +19,12 @@
       <ul class="nav quick-section pull-right">
         {acl isAllowed="KIOSKO_AVAILABLE"}
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom">
             <i class="fa fa-check fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
             <i class="fa fa-times fa-lg"></i>
           </button>
         </li>
@@ -35,12 +35,12 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs">
-          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
             <i class="fa fa-home fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks hidden-xs">
-          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
             <i class="fa fa-home fa-lg"></i>
             <i class="fa fa-times fa-sub text-danger"></i>
           </button>
@@ -52,7 +52,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
@@ -166,7 +166,7 @@
               <td class="left">
                 <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
                 title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail visible-xs visible-sm" />
-                <span tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
+                <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                 <div class="listing-inline-actions">
                   {acl isAllowed="VIDEO_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_kiosko_show') %]">

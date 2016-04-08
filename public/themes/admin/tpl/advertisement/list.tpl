@@ -9,7 +9,7 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-bullhorn"></i>
-              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
               <span class="hidden-xs">{t}Advertisements{/t}</span>
@@ -45,7 +45,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
@@ -61,12 +61,12 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
           <li class="quicklinks">
-            <button class="btn btn-link"  ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link"  ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
@@ -76,7 +76,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>

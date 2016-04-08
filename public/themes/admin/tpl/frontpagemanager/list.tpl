@@ -58,14 +58,14 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-newspaper-o page-navbar-icon"></i>
-              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
               {t}Frontpages{/t}
             </h4>
           </li>
           <li class="quicklinks visible-xs">
-            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
               <i class="fa fa-question fa-lg"></i>
             </a>
           </li>
@@ -112,7 +112,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>

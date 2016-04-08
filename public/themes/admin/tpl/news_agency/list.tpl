@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-microphone fa-lg"></i>
-                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
                 {t}News Agency{/t}
@@ -53,7 +53,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section pull-left">
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+              <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
                 <i class="fa fa-arrow-left fa-lg"></i>
               </button>
             </li>
@@ -68,7 +68,7 @@
           </ul>
           <ul class="nav quick-section pull-right">
             <li>
-              <a href="#" class="btn btn-link" ng-click="importSelected()" tooltip="{t}Import{/t}" tooltip-placement="bottom">
+              <a href="#" class="btn btn-link" ng-click="importSelected()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom">
                 <i class="fa fa-cloud-download"></i>
                 <span class="hidden-xs hidden-sm">
                   {t}Import{/t}
@@ -123,7 +123,7 @@
               </ui-select>
             </li>
             <li class="quicklinks" ng-if="mode !== 'grid'">
-              <button class="btn btn-link" ng-click="list('backend_ws_news_agency_list')" tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="list('backend_ws_news_agency_list')" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
                 <i class="fa fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
               </button>
             </li>
