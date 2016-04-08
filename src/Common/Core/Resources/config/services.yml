@@ -1,0 +1,14 @@
+parameters:
+
+services:
+    core.instance:
+        class: Common\ORM\Entity\Instance
+        factory: [ '@core.loader', 'getInstance' ]
+
+    core.loader:
+        class: Common\Core\Loader\Loader
+        arguments: [ '@service_container' ]
+
+    core.theme:
+        class: Onm\ORM\Entity\Extension
+        factory: [ '@core.loader', 'getTheme' ]
