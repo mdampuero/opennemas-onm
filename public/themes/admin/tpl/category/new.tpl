@@ -116,17 +116,17 @@
                       </td>
                       <td class="left">
                         {if $subcategorys[s]->internal_category eq 7}
-                          <i class="fa fa-stack-overflow" tooltip="{t}Albums{/t}"></i>
+                          <i class="fa fa-stack-overflow" uib-tooltip="{t}Albums{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 9}
-                          <i class="fa fa-film" tooltip="{t}Videos{/t}"></i>
+                          <i class="fa fa-film" uib-tooltip="{t}Videos{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 11}
-                          <i class="fa fa-pie-chart" tooltip="{t}Polls{/t}"></i>
+                          <i class="fa fa-pie-chart" uib-tooltip="{t}Polls{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 10}
-                          <i class="fa fa-star" tooltip="{t}Specials{/t}"></i>
+                          <i class="fa fa-star" uib-tooltip="{t}Specials{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 14}
-                          <i class="fa fa-newspaper-o" tooltip="{t}News Stand{/t}"></i>
+                          <i class="fa fa-newspaper-o" uib-tooltip="{t}News Stand{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 15}
-                          <i class="fa fa-book" tooltip="{t}Books{/t}"></i>
+                          <i class="fa fa-book" uib-tooltip="{t}Books{/t}"></i>
                         {/if}
                       </td>
                       <td class="left">

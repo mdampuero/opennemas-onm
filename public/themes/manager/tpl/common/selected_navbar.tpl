@@ -19,7 +19,7 @@
       <ul class="nav quick-section pull-right">
         {if $list === 'instance'}
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+            <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>

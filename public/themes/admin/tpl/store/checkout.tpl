@@ -131,14 +131,14 @@
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.name.$invalid, 'has-success': billingForm.name.$dirty && billingForm.name.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.name.$dirty && billingForm.name.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.name.$invalid" tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.name.$invalid" uib-tooltip="{t}This field is required{/t}"></i>
                             <input class="form-control" id="name" name="name" ng-model="billing.name" placeholder="{t}Contact name{/t}" required="required" type="text">
                           </div>
                         </div>
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.company.$dirty && billingForm.company.$invalid, 'has-success': billingForm.company.$dirty && billingForm.company.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.company.$dirty && billingForm.name.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.company.$invalid" tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.company.$invalid" uib-tooltip="{t}This field is required{/t}"></i>
                             <input class="form-control" id="company" name="company" ng-model="billing.company" placeholder="{t}Company name{/t}" type="text">
                           </div>
                         </div>
@@ -147,15 +147,15 @@
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.email.$invalid, 'has-success': billingForm.email.$dirty && billingForm.email.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.email.$dirty && billingForm.email.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.email.$invalid && billingForm.email.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.email.$invalid && billingForm.email.$error.email" tooltip="{t}This is not a valid email{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.email.$invalid && billingForm.email.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.email.$invalid && billingForm.email.$error.email" uib-tooltip="{t}This is not a valid email{/t}"></i>
                             <input class="form-control" id="email" name="email" ng-model="billing.email" placeholder="{t}Email{/t}" required="required" type="email">
                           </div>
                         </div>
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.phone.$invalid || !validPhone, 'has-success': billingForm.phone.$dirty && billingForm.phone.$valid && validPhone }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.phone.$dirty && billingForm.phone.$valid && validPhone"></i>
-                            <i class="fa fa-times text-danger" ng-if="!validPhone" tooltip="{t}This is not a valid phone{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="!validPhone" uib-tooltip="{t}This is not a valid phone{/t}"></i>
                             <input class="form-control" id="phone" name="phone" ng-model="billing.phone" placeholder="{t}Phone number{/t}" type="text">
                           </div>
                         </div>
@@ -164,8 +164,8 @@
                         <div class="form-group col-sm-6" ng-class="{ 'has-error': billingForm.vat.$invalid || (billingForm.vat.$dirty && !validVat), 'has-success': billingForm.vat.$dirty && billingForm.vat.$valid && validVat }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.vat.$dirty && billingForm.vat.$valid && validVat"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" tooltip="{t}This is not a valid VAT identification number{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.vat.$invalid && billingForm.vat.$error.vat || (billingForm.vat.$dirty && !validVat)" uib-tooltip="{t}This is not a valid VAT identification number{/t}"></i>
                             <input class="form-control" id="vat" name="vat" ng-model="billing.vat" placeholder="{t}VAT identification number{/t}" ng-required="(billing.company != null && billing.company != '') || (billing.country == 'ES' && !validVat)" type="text">
                           </div>
                           <div class="help m-t-5">
@@ -178,16 +178,16 @@
                         <div class="form-group col-sm-8" ng-class="{ 'has-error': billingForm.address.$invalid, 'has-success': billingForm.address.$dirty && billingForm.address.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.address.$dirty && billingForm.address.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.address.$invalid && billingForm.address.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.address.$invalid && billingForm.address.$error.address" tooltip="{t}This is not a valid address{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.address.$invalid && billingForm.address.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.address.$invalid && billingForm.address.$error.address" uib-tooltip="{t}This is not a valid address{/t}"></i>
                             <input class="form-control" id="address" name="address" ng-model="billing.address" placeholder="{t}Address{/t}" required="required" type="text">
                           </div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{ 'has-error': billingForm.postal_code.$invalid, 'has-success': billingForm.postal_code.$dirty && billingForm.postal_code.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.postal_code.$dirty && billingForm.postal_code.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.postal_code.$invalid && billingForm.postal_code.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.postal_code.$invalid && billingForm.postal_code.$error.postal_code" tooltip="{t}This is not a valid postal_code{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.postal_code.$invalid && billingForm.postal_code.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.postal_code.$invalid && billingForm.postal_code.$error.postal_code" uib-tooltip="{t}This is not a valid postal_code{/t}"></i>
                             <input class="form-control" id="postal_code" name="postal_code" ng-model="billing.postal_code" placeholder="{t}Postal code{/t}" required="required" type="text">
                           </div>
                         </div>
@@ -196,16 +196,16 @@
                         <div class="form-group col-sm-4" ng-class="{ 'has-error': billingForm.city.$invalid, 'has-success': billingForm.city.$dirty && billingForm.city.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.city.$dirty && billingForm.city.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.city.$invalid && billingForm.city.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.city.$invalid && billingForm.city.$error.city" tooltip="{t}This is not a valid city{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.city.$invalid && billingForm.city.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.city.$invalid && billingForm.city.$error.city" uib-tooltip="{t}This is not a valid city{/t}"></i>
                             <input class="form-control" id="city" name="city" ng-model="billing.city" placeholder="{t}City{/t}" required="required" type="text">
                           </div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{ 'has-error': billingForm.state.$invalid, 'has-success': billingForm.state.$dirty && billingForm.state.$valid }">
                           <div class="input-with-icon right">
                             <i class="fa fa-check text-success" ng-if="billingForm.state.$dirty && billingForm.state.$valid"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.state.$invalid && billingForm.state.$error.required" tooltip="{t}This field is required{/t}"></i>
-                            <i class="fa fa-times text-danger" ng-if="billingForm.state.$invalid && billingForm.state.$error.state" tooltip="{t}This is not a valid state{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.state.$invalid && billingForm.state.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
+                            <i class="fa fa-times text-danger" ng-if="billingForm.state.$invalid && billingForm.state.$error.state" uib-tooltip="{t}This is not a valid state{/t}"></i>
                             <input class="form-control" id="state" name="state" ng-model="billing.state" placeholder="{t}State{/t}" required="required" type="text">
                           </div>
                         </div>

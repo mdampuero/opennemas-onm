@@ -41,13 +41,13 @@
                 </div>
                 <div class="tile-footer clearfix">
                   <div class="row">
-                    <a class="text-white contact-email col-xs-12 col-md-6" href="mailto:{$instance->contact_mail}" tooltip="{t}This is the email used to create your newspaper{/t}" tooltip-placement="bottom">
+                    <a class="text-white contact-email col-xs-12 col-md-6" href="mailto:{$instance->contact_mail}" uib-tooltip="{t}This is the email used to create your newspaper{/t}" tooltip-placement="bottom">
                       <i class="fa fa-envelope"></i>
                       {$instance->contact_mail}
                     </a>
                     <a href="#" class="text-white created-at col-xs-12 col-md-6">
                       <i class="fa fa-calendar"></i>
-                      <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
+                      <span uib-tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
                     </a>
                   </div>
                 </div>
@@ -84,7 +84,7 @@
                 <div class="widget-stats">
                   <div class="wrapper last">
                     <div class="item-count">
-                      {$instance->support_plan} <i class="fa fa-info-circle" tooltip="{t}Support by tickets{/t}" tooltip-placement="bottom"></i>
+                      {$instance->support_plan} <i class="fa fa-info-circle" uib-tooltip="{t}Support by tickets{/t}" tooltip-placement="bottom"></i>
                     </div>
                   </div>
                 </div>
@@ -118,7 +118,7 @@
                     <span class="item-count">
                       {t}coming soon... work in progress...{/t}
                       <!-- {$instance->page_views|number_format}
-                      <i class="fa fa-info-circle" tooltip="{t}Note: this number has not being used for billing purpose. Billing pageviews count goes from 26th to 25th of each month.{/t}" tooltip-placement="left"></i> -->
+                      <i class="fa fa-info-circle" uib-tooltip="{t}Note: this number has not being used for billing purpose. Billing pageviews count goes from 26th to 25th of each month.{/t}" tooltip-placement="left"></i> -->
                     </span>
                   </div>
                 </div>
