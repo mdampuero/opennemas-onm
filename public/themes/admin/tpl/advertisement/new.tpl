@@ -37,7 +37,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-bullhorn"></i>
-                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
                 <span class="hidden-xs">{t}Advertisements{/t}</span>

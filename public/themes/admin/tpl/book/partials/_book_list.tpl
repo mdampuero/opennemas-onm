@@ -3,7 +3,7 @@
     <div class="navbar-inner">
       <ul class="nav quick-section pull-left">
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
             <i class="fa fa-arrow-left fa-lg"></i>
           </button>
         </li>
@@ -19,12 +19,12 @@
       <ul class="nav quick-section pull-right">
         {acl isAllowed="BOOK_AVAILABLE"}
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom">
             <i class="fa fa-check fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
             <i class="fa fa-times fa-lg"></i>
           </button>
         </li>
@@ -32,7 +32,7 @@
         {acl isAllowed="BOOK_DELETE"}
         <li class="quicklinks"><span class="h-seperate"></span></li>
         <li class="quicklinks">
-          <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+          <button class="btn btn-link" id="batch-delete" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
