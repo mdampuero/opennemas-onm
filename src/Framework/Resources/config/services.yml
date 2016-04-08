@@ -13,13 +13,13 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
-        arguments: [ '@instance_manager', '@cache', '@cache_manager' ]
+        arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
     kernel.listener.user_listener:
         class: Framework\EventListener\UserListener
-        arguments: [ '@security.token_storage', '@onm_user_provider', '@router', '@session' ]
+        arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -202,10 +202,6 @@ services:
     instance_manager:
         class: Onm\Instance\InstanceManager
         arguments: [ '@dbal_connection', '@cache_manager', '@setting_repository' ]
-
-    instance:
-        class: Onm\Instance\Instance
-        factory: [ '@kernel.listener.instanceloader', getInstance ]
 
     onm_templating:
         class: Onm\Templating\Templating

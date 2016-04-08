@@ -27,41 +27,23 @@ use \Privileges;
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * @var SecurityContext
+     * @var ServiceContainer
      */
-    private $context;
-
-    /**
-     * @var Instance
-     */
-    private $instance;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @var Session
-     */
-    private $session;
+    private $container;
 
     /**
      * Constructs a new handler.
      *
-     * @param SecurityContext $context   The security context.
-     * @param Router          $router    The router service.
-     * @param Instance        $instance  The current instance.
-     * @param Session         $session   The session.
-     * @param Recaptcha       $recaptcha The Google Recaptcha.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($context, $instance, $router, $session, $recaptcha)
+    public function __construct($container)
     {
-        $this->context   = $context;
-        $this->instance  = $instance;
-        $this->router    = $router;
-        $this->session   = $session;
-        $this->recaptcha = $recaptcha;
+        $this->container = $container;
+
+        $this->context   = $container->get('security.token_storage');
+        $this->router    = $container->get('router');
+        $this->session   = $container->get('session');
+        $this->recaptcha = $container->get('google_recaptcha');
     }
 
     /**
@@ -76,8 +58,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $user  = $token->getUser();
-        $valid = true;
+        $instance = $this->container->get('core.instance');
+        $user     = $token->getUser();
+        $valid    = true;
 
         // Check reCaptcha if is set
         $response = $request->get('g-recaptcha-response');
@@ -99,7 +82,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $this->session->set('user', $user);
         $this->session->set('user_language', $user->getMeta('user_language'));
-        $this->session->set('instance', $this->instance);
+        $this->session->set('instance', $instance);
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
             $this->session->get('intention'),
@@ -132,12 +115,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
             return new RedirectResponse($request->headers->get('referer'));
         } else {
-            $im = getService('instance_manager');
-            $um = getService('user_repository');
-            $cache = getService('cache');
+            $um    = $this->container->get('user_repository');
+            $cache = $this->container->get('cache');
 
-            $database = $im->current_instance->getDatabaseName();
-            $namespace = $im->current_instance->internal_name;
+            $database  = $instance->getDatabaseName();
+            $namespace = $instance->internal_name;
 
             $um->selectDatabase($database);
             $cache->setNamespace($namespace);

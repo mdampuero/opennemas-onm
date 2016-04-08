@@ -1,14 +1,12 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Framework\EventListener;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,47 +21,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class UserListener implements EventSubscriberInterface
 {
     /**
-     * The security context.
+     * The service container.
      *
-     * @var SecurityContextInterface
+     * @var SecurityContainer
      */
-    private $context;
-
-    /**
-     * The user provider.
-     *
-     * @var OnmUserProvider
-     */
-    private $provider;
-
-    /**
-     * The router service.
-     *
-     * @var OnmUserProvider
-     */
-    private $router;
-
-    /**
-     * The current session.
-     *
-     * @var Session
-     */
-    private $session;
+    private $container;
 
     /**
      * Initializes the listener.
      *
-     * @param SecurityContext $context  The security context service.
-     * @param OnmUserProvider $provider The user provider.
-     * @param Router          $router   The router service.
-     * @param Session         $session  The current session.
+     * @param SecurityContext $container The service container.
      */
-    public function __construct($context, $provider, $router, $session)
+    public function __construct($container)
     {
-        $this->context  = $context;
-        $this->provider = $provider;
-        $this->router   = $router;
-        $this->session  = $session;
+        $this->container = $container;
+
+        $this->context  = $container->get('security.token_storage');
+        $this->provider = $container->get('onm_user_provider');
+        $this->router   = $container->get('router');
+        $this->session  = $container->get('session');
     }
 
     /**
@@ -87,8 +63,10 @@ class UserListener implements EventSubscriberInterface
             $user->eraseCredentials();
             $token->setUser($user);
 
-            $database  = getService('instance_manager')->current_instance->getDatabaseName();
-            $namespace = getService('instance_manager')->current_instance->internal_name;
+            $instance = $this->container->get('core.instance');
+
+            $database  = $instance->getDatabaseName();
+            $namespace = $instance->internal_name;
 
             getService('dbal_connection')->selectDatabase($database);
             getService('cache')->setNamespace($namespace);
