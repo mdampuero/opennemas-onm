@@ -325,6 +325,10 @@ class DomainManagementController extends Controller
         $params = $this->container
             ->getParameter("manager_webservice");
 
+        $subject = $create ?
+            'Opennemas Domain domain registration request:' :
+            'Opennemas Domain mapping request';
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Domain mapping request')
             ->setFrom($params['no_reply_from'])
