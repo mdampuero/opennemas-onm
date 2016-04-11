@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,6 +10,9 @@
 namespace Common\ORM\Core;
 
 use Framework\Component\Data\DataObject;
+use Common\ORM\Core\Exception\InvalidConverterException;
+use Common\ORM\Core\Exception\InvalidPersisterException;
+use Common\ORM\Core\Exception\InvalidRepositoryException;
 use Common\ORM\Core\Validation\Validable;
 
 /**
@@ -64,6 +67,33 @@ class Metadata extends DataObject implements Validable
     public function getClassName()
     {
         return 'Metadata';
+    }
+
+    /**
+     * Returns the configuration for converter.
+     *
+     * @param string $converter The converter name.
+     *
+     * @return array The converter configuration.
+     *
+     * @throws InvalidConverterException If the converter does not exists.
+     */
+    public function getConverter($converter = null)
+    {
+        if (!array_key_exists('converters', $this->mapping)) {
+            throw new InvalidConverterException($this->name, $converter);
+        }
+
+        if (empty($converter)) {
+            $converter = array_keys($this->mapping['converters']);
+            $converter = array_pop($converter);
+        }
+
+        if (array_key_exists($converter, $this->mapping['converters'])) {
+            return $this->mapping['converters'][$converter];
+        }
+
+        throw new InvalidConverterException($this->name, $converter);
     }
 
     /**
@@ -143,6 +173,60 @@ class Metadata extends DataObject implements Validable
         }
 
         return $this->getTable() . '_meta';
+    }
+
+    /**
+     * Returns the configuration for persister.
+     *
+     * @param string $persister The persister name.
+     *
+     * @return array The persister configuration.
+     *
+     * @throws InvalidPersisterException If the persister does not exists.
+     */
+    public function getPersister($persister = null)
+    {
+        if (!array_key_exists('persisters', $this->mapping)) {
+            throw new InvalidPersisterException($this->name);
+        }
+
+        if (empty($persister)) {
+            $persister = array_keys($this->mapping['persisters']);
+            $persister = array_pop($persister);
+        }
+
+        if (array_key_exists($persister, $this->mapping['persisters'])) {
+            return $this->mapping['persisters'][$persister];
+        }
+
+        throw new InvalidPersisterException($this->name, $persister);
+    }
+
+    /**
+     * Returns the configuration for repository.
+     *
+     * @param string $repository The repository name.
+     *
+     * @return array The repository configuration.
+     *
+     * @throws InvalidRepositoryException If the repository does not exists.
+     */
+    public function getRepository($repository = null)
+    {
+        if (!array_key_exists('repositories', $this->mapping)) {
+            throw new InvalidRepositoryException($this->name);
+        }
+
+        if (empty($repository)) {
+            $repository = array_keys($this->mapping['repositories']);
+            $repository = array_pop($repository);
+        }
+
+        if (array_key_exists($repository, $this->mapping['repositories'])) {
+            return $this->mapping['repositories'][$repository];
+        }
+
+        throw new InvalidRepositoryException($this->name, $repository);
     }
 
     /**
