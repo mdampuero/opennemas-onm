@@ -196,7 +196,7 @@ class BaseRepository extends Repository
             return array_pop($rs);
         }
 
-        return $rs;
+        throw new EntityNotFoundException($this->metadata->name);
     }
 
     /**
