@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,22 +10,30 @@
 namespace Common\ORM\Core;
 
 use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\InvalidConnectionException;
+use Common\ORM\Core\Exception\InvalidMetadataException;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Validation\Validator;
-use Common\ORM\Core\Exception\InvalidConnectionException;
-use Common\ORM\Core\Exception\InvalidConverterException;
-use Common\ORM\Core\Exception\InvalidPersisterException;
-use Common\ORM\Core\Exception\InvalidRepositoryException;
-use Common\ORM\Database\Data\Converter\Converter;
 
+/**
+ * The EntityManager class manages the ORM configuration and creates components
+ * to create, read, update and delete entities from different data sources.
+ */
 class EntityManager
 {
     /**
-     * The entity validator.
+     * The ORM configuration.
      *
-     * @var Validator
+     * @var array
      */
-    protected $validator;
+    protected $config;
+
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
 
     /**
      * Initializes the EntityManager.
@@ -59,19 +67,21 @@ class EntityManager
     /**
      * Returns a converted configured for the entity.
      *
-     * @param string $entity The entity.
+     * @param string $entity    The entity.
+     * @param string $persister The converter name.
      *
      * @return Converter A converter for the entity.
      */
-    public function getConverter($entity)
+    public function getConverter($entity, $converter = null)
     {
-        if (!array_key_exists('metadata', $this->config)
-            || !array_key_exists($entity, $this->config['metadata'])
-        ) {
-            throw new InvalidConverterException($entity);
-        }
+        $metadata  = $this->getMetadata($entity);
+        $converter = $metadata->getConverter($converter);
 
-        return new Converter($this->config['metadata'][$entity]);
+        $class = '\\' . $converter['class'];
+        $args  = $this->parseArgs($converter['arguments']);
+        $class = new \ReflectionClass($class);
+
+        return $class->newInstanceArgs($args);
     }
 
     /**
@@ -94,43 +104,45 @@ class EntityManager
     }
 
     /**
+     * Returns the metadata for an entity.
+     *
+     * @param mixed $entity The entity name of object.
+     *
+     * @return Metadata The metadata.
+     */
+    public function getMetadata($entity)
+    {
+        if (is_object($entity)) {
+            $entity = $entity->getClassName();
+        }
+
+        if (!array_key_exists('metadata', $this->config)
+            || !array_key_exists($entity, $this->config['metadata'])
+        ) {
+            throw new InvalidMetadataException($entity);
+        }
+
+        return $this->config['metadata'][$entity];
+    }
+
+    /**
      * Returns an array of available persisters for an entity.
      *
-     * @param string $entity The entity to persist.
+     * @param string $entity    The entity to persist.
+     * @param string $persister The persister name.
      *
-     * @return array Array of persisters.
-     *
-     * @throws InvalidPersisterException If the persister does not exist.
+     * @return Persister The persister.
      */
     public function getPersister(Entity $entity, $persister = null)
     {
-        $available = [];
-        if (array_key_exists($entity->getClassName(), $this->config['metadata'])) {
-            $available = $this->config['metadata'][$entity->getClassName()]
-                ->mapping['persisters'];
-        }
+        $metadata  = $this->getMetadata($entity);
+        $persister = $metadata->getPersister($persister);
 
-        // If only need one persister
-        if (!empty($persister)) {
-            $available = [ $available[$persister] ];
-        }
+        $class = '\\' . $persister['class'];
+        $args  = $this->parseArgs($persister['arguments']);
+        $class = new \ReflectionClass($class);
 
-        $persisters = [];
-        foreach ($available as $params) {
-            $class  = '\\' . $params['class'];
-            $args   = $this->parseArgs($params['arguments']);
-            $class  = new \ReflectionClass($class);
-
-            $args[] = $this->config['metadata'][$entity->getClassName()];
-
-            $persisters[] = $class->newInstanceArgs($args);
-        }
-
-        if (!empty($persisters) && is_array($persisters)) {
-            return $persisters[0];
-        }
-
-        throw new InvalidPersisterException($entity->getClassName(), 'any source');
+        return $class->newInstanceArgs($args);
     }
 
     /**
@@ -140,41 +152,18 @@ class EntityManager
      * @param string $repository The repository name.
      *
      * @return Repository The repository.
-     *
-     * @throws InvalidRepositoryException If the repository does not exist.
      */
     public function getRepository($entity, $repository = null)
     {
-        $entity = explode('.', $entity);
-        $entity = \classify($entity[count($entity) - 1]);
+        $entity     = \classify($entity);
+        $metadata   = $this->getMetadata($entity);
+        $repository = $metadata->getRepository($repository);
 
-        $available = [];
-        if (array_key_exists($entity, $this->config['metadata'])) {
-            $available = $this->config['metadata'][$entity]
-                ->mapping['repositories'];
-        }
+        $class = '\\' . $repository['class'];
+        $args  = $this->parseArgs($repository['arguments']);
+        $class = new \ReflectionClass($class);
 
-        // If only need one repository
-        if (!empty($repository)) {
-            $available = [ $available[$repository] ];
-        }
-
-        $repositories = [];
-        foreach ($available as $params) {
-            $class = '\\' . $params['class'];
-            $args  = $this->parseArgs($params['arguments']);
-            $class = new \ReflectionClass($class);
-
-            $args[] = $this->config['metadata'][$entity];
-
-            $repositories[] = $class->newInstanceArgs($args);
-        }
-
-        if (!empty($repositories) && is_array($repositories)) {
-            return $repositories[0];
-        }
-
-        throw new InvalidRepositoryException($entity, 'any source');
+        return $class->newInstanceArgs($args);
     }
 
     /**
@@ -217,8 +206,6 @@ class EntityManager
      *
      * @param Entity $entity    The entity to remove.
      * @param string $persister The persister name.
-     *
-     * @throws EntityNotFoundException If entity does not exist
      */
     public function remove(Entity $entity, $persister = null)
     {
@@ -266,7 +253,12 @@ class EntityManager
 
         if (strpos($arg, '@orm.connection') !== false) {
             $conn = str_replace('@orm.connection.', '', $arg);
-            return $this->config['connection'][$conn];
+            return $this->getConnection($conn);
+        }
+
+        if (strpos($arg, '@orm.metadata') !== false) {
+            $metadata = \classify(str_replace('@orm.metadata.', '', $arg));
+            return $this->getMetadata($metadata);
         }
 
         if (strpos($arg, '@') === 0) {

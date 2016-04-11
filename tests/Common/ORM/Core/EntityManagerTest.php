@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Tests\Common\ORM\Core;
 
 use Common\ORM\Braintree\BraintreeManager;
@@ -12,8 +19,14 @@ use Common\ORM\Entity\Payment;
 use Common\ORM\FreshBooks\FreshBooksManager;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 
+/**
+ * Defines test cases for EntityManager class.
+ */
 class EntityManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -33,6 +46,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                     'name'       => 'Entity',
                     'properties' => [ 'foo' => 'string', 'bar' => 'integer' ],
                     'mapping'    => [
+                        'converters' => [
+                            'default' => [ 'class' => 'Converter', 'arguments'  => [] ],
+                        ],
                         'persisters' => [
                             'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
                         ],
@@ -40,12 +56,23 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                             'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
                         ]
                     ]
+                ]),
+                'Client' => new Metadata([
+                    'name'       => 'Client',
+                    'properties' => [],
+                    'mapping'    => []
                 ])
             ],
             'schema' => []
         ];
 
         $this->loader->expects($this->any())->method('load')->willReturn($config);
+
+        $this->converter = $this->getMockBuilder('MockConverter')
+            ->setMockClassName('Converter')
+            ->disableOriginalConstructor()
+            ->setMethods([ '__construct' ])
+            ->getMock();
 
         $this->persister = $this->getMockBuilder('MockPersister')
             ->setMockClassName('Persister')
@@ -68,6 +95,10 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->em = new EntityManager($this->container);
     }
 
+    /**
+     * Returns mocks basing on arguments when calling get method of
+     * ServiceContainer mock.
+     */
     public function serviceContainerCallback()
     {
         $args = func_get_args();
@@ -87,6 +118,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getConnection for an invalid connection name.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidConnectionException
      */
     public function testGetConnectionInvalid()
@@ -94,39 +127,100 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->getConnection('Foobar');
     }
 
+    /**
+     * Tests getConnection for a valid connection name.
+     */
     public function testGetConnectionValid()
     {
         $this->assertNotEmpty($this->em->getConnection('foo'));
     }
 
     /**
+     * Tests getConverter when the requested converter is not defined.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidConverterException
      */
-    public function testGetConverterInvalid()
+    public function testGetConverterInvalidName()
     {
-        $this->em->getConverter('Foobar');
+        $this->em->getConverter('Entity', 'foo');
     }
 
+    /**
+     * Tests getConverter when no converters defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidConverterException
+     */
+    public function testGetConverterNoConverters()
+    {
+        $this->em->getConverter('Client');
+    }
+
+    /**
+     * Tests getConverter for a valid entity and converter.
+     */
     public function testGetConverterValid()
     {
         $this->assertNotEmpty($this->em->getConverter('Entity'));
+        $this->assertNotEmpty($this->em->getConverter('Entity', 'default'));
     }
 
+    /**
+     * Tests getDumper.
+     */
     public function testGetDumper()
     {
         $this->assertNotEmpty($this->em->getDumper());
     }
 
     /**
-     * @expectedException \Common\ORM\Core\Exception\InvalidPersisterException
+     * Tests getMetadata for an undefined Entity.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidMetadataException
      */
-    public function testGetPersisterInvalid()
+    public function testGetMetadataInvalid()
     {
-        $entity = new Payment();
-
-        $this->em->getPersister($entity);
+        $this->em->getMetadata('Foo');
     }
 
+    /**
+     * Tests getMetadata for Entities and entity names.
+     */
+    public function testGetMetadataValid()
+    {
+        $m1 = $this->em->getMetadata(new Entity());
+        $m2 = $this->em->getMetadata('Entity');
+
+        $this->assertNotEmpty($m1);
+        $this->assertNotEmpty($m2);
+        $this->assertEquals($m1, $m2);
+    }
+
+    /**
+     * Tests getPersister when the requested persister is not defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidPersisterException
+     */
+    public function testGetPersisterInvalidName()
+    {
+        $entity = new Entity();
+
+        $this->em->getPersister($entity, 'foo');
+    }
+
+    /**
+     * Tests getPersister when no persisters defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidPersisterException
+     */
+    public function testGetPeristerNoPersisters()
+    {
+
+        $this->em->getPersister(new Client());
+    }
+
+    /**
+     * Tests getPersister for a valid entity and persister.
+     */
     public function testGetPersisterValid()
     {
         $entity = new Entity();
@@ -136,21 +230,37 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getRepository when the requested repository is not defined.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidRepositoryException
      */
-    public function testGetRepositoryInvalid()
+    public function testGetRepositoryInvalidName()
     {
-        $this->em->getRepository('payment');
+        $this->em->getRepository('Entity', 'foo');
     }
 
+    /**
+     * Tests getRepository when no repositories defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidRepositoryException
+     */
+    public function testGetRepositoryNoRepositories()
+    {
+        $this->em->getRepository('Client');
+    }
+
+    /**
+     * Tests getRepository for a valid entity and repository
+     */
     public function testGetRepositoryValid()
     {
         $this->assertNotEmpty($this->em->getRepository('entity'));
-
-        $persisters = $this->em->getRepository('entity', 'Entity');
-        $this->assertEquals(1, count($persisters));
+        $this->assertNotEmpty($this->em->getRepository('entity', 'Entity'));
     }
 
+    /**
+     * Tests persist with an Entity from database.
+     */
     public function testPersistWithExistingEntity()
     {
         $entity     = new Entity([ 'id' => 1 ]);
@@ -163,6 +273,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->persist($entity);
     }
 
+    /**
+     * Tests persist with a new Entity.
+     */
     public function testPersistWithUnexistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
@@ -170,6 +283,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->persist($entity);
     }
 
+    /**
+     * Tests remove with an Entity from database.
+     */
     public function testRemoveWithExistingEntity()
     {
         $entity = new Entity([ 'id' => 1 ]);
@@ -177,6 +293,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->remove($entity);
     }
 
+    /**
+     * Tests parseArgs.
+     */
     public function testParseArgs()
     {
         $reflection = new \ReflectionClass($this->em);
@@ -187,6 +306,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($method->invokeArgs($this->em, [ [ 'foo' => 'bar' ] ]));
     }
 
+    /**
+     * Tests parseArg with ORM services, main services and parameters.
+     */
     public function testParseArg()
     {
         $reflection = new \ReflectionClass($this->em);
@@ -196,6 +318,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(123, $method->invokeArgs($this->em, [ 123 ]));
         $this->assertEquals($this->container, $method->invokeArgs($this->em, [ '@service_container' ]));
         $this->assertNotEmpty($method->invokeArgs($this->em, [ '@orm.connection.foo' ]));
+        $this->assertNotEmpty($method->invokeArgs($this->em, [ '@orm.metadata.entity' ]));
         $this->assertNotEmpty($method->invokeArgs($this->em, [ '@foo' ]));
         $this->assertNotEmpty($method->invokeArgs($this->em, [ '%foo%' ]));
     }
