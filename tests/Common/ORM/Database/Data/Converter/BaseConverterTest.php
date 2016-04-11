@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,10 +11,16 @@ namespace Tests\Common\ORM\Database\Data\Mapper;
 
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Data\Converter\Converter;
+use Common\ORM\Database\Data\Converter\BaseConverter;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Defines test cases for BaseConverter class.
+ */
+class BaseConverterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->metadata = new Metadata([
@@ -36,7 +42,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->converter = new Converter($this->metadata);
+        $this->converter = new BaseConverter($this->metadata);
 
         $keys    = [ 'convert', 'convertFrom', 'convertTo' ];
         $this->methods = [];
@@ -47,14 +53,19 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests databasify when empty metadata provided.
+     *
      * @expectedException \Exception
      */
     public function testDatabasifyInvalid()
     {
-        $converter = new Converter(new Metadata([]));
+        $converter = new BaseConverter(new Metadata([]));
         $converter->databasify([]);
     }
 
+    /**
+     * Tests databasify when valid metadata provided.
+     */
     public function testDatabasifyValid()
     {
         $this->assertEquals(
@@ -77,6 +88,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Tests objectify for data from database.
+     */
     public function testObjectifyFromDatabase()
     {
         $this->assertEquals(
@@ -95,6 +109,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Tests objectify for data from a request.
+     */
     public function testObjectifyFromRequest()
     {
         $this->assertEquals(
@@ -113,14 +130,20 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Tests objectify when empty metadata provided.
+     */
     public function testObjectifyWithoutMetadata()
     {
-        $converter = new Converter(new Metadata());
+        $converter = new BaseConverter(new Metadata());
         $data      = [ 'foo' => 'bar' ];
 
         $this->assertEquals($data, $converter->objectify($data));
     }
 
+    /**
+     * Tests responsify for data from an Entity.
+     */
     public function testResponsify()
     {
         $this->assertEquals(
@@ -137,6 +160,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Tests convertFrom.
+     */
     public function testConvertFrom()
     {
         $this->assertEquals(
@@ -145,6 +171,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Tests convertTo
+     */
     public function testConvertTo()
     {
         $this->assertEquals(
