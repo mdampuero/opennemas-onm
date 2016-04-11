@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Connection;
@@ -9,6 +16,9 @@ use Common\ORM\Core\Persister;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 use Onm\Cache\CacheInterface;
 
+/**
+ * The BasePersister class defines basic actions for database persisters.
+ */
 class BasePersister extends Persister
 {
     /**
@@ -19,13 +29,6 @@ class BasePersister extends Persister
     protected $cache;
 
     /**
-     * The entity converter.
-     *
-     * @var Converter
-     */
-    protected $converter;
-
-    /**
      * The database connection.
      *
      * @var Connection
@@ -33,18 +36,18 @@ class BasePersister extends Persister
     protected $conn;
 
     /**
+     * The entity converter.
+     *
+     * @var BaseConverter
+     */
+    protected $converter;
+
+    /**
      * The entity metadata.
      *
      * @var Metadata.
      */
     protected $metadata;
-
-    /**
-     * The source name.
-     *
-     * @var string
-     */
-    protected $source = 'Database';
 
     /**
      * Initializes a new DatabasePersister.

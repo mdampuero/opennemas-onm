@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,6 +18,9 @@ use Common\ORM\Core\Repository;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Onm\Cache\CacheInterface;
 
+/**
+ * The BaseRepository class defines basic actions for database repositories.
+ */
 class BaseRepository extends Repository
 {
     /**
@@ -35,6 +38,20 @@ class BaseRepository extends Repository
     protected $conn;
 
     /**
+     * The entity converter.
+     *
+     * @var BaseConverter
+     */
+    protected $converter;
+
+    /**
+     * The entity metadata.
+     *
+     * @var Metadata.
+     */
+    protected $metadata;
+
+    /**
      * The value to save in cache when the entity is not found.
      *
      * @var string
@@ -42,11 +59,11 @@ class BaseRepository extends Repository
     protected $miss = '-miss-';
 
     /**
-     * The source name.
+     * The OQL translator.
      *
-     * @var string
+     * @var OQLTranslator
      */
-    protected $source = 'Database';
+    protected $translator;
 
     /**
      * Initializes a new DatabasePersister.
