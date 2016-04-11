@@ -1,13 +1,26 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Tests\Common\ORM\Core\Schema;
 
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Schema\Schema;
 use Common\ORM\Core\Entity;
 
+/**
+ * Defines test cases for Dumper class.
+ */
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $schemas  = [ 'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]) ];
@@ -32,12 +45,39 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->dumper = new Dumper($schemas, $entities);
     }
 
+    /**
+     * Tests contructor.
+     */
     public function testConstructWithoutArguments()
     {
         new Dumper();
     }
 
     /**
+     * Tests discover.
+     */
+    public function testDiscover()
+    {
+        $database = 'gorp';
+
+        $manager = $this->getMockBuilder('SchemaManager')
+            ->setMethods([ 'createSchema' ])
+            ->getMock();
+
+        $conn = $this->getMockBuilder('Connection')
+            ->setMethods([ 'selectDatabase', 'getSchemaManager' ])
+            ->getMock();
+
+        $manager->expects($this->once())->method('createSchema');
+        $conn->expects($this->once())->method('selectDatabase')->with($database);
+        $conn->expects($this->once())->method('getSchemaManager')->willReturn($manager);
+
+        $this->dumper->discover($conn, $database);
+    }
+
+    /**
+     * Tests dump for an undefined schema.
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testDumpInvalidSchema()
@@ -45,12 +85,17 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->dumper->dump('foo');
     }
 
+    /**
+     * Tests dump for a defined schema.
+     */
     public function testDump()
     {
         $this->assertInstanceOf('Doctrine\DBAL\Schema\Schema', $this->dumper->dump('Foobar'));
     }
 
     /**
+     * Tests validate for a schema without table name.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateWithoutTableName()
@@ -59,6 +104,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validate for a schema for a invalid table name.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateInvalidTableName()
@@ -66,6 +113,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->dumper->validate([ 'table' => 'foo#bar' ]);
     }
 
+    /**
+     * Tests validate for a valid table name.
+     */
     public function testValidate()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -78,6 +128,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateField for a field without type.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateFieldWithoutType()
@@ -88,6 +140,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', 'foo', [] ]);
     }
 
+    /**
+     * Tests validateField for a field with a valid type.
+     */
     public function testValidateField()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -103,6 +158,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($dumper, [ 'gorp', 'foo', [ 'type' => 'integer', 'options' => [ 'default' => 0 ] ] ]);
     }
 
+    /**
+     * Tests validateFields.
+     */
     public function testValidateFields()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -118,6 +176,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateIndex for an index without name.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithoutName()
@@ -129,6 +189,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateIndex for an index without columns.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithUnknownColumns()
@@ -140,6 +202,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateIndex for an index with invalid flags.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithInvalidFlags()
@@ -150,6 +214,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]);
     }
 
+    /**
+     * Tests validateIndex for a valid index.
+     */
     public function testValidateIndexValid()
     {
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
@@ -159,6 +226,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateIndex with an already validated index.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexesDuplicated()
@@ -175,6 +244,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($dumper, [ 'gorp', [ 'quux' ], [ [ 'name' => 'id' ], [ 'name' => 'id' ] ] ]);
     }
 
+    /**
+     * Tests validateIndexes.
+     */
     public function testValidateIndexesValid()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -190,6 +262,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateOption for an invalid option.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionInvalid()
@@ -200,6 +274,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', 'length', true ]);
     }
 
+    /**
+     * Tests validateOption for a valid option.
+     */
     public function testValidateOptionValid()
     {
         $method = new \ReflectionMethod($this->dumper, 'validateOption');
@@ -209,6 +286,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateOptions with unrecognized options.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionsInvalid()
@@ -219,6 +298,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', [ 'foo' => 'bar' ] ]);
     }
 
+    /**
+     * Tests validateOptions with valid options.
+     */
     public function testValidateOptionsValid()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -234,6 +316,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateTable for a table without columns.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoColumns()
@@ -245,6 +329,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateTable for a table without indexes.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoIndexes()
@@ -255,6 +341,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ] ] ]);
     }
 
+    /**
+     * Tests validateTable for a valid table.
+     */
     public function testValidateTableValid()
     {
         $dumper = $this->getMockBuilder('Common\ORM\Core\Schema\Dumper')
@@ -271,6 +360,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateType with an invalid type.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTypeInvalid()
@@ -281,6 +372,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->invokeArgs($this->dumper, [ 'gorp', 'garply', 'quux' ]);
     }
 
+    /**
+     * Tests validateType with a valid type.
+     */
     public function testValidateTypeValid()
     {
         $method = new \ReflectionMethod($this->dumper, 'validateType');
