@@ -1,19 +1,35 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\Core\Exception;
 
+/**
+ * Exception thrown when the requested persister does not exist.
+ */
 class InvalidPersisterException extends \Exception
 {
     /**
-     * Initializes the exception with a custom message.
+     * Initializes the exception.
      *
-     * @param string $class  The classname of the invalid persister.
-     * @param string $source The source name.
+     * @param string $entity    The entity name.
+     * @param string $persister The persister name.
      */
-    public function __construct($class, $source)
+    public function __construct($entity, $persister = null)
     {
-        $message = _('The persister \'%s\' does not exist in %s');
+        $message = _('No persisters found for "%s"');
+        $message = sprintf($message, $entity);
 
-        parent::__construct(sprintf($message, $class, $source));
+        if (!empty($persister)) {
+            $message = _('The persister "%s" for "%s" does not exist');
+            $message = sprintf($message, $persister, $entity);
+        }
+
+        parent::__construct($message);
     }
 }
