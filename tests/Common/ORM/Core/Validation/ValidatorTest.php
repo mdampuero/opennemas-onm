@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,14 @@ use Common\ORM\Entity\Client;
 use Common\ORM\Entity\Theme;
 use Common\ORM\Core\Validation\Validator;
 
+/**
+ * Defines test cases for Validator class.
+ */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->client = new Client([ 'foo' => 'bar', 'baz' => 'qux' ]);
@@ -34,7 +40,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     'garply' => [ 'grault' ]
                 ]
             ]),
-            new Metadata([ 'name' => 'extension' ]),
+            new Metadata([ 'name' => 'extension', 'required' => [ 'foo' ] ]),
         ];
 
         // Mock constructor only
@@ -53,6 +59,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->methods['isEnum']           = $reflection->getMethod('isEnum');
         $this->methods['isFloat']          = $reflection->getMethod('isFloat');
         $this->methods['isInteger']        = $reflection->getMethod('isInteger');
+        $this->methods['isNull']           = $reflection->getMethod('isNull');
         $this->methods['isObject']         = $reflection->getMethod('isObject');
         $this->methods['isString']         = $reflection->getMethod('isString');
         $this->methods['loadValidation']   = $reflection->getMethod('loadValidation');
@@ -69,12 +76,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Tests constructor when empty validations provided.
+     */
     public function testConstructor()
     {
         new Validator(false);
     }
 
     /**
+     * Tests loadValidation when the validation to load is already loaded.
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testLoadRulesAlreadySet()
@@ -83,6 +95,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validate when the ruleset for the entity isn't loaded.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateInvalidRuleset()
@@ -91,6 +105,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validate when the entity data are invalid.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateInvalid()
@@ -98,6 +114,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->validate(new Client([ 'corge' => 'flob' ]));
     }
 
+    /**
+     * Tests validate for valid entity data.
+     */
     public function testValidateValid()
     {
         $this->properties['required']->setValue($this->validator, [ 'client' => [ 'foo' ] ]);
@@ -111,18 +130,27 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->validate($this->client);
     }
 
+    /**
+     * Tests isArray with valid and invalid data.
+     */
     public function testIsArray()
     {
         $this->assertTrue($this->methods['isArray']->invokeArgs($this->validator, [ [] ]));
         $this->assertFalse($this->methods['isArray']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isBoolean with valid and invalid data.
+     */
     public function testIsBoolean()
     {
         $this->assertTrue($this->methods['isBoolean']->invokeArgs($this->validator, [ true ]));
         $this->assertFalse($this->methods['isBoolean']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isDateInterval with valid and invalid data.
+     */
     public function testIsDateInterval()
     {
         $this->assertTrue($this->methods['isDateinterval']->invokeArgs($this->validator, [ new \DateInterval('P1D') ]));
@@ -130,6 +158,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isDateinterval']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isDateTime with valid and invalid data.
+     */
     public function testIsDateTime()
     {
         $this->assertTrue($this->methods['isDatetime']->invokeArgs($this->validator, [ new \Datetime('now') ]));
@@ -137,12 +168,18 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isDatetime']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isEnum with valid and invalid data.
+     */
     public function testIsEnum()
     {
         $this->assertTrue($this->methods['isEnum']->invokeArgs($this->validator, [ 'grault', 'client', 'garply' ]));
         $this->assertFalse($this->methods['isEnum']->invokeArgs($this->validator, [ 'norf', 'client', 'foo' ]));
     }
 
+    /**
+     * Tests isFloat with valid and invalid data.
+     */
     public function testIsFloat()
     {
         $this->assertTrue($this->methods['isFloat']->invokeArgs($this->validator, [ 1.1 ]));
@@ -150,6 +187,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isFloat']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isInteger with valid and invalid data.
+     */
     public function testIsInteger()
     {
         $this->assertTrue($this->methods['isInteger']->invokeArgs($this->validator, [ 1 ]));
@@ -157,6 +197,20 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isInteger']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isNull with valid and invalid data.
+     */
+    public function testIsNull()
+    {
+        $this->assertTrue($this->methods['isNull']->invokeArgs($this->validator, [ 'foo', 'bar', null ]));
+        $this->assertTrue($this->methods['isNull']->invokeArgs($this->validator, [ 'extension', 'foo', null ]));
+        $this->assertFalse($this->methods['isNull']->invokeArgs($this->validator, [ 'extension', 'foo', 1 ]));
+        $this->assertFalse($this->methods['isNull']->invokeArgs($this->validator, [ 'foo', 'bar', [] ]));
+    }
+
+    /**
+     * Tests isObject with valid and invalid data.
+     */
     public function testIsObject()
     {
         $this->assertTrue($this->methods['isObject']->invokeArgs($this->validator, [ $this->client ]));
@@ -164,6 +218,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isObject']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
+    /**
+     * Tests isString with valid and invalid data.
+     */
     public function testIsString()
     {
         $this->assertTrue($this->methods['isString']->invokeArgs($this->validator, [ 'foo' ]));
@@ -171,6 +228,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->methods['isString']->invokeArgs($this->validator, [ [] ]));
     }
 
+    /**
+     * Tests validateProperty  with valid and invalid data.
+     */
     public function testValidateProperty()
     {
         $this->assertFalse($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'foo', 1 ]));
@@ -178,6 +238,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateData with invalid data.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateDataInvalid()
@@ -186,16 +248,25 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $entity->getData() ]);
     }
 
+    /**
+     * Tests validateData with valid data.
+     */
     public function testValidateDataValid()
     {
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
     }
 
+    /**
+     * Tests validateRequired with valid data.
+     */
     public function testValidateRequired()
     {
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
     }
 
+    /**
+     * Tests validateRequired with no required data.
+     */
     public function testValidateRequiredEmpty()
     {
         $this->properties['required']->setValue($this->validator, []);
@@ -203,6 +274,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validateRequired with missing required data.
+     *
      * @expectedException \Common\ORM\Core\Exception\InvalidEntityException
      */
     public function testValidateRequiredMissing()
