@@ -11,17 +11,13 @@
 
 namespace Framework\EventListener;
 
+use Common\Core\Exception\InstanceNotActivatedException;
+use Onm\Cache\AbstractCache;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
-use Onm\Cache\AbstractCache;
-use Onm\Instance\InstanceManager;
-use Onm\Exception\InstanceNotFoundException;
-use Onm\Exception\InstanceNotRegisteredException;
 
 /**
  * Loads and initializes an instance from the request object.
@@ -29,53 +25,21 @@ use Onm\Exception\InstanceNotRegisteredException;
 class InstanceLoaderListener implements EventSubscriberInterface
 {
     /**
-     * The cache object.
-     *
-     * @var AbstractCache
-     */
-    private $cache;
-
-    /**
-     * The instance manager.
-     *
-     * @var InstanceManager
-     */
-    private $im;
-
-    /**
-     * The current instance.
-     *
-     * @var Instance.
-     */
-    public $instance;
-
-    /**
-     * The cache object for manager.
-     *
-     * @var AbstractCache
-     */
-    private $mcache;
-
-    /**
      * Initializes the instance loader.
      *
-     * @param InstanceManager $im     The instance manager.
-     * @param AbstractCache   $cache  The cache service.
-     * @param AbstractCache   $mcache The cache service for manager.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(InstanceManager $im, AbstractCache $cache, AbstractCache $mcache)
+    public function __construct($container)
     {
-        $this->im    = $im;
-        $this->cache = $cache;
-        $this->mcache = $mcache;
+        $this->container = $container;
 
-        $this->mcache->setNamespace('manager');
+        $container->get('cache_manager')->setNamespace('manager');
     }
 
     /**
      * Loads an instance basing on the request.
      *
-     * @param GetResponseEvent $event A GetResponseEvent object.
+     * @param GetResponseEvent $event The event object.
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -85,118 +49,34 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $host    = $request->getHost();
+        $uri     = $request->getRequestUri();
+        $loader  = $this->container->get('core.loader');
 
-        if (preg_match("@^\/(manager|_profiler|_wdt|framework)@", $request->getRequestUri())) {
-            $this->instance = $this->im->loadManager();
-        } else {
-            $this->instance = $this->mcache->fetch($host);
-
-            if ($this->instance === false) {
-                $criteria = array(
-                    'domains' => array(
-                        array(
-                            'value' => '^' . $host . '|,[ ]*' . $host
-                                . '[ ]*,|,[ ]*' . $host . '$',
-                            'operator' => 'REGEXP'
-                        )
-                    )
-                );
-
-                $this->instance = $this->im->findOneBy($criteria);
-                $this->mcache->save($host, $this->instance);
-            }
-        }
-
-        $this->im->current_instance = $this->instance;
-
-        if (!$this->instance && !is_object($this->instance)) {
-            throw new InstanceNotRegisteredException(_('Instance not found'));
-        }
+        $instance = $loader->loadInstanceFromUri($host, $uri);
 
         // If this instance is not activated throw an exception
-        if (!$this->instance->activated) {
-            $message =_('Instance not activated');
-            throw new \Onm\Instance\NotActivatedException($message);
+        if (!$instance->activated) {
+            throw new InstanceNotActivatedException($instance->internal_name);
         }
 
-        $this->instance->boot();
-        $this->cache->setNamespace($this->instance->internal_name);
+        $loader->init();
 
-        // Initialize the instance database connection
-        if ($this->instance->internal_name != 'manager') {
-            $databaseName               = $this->instance->getDatabaseName();
-            $databaseInstanceConnection = getService('db_conn');
-            $databaseInstanceConnection->selectDatabase($databaseName);
+        $this->configure($instance);
 
-            $dbalConnection = getService('dbal_connection');
-            $dbalConnection->selectDatabase($databaseName);
-
-            getService('orm.manager')->config['connection']['instance']
-                ->selectDatabase($this->instance->getDatabaseName());
-        } else {
-            $databaseName               = $this->instance->getDatabaseName();
-            $databaseInstanceConnection = getService('db_conn_manager');
-        }
-
-        // CRAP: take this out, Workaround
-        \Application::load();
-        \Application::initDatabase($databaseInstanceConnection);
-
-        $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
-
-        // Check if the request is for backend and it is done to the proper
-        // domain and protocol. If not redirect to the proper url
-        if (strpos($request->getRequestUri(), '/admin') === 0) {
-            $forceSSL = getContainerParameter('opennemas.backend_force_ssl');
-
-            $scheme = $forceSSL ? 'https://' : 'http://';
-            $port   = in_array($request->getPort(), array(80, 443)) ?
-                '' : ':' . $request->getPort();
-
-            $domainRoot = getContainerParameter('opennemas.base_domain');
-            $supposedDomain = $this->instance->internal_name . $domainRoot;
-
-            if ($host !== strtolower($supposedDomain)
-                || ($forceSSL && !$isSecuredRequest)
-            ) {
-                $uri = $request->getRequestUri();
-                $url = $scheme . $supposedDomain . $port . $uri;
-
-                $event->setResponse(new RedirectResponse($url, 301));
-            }
-        } elseif (getContainerParameter('opennemas.redirect_frontend')
-            && strpos($request->getRequestUri(), '/admin') !== 0
-            && strpos($request->getRequestUri(), '/manager') !== 0
-            && strpos($request->getRequestUri(), '/ws') !== 0
-            && strpos($request->getRequestUri(), '/_wdt') !== 0
+        // Ignore manager requests
+        if (strpos($uri, '/manager') === 0
+            && strpos($uri, '/ws') !== 0
+            && strpos($uri, '/_wdt') !== 0
         ) {
-            $port = in_array($request->getPort(), array(80, 443)) ?
-                '' : ':' . $request->getPort();
-
-            $domain = null;
-            if (!empty($this->instance->domains)) {
-                $domain = $this->instance->getMainDomain();
-            }
-
-            // Redirect to proper URL if the source request is not from main domain
-            // or an HTTPS request
-            if (($domain && $host !== $domain) || $isSecuredRequest) {
-                $uri  = $request->getRequestUri();
-                $url = 'http://' . $domain . $port . $uri;
-
-                $event->setResponse(new RedirectResponse($url, 301));
-            }
+            return;
         }
-    }
 
-    /**
-     * Returns the current instance.
-     *
-     * @return Instance The current instance.
-     */
-    public function getInstance()
-    {
-        return $this->instance;
+        $originalUri = $this->getOriginalUri($request);
+        $expectedUri = $this->getExpectedUri($request, $instance);
+
+        if ($originalUri !== $expectedUri) {
+            $event->setResponse(new RedirectResponse($expectedUri, 301));
+        }
     }
 
     /**
@@ -206,8 +86,89 @@ class InstanceLoaderListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            SymfonyKernelEvents::REQUEST => array(array('onKernelRequest', 100)),
-        );
+        return [
+            KernelEvents::REQUEST => [ ['onKernelRequest', 100] ],
+        ];
+    }
+
+    /**
+     * Configures the services basing on the loaded instance.
+     *
+     * @param Instance $instance The loaded instance.
+     */
+    protected function configure($instance)
+    {
+        $this->container->get('cache')->setNamespace($instance->internal_name);
+
+        // Initialize the instance database connection
+        $database   = $instance->getDatabaseName();
+        $connection = $this->container->get('db_conn_manager');
+
+        if ($instance->internal_name != 'manager') {
+            $connection = $this->container->get('db_conn');
+            $connection->selectDatabase($database);
+
+            $this->container->get('dbal_connection')->selectDatabase($database);
+
+            $this->container->get('orm.manager')
+                ->getConnection('instance')
+                ->selectDatabase($database);
+        }
+
+        // TODO: take this out, Workaround
+        \Application::load();
+        \Application::initDatabase($connection);
+    }
+
+    /**
+     * Returns the expected URI basing on the request and the instance.
+     *
+     * @param Request  $request  The current request.
+     * @param Instance $instance The current instance.
+     *
+     * @return String The expected URI.
+     */
+    protected function getExpectedUri($request, $instance)
+    {
+        $host   = $request->getHost();
+        $port   = $request->getPort();
+        $scheme = 'http://';
+        $uri    = $request->getRequestUri();
+
+        $port = in_array($port, [ 80, 443 ]) ?  '' : ':' . $port;
+
+        if (strpos($uri, '/admin') === 0) {
+            if ($this->container->getParameter('opennemas.backend_force_ssl')) {
+                $scheme = 'https://';
+            }
+
+            $host = $instance->internal_name .
+                $this->container->getParameter('opennemas.base_domain');
+
+        } elseif ($this->container->getParameter('opennemas.redirect_frontend')) {
+            if (!empty($instance->domains)) {
+                $host = $instance->getMainDomain();
+            }
+        }
+
+        return $scheme . $host . $port . $uri;
+    }
+
+    /**
+     * Returns the original URI.
+     *
+     * @param Request $request The current request.
+     *
+     * @return String The original URI.
+     */
+    protected function getOriginalUri($request)
+    {
+        $scheme = $request->getScheme();
+
+        if (!empty($request->headers->get('x-forwarded-proto'))) {
+            $scheme = $request->headers->get('x-forwarded-proto');
+        }
+
+        return str_replace($request->getScheme(), $scheme, $request->getUri());
     }
 }
