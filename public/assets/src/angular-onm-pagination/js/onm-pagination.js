@@ -151,7 +151,7 @@
         };
 
         // Updates pagination values when the current page changes.
-        $scope.$watch('[ngModel,itemsPerPage]', function() {
+        $scope.$watch('[ ngModel, itemsPerPage, totalItems ]', function() {
           $scope.from = 1;
           $scope.to   = $scope.totalItems;
           $scope.totalPages = Math.ceil($scope.totalItems / $scope.itemsPerPage);
