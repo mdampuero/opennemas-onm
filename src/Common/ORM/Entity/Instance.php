@@ -17,9 +17,9 @@ use Common\ORM\Core\Entity;
 class Instance extends Entity
 {
     /**
-     * Returns the instance Client object.
+     * Returns the instance client id.
      *
-     * @return Client The client.
+     * @return integer The client id.
      */
     public function getClient()
     {
@@ -55,14 +55,19 @@ class Instance extends Entity
      */
     public function getMainDomain()
     {
-        if ($this->main_domain && $this->main_domain > 0) {
-            $domain = $this->domains[$this->main_domain - 1];
-        } elseif (is_array($this->domains) && !empty($this->domains)) {
-            $domain = $this->domains[0];
-        } else {
-            $domain = null;
+        if ($this->main_domain === 0
+            || !is_array($this->domains)
+            || empty($this->domains)
+        ) {
+            return null;
         }
 
-        return $domain;
+        $index = $this->main_domain;
+
+        if ($index <= count($this->domains)) {
+            return $this->domains[$this->main_domain - 1];
+        }
+
+        return $this->domains[0];
     }
 }
