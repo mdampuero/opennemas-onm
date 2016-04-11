@@ -15,14 +15,18 @@ entity:
         users:     array
     mapping:
         table: notification
+        converters:
+            default:
+                class:     Common\ORM\Database\Data\Converter\BaseConverter
+                arguments: [ '@orm.metadata.notification' ]
         repositories:
             manager:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.notification' ]
         persisters:
             manager:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.notification' ]
         columns:
             id:
                 type:    integer

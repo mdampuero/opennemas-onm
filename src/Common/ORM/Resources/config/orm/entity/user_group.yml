@@ -6,20 +6,24 @@ entity:
         privileges: array
     mapping:
         table: user_group
+        converters:
+            default:
+                class:     Common\ORM\Database\Data\Converter\BaseConverter
+                arguments: [ '@orm.metadata.user_group' ]
         repositories:
             instance:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.instance' ]
+                arguments: [ '@cache', '@orm.connection.instance', '@orm.metadata.user_group' ]
             manager:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.user_group' ]
         persisters:
             instance:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.instance' ]
+                arguments: [ '@cache', '@orm.connection.instance', '@orm.metadata.user_group' ]
             manager:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.user_group' ]
         columns:
             id:
                 type: integer

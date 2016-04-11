@@ -35,14 +35,18 @@ entity:
             table: extension_meta
             ids:
                 id: extension_id
+        converters:
+            default:
+                class:     Common\ORM\Database\Data\Converter\BaseConverter
+                arguments: [ '@orm.metadata.extension' ]
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.extension' ]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.manager' ]
+                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.extension' ]
         columns:
             id:
                 type: bigint
