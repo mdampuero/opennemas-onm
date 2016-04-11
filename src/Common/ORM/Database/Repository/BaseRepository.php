@@ -10,7 +10,7 @@
 namespace Common\ORM\Database\Repository;
 
 use Common\ORM\Core\OQL\OQLTranslator;
-use Common\ORM\Database\Data\Converter\Converter;
+use Common\ORM\Database\Data\Converter\BaseConverter;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
@@ -59,7 +59,7 @@ class BaseRepository extends Repository
     {
         $this->cache      = $cache;
         $this->conn       = $conn;
-        $this->converter  = new Converter($metadata);
+        $this->converter  = new BaseConverter($metadata);
         $this->metadata   = $metadata;
         $this->translator = new OQLTranslator($metadata);
     }

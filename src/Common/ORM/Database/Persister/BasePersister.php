@@ -6,7 +6,7 @@ use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Persister;
-use Common\ORM\Database\Data\Converter\Converter;
+use Common\ORM\Database\Data\Converter\BaseConverter;
 use Onm\Cache\CacheInterface;
 
 class BasePersister extends Persister
@@ -57,7 +57,7 @@ class BasePersister extends Persister
     {
         $this->cache     = $cache;
         $this->conn      = $conn;
-        $this->converter = new Converter($metadata);
+        $this->converter = new BaseConverter($metadata);
         $this->metadata  = $metadata;
     }
 
