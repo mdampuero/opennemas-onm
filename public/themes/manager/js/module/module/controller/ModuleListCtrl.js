@@ -39,7 +39,8 @@
         $scope.columns = {
           collapsed: 1,
           selected: [ 'enabled', 'created', 'image', 'l10n', 'name', 'updated',
-            'uuid' ]
+            'uuid'
+          ]
         };
 
         /**
@@ -104,7 +105,7 @@
               success: function() {
                 return function(modalWindow) {
                   var route = {
-                    name: 'manager_ws_module_delete',
+                    name:   'manager_ws_module_delete',
                     params: { id: id }
                   };
 
@@ -148,7 +149,7 @@
                   var route = 'manager_ws_modules_delete';
                   var data  = { ids: $scope.selected.items };
 
-                  http.delete(route, items).then(function(response) {
+                  http.delete(route, data).then(function(response) {
                     modalWindow.close({ data: response.data, success: true });
                   }).error(function(response) {
                     modalWindow.close({ data: response.data, success: false });
@@ -219,9 +220,9 @@
          * @description
          *   Enables/disables a module.
          *
-         * @param {String}  notification The notification object.
-         * @param {String}  property     The property name.
-         * @param {Boolean} value        The property value.
+         * @param {String}  item     The notification object.
+         * @param {String}  property The property name.
+         * @param {Boolean} value    The property value.
          */
         $scope.patch = function(item, property, value) {
           var data = {};
@@ -282,7 +283,7 @@
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.add('modules-columns', $scope.columns);
+            webStorage.local.set('modules-columns', $scope.columns);
           }
         }, true);
 
@@ -295,4 +296,3 @@
       }
     ]);
 })();
-
