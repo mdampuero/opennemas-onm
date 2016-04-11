@@ -20,7 +20,7 @@ class InvalidRepositoryException extends \Exception
      * @param string $entity     The entity name.
      * @param string $repository The repository name.
      */
-    public function __construct($entity, $repository)
+    public function __construct($entity, $repository = null)
     {
         $message = _('No repositories found for "%s"');
         $message = sprintf($message, $entity);
