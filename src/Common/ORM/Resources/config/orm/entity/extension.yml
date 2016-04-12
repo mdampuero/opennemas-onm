@@ -1,7 +1,7 @@
 entity:
     name: Extension
     enum:
-        type: [ module, theme, widget ]
+        type: [ module, theme, theme-addon, widget ]
 
     required:
         - uuid
