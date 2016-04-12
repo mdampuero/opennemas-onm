@@ -31,7 +31,7 @@ class NotificationController extends Controller
         $em = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $notification = $em->getRepository('manager.notification')->find($id);
+        $notification = $em->getRepository('Notification')->find($id);
 
         $em->remove($notification);
         $msg->add(_('Notification deleted successfully.'), 'success');
