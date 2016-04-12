@@ -204,6 +204,24 @@ class EuropaPress extends Parser
     }
 
     /**
+     * Returns the title from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The resource title.
+     */
+    public function getAgency($data)
+    {
+        if (empty($data->AGENCIA)) {
+            return '';
+        }
+
+        $agency = (string) $data->AGENCIA;
+
+        return iconv(mb_detect_encoding($agency), "UTF-8", $agency);
+    }
+
+    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -251,8 +269,10 @@ class EuropaPress extends Parser
         $resource->file_name    = (string) $data->FOTO->NOMBRE;
         $resource->file_path    = (string) $data->FOTO->NOMBRE;
         $resource->id           = $this->getId($data) . '.photo';
-        $resource->image_type    = 'image/' . $resource->extension;
+        $resource->image_type   = 'image/' . $resource->extension;
         $resource->title        = (string) $data->FOTO->PIE;
+        $resource->summary      = (string) $data->FOTO->PIE;
+        $resource->description  = (string) $data->FOTO->PIE;
         $resource->type         = 'photo';
         $resource->urn          = $this->getUrn($data, 'photo');
 
@@ -268,7 +288,12 @@ class EuropaPress extends Parser
 
         $resource = new Resource();
 
-        $resource->agency_name  = 'EuropaPress';
+        $agency = 'EuropaPress';
+        if (!empty($this->getAgency($data))) {
+            $agency = $this->getAgency($data);
+        }
+
+        $resource->agency_name  = $agency;
         $resource->body         = $this->getBody($data);
         $resource->category     = $this->getCategory($data);
         $resource->created_time = $this->getCreatedTime($data)
