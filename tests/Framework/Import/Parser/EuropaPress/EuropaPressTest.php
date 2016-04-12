@@ -35,6 +35,7 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
             <TITULAR>Sample title</TITULAR>
             <ENTRADILLA>Sample summary</ENTRADILLA>
             <CONTENIDO>Sample body</CONTENIDO>
+            <FIRMA2>Sample signature not EP</FIRMA2>
             <FOTO>
                 <NOMBRE>photo1.jpg</NOMBRE>
                 <PIE>Photo description</PIE>
@@ -62,6 +63,8 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->photo->file_name   = 'photo1.jpg';
         $this->photo->image_type  = 'image/jpg';
         $this->photo->title       = 'Photo description';
+        $this->photo->summary     = 'Photo description';
+        $this->photo->description = 'Photo description';
         $this->photo->type        = 'photo';
         $this->photo->urn         =
             'urn:europapress:europapress:20150921181604:photo:20150921181604';
@@ -80,15 +83,16 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->created_time =
             $this->text->created_time->format('Y-m-d H:i:s');
 
-        $this->text->id       = '20150921181604';
-        $this->text->pretitle = 'Sample pretitle';
-        $this->text->priority = 4;
-        $this->text->related  = [ '20150921181604.photo' ];
-        $this->text->summary  = 'Sample summary';
-        $this->text->tags     = '';
-        $this->text->title    = 'Sample title';
-        $this->text->type     = 'text';
-        $this->text->urn      = 'urn:europapress:europapress:20150921181604:text:20150921181604';
+        $this->text->id        = '20150921181604';
+        $this->text->pretitle  = 'Sample pretitle';
+        $this->text->priority  = 4;
+        $this->text->related   = [ '20150921181604.photo' ];
+        $this->text->summary   = 'Sample summary';
+        $this->text->tags      = '';
+        $this->text->title     = 'Sample title';
+        $this->text->type      = 'text';
+        $this->text->urn       = 'urn:europapress:europapress:20150921181604:text:20150921181604';
+        $this->text->signature = 'Sample signature not EP';
     }
 
     public function testCheckFormat()
@@ -138,6 +142,13 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->parser->getPhoto($this->invalid));
 
         $this->assertEquals($this->photo, $this->parser->getPhoto($this->valid));
+    }
+
+    public function testGetSignature()
+    {
+        $this->assertEmpty($this->parser->getSignature($this->invalid));
+
+        $this->assertEquals('Sample signature not EP', $this->parser->getSignature($this->valid));
     }
 
     public function testGetPriority()

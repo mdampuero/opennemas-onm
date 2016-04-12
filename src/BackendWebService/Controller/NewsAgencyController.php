@@ -498,8 +498,8 @@ class NewsAgencyController extends Controller
             'urn_source'     => $resource->urn,
         ];
 
-        if ($resource->agency_name != 'EuropaPress') {
-            $data['agency'] = $resource->agency_name;
+        if (!empty($resource->signature)) {
+            $data['agency'] = $resource->signature;
         }
 
         // Check photos and videos for articles and opinions
