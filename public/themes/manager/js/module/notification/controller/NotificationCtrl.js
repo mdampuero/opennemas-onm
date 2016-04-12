@@ -10,7 +10,6 @@
      * @requires $scope
      * @requires http
      * @requires messenger
-     * @requires data
      *
      * @description
      *   Handles actions for notification edition form

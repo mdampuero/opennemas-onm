@@ -8,9 +8,9 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $uibModal
      * @requires $scope
-     * @requires itemService
+     * @requires $uibModal
+     * @requires http
      * @requires routing
      * @requires messenger
      *
@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger) {
+      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger',
+      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -43,9 +43,7 @@
             max_users:   0,
             time_zone:     '335'
           },
-          metas: {
-            billing: []
-          }
+          metas: {}
         };
 
         /**
@@ -237,7 +235,7 @@
             $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
           }
 
-          itemService.save('manager_ws_instance_create', $scope.instance)
+          http.post('manager_ws_instance_create', $scope.instance)
             .success(function (response) {
               messenger.post({ message: response, type: 'success' });
 
@@ -342,7 +340,7 @@
             $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
           }
 
-          itemService.update('manager_ws_instance_update', $scope.instance.id,
+          http.put('manager_ws_instance_update', $scope.instance.id,
             $scope.instance).success(function (response) {
               messenger.post({ message: response, type: 'success' });
               $scope.saving = 0;
@@ -480,34 +478,32 @@
           $scope.selected = null;
         });
 
+        var route = 'manager_ws_instance_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_instance_show', $routeParams.id).then(
-            function(response) {
-              $scope.template = response.data.template;
-              $scope.instance = response.data.instance;
-
-              if (!$scope.instance.metas) {
-                $scope.instance.metas = {};
-              }
-            }
-          );
-        } else {
-          itemService.new('manager_ws_instance_new').then(
-            function(response) {
-              $scope.template = response.data.template;
-
-              // Select Base plan as default
-              for (var i = 0; i < response.data.template.modules.length; i++) {
-                if (response.data.template.modules[i].plan == 'Base') {
-                  $scope.instance.activated_modules.push(
-                      response.data.template.modules[i].id);
-                }
-              }
-
-              $scope.initModules();
-            }
-          );
+          route = {
+            name:   'manager_ws_instance_show',
+            params: { id: $routeParams.id }
+          };
         }
+
+        http.get(route).then(function(response) {
+          $scope.extra = response.data.extra;
+
+          if (response.data.instance) {
+            $scope.instance = response.data.instance;
+          }
+
+          // Select Base plan as default
+          for (var i = 0; i < response.data.extra.modules.length; i++) {
+            if (response.data.template.modules[i].plan === 'Base') {
+              $scope.instance.activated_modules.push(
+                  response.data.template.modules[i].id);
+            }
+          }
+
+          $scope.initModules();
+        });
       }
     ]);
 })();
