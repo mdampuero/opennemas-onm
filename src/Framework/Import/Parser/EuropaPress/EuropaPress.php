@@ -210,15 +210,15 @@ class EuropaPress extends Parser
      *
      * @return string The resource title.
      */
-    public function getAgency($data)
+    public function getSignature($data)
     {
-        if (empty($data->AGENCIA)) {
+        if (empty($data->FIRMA2)) {
             return '';
         }
 
-        $agency = (string) $data->AGENCIA;
+        $signature = (string) $data->FIRMA2;
 
-        return iconv(mb_detect_encoding($agency), "UTF-8", $agency);
+        return iconv(mb_detect_encoding($signature), "UTF-8", $signature);
     }
 
     /**
@@ -288,12 +288,8 @@ class EuropaPress extends Parser
 
         $resource = new Resource();
 
-        $agency = 'EuropaPress';
-        if (!empty($this->getAgency($data))) {
-            $agency = $this->getAgency($data);
-        }
-
-        $resource->agency_name  = $agency;
+        $resource->signature    = $this->getSignature($data);
+        $resource->agency_name  = 'EuropaPress';
         $resource->body         = $this->getBody($data);
         $resource->category     = $this->getCategory($data);
         $resource->created_time = $this->getCreatedTime($data)
