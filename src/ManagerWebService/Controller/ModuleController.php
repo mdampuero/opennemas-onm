@@ -33,22 +33,19 @@ class ModuleController extends Controller
     {
         $msg = $this->get('core.messenger');
         $oql = sprintf('uuid = "%s"', $uuid);
+        $id  = $request->query->get('id');
 
-        $module = $this->get('orm.manager')
-            ->getRepository('Extension')
-            ->findOneBy($oql);
+        try {
+            $module = $this->get('orm.manager')
+                ->getRepository('Extension')
+                ->findOneBy($oql);
 
-        if (!$module || $request->query->get('id') == $module->id) {
-            $msg->add(_('Valid uuid'), 'success');
-
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
+            if ($module->id !== (int) $id) {
+                $text = _('A module with the uuid \'%s\' already exists');
+                $msg->add(sprintf($text, $uuid), 'error', 409);
+            }
+        } catch (\Exception $e) {
         }
-
-        $msg->add(
-            sprintf(_('A module with the uuid \'%s\' already exists'), $uuid),
-            'error',
-            409
-        );
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -281,7 +278,8 @@ class ModuleController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_ws_module_show', [ 'id' => $module->id ]
+                'manager_ws_module_show',
+                [ 'id' => $module->id ]
             )
         );
 
@@ -339,7 +337,7 @@ class ModuleController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Extension')->objectify($params);
 
-        $module   = $em ->getRepository('manager.extension')->find($id);
+        $module   = $em ->getRepository('Extension')->find($id);
         $path     = $this->getParameter('paths.extensions_assets_path') . DS;
         $toDelete = empty($module->images) ? [] : $module->images;
 
