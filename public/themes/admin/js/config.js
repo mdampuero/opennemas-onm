@@ -6,6 +6,9 @@
     $interpolateProvider.startSymbol('[%').endSymbol('%]');
   }]).config(['$httpProvider', function ($httpProvider) {
     // Use x-www-form-urlencoded Content-Type
+    $httpProvider.defaults.headers.put['X-Requested-With']  = 'XMLHttpRequest';
+    $httpProvider.defaults.headers.post['X-Requested-With']  = 'XMLHttpRequest';
+    $httpProvider.defaults.headers.patch['X-Requested-With']  = 'XMLHttpRequest';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
     $httpProvider.defaults.headers.patch['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
