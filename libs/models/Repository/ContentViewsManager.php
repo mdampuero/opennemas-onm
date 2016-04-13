@@ -27,7 +27,11 @@ class ContentViewsManager extends EntityManager
     {
         $sql = "SELECT * FROM `content_views`";
         if (is_array($id)) {
-            $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
+            if (count($id) > 0) {
+                $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
+            } else {
+                return [];
+            }
         } else {
             $sql .= " WHERE pk_fk_content = ".intval($id);
         }
