@@ -247,6 +247,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         // Disable spinner
         $scope.loading = 0;
         $scope.loadingMore = false;
+      }, function errorCallback(response) {
+        $scope.loading = 0;
+        var params = {
+          id: new Date().getTime(),
+          message: 'Error while fetching data from backend',
+          type: 'error'
+        };
+
+        messenger.post(params);
       });
     };
 
