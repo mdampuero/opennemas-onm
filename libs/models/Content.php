@@ -1038,7 +1038,9 @@ class Content
         $authorName = (is_object($author)) ? $author->name : '';
 
         if ($this->id !== null) {
-            $views = getService('content_views_repository')->getViews($this->id);
+            if (is_null($this->views)) {
+                $this->views = getService('content_views_repository')->getViews($this->id);
+            }
 
             $status = $this->getStatus();
             $schedulingState = $this->getSchedulingState();
@@ -1046,7 +1048,7 @@ class Content
             return array(
                 'title'           => $this->title,
                 'category'        => $ccm->getName($this->category),
-                'views'           => $views,
+                'views'           => $this->views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
                 'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
