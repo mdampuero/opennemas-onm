@@ -48,8 +48,7 @@
         $scope.columns = {
           collapsed: 1,
           selected: [
-            'name', 'domains', 'last_login', 'created',
-            'articles', 'alexa', 'activated'
+            'title', 'instance', 'type', 'l10n', 'fixed'
           ]
         };
 
