@@ -1748,6 +1748,15 @@ class MigrationSaver
                 case 'youtube':
                     $field = $this->convertToYoutube($field);
                     break;
+                case 'strip_tags':
+                    $field = strip_tags($field);
+                    break;
+                case 'summary':
+                    $field = StringUtils::getNumWords($field, 50);
+                    break;
+                case 'replace':
+                    $field = preg_replace($params['pattern'], $params['replacement'], $field);
+                    break;
                 default:
                     if (method_exists($this, $type . 'Filter')) {
                         $field = call_user_func(
