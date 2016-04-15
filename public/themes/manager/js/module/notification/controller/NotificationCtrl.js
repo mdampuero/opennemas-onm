@@ -62,6 +62,28 @@
         };
 
         /**
+         * @function autocomplete
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Suggest a list of instance basing on the current query.
+         *
+         * @return {Array} A list of instances
+         */
+        $scope.autocomplete = function(query) {
+          var tags = [];
+
+          for (var i = 0; i < $scope.extra.instances.length; i++) {
+            var instance = $scope.extra.instances[i];
+            if (!query || instance.name.indexOf(query.toLowerCase()) !== -1) {
+              tags.push(instance);
+            }
+          }
+
+          return tags;
+        };
+
+        /**
          * @function changeLanguage
          * @memberOf NotificationCtrl
          *
@@ -120,19 +142,23 @@
 
           $scope.saving = 1;
 
-          $scope.notification.instances = $scope.notification.instances.map(function(a) {
-            return a.id;
-          });
+          var data = angular.copy($scope.notification);
 
-          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
-            $scope.notification.start = $scope.notification.start.toString();
+          if (data.instances) {
+            data.instances = data.instances.map(function(a) {
+              return a.id;
+            });
           }
 
-          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
-            $scope.notification.end = $scope.notification.end.toString();
+          if (data.start && angular.isObject(data.start)) {
+            data.start = data.start.toString();
           }
 
-          itemService.save('manager_ws_notification_create', $scope.notification)
+          if (data.end && angular.isObject(data.end)) {
+            data.end = data.end.toString();
+          }
+
+          itemService.save('manager_ws_notification_create', data)
             .then(function (response) {
               messenger.post({ message: response.data, type: 'success' });
 
@@ -175,12 +201,23 @@
           $scope.saving = 1;
 
           var data = angular.copy($scope.notification);
-          data.instances = data.instances.map(function(a) {
-            return a.id;
-          });
 
-          itemService.update('manager_ws_notification_update', $scope.notification.id,
-            $scope.notification).success(function (response) {
+          if (data.instances) {
+            data.instances = data.instances.map(function(a) {
+              return a.id;
+            });
+          }
+
+          if (data.start && angular.isObject(data.start)) {
+            data.start = data.start.toString();
+          }
+
+          if (data.end && angular.isObject(data.end)) {
+            data.end = data.end.toString();
+          }
+
+          itemService.update('manager_ws_notification_update', data.id,
+            data).success(function (response) {
               messenger.post({ message: response, type: 'success' });
               $scope.saving = 0;
             }).error(function(response) {
@@ -192,19 +229,6 @@
         $scope.$on('$destroy', function() {
           $scope.notification = null;
         });
-
-        $scope.test = function(query) {
-          var tags = [];
-
-          for (var i = 0; i < $scope.extra.instances.length; i++) {
-            var instance = $scope.extra.instances[i];
-            if (!query || instance.name.indexOf(query.toLowerCase()) !== -1) {
-              tags.push(instance);
-            }
-          }
-
-          return tags;
-        };
 
         if ($routeParams.id) {
           itemService.show('manager_ws_notification_show', $routeParams.id).then(
