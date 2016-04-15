@@ -336,23 +336,21 @@ class NotificationController extends Controller
             }
 
             $extra = $this->getTemplateParams();
-            $em = $this->get('instance_manager');
 
             $instances = [];
-            foreach ($notification->instances as $id) {
-                if ($id == 0) {
-                    $instances[] = [ 'name' => _('All'), 'id' => $id ];
-                } elseif ($id == -1) {
-                    $instances[] = [ 'name' => 'Manager', 'id' => $id ];
-                } else {
-                    $instances[] = [ 'name' => $em->find($id)->internal_name, 'id' => $id ];
+            foreach ($notification->instances as $instance) {
+                $name = $instance;
+
+                if ($instance == 'all') {
+                    $name = _('All');
+                } elseif ($instance == 'manager') {
+                    $name = 'Manager';
                 }
+
+                $instances[] = [ 'name' => $name, 'id' => $instance ];
             }
 
             $notification->instances = $instances;
-
-
-            unset($extra['types']['-1']);
 
             return new JsonResponse([
                 'extra'        => $extra,
@@ -429,8 +427,8 @@ class NotificationController extends Controller
         $instances = $this->get('instance_manager')->findBy([]);
 
         $params['instances'] = [
-            [ 'name' => 'Manager', 'id' => -1 ],
-            [ 'name' => _('All'), 'id' => 0 ]
+            [ 'id' => 'manager', 'name' => 'Manager' ],
+            [ 'id' => 'all', 'name' => _('All') ]
         ];
 
         $params['languages'] = [
@@ -441,8 +439,8 @@ class NotificationController extends Controller
 
         foreach ($instances as $instance) {
             $params['instances'][] = [
-                'name'  => $instance->internal_name,
-                'id' => $instance->id
+                'id'   => $instance->internal_name,
+                'name' => $instance->internal_name
             ];
         }
 
