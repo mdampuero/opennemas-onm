@@ -96,25 +96,11 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
             <label for="checkbox-instance">
               {t}Instance{/t}
             </label>
           </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-type" checklist-model="columns.selected" checklist-value="'type'" type="checkbox">
-            <label for="checkbox-type">
-              {t}Type{/t}
-            </label>
-          </div>
-          <div class="checkbox check-default p-b-5">
-            <input id="checkbox-style" checklist-model="columns.selected" checklist-value="'style'" type="checkbox">
-            <label for="checkbox-style">
-              {t}Style{/t}
-            </label>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
             <label for="checkbox-l10n">
@@ -127,6 +113,8 @@
               {t}Start{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
             <label for="checkbox-end">
@@ -137,6 +125,18 @@
             <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
             <label for="checkbox-fixed">
               {t}Fixed{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-forced" checklist-model="columns.selected" checklist-value="'forced'" type="checkbox">
+            <label for="checkbox-forced">
+              {t}Forced{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+            <label for="checkbox-enabled">
+              {t}Enabled{/t}
             </label>
           </div>
         </div>
@@ -216,8 +216,8 @@
                 </div>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <div ng-repeat="id in item.instances">
-                  [% extra.instances[id].name %]
+                <div ng-repeat="instance in item.instances track by $index">
+                  [% instance === 'all' ? '{t}All{/t}' : instance %]
                 </div>
               </td>
               <td class="text-center">

@@ -48,7 +48,7 @@
         $scope.columns = {
           collapsed: 1,
           selected: [
-            'title', 'instance', 'type', 'l10n', 'fixed'
+            'title', 'instances', 'type', 'l10n', 'fixed', 'forced', 'enabled'
           ]
         };
 
