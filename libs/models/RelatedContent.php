@@ -209,7 +209,7 @@ class RelatedContent
      */
     public function getRelations($contentID)
     {
-        $sql = "SELECT pk_content2 FROM related_contents ".
+        $sql = "SELECT pk_content2, position FROM related_contents ".
                "WHERE verportada=\"1\" AND pk_content1=? ".
                "ORDER BY position ASC";
 
@@ -236,7 +236,7 @@ class RelatedContent
      */
     public function getRelationsForInner($contentID)
     {
-        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+        $sql = "SELECT DISTINCT pk_content2, posinterior FROM related_contents ".
                "WHERE verinterior=\"1\" AND pk_content1=? ".
                "ORDER BY posinterior ASC";
 
@@ -263,7 +263,7 @@ class RelatedContent
      **/
     public function getHomeRelations($contentID)
     {
-        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+        $sql = "SELECT DISTINCT pk_content2, position FROM related_contents ".
                "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
 
         $rs = $this->dbConn->fetchAll($sql, [$contentID]);
