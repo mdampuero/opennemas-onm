@@ -98,7 +98,6 @@ class FrontpageManager extends EntityManager
         }
 
         $contents = $this->findMulti($contentIdentifiers);
-        var_dump(count($contents));
 
         return $contents;
     }

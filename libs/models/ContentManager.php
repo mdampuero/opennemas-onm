@@ -1250,8 +1250,7 @@ class ContentManager
         $orderBy,
         $page = 1,
         $numElements = 10,
-        $offset = 0,
-        $debug = false
+        $offset = 0
     ) {
         $this->init($contentType);
 
@@ -1287,9 +1286,6 @@ class ContentManager
                  . ' '
                  . $orderBy
                  . ' LIMIT '.$limit;
-        }
-        if ($debug == true) {
-            var_dump($sql);
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
