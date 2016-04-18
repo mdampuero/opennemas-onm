@@ -1180,19 +1180,22 @@ class ContentController extends Controller
      */
     protected function loadExtraData($contents)
     {
-        $extra = array();
+        $extra      = [];
+        $ids        = [];
+        $contentIds = [];
 
-        $ids = array();
-
-        $vm = $this->get('content_views_repository');
-        $extra['views'] = array();
         foreach ($contents as $content) {
             $ids[] = $content->fk_author;
             $ids[] = $content->fk_publisher;
             $ids[] = $content->fk_user_last_editor;
 
-            $extra['views'][$content->id] = $vm->getViews($content->id);
+            $contentIds[] = $content->id;
         }
+
+        // Fetch all content views at once
+        $vm = $this->get('content_views_repository');
+        $extra['views'] = $vm->getViews($contentIds);
+
         $ids = array_unique($ids);
 
         if (($key = array_search(0, $ids)) !== false) {

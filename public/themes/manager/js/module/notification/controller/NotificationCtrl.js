@@ -15,8 +15,8 @@
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$location', '$scope', 'http', 'routing', 'messenger',
-      function ($location, $scope, http, routing, messenger) {
+      '$location', '$scope', 'http', 'messenger',
+      function ($location, $scope, http, messenger) {
         /**
          * @memberOf NotificationCtrl
          *
@@ -129,17 +129,22 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          $scope.notification.instances = $scope.notification.instances
-            .map(function(a) { return a.id; });
+          var data = angular.copy($scope.notification);
 
-          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
-            $scope.notification.start = $scope.notification.start.toString();
+          if (data.instances) {
+            data.instances = data.instances.map(function(a) {
+              return a.id;
+            });
           }
 
-          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
-            $scope.notification.end = $scope.notification.end.toString();
+          if (data.start && angular.isObject(data.start)) {
+            data.start = data.start.toString();
           }
 
+          if (data.end && angular.isObject(data.end)) {
+            data.end = data.end.toString();
+          }
+          
           http.post('manager_ws_notification_save', $scope.notification)
             .then(function(response) {
               messenger.post(response.data);
@@ -148,6 +153,8 @@
                 var url = response.headers().location.replace('/manager', '');
                 $location.path(url);
               }
+
+              $scope.saving = 0;
             }, function(response) {
               messenger.post(response.data);
               $scope.saving = 0;
@@ -164,15 +171,20 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          $scope.notification.instances = $scope.notification.instances
-            .map(function(a) { return a.id; });
+          var data = angular.copy($scope.notification);
 
-          if ($scope.notification.start && angular.isObject($scope.notification.start)) {
-            $scope.notification.start = $scope.notification.start.toString();
+          if (data.instances) {
+            data.instances = data.instances.map(function(a) {
+              return a.id;
+            });
           }
 
-          if ($scope.notification.end && angular.isObject($scope.notification.end)) {
-            $scope.notification.end = $scope.notification.end.toString();
+          if (data.start && angular.isObject(data.start)) {
+            data.start = data.start.toString();
+          }
+
+          if (data.end && angular.isObject(data.end)) {
+            data.end = data.end.toString();
           }
 
           var route = {

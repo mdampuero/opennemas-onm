@@ -33,13 +33,13 @@
               <h4>
                 <i class="fa fa-user fa-lg page-navbar-icon"></i>
                 {t}Authors{/t}
-                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
               </h4>
             </li>
             <li class="quicklinks visible-xs">
-              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question fa-lg"></i>
               </a>
             </li>

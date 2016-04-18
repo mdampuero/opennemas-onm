@@ -204,6 +204,24 @@ class EuropaPress extends Parser
     }
 
     /**
+     * Returns the title from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The resource title.
+     */
+    public function getSignature($data)
+    {
+        if (empty($data->FIRMA2)) {
+            return '';
+        }
+
+        $signature = (string) $data->FIRMA2;
+
+        return iconv(mb_detect_encoding($signature), "UTF-8", $signature);
+    }
+
+    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -251,8 +269,10 @@ class EuropaPress extends Parser
         $resource->file_name    = (string) $data->FOTO->NOMBRE;
         $resource->file_path    = (string) $data->FOTO->NOMBRE;
         $resource->id           = $this->getId($data) . '.photo';
-        $resource->image_type    = 'image/' . $resource->extension;
+        $resource->image_type   = 'image/' . $resource->extension;
         $resource->title        = (string) $data->FOTO->PIE;
+        $resource->summary      = (string) $data->FOTO->PIE;
+        $resource->description  = (string) $data->FOTO->PIE;
         $resource->type         = 'photo';
         $resource->urn          = $this->getUrn($data, 'photo');
 
@@ -268,6 +288,7 @@ class EuropaPress extends Parser
 
         $resource = new Resource();
 
+        $resource->signature    = $this->getSignature($data);
         $resource->agency_name  = 'EuropaPress';
         $resource->body         = $this->getBody($data);
         $resource->category     = $this->getCategory($data);

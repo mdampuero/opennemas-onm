@@ -216,7 +216,7 @@
               </div>
               <div class="row p-b-15">
                 <div class="col-sm-6">
-                  <strong>{t}VAT{/t}</strong> [% client.vat %]
+                  <strong>{t}VAT number{/t}:</strong> [% client.vat_number %]
                 </div>
               </div>
               <div class="row p-b-15">
@@ -236,7 +236,7 @@
                   <strong>{t}State{/t}:</strong> [% client.state %]
                 </div>
                 <div class="col-sm-4">
-                  <strong>{t}Country{/t}:</strong> [% client.country %]
+                  <strong>{t}Country{/t}:</strong> [% template.countries[client.country] %]
                 </div>
               </div>
               <div class="row p-t-30">

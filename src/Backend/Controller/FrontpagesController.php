@@ -133,6 +133,20 @@ class FrontpagesController extends Controller
             'position'
         );
 
+        // Calculate the content views at once
+        $ids = array_map(function($content) {
+            return $content->id;
+        }, $contentElementsInFrontpage);
+
+        $views = getService('content_views_repository')->getViews($ids);
+        foreach ($contentElementsInFrontpage as &$content) {
+            if (array_key_exists($content->id, $views)) {
+                $content->views = $views[$content->id];
+            } else {
+                $content->views = 0;
+            }
+        }
+
         $layout = $lm->render(
             array(
                 'contents'  => $contentElementsInFrontpage,

@@ -498,6 +498,10 @@ class NewsAgencyController extends Controller
             'urn_source'     => $resource->urn,
         ];
 
+        if (!empty($resource->signature)) {
+            $data['agency'] = $resource->signature;
+        }
+
         // Check photos and videos for articles and opinions
         if ($resource->type === 'text') {
             $em = $this->get('entity_repository');

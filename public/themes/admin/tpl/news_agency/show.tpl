@@ -21,7 +21,7 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-home fa-lg"></i>
-                        <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                        <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                           <i class="fa fa-question"></i>
                         </a>
                         {t}News Agency{/t}

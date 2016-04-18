@@ -19,8 +19,7 @@
   top: 85px;
 }
 
-.content-grid {
-  .notification-list {
+.content-grid .notification-list {
     padding-right: 250px;
   }
 }

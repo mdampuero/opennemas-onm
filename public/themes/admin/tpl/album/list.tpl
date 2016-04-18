@@ -9,14 +9,14 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-stack-overflow page-navbar-icon"></i>
-              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
               {t}Albums{/t}
             </h4>
           </li>
           <li class="quicklinks visible-xs">
-            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
               <i class="fa fa-question fa-lg"></i>
             </a>
           </li>

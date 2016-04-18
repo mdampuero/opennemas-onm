@@ -82,14 +82,20 @@ class WebServiceController extends Controller
             'FRONTPAGE_MANAGER',
             'IMAGE_MANAGER',
             'KEYWORD_MANAGER',
+            'LIBRARY_MANAGER',
             'MENU_MANAGER',
             'OPINION_MANAGER',
             'SETTINGS_MANAGER',
             'STATIC_PAGES_MANAGER',
             'TRASH_MANAGER',
             'USERVOICE_SUPPORT',
-            'WIDGET_MANAGER'
+            'WIDGET_MANAGER',
+
+            // Themes included
+            'es.openhost.theme.basic',
         ];
+
+        $instance->metas = [ 'purchased' => [ 'es.openhost.theme.basic' ] ];
 
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone("UTC"));

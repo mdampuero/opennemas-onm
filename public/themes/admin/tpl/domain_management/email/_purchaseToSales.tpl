@@ -16,15 +16,15 @@
 </ul>
 <br>
 <h4>{t}Billing information{/t}</h4>
-{t}Name{/t}: {$billing['name']}<br>
-{if $billing['company']}
-  {t}Company{/t}: {$billing['company']}<br>
+{t}Name{/t}: {$client->last_name}, {$client->first_name}<br>
+{if $client->company}
+  {t}Company{/t}: {$client->company}<br>
 {/if}
-{t}VAT number{/t}: {$billing['vat']}<br>
-{t}Email{/t}: {$billing['email']}<br>
-{t}Phone{/t}: {$billing['phone']}<br>
+{t}VAT number{/t}: {$client->vat}<br>
+{t}Email{/t}: {$client->email}<br>
+{t}Phone{/t}: {$client->phone}<br>
 <address>
-  {$billing['address']}<br>
-  {$billing['postal_code']}, {$billing['city']}, {$billing['state']}<br>
-  {$countries[$billing['country']]}<br>
+  {$client->address}<br>
+  {$client->postal_code}, {$client->city}, {$client->state}<br>
+  {$countries[$client->country]}<br>
 </address>

@@ -172,76 +172,85 @@ class DomainManagementController extends Controller
         $price       = $create ? 18.00 : 12.00;
         $description = $create ? _('Domain + redirection: ') : _('Redirection: ');
 
-        $client = $this->get('orm.manager')
-            ->getRepository('manager.client', 'Database')
-            ->find($instance->getClient());
+        try {
+            $client = $this->get('orm.manager')
+                ->getRepository('manager.client', 'Database')
+                ->find($instance->getClient());
 
-        $vatTax = $this->get('vat')->getVatFromCode($client->country);
+            $vatTax = $this->get('vat')->getVatFromCode($client->country);
 
-        $payment = new Payment([
-            'client_id' => $client->id,
-            'amount'    => str_replace(',', '.', (string) round($total, 2)),
-            'date'      => $date->format('Y-m-d'),
-            'type'      => 'Check'
-        ]);
+            $payment = new Payment([
+                'client_id' => $client->id,
+                'amount'    => str_replace(',', '.', (string) round($total, 2)),
+                'date'      => $date->format('Y-m-d'),
+                'type'      => 'Check'
+            ]);
 
-        if (!empty($nonce)) {
-            $payment->nonce = $nonce;
+            if (!empty($nonce)) {
+                $payment->nonce = $nonce;
+            }
+
+            $this->get('orm.manager')->persist($payment, 'Braintree');
+
+            $invoice = new Invoice([
+                'client_id' => $client->id,
+                'date'      => date('Y-m-d'),
+                'status'    => 'sent',
+                'lines'     => []
+            ]);
+
+            foreach ($domains as $domain) {
+                $invoice->lines[] = [
+                    'description'  => $description . $domain,
+                    'unit_cost'    => $price,
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => $vatTax
+                ];
+            }
+
+            if ($method === 'CreditCard') {
+                $invoice->lines[] = [
+                    'description'  => _('Pay with credit card'),
+                    'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => 0
+                ];
+            }
+
+            $this->get('orm.manager')->persist($invoice, 'FreshBooks');
+
+            $payment->invoice_id = $invoice->invoice_id;
+            $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
+
+            $this->get('orm.manager')->persist($payment, 'FreshBooks');
+
+            $purchase = new Purchase([
+                'client'      => $client,
+                'client_id'   => $client->id,
+                'created'     => $date->format('Y-m-d H:i:s'),
+                'details'     => $invoice->lines,
+                'fee'         => $fee,
+                'invoice_id'  => $invoice->invoice_id,
+                'instance_id' => $this->get('instance')->id,
+                'method'      => $method,
+                'payment_id'  => $payment->payment_id,
+                'total'       => $payment->amount,
+            ]);
+
+            $this->get('orm.manager')->persist($purchase);
+
+            $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
+            $this->sendEmailToSales($client, $domains, $instance, $create);
+
+            return new JsonResponse(_('Domain added successfully'));
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+                'type' => 'error'
+            ], 404);
         }
-
-        $this->get('orm.manager')->persist($payment, 'Braintree');
-
-        $invoice = new Invoice([
-            'client_id' => $client->id,
-            'date'      => date('Y-m-d'),
-            'status'    => 'sent',
-            'lines'     => []
-        ]);
-
-        foreach ($domains as $domain) {
-            $invoice->lines[] = [
-                'description'  => $description . $domain,
-                'unit_cost'    => $price,
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => $vatTax
-            ];
-        }
-
-        if ($method === 'CreditCard') {
-            $invoice->lines[] = [
-                'description'  => _('Pay with credit card'),
-                'unit_cost'    => str_replace(',', '.', (string) round($fee, 2)),
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => 0
-            ];
-        }
-
-        $this->get('orm.manager')->persist($invoice, 'FreshBooks');
-
-        $payment->invoice_id = $invoice->invoice_id;
-        $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
-
-        $this->get('orm.manager')->persist($payment, 'FreshBooks');
-
-        $purchase = new Purchase([
-            'client'     => $client,
-            'created'    => $date->format('Y-m-d H:i:s'),
-            'details'    => $invoice->lines,
-            'fee'        => $fee,
-            'invoice_id' => $invoice->invoice_id,
-            'method'     => $method,
-            'payment_id' => $payment->payment_id,
-            'total'      => $payment->amount,
-        ]);
-
-        $this->get('orm.manager')->persist($purchase);
-
-        $this->sendEmailToCustomer($client->getData(), $domains, $instance, $create);
-        $this->sendEmailToSales($client->getData(), $domains, $instance, $create);
-
-        return new JsonResponse(_('Domain added successfully'));
     }
 
     /**
@@ -304,32 +313,40 @@ class DomainManagementController extends Controller
     /**
      * Sends an email to the customer.
      *
-     * @param array    $billing  The billing information.
+     * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $instance The instance.
+     * @param Instance $purchase The purchase id.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToCustomer($billing, $domains, $instance, $create)
+    private function sendEmailToCustomer($client, $domains, $purchase, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
 
         $params = $this->container
             ->getParameter("manager_webservice");
 
+        $subject = $create ?
+            'Opennemas Domain domain registration request:' :
+            'Opennemas Domain mapping request';
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Domain mapping request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
-            ->setTo($this->getUser()->contact_mail)
+            ->setTo($client->email)
             ->setBody(
                 $this->renderView(
                     'domain_management/email/_purchaseToCustomer.tpl',
                     [
-                        'billing'   => $billing,
+                        'client'    => $client,
                         'create'    => $create,
                         'countries' => $countries,
                         'domains'   => $domains,
-                        'instance'  => $instance
+                        'url'       => $this->get('router')->generate(
+                            'backend_ws_purchase_get_pdf',
+                            [ 'id' => $purchase ],
+                            true
+                        )
                     ]
                 ),
                 'text/html'
@@ -341,12 +358,12 @@ class DomainManagementController extends Controller
     /**
      * Sends an email to sales department.
      *
-     * @param array    $billing  The billing information.
+     * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
      * @param Instance $instance The instance.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($billing, $domains, $instance, $create)
+    private function sendEmailToSales($client, $domains, $instance, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
 
@@ -366,7 +383,7 @@ class DomainManagementController extends Controller
                 $this->renderView(
                     'domain_management/email/_purchaseToSales.tpl',
                     [
-                        'billing'   => $billing,
+                        'client'    => $client,
                         'create'    => $create,
                         'countries' => $countries,
                         'domains'   => $domains,

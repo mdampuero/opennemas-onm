@@ -27,7 +27,7 @@
                 {t}Subscriptors{/t}
               </a>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks">
               <a class="btn btn-primary" href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">
                 <i class="fa fa-plus"></i>
@@ -45,7 +45,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
@@ -60,7 +60,7 @@
         </ul>
         <ul class="nav quick-section pull-right">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="removePermanentlySelected()" uib-tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
             </button>
           </li>

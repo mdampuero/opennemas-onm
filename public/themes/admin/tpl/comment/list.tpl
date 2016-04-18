@@ -30,7 +30,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section pull-left">
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+              <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
               </button>
             </li>
@@ -46,19 +46,19 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="COMMENT_AVAILABLE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')" tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')" uib-tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
               </button>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')" tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')" uib-tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
               </button>
             </li>
             {/acl}
             {acl isAllowed="COMMENT_DELETE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="deleteSelected('backend_ws_comments_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="deleteSelected('backend_ws_comments_batch_delete')" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
               </button>
             </li>

@@ -46,8 +46,14 @@ node_modules/*
 #public
 public/assets/components/*
 public/assets/js/routes.js
-public/assets/images/pass.png
+public/assets/images/attention.png
+public/assets/images/ban.png
+public/assets/images/error.png
 public/assets/images/fail.png
+public/assets/images/info.png
+public/assets/images/pass.png
+public/assets/images/success.png
+public/assets/images/warning.png
 public/build
 public/bundles
 public/media/

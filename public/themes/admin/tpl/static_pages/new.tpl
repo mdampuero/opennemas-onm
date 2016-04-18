@@ -9,14 +9,14 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-file-o page-navbar-icon"></i>
-                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
                 {t}Static Pages{/t}
               </h4>
             </li>
             <li class="quicklinks visible-xs">
-              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" tooltip="{t}Help{/t}" tooltip-placement="bottom">
+              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question fa-lg"></i>
               </a>
             </li>

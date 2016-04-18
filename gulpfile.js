@@ -5,59 +5,115 @@
   var exec       = require('child_process').exec;
   var gulp       = require('gulp');
   var livereload = require('gulp-livereload');
+  var logme      = require('logme');
   var notifier   = require('node-notifier');
-  var path       = require('path');
 
+  // Configuration
+  var config = {
+    icons: {
+      error:   __dirname + '/public/assets/images/error.png',
+      success: __dirname + '/public/assets/images/success.png',
+      warning: __dirname + '/public/assets/images/warning.png'
+    },
+    paths: {
+      ag: [
+        'src',
+        'libs',
+        'public/themes/admin',
+        'public/themes/manager',
+        'public/themes/*/*/*/*.php'
+      ],
+      phpunit: [
+        'src/**/*.php',
+        'libs/**/*.php',
+        'public/themes/**/*.tpl',
+        'public/themes/**/*.php',
+        'tests/**/*.php'
+      ],
+      js: [],
+      touch: [
+        'public/assets/src/**/*.less',
+        'public/themes/**/*.less',
+        '!public/assets/src/**/main.less',
+        '!public/themes/**/main.less',
+      ],
+    },
+    watch: {
+      interval:      1000, // default 100
+      debounceDelay: 1000, // default 500
+    }
+  };
+
+  // Executes test cases
   gulp.task('phpunit', function () {
     exec('./vendor/phpunit/phpunit/phpunit 2>&1',
       function(error, stdout) {
-        var title   = '';
-        var icon    = 'fail.png';
+        var title = 'Tests executed!';
+        var icon  = config.icons.success;
+        var type  = 'info';
 
-        // Remove trainling NL and get the last one
-        var report = stdout.replace(/\n$/, '').split(/\r?\n/);
-        report = report[report.length - 1];
-        if (report.indexOf('Tests') !== -1 || report.indexOf('OK') === -1) {
-          title   = 'Unable to complete the tests!';
-          icon    = 'fail.png';
+        // Remove trailing NL and get the last one
+        var report = stdout.replace(/\n$/, '').replace(/\n/g, '\n  ');
+        var result = report.split(/\r?\n/).pop();
 
-          console.log(stdout);
-        } else {
-          title   = 'Tests executed!';
-          icon    = 'pass.png';
+        if (result.indexOf('Tests') !== -1 || result.indexOf('OK') === -1) {
+          title  = 'Unable to complete the tests!';
+          icon   = config.icons.error;
+          type   = 'error';
         }
 
-        notifier.notify({
-          'title':   title,
-          'icon':    path.join(__dirname, 'public/assets/images', icon),
-          'message': report
-        });
+        logme.log(type, title + '\n  ' + report);
+        notifier.notify({ 'title': title, 'icon': icon, 'message': result });
       }
     );
   });
 
+  // Touches less files
   gulp.task('touch', function () {
-    exec('find -type f -name main.less | xargs touch');
+    exec('find public -type f -name main.less | xargs touch');
   });
 
+  // Searches debug messages in files
+  gulp.task('search', function () {
+    var cmd = 'ag -l "(var_dump|console.log)\\(.*\\)" ' +
+      config.paths.ag.join(' ') +
+      ' --ignore adodb5 --ignore webarch --ignore scripts.js';
+
+    exec(cmd, function(error, stdout) {
+      if (stdout) {
+        notifier.notify({
+          'title':   'Check your code, dude!',
+          'icon':    config.icons.warning,
+          'message': 'Debug messages found in ' +
+              stdout.replace(/\n$/, '').split(/\r?\n/).length + ' files',
+        });
+
+        logme.warning('Debug messages found in the following files:\n  ' +
+            stdout.replace(/\n/g, '\n  '));
+      }
+    });
+  });
+
+  // Watches files and executes tasks on change
   gulp.task('watch', function () {
     livereload.listen();
 
-    // Executes tests and reload browser
-    gulp.watch([ 'app/models/**/*.php', 'libs/**/*.php', 'src/**/*.php',
-      'public/themes/**/*.tpl', 'tests/**/*.php'
-    ], batch(function (events, done) {
-      gulp.start('phpunit', done);
-      livereload.reload();
-    }));
+    // Executes test cases and reloads the browser
+    gulp.watch(config.paths.phpunit, config.watch,
+      batch(function (events, done) {
+        gulp.start('phpunit', done);
+        gulp.start('search', done);
+        livereload.reload();
+      })
+    );
 
-    // Executes tests and reload browser
-    gulp.watch([ 'public/assets/src/**/*.less', 'public/themes/**/*.less',
-      '!public/assets/src/**/main.less', '!public/themes/**/main.less',
-    ], batch(function (events, done) {
+    // Touches less files and reloads the browser
+    gulp.watch(config.paths.touch, config.watch,
+      batch(function (events, done) {
         gulp.start('touch', done);
         livereload.reload();
-    }));
+      })
+    );
   });
 
   gulp.task('default', [ 'watch' ]);

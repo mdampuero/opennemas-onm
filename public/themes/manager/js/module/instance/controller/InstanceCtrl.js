@@ -8,10 +8,10 @@
      *
      * @requires $filter
      * @requires $location
+     * @required $routeParams
      * @requires $scope
      * @requires $uibModal
      * @requires http
-     * @requires routing
      * @requires messenger
      *
      * @description

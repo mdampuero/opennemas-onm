@@ -211,8 +211,8 @@
                 </div>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <div ng-repeat="id in item.instances">
-                  [% extra.instances[id].name %]
+                <div ng-repeat="instance in item.instances track by $index">
+                  [% instance === 'all' ? '{t}All{/t}' : instance %]
                 </div>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('l10n')">

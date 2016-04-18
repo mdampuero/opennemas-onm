@@ -4,7 +4,10 @@
  * File:        function.structured_data_tags.php
  */
 
-function smarty_function_structured_data_tags($params, &$smarty) {
+function smarty_function_structured_data_tags($params, &$smarty)
+{
+    // disable for now, it's causing overload in productoin
+    return;
 
     $output = "";
 
