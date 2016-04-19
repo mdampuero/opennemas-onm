@@ -325,7 +325,7 @@
                       {t}Slug{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id)}disabled{/if}>
+                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id) && $article->content_status != 0}disabled{/if}>
                       {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
                       <span class="help-block">
