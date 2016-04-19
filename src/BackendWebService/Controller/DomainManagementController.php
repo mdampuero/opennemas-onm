@@ -135,7 +135,7 @@ class DomainManagementController extends Controller
         $primary = $instance->domains[$instance->main_domain - 1];
 
         $domains = [];
-        foreach ($instance->domains as $key => $value) {
+        foreach ($instance->domains as $value) {
             $domains[] = [
                 'free'   => $value === $base,
                 'name'   => $value,
@@ -307,7 +307,13 @@ class DomainManagementController extends Controller
      */
     private function getTarget($domain)
     {
-        return gethostbyname($domain);
+        $output = dns_get_record($domain, DNS_CNAME);
+
+        if (empty($output)) {
+            return gethostbyname($domain);
+        }
+
+        return $output[0]['target'];
     }
 
     /**
@@ -330,7 +336,7 @@ class DomainManagementController extends Controller
             'Opennemas Domain mapping request';
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain mapping request')
+            ->setSubject($subject)
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($client->email)
