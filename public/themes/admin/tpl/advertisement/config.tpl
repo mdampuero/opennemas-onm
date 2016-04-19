@@ -36,9 +36,9 @@
       </div>
     </div>
   </div>
-  <div class="content">
-    <div class="grid simple">
-      <div class="grid-body">
+  <div class="content ng-cloak">
+    <uib-tabset>
+      <uib-tab heading="{t}General{/t}">
         <div class="form-group">
           <label for="ads_settings_lifetime_cookie" class="form-label">
             {t}Cookie lifetime for intersticials{/t}
@@ -58,13 +58,9 @@
             <div class="help-block">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="grid simple">
-      <div class="grid-title">
+      </uib-tab>
+      <uib-tab heading="{t}External services{/t}">
         <h5>{t}OpenX/Revive Ad server integration{/t}</h5>
-      </div>
-      <div class="grid-body">
         <div class="form-group">
           <label for="revive_ad_server_url" class="form-label">{t}Ad server base url{/t}</label>
           <div class="controls">
@@ -72,13 +68,7 @@
             <div class="help-block">{t}The ad server URL (i.e. http://ad.serverexample.net/).{/t}</div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="grid simple">
-      <div class="grid-title">
-        <h5>{t}Tradedoubler integration{/t}</h5>
-      </div>
-      <div class="grid-body">
+        <h5 class="m-t-30">{t}Tradedoubler integration{/t}</h5>
         <div class="form-group">
           <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
           <div class="controls">
@@ -86,14 +76,8 @@
             <div class="help-block">{t}Only the ID from Tradedoubler validation tag{/t}</div>
           </div>
         </div>
-      </div>
-    </div>
-    {is_module_activated name="IADBOX_MANAGER"}
-    <div class="grid simple">
-      <div class="grid-title">
-        <h5>{t}Iadbox integration{/t}</h5>
-      </div>
-      <div class="grid-body">
+        {is_module_activated name="IADBOX_MANAGER"}
+        <h5 class="m-t-30">{t}Iadbox integration{/t}</h5>
         <div class="form-group">
           <label for="iadbox_id" class="form-label">{t}Iadbox ID{/t}</label>
           <div class="controls">
@@ -101,9 +85,46 @@
             <div class="help-block">{t}Iadbox affiliate ID{/t}</div>
           </div>
         </div>
-      </div>
-    </div>
-    {/is_module_activated}
+        {/is_module_activated}
+      </uib-tab>
+      {if $smarty.session._sf2_attributes.user->isMaster()}
+      <uib-tab heading="{t}Scripts{/t}">
+        <div class="tab-wrapper">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label" for="header-script">
+                  {t}Scripts in header{/t}
+                  <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                </label>
+                <div class="controls">
+                  <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|default:""}</textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="body-start-script">
+                  {t}Scripts at body start{/t}
+                  <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                </label>
+                <div class="controls">
+                  <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|default:""}</textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="body-end-script">
+                  {t}Scripts at body end{/t}
+                  <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                </label>
+                <div class="controls">
+                  <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|default:""}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+      {/if}
+    </uib-tabset>
   </div>
 </form>
 {/block}
