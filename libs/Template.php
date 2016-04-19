@@ -327,6 +327,7 @@ class Template extends Smarty
         $this->addFilter("output", "js_includes");
         $this->addFilter("output", "ojd");
         $this->addFilter("output", "piwik");
+        $this->addFilter("output", "ads_scripts");
         $this->addFilter("output", "meta_amphtml");
     }
 }
