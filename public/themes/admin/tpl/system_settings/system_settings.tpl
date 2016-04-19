@@ -806,6 +806,58 @@
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#instagram">
+                            <i class="fa fa-instagram"></i>{t}Instagram{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="instagram" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="instagram_page">
+                              {t}Instagram Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="instagram_page" name="instagram_page" type="text" value="{$configs['instagram_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <strong>Instagram page</strong>, add your page url on the form.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#pinterest">
+                            <i class="fa fa-pinterest-square"></i>{t}Pinterest{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="pinterest" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="pinterest_page">
+                              {t}Pinterest Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="pinterest_page" name="pinterest_page" type="text" value="{$configs['pinterest_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <strong>Pinterest page</strong>, add your page url on the form.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
                           <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#vimeo">
                             <i class="fa fa-vimeo-square"></i>{t}Vimeo{/t}
                           </a>
