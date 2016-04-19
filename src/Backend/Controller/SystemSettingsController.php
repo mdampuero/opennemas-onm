@@ -39,18 +39,20 @@ class SystemSettingsController extends Controller
     public function defaultAction()
     {
         $keys = [
-            'site_title', 'site_logo', 'site_description','site_keywords',
-            'site_agency', 'site_footer', 'mobile_logo', 'favico',
-            'youtube_page', 'contact_email', 'site_color', 'site_name',
-            'time_zone','site_language','site_footer', 'recaptcha',
-            'google_maps_api_key','google_custom_search_api_key', 'vimeo_page',
-            'facebook','facebook_page','facebook_id','twitter_page','comscore',
-            'googleplus_page', 'google_analytics', 'google_analytics_others',
-            'piwik', 'ojd', 'section_settings', 'paypal_mail', 'items_per_page',
-            'refresh_interval','items_in_blog', 'google_news_name',
-            'google_page', 'webmastertools_google', 'webmastertools_bing',
-            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
-            'cookies_hint_enabled', 'cookies_hint_url', 'linkedin_page'
+            'comscore', 'contact_email', 'cookies_hint_enabled',
+            'cookies_hint_url', 'facebook', 'facebook_id', 'facebook_page',
+            'favico', 'google_analytics', 'google_analytics_others',
+            'google_custom_search_api_key', 'google_maps_api_key',
+            'google_news_name', 'google_page', 'googleplus_page',
+            'instagram_page', 'items_in_blog', 'items_per_page',
+            'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
+            'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
+            'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
+            'section_settings', 'site_agency', 'site_color',
+            'site_description', 'site_footer', 'site_footer', 'site_keywords',
+            'site_language', 'site_logo', 'site_name', 'site_title',
+            'time_zone', 'twitter_page', 'vimeo_page', 'webmastertools_bing',
+            'webmastertools_google', 'youtube_page',
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
