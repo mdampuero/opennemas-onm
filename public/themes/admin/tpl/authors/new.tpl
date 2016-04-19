@@ -115,6 +115,19 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="form-label" for="meta[facebook]">
+                  {t}Facebook user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="fa fa-at"></i>
+                    </span>
+                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[facebook]" name="meta[facebook]" value="{$user->meta['facebook']|default:""}">
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="col-sm-4 text-center">
               <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
