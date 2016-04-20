@@ -115,8 +115,8 @@ class Photo extends Content
                     (?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            $this->id, $data["name"], $data["path_file"],
-            $data['size'], $data['width'], $data['height'],
+            (int) $this->id, $data["name"], $data["path_file"],
+            $data['size'], (int) $data['width'], (int) $data['height'],
             $data['nameCat'], $data['author_name']
         );
 
@@ -360,16 +360,16 @@ class Photo extends Content
                 SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?, `author_name`=?, `address`=?
                 WHERE pk_photo=?";
 
-        $values = array(
+        $values = [
             $this->name,
             $this->path_file,
             $this->size,
-            $this->width,
-            $this->height,
+            (int) $this->width,
+            (int) $this->height,
             $data['author_name'],
             $data['address'],
-            $data['id']
-        );
+            (int) $data['id']
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
