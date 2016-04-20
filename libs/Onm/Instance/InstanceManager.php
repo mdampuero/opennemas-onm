@@ -422,6 +422,7 @@ class InstanceManager extends BaseManager
         foreach ($ref->getProperties() as $property) {
             $properties[] = $property->name;
         }
+        $instance->created = $instance->created == '0000-00-00 00:00:00' ? '1970-01-01 00:00' : $instance->created;
 
         $values = array();
         foreach ($properties as $key) {
