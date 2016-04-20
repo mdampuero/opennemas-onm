@@ -197,22 +197,23 @@ class Advertisement extends Content
 
         $values = array(
             $this->id,
-            $data['type_advertisement'],
+            (int) $data['type_advertisement'],
             $data['categories'],
             $data['img'],
             $data['url'],
             $data['type_medida'],
-            $data['num_clic'],
+            (int) $data['num_clic'],
             0, // num_clic_count
-            $data['num_view'],
-            $data['with_script'],
+            (int) $data['num_view'],
+            (int) $data['with_script'],
             $data['script'],
-            $data['overlap'],
-            $data['timeout']
+            (int) $data['overlap'],
+            (int) $data['timeout']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return null;
         }
 
@@ -234,6 +235,7 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return;
         }
 
@@ -297,20 +299,21 @@ class Advertisement extends Content
                     `path`=?, `url`=?, `type_medida`=?, `num_clic`=?,
                     `num_view`=?,`with_script`=?,
                     `script`=?, `overlap`=?, `timeout`=?
-                WHERE pk_advertisement=".($data['id']);
+                WHERE pk_advertisement=?";
 
         $values = array(
-            $data['type_advertisement'],
+            (int) $data['type_advertisement'],
             $data['categories'],
             $data['img'],
             $data['url'],
             $data['type_medida'],
-            $data['num_clic'],
-            $data['num_view'],
-            $data['with_script'],
+            (int) $data['num_clic'],
+            (int) $data['num_view'],
+            (int) $data['with_script'],
             $data['script'],
-            $data['overlap'],
-            $data['timeout']
+            (int) $data['overlap'],
+            (int) $data['timeout'],
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
