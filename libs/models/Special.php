@@ -135,7 +135,7 @@ class Special extends Content
         $values = array(
             $this->id,
             $data['subtitle'],
-            $data['img1'],
+            (int) $data['img1'],
             $data['pdf_path']
         );
 
@@ -194,7 +194,7 @@ class Special extends Content
         $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=? WHERE pk_special=?";
         $values = array(
             $data['subtitle'],
-            $data['img1'],
+            (int) $data['img1'],
             $data['pdf_path'],
             intval($data['id']),
         );
