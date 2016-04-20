@@ -186,8 +186,8 @@ class Opinion extends Content
 
         $values = array(
             $this->id,
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion']
         );
 
@@ -273,10 +273,10 @@ class Opinion extends Content
              . "WHERE pk_opinion=?";
 
         $values = array(
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion'],
-            $data['id']
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
