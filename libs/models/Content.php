@@ -381,20 +381,20 @@ class Content
         $data['available']      = $data['content_status'];
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
-                $data['starttime'] = '0000-00-00 00:00:00';
+                $data['starttime'] = null;
             } else {
                 $data['starttime'] = date("Y-m-d H:i:s");
             }
         }
 
-        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
+        $data['endtime']          = (empty($data['endtime']))? null: $data['endtime'];
         $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))
                                     ? 0: intval($data['frontpage']);
-        $data['position']         = (empty($data['position']))? '2': $data['position'];
-        $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
-        $data['favorite']          = (empty($data['favorite']))? 0: $data['favorite'];
+        $data['position']         = (empty($data['position']))? 2: intval($data['position']);
+        $data['in_home']          = (empty($data['in_home']))? 0: intval($data['in_home']);
+        $data['favorite']         = (empty($data['favorite'])) ? 0: intval($data['favorite']);
         $data['home_pos']         = 100;
-        $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
+        $data['urn_source']       = (empty($data['urn_source'])) ? null: $data['urn_source'];
         $data['params'] =
             (!isset($data['params'])
             || empty($data['params'])) ? null: serialize($data['params']);
@@ -420,8 +420,8 @@ class Content
         }
 
         $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-        $data['fk_publisher']        = $_SESSION['userid'];
+        $data['fk_user_last_editor'] = (int) $_SESSION['userid'];
+        $data['fk_publisher']        = (int) $_SESSION['userid'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
