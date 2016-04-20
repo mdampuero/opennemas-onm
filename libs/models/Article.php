@@ -213,9 +213,9 @@ class Article extends Content
         $values = array(
             $this->id,
             $data['subtitle'], $data['agency'],  $data['summary'],
-            $data['img1'], $data['img1_footer'],
-            $data['img2'], $data['img2_footer'], $data['fk_video'],
-            $data['fk_video2'], $data['footer_video2'], $data['title_int']
+            (int) $data['img1'], $data['img1_footer'],
+            (int) $data['img2'], $data['img2_footer'], (int) $data['fk_video'],
+            (int) $data['fk_video2'], $data['footer_video2'], $data['title_int']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -325,10 +325,10 @@ class Article extends Content
 
         $values = array(
             strtoupper($data['subtitle']), $data['agency'], $data['summary'],
-            $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
-            $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
+            (int) $data['img1'], $data['img1_footer'], (int) $data['img2'], $data['img2_footer'],
+            (int) $data['fk_video'], (int) $data['fk_video2'], $data['footer_video2'],
             $data['title_int'],
-            $data['id']
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
