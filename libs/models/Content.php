@@ -440,15 +440,16 @@ class Content
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['created'], $data['changed'], $data['content_status'],
-            $data['position'],$data['frontpage'],
-            $data['fk_author'], $data['fk_publisher'],
-            $data['fk_user_last_editor'], $data['in_home'], $data['favorite'],
-            $data['home_pos'], $data['available'], $data['with_comment'],
+            $data['created'], $data['changed'], (int) $data['content_status'],
+            (int) $data['position'],$data['frontpage'],
+            (int) $data['fk_author'], $data['fk_publisher'],
+            (int) $data['fk_user_last_editor'], $data['in_home'], (int) $data['favorite'],
+            (int) $data['home_pos'], $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return false;
         }
 
@@ -535,7 +536,7 @@ class Content
             'starttime'      =>
                 (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
             'endtime'        =>
-                (empty($data['endtime'])) ? '0000-00-00 00:00:00': $data['endtime'],
+                (empty($data['endtime'])) ? null: $data['endtime'],
             'content_status' =>
                 (!isset($data['content_status'])) ? $this->content_status: $data['content_status'],
             'content_status'      =>
@@ -612,14 +613,15 @@ class Content
         $values = array(
             $data['title'], $data['description'], $data['body'], $data['created'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['changed'], $data['in_home'], $data['favorite'], $data['frontpage'],
-            $data['available'], $data['content_status'], $data['with_comment'],
-            $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
-            $catName, $data['params'], $data['id']
+            $data['changed'], (int) $data['in_home'], (int) $data['favorite'], (int) $data['frontpage'],
+            (int) $data['available'], (int) $data['content_status'], (int) $data['with_comment'],
+            (int) $data['fk_author'], (int) $data['fk_user_last_editor'], $data['slug'],
+            $catName, $data['params'], (int) $data['id']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
 
             return false;
         }
