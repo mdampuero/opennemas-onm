@@ -518,16 +518,13 @@ class Content
     public function update($data)
     {
         $this->read($data['id']);
-
-        if (array_key_exists('content_status', $data)
-            && $data['content_status'] == 1
-            && array_key_exists('starttime', $data)
-            && ($data['starttime'] =='0000-00-00 00:00:00'
-                || empty($data['starttime']))
-        ) {
-            $data['starttime'] = date("Y-m-d H:i:s");
+        if (!isset($data['starttime']) || empty($data['starttime'])) {
+            if ($data['content_status'] == 0) {
+                $data['starttime'] = null;
+            } else {
+                $data['starttime'] = date("Y-m-d H:i:s");
+            }
         }
-
         $values = array(
             'body'           => (!array_key_exists('body', $data))? '': $data['body'],
             'created'        =>
@@ -1314,6 +1311,14 @@ class Content
             $this->content_type = $this->fk_content_type;
         } else {
             $this->content_type = null;
+        }
+
+        if (!isset($this->starttime) || empty($this->starttime)) {
+            $this->starttime = null;
+        }
+
+        if (!isset($this->endtime) || empty($this->endtime)) {
+            $this->endtime = null;
         }
 
         if (isset($this->pk_fk_content_category)) {
