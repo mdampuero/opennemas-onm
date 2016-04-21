@@ -238,8 +238,8 @@
           }
 
           itemService.save('manager_ws_instance_create', $scope.instance)
-            .success(function (response) {
-              messenger.post({ message: response, type: 'success' });
+            .then(function (response) {
+              messenger.post({ message: response.data, type: 'success' });
 
               if (response.status === 201) {
                 // Get new instance id
@@ -252,9 +252,9 @@
               }
 
               $scope.saving = 0;
-            }).error(function(response) {
+            }, function(response) {
               $scope.saving = 0;
-              messenger.post({ message: response, type: 'error' });
+              messenger.post({ message: response.data, type: 'error' });
             });
         };
 
