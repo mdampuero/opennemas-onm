@@ -152,11 +152,11 @@
           $scope.loading = 1;
 
           // Search by name, domains and contact mail
-          var cleaned = angular.copy($scope.criteria)
+          var cleaned = angular.copy($scope.criteria);
+
           if (cleaned.name_like) {
-            cleaned.domains_like =
-              cleaned.contact_mail_like =
-              cleaned.name_like;
+            cleaned.domains_like      = cleaned.name_like;
+            cleaned.contact_mail_like = cleaned.name_like;
           }
 
           cleaned = itemService.cleanFilters(cleaned);
