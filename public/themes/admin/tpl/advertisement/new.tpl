@@ -137,53 +137,39 @@
                 </div>
               </div>
               <div ng-init="init({json_encode($advertisement->params)|clear_json})" id="ad_dimensions">
-                <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length < 1">
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Width{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" ng-value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-3 col-sm-offset-1">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Height{/t}
-                      </label>
-                      <div class="controls">
-                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" ng-value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <input name="params_width" ng-value="params_width" type="hidden">
+                <input name="params_height" ng-value="params_height" type="hidden">
                 <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
-                  <div class="col-sm-3">
+                  <div class="col-xs-4">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-3 col-sm-offset-1">
+                  <div class="col-xs-4">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                        <div ng-class="{ 'input-group': $index > 0 }">
-                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
-                          <span class="input-group-btn" ng-show="$index > 0">
-                            <button class="btn btn-danger" ng-click="removeInput(sizes, $index )" type="button">
-                                <i class="fa fa-trash-o"></i>
-                            </button>
-                          </span>
-                        </div>
+                        <input class="form-control pull-left" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <label class="form-label">&nbsp;</label>
+                      <div class="controls">
+                        <button class="btn btn-success pull-left" ng-click="addSize();" ng-if="$index === 0" type="button">
+                          <i class="fa fa-plus"></i>
+                        </button>
+                        <button class="btn btn-danger" ng-click="removeSize($index)" ng-if="$index !== 0" type="button">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
                       </div>
                     </div>
                   </div>

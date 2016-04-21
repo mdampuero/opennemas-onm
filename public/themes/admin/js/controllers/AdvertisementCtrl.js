@@ -18,6 +18,8 @@
       // Initialize the super class and extend it.
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+      $scope.sizes = [ { width: 0, height: 0 } ];
+
       /**
        * @function init
        * @memberOf AdvertisementCtrl
@@ -28,32 +30,16 @@
        * @param Object params The advertisement params
        */
       $scope.init = function(params) {
-        if (params == null) {
-          $scope.params_width = [];
-          $scope.params_height = [];
-        } else {
-          if (angular.isArray(params.width)) {
-            $scope.params_width = params.width;
-          } else if (params.width != '') {
-            $scope.params_width = [ params.width ];
-          } else {
-            $scope.params_width = [];
-          }
-
-          if (angular.isArray(params.height)) {
-            $scope.params_height = params.height;
-          } else if (params.height != '')  {
-            $scope.params_height = [ params.height ];
-          } else {
-            $scope.params_height = [];
-          }
+        if (!angular.isArray(params.width) || !angular.isArray(params.height)) {
+          return;
         }
 
         $scope.sizes = [];
-        for (var i = 0; i < $scope.params_width.length; i++) {
+
+        for (var i = 0; i < params.width.length; i++) {
           $scope.sizes.push({
-            width: parseInt($scope.params_width[i]),
-            height: parseInt($scope.params_height[i])}
+            width:  parseInt(params.width[i]),
+            height: parseInt(params.height[i])}
           );
         }
       };
@@ -66,9 +52,8 @@
        *   Add new input for advertisement size
        */
       $scope.addSize = function() {
-        $scope.sizes.push({width: '', height: ''});
+        $scope.sizes.push({ width: 0, height: 0 });
       };
-
 
       /**
        * @function removeInput
@@ -79,7 +64,7 @@
        *
        * @param integer index The index of the input to remove.
        */
-      $scope.removeInput = function(sizes, index) {
+      $scope.removeSize = function(index) {
         $scope.sizes.splice(index, 1);
       };
 
@@ -130,6 +115,24 @@
           });
         }
       };
+
+      // Updates params_width and params_height when sizes change
+      $scope.$watch('sizes', function(nv) {
+        if (!angular.isArray(nv)) {
+          return;
+        }
+
+        var height = [];
+        var width  = [];
+
+        for (var i = 0; i < nv.length; i++) {
+          width.push(nv[i].width);
+          height.push(nv[i].height);
+        }
+
+        $scope.params_height = angular.toJson(height);
+        $scope.params_width  = angular.toJson(width);
+      }, true);
 
       // Watch script to detect Google DFP advertisement.
       $scope.$watch('script', function(nv, ov) {

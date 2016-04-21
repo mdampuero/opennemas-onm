@@ -163,8 +163,8 @@ class AdsController extends Controller
                 'fk_author'          => $_SESSION['userid'],
                 'fk_publisher'       => $_SESSION['userid'],
                 'params'             => [
-                    'width'             => $request->request->getDigits('params_width', ''),
-                    'height'            => $request->request->getDigits('params_height', ''),
+                    'width'             => json_decode($request->request->get('params_width', '')),
+                    'height'            => json_decode($request->request->get('params_height', '')),
                     'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                     'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 ]
@@ -339,8 +339,8 @@ class AdsController extends Controller
             'fk_author'          => $_SESSION['userid'],
             'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
-                'width'             => $request->request->getDigits('params_width', ''),
-                'height'            => $request->request->getDigits('params_height', ''),
+                'width'             => json_decode($request->request->get('params_width', '')),
+                'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
             )
