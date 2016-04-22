@@ -382,4 +382,47 @@ class Theme
     {
         return $this->adsManager;
     }
+
+    /**
+     * Loads a widget given its name.
+     *
+     * @param string $widgetName The widget name.
+     */
+    public function loadWidget($widgetName)
+    {
+        $paths    = $this->getWidgetPaths();
+        $filename = \underscore($widgetName);
+
+        foreach ($paths as $path) {
+            if (file_exists($path . DS . $filename . '.class.php')) {
+                require_once $path . DS . $filename . '.class.php';
+                return;
+            }
+        }
+    }
+
+    /**
+     * Returns the paths for widgets for the current theme.
+     *
+     * @return array An array of paths.
+     */
+    public function getWidgetPaths()
+    {
+        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $parents = $this->getParentTheme();
+
+        if (!empty($parents)) {
+            if (!is_array($parents)) {
+                $parents = [ $parents ];
+            }
+
+            foreach ($parents as $theme) {
+                $paths[] = realpath(SITE_PATH . "/themes/{$theme}/tpl/widgets");
+            }
+        }
+
+        $paths[] = SITE_PATH . 'themes' . DS . 'base' . DS . 'tpl/widgets/';
+
+        return $paths;
+    }
 }
