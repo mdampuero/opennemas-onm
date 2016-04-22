@@ -56,9 +56,13 @@
             var e = $compile(response.data)($scope);
 
             // Add original parameters to form
-            for (var i in $scope.params) {
-              if ($scope.originalParams[i]) {
-                $scope.params[i] = angular.copy($scope.originalParams[i]);
+            for (var i = 0; i < $scope.params.length; i++) {
+              var item = $scope.originalParams.filter(function (e) {
+                return e.name === $scope.params[i].name;
+              });
+
+              if (item.length > 0) {
+                $scope.params[i] = angular.copy(item[0]);
               }
             }
 
