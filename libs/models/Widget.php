@@ -265,7 +265,7 @@ class Widget extends Content
                 $objects = scandir($path);
                 foreach ($objects as $object) {
                     if ($object != "." && $object != "..") {
-                        if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
+                        if (preg_match('@^widget_(.)*\.class\.tpl$@', $object)) {
                             $objectWords = explode('_', substr($object, 7, -10));
                             $name = '';
                             foreach ($objectWords as $word) {
