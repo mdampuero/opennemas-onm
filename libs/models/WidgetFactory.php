@@ -52,6 +52,16 @@ class WidgetFactory
     }
 
     /**
+     * Returns the form for widget parameters.
+     *
+     * @return string The widget form.
+     */
+    public function getForm()
+    {
+        return null;
+    }
+
+    /**
      * Returns a parameter given its name.
      *
      * @param string $name   The parameter name.
