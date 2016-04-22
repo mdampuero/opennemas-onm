@@ -94,7 +94,7 @@
             <div class="input-with-icon right">
               <select class="form-control" id="country" name="country" ng-change="template.checkPhone(template);template.checkVat(template)" ng-model="template.extra.billing.country" placeholder="{t}Country{/t}" required="required">
                 <option value="">{t}Select a country{/t}...</option>
-                <option value="[% value %]" ng-repeat="(key,value) in template.extra.countries | orderBy" ng-selected="[% template.extra.billing.country === value %]">[% key %]</option>
+                <option value="[% value %]" ng-repeat="(key,value) in template.extra.countries" ng-selected="[% template.extra.billing.country === value %]">[% key %]</option>
               </select>
             </div>
           </div>
