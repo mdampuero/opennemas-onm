@@ -3,6 +3,13 @@
 class WidgetFactory
 {
     /**
+     * The template for the widget form.
+     *
+     * @var string
+     */
+    public $form = null;
+
+    /**
      * The params for the widget.
      *
      * @var array
@@ -58,7 +65,7 @@ class WidgetFactory
      */
     public function getForm()
     {
-        return null;
+        return $this->tpl->fetch($this->form);
     }
 
     /**
