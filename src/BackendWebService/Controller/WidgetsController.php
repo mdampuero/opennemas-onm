@@ -12,6 +12,7 @@ namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 
@@ -59,5 +60,31 @@ class WidgetsController extends ContentController
                 'total'             => $total
             )
         );
+    }
+
+    /**
+     * Returns the parameters form for widgets of the given type.
+     *
+     * @param string $type The widget type.
+     *
+     * @return Response The response object.
+     */
+    public function getFormAction($type)
+    {
+        $type = 'Widget' . $type;
+
+        $this->get('instance')->theme->loadWidget($type);
+
+        if (!class_exists($type)) {
+            return new Response('', 400);
+        }
+
+        $widget = new $type(null);
+
+        if (empty($widget->getForm())) {
+            return new Response('', 400);
+        }
+
+        return new Response($widget->getForm());
     }
 }
