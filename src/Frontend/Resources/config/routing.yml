@@ -164,6 +164,10 @@ frontend_rss:
     path: /rss
     defaults: { _controller: FrontendBundle:Rss:generalRSS }
 
+frontend_fb_instant_articles:
+    path: /fb/instant-articles
+    defaults: { _controller: FrontendBundle:Rss:facebookInstantArticlesRSS }
+
 frontend_robots:
     path: /robots.txt
     defaults: { _controller: FrontendBundle:Robots:index }
