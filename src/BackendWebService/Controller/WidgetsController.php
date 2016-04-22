@@ -63,23 +63,22 @@ class WidgetsController extends ContentController
     }
 
     /**
-     * Returns the parameters form for widgets of the given type.
+     * Returns the parameters form for widgets of the given uuid.
      *
-     * @param string $type The widget type.
+     * @param string $uuid The widget uuid.
      *
      * @return Response The response object.
      */
-    public function getFormAction($type)
+    public function getFormAction($uuid)
     {
-        $type = 'Widget' . $type;
+        $this->get('instance')->theme->loadWidget($uuid);
 
-        $this->get('instance')->theme->loadWidget($type);
-
-        if (!class_exists($type)) {
+        $uuid = 'Widget' . $uuid;
+        if (!class_exists($uuid)) {
             return new Response('', 400);
         }
 
-        $widget = new $type(null);
+        $widget = new $uuid(null);
 
         if (empty($widget->getForm())) {
             return new Response('', 400);

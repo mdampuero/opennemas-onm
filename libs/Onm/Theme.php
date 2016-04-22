@@ -390,12 +390,18 @@ class Theme
      */
     public function loadWidget($widgetName)
     {
-        $paths    = $this->getWidgetPaths();
-        $filename = \underscore($widgetName);
+        $widgetName = 'Widget' . str_replace('Widget', '', $widgetName);
+        $paths      = $this->getWidgetPaths();
+        $filename   = \underscore($widgetName);
 
         foreach ($paths as $path) {
             if (file_exists($path . DS . $filename . '.class.php')) {
                 require_once $path . DS . $filename . '.class.php';
+                return;
+            }
+
+            if (file_exists($path . DS . $widgetName . '.php')) {
+                require_once $path . DS . $widgetName . '.php';
                 return;
             }
         }

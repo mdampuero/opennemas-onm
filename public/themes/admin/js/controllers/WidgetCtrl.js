@@ -37,16 +37,16 @@
          * @memberOf WidgetCtrl
          *
          * @description
-         *   Gets the form for widgets of type.
+         *   Gets the form for widgets of uuid.
          *
-         * @param {String} type The widget type.
+         * @param {String} uuid The widget uuid.
          */
-        $scope.getForm = function (type) {
+        $scope.getForm = function (uuid) {
           $scope.formLoading = true;
 
           $('.widget-form').empty();
 
-          var url = routing.generate('backend_ws_widget_get_form', { type: type });
+          var url = routing.generate('backend_ws_widget_get_form', { uuid: uuid });
 
           $http.get(url).then(function(response) {
             $scope.form        = $sce.trustAsHtml(response.data);

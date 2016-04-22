@@ -5,7 +5,7 @@ backend_ws_widgets_list:
         expose: true
 
 backend_ws_widget_get_form:
-    path:     /widgets/{type}/form
+    path:     /widgets/{uuid}/form
     defaults: { _controller: BackendWebServiceBundle:Widgets:getForm }
     options:
         expose: true

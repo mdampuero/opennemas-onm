@@ -345,8 +345,6 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
-        $class = 'Widget' . $this->content;
-
         getService('instance')->theme->loadWidget($class);
 
         try {
