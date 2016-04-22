@@ -187,15 +187,15 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $values = array(
             $data['username'],
             md5($data['password']),
-            $data['sessionexpire'],
+            (int) $data['sessionexpire'],
             $data['url'],
             $data['bio'],
-            $data['avatar_img_id'],
+            (int) $data['avatar_img_id'],
             $data['email'],
             $data['name'],
-            $data['type'],
+            (int) $data['type'],
             $data['token'],
-            $data['activated'],
+            (int) $data['activated'],
             $data['id_user_group']
         );
 
@@ -250,19 +250,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $this->id               = $rs->fields['id'];
+        $this->id               = (int) $rs->fields['id'];
         $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
-        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->sessionexpire    = (int) $rs->fields['sessionexpire'];
         $this->url              = $rs->fields['url'];
         $this->bio              = $rs->fields['bio'];
-        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
+        $this->avatar_img_id    = (int) $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
-        $this->type             = $rs->fields['type'];
+        $this->type             = (int) $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->activated        = $rs->fields['activated'];
+        $this->activated        = (int) $rs->fields['activated'];
         $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
 
         $database = $GLOBALS['application']->conn->connectionParams['dbname'];
@@ -313,15 +313,15 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $values = array(
                 $data['username'],
                 md5($data['password']),
-                $data['sessionexpire'],
+                (int) $data['sessionexpire'],
                 $data['url'],
                 $data['bio'],
-                $data['avatar_img_id'],
+                (int) $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
-                $data['activated'],
+                (int) $data['activated'],
                 $data['id_user_group'],
-                $data['type'],
+                (int) $data['type'],
                 intval($data['id'])
             );
 
@@ -333,15 +333,15 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
             $values = array(
                 $data['username'],
-                $data['sessionexpire'],
+                (int) $data['sessionexpire'],
                 $data['email'],
                 $data['url'],
                 $data['bio'],
-                $data['avatar_img_id'],
+                (int) $data['avatar_img_id'],
                 $data['name'],
-                $data['activated'],
+                (int) $data['activated'],
                 $data['id_user_group'],
-                $data['type'],
+                (int) $data['type'],
                 intval($data['id'])
             );
         }
