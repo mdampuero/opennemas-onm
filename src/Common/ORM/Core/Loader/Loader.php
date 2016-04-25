@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,17 +21,40 @@ use Symfony\Component\Yaml\Yaml;
 class Loader
 {
     /**
+     * The default data.
+     *
+     * @var array
+     */
+    protected $default;
+
+    /**
+     * The current environment.
+     *
+     * @var string
+     */
+    protected $env;
+
+    /**
+     * Path to the ORM configuration.
+     *
+     * @var string
+     */
+    protected $path;
+
+   /**
      * Initializes the Loader.
      *
-     * @param string $path The path to load from.
-     * @param string $env  The current environment.
+     * @param string $path    The path to load from.
+     * @param string $env     The current environment.
+     * @param string $default The default data for the items to load.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($path, $env)
+    public function __construct($path, $env, $default = [])
     {
-        $this->env  = $env;
-        $this->path = $path;
+        $this->default = $default;
+        $this->env     = $env;
+        $this->path    = $path;
     }
 
     /**
@@ -105,6 +128,11 @@ class Loader
      */
     public function loadConnection($data)
     {
+        if (array_key_exists('connection', $this->default)) {
+            $data['connection'] =
+                array_merge($this->default['connection'], $data['connection']);
+        }
+
         return new Connection($data['connection'], $this->env);
     }
 
@@ -117,6 +145,11 @@ class Loader
      */
     public function loadEntity($data)
     {
+        if (array_key_exists('entity', $this->default)) {
+            $data['entity'] =
+                array_merge($this->default['entity'], $data['entity']);
+        }
+
         return new Metadata($data['entity']);
     }
 
@@ -129,6 +162,11 @@ class Loader
      */
     public function loadSchema($data)
     {
+        if (array_key_exists('schema', $this->default)) {
+            $data['schema'] =
+                array_merge($this->default['schema'], $data['schema']);
+        }
+
         return new Schema($data['schema']);
     }
 
