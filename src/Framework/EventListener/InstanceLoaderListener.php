@@ -98,24 +98,33 @@ class InstanceLoaderListener implements EventSubscriberInterface
      */
     protected function configure($instance)
     {
-        $this->container->get('cache')->setNamespace($instance->internal_name);
+        $database  = $instance->getDatabaseName();
+        $namespace = $instance->internal_name;
+
+        $this->container->get('cache')->setNamespace($namespace);
 
         // Initialize the instance database connection
-        $database   = $instance->getDatabaseName();
         $connection = $this->container->get('db_conn_manager');
 
-        if ($instance->internal_name != 'manager') {
+        if ($namespace != 'manager') {
+            // Change database for `instance` database connection
+            $this->container->get('orm.manager')->getConnection('instance')
+                ->selectDatabase($database);
+
+            // Change namespace for `instance` cache connection
+            if ($this->container->has('cache.manager')) {
+                $this->container->get('cache.connection.instance')
+                    ->setNamespace($namespace);
+            }
+
+            // TODO: Remove when AdoDB removed from models
             $connection = $this->container->get('db_conn');
             $connection->selectDatabase($database);
 
             $this->container->get('dbal_connection')->selectDatabase($database);
-
-            $this->container->get('orm.manager')
-                ->getConnection('instance')
-                ->selectDatabase($database);
         }
 
-        // TODO: take this out, Workaround
+        // TODO: Remove when AdoDB removed from models
         \Application::load();
         \Application::initDatabase($connection);
     }
