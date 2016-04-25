@@ -56,7 +56,7 @@ class NotificationService
         $notification = new Notification();
 
         $notification->id          = 'comments';
-        $notification->instances   = [ $this->container->get('instance')->id ];
+        $notification->instances   = [ $this->container->get('core.instance')->id ];
         $notification->fixed       = 0;
         $notification->forced      = 1;
         $notification->read        = 0;
@@ -218,7 +218,7 @@ class NotificationService
     public function getItem($id)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->find($id);
     }
 
@@ -232,10 +232,10 @@ class NotificationService
      *
      * @return array A list of notifications.
      */
-    public function getList($criteria, $order = [], $epp = 10, $page = 1)
+    public function getList($oql)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
-            ->findBy($criteria, $order, $epp, $page);
+            ->getRepository('Notification')
+            ->findBy($oql);
     }
 }

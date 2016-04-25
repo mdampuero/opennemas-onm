@@ -100,10 +100,7 @@ class NotificationSubscriber implements EventSubscriberInterface
      */
     public function getNotifications(Event $event)
     {
-        $criteria = $event->getArgument('criteria');
-        $order    = $event->getArgument('order');
-        $epp      = $event->getArgument('epp');
-        $page     = $event->getArgument('page');
+        $oql = $event->getArgument('oql');
 
         $response = $event->getResponse();
         if (!is_array($response)) {
@@ -112,8 +109,7 @@ class NotificationSubscriber implements EventSubscriberInterface
 
         $response = array_merge(
             $response,
-            $this->container->get('core.service.notification')
-                ->getList($criteria, $order, $epp, $page)
+            $this->container->get('core.service.notification')->getList($oql)
         );
 
         $event->setResponse($response);
@@ -129,9 +125,9 @@ class NotificationSubscriber implements EventSubscriberInterface
         $repository = $this->container->get('orm.manager')
             ->getRepository('user_notification');
 
-        $notifications = $repository->findBy([
-            'user_id' => [ [ 'value' => $event->getArgument('user_id') ] ]
-        ]);
+        $oql = sprintf('user_id = %s', $event->getArgument('user_id'));
+
+        $notifications = $repository->findBy($oql);
 
         $response = [];
         foreach ($notifications as $notification) {

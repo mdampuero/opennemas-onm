@@ -30,7 +30,7 @@ class NotificationController extends Controller
         $date = new \DateTime('now');
         $date = $date->format('Y-m-d H:i:s');
         $epp  = $request->query->getDigits('epp', 10);
-        $id   = $this->get('instance')->internal_name;
+        $id   = $this->get('core.instance')->internal_name;
         $page = $request->query->getDigits('page', 1);
 
         $read = $this->get('core.event_dispatcher')->dispatch(
@@ -38,27 +38,24 @@ class NotificationController extends Controller
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $criteria = '(instances LIKE \'%"' . $id . '"%\' OR '
-            .  'instances LIKE \'%"all"%\') AND enabled = 1 AND (start <= \''
-            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+        $oql = '(instances ~ "%s" or instances ~ "all") and enabled = 1 and'
+            . ' start <= "%s" and (end = null or end > "%s")';
 
         if (!empty($read)) {
-            $criteria .= ' AND id NOT IN ( ' . implode(', ', array_keys($read))
-                . ' )';
+            $oql .= ' and id NOT IN (' . implode(', ', array_keys($read)) . ' )';
         }
 
         if (!$this->getUser()->isAdmin()) {
-            $criteria .= ' AND users != 1';
+            $oql .= ' and users != 1';
         }
+
+        $oql .= ' order by fixed desc limit %s';
+
+        $oql = sprintf($oql, $id, $date, $date, $epp);
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
-            [
-                'criteria' => $criteria,
-                'epp'      => $epp,
-                'order'    => [ 'fixed' => 'desc' ],
-                'page'     => $page
-            ]
+            [ 'oql' => $oql ]
         );
 
         if (is_array($notifications)) {
@@ -84,7 +81,7 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $id   = $this->get('instance')->internal_name;
+        $id   = $this->get('core.instance')->internal_name;
         $date = date('Y-m-d H:i:s');
 
         $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
