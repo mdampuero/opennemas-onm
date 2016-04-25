@@ -9,16 +9,16 @@
  */
 namespace Framework\Tests\Import\Parser\EuropaPress;
 
-use Framework\Import\Parser\EuropaPress\EuropaPress;
+use Framework\Import\Parser\EuropaPress\EuropaPressIdeal;
 use Framework\Import\Resource\Resource;
 
-class EuropaPressTest extends \PHPUnit_Framework_TestCase
+class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $factory = $this->getMock('Framework\Import\ParserFactory');
 
-        $this->parser = new EuropaPress($factory);
+        $this->parser = new EuropaPressIdeal($factory);
 
         $this->invalid = simplexml_load_string('<foo></foo>');
         $this->valid   = simplexml_load_string("<NOTICIA>
@@ -35,6 +35,12 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
             <TITULAR>Sample title</TITULAR>
             <ENTRADILLA>Sample summary</ENTRADILLA>
             <CONTENIDO>Sample body</CONTENIDO>
+            <FIRMA2>Sample signature not EP</FIRMA2>
+            <FOTOP>
+                <NOMBRE>photo1.jpg</NOMBRE>
+                <PIE>Photo description</PIE>
+                <EXTENSION>.jpg</EXTENSION>
+            </FOTOP>
             <FOTO>
                 <NOMBRE>photo1.jpg</NOMBRE>
                 <PIE>Photo description</PIE>
@@ -47,7 +53,8 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
             <SECCION>XYZ</SECCION>
         </NOTICIA>");
 
-        $this->photo = new Resource();
+        $this->photo  = new Resource();
+        $this->photop = new Resource();
 
         $this->photo->created_time =
             \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
@@ -66,11 +73,30 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->photo->description = 'Photo description';
         $this->photo->type        = 'photo';
         $this->photo->urn         =
-            'urn:europapress:europapress:20150921181604:photo:20150921181604';
+            'urn:europapressideal:europapress:20150921181604:photo:20150921181604';
+
+        $this->photop->created_time =
+            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
+
+        $this->photop->created_time =
+            $this->photop->created_time->format('Y-m-d H:i:s');
+
+        $this->photop->agency_name = 'Grupo Idealgallego';
+        $this->photop->id          = '20150921181604front_ig.photo';
+        $this->photop->extension   = 'jpg';
+        $this->photop->file_path   = 'photo1.jpg';
+        $this->photop->file_name   = 'photo1.jpg';
+        $this->photop->image_type  = 'image/jpg';
+        $this->photop->title       = 'Photo description';
+        $this->photop->summary     = 'Photo description';
+        $this->photop->description = 'Photo description';
+        $this->photop->type        = 'photo';
+        $this->photop->urn         =
+            'urn:europapressideal:europapress:20150921181604:photo:20150921181604front';
 
         $this->text = new Resource();
 
-        $this->text->agency_name  = 'EuropaPress';
+        $this->text->agency_name  = 'Grupo Idealgallego';
         $this->text->body         = 'Sample body';
         $this->text->category     = 'Politics POL';
         $this->text->created_time = \DateTime::createFromFormat(
@@ -85,12 +111,13 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->id        = '20150921181604';
         $this->text->pretitle  = 'Sample pretitle';
         $this->text->priority  = 4;
-        $this->text->related   = [ '20150921181604.photo' ];
+        $this->text->related   = [ '20150921181604front_ig.photo', '20150921181604.photo' ];
         $this->text->summary   = 'Sample summary';
         $this->text->tags      = '';
         $this->text->title     = 'Sample title';
         $this->text->type      = 'text';
-        $this->text->urn       = 'urn:europapress:europapress:20150921181604:text:20150921181604';
+        $this->text->urn       = 'urn:europapressideal:europapress:20150921181604:text:20150921181604';
+        $this->text->signature = 'Sample signature not EP';
     }
 
     public function testCheckFormat()
@@ -99,89 +126,18 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->parser->checkFormat($this->valid));
     }
 
-    public function testGetBody()
+    public function testGetSignature()
     {
-        $this->assertEmpty($this->parser->getBody($this->invalid));
+        $this->assertEmpty($this->parser->getSignature($this->invalid));
 
-        $this->assertEquals(
-            'Sample body',
-            $this->parser->getBody($this->valid)
-        );
+        $this->assertEquals('Sample signature not EP', $this->parser->getSignature($this->valid));
     }
 
-    public function testGetCategory()
-    {
-        $this->assertEmpty($this->parser->getCategory($this->invalid));
-
-        $this->assertEquals(_('Politics POL'), $this->parser->getCategory($this->valid));
-
-        $this->assertEquals('XYZ', $this->parser->getCategory($this->miss));
-    }
-
-    public function testGetCreatedTime()
-    {
-        $date = new \DateTime('now');
-        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
-
-        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
-
-        $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
-    }
-
-    public function testGetId()
-    {
-        $this->assertEmpty($this->parser->getId($this->invalid));
-
-        $this->assertEquals('20150921181604', $this->parser->getId($this->valid));
-    }
-
-    public function testGetPhoto()
+    public function testGetPhotoFront()
     {
         $this->assertEmpty($this->parser->getPhoto($this->invalid));
 
-        $this->assertEquals($this->photo, $this->parser->getPhoto($this->valid));
-    }
-
-    public function testGetPriority()
-    {
-        $this->assertEquals(5, $this->parser->getPriority($this->invalid));
-
-        $this->assertEquals(4, $this->parser->getPriority($this->valid));
-
-        $this->assertEquals(5, $this->parser->getPriority($this->miss));
-    }
-
-    public function testGetSummary()
-    {
-        $this->assertEmpty($this->parser->getSummary($this->invalid));
-
-        $this->assertEquals(
-            'Sample summary',
-            $this->parser->getSummary($this->valid)
-        );
-    }
-
-    public function testGetTitle()
-    {
-        $this->assertEmpty($this->parser->getTitle($this->invalid));
-
-        $this->assertEquals(
-            'Sample title',
-            $this->parser->getTitle($this->valid)
-        );
-    }
-
-    public function testGetUrn()
-    {
-        $this->assertEquals(1, preg_match(
-            '/urn:europapress:europapress:\d{14}:/',
-            $this->parser->getUrn($this->invalid)
-        ));
-
-        $this->assertEquals(
-            'urn:europapress:europapress:20150921181604:text:20150921181604',
-            $this->parser->getUrn($this->valid)
-        );
+        $this->assertEquals($this->photop, $this->parser->getPhotoFront($this->valid));
     }
 
     public function testParse()
@@ -190,24 +146,24 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 
         $resource = new Resource();
 
-        $resource->agency_name  = 'EuropaPress';
+        $resource->agency_name  = 'Grupo Idealgallego';
         $resource->type         = 'text';
-        $resource->urn          = 'urn:europapress:europapress::';
+        $resource->urn          = 'urn:europapressideal:europapress::';
 
         $resources = $this->parser->parse($this->invalid);
 
         foreach ($resources as $resource) {
-            $this->assertEquals('EuropaPress', $resource->agency_name);
+            $this->assertEquals('Grupo Idealgallego', $resource->agency_name);
             $this->assertEquals('text', $resource->type);
 
             $this->assertEquals(1, preg_match(
-                '/urn:europapress:europapress:\d{14}:/',
+                '/urn:europapressideal:europapress:\d{14}:/',
                 $resource->urn
             ));
         }
 
         $this->assertEquals(
-            [ $this->text, $this->photo ],
+            [ $this->text, $this->photop, $this->photo ],
             $this->parser->parse($this->valid)
         );
     }
