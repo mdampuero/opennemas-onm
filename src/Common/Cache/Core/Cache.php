@@ -14,11 +14,39 @@ use Framework\Component\Data\DataBuffer;
 abstract class Cache extends DataBuffer
 {
     /**
+     * The already used data.
+     *
+     * @var array
+     */
+    public $data = [];
+
+    /**
      * The cache namespace
      *
      * @var string
      */
     protected $namespace = 'default';
+
+    /**
+     * Checks if there is data in cache for the given id.
+     *
+     * @param string $id The cache id.
+     *
+     * @return boolean True if there is an entry in the cache for the id.
+     *                 Otherwise, returns false.
+     */
+    public function exists($id)
+    {
+        $this->addToBuffer('exists', $id);
+
+        $cacheId = $this->getNamespacedId($id);
+
+        if (array_key_exists($id, $this->data)) {
+            return true;
+        }
+
+        return $this->contains($cacheId);
+    }
 
     /**
      * Deletes the data from cache for the given id.
@@ -29,14 +57,18 @@ abstract class Cache extends DataBuffer
     {
         $this->addToBuffer('delete', $id);
 
-        $id = $this->getNamespacedId($id);
+        $cacheId = $this->getNamespacedId($id);
 
         if (is_array($id)) {
-            $this->removeMulti($id);
+            $this->data = array_diff_key($this->data, array_flip($id));
+
+            $this->removeMulti($cacheId);
             return;
         }
 
-        $this->remove($id);
+        unset($this->data[$id]);
+
+        $this->remove($cacheId);
     }
 
     /**
@@ -50,13 +82,38 @@ abstract class Cache extends DataBuffer
     {
         $this->addToBuffer('get', $id);
 
-        $id = $this->getNamespacedId($id);
-
         if (is_array($id)) {
-            return $this->fetchMulti($id);
+            // Get values from MRU data
+            $values = array_intersect_key($this->data, array_flip($id));
+
+            // Missed ids in MRU data
+            $id = array_diff($id, array_keys($values));
+
+            if (!empty($id)) {
+                $cacheId = $this->getNamespacedId($id);
+                $values  = array_merge($values, $this->fetchMulti($cacheId));
+
+                // Save values in MRU data
+                if (!empty($values)) {
+                    $this->data = array_merge($this->data, $values);
+                }
+            }
+
+            return $values;
         }
 
-        return $this->fetch($id);
+        if (array_key_exists($id, $this->data)) {
+            return $this->data[$id];
+        }
+
+        $cacheId = $this->getNamespacedId($id);
+        $value   = $this->fetch($cacheId);
+
+        if (!empty($value)) {
+            $this->data[$id] = $value;
+        }
+
+        return $value;
     }
 
     /**
@@ -118,7 +175,9 @@ abstract class Cache extends DataBuffer
             return $id;
         }
 
-        return $this->namespace . '_'. $id;
+        $prefix = $this->namespace . '_';
+
+        return $prefix . str_replace($prefix, '', $id);
     }
 
     /**
@@ -138,6 +197,15 @@ abstract class Cache extends DataBuffer
 
         return preg_replace('/^' . $this->namespace . '_/', '', $id);
     }
+
+    /**
+     * Checks if there is data in cache for the given id.
+     *
+     * @param string $id The cache id.
+     *
+     * @return mixed The data from cache.
+     */
+    abstract protected function contains($id);
 
     /**
      * Returns data from cache given an id.
