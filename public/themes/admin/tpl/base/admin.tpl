@@ -148,7 +148,7 @@
                       {is_module_activated name="STATIC_PAGES_MANAGER"}
                         {acl isAllowed="STATIC_PAGE_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_static_pages_create}">
+                            <a href="{url name=backend_static_page_create}">
                               <i class="fa fa-file-o"></i>
                               <span class="title">{t}Page{/t}</span>
                             </a>

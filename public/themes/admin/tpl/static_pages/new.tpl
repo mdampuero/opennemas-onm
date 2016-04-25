@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($page->id)}{url name=backend_static_pages_update id=$page->id}{else}{url name=backend_static_pages_save}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
+  <form action="{if isset($page->id)}{url name=backend_static_page_update id=$page->id}{else}{url name=backend_static_page_save}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -140,7 +140,7 @@
             if ((slugy.length <= 0) && (previous !== slugy)) {
 
               $.ajax({
-                url:  '{url name=backend_static_pages_build_slug id=$page->id|default:0}',
+                url:  '{url name=backend_static_page_build_slug id=$page->id|default:0}',
                 type: 'POST',
                 data: { id: '{$page->id|default:0}', slug: slugy, title: $('#title').val() },
                 success: function(data){
