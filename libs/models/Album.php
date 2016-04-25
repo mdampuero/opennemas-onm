@@ -121,10 +121,10 @@ class Album extends Content
                 ." VALUES (?,?,?,?)";
 
         $values = array(
-            $this->id,
+            (int) $this->id,
             $data["subtitle"],
             $data["agency"],
-            $data['album_frontpage_image'],
+            (int) $data['album_frontpage_image'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -163,7 +163,7 @@ class Album extends Content
         $this->subtitle    = $rs->fields['subtitle'];
         $this->agency      = $rs->fields['agency'];
         $this->cover_id    = $rs->fields['cover_id'];
-        $this->cover_image = new Photo($rs->fields['cover_id']);
+        $this->cover_image = $this->get('entity_repository')->find($rs->fields['cover_id']);
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
         $this->category_title = $this->loadCategoryTitle($rs->fields['pk_album']);
 
@@ -190,8 +190,8 @@ class Album extends Content
         $values = array(
             $data['subtitle'],
             $data['agency'],
-            $data['album_frontpage_image'],
-            $data['id']
+            (int) $data['album_frontpage_image'],
+            (int) $data['id']
         );
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
