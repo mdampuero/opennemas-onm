@@ -37,7 +37,7 @@ abstract class Repository
     /**
      * Finds entities that match a criteria.
      *
-     * @param strign $oql The criteria.
+     * @param string $oql The criteria.
      *
      * @return array The list of entities.
      */

@@ -181,6 +181,37 @@ class BaseRepository extends Repository
     }
 
     /**
+     * Finds entities that match a criteria.
+     *
+     * @param string $criteria The criteria.
+     * @param string $tables   The comma-separated list of tables.
+     *
+     * @return array The list of entities.
+     */
+    public function findBySQL($criteria = '', $tables = '')
+    {
+        if (empty($tables)) {
+            $tables = $this->metadata->getTable();
+        }
+
+        $keys = $this->metadata->getIdKeys();
+
+        $sql = sprintf('select %s from %s', implode(',', $keys), $tables);
+
+        if (!empty($criteria)) {
+            $sql .= " where $criteria";
+        }
+
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array_map(function ($a) use ($keys) {
+            return array_intersect_key($a, array_flip($keys));
+        }, $rs);
+
+        return $this->findMulti($ids);
+    }
+
+    /**
      * Find multiple contents from an array of entity ids.
      *
      * @param array $data Array of entity ids.
