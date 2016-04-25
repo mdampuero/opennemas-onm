@@ -9,3 +9,9 @@ services:
     orm.manager:
         class: Common\ORM\Core\EntityManager
         arguments: [ '@service_container' ]
+
+    # TODO: Remove when models use new ORM
+    orm.connection.instance:
+        class:     Common\ORM\Core\Connection
+        factory:   [ '@orm.manager', 'getConnection' ]
+        arguments: [ 'instance' ]
