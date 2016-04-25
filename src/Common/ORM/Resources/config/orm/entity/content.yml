@@ -36,14 +36,18 @@ entity:
             table: contentmeta
             ids:
                 pk_content: fk_content
+        converters:
+            default:
+                class:     Common\ORM\Database\Data\Converter\BaseConverter
+                arguments: [ '@orm.metadata.content' ]
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
         columns:
             pk_content:
                 type: bigint

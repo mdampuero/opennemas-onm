@@ -22,11 +22,11 @@ entity:
         repositories:
             manager:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache.connection.manager' ]
         persisters:
             manager:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.manager', '@orm.metadata.notification',  '@cache' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.notification',  '@cache.connection.manager' ]
         columns:
             id:
                 type:    integer

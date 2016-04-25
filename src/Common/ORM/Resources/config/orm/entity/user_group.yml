@@ -13,17 +13,17 @@ entity:
         repositories:
             instance:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
             manager:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.manager', '@orm.metadata.user_group',  '@cache' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.user_group',  '@cache.connection.manager' ]
         persisters:
             instance:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
             manager:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.manager' ]
         columns:
             id:
                 type: integer
