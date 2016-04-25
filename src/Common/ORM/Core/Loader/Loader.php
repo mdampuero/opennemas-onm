@@ -64,7 +64,6 @@ class Loader
     {
         $finder = new Finder();
         $loaded = [];
-        $items  = [];
 
         $finder->files()->in($this->path)->name('*.yml');
 
