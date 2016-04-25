@@ -125,18 +125,23 @@ class Loader
             return $this->instance;
         }
 
-        $cache = $this->container->get('cache_manager');
+        if ($this->container->has('cache.manager')) {
+            $this->instance = $this->container->get('cache.manager')
+                ->getConnection('manager')->get($host);
 
-        $this->instance = $cache->fetch($host);
-
-        if (!empty($this->instance)) {
-            return $this->instance;
+            if (!empty($this->instance)) {
+                return $this->instance;
+            }
         }
 
         $oql = 'domains ^ "^%s|,\s*%s\s*,|\s*%s$"';
 
         $this->loadInstanceFromOql(sprintf($oql, $host, $host, $host));
-        $cache->save($host, $this->instance);
+
+        if ($this->container->has('cache.manager')) {
+            $this->container->get('cache.manager')->getConnection('manager')
+                ->set($host, $this->instance);
+        }
 
         return $this->instance;
     }
