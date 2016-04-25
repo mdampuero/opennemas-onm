@@ -41,6 +41,7 @@ class AppKernel extends Kernel
             new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
             new Common\ORM\OrmBundle(),
+            new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
         );
 
