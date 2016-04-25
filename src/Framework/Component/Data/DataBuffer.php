@@ -46,7 +46,7 @@ class DataBuffer extends DataObject
     public function addToBuffer($method, $params)
     {
         if ($this->env !== 'prod') {
-            $this->buffer[] = [ $method, 'params' => $params ];
+            $this->buffer[] = [ 'method' => $method, 'params' => $params ];
         }
     }
 
