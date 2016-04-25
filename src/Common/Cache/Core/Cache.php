@@ -18,14 +18,7 @@ abstract class Cache extends DataBuffer
      *
      * @var array
      */
-    public $data = [];
-
-    /**
-     * The cache namespace
-     *
-     * @var string
-     */
-    protected $namespace = 'default';
+    public $mru = [];
 
     /**
      * Checks if there is data in cache for the given id.
@@ -41,7 +34,7 @@ abstract class Cache extends DataBuffer
 
         $cacheId = $this->getNamespacedId($id);
 
-        if (array_key_exists($id, $this->data)) {
+        if (array_key_exists($id, $this->mru)) {
             return true;
         }
 
@@ -60,13 +53,13 @@ abstract class Cache extends DataBuffer
         $cacheId = $this->getNamespacedId($id);
 
         if (is_array($id)) {
-            $this->data = array_diff_key($this->data, array_flip($id));
+            $this->mru = array_diff_key($this->mru, array_flip($id));
 
             $this->removeMulti($cacheId);
             return;
         }
 
-        unset($this->data[$id]);
+        unset($this->mru[$id]);
 
         $this->remove($cacheId);
     }
@@ -84,7 +77,7 @@ abstract class Cache extends DataBuffer
 
         if (is_array($id)) {
             // Get values from MRU data
-            $values = array_intersect_key($this->data, array_flip($id));
+            $values = array_intersect_key($this->mru, array_flip($id));
 
             // Missed ids in MRU data
             $id = array_diff($id, array_keys($values));
@@ -95,22 +88,22 @@ abstract class Cache extends DataBuffer
 
                 // Save values in MRU data
                 if (!empty($values)) {
-                    $this->data = array_merge($this->data, $values);
+                    $this->mru = array_merge($this->mru, $values);
                 }
             }
 
             return $values;
         }
 
-        if (array_key_exists($id, $this->data)) {
-            return $this->data[$id];
+        if (array_key_exists($id, $this->mru)) {
+            return $this->mru[$id];
         }
 
         $cacheId = $this->getNamespacedId($id);
         $value   = $this->fetch($cacheId);
 
         if (!empty($value)) {
-            $this->data[$id] = $value;
+            $this->mru[$id] = $value;
         }
 
         return $value;

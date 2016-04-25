@@ -23,7 +23,7 @@ class DataObject
      *
      * @param array $data The entity data.
      */
-    public function __construct($data = null)
+    public function __construct($data = [])
     {
         if (!empty($data)) {
             $this->data = $data;

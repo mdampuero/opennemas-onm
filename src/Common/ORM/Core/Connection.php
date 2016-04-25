@@ -18,39 +18,11 @@ use Common\ORM\Core\Validation\Validable;
 class Connection extends DataBuffer implements Validable
 {
     /**
-     * The connection configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
      * The database connection.
      *
      * @var Doctrine\DBAL\Connection
      */
     protected $conn = null;
-
-    /**
-     * The current environment.
-     *
-     * @var string
-     */
-    protected $env;
-
-
-    /**
-     * Initializes the Connection.
-     *
-     * @param array  $config The connection configuration.
-     * @param string $env    The current environment.
-     */
-    public function __construct($config, $env)
-    {
-        $this->config = $config;
-
-        parent::__construct($env);
-    }
 
     /**
      * Redirects all the calls to the doctrine connection.
@@ -71,15 +43,6 @@ class Connection extends DataBuffer implements Validable
         return $rs;
     }
 
-    public function __get($property)
-    {
-        if (array_key_exists($property, $this->config)) {
-            return $this->config[$property];
-        }
-
-        return false;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -97,20 +60,12 @@ class Connection extends DataBuffer implements Validable
     {
         if (!is_object($this->conn)) {
             $this->conn = \Doctrine\DBAL\DriverManager::getConnection(
-                $this->config,
+                $this->getData(),
                 new \Doctrine\DBAL\Configuration()
             );
         }
 
         return $this->conn;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData()
-    {
-        return $this->config;
     }
 
     /**

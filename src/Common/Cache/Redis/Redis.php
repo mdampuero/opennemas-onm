@@ -15,13 +15,6 @@ use Common\Cache\Core\Cache;
 class Redis extends Cache
 {
     /**
-     * The Redis configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
      * The Redis connection.
      *
      * @var RedisBase
@@ -31,15 +24,16 @@ class Redis extends Cache
     /**
      * Initializes the Redis client.
      */
-    public function __construct($config)
+    public function __construct($data)
     {
-        if (!array_key_exists('server', $config)
-            && !array_key_exists('port', $config)
+        if (!array_key_exists('name', $data)
+            || !array_key_exists('server', $data)
+            || !array_key_exists('port', $data)
         ) {
             throw new \InvalidArgumentException();
         }
 
-        $this->config = $config;
+        parent::__construct($data);
     }
 
     /**
@@ -84,13 +78,10 @@ class Redis extends Cache
     {
         if (!is_object($this->redis)) {
             $this->redis = new RedisBase();
-            $this->redis->pconnect(
-                $this->config['server'],
-                $this->config['port']
-            );
+            $this->redis->pconnect($this->server, $this->port);
 
-            if (array_key_exists('auth', $this->config)) {
-                $this->redis->auth($this->config['auth']);
+            if (!empty($this->auth)) {
+                $this->redis->auth($this->auth);
             }
         }
 

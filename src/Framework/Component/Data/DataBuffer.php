@@ -9,7 +9,7 @@
  */
 namespace Framework\Component\Data;
 
-class DataBuffer
+class DataBuffer extends DataObject
 {
     /**
      * The function call buffer.
@@ -30,9 +30,11 @@ class DataBuffer
      *
      * @param string $env The current environment.
      */
-    public function __construct($env = 'dev')
+    public function __construct($data = [], $env = 'dev')
     {
         $this->env = $env;
+
+        parent::__construct($data);
     }
 
     /**
@@ -46,5 +48,10 @@ class DataBuffer
         if ($this->env !== 'prod') {
             $this->buffer[] = [ $method, 'params' => $params ];
         }
+    }
+
+    public function getBuffer()
+    {
+        return $this->buffer;
     }
 }
