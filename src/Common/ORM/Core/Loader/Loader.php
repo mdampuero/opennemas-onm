@@ -44,7 +44,7 @@ class Loader
    /**
      * Initializes the Loader.
      *
-     * @param string $path    The path to load from.
+     * @param string $path    The path to the ORM configuration.
      * @param string $env     The current environment.
      * @param string $default The default data for the items to load.
      *
@@ -97,9 +97,9 @@ class Loader
     }
 
     /**
-     * Load a plugin from configuration file.
+     * Load an item from a configuration file.
      *
-     * @param string $path The path to plugin configuration file.
+     * @param string $path The path to the configuration file.
      */
     public function loadItem($path)
     {
@@ -123,7 +123,7 @@ class Loader
      *
      * @param array $data The data to load.
      *
-     * @return Connection The loaded database connection.
+     * @return Connection The database connection.
      */
     public function loadConnection($data)
     {
@@ -140,7 +140,7 @@ class Loader
      *
      * @param array $data The data to load.
      *
-     * @return Entity The loaded entity.
+     * @return Entity The entity.
      */
     public function loadEntity($data)
     {
@@ -153,11 +153,11 @@ class Loader
     }
 
     /**
-     * Returns a new entity from data.
+     * Returns a new schema from data.
      *
      * @param array $data The data to load.
      *
-     * @return Entity The loaded entity.
+     * @return Entity The schema.
      */
     public function loadSchema($data)
     {
