@@ -24,22 +24,30 @@ class Redis extends Cache
     /**
      * The Redis connection.
      *
-     * @var Redis
+     * @var RedisBase
      */
     protected $redis;
 
     /**
      * Initializes the Redis client.
      */
-    public function __construct($options)
+    public function __construct($config)
     {
-        if (!array_key_exists('server', $options)
-            && !array_key_exists('port', $options)
+        if (!array_key_exists('server', $config)
+            && !array_key_exists('port', $config)
         ) {
             throw new \InvalidArgumentException();
         }
 
-        $this->options = $options;
+        $this->config = $config;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function contains($id)
+    {
+        return $this->getRedis()->exists($id);
     }
 
     /**
@@ -77,12 +85,12 @@ class Redis extends Cache
         if (!is_object($this->redis)) {
             $this->redis = new RedisBase();
             $this->redis->pconnect(
-                $this->options['server'],
-                $this->options['port']
+                $this->config['server'],
+                $this->config['port']
             );
 
-            if (array_key_exists('auth', $this->options)) {
-                $this->redis->auth($this->options['auth']);
+            if (array_key_exists('auth', $this->config)) {
+                $this->redis->auth($this->config['auth']);
             }
         }
 
