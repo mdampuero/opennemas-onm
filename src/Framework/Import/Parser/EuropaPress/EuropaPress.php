@@ -57,7 +57,11 @@ class EuropaPress extends Parser
      */
     public function checkFormat($data)
     {
-        if (is_object($data) && $data->CODIGO->count() > 0) {
+        if (is_object($data) &&
+            $data->CODIGO->count() > 0 &&
+            empty($data->FIRMA2) &&
+            empty($data->FOTOP)
+        ) {
             return true;
         }
 
@@ -204,24 +208,6 @@ class EuropaPress extends Parser
     }
 
     /**
-     * Returns the title from the parsed data.
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return string The resource title.
-     */
-    public function getSignature($data)
-    {
-        if (empty($data->FIRMA2)) {
-            return '';
-        }
-
-        $signature = (string) $data->FIRMA2;
-
-        return iconv(mb_detect_encoding($signature), "UTF-8", $signature);
-    }
-
-    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -288,7 +274,6 @@ class EuropaPress extends Parser
 
         $resource = new Resource();
 
-        $resource->signature    = $this->getSignature($data);
         $resource->agency_name  = 'EuropaPress';
         $resource->body         = $this->getBody($data);
         $resource->category     = $this->getCategory($data);
