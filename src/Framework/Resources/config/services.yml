@@ -89,7 +89,7 @@ services:
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
-        arguments: [ '@dbal_connection' ]
+        arguments: [ '@orm.connection.instance' ]
         tags:
             -
                 name:     data_collector
@@ -126,51 +126,51 @@ services:
 
     category_repository:
         class: Repository\CategoryManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     content_views_repository:
         class: Repository\ContentViewsManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     frontpage_repository:
         class: Repository\FrontpageManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     menu_repository:
         class: Repository\MenuManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     advertisement_repository:
         class: Repository\AdvertisementManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     opinion_repository:
         class: Repository\OpinionManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     widget_repository:
         class: Repository\WidgetManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     usergroup_repository:
         class: Repository\UserGroupManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
@@ -178,7 +178,7 @@ services:
 
     automatic_contents:
         class: Onm\MachineSearcher
-        arguments: [ '@dbal_connection', '@entity_repository', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
 
     acl_checker:
         class: Onm\Security\Acl
@@ -201,7 +201,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ '@dbal_connection', '@cache_manager', '@setting_repository' ]
+        arguments: [ '@orm.connection.instance', '@cache_manager', '@setting_repository' ]
 
     onm_templating:
         class: Onm\Templating\Templating
@@ -249,7 +249,7 @@ services:
 
     related_contents:
         class: RelatedContent
-        arguments: [ '@dbal_connection', '@entity_repository', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
 
     core.event_dispatcher:
         class: Framework\Component\EventDispatcher\EventDispatcher

@@ -12,7 +12,6 @@
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well
@@ -29,11 +28,11 @@ class CommentManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param DbalWrapper    $dbConn      The database connection.
+     * @param Connection     $dbConn      The database connection.
      * @param CacheInterface $cache       The cache instance.
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;
