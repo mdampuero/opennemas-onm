@@ -126,7 +126,7 @@ class BaseRepository extends Repository
         $entity = null;
 
         if ($this->hasCache() && $this->cache->contains($cacheId)) {
-            $entity = $this->cache->fetch($cacheId);
+            $entity = $this->cache->get($cacheId);
         }
 
         if (empty($entity)) {
@@ -229,7 +229,7 @@ class BaseRepository extends Repository
         $entities = [];
         $keys     = [];
         if ($this->hasCache()) {
-            $entities = $this->cache->fetch($ids);
+            $entities = $this->cache->get($ids);
             $keys     = array_keys($entities);
         }
 
