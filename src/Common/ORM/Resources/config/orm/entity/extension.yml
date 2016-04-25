@@ -42,11 +42,11 @@ entity:
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.extension' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.extension',  '@cache',]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.manager', '@orm.metadata.extension' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.extension', '@cache',]
         columns:
             id:
                 type: bigint

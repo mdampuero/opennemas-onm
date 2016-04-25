@@ -39,11 +39,11 @@ entity:
         repositories:
             database:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@cache', '@orm.connection.instance' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache' ]
         persisters:
             database:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@cache', '@orm.connection.instance' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache' ]
         columns:
             pk_content:
                 type: bigint

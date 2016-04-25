@@ -56,7 +56,7 @@ class BasePersister extends Persister
      * @param Connection     $conn     The database connection.
      * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct(CacheInterface $cache, Connection $conn, Metadata $metadata)
+    public function __construct(Connection $conn, Metadata $metadata, CacheInterface $cache = null)
     {
         $this->cache     = $cache;
         $this->conn      = $conn;
@@ -95,7 +95,10 @@ class BasePersister extends Persister
         $id = $this->metadata->getId($entity);
 
         $this->conn->delete($this->metadata->getTable(), $id);
-        $this->cache->delete($this->metadata->getCacheId($entity));
+
+        if ($this->hasCache()) {
+            $this->cache->delete($this->metadata->getCacheId($entity));
+        }
     }
 
     /**
@@ -116,7 +119,20 @@ class BasePersister extends Persister
             $this->persistMetas($id, $metas);
         }
 
-        $this->cache->delete($this->metadata->getCacheId($entity));
+        if ($this->hasCache()) {
+            $this->cache->delete($this->metadata->getCacheId($entity));
+        }
+    }
+
+    /**
+     * Checks if the current repository has cache.
+     *
+     * @return boolean True if the repository has cache. Otherwise, returns
+     *                 false.
+     */
+    protected function hasCache()
+    {
+        return !empty($this->cache);
     }
 
     /**

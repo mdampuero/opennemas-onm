@@ -66,13 +66,13 @@ class BaseRepository extends Repository
     protected $translator;
 
     /**
-     * Initializes a new DatabasePersister.
+     * Initializes a new DatabaseRepository.
      *
      * @param CacheInterface $cache    The cache service.
      * @param Connection     $conn     The database connection.
      * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct(CacheInterface $cache, Connection $conn, Metadata $metadata)
+    public function __construct(Connection $conn, Metadata $metadata, CacheInterface $cache = null)
     {
         $this->cache      = $cache;
         $this->conn       = $conn;
@@ -123,13 +123,21 @@ class BaseRepository extends Repository
         $cacheId = $this->metadata->getCachePrefix()
             . implode($this->metadata->getCacheSeparator, $id);
 
-        if (($entity = $this->cache->fetch($cacheId)) === false) {
-            $class = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+        $entity = null;
+
+        if ($this->hasCache() && $this->cache->contains($cacheId)) {
+            $entity = $this->cache->fetch($cacheId);
+        }
+
+        if (empty($entity)) {
+            $class  = 'Common\\ORM\\Entity\\' . $this->metadata->name;
 
             $entity = new $class($id);
             $this->refresh($entity);
 
-            $this->cache->save($cacheId, $entity);
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $entity);
+            }
         }
 
         if ($entity === $this->miss) {
@@ -187,8 +195,14 @@ class BaseRepository extends Repository
                 . implode($this->metadata->getCacheSeparator(), $a);
         }, $data);
 
-        $entities = $this->cache->fetch($ids);
-        $miss     = array_diff($ids, array_keys($entities));
+        $entities = [];
+        $keys     = [];
+        if ($this->hasCache()) {
+            $entities = $this->cache->fetch($ids);
+            $keys     = array_keys($entities);
+        }
+
+        $miss = array_diff($ids, $keys);
 
         // Get missed entities from database
         foreach ($miss as $cacheId) {
@@ -287,5 +301,16 @@ class BaseRepository extends Repository
         }
 
         return $metas;
+    }
+
+    /**
+     * Checks if the current repository has cache.
+     *
+     * @return boolean True if the repository has cache. Otherwise, returns
+     *                 false.
+     */
+    protected function hasCache()
+    {
+        return !empty($this->cache);
     }
 }
