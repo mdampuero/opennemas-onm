@@ -58,7 +58,7 @@ class Connection extends DataBuffer implements Validable
      */
     public function getConnection()
     {
-        if (!is_object($this->conn)) {
+        if (empty($this->conn)) {
             $this->conn = \Doctrine\DBAL\DriverManager::getConnection(
                 $this->getData(),
                 new \Doctrine\DBAL\Configuration()
@@ -73,9 +73,9 @@ class Connection extends DataBuffer implements Validable
      */
     public function resetConnection()
     {
-        if (is_object($this->connection)) {
-            $this->connection->close();
-            $this->connection = null;
+        if (is_object($this->conn)) {
+            $this->conn->close();
+            $this->conn = null;
         }
     }
 
@@ -86,7 +86,7 @@ class Connection extends DataBuffer implements Validable
      */
     public function selectDatabase($database)
     {
-        $this->config['dbname'] = $database;
+        $this->dbname = $database;
 
         $this->resetConnection();
     }
