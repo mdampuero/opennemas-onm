@@ -9,6 +9,7 @@
  */
 namespace Common\ORM\Database\Repository;
 
+use Common\Cache\Core\Cache;
 use Common\ORM\Core\OQL\OQLTranslator;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 use Common\ORM\Core\Connection;
@@ -16,7 +17,6 @@ use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Repository;
 use Common\ORM\Core\Exception\EntityNotFoundException;
-use Onm\Cache\CacheInterface;
 
 /**
  * The BaseRepository class defines basic actions for database repositories.
@@ -68,11 +68,11 @@ class BaseRepository extends Repository
     /**
      * Initializes a new DatabaseRepository.
      *
-     * @param CacheInterface $cache    The cache service.
-     * @param Connection     $conn     The database connection.
-     * @param Metadata       $metadata The entity metadata.
+     * @param Connection $conn     The database connection.
+     * @param Metadata   $metadata The entity metadata.
+     * @param Cache      $cache    The cache service.
      */
-    public function __construct(Connection $conn, Metadata $metadata, CacheInterface $cache = null)
+    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null)
     {
         $this->cache      = $cache;
         $this->conn       = $conn;
@@ -125,7 +125,7 @@ class BaseRepository extends Repository
 
         $entity = null;
 
-        if ($this->hasCache() && $this->cache->contains($cacheId)) {
+        if ($this->hasCache() && $this->cache->exists($cacheId)) {
             $entity = $this->cache->get($cacheId);
         }
 
@@ -136,7 +136,7 @@ class BaseRepository extends Repository
             $this->refresh($entity);
 
             if ($this->hasCache()) {
-                $this->cache->save($cacheId, $entity);
+                $this->cache->set($cacheId, $entity);
             }
         }
 

@@ -9,12 +9,12 @@
  */
 namespace Common\ORM\Database\Persister;
 
+use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Persister;
 use Common\ORM\Database\Data\Converter\BaseConverter;
-use Onm\Cache\CacheInterface;
 
 /**
  * The BasePersister class defines basic actions for database persisters.
@@ -24,7 +24,7 @@ class BasePersister extends Persister
     /**
      * The cache service.
      *
-     * @var CacheInterface
+     * @var Cache
      */
     protected $cache;
 
@@ -52,11 +52,11 @@ class BasePersister extends Persister
     /**
      * Initializes a new DatabasePersister.
      *
-     * @param CacheInterface $cache    The cache service.
-     * @param Connection     $conn     The database connection.
-     * @param Metadata       $metadata The entity metadata.
+     * @param Connection $conn     The database connection.
+     * @param Metadata   $metadata The entity metadata.
+     * @param Cache      $cache    The cache service.
      */
-    public function __construct(Connection $conn, Metadata $metadata, CacheInterface $cache = null)
+    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null)
     {
         $this->cache     = $cache;
         $this->conn      = $conn;
