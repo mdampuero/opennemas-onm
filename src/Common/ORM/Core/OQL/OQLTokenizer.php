@@ -44,6 +44,8 @@ class OQLTokenizer
         'O_EQUALS'       => '/\s*=\s*/',
         'O_GREAT'        => '/\s*>\s*/',
         'O_IN'           => '/\s*in\s*/',
+        'O_IS'           => '/\s*is\s*/',
+        'O_NOT_IS'       => '/\s*!is\s*/',
         'O_LESS'         => '/\s*<\s*/',
         'O_LIKE'         => '/\s*~\s*/',
         'O_REGEXP'       => '/\s*\^\s*/',
@@ -62,7 +64,7 @@ class OQLTokenizer
      */
     protected $sentences = [
         'T_CONNECTOR' => '/C_AND|C_OR/',
-        'T_OPERATOR'  => '/O_GREAT_EQUALS|O_LESS_EQUALS|O_EQUALS|O_GREAT|O_IN|O_LESS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_LIKE|O_NOT_REGEXP|O_REGEXP/',
+        'T_OPERATOR'  => '/O_GREAT_EQUALS|O_LESS_EQUALS|O_EQUALS|O_GREAT|O_IN|O_IS|O_LESS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_IS|O_NOT_LIKE|O_NOT_REGEXP|O_REGEXP/',
         'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL\s*)*\s*G_CBRACKET/',
         'S_LIMIT'     => '/M_LIMIT T_INTEGER/',
