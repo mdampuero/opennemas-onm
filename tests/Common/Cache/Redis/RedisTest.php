@@ -52,11 +52,21 @@ class RedisTest extends KernelTestCase
     }
 
     /**
+     * Tests setNamespace and getNamespace.
+     */
+    public function testSetNamespace()
+    {
+        $this->redis->setNamespace('garply');
+        $this->assertEquals('garply', $this->redis->getNamespace());
+    }
+
+    /**
      * Tests set and get with single values.
      */
     public function testWithSingleValues()
     {
         $this->redis->set('foo', 'bar', 60);
+        $this->assertTrue($this->redis->exists('foo'));
         $this->assertEquals('bar', $this->redis->get('foo'));
         $this->redis->delete('foo');
         $this->assertEmpty($this->redis->get('foo'));
@@ -76,9 +86,10 @@ class RedisTest extends KernelTestCase
     {
         $this->redis->set([ 'foo' => 'bar', 'fred' => 'wibble' ]);
 
+        $this->assertTrue($this->redis->exists('foo'));
         $this->assertEquals(['foo' => 'bar', 'fred' => 'wibble' ], $this->redis->get([ 'foo', 'fred' ]));
-
         $this->assertEquals(['foo' => 'bar' ], $this->redis->get([ 'foo', 'garply' ]));
+        $this->assertTrue($this->redis->exists('foo'));
 
         $this->assertEquals('bar', $this->redis->get('foo'));
         $this->assertEquals('wibble', $this->redis->get('fred'));
