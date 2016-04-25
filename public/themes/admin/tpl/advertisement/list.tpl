@@ -31,7 +31,7 @@
           </li>
           {/acl}
           <li class="quicklinks">
-            <a href="{url name=admin_ad_create}" class="btn btn-primary">
+            <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create_button">
               <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>

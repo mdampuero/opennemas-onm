@@ -75,7 +75,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
+                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save_button">
                   <span class="fa fa-save"></span>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -106,7 +106,7 @@
               <div class="input-group">
                 <input type="password" required="required" id="password" name="password" value="{$site['password']}" class="form-control"/>
                 <div class="input-group-btn">
-                  <button class="btn check-pass" type="button">
+                  <button class="btn check-pass" type="button" id="show_pass_button">
                     <i class="fa fa-lock"></i>
                   </button>
                 </div>
@@ -121,7 +121,7 @@
               </span>
               <input class="form-control" colorpicker="hex" id="color" name="site_color" ng-init="site_color='{$site['site_color']|default:""}'" ng-model="site_color" type="text">
               <span class="input-group-btn">
-                <button class="btn btn-default" ng-click="site_color='{$site['site_color']|default:""}'">
+                <button class="btn btn-default" ng-click="site_color='{$site['site_color']|default:""}'" id="reset_button">
                   {t}Reset{/t}
                 </button>
               </span>

@@ -25,7 +25,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="STATIC_PAGE_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_static_pages_create}" title="{t}Create new page{/t}">
+              <a class="btn btn-primary" href="{url name=admin_static_pages_create}" title="{t}Create new page{/t}" id="create_button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

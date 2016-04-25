@@ -37,7 +37,7 @@
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
       <div class="row p-b-20">
         <div class="col-sm-6">
-          <a class="btn btn-block btn-white" href="{url name=admin_domain_management_add}">
+          <a class="btn btn-block btn-white" href="{url name=admin_domain_management_add}" id="add_redirection_button">
             <i class="block fa fa-retweet fa-2x m-b-15"></i>
             <h4 class="block uppercase">{t}Redirect your own domain{/t}</h4>
             <h5 class="wrap">
@@ -46,7 +46,7 @@
           </a>
         </div>
         <div class="col-sm-6">
-          <a class="btn btn-block btn-success" href="{url name=admin_domain_management_add create=1}">
+          <a class="btn btn-block btn-success" href="{url name=admin_domain_management_add create=1}" id="add_domain_button">
             <i class="block fa fa-plus fa-2x m-b-15"></i>
             <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
             <h5 class="text-white wrap">

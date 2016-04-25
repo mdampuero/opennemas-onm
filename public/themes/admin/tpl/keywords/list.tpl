@@ -18,7 +18,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="PCLAVE_CREATE"}
             <li>
-              <a href="{url name=admin_keyword_create}" class="btn btn-primary">
+              <a href="{url name=admin_keyword_create}" class="btn btn-primary" id="create_button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
@@ -35,7 +35,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>

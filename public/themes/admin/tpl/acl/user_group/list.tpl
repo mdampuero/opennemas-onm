@@ -17,7 +17,7 @@
         <ul class="nav quick-section">
           {acl isAllowed="GROUP_CREATE"}
           <li>
-            <a href="{url name="admin_acl_usergroups_create"}" class="btn btn-primary">
+            <a href="{url name="admin_acl_usergroups_create"}" class="btn btn-primary" id="create_button">
               <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>

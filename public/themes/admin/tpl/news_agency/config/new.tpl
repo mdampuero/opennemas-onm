@@ -40,7 +40,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
+            <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save_button">
               <span class="fa fa-save"></span>
               <span class="text">{t}Save{/t}</span>
             </button>

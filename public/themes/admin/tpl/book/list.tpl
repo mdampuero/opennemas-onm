@@ -40,7 +40,7 @@
           <ul class="nav quick-section">
             {if $category == 'widget' && $page <= 1}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}" id="save_button">
                 <span class="fa fa-save"></span>
                 {t}Save positions{/t}
               </a>
@@ -49,7 +49,7 @@
             {/if}
             {acl isAllowed="BOOK_CREATE"}
             <li>
-              <a class="btn btn-primary" href="{url name=admin_books_create}" title="{t}New book{/t}">
+              <a class="btn btn-primary" href="{url name=admin_books_create}" title="{t}New book{/t}" id="create_button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

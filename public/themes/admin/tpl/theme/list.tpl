@@ -40,19 +40,19 @@
                 <span class="caret"></span>
               </div>
               <ul class="dropdown-menu">
-                <li ng-click="type = 'available'">
+                <li ng-click="type = 'available'" id="available_button">
                   <a href="#">
                     <i class="fa fa-check m-r-5"></i>
                     {t}Available{/t}
                   </a>
                 </li>
-                <li ng-click="type = 'exclusive'">
+                <li ng-click="type = 'exclusive'"id="exclusive_button">
                   <a href="#">
                     <i class="fa fa-usd m-r-5"></i>
                     {t}Exclusive{/t}
                   </a>
                 </li>
-                <li ng-click="type = 'purchased'">
+                <li ng-click="type = 'purchased'" id="purchased_button">
                   <a href="#">
                     <i class="fa fa-star-o m-r-5"></i>
                     {t}My themes{/t}
