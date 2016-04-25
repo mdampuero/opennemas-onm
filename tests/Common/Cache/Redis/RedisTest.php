@@ -20,14 +20,12 @@ class RedisTest extends KernelTestCase
 {
     public function setUp()
     {
-        self::bootKernel();
-
-        $params = self::$kernel->getContainer()
-            ->getParameter('cache_handler_params');
-
-        $params['auth'] = 'gorp';
-
-        $this->redis = new Redis($params);
+        $this->redis = new Redis([
+            'name'   => 'bar',
+            'server' => '127.0.0.1',
+            'port'   => '6379',
+            'auth'   => 'gorp'
+        ]);
     }
 
     /**
