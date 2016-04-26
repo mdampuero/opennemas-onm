@@ -71,14 +71,14 @@ class ContentUrlMatcher
             'content_type_name' => [ [ 'value' => $type ] ],
             'starttime'         => [
                 'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => $now, 'operator' => '<' ]
+                [ 'value' => $now, 'operator' => '<' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
             ],
             'endtime'           => [
                 'union'   => 'OR',
-                [ 'value'  => null, 'operator' => 'IS' ],
+                [ 'value' => $now, 'operator' => '>' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $now, 'operator' => '>' ]
             ],
         ];
 

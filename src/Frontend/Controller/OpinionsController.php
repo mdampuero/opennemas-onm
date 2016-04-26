@@ -64,12 +64,12 @@ class OpinionsController extends Controller
                 'in_litter'      => [['value' => 0]],
                 'starttime' => [
                     'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS' ],
-                    [ 'value' => $date, 'operator' => '<' ]
+                    [ 'value' => $date, 'operator' => '<' ],
+                    [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 ],
                 'endtime' => [
                     'union'   => 'OR',
-                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value' => $date, 'operator' => '>' ]
                 ],
