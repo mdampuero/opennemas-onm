@@ -81,6 +81,22 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Content::getSchedulingState
      */
+    public function testGetSchedulingStateWithNotScheduledNulledContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = null;
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals(\Content::NOT_SCHEDULED, $result);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
     public function testGetSchedulingStateWithDuedContent()
     {
         $content = new \Content();
@@ -129,13 +145,29 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Content::getSchedulingState
      */
-    public function testGetSchedulingStateWithPostponedAndNotEndtimeContent()
+    public function testGetSchedulingStateWithPostponedAndZeroedEndtimeContent()
     {
         $content = new \Content();
 
         $now                = '2012-08-20 03:03:12';
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, \Content::POSTPONED);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithPostponedAndNullEndtimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-20 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = null;
 
         $result = $content->getSchedulingState($now);
 
@@ -256,6 +288,22 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Content::isStarted
      */
+    public function testIsStartedWithNullStartTime()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = null;
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isStarted($now);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Content::isStarted
+     */
     public function testIsStartedWithPostponedContent()
     {
         $content = new \Content();
@@ -265,6 +313,22 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $content->endtime   = '0000-00-00 00:00:00';
 
         $result = $content->isStarted($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isStarted
+     */
+    public function testIsPostponedWithNullEndTime()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = null;
+        $content->endtime   = null;
+
+        $result = $content->isPostponed($now);
 
         $this->assertFalse($result);
     }
@@ -343,6 +407,22 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $now                = '2012-08-22 03:03:12';
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isDued($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isDued
+     */
+    public function testIsDuedWithNullEndTimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = null;
 
         $result = $content->isDued($now);
 

@@ -739,7 +739,7 @@ class Content
         $this->content_status = $status;
         $this->available = $status;
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
             $date = date("Y-m-d H:i:s");
         }
 
@@ -782,7 +782,7 @@ class Content
 
         $this->favorite = $status;
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
             $date = date("Y-m-d H:i:s");
         }
 
@@ -824,7 +824,7 @@ class Content
 
         $this->in_home = $status;
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
             $date = date("Y-m-d H:i:s");
         }
 
@@ -950,7 +950,7 @@ class Content
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
-            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+            if (($status == 1) && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)) {
                 $this->starttime = date("Y-m-d H:i:s");
             }
             $values = array(
@@ -1400,6 +1400,15 @@ class Content
     */
     public function isScheduled($now = null)
     {
+        // Return false if start and end time are set to no date
+        if (is_null($this->starttime)) {
+            $this->starttime = '0000-00-00 00:00:00';
+        }
+
+        if (is_null($this->endtime)) {
+            $this->endtime = '0000-00-00 00:00:00';
+        }
+
         if (is_null($now)) {
             $actual  = new \DateTime();
         } else {
@@ -1497,6 +1506,10 @@ class Content
     */
     public function isStarted($now = null)
     {
+        if ($this->starttime == null) {
+            return true;
+        }
+
         $start = new \DateTime($this->starttime);
         $now = new \DateTime($now);
 
@@ -1520,6 +1533,10 @@ class Content
      */
     public function isPostponed($now = null)
     {
+        if ($this->starttime == null) {
+            return false;
+        }
+
         $start = new \DateTime($this->starttime);
         $now   = new \DateTime($now);
 
@@ -1542,6 +1559,9 @@ class Content
      */
     public function isDued($now = null)
     {
+        if ($this->endtime == null) {
+            return false;
+        }
         $end = new \DateTime($this->endtime);
         $now = new \DateTime($now);
 
