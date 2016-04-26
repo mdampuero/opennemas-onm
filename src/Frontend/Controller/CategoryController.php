@@ -64,8 +64,9 @@ class CategoryController extends Controller
         $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
         $total = count($articles)+1;
 
-        $expires = $this->get('content_cache')
-            ->getEarlierStarttimeOfScheduledContents($articles);
+        $cm = new \ContentManager;
+
+        $expires = $cm->getEarlierStarttimeOfScheduledContents($articles);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
@@ -75,7 +76,6 @@ class CategoryController extends Controller
             }
         }
 
-        $cm = new \ContentManager;
         $articles = $cm->getInTime($articles);
 
         $cacheId = "category|$categoryName|$page";
