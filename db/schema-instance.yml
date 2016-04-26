@@ -564,9 +564,6 @@ contents:
             options: { default: 0, notnull: false }
         in_home:
             type: smallint
-        home_pos:
-            type: integer
-            options: { default: '100', notnull: false, comment: '10' }
             options: { default: 0, notnull: false }
         slug:
             type: string

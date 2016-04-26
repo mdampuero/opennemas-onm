@@ -160,13 +160,6 @@ class Content
     public $in_home             = null;
 
     /**
-     * Ther order of this content for homepages
-     *
-     * @var int
-     **/
-    public $home_pos            = null;
-
-    /**
      * Whether if this content is available
      *
      * @var int 0|1
@@ -393,7 +386,6 @@ class Content
         $data['position']         = (empty($data['position']))? 2: intval($data['position']);
         $data['in_home']          = (empty($data['in_home']))? 0: intval($data['in_home']);
         $data['favorite']         = (empty($data['favorite'])) ? 0: intval($data['favorite']);
-        $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source'])) ? null: $data['urn_source'];
         $data['params'] =
             (!isset($data['params'])
@@ -433,7 +425,7 @@ class Content
             `metadata`, `starttime`, `endtime`,
             `created`, `changed`, `content_status`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `favorite`, `home_pos`,`available`, `with_comment`,
+            `in_home`, `favorite`, `available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
            " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?,?)";
 
@@ -444,7 +436,7 @@ class Content
             (int) $data['position'],$data['frontpage'],
             (int) $data['fk_author'], $data['fk_publisher'],
             (int) $data['fk_user_last_editor'], $data['in_home'], (int) $data['favorite'],
-            (int) $data['home_pos'], $data['available'], $data['with_comment'],
+            $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
