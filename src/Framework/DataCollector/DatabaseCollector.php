@@ -33,12 +33,14 @@ class DatabaseCollector extends DataCollector
         $this->data = $this->conn->getBuffer();
 
         foreach ($this->data as &$query) {
-            $sql    = array_slice($query['params'], 0, 1);
-            $params = array_key_exists(0, array_slice($query['params'], 1)) ? array_slice($query['params'], 1)[0] : array();
+            $sql    = array_shift($query['params']);
+            $values = array_shift($query['params']);
             $query  = [
                 'method' => $query['method'],
-                'sql'    => $sql,
-                'params' => (count($params) > 0) ? print_r($params, true) : '',
+                'params' => [
+                    'sql'    => $sql,
+                    'values' => $values
+                ]
             ];
         }
     }
