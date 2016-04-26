@@ -27,6 +27,13 @@ abstract class AbstractCache implements CacheInterface
     private $namespace = '';
 
     /**
+     * List of most recent used items.
+     *
+     * @var array
+     */
+    public $mru = [];
+
+    /**
      * The function call buffer.
      *
      * @var array
@@ -74,23 +81,44 @@ abstract class AbstractCache implements CacheInterface
     public function fetch($id)
     {
         if (is_array($id)) {
-            $ids = array();
-            foreach ($id as $key) {
-                $ids []= $this->getNamespacedId($key);
+            $values = array_intersect_key($this->mru, array_flip($id));
+            $id     = array_diff($id, array_keys($values));
+
+            if (!empty($values)) {
+                $this->buffer[] = [
+                    'method' => 'fetchMulti',
+                    'params' => [ 'ids' => array_keys($values) ],
+                    'mru'    => true
+                ];
             }
+
+            $ids = [];
+            foreach ($id as $i) {
+                $ids[] = $this->getNamespacedId($i);
+            }
+
+            $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $ids ] ];
+
             $rawValues = $this->doFetch($ids);
 
-            $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $id ] ];
-
-            $values = array();
             foreach ($rawValues as $key => $value) {
-                $values [str_replace($this->namespace. '_', '', $key)] = $value;
+                $values[str_replace($this->namespace. '_', '', $key)] = $value;
             }
 
             return $values;
         }
 
-        $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
+        if (array_key_exists($id, $this->mru)) {
+            $this->buffer[] = [
+                'method' => 'fetch',
+                'params' => [ 'ids' => $id ],
+                'mru'    => true
+            ];
+
+            return $this->mru[$id];
+        }
+
+        $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $id ] ];
 
         return $this->doFetch($this->getNamespacedId($id));
     }
@@ -121,9 +149,11 @@ abstract class AbstractCache implements CacheInterface
     public function save($id, $data = null, $lifeTime = 0)
     {
         if (is_array($id)) {
+            $this->mru = array_merge($this->mru, $id);
+
             $values = array();
             foreach ($id as $key => $value) {
-                $values [$this->getNamespacedId($key)] = $value;
+                $values[$this->getNamespacedId($key)] = $value;
             }
 
             $this->buffer[] = [ 'method' => 'saveMulti', 'params' => [ 'ids' => $id, 'values' => $data ] ];
@@ -132,6 +162,7 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->buffer[] = [ 'method' => 'save', 'params' => [ 'ids' => $id, 'values' => $data ] ];
+        $this->mru[$id] = $data;
 
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
