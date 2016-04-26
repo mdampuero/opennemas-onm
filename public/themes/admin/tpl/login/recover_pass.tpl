@@ -44,7 +44,7 @@
                   <div class="form-group text-right">
                     <div class="controls">
                       <a href="{url name=admin_login}" class="btn btn-link">{t}Go back to login{/t}</a>
-                      <button type="submit" class="btn btn-primary" id="recover_pass_button">{t}Submit{/t}</button>
+                      <button type="submit" class="btn btn-primary" id="recover-pass-button">{t}Submit{/t}</button>
                     </div>
                   </div>
                 </div>

@@ -23,7 +23,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}" accesskey="c" id="create_button">
+              <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}" accesskey="c" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

@@ -18,7 +18,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="PCLAVE_CREATE"}
             <li>
-              <a href="{url name=admin_keyword_create}" class="btn btn-primary" id="create_button">
+              <a href="{url name=admin_keyword_create}" class="btn btn-primary" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

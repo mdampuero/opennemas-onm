@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group text-right">
                       <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
-                      <button class="btn btn-primary" type="submit" id="forgot_pass_button">
+                      <button class="btn btn-primary" type="submit" id="forgot-pass-button">
                         {t}Submit{/t}
                       </button>
                     </div>

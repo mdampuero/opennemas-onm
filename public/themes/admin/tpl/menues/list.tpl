@@ -26,7 +26,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               {acl isAllowed="MENU_CREATE"}
-              <a href="{url name=admin_menu_create}" class="btn btn-primary" id="create_button">
+              <a href="{url name=admin_menu_create}" class="btn btn-primary" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

@@ -63,7 +63,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="KIOSKO_CREATE"}
             <li>
-              <a class="btn btn-primary" href="{url name=admin_kiosko_create}" title="{t}New cover{/t}" id="create_button">
+              <a class="btn btn-primary" href="{url name=admin_kiosko_create}" title="{t}New cover{/t}" id="create-button">
                 {t}Create{/t}
               </a>
             </li>

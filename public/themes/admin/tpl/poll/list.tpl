@@ -66,7 +66,7 @@
             {/acl}
             {acl isAllowed="POLL_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}" id="create_button">
+              <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

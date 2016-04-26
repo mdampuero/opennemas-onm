@@ -18,7 +18,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
-              <button class="btn btn-danger" type="button" ng-click="removeAll()" id="remove_all_button">
+              <button class="btn btn-danger" type="button" ng-click="removeAll()" id="remove-all-button">
                 <i class="fa fa-trash-o"></i>
                 {t}Remove all{/t}
               </button>
@@ -35,7 +35,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button" id="clear_selection_button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button" id="clear-selection-button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>

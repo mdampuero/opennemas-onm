@@ -115,7 +115,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks module-filter" ng-click="type = 'pack'">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'pack', 'btn-white': type != 'pack' }" id="packs_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'pack', 'btn-white': type != 'pack' }" id="packs-button">
                 <i class="fa fa-lg fa-dropbox hidden-sm"></i>
                 {t}Packs{/t}
               </button>
@@ -124,7 +124,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'" id="modules_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'" id="modules-button">
                 <i class="fa fa-cube hidden-sm m-r-5"></i>
                 {t}Modules{/t}
               </button>
@@ -133,7 +133,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'" id="services_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'" id="services-button">
                 <i class="fa fa-support hidden-sm m-r-5"></i>
                 {t}Services{/t}
               </button>
@@ -142,7 +142,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'" id="partner_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'partner', 'btn-white': type != 'partner' }" ng-click="type = 'partner'" id="partner-button">
                 <i class="fa fa-thumbs-o-up hidden-sm m-r-5"></i>
                 {t}Partners{/t}
               </button>
@@ -151,7 +151,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }" ng-click="type = 'free'" id="free_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'free', 'btn-white': type != 'free' }" ng-click="type = 'free'" id="free-button">
                 <i class="fa fa-ban fa-circle-o hidden-sm m-r-5"></i>
                 {t}Free{/t}
               </button>
@@ -160,7 +160,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'" id="purchased_button">
+              <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'" id="purchased-button">
                 <i class="fa fa-star-o hidden-sm m-r-5"></i>
                 {t}My selection{/t}
               </button>

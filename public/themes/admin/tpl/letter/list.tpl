@@ -17,7 +17,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="LETTER_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_letter_create}" class="admin_add" accesskey="N" tabindex="1" id="create_button">
+              <a class="btn btn-primary" href="{url name=admin_letter_create}" class="admin_add" accesskey="N" tabindex="1" id="create-button">
                 <span class="fa fa-plus"></span> {t}Create{/t}
               </a>
             </li>

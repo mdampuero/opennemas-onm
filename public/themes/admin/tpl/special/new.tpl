@@ -41,14 +41,14 @@
             <li class="quicklinks">
               {if !is_null($special->id)}
                 {acl isAllowed="SPECIAL_UPDATE"}
-                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update_button">
+                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Update{/t}</span>
                   </button>
                 {/acl}
               {else}
                 {acl isAllowed="SPECIAL_CREATE"}
-                  <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save_button">
+                  <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Save{/t}</span>
                   </button>

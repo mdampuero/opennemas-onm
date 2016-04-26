@@ -90,14 +90,14 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{$categories[$category_id]['value']}')" title="{t}Preview frontpage with actual content positions{/t}" type="button" id="preview_button">
+              <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{$categories[$category_id]['value']}')" title="{t}Preview frontpage with actual content positions{/t}" type="button" id="preview-button">
                 <span class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></span>
                 {t}Preview{/t}
               </button>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}" id="save_button">
+              <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}" id="save-button">
                 <span class="fa fa-save"></span> <span class="hidden-xs text">{t}Save changes{/t}</span>
               </a>
             </li>

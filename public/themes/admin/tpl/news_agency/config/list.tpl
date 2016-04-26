@@ -34,7 +34,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}" id="add_server_button">
+              <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}" id="add-server-button">
                 <i class="fa fa-plus"></i>
                 {t}Add server{/t}
               </a>
