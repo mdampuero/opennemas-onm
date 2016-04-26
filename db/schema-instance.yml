@@ -85,6 +85,13 @@ advertisements:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: advertisement_id_contents_id
+            source_field: [ pk_advertisement ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums:
     columns:
         pk_album:
@@ -118,6 +125,13 @@ albums:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: album_id_contents_id
+            source_field: [ pk_album ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums_photos:
     columns:
         pk_album:
@@ -151,6 +165,19 @@ albums_photos:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: photos_id_album_id
+            source_field: [ pk_album ]
+            target_table: albums
+            target_field: [ pk_album ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: photos_id_photo_id
+            source_field: [ pk_photo ]
+            target_table: photos
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 articles:
     columns:
         pk_article:
@@ -199,6 +226,13 @@ articles:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: article_id_contents_id
+            source_field: [ pk_article ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 attachments:
     columns:
         pk_attachment:
@@ -220,6 +254,13 @@ attachments:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: attachment_id_contents_id
+            source_field: [ pk_attachment ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 books:
     columns:
         pk_book:
@@ -241,6 +282,13 @@ books:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: book_id_contents_id
+            source_field: [ pk_book ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 comments:
     columns:
         id:
@@ -304,7 +352,13 @@ comments:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
         -
+            name: comments_id_contents_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: 'SET NULL', onDelete: 'SET NULL' }
 commentsmeta:
     columns:
         fk_content:
@@ -329,6 +383,13 @@ commentsmeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: commentsmeta_id_comments_id
+            source_field: [ fk_content ]
+            target_table: comments
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_categories:
     columns:
         pk_content_category:
@@ -407,6 +468,13 @@ content_positions:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: contentposition_id_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contentmeta:
     columns:
         fk_content:
@@ -431,6 +499,13 @@ contentmeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: contentmeta_id_contents_id
+            source_field: [ fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents:
     columns:
         pk_content:
@@ -614,6 +689,19 @@ contents_categories:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: contentcategory_contentid_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: contentcategory_category_category_id
+            source_field: [ pk_fk_content_category ]
+            target_table: content_categories
+            target_field: [ pk_content_category ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_views:
     columns:
         pk_fk_content:
@@ -629,6 +717,13 @@ content_views:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: contentview_contentid_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 frontpages:
     columns:
         pk_frontpage:
@@ -689,6 +784,13 @@ kioskos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: kioskos_id_contents_id
+            source_field: [ pk_kiosko ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 letters:
     columns:
         pk_letter:
@@ -707,6 +809,13 @@ letters:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: letters_id_contents_id
+            source_field: [ pk_letter ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 menu_items:
     columns:
         pk_item:
@@ -746,6 +855,13 @@ menu_items:
         -
             name: pk_menu
             columns: [pk_menu]
+    foreign_keys:
+        -
+            name: menuitems_id_menu_id
+            source_field: [ pk_menu ]
+            target_table: menues
+            target_field: [ pk_menu ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 menues:
     columns:
         pk_menu:
@@ -848,6 +964,13 @@ opinions:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: opinions_id_contents_id
+            source_field: [ pk_opinion ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 orders:
     columns:
         id:
@@ -974,6 +1097,13 @@ photos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: photos_id_contents_id
+            source_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 poll_items:
     columns:
         pk_item:
@@ -1004,6 +1134,13 @@ poll_items:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: poll_items_id_contents_id
+            source_field: [ fk_pk_poll ]
+            target_table: polls
+            target_field: [ pk_poll ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 polls:
     columns:
         pk_poll:
@@ -1028,6 +1165,13 @@ polls:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: polls_id_contents_id
+            source_field: [ pk_poll ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 ratings:
     columns:
         pk_rating:
@@ -1094,6 +1238,19 @@ related_contents:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: related_contents_content1_contents_id
+            source_field: [ pk_content1 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: related_contents_content2_contents_id
+            source_field: [ pk_content2 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 settings:
     columns:
         name:
@@ -1148,6 +1305,19 @@ special_contents:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: specialcontents_fk_content_contents_id
+            source_field: [ fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: specialcontents_fk_special_contents_id
+            source_field: [ fk_special ]
+            target_table: specials
+            target_field: [ pk_special ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 specials:
     columns:
         pk_special:
@@ -1169,6 +1339,13 @@ specials:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: specials_id_contents_id
+            source_field: [ pk_special ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 static_pages:
     columns:
         pk_static_page:
@@ -1181,6 +1358,13 @@ static_pages:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: static_pages_id_contents_id
+            source_field: [ pk_static_page ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 translation_ids:
     columns:
         pk_content_old:
@@ -1211,6 +1395,13 @@ translation_ids:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: translationids_contentid_contents_id
+            source_field: [ pk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 user_groups:
     columns:
         pk_user_group:
@@ -1247,6 +1438,13 @@ user_groups_privileges:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: usergroups_privileges_groupid_usergroups_id
+            target_table: user_groups
+            source_field: [ pk_fk_user_group ]
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 usermeta:
     columns:
         user_id:
@@ -1277,6 +1475,13 @@ usermeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: usermeta_userid_users_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 users:
     columns:
         id:
@@ -1394,6 +1599,13 @@ videos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: videos_id_contents_id
+            source_field: [ pk_video ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 votes:
     columns:
         pk_vote:
@@ -1436,3 +1648,10 @@ widgets:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: widgets_id_contents_id
+            source_field: [ pk_widget ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
