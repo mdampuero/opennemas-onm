@@ -248,7 +248,7 @@ comments:
             options: { default: null, unsigned: true, autoincrement: true }
         content_id:
             type: bigint
-            options: { length: 20, default: null, unsigned: true }
+            options: { length: 20, default: null, notnull: false, unsigned: true }
         author:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -278,10 +278,10 @@ comments:
             options: { default: '', length: 20 }
         parent_id:
             type: bigint
-            options: { default: '0' }
+            options: { default: null, unsigned: true, default: '0' }
         user_id:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
         content_type_referenced:
             type: string
             options: { default: null, length: 20 }
@@ -480,7 +480,7 @@ contents:
             options: { default: null, notnull: false, unsigned: true }
         position:
             type: integer
-            options: { default: '100', notnull: false, unsigned: true }
+            options: { default: 100, notnull: false, unsigned: true }
         frontpage:
             type: boolean
             options: { default: 1, notnull: false }
