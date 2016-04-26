@@ -72,7 +72,7 @@ EOF
         // Initialize database connection
         $this->connection = $this->getContainer()->get('db_conn');
         $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
-        $conn = getService('dbal_connection');
+        $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
 
         // Initialize application

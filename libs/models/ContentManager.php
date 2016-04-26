@@ -404,7 +404,7 @@ class ContentManager
             return $contents;
         }
 
-        $conn = getService('dbal_connection');
+        $conn = getService('orm.manager')->getConnection('instance');
 
         $categoriesSQL = implode(', ', $categories);
         $sql = 'SELECT * FROM content_positions '
@@ -539,7 +539,7 @@ class ContentManager
             return $returnValue;
         }
 
-        $conn   = getService('dbal_connection');
+        $conn   = getService('orm.manager')->getConnection('instance');
         $logger = getService('application.log');
 
         // Foreach element setup the sql values statement part
@@ -605,7 +605,7 @@ class ContentManager
         $conn = false
     ) {
         if (!$conn) {
-            $conn = getService('dbal_connection');
+            $conn   = getService('orm.manager')->getConnection('instance');
         }
 
         if (is_array($contentIds) && (count($contentIds) > 0)) {
@@ -646,7 +646,7 @@ class ContentManager
         $conn = false
     ) {
         if (!$conn) {
-            $conn = getService('dbal_connection');
+            $conn   = getService('orm.manager')->getConnection('instance');
         }
 
         // clean actual contents for the homepage of this category

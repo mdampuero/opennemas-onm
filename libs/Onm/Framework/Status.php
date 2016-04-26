@@ -38,13 +38,15 @@ class Status
     public function checkCacheConnection()
     {
         $cacheId = 'framework.cache.check';
+
         try {
-            $cache = $this->container->get('cache');
+            $cache = $this->container->get('cache.manager')
+                ->getConnection('manager');
 
-            $cache->save($cacheId, 'bar');
+            $cache->set($cacheId, 'bar');
 
-            if ($cache->fetch($cacheId) !== 'bar'
-                || $cache->delete($cacheId) !== 1
+            if ($cache->get($cacheId) !== 'bar'
+                || ($cache->delete($cacheId) && $cache->get($cacheId))
             ) {
                 return false;
             }
@@ -62,7 +64,8 @@ class Status
      **/
     public function checkDatabaseConnection()
     {
-        $conn = $this->container->get('dbal_connection');
+        $conn = $this->container->get('orm.manager')
+            ->getConnection('manager');
 
         try {
             $rs = $conn->executeQuery('SHOW VARIABLES LIKE "version"');

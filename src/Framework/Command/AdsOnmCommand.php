@@ -73,7 +73,7 @@ EOF
         $dbConn = $this->getContainer()->get('db_conn');
         $database = $instance->settings['BD_DATABASE'];
         $dbConn->selectDatabase($database);
-        $conn = $this->getContainer()->get('dbal_connection');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $conn->selectDatabase($database);
 
         // Initialize application

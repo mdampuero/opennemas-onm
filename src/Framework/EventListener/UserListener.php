@@ -68,7 +68,7 @@ class UserListener implements EventSubscriberInterface
             $database  = $instance->getDatabaseName();
             $namespace = $instance->internal_name;
 
-            getService('dbal_connection')->selectDatabase($database);
+            getService('orm.manager')->getConnection('instance')->selectDatabase($database);
             getService('cache')->setNamespace($namespace);
             $GLOBALS['application']->conn->selectDatabase($database);
 

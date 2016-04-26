@@ -113,7 +113,9 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         $this->tpl = new \TemplateAdmin('admin');
 
-        $conn = $this->getContainer()->get('dbal_connection');
+        $conn = $this->getContainer()->get('orm.manager')
+            ->getConnection('instance');
+
         $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
 
         switch ($source) {

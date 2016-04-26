@@ -488,7 +488,7 @@ class Advertisement extends Content
                   ."WHERE advertisements.type_advertisement IN (".$types.") "
                   .$catsSQL.' ORDER BY id';
 
-            $conn = getService('dbal_connection');
+            $conn = getService('orm.manager')->getConnection('instance');
             $result = $conn->fetchAll($sql);
 
             if (count($result) <= 0) {

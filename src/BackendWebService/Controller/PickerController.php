@@ -114,7 +114,7 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
         $sql         = "UPDATE contents SET `description`=? WHERE pk_content=?";
 
-        $conn = $this->get('dbal_connection');
+        $conn = $this->get('orm.manager')->getConnection('instance');
 
         $this->get('cache')->delete('Photo' . "-" . $id);
 
@@ -135,7 +135,7 @@ class PickerController extends Controller
     {
         $years = array();
 
-        $conn = $this->get('dbal_connection');
+        $conn = $this->get('orm.manager')->getConnection('instance');
 
         $results = $conn->fetchAll(
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month

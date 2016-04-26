@@ -48,7 +48,7 @@ class GettingStartedController extends Controller
             $this->getUser()->getUsername()
         );
 
-        $this->get('dbal_connection')->selectDatabase($database);
+        $this->get('orm.manager')->getConnection('instance')->selectDatabase($database);
         $this->get('cache')->setNamespace($namespace);
 
         if ($user->getMeta('facebook_id')) {

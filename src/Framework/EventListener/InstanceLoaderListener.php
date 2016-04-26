@@ -120,8 +120,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             // TODO: Remove when AdoDB removed from models
             $connection = $this->container->get('db_conn');
             $connection->selectDatabase($database);
-
-            $this->container->get('dbal_connection')->selectDatabase($database);
         }
 
         // TODO: Remove when AdoDB removed from models
