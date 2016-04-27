@@ -11,6 +11,18 @@
     </span>
   {% endset %}
 
+  {% set text %}
+    {# this is the content displayed when hovering the mouse over the toolbar panel #}
+    <div class="sf-toolbar-info-piece">
+      <b>Cache queries</b>
+      <span class="sf-toolbar-status {% if collector.countCache > 50 %} sf-toolbar-status-yellow{% elseif collector.countCache > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.countCache }}</span>
+    </div>
+    <div class="sf-toolbar-info-piece">
+      <b>MRU queries</b>
+      <span class="sf-toolbar-status {% if collector.countMru > 50 %} sf-toolbar-status-yellow{% elseif collector.countMru > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.countMru }}</span>
+    </div>
+  {% endset %}
+
   {# the 'link' value set to 'false' means that this panel doesn't show a section in the web profiler (default is 'true'). #}
   {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
 {% endblock %}
@@ -45,25 +57,43 @@
 {% endblock %}
 
 {% block panel %}
+  <style>
+    #collector-content pre.sf-dump {
+      max-width: 500px;
+    }
+  </style>
   <h2>Cache Metrics</h2>
   <div class="metrics">
     <div class="metric">
       <span class="value">{{ collector.queries | length }}</span>
       <span class="label">Queries</span>
     </div>
+    <div class="metric">
+      <span class="value">{{ collector.cacheQueries | length }}</span>
+      <span class="label">Cache Queries</span>
+    </div>
+    <div class="metric">
+      <span class="value">{{ collector.mruQueries | length }}</span>
+      <span class="label">MRU Queries</span>
+    </div>
   </div>
   <h2>Queries</h2>
   <table class="queries">
     <thead>
       <tr>
-        <th width="100">Actions</th>
+        <th width="150">Actions</th>
         <th width="500">Ids</th>
         <th>Values</th>
       </tr>
     </thead>
     {% for query in collector.queries %}
       <tr>
-        <td>{{ query.method }}</td>
+        <td>
+          {% if query.mru is defined %}
+            [MRU]
+          {% endif %}
+          {{ query.method }}
+        </td>
         <td>{{ query.params.ids | join(', ') }}</td>
         <td>
           {% if query.params.values is defined %}
