@@ -58,4 +58,19 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($contentTypeId, false);
     }
+
+    /**
+     * @covers ContentManager::getEarlierStarttimeOfScheduledContents
+     */
+    public function testGetEarlierStarttimeOfScheduledContents()
+    {
+        $contents = [];
+        $expires = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+        $this->assertEquals($expires, false);
+
+        $contents = [
+
+        ];
+    }
+
 }

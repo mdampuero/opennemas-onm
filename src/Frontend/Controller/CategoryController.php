@@ -64,9 +64,7 @@ class CategoryController extends Controller
         $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
         $total = count($articles)+1;
 
-        $cm = new \ContentManager;
-
-        $expires = $cm->getEarlierStarttimeOfScheduledContents($articles);
+        $expires = \ContentManager::getEarlierStarttimeOfScheduledContents($articles);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();

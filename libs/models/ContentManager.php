@@ -743,7 +743,7 @@ class ContentManager
      *
      * @return string The minor starttime of scheduled contents or null
      */
-    public function getEarlierStarttimeOfScheduledContents($contents)
+    public static function getEarlierStarttimeOfScheduledContents($contents)
     {
         $current = date('Y-m-d H:i:s');
         $expires = null;
