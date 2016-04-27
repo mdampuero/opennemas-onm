@@ -92,18 +92,22 @@ abstract class AbstractCache implements CacheInterface
                 ];
             }
 
-            $ids = [];
-            foreach ($id as $i) {
-                $ids[] = $this->getNamespacedId($i);
+            if (!empty($id)) {
+                $ids = [];
+                foreach ($id as $i) {
+                    $ids[] = $this->getNamespacedId($i);
+                }
+
+                $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $ids ] ];
+
+                $rawValues = $this->doFetch($ids);
+
+                foreach ($rawValues as $key => $value) {
+                    $values[str_replace($this->namespace. '_', '', $key)] = $value;
+                }
             }
 
-            $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $ids ] ];
-
-            $rawValues = $this->doFetch($ids);
-
-            foreach ($rawValues as $key => $value) {
-                $values[str_replace($this->namespace. '_', '', $key)] = $value;
-            }
+            $this->mru = array_merge($this->mru, $values);
 
             return $values;
         }
@@ -118,7 +122,7 @@ abstract class AbstractCache implements CacheInterface
             return $this->mru[$id];
         }
 
-        $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $id ] ];
+        $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
 
         return $this->doFetch($this->getNamespacedId($id));
     }
