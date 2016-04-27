@@ -163,7 +163,7 @@ class Album extends Content
         $this->subtitle    = $rs->fields['subtitle'];
         $this->agency      = $rs->fields['agency'];
         $this->cover_id    = $rs->fields['cover_id'];
-        $this->cover_image = $this->get('entity_repository')->find($rs->fields['cover_id']);
+        $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
         $this->category_title = $this->loadCategoryTitle($rs->fields['pk_album']);
 
