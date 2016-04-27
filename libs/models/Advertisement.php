@@ -237,6 +237,12 @@ class Advertisement extends Content
             return;
         }
 
+        // Decode base64 if isn't decoded yet
+        $isBase64 = base64_decode($rs->fields['script']);
+        if ($isBase64) {
+            $rs->fields['script'] = $isBase64;
+        }
+
         $this->load($rs->fields);
 
         // Return instance to method chaining
@@ -254,12 +260,6 @@ class Advertisement extends Content
     {
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
-
-        // Decode base64 if isn't decoded yet
-        $isBase64 = base64_decode($this->script);
-        if ($isBase64) {
-            $this->script = $isBase64;
-        }
 
         // FIXME: review that this property is not used ->img
         $this->img = $this->path;
