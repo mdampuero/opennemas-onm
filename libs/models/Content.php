@@ -423,20 +423,20 @@ class Content
         $sql = "INSERT INTO contents
             (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
             `metadata`, `starttime`, `endtime`,
-            `created`, `changed`, `content_status`, `position`,`frontpage`,
+            `created`, `changed`, `content_status`,
+            `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
             `in_home`, `favorite`, `available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?, ?,?,?, ?,?,?,?, ?,?,?,?)";
 
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], (int) $data['content_status'],
             (int) $data['position'],$data['frontpage'],
-            (int) $data['fk_author'], $data['fk_publisher'],
-            (int) $data['fk_user_last_editor'], $data['in_home'], (int) $data['favorite'],
-            $data['available'], $data['with_comment'],
+            (int) $data['fk_author'], (int) $data['fk_publisher'], (int) $data['fk_user_last_editor'],
+            $data['in_home'], (int) $data['favorite'], (int) $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
@@ -444,18 +444,16 @@ class Content
             getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return false;
         }
-
         $this->id = $GLOBALS['application']->conn->Insert_ID();
         $this->category_name = $catName;
 
-        $sql = "INSERT INTO contents_categories (`pk_fk_content` ,"
-             . "`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
+        $sql = "INSERT INTO contents_categories (`pk_fk_content`, `pk_fk_content_category`, `catName`) VALUES (?,?,?)";
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return false;
         }
-
         $sql = "INSERT INTO content_views (`pk_fk_content` ,`views`) "
              . "VALUES (?,?)";
         $values = array($this->id, 0);
