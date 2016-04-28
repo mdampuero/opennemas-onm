@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-02 17:23+0100\n"
+"POT-Creation-Date: 2016-04-28 12:07+0000\n"
 "PO-Revision-Date: 2016-01-07 18:09+0100\n"
 "Last-Translator: Alex <alex@openhost.es>\n"
 "Language-Team: Portuguese <devs@opennemas.com>\n"
@@ -27,6 +27,9 @@ msgid ""
 msgstr ""
 "Você alcançou os usuários máximos permitidos. Se quiser criar mais usuários, "
 "entre em contato conosco."
+
+msgid "Not assigned"
+msgstr ""
 
 msgid "All"
 msgstr "Todos"
@@ -165,11 +168,11 @@ msgstr "VÍDEO"
 msgid "Categories"
 msgstr "Categorias"
 
-msgid "Advertisement successfully created."
-msgstr "Anúncio criado com êxito."
-
 msgid "Unable to create the new advertisement."
 msgstr "Não foi possível criar o novo anúncio."
+
+msgid "Advertisement successfully created."
+msgstr "Anúncio criado com êxito."
 
 #, php-format
 msgid "Unable to find the advertisement with the id \"%d\""
@@ -303,47 +306,17 @@ msgstr ""
 "Não foi possível guardar as novas posições. Entre em contato com o "
 "administrador do sistema."
 
-msgid "Frontpages"
-msgstr "Capas"
-
-msgid "Article - inner"
-msgstr "Artigo - interior"
-
-msgid "Mobile - frontpages"
-msgstr "Celular - capas"
-
-msgid "RSS"
-msgstr "RSS"
-
-msgid "Opinion - Authors"
-msgstr "Opinião - Autores"
-
-msgid "Opinion - inner"
-msgstr "Opinião - interior"
-
-msgid "Video - frontpage"
-msgstr "Vídeo - capa"
-
-msgid "Video - inner"
-msgstr "Vídeo - interior"
-
-msgid "Album - frontpage"
-msgstr "Álbum - capa"
-
-msgid "Album - inner"
-msgstr "Álbum - interior"
-
-msgid "Poll - frontpage"
-msgstr "Enquete - capa"
-
-msgid "Poll - inner"
-msgstr "Enquete - interior"
-
 msgid "Cache configuration saved successfully."
 msgstr "Configuração de cache guardada com êxito."
 
 msgid "Unable to save the cache configuration."
 msgstr "Não foi possível guardar a configuração de cache."
+
+msgid "Smarty cache removed for the instance."
+msgstr ""
+
+msgid "Smarty compiled templates removed for the instance."
+msgstr ""
 
 msgid "Category created successfully."
 msgstr "Categoria criada com êxito."
@@ -520,9 +493,6 @@ msgstr "Tampa %s excluída com êxito."
 msgid "You must give an id to delete the cover."
 msgstr "Você deve providenciar um identificador para excluir a tampa."
 
-msgid "SQL errors registered in database cleaned sucessfully."
-msgstr "Erros de SQL registrados no banco de dados excluídos com êxito."
-
 msgid "Instance not found"
 msgstr "Instância não encontrada"
 
@@ -563,6 +533,9 @@ msgstr "Arquivo atualizado com êxito."
 #, php-format
 msgid "There was a problem while saving the file information."
 msgstr "Houve um problema ao guardar as informações do arquivo."
+
+msgid "Frontpages"
+msgstr "Capas"
 
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
@@ -1073,9 +1046,6 @@ msgstr "Anúncios"
 msgid "Widgets"
 msgstr "Widgets"
 
-msgid "Sidebars"
-msgstr "Barras laterais"
-
 msgid "Menus"
 msgstr "Menus"
 
@@ -1175,12 +1145,6 @@ msgstr "Grupos de Usuários"
 msgid "Authors"
 msgstr "Autores"
 
-msgid "Cache manager"
-msgstr "Gestor de cache"
-
-msgid "SQL error log"
-msgstr "Log de erro SQL"
-
 msgid "Store"
 msgstr "Loja"
 
@@ -1213,77 +1177,6 @@ msgstr ""
 "que primeiro você tem que associá-lo a partir de sua conta de usuário "
 "Opennemas."
 
-msgid "Item deleted successfully"
-msgstr "Item excluído com êxito"
-
-#, php-format
-msgid "Unable to delete the item \"%s\""
-msgstr "Não foi possível excluir o item \"%s\""
-
-msgid "No items selected"
-msgstr "Não há itens selecionados"
-
-msgid "Unknown cache file"
-msgstr "Arquivo de cache desconhecido"
-
-msgid "Article inner"
-msgstr "Artigo interior"
-
-msgid "Mobile article inner"
-msgstr "Artigo interior en dispositivo móvel"
-
-msgid "Mobile frontpage"
-msgstr "Capa en dispositivo móvel"
-
-msgid "Mobile opinion inner"
-msgstr "Opinião interior en dispositivo móvel"
-
-msgid "Mobile opinion frontpage"
-msgstr "Capa de opinião en dispositivo móvel"
-
-msgid "Video frontpage"
-msgstr "Capa de vídeo"
-
-msgid "Video inner"
-msgstr "Vídeo interior"
-
-msgid "Album frontpage"
-msgstr "Capa de Álbuns"
-
-msgid "Album inner"
-msgstr "Álbum interior"
-
-msgid "Opinion frontpage"
-msgstr "Capa de Opinião"
-
-#, php-format
-msgid "Page %s"
-msgstr "Página %s"
-
-msgid "Opinion inner"
-msgstr "Opinião interior"
-
-msgid "Blog inner"
-msgstr "Blog interior"
-
-msgid "RSS Author"
-msgstr "RSS de Autor"
-
-msgid "Homepage"
-msgstr "Capa principal"
-
-msgid "Poll inner"
-msgstr "Enquete interior"
-
-msgid "Poll frontpage"
-msgstr "Capa de enquete"
-
-msgid "Custom CSS"
-msgstr "CSS customizado"
-
-msgid "Sitemap: "
-msgstr "Sitemap: "
-
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Não foi possível excluir o item com id \"%d\""
@@ -1303,6 +1196,9 @@ msgstr "Não foi possível actualizar o item com id \"%d\""
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d item(s) atualizado(s) com êxito"
+
+msgid "Item deleted successfully"
+msgstr "Item excluído com êxito"
 
 msgid "Item updated successfully"
 msgstr "Item atualizado com êxito"
@@ -1386,6 +1282,10 @@ msgstr "Não foi possível guardar a posição para o item com id \"%d\""
 msgid "Positions saved successfully"
 msgstr "Posições guardadas com êxito"
 
+#, fuzzy, php-format
+msgid "The domain %s is not valid"
+msgstr "O domínio %s não está disponível"
+
 #, php-format
 msgid "The domain %s is not available"
 msgstr "O domínio %s não está disponível"
@@ -1397,6 +1297,10 @@ msgstr "Seu domínio está configurado corretamente"
 msgid "Your domain has to point to %s"
 msgstr "Seu domínio tem de apontar para"
 
+#, fuzzy
+msgid "Your domain is valid"
+msgstr "Seu domínio está configurado corretamente"
+
 #, php-format
 msgid "Domain deleted successfully"
 msgstr "Domínio excluído com êxito"
@@ -1405,28 +1309,17 @@ msgstr "Domínio excluído com êxito"
 msgid "Unable to delete the domain %s"
 msgstr "Não foi possível excluir o domínio \"%s\""
 
+msgid "Domain + redirection: "
+msgstr ""
+
+msgid "Redirection: "
+msgstr ""
+
+msgid "Pay with credit card"
+msgstr ""
+
 msgid "Domain added successfully"
 msgstr "Domínio adicionado com êxito"
-
-msgid "Your request could not been registered"
-msgstr "Sua petição não pôde ser registrada"
-
-msgid "Your request has been registered"
-msgstr "Sua petição foi registrada"
-
-msgid "Add Video and Image Galleries to your content. "
-msgstr "Adicionar Vídeo e Galerias de Imagem a seus conteúdos."
-
-msgid ""
-"<p>This module will allow you to create Photo Galleries, add video from "
-"YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the "
-"most interesting fact is that the video manager is the same as youtube one, "
-"perfect consistency and performance.</p>"
-msgstr ""
-"<p>Este módulo irá permitir que você crie galerias de fotografias, adicionar "
-"vídeos do YouTube, Vimeo, Dailymotion e de outras 10 fontes mais. </p><p>E o "
-"mais interessante é que o gestor de vídeos é o mesmo que Youtube, perfeito "
-"consistente e com um ótimo desempenho.</p>"
 
 #, php-format
 msgid "%d contents imported successfully"
@@ -1454,16 +1347,6 @@ msgstr "Servidor atualizado com êxito."
 
 msgid "News agency server deleted."
 msgstr "Servidor de agência de notícias excluído."
-
-msgid "Newsletter deleted successfully."
-msgstr "Newsletter excluído com êxito."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Não foi possível excluir a newsletter \"%s\""
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Você deve providenciar um id para excluir uma newsletter."
 
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
@@ -1497,6 +1380,16 @@ msgstr "Por favor, especifique um id de subscriptor para alterar o seu estado."
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Alterado com êxito o estado de activado para %d subscriptores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Newsletter excluído com êxito."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Não foi possível excluir a newsletter \"%s\""
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Você deve providenciar um id para excluir uma newsletter."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificação marcada como lida com êxito"
@@ -1581,19 +1474,15 @@ msgstr ""
 "Soltar os arquivos em qualquer lugar aqui para fazer o upload ou clique no "
 "botão \"Adicionar arquivos...\" acima."
 
-msgid "Add Video and Image Galleries to your content."
-msgstr "Adicionar Vídeo e Galerias de Imagem para aos seus conteúdos."
+#, fuzzy
+msgid "Unable to find the purchase"
+msgstr "Não foi possível encontrar o usuário com o ID '%d'"
 
-msgid ""
-"<p>This module will allow you to create Photo Galleries, add video from "
-"YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>\n"
-"                    <p>Our video manager is the same as youtube one, perfect "
-"consistency and performance.</p>"
-msgstr ""
-"<p>Este módulo irá permitir que você crie galerias de fotografias, adicionar "
-"vídeos do YouTube, Vimeo, Dailymotion e de outras 10 fontes mais.</p>\n"
-"                    <p>E o mais interessante é que o gestor de vídeos é o "
-"mesmo que Youtube, perfeito consistente e com um ótimo desempenho.</p>"
+msgid "Your request could not been registered"
+msgstr "Sua petição não pôde ser registrada"
+
+msgid "Your request has been registered"
+msgstr "Sua petição foi registrada"
 
 #, fuzzy
 msgid "Billing information saved successfully"
@@ -1671,15 +1560,26 @@ msgid ""
 "You have %s pending comments. Click <a href=\"%s\">here</a> to moderate."
 msgstr ""
 
-#, fuzzy
-msgid "Usage of your newspaper"
-msgstr "Meu jornal"
+#, php-format
+msgid "Your are using %d Mb of storage."
+msgstr ""
 
 #, php-format
 msgid ""
-"You have %d activated users. Note that <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/566172-pricing-opennemas-user-licenses\" target="
-"\"_blank\" title=\"Learn more\">the cost is %s € user/month</a>"
+"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Learn more\">the cost %s € Mb/month</a>."
+msgstr ""
+
+#, fuzzy, php-format
+msgid "You have %d activated users."
+msgstr "Você excluiu %d usuários."
+
+#, php-format
+msgid ""
+"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
+"pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Learn more\">the "
+"cost is %s € user/month</a>."
 msgstr ""
 
 #, php-format
@@ -1691,17 +1591,6 @@ msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € pv/month</a>."
-msgstr ""
-
-#, php-format
-msgid "Your are using %d Mb of storage. "
-msgstr ""
-
-#, php-format
-msgid ""
-"Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
-"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
-"\"Learn more\">the cost %s € Mb/month</a>."
 msgstr ""
 
 msgid "Already voted."
@@ -1797,6 +1686,21 @@ msgstr ""
 msgid "You can't vote this poll, it is closed."
 msgstr ""
 
+#, fuzzy
+msgid "Latest Opinions"
+msgstr "Opiniões"
+
+msgid "Latest News"
+msgstr ""
+
+#, fuzzy
+msgid "Latest Videos"
+msgstr "Vídeos"
+
+#, fuzzy
+msgid "Latest Albums"
+msgstr "Álbuns"
+
 msgid "You have been subscribed to the newsletter."
 msgstr ""
 
@@ -1885,6 +1789,25 @@ msgstr ""
 msgid "Reinventing Gutenberg machine..."
 msgstr ""
 
+#, fuzzy
+msgid "Client removed successfully"
+msgstr "Conteúdo guardado com êxito"
+
+msgid "Unable to find the instances for the given criteria"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to find the client with id \"%s\""
+msgstr "Não foi possível encontrar o item com id \"%s\""
+
+#, fuzzy, php-format
+msgid "%d clients deleted successfully."
+msgstr "%d item(s) excluído(s) com êxito"
+
+#, fuzzy
+msgid "Client saved successfully"
+msgstr "Conteúdo guardado com êxito"
+
 msgid "Instance saved successfully"
 msgstr ""
 
@@ -1905,15 +1828,51 @@ msgstr ""
 msgid "Error while deleting instance with id \"%s\""
 msgstr ""
 
-msgid "Unable to find the instances for the given criteria"
-msgstr ""
-
 #, php-format
 msgid "%s instances deleted successfully."
 msgstr ""
 
 #, php-format
 msgid "%s instances updated successfully."
+msgstr ""
+
+#, php-format
+msgid "A module with the uuid %d already exists"
+msgstr ""
+
+#, php-format
+msgid "A module with uuid '%s' already exists"
+msgstr ""
+
+#, fuzzy
+msgid "Module saved successfully"
+msgstr "Conteúdo guardado com êxito"
+
+#, fuzzy
+msgid "Module deleted successfully."
+msgstr "Enquete excluída com êxito."
+
+#, fuzzy, php-format
+msgid "%s modules deleted successfully."
+msgstr "Enquete excluída com êxito."
+
+msgid "Manager"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to find the module with id \"%s\""
+msgstr "Não foi possível encontrar o item com id \"%s\""
+
+#, fuzzy
+msgid "Unable to find the modules for the given criteria"
+msgstr "Não foi possível encontrar uma categoria com o id dado."
+
+#, fuzzy, php-format
+msgid "%s modules updated successfully."
+msgstr "Tampa atualizada com êxito."
+
+#, php-format
+msgid "Unable to find the entity with id \"%s\""
 msgstr ""
 
 #, fuzzy
@@ -1928,27 +1887,31 @@ msgstr "Configuração do site eliminada com êxito"
 msgid "%s notifications deleted successfully."
 msgstr "%s instances deleted successfully."
 
-msgid "Manager"
-msgstr ""
+#, fuzzy
+msgid "Unable to find the notifications for the given criteria"
+msgstr "Não foi possível encontrar uma categoria com o id dado."
 
-#, php-format
-msgid "Unable to find the entity with id \"%s\""
-msgstr ""
+#, fuzzy, php-format
+msgid "%s notifications updated successfully."
+msgstr "%s instances deleted successfully."
 
-msgid "Error"
+msgid "Help"
 msgstr ""
 
 msgid "Information"
 msgstr ""
 
-msgid "Success"
-msgstr ""
+#, fuzzy
+msgid "Purchased removed successfully"
+msgstr "Item suprimido permanentemente com êxito"
 
-msgid "Warning"
-msgstr ""
+#, fuzzy, php-format
+msgid "Unable to find the purchase with id \"%s\""
+msgstr "Não foi possível encontrar o item com id \"%s\""
 
-msgid "Help"
-msgstr ""
+#, fuzzy, php-format
+msgid "%d purchases deleted successfully."
+msgstr "%d item(s) excluído(s) com êxito"
 
 msgid "Instances not used in last month"
 msgstr ""
@@ -1966,7 +1929,20 @@ msgstr ""
 msgid "Instances"
 msgstr ""
 
+msgid "Extensions"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
 msgid "Notifications"
+msgstr ""
+
+#, fuzzy
+msgid "Clients"
+msgstr "Conteúdos"
+
+msgid "Purchases"
 msgstr ""
 
 msgid "Reports"
@@ -2128,6 +2104,32 @@ msgstr "Campo '%s' não é válido"
 msgid "Database error."
 msgstr "Erro banco de dados."
 
+#, fuzzy
+msgid "trashed"
+msgstr "Lixo"
+
+#, fuzzy
+msgid "pending"
+msgstr "Pendente"
+
+msgid "available"
+msgstr ""
+
+msgid "not scheduled"
+msgstr ""
+
+msgid "scheduled"
+msgstr ""
+
+msgid "dued"
+msgstr ""
+
+msgid "in time"
+msgstr ""
+
+msgid "postponed"
+msgstr ""
+
 msgid "Event"
 msgstr "Evento"
 
@@ -2159,32 +2161,6 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Alguns elementos foram removidos porque esta capa tinha muitos conteúdos."
-
-#, fuzzy
-msgid "trashed"
-msgstr "Lixo"
-
-#, fuzzy
-msgid "pending"
-msgstr "Pendente"
-
-msgid "available"
-msgstr ""
-
-msgid "not scheduled"
-msgstr ""
-
-msgid "scheduled"
-msgstr ""
-
-msgid "dued"
-msgstr ""
-
-msgid "in time"
-msgstr ""
-
-msgid "postponed"
-msgstr ""
 
 msgid "Cover"
 msgstr "Tampa"
@@ -2419,6 +2395,9 @@ msgstr ""
 msgid "Inner Opinion"
 msgstr ""
 
+msgid "RSS"
+msgstr "RSS"
+
 msgid "Name of the newspaper must be longer than 5 characters"
 msgstr ""
 
@@ -2448,6 +2427,9 @@ msgstr ""
 msgid "The email that you entered is already in use"
 msgstr ""
 
+msgid "Accelerated Mobile Pages integration"
+msgstr ""
+
 msgid "Advanced search"
 msgstr ""
 
@@ -2459,6 +2441,9 @@ msgstr ""
 
 msgid "Authors Blog"
 msgstr ""
+
+msgid "Cache manager"
+msgstr "Gestor de cache"
 
 msgid "Subscription"
 msgstr ""
@@ -2511,11 +2496,11 @@ msgstr ""
 msgid "Basic support"
 msgstr ""
 
-msgid "Profesional support"
+msgid "Training and Advisory Services"
 msgstr ""
 
-msgid "Support 1"
-msgstr "Suporte 1"
+msgid "Profesional support"
+msgstr ""
 
 msgid "Support 2"
 msgstr "Suporte 2"
@@ -2876,501 +2861,32 @@ msgid ""
 "                    </ul>"
 msgstr ""
 
-msgid "Gain money with your Opennemas newspaper: manage your ads!"
-msgstr ""
-
-msgid ""
-"<p>Thanks to this module all Opennemas journals will be able to create, add "
-"and manage ads on any pages: Frontpage Home/Sections, Inner Articles, "
-"Opinions, Gallery, Media.</p>\n"
-"                        <p>There are more than 15 types of ads.</p>"
-msgstr ""
-
-msgid "Allows searching for content directly inside the manager"
-msgstr ""
-
-msgid "Allow you to create photo galleries and use them in your site."
-msgstr ""
-
-msgid ""
-"<p>Add Video and Image Galleries to your content.</p>\n"
-"                        <p>This module will allow you to create Photo "
-"Galleries, add video from YouTube, Vimeo, Dailymotion, MarcaTV, etc</p>\n"
-"                        <p>And the most interesting fact is that the video "
-"manager is the same as youtube one, perfect consistency and performance.</p>"
-msgstr ""
-
-msgid "Create your article and publish it with SEO included."
-msgstr ""
-
-msgid ""
-"<p>Publish articles including Title, Subtitle, Summary, Comment, Image, "
-"whenever you want and from wherever you want.</p>"
-msgstr ""
-
-msgid "Module to allow the second article signature"
-msgstr ""
-
-msgid "Missed long description..."
-msgstr ""
-
-msgid "Change the look and feel of your frontpages every time you want."
-msgstr ""
-
-msgid ""
-"<p>Changing frontpage is more and more frequent in order to disrupt with "
-"daily monotony.</p>\n"
-"                        <p>By activating this module you will be allowed to:"
-"</p>\n"
-"                        <ul>\n"
-"                            <li>Change background color of the news, so that "
-"a column can gain a different style from others.</li>\n"
-"                            <li>Change font size, so that you can give more "
-"weight to a title in the page.</li>\n"
-"                            <li>Change colour of titles fonts, so that you "
-"can combine it with the different background.</li>\n"
-"                            <li>Change of style: font, bold, italic, etc.</"
-"li>\n"
-"                            <li>Change the disposition of the image with "
-"respect to the text (right, left, above/below of the title, etc.)</li>\n"
-"                        </ul>"
-msgstr ""
-
-msgid ""
-"Would you like to give to your Opinion authors a Blog Space, this is the "
-"feature you were looking for."
-msgstr ""
-
-msgid ""
-"<p>Authors will have a dedicated space where all their contributions will "
-"appear in chronological order and readers alse set a RSS notification to "
-"receive the latest articles posted by a particular Author.</p>"
-msgstr ""
-
-msgid "Module for managing book pages"
-msgstr ""
-
-msgid "Module for managing the cache of pages"
-msgstr ""
-
-msgid "Create, update and delete categories for contents."
-msgstr ""
-
-msgid ""
-"<p>Module included in the Basic pack (FREE) of opennemas, it allows users to "
-"create and manage categories of content.</p>"
-msgstr ""
-
-msgid ""
-"Allow your readers to comment articles whether through Opennemas comment "
-"system or connecting with Facebook or Disqus."
-msgstr ""
-
-msgid ""
-"<p>Module included in the FREE version, it allows users to add comments to "
-"any content generated by newspaper."
-msgstr ""
-
-msgid "Module for managing Cronicas customizations"
-msgstr ""
-
-msgid "Upload your files and share them on your newspaper."
-msgstr ""
-
-msgid ""
-"<p>Module included in the Basic pack (FREE) of Opennemas, it allows users to "
-"upload files to the system and share them with a url in the newspaper "
-"articles."
-msgstr ""
-
-msgid "Let your readers send you content with or without attachments."
-msgstr ""
-
-msgid ""
-"<p>Our feature Opennemas Contact will allow readers to submit their opinions "
-"with or without attachment, so that they can communicate with the newspapers."
-"</p>"
-msgstr ""
-
-msgid ""
-"Most important asset of a newspaper, the frontpage manager allows live "
-"update of frontpages content."
-msgstr ""
-
-msgid ""
-"<p>Module included in the Basic pack (FREE) of opennemas, the frontpage "
-"manager will allow you to add articles and modify visualization of your "
-"frontpages instantly.<p>"
-msgstr ""
-
-msgid "Create and Manage Frontpage Layouts made by you, every time you want!"
-msgstr ""
-
-msgid ""
-"<p>Manual Frontpages Disposition Management/Frontpages Organization</p>\n"
-"                        <p>You can change the appearance of Opennemas "
-"newspaper in a matter of seconds with this module. In this way you can "
-"select a different frontpage model on each of the sections frontpages.</p>"
-msgstr ""
-
-msgid "Allows user to upload images"
-msgstr ""
-
-msgid ""
-"<p>iadbox is a way to serve ads when users want to receive them.</p>\n"
-"                        <p>Let us know if you want to try it on your "
-"newspaper, we are alreday using it on ours!</p>\n"
-"                        <p>We will set it up for you for FREE and let iadbox "
-"team know so that you receive your reports and revenue.</p>\n"
-"                    "
-msgstr ""
-
-msgid ""
-"<p>iadbox is an intelligent commercial messaging for the smartphone "
-"generation.</p>\n"
-"                        <p>It is a mobile and desktop marketing platform, "
-"with a user-controlled inbox for interaction with audiences.</p>\n"
-"                        <p><strong>More info</strong>: <a target=\"_blank\" "
-"href=\"http://www.iadbox.com\">www.iadbox.com</a></p>\n"
-"                        <p><a class=\"btn btn-success\" href=\"mailto:"
-"sales@openhost.es\">Ask for it</a></p>"
-msgstr ""
-
-msgid "Do you have your articles in Adobe InDesign or QuarkXPress"
-msgstr ""
-
-msgid ""
-"<p>By activating this module you will be able to import XML from Adobe "
-"InDesign and QuarkXPress, so that your print articles will become digital. "
-"This automatisation is one of the most popular because it saves so much "
-"time...</p>"
-msgstr ""
-
-msgid ""
-"Create a list of your favourite keywords and choose if you want to link it "
-"to something or assign an action to it."
-msgstr ""
-
-msgid ""
-"<p>Feature included in the Basic pack (FREE) of opennemas.</p>\n"
-"                        <p>It allows you to create a list of keywords and "
-"assign a landing page to each of them, or mail_to, and automatically every "
-"time that this keyword will be used the system will tag it for you.</p>"
-msgstr ""
-
-msgid "Let your readers download the pdf copy of your print newspaper."
-msgstr ""
-
-msgid ""
-"<p>If you would like to keep the print version of your newspaper in a "
-"newsstand like <a href=\"http://kiosko.net/\" target=\"_blank\">kiosko.net</"
-"a>, you just need to upload the full version or the frontpage and your users "
-"will be able to download it whenever they want.</p>"
-msgstr ""
-
 msgid "Connect"
-msgstr ""
-
-msgid "Let your readers be contributors."
-msgstr ""
-
-msgid ""
-"<p>Our feature Opennemas Connect will allow readers to submit their news, so "
-"that the newspaper can become the \"voice of people/Internet\".</p>\n"
-"                        <p>You will be able to create custom submission "
-"forms for your contributors so that they can share daily in the easiest way."
-"</p>\n"
-"                        <p>All contributions can be moderated.</p>"
-msgstr ""
-
-msgid "It allows to render list of contents in a page and classify it."
-msgstr ""
-
-msgid ""
-"<p>Feature included in the Basic pack (FREE) of Opennemas in order to "
-"process in a page the list of the contents and classify it by section "
-"created on a given day.</p>"
-msgstr ""
-
-msgid "Control your site navegation with menus and custom elements."
-msgstr ""
-
-msgid ""
-"<p>Feature included in the Basic Pack (FREE) of Opennemas, it enables you to "
-"control your site navigation.</p>\n"
-"                        <p>You can add different kind of elements to menus:</"
-"p>\n"
-"                        <ul>\n"
-"                            <li>Internal links</li>\n"
-"                            <li>Frontages</li>\n"
-"                            <li>Static pages</li>\n"
-"                            <li>External links</li>\n"
-"                        </ul>"
-msgstr ""
-
-msgid ""
-"Keeping your digital news up to date with agencies is already a reality!"
-msgstr ""
-
-msgid ""
-"<p>With just a few clicks the administrator will be able to add any news "
-"from agencies in the frontpage of the newspaper together with any image or "
-"media attached.</p>\n"
-"                        <p>Whichever is your agency you can configure it: <a "
-"href=\"http://www.efe.com/\" target=\"_blank\">Agencia EFE</a>, <a href="
-"\"http://www.europapress.es/\" target=\"_blank\">Agencia Europa press</a>, "
-"<a href=\"http://www.reuters.com/\" target=\"_blank\">Reuters</a> and other "
-"RSS/XML sources, etc. Every and each of this channels will be available in "
-"your administration panel.</p>"
 msgstr ""
 
 msgid "Engage your readers with your own personalised newsletter."
 msgstr ""
 
-msgid ""
-"<p>It is more and more frequent that newspapers send bulletins with a "
-"selection of the most interesting news of the day/week/month.</p>\n"
-"                        <p>This module allows administrators to create "
-"custom layouts of the bulletin and to edit the style before sending it.</p>\n"
-"                        <p>This way you will be able to create the "
-"newsletter your style.</p>"
-msgstr ""
-
-msgid "emails"
-msgstr ""
-
-msgid "Update more newspapers at once by syncing articles."
-msgstr ""
-
-msgid ""
-"<p>Similarly to the frontpage synchronisation feature you will be able to "
-"update multiple newspapers by adding or editing articles in the main one.</"
-"p>\n"
-"                        <p>If you have many local newspapers you can import "
-"all the articles you want from the main one.</p>"
-msgstr ""
-
-msgid "Have your opinionist publishing on your newspaper."
-msgstr ""
-
-msgid ""
-"<p>Module included in the Basic pack (FREE) of Opennemas.</p>\n"
-"                        <p>It allows all newspapers to have a section "
-"dedicated to opinions organized by author and with author frontpage too.</p>"
-msgstr ""
-
 msgid "Polls Manager"
-msgstr ""
-
-msgid ""
-"Create and manage your polls, engage your audience and collect useful "
-"information."
-msgstr ""
-
-msgid ""
-"<p>Polls questions can be created with single or multiple choice answers and "
-"the results displayed on bar charts, pie charts, etc.</p>\n"
-"                        <p>The most relevant aspect is that they are "
-"compatible and available on any browsers in the world.</p>"
-msgstr ""
-
-msgid "Add description..."
-msgstr ""
-
-msgid "Manage your internal information in a static page."
-msgstr ""
-
-msgid ""
-"<p>Module included in the Basic pack (FREE) of opennemas.</p>\n"
-"                        <p>It allows newspapers to have static pages if "
-"needed for legal information and or \"about us\" information."
 msgstr ""
 
 msgid "Frontpage Synchronization"
 msgstr ""
 
-msgid "Update many frontpages by updating 1 frontpage!"
+msgid "Add description..."
 msgstr ""
 
-msgid ""
-"<p>Do you have more than 1 newspaper and you would like for the \"home\" "
-"pages to be synchronised?</p>\n"
-"                        <p>No problem. By activating this module you will "
-"have all your news synchronised in many frontpages all at once. For instance "
-"if you have many locak newspapers and one main one, you can update the "
-"frontpage of all locals with news of the general newspaper.</p>\n"
-"                        <p>If you modify a frontpage in the main newspaper "
-"the frontpage of local newspapers will update automatically too.</p>\n"
-"                        <p>The only requirement is that all newspapers need "
-"to belong to the same group, so that the frontpage is stored in the one "
-"place.</p>"
-msgstr ""
-
-msgid ""
-"<p>Would you like for your readers to be able to unlock premium content for "
-"free?</p><p>This is the module you should add to your newspaper!</p>"
-msgstr ""
-
-msgid ""
-"<p>This module enables newspapers to add a customized subscription form to "
-"allow users to unlock premium content.</p>\n"
-"                        <p>The subscription form generates login details for "
-"the user.</p>\n"
-"                        <p>Newspapers will be able to mark content as "
-"\"premium\" and users will need to register in order to access the full "
-"extent of it.</p>\n"
-"                        <p>Note: if the newspaper needs to collect user's "
-"data will have to provide certification of inscription to \"Agencia Española "
-"de Protección de Datos\" or equivalent. Openhost, S.L. is not responsible of "
-"any data saved or required by newspapers."
-msgstr ""
-
-msgid "Make money creating exclusive content only subscribers can access."
-msgstr ""
-
-#, php-format
-msgid ""
-"<p>The News business is a very challenging and advertising alone often does "
-"not allow to newspapers to keep going. Add paywall to your newspaper and you "
-"will be able to select articles that you want to sell. This way in order to "
-"access this news users will need to register.</p>\n"
-"                        <p>You will be able to set the payment/subscription "
-"the way you want (weekly, monthly, annual, etc.) and also add currency and "
-"% of taxes that the item is subject to.</p>"
+msgid "Missed long description..."
 msgstr ""
 
 msgid "No support"
 msgstr "Sem suporte"
 
-msgid "Training and Advisory Services"
-msgstr ""
-
-msgid ""
-"Ask all your questions, walk through Opennemas and/or receive personal "
-"training via phone"
-msgstr ""
-
-msgid ""
-"<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or "
-"to walk through Opennemas and make sure you know it all?</p>\n"
-"                        <p>This is the Support Offer perfect for you!</p>\n"
-"                        <p>For a very small fee you will get our expert team "
-"on the line and you will be able to ask all the questions you have and/or "
-"receive personal training.</p>\n"
-"                        <p>Please remember that we guarantee FREE support "
-"via tickets/emails.</p>"
-msgstr ""
-
 msgid "Support Pro"
 msgstr "Suporte Pro"
 
-msgid "This support plan is thought for changes and creation of new widgets."
-msgstr ""
-
-msgid ""
-"<p>10 hours (2h day/1week).</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Creation and change of widgets</li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets</p>"
-msgstr ""
-
-msgid ""
-"This support plan is ideal for updating your theme if you have had it for a "
-"long time."
-msgstr ""
-
-msgid ""
-"<p>40 hours (2h per day during 1 month)</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Standard changes of HTML/CSS in templates</"
-"li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets and hangouts/"
-"skype</p>"
-msgstr ""
-
-msgid ""
-"This support plan is ideal for updating your theme and at the same time "
-"redefining spaces."
-msgstr ""
-
-msgid ""
-"<p>60 hours (3h day/1month)</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Standard changes of HTML/CSS in templates</"
-"li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets and hangouts/"
-"skype</p>"
-msgstr ""
-
-msgid ""
-"<p>80 hours (4h day/1month)</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Examples of usage of support:\n"
-"                            <li>Standard changes of HTML/CSS in templates</"
-"li>\n"
-"                            <li>Change Requests of the disposition of "
-"frontpage templates</li>\n"
-"                            <li>Category Titles, New structure of inner "
-"articles.</li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets and hangouts/"
-"skype</p>"
-msgstr ""
-
-msgid ""
-"This support plan fits the purpose of a restyling of newspapers by "
-"redefining spaces, disegn and style."
-msgstr ""
-
-msgid ""
-"<p>160 hours (8h day/1month)</p>\n"
-"                        <p>This support is all about customization and "
-"having one of our resources dedicated to a newsaper full time.</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Creation and change requests of widgets\n"
-"                            <li>Standard changes of HTML/CSS in templates</"
-"li>\n"
-"                            <li>Change Requests of the disposition of "
-"frontpage templates</li>\n"
-"                            <li>Category Titles</li>\n"
-"                            <li>New structure of inner articles.</li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets, hangouts/"
-"skype and phone</p>"
-msgstr ""
-
 msgid "Support 8 Plus"
 msgstr "Suporte 8 Plus"
-
-msgid ""
-"This Support is designed for all newspapers that need may need help "
-"including during the weekend."
-msgstr ""
-
-msgid ""
-"<p>8h day/7 days/ 1month</p>\n"
-"                        <p>Examples of usage of support:</p>\n"
-"                        <ul>\n"
-"                            <li>Creation and change requests of widgets</"
-"li>\n"
-"                            <li>Standard changes of HTML/CSS in templates</"
-"li>\n"
-"                            <li>Change Requests of the disposition of "
-"frontpage templates</li>\n"
-"                            <li>Category Titles</li>\n"
-"                            <li>New structure of inner articles.</li>\n"
-"                        </ul>\n"
-"                        <p>Support provided by emails/tickets, hangouts/"
-"skype and phone</p>"
-msgstr ""
 
 msgid "Sorry, you don't have enough privileges"
 msgstr ""
@@ -3453,94 +2969,10 @@ msgstr ""
 msgid "%d months ago"
 msgstr ""
 
-msgid "Cache Manager"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Go back"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Cache group"
-msgstr ""
-
-msgid "Expire time"
-msgstr ""
-
-msgid "seconds"
-msgstr ""
-
-msgid "Remove all"
-msgstr ""
-
-msgid "Clear selection"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "Loading"
-msgstr ""
-
-msgid "No cache files were generated for now."
-msgstr ""
-
-msgid ""
-"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>  "
-"and come back here"
-msgstr ""
-
-msgid "Resource"
-msgstr ""
-
-msgid "Valid until"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "View page"
-msgstr ""
-
-msgid "Delete cache file"
-msgstr ""
-
-msgid "Delete cache elements"
-msgstr ""
-
-msgid ""
-"Are you sure you want to delete [% template.selected.length %] cache "
-"elements?"
-msgstr ""
-
-msgid "Yes, remove all"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Delete cache element"
-msgstr ""
-
-msgid ""
-"Are you sure you want to delete the cache element \"[% template.content."
-"title %]\"."
-msgstr ""
-
-msgid "Yes, remove"
-msgstr ""
-
 msgid "Instance not activated - Opennemas"
 msgstr ""
 
-msgid "Maintenance mode."
+msgid "We are improving our platform."
 msgstr ""
 
 msgid ""
@@ -3557,6 +2989,9 @@ msgid ""
 msgstr ""
 
 msgid "Yes, delete"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "Delete selected items"
@@ -3590,6 +3025,12 @@ msgstr ""
 msgid "Go back to list"
 msgstr ""
 
+msgid "Saving"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Surname"
 msgstr ""
 
@@ -3616,6 +3057,9 @@ msgstr ""
 msgid "Go back to newsletter manager"
 msgstr ""
 
+msgid "Clear selection"
+msgstr ""
+
 msgid "Activate"
 msgstr ""
 
@@ -3635,6 +3079,12 @@ msgid "No subscribed"
 msgstr ""
 
 msgid "Status"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Loading"
 msgstr ""
 
 msgid "No available subscriptors."
@@ -3916,6 +3366,12 @@ msgstr ""
 msgid "Go Back"
 msgstr ""
 
+msgid "Updating"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
 msgid "Date"
 msgstr ""
 
@@ -3926,6 +3382,9 @@ msgid "Price"
 msgstr ""
 
 msgid "Split decimals with a dot"
+msgstr ""
+
+msgid "Type"
 msgstr ""
 
 msgid "Item"
@@ -3986,6 +3445,9 @@ msgid "Sort elements"
 msgstr ""
 
 msgid "You must put %1 covers in the HOME"
+msgstr ""
+
+msgid "Settings"
 msgstr ""
 
 msgid "Order newsstand frontpage by"
@@ -4093,6 +3555,9 @@ msgstr ""
 msgid "OpenNeMaS administration"
 msgstr ""
 
+msgid "You are leaving the current page."
+msgstr ""
+
 msgid "Instance information"
 msgstr ""
 
@@ -4100,6 +3565,9 @@ msgid "Page"
 msgstr ""
 
 msgid "Author"
+msgstr ""
+
+msgid "Sysops"
 msgstr ""
 
 msgid "There are no notifications for now."
@@ -4132,7 +3600,7 @@ msgstr ""
 msgid "Use videos to get walkthrough guides"
 msgstr ""
 
-msgid "This user is a master"
+msgid "You are a master"
 msgstr ""
 
 msgid "Go to newspaper"
@@ -4166,6 +3634,9 @@ msgid "Editing letter"
 msgstr ""
 
 msgid "Creating letter"
+msgstr ""
+
+msgid "Go back"
 msgstr ""
 
 msgid "Body"
@@ -4234,40 +3705,7 @@ msgstr ""
 msgid "Color to distinguish between other agencies"
 msgstr ""
 
-msgid "Dark Gray"
-msgstr ""
-
-msgid "Black"
-msgstr ""
-
-msgid "Bold red"
-msgstr ""
-
-msgid "Green"
-msgstr ""
-
-msgid "Blue"
-msgstr ""
-
-msgid "Turquoise"
-msgstr ""
-
-msgid "Light green"
-msgstr ""
-
-msgid "Bold green"
-msgstr ""
-
-msgid "Yellow"
-msgstr ""
-
-msgid "Orange"
-msgstr ""
-
-msgid "Red"
-msgstr ""
-
-msgid "Purple"
+msgid "Reset"
 msgstr ""
 
 msgid "Connection"
@@ -4626,6 +4064,21 @@ msgstr ""
 msgid "Delete advertisements"
 msgstr ""
 
+#, fuzzy
+msgid "Restore selected items"
+msgstr "itens selecionados"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to restore [% template.selected.contents.length %] "
+"item(s)?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+msgid "Yes, restore them all"
+msgstr ""
+
 msgid "Permanently remove item"
 msgstr ""
 
@@ -4635,6 +4088,9 @@ msgid ""
 msgstr ""
 
 msgid " You will not be able to restore it back."
+msgstr ""
+
+msgid "Yes, remove"
 msgstr ""
 
 msgid ""
@@ -5084,9 +4540,6 @@ msgstr ""
 msgid "Backend access"
 msgstr "Gestor de backend"
 
-msgid "Not assigned"
-msgstr ""
-
 msgid "Your account is connected to %1."
 msgstr ""
 
@@ -5134,19 +4587,107 @@ msgstr ""
 msgid "Last updated"
 msgstr ""
 
-msgid "Packs"
+msgid "Payment"
 msgstr ""
 
-msgid "Modules"
+msgid "First payment"
+msgstr ""
+
+msgid ""
+"When you want to pay you can use your paypal account or your credit card."
+msgstr ""
+
+msgid "Pay with Paypal"
+msgstr ""
+
+msgid "To pay with your paypal account click on the Paypal button."
+msgstr ""
+
+msgid ""
+"A popup window will be opened in order to log in with your paypal account."
+msgstr ""
+
+msgid ""
+"After logging in with your paypal account the popup window will "
+"automatically close and your account will appear as your selected payment "
+"method."
+msgstr ""
+
+msgid "Click 'Next' button to continue with your purchase."
+msgstr ""
+
+msgid "Pay with Credit Card"
+msgstr ""
+
+msgid ""
+"To pay with your credit card fill the form with your credit card information."
+msgstr ""
+
+msgid ""
+"While typing your credit card information will be automatically validated."
+msgstr ""
+
+msgid ""
+"If one or more fields are incorrect you will not be able to continue with "
+"the purchase."
+msgstr ""
+
+msgid ""
+"Click 'Next' button to select the credit card as your payment method and "
+"continue with the purchase."
+msgstr ""
+
+msgid "Not your first payment"
+msgstr ""
+
+msgid ""
+"If this is not your first purchase, the last used payment method will be "
+"automatically selected."
+msgstr ""
+
+msgid "You can change your payment method following the steps below."
+msgstr ""
+
+msgid ""
+"If you want to delete a payment method, please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+
+msgid "Change your payment method"
+msgstr ""
+
+msgid "Click on 'Change payment method'."
+msgstr ""
+
+msgid "A list with all payment method used will appear."
+msgstr ""
+
+msgid "Select one of the listed payment methods or add a new payment method."
+msgstr ""
+
+msgid "year"
+msgstr ""
+
+#, fuzzy
+msgid "item"
+msgstr "Sitemap: "
+
+msgid "Free"
+msgstr ""
+
+msgid "More info"
+msgstr ""
+
+msgid "Added to cart"
+msgstr ""
+
+msgid "Packs"
 msgstr ""
 
 msgid "Services"
 msgstr ""
 
 msgid "Partners"
-msgstr ""
-
-msgid "Free"
 msgstr ""
 
 msgid "My selection"
@@ -5165,12 +4706,6 @@ msgid "Checkout"
 msgstr ""
 
 msgid "No items available to purchase"
-msgstr ""
-
-msgid "More info"
-msgstr ""
-
-msgid "Added to cart"
 msgstr ""
 
 msgid "You have requested the following purchases for your newspaper \"%1\""
@@ -5211,6 +4746,15 @@ msgid ""
 msgstr ""
 
 msgid "Contact information"
+msgstr ""
+
+msgid "This is not a valid VAT identification number"
+msgstr ""
+
+msgid "VAT identification number"
+msgstr ""
+
+msgid "What is a VAT identification number?"
 msgstr ""
 
 msgid "Purchase summary"
@@ -5652,6 +5196,28 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 
+msgid "Instagram"
+msgstr ""
+
+msgid "Instagram Page"
+msgstr ""
+
+msgid ""
+"If you also have a <strong>Instagram page</strong>, add your page url on the "
+"form."
+msgstr ""
+
+msgid "Pinterest"
+msgstr ""
+
+msgid "Pinterest Page"
+msgstr ""
+
+msgid ""
+"If you also have a <strong>Pinterest page</strong>, add your page url on the "
+"form."
+msgstr ""
+
 msgid "Vimeo"
 msgstr ""
 
@@ -5686,6 +5252,9 @@ msgstr ""
 msgid "Twitter user"
 msgstr ""
 
+msgid "Facebook user"
+msgstr ""
+
 msgid "View as Blog"
 msgstr ""
 
@@ -5708,6 +5277,25 @@ msgid "Unable to find any author that matches your search."
 msgstr ""
 
 msgid "No biography set"
+msgstr ""
+
+msgid "Cache Manager"
+msgstr ""
+
+#, fuzzy
+msgid "Remove cache"
+msgstr "Remover"
+
+msgid "Remove compiled templates"
+msgstr ""
+
+msgid "Cache group"
+msgstr ""
+
+msgid "Expire time"
+msgstr ""
+
+msgid "seconds"
 msgstr ""
 
 msgid "Creating video"
@@ -6042,8 +5630,14 @@ msgstr ""
 msgid "Inner article"
 msgstr ""
 
+msgid "Video frontpage"
+msgstr "Capa de vídeo"
+
 msgid "Inner video"
 msgstr ""
+
+msgid "Opinion frontpage"
+msgstr "Capa de Opinião"
 
 msgid "Inner opinion"
 msgstr ""
@@ -6057,7 +5651,13 @@ msgstr ""
 msgid "Poll Inner"
 msgstr ""
 
+msgid "AMP pages"
+msgstr ""
+
 msgid "and inside the position"
+msgstr ""
+
+msgid "AMP inner article - Button 1"
 msgstr ""
 
 msgid "Advertisment"
@@ -6119,6 +5719,36 @@ msgstr ""
 msgid "Only the ID from Tradedoubler validation tag"
 msgstr ""
 
+msgid "Iadbox integration"
+msgstr ""
+
+msgid "Iadbox ID"
+msgstr ""
+
+msgid "Iadbox affiliate ID"
+msgstr ""
+
+msgid "Scripts"
+msgstr ""
+
+msgid "Scripts in header"
+msgstr ""
+
+msgid "This scripts will be included before the </head> tag"
+msgstr ""
+
+msgid "Scripts at body start"
+msgstr ""
+
+msgid "This scripts will be included before the <body> tag"
+msgstr ""
+
+msgid "Scripts at body end"
+msgstr ""
+
+msgid "This scripts will be included before the </body> tag"
+msgstr ""
+
 msgid "Unable to find any advertisement that matches your search."
 msgstr ""
 
@@ -6150,9 +5780,6 @@ msgid "Site URL"
 msgstr ""
 
 msgid "http://example.com"
-msgstr ""
-
-msgid "Reset color"
 msgstr ""
 
 msgid "Username or password are incorrect"
@@ -6193,6 +5820,22 @@ msgstr ""
 
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
+
+msgid "Where are you from?"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "This is not a valid vat_number identification number"
+msgstr ""
+
+#, fuzzy
+msgid "Vat identification number"
+msgstr "Notificações inválidas"
 
 msgid "My account"
 msgstr ""
@@ -6293,6 +5936,9 @@ msgstr ""
 msgid "Technical information"
 msgstr ""
 
+msgid "Check"
+msgstr ""
+
 msgid ""
 "I do not have my own domain and I want to create one and redirect it to my "
 "Opennemas digital newspaper"
@@ -6304,9 +5950,6 @@ msgstr ""
 msgid "Map it"
 msgstr ""
 
-msgid "year"
-msgstr ""
-
 msgid "Requested domains"
 msgstr ""
 
@@ -6316,68 +5959,16 @@ msgstr ""
 msgid "Domain mapping"
 msgstr ""
 
-msgid "Summary"
+msgid "Select the payment method."
 msgstr ""
 
-msgid "Terms of create a new domain"
+msgid "You'll have a chance to review your order before it's placed."
 msgstr ""
 
-msgid "Terms of redirection"
+msgid "Any problem with payment?"
 msgstr ""
 
-msgid ""
-"Payment: the registration and redirection service requires payment in "
-"advance. This amount cannot be divided into several payments."
-msgstr ""
-
-msgid ""
-"Identity: when buying a new domain, the identity of the domains would be the "
-"one of your entity. The administrative identity, technical contact, billing "
-"contact name would be Openhost, SL"
-msgstr ""
-
-msgid ""
-"Availability: please inform us of the name of the domain that you wish to "
-"register and we will let you know if it is available. May be one or more "
-"domains."
-msgstr ""
-
-msgid ""
-"The service of registering and redirecting the domain is valid for one year, "
-"so you will be notified prior to the renewal date."
-msgstr ""
-
-msgid ""
-"Following the purchase of the domain, if the user wants to transfer it to "
-"another provider, which may only be transferred to another from the 6th "
-"month after the date of registration of the domain."
-msgstr ""
-
-msgid ""
-"Payment: the redirection service requires payment in advance. The amount "
-"cannot be divided into several payments. "
-msgstr ""
-
-msgid ""
-"Identity: the identity of the domains would be the customer's identity "
-"because the domain does not undergo any change. "
-msgstr ""
-
-msgid ""
-"The service domain redirection is valid for one year, so you will be "
-"notified prior to the renewal date. "
-msgstr ""
-
-msgid ""
-"The customer must make changes to the DNS zone for your domain registration "
-"www. This change has nothing to do with the Opennemas platform or company "
-"Openhost, SL (company that maintains the service). "
-msgstr ""
-
-msgid ""
-"If redirection does not work through no fault of the platform, ie by "
-"malfunction of the DNS servers the client, Openhost, SL area will have "
-"nothing to do with the damage caused to the hours of service failure. "
+msgid "Click here for a quick tips."
 msgstr ""
 
 msgid "I have read and accept the Terms of creating a new domain"
@@ -6386,12 +5977,12 @@ msgstr ""
 msgid "I have read and accept the Terms of redirection"
 msgstr ""
 
-msgid "Thank you for your request!"
+msgid "Thank you for your purchase!"
 msgstr ""
 
 msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"the invoice."
+"Check your email, we have sent you an email with the invoice and purchase "
+"details. We will review your purchase and activate your domain."
 msgstr ""
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
@@ -6444,6 +6035,18 @@ msgid "This change is NOT done in the DNS section"
 msgstr ""
 
 msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+
+msgid "Thank you for choosing Opennemas!"
+msgstr ""
+
+msgid "You have just purchased the following items:"
+msgstr ""
+
+msgid "Required Domains:"
+msgstr ""
+
+msgid "You can find your invoice on the following page:"
 msgstr ""
 
 msgid "Domains to create"
@@ -6549,6 +6152,9 @@ msgstr ""
 msgid "My themes"
 msgstr ""
 
+msgid "Addons"
+msgstr ""
+
 msgid "No themes available"
 msgstr ""
 
@@ -6592,89 +6198,6 @@ msgstr ""
 msgid "widget"
 msgstr ""
 
-msgid "Refresh the list for getting newest error list"
-msgstr ""
-
-msgid "Refresh list"
-msgstr ""
-
-msgid "Clean"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Creation date"
-msgstr ""
-
-msgid "Error explanation"
-msgstr ""
-
-msgid "Execution time"
-msgstr ""
-
-msgid "There is no SQL errors registered in database."
-msgstr ""
-
-msgid "Come back later."
-msgstr ""
-
-msgid "Edit uploaded"
-msgstr ""
-
-msgid ""
-"Please click in the \"Edit uploaded\" button from above to edit latest "
-"upload photo's data"
-msgstr ""
-
-msgid ""
-"Drop files anywhere here to upload or click on the \"Select Files\" button "
-"above."
-msgstr ""
-
-msgid "User notes"
-msgstr ""
-
-msgid "Include files to upload by:"
-msgstr ""
-
-msgid ""
-"You can <strong>drag &amp; drop</strong> files from your desktop on this "
-"webpage with Google Chrome, Mozilla Firefox and Apple Safari."
-msgstr ""
-
-msgid ""
-"If you are using Internet Explorer click in \"Add Files...\" buton and "
-"select the files you want to upload."
-msgstr ""
-
-msgid "The maximum file size for uploads is <strong>%1 MB</strong>."
-msgstr ""
-
-msgid "Only image files (<strong>JPG, GIF, PNG</strong>) are allowed."
-msgstr ""
-
-msgid "File is too big"
-msgstr ""
-
-msgid "File is too small"
-msgstr ""
-
-msgid "Filetype not allowed"
-msgstr ""
-
-msgid "Max number of files exceeded"
-msgstr ""
-
-msgid "Uploaded bytes exceed file size"
-msgstr ""
-
-msgid "Empty file upload result"
-msgstr ""
-
-msgid "Iniciar"
-msgstr ""
-
 msgid "Delete multiple images"
 msgstr ""
 
@@ -6704,6 +6227,9 @@ msgid "Geolocate photo with my position"
 msgstr ""
 
 msgid "Assign location"
+msgstr ""
+
+msgid "View original"
 msgstr ""
 
 msgid "Original filename:"
@@ -6742,6 +6268,9 @@ msgstr ""
 msgid "Resolution"
 msgstr ""
 
+msgid "Size"
+msgstr ""
+
 msgid "No available images for this search"
 msgstr ""
 
@@ -6749,6 +6278,12 @@ msgid "No available description"
 msgstr ""
 
 msgid "No tags"
+msgstr ""
+
+msgid "Sidebars"
+msgstr "Barras laterais"
+
+msgid "Remove all"
 msgstr ""
 
 msgid "Restore"
@@ -6774,19 +6309,13 @@ msgid ""
 "trash?"
 msgstr ""
 
+msgid "Yes, remove all"
+msgstr ""
+
 msgid "Creating article"
 msgstr ""
 
 msgid "Editing article"
-msgstr ""
-
-msgid "Updating"
-msgstr ""
-
-msgid "Update"
-msgstr ""
-
-msgid "Saving"
 msgstr ""
 
 msgid "Inner title"
@@ -6796,6 +6325,9 @@ msgid "Signature"
 msgstr ""
 
 msgid "Pretitle"
+msgstr ""
+
+msgid "Summary"
 msgstr ""
 
 msgid "Suggested for frontpage"
@@ -6868,6 +6400,9 @@ msgid "Pick a video"
 msgstr ""
 
 msgid "File name"
+msgstr ""
+
+msgid "Creation date"
 msgstr ""
 
 msgid "Footer text for inner video:"
@@ -7437,30 +6972,6 @@ msgstr ""
 msgid "Background Color"
 msgstr ""
 
-msgid "White"
-msgstr ""
-
-msgid "Light Blue"
-msgstr ""
-
-msgid "Light Red"
-msgstr ""
-
-msgid "Light Orange"
-msgstr ""
-
-msgid "Light purple"
-msgstr ""
-
-msgid "Light yellow"
-msgstr ""
-
-msgid "Bold blue"
-msgstr ""
-
-msgid "Gray"
-msgstr ""
-
 msgid "Title font color"
 msgstr ""
 
@@ -7509,7 +7020,7 @@ msgstr ""
 msgid "Left image"
 msgstr ""
 
-msgid "Reset"
+msgid "Default"
 msgstr ""
 
 msgid "Archive this element"
@@ -7588,9 +7099,6 @@ msgid "%1 users"
 msgstr ""
 
 msgid "Export list"
-msgstr ""
-
-msgid "Purchases"
 msgstr ""
 
 msgid "Filter by name or email"
@@ -7885,17 +7393,77 @@ msgstr ""
 msgid "New book"
 msgstr ""
 
+msgid "There is nothing to see here, kid."
+msgstr ""
+
 msgid "Report"
 msgstr ""
 
 msgid "Action"
 msgstr ""
 
-msgid "There is no available instances yet"
+#, fuzzy
+msgid "New purchase"
+msgstr "Compras paywall"
+
+#, fuzzy
+msgid "Edit purchase"
+msgstr "Compras paywall"
+
+msgid "Client"
 msgstr ""
 
-msgid ""
-"There is no reports created yet or <br/>your search don't match your criteria"
+msgid "View on"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+msgid "Cost"
+msgstr ""
+
+msgid "Subtotal"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to delete the purchase?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid "Do you want to delete the selected purchases?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid "Search by client"
+msgstr "Pesquisar por nome"
+
+msgid "To"
+msgstr ""
+
+#, fuzzy
+msgid "Reset filters"
+msgstr "Newsletters"
+
+msgid "Columns"
+msgstr ""
+
+msgid "Client ID"
+msgstr ""
+
+msgid "Invoice ID"
+msgstr ""
+
+msgid "Payment ID"
+msgstr ""
+
+msgid "#"
 msgstr ""
 
 msgid "New user group"
@@ -7910,21 +7478,19 @@ msgstr ""
 msgid "[% section.title %]"
 msgstr ""
 
-msgid "Users groups"
+#, fuzzy
+msgid "Do you want to delete the user group?"
 msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
 
-msgid ""
-"There is no available groups yet or <br/>your search don't match your "
-"criteria"
+#, fuzzy
+msgid "Do you want to delete the selected user groups?"
 msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
 
 msgid "Edit group"
-msgstr ""
-
-msgid "Showing"
-msgstr ""
-
-msgid "of"
 msgstr ""
 
 msgid "Initializing"
@@ -7953,7 +7519,95 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+msgid "New module"
+msgstr ""
+
+msgid "Edit module"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "This UUID is invalid"
+msgstr ""
+
+msgid "Select a type..."
+msgstr ""
+
+#, fuzzy
+msgid "Theme"
+msgstr "Temas"
+
+msgid "Theme addon"
+msgstr ""
+
+msgid "Select a category..."
+msgstr ""
+
+msgid "Pack"
+msgstr ""
+
+msgid "Partner"
+msgstr ""
+
+#, fuzzy
+msgid "Monthly"
+msgstr "Mês"
+
+#, fuzzy
+msgid "Yearly"
+msgstr "Ano"
+
+msgid "Single"
+msgstr ""
+
+msgid "Modules included"
+msgstr ""
+
+msgid "Modules in conflict"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to delete the module?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+msgid "Do you want to delete the selected modules?"
+msgstr ""
+
+#, fuzzy
+msgid "Search by UUID"
+msgstr "Pesquisar por nome"
+
+msgid "Translations"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Translations completed"
+msgstr ""
+
+msgid "translations left"
+msgstr ""
+
 msgid "Download CSV of selected"
+msgstr ""
+
+msgid "Unfixed"
+msgstr ""
+
+msgid "Fixed"
+msgstr ""
+
+msgid "Unforced"
+msgstr ""
+
+msgid "Forced"
+msgstr ""
+
+msgid "Disabled"
 msgstr ""
 
 msgid "Delete instance"
@@ -7976,6 +7630,14 @@ msgstr ""
 
 msgid "Delete notifications"
 msgstr ""
+
+#, fuzzy
+msgid "Delete module"
+msgstr "Excluir"
+
+#, fuzzy
+msgid "Delete modules"
+msgstr "Excluir"
 
 msgid "Do you really want to exit from backend?"
 msgstr ""
@@ -8003,6 +7665,12 @@ msgstr ""
 
 msgid "Do you really want to delete the selected notifications?"
 msgstr ""
+
+#, fuzzy
+msgid "Do you really want to delete the selected modules?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
 
 msgid "log out"
 msgstr ""
@@ -8040,9 +7708,6 @@ msgstr ""
 msgid "Detailed statistics"
 msgstr ""
 
-msgid "Scripts"
-msgstr ""
-
 msgid "Path"
 msgstr ""
 
@@ -8069,8 +7734,8 @@ msgstr ""
 
 msgid ""
 "Select the desired instance where clean cache and compile files in.\n"
-"                                <br>Select 'All' for cleaning all the cache/"
-"compile files."
+"                    <br>Select 'All' for cleaning all the cache/compile "
+"files."
 msgstr ""
 
 msgid "Execute"
@@ -8087,13 +7752,25 @@ msgstr ""
 msgid "Edit notification"
 msgstr ""
 
-msgid "Style"
+msgid "Icon"
 msgstr ""
 
-msgid "Fixed"
+msgid "Pick an icon..."
 msgstr ""
 
-msgid "Notification always visible"
+msgid "No icon"
+msgstr ""
+
+msgid "Background"
+msgstr ""
+
+msgid "Font color"
+msgstr ""
+
+msgid "Notification always visible in dropdown"
+msgstr ""
+
+msgid "Notification always visible before content"
 msgstr ""
 
 msgid "Starts"
@@ -8105,40 +7782,50 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
-msgid "Columns"
+msgid "Show only for admins"
 msgstr ""
 
-msgid "Domain expire"
+msgid "Do you want to delete the notification?"
 msgstr ""
 
-msgid "Last access"
+msgid "Do you want to delete the selected notifications?"
 msgstr ""
 
-msgid "Database"
-msgstr ""
-
-msgid "Media size"
-msgstr ""
-
-msgid "Alexa"
-msgstr ""
-
-msgid "Page views"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-msgid "#"
+msgid "L10n"
 msgstr ""
 
 msgid "Start"
 msgstr ""
 
 msgid "End"
+msgstr ""
+
+msgid "New client"
+msgstr ""
+
+msgid "Edit client"
+msgstr ""
+
+msgid "VAT No."
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to delete the client?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+msgid "Do you want to delete the selected clients?"
+msgstr ""
+
+#, fuzzy
+msgid "Search"
+msgstr "Pesquisa global"
+
+msgid "Vat number"
+msgstr ""
+
+msgid "P.O."
 msgstr ""
 
 msgid "Our Videos"
@@ -8184,10 +7871,10 @@ msgstr ""
 msgid "Edit instance"
 msgstr ""
 
-msgid "Owner email"
+msgid "Created from"
 msgstr ""
 
-msgid "Created from"
+msgid "Media size"
 msgstr ""
 
 msgid "(Human readable name)"
@@ -8211,25 +7898,16 @@ msgstr ""
 msgid "Billing"
 msgstr ""
 
-msgid "Add billing information"
-msgstr ""
-
-msgid "Last invoice date"
-msgstr ""
-
 msgid "Select all"
-msgstr ""
-
-msgid "pending activation"
-msgstr ""
-
-msgid "pending deactivation"
 msgstr ""
 
 msgid "Support"
 msgstr ""
 
 msgid "Alphanumeric, without spaces"
+msgstr ""
+
+msgid "Database"
 msgstr ""
 
 msgid "Maximun activated users"
@@ -8239,9 +7917,6 @@ msgid "0 for unlimited users"
 msgstr ""
 
 msgid "Minimum password level"
-msgstr ""
-
-msgid "Default"
 msgstr ""
 
 msgid "Weak"
@@ -8270,13 +7945,31 @@ msgstr ""
 msgid "Server url"
 msgstr ""
 
+#, fuzzy
+msgid "Do you want to delete the instance?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+msgid "Do you want to delete the selected instances?"
+msgstr ""
+
 msgid "Select modules"
 msgstr ""
 
-msgid "Filter by name, domain or contact"
+msgid "Domain expire"
 msgstr ""
 
 msgid "Last activity"
+msgstr ""
+
+msgid "Emails"
+msgstr ""
+
+msgid "Alexa"
+msgstr ""
+
+msgid "Page views"
 msgstr ""
 
 msgid "No rank"
@@ -8350,16 +8043,13 @@ msgstr ""
 msgid "Instance domains"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
 msgid "We seem to have lost you in the clouds."
 msgstr ""
 
 msgid "The page your looking for is not here"
-msgstr ""
-
-msgid "Help &amp; FAQ"
-msgstr ""
-
-msgid "Privacy"
 msgstr ""
 
 msgid "New user"
@@ -8371,9 +8061,150 @@ msgstr ""
 msgid "User type"
 msgstr ""
 
-msgid ""
-"There is no users created yet or <br/>your search don't match your criteria"
+#, fuzzy
+msgid "Do you want to delete the user?"
 msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid "Do you want to delete the selected users?"
+msgstr ""
+"Are you sure you want to reject [% template.selected.contents.length %] "
+"item(s)?"
+
+#, fuzzy
+msgid "Search by name or username"
+msgstr "Pesquisar por nome"
+
+#~ msgid "Article - inner"
+#~ msgstr "Artigo - interior"
+
+#~ msgid "Mobile - frontpages"
+#~ msgstr "Celular - capas"
+
+#~ msgid "Opinion - Authors"
+#~ msgstr "Opinião - Autores"
+
+#~ msgid "Opinion - inner"
+#~ msgstr "Opinião - interior"
+
+#~ msgid "Video - frontpage"
+#~ msgstr "Vídeo - capa"
+
+#~ msgid "Video - inner"
+#~ msgstr "Vídeo - interior"
+
+#~ msgid "Album - frontpage"
+#~ msgstr "Álbum - capa"
+
+#~ msgid "Album - inner"
+#~ msgstr "Álbum - interior"
+
+#~ msgid "Poll - frontpage"
+#~ msgstr "Enquete - capa"
+
+#~ msgid "Poll - inner"
+#~ msgstr "Enquete - interior"
+
+#~ msgid "SQL errors registered in database cleaned sucessfully."
+#~ msgstr "Erros de SQL registrados no banco de dados excluídos com êxito."
+
+#~ msgid "SQL error log"
+#~ msgstr "Log de erro SQL"
+
+#~ msgid "Unable to delete the item \"%s\""
+#~ msgstr "Não foi possível excluir o item \"%s\""
+
+#~ msgid "No items selected"
+#~ msgstr "Não há itens selecionados"
+
+#~ msgid "Unknown cache file"
+#~ msgstr "Arquivo de cache desconhecido"
+
+#~ msgid "Article inner"
+#~ msgstr "Artigo interior"
+
+#~ msgid "Mobile article inner"
+#~ msgstr "Artigo interior en dispositivo móvel"
+
+#~ msgid "Mobile frontpage"
+#~ msgstr "Capa en dispositivo móvel"
+
+#~ msgid "Mobile opinion inner"
+#~ msgstr "Opinião interior en dispositivo móvel"
+
+#~ msgid "Mobile opinion frontpage"
+#~ msgstr "Capa de opinião en dispositivo móvel"
+
+#~ msgid "Video inner"
+#~ msgstr "Vídeo interior"
+
+#~ msgid "Album frontpage"
+#~ msgstr "Capa de Álbuns"
+
+#~ msgid "Album inner"
+#~ msgstr "Álbum interior"
+
+#~ msgid "Page %s"
+#~ msgstr "Página %s"
+
+#~ msgid "Opinion inner"
+#~ msgstr "Opinião interior"
+
+#~ msgid "Blog inner"
+#~ msgstr "Blog interior"
+
+#~ msgid "RSS Author"
+#~ msgstr "RSS de Autor"
+
+#~ msgid "Homepage"
+#~ msgstr "Capa principal"
+
+#~ msgid "Poll inner"
+#~ msgstr "Enquete interior"
+
+#~ msgid "Poll frontpage"
+#~ msgstr "Capa de enquete"
+
+#~ msgid "Custom CSS"
+#~ msgstr "CSS customizado"
+
+#~ msgid "Add Video and Image Galleries to your content. "
+#~ msgstr "Adicionar Vídeo e Galerias de Imagem a seus conteúdos."
+
+#~ msgid ""
+#~ "<p>This module will allow you to create Photo Galleries, add video from "
+#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the "
+#~ "most interesting fact is that the video manager is the same as youtube "
+#~ "one, perfect consistency and performance.</p>"
+#~ msgstr ""
+#~ "<p>Este módulo irá permitir que você crie galerias de fotografias, "
+#~ "adicionar vídeos do YouTube, Vimeo, Dailymotion e de outras 10 fontes "
+#~ "mais. </p><p>E o mais interessante é que o gestor de vídeos é o mesmo que "
+#~ "Youtube, perfeito consistente e com um ótimo desempenho.</p>"
+
+#~ msgid "Add Video and Image Galleries to your content."
+#~ msgstr "Adicionar Vídeo e Galerias de Imagem para aos seus conteúdos."
+
+#~ msgid ""
+#~ "<p>This module will allow you to create Photo Galleries, add video from "
+#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>\n"
+#~ "                    <p>Our video manager is the same as youtube one, "
+#~ "perfect consistency and performance.</p>"
+#~ msgstr ""
+#~ "<p>Este módulo irá permitir que você crie galerias de fotografias, "
+#~ "adicionar vídeos do YouTube, Vimeo, Dailymotion e de outras 10 fontes "
+#~ "mais.</p>\n"
+#~ "                    <p>E o mais interessante é que o gestor de vídeos é o "
+#~ "mesmo que Youtube, perfeito consistente e com um ótimo desempenho.</p>"
+
+#, fuzzy
+#~ msgid "Usage of your newspaper"
+#~ msgstr "Meu jornal"
+
+#~ msgid "Support 1"
+#~ msgstr "Suporte 1"
 
 #, fuzzy
 #~ msgid "Please, fill your billing information below."
