@@ -42,10 +42,10 @@
         <div class="form-group">
           <label for="ads_settings_lifetime_cookie" class="form-label">
             {t}Cookie lifetime for intersticials{/t}
-            <span class="help">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t} {t}(in minutes){/t}</span>
           </label>
           <div class="controls">
             <input type="number" class="form-control" name="ads_settings_lifetime_cookie" id="ads_settings_lifetime_cookie" value="{$configs['ads_settings']['lifetime_cookie']|default:'300'}" required/>
+            <span class="help">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t} {t}(in minutes){/t}</span>
           </div>
         </div>
         <div class="form-group">
@@ -55,34 +55,42 @@
               <option value="0">{t}Yes{/t}</option>
               <option value="1" {if $configs['ads_settings']['no_generics'] eq "1"} selected {/if}>{t}No{/t}</option>
             </select>
-            <div class="help-block">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
+            <div class="help">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
           </div>
         </div>
       </uib-tab>
       <uib-tab heading="{t}External services{/t}">
-        <h5>{t}OpenX/Revive Ad server integration{/t}</h5>
+        <h4>{t}OpenX/Revive Ad server integration{/t}</h4>
         <div class="form-group">
           <label for="revive_ad_server_url" class="form-label">{t}Ad server base url{/t}</label>
           <div class="controls">
             <input class="form-control" type="text" name="revive_ad_server_url" value="{$configs['revive_ad_server']['url']}">
-            <div class="help-block">{t}The ad server URL (i.e. http://ad.serverexample.net/).{/t}</div>
+            <div class="help">{t}The ad server URL (i.e. http://ad.serverexample.net/).{/t}</div>
           </div>
         </div>
-        <h5 class="m-t-30">{t}Tradedoubler integration{/t}</h5>
+        <h4>{t}DFP category targeting{/t}</h4>
+        <div class="form-group">
+          <label for="dfp_options_target" class="form-label">{t}Key for setTargeting function{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="dfp_options_target" value="{$configs['dfp_options']['target']}">
+            <div class="help">{t}Set a key for targeting your ads by category. Note that the value for targeting will always be the current category internal name{/t}</div>
+          </div>
+        </div>
+        <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
         <div class="form-group">
           <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
           <div class="controls">
             <input class="form-control" type="number" name="tradedoubler_id" value="{$configs['tradedoubler_id']}">
-            <div class="help-block">{t}Only the ID from Tradedoubler validation tag{/t}</div>
+            <div class="help">{t}Only the ID from Tradedoubler validation tag{/t}</div>
           </div>
         </div>
         {is_module_activated name="IADBOX_MANAGER"}
-        <h5 class="m-t-30">{t}Iadbox integration{/t}</h5>
+        <h4 class="m-t-30">{t}Iadbox integration{/t}</h4>
         <div class="form-group">
           <label for="iadbox_id" class="form-label">{t}Iadbox ID{/t}</label>
           <div class="controls">
             <input class="form-control" type="text" name="iadbox_id" value="{$configs['iadbox_id']}">
-            <div class="help-block">{t}Iadbox affiliate ID{/t}</div>
+            <div class="help">{t}Iadbox affiliate ID{/t}</div>
           </div>
         </div>
         {/is_module_activated}
