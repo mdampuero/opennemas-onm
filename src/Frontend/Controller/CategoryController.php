@@ -74,6 +74,7 @@ class CategoryController extends Controller
             }
         }
 
+        $cm = new \ContentManager();
         $articles = $cm->getInTime($articles);
 
         $cacheId = "category|$categoryName|$page";
