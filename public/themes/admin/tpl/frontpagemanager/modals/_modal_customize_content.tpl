@@ -181,6 +181,11 @@
               <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition5.png" name="image-middle-left" alt="{t}image-middle-left{/t}" >
             </label>
           </div>
+          <div class="form-group disposition">
+            <label class="radio">
+              {t}Default{/t}<input name="imageDisposition" value="" type="radio">
+            </label>
+          </div>
         </div>
       </form>
       </div>
