@@ -434,8 +434,9 @@
             return;
           }
 
-          if ($scope.client.country === 'ES' || (!$scope.client.company &&
-                $scope.countries[$scope.client.country])) {
+          if ($scope.taxes[$scope.client.country] &&
+             ($scope.client.country === 'ES' || (!$scope.client.company &&
+              $scope.countries[$scope.client.country]))) {
             $scope.vatTax = $scope.taxes[$scope.client.country].value;
           }
 
