@@ -326,7 +326,8 @@ class DomainManagementController extends Controller
      */
     private function sendEmailToCustomer($client, $domains, $purchase, $create)
     {
-        $countries = Intl::getRegionBundle()->getCountryNames();
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_LONG);
 
         $params = $this->container
             ->getParameter("manager_webservice");
