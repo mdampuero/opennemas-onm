@@ -1,12 +1,9 @@
 {extends file="domain_management/list.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="
-    @AdminTheme/less/_store.less,
+  {stylesheets src="@AdminTheme/less/_store.less,
     @AdminTheme/less/_domain.less,
-    @AdminTheme/less/_braintree.less
-  " filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+    @AdminTheme/less/_checkout.less" filters="cssrewrite,less"}
   {/stylesheets}
 {/block}
 {block name="footer-js" append}

@@ -1,16 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="
-    @AdminTheme/less/_store.less
-  " filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {stylesheets src="@AdminTheme/less/_store.less,
+    @AdminTheme/less/_checkout.less" filters="cssrewrite,less"}
   {/stylesheets}
-  <style>
-  .grid.simple {
-    font-size:14px;
-  }
-  </style>
 {/block}
 
 {block name="content"}
