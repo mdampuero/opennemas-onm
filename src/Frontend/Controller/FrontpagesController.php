@@ -1,60 +1,61 @@
 <?php
 /**
- * Defines the frontend controller for the frontpage content type
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * Handles the actions for frontpages
- *
- * @package Frontend_Controllers
- **/
+ * Displays frontpages.
+ */
 class FrontpagesController extends Controller
 {
     /**
-     * Shows the frontpage given a category name
+     * Shows the frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the frontpage doesn't exists
-     **/
+     * @return Response The response object.
+     *
+     * @throws ResourceNotFoundException If the frontpage doesn't exist.
+     */
     public function showAction(Request $request)
     {
-        // Fetch HTTP variables
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
-        // Get the ID of the actual category from the categoryName
-        $ccm = \ContentCategoryManager::get_instance();
-        $actualCategoryId = $ccm->get_id($categoryName);
+        $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId    = 0;
+        $categoryTitle = 0;
+        $category      = null;
 
-        $date = $this->get('setting_repository')
-            ->get('frontpage_' . $actualCategoryId . '_last_saved');
+        if ($categoryName !== 'home') {
+            $category = $this->get('category_repository')->findOneBy([
+                'name' => [ [ 'value' => $categoryName ] ]
+            ]);
 
-        $cacheID = 'frontpage|' . $categoryName . '|' . $date;
+            if (!empty($category)) {
+                $categoryId    = $category->id;
+                $categoryTitle = $category->title;
+            }
+        }
 
-        $cm = new \ContentManager;
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+        $cacheId = 'frontpage|' . $categoryName . '|' . $this
+            ->get('setting_repository')
+            ->get('frontpage_' . $categoryId . '_last_saved');
 
-        $expires = \ContentManager::getEarlierStarttimeOfScheduledContents($contentsInHomepage);
+        $cm       = new \ContentManager;
+        $contents = $cm->getContentsForHomepageOfCategory($categoryId);
+        $expires  = $cm->getEarlierStarttimeOfScheduledContents($contents);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
@@ -64,96 +65,138 @@ class FrontpagesController extends Controller
             }
         }
 
-        $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+        $contents = $cm->getInTime($contents);
 
         // Fetch ads
-        $ads = $this->getAds($actualCategoryId, $contentsInHomepage);
+        $ads = $this->getAds($categoryId, $contents);
         $this->view->assign('advertisements', $ads);
 
         if ($this->view->caching == 0
-            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
+            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
             // If no home category name
-            if (($categoryName != 'home')
-                && (empty($categoryName) || !$ccm->exists($categoryName))
-            ) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            if ($categoryName !== 'home' && (empty($category))) {
+                throw new ResourceNotFoundException();
             }
 
-            $categoryData = null;
-            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
-                $categoryData = $ccm->categories[$actualCategoryId];
-            }
-            $this->view->assign(
-                array(
-                    'actual_category_id'    => $actualCategoryId,
-                    'actual_category_title' => $ccm->getTitle($categoryName),
-                    'category_data'         => $categoryData,
-                    'time'                  => time(),
-                )
-            );
+            $this->view->assign([
+                'actual_category_id'    => $categoryId,
+                'actual_category_title' => $categoryTitle,
+                'category_data'         => $category,
+                'time'                  => time(),
+            ]);
 
-            // Filter articles if some of them has time scheduling and sort them by position
-            $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+            $contents = $cm->sortArrayofObjectsByProperty($contents, 'position');
 
-            /***** GET ALL FRONTPAGE'S IMAGES *******/
-            $imageIdsList = array();
-            foreach ($contentsInHomepage as $content) {
+            $ids        = [];
+            $relatedIds = [];
+
+            // Get photo and video ids
+            foreach ($contents as $content) {
+                $ids[] = $content->pk_content;
+
                 if (isset($content->img1) && !empty($content->img1)) {
-                    $imageIdsList []= $content->img1;
+                    $relatedIds[] = $content->img1;
+                }
+
+                if (isset($content->fk_video) && !empty($content->fk_video)) {
+                    $relatedIds[] = $content->img1;
                 }
             }
 
-            if (count($imageIdsList) > 0) {
-                $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
-            } else {
-                $imageList = array();
+            // Get related content ids
+            $relatedMap = $this->get('related_contents')
+                ->getRelatedContents($ids, $categoryId);
+
+            foreach ($relatedMap as $id => $ids) {
+                $relatedIds = array_merge($relatedIds, $ids);
+            }
+
+            $relatedIds = array_unique($relatedIds);
+            $date = date('Y-m-d H:i:s');
+
+            if (!empty($relatedIds)) {
+                $data = $this->get('entity_repository')->findBy([
+                    'pk_content' => [ [ 'value' => $relatedIds, 'operator' => 'in' ] ],
+                    'starttime' => [
+                        'union' => 'OR',
+                        [ 'value' => null, 'operator' => 'is', 'field' => true ],
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => $date, 'operator' => '<=' ],
+                    ],
+                    'endtime' => [
+                        'union' => 'OR',
+                        [ 'value' => null, 'operator' => 'is', 'field' => true ],
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => $date, 'operator' => '>' ],
+                    ]
+                ]);
+
+                $related = [];
+                foreach ($data as $content) {
+                    $related[(string) $content->pk_content] = $content;
+                }
             }
 
             // Overloading information for contents
-            foreach ($contentsInHomepage as &$content) {
-                // Load category related information
+            foreach ($contents as &$content) {
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
-                // Get number comments for a content
-                if ($content->with_comment == 1) {
-                    $content->num_comments = $content->getProperty('num_comments');
+                if (isset($content->img1) && !empty($content->img1)
+                    && array_key_exists($content->img1, $related)
+                ) {
+                    $content->img1 = $related[$content->img1];
+                    $content->img1_path = $content->img1->path_file
+                        . $content->img1->name;
                 }
 
-                // Load attached and related contents from array
-                $content->loadFrontpageImageFromHydratedArray($imageList)
-                        ->loadAttachedVideo()
-                        ->loadRelatedContents($categoryName);
+                if (isset($content->fk_video) && !empty($content->fk_video)
+                    && array_key_exists($content->fk_video, $related)
+                ) {
+                    $content->obj_video = $related[$content->fk_video];
+                    $ids[] = $content->img1;
+                }
+
+                if (array_key_exists($content->pk_content, $relatedMap)) {
+                    $content->related_contents = [];
+
+                    $keys = $relatedMap[$content->pk_content];
+
+                    foreach ($keys as $key) {
+                        $content->related_contents[] = $related[$key];
+                    }
+                }
             }
 
-            $this->view->assign('column', $contentsInHomepage);
+            $layout = $this->get('setting_repository')
+                ->get('frontpage_layout_' . $categoryId, 'default');
 
-            $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
-            $layoutFile = 'layouts/'.$layout.'.tpl';
+            $layoutFile = 'layouts/' . $layout . '.tpl';
 
+            $this->view->assign('column', $contents);
             $this->view->assign('layoutFile', $layoutFile);
         }
 
         return $this->render(
             'frontpage/frontpage.tpl',
-            array(
-                'cache_id'        => $cacheID,
+            [
+                'cache_id'        => $cacheId,
                 'category_name'   => $categoryName,
                 'actual_category' => $categoryName,
-                'x-tags'          => 'frontpage-page,'.$categoryName,
+                'x-tags'          => 'frontpage-page,' . $categoryName,
                 'x-cache-for'     => $expires,
-            )
+            ]
         );
     }
 
     /**
-     * Displays an external frontpage by sync
+     * Displays an external frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function extShowAction(Request $request)
     {
         // Fetch HTTP variables
@@ -166,7 +209,7 @@ class FrontpagesController extends Controller
 
         // Get sync params
         $wsUrl = '';
-        $syncParams = s::get('sync_params');
+        $syncParams = $this->get('setting_repository')->get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
                 if (in_array($categoryName, $values['categories'])) {
@@ -236,27 +279,26 @@ class FrontpagesController extends Controller
     }
 
     /**
-     * Retrieves the advertisement for the frontpage
+     * Gets advertisements for the frontpage.
      *
-     * @param string $category           the category name where fetch ads from
-     * @param array  $contentsInHomepage list of contents that are already present in the frontpage
+     * @param string $category The category name.
+     * @param array  $contents The list of contents that are in the frontpage.
      *
-     * @return array the list of advertisement objects
-     **/
-    public static function getAds($category, $contentsInHomepage)
+     * @return array The list of advertisement objects.
+     */
+    public static function getAds($category, $contents)
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get frontpage positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('frontpage');
+        $positions = getService('instance')->theme->getAdsPositionManager()
+            ->getAdsPositionsForGroup('frontpage');
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
-        // Get all the ads from the list of contents dropped in this frontpage and
-        // add them to the advertisements list.
-        if (is_array($contentsInHomepage)) {
-            foreach ($contentsInHomepage as $content) {
+        // Get all the ads and add them to the advertisements list
+        if (is_array($contents)) {
+            foreach ($contents as $content) {
                 if ($content->content_type_name == 'advertisement') {
                     $advertisements []= $content;
                 }
