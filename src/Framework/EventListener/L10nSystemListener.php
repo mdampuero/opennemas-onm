@@ -95,7 +95,7 @@ class L10nSystemListener implements EventSubscriberInterface
                 $userLanguage = $request->getSession()->get('user_language', 'default');
             }
 
-            if ($userLanguage != 'default') {
+            if (!empty($userLanguage) && $userLanguage != 'default') {
                 $language = $userLanguage;
             }
 
