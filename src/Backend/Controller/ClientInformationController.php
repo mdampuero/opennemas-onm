@@ -46,18 +46,12 @@ class ClientInformationController extends Controller
                 ->find($id);
         }
 
-        $users = 2;
-        //$users = $this->get('setting_repository')->get('max_users');
-
-        //$users = $users === 'NaN' ? _('unlimited')
-
         return $this->render(
             'stats/stats_info.tpl',
             [
                 'client'    => $client,
                 'countries' => $countries,
-                'instance'  => $instance,
-                'users'     => $users
+                'instance'  => $instance
             ]
         );
     }
