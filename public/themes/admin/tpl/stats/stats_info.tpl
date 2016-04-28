@@ -59,23 +59,6 @@
       <div class="col-xs-12 col-sm-5">
         <div class="row">
           <div class="col-md-6">
-            <div class="tiles red m-b-15">
-              <div class="tiles-body">
-                <div class="tiles-title text-uppercase text-black">
-                  {t}Plan{/t}
-                </div>
-                <div class="widget-stats">
-                  <div class="wrapper last">
-                    <div class="item-count ng-cloak">
-                      <span ng-if="countActivatedModulesForPlan('Profesional') == 0 || countActivatedModulesForPlan('Gold') == 0 || countActivatedModulesForPlan('Other') == 0">{t}Base{/t}</span>
-                      <span ng-if="countActivatedModulesForPlan('Profesional') > 0 || countActivatedModulesForPlan('Gold') > 0 || countActivatedModulesForPlan('Other') > 0">{t}Base + Modules{/t}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
             <div class="tiles green m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
@@ -91,8 +74,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-md-6">
             <div class="tiles purple m-b-15">
               <div class="tiles-body">
@@ -107,6 +88,8 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
@@ -117,51 +100,24 @@
                   <div class="wrapper last">
                     <span class="item-count">
                       {t}coming soon... work in progress...{/t}
-                      <!-- {$instance->page_views|number_format}
-                      <i class="fa fa-info-circle" uib-tooltip="{t}Note: this number has not being used for billing purpose. Billing pageviews count goes from 26th to 25th of each month.{/t}" tooltip-placement="left"></i> -->
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12">
+          <div class="col-md-6">
             <div class="tiles blue m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
                   {t}Users{/t}
                 </div>
                 <div class="widget-stats">
-                  <div class="wrapper">
+                  <div class="wrapper last">
                     <span class="item-title">{t}Activated{/t}</span>
                     <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
-                <!-- <div class="widget-stats">
-                  <div class="wrapper">
-                    <span class="item-title">{t}Available{/t}</span>
-                    <span class="item-count">{$max_users - $instance->users}</span>
-                  </div>
-                </div> -->
-                <div class="widget-stats">
-                  <div class="wrapper last">
-                    <span class="item-title">{t}Max{/t}</span>
-                    <span class="item-count">{$max_users}</span>
-                  </div>
-                </div>
-                {if $max_users > 0}
-                <div class="progress progress-small no-radius m-t-20" style="width:90%">
-                  <div class="progress-bar progress-bar-white animate-progress-bar" data-percentage="{($instance->users * 100) / $max_users}%" style="width: {($instance->users * 100) / $max_users}%;"></div>
-                </div>
-                <div class="description">
-                  <span class="text-white mini-description ">
-                    {($instance->users * 100) / $max_users}%
-                    <span class="blend">of total</span>
-                  </span>
-                </div>
-                {/if}
               </div>
             </div>
           </div>
@@ -197,45 +153,45 @@
             <div class="tiles-title text-uppercase text-black">
               {t}Billing information{/t}
             </div>
-            {if !empty($instance->metas) && array_key_exists('billing_name', $instance->metas) && !empty($instance->metas['billing_name'])}
+            {if !empty($client)}
               <div class="row p-b-15 p-t-15">
                 <div class="col-sm-6">
-                  <strong>{t}Name{/t}:</strong> {$instance->metas['billing_name']}
+                  <strong>{t}Name{/t}:</strong> {$client->last_name}, {$client->first_name}
                 </div>
-                <div class="col-sm-6" ng-if="billing_company_name">
-                  <strong>{t}Company{/t}:</strong> {$instance->metas['billing_company']}
+                <div class="col-sm-6">
+                  <strong>{t}Company{/t}:</strong> {$client->company}
                 </div>
               </div>
               <div class="row p-b-15">
                 <div class="col-sm-6">
-                  <strong>{t}VAT{/t}</strong> {$instance->metas['billing_vat']}
+                  <strong>{t}VAT number{/t}:</strong> {$client->vat_number}
                 </div>
               </div>
               <div class="row p-b-15">
                 <div class="col-sm-6">
-                  <strong>{t}Email{/t}:</strong> {$instance->metas['billing_email']}
+                  <strong>{t}Email{/t}:</strong> {$client->email}
                 </div>
                 <div class="col-sm-6">
-                  <strong>{t}Phone{/t}:</strong> {$instance->metas['billing_phone']}
+                  <strong>{t}Phone{/t}:</strong> {$client->phone}
                 </div>
               </div>
               <div class="row p-b-15">
                 <div class="col-sm-8">
-                  <strong>{t}Address{/t}:</strong> {$instance->metas['billing_address']}
+                  <strong>{t}Address{/t}:</strong> {$client->address}
                 </div>
                 <div class="col-sm-4">
-                  <strong>{t}Postal code{/t}:</strong> {$instance->metas['billing_postal_code']}
+                  <strong>{t}Postal code{/t}:</strong> {$client->postal_code}
                 </div>
               </div>
               <div class="row p-b-15">
                 <div class="col-sm-4">
-                  <strong>{t}City{/t}:</strong> {$instance->metas['billing_city']}
+                  <strong>{t}City{/t}:</strong> {$client->city}
                 </div>
                 <div class="col-sm-4">
-                  <strong>{t}State{/t}:</strong> {$instance->metas['billing_state']}
+                  <strong>{t}State{/t}:</strong> {$client->state}
                 </div>
                 <div class="col-sm-4">
-                  <strong>{t}Country{/t}:</strong> {$instance->metas['billing_country']}
+                  <strong>{t}Country{/t}:</strong> {$countries[$client->country]}
                 </div>
               </div>
               <div class="row p-t-15">
@@ -247,33 +203,6 @@
               <h4 class="p-t-30 text-center">{t}You have no billing information{/t}</h4>
               <h5 class="p-b-30 text-center">{t escape=off}You will be asked to add it during the checkout in our store{/t}</h5>
             {/if}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12 m-b-15 ng-cloak">
-        <div class="tiles white">
-          <div class="tiles-body" style="overflow: auto;">
-            <div class="tiles-title text-uppercase text-black">
-              {t}Activated plans & modules{/t}
-            </div>
-            {*<div class="upgrade pull-right hidden">
-              <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
-                <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
-                <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
-              </button>
-            </div>*}
-            <div class="plans-wrapper">
-              <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
-                <h5 class="plan-title">
-                  [% plan.title %]
-                </h5>
-                <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
-                  [% item.name %]
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
