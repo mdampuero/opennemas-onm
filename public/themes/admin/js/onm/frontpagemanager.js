@@ -1,3 +1,4 @@
+
 function makeContentProviderAndPlaceholdersSortable() {
     // Make content providers sortable and allow to D&D over the placeholders
     jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({
@@ -491,7 +492,7 @@ jQuery(function($) {
         modal.find('.modal-body #font-color').val('#000000');
         modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
         modal.find('.modal-body #bg-color').val('#ffffff');
-        modal.find('.modal-body .radio input[value=image-top-wide]').prop('checked', true);
+        modal.find('.modal-body .radio input[value=""]').prop('checked', true);
 
         e.preventDefault();
     });
