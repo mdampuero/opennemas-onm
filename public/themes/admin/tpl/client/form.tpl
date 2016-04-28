@@ -107,8 +107,15 @@
       </div>
     </div>
     <div class="row m-t-50 ng-cloak">
-      <div class="col-sm-6 col-sm-offset-3">
-        <button class="btn btn-block btn-loading btn-success" ng-click="save()" ng-disabled="clientForm.$invalid || !validVatNumber || loading">
+      <div class="col-sm-4 m-t-15">
+        <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="loading">
+          <h4 class="text-uppercase">
+            {t}Previous{/t}
+          </h4>
+        </button>
+      </div>
+      <div class="col-sm-4 col-sm-offset-4 m-t-15">
+        <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="clientForm.$invalid || !validVatNumber || loading">
           <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
           <h4 class="text-uppercase text-white">
             {t}Next{/t}
