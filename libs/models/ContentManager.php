@@ -910,7 +910,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql, array($maxElements));
 
         $contents = array();
-        while (!$rs->EOF) {
+        while ($rs && !$rs->EOF) {
             $content = new $contentType();
             $content->load($rs->fields);
 
@@ -1040,7 +1040,7 @@ class ContentManager
         $em = getService('entity_repository');
 
         $now = new \DateTime();
-        $now = $now->format('Y-M-d H:i:s');
+        $now = $now->format('Y-m-d H:i:s');
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
@@ -1937,7 +1937,7 @@ class ContentManager
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
 
-        while (!$rs->EOF) {
+        while ($rs && !$rs->EOF) {
             $content = new \Article();
             $content->load($rs->fields);
             $content->comment        =  $rs->fields['comment_body'];
