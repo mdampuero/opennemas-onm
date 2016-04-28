@@ -442,6 +442,9 @@ class AdsController extends Controller
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
+                'dfp_options' => [
+                    'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                ],
                 'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
@@ -468,7 +471,7 @@ class AdsController extends Controller
         } else {
             $keys = [
                 'ads_settings', 'body_end_script', 'body_start_script',
-                'header_script', 'iadbox_id', 'revive_ad_server',
+                'dfp_options', 'header_script', 'iadbox_id', 'revive_ad_server',
                 'tradedoubler_id',
             ];
 
