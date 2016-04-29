@@ -115,9 +115,14 @@ class Photo extends Content
                     (?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            (int) $this->id, $data["name"], $data["path_file"],
-            $data['size'], (int) $data['width'], (int) $data['height'],
-            $data['nameCat'], $data['author_name']
+            (int) $this->id,
+            $data["name"],
+            $data["path_file"],
+            $data['size'],
+            (int) $data['width'],
+            (int) $data['height'],
+            $data['nameCat'],
+            $data['author_name']
         );
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);

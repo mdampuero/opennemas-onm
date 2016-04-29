@@ -670,7 +670,7 @@ class Content
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
 
-        $values = array(1, $changed, $lastEditor, $id);
+        $values = [1, $changed, $lastEditor, $id];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             return false;
@@ -768,22 +768,11 @@ class Content
         }
 
         $status = ($this->favorite + 1) % 2;
-        $date = $this->starttime;
-
         $this->favorite = $status;
 
-        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
-            $date = date("Y-m-d H:i:s");
-        }
+        $sql = 'UPDATE `contents` SET `favorite` = ? WHERE `pk_content`=?';
 
-        $sql = 'UPDATE `contents` '
-               .'SET `favorite` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$status, $id]);
         if ($rs === false) {
             return false;
         }
@@ -809,23 +798,11 @@ class Content
             $id = $this->id;
         }
 
-        $status = ($this->in_home + 1) % 2;
-        $date = $this->starttime;
+        $this->in_home = ($this->in_home + 1) % 2;
 
-        $this->in_home = $status;
+        $sql = 'UPDATE `contents` SET `in_home` = ? WHERE `pk_content`=?';
 
-        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
-            $date = date("Y-m-d H:i:s");
-        }
-
-        $sql = 'UPDATE `contents` '
-               .'SET `in_home` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->in_home, $id]);
         if ($rs === false) {
             return false;
         }
@@ -850,7 +827,7 @@ class Content
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
              . 'WHERE `pk_content`=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->id]);
         if ($rs === false) {
             throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
         }
@@ -1327,6 +1304,22 @@ class Content
     }
 
     /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     **/
+    public function isInTime($now = null)
+    {
+        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns the scheduling state
      *
      * @param string $now string that represents the actual
@@ -1425,68 +1418,6 @@ class Content
     }
 
     /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     **/
-    public function isInTime($now = null)
-    {
-        if ($this->isScheduled($now)) {
-            if ($this->isDued($now) || $this->isPostponed($now)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     * @param string $time      time to compare with the previous parameters
-     *
-     * @return boolean
-     **/
-    public static function isInTime2($starttime = null, $endtime = null, $time = null)
-    {
-        $start = strtotime($starttime);
-        $end   = strtotime($endtime);
-
-        if ($start == $end) {
-            return true;
-        }
-
-        if (is_null($time)) {
-            $now = time();
-        } else {
-            $now = strtotime($time);
-        }
-
-        // If $start and $end not defined then return true
-        if (empty($start) && empty($end)) {
-            return true;
-        }
-
-        // only setted $end
-        if (empty($start)) {
-            return ($now < $end);
-        }
-
-        // only setted $start
-        if (empty($end) || $end <= 0) {
-            return ($now > $start);
-        }
-
-        // $start < $now < $end
-        return (($now < $end) && ($now > $start));
-        return false;
-    }
-
-    /**
      * Check if a content start time for publishing
      * don't check Content::endtime
      *
@@ -1496,7 +1427,7 @@ class Content
     */
     public function isStarted($now = null)
     {
-        if ($this->starttime == null) {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
             return true;
         }
 
@@ -1523,7 +1454,7 @@ class Content
      */
     public function isPostponed($now = null)
     {
-        if ($this->starttime == null) {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
             return false;
         }
 
@@ -1549,7 +1480,7 @@ class Content
      */
     public function isDued($now = null)
     {
-        if ($this->endtime == null) {
+        if ($this->endtime == null || $this->endtime == '0000-00-00 00:00:00') {
             return false;
         }
         $end = new \DateTime($this->endtime);
@@ -1795,7 +1726,6 @@ class Content
                 && $this->content_status == 1
                 && $this->in_litter == 0);
     }
-
 
     /**
      * Loads all the related contents for this content

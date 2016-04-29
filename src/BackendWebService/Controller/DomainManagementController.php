@@ -132,7 +132,7 @@ class DomainManagementController extends Controller
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
-        $primary = $instance->domains[$instance->main_domain - 1];
+        $primary = $instance->getMainDomain();
 
         $domains = [];
         foreach ($instance->domains as $value) {
@@ -201,7 +201,7 @@ class DomainManagementController extends Controller
 
             foreach ($domains as $domain) {
                 $invoice->lines[] = [
-                    'description'  => $description . $domain,
+                    'description'  => $description . $domain['description'],
                     'unit_cost'    => $price,
                     'quantity'     => 1,
                     'tax1_name'    => 'IVA',
@@ -326,7 +326,8 @@ class DomainManagementController extends Controller
      */
     private function sendEmailToCustomer($client, $domains, $purchase, $create)
     {
-        $countries = Intl::getRegionBundle()->getCountryNames();
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_LONG);
 
         $params = $this->container
             ->getParameter("manager_webservice");

@@ -20,11 +20,31 @@ use Symfony\Component\HttpFoundation\Request;
 class ClientController extends Controller
 {
     /**
+     * Shows the client.
+     *
+     * @param integer $id The client id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function showAction($id)
+    {
+        if ($this->get('instance')->getClient() !== $id) {
+            return JsonResponse('', 400);
+        }
+
+        $client = $this->get('orm.manager')
+            ->getRepository('manager.Client', 'Database')
+            ->find($id);
+
+        return new JsonResponse($client->getData());
+    }
+
+    /**
      * Creates the client from the client data.
      *
-     * @param array $data The client data.
+     * @param Request $request The request object.
      *
-     * @return Client The client.
+     * @return JsonResponse The response object.
      */
     public function saveAction(Request $request)
     {
@@ -37,6 +57,28 @@ class ClientController extends Controller
         $instance = $this->get('instance');
         $instance->metas['client'] = $client->id;
         $this->get('instance_manager')->persist($instance);
+
+        return new JsonResponse($client->id);
+    }
+
+    /**
+     * Creates the client from the client data.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $client = $this->get('orm.manager')
+            ->getRepository('manager.client', 'Database')
+            ->find($id);
+
+        $client->merge($request->request->all());
+
+        $this->get('orm.manager')->persist($client, 'FreshBooks');
+        $this->get('orm.manager')->persist($client, 'Braintree');
+        $this->get('orm.manager')->persist($client, 'Database');
 
         return new JsonResponse();
     }

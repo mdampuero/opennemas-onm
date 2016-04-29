@@ -6,20 +6,23 @@
      * @ngdoc controller
      * @name  DomainManagementCtrl
      *
+     * @requires $controller
      * @requires $http
-     * @requires $location
-     * @requires $uibModal
+     * @requires $rootScope
      * @requires $scope
-     * @requires $timeout
      * @requires routing
      * @requires messenger
      *
      * @description
-     *   description
+     *   Controller to handle actions in domains.
      */
     .controller('DomainManagementCtrl', [
-      '$http', '$location', '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'messenger', 'routing',
-      function($http, $location, $rootScope, $scope, $timeout, $uibModal, $window, messenger, routing) {
+      '$controller', '$http', '$rootScope', '$scope', '$window', 'messenger', 'routing',
+      function($controller, $http, $rootScope, $scope, $window, messenger, routing) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('CheckoutCtrl',
+            { $rootScope: $rootScope, $scope: $scope }));
+
         /**
          * @memberOf DomainManagementCtrl
          *
@@ -64,31 +67,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   Array of domains.
-         *
-         * @type {Array}
-         */
-        $scope.domains = [];
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Array of expanded domains.
+         *   Array of expanded cart.
          *
          * @type {Array}
          */
         $scope.expanded = {};
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *  The current payment method.
-         *
-         * @type {String}
-         */
-        $scope.payment = '';
 
         /**
          * @memberOf DomainManagementCtrl
@@ -104,51 +87,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   The current step in the checkout wizard.
-         *
-         * @type {Boolean}
-         */
-        $scope.step = 1;
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
          *   The suggestions list.
          *
          * @type {Array}
          */
         $scope.suggests = [];
-
-        /**
-         * @memberOf StoreCheckoutCtrl
-         *
-         * @description
-         *   Flag to know if current phone is valid.
-         *
-         * @type {Boolean}
-         */
-        $scope.validPhone = true;
-
-        /**
-         * @memberOf StoreCheckoutCtrl
-         *
-         * @description
-         *   Flag to know if current VAT is valid.
-         *
-         * @type {Boolean}
-         */
-        $scope.validVat = true;
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   The VAT tax to apply.
-         *
-         * @type {Boolean}
-         */
-        $scope.vatTax = 0;
 
         /**
          * @function cancelCreditCard
@@ -177,20 +120,20 @@
           var data = {
             client:  $scope.client,
             create:  $scope.create,
-            domains: $scope.domains,
+            domains: $scope.cart,
             fee:     $scope.fee,
             method:  $scope.payment.type,
             nonce:   $scope.payment.nonce,
             total:   $scope.total
           };
 
-          $http.post(url, data).success(function() {
+          $http.post(url, data).then(function() {
             $scope.next();
             $scope.loading = false;
-            $scope.domains = [];
-          }).error(function(response) {
+            $scope.cart = [];
+          }, function(response) {
             $scope.loading = false;
-            messenger.post(response);
+            messenger.post(response.data);
           });
         };
 
@@ -272,7 +215,11 @@
         $scope.isValid = function() {
           var domain = 'www.' + $scope.domain;
 
-          if ($scope.domains.indexOf(domain) !== -1) {
+          var domains = $scope.cart.filter(function(e) {
+            return e.description === domain;
+          });
+
+          if (domains.length > 0) {
             return false;
           }
 
@@ -296,17 +243,6 @@
             $scope.primary = response.data.primary;
             $scope.base    = response.data.base;
           });
-        };
-
-        /**
-         * @function removeFromList
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Removes a domain from domain list.
-         */
-        $scope.removeFromList = function(index) {
-          $scope.domains.splice(index, 1);
         };
 
         /**
@@ -334,25 +270,28 @@
 
           var domain = 'www.' + $scope.domain;
 
-          if ($scope.domains.indexOf(domain) === -1) {
-            var url = routing.generate('backend_ws_domain_check_available',
+          var url = routing.generate('backend_ws_domain_check_available',
+              { domain: domain, create: $scope.create });
+
+          if (!$scope.create) {
+            var url = routing.generate('backend_ws_domain_check_valid',
                 { domain: domain, create: $scope.create });
-
-            if (!$scope.create) {
-              var url = routing.generate('backend_ws_domain_check_valid',
-                  { domain: domain, create: $scope.create });
-            }
-
-            $scope.loading = true;
-            $http.get(url).success(function() {
-              $scope.domains.push(domain);
-              $scope.domain = '';
-              $scope.loading = false;
-            }).error(function(response) {
-              $scope.loading = false;
-              messenger.post({ message: response, type: 'error' });
-            });
           }
+
+          $scope.loading = true;
+          $http.get(url).then(function() {
+            $scope.cart.push({
+              name:        $scope.description,
+              description: domain,
+              price:       [{ value:  $scope.price, type: 'yearly' }]
+            });
+
+            $scope.domain  = '';
+            $scope.loading = false;
+          }, function(response) {
+            $scope.loading = false;
+            messenger.post({ message: response.data, type: 'error' });
+          });
         };
 
         /**
@@ -365,38 +304,6 @@
         $scope.mapByKeyPress = function(event) {
           if ($scope.isValid() && event.keyCode === 13) {
             $scope.map();
-          }
-        };
-
-        /**
-         * @function next
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Goes to the next step.
-         */
-        $scope.next = function() {
-          $scope.step++;
-
-          if ($scope.step === 2 && $scope.client) {
-            $scope.step++;
-          }
-        };
-
-        /**
-         * @function previous
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Goes to the previous step.
-         */
-        $scope.previous = function() {
-          if ($scope.step > 1) {
-            $scope.step--;
-          }
-
-          if ($scope.step === 2 && $scope.client) {
-            $scope.step--;
           }
         };
 
@@ -418,47 +325,14 @@
           }
         });
 
-        // Updates total and vat when domain change
-        $scope.$watch('domains', function(nv, ov) {
-          if (ov === nv) {
-            return;
-          }
-
-          if (nv.length > 0) {
-            $scope.subtotal = $scope.price * nv.length;
-          }
-        }, true);
-
-        $scope.$watch('step', function(nv) {
-          if (nv !== 3) {
-            return;
-          }
-
-          if ($scope.taxes[$scope.client.country] &&
-             ($scope.client.country === 'ES' || (!$scope.client.company &&
-              $scope.countries[$scope.client.country]))) {
-            $scope.vatTax = $scope.taxes[$scope.client.country].value;
-          }
-
-          $scope.vat   = Math.round($scope.subtotal * $scope.vatTax)/100;
-          $scope.total = $scope.subtotal + $scope.vat;
-        });
-
+        // Update free when payment changes
         $scope.$watch('payment', function(nv) {
           $scope.fee = 0;
 
           if (nv && nv.type === 'CreditCard') {
-            $scope.fee   = ($scope.subtotal + $scope.vat) * 0.029 + 0.30;
+            $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
           }
-
-          $scope.total = $scope.subtotal + $scope.vat + $scope.fee;
         }, true);
-
-        // Get client after saving
-        $rootScope.$on('client-saved', function (event, args) {
-          $scope.client = args;
-          $scope.next();
-        });
 
         // Configure braintree
         $scope.$watch('clientToken', function(nv) {

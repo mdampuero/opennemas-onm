@@ -1161,9 +1161,9 @@ class ContentManager
                     }
                 } else {
                     $starttime = (!empty($item['starttime']))
-                        ? $item['starttime']: '0000-00-00 00:00:00';
+                        ? $item['starttime']: null;
                     $endtime   = (!empty($item['endtime']))
-                        ? $item['endtime']: '0000-00-00 00:00:00';
+                        ? $item['endtime']: null;
 
                     if (Content::isInTime2($starttime, $endtime, $time)) {
                         $filtered[] = $item;
@@ -1173,6 +1173,47 @@ class ContentManager
         }
 
         return $filtered;
+    }
+
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $starttime the initial time from it will be available
+     * @param string $endtime   the initial time until it will be available
+     * @param string $currentTime      time to compare with the previous parameters
+     *
+     * @return boolean
+     **/
+    public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
+    {
+        $start       = ($starttime !== '0000-00-00 00:00:00' || empty($starttime)) ? strtotime($starttime) : null;
+        $end         = ($endtime !== '0000-00-00 00:00:00' || empty($endtime)) ? strtotime($endtime): null;
+        $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
+
+        // If $start and $end not defined  => is in time
+        if (empty($start) && empty($end)) {
+            return true;
+        }
+
+        // If both equals and bigger than current time => is in time
+        if ($start == $end && $start >= $currentTime) {
+            return true;
+        } elseif ($start == $end && $start < $currentTime) {
+            return false;
+        }
+
+        // only setted $end
+        if (empty($start)) {
+            return ($currentTime < $end);
+        }
+
+        // only setted $start
+        if (empty($end) || $end <= 0) {
+            return ($currentTime > $start);
+        }
+
+        // $start < $currentTime < $end
+        return (($currentTime < $end) && ($currentTime > $start));
     }
 
     /**
