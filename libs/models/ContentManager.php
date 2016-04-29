@@ -1161,9 +1161,9 @@ class ContentManager
                     }
                 } else {
                     $starttime = (!empty($item['starttime']))
-                        ? $item['starttime']: '0000-00-00 00:00:00';
+                        ? $item['starttime']: null;
                     $endtime   = (!empty($item['endtime']))
-                        ? $item['endtime']: '0000-00-00 00:00:00';
+                        ? $item['endtime']: null;
 
                     if (Content::isInTime2($starttime, $endtime, $time)) {
                         $filtered[] = $item;
