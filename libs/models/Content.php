@@ -1418,51 +1418,6 @@ class Content
 
         return true;
     }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     * @param string $time      time to compare with the previous parameters
-     *
-     * @return boolean
-     **/
-    public static function isInTime2($starttime = null, $endtime = null, $time = null)
-    {
-        $start = strtotime($starttime);
-        $end   = strtotime($endtime);
-
-        if ($start == $end) {
-            return true;
-        }
-
-        if (is_null($time)) {
-            $now = time();
-        } else {
-            $now = strtotime($time);
-        }
-
-        // If $start and $end not defined then return true
-        if (empty($start) && empty($end)) {
-            return true;
-        }
-
-        // only setted $end
-        if (empty($start)) {
-            return ($now < $end);
-        }
-
-        // only setted $start
-        if (empty($end) || $end <= 0) {
-            return ($now > $start);
-        }
-
-        // $start < $now < $end
-        return (($now < $end) && ($now > $start));
-        return false;
-    }
-
     /**
      * Check if a content start time for publishing
      * don't check Content::endtime
