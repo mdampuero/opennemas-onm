@@ -1304,6 +1304,22 @@ class Content
     }
 
     /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     **/
+    public function isInTime($now = null)
+    {
+        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns the scheduling state
      *
      * @param string $now string that represents the actual
@@ -1402,23 +1418,6 @@ class Content
     }
 
     /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     **/
-    public function isInTime($now = null)
-    {
-        if ($this->isScheduled($now)) {
-            if ($this->isDued($now) || $this->isPostponed($now)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    /**
      * Check if a content start time for publishing
      * don't check Content::endtime
      *
@@ -1428,7 +1427,7 @@ class Content
     */
     public function isStarted($now = null)
     {
-        if ($this->starttime == null) {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
             return true;
         }
 
@@ -1455,7 +1454,7 @@ class Content
      */
     public function isPostponed($now = null)
     {
-        if ($this->starttime == null) {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
             return false;
         }
 
@@ -1481,7 +1480,7 @@ class Content
      */
     public function isDued($now = null)
     {
-        if ($this->endtime == null) {
+        if ($this->endtime == null || $this->endtime == '0000-00-00 00:00:00') {
             return false;
         }
         $end = new \DateTime($this->endtime);
@@ -1727,7 +1726,6 @@ class Content
                 && $this->content_status == 1
                 && $this->in_litter == 0);
     }
-
 
     /**
      * Loads all the related contents for this content
