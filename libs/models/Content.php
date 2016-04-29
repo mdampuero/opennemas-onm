@@ -670,7 +670,7 @@ class Content
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
 
-        $values = array(1, $changed, $lastEditor, $id);
+        $values = [1, $changed, $lastEditor, $id];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             return false;
@@ -768,22 +768,11 @@ class Content
         }
 
         $status = ($this->favorite + 1) % 2;
-        $date = $this->starttime;
-
         $this->favorite = $status;
 
-        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
-            $date = date("Y-m-d H:i:s");
-        }
+        $sql = 'UPDATE `contents` SET `favorite` = ? WHERE `pk_content`=?';
 
-        $sql = 'UPDATE `contents` '
-               .'SET `favorite` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$status, $id]);
         if ($rs === false) {
             return false;
         }
@@ -809,23 +798,11 @@ class Content
             $id = $this->id;
         }
 
-        $status = ($this->in_home + 1) % 2;
-        $date = $this->starttime;
+        $this->in_home = ($this->in_home + 1) % 2;
 
-        $this->in_home = $status;
+        $sql = 'UPDATE `contents` SET `in_home` = ? WHERE `pk_content`=?';
 
-        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
-            $date = date("Y-m-d H:i:s");
-        }
-
-        $sql = 'UPDATE `contents` '
-               .'SET `in_home` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->in_home, $id]);
         if ($rs === false) {
             return false;
         }
@@ -850,7 +827,7 @@ class Content
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
              . 'WHERE `pk_content`=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->id]);
         if ($rs === false) {
             throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
         }
