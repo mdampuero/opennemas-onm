@@ -61,9 +61,15 @@ class ThemeController extends Controller
             ->findBy([ 'type' => [ [ 'value' => 'theme-addon'] ] ]);
 
         foreach ($addons as &$addon) {
-            $addon->about       = $addon->about[CURRENT_LANGUAGE_SHORT];
-            $addon->description = $addon->description[CURRENT_LANGUAGE_SHORT];
-            $addon->name        = $addon->name[CURRENT_LANGUAGE_SHORT];
+            $addon->about       = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->about)
+                ? $addon->about[CURRENT_LANGUAGE_SHORT]
+                : $addon->about['en'];
+            $addon->description = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->description)
+                ? $addon->description[CURRENT_LANGUAGE_SHORT]
+                : $addon->description['en'];
+            $addon->name        = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->name)
+                ? $addon->name[CURRENT_LANGUAGE_SHORT]
+                : $addon->name['en'];
 
             if ($addon->metas && array_key_exists('price', $addon->metas)) {
                 $addon->price = $addon->metas['price'];
