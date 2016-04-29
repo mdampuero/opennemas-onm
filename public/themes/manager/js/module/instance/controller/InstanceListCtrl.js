@@ -152,23 +152,21 @@
           $scope.loading = 1;
 
           // Search by name, domains and contact mail
-          var cleaned = angular.copy($scope.criteria);
+          var criteria = angular.copy($scope.criteria);
 
-          if (cleaned.name_like) {
-            cleaned.domains_like      = cleaned.name_like;
-            cleaned.contact_mail_like = cleaned.name_like;
+          if (criteria.name_like) {
+            criteria.domains_like      = criteria.name_like;
+            criteria.contact_mail_like = criteria.name_like;
           }
 
-          cleaned = itemService.cleanFilters(cleaned);
-
           var data = {
-            criteria: cleaned,
+            criteria: itemService.cleanFilters(criteria),
             orderBy:  $scope.orderBy,
             epp:      $scope.pagination.epp,
             page:     $scope.pagination.page
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
+          itemService.encodeFilters(criteria, $scope.orderBy,
             $scope.pagination.epp, $scope.pagination.page);
 
           itemService.list('manager_ws_instances_list', data).then(
