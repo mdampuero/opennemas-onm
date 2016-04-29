@@ -46,7 +46,7 @@
 
         for (var name in criteria) {
           if (name != 'union') {
-            for (var i = 0; i < criteria[name].length; i++) {
+            for (var i in criteria[name]) {
               if (criteria[name][i]['value']
                 && criteria[name][i]['value'] != -1
                 && criteria[name][i]['value'] !== ''
@@ -289,32 +289,6 @@
          * TODO: Remove cleanFilters usage and replace by query manager functions.
          */
         itemService.list = function(route, data) {
-          // Decode filters from URL and overwrite data
-          var filters = itemService.decodeFilters();
-          filters.criteria = itemService.cleanFilters(filters.criteria);
-
-          // Merge data with filters from URL
-          if (filters.criteria && !data.criteria) {
-            data.criteria = {};
-          }
-
-          for (var name in filters.criteria) {
-            data.criteria[name] = filters.criteria[name];
-          }
-
-          // Merge data with filters from URL
-          if (filters.orderBy) {
-            data.orderBy = filters.orderBy;
-          }
-
-          if (filters.page) {
-            data.page = filters.page;
-          }
-
-          if (filters.epp) {
-            data.epp = filters.epp;
-          }
-
           var url = routing.generate(route, data);
 
           return $http.get(url);
