@@ -27,7 +27,11 @@
          *
          * @return {Float} The item price.
          */
-        $scope.getPrice = function (index, type = 'monthly') {
+        $scope.getPrice = function (index, type) {
+          if (!type) {
+            type = 'monthly';
+          }
+
           if (!$scope.cart[index].price ||
               $scope.cart[index].price.length === 0) {
             return { value: 0 };
