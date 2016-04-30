@@ -2003,8 +2003,6 @@ class ContentManager
             $rs->MoveNext();
         }
 
-        $rs->Close(); # optional
-
         return $contents;
     }
 
