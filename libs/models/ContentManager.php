@@ -1157,22 +1157,16 @@ class ContentManager
     {
         $filtered = array();
         if (is_array($items)) {
-            foreach ($items as $item) {
-                if (is_object($item)) {
-                    if ($item->isInTime()) {
-                        $filtered[] = $item;
-                    }
-                } else {
-                    $starttime = (!empty($item['starttime']))
-                        ? $item['starttime']: null;
-                    $endtime   = (!empty($item['endtime']))
-                        ? $item['endtime']: null;
-
-                    if (Content::isInTime2($starttime, $endtime, $time)) {
-                        $filtered[] = $item;
+            $filtered = array_filter(
+                $items,
+                function ($item) use ($time) {
+                    if (is_object($item)) {
+                        return $item->isInTime();
+                    } else {
+                        return self::isInTime2($item['starttime'], $item['endtime'], $time);
                     }
                 }
-            }
+            );
         }
 
         return $filtered;
