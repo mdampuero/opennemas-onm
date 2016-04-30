@@ -1189,28 +1189,24 @@ class ContentManager
      **/
     public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
     {
-        $start       = ($starttime !== '0000-00-00 00:00:00' || empty($starttime)) ? strtotime($starttime) : null;
-        $end         = ($endtime !== '0000-00-00 00:00:00' || empty($endtime)) ? strtotime($endtime): null;
+        $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
+        $end         = ($endtime !== '0000-00-00 00:00:00' && !empty($endtime)) ? strtotime($endtime): null;
         $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
 
-        // If $start and $end not defined  => is in time
-        if (empty($start) && empty($end)) {
+        // If $start and $end not defined or they are equals  => is in time
+        if (
+            (empty($start) && empty($end))
+            || ($start == $end)
+        ) {
             return true;
         }
 
-        // If both equals and bigger than current time => is in time
-        if ($start == $end && $start >= $currentTime) {
-            return true;
-        } elseif ($start == $end && $start < $currentTime) {
-            return false;
-        }
-
-        // only setted $end
+        // only setted $end -> check endttime
         if (empty($start)) {
             return ($currentTime < $end);
         }
 
-        // only setted $start
+        // only setted $start -> check startime
         if (empty($end) || $end <= 0) {
             return ($currentTime > $start);
         }
