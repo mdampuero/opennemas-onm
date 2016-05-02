@@ -64,7 +64,7 @@ class Instance extends Entity
 
         $index = $this->main_domain;
 
-        if ($index <= count($this->domains)) {
+        if ($index > 0 && $index <= count($this->domains)) {
             return $this->domains[$this->main_domain - 1];
         }
 
