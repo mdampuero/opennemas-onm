@@ -53,8 +53,8 @@ class CheckSchemaCommand extends ContainerAwareCommand
     /**
      * Executes the command.
      *
-     * @param InputInterface  $input  An InputInterface instance.
-     * @param OutputInterface $output An OutputInterface instance.
+     * @param InputInterface  $input  The input object.
+     * @param OutputInterface $output The output object.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
