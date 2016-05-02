@@ -12,7 +12,7 @@ DELETE FROM `comments` WHERE `content_id` NOT IN (SELECT `pk_content` FROM `cont
 DELETE FROM `commentsmeta` WHERE `fk_content` NOT IN (SELECT `id` FROM `comments`);
 DELETE FROM `contentmeta` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `contents_categories` WHERE `pk_fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `contents_categories` WHERE `pk_fk_content_category` NOT IN (SELECT pk_content_category FROM content_categories)
+-- DELETE FROM `contents_categories` WHERE `pk_fk_content_category` NOT IN (SELECT pk_content_category FROM content_categories);
 DELETE FROM `content_positions` WHERE `pk_fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `content_views` WHERE `pk_fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `kioskos` WHERE `pk_kiosko` NOT IN (SELECT `pk_content` FROM `contents`);
