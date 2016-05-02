@@ -21,41 +21,40 @@ use Common\ORM\Core\Validation\Validable;
 class Metadata extends DataObject implements Validable
 {
     /**
-     * Returns the cache id for an entity.
+     * Returns the prefixed id for an entity.
      *
      * @param Entity $entity The entity.
      *
-     * @return string The cache id.
+     * @return string The prefixed id.
      */
-    public function getCacheId(Entity $entity)
+    public function getPrefixedId(Entity $entity)
     {
-        return $this->getCachePrefix()
-            . implode('_', $this->getId($entity));
+        return $this->getPrefix() . implode('_', $this->getId($entity));
     }
 
     /**
-     * Returns the cache prefix for the current entity.
+     * Returns the prefix for the current entity.
      *
-     * @return string The cache prefix.
+     * @return string The prefix.
      */
-    public function getCachePrefix()
+    public function getPrefix()
     {
-        if (!empty($this->cachePrefix)) {
-            return $this->cachePrefix . $this->getCacheSeparator();
+        if (!empty($this->prefix)) {
+            return $this->prefix . $this->getSeparator();
         }
 
-        return \underscore($this->name) . $this->getCacheSeparator();
+        return \underscore($this->name) . $this->getSeparator();
     }
 
     /**
-     * Returns the cache separator for the current entity.
+     * Returns the separator for the current entity.
      *
-     * @return string The cache separator.
+     * @return string The separator.
      */
-    public function getCacheSeparator()
+    public function getSeparator()
     {
-        if (!empty($this->cacheSeparator)) {
-            return $this->cacheSeparator;
+        if (!empty($this->separator)) {
+            return $this->separator;
         }
 
         return '-';

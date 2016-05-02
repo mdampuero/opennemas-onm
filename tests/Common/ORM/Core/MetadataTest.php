@@ -24,26 +24,26 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testGetCacheId()
+    public function testGetPrefixedId()
     {
         $entity = new Entity([ 'id' => 1 ]);
-        $this->assertEquals('foo-1', $this->metadata->getCacheId($entity));
+        $this->assertEquals('foo-1', $this->metadata->getPrefixedId($entity));
     }
 
-    public function testGetCachePrefix()
+    public function testGetPrefix()
     {
-        $this->assertEquals('foo-', $this->metadata->getCachePrefix());
+        $this->assertEquals('foo-', $this->metadata->getPrefix());
 
-        $this->metadata->cachePrefix = 'bar';
-        $this->assertEquals('bar-', $this->metadata->getCachePrefix());
+        $this->metadata->prefix = 'bar';
+        $this->assertEquals('bar-', $this->metadata->getPrefix());
     }
 
-    public function testGetCacheSeparator()
+    public function testGetSeparator()
     {
-        $this->assertEquals('-', $this->metadata->getCacheSeparator());
+        $this->assertEquals('-', $this->metadata->getSeparator());
 
-        $this->metadata->cacheSeparator = '_';
-        $this->assertEquals('_', $this->metadata->getCacheSeparator());
+        $this->metadata->separator = '_';
+        $this->assertEquals('_', $this->metadata->getSeparator());
     }
 
     public function testGetId()
