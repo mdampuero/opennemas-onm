@@ -23,6 +23,7 @@ entity:
         letters:            integer
         polls:              integer
         photos:             integer
+        purchased:          array
         videos:             integer
         widgets:            integer
         static_pages:       integer
