@@ -53,7 +53,7 @@ class MaintenanceListener implements EventSubscriberInterface
             return;
         }
 
-        if (!file_exists($this->path)) {
+        if (file_exists($this->path)) {
             $attributes = [
                 '_controller' => 'CoreBundle:Maintenance:default',
                 'format'      => $request->getRequestFormat(),
