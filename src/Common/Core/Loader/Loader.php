@@ -38,6 +38,16 @@ class Loader
     public function __construct($container)
     {
         $this->container = $container;
+
+        // Force cache initialization
+        if ($this->container->has('cache.manager')) {
+            $this->container->get('cache.manager');
+        }
+
+        // Force database initialization
+        if ($this->container->has('orm.manager')) {
+            $this->container->get('orm.manager');
+        }
     }
 
     /**
