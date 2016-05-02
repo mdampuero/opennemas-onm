@@ -201,7 +201,7 @@ class Photo extends Content
 
         // Building information for the photo image
         $dataPhoto = array(
-            'title'          => $originalFileName,
+            'title'          => isset($data['title']) ? $data['title'] :$originalFileName,
             'name'           => $finalPhotoFileName,
             'path_file'      => $dateForDirectory,
             'fk_category'    => $data["fk_category"],
