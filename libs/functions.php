@@ -284,14 +284,16 @@ function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnecti
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
-    $eventDispatcher = getService('event_dispatcher');
+    if (php_sapi_name() != 'cli') {
+        $eventDispatcher = getService('event_dispatcher');
 
-    $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-    foreach ($params as $paramName => $paramValue) {
-        $event->setArgument($paramName, $paramValue);
+        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
+        foreach ($params as $paramName => $paramValue) {
+            $event->setArgument($paramName, $paramValue);
+        }
+
+        $eventDispatcher->dispatch($eventName, $event);
     }
-
-    $eventDispatcher->dispatch($eventName, $event);
 }
 
 function debug()
@@ -526,3 +528,4 @@ function genarateGAAmpCode($config)
 
     return $code;
 }
+
