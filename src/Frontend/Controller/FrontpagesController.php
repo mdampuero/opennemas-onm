@@ -101,7 +101,7 @@ class FrontpagesController extends Controller
                 }
 
                 if (isset($content->fk_video) && !empty($content->fk_video)) {
-                    $relatedIds[] = $content->img1;
+                    $relatedIds[] = $content->fk_video;
                 }
             }
 
@@ -156,7 +156,6 @@ class FrontpagesController extends Controller
                     && array_key_exists($content->fk_video, $related)
                 ) {
                     $content->obj_video = $related[$content->fk_video];
-                    $ids[] = $content->img1;
                 }
 
                 if (array_key_exists($content->pk_content, $relatedMap)) {
