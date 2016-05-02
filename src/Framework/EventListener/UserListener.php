@@ -63,6 +63,7 @@ class UserListener implements EventSubscriberInterface
             $user->eraseCredentials();
             $token->setUser($user);
 
+            $this->container->get('core.loader')->setUser($user);
             $instance = $this->container->get('core.instance');
 
             $database  = $instance->getDatabaseName();
