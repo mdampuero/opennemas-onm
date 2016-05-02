@@ -5,7 +5,6 @@ imports:
 
 parameters:
     cache_prefix: onm
-    available_languages: {'en_US' : 'English', 'es_ES' : 'Español', 'gl_ES' : 'Galego'}
 
 framework:
     #esi:             ~

@@ -1,14 +1,26 @@
 parameters:
+    core.locale.available: [ 'en_US', 'es_ES', 'gl_ES' ]
+    core.locale.path:      '%kernel.root_dir%/Resources/locale'
 
 services:
     core.instance:
-        class: Common\ORM\Entity\Instance
+        class:   Common\ORM\Entity\Instance
         factory: [ '@core.loader', 'getInstance' ]
 
     core.loader:
-        class: Common\Core\Loader\Loader
+        class:     Common\Core\Loader\Loader
         arguments: [ '@service_container' ]
 
+    core.locale:
+        class:     Common\Core\Locale\Locale
+        arguments: [ '%core.locale.available%', '%core.locale.path%' ]
+
+    core.listener.locale:
+        class:     Common\Core\EventListener\LocaleListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
     core.theme:
-        class: Onm\ORM\Entity\Extension
+        class:   Onm\ORM\Entity\Extension
         factory: [ '@core.loader', 'getTheme' ]
