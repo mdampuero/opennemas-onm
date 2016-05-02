@@ -40,7 +40,7 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * Configures the system locale basing on the request and the current user.
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance
+     * @param GetResponseEvent $event The event object.
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -104,7 +104,7 @@ class LocaleListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => [ ['onKernelRequest', 0] ]
+            'kernel.request' => [ ['onKernelRequest', 0] ]
         ];
     }
 }
