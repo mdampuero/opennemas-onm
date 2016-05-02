@@ -261,7 +261,6 @@ class Attachment extends Content
         while (!$rs->EOF) {
             $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
             if (file_exists($file)) {
-                var_dump($file);
                 @unlink($file);
             }
 

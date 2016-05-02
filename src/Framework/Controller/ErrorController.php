@@ -31,7 +31,6 @@ class ErrorController extends Controller
     {
         global $error;
         $error = unserialize($this->request->get('error'));
-        // var_dump($error);die();
 
         if ($this->container->hasParameter('environment')
             && $this->container->getParameter('environment') == 'development'
