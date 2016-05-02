@@ -119,24 +119,24 @@ class BaseRepository extends Repository
             throw new \Exception();
         }
 
+        $entity  = $this->miss;
         $id      = $this->metadata->normalizeId($id);
-        $cacheId = $this->metadata->getCachePrefix()
-            . implode($this->metadata->getCacheSeparator, $id);
-
-        $entity = null;
+        $cacheId = $this->metadata->getPrefix()
+            . implode($this->metadata->getSeparator(), $id);
 
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             $entity = $this->cache->get($cacheId);
         }
 
         if (empty($entity)) {
-            $class  = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+            $entities = $this->refresh([ $id ]);
 
-            $entity = new $class($id);
-            $this->refresh($entity);
+            if (!empty($this->entities)) {
+                $entity = array_pop($entities);
 
-            if ($this->hasCache()) {
-                $this->cache->set($cacheId, $entity);
+                if ($this->hasCache()) {
+                    $this->cache->set($cacheId, $entity);
+                }
             }
         }
 
@@ -177,7 +177,7 @@ class BaseRepository extends Repository
             return array_intersect_key($a, array_flip($keys));
         }, $rs);
 
-        return $this->findMulti($ids);
+        return $this->getEntities($ids);
     }
 
     /**
@@ -208,42 +208,58 @@ class BaseRepository extends Repository
             return array_intersect_key($a, array_flip($keys));
         }, $rs);
 
-        return $this->findMulti($ids);
+        return $this->getEntities($ids);
     }
 
     /**
-     * Find multiple contents from an array of entity ids.
+     * Find entities from an array of entity ids.
      *
-     * @param array $data Array of entity ids.
+     * @param array $ids Array of entity ids.
      *
      * @return array The array of entities.
      */
-    public function findMulti($data)
+    public function getEntities($ids)
     {
-        // Build cache ids
-        $ids = array_map(function ($a) {
-            return $this->metadata->getCachePrefix()
-                . implode($this->metadata->getCacheSeparator(), $a);
-        }, $data);
+        // Prefix ids
+        $prefixedIds = array_map(function ($a) {
+            return $this->metadata->getPrefix()
+                . implode($this->metadata->getSeparator(), $a);
+        }, $ids);
 
         $entities = [];
         $keys     = [];
         if ($this->hasCache()) {
-            $entities = $this->cache->get($ids);
+            $entities = $this->cache->get($prefixedIds);
             $keys     = array_keys($entities);
         }
 
-        $miss = array_diff($ids, $keys);
+        $missed = array_diff($prefixedIds, $keys);
 
         // Get missed entities from database
-        foreach ($miss as $cacheId) {
-            $id = str_replace($this->metadata->getCachePrefix(), '', $cacheId);
+        if (!empty($missed)) {
+            $notCached = [];
 
-            $entities[$cacheId] = $this->find($id);
+            // Remove prefix from missed ids
+            foreach ($missed as $cacheId) {
+                $id = str_replace($this->metadata->getPrefix(), '', $cacheId);
+                $id = explode($this->metadata->getSeparator(), $id);
+
+                $notCached[] = array_combine($this->metadata->getIdKeys(), $id);
+            }
+
+            $notCached = $this->refresh($notCached);
+
+            foreach ($notCached as $entity) {
+                if ($this->hasCache()) {
+                    $this->cache->set($this->metadata->getPrefixedId($entity), $entity);
+                }
+
+                $entities[$this->metadata->getPrefixedId($entity)] = $entity;
+            }
         }
 
         // Keep original order
-        return array_values(array_merge(array_flip($ids), $entities));
+        return array_values(array_merge(array_flip($prefixedIds), $entities));
     }
 
     /**
@@ -262,73 +278,90 @@ class BaseRepository extends Repository
     }
 
     /**
-     * Refresh an entity with fresh data from database.
+     * Refreshes data from database for the given ids.
      *
-     * @param Entity $entity The entity to refresh.
+     * @param array $ids The ids of the entities to refresh.
+     *
+     * @return array The array of entities.
      */
-    public function refresh(Entity &$entity)
+    protected function refresh($ids)
     {
-        $filters = [];
-        $params  = [];
-        $types   = [];
-        foreach ($entity->getData() as $key => $value) {
-            $params[]  = $value;
-            $filters[] = "$key = ?";
-            $types[]   = is_string($value) ? \PDO::PARAM_STR : \PDO::PARAM_INT;
+        foreach ($ids as $id) {
+            $filter = [];
+
+            foreach ($id as $key => $value) {
+                $filter[] = "$key='$value'";
+            }
+
+            $oql[] = '(' . implode(' and ', $filter) . ')';
         }
 
-        if (empty($filters)) {
-            $entity = $this->miss;
-            return;
-        }
+        $oql = implode(' or ', $oql);
 
-        $sql = 'select * from ' . $this->metadata->getTable() . ' where '
-            .  implode(' and ', $filters);
+        list($tables, $filter, $params, $types) =
+            $this->translator->translate(trim($oql));
 
-        $rs = $this->conn->fetchAssoc($sql, $params, $types);
+        $sql = sprintf('select * from %s', implode(',', $tables))
+            . ' where ' . $filter;
 
-        if (!$rs) {
-            $entity = $this->miss;
-            return;
+        $rs = $this->conn->fetchAll($sql, $params, $types);
+
+        foreach ($rs as $data) {
+            $values[$data[$key]] = $data;
         }
 
         if ($this->metadata->hasMetas()) {
-            $rs = array_merge($rs, $this->getMetas($entity));
+            $key = $this->metadata->getIdKeys()[0];
 
-            if (!$rs) {
-                $entity = $this->miss;
-                return;
+            $ids = array_map(function ($a) use ($key) {
+                return $a[$key];
+            }, $values);
+
+            $metas = $this->getMetas($ids);
+
+            // Merge values and metas
+            foreach ($metas as $id => $meta) {
+                $values[$id] = array_merge($values[$id], $meta);
             }
         }
 
-        $entity->setData($this->converter->objectify($rs, true));
-        $entity->refresh();
+        // Build entities from values
+        $class = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+
+        foreach ($values as $key => $value) {
+            $entity = new $class($this->converter->objectify($value, true));
+            $entity->refresh();
+
+            $entities[$key] = $entity;
+        }
+
+        return $entities;
     }
 
     /**
-     * Returns an array of metas for the current entity.
+     * Returns an array of metas grouped by entity id.
      *
-     * @param Entity $entity The entity.
+     * @param array $ids The entity ids.
      *
      * @return array The array of metas.
      */
-    protected function getMetas($entity)
+    protected function getMetas($ids)
     {
-        $metas   = [];
+        $metas    = [];
         $metaKeys = $this->metadata->getMetaKeys();
-        $filters = [];
+        $metaId   = array_pop($metaKeys);
 
-        foreach ($metaKeys as $key => $value) {
-            $filters[] = $value . '=' . $entity->{$key};
+        foreach ($ids as $id) {
+            $filters[] = $metaId . '=' . $id;
         }
 
         $sql = 'select * from ' . $this->metadata->getMetaTable()
-            . ' where ' . implode(' and ', $filters);
+            . ' where ' . implode(' or ', $filters);
 
         $rs = $this->conn->fetchAll($sql);
 
         foreach ($rs as $value) {
-            $metas[$value['meta_key']] = $value['meta_value'];
+            $metas[$value[$metaId]][$value['meta_key']] = $value['meta_value'];
         }
 
         return $metas;
