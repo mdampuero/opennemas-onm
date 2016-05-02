@@ -31,3 +31,7 @@ services:
     core.theme:
         class:   Onm\ORM\Entity\Extension
         factory: [ '@core.loader', 'getTheme' ]
+
+    core.user:
+        class:   Onm\ORM\Entity\User
+        factory: [ '@core.loader', 'getUser' ]

@@ -31,6 +31,13 @@ class Loader
     protected $theme;
 
     /**
+     * The current user.
+     *
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Initializes the Loader.
      *
      * @param ServiceContainer $container The service container.
@@ -68,6 +75,16 @@ class Loader
     public function getTheme()
     {
         return $this->theme;
+    }
+
+    /**
+     * Returns the current user.
+     *
+     * @return User The current user.
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -154,6 +171,16 @@ class Loader
         }
 
         return $this->instance;
+    }
+
+    /**
+     * Changes the current user.
+     *
+     * @param User $user The current user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**
