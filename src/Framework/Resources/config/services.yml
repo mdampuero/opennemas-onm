@@ -6,11 +6,6 @@ parameters:
 #    onm_test.example.class: Onm\TestBundle\Example
 
 services:
-    kernel.listener.maintenance_mode:
-        class: Framework\EventListener\MaintenanceModeListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
-
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
         arguments: [ '@service_container' ]

@@ -1,37 +1,49 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Framework\EventListener;
+namespace Common\Core\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Onm\Settings as s;
 
 /**
- * Handles all backend requests when maintenance mode is enabled.
+ * Handles backend requests when maintenance mode is enabled.
  */
-class MaintenanceModeListener implements EventSubscriberInterface
+class MaintenanceListener implements EventSubscriberInterface
 {
+    /**
+     * Path to the maintenance file.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * Initializes the MaintenanceModelListener.
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($path)
+    {
+        $this->path = $path;
+    }
+
     /**
      * Checks if maintenance mode is enabled and returns a custom response.
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance.
+     * @param GetResponseEvent $event The event object.
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
+        if (!$event->isMasterRequest()) {
             return;
         }
 
@@ -41,15 +53,11 @@ class MaintenanceModeListener implements EventSubscriberInterface
             return;
         }
 
-        $maintenanceFile = APP_PATH.'/../.maintenance';
-
-        if (file_exists($maintenanceFile)) {
-            $request = $event->getRequest();
-
-            $attributes = array(
-                '_controller' => 'OnmFrameworkBundle:Maintenance:default',
+        if (!file_exists($this->path)) {
+            $attributes = [
+                '_controller' => 'CoreBundle:Maintenance:default',
                 'format'      => $request->getRequestFormat(),
-            );
+            ];
 
             $request = $request->duplicate(null, null, $attributes);
             $request->setMethod('GET');
@@ -65,14 +73,14 @@ class MaintenanceModeListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * Returns a list of events listened by this subscriber.
      *
-     * @return array The event names to listen to.
+     * @return array The list of events.
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            SymfonyKernelEvents::REQUEST => array(array('onKernelRequest', 100)),
-        );
+        return [
+            'kernel.request' => [ ['onKernelRequest', 100 ] ]
+        ];
     }
 }
