@@ -155,7 +155,7 @@ class AclUserController extends Controller
         array_unshift($allcategorys, $frontpage);
 
         // Get available languages
-        $languages    = $this->container->getParameter('available_languages');
+        $languages    = $this->container->getParameter('core.locale.available');
         $languages    = array_merge(array('default' => _('Default system language')), $languages);
 
         // Get minimum password level
@@ -438,7 +438,7 @@ class AclUserController extends Controller
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
-        $languages = $this->container->getParameter('available_languages');
+        $languages = $this->container->getParameter('core.locale.available');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
         $extra = [ 'billing' => [] ];
@@ -612,7 +612,7 @@ class AclUserController extends Controller
     {
         // Setup view
         $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 
         if ('POST' != $request->getMethod()) {
@@ -698,7 +698,7 @@ class AclUserController extends Controller
     {
         // Setup view
         $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);

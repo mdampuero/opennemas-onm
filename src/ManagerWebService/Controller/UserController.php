@@ -494,7 +494,7 @@ class UserController extends Controller
     private function templateParams()
     {
         $groups = $this->get('usergroup_repository')->findBy();
-        $languages = $this->container->getParameter('available_languages');
+        $languages = $this->container->getParameter('core.locale.available');
         $languages = array_merge(
             array('default' => _('Default system language')),
             $languages
