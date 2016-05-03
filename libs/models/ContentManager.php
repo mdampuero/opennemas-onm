@@ -362,13 +362,16 @@ class ContentManager
                         'placeholder' => $element['placeholder'],
                         'position'    => $element['position'],
                     ]);
-                    if (is_array($content->params) && $content->params > 0) {
-                        $content->params = array_merge(
-                            $content->params,
-                            (array) $element['params']
-                        );
-                    } else {
-                        $content->params = $element['params'];
+
+                    if (!empty($element['params'])) {
+                        if (is_array($content->params) && $content->params > 0) {
+                            $content->params = array_merge(
+                                $content->params,
+                                (array) $element['params']
+                            );
+                        } else {
+                            $content->params = $element['params'];
+                        }
                     }
 
                     $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
