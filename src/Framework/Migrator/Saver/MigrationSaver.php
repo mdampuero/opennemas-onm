@@ -2038,14 +2038,16 @@ class MigrationSaver
      */
     private function findPhoto($title)
     {
-        $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
-        $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
+        if (!empty($tiltle)) {
+            $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
+            $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
+            $rs = $this->targetConnection->Execute($sql);
+            $rss = $rs->getArray();
 
-        if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
-            return $rss[0]['pk_content'];
+            if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
+                return $rss[0]['pk_content'];
+            }
         }
 
         return false;
