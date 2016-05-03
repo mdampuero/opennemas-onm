@@ -31,6 +31,10 @@ class AmpController extends Controller
      **/
     public function init()
     {
+        if (\Onm\Module\ModuleManager::isActivated('AMP_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         // RenderColorMenu
         $siteColor = '#005689';
         $configColor = getService('setting_repository')->get('site_color');
@@ -72,6 +76,11 @@ class AmpController extends Controller
         // If external link is set, redirect
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
             return $this->redirect($article->params['bodyLink']);
+        }
+
+        // Avoid NewRelic js script
+        if (extension_loaded('newrelic')) {
+            newrelic_disable_autorum();
         }
 
         // Load config
@@ -146,6 +155,12 @@ class AmpController extends Controller
             }
             $this->view->assign('relationed', $relatedContents);
 
+            $pattern = ['@<img([^>]+>)@', '@style=".*"@'];
+            $replacement  = [
+                '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
+                ''
+            ];
+            $article->body = preg_replace($pattern, $replacement, $article->body);
         } // end if $this->view->is_cached
 
         return $this->render(
