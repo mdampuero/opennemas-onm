@@ -202,7 +202,8 @@ class AclUserController extends Controller
             }
         }
 
-        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'acl/user/new.tpl',
