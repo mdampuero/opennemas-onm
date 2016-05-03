@@ -142,7 +142,35 @@
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
-              {include file='client/form.tpl'}
+              <div ng-if="!client || !client.id">
+                {include file='client/form.tpl'}
+              </div>
+              <div ng-if="client && client.id">
+                <h4 class="semi-bold">[% client.last_name %], [% client.first_name %]</h4>
+                <address>
+                  <strong ng-if="client.company">[% client.company %]</strong><br>
+                  [% client.address %]<br>
+                  [% client.postal_code %], [% client.city %], [% client.state %]<br>
+                  [% countries[client.country] %]<br>
+                </address>
+                <div class="row m-t-50 ng-cloak">
+                  <div class="col-sm-4 m-t-15">
+                    <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="loading">
+                      <h4 class="text-uppercase">
+                        {t}Previous{/t}
+                      </h4>
+                    </button>
+                  </div>
+                  <div class="col-sm-4 col-sm-offset-4 m-t-15">
+                    <button class="btn btn-block btn-loading btn-success" ng-click="next()" ng-disabled="loading">
+                      <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
+                      <h4 class="text-uppercase text-white">
+                        {t}Next{/t}
+                      </h4>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

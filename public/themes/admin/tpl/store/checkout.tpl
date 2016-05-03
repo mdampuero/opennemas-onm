@@ -80,7 +80,7 @@
       </div>
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" ng-show="(cart && cart.length > 0) || step == 4">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
-          <ul class="wizard-steps form-wizard" ng-class="{ 'wizard-steps-5': !clientValid }">
+          <ul class="wizard-steps form-wizard">
             <li class="text-center" ng-class="{ 'active': step == 1 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Cart{/t}</h5>
@@ -100,7 +100,7 @@
           </ul>
         </div>
         <div class="fake-form-wizard-steps ng-cloak">
-          <div class="fake-wizard-steps text-center fake-wizard-steps-active-[% step %]" ng-class="{ 'fake-wizard-steps-5': !clientValid }">
+          <div class="fake-wizard-steps text-center fake-wizard-steps-active-[% step %]">
             <div class="step">
               <i class="fa fa-truck fa-flip-horizontal fa-lg"></i>
             </div>
@@ -125,7 +125,35 @@
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
-              {include file='client/form.tpl'}
+              <div ng-if="!client || !client.id">
+                {include file='client/form.tpl'}
+              </div>
+              <div ng-if="client && client.id">
+                <h4 class="semi-bold">[% client.last_name %], [% client.first_name %]</h4>
+                <address>
+                  <strong ng-if="client.company">[% client.company %]</strong><br>
+                  [% client.address %]<br>
+                  [% client.postal_code %], [% client.city %], [% client.state %]<br>
+                  [% countries[client.country] %]<br>
+                </address>
+                <div class="row m-t-50 ng-cloak">
+                  <div class="col-sm-4 m-t-15">
+                    <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="loading">
+                      <h4 class="text-uppercase">
+                        {t}Previous{/t}
+                      </h4>
+                    </button>
+                  </div>
+                  <div class="col-sm-4 col-sm-offset-4 m-t-15">
+                    <button class="btn btn-block btn-loading btn-success" ng-click="next()" ng-disabled="loading">
+                      <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
+                      <h4 class="text-uppercase text-white">
+                        {t}Next{/t}
+                      </h4>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -166,35 +194,37 @@
         </div>
         <div class="grid simple ng-hide" ng-show="step == 4">
           <div class="grid-body text-center">
-            <i class="fa fa-heart fa-3x"></i>
-            <h3 class="p-b-30">{t}Thank you for your purchase request!{/t}</h3>
-            <p class="p-b-15">
+            <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center">
+              <i class="fa fa-heart fa-3x"></i>
+              <h3 class="p-b-30 ">{t}Thank you for your purchase request!{/t}</h3>
+              <p class="p-b-15">
               {t}In the next 24 hours you will receive an email with payment instructions and invoice.{/t}
-            </p>
-            <p class="p-b-15">
+              </p>
+              <p class="p-b-15">
               {capture name="client_info_url"}{url name=admin_client_info_page}{/capture}
               {t escape=off 1=$smarty.capture.client_info_url}Meanwhile, you can go to your <a href="%1">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
-            </p>
-            <p class="p-b-10">
-              {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
-            </p>
-            <div>
-              <a href="http://www.facebook.com" target="_blank">
-                <i class="fa fa-lg fa-facebook m-r-30"></i>
-              </a>
-              <a href="http://twitter.com" target="_blank">
-                <i class="fa fa-lg fa-twitter m-r-30"></i>
-              </a>
-              <a href="https://plus.google.com/" target="_blank">
-                <i class="fa fa-lg fa-google-plus m-r-30"></i>
-              </a>
-              <a href="https://www.linkedin.com/" target="_blank">
-                <i class="fa fa-lg fa-linkedin"></i>
-              </a>
-            </div>
-            <h4 class="m-t-30">
-              {t}Have a wonderful day!{/t}
               </p>
+              <p class="p-b-10">
+              {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
+              </p>
+              <div>
+                <a href="http://www.facebook.com" target="_blank">
+                  <i class="fa fa-lg fa-facebook m-r-30"></i>
+                </a>
+                <a href="http://twitter.com" target="_blank">
+                  <i class="fa fa-lg fa-twitter m-r-30"></i>
+                </a>
+                <a href="https://plus.google.com/" target="_blank">
+                  <i class="fa fa-lg fa-google-plus m-r-30"></i>
+                </a>
+                <a href="https://www.linkedin.com/" target="_blank">
+                  <i class="fa fa-lg fa-linkedin"></i>
+                </a>
+              </div>
+              <h4 class="m-t-30">
+                {t}Have a wonderful day!{/t}
+              </h4>
+            </div>
           </div>
         </div>
       </div>
