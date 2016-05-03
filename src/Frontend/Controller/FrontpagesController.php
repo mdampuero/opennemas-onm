@@ -145,6 +145,7 @@ class FrontpagesController extends Controller
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
                 if (isset($content->img1) && !empty($content->img1)
+                    && !is_object($content->img1)
                     && array_key_exists($content->img1, $related)
                 ) {
                     $content->img1 = $related[$content->img1];
