@@ -64,8 +64,8 @@ class StoreController extends Controller
         $modulesRequested = array_intersect_key($availableItems, array_flip($modulesRequested));
 
         // Send emails
-        $this->sendEmailToSales($client, $modulesRequested, $instance);
-        $this->sendEmailToCustomer($modulesRequested, $instance);
+        $this->sendEmailToSales($client, $modulesRequested);
+        $this->sendEmailToCustomer($client, $modulesRequested);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
@@ -183,19 +183,19 @@ class StoreController extends Controller
     /**
      * Sends an email to the customer.
      *
-     * @param array    $modules  The requested modules.
-     * @param Instance $instance The instance to upgrade.
+     * @param Client $client  The client.
+     * @param array  $modules The requested modules.
      */
-    private function sendEmailToCustomer($modules, $instance)
+    private function sendEmailToCustomer($client, $modules)
     {
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
-            ->setTo($this->getUser()->contact_mail)
+            ->setTo($client->email)
             ->setBody(
                 $this->renderView(
                     'store/email/_purchaseToCustomer.tpl',
@@ -207,20 +207,23 @@ class StoreController extends Controller
                 'text/html'
             );
 
+        if ($instance->contact_mail !== $client->email) {
+            $message->setBcc($instance->contact_mail);
+        }
+
         $this->get('mailer')->send($message);
     }
 
     /**
      * Sends an email to sales department.
      *
-     * @param Instance $instance The instance to upgrade.
-     * @param array    $modules  The requested modules.
-     * @param Client   $client   The client information.
+     * @param Client $client  The client information.
+     * @param array  $modules The requested modules.
      */
-    private function sendEmailToSales($client, $modules, $instance)
+    private function sendEmailToSales($client, $modules)
     {
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')

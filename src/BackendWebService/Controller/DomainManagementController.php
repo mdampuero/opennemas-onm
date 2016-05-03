@@ -241,8 +241,8 @@ class DomainManagementController extends Controller
 
             $this->get('orm.manager')->persist($purchase);
 
-            $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
-            $this->sendEmailToSales($client, $domains, $instance, $create);
+            $this->sendEmailToCustomer($client, $domains, $create, $purchase->id);
+            $this->sendEmailToSales($client, $domains, $create);
 
             return new JsonResponse(_('Domain added successfully'));
         } catch (\Exception $e) {
@@ -321,16 +321,16 @@ class DomainManagementController extends Controller
      *
      * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $purchase The purchase id.
      * @param boolean  $create   The creation flag.
+     * @param Purchase $purchase The purchase id.
      */
-    private function sendEmailToCustomer($client, $domains, $purchase, $create)
+    private function sendEmailToCustomer($client, $domains, $create, $purchase)
     {
         $countries = Intl::getRegionBundle()
             ->getCountryNames(CURRENT_LANGUAGE_LONG);
 
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $subject = $create ?
             'Opennemas Domain domain registration request:' :
@@ -359,6 +359,10 @@ class DomainManagementController extends Controller
                 'text/html'
             );
 
+        if ($instance->contact_mail !== $client->email) {
+            $message->setBcc($instance->contact_mail);
+        }
+
         $this->get('mailer')->send($message);
     }
 
@@ -367,15 +371,13 @@ class DomainManagementController extends Controller
      *
      * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $instance The instance.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($client, $domains, $instance, $create)
+    private function sendEmailToSales($client, $domains, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
-
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance  = $this->get('instance');
+        $params    = $this->getParameter("manager_webservice");
 
         $subject = $create ?
             'Opennemas Domain domain registration request:' :
