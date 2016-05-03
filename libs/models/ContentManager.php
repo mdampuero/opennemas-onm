@@ -1168,7 +1168,7 @@ class ContentManager
             );
         }
 
-        return $filtered;
+        return array_values($filtered);
     }
 
     /**
