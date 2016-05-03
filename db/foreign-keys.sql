@@ -1,7 +1,7 @@
 #
 # Foreign keys definitions
 #
-#Cleanup
+# Cleanup
 DELETE FROM `advertisements` WHERE `pk_advertisement` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `albums` WHERE `pk_album` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `albums_photos` WHERE `pk_album` NOT IN (SELECT `pk_content` FROM `contents`);

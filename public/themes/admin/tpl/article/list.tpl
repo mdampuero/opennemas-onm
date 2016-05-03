@@ -191,7 +191,7 @@
                   </div>
                   <div class="small-text">
                     <strong>{t}Available from{/t} </strong> [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    <span ng-if="content.endtime != '0000-00-00 00:00:00'">
+                    <span ng-if="content.endtime != '0000-00-00 00:00:00 || !content.endtime'">
                       <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </span>
                   </div>

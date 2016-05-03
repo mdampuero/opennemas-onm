@@ -27,13 +27,6 @@ class Advertisement extends Content
      **/
     const ADVERTISEMENT_CATEGORY = 2;
 
-    // FIXME: modificado para versión demo
-    /**
-     * List of available ads positions
-     *
-     * @var array
-     **/
-    public $map = null;
     /**
      * the advertisement id
      *
@@ -184,7 +177,7 @@ class Advertisement extends Content
         }
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: -1;
+        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
         $data['type_medida'] =
             (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
@@ -290,7 +283,7 @@ class Advertisement extends Content
         }
 
         $data['overlap']     = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: 0;
+        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: null;
         $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
         $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 

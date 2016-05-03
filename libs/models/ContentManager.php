@@ -358,22 +358,17 @@ class ContentManager
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
-                    $content->load(
-                        array(
-                            'placeholder' => $element['placeholder'],
-                            'position'    => $element['position'],
-                        )
-                    );
-
-                    if (!empty($params)) {
-                        if (is_array($content->params) && $content->params > 0) {
-                            $content->params = array_merge(
-                                $content->params,
-                                (array) $element['params']
-                            );
-                        } else {
-                            $content->params = $element['params'];
-                        }
+                    $content->load([
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],
+                    ]);
+                    if (is_array($content->params) && $content->params > 0) {
+                        $content->params = array_merge(
+                            $content->params,
+                            (array) $element['params']
+                        );
+                    } else {
+                        $content->params = $element['params'];
                     }
 
                     $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
@@ -853,14 +848,15 @@ class ContentManager
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
                 'union' => 'AND',
-                ['value' => $date, 'operator' => '>='],
-                ['value' => $now, 'operator' => '<']
+                [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                [ 'value' => $date, 'operator' => '>=' ],
+                [ 'value' => $now, 'operator' => '<' ]
             ],
             'endtime'           => [
                 'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00'],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                ['value' => '0000-00-00 00:00:00', 'operator' => '='],
-                ['value' => $now, 'operator' => '>']
+                [ 'value' => $now, 'operator' => '>' ]
             ],
         ];
 
@@ -1086,14 +1082,14 @@ class ContentManager
                     )
                 )
             ),
-            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
-            'in_litter'       => array(array('value' => 0)),
-            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
+            'fk_content_type' => [[ 'value' => array(1,3,4,7,9,11), 'operator' => 'IN' ]],
+            'in_litter'       => [[ 'value' => 0 ]],
+            'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
             'endtime'         => array(
                 'union' => 'OR',
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                ['value' => '0000-00-00 00:00:00', 'operator' => '='],
-                ['value' => $now, 'operator' => '>'],
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ],
             ),
         );
 
