@@ -345,7 +345,9 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
-        getService('instance')->theme->loadWidget($class);
+        getService('instance')->theme->loadWidget($this->content);
+
+        $class = 'Widget' . $this->content;
 
         try {
             if (class_exists($class)) {
@@ -354,9 +356,9 @@ class Widget extends Content
 
                 $class = new $class($widget);
             } else {
-                throw new Exception('', 1);
+                throw new \Exception('', 1);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return sprintf(_("Widget %s not available"), $this->content);
         }
 
