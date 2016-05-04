@@ -68,11 +68,22 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
         }
 
         if (count($dfpZonesInformation) > 0) {
+            $dfpOptions = s::get('dfp_options');
+            // Check if targeting is set
+            $targetingCode = '';
+            if (is_array($dfpOptions) &&
+                array_key_exists('target', $dfpOptions) &&
+                !empty($dfpOptions['target'])
+            ) {
+                $targetingCode = "\ngoogletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$actual_category."']);";
+            }
+
 
             $dfpOutput = '<script type="text/javascript">var googletag=googletag||{};googletag.cmd=googletag.cmd||[],function(){var a=document.createElement("script");a.async=!0,a.type="text/javascript";var b="https:"==document.location.protocol;a.src=(b?"https:":"http:")+"//www.googletagservices.com/tag/js/gpt.js";var c=document.getElementsByTagName("script")[0];c.parentNode.insertBefore(a,c)}();</script>';
             $dfpOutput .= "<script type='text/javascript'>\n"
                           ."googletag.cmd.push(function() {\n"
                           .implode("\n", $dfpZonesInformation)
+                          .$targetingCode
                           ."\ngoogletag.pubads().enableSingleRequest();\n"
                           ."googletag.enableServices();\n"
                           ."});\n</script>";

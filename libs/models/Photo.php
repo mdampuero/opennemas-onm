@@ -115,9 +115,14 @@ class Photo extends Content
                     (?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            (int) $this->id, $data["name"], $data["path_file"],
-            $data['size'], (int) $data['width'], (int) $data['height'],
-            $data['nameCat'], $data['author_name']
+            (int) $this->id,
+            $data["name"],
+            $data["path_file"],
+            $data['size'],
+            (int) $data['width'],
+            (int) $data['height'],
+            $data['nameCat'],
+            $data['author_name']
         );
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -201,7 +206,7 @@ class Photo extends Content
 
         // Building information for the photo image
         $dataPhoto = array(
-            'title'          => $originalFileName,
+            'title'          => isset($data['title']) ? $data['title'] :$originalFileName,
             'name'           => $finalPhotoFileName,
             'path_file'      => $dateForDirectory,
             'fk_category'    => $data["fk_category"],

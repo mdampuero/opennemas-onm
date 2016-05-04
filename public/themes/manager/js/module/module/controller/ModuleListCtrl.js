@@ -188,16 +188,14 @@
             criteria.uuid_like = criteria.name_like;
           }
 
-          var cleaned = itemService.cleanFilters(criteria);
-
           var data = {
-            criteria: cleaned,
+            criteria: itemService.cleanFilters(criteria),
             orderBy: $scope.orderBy,
             epp: $scope.pagination.epp, // elements per page
             page: $scope.pagination.page
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
+          itemService.encodeFilters(criteria, $scope.orderBy,
             $scope.pagination.epp, $scope.pagination.page);
 
           itemService.list('manager_ws_modules_list', data).then(

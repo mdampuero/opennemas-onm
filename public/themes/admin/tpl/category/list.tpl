@@ -22,7 +22,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="CATEGORY_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1">
+              <a class="btn btn-primary" href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1" id="create-button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

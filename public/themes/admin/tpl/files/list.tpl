@@ -61,7 +61,7 @@
             {/if}
             {acl isAllowed="ATTACHMENT_CREATE"}
             <li>
-              <a class="btn btn-primary" href="{url name=admin_files_create}" title="{t}New file{/t}">
+              <a class="btn btn-primary" href="{url name=admin_files_create}" title="{t}New file{/t}" id="create-button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

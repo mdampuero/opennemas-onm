@@ -1,66 +1,62 @@
 {% extends '@WebProfiler/Profiler/layout.html.twig' %}
 
 {% block toolbar %}
-    {% set icon %}
-        {# this is the content displayed as a panel in the toolbar #}
-        <span class="icon">
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
-            </svg>
-            <span class="sf-toolbar-value sf-toolbar-status {% if collector.count > 50 %} sf-toolbar-status-yellow{% elseif collector.count > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.count }}</span>
-        </span>
-    {% endset %}
+  {% set icon %}
+    {# this is the content displayed as a panel in the toolbar #}
+    <span class="icon">
+      <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+        <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
+      </svg>
+      <span class="sf-toolbar-value sf-toolbar-status {% if collector.count > 50 %} sf-toolbar-status-yellow{% elseif collector.count > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.count }}</span>
+    </span>
+  {% endset %}
 
-    {# the 'link' value set to 'false' means that this panel doesn't
-       show a section in the web profiler (default is 'true'). #}
-    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
+  {# the 'link' value set to 'false' means that this panel doesn't show a section in the web profiler (default is 'true'). #}
+  {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
 {% endblock %}
 
 {% block menu %}
-    {# This left-hand menu appears when using the full-screen profiler. #}
-    <span class="label{% if collector.count > 50 %} label-status-warning{% elseif collector.count > 100 %} label-status-error{% endif %}">
-        <span class="icon">
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
-            </svg>
-        </span>
-        <strong>Database</strong>
-        <span class="count">
-            <span>{{ collector.count }}</span>
-        </span>
+  {# This left-hand menu appears when using the full-screen profiler. #}
+  <span class="label{% if collector.count > 50 %} label-status-warning{% elseif collector.count > 100 %} label-status-error{% endif %}">
+    <span class="icon">
+      <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+        <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
+      </svg>
     </span>
+    <strong>Database</strong>
+    <span class="count">
+      <span>{{ collector.count }}</span>
+    </span>
+  </span>
 {% endblock %}
 
 {% block panel %}
-    <h2>Database Metrics</h2>
-    <div class="metrics">
-        <div class="metric">
-            <span class="value">{{ collector.queries | length }}</span>
-            <span class="label">Queries</span>
-        </div>
+  <h2>Database Metrics</h2>
+  <div class="metrics">
+    <div class="metric">
+      <span class="value">{{ collector.queries | length }}</span>
+      <span class="label">Queries</span>
     </div>
-    <p class="help">
-        Queries includes transactions.
-    </p>
-    <h2>Queries</h2>
-    <table class="queries">
-        <thead>
-            <tr>
-                <th>Actions</th>
-                <th>SQL</th>
-                <th>Params</th>
-            </tr>
-        </thead>
-        {% for query in collector.queries %}
-        <tr>
-            <td>{{ query.method }}</td>
-            <td>{{ query.sql | join}}</td>
-            <td>
-                <pre>
-                    {{ query.params }}
-                </pre>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+  </div>
+  <h2>Queries</h2>
+  <table class="queries">
+    <thead>
+      <tr>
+        <th width="100">Actions</th>
+        <th width="500">SQL</th>
+        <th>Params</th>
+      </tr>
+    </thead>
+    {% for query in collector.queries %}
+    <tr>
+      <td>{{ query.method }}</td>
+      <td>{{ query.params.sql | join}}</td>
+      <td>
+        {% if query.params.values is defined and query.params.values is not null %}
+          {{ dump(query.params.values) }}
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 {% endblock %}

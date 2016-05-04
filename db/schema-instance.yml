@@ -8,6 +8,7 @@ action_counters:
             options: { default: null, length: 255 }
         date:
             type: datetime
+            options: { default: CURRENT_TIMESTAMP }
         counter:
             type: integer
             options: { default: null }
@@ -28,7 +29,7 @@ advertisements:
     columns:
         pk_advertisement:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         type_advertisement:
             type: smallint
             options: { default: '1', notnull: false, unsigned: true }
@@ -84,11 +85,18 @@ advertisements:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: advertisement_id_contents_id
+            source_field: [ pk_advertisement ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -117,14 +125,21 @@ albums:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: album_id_contents_id
+            source_field: [ pk_album ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums_photos:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         position:
             type: integer
             options: { default: '1', notnull: false }
@@ -133,16 +148,41 @@ albums_photos:
             options: { default: null, length: 65532, notnull: false }
     index:
         -
-            name: pk_album_2
+            name: index_album_photo
             columns: [pk_album, pk_photo]
             primary: false
             unique: false
             flags: {  }
+        -
+            name: pk_album
+            columns: [pk_album]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: pk_photo
+            columns: [pk_photo]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: photos_id_album_id
+            source_field: [ pk_album ]
+            target_table: albums
+            target_field: [ pk_album ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: photos_id_photo_id
+            source_field: [ pk_photo ]
+            target_table: photos
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 articles:
     columns:
         pk_article:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         summary:
             type: text
             options: { default: null, length: 65532, notnull: false }
@@ -186,11 +226,18 @@ articles:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: article_id_contents_id
+            source_field: [ pk_article ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 attachments:
     columns:
         pk_attachment:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         title:
             type: string
             options: { default: null, length: 200 }
@@ -207,11 +254,18 @@ attachments:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: attachment_id_contents_id
+            source_field: [ pk_attachment ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 books:
     columns:
         pk_book:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         author:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -221,7 +275,20 @@ books:
         editorial:
             type: string
             options: { default: null, notnull: false, length: 250 }
-    index: {  }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_book]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: book_id_contents_id
+            source_field: [ pk_book ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 comments:
     columns:
         id:
@@ -229,7 +296,7 @@ comments:
             options: { default: null, unsigned: true, autoincrement: true }
         content_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { length: 20, default: null, notnull: false, unsigned: true }
         author:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -244,7 +311,7 @@ comments:
             options: { default: '', notnull: false, length: 100 }
         date:
             type: datetime
-            options: { default: '0000-00-00 00:00:00' }
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         body:
             type: text
             options: { default: null, length: 65532, notnull: false }
@@ -259,10 +326,10 @@ comments:
             options: { default: '', length: 20 }
         parent_id:
             type: bigint
-            options: { default: '0' }
+            options: { default: null, unsigned: true, default: '0' }
         user_id:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
         content_type_referenced:
             type: string
             options: { default: null, length: 20 }
@@ -280,28 +347,23 @@ comments:
             unique: false
             flags: {  }
         -
-            name: comment_status_date
-            columns: [status, date]
-            primary: false
-            unique: false
-            flags: {  }
-        -
             name: comment_parent_id
             columns: [parent_id]
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
         -
-            name: comment_date
-            columns: [date]
-            primary: false
-            unique: false
-            flags: {  }
+            name: comments_id_contents_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: 'SET NULL', onDelete: 'SET NULL' }
 commentsmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null }
+            options: { default: null, unsigned: true }
         meta_name:
             type: string
             options: { default: null, length: 255 }
@@ -321,6 +383,13 @@ commentsmeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: commentsmeta_id_comments_id
+            source_field: [ fk_content ]
+            target_table: comments
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_categories:
     columns:
         pk_content_category:
@@ -352,7 +421,7 @@ content_categories:
             options: { default: null, notnull: false, length: 200 }
         color:
             type: string
-            options: { default: '#638F38', notnull: false, length: 10 }
+            options: { default: null, notnull: false, length: 10 }
     index:
         -
             name: PRIMARY
@@ -364,13 +433,13 @@ content_positions:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null }
+            options: { default: null, unsigned: true, length: 20 }
         fk_category:
             type: integer
-            options: { default: null }
+            options: { default: null, unsigned: true}
         position:
             type: integer
-            options: { default: '0' }
+            options: { default: 0, unsigned: true }
         placeholder:
             type: string
             options: { default: '', length: 45 }
@@ -387,11 +456,30 @@ content_positions:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: content_position_pk_content
+            columns: [pk_fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_position_fk_category
+            columns: [fk_category]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: contentposition_id_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contentmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         meta_name:
             type: string
             options: { default: null, length: 255 }
@@ -411,11 +499,18 @@ contentmeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: contentmeta_id_contents_id
+            source_field: [ fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents:
     columns:
         pk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         fk_content_type:
             type: integer
             options: { default: null, unsigned: true }
@@ -436,43 +531,40 @@ contents:
             options: { default: null, notnull: false, length: 255 }
         starttime:
             type: datetime
-            options: { default: null, notnull: false }
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         endtime:
             type: datetime
             options: { default: null, notnull: false }
         created:
             type: datetime
-            options: { default: null, notnull: false }
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         changed:
             type: datetime
-            options: { default: null, notnull: false }
+            options: { default: CURRENT_TIMESTAMP, notnull: false, onUpdate: CURRENT_TIMESTAMP}
         content_status:
             type: integer
-            options: { default: '0', notnull: false, unsigned: true }
+            options: { default: 0, notnull: false, unsigned: true }
         fk_author:
             type: integer
-            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+            options: { default: null, notnull: false, unsigned: true }
         fk_publisher:
             type: integer
-            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+            options: { default: null, notnull: false, unsigned: true }
         fk_user_last_editor:
             type: integer
-            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+            options: { default: null, notnull: false, unsigned: true }
         position:
             type: integer
-            options: { default: '100', notnull: false, unsigned: true }
+            options: { default: 100, notnull: false, unsigned: true }
         frontpage:
             type: boolean
-            options: { default: '1', notnull: false }
+            options: { default: 1, notnull: false }
         in_litter:
             type: boolean
-            options: { default: '0', notnull: false, comment: '0publicado 1papelera' }
+            options: { default: 0, notnull: false }
         in_home:
             type: smallint
-            options: { default: '0', notnull: false }
-        home_pos:
-            type: integer
-            options: { default: '100', notnull: false, comment: '10' }
+            options: { default: 0, notnull: false }
         slug:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -562,10 +654,10 @@ contents_categories:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         pk_fk_content_category:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { default: null, notnull: false, unsigned: true }
         catName:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -577,19 +669,41 @@ contents_categories:
             unique: true
             flags: {  }
         -
+            name: pk_fk_content
+            columns: [pk_fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+        -
             name: pk_fk_content_category
             columns: [pk_fk_content_category]
             primary: false
             unique: false
             flags: {  }
         -
-            name: catName
+            name: content_categories_catname
             columns: [catName]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: contentcategory_contentid_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        # -
+        #     name: contentcategory_category_category_id
+        #     source_field: [ pk_fk_content_category ]
+        #     target_table: content_categories
+        #     target_field: [ pk_content_category ]
+        #     restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_views:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         views:
             type: integer
             options: { default: 0, unsigned: true }
@@ -600,23 +714,30 @@ content_views:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: contentview_contentid_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 frontpages:
     columns:
-        date:
-            type: integer
-            options: { default: null, comment: 'date as 20110720' }
-        category:
-            type: integer
-            options: { default: null, comment: category }
         pk_frontpage:
             type: bigint
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+        date:
+            type: integer
+            options: { default: null}
+        category:
+            type: integer
             options: { default: null }
         version:
             type: bigint
             options: { default: null, notnull: false }
         content_positions:
             type: text
-            options: { default: null, comment: 'serialized id of contents', length: 65532 }
+            options: { default: null }
         promoted:
             type: boolean
             options: { default: null, notnull: false }
@@ -629,7 +750,7 @@ frontpages:
     index:
         -
             name: PRIMARY
-            columns: [date, category]
+            columns: [ pk_frontpage ]
             primary: true
             unique: true
             flags: {  }
@@ -637,7 +758,7 @@ kioskos:
     columns:
         pk_kiosko:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         name:
             type: string
             options: { default: null, length: 100 }
@@ -660,11 +781,18 @@ kioskos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: kioskos_id_contents_id
+            source_field: [ pk_kiosko ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 letters:
     columns:
         pk_letter:
-            type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         author:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -678,14 +806,21 @@ letters:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: letters_id_contents_id
+            source_field: [ pk_letter ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 menu_items:
     columns:
         pk_item:
             type: integer
-            options: { default: null, autoincrement: true }
+            options: { default: null, unsigned: true }
         pk_menu:
             type: integer
-            options: { default: null }
+            options: { default: null, length: 10, unsigned: true }
         title:
             type: string
             options: { default: null, length: 255 }
@@ -717,11 +852,18 @@ menu_items:
         -
             name: pk_menu
             columns: [pk_menu]
+    foreign_keys:
+        -
+            name: menuitems_id_menu_id
+            source_field: [ pk_menu ]
+            target_table: menues
+            target_field: [ pk_menu ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 menues:
     columns:
         pk_menu:
             type: integer
-            options: { default: null, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true }
         name:
             type: string
             options: { default: null, length: 255 }
@@ -757,7 +899,7 @@ newsletter_archive:
     columns:
         pk_newsletter:
             type: integer
-            options: { default: null, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true }
         title:
             type: string
             options: { default: null, length: 255 }
@@ -769,9 +911,10 @@ newsletter_archive:
             options: { default: null, length: 4294967295, notnull: false }
         created:
             type: datetime
-            options: { default: '0000-00-00 00:00:00' }
+            options: { default: CURRENT_TIMESTAMP }
         updated:
             type: datetime
+            options: { default: CURRENT_TIMESTAMP, onUpdate: CURRENT_TIMESTAMP }
         sent:
             type: string
             options: { default: null, length: 255 }
@@ -786,7 +929,7 @@ opinions:
     columns:
         pk_opinion:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         fk_content_categories:
             type: integer
             options: { default: '7', notnull: false, unsigned: true }
@@ -818,6 +961,13 @@ opinions:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: opinions_id_contents_id
+            source_field: [ pk_opinion ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 orders:
     columns:
         id:
@@ -831,7 +981,7 @@ orders:
             options: { default: null }
         created:
             type: datetime
-            options: { default: null }
+            options: { default: CURRENT_TIMESTAMP }
         payment_id:
             type: string
             options: { default: null, length: 50 }
@@ -912,7 +1062,7 @@ photos:
     columns:
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         name:
             type: string
             options: { default: null, notnull: false, length: 100 }
@@ -944,6 +1094,13 @@ photos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: photos_id_contents_id
+            source_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 poll_items:
     columns:
         pk_item:
@@ -951,7 +1108,7 @@ poll_items:
             options: { default: null, unsigned: true, autoincrement: true }
         fk_pk_poll:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         item:
             type: string
             options: { default: null, length: 255 }
@@ -968,11 +1125,24 @@ poll_items:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: fk_pk_poll
+            columns: [fk_pk_poll]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: poll_items_id_contents_id
+            source_field: [ fk_pk_poll ]
+            target_table: polls
+            target_field: [ pk_poll ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 polls:
     columns:
         pk_poll:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         total_votes:
             type: integer
             options: { default: '0' }
@@ -992,11 +1162,18 @@ polls:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: polls_id_contents_id
+            source_field: [ pk_poll ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 ratings:
     columns:
         pk_rating:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         total_votes:
             type: smallint
             options: { default: '0', unsigned: true }
@@ -1017,10 +1194,10 @@ related_contents:
     columns:
         pk_content1:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         pk_content2:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, length: 20 }
         relationship:
             type: string
             options: { default: null, notnull: false, length: 50 }
@@ -1047,11 +1224,30 @@ related_contents:
             unique: false
             flags: {  }
         -
+            name: pk_content2
+            columns: [pk_content2]
+            primary: false
+            unique: false
+            flags: {  }
+        -
             name: verportada
             columns: [verportada]
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: related_contents_content1_contents_id
+            source_field: [ pk_content1 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: related_contents_content2_contents_id
+            source_field: [ pk_content2 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 settings:
     columns:
         name:
@@ -1070,11 +1266,11 @@ settings:
 special_contents:
     columns:
         fk_content:
-            type: string
-            options: { default: null, length: 250 }
+            type: bigint
+            options: { default: null, unsigned: true, length: 20 }
         fk_special:
-            type: integer
-            options: { default: null }
+            type: bigint
+            options: { default: null, unsigned: true, length: 20 }
         name:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -1087,12 +1283,43 @@ special_contents:
         type_content:
             type: string
             options: { default: null, length: 100 }
-    index: {  }
+    index:
+        -
+            name: PRIMARY
+            columns: [fk_content, fk_special]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content
+            columns: [fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_special
+            columns: [fk_special]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: specialcontents_fk_content_contents_id
+            source_field: [ fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: specialcontents_fk_special_contents_id
+            source_field: [ fk_special ]
+            target_table: specials
+            target_field: [ pk_special ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 specials:
     columns:
         pk_special:
-            type: integer
-            options: { default: null, unsigned: true }
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -1109,11 +1336,18 @@ specials:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: specials_id_contents_id
+            source_field: [ pk_special ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 static_pages:
     columns:
         pk_static_page:
             type: bigint
-            options: { default: null, autoincrement: true, comment: BIGINT(20) }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
     index:
         -
             name: PRIMARY
@@ -1121,6 +1355,13 @@ static_pages:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: static_pages_id_contents_id
+            source_field: [ pk_static_page ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 translation_ids:
     columns:
         pk_content_old:
@@ -1128,7 +1369,7 @@ translation_ids:
             options: { default: null }
         pk_content:
             type: bigint
-            options: { default: null }
+            options: { default: null, unsigned: true, length: 20 }
         type:
             type: string
             options: { default: null, length: 100 }
@@ -1145,6 +1386,19 @@ translation_ids:
         -
             name: slug
             columns: [slug]
+        -
+            name: pk_content
+            columns: [pk_content]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: translationids_contentid_contents_id
+            source_field: [ pk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 user_groups:
     columns:
         pk_user_group:
@@ -1175,11 +1429,24 @@ user_groups_privileges:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: pk_fk_user_group
+            columns: [pk_fk_user_group]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: usergroups_privileges_groupid_usergroups_id
+            target_table: user_groups
+            source_field: [ pk_fk_user_group ]
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 usermeta:
     columns:
         user_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { default: null, unsigned: true, autoincrement: true }
         meta_key:
             type: string
             options: { default: '', length: 255 }
@@ -1205,10 +1472,17 @@ usermeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: usermeta_userid_users_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 users:
     columns:
         id:
-            type: integer
+            type: bigint
             options: { default: null, unsigned: true, autoincrement: true }
         username:
             type: string
@@ -1272,7 +1546,7 @@ users_content_categories:
     columns:
         pk_fk_user:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         pk_fk_content_category:
             type: integer
             options: { default: null, unsigned: true }
@@ -1293,7 +1567,7 @@ user_notification:
             options: { default: null, unsigned: true }
         read_time:
             type: datetime
-            options: { default: null }
+            options: { default: CURRENT_TIMESTAMP }
     index:
         -
             name: PRIMARY
@@ -1305,7 +1579,7 @@ videos:
     columns:
         pk_video:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         video_url:
             type: string
             options: { default: null, length: 255 }
@@ -1322,11 +1596,18 @@ videos:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: videos_id_contents_id
+            source_field: [ pk_video ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 votes:
     columns:
         pk_vote:
             type: bigint
-            options: { default: null, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         value_pos:
             type: smallint
             options: { default: '0' }
@@ -1350,7 +1631,7 @@ widgets:
     columns:
         pk_widget:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         content:
             type: text
             options: { default: null, length: 65532 }
@@ -1364,3 +1645,10 @@ widgets:
             primary: true
             unique: true
             flags: {  }
+    foreign_keys:
+        -
+            name: widgets_id_contents_id
+            source_field: [ pk_widget ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }

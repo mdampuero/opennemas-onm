@@ -18,7 +18,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="WIDGET_CREATE"}
             <li class="quicklinks">
-              <a href="{url name=admin_widget_create}" class="btn btn-primary">
+              <a href="{url name=admin_widget_create}" class="btn btn-primary" id="create-button">
                 <i class="fa fa-plus fa-lg"></i>
                 {t}Create{/t}
               </a>
@@ -35,7 +35,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button" id="deselect-button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
@@ -66,7 +66,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button" id="send-to-trash-button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>

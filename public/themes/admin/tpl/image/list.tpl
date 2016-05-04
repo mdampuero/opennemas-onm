@@ -20,7 +20,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="PHOTO_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" media-picker media-picker-mode="explore,upload" media-picker-mode-active="upload">
+              <a class="btn btn-primary" media-picker media-picker-mode="explore,upload" media-picker-mode-active="upload" id="upload-button">
                 <span class="fa fa-cloud-upload"></span> {t}Upload{/t}
               </a>
             </li>

@@ -56,20 +56,16 @@ class StoreController extends Controller
         }
 
         $instance = $this->get('instance');
-
-        // Save new billing info for instance
-        foreach ($billing as $key => $value) {
-            $instance->metas['billing_' . $key] = $value;
-        }
-
-        $this->get('instance_manager')->persist($instance);
+        $client = $this->get('orm.manager')
+            ->getRepository('manager.client', 'Database')
+            ->find($instance->getClient());
 
         // Get names for filtered modules to use in template
         $modulesRequested = array_intersect_key($availableItems, array_flip($modulesRequested));
 
         // Send emails
-        $this->sendEmailToSales($billing, $modulesRequested, $instance);
-        $this->sendEmailToCustomer($modulesRequested, $instance);
+        $this->sendEmailToSales($client, $modulesRequested);
+        $this->sendEmailToCustomer($client, $modulesRequested);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
@@ -185,42 +181,21 @@ class StoreController extends Controller
     }
 
     /**
-     * Saves the billing information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveBillingAction(Request $request)
-    {
-        $billing  = $request->request->all();
-        $instance = $this->get('instance');
-
-        foreach ($billing as $key => $value) {
-            $instance->metas['billing_' . $key] = $value;
-        }
-
-        $this->get('instance_manager')->persist($instance);
-
-        return new JsonResponse(_('Billing information saved successfully'));
-    }
-
-    /**
      * Sends an email to the customer.
      *
-     * @param array    $modules  The requested modules.
-     * @param Instance $instance The instance to upgrade.
+     * @param Client $client  The client.
+     * @param array  $modules The requested modules.
      */
-    private function sendEmailToCustomer($modules, $instance)
+    private function sendEmailToCustomer($client, $modules)
     {
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
-            ->setTo($this->getUser()->contact_mail)
+            ->setTo($client->email)
             ->setBody(
                 $this->renderView(
                     'store/email/_purchaseToCustomer.tpl',
@@ -232,20 +207,23 @@ class StoreController extends Controller
                 'text/html'
             );
 
+        if ($instance->contact_mail !== $client->email) {
+            $message->setBcc($instance->contact_mail);
+        }
+
         $this->get('mailer')->send($message);
     }
 
     /**
      * Sends an email to sales department.
      *
-     * @param Instance $instance The instance to upgrade.
-     * @param array    $modules  The requested modules.
-     * @param array    $billing  The billing information.
+     * @param Client $client  The client information.
+     * @param array  $modules The requested modules.
      */
-    private function sendEmailToSales($billing, $modules, $instance)
+    private function sendEmailToSales($client, $modules)
     {
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')
@@ -256,7 +234,7 @@ class StoreController extends Controller
                 $this->renderView(
                     'store/email/_purchaseToSales.tpl',
                     [
-                        'billing'  => $billing,
+                        'client'   => $client,
                         'instance' => $instance,
                         'modules'  => $modules,
                         'user'     => $this->getUser()

@@ -92,7 +92,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser()" type="button" value="validate">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser()" type="button" value="validate" id="save-button">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>

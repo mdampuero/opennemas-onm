@@ -26,7 +26,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
-              <a class="btn btn-primary" href="{url name=admin_article_create}">
+              <a class="btn btn-primary" href="{url name=admin_article_create}" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
@@ -191,7 +191,7 @@
                   </div>
                   <div class="small-text">
                     <strong>{t}Available from{/t} </strong> [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    <span ng-if="content.endtime != '0000-00-00 00:00:00'">
+                    <span ng-if="content.endtime != '0000-00-00 00:00:00 || !content.endtime'">
                       <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </span>
                   </div>

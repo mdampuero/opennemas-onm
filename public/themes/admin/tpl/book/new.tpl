@@ -51,14 +51,14 @@
             <li class="quicklinks">
               {if isset($book->id)}
               {acl isAllowed="BOOK_UPDATE"}
-              <button class="btn btn-primary" data-text="{t}Updating{/t}..." href="{url name=admin_books_update id=$book->id}" name="continue" value="1">
+              <button class="btn btn-primary" data-text="{t}Updating{/t}..." href="{url name=admin_books_update id=$book->id}" name="continue" value="1" id="update-button">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Update{/t}</span>
               </button>
               {/acl}
               {else}
               {acl isAllowed="BOOK_CREATE"}
-              <button class="btn btn-primary" data-text="{t}Saving{/t}..." href="{url name=admin_books_create}" name="continue" value="1">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." href="{url name=admin_books_create}" name="continue" value="1" id="save-button">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>

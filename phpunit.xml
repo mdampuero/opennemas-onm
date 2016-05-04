@@ -31,7 +31,7 @@
     -->
     <filter>
         <whitelist>
-            <directory>models</directory>
+            <directory>./libs/models</directory>
             <directory>./libs/Onm</directory>
             <directory>./src/</directory>
             <exclude>

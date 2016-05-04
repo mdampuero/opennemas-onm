@@ -284,6 +284,10 @@ function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnecti
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
+    if (php_sapi_name() == 'cli') {
+        return;
+    }
+
     $eventDispatcher = getService('event_dispatcher');
 
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
@@ -526,3 +530,4 @@ function genarateGAAmpCode($config)
 
     return $code;
 }
+

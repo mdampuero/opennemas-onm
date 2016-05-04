@@ -155,7 +155,15 @@ class AclUserController extends Controller
         array_unshift($allcategorys, $frontpage);
 
         // Get available languages
-        $languages    = $this->container->getParameter('available_languages');
+        // $languages    = $this->container->getParameter('available_languages');
+        $languages = array(
+            'en_US' => _("English"),
+            'es_ES' => _("Spanish"),
+            'gl_ES' => _("Galician"),
+            // 'it_IT' => _("Italian"),
+            // 'pt_PT' => _("Portuguesse"),
+            // 'fr_FR' => _("French"),
+        );
         $languages    = array_merge(array('default' => _('Default system language')), $languages);
 
         // Get minimum password level
@@ -194,7 +202,8 @@ class AclUserController extends Controller
             }
         }
 
-        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'acl/user/new.tpl',

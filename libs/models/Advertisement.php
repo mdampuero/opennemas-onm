@@ -27,13 +27,6 @@ class Advertisement extends Content
      **/
     const ADVERTISEMENT_CATEGORY = 2;
 
-    // FIXME: modificado para versión demo
-    /**
-     * List of available ads positions
-     *
-     * @var array
-     **/
-    public $map = null;
     /**
      * the advertisement id
      *
@@ -184,7 +177,7 @@ class Advertisement extends Content
         }
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: -1;
+        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
         $data['type_medida'] =
             (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
@@ -239,6 +232,12 @@ class Advertisement extends Content
             return;
         }
 
+        // Decode base64 if isn't decoded yet
+        $isBase64 = base64_decode($rs->fields['script']);
+        if ($isBase64) {
+            $rs->fields['script'] = $isBase64;
+        }
+
         $this->load($rs->fields);
 
         // Return instance to method chaining
@@ -256,12 +255,6 @@ class Advertisement extends Content
     {
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
-
-        // Decode base64 if isn't decoded yet
-        $isBase64 = base64_decode($this->script);
-        if ($isBase64) {
-            $this->script = $isBase64;
-        }
 
         // FIXME: review that this property is not used ->img
         $this->img = $this->path;
@@ -290,7 +283,7 @@ class Advertisement extends Content
         }
 
         $data['overlap']     = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: 0;
+        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: null;
         $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
         $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 

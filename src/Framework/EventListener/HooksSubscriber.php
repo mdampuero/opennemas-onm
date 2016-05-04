@@ -389,6 +389,10 @@ class HooksSubscriber implements EventSubscriberInterface
         } elseif (property_exists($content, 'pk_opinion')) {
             $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
             $cacheManager->delete('blog', 'blog_frontpage.tpl');
+        } elseif (property_exists($content, 'pk_video')) {
+            $cacheManager->delete('videos|RSS');
+        } elseif (property_exists($content, 'pk_album')) {
+            $cacheManager->delete('albums|RSS');
         }
     }
 
