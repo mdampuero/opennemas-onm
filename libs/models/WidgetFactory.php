@@ -65,6 +65,10 @@ class WidgetFactory
      */
     public function getForm()
     {
+        if (empty($this->form)) {
+            return '';
+        }
+
         return $this->tpl->fetch($this->form);
     }
 
