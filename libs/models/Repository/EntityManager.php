@@ -109,6 +109,8 @@ class EntityManager extends BaseManager
             }
         }
 
+        $ids = array_intersect($ids, array_keys($contents));
+
         return array_values(array_merge(array_flip($ids), $contents));
     }
 
