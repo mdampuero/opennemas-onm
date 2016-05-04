@@ -159,6 +159,7 @@ class ModuleManager
                 'COMMENT_MANAGER'            => _('Comments'),
                 'CONTENT_SUBSCRIPTIONS'      => _('Subscription'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
+                'FIA_MODULE'                 => _('Facebook Instant Articles integration'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),

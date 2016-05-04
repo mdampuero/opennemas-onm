@@ -772,6 +772,16 @@
                               <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
                             </div>
                           </div>
+                          {is_module_activated name="FIA_MODULE"}
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_secret_key">
+                              {t}Instant Articles (fb:pages meta tag){/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_instant_articles_tag" name="facebook[instant_articles_tag]" type="text" value="{$configs['facebook']['instant_articles_tag']|default:""}">
+                            </div>
+                          </div>
+                          {/is_module_activated}
                         </div>
                       </div>
                     </div>
