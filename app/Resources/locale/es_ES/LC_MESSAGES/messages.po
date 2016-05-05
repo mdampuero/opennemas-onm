@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 12:06+0000\n"
-"PO-Revision-Date: 2016-04-07 15:18+0200\n"
+"POT-Creation-Date: 2016-05-05 16:55+0000\n"
+"PO-Revision-Date: 2016-05-05 19:00+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -40,6 +40,15 @@ msgstr "No se pudo encontrar el usuario con el identificador «%d»"
 
 msgid "Frontpage"
 msgstr "Portada"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Galician"
+msgstr "Gallego"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
@@ -359,40 +368,6 @@ msgstr ""
 
 msgid "Settings saved."
 msgstr "Opciones guardadas"
-
-msgid "Base"
-msgstr "Base"
-
-msgid "Professional"
-msgstr "Profesional"
-
-msgid "Advanced"
-msgstr "Pack avanzado"
-
-msgid "Expert"
-msgstr "Pack experto"
-
-msgid "Unlimited"
-msgstr "Sin límite"
-
-msgid ""
-"You had already sent an upgrade request. Your upgrade will be applied as "
-"soon as possible"
-msgstr ""
-"Ya has enviado una solicitud de actualización. Tu actualización se aplicará "
-"tan pronto como podamos."
-
-#, php-format
-msgid "Upgrade instance request for %s"
-msgstr "Solicitud de actualización de instancia para %s"
-
-msgid "Unable to send your upgrade request. Please try it again."
-msgstr ""
-"No se pudo enviar su solicitud de actualización. Por favor inténtalo más "
-"tarde."
-
-msgid "Your upgrade request has been sent."
-msgstr "Se ha enviado tu solicitud de respuesta."
 
 msgid "Accepted"
 msgstr "Aceptado"
@@ -951,15 +926,6 @@ msgstr ""
 msgid "Others"
 msgstr "Otros"
 
-msgid "English"
-msgstr "Inglés"
-
-msgid "Spanish"
-msgstr "Español"
-
-msgid "Galician"
-msgstr "Gallego"
-
 msgid ""
 "The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
 "size."
@@ -1476,18 +1442,14 @@ msgstr ""
 "Suelte archivos aquí para subirlos o pulse en el botón «Añadir archivos…» de "
 "arriba."
 
-#, fuzzy
 msgid "Unable to find the purchase"
-msgstr "No se pudo encontrar la compra con el identificador «%s»"
+msgstr "No se pudo encontrar la compra"
 
 msgid "Your request could not been registered"
 msgstr "Tu solicitud no pudo guardarse"
 
 msgid "Your request has been registered"
 msgstr "Tu solicitud se ha guardado"
-
-msgid "Billing information saved successfully"
-msgstr "Información de facturación guardada correctamente"
 
 msgid "Invalid theme"
 msgstr "Tema non válido"
@@ -1702,21 +1664,17 @@ msgstr "Ya has votado esta encuesta anteriormente."
 msgid "You can't vote this poll, it is closed."
 msgstr "La encuesta está cerrada, no puedes votar."
 
-#, fuzzy
 msgid "Latest Opinions"
-msgstr "Opiniones"
+msgstr "Últimas opiniones"
 
-#, fuzzy
 msgid "Latest News"
-msgstr "Últimos artículos"
+msgstr "Últimas noticias"
 
-#, fuzzy
 msgid "Latest Videos"
-msgstr "Últimos artículos"
+msgstr "Últimos vídeos"
 
-#, fuzzy
 msgid "Latest Albums"
-msgstr "Últimos artículos"
+msgstr "Últimos álbums"
 
 msgid "You have been subscribed to the newsletter."
 msgstr "Te has suscrito al boletín de noticias."
@@ -2464,6 +2422,9 @@ msgstr "Suscripción"
 
 msgid "Cronicas customizations"
 msgstr "Personalizaciones para Cronicas"
+
+msgid "Facebook Instant Articles integration"
+msgstr "Integración con Instance Articles de Facebook"
 
 msgid "Contact"
 msgstr "Contacto"
@@ -3623,6 +3584,15 @@ msgstr "No podrás restaurarlos."
 msgid "Yes, remove them all"
 msgstr "Si, eliminarlos todos"
 
+msgid "Unit price"
+msgstr "Unidad de precio"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "VAT"
+msgstr "IVA"
+
 msgid "Delete newsstands"
 msgstr "Eliminar portadas"
 
@@ -3804,9 +3774,6 @@ msgstr "Valor de parámetro"
 msgid "Add parameter"
 msgstr "Añadir parámetro"
 
-msgid "Tags"
-msgstr "Etiquetas"
-
 msgid "Edit '%1'"
 msgstr "Editar '%1'"
 
@@ -3935,6 +3902,9 @@ msgstr "Alias"
 
 msgid "Created at"
 msgstr "Creado en"
+
+msgid "Tags"
+msgstr "Etiquetas"
 
 msgid "List of words separated by words."
 msgstr "Lista de palabras separadas por comas."
@@ -4709,60 +4679,6 @@ msgstr ""
 "Por favor, completa la información e facturación de debajo, te enviaremos "
 "una factura de todos tus usuarios activos al final del mes."
 
-msgid "This field is required"
-msgstr "Este campo es obligatorio"
-
-msgid "Contact name"
-msgstr "Nombre de contacto"
-
-msgid "Company name"
-msgstr "Nombre de la empresa"
-
-msgid "This is not a valid email"
-msgstr "Este no es un correo electrónico válido"
-
-msgid "This is not a valid phone"
-msgstr "Este no es un número de teléfono válido"
-
-msgid "Phone number"
-msgstr "Número de teléfono"
-
-msgid "This is not a valid vat"
-msgstr "Este no es un CIF válido"
-
-msgid "VAT Number"
-msgstr "Número de identificación fiscal"
-
-msgid "Address"
-msgstr "Dirección"
-
-msgid "This is not a valid address"
-msgstr "Este no es una dirección válida"
-
-msgid "This is not a valid postal_code"
-msgstr "Esta no es un código postal válido"
-
-msgid "Postal code"
-msgstr "Código postal"
-
-msgid "This is not a valid city"
-msgstr "Esta no es una ciudad válida"
-
-msgid "City"
-msgstr "Ciudad"
-
-msgid "This is not a valid state"
-msgstr "Este no es un estado válido"
-
-msgid "State"
-msgstr "Estado"
-
-msgid "Country"
-msgstr "País"
-
-msgid "Select a country"
-msgstr "Seleccione un país"
-
 msgid "Are you sure you want to create a new user?"
 msgstr "¿Está seguro de que quiere crear un usuario?"
 
@@ -4849,14 +4765,21 @@ msgstr "Acceso al panel"
 msgid "Used to enable or disable user access to control panel."
 msgstr "Úsalo para activar o desactivar el acceso al panel de control."
 
-msgid "User group:"
-msgstr "Grupos de usuario:"
+msgid "User group"
+msgstr "Grupo de usuarios"
 
 msgid "Select"
 msgstr "Seleccionar"
 
 msgid "selected"
 msgstr "seleccionados"
+
+msgid ""
+"Categories that this user will have access to. Leave empty to give access to "
+"all categories"
+msgstr ""
+"Categorías a las que este usuario tiene acceso. Déjalo en blanco para dar "
+"acceso a todas las categorías."
 
 msgid "Social Networks"
 msgstr "Redes sociales"
@@ -5029,13 +4952,12 @@ msgstr ""
 msgid "You can change your payment method following the steps below."
 msgstr "Puedes cambiar tu método de pago siguiente los pasos debajo."
 
-#, fuzzy
 msgid ""
 "If you want to delete a payment method, please <a href=\"mailto:"
 "sales@openhost.es\">contact us</a>."
 msgstr ""
-"Si necesitas eliminar un método de pago, por favor <a href=\"mailto:"
-"sales@openhost.es\">contactanos</a>."
+"Si necesitas eliminar un método de pago, por favor <a href=\""
+"mailto:sales@openhost.es\">contactanos</a>."
 
 msgid "Change your payment method"
 msgstr "Cambiar tu método de pago"
@@ -5120,47 +5042,11 @@ msgstr "Teléfono"
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Vuelva a <a href=\"%1\">la tienda</a> y probar de nuevo"
 
-msgid ""
-"You are about to order next items. In the next 24hours our sales team will "
-"send you payment and activation information. "
-msgstr ""
-"Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
-"horas nuestro departamento de ventas te enviará la información de pago y "
-"activación."
-
-msgid "Total"
-msgstr "Total"
-
-msgid ""
-"If you need to update this information please <a href=\"mailto:"
-"sales@openhost.es\">contact us</a>."
-msgstr ""
-"Si necesitas actualizar esta información, por favor <a href=\"mailto:"
-"sales@openhost.es\">contactanos</a>."
-
-msgid "Contact information"
-msgstr "Información de contacto"
-
-msgid "This is not a valid VAT identification number"
-msgstr "No es un número de identificación fiscal válido"
-
-msgid "VAT identification number"
-msgstr "Número de identificación fiscal"
-
-msgid "What is a VAT identification number?"
-msgstr "Que es un número de identificación fiscal?"
+msgid "Check"
+msgstr "Comprobar"
 
 msgid "Purchase summary"
 msgstr "Resumen de la compra"
-
-msgid "You have to complete your billing information to complete the purchase."
-msgstr "Debes introducir la información de pago para completar la compra."
-
-msgid "Unit price"
-msgstr "Unidad de precio"
-
-msgid "VAT"
-msgstr "IVA"
 
 msgid ""
 "I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
@@ -5631,6 +5517,9 @@ msgstr ""
 msgid "Secret key"
 msgstr "Llave secreta"
 
+msgid "Instant Articles (fb:pages meta tag)"
+msgstr "Instant Articles (etiqueta meta fb:pages)"
+
 msgid "Twitter Page"
 msgstr "Página en Twitter"
 
@@ -5641,34 +5530,30 @@ msgstr ""
 "Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
 "en el formulario. Por omisión se usará el de OpenNemas"
 
-#, fuzzy
 msgid "Instagram"
-msgstr "Nombre de instancia"
+msgstr "Instragram"
 
 msgid "Instagram Page"
-msgstr ""
+msgstr "Página de Instagram"
 
-#, fuzzy
 msgid ""
 "If you also have a <strong>Instagram page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si ya tienes una <b>página de Vimeo</b>, añade tu URL de la página en el "
+"Si ya tienes una <b>página de Instagram</b>, añade tu URL de la página en el "
 "formulario."
 
 msgid "Pinterest"
-msgstr ""
+msgstr "Pinterest"
 
-#, fuzzy
 msgid "Pinterest Page"
-msgstr "Página en Twitter"
+msgstr "Página en Pinterest"
 
-#, fuzzy
 msgid ""
 "If you also have a <strong>Pinterest page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si ya tienes una <b>página de Vimeo</b>, añade tu URL de la página en el "
+"Si ya tienes una <b>página de Pinterest</b>, añade tu URL de la página en el "
 "formulario."
 
 msgid "Vimeo"
@@ -5709,9 +5594,8 @@ msgstr "Información de usuario"
 msgid "Twitter user"
 msgstr "Usuario en twitter"
 
-#, fuzzy
 msgid "Facebook user"
-msgstr "Facebook"
+msgstr "Usuario de Facebook"
 
 msgid "View as Blog"
 msgstr "Ver como Blog"
@@ -6143,11 +6027,23 @@ msgstr "Encuesta interior"
 msgid "AMP pages"
 msgstr "Páginas AMP"
 
+msgid "Instant Articles pages"
+msgstr "Páginas de Instant Articles"
+
 msgid "and inside the position"
 msgstr "y en la posición"
 
 msgid "AMP inner article - Button 1"
 msgstr "Artículo interior AMP - Botón 1"
+
+msgid "Instant Articles inner article - Button 1"
+msgstr "Artículo interior Instant Articles - Botón 1"
+
+msgid "Instant Articles inner article - Button 2"
+msgstr "Artículo interior Instant Articles - Botón 2"
+
+msgid "Instant Articles inner article - Button 3"
+msgstr "Artículo interior Instant Articles - Botón 3"
 
 msgid "Advertisment"
 msgstr "Publicidad"
@@ -6207,6 +6103,17 @@ msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
 msgstr ""
 "La URL del servidor de publicidad (p.ej. http://ad.servidorejemplo.net/)."
 
+msgid "DFP category targeting"
+msgstr ""
+
+msgid "Key for setTargeting function"
+msgstr ""
+
+msgid ""
+"Set a key for targeting your ads by category. Note that the value for "
+"targeting will always be the current category internal name"
+msgstr ""
+
 msgid "Tradedoubler integration"
 msgstr "Integración con Tradedoubler"
 
@@ -6229,22 +6136,22 @@ msgid "Scripts"
 msgstr "Scripts"
 
 msgid "Scripts in header"
-msgstr ""
+msgstr "Scripts en la cabecera"
 
 msgid "This scripts will be included before the </head> tag"
-msgstr ""
+msgstr "Estes scripts se incluirán antes de la etiqueta </head>"
 
 msgid "Scripts at body start"
-msgstr ""
+msgstr "Scripts al inicio del body"
 
 msgid "This scripts will be included before the <body> tag"
-msgstr ""
+msgstr "Estes scripts se incluirán después de la etiqueta <body>"
 
 msgid "Scripts at body end"
-msgstr ""
+msgstr "Scripts al final del body"
 
 msgid "This scripts will be included before the </body> tag"
-msgstr ""
+msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
 
 msgid "Unable to find any advertisement that matches your search."
 msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
@@ -6323,17 +6230,65 @@ msgstr ""
 msgid "Where are you from?"
 msgstr "De donde eres?"
 
+msgid "Country"
+msgstr "País"
+
+msgid "Select a country"
+msgstr "Seleccione un país"
+
+msgid "Contact information"
+msgstr "Información de contacto"
+
+msgid "This field is required"
+msgstr "Este campo es obligatorio"
+
 msgid "First name"
 msgstr "Nombre"
 
 msgid "Last name"
 msgstr "Apellido"
 
+msgid "Company name"
+msgstr "Nombre de la empresa"
+
+msgid "This is not a valid email"
+msgstr "Este no es un correo electrónico válido"
+
+msgid "Phone number"
+msgstr "Número de teléfono"
+
 msgid "This is not a valid vat_number identification number"
 msgstr "Este no es un número de identificación fiscal válido"
 
 msgid "Vat identification number"
 msgstr "Número de identificación fiscal"
+
+msgid "What is a VAT identification number?"
+msgstr "Que es un número de identificación fiscal?"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "This is not a valid address"
+msgstr "Este no es una dirección válida"
+
+msgid "This is not a valid postal_code"
+msgstr "Esta no es un código postal válido"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "This is not a valid city"
+msgstr "Esta no es una ciudad válida"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "This is not a valid state"
+msgstr "Este no es un estado válido"
+
+msgid "State"
+msgstr "Estado"
 
 msgid "My account"
 msgstr "Mi cuenta"
@@ -6343,12 +6298,6 @@ msgstr "Este es el correo-e usado para crear el periódico"
 
 msgid "Your newspaper was created on %1"
 msgstr "Tu periódico fué creado el %1"
-
-msgid "Plan"
-msgstr "Plan"
-
-msgid "Base + Modules"
-msgstr "Base + Módulos"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
@@ -6364,20 +6313,6 @@ msgstr "Páginas vistas este mes"
 
 msgid "coming soon... work in progress..."
 msgstr "pronto tendrás esta información..."
-
-msgid ""
-"Note: this number has not being used for billing purpose. Billing pageviews "
-"count goes from 26th to 25th of each month."
-msgstr ""
-"Nota: este número no ha sido usado para las facturas. Las contía de páginas "
-"vistas en la facturación comienzan desde el 26 de cada mes al 25 del "
-"siguiente."
-
-msgid "Available"
-msgstr "Disponible"
-
-msgid "Max"
-msgstr "Máximo"
 
 msgid "Opennemas offers many more modules and solutions"
 msgstr "Opennemas ofrece muchos más módulos y soluciones"
@@ -6409,15 +6344,6 @@ msgid "You will be asked to add it during the checkout in our store"
 msgstr ""
 "Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
 
-msgid "Activated plans & modules"
-msgstr "Planes y módulos activados"
-
-msgid "Upgrade"
-msgstr "Actualizar"
-
-msgid "Waiting for upgrade"
-msgstr "Esperando actualización"
-
 msgid "Upgrade instance"
 msgstr "Actualizar instancia"
 
@@ -6442,8 +6368,11 @@ msgstr "Dominio principal"
 msgid "Technical information"
 msgstr "Más información"
 
-msgid "Check"
-msgstr "Comprobar"
+msgid "Domain registration + mapping"
+msgstr "Registro de dominio + redirección"
+
+msgid "Domain mapping"
+msgstr "Redirección de dominio"
 
 msgid ""
 "I do not have my own domain and I want to create one and redirect it to my "
@@ -6460,12 +6389,6 @@ msgstr "Asignar"
 
 msgid "Requested domains"
 msgstr "Dominios solicitados"
-
-msgid "Domain registration + mapping"
-msgstr "Registro de dominio + redirección"
-
-msgid "Domain mapping"
-msgstr "Redirección de dominio"
 
 msgid "Select the payment method."
 msgstr "Seleccionar un método de pago."
@@ -6556,20 +6479,17 @@ msgstr ""
 "Si necesitas más información para configurar tus dominios contacta con "
 "nuestro equipo de soporte"
 
-#, fuzzy
 msgid "Thank you for choosing Opennemas!"
-msgstr "Grazas por tu solicitud!"
+msgstr "Gracias por elegir Opennemas"
 
 msgid "You have just purchased the following items:"
-msgstr ""
+msgstr "Acabas de comprar los siguientes productos:"
 
-#, fuzzy
 msgid "Required Domains:"
-msgstr "Dominios solicitados"
+msgstr "Dominios requeridos:"
 
-#, fuzzy
 msgid "You can find your invoice on the following page:"
-msgstr "Puedes cambiar tu método de pago siguiente los pasos debajo."
+msgstr "Puedes encontrar tu factura en la siguiente página:"
 
 msgid "Domains to create"
 msgstr "Dominios a crear"
@@ -6734,6 +6654,9 @@ msgstr ""
 "            <li>135€ (12 meses)*<br> * Los precios no incluyen IVA</li>\n"
 "          </ul>\n"
 "        "
+
+msgid "Available"
+msgstr "Disponible"
 
 msgid "Exclusive"
 msgstr "Exclusivo"
@@ -8147,11 +8070,14 @@ msgstr "Columnas"
 msgid "Client ID"
 msgstr "ID de cliente"
 
+msgid "Payment ID"
+msgstr "ID de pago"
+
 msgid "Invoice ID"
 msgstr "ID de factura"
 
-msgid "Payment ID"
-msgstr "ID de pago"
+msgid "Instance ID"
+msgstr "ID de Instancia"
 
 msgid "#"
 msgstr "#"
@@ -8723,6 +8649,9 @@ msgstr "Puedes acceder al periódico con la información de abajo"
 msgid "Newspaper URL"
 msgstr "URL del periódico"
 
+msgid "Plan"
+msgstr "Plan"
+
 msgid "Sincerely"
 msgstr "Atentamente"
 
@@ -8755,9 +8684,6 @@ msgstr "La página que estas buscando no está aquí"
 msgid "New user"
 msgstr "Nuevo usuario"
 
-msgid "User group"
-msgstr "Grupo de usuarios"
-
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -8769,6 +8695,105 @@ msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
 
 msgid "Search by name or username"
 msgstr "Buscar por nombre o correo"
+
+#~ msgid "Base"
+#~ msgstr "Base"
+
+#~ msgid "Professional"
+#~ msgstr "Profesional"
+
+#~ msgid "Advanced"
+#~ msgstr "Pack avanzado"
+
+#~ msgid "Expert"
+#~ msgstr "Pack experto"
+
+#~ msgid "Unlimited"
+#~ msgstr "Sin límite"
+
+#~ msgid ""
+#~ "You had already sent an upgrade request. Your upgrade will be applied as "
+#~ "soon as possible"
+#~ msgstr ""
+#~ "Ya has enviado una solicitud de actualización. Tu actualización se "
+#~ "aplicará tan pronto como podamos."
+
+#~ msgid "Upgrade instance request for %s"
+#~ msgstr "Solicitud de actualización de instancia para %s"
+
+#~ msgid "Unable to send your upgrade request. Please try it again."
+#~ msgstr ""
+#~ "No se pudo enviar su solicitud de actualización. Por favor inténtalo más "
+#~ "tarde."
+
+#~ msgid "Your upgrade request has been sent."
+#~ msgstr "Se ha enviado tu solicitud de respuesta."
+
+#~ msgid "Billing information saved successfully"
+#~ msgstr "Información de facturación guardada correctamente"
+
+#~ msgid "Contact name"
+#~ msgstr "Nombre de contacto"
+
+#~ msgid "This is not a valid phone"
+#~ msgstr "Este no es un número de teléfono válido"
+
+#~ msgid "This is not a valid vat"
+#~ msgstr "Este no es un CIF válido"
+
+#~ msgid "VAT Number"
+#~ msgstr "Número de identificación fiscal"
+
+#~ msgid "User group:"
+#~ msgstr "Grupos de usuario:"
+
+#~ msgid ""
+#~ "You are about to order next items. In the next 24hours our sales team "
+#~ "will send you payment and activation information. "
+#~ msgstr ""
+#~ "Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
+#~ "horas nuestro departamento de ventas te enviará la información de pago y "
+#~ "activación."
+
+#~ msgid ""
+#~ "If you need to update this information please <a href=\"mailto:"
+#~ "sales@openhost.es\">contact us</a>."
+#~ msgstr ""
+#~ "Si necesitas actualizar esta información, por favor <a href=\"mailto:"
+#~ "sales@openhost.es\">contactanos</a>."
+
+#~ msgid "This is not a valid VAT identification number"
+#~ msgstr "No es un número de identificación fiscal válido"
+
+#~ msgid "VAT identification number"
+#~ msgstr "Número de identificación fiscal"
+
+#~ msgid ""
+#~ "You have to complete your billing information to complete the purchase."
+#~ msgstr "Debes introducir la información de pago para completar la compra."
+
+#~ msgid "Base + Modules"
+#~ msgstr "Base + Módulos"
+
+#~ msgid ""
+#~ "Note: this number has not being used for billing purpose. Billing "
+#~ "pageviews count goes from 26th to 25th of each month."
+#~ msgstr ""
+#~ "Nota: este número no ha sido usado para las facturas. Las contía de "
+#~ "páginas vistas en la facturación comienzan desde el 26 de cada mes al 25 "
+#~ "del siguiente."
+
+#~ msgid "Max"
+#~ msgstr "Máximo"
+
+#~ msgid "Activated plans & modules"
+#~ msgstr "Planes y módulos activados"
+
+#~ msgid "Upgrade"
+#~ msgstr "Actualizar"
+
+#~ msgid "Waiting for upgrade"
+#~ msgstr "Esperando actualización"
 
 #~ msgid "Gain money with your Opennemas newspaper: manage your ads!"
 #~ msgstr "Gana dinero con tu periódico Opennemas."
