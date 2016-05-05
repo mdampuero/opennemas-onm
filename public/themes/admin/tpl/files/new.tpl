@@ -20,7 +20,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" method="POST" name="formulario" id="formulario" />
+  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" method="POST" name="formulario" id="formulario" ng-controller="InnerCtrl" />
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -80,7 +80,7 @@
               <div class="form-group">
                 <label for="description" class="form-label">{t}Description{/t}</label>
                 <div class="controls">
-                  <textarea id="description" name="description" class="form-control" ng-model="summary" required="required" class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
+                  <textarea id="description" name="description" class="form-control" ng-model="description" required="required" class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
                 </div>
               </div>
             </div>
