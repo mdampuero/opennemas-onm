@@ -140,34 +140,9 @@
                 </label>
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="metadata">
-                {t}Tags{/t}
-              </label>
-              <div class="controls">
-                <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$widget->metadata|clearslash|escape:"html"}"/>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </form>
-{/block}
-
-{block name="footer-js" append}
-{javascripts}
-  <script type="text/javascript">
-    jQuery(document).ready(function($){
-      var tags = $('#metadata');
-      var title = $('#title');
-      title.on('change', function() {
-        // Fill tags from title
-        if (!tags.val()) {
-          fill_tags(title.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-        }
-      });
-    });
-  </script>
-{/javascripts}
 {/block}
