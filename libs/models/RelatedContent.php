@@ -376,6 +376,10 @@ class RelatedContent
     {
         $verPortada = 1;
 
+        if (empty($ids)) {
+            return [];
+        }
+
         if (!is_array($ids)) {
             $ids = [ $ids ];
         }
