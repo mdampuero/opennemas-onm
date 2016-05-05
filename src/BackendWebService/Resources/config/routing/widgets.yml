@@ -3,3 +3,9 @@ backend_ws_widgets_list:
     defaults: { _controller: BackendWebServiceBundle:Widgets:list }
     options:
         expose: true
+
+backend_ws_widget_get_form:
+    path:     /widgets/{uuid}/form
+    defaults: { _controller: BackendWebServiceBundle:Widgets:getForm }
+    options:
+        expose: true

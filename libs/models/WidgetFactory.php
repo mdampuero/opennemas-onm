@@ -3,6 +3,13 @@
 class WidgetFactory
 {
     /**
+     * The template for the widget form.
+     *
+     * @var string
+     */
+    public $form = null;
+
+    /**
      * The params for the widget.
      *
      * @var array
@@ -52,6 +59,20 @@ class WidgetFactory
     }
 
     /**
+     * Returns the form for widget parameters.
+     *
+     * @return string The widget form.
+     */
+    public function getForm()
+    {
+        if (empty($this->form)) {
+            return '';
+        }
+
+        return $this->tpl->fetch($this->form);
+    }
+
+    /**
      * Returns a parameter given its name.
      *
      * @param string $name   The parameter name.
@@ -79,12 +100,12 @@ class WidgetFactory
     public function parseParams($params)
     {
         // Unserialize widget params
-        if (is_string($this->content->params)) {
+        if (!empty($this->content) && is_string($this->content->params)) {
             $this->content->params = unserialize($this->content->params);
         }
 
         // Merge parameters if they are a valid array
-        if (is_array($this->content->params)) {
+        if (!empty($this->content) && is_array($this->content->params)) {
             $this->params = array_merge($this->params, $this->content->params);
         }
 

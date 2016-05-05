@@ -94,30 +94,34 @@
               </div>
             </div>
           </div>
-          <div  class="form-group ng-cloak" ng-show="renderlet == 'intelligentwidget'">
-          <label for="params" ng-if="params.length > 0">{t}Parameters{/t}</label>
-          <div id="params">
-            <input type="hidden" name="parsedParams" ng-model="parsedParams" ng-value="parsedParams" ng-init="parseParams({json_encode($widget->params)|clear_json})">
-            <label for="" class="sr-only">{t}Parameter name{/t}</label>
-            <div class="form-group ng-cloak" ng-repeat="param in params track by $index">
-              <div class="row">
-                <div class="control col-md-2 col-sm-3 col-xs-12">
-                  <input type="text" class="form-control" name="items[]" ng-model="param.name" placeholder="{t}Parameter name{/t}" />
-                </div>
-                <div class="control col-md-9 col-sm-7 col-xs-12">
-                  <input type="text" class="form-control" name="values[]" ng-model="param.value"  placeholder="{t}Parameter value{/t}">
-                </div>
-                <div class="control col-md-1 col-sm-2 col-xs-12">
-                  <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
+          <div class="form-group ng-cloak" ng-show="renderlet == 'intelligentwidget'">
+            <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="formLoading">
+              <div class="loading-spinner"></div>
+              <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+            <div id="params" ng-show="!formLoading && !form">
+              <label for="params">{t}Parameters{/t}</label>
+              <input type="hidden" name="parsedParams" ng-model="parsedParams" ng-value="parsedParams" ng-init="parseParams({json_encode($widget->params)|clear_json})">
+              <div class="form-group ng-cloak" ng-repeat="param in params track by $index">
+                <div class="row">
+                  <div class="control col-md-2 col-sm-3 col-xs-12">
+                    <input type="text" class="form-control" name="items[]" ng-model="param.name" placeholder="{t}Parameter name{/t}" />
+                  </div>
+                  <div class="control col-md-9 col-sm-7 col-xs-12">
+                    <input type="text" class="form-control" name="values[]" ng-model="param.value"  placeholder="{t}Parameter value{/t}">
+                  </div>
+                  <div class="control col-md-1 col-sm-2 col-xs-12">
+                    <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
+                  </div>
                 </div>
               </div>
+              <br>
+              <a id="add_param" class="btn" ng-click="addParameter()">
+                <i class="fa fa-plus"></i>
+                {t}Add parameter{/t}
+              </a>
             </div>
-          </div>
-          <br>
-          <a id="add_param" class="btn" ng-click="addParameter()">
-            <i class="fa fa-plus"></i>
-            {t}Add parameter{/t}
-          </a>
+            <div class="widget-form" ng-show="!formLoading && form"></div>
           </div>
         </div>
         </div>
