@@ -84,7 +84,7 @@ abstract class AbstractCache implements CacheInterface
 
         if (is_array($id)) {
             $values = array_intersect_key($this->mru, array_flip($id));
-            $id     = array_diff($id, array_keys($values));
+            $id     = array_values(array_diff($id, array_keys($values)));
 
             if (!empty($values)) {
                 $this->buffer[] = [
