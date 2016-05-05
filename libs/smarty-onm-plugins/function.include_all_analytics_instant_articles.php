@@ -51,7 +51,7 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     // Piwik
     $codes[] = getPiwikCode();
 
-    $output = '<figure class="op-tracker">'.implode('<br>', $codes).'</figure>';
+    $output = '<figure class="op-tracker"><iframe>'.implode('<br>', $codes).'</iframe></figure>';
 
     return $output;
 }
