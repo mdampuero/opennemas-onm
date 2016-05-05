@@ -774,7 +774,7 @@
                           </div>
                           {is_module_activated name="FIA_MODULE"}
                           <div class="form-group">
-                            <label class="form-label" for="facebook_secret_key">
+                            <label class="form-label" for="facebook_instant_articles_tag">
                               {t}Instant Articles (fb:pages meta tag){/t}
                             </label>
                             <div class="controls">
