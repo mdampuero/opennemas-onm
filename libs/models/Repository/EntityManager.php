@@ -222,8 +222,10 @@ class EntityManager extends BaseManager
             } else {
                 $contentMeta = $contentMetaMap['content-meta-'.$content->id];
 
-                foreach ($contentMeta as $key => $value) {
-                    $content->{$key} = $value;
+                if (!empty($contentMeta)) {
+                    foreach ($contentMeta as $key => $value) {
+                        $content->{$key} = $value;
+                    }
                 }
             }
 
