@@ -434,7 +434,7 @@ class Content
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], (int) $data['content_status'],
-            (int) $data['position'],$data['frontpage'],
+            (int) $data['position'], $data['frontpage'],
             (int) $data['fk_author'], (int) $data['fk_publisher'], (int) $data['fk_user_last_editor'],
             $data['in_home'], (int) $data['favorite'], (int) $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
