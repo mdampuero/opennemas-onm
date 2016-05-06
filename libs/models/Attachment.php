@@ -223,11 +223,8 @@ class Attachment extends Content
      **/
     public function remove($id)
     {
-        $dirDateComponent = preg_replace("/\-/", '/', substr($this->created, 0, 10));
+        $filename = MEDIA_PATH.DS.FILE_DIR.$this->path;
 
-        $mediaPath = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dirDateComponent;
-
-        $filename = $mediaPath.'/'.$this->path;
         if (file_exists($filename)) {
             unlink($filename);
         }
