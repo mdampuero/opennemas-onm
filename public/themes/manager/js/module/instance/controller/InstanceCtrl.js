@@ -206,6 +206,14 @@
          */
         $scope.removeDomain = function(index) {
           $scope.instance.domains.splice(index, 1);
+
+          if ($scope.instance.main_domain -1 > index) {
+            $scope.instance.main_domain--;
+          }
+
+          if ($scope.instance.main_domain > $scope.instance.domains.length) {
+            $scope.instance.main_domain = $scope.instance.domains.length;
+          }
         };
 
         /**
