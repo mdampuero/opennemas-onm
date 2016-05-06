@@ -168,7 +168,7 @@
               $scope.loading          = 0;
 
               // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
+              $('body').animate({ scrollTop: '0px' }, 1000);
             }
           );
         };
