@@ -289,11 +289,16 @@ class RssController extends Controller
                     $content->related = $relatedContents;
                 }
 
+                // Wrap img with figure and add caption
                 $content->body = preg_replace(
                     '@(<img[^>]+>)@',
                     '<figure>${1}<figcaption>'.$content->title.'</figcaption></figure>',
                     $content->body
                 );
+
+                // Clean empty HTML tags
+                $content->body = preg_replace('@<(.*)><\/\1>@', '', $content->body);
+
             }
 
 
