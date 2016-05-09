@@ -3,7 +3,6 @@ entity:
     properties:
         id:         integer
         name:       string
-        privileges: array
     mapping:
         table: user_group
         converters:
@@ -31,9 +30,6 @@ entity:
             name:
                 type: string
                 options: { default: null, notnull: false, length: 50 }
-            privileges:
-                type: text
-                options: { default: null, length: 65532, notnull: false }
         index:
             -
                 name: PRIMARY
