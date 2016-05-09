@@ -119,7 +119,7 @@ class BaseRepository extends Repository
             throw new \Exception();
         }
 
-        $entity  = $this->miss;
+        $entity  = null;
         $id      = $this->metadata->normalizeId($id);
         $cacheId = $this->metadata->getPrefix()
             . implode($this->metadata->getSeparator(), $id);
@@ -129,14 +129,15 @@ class BaseRepository extends Repository
         }
 
         if (empty($entity)) {
+            $entity   = $this->miss;
             $entities = $this->refresh([ $id ]);
 
-            if (!empty($this->entities)) {
+            if (!empty($entities)) {
                 $entity = array_pop($entities);
+            }
 
-                if ($this->hasCache()) {
-                    $this->cache->set($cacheId, $entity);
-                }
+            if ($this->hasCache()) {
+                $this->cache->set($cacheId, $entity);
             }
         }
 
@@ -306,11 +307,12 @@ class BaseRepository extends Repository
 
         $rs = $this->conn->fetchAll($sql, $params, $types);
 
+        $values = [];
         foreach ($rs as $data) {
             $values[$data[$key]] = $data;
         }
 
-        if ($this->metadata->hasMetas()) {
+        if ($this->metadata->hasMetas() && !empty($values)) {
             $key = $this->metadata->getIdKeys()[0];
 
             $ids = array_map(function ($a) use ($key) {
@@ -326,7 +328,8 @@ class BaseRepository extends Repository
         }
 
         // Build entities from values
-        $class = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+        $class    = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+        $entities = [];
 
         foreach ($values as $key => $value) {
             $entity = new $class($this->converter->objectify($value, true));
@@ -347,6 +350,7 @@ class BaseRepository extends Repository
      */
     protected function getMetas($ids)
     {
+        $filters  = [];
         $metas    = [];
         $metaKeys = $this->metadata->getMetaKeys();
         $metaId   = array_pop($metaKeys);
