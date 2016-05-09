@@ -1075,7 +1075,6 @@ class ModuleManager
             // Check if module exists
 
             return false; // Hack to avoid crashes
-            throw new ModuleException("Module '{$module} is not available");
         } else {
             // Finally return if that module is activated
             return in_array($module, self::getActivatedModules());
