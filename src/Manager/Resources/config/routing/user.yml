@@ -1,14 +1,16 @@
-manager_users_list:
-    path: /users
-    options:
-        expose: true
-
 manager_user_create:
-    path: /user/create
+    path: /users/new
     options:
         expose: true
 
 manager_user_show:
-    path: /user/{id}/show
+    path: /users/{id}
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_users_list:
+    path: /users
     options:
         expose: true
