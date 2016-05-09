@@ -1,19 +1,31 @@
 entity:
     name: User
+    required:
+        - enabled
+        - email
+        - name
+        - type
+        - username
     properties:
-        enabled:     boolean
-        avatar_id:   integer
-        bio:         string
-        email:       string
-        user_groups: array
-        id:          integer
-        name:        string
-        password:    string
-        type:        boolean
-        url:         string
-        username:    string
+        enabled:        boolean
+        avatar_id:      integer
+        bio:            string
+        email:          string
+        id:             integer
+        name:           string
+        password:       string
+        type:           integer
+        token:          string
+        url:            string
+        username:       string
+        user_language:  string
+        user_group_ids: array
     mapping:
-        table: users
+        table: user
+        metas:
+            table: user_meta
+            ids:
+                id: user_id
         converters:
             default:
                 class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -21,60 +33,54 @@ entity:
         repositories:
             instance:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.instance', '@orm.metadata.notification', '@cache.connection.instance' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
             manager:
                 class:     Common\ORM\Database\Repository\BaseRepository
-                arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache.connection.manager' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.user' ]
         persisters:
             instance:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.instance', '@orm.metadata.notification', '@cache.connection.instance' ]
+                arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
             manager:
                 class:     Common\ORM\Database\Persister\BasePersister
-                arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache.connection.manager' ]
+                arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
         columns:
             id:
                 type: integer
                 options: { default: null, unsigned: true, autoincrement: true }
             username:
                 type: string
-                options: { default: null, notnull: false, length: 100 }
+                options: { default: null, length: 100 }
             password:
                 type: string
-                options: { default: null, notnull: false, length: 50 }
-            sessionexpire:
-                type: integer
-                options: { default: '15', unsigned: true }
+                options: { default: null, length: 50 }
             url:
                 type: string
-                options: { default: '', notnull: false, length: 255 }
+                options: { default: '', length: 255 }
             bio:
                 type: text
-                options: { default: null, length: 65532, notnull: false }
-            avatar_img_id:
+                options: { default: null, length: 65532 }
+            avatar_id:
                 type: bigint
                 options: { default: '0', unsigned: true }
             email:
                 type: string
-                options: { default: null, notnull: false, length: 255 }
+                options: { default: null, length: 255 }
             name:
                 type: string
-                options: { default: null, notnull: false, length: 100 }
+                options: { default: null, length: 100 }
             type:
-                type: boolean
+                type: integer
                 options: { default: '0', comment: '0-backend, 1-frontend' }
-            deposit:
-                type: float
-                options: { default: '0' }
             token:
                 type: string
-                options: { default: null, notnull: false, length: 50 }
-            activated:
+                options: { default: null, length: 50 }
+            enabled:
                 type: boolean
-                options: { default: '1', comment: '1 activated - 0 deactivated' }
-            fk_user_group:
+                options: { default: true, comment: '1 activated - 0 deactivated' }
+            user_group_ids:
                 type: simple_array
-                options: { default: null, notnull: false, length: 100 }
+                options: { default: null, length: 100 }
         index:
             -
                 name: PRIMARY
