@@ -630,7 +630,7 @@ class InstanceManager extends BaseManager
 
             $values = array(
                 $data['username'], $data['token'], 60, $data['email'],
-                md5($data['password']), $data['username'], 5
+                md5($data['password']), $data['username'], [3,5]
             );
 
             if (!$this->conn->executeQuery($sql, $values)) {
