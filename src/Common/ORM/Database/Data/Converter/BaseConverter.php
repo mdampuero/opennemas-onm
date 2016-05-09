@@ -78,7 +78,7 @@ class BaseConverter
 
         $metas = array_intersect_key($data, array_flip($unknown));
         $data  = array_diff_key($data, array_flip($unknown));
-        $types = array_map(function ($a) {
+        $types = array_values(array_map(function ($a) {
             if (is_bool($a)) {
                 return \PDO::PARAM_BOOL;
             }
@@ -88,7 +88,7 @@ class BaseConverter
             }
 
             return \PDO::PARAM_STR;
-        }, $data);
+        }, $data));
 
         return [ $data, $metas, $types ];
     }

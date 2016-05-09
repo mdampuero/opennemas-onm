@@ -76,7 +76,13 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'baz' => '["garply","gorp"]',
                     'norf' => 0,
                 ],
-                [ 'wobble' => 'wubble' ]
+                [ 'wobble' => 'wubble' ],
+                [
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_INT,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_BOOL,
+                ]
             ],
             $this->converter->databasify([
                 'foo' => 'foobar',
