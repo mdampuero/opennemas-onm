@@ -112,7 +112,8 @@ class BasePersister extends Persister
         $id   = array_intersect_key($entity->getData(), $keys);
 
         // Remove ids from data
-        $data = array_diff_key($data, $keys);
+        $data  = array_diff_key($data, $keys);
+        $types = array_values(array_diff_key($types, $keys));
 
         $this->conn->update($this->metadata->getTable(), $data, $id, $types);
 
