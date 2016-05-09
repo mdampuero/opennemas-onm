@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<div class="content ng-hide" ng-show="group">
+<div class="content ng-hide" ng-show="user_group">
   <form name="groupForm" novalidate>
     <div class="grid simple">
       <div class="grid-body">
