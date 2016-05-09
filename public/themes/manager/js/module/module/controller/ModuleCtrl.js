@@ -6,12 +6,13 @@
      * @ngdoc controller
      * @name  ModuleCtrl
      *
-     * @requires $filter
+     * @requires $http
      * @requires $location
+     * @requires $routeParams
      * @requires $scope
-     o @requires $timeout
-     * @requires $uibModal
-     * @requires itemService
+     * @requires $timeout
+     * @requires Cleaner
+     * @requires http
      * @requires routing
      * @requires messenger
      *
@@ -19,8 +20,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$filter', '$http', '$location', '$routeParams', '$scope', '$timeout', '$uibModal', 'Cleaner', 'http', 'routing', 'messenger',
-      function ($filter, $http, $location, $routeParams, $scope, $timeout, $uibModal, Cleaner, http, routing, messenger) {
+      '$http', '$location', '$routeParams', '$scope', '$timeout', 'Cleaner', 'http', 'routing', 'messenger',
+      function ($http, $location, $routeParams, $scope, $timeout, Cleaner, http, routing, messenger) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -66,7 +67,7 @@
         };
 
         /**
-         * @function addPrice
+         * @function autocomplete
          * @memberOf ModuleCtrl
          *
          * @description
@@ -261,6 +262,7 @@
 
         // To execute on destroy
         $scope.$on('$destroy', function() {
+          $scope.extra  = null;
           $scope.module = null;
         });
 
@@ -282,15 +284,13 @@
           };
         }
 
-        http.get(route).then(
-          function(response) {
-            $scope.extra  = response.data.extra;
+        http.get(route).then(function(response) {
+          $scope.extra  = response.data.extra;
 
-            if (response.data.module) {
-              $scope.module = angular.merge($scope.module, response.data.module);
-            }
+          if (response.data.module) {
+            $scope.module = angular.merge($scope.module, response.data.module);
           }
-        );
+        });
       }
     ]);
 })();

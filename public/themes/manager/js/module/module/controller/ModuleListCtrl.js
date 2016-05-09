@@ -220,7 +220,7 @@
          * @description
          *   Enables/disables a module.
          *
-         * @param {String}  item     The notification object.
+         * @param {String}  item     The module object.
          * @param {String}  property The property name.
          * @param {Boolean} value    The property value.
          */
@@ -266,18 +266,17 @@
           var data = { ids: $scope.selected.items };
           data[property] = value;
 
-          http.patch('manager_ws_modules_patch', data)
-            .then(function(response) {
-              $scope.list().then(function() {
-                messenger.post(response.data);
-                $scope.selected = { all: false, items: [] };
-              });
-            }, function(response) {
-              $scope.list().then(function() {
-                messenger.post(response.data);
-                $scope.selected = { all: false, items: [] };
-              });
+          http.patch('manager_ws_modules_patch', data).then(function(response) {
+            $scope.list().then(function() {
+              messenger.post(response.data);
+              $scope.selected = { all: false, items: [] };
             });
+          }, function(response) {
+            $scope.list().then(function() {
+              messenger.post(response.data);
+              $scope.selected = { all: false, items: [] };
+            });
+          });
         };
 
         // Updates the columns stored in localStorage.
