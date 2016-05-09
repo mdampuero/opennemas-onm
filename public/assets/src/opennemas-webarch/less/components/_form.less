@@ -20,6 +20,28 @@ select.form-control {
   white-space: nowrap;
 }
 
+.input-with-icon {
+  .icon {
+    bottom: 0;
+    color: @default-color;
+    display: block;
+    font-size: 16px;
+    height: auto;
+    left: 0;
+    margin: 11px 2px 4px 10px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 16px;
+
+    &.right {
+      left: auto;
+      margin: 7px 10px;
+      right: 0;
+    }
+  }
+}
+
 .has-error {
   .input-with-icon i {
     color: @error-color;
