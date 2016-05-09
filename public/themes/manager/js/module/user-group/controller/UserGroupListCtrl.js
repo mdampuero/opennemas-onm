@@ -7,10 +7,10 @@
      * @name  UserGroupListCtrl
      *
      * @requires $controller
-     * @requires $uibModal
      * @requires $location
      * @requires $scope
      * @requires $timeout
+     * @requires $uibModal
      * @requires http
      * @requires messenger
      * @requires oqlBuilder
@@ -20,8 +20,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('UserGroupListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function ($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -138,7 +138,7 @@
 
         /**
          * @function list
-         * @memberOf InstanceListCtrl
+         * @memberOf UserGroupListCtrl
          *
          * @description
          *   Reloads the list.
