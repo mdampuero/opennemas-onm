@@ -110,9 +110,9 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface
      */
     public function eraseCredentials()
     {
-        unset($this->roles);
-        unset($this->password);
-        unset($this->token);
+        unset($this->data['roles']);
+        unset($this->data['password']);
+        unset($this->data['token']);
     }
 
     /**
