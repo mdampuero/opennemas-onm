@@ -6,20 +6,28 @@
      * @ngdoc controller
      * @name  UserGroupCtrl
      *
-     * @requires $filter
      * @requires $location
      * @requires $routeParams
      * @requires $scope
-     * @requires itemService
+     * @requires http
      * @requires routing
      * @requires messenger
      *
      * @description
-     *   description
+     *   Handles all actions in user groups listing.
      */
     .controller('UserGroupCtrl', [
-      '$filter', '$location', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($filter, $location, $routeParams, $scope, itemService, routing, messenger) {
+       '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, http, routing, messenger) {
+        /**
+         * List of available groups.
+         *
+         * @type Object
+         */
+        $scope.user_group = {
+          privileges: []
+        };
+
         /**
          * Privileges section
          *
@@ -68,11 +76,7 @@
          *
          * @type Object
          */
-        $scope.selected = {
-          all: {},
-          privileges: {},
-          allSelected: {}
-        };
+        $scope.selected = { all: {}, privileges: {}, allSelected: {} };
 
         /**
          * Checks if all module privileges are checked.
@@ -90,8 +94,8 @@
           for (var key in $scope.extra.modules[module]) {
             var id = $scope.extra.modules[module][key].id;
 
-            if (!$scope.group.privileges ||
-                $scope.group.privileges.indexOf(id) === -1
+            if (!$scope.user_group.privileges ||
+                $scope.user_group.privileges.indexOf(id) === -1
                ) {
               $scope.selected.all[module] = 0;
               return false;
@@ -110,8 +114,8 @@
          *                 false.
          */
         $scope.isSelected = function(id) {
-          if (!$scope.group.privileges ||
-              $scope.group.privileges.indexOf(id) == -1
+          if (!$scope.user_group.privileges ||
+              $scope.user_group.privileges.indexOf(id) == -1
              ) {
             return false;
           }
@@ -120,39 +124,21 @@
         };
 
         /**
-         * Creates a new user group.
+         * Saves a new user group.
          */
         $scope.save = function() {
-          if ($scope.groupForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
-          itemService.save('manager_ws_user_group_create', $scope.group)
+          http.post('manager_ws_user_group_save', $scope.user_group)
             .then(function (response) {
-              messenger.post({
-                message: response.data,
-                type: response.status === 201  ? 'success' : 'error'
-              });
+              messenger.post(response.data);
 
               if (response.status === 201) {
-                // Get new instance id
-                var url = response.headers()['location'];
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                    'manager_user_group_show', { id: id });
+                var url = response.headers().location.replace('/manager', '');
                 $location.path(url);
               }
-
+            }, function(response) {
+              messenger.post(response.data);
               $scope.saving = 0;
             });
         };
@@ -163,24 +149,24 @@
          * @param string module The module name.
          */
         $scope.selectAll = function(module) {
-          if (!$scope.group.privileges) {
-            $scope.group.privileges = [];
+          if (!$scope.user_group.privileges) {
+            $scope.user_group.privileges = [];
           }
 
           if ($scope.selected.all[module]) {
             for (var key in $scope.extra.modules[module]) {
               var id = $scope.extra.modules[module][key].id;
 
-              if ($scope.group.privileges.indexOf(id) === -1) {
-                $scope.group.privileges.push(id);
+              if ($scope.user_group.privileges.indexOf(id) === -1) {
+                $scope.user_group.privileges.push(id);
               }
             }
           } else {
             for (var key in $scope.extra.modules[module]) {
               var id = $scope.extra.modules[module][key].id;
 
-              if ($scope.group.privileges.indexOf(id) !== -1) {
-                $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
+              if ($scope.user_group.privileges.indexOf(id) !== -1) {
+                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
               }
             }
           }
@@ -190,8 +176,8 @@
          * Selects/unselects all privileges
          */
         $scope.selectAllPrivileges = function() {
-          if (!$scope.group.privileges) {
-            $scope.group.privileges = [];
+          if (!$scope.user_group.privileges) {
+            $scope.user_group.privileges = [];
           }
 
           if (!$scope.selected.allSelected) {
@@ -200,8 +186,8 @@
                 for (var key in $scope.extra.modules[module]) {
                   var id = $scope.extra.modules[module][key].id;
 
-                  if ($scope.group.privileges.indexOf(id) == -1) {
-                    $scope.group.privileges.push(id);
+                  if ($scope.user_group.privileges.indexOf(id) == -1) {
+                    $scope.user_group.privileges.push(id);
                   }
                 }
                 $scope.selected.allSelected = true;
@@ -209,12 +195,12 @@
             }
           } else {
             $scope.selected.allSelected = false;
-            $scope.group.privileges = [];
+            $scope.user_group.privileges = [];
             for (var key in $scope.extra.modules[module]) {
               var id = $scope.extra.modules[module][key].id;
 
-              if ($scope.group.privileges.indexOf(id) == -1) {
-                $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
+              if ($scope.user_group.privileges.indexOf(id) == -1) {
+                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
               }
             }
           }
@@ -224,38 +210,29 @@
          * Updates an user group.
          */
         $scope.update = function() {
-          if ($scope.groupForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
-          itemService.update('manager_ws_user_group_update', $scope.group.id,
-              $scope.group).then(function (response) {
-            messenger.post({
-              message: response.data,
-              type: response.status === 200 ? 'success' : 'error'
-            });
+          var route = {
+            name: 'manager_ws_user_group_update',
+            params: { id: $scope.user_group.id }
+          };
 
-            $scope.saving = 0;
-          });
+          http.put(route, $scope.user_group)
+            .then(function (response) {
+              messenger.post(response.data);
+              $scope.saving = 0;
+            }, function(response) {
+              messenger.post(response.data);
+              $scope.saving = 0;
+            });
         };
 
-        /**
-         * Frees up memory before controller destroy event
-         */
+        // Frees up memory on destroy
         $scope.$on('$destroy', function() {
-          $scope.group    = null;
-          $scope.sections = null;
-          $scope.selected = null;
-          $scope.extra    = null;
+          $scope.user_group = null;
+          $scope.sections   = null;
+          $scope.selected   = null;
+          $scope.extra      = null;
         });
 
         $scope.$watch('extra', function(nv) {
@@ -275,20 +252,20 @@
           }
         });
 
-        // Initialize group
+        var route = 'manager_ws_user_group_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_user_group_show', $routeParams.id).then(
-            function(response) {
-              $scope.group = response.data.group;
-              $scope.extra = response.data.extra;
-            }
-          );
-        } else {
-          itemService.new('manager_ws_user_group_new').then(function(response) {
-            $scope.group = { privileges: [] };
-            $scope.extra = response.data.extra;
-          });
+          route = { name: 'manager_ws_user_group_show',
+            params: { id: $routeParams.id } };
         }
+
+        http.get(route).then(function(response) {
+          $scope.extra = response.data.extra;
+
+          if (response.data.user_group) {
+            $scope.user_group = angular.merge(response.data.user_group);
+          }
+        });
       }
   ]);
 })();
