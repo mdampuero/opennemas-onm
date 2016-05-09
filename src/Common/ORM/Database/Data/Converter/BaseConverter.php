@@ -60,6 +60,16 @@ class BaseConverter
             $data[$key] = $this->convertTo($from, $to, $value);
         }
 
+        // Null non-present values
+        $missing = array_diff(
+            array_keys($this->metadata->properties),
+            array_keys($data)
+        );
+
+        foreach ($missing as $key) {
+            $data[$key] = null;
+        }
+
         // Meta keys (unknown properties)
         $unknown = array_diff(
             array_keys($data),
@@ -68,8 +78,19 @@ class BaseConverter
 
         $metas = array_intersect_key($data, array_flip($unknown));
         $data  = array_diff_key($data, array_flip($unknown));
+        $types = array_map(function ($a) {
+            if (is_bool($a)) {
+                return \PDO::PARAM_BOOL;
+            }
 
-        return [ $data, $metas ];
+            if (is_integer($a)) {
+                return \PDO::PARAM_INT;
+            }
+
+            return \PDO::PARAM_STR;
+        }, $data);
+
+        return [ $data, $metas, $types ];
     }
 
     /**
