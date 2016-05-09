@@ -16,7 +16,7 @@ services:
         class:     Backend\Security\OnmPasswordEncoder
     onm_user_provider:
         class:     %onm_user_provider.class%
-        arguments: [ '@cache', '@instance_manager', '@user_repository' ]
+        arguments: [ '@orm.manager' ]
     check_module_access:
         class:     Backend\EventListener\AnnotationListener
         arguments: [ '@router', '@annotation_reader' ]
