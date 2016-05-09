@@ -100,12 +100,11 @@
             <div class="grid-body">
               {acl isAllowed="STATIC_PAGE_AVAILABLE"}
               <div class="form-group">
-                <label for="content_status" class="form-label">{t}Published{/t}</label>
-                <div class="controls">
-                  <select name="content_status" id="content_status" tabindex="3">
-                    <option value="1"{if isset($page->content_status) && $page->content_status eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
-                    <option value="0"{if isset($page->content_status) && $page->content_status eq 0} selected="selected"{/if}>{t}No{/t}</option>
-                  </select>
+                <div class="checkbox">
+                  <input id="content_status" name="content_status" {if (isset($page) && $page->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                  <label for="content_status">
+                    {t}Published{/t}
+                  </label>
                 </div>
               </div>
               {/acl}
