@@ -307,7 +307,7 @@ class ModuleController extends Controller
         }
 
         return new JsonResponse([
-            'extra'  => $extra = $this->getExtraData(),
+            'extra'  => $this->getExtraData(),
             'module' => $converter->responsify($module->getData())
         ]);
     }
