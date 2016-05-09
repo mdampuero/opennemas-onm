@@ -102,12 +102,10 @@ class UserGroupController extends Controller
             return $converter->responsify($a->getData());
         }, $userGroups);
 
-        return new JsonResponse(
-            array(
-                'results' => $userGroups,
-                'total'   => $total,
-            )
-        );
+        return new JsonResponse([
+            'results' => $userGroups,
+            'total'   => $total,
+        ]);
     }
 
     /**
@@ -143,7 +141,8 @@ class UserGroupController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_user_group_show', [ 'id' => $userGroup->id ]
+                'manager_user_group_show',
+                [ 'id' => $userGroup->id ]
             )
         );
 
