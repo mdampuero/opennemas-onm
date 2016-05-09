@@ -29,6 +29,7 @@ angular.module(
     'onm.pagination',
     'onm.resizable',
     'onm.routing',
+    'onm.serializer',
     'onm.sidebar',
     'pascalprecht.translate',
     'sun.scrollable',

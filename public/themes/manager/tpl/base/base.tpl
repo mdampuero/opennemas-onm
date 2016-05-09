@@ -330,6 +330,7 @@
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-oql/*,
+      @Common/src/angular-serializer/serializer.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
       @Common/src/sidebar/js/sidebar.js,
