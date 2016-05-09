@@ -31,10 +31,10 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving || userForm.$invalid || (user.password && user.password !== rpassword)" ng-if="!user.id">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving || userForm.$invalid || (user.password && user.password !== rpassword)" ng-if="user.id">
               <i class="fa fa-save m-r-t" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -50,39 +50,36 @@
         <div class="grid simple">
           <div class="grid-body">
             <div class="form-group">
-              <label class="control-label" for="name">
-                {t}Display name{/t}
-                <span ng-show="userForm.name.$invalid">*</span>
-              </label>
-              <div class="controls input-with-icon right" ng-class="{ 'error-control': formValidated && userForm.name.$invalid }">
+              <label class="control-label" for="name">{t}Display name{/t}</label>
+              <div class="controls input-with-icon right">
                 <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
-                <span class="error" ng-show="formValidated && userForm.name.$invalid">
-                  <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="userForm.name.$dirty && userForm.name.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!userForm.name.$dirty && userForm.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.name.$dirty && userForm.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
                 </span>
               </div>
             </div>
-            <div class="form-group">
-              <label class="control-label" for="username">
-                {t}User name{/t}
-                <span ng-show="userForm.username.$invalid">*</span>
-              </label>
-              <div class="controls" ng-class="{ 'error-control': formValidated && userForm.username.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': userForm.username.$dirty && userForm.username.$invalid }">
+              <label class="control-label" for="username">{t}User name{/t}</label>
+              <div class="controls input-with-icon right">
                 <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
-                <span class="error" ng-show="formValidated && userForm.username.$invalid">
-                  <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="userForm.username.$dirty && userForm.username.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!userForm.username.$dirty && userForm.username.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.username.$dirty && userForm.username.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
                 </span>
               </div>
             </div>
-            <div class="form-group">
-              <label class="control-label" for="email">
-                {t}Email{/t}
-                <span ng-show="userForm.email.$invalid">*</span>
-              </label>
-              <div class="controls" ng-class="{ 'error-control': formValidated && userForm.email.$invalid }">
-                <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
-                <span class="error" ng-show="formValidated && userForm.email.$invalid">
-                  <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+            <div class="form-group" ng-class="{ 'has-error': userForm.email.$dirty && userForm.email.$invalid }">
+              <label class="control-label" for="email">{t}Email{/t}</label>
+              <div class="controls input-with-icon right">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="userForm.email.$dirty && userForm.email.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!userForm.email.$dirty && userForm.email.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.email.$dirty && userForm.email.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
                 </span>
+                <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
               </div>
             </div>
             <div class="form-group">
@@ -97,76 +94,67 @@
                 <textarea class="form-control" id="bio" name="bio" ng-model="user.bio" rows="3"></textarea>
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid, 'has-success': userForm.password.$dirty && userForm.password.$valid }">
+            <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid">
               <label class="control-label" for="password">{t}Password{/t}</label>
-              <div class="controls">
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                  <input class="form-control" id="password" name="password"  ng-model="user.password" maxlength="20" type="password"/>
-                </div>
+              <div class="controls input-with-icon">
+                <i class="icon fa fa-lock"></i>
+                <input class="form-control" id="password" name="password" ng-model="user.password" maxlength="20" type="password"/>
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error': userForm.rpassword.$dirty && userForm.rpassword.$invalid, 'has-success': userForm.rpassword.$dirty && userForm.rpassword.$valid }">
+            <div class="form-group" ng-class="{ 'has-error': userForm.password.$valid && user.password && user.password !== rpassword }">
               <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
-              <div class="controls">
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                  <input class="form-control" id="rpassword" id="rpassword"  ng-model="user.rpassword" maxlength="20" type="password"/>
-                </div>
+              <div class="controls input-with-icon">
+                <i class="icon fa fa-lock"></i>
+                <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" type="password"/>
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="userForm.password.$dirty && user.password === rpassword"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.password.$valid && user.password && user.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-5">
-        {is_module_activated name="PAYWALL"}
-          <div class="grid simple">
-            <div class="grid-title">
-              <h4>{t}Paywall{/t}</h4>
-            </div>
-            <div class="grid-body">
-              <div class="form-group">
-                <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                <input class="form-control" datetime-picker="picker" ng-model="user.meta.paywall_time_limit" type="text">
-              </div>
-            </div>
-          </div>
-        {/is_module_activated}
-        {acl isAllowed="GROUP_CHANGE"}
-          <div class="grid simple">
-            <div class="grid-title">
-              <h4>{t}Privileges{/t}</h4>
-            </div>
-            <div class="grid-body">
-              <div class="form-group">
-                <label for="id-user-group">{t}User group{/t}</label>
-                <ui-select multiple ng-model="user.id_user_group" theme="select2" >
-                  <ui-select-match>
-                    [% $item.name %]
-                  </ui-select-match>
-                  <ui-select-choices repeat="item.id as item in extra.groups">
-                    <div ng-bind-html="item.name | highlight: $select.search"></div>
-                  </ui-select-choices>
-                </ui-select>
-              </div>
-            </div>
-          </div>
-        {/acl}
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Settings{/t}</h4>
           </div>
           <div class="grid-body">
+            {acl isAllowed="GROUP_CHANGE"}
+              <div class="form-group">
+                <label class="form-label">
+                  {t}User groups{/t}
+                </label>
+                <div class="controls">
+                  <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.user_group_ids">
+                    <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                  </tags-input>
+                </div>
+              </div>
+            {/acl}
             <div class="form-group">
-              <label for="user-type">{t}User type{/t}</label>
-              <select id="user-type" ng-model="user.type">
-                <option value="0">{t}Backend{/t}</option>
-                <option value="1">{t}Frontend{/t}</option>
-              </select>
+              <label class="form-label">
+                {t}User type{/t}
+              </label>
+              <div class="controls">
+                <div class="radio">
+                  <input class="form-control" id="backend" ng-model="user.type" ng-value="0" type="radio"/>
+                  <label for="backend">
+                    {t}Backend{/t}
+                  </label>
+                </div>
+                <div class="radio">
+                  <input class="form-control" id="frontend" ng-model="user.type" ng-value="1" type="radio"/>
+                  <label for="frontend">
+                    {t}Frontend{/t}
+                  </label>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="user-language">{t}User language{/t}</label>
-              <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in extra.languages"></select>
+              <select id="user-language" ng-model="user.user_language" ng-options="key as value for (key, value) in extra.languages"></select>
               <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
             </div>
           </div>

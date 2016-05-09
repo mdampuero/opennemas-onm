@@ -65,7 +65,7 @@
             <span class="h-seperate"></span>
           </li>
         {/if}
-        {if $list === 'notification' || $list === 'extension'}
+        {if $list === 'notification' || $list === 'extension' || $list === 'user'}
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>

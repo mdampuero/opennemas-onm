@@ -34,8 +34,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search by name or username{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name_like[0].value = null" ng-show="criteria.name_like[0].value">
+            <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name or username{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name = null" ng-show="criteria.name">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -44,17 +44,17 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <ui-select ng-model="criteria.fk_user_group[0].value" theme="select2" >
+          <ui-select ng-model="criteria.user_group_ids" theme="select2" >
             <ui-select-match>
               <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
-            <ui-select-choices repeat="item.id as item in extra.flatGroups">
+            <ui-select-choices repeat="item.id as item in extra.user_groups">
               <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>
         <li class="quicklinks hidden-xs">
-          <ui-select name="view" ng-model="pagination.epp" theme="select2" >
+          <ui-select name="view" ng-model="criteria.epp" theme="select2" >
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -79,7 +79,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -125,7 +125,6 @@
     </div>
     <div class="grid-body no-padding">
       <div class="table-wrapper">
-        <div class="grid-overlay" ng-if="loading"></div>
         <table class="table no-margin">
           <thead>
             <tr>
@@ -148,7 +147,7 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('username') == 'asc', 'fa fa-caret-down': isOrderedBy('username') == 'desc'}"></i>
               </th>
               <th ng-if="isColumnEnabled('usergroups')" width="250">{t}Group{/t}</th>
-              <th class="text-center pointer" width="10" ng-click="sort('activated')" ng-if="isColumnEnabled('enabled')">{t}Activated{/t}</th>
+              <th class="text-center pointer" width="10" ng-click="sort('enabled')" ng-if="isColumnEnabled('enabled')">{t}Enabled{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -170,7 +169,7 @@
                   <a class="link" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -180,14 +179,14 @@
               </td>
               <td ng-if="isColumnEnabled('usergroups')">
                 <ul class="no-style">
-                  <li ng-repeat="id in item.id_user_group">
-                    [% extra.groups[id].name %]
+                  <li ng-repeat="id in item.user_group_ids">
+                    [% getUserGroup(id) %]
                   </li>
                 </ul>
               </td>
               <td class="text-center" ng-if="isColumnEnabled('enabled')">
-                <button class="btn btn-white" ng-click="setEnabled(item, item.activated == '1' ? '0' : '1')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading && item.activated == '1', 'fa-times text-error': !item.loading && item.activated == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == '1' ? '0' : '1')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                 </button>
               </td>
             </tr>
@@ -197,7 +196,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>
