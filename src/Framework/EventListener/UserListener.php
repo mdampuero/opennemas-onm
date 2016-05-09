@@ -59,19 +59,7 @@ class UserListener implements EventSubscriberInterface
             $token = $this->context->getToken();
             $user = $token->getUser();
 
-            $user = $this->provider->loadUserByUsername($user->getUsername());
-            $user->eraseCredentials();
-            $token->setUser($user);
-
             $this->container->get('core.loader')->setUser($user);
-            $instance = $this->container->get('core.instance');
-
-            $database  = $instance->getDatabaseName();
-            $namespace = $instance->internal_name;
-
-            getService('orm.manager')->getConnection('instance')->selectDatabase($database);
-            getService('cache')->setNamespace($namespace);
-            $GLOBALS['application']->conn->selectDatabase($database);
 
             if ($user->isMaster() || $user->isEnabled()) {
                 return;
