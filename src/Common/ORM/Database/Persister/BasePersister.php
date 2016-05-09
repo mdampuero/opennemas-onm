@@ -69,9 +69,9 @@ class BasePersister extends Persister
      */
     public function create(Entity &$entity)
     {
-        list($data, $metas) = $this->converter->databasify($entity->getData());
+        list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
-        $this->conn->insert($this->metadata->getTable(), $data);
+        $this->conn->insert($this->metadata->getTable(), $data, $types);
 
         $keys = $this->metadata->getIdKeys();
 
@@ -97,7 +97,7 @@ class BasePersister extends Persister
         $this->conn->delete($this->metadata->getTable(), $id);
 
         if ($this->hasCache()) {
-            $this->cache->delete($this->metadata->getCacheId($entity));
+            $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
     }
 
@@ -106,21 +106,22 @@ class BasePersister extends Persister
      */
     public function update(Entity $entity)
     {
-        list($data, $metas) = $this->converter->databasify($entity->getData());
+        list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
         $keys = array_flip($this->metadata->getIdKeys());
-
         $id   = array_intersect_key($entity->getData(), $keys);
+
+        // Remove ids from data
         $data = array_diff_key($data, $keys);
 
-        $this->conn->update($this->metadata->getTable(), $data, $id);
+        $this->conn->update($this->metadata->getTable(), $data, $id, $types);
 
         if ($this->metadata->hasMetas()) {
             $this->persistMetas($id, $metas);
         }
 
         if ($this->hasCache()) {
-            $this->cache->delete($this->metadata->getCacheId($entity));
+            $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
     }
 
