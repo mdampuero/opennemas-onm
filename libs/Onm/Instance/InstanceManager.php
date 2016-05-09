@@ -422,6 +422,7 @@ class InstanceManager extends BaseManager
         foreach ($ref->getProperties() as $property) {
             $properties[] = $property->name;
         }
+        $instance->created = $instance->created == '0000-00-00 00:00:00' ? '1970-01-01 00:00' : $instance->created;
 
         $values = array();
         foreach ($properties as $key) {
@@ -629,7 +630,7 @@ class InstanceManager extends BaseManager
 
             $values = array(
                 $data['username'], $data['token'], 60, $data['email'],
-                md5($data['password']), $data['username'], 5
+                md5($data['password']), $data['username'], [3,5]
             );
 
             if (!$this->conn->executeQuery($sql, $values)) {

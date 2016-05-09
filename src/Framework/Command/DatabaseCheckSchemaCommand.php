@@ -56,6 +56,12 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Whether to check manager schema or an instance schema (default: instance)'
+            )
+            ->addOption(
+                'foreign-keys',
+                false,
+                InputOption::VALUE_NONE,
+                'Whether to Use foreign keys in tables'
             );
     }
 
@@ -77,7 +83,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
         // $this->dumpSchema('onm-instances');
 
         $master = Yaml::parse(file_get_contents(APPLICATION_PATH.'/'.$this->path));
-        $master = $this->createSchema($master);
+        $master = $this->createSchema($master, $input->getoption('foreign-keys'));
 
         $schema = $this->getSchema($database);
         $conn = getService('dbal_connection');
@@ -149,7 +155,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
      * @param  array  $input Master schema as array.
      * @return Schema        Master schema.
      */
-    private function createSchema($input)
+    private function createSchema($input, $useForeignKeys)
     {
         $schema = new Schema();
 
@@ -173,6 +179,24 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                     $table->addUniqueIndex($value['columns'], $value['name']);
                 } else {
                     $table->addIndex($value['columns'], $value['name']);
+                }
+            }
+
+            // Add table creation options
+            if (array_key_exists('options', $definition)) {
+                foreach ($definition['options'] as $name => $value) {
+                    $table->addOption($name, $value);
+                }
+            }
+        }
+
+        if ($useForeignKeys) {
+            foreach ($input as $table => $definition) {
+                if (array_key_exists('foreign_keys', $definition)) {
+                    $tableObject = $schema->getTable($table);
+                    foreach ($definition['foreign_keys'] as $field => $value) {
+                        $tableObject->addForeignKeyConstraint($schema->getTable($value['target_table']), $value['source_field'], $value['target_field'], $value['restrictions'], $value['name']);
+                    }
                 }
             }
         }

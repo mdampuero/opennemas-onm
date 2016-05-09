@@ -159,6 +159,7 @@ class ModuleManager
                 'COMMENT_MANAGER'            => _('Comments'),
                 'CONTENT_SUBSCRIPTIONS'      => _('Subscription'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
+                'FIA_MODULE'                 => _('Facebook Instant Articles integration'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
@@ -667,20 +668,12 @@ class ModuleManager
                     'thumbnail'        => 'module-ads.jpg',
                     'type'             => 'module',
                     'name'             => _('Advertisement'),
-                    'description'      => _('Gain money with your Opennemas newspaper: manage your ads!'),
-                    'long_description' => _('<p>Thanks to this module all Opennemas journals will be able to create, add and manage ads on any pages: Frontpage Home/Sections, Inner Articles, Opinions, Gallery, Media.</p>
-                        <p>There are more than 15 types of ads.</p>'),
-                    'price'            => [
-                        'month' => 35
-                    ]
                 ],
                 [
                     'id'               => 'ADVANCED_SEARCH',
                     'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Advanced search'),
-                    'description'      => _('Allows searching for content directly inside the manager'),
-                    'long_description' => null,
                 ],
                 [
                     'id'               => 'ALBUM_MANAGER',
@@ -688,10 +681,6 @@ class ModuleManager
                     'thumbnail'        => 'module-albums.jpg',
                     'type'             => 'module',
                     'name'             => _('Albums'),
-                    'description'      => _('Allow you to create photo galleries and use them in your site.'),
-                    'long_description' => _('<p>Add Video and Image Galleries to your content.</p>
-                        <p>This module will allow you to create Photo Galleries, add video from YouTube, Vimeo, Dailymotion, MarcaTV, etc</p>
-                        <p>And the most interesting fact is that the video manager is the same as youtube one, perfect consistency and performance.</p>'),
                 ],
                 [
                     'id'               => 'ARTICLE_MANAGER',
@@ -699,19 +688,12 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-articles.jpg',
                     'name'             => _('Articles'),
-                    'description'      => _('Create your article and publish it with SEO included.'),
-                    'long_description' => _('<p>Publish articles including Title, Subtitle, Summary, Comment, Image, whenever you want and from wherever you want.</p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'ADVANCED_ARTICLE_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Advanced article options'),
-                    'description'      => _('Module to allow the second article signature'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'ADVANCED_FRONTPAGE_MANAGER',
@@ -719,19 +701,6 @@ class ModuleManager
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
                     'type'             => 'module',
                     'name'             => _('Frontpage Customization'),
-                    'description'      => _('Change the look and feel of your frontpages every time you want.'),
-                    'long_description' => _('<p>Changing frontpage is more and more frequent in order to disrupt with daily monotony.</p>
-                        <p>By activating this module you will be allowed to:</p>
-                        <ul>
-                            <li>Change background color of the news, so that a column can gain a different style from others.</li>
-                            <li>Change font size, so that you can give more weight to a title in the page.</li>
-                            <li>Change colour of titles fonts, so that you can combine it with the different background.</li>
-                            <li>Change of style: font, bold, italic, etc.</li>
-                            <li>Change the disposition of the image with respect to the text (right, left, above/below of the title, etc.)</li>
-                        </ul>'),
-                    'price'            => [
-                        'month' => 30
-                    ]
                 ],
                 [
                     'id'               => 'BLOG_MANAGER',
@@ -739,30 +708,18 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Authors Blog'),
-                    'description'      => _('Would you like to give to your Opinion authors a Blog Space, this is the feature you were looking for.'),
-                    'long_description' => _('<p>Authors will have a dedicated space where all their contributions will appear in chronological order and readers alse set a RSS notification to receive the latest articles posted by a particular Author.</p>'),
-                    'price'            => [
-                        'month' => 20
-                    ]
                 ],
                 [
                     'id'               => 'BOOK_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Books'),
-                    'description'      => _('Module for managing book pages'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 'xxx'
-                    ]
                 ],
                 [
                     'id'               => 'CACHE_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Cache manager'),
-                    'description'      => _('Module for managing the cache of pages'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'CATEGORY_MANAGER',
@@ -770,11 +727,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-categories.jpg',
                     'name'             => _('Category'),
-                    'description'      => _('Create, update and delete categories for contents.'),
-                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas, it allows users to create and manage categories of content.</p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'COMMENT_MANAGER',
@@ -782,22 +734,12 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-comments.jpg',
                     'name'             => _('Comments'),
-                    'description'      => _('Allow your readers to comment articles whether through Opennemas comment system or connecting with Facebook or Disqus.'),
-                    'long_description' => _('<p>Module included in the FREE version, it allows users to add comments to any content generated by newspaper.'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'CRONICAS_MODULES',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Cronicas customizations'),
-                    'description'      => _('Module for managing Cronicas customizations'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'FILE_MANAGER',
@@ -805,11 +747,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-files.jpg',
                     'name'             => _('Files'),
-                    'description'      => _('Upload your files and share them on your newspaper.'),
-                    'long_description' => _('<p>Module included in the Basic pack (FREE) of Opennemas, it allows users to upload files to the system and share them with a url in the newspaper articles.'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'FORM_MANAGER',
@@ -817,11 +754,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-letters.jpg',
                     'name'             => _('Contact'),
-                    'description'      => _('Let your readers send you content with or without attachments.'),
-                    'long_description' => _('<p>Our feature Opennemas Contact will allow readers to submit their opinions with or without attachment, so that they can communicate with the newspapers.</p>'),
-                    'price'            => [
-                        'month' => 25
-                    ]
                 ],
                 [
                     'id'               => 'FRONTPAGE_MANAGER',
@@ -829,11 +761,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpages.jpg',
                     'name'             => _('Frontpages'),
-                    'description'      => _('Most important asset of a newspaper, the frontpage manager allows live update of frontpages content.'),
-                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas, the frontpage manager will allow you to add articles and modify visualization of your frontpages instantly.<p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
@@ -841,12 +768,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-layouts.jpg',
                     'name'             => _('Frontpage Manager'),
-                    'description'      => _('Create and Manage Frontpage Layouts made by you, every time you want!'),
-                    'long_description' => _('<p>Manual Frontpages Disposition Management/Frontpages Organization</p>
-                        <p>You can change the appearance of Opennemas newspaper in a matter of seconds with this module. In this way you can select a different frontpage model on each of the sections frontpages.</p>'),
-                    'price'            => [
-                        'month' => 45
-                    ]
                 ],
                 [
                     'id'               => 'IMAGE_MANAGER',
@@ -854,11 +775,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-multimedia.jpg',
                     'name'             => _('Images'),
-                    'description'      => _('Allows user to upload images'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'IADBOX_MANAGER',
@@ -867,17 +783,6 @@ class ModuleManager
                     'plan'             => 'OTHER',
                     'thumbnail'        => 'iadbox.jpg',
                     'name'             => _('iadbox'),
-                    'description'      => _('<p>iadbox is a way to serve ads when users want to receive them.</p>
-                        <p>Let us know if you want to try it on your newspaper, we are alreday using it on ours!</p>
-                        <p>We will set it up for you for FREE and let iadbox team know so that you receive your reports and revenue.</p>
-                    '),
-                    'long_description' => _('<p>iadbox is an intelligent commercial messaging for the smartphone generation.</p>
-                        <p>It is a mobile and desktop marketing platform, with a user-controlled inbox for interaction with audiences.</p>
-                        <p><strong>More info</strong>: <a target="_blank" href="http://www.iadbox.com">www.iadbox.com</a></p>
-                        <p><a class="btn btn-success" href="mailto:sales@openhost.es">Ask for it</a></p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'XML_IMPORT',
@@ -885,11 +790,6 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Import XMLs'),
                     'thumbnail'        => 'module-frontpage-adv-custom.jpg',
-                    'description'      => _('Do you have your articles in Adobe InDesign or QuarkXPress'),
-                    'long_description' => _('<p>By activating this module you will be able to import XML from Adobe InDesign and QuarkXPress, so that your print articles will become digital. This automatisation is one of the most popular because it saves so much time...</p>'),
-                    'price'            => [
-                        'month' => 75
-                    ]
                 ],
                 [
                     'id'               => 'KEYWORD_MANAGER',
@@ -897,12 +797,6 @@ class ModuleManager
                     'type'             => 'module',
                     'name'             => _('Keywords'),
                     'thumbnail'        => 'module-tags.jpg',
-                    'description'      => _('Create a list of your favourite keywords and choose if you want to link it to something or assign an action to it.'),
-                    'long_description' => _('<p>Feature included in the Basic pack (FREE) of opennemas.</p>
-                        <p>It allows you to create a list of keywords and assign a landing page to each of them, or mail_to, and automatically every time that this keyword will be used the system will tag it for you.</p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
@@ -910,11 +804,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-newsstand.jpg',
                     'name'             => _('NewsStand'),
-                    'description'      => _('Let your readers download the pdf copy of your print newspaper.'),
-                    'long_description' => _('<p>If you would like to keep the print version of your newspaper in a newsstand like <a href="http://kiosko.net/" target="_blank">kiosko.net</a>, you just need to upload the full version or the frontpage and your users will be able to download it whenever they want.</p>'),
-                    'price'            => [
-                        'month' => 40
-                    ]
                 ],
                 [
                     'id'               => 'LETTER_MANAGER',
@@ -922,24 +811,12 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-letters.jpg',
                     'name'             => _('Connect'),
-                    'description'      => _('Let your readers be contributors.'),
-                    'long_description' => _('<p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper can become the "voice of people/Internet".</p>
-                        <p>You will be able to create custom submission forms for your contributors so that they can share daily in the easiest way.</p>
-                        <p>All contributions can be moderated.</p>'),
-                    'price'            => [
-                        'month' => '25'
-                    ]
                 ],
                 [
                     'id'               => 'LIBRARY_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Library'),
-                    'description'      => _('It allows to render list of contents in a page and classify it.'),
-                    'long_description' => _('<p>Feature included in the Basic pack (FREE) of Opennemas in order to process in a page the list of the contents and classify it by section created on a given day.</p>'),
-                    'price'            => [
-                        'month' => '0'
-                    ]
                 ],
                 [
                     'id'               => 'MENU_MANAGER',
@@ -947,18 +824,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-menus.jpg',
                     'name'             => _('Menus'),
-                    'description'      => _('Control your site navegation with menus and custom elements.'),
-                    'long_description' => _('<p>Feature included in the Basic Pack (FREE) of Opennemas, it enables you to control your site navigation.</p>
-                        <p>You can add different kind of elements to menus:</p>
-                        <ul>
-                            <li>Internal links</li>
-                            <li>Frontages</li>
-                            <li>Static pages</li>
-                            <li>External links</li>
-                        </ul>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
@@ -966,12 +831,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-agencies.jpg',
                     'name'             => _('News Agency importer'),
-                    'description'      => _('Keeping your digital news up to date with agencies is already a reality!'),
-                    'long_description' => _('<p>With just a few clicks the administrator will be able to add any news from agencies in the frontpage of the newspaper together with any image or media attached.</p>
-                        <p>Whichever is your agency you can configure it: <a href="http://www.efe.com/" target="_blank">Agencia EFE</a>, <a href="http://www.europapress.es/" target="_blank">Agencia Europa press</a>, <a href="http://www.reuters.com/" target="_blank">Reuters</a> and other RSS/XML sources, etc. Every and each of this channels will be available in your administration panel.</p>'),
-                    'price'            => [
-                        'month' => 40
-                    ]
                 ],
                 [
                     'id'               => 'NEWSLETTER_MANAGER',
@@ -980,17 +839,6 @@ class ModuleManager
                     'thumbnail'        => 'module-newsletters.jpg',
                     'name'             => _('Newsletter'),
                     'description'      => _('Engage your readers with your own personalised newsletter.'),
-                    'long_description' => _('<p>It is more and more frequent that newspapers send bulletins with a selection of the most interesting news of the day/week/month.</p>
-                        <p>This module allows administrators to create custom layouts of the bulletin and to edit the style before sending it.</p>
-                        <p>This way you will be able to create the newsletter your style.</p>'),
-                    'price'            => [
-                        'month' => 30,
-                        'usage' => [
-                            'price' => 2,
-                            'items' => 1000,
-                            'type' => _('emails')
-                        ]
-                    ]
                 ],
                 [
                     'id'               => 'OPENNEMAS_AGENCY',
@@ -998,12 +846,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Articles Synchronization'),
-                    'description'      => _('Update more newspapers at once by syncing articles.'),
-                    'long_description' => _('<p>Similarly to the frontpage synchronisation feature you will be able to update multiple newspapers by adding or editing articles in the main one.</p>
-                        <p>If you have many local newspapers you can import all the articles you want from the main one.</p>'),
-                    'price'            => [
-                        'month' => 55
-                    ]
                 ],
                 [
                     'id'               => 'OPINION_MANAGER',
@@ -1011,12 +853,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-opinion.jpg',
                     'name'             => _('Opinion'),
-                    'description'      => _('Have your opinionist publishing on your newspaper.'),
-                    'long_description' => _('<p>Module included in the Basic pack (FREE) of Opennemas.</p>
-                        <p>It allows all newspapers to have a section dedicated to opinions organized by author and with author frontpage too.</p>'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'POLL_MANAGER',
@@ -1024,58 +860,36 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-polls.jpg',
                     'name'             => _('Polls Manager'),
-                    'description'      => _('Create and manage your polls, engage your audience and collect useful information.'),
-                    'long_description' => _('<p>Polls questions can be created with single or multiple choice answers and the results displayed on bar charts, pie charts, etc.</p>
-                        <p>The most relevant aspect is that they are compatible and available on any browsers in the world.</p>'),
-                    'price'            => [
-                        'month' => 15
-                    ]
                 ],
                 [
                     'id'               => 'PROMOTIONAL_BAR',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Promotional bar'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'SCHEDULE_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Schedules'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'SETTINGS_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('System wide settings'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'SPECIAL_MANAGER',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Specials'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 'xxx'
-                    ]
                 ],
                 [
                     'id'               => 'STATIC_LIBRARY',
                     'plan'             => 'OTHER',
                     'type'             => 'internal',
                     'name'             => _('Static library'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 'xxx'
-                    ]
                 ],
                 [
                     'id'               => 'STATIC_PAGES_MANAGER',
@@ -1083,12 +897,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-static-page.jpg',
                     'name'             => _('Static pages'),
-                    'description'      => _('Manage your internal information in a static page.'),
-                    'long_description' => _('<p>Module included in the Basic pack (FREE) of opennemas.</p>
-                        <p>It allows newspapers to have static pages if needed for legal information and or "about us" information.'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'SYNC_MANAGER',
@@ -1096,14 +904,6 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-frontpage-sync.jpg',
                     'name'             => _('Frontpage Synchronization'),
-                    'description'      => _('Update many frontpages by updating 1 frontpage!'),
-                    'long_description' => _('<p>Do you have more than 1 newspaper and you would like for the "home" pages to be synchronised?</p>
-                        <p>No problem. By activating this module you will have all your news synchronised in many frontpages all at once. For instance if you have many locak newspapers and one main one, you can update the frontpage of all locals with news of the general newspaper.</p>
-                        <p>If you modify a frontpage in the main newspaper the frontpage of local newspapers will update automatically too.</p>
-                        <p>The only requirement is that all newspapers need to belong to the same group, so that the frontpage is stored in the one place.</p>'),
-                    'price'            => [
-                        'month' => 65
-                    ]
                 ],
                 [
                     'id'               => 'CONTENT_SUBSCRIPTIONS',
@@ -1111,47 +911,24 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
                     'name'             => _("Subscription"),
-                    'description'      => _("<p>Would you like for your readers to be able to unlock premium content for free?</p><p>This is the module you should add to your newspaper!</p>"),
-                    'long_description' => _('<p>This module enables newspapers to add a customized subscription form to allow users to unlock premium content.</p>
-                        <p>The subscription form generates login details for the user.</p>
-                        <p>Newspapers will be able to mark content as "premium" and users will need to register in order to access the full extent of it.</p>
-                        <p>Note: if the newspaper needs to collect user\'s data will have to provide certification of inscription to "Agencia Española de Protección de Datos" or equivalent. Openhost, S.L. is not responsible of any data saved or required by newspapers.'),
-                    'price'            => [
-                        'month' => 65
-                    ]
                 ],
                 [
                     'id'               => 'TRASH_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Trash'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'USER_GROUP_MANAGER',
                     'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('User groups'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'USER_MANAGER',
                     'plan'             => 'ADVANCED',
                     'type'             => 'internal',
                     'name'             => _('Users'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'USERVOICE_SUPPORT',
@@ -1166,19 +943,12 @@ class ModuleManager
                     'plan'             => 'PROFESSIONAL',
                     'type'             => 'module',
                     'name'             => _('Videos'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
                 ],
                 [
                     'id'               => 'WIDGET_MANAGER',
                     'plan'             => 'BASIC',
                     'type'             => 'internal',
                     'name'             => _('Widgets'),
-                    'description'      => _('Add description...'),
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'PAYWALL',
@@ -1186,23 +956,12 @@ class ModuleManager
                     'type'             => 'module',
                     'thumbnail'        => 'module-paywall.jpg',
                     'name'             => _('Paywall'),
-                    'description'      => _('Make money creating exclusive content only subscribers can access.'),
-                    'long_description' => _('<p>The News business is a very challenging and advertising alone often does not allow to newspapers to keep going. Add paywall to your newspaper and you will be able to select articles that you want to sell. This way in order to access this news users will need to register.</p>
-                        <p>You will be able to set the payment/subscription the way you want (weekly, monthly, annual, etc.) and also add currency and % of taxes that the item is subject to.</p>'),
-                    'price'            => [
-                        'month' => 95
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_NONE',
                     'plan'             => 'Support',
                     'type'             => 'internal',
                     'name'             => _('No support'),
-                    'description'      => '',
-                    'long_description' => _('Missed long description...'),
-                    'price'            => [
-                        'month' => 0
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_TRAINING',
@@ -1210,14 +969,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-2.jpg',
                     'name'             => _('Training and Advisory Services'),
-                    'description'      => _('Ask all your questions, walk through Opennemas and/or receive personal training via phone'),
-                    'long_description' => _('<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions or to walk through Opennemas and make sure you know it all?</p>
-                        <p>This is the Support Offer perfect for you!</p>
-                        <p>For a very small fee you will get our expert team on the line and you will be able to ask all the questions you have and/or receive personal training.</p>
-                        <p>Please remember that we guarantee FREE support via tickets/emails.</p>'),
-                    'price'            => [
-                        'month' => 30
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_PRO',
@@ -1225,16 +976,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-1.jpg',
                     'name'             => _('Support Pro'),
-                    'description'      => _('This support plan is thought for changes and creation of new widgets.'),
-                    'long_description' => _('<p>10 hours (2h day/1week).</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Creation and change of widgets</li>
-                        </ul>
-                        <p>Support provided by emails/tickets</p>'),
-                    'price'            => [
-                        'month' => 100
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_2',
@@ -1242,16 +983,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-2.jpg',
                     'name'             => _('Support 2'),
-                    'description'      => _('This support plan is ideal for updating your theme if you have had it for a long time.'),
-                    'long_description' => _('<p>40 hours (2h per day during 1 month)</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Standard changes of HTML/CSS in templates</li>
-                        </ul>
-                        <p>Support provided by emails/tickets and hangouts/skype</p>'),
-                    'price'            => [
-                        'month' => 300
-                    ]
                 ],
 
                 [
@@ -1260,16 +991,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-3.jpg',
                     'name'             => _('Support 3'),
-                    'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
-                    'long_description' => _('<p>60 hours (3h day/1month)</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Standard changes of HTML/CSS in templates</li>
-                        </ul>
-                        <p>Support provided by emails/tickets and hangouts/skype</p>'),
-                    'price'            => [
-                        'month' => 450
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_4',
@@ -1277,19 +998,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-4.jpg',
                     'name'             => _('Support 4'),
-                    'description'      => _('This support plan is ideal for updating your theme and at the same time redefining spaces.'),
-                    'long_description' => _('<p>80 hours (4h day/1month)</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Examples of usage of support:
-                            <li>Standard changes of HTML/CSS in templates</li>
-                            <li>Change Requests of the disposition of frontpage templates</li>
-                            <li>Category Titles, New structure of inner articles.</li>
-                        </ul>
-                        <p>Support provided by emails/tickets and hangouts/skype</p>'),
-                    'price'            => [
-                        'month' => 600
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_8',
@@ -1297,21 +1005,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-8.jpg',
                     'name'             => _('Support 8'),
-                    'description'      => _('This support plan fits the purpose of a restyling of newspapers by redefining spaces, disegn and style.'),
-                    'long_description' => _('<p>160 hours (8h day/1month)</p>
-                        <p>This support is all about customization and having one of our resources dedicated to a newsaper full time.</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Creation and change requests of widgets
-                            <li>Standard changes of HTML/CSS in templates</li>
-                            <li>Change Requests of the disposition of frontpage templates</li>
-                            <li>Category Titles</li>
-                            <li>New structure of inner articles.</li>
-                        </ul>
-                        <p>Support provided by emails/tickets, hangouts/skype and phone</p>'),
-                    'price'            => [
-                        'month' => 1200
-                    ]
                 ],
                 [
                     'id'               => 'SUPPORT_8_PLUS',
@@ -1319,20 +1012,6 @@ class ModuleManager
                     'type'             => 'service',
                     'thumbnail'        => 'service-8plus.jpg',
                     'name'             => _('Support 8 Plus'),
-                    'description'      => _('This Support is designed for all newspapers that need may need help including during the weekend.'),
-                    'long_description' => _('<p>8h day/7 days/ 1month</p>
-                        <p>Examples of usage of support:</p>
-                        <ul>
-                            <li>Creation and change requests of widgets</li>
-                            <li>Standard changes of HTML/CSS in templates</li>
-                            <li>Change Requests of the disposition of frontpage templates</li>
-                            <li>Category Titles</li>
-                            <li>New structure of inner articles.</li>
-                        </ul>
-                        <p>Support provided by emails/tickets, hangouts/skype and phone</p>'),
-                    'price'            => [
-                        'month' => 3000
-                    ]
                 ]
             ];
         }
@@ -1396,7 +1075,6 @@ class ModuleManager
             // Check if module exists
 
             return false; // Hack to avoid crashes
-            throw new ModuleException("Module '{$module} is not available");
         } else {
             // Finally return if that module is activated
             return in_array($module, self::getActivatedModules());

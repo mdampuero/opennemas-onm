@@ -247,8 +247,15 @@ class RssController extends Controller
      **/
     public function facebookInstantArticlesRSSAction(Request $request)
     {
+        if (!\Onm\Module\ModuleManager::isActivated('FIA_MODULE')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
+
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId('instantArticles', '', 'RSS');
         if (($this->view->caching == 0)
@@ -271,7 +278,29 @@ class RssController extends Controller
                     && !empty($content->params['bodyLink'])) {
                     unset($contents[$key]);
                 }
+
+                $relationsId = getService('related_contents')->getRelationsForInner($content->id);
+                if (count($relationsId) > 0) {
+                    $cm = new \ContentManager;
+                    $relatedContents  = $cm->getContents($relationsId);
+                    // Drop contents that are not available or not in time
+                    $relatedContents  = $cm->getInTime($relatedContents);
+                    $relatedContents  = $cm->getAvailable($relatedContents);
+                    $content->related = $relatedContents;
+                }
+
+                // Wrap img with figure and add caption
+                $content->body = preg_replace(
+                    '@(<img[^>]+>)@',
+                    '<figure>${1}<figcaption>'.$content->title.'</figcaption></figure>',
+                    $content->body
+                );
+
+                // Clean empty HTML tags
+                $content->body = preg_replace('@<(.*)><\/\1>@', '', $content->body);
+
             }
+
 
             $this->view->assign('contents', $contents);
         }
@@ -301,11 +330,13 @@ class RssController extends Controller
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
@@ -335,13 +366,13 @@ class RssController extends Controller
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
@@ -372,11 +403,13 @@ class RssController extends Controller
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
@@ -384,5 +417,20 @@ class RssController extends Controller
         $contents = $er->findBy($filters, $order, $total, 1);
 
         return $contents;
+    }
+
+
+    /**
+     * Fetches advertisements for Instant article
+     *
+     * @param string category the category identifier
+     *
+     * @return array the list of advertisements for this page
+     **/
+    public static function getAds($category = 'home')
+    {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
     }
 }

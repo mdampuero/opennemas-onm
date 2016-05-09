@@ -76,22 +76,70 @@
         };
 
         /**
+         * @function confirm
+         * @memberOf ClientCtrl
+         *
+         * @description
+         *   Saves or updates a client.
+         */
+        $scope.confirm = function () {
+          if (!$scope.clientForm.$dirty) {
+            $rootScope.$broadcast('client-saved', $scope.client);
+            return;
+          }
+
+
+          if ($scope.client.id) {
+            $scope.update();
+            return;
+          }
+
+          $scope.save();
+        };
+
+        /**
          * @function save
          * @memberOf ClientCtrl
          *
          * @description
-         *   Saves client information.
+         *   Saves a client.
          */
         $scope.save = function () {
           $scope.loading = true;
 
-          var url  = routing.generate('backend_ws_client_save');
+          var url = routing.generate('backend_ws_client_save');
 
-          $http.post(url, $scope.client).success(function(response) {
+          $http.post(url, $scope.client).then(function(response) {
             $scope.loading = false;
 
+            if (response.data) {
+              $scope.client.id = response.data;
+            }
+
             $rootScope.$broadcast('client-saved', $scope.client);
-          }).error(function(response) {
+          }, function(response) {
+            $scope.loading = false;
+            messenger.post(response);
+          });
+        }
+
+        /**
+         * @function update
+         * @memberOf ClientCtrl
+         *
+         * @description
+         *   Updates a client.
+         */
+        $scope.update = function () {
+          $scope.loading = true;
+
+          var url = routing.generate('backend_ws_client_update',
+              { id: $scope.client.id });
+
+          $http.put(url, $scope.client).then(function() {
+            $scope.loading = false;
+            $rootScope.$broadcast('client-saved', $scope.client);
+          }, function(response) {
             $scope.loading = false;
             messenger.post(response);
           });

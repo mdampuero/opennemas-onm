@@ -92,7 +92,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser()" type="button" value="validate">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser()" type="button" value="validate" id="save-button">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
@@ -307,7 +307,7 @@
             <div class="grid-body">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
+                  <label class="form-label" for="id_user_group">{t}User group{/t}</label>
                   <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
                     <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                   </div>
@@ -321,7 +321,8 @@
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
+                  <label class="form-label" for="ids_category">{t}Categories{/t}</label>
+                  <div class="help">{t}Categories that this user will have access to. Leave empty to give access to all categories{/t}</div>
                   <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
                     <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                   </div>
@@ -331,6 +332,7 @@
                       <input type="hidden" name="ids_category[]" value="[% category.id %]">
                     </span>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -374,7 +376,7 @@
                   </label>
                   <div class="controls">
                     {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                    <div class="help-blockacl/user/modals/_modalBatchUpdate.tpl">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                    <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                   </div>
                 </div>
                 {acl isAllowed="USER_ADMIN"}

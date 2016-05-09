@@ -80,9 +80,11 @@ abstract class AbstractCache implements CacheInterface
      */
     public function fetch($id)
     {
+        $id = $this->getNamespacedId($id);
+
         if (is_array($id)) {
             $values = array_intersect_key($this->mru, array_flip($id));
-            $id     = array_diff($id, array_keys($values));
+            $id     = array_values(array_diff($id, array_keys($values)));
 
             if (!empty($values)) {
                 $this->buffer[] = [
@@ -93,23 +95,21 @@ abstract class AbstractCache implements CacheInterface
             }
 
             if (!empty($id)) {
-                $ids = [];
-                foreach ($id as $i) {
-                    $ids[] = $this->getNamespacedId($i);
-                }
+                $this->buffer[] = [
+                    'method' => 'fetchMulti',
+                    'params' => [ 'ids' => $id ]
+                ];
 
-                $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $ids ] ];
-
-                $rawValues = $this->doFetch($ids);
-
-                foreach ($rawValues as $key => $value) {
-                    $values[str_replace($this->namespace. '_', '', $key)] = $value;
-                }
+                $rawValues = $this->doFetch($id);
+                $values    = array_merge($values, $rawValues);
             }
 
             $this->mru = array_merge($this->mru, $values);
 
-            return $values;
+            return array_combine(
+                $this->getUnNamespacedId(array_keys($values)),
+                array_values($values)
+            );
         }
 
         if (array_key_exists($id, $this->mru)) {
@@ -123,8 +123,9 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
+        $this->mru[$id] = $this->doFetch($id);
 
-        return $this->doFetch($this->getNamespacedId($id));
+        return $this->mru[$id];
     }
 
     /**
@@ -285,13 +286,30 @@ abstract class AbstractCache implements CacheInterface
     private function getNamespacedId($id)
     {
         if (is_array($id)) {
-            foreach ($id as &$idPart) {
-                $idPart = $this->getNamespacedId($idPart);
-            }
-            return $id;
+            return array_map(function ($a) {
+                return $this->namespace . '_'. $a;
+            }, $id);
         }
 
         return $this->namespace . '_'. $id;
+    }
+
+    /**
+     * Removes the namespace from the id.
+     *
+     * @param mixed $id A namespaced id or an array of namespaced ids.
+     *
+     * @return mixed The id or ids without namespace.
+     */
+    private function getUnNamespacedId($id)
+    {
+        if (is_array($id)) {
+            return array_map(function ($a) {
+                return str_replace($this->namespace . '_', '', $a);
+            }, $id);
+        }
+
+        return str_replace($this->namespace . '_', '', $id);
     }
 
     /**

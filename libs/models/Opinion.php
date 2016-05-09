@@ -164,7 +164,8 @@ class Opinion extends Content
      **/
     public function create($data)
     {
-        $data['position']   =  1;
+        $data['position'] =  1;
+        $data['category'] = 4; // force internal category name
 
         // Editorial or director
         if (!isset($data['fk_author'])) {
@@ -172,24 +173,18 @@ class Opinion extends Content
         }
 
         // Set author img to null if not exist
-        (isset($data['fk_author_img']))
-            ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
-
-
+        (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
 
         parent::create($data);
 
-        $sql = 'INSERT INTO opinions
-                    (`pk_opinion`, `fk_author`, `fk_author_img`, type_opinion)
-                VALUES
-                    (?,?,?,?)';
+        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `fk_author_img`, `type_opinion`) VALUES (?,?,?,?)';
 
-        $values = array(
+        $values = [
             $this->id,
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion']
-        );
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -273,10 +268,10 @@ class Opinion extends Content
              . "WHERE pk_opinion=?";
 
         $values = array(
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion'],
-            $data['id']
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

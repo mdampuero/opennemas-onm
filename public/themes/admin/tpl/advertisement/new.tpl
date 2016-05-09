@@ -68,7 +68,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Save{/t}</span>
                 </button>
@@ -343,7 +343,10 @@
                     <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1100}selected{/if}>{t}AMP pages{/t}</option>
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="FIA_MODULE"}
+                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
                     {/is_module_activated}
                     <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                   </select>
@@ -407,6 +410,38 @@
                               <input id="amp-inner-button1" name="type_advertisement" type="radio" value="1051" {if isset($advertisement) && $advertisement->type_advertisement == 1051}checked="checked" {/if}/>
                               <label for="amp-inner-button1">
                                 {t}AMP inner article - Button 1{/t}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/is_module_activated}
+                    {is_module_activated name="FIA_MODULE"}
+                    <div class="ng-cloak" ng-show="position == 'publi-fia'">
+                      <div class="col-md-9">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button1" name="type_advertisement" type="radio" value="1075" {if isset($advertisement) && $advertisement->type_advertisement == 1075}checked="checked" {/if}/>
+                              <label for="fia-inner-button1">
+                                {t}Instant Articles inner article - Button 1{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button2" name="type_advertisement" type="radio" value="1076" {if isset($advertisement) && $advertisement->type_advertisement == 1076}checked="checked" {/if}/>
+                              <label for="fia-inner-button2">
+                                {t}Instant Articles inner article - Button 2{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
+                              <label for="fia-inner-button4">
+                                {t}Instant Articles inner article - Button 3{/t}
                               </label>
                             </div>
                           </div>

@@ -69,7 +69,7 @@ class UserGroup
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
+        $this->id = (int) $GLOBALS['application']->conn->Insert_ID();
         $this->name = $data['name'];
 
         //Se insertan los privilegios
@@ -135,7 +135,7 @@ class UserGroup
                     WHERE pk_user_group=?";
             $values = array(
                 $data['name'],
-                $data['id']
+                (int) $data['id']
             );
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -254,7 +254,7 @@ class UserGroup
                 "INSERT INTO user_groups_privileges
                 (`pk_fk_user_group`, `pk_fk_privilege`)
                 VALUES (?,?)",
-                array($this->id, $privilegeId)
+                array((int) $this->id, (int) $privilegeId)
             );
             if (!$rs) {
                 return false;

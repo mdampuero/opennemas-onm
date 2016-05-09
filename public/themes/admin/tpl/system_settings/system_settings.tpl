@@ -65,7 +65,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -772,6 +772,16 @@
                               <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
                             </div>
                           </div>
+                          {is_module_activated name="FIA_MODULE"}
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_instant_articles_tag">
+                              {t}Instant Articles (fb:pages meta tag){/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_instant_articles_tag" name="facebook[instant_articles_tag]" type="text" value="{$configs['facebook']['instant_articles_tag']|default:""}">
+                            </div>
+                          </div>
+                          {/is_module_activated}
                         </div>
                       </div>
                     </div>

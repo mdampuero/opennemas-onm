@@ -129,7 +129,7 @@ class Attachment extends Content
             $this->id,
             $data['title'],
             $data['path'],
-            $data['category'],
+            (int) $data['category'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -201,7 +201,11 @@ class Attachment extends Content
 
         $sql = "UPDATE attachments SET `title`=?, category=? "
              . "WHERE pk_attachment=?";
-        $values = array($data['title'], $data['category'], $data['id']);
+        $values = [
+            $data['title'],
+            (int) $data['category'],
+            (int) $data['id']
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -258,7 +262,6 @@ class Attachment extends Content
         while (!$rs->EOF) {
             $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
             if (file_exists($file)) {
-                var_dump($file);
                 @unlink($file);
             }
 

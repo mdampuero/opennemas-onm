@@ -4,3 +4,21 @@ backend_ws_client_save:
     methods:  [ POST ]
     options:
         expose: true
+
+backend_ws_client_show:
+    path:     /client/{id}
+    defaults: { _controller: BackendWebServiceBundle:Client:show }
+    methods:  [ GET ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_ws_client_update:
+    path:     /client/{id}
+    defaults: { _controller: BackendWebServiceBundle:Client:update }
+    methods:  [ PUT ]
+    requirements:
+        id: \d+
+    options:
+        expose: true

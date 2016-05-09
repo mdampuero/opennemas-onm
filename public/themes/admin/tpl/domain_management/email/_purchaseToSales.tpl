@@ -20,7 +20,7 @@
 {if $client->company}
   {t}Company{/t}: {$client->company}<br>
 {/if}
-{t}VAT number{/t}: {$client->vat}<br>
+{t}VAT number{/t}: {$client->vat_number}<br>
 {t}Email{/t}: {$client->email}<br>
 {t}Phone{/t}: {$client->phone}<br>
 <address>

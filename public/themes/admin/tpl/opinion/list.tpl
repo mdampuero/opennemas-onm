@@ -70,7 +70,7 @@
             {/acl}
             {acl isAllowed="OPINION_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}">
+              <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

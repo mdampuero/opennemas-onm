@@ -236,7 +236,7 @@ class Instance
      */
     public function __wakeup()
     {
-        if (property_exists($this, 'metas')) {
+        if (!property_exists($this, 'metas') || empty($this->metas)) {
             return;
         }
 

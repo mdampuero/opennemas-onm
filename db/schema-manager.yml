@@ -136,6 +136,13 @@ instance_meta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: instancemeta_id_instances_id
+            source_field: [ instance_id ]
+            target_table: instances
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 extension:
     columns:
         id:
@@ -217,6 +224,13 @@ extension_meta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: extensionmeta_extensionid_extension_id
+            source_field: [ extension_id ]
+            target_table: extension
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 
 notification:
     columns:
@@ -338,6 +352,13 @@ usermeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: usermeta_userid_users_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 users:
     columns:
         id:
@@ -454,7 +475,7 @@ purchase:
             options: { default: null, length: 65532, notnull: true }
         method:
             type: string
-            options: { default: null, length: 10 }
+            options: { default: null, length: 15 }
         fee:
             type: float
             options: { default: 0, notnull: true }

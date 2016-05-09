@@ -372,6 +372,7 @@ class HooksSubscriber implements EventSubscriberInterface
             $cacheManager->delete('frontpage|home');
             $cacheManager->delete('home|RSS');
             $cacheManager->delete('last|RSS');
+            $cacheManager->delete('instantArticles|RSS');
             $cacheManager->delete(
                 'blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
             );

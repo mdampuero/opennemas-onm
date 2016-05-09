@@ -165,7 +165,7 @@ class Poll extends Content
         $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`)
                 VALUES (?,?,?,?)';
         $values = array(
-            $this->id,
+            (int) $this->id,
             $data['subtitle'],
             0,
             $data['visualization']
@@ -197,7 +197,12 @@ class Poll extends Content
                     $item->pk_item = $k + 1;
                 }
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
-                $values = array($item->pk_item, (int) $this->id, $item->item, $item->votes);
+                $values = [
+                    (int) $item->pk_item,
+                    (int) $this->id,
+                    $item->item,
+                    $item->votes
+                ];
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 $keys .= $item->pk_item.', ';
@@ -205,7 +210,7 @@ class Poll extends Content
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
-            $values = array((int)$this->id);
+            $values = [(int)$this->id];
             $GLOBALS['application']->conn->Execute($sql, $values);
         }
 

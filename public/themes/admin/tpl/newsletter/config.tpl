@@ -5,27 +5,14 @@
 {javascripts}
 <script type="text/javascript">
   jQuery(document).ready(function($){
-    var newsletterType = $('#newsletter_subscriptionType');
     var reCaptcha = '{$missing_recaptcha}';
-
-    //If selected manage newsletter by e-mail, show e-mail address field
-    newsletterType.on('change', function() {
-      var divExternal= $('.external-config');
-      var divInternal = $('.internal-config');
-      if ($(this).val() == 'submit') {
-        divExternal.css('display', 'table-row');
-        divInternal.css('display', 'none');
-      } else {
-        divExternal.css('display', 'none');
-        divInternal.css('display', 'table-row');
-      }
-    });
 
     //If newsletter is activated and recaptcha is missing don't send form
     if (reCaptcha) {
       if ($('#warnings-validation')) {
         $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
       }
+
       $('#formulario').on('submit', function(){
         return false;
       });
@@ -36,7 +23,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_newsletter_config}" method="POST" id="formulario">
+<form action="{url name=admin_newsletter_config}" method="POST" id="formulario" ng-controller="InnerCtrl" ng-init="type='{if empty($configs['newsletter_subscriptionType'])}submit{else}{$configs['newsletter_subscriptionType']}{/if}'">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -61,7 +48,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
+              <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
                 <span class="fa fa-save"></span>
                 <span class="text">{t}Save{/t}</span>
               </button>
@@ -108,24 +95,24 @@
               {t escape=off 1=$smarty.capture.subscriptors}Whether to manage new subscriptions by an external maillist or using the <a href="%1" target="_blank"> Opennemas-managed list of subscribers</a>.{/t}
             </div>
             <div class="controls">
-              <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
+              <select name="newsletter_subscriptionType" id="newsletter_subscriptionType" ng-model="type">
                 <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
                 <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
               </select>
             </div>
           </div>
-          <div class="external-config" {if $configs['newsletter_subscriptionType'] neq 'submit'}style="display:none"{/if}>
+          <div class="external-config ng-cloak" ng-if="type === 'submit'">
             <div class="form-group">
               <label for="email" class="form-label">{t}Mailing list address{/t}</label>
               <div class="controls">
-                <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
+                <input class="form-control" id="email" name="newsletter_maillist[email]" required type="email" value="{$configs['newsletter_maillist']['email']|default:""}"/>
                 <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
               </div>
             </div>
             <div class="form-group" >
               <label for="subscription" class="form-label">{t}Mail address to receive new subscriptions{/t}</label>
               <div class="controls">
-                <input type="email" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
+                <input class="form-control" id="subscription" name="newsletter_maillist[subscription]" required type="email" value="{$configs['newsletter_maillist']['subscription']|default:""}"/>
               </div>
             </div>
           </div>

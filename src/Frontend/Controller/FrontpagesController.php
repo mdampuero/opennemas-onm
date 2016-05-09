@@ -55,8 +55,7 @@ class FrontpagesController extends Controller
 
         $cm       = new \ContentManager;
         $contents = $cm->getContentsForHomepageOfCategory($categoryId);
-        $expires  = $this->get('content_cache')
-            ->getEarlierStarttimeOfScheduledContents($contents);
+        $expires  = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();

@@ -161,8 +161,9 @@ class Frontpages
             'category_name'     => array(array('value' => $category->name)),
             'starttime'         => array(
                 'union' => 'OR',
-                array('value' => '0000-00-00 00:00:00'),
-                array('value' => date('Y-m-d H:i:s'), 'operator' => '<='),
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             )
         );
 

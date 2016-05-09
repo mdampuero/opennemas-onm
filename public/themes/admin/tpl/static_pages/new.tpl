@@ -42,7 +42,7 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -70,7 +70,7 @@
                   {t}URL{/t}
                 </label>
                 <span class="help">
-                  {t}The slug component in the url{/t}: {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html"><span class="fa fa-external-link"></span></a>
+                  {t}The slug component in the url{/t}: {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html" target="_blank"><span class="fa fa-external-link"></span></a>
                 </span>
                 <div class="controls">
                   <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}"  ng-model="slug" maxlength="120" tabindex="2" required="required"  />
@@ -100,12 +100,11 @@
             <div class="grid-body">
               {acl isAllowed="STATIC_PAGE_AVAILABLE"}
               <div class="form-group">
-                <label for="content_status" class="form-label">{t}Published{/t}</label>
-                <div class="controls">
-                  <select name="content_status" id="content_status" tabindex="3">
-                    <option value="1"{if isset($page->content_status) && $page->content_status eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
-                    <option value="0"{if isset($page->content_status) && $page->content_status eq 0} selected="selected"{/if}>{t}No{/t}</option>
-                  </select>
+                <div class="checkbox">
+                  <input id="content_status" name="content_status" {if (isset($page) && $page->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                  <label for="content_status">
+                    {t}Published{/t}
+                  </label>
                 </div>
               </div>
               {/acl}

@@ -265,7 +265,7 @@ class Widget extends Content
                 $objects = scandir($path);
                 foreach ($objects as $object) {
                     if ($object != "." && $object != "..") {
-                        if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
+                        if (preg_match('@^widget_(.)*\.class\.tpl$@', $object)) {
                             $objectWords = explode('_', substr($object, 7, -10));
                             $name = '';
                             foreach ($objectWords as $word) {
@@ -345,58 +345,20 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
-        $paths = array();
-        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
-        $instanceManager = getService('instance_manager');
-        $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
+        getService('instance')->theme->loadWidget($this->content);
 
-        if (is_array($baseTheme)) {
-            foreach ($baseTheme as $theme) {
-                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl/widgets");
-                if (!empty($baseTheme) && $baseThemePath) {
-                    $paths[] = $baseThemePath;
-                }
-            }
-        } else {
-            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl/widgets");
-            if (!empty($baseTheme) && $baseThemePath) {
-                $paths[] = $baseThemePath;
-            }
-        }
-        $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
-
-        $className = 'Widget' . trim($this->content);
-        $filename = strtolower($className);
-
-        foreach ($paths as $path) {
-            if ($path != '/') {
-                ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
-                if (file_exists($path . '/' . $filename . '.class.php')) {
-                    require_once $path . '/' . $filename . '.class.php';
-                    break;
-                } else {
-                    $filename = strtolower(
-                        preg_replace('/([a-z])([A-Z])/', '$1_$2', $className)
-                    );
-
-                    if (file_exists($path . '/' . $filename . '.class.php')) {
-                        require_once $path . '/' . $filename . '.class.php';
-                        break;
-                    }
-                }
-            }
-        }
+        $class = 'Widget' . $this->content;
 
         try {
-            if (class_exists($className)) {
-                $er = getService('entity_repository');
-                $widget = $er->find('Widget', $this->id);
+            if (class_exists($class)) {
+                $widget = getService('entity_repository')
+                    ->find('Widget', $this->id);
 
-                $class = new $className($widget);
+                $class = new $class($widget);
             } else {
-                throw new Exception('', 1);
+                throw new \Exception('', 1);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return sprintf(_("Widget %s not available"), $this->content);
         }
 

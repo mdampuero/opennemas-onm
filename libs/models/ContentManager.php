@@ -358,14 +358,12 @@ class ContentManager
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
-                    $content->load(
-                        array(
-                            'placeholder' => $element['placeholder'],
-                            'position'    => $element['position'],
-                        )
-                    );
+                    $content->load([
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],
+                    ]);
 
-                    if (!empty($params)) {
+                    if (!empty($element['params'])) {
                         if (is_array($content->params) && $content->params > 0) {
                             $content->params = array_merge(
                                 $content->params,
@@ -740,6 +738,29 @@ class ContentManager
     }
 
     /**
+     * Gets the earlier starttime of scheduled contents from a contents array
+     *
+     * @param array $contents Array of Contents.
+     *
+     * @return string The minor starttime of scheduled contents or null
+     */
+    public static function getEarlierStarttimeOfScheduledContents($contents)
+    {
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contents as $content) {
+            if ($content->starttime > $current
+                && (empty($expires)
+                    || $content->starttime < $expires)
+            ) {
+                $expires = $content->starttime;
+            }
+        }
+
+        return $expires;
+    }
+
+    /**
      * Gets the path of one file type by its ID
      *
      * @param int $contentID the id of the content we want to work with
@@ -830,13 +851,15 @@ class ContentManager
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
                 'union' => 'AND',
-                ['value' => $date, 'operator' => '>='],
-                ['value' => $now, 'operator' => '<']
+                [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                [ 'value' => $date, 'operator' => '>=' ],
+                [ 'value' => $now, 'operator' => '<' ]
             ],
             'endtime'           => [
                 'union' => 'OR',
-                ['value' => '0000-00-00 00:00:00', 'operator' => '='],
-                ['value' => $now, 'operator' => '>']
+                [ 'value' => '0000-00-00 00:00:00'],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ]
             ],
         ];
 
@@ -1062,13 +1085,14 @@ class ContentManager
                     )
                 )
             ),
-            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
-            'in_litter'       => array(array('value' => 0)),
-            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
+            'fk_content_type' => [[ 'value' => array(1,3,4,7,9,11), 'operator' => 'IN' ]],
+            'in_litter'       => [[ 'value' => 0 ]],
+            'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
             'endtime'         => array(
                 'union' => 'OR',
-                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
-                array('value' => $now, 'operator' => '>')
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ],
             ),
         );
 
@@ -1132,25 +1156,56 @@ class ContentManager
     {
         $filtered = array();
         if (is_array($items)) {
-            foreach ($items as $item) {
-                if (is_object($item)) {
-                    if ($item->isInTime()) {
-                        $filtered[] = $item;
-                    }
-                } else {
-                    $starttime = (!empty($item['starttime']))
-                        ? $item['starttime']: '0000-00-00 00:00:00';
-                    $endtime   = (!empty($item['endtime']))
-                        ? $item['endtime']: '0000-00-00 00:00:00';
-
-                    if (Content::isInTime2($starttime, $endtime, $time)) {
-                        $filtered[] = $item;
+            $filtered = array_filter(
+                $items,
+                function ($item) use ($time) {
+                    if (is_object($item)) {
+                        return $item->isInTime();
+                    } else {
+                        return self::isInTime2($item['starttime'], $item['endtime'], $time);
                     }
                 }
-            }
+            );
         }
 
-        return $filtered;
+        return array_values($filtered);
+    }
+
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $starttime the initial time from it will be available
+     * @param string $endtime   the initial time until it will be available
+     * @param string $currentTime      time to compare with the previous parameters
+     *
+     * @return boolean
+     **/
+    public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
+    {
+        $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
+        $end         = ($endtime !== '0000-00-00 00:00:00' && !empty($endtime)) ? strtotime($endtime): null;
+        $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
+
+        // If $start and $end not defined or they are equals  => is in time
+        if (
+            (empty($start) && empty($end))
+            || ($start == $end)
+        ) {
+            return true;
+        }
+
+        // only setted $end -> check endttime
+        if (empty($start)) {
+            return ($currentTime < $end);
+        }
+
+        // only setted $start -> check startime
+        if (empty($end) || $end <= 0) {
+            return ($currentTime > $start);
+        }
+
+        // $start < $currentTime < $end
+        return (($currentTime < $end) && ($currentTime > $start));
     }
 
     /**
@@ -1253,8 +1308,7 @@ class ContentManager
         $orderBy,
         $page = 1,
         $numElements = 10,
-        $offset = 0,
-        $debug = false
+        $offset = 0
     ) {
         $this->init($contentType);
 
@@ -1290,9 +1344,6 @@ class ContentManager
                  . ' '
                  . $orderBy
                  . ' LIMIT '.$limit;
-        }
-        if ($debug == true) {
-            var_dump($sql);
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1950,8 +2001,6 @@ class ContentManager
             $contents[$content->pk_comment] = $content;
             $rs->MoveNext();
         }
-
-        $rs->Close(); # optional
 
         return $contents;
     }

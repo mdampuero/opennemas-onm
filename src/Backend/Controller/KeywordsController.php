@@ -136,7 +136,7 @@ class KeywordsController extends Controller
      **/
     public function autolinkAction(Request $request)
     {
-        $content = $request->request->filter('text', null, FILTER_SANITIZE_STRING);
+        $content = $request->request->get('text', null);
 
         $newContent = '';
         if (!empty($content)) {
