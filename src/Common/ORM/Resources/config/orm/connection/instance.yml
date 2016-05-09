@@ -1,9 +1,3 @@
 connection:
-    name:     instance
-    dbname:   onm-instances
-    driver:   mysqli
-    host:     localhost
-    port:     3306
-    user:     root
-    password: root
-    charset:  UTF-8
+    name:   instance
+    dbname: manager
