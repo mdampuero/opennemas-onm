@@ -6,9 +6,6 @@
 
 function smarty_function_structured_data_tags($params, &$smarty)
 {
-    // disable for now, it's causing overload in productoin
-    return;
-
     $output = "";
 
     // Only generate tags if is a content page
