@@ -35,8 +35,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.client_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.client_like[0].value" placeholder="{t}Search by client{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.client_like[0].value = null" ng-show="criteria.client_like[0].value">
+            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.client }" ng-keyup="searchByKeypress($event)" ng-model="criteria.client" placeholder="{t}Search by client{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.client = null" ng-show="criteria.client">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -50,8 +50,8 @@
               <i class="fa fa-calendar m-r-5"></i>
               {t}From{/t}
             </span>
-            <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from[0].value }" ng-model="criteria.from[0].value" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from[0].value = null" ng-show="criteria.from[0].value">
+            <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from }" ng-model="criteria.from" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from = null" ng-show="criteria.from">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -65,8 +65,8 @@
               <i class="fa fa-calendar m-r-5"></i>
               {t}To{/t}
             </span>
-            <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to[0].value }" ng-model="criteria.to[0].value" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to[0].value = null" ng-show="criteria.to[0].value">
+            <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to }" ng-model="criteria.to" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to = null" ng-show="criteria.to">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -75,7 +75,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -100,7 +100,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -218,7 +218,7 @@
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn-link text-danger" ng-click="delete(item)" type="button">
+                  <button class="btn-link text-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -251,7 +251,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

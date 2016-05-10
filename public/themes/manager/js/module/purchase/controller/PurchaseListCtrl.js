@@ -7,35 +7,26 @@
      * @name  PurchaseListCtrl
      *
      * @requires $controller
-     * @requires $uibModal
+     * @requires $location
      * @requires $scope
-     * @requires itemService
-     * @requires routing
+     * @requires $timeout
+     * @requires $uibModal
+     * @requires http
      * @requires messenger
+     * @requires oqlBuilder
      * @requires webStorage
-     * @requires data
      *
      * @description
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
           $timeout: $timeout
         }));
-
-        /**
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   The criteria to search.
-         *
-         * @type {Object}
-         */
-        $scope.criteria = { name_like: [] };
 
         /**
          * @memberOf PurchaseListCtrl
@@ -54,11 +45,11 @@
          * @memberOf PurchaseListCtrl
          *
          * @description
-         *   The listing order.
+         *   The criteria to search.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{ name: 'created', value: 'desc' }];
+        $scope.criteria = { epp: 25, page: 1 };
 
         /**
          * @function delete
@@ -67,9 +58,9 @@
          * @description
          *   Confirm delete action.
          *
-         * @param {Object purchase The purchase to delete.
+         * @param {Integer} id The purchase id.
          */
-        $scope.delete = function(purchase) {
+        $scope.delete = function(id) {
           var modal = $uibModal.open({
             templateUrl: '/managerws/template/purchase:modal.' + appVersion + '.tpl',
             backdrop: 'static',
@@ -79,21 +70,28 @@
                 return { };
               },
               success: function() {
-                return function(modalPurchase) {
-                  itemService.delete('manager_ws_purchase_delete', purchase.id)
-                    .success(function(response) {
-                      modalPurchase.close({ message: response, type: 'success'});
-                    }).error(function(response) {
-                      modalPurchase.close({ message: response, type: 'error'});
-                    });
+                return function(modalWindow) {
+                  var route = {
+                    name: 'manager_ws_purchase_delete',
+                    params: { id: id }
+                  };
+
+                  http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ message: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            messenger.post(response);
-            $scope.list();
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
           });
         };
 
@@ -114,28 +112,27 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalPurchase) {
-                  itemService.deleteSelected('manager_ws_purchases_delete',
-                    $scope.selected.items).success(function(response) {
-                      modalPurchase.close(response);
-                    }).error(function(response) {
-                      modalPurchase.close(response);
-                    });
+                return function(modalWindow) {
+                  var route = 'manager_ws_purchases_delete';
+                  var data  = { ids: $scope.selected.items };
+
+                  http.delete(route, data).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            if (response.messages) {
-              messenger.post(response.messages);
+            messenger.post(response.data);
 
+            if (response.success) {
               $scope.selected = { all: false, items: [] };
-            } else {
-              messenger.post(response);
+              $scope.list();
             }
-
-            $scope.list();
           });
         };
 
@@ -149,30 +146,31 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          oqlBuilder.configure({
+            placeholder: {
+              client: 'client ~ "[value]"',
+              from: 'created > "[value]"',
+              to: 'created < "[value]"'
+            }
+          });
 
-          var data = {
-            criteria: cleaned,
-            orderBy: $scope.orderBy,
-            epp: $scope.pagination.epp, // elements per page
-            page: $scope.pagination.page
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_purchases_list',
+            params: { oql: oql }
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
+          $location.search('oql', oql);
 
-          itemService.list('manager_ws_purchases_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
+          return http.get(route).then(function(response) {
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
 
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
+            // Scroll top
+            $('body').animate({ scrollTop: '0px' }, 1000);
+          });
         };
 
         /**
@@ -183,10 +181,7 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria   = { name_like: [ { value: '', operator: 'like' } ] };
-          $scope.orderBy    = [ { name: 'created', value: 'desc' } ];
-
-          $scope.pagination.page = 1;
+          $scope.criteria = { epp: 25, page: 1 };
         };
 
         // Updates the columns stored in localStorage.
@@ -196,25 +191,10 @@
           }
         }, true);
 
-        // Initialize filters from URL
-        var filters = itemService.decodeFilters();
-        for (var name in filters) {
-          $scope[name] = filters[name];
-        }
-
         // Get enabled columns from localStorage
         if (webStorage.local.get('purchases-columns')) {
           $scope.columns = webStorage.local.get('purchases-columns');
         }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
-        }
-
-        // Prevent dropdown from closing
-        $('.dropdown-menu').on('click', '.checkbox,label', function(e) {
-          e.stopPropagation();
-        });
 
         $scope.list();
       }
