@@ -594,20 +594,20 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (1, 9, 'Aviso Legal', 'aviso-legal', 'static', 1, 0),
 (1, 10, 'Hemeroteca', 'archive/content/', 'internal', 1, 0),
 (1, 11, 'Actualidad', 'actualidad', 'blog-category', 1, 0),
-(2, 1, 'Opinión', 'opinion/', 'internal', 2, 0),
-(2, 9, 'Quiénes Somos', 'quienes-somos', 'static', 2, 0),
+(2, 1, 'OpiniÃ³n', 'opinion/', 'internal', 2, 0),
+(2, 9, 'QuiÃ©nes Somos', 'quienes-somos', 'static', 2, 0),
 (2, 10, 'Newsletter', 'newsletter/', 'internal', 2, 0),
 (2, 11, 'Internacional', 'internacional', 'blog-category', 2, 0),
 (3, 1, 'Actualidad', 'actualidad', 'blog-category', 3, 0),
-(3, 9, 'Política de Cookies', 'politica-de-cookies', 'static', 3, 0),
-(3, 11, 'Economí­a', 'economia', 'blog-category', 3, 0),
+(3, 9, 'PolÃ­tica de Cookies', 'politica-de-cookies', 'static', 3, 0),
+(3, 11, 'EconomÃ­a', 'economia', 'blog-category', 3, 0),
 (4, 1, 'Cultura', 'cultura', 'blog-category', 4, 0),
-(4, 11, 'Política', 'politica', 'blog-category', 4, 0),
+(4, 11, 'PolÃ­tica', 'politica', 'blog-category', 4, 0),
 (5, 1, 'Sociedad', 'sociedad', 'blog-category', 5, 0),
 (6, 1, 'Deportes', 'deportes', 'blog-category', 6, 0),
-(7, 1, 'Política', 'politica', 'blog-category', 7, 0),
+(7, 1, 'PolÃ­tica', 'politica', 'blog-category', 7, 0),
 (8, 1, 'Ciencia', 'ciencia', 'blog-category', 8, 0),
-(9, 1, 'Economía', 'economia', 'blog-category', 9, 0);
+(9, 1, 'EconomÃ­a', 'economia', 'blog-category', 9, 0);
 /*!40000 ALTER TABLE `menu_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
