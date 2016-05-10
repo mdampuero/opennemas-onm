@@ -177,19 +177,34 @@ class ClientController extends Controller
 
         $ids       = [];
         $clients = $repository->findBy($criteria, $order, $epp, $page);
-        $total     = $repository->countBy($criteria);
+        $total   = $repository->countBy($criteria);
 
         // Clean clients
-        foreach ($clients as &$client) {
-            $ids[]    = $client->instance_id;
-            $client = $client->getData();
+        foreach ($clients as $client) {
+            $ids[]  = $client->id;
+        }
+
+        $rs  = $this->get('instance_manager')->findByClient($ids);
+        $ids = [];
+
+        foreach ($clients as $key => $client) {
+            if (array_key_exists($client->id, $rs)) {
+                $client->instances = $rs[$client->id];
+                $ids = array_merge($ids, $client->instances);
+            }
+
+            $clients[$key] = $client->getData();
         }
 
         // Find instances by ids
         if (!empty($ids)) {
-            $extra['instances'] = $this->get('instance_manager')->findBy([
+            $instances = $this->get('instance_manager')->findBy([
                 'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
             ]);
+
+            foreach ($instances as $instance) {
+                $extra['instances'][$instance->id] = $instance->internal_name;
+            }
         }
 
         return new JsonResponse([

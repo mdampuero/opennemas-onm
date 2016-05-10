@@ -195,6 +195,31 @@ class InstanceManager extends BaseManager
     }
 
     /**
+     * Returns the instance ids grouped by client.
+     *
+     * @param array $ids The list of client ids.
+     *
+     * @return array The instance ids grouped by client.
+     */
+    public function findByClient($ids)
+    {
+        // Executing the SQL
+        $sql = "SELECT instance_id, meta_value FROM `instance_meta` "
+            ."WHERE meta_key = 'client' AND meta_value in ("
+            . implode(',', $ids) . ")";
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[$item['meta_value']][] = $item['instance_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
      * Finds the list of instances created in the current month.
      *
      * @return array Array of instances.
