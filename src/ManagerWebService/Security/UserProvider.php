@@ -42,13 +42,13 @@ class UserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
-        $user = $this->em->getRepository('User')->findOneBy($oql);
 
-        if (!empty($user)) {
-            throw new UsernameNotFoundException();
+        try {
+            return $this->em->getRepository('User', 'manager')->findOneBy($oql);
+        } catch (\Exception $e) {
         }
 
-        return $user;
+        throw new UsernameNotFoundException();
     }
 
     /**
