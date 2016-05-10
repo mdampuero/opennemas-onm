@@ -141,11 +141,11 @@ class BaseConverter
         foreach ($source as $key => $value) {
             $data[$key] = $value;
 
-            if ($value instanceOf Entity) {
-                $data[$key] = $this->responsify($value->getData());
+            if ($value instanceof Entity) {
+                $data[$key] = $value->getData();
             }
 
-            if ($value instanceOf \Datetime) {
+            if ($value instanceof \Datetime) {
                 $data[$key] = $value->format('Y-m-d H:i:s');
             }
 
