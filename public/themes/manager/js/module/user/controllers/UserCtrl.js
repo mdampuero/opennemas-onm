@@ -73,8 +73,6 @@
               .map(function(e) { return e.id; });
           }
 
-          console.log(data);
-
           http.post('manager_ws_user_save', data).then(function (response) {
             messenger.post(response.data);
 
