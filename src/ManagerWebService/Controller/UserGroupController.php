@@ -34,7 +34,7 @@ class UserGroupController extends Controller
         $userGroup = $em->getRepository('UserGroup')->find($id);
 
         $em->remove($userGroup);
-        $msg->add(_('User group deleted successfully.'), 'success');
+        $msg->add(_('User group deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
