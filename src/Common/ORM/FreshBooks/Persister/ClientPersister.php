@@ -36,7 +36,7 @@ class ClientPersister extends BasePersister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            $entity->id = $response['client_id'];
+            $entity->id = (int) $response['client_id'];
 
             return;
         }

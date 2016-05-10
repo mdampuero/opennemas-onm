@@ -29,7 +29,7 @@ class ClientPersister extends BraintreePersister
         $response = $cr::create($data);
 
         if ($response->success) {
-            $entity->id = $response->customer->id;
+            $entity->id = (int) $response->customer->id;
 
             return;
         }
