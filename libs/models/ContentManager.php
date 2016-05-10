@@ -851,7 +851,7 @@ class ContentManager
             'content_type_name' => [['value' => $contentType]],
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
-                'union' => 'OR',
+                'union' => 'AND',
                 [ 'value' => $date, 'operator' => '>=' ],
                 [ 'value' => $now, 'operator' => '<' ]
             ],
