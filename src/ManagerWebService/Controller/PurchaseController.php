@@ -220,9 +220,13 @@ class PurchaseController extends Controller
 
         // Find instances by ids
         if (!empty($ids)) {
-            $extra['instances'] = $this->get('instance_manager')->findBy([
+            $instances = $this->get('instance_manager')->findBy([
                 'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
             ]);
+
+            foreach ($instances as $instance) {
+                $extra['instances'][$instance->id] = $instance->internal_name;
+            }
         }
 
         return new JsonResponse([

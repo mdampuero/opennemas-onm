@@ -151,9 +151,9 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-instance-id" checklist-model="columns.selected" checklist-value="'instance_id'" type="checkbox">
-            <label for="checkbox-instance-id">
-              {t}Instance ID{/t}
+            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+            <label for="checkbox-instance">
+              {t}Instance{/t}
             </label>
           </div>
         </div>
@@ -203,8 +203,8 @@
                 {t}Invoice ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('invoice_id') == 'asc', 'fa fa-caret-down': isOrderedBy('invoice_id') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('instance_id')" ng-show="isColumnEnabled('instance_id')" width="120">
-                {t}Instance ID{/t}
+              <th class="pointer text-center" ng-click="sort('instance_id')" ng-show="isColumnEnabled('instance')" width="120">
+                {t}Instance{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance_id') == 'asc', 'fa fa-caret-down': isOrderedBy('instance_id') == 'desc'}"></i>
               </th>
               <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="250">
@@ -253,9 +253,9 @@
                   [% item.invoice_id %]
                 </a>
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('instance_id')">
+              <td class="text-center" ng-show="isColumnEnabled('instance')">
                 <a ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.instance_id }) %]" target="_blank">
-                  [% item.instance_id %]
+                  [% extra.instances[item.instance_id]%] ([% item.instance_id %])
                 </a>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('created')">
