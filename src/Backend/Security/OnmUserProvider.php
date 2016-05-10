@@ -55,10 +55,6 @@ class OnmUserProvider implements UserProviderInterface
         $user = $this->em->getRepository('User', 'instance')->findOneBy($oql);
 
         if (!$user) {
-            $user = $this->em->getRepository('User', 'manager')->findOneBy($oql);
-        }
-
-        if (!$user) {
             throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
         }
 
