@@ -9,7 +9,7 @@
      * @requires $filter
      * @requires $location
      * @requires $scope
-     * @requires itemService
+     * @requires http
      * @requires routing
      * @requires messenger
      * @requires data
@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('ClientCtrl', [
-      '$location', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($location, $routeParams, $scope, itemService, routing, messenger) {
+      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, http, routing, messenger) {
         /**
          * @memberOf ClientCtrl
          *
@@ -40,23 +40,17 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          itemService.save('manager_ws_client_save', $scope.client)
+          http.post('manager_ws_client_save', $scope.client)
             .then(function (response) {
-              messenger.post({ message: response.data, type: 'success' });
+              messenger.post(response.data);
 
               if (response.status === 201) {
-                // Get new client id
-                var url = response.headers().location;
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort('manager_client_show', { id: id });
+                var url = response.headers().location.replace('/manager', '');
                 $location.path(url);
               }
-
-              $scope.saving = 0;
             }, function(response) {
+              messenger.post(response.data);
               $scope.saving = 0;
-              messenger.post({ message: response, type: 'error' });
             });
         };
 
@@ -70,26 +64,37 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          itemService.update('manager_ws_client_update', $scope.client.id,
-            $scope.client).success(function (response) {
-              messenger.post({ message: response, type: 'success' });
+          var route = {
+            name: 'manager_ws_client_update',
+            params: { id: $scope.client.id }
+          };
+
+          http.put(route, $scope.client, $scope.client)
+            .then(function (response) {
+              messenger.post(response.data);
               $scope.saving = 0;
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
+            }, function(response) {
+              messenger.post(response.data);
               $scope.saving = 0;
             });
         };
 
+        var route = 'manager_ws_client_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_client_show', $routeParams.id).then(function(response) {
-            $scope.extra  = response.data.extra;
-            $scope.client = response.data.client;
-          });
-        } else {
-          itemService.show('manager_ws_client_new').then(function(response) {
-            $scope.extra  = response.data.extra;
-          });
+          route = {
+            name:   'manager_ws_client_show',
+            params: { id:  $routeParams.id }
+          };
         }
+
+        http.get(route).then(function(response) {
+          $scope.extra  = response.data.extra;
+
+          if (response.data.client) {
+            $scope.client = angular.merge($scope.client, response.data.client);
+          }
+        });
       }
     ]);
 })();

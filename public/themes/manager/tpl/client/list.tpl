@@ -35,8 +35,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.name_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name_like[0].value = null" ng-show="criteria.name_like[0].value">
+            <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name = null" ng-show="criteria.name">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -45,7 +45,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -70,7 +70,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -271,7 +271,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

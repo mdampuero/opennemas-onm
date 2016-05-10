@@ -7,37 +7,26 @@
      * @name  ClientListCtrl
      *
      * @requires $controller
-     * @requires $uibModal
+     * @requires $location
      * @requires $scope
-     * @requires itemService
-     * @requires routing
+     * @requires $timeout
+     * @requires $uibModal
+     * @requires http
      * @requires messenger
+     * @requires oqlBuilder
      * @requires webStorage
-     * @requires data
      *
      * @description
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
-      function($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
           $timeout: $timeout
         }));
-
-        /**
-         * @memberOf ClientListCtrl
-         *
-         * @description
-         *   The criteria to search.
-         *
-         * @type {Object}
-         */
-        $scope.criteria = {
-          name_like: []
-        };
 
         /**
          * @memberOf ClientListCtrl
@@ -49,19 +38,18 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'name', 'email', 'address', 'city',
-            'state', 'country' ]
+          selected: [ 'name', 'email', 'address', 'city', 'state', 'country' ]
         };
 
         /**
          * @memberOf ClientListCtrl
          *
          * @description
-         *   The listing order.
+         *   The criteria to search.
          *
          * @type {Object}
          */
-        $scope.orderBy = [{ name: 'id', value: 'asc' }];
+        $scope.criteria = { epp: 25, page: 1 };
 
         /**
          * @function delete
@@ -82,21 +70,28 @@
                 return { };
               },
               success: function() {
-                return function(m) {
-                  itemService.delete('manager_ws_client_delete', client.id)
-                    .success(function(response) {
-                      m.close({ message: response, type: 'success'});
-                    }).error(function(response) {
-                      m.close({ message: response, type: 'error'});
-                    });
+                return function(modalWindow) {
+                  var route = {
+                    name: 'manager_ws_client_delete',
+                    params: { id: client.id }
+                  };
+
+                  http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            messenger.post(response);
-            $scope.list();
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
           });
         };
 
@@ -108,7 +103,7 @@
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
-          var modal = $modal.open({
+          var modal = $uibModal.open({
             templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
@@ -117,28 +112,27 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalClient) {
-                  itemService.deleteSelected('manager_ws_clients_delete',
-                    $scope.selected.items).success(function(response) {
-                      modalClient.close(response);
-                    }).error(function(response) {
-                      modalClient.close(response);
-                    });
+                return function(modalWindow) {
+                  var route = 'manager_ws_clients_delete';
+                  var data  = { ids: $scope.selected.items };
+
+                  http.delete(route, data).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            if (response.messages) {
-              messenger.post(response.messages);
+            messenger.post(response.data);
 
+            if (response.success) {
               $scope.selected = { all: false, items: [] };
-            } else {
-              messenger.post(response);
+              $scope.list();
             }
-
-            $scope.list();
           });
         };
 
@@ -152,30 +146,32 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          oqlBuilder.configure({
+            placeholder: {
+              name: 'first_name ~ "[value]" or last_name ~ "[value]"' +
+                ' or email ~ "[value]" or address ~ "[value]"' +
+                ' or city ~ "[value]" or state ~ "[value]"',
+              country: 'country ~ "[value]"'
+            }
+          });
 
-          var data = {
-            criteria: cleaned,
-            orderBy:  $scope.orderBy,
-            epp:      $scope.pagination.epp, // elements per page
-            page:     $scope.pagination.page
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_clients_list',
+            params: { oql: oql }
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
+          $location.search('oql', oql);
 
-          itemService.list('manager_ws_clients_list', data).then(
-            function(response) {
-              $scope.items = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.extra = response.data.extra;
+          http.get(route).then(function(response) {
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
 
-              $scope.loading = 0;
-
-              // Scroll top
-              $('.page-content').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
+            // Scroll top
+            $('body').animate({ scrollTop: '0px' }, 1000);
+          });
         };
 
         /**
@@ -186,10 +182,7 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria   = { name_like: [ { value: '', operator: 'like' } ] };
-          $scope.orderBy    = [ { name: 'id', value: 'asc' } ];
-
-          $scope.pagination.page = 1;
+          $scope.criteria = { epp: 25, page: 1 };
         };
 
         // Updates the columns stored in localStorage.
@@ -199,25 +192,10 @@
           }
         }, true);
 
-        // Initialize filters from URL
-        var filters = itemService.decodeFilters();
-        for (var name in filters) {
-          $scope[name] = filters[name];
-        }
-
         // Get enabled columns from localStorage
         if (webStorage.local.get('clients-columns')) {
           $scope.columns = webStorage.local.get('clients-columns');
         }
-
-        if (webStorage.local.get('token')) {
-          $scope.token = webStorage.local.get('token');
-        }
-
-        // Prevent dropdown from closing
-        $('.dropdown-menu').on('click', '.checkbox,label', function(e) {
-          e.stopPropagation();
-        });
 
         $scope.list();
       }
