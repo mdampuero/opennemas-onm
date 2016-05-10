@@ -18,7 +18,7 @@ class ObjectDataMapper
      *
      * @return string The object.
      */
-    public function fromObject($value)
+    public function fromString($value)
     {
         if (empty($value)) {
             return null;
@@ -28,18 +28,42 @@ class ObjectDataMapper
     }
 
     /**
+     * Unserializes an object.
+     *
+     * @param string $value The serialized object.
+     *
+     * @return string The object.
+     */
+    public function fromText($value)
+    {
+        return $this->fromString($value);
+    }
+
+    /**
      * Serializes an object.
      *
      * @param array $value The object to serialize.
      *
      * @return string The serialized object.
      */
-    public function toObject($value)
+    public function toString($value)
     {
         if (empty($value) || !is_object($value)) {
             return null;
         }
 
         return @serialize($value);
+    }
+
+    /**
+     * Serializes an object.
+     *
+     * @param array $value The object to serialize.
+     *
+     * @return string The serialized object.
+     */
+    public function toText($value)
+    {
+        return $this->toString($value);
     }
 }
