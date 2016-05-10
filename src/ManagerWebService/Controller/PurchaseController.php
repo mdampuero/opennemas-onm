@@ -42,13 +42,13 @@ class PurchaseController extends Controller
     }
 
     /**
-     * @api {delete} /purchases/ Delete selected purchases
+     * @api {delete} /purchases Delete selected purchases
      * @apiName DeletePuchases
      * @apiGroup Purchase
      *
-     * @apiParam {Integer} selected The clients ids.
+     * @apiParam {Integer} ids The clients ids.
      *
-     * @apiSuccess {String} message The success message.
+     * @apiSuccess {Object} The success message.
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -113,8 +113,8 @@ class PurchaseController extends Controller
      * @apiName GetPurchases
      * @apiGroup Purchase
      *
-     * @apiParam {String} oql  The OQL query.
-    *
+     * @apiParam {String} oql The OQL query.
+     *
      * @apiSuccess {Integer} total   The total number of elements.
      * @apiSuccess {Array}   results The list of purchases.
      */
@@ -162,7 +162,7 @@ class PurchaseController extends Controller
      * @apiName GetPurchase
      * @apiGroup Purchase
      *
-     * @apiSuccess {Array} purchase The purchases.
+     * @apiSuccess {Array} The purchases.
      */
     public function showAction($id)
     {
