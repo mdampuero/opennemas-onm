@@ -75,7 +75,7 @@ class BasePersister extends Persister
 
         $keys = $this->metadata->getIdKeys();
 
-        if (count($keys) === 1) {
+        if (count($keys) === 1 && empty($entity->{$keys[0]})) {
             $entity->{$keys[0]} = $this->conn->lastInsertId();
         }
 
