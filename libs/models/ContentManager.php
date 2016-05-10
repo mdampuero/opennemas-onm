@@ -349,6 +349,7 @@ class ContentManager
                     continue;
                 }
 
+                $content = null;
                 foreach ($contentsRaw as $contentRaw) {
                     if ($element['content_id'] == $contentRaw->id) {
                         $content = $contentRaw;
