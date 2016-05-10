@@ -349,7 +349,7 @@ class InstanceManager extends BaseManager
             $settings = array();
             if ($rs !== false) {
                 foreach ($rs as $value) {
-                    $settings[$value['name'] ] = unserialize($value['value']);
+                    $settings[$value['name'] ] = @unserialize($value['value']);
                 }
             }
 
