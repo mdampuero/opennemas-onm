@@ -636,6 +636,7 @@ class InstanceController extends Controller
      */
     private function templateParams()
     {
+        $lang    = $this->get('core.loader')->getLocaleShort();
         $themes  = $this->get('orm.loader')->getPlugins();
         $modules = $this->get('orm.manager')
             ->getRepository('manager.extension')
@@ -646,10 +647,10 @@ class InstanceController extends Controller
                 if (!empty($a->{$key})) {
                     $lang = $a->{$key}['en'];
 
-                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a->{$key})
-                        && !empty($a->{$key}[CURRENT_LANGUAGE_SHORT])
+                    if (array_key_exists($lang, $a->{$key})
+                        && !empty($a->{$key}[$lang])
                     ) {
-                        $lang = $a->{$key}[CURRENT_LANGUAGE_SHORT];
+                        $lang = $a->{$key}[$lang];
                     }
 
                     $a->{$key} = $lang;

@@ -268,7 +268,7 @@ class PurchaseController extends Controller
     protected function getTemplateParams()
     {
         $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
         asort($countries);
 

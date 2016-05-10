@@ -260,7 +260,7 @@ class ClientController extends Controller
     protected function getExtraData()
     {
         $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
         asort($countries);
 
