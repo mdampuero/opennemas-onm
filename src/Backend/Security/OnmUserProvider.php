@@ -50,15 +50,14 @@ class OnmUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $oql = sprintf('username = "%s" or email = "%s"', $username, $username);
+        $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
 
-        $user = $this->em->getRepository('User', 'instance')->findOneBy($oql);
-
-        if (!$user) {
-            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
+        try {
+            return $this->em->getRepository('User', 'instance')->findOneBy($oql);
+        } catch (\Exception $e) {
         }
 
-        return $user;
+        throw new UsernameNotFoundException();
     }
 
     /**
