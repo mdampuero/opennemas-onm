@@ -20,31 +20,33 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends Controller
 {
     /**
-     * Deletes an user.
+     * @api {delete} /users/:id Delete an user
+     * @apiName DeleteUser
+     * @apiGroup User
      *
-     * @param integer $id The user's id.
-     *
-     * @return JsonResponse The response object.
+     * @apiSuccess {String} message The success message.
      */
     public function deleteAction($id)
     {
         $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $user= $em->getRepository('User')->find($id);
+        $user = $em->getRepository('User')->find($id);
 
         $em->remove($user);
-        $msg->add(_('User deleted successfully.'), 'success');
+        $msg->add(_('User deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Deletes the selected users.
+     * @api {delete} /users Delete selected users
+     * @apiName DeleteUsers
+     * @apiGroup User
      *
-     * @param Request $request The request object.
+     * @apiParam {Array} ids The user ids.
      *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Object} The success message.
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -82,11 +84,14 @@ class UserController extends Controller
     }
 
     /**
-     * Returns the list of users as JSON.
+     * @api {get} /purchases List of users
+     * @apiName GetUsers
+     * @apiGroup User
      *
-     * @param Request $request The request object.
+     * @apiParam {String} oql The OQL query.
      *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Integer} total   The total number of elements.
+     * @apiSuccess {Array}   results The list of users.
      */
     public function listAction(Request $request)
     {
@@ -231,11 +236,11 @@ class UserController extends Controller
     }
 
     /**
-     * Returns an user as JSON.
+     * @api {get} /users/:id Show a user
+     * @apiName GetUser
+     * @apiGroup User
      *
-     * @param integer $id The user's id.
-     *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Array} The user.
      */
     public function showAction($id)
     {
