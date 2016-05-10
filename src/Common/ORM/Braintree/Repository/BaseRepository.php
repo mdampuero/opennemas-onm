@@ -1,11 +1,11 @@
 <?php
 
-namespace Common\ORM\Braintree\Persister;
+namespace Common\ORM\Braintree\Repository;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Persister;
+use Common\ORM\Core\Repository;
 
-abstract class BraintreePersister extends Persister
+abstract class BaseRepository extends Repository
 {
     /**
      * The Braintree factory.

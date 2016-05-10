@@ -12,7 +12,7 @@ namespace Framework\ORM\Braintree\Persister;
 use Framework\ORM\Entity\Entity;
 use Framework\ORM\Exception\PaymentNotFoundException;
 
-class PaymentPersister extends BraintreePersister
+class PaymentPersister extends BasePersister
 {
     /**
      * Saves a new payment in Braintree.

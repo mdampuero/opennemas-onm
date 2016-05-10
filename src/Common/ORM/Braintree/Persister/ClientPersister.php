@@ -12,7 +12,7 @@ namespace Common\ORM\Braintree\Persister;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
-class ClientPersister extends BraintreePersister
+class ClientPersister extends BasePersister
 {
     /**
      * Saves a new client in Braintree.
@@ -53,7 +53,7 @@ class ClientPersister extends BraintreePersister
             return;
         }
 
-        throw new EntityNotFoundException($entity->client_id, $this->source);
+        throw new EntityNotFoundException('Client', $entity->id);
     }
 
     /**
@@ -74,7 +74,7 @@ class ClientPersister extends BraintreePersister
             return;
         }
 
-        throw new EntityNotFoundException($entity->client_id, $this->source);
+        throw new EntityNotFoundException('Client', $entity->id);
     }
 
     /**

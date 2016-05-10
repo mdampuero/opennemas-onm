@@ -6,7 +6,7 @@ use Common\ORM\Entity\Client;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
-class ClientRepository extends BraintreeRepository
+class ClientRepository extends BaseRepository
 {
     /**
      * {@inheritdoc}

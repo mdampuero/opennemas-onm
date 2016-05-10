@@ -1,11 +1,11 @@
 <?php
 
-namespace Common\ORM\Braintree\Repository;
+namespace Common\ORM\Braintree\Persister;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Repository;
+use Common\ORM\Core\Persister;
 
-abstract class BraintreeRepository extends Repository
+abstract class BasePersister extends Persister
 {
     /**
      * The Braintree factory.
@@ -15,21 +15,13 @@ abstract class BraintreeRepository extends Repository
     protected $factory;
 
     /**
-     * The source name.
-     *
-     * @var source
-     */
-    protected $source;
-
-    /**
      * Initializes the Braintree factory.
      *
      * @param Braintree_Base $factory The Braintree factory.
      * @param string         $source  The source name.
      */
-    public function __construct($factory, $source)
+    public function __construct($factory)
     {
         $this->factory = $factory;
-        $this->source  = $source;
     }
 }
