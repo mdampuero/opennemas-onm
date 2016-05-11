@@ -28,22 +28,31 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $user = getService('user_repository')->find($content->fk_author);
 
         $imageUrl = '';
+        $imageWidth = $imageHeight = 0;
         if (array_key_exists('photoInt', $smarty->tpl_vars)) {
             // Articles
             $photoInt = $smarty->tpl_vars['photoInt']->value;
+            $imageWidth = $photoInt->width;
+            $imageHeight = $photoInt->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
         } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
             // Opinions
             $photo = $smarty->tpl_vars['photo']->value;
+            $imageWidth = $photo->width;
+            $imageHeight = $photo->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
         } elseif (isset($content->author->photo->path_img) &&
                 !empty($content->author->photo->path_img) &&
                 $content->content_type_name == 'opinion'
         ) {
             // Author
+            $imageWidth = $content->author->photo->width;
+            $imageHeight = $content->author->photo->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
         } elseif (isset($content->cover) && !empty($content->cover)) {
             // Album
+            $imageWidth = $content->cover_image->width;
+            $imageHeight = $content->cover_image->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
         } elseif (isset($content->thumb) && !empty($content->thumb)) {
             // Video
@@ -51,16 +60,11 @@ function smarty_function_structured_data_tags($params, &$smarty)
             if (strpos($content->thumb, 'http')  === false) {
                 $imageUrl = SITE_URL.$content->thumb;
             }
-        } elseif (array_key_exists('default_image', $params)) {
-            // Default
-            $imageUrl = $params['default_image'];
-        }
-
-        // Get image size
-        $imageWidth = $imageHeight = 0;
-        if (!empty($imageUrl)) {
             $imageSize = @getimagesize($imageUrl);
-            if (is_array($imageSize) && array_key_exists(0, $imageSize) && array_key_exists(1, $imageSize)) {
+            if (is_array($imageSize) &&
+                array_key_exists(0, $imageSize)
+                && array_key_exists(1, $imageSize)
+            ) {
                 $imageWidth = $imageSize[0];
                 $imageHeight = $imageSize[1];
             }
@@ -71,12 +75,11 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $logoUrl = '';
         $logoWidth = $logoHeight = 0;
         if (!empty($logo)) {
-            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.$logo;
-            $logoSize = @getimagesize($logoUrl);
-            if (is_array($logoSize) && array_key_exists(0, $logoSize) && array_key_exists(1, $logoSize)) {
-                $logoWidth = $logoSize[0];
-                $logoHeight = $logoSize[1];
-            }
+            $logoUrl = SITE_URL.
+                       'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'.
+                       MEDIA_DIR_URL.'sections/'.$logo;
+            $logoWidth  = '260';
+            $logoHeight = '60';
         }
 
         // Get author if exists otherwise get agency
@@ -84,7 +87,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
         if (empty($author)) {
             $author = getService('setting_repository')->get('site_name');
         }
-
 
         // Generate tags
         $output = '<script type="application/ld+json">';
