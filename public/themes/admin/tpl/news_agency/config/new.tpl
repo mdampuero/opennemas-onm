@@ -172,18 +172,25 @@
                 <span class="help m-l-5">{t}Activate this if you want to add the link to the source at the end of the body{/t}</span>
               </div>
             </div>
-            <div class="form-group" ng-init="import_to_category = '{$server['import_to_category']}'">
+            <div class="form-group" ng-init="auto_import = '{$server['auto_import']}'">
               <div class="checkbox">
-                <input id="import-to-category" name="import_to_category" ng-model="import_to_category" ng-true-value="'1'" type="checkbox" value="1">
-                <label class="form-label" for="import-to-category">{t}Import to category{/t}</label>
+                <input id="auto-import" name="auto_import" ng-model="auto_import" ng-true-value="'1'" type="checkbox" value="1">
+                <label class="form-label" for="auto-import">{t}Automatic import{/t}</label>
               </div>
             </div>
-            <div class="form-group ng-cloak" ng-show="import_to_category == 1" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}" value="1">
+            <div class="form-group ng-cloak" ng-show="auto_import == 1" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}" value="1">
               <label class="form-label" for="category">{t}Category{/t}</label>
               <div class="controls">
-                <select id="category" name="category" ng-disabled="!import_to_category">
+                <select id="category" name="category" ng-disabled="!auto_import">
                   <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
                 </select>
+              </div>
+            </div>
+            <div class="form-group ng-cloak" ng-show="auto_import == 1">
+              <div class="checkbox">
+                <input id="import-related" {if $server['import_related'] != 0}checked{/if} name="import_related" ng-disabled="!auto_import" type="checkbox" value="1">
+                <label class="form-label" for="import-related">{t}Import related contents{/t}</label>
+                <span class="help m-l-5">{t}Activate this if you want to import all related contents for each content{/t}</span>
               </div>
             </div>
           </div>
