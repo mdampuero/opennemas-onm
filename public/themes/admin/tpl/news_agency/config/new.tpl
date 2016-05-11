@@ -160,29 +160,29 @@
             </div>
             <div class="form-group">
               <div class="checkbox">
-                <input id="author" name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1'>
+                <input id="author" name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value="1">
                 <label class="form-label" for="author">{t}Import authors{/t}</label>
                 <span class="help m-l-5">{t}Activate this if you want to import the author of the elements if available{/t}</span>
               </div>
             </div>
             <div class="form-group">
               <div class="checkbox">
-                <input id="source" name="source" {if $server['source'] != 0}checked{/if} type="checkbox" value='1'>
+                <input id="source" name="source" {if $server['source'] != 0}checked{/if} type="checkbox" value="1">
                 <label class="form-label" for="source">{t}Link to source{/t}</label>
                 <span class="help m-l-5">{t}Activate this if you want to add the link to the source at the end of the body{/t}</span>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-init="import_to_category = '{$server['import_to_category']}'">
               <div class="checkbox">
-                <input id="import-to-category" name="import_to_category" ng-model="import_to_category" type="checkbox">
+                <input id="import-to-category" name="import_to_category" ng-model="import_to_category" ng-true-value="'1'" type="checkbox" value="1">
                 <label class="form-label" for="import-to-category">{t}Import to category{/t}</label>
               </div>
             </div>
-            <div class="form-group ng-cloak" ng-show="import_to_category" ng-init="categories = {json_encode($categories)|clear_json}" value="1">
+            <div class="form-group ng-cloak" ng-show="import_to_category == 1" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}" value="1">
               <label class="form-label" for="category">{t}Category{/t}</label>
               <div class="controls">
                 <select id="category" name="category" ng-disabled="!import_to_category">
-                  <option value="[% key %]" ng-repeat="(key, value) in categories">[% value %]</option>
+                  <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
                 </select>
               </div>
             </div>

@@ -80,15 +80,19 @@ class NewsAgencyServerController extends Controller
         }
 
         $server = array(
-            'id'            => $latestServerId + 1,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
+            'id'                 => $latestServerId + 1,
+            'name'               => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'           => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'           => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string'      => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'              => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'          => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'          => $request->request->getDigits('activated', 0),
+            'author'             => $request->request->getDigits('author', 0),
+            'source'             => $request->request->getDigits('source', 0),
+            'import_to_category' => $request->request->getDigits('import_to_category', 0),
+            'category'           => $request->request->filter('category', '', FILTER_SANITIZE_STRING)
         );
 
         $servers[$server['id']] = $server;
@@ -182,15 +186,18 @@ class NewsAgencyServerController extends Controller
 
         $server = array(
             'id'            => $id,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
-            'author'        => $request->request->getDigits('author', 0),
+            'name'               => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'           => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'           => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string'      => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'              => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'          => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'          => $request->request->getDigits('activated', 0),
+            'author'             => $request->request->getDigits('author', 0),
+            'source'             => $request->request->getDigits('source', 0),
+            'import_to_category' => $request->request->getDigits('import_to_category', 0),
+            'category'           => $request->request->filter('category', '', FILTER_SANITIZE_STRING)
         );
 
         $servers[$id] = $server;
