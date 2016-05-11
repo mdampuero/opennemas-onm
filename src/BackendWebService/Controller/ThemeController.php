@@ -58,7 +58,10 @@ class ThemeController extends Controller
         }
 
         $addons = $this->get('orm.manager')->getRepository('manager.extension')
-            ->findBy([ 'type' => [ [ 'value' => 'theme-addon'] ] ]);
+            ->findBy([
+                'enabled' => [ [ 'value' => 1 ] ],
+                'type'    => [ [ 'value' => 'theme-addon'] ]
+            ]);
 
         foreach ($addons as &$addon) {
             $addon->about       = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->about)
