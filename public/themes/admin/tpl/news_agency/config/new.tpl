@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off" id="formulario">
+<form action="{if array_key_exists('id', $server)}{url name=backend_news_agency_server_update id=$server['id']}{else}{url name=backend_news_agency_server_create}{/if}" method="POST" autocomplete="off" id="formulario" ng-controller="NewsAgencyServerCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -40,7 +40,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
+            <button class="btn btn-primary" data-text="{t}Saving{/t}..." id="save-button" type="submit">
               <span class="fa fa-save"></span>
               <span class="text">{t}Save{/t}</span>
             </button>
@@ -49,7 +49,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="row">
       <div class="col-sm-6">
@@ -91,25 +90,25 @@
             <h4>{t}Connection{/t}</h4>
           </div>
           <div class="grid-body">
-            <div class="form-group">
+            <div class="form-group" ng-init="url = '{$server['url']}'">
               <label for="url" class="form-label">{t}Url{/t}</label>
               <span class="help m-l-5">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
               <div class="controls">
-                <input type="text" id="server" name="url" value="{$server['url']}" class="form-control" required="required"/>
+                <input class="form-control" id="server" name="url" ng-model="url" required="required" type="text">
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-init="username = '{$server['username']}'">
               <label for="username" class="form-label">{t}Username{/t}</label>
               <div class="controls">
                 <div class="input-group">
                   <span class="input-group-addon">
                     <i class="fa fa-user"></i>
                   </span>
-                  <input type="text" id="username" name="username" value="{$server['username']}" class="form-control"/>
+                  <input class="form-control" id="username" name="username" ng-model="username" type="text">
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-init="password = '{$server['password']}'">
               <label class="form-label" for="password">{t}Password{/t}</label>
               <div class="controls">
                 <div class="input-group">
@@ -118,14 +117,16 @@
                       <i class="fa fa-lock"></i>
                     </button>
                   </span>
-                  <input type="password" id="password" name="password" value="{$server['password']}" class="form-control"/>
+                  <input class="form-control" id="password" name="password" ng-model="password" type="password">
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <button class="btn btn-block btn-loading btn-success">
-                  <i class="fa fa-circle-o-notch fa-spin m-t-10 ng-cloak" ng-if="checking"></i>
+                <button class="btn btn-block btn-loading btn-success" ng-click="check()" type="button">
+                  <span class="no-animate" ng-if="checking">
+                    <i class="fa fa-circle-o-notch fa-spin m-t-10 ng-cloak"></i>
+                  </span>
                   <h5 class="text-uppercase text-white">{t}Test{/t}</h5>
                 </button>
               </div>
