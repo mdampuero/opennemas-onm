@@ -51,112 +51,145 @@
   </div>
 
   <div class="content">
-
-    <div class="grid simple">
-      <div class="grid-body">
-
-        <div class="form-group">
-          <label for="name" class="form-label">{t}Source name{/t}</label>
-          <div class="controls">
-            <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="activated" class="form-label">{t}Activated{/t}</label>
-          <div class="controls">
-            <div class="slide-primary">
-              <input type="checkbox" name="activated" class="ios" {if $server['activated'] != 0}checked="checked"{/if} value='1' />
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="grid simple">
+          <div class="grid-body">
+            <div class="form-group">
+              <label for="name" class="form-label">{t}Source name{/t}</label>
+              <div class="controls">
+                <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="controls">
+                <div class="checkbox">
+                  <input id="activated" name="activated" {if $server['activated'] != 0}checked="checked"{/if} type="checkbox" value='1'>
+                  <label class="form-label" for="activated">{t}Activated{/t}</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="color" class="form-label">{t}Color{/t}</label>
+              <span class="help m-l-5">{t}Color to distinguish between other agencies{/t}</span>
+              <div class="controls">
+                <div class="input-group">
+                  <span class="input-group-addon" ng-style="{ 'background-color': color }">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                  </span>
+                  <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$server['color']|default:"" }'" ng-model="color" type="text">
+                  <div class="input-group-btn">
+                    <button class="btn btn-default" ng-click="color='{$server['color']|default:""}'" type="button">{t}Reset{/t}</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="form-group">
-          <label for="color" class="form-label">{t}Color{/t}</label>
-          <span class="help">{t}Color to distinguish between other agencies{/t}</span>
-          <div class="controls">
-            <div class="input-group">
-              <span class="input-group-addon" ng-style="{ 'background-color': color }">
-                &nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Connection{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="form-group">
+              <label for="url" class="form-label">{t}Url{/t}</label>
+              <span class="help m-l-5">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
+              <div class="controls">
+                <input type="text" id="server" name="url" value="{$server['url']}" class="form-control" required="required"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="username" class="form-label">{t}Username{/t}</label>
+              <div class="controls">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                  </span>
+                  <input type="text" id="username" name="username" value="{$server['username']}" class="form-control"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="password">{t}Password{/t}</label>
+              <div class="controls">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default check-pass">
+                      <i class="fa fa-lock"></i>
+                    </button>
+                  </span>
+                  <input type="password" id="password" name="password" value="{$server['password']}" class="form-control"/>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                <button class="btn btn-block btn-loading btn-success">
+                  <i class="fa fa-circle-o-notch fa-spin m-t-10 ng-cloak" ng-if="checking"></i>
+                  <h5 class="text-uppercase text-white">{t}Test{/t}</h5>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Sync parameters{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="form-group">
+              <label for="agency_string" class="form-label">{t}Agency{/t}</label>
+              <span class="help m-l-5">{t}When importing elements this will be the signature{/t}</span>
+              <div class="controls">
+                <input class="form-control" id="agency_string" name="agency_string" required="required" type="text" value="{$server['agency_string']}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sync_from" class="form-label">{t}Sync elements newer than{/t}</label>
+              <span class="help m-l-5">
+                {t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}
               </span>
-              <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$server['color']|default:"" }'" ng-model="color" type="text">
-              <div class="input-group-btn">
-                <button class="btn btn-default" ng-click="color='{$server['color']|default:""}'" type="button">{t}Reset{/t}</button>
+              <div class="controls">
+                <select name="sync_from" required="required">
+                  {html_options options=$sync_from selected={$server['sync_from']}}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="author" name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1'>
+                <label class="form-label" for="author">{t}Import authors{/t}</label>
+                <span class="help m-l-5">{t}Activate this if you want to import the author of the elements if available{/t}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="source" name="source" {if $server['source'] != 0}checked{/if} type="checkbox" value='1'>
+                <label class="form-label" for="source">{t}Link to source{/t}</label>
+                <span class="help m-l-5">{t}Activate this if you want to add the link to the source at the end of the body{/t}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="import-to-category" name="import_to_category" ng-model="import_to_category" type="checkbox">
+                <label class="form-label" for="import-to-category">{t}Import to category{/t}</label>
+              </div>
+            </div>
+            <div class="form-group ng-cloak" ng-show="import_to_category" ng-init="categories = {json_encode($categories)|clear_json}" value="1">
+              <label class="form-label" for="category">{t}Category{/t}</label>
+              <div class="controls">
+                <select id="category" name="category" ng-disabled="!import_to_category">
+                  <option value="[% key %]" ng-repeat="(key, value) in categories">[% value %]</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="grid simple">
-      <div class="grid-title">
-        <h4>{t}Connection{/t}</h4>
-      </div>
-      <div class="grid-body">
-
-        <div class="form-group">
-          <label for="url" class="form-label">{t}Url{/t}</label>
-          <span class="help">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
-          <div class="controls">
-            <input type="text" id="server" name="url" value="{$server['url']}" class="form-control" required="required"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="username" class="form-label">{t}Username{/t}</label>
-          <div class="controls">
-            <input type="text" id="username" name="username" value="{$server['username']}" class="form-control"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="password" class="form-label">{t}Password{/t}</label>
-          <div class="controls">
-            <input type="password" id="password" name="password" value="{$server['password']}" class="form-control"/>
-            <button class="check-pass btn">{t}Show password{/t}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid simple">
-      <div class="grid-title">
-        <h4>{t}Sync parameters{/t}</h4>
-      </div>
-      <div class="grid-body">
-
-        <div class="form-group">
-          <label for="agency_string" class="form-label">{t}Agency{/t}</label>
-          <span class="help">{t}When importing elements this will be the signature{/t}</span>
-          <div class="controls">
-            <input type="text" id="agency_string" name="agency_string" value="{$server['agency_string']}" class="form-control" required="required"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="author" class="form-label">{t}Import authors{/t}</label>
-          <span class="help">{t}Activate this if you want to import the author of the elements if available{/t}</span>
-          <div class="controls">
-            <input name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1'>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="sync_from" class="form-label">{t}Sync elements newer than{/t}</label>
-          <span class="help">
-            {t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}
-          </span>
-          <div class="controls">
-            <select name="sync_from" required="required">
-              {html_options options=$sync_from selected={$server['sync_from']}}
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-
 </form>
 {/block}
 
@@ -167,13 +200,13 @@
         $('.check-pass').on('click', function(e, ui){
           e.preventDefault();
           var passInput = $('#password');
-          var btn = $(this);
+          var icon = $(this).find('i');
           if (passInput.attr('type') == 'password') {
             passInput.prop('type','text');
-            btn.html('{t}Hide password{/t}');
+            icon.addClass('fa-unlock');
           } else {
             passInput.prop('type','password');
-            btn.html('{t}Show password{/t}');
+            icon.removeClass('fa-unlock');
           }
         });
       });

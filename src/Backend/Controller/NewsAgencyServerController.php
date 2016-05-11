@@ -136,6 +136,14 @@ class NewsAgencyServerController extends Controller
     public function showAction(Request $request)
     {
         $servers = $this->get('setting_repository')->get('news_agency_config');
+        $items   = $this->get('category_repository')->findBy([], []);
+
+        $categories = [];
+        foreach ($items as $category) {
+            $categories[$category->name] = $category->title;
+        }
+
+        asort($categories);
 
         $id     = $request->query->getDigits('id');
         $server = [];
@@ -147,8 +155,9 @@ class NewsAgencyServerController extends Controller
         return $this->render(
             'news_agency/config/new.tpl',
             [
-                'server'    => $server,
-                'sync_from' => $this->syncFrom,
+                'categories' => $categories,
+                'server'     => $server,
+                'sync_from'  => $this->syncFrom
             ]
         );
     }
