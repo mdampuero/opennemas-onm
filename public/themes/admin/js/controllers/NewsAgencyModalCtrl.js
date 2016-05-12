@@ -55,7 +55,7 @@
         $scope.init = function() {
           $scope.check();
 
-          $scope.template.type = 'article';
+          $scope.template.type = 'Article';
 
           if ($scope.photos === $scope.template.contents.length) {
             $scope.template.type = 'photo';
