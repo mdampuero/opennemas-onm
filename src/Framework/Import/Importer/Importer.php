@@ -14,6 +14,13 @@ use Framework\Import\Repository\LocalRepository;
 class Importer
 {
     /**
+     * The importer configuration.
+     *
+     * @var array
+     */
+    protected $config = [];
+
+    /**
      * The service container.
      *
      * @var ServiceContainer
@@ -21,11 +28,11 @@ class Importer
     protected $container;
 
     /**
-     * The importer configuration.
+     * The local repository.
      *
-     * @var array
+     * @var LocalRepository
      */
-    protected $config = [];
+    protected $repository;
 
     /**
      * Initializes the Importer.
@@ -34,7 +41,8 @@ class Importer
      */
     public function __construct($container, $config = [])
     {
-        $this->container = $container;
+        $this->container  = $container;
+        $this->repository = new LocalRepository();
 
         $this->configure($config);
     }
@@ -99,13 +107,11 @@ class Importer
      *
      * @return integer The content id.
      */
-    public function import($id, $category = null, $target = 'Article', $author = null, $enabled = 0)
+    public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 0)
     {
-        $category   = $this->getCategory($category);
-        $repository = new LocalRepository();
-        $resource   = $repository->find($this->config['id'], $id);
+        $category = $this->getCategory($category);
 
-        $data = $this->getData($resource, $repository->syncPath, $category, $author, $enabled, $target);
+        $data = $this->getData($resource, $category, $author, $enabled, $target);
 
         if ($resource->type === 'photo') {
             $photo = new \Photo();
@@ -127,15 +133,14 @@ class Importer
      */
     public function importAll()
     {
-        $repository = new LocalRepository();
-        $total      = $repository->countBy();
+        $total      = $this->repository->countBy();
         $criteria   = [ 'source' => $this->config['id'] ];
 
-        $resources = $repository->findBy($criteria, $total, 1);
+        $resources = $this->repository->findBy($criteria, $total, 1);
 
         foreach ($resources as $resource) {
             $imported[] = $this->import(
-                $resource->id,
+                $resource,
                 $this->config['category'],
                 'Article',
                 null,
@@ -190,7 +195,7 @@ class Importer
      *
      * @return array The array of data.
      */
-    protected function getData($resource, $path, $category, $author, $enabled, $target)
+    protected function getData($resource, $category, $author, $enabled, $target)
     {
         $data = [
             'category'            => $category,
@@ -208,8 +213,8 @@ class Importer
         ];
 
         if ($target === 'photo') {
-            $data['local_file'] = realpath($path . DS . $this->config['id']
-                .  DS . $resource->file_name);
+            $data['local_file'] = realpath($this->repository->syncPath. DS
+                . $this->config['id'] .  DS . $resource->file_name);
             $data['original_filename'] = $resource->file_name;
 
             return $data;
@@ -262,10 +267,9 @@ class Importer
     {
         $data       = [];
         $related    = [];
-        $repository = new LocalRepository();
 
         foreach ($resource->related as $id) {
-            $related[] = $repository->find($this->config['id'], $id);
+            $related[] = $this->repository->find($this->config['id'], $id);
         }
 
         if (empty($related)) {
