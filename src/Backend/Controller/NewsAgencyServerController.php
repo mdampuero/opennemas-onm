@@ -145,7 +145,7 @@ class NewsAgencyServerController extends Controller
 
         $categories = [];
         foreach ($items as $category) {
-            $categories[$category->name] = $category->title;
+            $categories[$category->id] = $category->title;
         }
 
         asort($categories);
