@@ -367,7 +367,6 @@ class ArticlesController extends Controller
                 }
                 $this->view->assign('orderHome', \Onm\StringUtils::convertToUtf8($orderHome));
             }
-
         }
 
         $authorsComplete = \User::getAllUsersAuthors();

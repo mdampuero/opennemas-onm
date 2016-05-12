@@ -15,7 +15,6 @@
  */
 class Uri
 {
-
     /**
      * List of all default uri settings
      *

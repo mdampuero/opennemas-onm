@@ -150,7 +150,6 @@ class ImporterXml
             } elseif (!in_array($key, $this->ignoreds)) {
                 $label = $this->checkLabels($key);
             } else {
-
                 return '';
             }
 
@@ -184,18 +183,15 @@ class ImporterXml
 
     public function checkAttributes($value)
     {
-        $label='';
+        $label = '';
 
         if ((is_object($value) || is_array($value))) {
-
             foreach ($value as $n => $val) {
-
                 if (!empty($val) && (!in_array($n, $this->ignoreds))) {
                     $label = $this->checkAttributes($val);
                 }
             }
         } else {
-
             if (!empty($value)) {
                 $label = $this->checkLabels($value);
             }
@@ -207,9 +203,7 @@ class ImporterXml
     public function checkBeImportant($value)
     {
         if ((!is_object($value) && !is_array($value))) {
-
             if (in_array($value, $this->alloweds)) {
-
                 return true;
             }
         }

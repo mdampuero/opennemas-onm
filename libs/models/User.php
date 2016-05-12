@@ -298,7 +298,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
-        // Transform groups array to a string separated by comma
+        // Transform groups array to a string separated by commas
         $data['id_user_group'] = implode(',', $data['id_user_group']);
 
         if (isset($data['password'])
@@ -310,7 +310,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                         `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
-            $values = array(
+            $values = [
                 $data['username'],
                 md5($data['password']),
                 (int) $data['sessionexpire'],
@@ -323,15 +323,14 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 $data['id_user_group'],
                 (int) $data['type'],
                 intval($data['id'])
-            );
-
+            ];
         } else {
             $sql = "UPDATE users
                     SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
                         `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
-            $values = array(
+            $values = [
                 $data['username'],
                 (int) $data['sessionexpire'],
                 $data['email'],
@@ -343,7 +342,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 $data['id_user_group'],
                 (int) $data['type'],
                 intval($data['id'])
-            );
+            ];
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -380,7 +379,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     {
         $sql = 'DELETE FROM users WHERE id=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, [intval($id)])===false) {
             return false;
         }
 
@@ -450,8 +449,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     private function createAccessCategoriesDb($categoryIds)
     {
         if ($this->deleteAccessCategoriesDb()) {
-            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
-                    VALUES (?,?)";
+            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`) VALUES (?,?)";
 
             if (count($categoryIds) > 0) {
                 $values = array();

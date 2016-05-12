@@ -88,14 +88,12 @@ class MethodCacheManager
         $class_methods = $this->getInternalObjectMethods();
 
         if (in_array($method, $class_methods)) {
-
             $key = $this->classname.$method.md5(serialize($args));
             if (defined('CACHE_PREFIX')) {
                 $key = CACHE_PREFIX . $key;
             }
 
             if (false === ($result = $this->cache->fetch($key))) {
-
                 $result = call_user_func_array(array($this->object, $method), $args);
                 $this->cache->save($key, serialize($result), $this->ttl);
 

@@ -22,7 +22,6 @@
  */
 class MediaItem
 {
-
     /* Absolute path and file name */
     /**
      * The file name of the item to parse

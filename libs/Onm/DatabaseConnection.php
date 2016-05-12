@@ -310,7 +310,6 @@ class DatabaseConnection
                 // from the list of slaves connection parameters
                 $slaveConnection = null;
                 do {
-
                     $randomSlaveIndex = array_rand($slavesList);
                     $slaveParams = $slavesList[$randomSlaveIndex];
 

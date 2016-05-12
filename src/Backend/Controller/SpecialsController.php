@@ -132,7 +132,6 @@ class SpecialsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-
             return $this->render('special/new.tpl');
         }
 

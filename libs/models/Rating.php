@@ -210,7 +210,6 @@ class Rating
         if ($countKIP === false) {
             $ipsCount[] = array('ip' => $ip, 'count' => 1);
         } else {
-
             if ($ipsCount[$countKIP]['count'] == 50) {
                 return false;
             }

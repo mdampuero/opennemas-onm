@@ -88,7 +88,6 @@ class LayoutManager
             $position++;
             $last = ($total == $position);
             $output []= $this->renderElement($elementTypeInner, $innerValuesInner, $last);
-
         }
         $output []= '</div><!-- end wrapper -->';
 

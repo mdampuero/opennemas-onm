@@ -388,27 +388,21 @@ class ContentCategoryManager
     {
         $categories = array_values($categories);
 
-        if (count($categories) > 0) {
-            usort(
-                $categories,
-                function (
-                    $a,
-                    $b
-                ) {
-                    if ($b->inmenu == 0) {
-                        return 0;
-                    }
-                    if ($a->inmenu == 0) {
-                        return +1;
-                    }
-                    if ($a->posmenu == $b->posmenu) {
-
-                    }
-
-                    return ($a->posmenu > $b->posmenu) ? +1 : -1;
-                }
-            );
+        if (count($categories) == 0) {
+            return $categories;
         }
+
+        usort($categories, function ($a, $b) {
+            if ($b->inmenu == 0) {
+                return 0;
+            }
+
+            if ($a->inmenu == 0) {
+                return +1;
+            }
+
+            return ($a->posmenu > $b->posmenu) ? +1 : -1;
+        });
 
         return $categories;
     }
@@ -425,28 +419,24 @@ class ContentCategoryManager
         $categories = array_values($categories);
 
         if (count($categories) > 0) {
-            usort(
-                $categories,
-                function (
-                    $a,
-                    $b
-                ) {
-                    //Las que no están en el menú colocarlas al final
-                    if ($b->internal_category == 0) {
-                         return 0;
-                    }
-                    if ($a->internal_category == 0) {
-                         return +1;
-                    }
-                    if ($a->internal_category == $b->internal_category) {
-                        return ($a->posmenu > $b->posmenu) ? +1 : -1;
-                    }
-
-                    return ($a->internal_category < $b->internal_category) ? 1 : +1;
-
-                }
-            );
+            return $categories;
         }
+
+        usort($categories, function ($a, $b) {
+            // Those that are not in the menu put them at the end of the list
+            if ($b->internal_category == 0) {
+                 return 0;
+            }
+            if ($a->internal_category == 0) {
+                 return +1;
+            }
+            if ($a->internal_category == $b->internal_category) {
+                return ($a->posmenu > $b->posmenu) ? +1 : -1;
+            }
+
+            return ($a->internal_category < $b->internal_category) ? 1 : +1;
+
+        });
 
         return $categories;
     }
@@ -514,8 +504,7 @@ class ContentCategoryManager
                     //subcategorys
                     foreach ($category->childNodes as $subcat) {
                         $tree[$i] = new stdClass();
-                        $tree[$i]->pk_content_category =
-                            $subcat->pk_content_category;
+                        $tree[$i]->pk_content_category = $subcat->pk_content_category;
                         $tree[$i]->title = '      ⇒ '.$subcat->title;
 
                         $i++;
@@ -536,11 +525,10 @@ class ContentCategoryManager
      **/
     public function getCategoriesTreeMenu()
     {
-        $tree = array();
-
         $categories = $this->orderByPosmenu($this->categories);
 
-        // First loop categories
+        // Loop categories, and build the tree down
+        $tree = [];
         foreach ($categories as $category) {
             $category->params = @unserialize($category->params);
             if ($category->fk_content_category == 0
@@ -552,7 +540,7 @@ class ContentCategoryManager
             }
         }
 
-        // Loop on subcategories
+        // Loop on subcategories, add them to the tree
         foreach ($categories as $category) {
             if ($category->fk_content_category != 0
                 && $category->internal_category != 0
@@ -687,14 +675,10 @@ class ContentCategoryManager
     public function isEmpty($categoryName)
     {
         $pk_category = $this->get_id($categoryName);
-        $sql1 = 'SELECT count( * )
-                 FROM `content_positions`
-                 WHERE `fk_category` ='.$pk_category;
-        $rs1 = $GLOBALS['application']->conn->Execute($sql1);
+        $sql = 'SELECT count(*) FROM `content_positions` WHERE `fk_category`=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql1, [$pk_category]);
 
-        if (!$rs1) {
-            return;
-        }
+        if (!$rs) { return; }
 
         $sql = 'SELECT count(pk_content) AS number '
             . 'FROM `contents`, `contents_categories`
@@ -702,7 +686,7 @@ class ContentCategoryManager
             AND `contents`.`in_litter`=0
             AND `contents_categories`.`pk_fk_content_category`=?
             AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($pk_category));
+        $rs = $GLOBALS['application']->conn->Execute($sql, [ $pk_category ]);
 
         if (!$rs) {
             return;

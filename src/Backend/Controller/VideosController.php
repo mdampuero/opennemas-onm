@@ -207,7 +207,6 @@ class VideosController extends Controller
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
-
             } elseif ($type == 'web-source') {
                 if (!empty($_POST['information'])) {
                     $video = new \Video();
@@ -221,13 +220,11 @@ class VideosController extends Controller
                         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
                         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
                         $cacheManager->delete('home|1');
-
                     } catch (\Exception $e) {
                         $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
 
                         return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                     }
-
                 } else {
                     $this->get('session')->getFlashBag()->add(
                         'notice',
