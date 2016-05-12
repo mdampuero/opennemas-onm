@@ -206,25 +206,26 @@ class Photo extends Content
 
         // Building information for the photo image
         $dataPhoto = array(
-            'title'          => isset($data['title']) ? $data['title'] :$originalFileName,
-            'name'           => $finalPhotoFileName,
-            'path_file'      => $dateForDirectory,
-            'fk_category'    => $data["fk_category"],
-            'category'       => $data["fk_category"],
-            'nameCat'        => $data["category_name"],
-            'created'        => $data["created"],
-            'changed'        => $data["changed"],
-            'content_status' => $data['content_status'],
-            'description'    => $data['description'],
-            'metadata'       => $data["metadata"],
-            'urn_source'     => $data['urn_source'],
-            'size'           => round($fileInformation->size/1024, 2),
-            'date'           => $dateString,
-            'width'          => $fileInformation->width,
-            'height'         => $fileInformation->height,
-            'author_name'    => isset($data['author_name']) ? $data['author_name'] : '',
-            'pk_author'      => $_SESSION['userid'],
-            'fk_publisher'   => $_SESSION['userid'],
+            'title'               => isset($data['title']) ? $data['title'] :$originalFileName,
+            'name'                => $finalPhotoFileName,
+            'path_file'           => $dateForDirectory,
+            'fk_category'         => $data["fk_category"],
+            'category'            => $data["fk_category"],
+            'nameCat'             => $data["category_name"],
+            'created'             => $data["created"],
+            'changed'             => $data["changed"],
+            'content_status'      => $data['content_status'],
+            'description'         => $data['description'],
+            'metadata'            => $data["metadata"],
+            'urn_source'          => $data['urn_source'],
+            'size'                => round($fileInformation->size/1024, 2),
+            'date'                => $dateString,
+            'width'               => $fileInformation->width,
+            'height'              => $fileInformation->height,
+            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
+            'fk_user_last_editor' => $_SESSION['userid'],
+            'fk_publisher'        => $_SESSION['userid'],
         );
 
         if ($filePathInfo['extension'] != 'swf') {
@@ -356,9 +357,6 @@ class Photo extends Content
      **/
     public function update($data)
     {
-        $data['fk_author'] = $_SESSION['userid'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-
         parent::update($data);
 
         $sql = "UPDATE photos
