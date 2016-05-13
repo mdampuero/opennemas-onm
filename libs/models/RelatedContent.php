@@ -390,8 +390,8 @@ class RelatedContent
             $verPortada = 2;
         }
 
-        $ids = array_filter($ids, function ($id) { 
-            return !is_null($id); 
+        $ids = array_filter($ids, function ($id) {
+            return !is_null($id);
         });
 
         $sql = "SELECT pk_content1, pk_content2, position FROM related_contents "

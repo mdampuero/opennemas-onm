@@ -188,7 +188,6 @@ class Contents
 
             $sql =  'UPDATE `contents` SET `views`=`views`+1'
                     .' WHERE  `pk_content` IN ('.implode(',', $ads).')';
-
         } else {
             $sql =  'UPDATE `contents` SET `views`=`views`+1 '
                     .'WHERE `content_status`=1 AND `pk_content`='.$id;

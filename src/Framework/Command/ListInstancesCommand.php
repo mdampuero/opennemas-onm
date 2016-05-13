@@ -68,8 +68,6 @@ EOF
                     ', ACTIVATED: '.$instance['activated']
                 );
             }
-
         }
-
     }
 }

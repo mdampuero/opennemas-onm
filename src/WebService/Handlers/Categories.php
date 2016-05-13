@@ -119,7 +119,6 @@ class Categories
                 } else {
                     $categories[$key] = $value;
                 }
-
             }
         }
 

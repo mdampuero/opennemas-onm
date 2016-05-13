@@ -239,7 +239,6 @@ class BlogsController extends Controller
                     )
                 );
             }
-
         } // End if isCached
 
         return $this->render(

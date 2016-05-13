@@ -210,7 +210,6 @@ class PaywallController extends Controller
 
             $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
             return $this->redirect($paypalUrl);
-
         } else {
             $errors = array();
 
@@ -764,7 +763,6 @@ class PaywallController extends Controller
 
                 $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
                 return $this->redirect($paypalUrl);
-
             } else {
                 $errors = array();
 

@@ -97,7 +97,7 @@ class MediaItem
      * The description of the fie
      *
      * @var string23
-     * 
+     *
      **/
     public $description = null;
 

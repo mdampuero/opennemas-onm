@@ -118,9 +118,7 @@ EOF
           // execute the handles
         $running = null;
         do {
-
             curl_multi_exec($mh, $running);
-
         } while ($running > 0);
 
 

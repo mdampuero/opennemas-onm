@@ -203,7 +203,6 @@ class SubscriptionsController extends Controller
                 $message = _("You have been unsubscribed from our newsletter.");
             }
             $class   = 'success';
-
         } catch (\Swift_SwiftException $e) {
             $message = _(
                 "Sorry, we were unable to complete your request.\n"

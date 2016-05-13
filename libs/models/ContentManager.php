@@ -722,7 +722,6 @@ class ContentManager
                             $i++;
                             $j--;
                         }
-
                     } while ($i <= $j);
 
                     if ($i < $r) {
@@ -1187,8 +1186,7 @@ class ContentManager
         $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
 
         // If $start and $end not defined or they are equals  => is in time
-        if (
-            (empty($start) && empty($end))
+        if ((empty($start) && empty($end))
             || ($start == $end)
         ) {
             return true;
@@ -2025,9 +2023,7 @@ class ContentManager
             $returnValue = false;
         } else {
             if ($rss->_numOfRows > 0) {
-
                 $returnValue =  $rss->fields['pk_content'];
-
             } else {
                 $returnValue = false;
             }

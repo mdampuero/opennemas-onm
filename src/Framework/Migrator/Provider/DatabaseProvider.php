@@ -107,7 +107,6 @@ class DatabaseProvider extends MigrationProvider
                             in_array('constant', $field['type'])) {
                         $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key
                             . ', ';
-
                     } else if (isset($field['type']) &&
                             in_array('subselect', $field['type'])) {
                         $params = $field['params']['subselect'];
@@ -125,7 +124,6 @@ class DatabaseProvider extends MigrationProvider
                         }
 
                         $sql .= ')' . ' AS ' . $key . ', ';
-
                     } else {
                         $sql .= $field['table'] . '.' . $field['field']
                             . ' AS ' . $key . ', ';

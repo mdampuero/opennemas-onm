@@ -250,7 +250,6 @@ class VideosController extends Controller
                     )
                 )
             );
-
         } else {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
             if (empty($type)) {
@@ -476,7 +475,6 @@ class VideosController extends Controller
                     'video/partials/_video_information.tpl',
                     array('information' => $information,)
                 );
-
             } catch (\Exception $e) {
                 $output = _("Can't get video information. Check the url");
             }

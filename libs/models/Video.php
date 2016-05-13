@@ -274,7 +274,6 @@ class Video extends Content
             if (!$videoId) {
                 throw new \Exception($this->errors);
             }
-
         } else {
             $message = _('There was an error while processing your video file');
             throw new \Exception($message);

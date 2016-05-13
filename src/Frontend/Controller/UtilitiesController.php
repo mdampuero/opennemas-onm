@@ -72,7 +72,6 @@ class UtilitiesController extends Controller
                 if (isset($result->result->views)) {
                     $json['count'] = $result->result->views;
                 }
-
             }
         }
 

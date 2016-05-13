@@ -363,7 +363,6 @@ class BooksController extends Controller
                 $result = $result && $book->setPosition($pos);
                 $pos += 1;
             }
-
         }
 
         if ($result) {

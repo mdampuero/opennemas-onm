@@ -55,7 +55,6 @@ class JavascriptManager extends AssetManager
 
                 $fm->set($name, $filter);
             }
-
         }
 
         return $fm;

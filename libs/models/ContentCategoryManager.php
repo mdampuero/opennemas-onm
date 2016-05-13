@@ -676,7 +676,9 @@ class ContentCategoryManager
         $sql = 'SELECT count(*) FROM `content_positions` WHERE `fk_category`=?';
         $rs = $GLOBALS['application']->conn->Execute($sql1, [$pk_category]);
 
-        if (!$rs) { return; }
+        if (!$rs) {
+            return;
+        }
 
         $sql = 'SELECT count(pk_content) AS number '
             . 'FROM `contents`, `contents_categories`

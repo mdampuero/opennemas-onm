@@ -322,7 +322,6 @@ EOF
             if (!$rss) {
                 //$output->writeln($GLOBALS['application']->conn->ErrorMsg());
             }
-
         } else {
             //$output->writeln("Please provide a contentID and views to update it.");
         }

@@ -228,7 +228,6 @@ class EntityManager extends BaseManager
                     }
                 }
             }
-
         }
 
         return $contentMap;

@@ -409,8 +409,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             && !is_object($this->photo)
             && $this->avatar_img_id != 0))
         ) {
-          $this->photo = $photo = getService('entity_repository')
-            ->find('Photo', $this->avatar_img_id);
+            $this->photo = $photo = getService('entity_repository')
+                ->find('Photo', $this->avatar_img_id);
         }
 
         return $photo;
@@ -922,7 +922,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return false;
-
         }
 
         return $rs->fields['username'];

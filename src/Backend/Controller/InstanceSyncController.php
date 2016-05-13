@@ -285,7 +285,6 @@ class InstanceSyncController extends Controller
             }
 
             $maxRedirects++;
-
         } while ($httpCode == 302 ||
                  $httpCode == 301 ||
                  $maxRedirects > $redirectsAllowed

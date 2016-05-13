@@ -470,7 +470,7 @@ class Photo extends Content
                                 $this->resolution =
                                     $exifData['IFD0']['XResolution'];
                             }
-                            
+
                             if (empty($this->date)
                                 && !is_null($exifData['FILE']['FileDateTime'])
                             ) {
@@ -535,7 +535,6 @@ class Photo extends Content
                             }
 
                             ini_set($errorReporting);
-
                         } else {
                             $this->infor .=  _("No available IPTC data");
                         }

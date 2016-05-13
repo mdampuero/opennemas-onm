@@ -278,7 +278,6 @@ class LetterController extends Controller
                             } catch (\Swift_SwiftException $e) {
                             }
                         }
-
                     } else {
                         $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
                             ."correctamente todos los campos.";

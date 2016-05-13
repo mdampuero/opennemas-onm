@@ -134,7 +134,7 @@ class FrontpagesController extends Controller
         );
 
         // Calculate the content views at once
-        $ids = array_map(function($content) {
+        $ids = array_map(function ($content) {
             return $content->id;
         }, $contentElementsInFrontpage);
 

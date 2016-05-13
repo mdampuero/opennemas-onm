@@ -40,7 +40,6 @@ EOF
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
             $output->writeln(" [DONE]");
-
         } else {
             $output->writeln(" [Not supported]");
         }
