@@ -2057,7 +2057,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }
@@ -2085,7 +2084,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }

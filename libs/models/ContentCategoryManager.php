@@ -470,7 +470,6 @@ class ContentCategoryManager
                 && $category->internal_category != 0
                 && isset($tree[$category->fk_content_category])
             ) {
-
                 $tree[$category->fk_content_category]
                     ->childNodes[$category->pk_content_category] = $category;
             }
@@ -546,7 +545,6 @@ class ContentCategoryManager
                 && $category->internal_category != 0
                 && isset($tree[$category->fk_content_category])
             ) {
-
                 $tree[$category->fk_content_category]
                     ->childNodes[$category->pk_content_category] = $category;
             }

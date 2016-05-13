@@ -655,7 +655,6 @@ class Advertisement extends Content
                 $content = '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; '
                             .'height:'.$height.'px; overflow: hidden;border:none"></iframe>';
             }
-
         } elseif ($this->with_script == 2) {
             if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));

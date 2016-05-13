@@ -263,7 +263,6 @@ class ImporterXml
             $ccm = ContentCategoryManager::get_instance();
             $current_category = strtolower(StringUtils::normalizeName($this->data['category_name']));
             $this->data['category'] = $ccm->get_id($current_category);
-
         } else {
             $this->data['category']=  20;
         }
