@@ -114,7 +114,7 @@ class Importer
      *
      * @return integer The content id.
      */
-    public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 0)
+    public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 1)
     {
         $category = $this->getCategory($category);
         $author   = $this->getAuthor($resource, $author);
@@ -144,13 +144,7 @@ class Importer
         $resources = $this->getResources();
 
         foreach ($resources as $resource) {
-            $imported[] = $this->import(
-                $resource,
-                $this->config['category'],
-                'Article',
-                null,
-                1
-            );
+            $imported[] = $this->import($resource);
         }
 
         return $imported;
