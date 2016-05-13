@@ -1499,9 +1499,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $relativeAuthorImagePath ="/authors/".$userName;
         $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
 
-        // Get original information of the uploaded image
+        // Get original information of the uploaded/local image
         $originalFileName = $file->getBaseName();
-        $fileExtension    = $file->getClientOriginalExtension();
+        $fileExtension    = $file->guessExtension();
 
         // Generate new file name
         $currentTime = gettimeofday();
