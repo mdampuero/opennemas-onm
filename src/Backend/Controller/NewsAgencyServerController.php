@@ -93,7 +93,8 @@ class NewsAgencyServerController extends Controller
             'source'         => $request->request->getDigits('source', 0),
             'auto_import'    => $request->request->getDigits('auto_import', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING)
+            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'filters'        => $request->request->get('filters', [])
         );
 
         $servers[$server['id']] = $server;
@@ -179,13 +180,11 @@ class NewsAgencyServerController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
-        $sm = $this->get('setting_repository');
-
+        $id      = $request->query->getDigits('id');
+        $sm      = $this->get('setting_repository');
         $servers = $sm->get('news_agency_config');
 
-        $server = array(
+        $server = [
             'id'             => $id,
             'name'           => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
@@ -199,8 +198,9 @@ class NewsAgencyServerController extends Controller
             'source'         => $request->request->getDigits('source', 0),
             'auto_import'    => $request->request->getDigits('auto_import', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING)
-        );
+            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'filters'        => $request->request->get('filters', [])
+        ];
 
         $servers[$id] = $server;
 
@@ -214,7 +214,7 @@ class NewsAgencyServerController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'backend_news_agency_server_show',
-                array('id' => $id)
+                [ 'id' => $id ]
             )
         );
     }
