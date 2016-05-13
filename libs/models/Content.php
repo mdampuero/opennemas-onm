@@ -879,7 +879,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-
                 return false;
             }
         }

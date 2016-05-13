@@ -347,7 +347,6 @@ class PaywallController extends Controller
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
-
             $order = new \Order();
             $order->create(
                 array(
@@ -781,7 +780,6 @@ class PaywallController extends Controller
                 );
             }
         } else {
-
             return $this->render(
                 'paywall/prifile_activated.tpl',
                 array(

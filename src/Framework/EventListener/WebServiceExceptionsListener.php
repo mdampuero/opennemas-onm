@@ -28,7 +28,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class WebServiceExceptionsListener implements EventSubscriberInterface
 {
-
     /**
      * Checks and handles exceptions that are not handled by any other listener.
      *
@@ -50,7 +49,6 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         if (!($exception instanceof AuthenticationException)
             && strpos($uri, '/managerws') !== false
         ) {
-
             $event->setResponse(
                 new JsonResponse([ 'text' => $exception->getMessage() ])
             );

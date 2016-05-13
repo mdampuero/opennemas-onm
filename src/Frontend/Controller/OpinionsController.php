@@ -131,7 +131,6 @@ class OpinionsController extends Controller
                         'opinionsDirector' => $contents
                     ]);
                 }
-
             }
 
             $numOpinions  = $sm->get('items_per_page');

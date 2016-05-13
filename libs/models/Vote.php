@@ -125,7 +125,6 @@ class Vote
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs->EOF) {
-
             //Si no existe un votacion pinta 0
             $sql = "INSERT INTO votes (`pk_vote`,`value_pos`,
                                        `value_neg`, `karma`, `ips_count_vote`)
@@ -205,7 +204,6 @@ class Vote
         $results = "";
 
         if ($type == "vote") {
-
             // Render links
             for ($i = 1; $i <= 2; $i++) {
                 $results.= $this->renderLink($i, $this->pk_vote);

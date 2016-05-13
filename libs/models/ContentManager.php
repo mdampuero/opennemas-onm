@@ -1474,7 +1474,6 @@ class ContentManager
         $ccm   = ContentCategoryManager::get_instance();
         $items = array();
         while (!$rs->EOF) {
-
             if (!$frontIncluded) {
                 $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
                 $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
@@ -1718,7 +1717,6 @@ class ContentManager
             $contentTypes = \ContentManager::getContentTypes();
             foreach ($contentTypes as $types) {
                 if ($types['pk_content_type'] == $id) {
-
                     $name = ($ucfirst === true) ? ucfirst($types['name']) : $types['name'];
 
                     return $name;

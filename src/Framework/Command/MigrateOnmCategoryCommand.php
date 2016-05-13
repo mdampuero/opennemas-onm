@@ -115,13 +115,11 @@ EOF
         if (!$rs) {
             $output->writeln('DB problem: '. $this->originConnection->ErrorMsg());
         } else {
-
             $totalRows = count($rs->getArray());
             $current = 1;
 
             $article = new \Article();
             while (!$rs->EOF) {
-
                 $originalArticleID = $rs->fields['pk_article'];
 
                 if ($this->elementIsImported($originalArticleID, 'article')) {
@@ -274,7 +272,6 @@ EOF
         if (!$rss) {
             //$output->writeln('\n insertRefactorID: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-
     }
 
     /**
@@ -297,7 +294,6 @@ EOF
             } else {
                 return ($rss->fields['pk_content']);
             }
-
         } else {
             //$output->writeln("There is imported {$contentID} - {$contentType}\n.");
         }
