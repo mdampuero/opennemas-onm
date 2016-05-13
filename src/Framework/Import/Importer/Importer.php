@@ -75,25 +75,32 @@ class Importer
     }
 
     /**
-     * Returns the category basing on the configuration.
+     * Returns the list of resources to import basing on the configuration.
      *
-     * @param integer $category The category for contents.
-     *
-     * @return integer The category for contents.
+     * @return array The list of resources to import.
      */
-    public function getCategory($category = null)
+    protected function getResources()
     {
-        if ($this->autoImport()) {
-            return $this->config['category'];
+        $criteria = [ 'source' => $this->config['id'] ];
+
+        if (!array_key_exists('filters', $this->config)
+            || empty($this->config['filters'])) {
+
+            return $this->repository->findBy($criteria);
         }
 
-        $category = $this->getSimilarCategory($category);
+        $resources = [];
+        foreach ($this->config['filters'] as $filter) {
+            $criteria  = array_merge(
+                $criteria,
+                [ 'title' => $filter, 'body' => $filter ]
+            );
 
-        if (!empty($category)) {
-            return $category;
+            $items     = $this->repository->findBy($criteria);
+            $resources = array_merge($resources, $items);
         }
 
-        return 20;
+        return $resources;
     }
 
     /**
@@ -110,6 +117,7 @@ class Importer
     public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 0)
     {
         $category = $this->getCategory($category);
+        $author   = $this->getAuthor($resource, $author);
 
         $data = $this->getData($resource, $category, $author, $enabled, $target);
 
@@ -133,10 +141,7 @@ class Importer
      */
     public function importAll()
     {
-        $total      = $this->repository->countBy();
-        $criteria   = [ 'source' => $this->config['id'] ];
-
-        $resources = $this->repository->findBy($criteria, $total, 1);
+        $resources = $this->getResources();
 
         foreach ($resources as $resource) {
             $imported[] = $this->import(
@@ -152,18 +157,134 @@ class Importer
     }
 
     /**
-     * Checks if the related contents have to be imported.
+     * Returns the author id for a resource.
      *
-     * @return boolean True if the related contents have to be imported.
-     *                 Otherwise, returns false.
+     * @param Resource $resource The resource.
+     * @param integer  $id       The author id.
+     * @param string   $target   The target content type.
+     *
+     * @return integer The author id for the resource.
      */
-    public function importRelated()
+    protected function getAuthor($resource, $author)
     {
-        if ($this->autoImport()) {
-            return $this->config['import_related'];
+        // Author as parameter
+        if (!empty($author)) {
+            return $author;
         }
 
-        return true;
+        // Resource has no author
+        if (!property_exists($resource, 'author')
+            || empty($resource->author)
+            || !array_key_exists('author', $this->config)
+            || $this->config['author'] !== '1'
+        ) {
+            if (array_key_exists('target_author', $this->config)
+                &&  !empty($this->config['target_author'])
+            ) {
+                return $this->config['target_author'];
+            }
+
+            return 0;
+        }
+
+        // Resource has author
+        $author = $resource->author;
+
+        if (!is_object($author)) {
+            return 0;
+        }
+
+        $data = get_object_vars($author);
+
+        if (array_key_exists('email', $data)) {
+            $um = $this->get('user_repository');
+            $user = $um->findOneBy();
+
+            if (empty($user)) {
+                return $user->id;
+            }
+        }
+
+        // Set user as deactivated author without privileges
+        $data['activated']        = 0;
+        $data['id_user_group']    = ['3'];
+        $data['accesscategories'] = [];
+
+        // Create author
+        $user = new \User();
+
+        if (!$user->create($data)) {
+            return 0;
+        }
+
+        // Write in log
+        $logger = $this->get('application.log');
+        $logger->info(
+            'User ' . $data['username'] . ' was created from importer by user '
+            . $_SESSION['username'] . ' (' . $_SESSION['userid'] . ')'
+        );
+
+        // Set user meta if exists
+        if ($author->meta) {
+            $meta = get_object_vars($author->meta);
+            $user->setMeta($meta);
+        }
+
+        if (!$author->photo) {
+            return $user->id;
+        }
+
+        $cm       = new \ContentManager();
+        $photoRaw = $cm->getUrlContent($author->photo);
+
+        if (!$photoRaw) {
+            return $author->id;
+        }
+
+        // Create author photo
+        $localImageDir  = MEDIA_IMG_PATH . $author->photo->path_file;
+        $localImagePath = MEDIA_IMG_PATH . $author->photo->path_img;
+
+        if (!is_dir($localImageDir)) {
+            \Onm\FilesManager::createDirectory($localImageDir);
+        }
+
+        if (file_exists($localImagePath)) {
+            unlink($localImagePath);
+        }
+
+        file_put_contents($localImagePath, $photoRaw);
+
+        // Get all necessary data for the photo
+        $info = new \MediaItem($localImagePath);
+        $data = array(
+            'title'       => $author->photo->name,
+            'name'        => $author->photo->name,
+            'user_name'   => $author->photo->name,
+            'path_file'   => $author->photo->path_file,
+            'namecat'     => $author->username,
+            'category'    => '',
+            'created'     => $info->atime,
+            'changed'     => $info->mtime,
+            'date'        => $info->mtime,
+            'size'        => round($info->size/1024, 2),
+            'width'       => $info->width,
+            'height'      => $info->height,
+            'type'        => $info->type,
+            'type_img'    => substr($author->photo->name, -3),
+            'media_type'  => 'image',
+            'author_name' => $author->username,
+        );
+
+        $photo   = new \Photo();
+        $photoId = $photo->create($data);
+
+        $data['avatar_img_id'] = $photoId;
+        unset($data['password']);
+
+        $user->update($data);
+
+        return $user->id;
     }
 
     /**
@@ -181,6 +302,26 @@ class Importer
         }
 
         return 1;
+    }
+
+    /**
+     * Returns the category basing on the configuration.
+     *
+     * @param integer $category The category for contents.
+     *
+     * @return integer The category for contents.
+     */
+    protected function getCategory($category = null)
+    {
+        if (!empty($category)) {
+            return $category;
+        }
+
+        if ($this->autoImport()) {
+            return $this->config['category'];
+        }
+
+        return 20;
     }
 
     /**
@@ -202,9 +343,9 @@ class Importer
             'content_status'      => $enabled,
             'description'         => $resource->summary,
             'frontpage'           => 0,
-            'fk_author'           => (isset($authorId) ? $authorId : 0),
-            'fk_publisher'        => 0,
-            'fk_user_last_editor' => 0,
+            'fk_author'           => $this->getAuthor($resource, $author),
+            'fk_publisher'        => $this->getAuthor($resource, $author),
+            'fk_user_last_editor' => $this->getAuthor($resource, $author),
             'in_home'             => 0,
             'metadata'            => \Onm\StringUtils::getTags($resource->title),
             'title'               => $resource->title,
@@ -334,33 +475,17 @@ class Importer
     }
 
     /**
-     * Returns the category id of the most similar category in database given a
-     * given a external category name.
+     * Checks if the related contents have to be imported.
      *
-     * @param string The external category name.
-     *
-     * @return integer The category id of the most similar category.
+     * @return boolean True if the related contents have to be imported.
+     *                 Otherwise, returns false.
      */
-    protected function getSimilarCategory($original)
+    protected function importRelated()
     {
-        if (empty($original)) {
-            return $original;
+        if ($this->autoImport()) {
+            return $this->config['import_related'];
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $categories = $ccm->findAll();
-
-        $prevPoint = 1000;
-        $final     = 0;
-        foreach ($categories as $category) {
-            $lev = levenshtein($original, $category->name);
-
-            if ($lev < 2  && $lev < $prevPoint) {
-                $prevPoint = $lev;
-                $final     = $category->id;
-            }
-        }
-
-        return $final;
+        return true;
     }
 }
