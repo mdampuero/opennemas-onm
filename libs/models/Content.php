@@ -448,7 +448,7 @@ class Content
         $this->category_name = $catName;
 
         $sql = "INSERT INTO contents_categories (`pk_fk_content`, `pk_fk_content_category`, `catName`) VALUES (?,?,?)";
-        $values = array($this->id, $data['category'],$catName);
+        $values = array($this->id, (int) $data['category'], $catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
