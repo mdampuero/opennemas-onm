@@ -92,9 +92,11 @@ class NewsAgencyServerController extends Controller
             'author'         => $request->request->getDigits('author', 0),
             'source'         => $request->request->getDigits('source', 0),
             'auto_import'    => $request->request->getDigits('auto_import', 0),
+            'auto_import'    => $request->request->getDigits('auto_import', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
             'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
-            'filters'        => $request->request->get('filters', [])
+            'filters'        => $request->request->get('filters', []),
         );
 
         $servers[$server['id']] = $server;
@@ -158,9 +160,17 @@ class NewsAgencyServerController extends Controller
             $server = $servers[$id];
         }
 
+        $users   = \User::getAllUsersAuthors();
+        $authors = [];
+
+        foreach ($users as $user) {
+            $authors[$user->id] = $user->name;
+        }
+
         return $this->render(
             'news_agency/config/new.tpl',
             [
+                'authors'    => $authors,
                 'categories' => $categories,
                 'server'     => $server,
                 'sync_from'  => $this->syncFrom
@@ -198,6 +208,7 @@ class NewsAgencyServerController extends Controller
             'source'         => $request->request->getDigits('source', 0),
             'auto_import'    => $request->request->getDigits('auto_import', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
             'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
             'filters'        => $request->request->get('filters', [])
         ];

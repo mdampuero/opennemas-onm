@@ -185,12 +185,21 @@
                 <label class="form-label" for="auto-import">{t}Enabled{/t}</label>
               </div>
             </div>
-            <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}" value="1">
+            <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}">
               <label class="form-label" for="category">{t}Category{/t}</label>
               <span class="help m-l-5">{t}Category to import{/t}</span>
               <div class="controls">
                 <select id="category" name="category" ng-disabled="!auto_import">
                   <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" ng-init="author = '{$server['target_author']}'; authors = {json_encode($authors)|clear_json}">
+              <label class="form-label" for="target-author">{t}Author{/t}</label>
+              <span class="help m-l-5">{t}Author to import to{/t}</span>
+              <div class="controls">
+                <select id="target-author" name="target_author" ng-disabled="!auto_import">
+                  <option value="[% key %]" ng-repeat="(key, value) in authors" ng-selected="author === key">[% value %]</option>
                 </select>
               </div>
             </div>
