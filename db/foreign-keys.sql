@@ -3,13 +3,18 @@
 #
 
 # Use proper values for invalid dates
-UPDATE `contents` SET `endtime`=NULL WHERE `endtime`<'1970-01-01 00:00:00'
-UPDATE `contents` SET `starttime`=NULL WHERE `starttime`<'1970-01-01 00:00:00'
+UPDATE `contents` SET `endtime`= NULL WHERE `endtime`< "1970-01-01 00:00:00";
+UPDATE `contents` SET `starttime`= NULL WHERE `starttime`< "1970-01-01 00:00:00";
+UPDATE `contents` SET `created`= NULL WHERE `created`< '1970-01-01 00:00:00' AND `created` IS NOT NULL;
+UPDATE `comments` SET `date`= NULL WHERE `date`< '1970-01-01 00:00:00' AND `date` IS NOT NULL;
+ALTER TABLE comments CHANGE date date DATETIME DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE contents CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP;
 
 # References cleanup
 DELETE FROM `advertisements` WHERE `pk_advertisement` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `albums` WHERE `pk_album` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `albums_photos` WHERE `pk_album` NOT IN (SELECT `pk_content` FROM `contents`);
+DELETE FROM `albums_photos` WHERE `pk_album` NOT IN (SELECT `pk_album` FROM `albums`);
+DELETE FROM `albums_photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `articles` WHERE `pk_article` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `attachments` WHERE `pk_attachment` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `books` WHERE `pk_book` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -28,6 +33,7 @@ DELETE FROM `polls` WHERE `pk_poll` NOT IN (SELECT `pk_content` FROM `contents`)
 DELETE FROM `poll_items` WHERE `fk_pk_poll` NOT IN (SELECT `pk_poll` FROM `polls`);
 DELETE FROM `related_contents` WHERE `pk_content1` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `related_contents` WHERE `pk_content2` NOT IN (SELECT `pk_content` FROM `contents`);
+DELETE FROM `static_pages` WHERE `pk_static_page` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `specials` WHERE `pk_special` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `special_contents` WHERE `fk_special` NOT IN (SELECT `pk_special` FROM `specials`);
 DELETE FROM `special_contents` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -38,7 +44,7 @@ DELETE FROM `user_groups_privileges` WHERE `pk_fk_user_group` NOT IN (SELECT `pk
 DELETE FROM `videos` WHERE `pk_video` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `widgets` WHERE `pk_widget` NOT IN (SELECT `pk_content` FROM `contents`);
 
-# Update of content types (taked from MAy 5th, 2016 database changes)
+# Update of content types (taked from May 5th, 2016 database changes)
 ALTER TABLE action_counters CHANGE date date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE albums_photos CHANGE description description TEXT DEFAULT NULL;
 CREATE INDEX pk_album ON albums_photos (pk_album);
@@ -59,11 +65,11 @@ CREATE INDEX pk_fk_content ON contents_categories (pk_fk_content);
 ALTER TABLE commentsmeta CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
 ALTER TABLE contents_categories RENAME INDEX catname TO content_categories_catname;
 ALTER TABLE content_views CHANGE pk_fk_content pk_fk_content BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
-ALTER TABLE frontpages CHANGE date date INT NOT NULL, CHANGE category category INT NOT NULL, CHANGE pk_frontpage pk_frontpage BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, CHANGE content_positions content_positions LONGTEXT NOT NULL;
 ALTER TABLE frontpages CHANGE date date INT NOT NULL
 ALTER TABLE frontpages CHANGE category category INT NOT NULL
 ALTER TABLE frontpages CHANGE content_positions content_positions LONGTEXT NOT NULL
-ALTER TABLE frontpages CHANGE pk_frontpage pk_frontpage BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, ADD PRIMARY KEY (pk_frontpage);
+ALTER TABLE frontpages CHANGE pk_frontpage pk_frontpage BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
+ALTER TABLE frontpages ADD PRIMARY KEY (pk_frontpage);
 ALTER TABLE letters CHANGE pk_letter pk_letter BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE menu_items CHANGE pk_item pk_item INT UNSIGNED NOT NULL, CHANGE pk_menu pk_menu INT UNSIGNED NOT NULL;
 ALTER TABLE menues CHANGE pk_menu pk_menu INT UNSIGNED AUTO_INCREMENT NOT NULL;
