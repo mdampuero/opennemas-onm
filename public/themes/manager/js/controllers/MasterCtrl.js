@@ -9,12 +9,12 @@
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$uibModal', '$rootScope', '$scope',
-    '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
-    'authService', 'routing', 'history', 'webStorage', 'messenger',
-    'cfpLoadingBar',
+    '$translate', '$timeout', '$window', 'vcRecaptchaService', 'jwtHelper',
+    'httpInterceptor', 'authService', 'routing', 'history', 'webStorage',
+    'messenger', 'cfpLoadingBar',
     function (
         $filter, $http, $location, $uibModal, $rootScope, $scope, $translate, $timeout,
-        $window, vcRecaptchaService, httpInterceptor, authService, routing,
+        $window, vcRecaptchaService, jwtHelper, httpInterceptor, authService, routing,
         history, webStorage, messenger, cfpLoadingBar
     ) {
         /**
@@ -198,13 +198,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.$on('auth-login-confirmed', function (event, args) {
             $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
-            $scope.user            = args.user;
+            $scope.user            = jwtHelper.decodeToken(args.token).user;
             $scope.auth.inprogress = false;
             $scope.auth.modal      = false;
             $scope.auth.status     = true;
 
             webStorage.local.set('token', args.token);
-            webStorage.local.set('user', args.user);
+            webStorage.local.set('user', $scope.user);
         });
 
         /**
