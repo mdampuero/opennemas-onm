@@ -287,14 +287,16 @@ class BaseRepository extends Repository
      */
     protected function refresh($ids)
     {
+        $oql    = [];
+        $filter = [];
         foreach ($ids as $id) {
-            $filter = [];
-
             foreach ($id as $key => $value) {
-                $filter[] = "$key='$value'";
+                $filter[$key][] = $value;
             }
+        }
 
-            $oql[] = '(' . implode(' and ', $filter) . ')';
+        foreach ($filter as $key => $values) {
+            $oql[] = $key . ' in [' . implode(',', $values) . ']';
         }
 
         $oql = implode(' or ', $oql);
