@@ -55,7 +55,6 @@ class BaseConverter
                 . ucfirst(strtolower($from)) . 'DataMapper';
 
             $mapper = new $mapper();
-            $method = 'to' . ucfirst($to);
 
             $data[$key] = $this->convertTo($from, $to, $value);
         }
@@ -68,6 +67,12 @@ class BaseConverter
 
         foreach ($missing as $key) {
             $data[$key] = null;
+
+            if (array_key_exists($key, $this->metadata->mapping['columns'])
+                && array_key_exists('default', $this->metadata->mapping['columns'][$key]['options'])
+            ) {
+                $data[$key] = $this->metadata->mapping['columns'][$key]['options']['default'];
+            }
         }
 
         // Meta keys (unknown properties)
