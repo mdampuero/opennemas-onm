@@ -27,6 +27,19 @@ parameters:
                     #         user:                 root
                     #         password:             root
                     #         charset:              ~
+    orm.default:
+        connection:
+            driver: mysqli
+            dbname: onm-instances
+            host: localhost
+            port: 3306
+            user: root
+            password: root
+            charset: UTF-8
+    cache.default:
+        redis:
+            server: 127.0.0.1
+            port: 6379
 
     mailer_transport:  mail
     mailer_host:       localhost
