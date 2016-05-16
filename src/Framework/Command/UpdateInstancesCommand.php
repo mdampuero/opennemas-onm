@@ -236,7 +236,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $stats = [];
         // Count contents
         $sql = 'SELECT content_type_name as type, count(*) as total '
-            .'FROM contents GROUP BY `fk_content_type`';
+            .'FROM contents GROUP BY `fk_content_type`, `content_type_name`';
 
         $rs = $this->im->conn->fetchAll($sql);
 
