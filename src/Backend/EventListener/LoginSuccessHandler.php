@@ -81,7 +81,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
         $this->session->set('user', $user);
-        $this->session->set('user_language', $user->getMeta('user_language'));
+        $this->session->set('user_language', $user->user_language);
         $this->session->set('instance', $instance);
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
