@@ -253,9 +253,9 @@ class InstanceCreator
      */
     public function restoreDatabase($source, $target = null)
     {
-        $cmd = "mysql -u{$this->conn->connectionParams['user']}"
-            . " -p{$this->conn->connectionParams['password']}"
-            . " -h{$this->conn->connectionParams['host']}"
+        $cmd = "mysql -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
             . ($target ? " $target"  : '')
             . " < $source";
 
