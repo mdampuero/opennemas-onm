@@ -39,8 +39,7 @@ parameters:
     cache.default:
         redis:
             server: 127.0.0.1
-            port: 6379
-
+            port:   6379
     mailer_transport:  mail
     mailer_host:       localhost
     mailer_user:       ~
