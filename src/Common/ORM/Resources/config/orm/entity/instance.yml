@@ -33,6 +33,7 @@ entity:
         emails:             integer
         users:              integer
         support_plan:       string
+        client:             string
     mapping:
         table: instances
         metas:
@@ -82,9 +83,6 @@ entity:
             activated_modules:
                 type: text
                 options: { default: null, length: 65532, notnull: false }
-            changes_in_modules:
-                type: text
-                options: { default: null, length: 65532, notnull: false }
             activated:
                 type: boolean
                 options: { default: null }
@@ -132,7 +130,7 @@ entity:
                 options: { default: 0 }
             alexa:
                 type: integer
-                options: { default: null, unsigned: true }
+                options: { default: 1000000, unsigned: true }
             page_views:
                 type: bigint
                 options: { default: 0, unsigned: true }
@@ -151,10 +149,10 @@ entity:
                 columns: [ id ]
                 primary: true
                 unique: true
-                flags: {  }
+                flags: {}
             -
-                name: client_id
-                columns: [ client_id ]
+                name: internal_name
+                columns: [ internal_name ]
                 primary: false
-                unique: false
-                flags: { fulltext: true }
+                unique: true
+                flags: {}
