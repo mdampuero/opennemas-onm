@@ -96,18 +96,23 @@ class InstanceController extends Controller
      */
     public function deleteAction($id)
     {
-        $im      = $this->get('instance_manager');
-        $creator = new InstanceCreator($im->getConnection());
+        $em      = $this->get('orm.manager');
+        $msg     = $this->get('core.messenger');
+        $creator = new InstanceCreator($em->getConnection('manager'));
 
         try {
-            $instance = $im->find($id);
+            $instance = $em->getRepository('Instance')->find($id);
 
             $assetFolder = realpath(
                 SITE_PATH . DS . 'media' . DS . $instance->internal_name
             );
 
-            $backupPath = BACKUP_PATH . DS . $instance->id . "-"
-                . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+            //$backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                //. $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+            $backupPath = $this->getParameter('kernel.root_dir')
+                . '/../tmp/backups/' . $instance->internal_name . '/DELETED-'
+                . date('YmdHis');
 
             $database = $instance->getDatabaseName();
 
@@ -118,36 +123,29 @@ class InstanceController extends Controller
             $creator->deleteDatabase($database);
             $creator->deleteAssets($instance->internal_name);
 
-            $im->remove($instance);
+            $em->remove($instance);
 
-            return new JsonResponse(_('Instance deleted successfully.'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the instance with id "%s"'), $id),
-                404
-            );
+            $msg->add(_('Instance deleted successfully'), 'success');
         } catch (BackupException $e) {
-            $message = $e->getMessage();
-
             $creator->deleteBackup($backupPath);
-
-            return new JsonResponse(sprintf(_($message), $id), 400);
+            $msg->add($e->getMessage(), 'error', 400);
         } catch (DatabaseNotDeletedException $e) {
-            $message = $e->getMessage();
-
             $creator->deleteBackup($backupPath);
-
-            return new JsonResponse(sprintf(_($message), $id), 400);
+            $msg->add($e->getMessage(), 'error', 400);
         } catch (\Exception $e) {
+            var_dump($e->getMessage());die();
             $creator->restoreAssets($backupPath);
             $creator->restoreDatabase($backupPath . DS . 'database.sql');
             $creator->deleteBackup($backupPath);
 
-            return new JsonResponse(
+            $msg->add(
                 sprintf(_('Error while deleting instance with id "%s"'), $id),
+                'error',
                 400
             );
         }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

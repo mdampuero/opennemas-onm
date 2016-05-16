@@ -70,9 +70,9 @@
          * @description
          *   Confirm delete action.
          *
-         * @param {Object} instance The instance to delete.
+         * @param {Integer} id The instance id.
          */
-        $scope.delete = function(instance) {
+        $scope.delete = function(id) {
           var modal = $uibModal.open({
             templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
             backdrop: 'static',
@@ -89,9 +89,9 @@
                   };
 
                   http.delete(route).then(function(response) {
-                    modalWindow.close({ message: response, type: 'success'});
+                    modalWindow.close({ data: response.data, success: true });
                   }, function(response) {
-                    modalWindow.close({ message: response, type: 'error'});
+                    modalWindow.close({ data: response.data, success: false });
                   });
                 };
               }
@@ -99,7 +99,7 @@
           });
 
           modal.result.then(function(response) {
-            messenger.post(response);
+            messenger.post(response.data);
 
             if (response.success) {
               $scope.list();
