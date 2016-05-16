@@ -23,15 +23,7 @@ class Instance extends Entity
      */
     public function getClient()
     {
-        if (!array_key_exists('client', $this->metas)) {
-            return null;
-        }
-
-        if (is_array($this->metas['client'])) {
-            return $this->metas['client'];
-        }
-
-        return $this->metas['client'];
+        return $this->client;
     }
 
     /**
