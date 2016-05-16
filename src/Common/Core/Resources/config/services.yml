@@ -8,6 +8,10 @@ services:
         class:   Common\ORM\Entity\Instance
         factory: [ '@core.loader', 'getInstance' ]
 
+    core.instance.checker:
+        class:   Common\Core\Instance\Checker
+        arguments: [ '@orm.manager' ]
+
     core.loader:
         class:     Common\Core\Loader\Loader
         arguments: [ '@service_container' ]
