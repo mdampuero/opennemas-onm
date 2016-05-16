@@ -13,6 +13,7 @@
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Onm\Exception\UserAlreadyExistsException;
+use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
  *
  * @package    Model
  **/
-class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface
+class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface, JWTUserInterface
 {
     /**
      * The user id
@@ -1648,6 +1649,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return [
+            'email'    => $this->email,
+            'id'       => $this->id,
+            'name'     => $this->name,
+            'username' => $this->username
+        ];
     }
 
     /**
