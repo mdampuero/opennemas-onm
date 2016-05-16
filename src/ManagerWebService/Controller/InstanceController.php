@@ -281,56 +281,37 @@ class InstanceController extends Controller
      */
     public function exportAction(Request $request)
     {
-        $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
-        $ids    = $request->query->filter('ids', '', FILTER_SANITIZE_STRING);
+        $oql = $request->query->get('oql', '');
+        $ids = $request->query->filter('ids');
 
-        $criteria = array();
-        $order    = array('id' => 'asc');
+        $repository = $this->get('orm.manager')->getRepository('Instance');
+        $converter  = $this->get('orm.manager')->getConverter('Instance');
 
-        if (!empty($search)) {
-            $criteria = array(
-                'name' => array(
-                    array('value' => "%$search%", 'operator' => 'LIKE')
-                ),
-                'contact_mail' => array(
-                    array('value' => "%$search%", 'operator' => 'LIKE')
-                )
-            );
-        } elseif (!empty($ids)) {
-            $criteria = array(
-                'id' => array(
-                    array('value' => explode(',', $ids), 'operator' => 'IN')
-                ),
-            );
-        }
+        $instances = $repository->findBy($oql);
+        $total     = $repository->countBy($oql);
 
-        $im = $this->get('instance_manager');
-        $instances = $im->findBy($criteria, $order);
-
-        foreach ($instances as &$instance) {
-            $im->getExternalInformation($instance);
-        }
+        //foreach ($instances as &$instance) {
+            //$im->getExternalInformation($instance);
+        //}
 
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         $response = $this->render(
             'instances/csv.tpl',
-            array(
-                'instances' => $instances
-            )
+            [ 'instances' => $instances ]
         );
 
-        if (!empty($search) && $search != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::getTitle($search);
-        } else {
-            $fileNameFilter = '-complete';
+        $name = '';
+        if (!empty($oql)) {
+            $name = '-' . \Onm\StringUtils::getTitle($oql);
         }
-        $fileName = 'opennemas-instances'.$fileNameFilter.'-'.date("Y_m_d_His").'.csv';
+
+        $filename = 'opennemas-instances' . $name . '.' . date("YmdHis") . '.csv';
 
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
@@ -339,7 +320,7 @@ class InstanceController extends Controller
     }
 
     /**
-     * Returns the list of instances as JSON.
+     * Returns the list of instances.
      *
      * @param Request $request The request object.
      *
@@ -347,35 +328,22 @@ class InstanceController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : array();
-        $orderBy  = $request->query->filter('orderBy') ? : array();
+        $oql = $request->query->get('oql', '');
 
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $repository = $this->get('orm.manager')->getRepository('Instance');
+        $converter  = $this->get('orm.manager')->getConverter('Instance');
 
-        if (!empty($criteria)) {
-            $criteria['union'] = 'OR';
-        }
+        $instances = $repository->findBy($oql);
+        $total     = $repository->countBy($oql);
 
-        // Put numbers in english format, avoids problem
-        setlocale(LC_NUMERIC, 'C');
+        $instances = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $instances);
 
-        $im = $this->get('instance_manager');
-        $instances = $im->findBy($criteria, $order, $epp, $page);
-        $total = $im->countBy($criteria);
-
-        return new JsonResponse(
-            array(
-                'epp'     => $epp,
-                'page'    => $page,
-                'results' => $instances,
-                'total'   => $total,
-            )
-        );
+        return new JsonResponse([
+            'total'   => $total,
+            'results' => $instances,
+        ]);
     }
 
     /**
