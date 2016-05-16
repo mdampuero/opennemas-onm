@@ -649,12 +649,12 @@ class InstanceManager extends BaseManager
             && isset($data['token'])
         ) {
             // Insert user into instance database
-            $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`,
+            $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`, `bio`,
                 `email`, `password`, `name`, `fk_user_group`)
-                VALUES (?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?)";
 
             $values = array(
-                $data['username'], $data['token'], 60, $data['email'],
+                $data['username'], $data['token'], 60, '', $data['email'],
                 md5($data['password']), $data['username'], "3,5"
             );
 
