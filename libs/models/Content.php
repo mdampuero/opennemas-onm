@@ -318,17 +318,19 @@ class Content
      **/
     public static function checkExists($id)
     {
-        $exists = false;
+        if (!isset($id)) return;
 
-        $sql = 'SELECT pk_content FROM `contents` '
-             . 'WHERE pk_content = ? LIMIT 1';
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT pk_content FROM `contents` '
+                .'WHERE pk_content = ? LIMIT 1',
+                [ (int) $id ]
+            );
+        } catch (\Exception $e) {
+            return false;
+        }
 
-
-        $exists = ($rs != false);
-
-        return $exists;
+        return count($rs) >= 1;
     }
 
     /**
