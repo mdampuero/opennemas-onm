@@ -1890,26 +1890,6 @@ class Content
     }
 
     /**
-     * Promotes the current content to a category frontapge given the category id
-     *
-     * @param int $categoryID the category id
-     *
-     * @return boolean  true if the content was promoted
-     **/
-    public function promoteToCategoryFrontpage($categoryID)
-    {
-        if ($categoryID == null) {
-            $categoryID = $this->category;
-        }
-        $sql = 'INSERT INTO content_positions(pk_fk_content, fk_category, position, placeholder, params, content_type) '
-              .'VALUES(?,?,?,?,?,?)';
-        $values = array($this->id, $categoryID, 0, 'placeholder_0_0', serialize(array()), 'Article');
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        return ($rs != false);
-    }
-
-    /**
      * Returns a metaproperty value from the current content
      *
      * @param string $property the property name to fetch

@@ -161,7 +161,6 @@ class ArticlesController extends Controller
 
         $params        = $postReq->get('params');
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
@@ -192,7 +191,6 @@ class ArticlesController extends Controller
             'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
             'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
             'fk_author'      => $postReq->getDigits('fk_author', 0),
-            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
             'params' =>  array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
@@ -214,14 +212,6 @@ class ArticlesController extends Controller
         );
 
         if ($article->create($data)) {
-            if ($data['promoted_to_category_frontpage'] == 1
-                && !$article->isInFrontpageOfCategory($data['category'])
-            ) {
-                $article->promoteToCategoryFrontpage($data['category']);
-                // Clear frontpage cache
-                dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-            }
-
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Article successfully created.')
@@ -261,7 +251,7 @@ class ArticlesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
+        $id = (int) $request->query->getDigits('id', null);
 
         $article = new \Article($id);
 
@@ -445,7 +435,6 @@ class ArticlesController extends Controller
 
         $params        = $postReq->get('params');
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
@@ -477,7 +466,6 @@ class ArticlesController extends Controller
             'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
             'params'         => array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
@@ -501,13 +489,6 @@ class ArticlesController extends Controller
         if ($article->update($data)) {
             if ($data['content_status'] == 0) {
                 $article->dropFromAllHomePages();
-            }
-
-            // Promote content to category frontpate if user wants to and is not already promoted
-            if ($data['promoted_to_category_frontpage'] == 1
-                && !$article->isInFrontpageOfCategory($data['category'])
-            ) {
-                $article->promoteToCategoryFrontpage($data['category']);
             }
 
             // Clear caches
