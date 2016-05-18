@@ -47,7 +47,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
             // Articles with inner video
             $videoInt = $smarty->tpl_vars['videoInt']->value;
-            if (strpos($videoInt->thumb, 'http')  === false) {
+            if (!empty($videoInt) && strpos($videoInt->thumb, 'http')  === false) {
                 $videoInt->thumb = SITE_URL.$videoInt->thumb;
             }
             $imageUrl = $videoInt->thumb;
