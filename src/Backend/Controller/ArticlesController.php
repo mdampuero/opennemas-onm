@@ -23,35 +23,6 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->category = $this->get('request')->query
-            ->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm      = \ContentCategoryManager::get_instance();
-        $this->category = ($this->category == 'all') ? 0 : $this->category;
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category);
-
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
-        $this->view->assign(
-            array(
-                'category'     => $this->category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-                'timezone'     => $timezone->getName()
-            )
-        );
-    }
-
-    /**
      * Lists articles in the system
      *
      * @return Response the response object
@@ -60,8 +31,10 @@ class ArticlesController extends Controller
      *
      * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $this->loadCategories($request);
+
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
             if (!Acl::checkCategoryAccess($this->category)) {
@@ -74,21 +47,15 @@ class ArticlesController extends Controller
             }
         }
 
-        // Fetch all authors
+        // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();
-
-        $authors = [
-            [ 'name' => _('All'), 'value' => -1 ],
-        ];
-
+        $authors = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($allAuthors as $author) {
             $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
         }
 
-        $categories = [
-            [ 'name' => _('All'), 'value' => -1 ],
-        ];
-
+        // Build the list of categories to render filters
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name'  => $category->title,
@@ -128,6 +95,8 @@ class ArticlesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
+            $this->loadCategories($request);
+
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -263,6 +232,8 @@ class ArticlesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_articles'));
         }
+
+        $this->loadCategories($request);
 
         if (is_string($article->params)) {
             $article->params = unserialize($article->params);
@@ -577,15 +548,15 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('settings_reporitosy')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+            'content_type_name' => [[ 'value' => 'article' ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
         );
 
         if ($categoryId != 0) {
@@ -791,8 +762,8 @@ class ArticlesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $cm  = new \ContentManager();
-        $ccm = \ContentCategoryManager::get_instance();
+        $this->loadCategories($request);
+
         $er  = $this->get('entity_repository');
 
         $article    = new \Article();
@@ -817,6 +788,7 @@ class ArticlesController extends Controller
         }
 
         // Fetch article category name
+        $ccm = \ContentCategoryManager::get_instance();
         $category_name         = $ccm->getName($article->category);
         $actual_category_title = $ccm->getTitle($category_name);
 
@@ -847,6 +819,7 @@ class ArticlesController extends Controller
             $relationes[$key] = $value['id'];
         }
 
+        $cm  = new \ContentManager();
         $relat = $cm->getContents($relationes);
         $relat = $cm->getInTime($relat);
         $relat = $cm->getAvailable($relat);
@@ -855,7 +828,7 @@ class ArticlesController extends Controller
             $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
         }
 
-        // Machine suggested contents code -----------------------------
+        // Machine suggested contents code
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             'article',
             "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
@@ -900,5 +873,33 @@ class ArticlesController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
+    }
+
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function loadCategories(Request $request)
+    {
+        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+
+        $this->ccm      = \ContentCategoryManager::get_instance();
+        $this->category = ($this->category == 'all') ? 0 : $this->category;
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
+            $this->ccm->getArraysMenu($this->category);
+
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
+            )
+        );
     }
 }
