@@ -334,6 +334,7 @@ class OpinionsController extends Controller
 
             // Clear caches
             dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
+            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -433,6 +434,7 @@ class OpinionsController extends Controller
             $author = new \User($data['fk_author']);
 
             // Clear caches
+            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
             dispatchEventWithParams(
                 'opinion.update',
                 array(
