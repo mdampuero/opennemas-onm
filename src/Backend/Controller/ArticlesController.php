@@ -486,57 +486,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Deletes an article given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_DELETE')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id');
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 0);
-        $title    = $request->query->filter('title', null, FILTER_SANITIZE_STRING);
-        $status   = $request->query->filter('status', -1);
-
-        if (!empty($id)) {
-            $article = new \Article($id);
-
-            $article->delete($id, $_SESSION['userid']);
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Article deleted successfully.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id to delete an article.')
-            );
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_articles',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                        'status'   => $status,
-                        'title'   => $title,
-                    )
-                )
-            );
-        } else {
-            return new Response('ok');
-        }
-    }
-
-    /**
      * Shows the content provider with articles in newsletter.
      *
      * @param  Request  $request The request object.
