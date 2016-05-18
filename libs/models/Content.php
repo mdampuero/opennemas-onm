@@ -479,20 +479,24 @@ class Content
      **/
     public function read($id)
     {
-        if (empty($id)) {
-            return false;
-        }
+        if (empty($id)) return false;
 
-        $sql = 'SELECT * FROM contents, contents_categories'
-                . ' WHERE pk_content = ? AND pk_content = pk_fk_content';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents, contents_categories'
+                . ' WHERE pk_content = ? AND pk_content = pk_fk_content',
+                [ (int) $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return false;
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
         // Load object properties
-        $this->load($rs->fields);
+        $this->load($rs);
 
         return $this;
     }
