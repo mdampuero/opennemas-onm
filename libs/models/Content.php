@@ -493,7 +493,6 @@ class Content
 
         // Load object properties
         $this->load($rs->fields);
-        $this->fk_user = $this->fk_author;
 
         return $this;
     }
@@ -1299,6 +1298,8 @@ class Content
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
+        
+        $this->fk_user = $this->fk_author;
     }
 
     /**
