@@ -30,27 +30,6 @@ use Onm\Settings as s;
 class OpinionsController extends Controller
 {
     /**
-     * Common code for all the actions
-     */
-    public function init()
-    {
-        $this->ccm  = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData)
-            = $this->ccm->getArraysMenu();
-
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
-        $this->view->assign(
-            array(
-                'allcategorys' => $this->parentCategories,
-                'timezone'     => $timezone->getName()
-            )
-        );
-    }
-
-    /**
      * Lists all the opinions.
      *
      * @param  $blog      Blog flag for listing
@@ -62,6 +41,8 @@ class OpinionsController extends Controller
      */
     public function listAction($blog)
     {
+        $this->loadCategories();
+
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
@@ -108,6 +89,8 @@ class OpinionsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
+        $this->loadCategories();
+
         $page =  $request->query->getDigits('page', 1);
         $configurations = s::get('opinion_settings');
 
@@ -239,6 +222,9 @@ class OpinionsController extends Controller
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
+        // Fetch categories to use them in the listing
+        $this->loadCategories();
+
         // Fetch author data and allAuthors
         $author = $this->get('user_repository')->find($opinion->fk_author);
         $allAuthors = \User::getAllUsersAuthors();
@@ -283,6 +269,9 @@ class OpinionsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
+            // Fetch categories
+            $this->loadCategories();
+
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -670,7 +659,7 @@ class OpinionsController extends Controller
             $opinion->id = '-1';
         }
 
-        //Fetch information for Advertisements
+        // Fetch information for Advertisements
         \Frontend\Controller\OpinionsController::getAds('inner');
 
         $author = new \User($opinion->fk_author);
@@ -767,5 +756,24 @@ class OpinionsController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
+    }
+
+    /**
+     * Common code for all the actions
+     */
+    public function loadCategories()
+    {
+        $this->ccm  = \ContentCategoryManager::get_instance();
+
+        list($this->parentCategories, $this->subcat, $this->categoryData)
+            = $this->ccm->getArraysMenu();
+
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
+        $this->view->assign([
+            'allcategorys' => $this->parentCategories,
+            'timezone'     => $timezone->getName()
+        ]);
     }
 }
