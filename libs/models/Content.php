@@ -341,8 +341,7 @@ class Content
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name =
-                $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName($this->pk_content);
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -1304,7 +1303,7 @@ class Content
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
-        
+
         $this->fk_user = $this->fk_author;
     }
 
