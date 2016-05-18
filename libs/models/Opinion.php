@@ -238,10 +238,10 @@ class Opinion extends Content
 
         if ((int) $rs['type_opinion'] == 1) {
             $rs['author'] = 'Editorial';
-        } elseif ((int) $rs->fields['type_opinion'] == 2) {
+        } elseif ((int) $rs['type_opinion'] == 2) {
             $rs['author'] = 'Director';
         } else {
-            $rs['author'] = $rs->fields['name'];
+            $rs['author'] = $rs['name'];
         }
 
         $this->load($rs);
@@ -396,7 +396,7 @@ class Opinion extends Content
         $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
-                $excludedContents []= $content->id;
+                $excludedContents []= (int) $content->id;
             }
         }
 
