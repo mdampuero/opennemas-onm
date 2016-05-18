@@ -272,25 +272,27 @@ class AssetController extends Controller
             }
 
             $selectedCategories = array();
-            foreach ($ccm->categories as &$category) {
-                $commonCategoryNames = [
-                    'photo', 'publicidad', 'album', 'opinion',
-                    'comment', 'video', 'author', 'portada', 'unknown'
-                ];
+            if (is_array($ccm->categories) && !empty($ccm->categories)) {
+                foreach ($ccm->categories as &$category) {
+                    $commonCategoryNames = [
+                        'photo', 'publicidad', 'album', 'opinion',
+                        'comment', 'video', 'author', 'portada', 'unknown'
+                    ];
 
-                if (in_array($category->name, $commonCategoryNames)) {
-                    continue;
-                }
-
-                if (empty($category->color)) {
-                    $category->color = $siteColor;
-                } else {
-                    if (!preg_match('@^#@', $category->color)) {
-                        $category->color = '#'.$category->color;
+                    if (in_array($category->name, $commonCategoryNames)) {
+                        continue;
                     }
-                }
 
-                $selectedCategories []= $category;
+                    if (empty($category->color)) {
+                        $category->color = $siteColor;
+                    } else {
+                        if (!preg_match('@^#@', $category->color)) {
+                            $category->color = '#'.$category->color;
+                        }
+                    }
+
+                    $selectedCategories []= $category;
+                }
             }
 
             $this->view->assign([
