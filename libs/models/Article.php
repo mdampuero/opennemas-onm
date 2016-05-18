@@ -262,16 +262,24 @@ class Article extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM articles WHERE pk_article = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM articles, contents, contents_categories '
+                .' WHERE pk_content = ? AND pk_content = pk_article AND pk_content = pk_fk_content',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         $this->permalink = Uri::generate(
             'article',
@@ -282,7 +290,6 @@ class Article extends Content
                 'slug'     => $this->slug,
             )
         );
-
     }
 
     /**
