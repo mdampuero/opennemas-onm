@@ -222,23 +222,24 @@ class Advertisement extends Content
      **/
     public function read($id)
     {
-        parent::read($id); // Read content of Content
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM advertisements, contents, contents_categories '
+                .' WHERE pk_content = ? AND pk_content = pk_advertisement AND pk_content = pk_fk_content',
+                [ $id ]
+            );
 
-        if (!$rs) {
-            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
 
-        // Decode base64 if isn't decoded yet
-        $isBase64 = base64_decode($rs->fields['script']);
-        if ($isBase64) {
-            $rs->fields['script'] = $isBase64;
-        }
-
-        $this->load($rs->fields);
+        $this->load($rs);
 
         // Return instance to method chaining
         return $this;
@@ -258,6 +259,14 @@ class Advertisement extends Content
 
         // FIXME: review that this property is not used ->img
         $this->img = $this->path;
+
+        if (array_key_exists('script', $properties)) {
+            // Decode base64 if isn't decoded yet
+            $isBase64 = base64_decode($properties['script']);
+            if ($isBase64) {
+                $properties['script'] = $isBase64;
+            }
+        }
 
         // Initialize the categories array of this advertisement
         if (!is_array($this->fk_content_categories)) {
