@@ -250,13 +250,23 @@ class Comment
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM comments WHERE id=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        // If no valid id then return
+        if (((int) $id) <= 0) return false;
 
-        if (!$rs) {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM comments WHERE id=?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
-        $this->load($rs->fields);
+
+        $this->load($rs);
 
         return $this;
     }
@@ -389,7 +399,7 @@ class Comment
      **/
     protected function getValidStatuses()
     {
-        return array(self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_PENDING,);
+        return [ self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_PENDING, ];
     }
 
     /**
