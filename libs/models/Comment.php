@@ -146,23 +146,24 @@ class Comment
     public function load($data)
     {
         if ($data) {
-            $allowedProperties = $this->getValidProperties();
+            return $this;
+        }
 
-            foreach ($allowedProperties as $name) {
-                if (array_key_exists($name, $data)) {
-                    if ($name == 'date') {
-                        $this->date = \DateTime::createFromFormat(
-                            'Y-m-d H:i:s',
-                            $data[$name],
-                            new \DateTimeZone('UTC')
-                        );
-                    } else {
-                        $this->{$name} = @iconv(
-                            mb_detect_encoding($data[$name]),
-                            "UTF-8",
-                            $data[$name]
-                        );
-                    }
+        $allowedProperties = $this->getValidProperties();
+        foreach ($allowedProperties as $name) {
+            if (array_key_exists($name, $data)) {
+                if ($name == 'date') {
+                    $this->date = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $data[$name],
+                        new \DateTimeZone('UTC')
+                    );
+                } else {
+                    $this->{$name} = @iconv(
+                        mb_detect_encoding($data[$name]),
+                        "UTF-8",
+                        $data[$name]
+                    );
                 }
             }
         }
