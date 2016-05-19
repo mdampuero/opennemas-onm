@@ -112,19 +112,16 @@ class DisqusSync
                     $comment->setProperty('disqus_post_id', $post->id);
                     $comment->setProperty('disqus_thread_id', $post->thread);
                     $comment->setProperty('disqus_thread_link', $threadDetails->link);
-
                 }
 
                 if (!empty($posts)) {
                     $params['since'] = $posts[count($posts)-1]->createdAt;
                 }
-
             } catch (\DisqusAPIError $e) {
                 $this->get('application.log')->notice(
                     "Unable to import disqus comment ".$e->getMessage()
                 );
             }
-
         } while (count($posts) == 100);
 
         foreach ($contents as $id) {

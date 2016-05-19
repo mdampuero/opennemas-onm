@@ -722,7 +722,6 @@ class ContentManager
                             $i++;
                             $j--;
                         }
-
                     } while ($i <= $j);
 
                     if ($i < $r) {
@@ -1187,8 +1186,7 @@ class ContentManager
         $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
 
         // If $start and $end not defined or they are equals  => is in time
-        if (
-            (empty($start) && empty($end))
+        if ((empty($start) && empty($end))
             || ($start == $end)
         ) {
             return true;
@@ -1476,7 +1474,6 @@ class ContentManager
         $ccm   = ContentCategoryManager::get_instance();
         $items = array();
         while (!$rs->EOF) {
-
             if (!$frontIncluded) {
                 $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
                 $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
@@ -1720,7 +1717,6 @@ class ContentManager
             $contentTypes = \ContentManager::getContentTypes();
             foreach ($contentTypes as $types) {
                 if ($types['pk_content_type'] == $id) {
-
                     $name = ($ucfirst === true) ? ucfirst($types['name']) : $types['name'];
 
                     return $name;
@@ -2025,9 +2021,7 @@ class ContentManager
             $returnValue = false;
         } else {
             if ($rss->_numOfRows > 0) {
-
                 $returnValue =  $rss->fields['pk_content'];
-
             } else {
                 $returnValue = false;
             }
@@ -2057,7 +2051,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }
@@ -2085,7 +2078,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }

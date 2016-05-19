@@ -66,19 +66,12 @@ class ModuleManager
             ->activated_modules;
 
         if (is_null(self::$activatedModules)) {
-
             if (!isset($activatedModules) or (count($activatedModules) < 1)) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } elseif (self::checkAllModulesActivated()) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } else {
-
                 self::$activatedModules = $activatedModules;
-
             }
         }
 
@@ -1117,5 +1110,6 @@ class ModuleManager
         $moduleNames = self::getAvailableModuleNames();
 
         return in_array($moduleName, $moduleNames);
+        
     }
 }

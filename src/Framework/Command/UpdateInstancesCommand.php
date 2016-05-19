@@ -187,7 +187,6 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
                 $message = "<fg=green>DONE</>";
             } else {
-
                 $message = "<error>FAILED</error>"."Piwik code not available";
             }
 

@@ -683,7 +683,6 @@ class AclUserController extends Controller
                         _('Unable to send your recover password email. Please try it later.')
                     );
                 }
-
             } else {
                 $request->getSession()->getFlashBag()->add(
                     'error',
@@ -738,7 +737,6 @@ class AclUserController extends Controller
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
                 return $this->redirect($this->generateUrl('admin_login'));
-
             } elseif ($password != $passwordVerify) {
                 $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
             } else {
@@ -749,7 +747,6 @@ class AclUserController extends Controller
 
                 return $this->redirect($this->generateUrl('admin_login'));
             }
-
         }
 
         return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));

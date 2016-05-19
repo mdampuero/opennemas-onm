@@ -318,17 +318,19 @@ class Content
      **/
     public static function checkExists($id)
     {
-        $exists = false;
+        if (!isset($id)) return;
 
-        $sql = 'SELECT pk_content FROM `contents` '
-             . 'WHERE pk_content = ? LIMIT 1';
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT pk_content FROM `contents` '
+                .'WHERE pk_content = ? LIMIT 1',
+                [ (int) $id ]
+            );
+        } catch (\Exception $e) {
+            return false;
+        }
 
-
-        $exists = ($rs != false);
-
-        return $exists;
+        return count($rs) >= 1;
     }
 
     /**
@@ -339,8 +341,7 @@ class Content
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name =
-                $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName($this->pk_content);
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -479,21 +480,24 @@ class Content
      **/
     public function read($id)
     {
-        if (empty($id)) {
-            return false;
-        }
+        if (empty($id)) return false;
 
-        $sql = 'SELECT * FROM contents, contents_categories'
-                . ' WHERE pk_content = ? AND pk_content = pk_fk_content';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents, contents_categories'
+                . ' WHERE pk_content = ? AND pk_content = pk_fk_content',
+                [ (int) $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return false;
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
         // Load object properties
-        $this->load($rs->fields);
-        $this->fk_user = $this->fk_author;
+        $this->load($rs);
 
         return $this;
     }
@@ -879,7 +883,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-
                 return false;
             }
         }
@@ -933,7 +936,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-
                 return false;
             }
         }
@@ -1301,6 +1303,8 @@ class Content
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
+
+        $this->fk_user = $this->fk_author;
     }
 
     /**
@@ -1883,26 +1887,6 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         return ($rs != false && $rs->_numOfRows > 0);
-    }
-
-    /**
-     * Promotes the current content to a category frontapge given the category id
-     *
-     * @param int $categoryID the category id
-     *
-     * @return boolean  true if the content was promoted
-     **/
-    public function promoteToCategoryFrontpage($categoryID)
-    {
-        if ($categoryID == null) {
-            $categoryID = $this->category;
-        }
-        $sql = 'INSERT INTO content_positions(pk_fk_content, fk_category, position, placeholder, params, content_type) '
-              .'VALUES(?,?,?,?,?,?)';
-        $values = array($this->id, $categoryID, 0, 'placeholder_0_0', serialize(array()), 'Article');
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        return ($rs != false);
     }
 
     /**

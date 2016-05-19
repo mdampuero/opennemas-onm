@@ -1,0 +1,25 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+  {% set icon %}
+  <img width="30" height="15" title="" alt="" style="width: 30px; height: 15px; max-width: 30px; max-height: 15px; margin-top: 5px; margin-bottom: -3px; display: inline;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAaCAYAAADIUm6MAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AUSCBc0wkSA3QAAA2FJREFUWMPVmFuIjVEUx3/fzKCIsl2TE3KZ3JLLUHLLFkmhXB7cD4UHJE8etgfTx7xoyotLGiKXJ0WupY8ymcaEMGlIuY0ost0Zl3E8WEfb13fmXOacKatOe6/97W+t/7f2Xnv/1/ESiQT/o5QAeJ6XcoLSphQYawP/eGh8DvDMBn59Wi+HGkcAvjNyhnisSp51AOYA84CJQAzoAHwGbgHHgIPEYz9ck0UtAB6utLkI3AfWRkxZBNxV2lQrbSakgd5dgCV/I8UHwGzgJLACGCSgAToBk4F9QC2HGnvJ/NTAlTab5GtnZbBqk4AapU250sbLdKldEBnIGOCMXbauXfK9ogiDFcBuoL0MXQPKI4ztBQInANuAqmzAR8g3oAG4DXwPPSuTVUFp8y9wpc0aYKuoP4GNwGQb+JfDHmzgX7eBPwNYBTTJcBwwOQC+CiwGFPHYMOKx0UBv4Gxo3pZkx0skEnieh9JmAFAve+sXsMAG/qkMl306cEFWqRkYbwP/lpOc04Arziu71dH9mwHssnXFxGPNKZK6M/AU6OqMDlRH9z9yI75DQAOUZwpaon8Z2CxqMVCZ4XukBA0Qj30ETkTk1J+torTpK0sF0AhU5LDc+2RvAkxV2ozL05FdE9IHu8m5RCIFUGED/3u21m3gJ4CdztDStNHOTB6G9H4u8OnSNgPHWxGdc06izshTxF+F9C4u8JHS1tvAf5+rBxv4X4BaUYcqbUryAPxrSO/oAu8j7Ys8OHruJGnPPNj7FtLbR11A7/Lg6GPYSSEkCfyHwylaKz1SfERBgD+WdkgebCbz5ZMN/DeFBn5D2v5Km5zBK236A6Wi1hWSjyeBu5xgdSvsrXf659sC+GngrfQ3KG165hDt3sAGUZuAIwUHLudvpUPgD2TJrYuBgw7X2WsD/3VbRBxgF/BA+nOBPQIoHeh2QJVUMkmus73QNWeRc+s1AQuAD85+vai0GdQC6BFCV1c6t9zC1ty+WRXLDvh7SpuZklhK+EaD0uYccAl4IpXJYClwZwOec2bPt4Ffl+OJFE0jMgGerGyUNmXAYeG+JU6Rm0puAstt4DfkE3RLzLIoxYNHwBSp5KuBqD9fEsKVl0jF00Abyt/SLU1EugGjhIx5wEvgTrYnhxvZKD6ecrtEzP0N+ngEKOfyPkIAAAAASUVORK5CYII=" />
+  {% endset %}
+
+  {% set text %}
+  <div class="sf-toolbar-info-piece">
+    <span>
+      <strong>Opennemas</strong>
+    </span>
+  </div>
+
+  <div class="sf-toolbar-info-piece">
+    <span>
+      Version: {{ collector.version }}
+      Visit <a href="https://www.opennemas.com" target="_blank">opennemas.com</a>
+    </span>
+  </div>
+  {% endset %}
+
+  {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+

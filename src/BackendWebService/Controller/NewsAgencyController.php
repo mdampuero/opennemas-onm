@@ -282,7 +282,6 @@ class NewsAgencyController extends Controller
                 'name' => $author->name,
                 'value' => $author->id
             ];
-
         }
 
         return $params;

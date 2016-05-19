@@ -454,7 +454,6 @@ class Photo extends Content
 
                     if (empty($exif)) {
                         $this->infor .= _("No available EXIF data");
-
                     } else {
                         if (empty($this->color)) {
                             if ($exifData['COMPUTED']['IsColor']==0) {
@@ -471,6 +470,7 @@ class Photo extends Content
                                 $this->resolution =
                                     $exifData['IFD0']['XResolution'];
                             }
+
                             if (empty($this->date)
                                 && !is_null($exifData['FILE']['FileDateTime'])
                             ) {
@@ -480,11 +480,9 @@ class Photo extends Content
                     }
 
                     if (isset($info['APP13'])) {
-
                         $iptc = iptcparse($info['APP13']);
 
                         if (is_array($iptc)) {
-
                             $errorReporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
 
@@ -537,7 +535,6 @@ class Photo extends Content
                             }
 
                             ini_set($errorReporting);
-
                         } else {
                             $this->infor .=  _("No available IPTC data");
                         }
@@ -546,7 +543,6 @@ class Photo extends Content
                 default:
                     break;
             } // endswitch;
-
         } else {
             $this->infor .=  _("Invalid image file");
         }

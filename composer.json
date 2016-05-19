@@ -3,9 +3,8 @@
     "description": "High performance and scalable NMS focused in journalism workflow",
     "keywords": ["nms", "newspapers", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
-    "type": "cms",
+    "type": "project",
     "license": "proprietary",
-    "version": "1.2",
     "authors": [
         {
             "name": "OpenHost developers",
@@ -24,8 +23,11 @@
             "": "src/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
-        "files": [
+        "classmap": [
             "app/AppKernel.php",
+            "app/AppCache.php"
+        ],
+        "files": [
             "libs/functions.php",
             "libs/adodb5/adodb.inc.php"
         ]
@@ -93,9 +95,6 @@
         }
     ],
     "scripts": {
-        "post-root-package-install": [
-            "SymfonyStandard\\Composer::hookRootPackageInstall"
-        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

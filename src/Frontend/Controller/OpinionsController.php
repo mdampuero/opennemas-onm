@@ -131,7 +131,6 @@ class OpinionsController extends Controller
                         'opinionsDirector' => $contents
                     ]);
                 }
-
             }
 
             $numOpinions  = $sm->get('items_per_page');
@@ -625,7 +624,6 @@ class OpinionsController extends Controller
                     'ext'        => $externalMediaUrl,
                 )
             );
-
         } // End if isCached
 
         $this->getAds();
@@ -836,7 +834,6 @@ class OpinionsController extends Controller
                         'ext'             => 1 //Used on widgets
                     )
                 );
-
             } else {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }

@@ -18,8 +18,7 @@ namespace Onm;
  **/
 class StringUtils
 {
-
-     /**
+    /**
      * Clean the special chars into a file name
      *
      * @param  string  $name the string to clean

@@ -23,35 +23,6 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->category = $this->get('request')->query
-            ->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm      = \ContentCategoryManager::get_instance();
-        $this->category = ($this->category == 'all') ? 0 : $this->category;
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category);
-
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
-        $this->view->assign(
-            array(
-                'category'     => $this->category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-                'timezone'     => $timezone->getName()
-            )
-        );
-    }
-
-    /**
      * Lists articles in the system
      *
      * @return Response the response object
@@ -60,8 +31,10 @@ class ArticlesController extends Controller
      *
      * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $this->loadCategories($request);
+
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
             if (!Acl::checkCategoryAccess($this->category)) {
@@ -74,21 +47,15 @@ class ArticlesController extends Controller
             }
         }
 
-        // Fetch all authors
+        // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();
-
-        $authors = [
-            [ 'name' => _('All'), 'value' => -1 ],
-        ];
-
+        $authors = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($allAuthors as $author) {
             $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
         }
 
-        $categories = [
-            [ 'name' => _('All'), 'value' => -1 ],
-        ];
-
+        // Build the list of categories to render filters
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name'  => $category->title,
@@ -128,6 +95,8 @@ class ArticlesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
+            $this->loadCategories($request);
+
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -161,7 +130,6 @@ class ArticlesController extends Controller
 
         $params        = $postReq->get('params');
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
@@ -192,7 +160,6 @@ class ArticlesController extends Controller
             'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
             'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
             'fk_author'      => $postReq->getDigits('fk_author', 0),
-            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
             'params' =>  array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
@@ -214,14 +181,6 @@ class ArticlesController extends Controller
         );
 
         if ($article->create($data)) {
-            if ($data['promoted_to_category_frontpage'] == 1
-                && !$article->isInFrontpageOfCategory($data['category'])
-            ) {
-                $article->promoteToCategoryFrontpage($data['category']);
-                // Clear frontpage cache
-                dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-            }
-
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Article successfully created.')
@@ -261,7 +220,7 @@ class ArticlesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
+        $id = (int) $request->query->getDigits('id', null);
 
         $article = new \Article($id);
 
@@ -273,6 +232,8 @@ class ArticlesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_articles'));
         }
+
+        $this->loadCategories($request);
 
         if (is_string($article->params)) {
             $article->params = unserialize($article->params);
@@ -367,7 +328,6 @@ class ArticlesController extends Controller
                 }
                 $this->view->assign('orderHome', \Onm\StringUtils::convertToUtf8($orderHome));
             }
-
         }
 
         $authorsComplete = \User::getAllUsersAuthors();
@@ -446,7 +406,6 @@ class ArticlesController extends Controller
 
         $params        = $postReq->get('params');
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $postReq->filter('promoted_to_category_frontpage', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
@@ -478,7 +437,6 @@ class ArticlesController extends Controller
             'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
             'params'         => array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
@@ -502,13 +460,6 @@ class ArticlesController extends Controller
         if ($article->update($data)) {
             if ($data['content_status'] == 0) {
                 $article->dropFromAllHomePages();
-            }
-
-            // Promote content to category frontpate if user wants to and is not already promoted
-            if ($data['promoted_to_category_frontpage'] == 1
-                && !$article->isInFrontpageOfCategory($data['category'])
-            ) {
-                $article->promoteToCategoryFrontpage($data['category']);
             }
 
             // Clear caches
@@ -535,57 +486,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Deletes an article given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_DELETE')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id');
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 0);
-        $title    = $request->query->filter('title', null, FILTER_SANITIZE_STRING);
-        $status   = $request->query->filter('status', -1);
-
-        if (!empty($id)) {
-            $article = new \Article($id);
-
-            $article->delete($id, $_SESSION['userid']);
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Article deleted successfully.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id to delete an article.')
-            );
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_articles',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                        'status'   => $status,
-                        'title'   => $title,
-                    )
-                )
-            );
-        } else {
-            return new Response('ok');
-        }
-    }
-
-    /**
      * Shows the content provider with articles in newsletter.
      *
      * @param  Request  $request The request object.
@@ -597,15 +497,15 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('settings_reporitosy')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+            'content_type_name' => [[ 'value' => 'article' ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
         );
 
         if ($categoryId != 0) {
@@ -811,8 +711,8 @@ class ArticlesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $cm  = new \ContentManager();
-        $ccm = \ContentCategoryManager::get_instance();
+        $this->loadCategories($request);
+
         $er  = $this->get('entity_repository');
 
         $article    = new \Article();
@@ -837,6 +737,7 @@ class ArticlesController extends Controller
         }
 
         // Fetch article category name
+        $ccm = \ContentCategoryManager::get_instance();
         $category_name         = $ccm->getName($article->category);
         $actual_category_title = $ccm->getTitle($category_name);
 
@@ -867,6 +768,7 @@ class ArticlesController extends Controller
             $relationes[$key] = $value['id'];
         }
 
+        $cm  = new \ContentManager();
         $relat = $cm->getContents($relationes);
         $relat = $cm->getInTime($relat);
         $relat = $cm->getAvailable($relat);
@@ -875,7 +777,7 @@ class ArticlesController extends Controller
             $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
         }
 
-        // Machine suggested contents code -----------------------------
+        // Machine suggested contents code
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             'article',
             "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
@@ -920,5 +822,33 @@ class ArticlesController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
+    }
+
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function loadCategories(Request $request)
+    {
+        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+
+        $this->ccm      = \ContentCategoryManager::get_instance();
+        $this->category = ($this->category == 'all') ? 0 : $this->category;
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
+            $this->ccm->getArraysMenu($this->category);
+
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
+            )
+        );
     }
 }

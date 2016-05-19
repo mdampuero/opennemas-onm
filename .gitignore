@@ -1,4 +1,5 @@
 # basics
+.idea
 *.sublime-*
 *~
 *.pot
@@ -8,37 +9,32 @@
 .maintenance
 
 # app
-app/cache
 app/config/parameters.yml
-app/spool
 app/Resources/**/*.mo
-app/Resources/locale/*/LC_MESSAGES/messages.mo
 
 # bin
-bin/*
-bin/tsmarty2c.php
-!bin/import-tools
-bin/import-tools/canarias/libs/canariasImport-config.inc.php-dist
-bin/import-tools/joomla/configuration.ini
-bin/import-tools/joomla/configuration.ini-hibridos
-bin/import-tools/joomla/configuration.ini-ideal
-bin/import-tools/joomla/importer.log
-bin/import-tools/onmToOnm/libs/onm-config.inc.php
-bin/import-tools/onmToOnm/log/log.txt
+/bin/
+!bin/import-tools/
+bin/import-tools/*/*.log
+bin/import-tools/*/*.ini
+bin/import-tools/*/*.dist
 
 # build
-build/*
+/build/
 !build/phpmd.xml
 !build/phpdox.dist.xml
 !build/phpdoc.dist.xml
 !build/phpcs.xml
 
 # misc
-backups/*
-doc/*
-cache.properties
-tmp/*
-vendor/*
+/backups
+/doc
+/cache.properties
+/tmp
+!tmp/cache/.gitkeep
+!tmp/logs/.gitkeep
+/vendor
+/tmp/bootstrap.php.cache
 
 # node
 node_modules/*

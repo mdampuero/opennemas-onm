@@ -25,7 +25,7 @@ class Imagick extends Common implements ImageInterface
      *
      * @var mixed
      **/
-    protected $_image;
+    protected $image;
 
     /**
      * Initializes the object from a path
@@ -36,9 +36,9 @@ class Imagick extends Common implements ImageInterface
      **/
     public function load($image)
     {
-        $this->_image = new \Imagick();
+        $this->image = new \Imagick();
 
-        $this->_image->readImage($image);
+        $this->image->readImage($image);
 
         return $this;
     }
@@ -50,7 +50,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function unload()
     {
-        $this->_image->destroy();
+        $this->image->destroy();
 
         return $this;
     }
@@ -64,9 +64,9 @@ class Imagick extends Common implements ImageInterface
     public function save($filePath = '')
     {
         if (!$filePath) {
-            $this->_image->writeImage();
+            $this->image->writeImage();
         } else {
-            $this->_image->writeImage($filePath);
+            $this->image->writeImage($filePath);
         }
 
         return $this;
@@ -79,8 +79,8 @@ class Imagick extends Common implements ImageInterface
      **/
     public function getWidth()
     {
-        if (is_object($this->_image)) {
-            return (int) $this->_image->getImageWidth();
+        if (is_object($this->image)) {
+            return (int) $this->image->getImageWidth();
         }
         throw new \Exception('Please initialize the image before get its width.');
     }
@@ -92,8 +92,8 @@ class Imagick extends Common implements ImageInterface
      **/
     public function getHeight()
     {
-        if (is_object($this->_image)) {
-            return (int) $this->_image->getImageHeight();
+        if (is_object($this->image)) {
+            return (int) $this->image->getImageHeight();
         }
         throw new \Exception('Please initialize the image before get its height.');
     }
@@ -121,7 +121,7 @@ class Imagick extends Common implements ImageInterface
 
         $fit = ($width === 0 || $height === 0) ? false : true;
 
-        $this->_image->scaleImage($width, $height, $fit);
+        $this->image->scaleImage($width, $height, $fit);
 
         return $this;
     }
@@ -141,7 +141,7 @@ class Imagick extends Common implements ImageInterface
         $x = $this->transformPosition($x, $width, $this->getWidth());
         $y = $this->transformPosition($y, $height, $this->getHeight());
 
-        $this->_image->cropImage($width, $height, $x, $y);
+        $this->image->cropImage($width, $height, $x, $y);
 
         return $this;
     }
@@ -153,7 +153,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function flip()
     {
-        $this->_image->flipImage();
+        $this->image->flipImage();
 
         return $this;
     }
@@ -165,7 +165,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function flop()
     {
-        $this->_image->flopImage();
+        $this->image->flopImage();
 
         return $this;
     }
@@ -212,7 +212,7 @@ class Imagick extends Common implements ImageInterface
             $background = '#'.$background;
         }
 
-        $this->_image->rotateImage($background, $degrees);
+        $this->image->rotateImage($background, $degrees);
 
         return $this;
     }
@@ -238,8 +238,8 @@ class Imagick extends Common implements ImageInterface
         $x = $this->transformPosition($x, $objectImage->getWidth(), $this->getWidth());
         $y = $this->transformPosition($y, $objectImage->getHeight(), $this->getHeight());
 
-        $this->_image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
-        $this->_image->flattenImages();
+        $this->image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
+        $this->image->flattenImages();
 
         return $this;
     }
@@ -253,7 +253,7 @@ class Imagick extends Common implements ImageInterface
      */
     public function convert($targetFormat)
     {
-        $this->_image->setImageFormat($targetFormat);
+        $this->image->setImageFormat($targetFormat);
 
         return $this;
     }
@@ -269,7 +269,7 @@ class Imagick extends Common implements ImageInterface
     {
         //Show header mime-type
         if ($header) {
-            $format = strtolower($this->_image->getImageFormat());
+            $format = strtolower($this->image->getImageFormat());
             $header = '';
 
             switch ($format) {
@@ -286,7 +286,7 @@ class Imagick extends Common implements ImageInterface
             }
         }
 
-        echo $this->_image->getImageBlob();
+        echo $this->image->getImageBlob();
 
         return;
     }

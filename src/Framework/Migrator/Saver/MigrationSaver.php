@@ -133,7 +133,6 @@ class MigrationSaver
                         ),
                         $schema['translation']['name']
                     );
-
                 } catch (Exception $e) {
                     $this->stats[$name]['error']++;
                 }
@@ -182,7 +181,6 @@ class MigrationSaver
                         $target,
                         $schema['translation']['name']
                     );
-
                 } catch (Exception $e) {
                     $this->stats[$name]['error']++;
                 }
@@ -537,7 +535,6 @@ class MigrationSaver
 
                     $this->stats[$name]['already_imported']++;
                 }
-
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }

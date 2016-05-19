@@ -63,7 +63,6 @@ class Acl
             ) {
                 return false;
             }
-
         } catch (Exception $e) {
             return false;
         }
@@ -123,7 +122,6 @@ class Acl
                         $user->getRoles()
                     );
                 }
-
             }
 
             if ($isGranted

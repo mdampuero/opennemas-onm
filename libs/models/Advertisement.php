@@ -145,16 +145,8 @@ class Advertisement extends Content
     {
         $this->content_type_l10n_name = _('Advertisement');
         $this->content_type = get_class();
-        parent::__construct($id);
 
-        // Check if it contains a flash element
-        $this->is_flash = 0;
-        if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
-            if (!empty($img) && $img->type_img == "swf") {
-                $this->is_flash = 1;
-            }
-        }
+        parent::__construct($id);
     }
 
     /**
@@ -222,23 +214,31 @@ class Advertisement extends Content
      **/
     public function read($id)
     {
-        parent::read($id); // Read content of Content
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM advertisements, contents, contents_categories '
+                .' WHERE pk_content = ? AND pk_content = pk_advertisement AND pk_content = pk_fk_content',
+                [ $id ]
+            );
 
-        if (!$rs) {
-            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
-
-        // Decode base64 if isn't decoded yet
-        $isBase64 = base64_decode($rs->fields['script']);
-        if ($isBase64) {
-            $rs->fields['script'] = $isBase64;
+        if (array_key_exists('script', $rs)) {
+            // Decode base64 if isn't decoded yet
+            $isBase64 = base64_decode($rs['script']);
+            if ($isBase64) {
+                $rs['script'] = $isBase64;
+            }
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         // Return instance to method chaining
         return $this;
@@ -262,6 +262,15 @@ class Advertisement extends Content
         // Initialize the categories array of this advertisement
         if (!is_array($this->fk_content_categories)) {
             $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        }
+
+        // Check if it contains a flash element
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
+            }
         }
 
         return $this;
@@ -346,22 +355,30 @@ class Advertisement extends Content
      **/
     public function getUrl($id)
     {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
         // Try to minimize the database overload if this object was preloaded
         // or doesn't fit the rules
         if (isset($this) && isset($this->url) && ($this->id == $id)) {
             return $this->url;
         }
 
-        // Fetch data for the ad from the database
-        $sql = 'SELECT url FROM `advertisements` '
-                .'WHERE `advertisements`.`pk_advertisement`=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            // Fetch data for the ad from the database
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT url FROM `advertisements` WHERE `advertisements`.`pk_advertisement`=?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
             return null;
         }
 
-        return $rs->fields['url'];
+        return $rs['url'];
     }
 
     /**
@@ -408,13 +425,21 @@ class Advertisement extends Content
      **/
     public static function setNumClics($id)
     {
-        $sql =  "UPDATE advertisements "
-                ." SET `num_clic_count`=`num_clic_count`+1 "
-                ." WHERE `pk_advertisement`=?";
-        $values = array($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
+        try {
+            // Fetch data for the ad from the database
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
         }
 
         // Clean entity repository cache
@@ -655,7 +680,6 @@ class Advertisement extends Content
                 $content = '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; '
                             .'height:'.$height.'px; overflow: hidden;border:none"></iframe>';
             }
-
         } elseif ($this->with_script == 2) {
             if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));

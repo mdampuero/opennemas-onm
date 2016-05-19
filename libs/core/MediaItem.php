@@ -22,7 +22,6 @@
  */
 class MediaItem
 {
-
     /* Absolute path and file name */
     /**
      * The file name of the item to parse
@@ -97,7 +96,8 @@ class MediaItem
     /**
      * The description of the fie
      *
-     * @var string
+     * @var string23
+     *
      **/
     public $description = null;
 

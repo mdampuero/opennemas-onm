@@ -159,7 +159,6 @@ class WidgetsController extends Controller
             $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
-
         } else {
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
 

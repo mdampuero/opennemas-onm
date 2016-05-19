@@ -181,7 +181,6 @@ class Frontpage extends Content
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -189,7 +188,6 @@ class Frontpage extends Content
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }

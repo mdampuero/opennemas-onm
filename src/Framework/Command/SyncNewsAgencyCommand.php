@@ -114,7 +114,6 @@ EOF
                     $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
                     $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
                     $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
-
                 } catch (\Exception $e) {
                     $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }

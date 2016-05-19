@@ -266,7 +266,6 @@ class FrontpagesController extends Controller
             $layoutFile = 'layouts/'.$layout.'.tpl';
 
             $this->view->assign('layoutFile', $layoutFile);
-
         }
 
         return $this->render(

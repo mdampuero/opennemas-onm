@@ -21,7 +21,6 @@ class OnmAuth implements \Luracast\Restler\iAuthenticate
 {
     public function __isAllowed()
     {
-
         $realm = 'Enter your credentials';
 
         // Just a random id
@@ -77,14 +76,12 @@ class OnmAuth implements \Luracast\Restler\iAuthenticate
             $digest = $_SERVER['PHP_AUTH_DIGEST'];
             // most other servers
         } elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {
-
             if (strpos(strtolower($_SERVER['HTTP_AUTHENTICATION']), 'digest') === 0) {
                 $digest = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
             }
         }
 
         return $digest;
-
     }
 
     // This function forces a login prompt

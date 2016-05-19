@@ -246,7 +246,6 @@ class CommentsController extends Controller
         $fbSettings = s::get('facebook');
 
         if ($request->getMethod() != 'POST') {
-
             $fbAppId = $fbSettings['api_key'];
 
             return $this->render(

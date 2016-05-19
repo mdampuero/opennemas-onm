@@ -119,7 +119,6 @@ class VideosController extends Controller
                     }
                 }
                 $this->view->assign('front_videos', $frontVideos);
-
             } else {
                 // Videos on top of the homepage
                 $videos = $this->cm->findAll(

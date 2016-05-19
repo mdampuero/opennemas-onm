@@ -515,4 +515,18 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($content->isReadyForPublish());
     }
+
+    /**
+     * @covers Content::isOwner()
+     **/
+    public function testIsOwner()
+    {
+        $content = new \Content();
+        $content->load([
+            'fk_publisher' => 4,
+        ]);
+
+        $this->assertTrue($content->isOwner(4));
+        $this->assertFalse($content->isOwner(40));
+    }
 }

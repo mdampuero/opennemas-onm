@@ -96,7 +96,6 @@ class StaticPagesController extends Controller
         if ('POST' != $request->getMethod()) {
             return $this->render('static_pages/new.tpl');
         } else {
-
             $staticPage = new \StaticPage();
 
             $data = array(
@@ -117,7 +116,6 @@ class StaticPagesController extends Controller
             return $this->redirect(
                 $this->generateUrl('admin_static_page_show', array('id' => $staticPage->id))
             );
-
         }
     }
 
@@ -199,12 +197,11 @@ class StaticPagesController extends Controller
             try {
                 $page = new \StaticPage();
                 $output = $page->buildSlug($data['slug'], $data['id'], $data['title']);
-
             } catch (\Exception $e) {
                 $output = _("Can't get static page title. Check the title");
             }
 
-             return new Response($output);
+            return new Response($output);
         }
 
     }

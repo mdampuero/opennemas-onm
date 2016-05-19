@@ -126,7 +126,6 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = array();
                 if ($field == 'blog') {
-
                     $bloggers = getService('user_repository')->findByUserMeta(
                         array(
                             'meta_key' => array(

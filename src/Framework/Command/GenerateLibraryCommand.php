@@ -105,7 +105,6 @@ EOF
             $category_name = $item->link;
 
             if (!empty($category_name)) {
-
                 $curly[$category_name] = curl_init();
 
                 $url = $urlBase. $category_name.'/';

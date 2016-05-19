@@ -57,7 +57,6 @@ EOF
                 if (array_key_exists($field, $instance)) {
                     $output->writeln($instance[$field]);
                 } else {
-
                     $output->writeln($instance['settings'][$field]);
                 }
             } else {
@@ -68,8 +67,6 @@ EOF
                     ', ACTIVATED: '.$instance['activated']
                 );
             }
-
         }
-
     }
 }

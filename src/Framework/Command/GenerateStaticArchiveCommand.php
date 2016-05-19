@@ -99,11 +99,9 @@ EOF
         }
 
         foreach ($menu->items as $item) {
-
             $category_name = $item->link;
 
             if (!empty($category_name)) {
-
                 $curly[$category_name] = curl_init();
 
                 $url = $urlBase. $category_name.'/';
@@ -118,9 +116,7 @@ EOF
           // execute the handles
         $running = null;
         do {
-
             curl_multi_exec($mh, $running);
-
         } while ($running > 0);
 
 

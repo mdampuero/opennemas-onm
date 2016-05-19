@@ -12,8 +12,6 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Composer\Autoload\ClassLoader;
 
-error_reporting(error_reporting() & ~E_USER_DEPRECATED);
-
 $rootDir = empty($_SERVER['DOCUMENT_ROOT']) ? __DIR__ : $_SERVER['DOCUMENT_ROOT'];
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', dirname($rootDir));

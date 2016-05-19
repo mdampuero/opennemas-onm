@@ -85,7 +85,6 @@ class Letter extends Content
                 if ($pos > 100) {
                     $summary = substr($summary, 0, $pos).".";
                 } else {
-
                     $summary = substr($summary, 0, strripos($summary, " "));
                 }
 

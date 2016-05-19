@@ -298,9 +298,7 @@ class RssController extends Controller
 
                 // Clean empty HTML tags
                 $content->body = preg_replace('@<(.*)><\/\1>@', '', $content->body);
-
             }
-
 
             $this->view->assign('contents', $contents);
         }

@@ -221,25 +221,30 @@ class Opinion extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
-            .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
-            .'WHERE pk_opinion = ?';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
+                .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
+                .'WHERE pk_opinion = ?',
+                [ (int) $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
-        if ((int) $rs->fields['type_opinion'] == 1) {
-            $rs->fields['author'] = 'Editorial';
-        } elseif ((int) $rs->fields['type_opinion'] == 2) {
-            $rs->fields['author'] = 'Director';
+        if ((int) $rs['type_opinion'] == 1) {
+            $rs['author'] = 'Editorial';
+        } elseif ((int) $rs['type_opinion'] == 2) {
+            $rs['author'] = 'Director';
         } else {
-            $rs->fields['author'] = $rs->fields['name'];
+            $rs['author'] = $rs['name'];
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         $this->loadAllContentProperties();
 
@@ -391,7 +396,7 @@ class Opinion extends Content
         $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
-                $excludedContents []= $content->id;
+                $excludedContents []= (int) $content->id;
             }
         }
 
