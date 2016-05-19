@@ -175,15 +175,24 @@ class Attachment extends Content
      */
     public function read($id)
     {
-        parent::read($id);
-        $sql = 'SELECT * FROM attachments WHERE pk_attachment=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        if (!$rs) {
-            return false;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM attachments, contents, contents_categories '
+                .' WHERE pk_content = ? AND pk_content = pk_attachment AND pk_content = pk_fk_content',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         return $this;
     }
