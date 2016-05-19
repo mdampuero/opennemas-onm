@@ -346,22 +346,30 @@ class Advertisement extends Content
      **/
     public function getUrl($id)
     {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
         // Try to minimize the database overload if this object was preloaded
         // or doesn't fit the rules
         if (isset($this) && isset($this->url) && ($this->id == $id)) {
             return $this->url;
         }
 
-        // Fetch data for the ad from the database
-        $sql = 'SELECT url FROM `advertisements` '
-                .'WHERE `advertisements`.`pk_advertisement`=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            // Fetch data for the ad from the database
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT url FROM `advertisements` WHERE `advertisements`.`pk_advertisement`=?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
             return null;
         }
 
-        return $rs->fields['url'];
+        return $rs['url'];
     }
 
     /**
@@ -408,13 +416,21 @@ class Advertisement extends Content
      **/
     public static function setNumClics($id)
     {
-        $sql =  "UPDATE advertisements "
-                ." SET `num_clic_count`=`num_clic_count`+1 "
-                ." WHERE `pk_advertisement`=?";
-        $values = array($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
+        try {
+            // Fetch data for the ad from the database
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
         }
 
         // Clean entity repository cache
