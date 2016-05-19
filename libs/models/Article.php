@@ -168,7 +168,6 @@ class Article extends Content
         }
 
         return parent::__get($name);
-
     }
 
     /**
