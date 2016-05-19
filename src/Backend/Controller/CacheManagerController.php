@@ -74,7 +74,7 @@ class CacheManagerController extends Controller
                 $flashBag->add('error', _('Unable to save the cache configuration.'));
             }
 
-            return $this->redirect($this->generateUrl('admin_tpl_manager'));
+            return $this->redirect($this->generateUrl('admin_cache_manager'));
         } else {
             // Load cache manager config and show the form with that info
             $config = $configManager->load();
@@ -105,7 +105,7 @@ class CacheManagerController extends Controller
         $this->get('session')->getFlashBag()
             ->add('success', _('Smarty cache removed for the instance.'));
 
-        return $this->redirect($this->generateUrl('admin_tpl_manager'));
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
 
     /**
@@ -127,6 +127,33 @@ class CacheManagerController extends Controller
         $this->get('session')->getFlashBag()
             ->add('success', _('Smarty compiled templates removed for the instance.'));
 
-        return $this->redirect($this->generateUrl('admin_tpl_manager'));
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * Deletes all varnish cache
+     *
+     * @return string the result string
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="CACHE_MANAGER")
+     **/
+    public function clearVarnishCacheAction()
+    {
+        // Initialization of the frontend template object
+        if (!$this->container->hasParameter('varnish')) {
+            return false;
+        }
+
+        $instanceName = $this->get('instance')->internal_name;
+
+        $this->container->get('varnish_ban_message_exchanger')
+            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
+
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Varnish BAN queued for current instance.'));
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
 }
