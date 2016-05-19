@@ -145,16 +145,8 @@ class Advertisement extends Content
     {
         $this->content_type_l10n_name = _('Advertisement');
         $this->content_type = get_class();
-        parent::__construct($id);
 
-        // Check if it contains a flash element
-        $this->is_flash = 0;
-        if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
-            if (!empty($img) && $img->type_img == "swf") {
-                $this->is_flash = 1;
-            }
-        }
+        parent::__construct($id);
     }
 
     /**
@@ -241,6 +233,14 @@ class Advertisement extends Content
 
         $this->load($rs);
 
+        if (array_key_exists('script', $rs)) {
+            // Decode base64 if isn't decoded yet
+            $isBase64 = base64_decode($rs['script']);
+            if ($isBase64) {
+                $rs['script'] = $isBase64;
+            }
+        }
+
         // Return instance to method chaining
         return $this;
     }
@@ -260,17 +260,18 @@ class Advertisement extends Content
         // FIXME: review that this property is not used ->img
         $this->img = $this->path;
 
-        if (array_key_exists('script', $properties)) {
-            // Decode base64 if isn't decoded yet
-            $isBase64 = base64_decode($properties['script']);
-            if ($isBase64) {
-                $properties['script'] = $isBase64;
-            }
-        }
-
         // Initialize the categories array of this advertisement
         if (!is_array($this->fk_content_categories)) {
             $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        }
+
+        // Check if it contains a flash element
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
+            }
         }
 
         return $this;
