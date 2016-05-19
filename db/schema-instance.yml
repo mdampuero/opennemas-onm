@@ -211,11 +211,11 @@ articles:
             type: bigint
             options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
         footer_video2:
-            type: string
-            options: { default: null, notnull: false, length: 150 }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         footer_video1:
-            type: string
-            options: { default: null, notnull: false, length: 150 }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         title_int:
             type: string
             options: { default: null, notnull: false, length: 255 }
