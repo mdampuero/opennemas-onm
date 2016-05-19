@@ -165,11 +165,11 @@
                         <select name="category" id="category">
                           {section name=as loop=$allcategorys}
                           <option value="{$allcategorys[as]->pk_content_category}"
-                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled {/if}
                                   {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                           {section name=su loop=$subcat[as]}
                           <option value="{$subcat[as][su]->pk_content_category}"
-                                  {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                  {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled {/if}
                                   {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                           {/section}
                           {/section}
