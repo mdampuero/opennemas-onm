@@ -54,13 +54,24 @@ ALTER TABLE books CHANGE pk_book pk_book BIGINT UNSIGNED AUTO_INCREMENT NOT NULL
 ALTER TABLE `comments` CHANGE `date` `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 DROP INDEX comment_status_date ON comments;
 DROP INDEX comment_date ON comments;
-ALTER TABLE comments CHANGE content_id content_id BIGINT UNSIGNED DEFAULT NULL, CHANGE date date DATETIME DEFAULT CURRENT_TIMESTAMP, CHANGE parent_id parent_id BIGINT UNSIGNED DEFAULT 0 NOT NULL;
+ALTER TABLE comments CHANGE content_id content_id BIGINT UNSIGNED DEFAULT NULL;
+ALTER TABLE content_positions CHANGE  date date DATETIME DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE content_positions CHANGE  parent_id parent_id BIGINT UNSIGNED DEFAULT 0 NOT NULL;
 ALTER TABLE content_categories CHANGE color color VARCHAR(10) DEFAULT NULL;
-ALTER TABLE content_positions CHANGE pk_fk_content pk_fk_content BIGINT UNSIGNED NOT NULL, CHANGE fk_category fk_category INT UNSIGNED NOT NULL, CHANGE position position INT UNSIGNED DEFAULT 0 NOT NULL;
+ALTER TABLE content_positions CHANGE pk_fk_content pk_fk_content BIGINT UNSIGNED NOT NULL;
+ALTER TABLE content_positions CHANGE fk_category fk_category INT UNSIGNED NOT NULL;
+ALTER TABLE content_positions CHANGE position position INT UNSIGNED DEFAULT 0 NOT NULL;
 CREATE INDEX content_position_pk_content ON content_positions (pk_fk_content);
 CREATE INDEX content_position_fk_category ON content_positions (fk_category);
 ALTER TABLE contentmeta CHANGE fk_content fk_content BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
-ALTER TABLE contents DROP home_pos, CHANGE starttime starttime DATETIME DEFAULT CURRENT_TIMESTAMP, CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP, CHANGE changed changed DATETIME DEFAULT CURRENT_TIMESTAMP, CHANGE fk_author fk_author INT UNSIGNED DEFAULT NULL, CHANGE fk_publisher fk_publisher INT UNSIGNED DEFAULT NULL, CHANGE fk_user_last_editor fk_user_last_editor INT UNSIGNED DEFAULT NULL, CHANGE in_litter in_litter TINYINT(1) DEFAULT '0';
+ALTER TABLE contents DROP home_pos;
+ALTER TABLE contents CHANGE starttime starttime DATETIME DEFAULT CURRENT_TIMESTAMP
+ALTER TABLE contents contents CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP
+ALTER TABLE contents CHANGE changed changed DATETIME DEFAULT CURRENT_TIMESTAMP
+ALTER TABLE contents CHANGE fk_author fk_author INT UNSIGNED DEFAULT NULL
+ALTER TABLE contents CHANGE fk_publisher fk_publisher INT UNSIGNED DEFAULT NULL
+ALTER TABLE contents CHANGE fk_user_last_editor fk_user_last_editor INT UNSIGNED DEFAULT NULL;
+ALTER TABLE contents CHANGE in_litter in_litter TINYINT(1) DEFAULT '0';
 CREATE INDEX pk_fk_content ON contents_categories (pk_fk_content);
 ALTER TABLE commentsmeta CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
 ALTER TABLE contents_categories RENAME INDEX catname TO content_categories_catname;
@@ -73,11 +84,15 @@ ALTER TABLE frontpages ADD PRIMARY KEY (pk_frontpage);
 ALTER TABLE letters CHANGE pk_letter pk_letter BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE menu_items CHANGE pk_item pk_item INT UNSIGNED NOT NULL, CHANGE pk_menu pk_menu INT UNSIGNED NOT NULL;
 ALTER TABLE menues CHANGE pk_menu pk_menu INT UNSIGNED AUTO_INCREMENT NOT NULL;
-ALTER TABLE newsletter_archive CHANGE pk_newsletter pk_newsletter INT UNSIGNED AUTO_INCREMENT NOT NULL, CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
+ALTER TABLE newsletter_archive CHANGE pk_newsletter pk_newsletter INT UNSIGNED AUTO_INCREMENT NOT NULL;
+ALTER TABLE newsletter_archive CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
+ALTER TABLE newsletter_archive CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE orders CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 CREATE INDEX fk_pk_poll ON poll_items (fk_pk_poll);
 CREATE INDEX pk_content2 ON related_contents (pk_content2);
-ALTER TABLE special_contents CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL, CHANGE fk_special fk_special BIGINT UNSIGNED NOT NULL, ADD PRIMARY KEY (fk_content, fk_special);
+ALTER TABLE special_contents CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
+ALTER TABLE newsletter_archive CHANGE fk_special fk_special BIGINT UNSIGNED NOT NULL
+ALTER TABLE newsletter_archive ADD PRIMARY KEY (fk_content, fk_special);
 CREATE INDEX fk_content ON special_contents (fk_content);
 CREATE INDEX fk_special ON special_contents (fk_special);
 ALTER TABLE specials CHANGE pk_special pk_special BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
