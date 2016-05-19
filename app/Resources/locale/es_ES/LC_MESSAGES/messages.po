@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-05 16:55+0000\n"
-"PO-Revision-Date: 2016-05-05 19:00+0200\n"
+"POT-Creation-Date: 2016-05-19 13:54+0200\n"
+"PO-Revision-Date: 2016-05-19 14:05+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -253,12 +253,6 @@ msgstr "Los datos del artículo enviados no son válidos."
 msgid "Article successfully updated."
 msgstr "Artículo actualizado correctamente."
 
-msgid "Article deleted successfully."
-msgstr "Artículo eliminado correctamente."
-
-msgid "You must give an id to delete an article."
-msgstr "Debes proporcionar un identificador para eliminar un artículo."
-
 msgid "Invalid token"
 msgstr "Token no válido"
 
@@ -321,6 +315,9 @@ msgstr "Caché de smarty eliminada para la instancia."
 
 msgid "Smarty compiled templates removed for the instance."
 msgstr "Plantillas compiladas de smarty eliminadas para la instancia."
+
+msgid "Varnish BAN queued for current instance."
+msgstr "BAN en Varnish encolado para la instancia actual."
 
 msgid "Category created successfully."
 msgstr "Categoría creada correctamente."
@@ -1312,6 +1309,16 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
 
+msgid "Newsletter deleted successfully."
+msgstr "Boletín de noticias eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "No se pudo eliminar el boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debes proporcionar un identificador para eliminar un boletín."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Suscripción con identificador «%d» eliminada correctamente"
@@ -1348,16 +1355,6 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscriptors."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletín de noticias eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "No se pudo eliminar el boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
@@ -2075,30 +2072,6 @@ msgstr "El campo '%s' no es válido"
 msgid "Database error."
 msgstr "Error de base de datos."
 
-msgid "trashed"
-msgstr "en papelera"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "no planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tiempo"
-
-msgid "postponed"
-msgstr "aplazado"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2131,6 +2104,30 @@ msgid ""
 msgstr ""
 "Se han eliminado algunos elementos porque la portada tenía demasiados "
 "contenidos."
+
+msgid "trashed"
+msgstr "en papelera"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "no planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tiempo"
+
+msgid "postponed"
+msgstr "aplazado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -4956,8 +4953,8 @@ msgid ""
 "If you want to delete a payment method, please <a href=\"mailto:"
 "sales@openhost.es\">contact us</a>."
 msgstr ""
-"Si necesitas eliminar un método de pago, por favor <a href=\""
-"mailto:sales@openhost.es\">contactanos</a>."
+"Si necesitas eliminar un método de pago, por favor <a href=\"mailto:"
+"sales@openhost.es\">contactanos</a>."
 
 msgid "Change your payment method"
 msgstr "Cambiar tu método de pago"
@@ -5631,6 +5628,9 @@ msgstr "Eliminar caché"
 msgid "Remove compiled templates"
 msgstr "Eliminar templates compiladas"
 
+msgid "Ban varnish cache"
+msgstr "Ban de cache de varnish"
+
 msgid "Cache group"
 msgstr "Grupo de caché"
 
@@ -6104,15 +6104,18 @@ msgstr ""
 "La URL del servidor de publicidad (p.ej. http://ad.servidorejemplo.net/)."
 
 msgid "DFP category targeting"
-msgstr ""
+msgstr "Segmentación DFP por categoría"
 
 msgid "Key for setTargeting function"
-msgstr ""
+msgstr "Clave para la función setTargeting"
 
 msgid ""
 "Set a key for targeting your ads by category. Note that the value for "
 "targeting will always be the current category internal name"
 msgstr ""
+"Establecer una clave para la segmentación de los anuncios por categorías. "
+"Tenga en cuenta que el valor para la segmentación será siempre el nombre "
+"interno de la categoría actual"
 
 msgid "Tradedoubler integration"
 msgstr "Integración con Tradedoubler"
@@ -8076,8 +8079,8 @@ msgstr "ID de pago"
 msgid "Invoice ID"
 msgstr "ID de factura"
 
-msgid "Instance ID"
-msgstr "ID de Instancia"
+msgid "Instance"
+msgstr "Instancia"
 
 msgid "#"
 msgstr "#"
@@ -8118,9 +8121,6 @@ msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
 msgstr ""
 "Pulsa Ctrl+F5 o Ctrl+Mayús+R para hacer que tu navegador recargue la "
 "aplicación."
-
-msgid "Instance"
-msgstr "Instancia"
 
 msgid "Notification"
 msgstr "Notificación"
@@ -8695,6 +8695,15 @@ msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
 
 msgid "Search by name or username"
 msgstr "Buscar por nombre o correo"
+
+#~ msgid "Article deleted successfully."
+#~ msgstr "Artículo eliminado correctamente."
+
+#~ msgid "You must give an id to delete an article."
+#~ msgstr "Debes proporcionar un identificador para eliminar un artículo."
+
+#~ msgid "Instance ID"
+#~ msgstr "ID de Instancia"
 
 #~ msgid "Base"
 #~ msgstr "Base"
