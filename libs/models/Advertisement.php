@@ -230,9 +230,6 @@ class Advertisement extends Content
         } catch (\Exception $e) {
             return;
         }
-
-        $this->load($rs);
-
         if (array_key_exists('script', $rs)) {
             // Decode base64 if isn't decoded yet
             $isBase64 = base64_decode($rs['script']);
@@ -240,6 +237,8 @@ class Advertisement extends Content
                 $rs['script'] = $isBase64;
             }
         }
+
+        $this->load($rs);
 
         // Return instance to method chaining
         return $this;
