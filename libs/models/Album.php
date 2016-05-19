@@ -114,13 +114,18 @@ class Album extends Content
     {
         parent::load($properties);
 
-        $this->pk_album    = $properties['pk_album'];
-        $this->subtitle    = $properties['subtitle'];
-        $this->agency      = $properties['agency'];
-        $this->cover_id    = $properties['cover_id'];
-        $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
-        $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
-        $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
+        if (array_key_exists('pk_album', $properties)) {
+            $this->pk_album    = $properties['pk_album'];
+            $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
+        }
+        if (array_key_exists('subtitle', $properties)) {
+            $this->subtitle    = $properties['subtitle'];
+        }
+        if (array_key_exists('cover_id', $properties)) {
+            $this->cover_id    = $properties['cover_id'];
+            $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
+            $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
+        }
 
         return $this;
     }
