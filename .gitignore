@@ -34,7 +34,8 @@ bin/import-tools/*/*.dist
 !tmp/cache/.gitkeep
 !tmp/logs/.gitkeep
 /vendor
-/tmp/bootstrap.php.cache
+!tmp/bootstrap.php.cache
+!tmp/SymfonyRequirements.php
 
 # node
 node_modules/*
