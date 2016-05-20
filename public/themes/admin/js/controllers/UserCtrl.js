@@ -9,10 +9,11 @@ angular.module('BackendApp.controllers').controller('UserCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
-    $scope.confirmUser = function() {
+    $scope.confirmUser = function(ismaster) {
       if (
-        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
-        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1')
+        !ismaster &&
+        (($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
+        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1'))
       ) {
         var modal = $uibModal.open({
           templateUrl: 'modal-update-selected',
