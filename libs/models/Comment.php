@@ -145,7 +145,7 @@ class Comment
      **/
     public function load($data)
     {
-        if ($data) {
+        if (empty($data)) {
             return $this;
         }
 
@@ -251,7 +251,9 @@ class Comment
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return false;
+        if (((int) $id) <= 0) {
+            return false;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
