@@ -72,8 +72,7 @@ class Book extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name =
-                        $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
                 $uri =  Uri::generate(
                     'book',
@@ -107,19 +106,23 @@ class Book extends Content
     {
         parent::create($data);
 
-        $sql = "INSERT INTO books "
-             . "(`pk_book`, `author`, `cover_id`, `editorial`) "
-             . "VALUES (?,?,?,?)";
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO books (`pk_book`, `author`, `cover_id`, `editorial`)"
+                ." VALUES (?,?,?,?)",
+                [
+                    $this->id,
+                    $data['author'],
+                    $data['cover_id'],
+                    $data['editorial'],
+                ]
+            );
 
-        $values = array(
-            $this->id,
-            $data['author'],
-            $data['cover_id'],
-            $data['editorial']
-        );
-
-        $rs  = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            if (!$rs) {
+                var_dump($rs);die();
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -135,23 +138,45 @@ class Book extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM books WHERE pk_book=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN books ON pk_content = pk_book WHERE pk_content = ?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
-        $this->pk_book   = $rs->fields['pk_book'];
-        $this->author    = $rs->fields['author'];
-        $this->cover_id  = $rs->fields['cover_id'];
-        $this->cover_img = new \Photo($rs->fields['cover_id']);
-        $this->editorial = $rs->fields['editorial'];
-
+        $this->load($rs);
 
         return $this;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        if (array_key_exists('pk_book', $properties)) {
+            $this->pk_book   = (int) $properties['pk_book'];
+        }
+        if (array_key_exists('cover_id', $properties)) {
+            $this->cover_id   = (int) $properties['cover_id'];
+            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
+        }
     }
 
     /**
@@ -165,19 +190,21 @@ class Book extends Content
     {
         parent::update($data);
 
-        $sql = "UPDATE books "
-             . "SET  `author`=?, `cover_id`=?, `editorial`=? "
-             . "WHERE pk_book=?";
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "UPDATE books SET `author`=?, `cover_id`=?, `editorial`=? WHERE pk_book=?",
+                [
+                    $data['author'],
+                    $data['cover_id'],
+                    $data['editorial'],
+                    intval($data['id']),
+                ]
+            );
 
-        $values = array(
-            $data['author'],
-            $data['cover_id'],
-            $data['editorial'],
-            intval($data['id']),
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -195,10 +222,16 @@ class Book extends Content
     {
         parent::remove($this->id);
 
-        $sql = 'DELETE FROM books WHERE pk_book=?';
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                'DELETE FROM books WHERE pk_book=?',
+                [ $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-        if ($rs === false) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
