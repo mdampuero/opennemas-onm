@@ -163,7 +163,6 @@ class Frontpage
                 return false;
             }
         } catch (\Exception $e) {
-            var_dump($e->getMessage());die();
             error_log($e->getMessage());
             return false;
         }

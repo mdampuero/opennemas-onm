@@ -119,7 +119,6 @@ class Book extends Content
             );
 
             if (!$rs) {
-                var_dump($rs);die();
                 return false;
             }
         } catch (\Exception $e) {
