@@ -116,23 +116,28 @@ class Attachment extends Content
         }
 
         $data['pk_author'] = $_SESSION['userid'];
+
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
 
         // now save all the specific information into the attachment table
-        $sql = "INSERT INTO attachments "
-             . "(`pk_attachment`,`title`, `path`, `category`) "
-             . "VALUES (?,?,?,?)";
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO attachments (`pk_attachment`,`title`, `path`, `category`) "
+                ." VALUES (?,?,?,?)",
+                [
+                    (int) $this->id,
+                    $data['title'],
+                    $data['path'],
+                    (int) $data['category'],
+                ]
+            );
 
-        $values = array(
-            $this->id,
-            $data['title'],
-            $data['path'],
-            (int) $data['category'],
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -160,8 +165,18 @@ class Attachment extends Content
     */
     public function exists($path)
     {
-        $sql = 'SELECT count(*) AS total FROM attachments WHERE `path`=? ';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($path));
+       try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(*) AS total FROM attachments WHERE `path`=?',
+                [ $path ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
 
         return intval($rs) > 0;
     }
@@ -180,8 +195,8 @@ class Attachment extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM attachments, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_attachment AND pk_content = pk_fk_content',
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN attachments ON pk_content = pk_attachment WHERE pk_content = ?',
                 [ $id ]
             );
 
