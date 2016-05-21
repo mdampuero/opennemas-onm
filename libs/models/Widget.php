@@ -54,30 +54,6 @@ class Widget extends Content
     }
 
     /**
-     * Load properties into this instance
-     *
-     * @param array $properties Array properties
-     */
-    public function load($properties)
-    {
-        if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-        $this->id = $this->pk_widget;
-    }
-
-    /**
      * Creates a new widget from a data array
      *
      * @param array $data the widget data
@@ -121,21 +97,28 @@ class Widget extends Content
      */
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $this->id = $id;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN widgets ON pk_content = pk_widget WHERE pk_content = ?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT * FROM `widgets` WHERE `pk_widget`=?",
-            array($id)
-        );
-
-        if ($rs === false) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
         }
+
         $this->loadAllContentProperties();
 
-        $this->load($rs->fields);
+        $this->load($rs);
+
+        return $this;
     }
 
     /**
@@ -151,13 +134,13 @@ class Widget extends Content
 
         parent::update($data);
 
-        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
 
         if ($data['renderlet'] != 'html'  && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
+        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
@@ -175,11 +158,11 @@ class Widget extends Content
      */
     public function remove($id, $editor = null)
     {
-        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
         parent::remove($id); // Delete from database, don't use trash
 
         $values = array($id);
 
+        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
