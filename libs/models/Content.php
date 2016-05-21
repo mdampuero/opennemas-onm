@@ -216,13 +216,6 @@ class Content
      **/
     public $with_comment  = null;
 
-    /**
-     * Proxy cache handler
-     *
-     * @var MethodCacheManager
-     **/
-    public $cache               = null;
-
     const AVAILABLE             = 'available';
     const TRASHED               = 'trashed';
     const PENDING               = 'pending';
@@ -512,6 +505,7 @@ class Content
     public function update($data)
     {
         $this->read($data['id']);
+
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
                 $data['starttime'] = null;
@@ -738,9 +732,7 @@ class Content
         }
 
         $sql = 'UPDATE `contents` '
-               .'SET `available` = ?, '
-               .'`content_status` = ?, '
-               .'`starttime` = ? '
+               .'SET `available` = ?, `content_status` = ?, `starttime` = ? '
                .'WHERE `pk_content`=?';
 
         $values = array($status, $status, $date, $id);
@@ -1152,42 +1144,6 @@ class Content
     }
 
     /**
-     * Suggest the content to be included in the general homepage
-     *
-     * @return boolean
-     **/
-    // public function suggestToHomepage()
-    // {
-    //     // OLD APPROACH
-    //     if (($this->id == null)) {
-    //         return false;
-    //     }
-
-    //     $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
-    //              `changed`=? WHERE `pk_content`=?';
-
-    //     $currentTime = new \DateTime();
-    //     $currentTime->setTimezone(new \DateTimeZone('UTC'));
-    //     $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-    //     $values = array($_SESSION['userid'], $currentTime, $this->id);
-
-    //     if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-    //         return false;
-    //     }
-
-    //     /* Notice log of this action */
-    //     logContentEvent(__METHOD__, $this);
-
-    //     // Set status for it's updated to next event
-    //     $this->in_home = 2;
-
-    //     dispatchEventWithParams('content.update', array('content' => $this));
-
-    //     return true;
-    // }
-
-    /**
      * TODO:  move to ContentCategory class
      * Loads the category name for a given content id
      *
@@ -1254,24 +1210,28 @@ class Content
                         'utf-8',
                         $propertyValue
                     );
+                } else {
+                    $this->{$propertyName} = (int) $propertyValue;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
+            foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = @iconv(
+                    $this->{$propertyName} = @iconv(
                         mb_detect_encoding($v),
                         'utf-8',
-                        $v
+                        $propertyValue
                     );
+                } else {
+                    $this->{$propertyName} = (int) $propertyValue;
                 }
             }
         }
 
         // Special properties
         if (isset($this->pk_content)) {
-            $this->id = $this->pk_content;
+            $this->id = (int) $this->pk_content;
         } else {
             $this->id = null;
         }
