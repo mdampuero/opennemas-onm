@@ -266,8 +266,8 @@ class Article extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM articles, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_article AND pk_content = pk_fk_content',
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
                 [ $id ]
             );
 
