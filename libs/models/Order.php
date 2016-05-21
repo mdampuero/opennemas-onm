@@ -19,6 +19,18 @@
 class Order
 {
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($id = null)
+    {
+        if (!is_null($id)) {
+            return $this->read($id);
+        }
+    }
+    /**
      * Loads the order information given its id
      *
      * @param int $id the order id
@@ -27,23 +39,30 @@ class Order
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM orders WHERE id = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM orders WHERE id = ?',
+                [ intval($id) ]
+            );
 
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
-        $this->id             = $rs->fields['id'];
-        $this->user_id        = $rs->fields['user_id'];
-        $this->content_id     = $rs->fields['content_id'];
-        $this->created        = $rs->fields['created'];
-        $this->payment_id     = $rs->fields['payment_id'];
-        $this->payment_status = $rs->fields['payment_status'];
-        $this->payment_amount = $rs->fields['payment_amount'];
-        $this->payment_method = $rs->fields['payment_method'];
-        $this->type           = $rs->fields['type'];
-        $this->params         = unserialize($rs->fields['params']);
+        $this->id             = $rs['id'];
+        $this->user_id        = $rs['user_id'];
+        $this->content_id     = $rs['content_id'];
+        $this->created        = $rs['created'];
+        $this->payment_id     = $rs['payment_id'];
+        $this->payment_status = $rs['payment_status'];
+        $this->payment_amount = $rs['payment_amount'];
+        $this->payment_method = $rs['payment_method'];
+        $this->type           = $rs['type'];
+        $this->params         = unserialize($rs['params']);
 
         return $this;
     }
