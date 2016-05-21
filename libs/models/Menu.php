@@ -186,9 +186,8 @@ class Menu
      **/
     public function update($data)
     {
-
         $sql = "UPDATE menues SET `name`=?, `params`=?, `position`=? "
-              ."WHERE pk_menu= ?" ;
+              ."WHERE pk_menu= ?";
 
         $values = array(
             $data['name'],
@@ -256,24 +255,27 @@ class Menu
      */
     public function getMenu($name)
     {
-        $sql =  "SELECT * FROM menues WHERE name=?";
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM menues WHERE name=?",
+                [ $name ]
+            );
 
-        $values = array($name);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
-        $this->name      = $name;
-        $this->pk_menu   = $rs->fields['pk_menu'];
-        $this->params    = $rs->fields['params'];
-        $this->position  = $rs->fields['position'];
-        $this->type      = $rs->fields['type'];
+        $this->name      = @iconv(mb_detect_encoding($rs['pk_menu']), 'utf-8', $rs['pk_menu']);
+        $this->pk_menu   = $rs['pk_menu'];
+        $this->params    = $rs['params'];
+        $this->position  = $rs['position'];
+        $this->type      = $rs['type'];
         $this->items     = $this->getMenuItems($this->pk_menu);
 
         return $this;
-
     }
 
     /**
@@ -285,12 +287,16 @@ class Menu
      */
     public function getMenuFromPosition($position)
     {
-        $sql =  "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1";
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1",
+                [ $position ]
+            );
 
-        $values = array($position);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if (!$rs) {
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
             return null;
         }
 
@@ -363,25 +369,30 @@ class Menu
     {
         $menuItems = array();
 
-        $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC",
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return $menuItems;
+            }
+        } catch (\Exception $e) {
             return $menuItems;
         }
 
-        $i = 0;
-        while (!$rs->EOF) {
-            $menuItems[$rs->fields['pk_item']] = new stdClass();
-            $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];
-            $menuItems[$rs->fields['pk_item']]->title     = $rs->fields['title'];
-            $menuItems[$rs->fields['pk_item']]->link      = $rs->fields['link_name'];
-            $menuItems[$rs->fields['pk_item']]->position  = $rs->fields['position'];
-            $menuItems[$rs->fields['pk_item']]->type      = $rs->fields['type'];
-            $menuItems[$rs->fields['pk_item']]->pk_father = $rs->fields['pk_father'];
-            $menuItems[$rs->fields['pk_item']]->submenu = array();
-            $rs->MoveNext();
-            $i++;
+        foreach ($rs as $element) {
+            $menuItem = new stdClass();
+            $menuItem->pk_item   = (int) $element['pk_item'];
+            $menuItem->title     = @iconv(mb_detect_encoding($element['title']), 'utf-8', $element['title']);
+            $menuItem->link      = $element['link_name'];
+            $menuItem->position  = (int) $element['position'];
+            $menuItem->type      = (int) $element['type'];
+            $menuItem->pk_father = (int) $element['pk_father'];
+            $menuItem->submenu   = [];
+
+            $menuItems[$element['pk_item']] = $menuItem;
         }
 
         foreach ($menuItems as $id => $element) {
