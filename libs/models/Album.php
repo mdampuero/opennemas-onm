@@ -114,14 +114,14 @@ class Album extends Content
     {
         parent::load($properties);
 
-        if (array_key_exists('pk_album', $properties)) {
+        if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
             $this->pk_album    = $properties['pk_album'];
             $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
         }
-        if (array_key_exists('subtitle', $properties)) {
+        if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
             $this->subtitle    = $properties['subtitle'];
         }
-        if (array_key_exists('cover_id', $properties)) {
+        if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
             $this->cover_id    = $properties['cover_id'];
             $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
             $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
@@ -179,8 +179,8 @@ class Album extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM albums, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_album AND pk_content = pk_fk_content',
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
                 [ $id ]
             );
 
