@@ -16,7 +16,7 @@
  *
  * @package    Model
  **/
-class Frontpage extends Content
+class Frontpage
 {
     /**
      * The frontpage id
@@ -44,21 +44,21 @@ class Frontpage extends Content
      *
      * @var array
      **/
-    public $contents = null;
+    public $content_positions = [];
 
     /**
      * Whether this frontpage is promoted
      *
      * @var boolean
      **/
-    public $promoted = null;
+    public $promoted = 0;
 
     /**
      * Whether the frontpage is a frontpage day
      *
      * @var boolean
      **/
-    public $day_frontpage = null;
+    public $day_frontpage = 0;
 
     /**
      * Miscelanous params of this frontpage
@@ -66,13 +66,6 @@ class Frontpage extends Content
      * @var array
      **/
     public $params = null;
-
-    /**
-     * Proxy property to the cache handler
-     *
-     * @var MethodCacheManager Handler to call method cached
-     */
-    public $cache = null;
 
     /**
      * Initializes the Frontpage instance
@@ -85,7 +78,7 @@ class Frontpage extends Content
     {
         $this->content_type_l10n_name = _('Frontpage');
 
-        parent::__construct($id);
+        return $this->read($id);
     }
 
     /**
@@ -157,17 +150,25 @@ class Frontpage extends Content
      */
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = "SELECT * FROM `frontpages` WHERE `pk_frontpage`=?";
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM frontpages WHERE pk_frontpage = ?',
+                [ $id ]
+            );
 
-        if ($rs === false) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());die();
+            error_log($e->getMessage());
+            return false;
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         return $this;
     }
@@ -195,7 +196,9 @@ class Frontpage extends Content
         }
 
         $this->id = $this->pk_frontpage;
-        $this->contents= unserialize($this->content_positions);
+        $this->content_positions = unserialize($this->content_positions);
+        $this->params = unserialize($this->params);
+        $this->fk_content_type = 18;
 
         return $this;
     }
