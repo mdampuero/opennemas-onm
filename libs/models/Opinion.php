@@ -219,21 +219,24 @@ class Opinion extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
-                .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
-                .'WHERE pk_opinion = ?',
-                [ (int) $id ]
+                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, users.avatar_img_id FROM contents '
+                .'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN opinions ON pk_content = pk_opinion '
+                .'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
+                [ $id ]
             );
 
             if (!$rs) {
-                return;
+                return false;
             }
         } catch (\Exception $e) {
-            return;
+            error_log($e->getMessage());
+            return false;
         }
 
         if ((int) $rs['type_opinion'] == 1) {
