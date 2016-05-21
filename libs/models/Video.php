@@ -126,21 +126,42 @@ class Video extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM videos WHERE pk_video = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, [$id]);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN videos ON pk_content = pk_video WHERE pk_content = ?',
+                [ $id ]
+            );
 
-        if (!$rs) {
-            return;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
         }
 
-        $this->pk_video       = $rs->fields['pk_video'];
-        $this->video_url      = $rs->fields['video_url'];
-        $this->author_name    = $rs->fields['author_name'];
-        $this->category_title = $this->loadCategoryTitle($rs->fields['pk_video']);
-        $this->information    = unserialize($rs->fields['information']);
-        $this->thumb          = $this->getThumb();
+        $this->load($rs);
+
+        return $this;
+    }
+
+    /**
+     * Load properties into this instance
+     *
+     * @param array $properties Array properties
+     */
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        if (array_key_exists('pk_video', $properties)) {
+            $this->category_title = $this->loadCategoryTitle($properties['pk_video']);
+        }
+
+        $this->thumb = $this->getThumb();
     }
 
     /**
