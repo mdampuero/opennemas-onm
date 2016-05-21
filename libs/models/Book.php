@@ -161,10 +161,11 @@ class Book extends Content
     }
 
     /**
-     * undocumented function
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
      *
      * @return void
-     * @author
      **/
     public function load($properties)
     {
