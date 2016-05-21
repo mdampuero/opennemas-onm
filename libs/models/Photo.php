@@ -309,44 +309,65 @@ class Photo extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM photos WHERE pk_photo =?';
-        $values = array($id);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN photos ON pk_content = pk_photo WHERE pk_content=?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
-        $this->pk_photo    = $rs->fields['pk_photo'];
-        $this->name        = $rs->fields['name'];
-        $this->path_file   = $rs->fields['path_file'];
-        if (!empty($rs->fields['path_file'])) {
-            $this->path_img = $rs->fields['path_file'].DS.$rs->fields['name'];
+        $this->load($rs);
+
+        return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        $this->pk_photo    = $properties['pk_photo'];
+        $this->name        = $properties['name'];
+        $this->path_file   = $properties['path_file'];
+        if (!empty($properties['path_file'])) {
+            $this->path_img = $properties['path_file'].DS.$properties['name'];
         }
-        $this->size        = $rs->fields['size'];
-        $this->width       = $rs->fields['width'];
-        $this->height      = $rs->fields['height'];
-        $this->nameCat     = $rs->fields['nameCat'];
-        $this->author_name = $rs->fields['author_name'];
+        $this->size        = $properties['size'];
+        $this->width       = $properties['width'];
+        $this->height      = $properties['height'];
+        $this->nameCat     = $properties['nameCat'];
+        $this->author_name = $properties['author_name'];
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
-        $this->address     = $rs->fields['address'];
+        $this->address     = $properties['address'];
         $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
 
-        if (!empty($photo->address)) {
-            $positions = explode(',', $photo->address);
+        if (!empty($properties['address'])) {
+            $positions = explode(',', $properties['address']);
             if (is_array($positions)) {
-                $photo->latlong = array(
+                $this->latlong = array(
                     'lat' => $positions[0],
                     'long' => $positions[1],
                 );
             }
         }
-        return $this;
     }
-
     /**
      * Updates the photo object given an array with information
      *
