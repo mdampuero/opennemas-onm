@@ -685,6 +685,12 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $opinionID = $this->findContent($values['title']);
+
+                    if (!empty($opinionID)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
                     $opinion = new \Opinion();
                     $opinion->create($values);
                     $slug = array_key_exists('slug', $schema['translation']) ?
@@ -701,6 +707,17 @@ class MigrationSaver
                 } else {
                     $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $opinionID = $this->findContent($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $opinionID,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
