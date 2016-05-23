@@ -57,6 +57,7 @@
         "google/recaptcha": "1.1",
         "hwi/oauth-bundle": "0.4.*",
         "imagine/imagine": "0.6.*",
+        "jagandecapri/symfony-parallel-process": "*",
         "jeremykendall/php-domain-parser": "~2.0",
         "league/csv": "~8.0",
         "lexik/jwt-authentication-bundle": "dev-master",

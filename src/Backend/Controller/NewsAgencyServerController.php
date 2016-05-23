@@ -80,15 +80,23 @@ class NewsAgencyServerController extends Controller
         }
 
         $server = array(
-            'id'            => $latestServerId + 1,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
+            'id'             => $latestServerId + 1,
+            'name'           => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'       => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'       => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string'  => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'          => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'      => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'      => $request->request->getDigits('activated', 0),
+            'author'         => $request->request->getDigits('author', 0),
+            'source'         => $request->request->getDigits('source', 0),
+            'auto_import'    => $request->request->getDigits('auto_import', 0),
+            'auto_import'    => $request->request->getDigits('auto_import', 0),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
+            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'filters'        => $request->request->get('filters', []),
         );
 
         $servers[$server['id']] = $server;
@@ -136,6 +144,14 @@ class NewsAgencyServerController extends Controller
     public function showAction(Request $request)
     {
         $servers = $this->get('setting_repository')->get('news_agency_config');
+        $items   = $this->get('category_repository')->findBy([], []);
+
+        $categories = [];
+        foreach ($items as $category) {
+            $categories[$category->id] = $category->title;
+        }
+
+        asort($categories);
 
         $id     = $request->query->getDigits('id');
         $server = [];
@@ -144,11 +160,20 @@ class NewsAgencyServerController extends Controller
             $server = $servers[$id];
         }
 
+        $users   = \User::getAllUsersAuthors();
+        $authors = [];
+
+        foreach ($users as $user) {
+            $authors[$user->id] = $user->name;
+        }
+
         return $this->render(
             'news_agency/config/new.tpl',
             [
-                'server'    => $server,
-                'sync_from' => $this->syncFrom,
+                'authors'    => $authors,
+                'categories' => $categories,
+                'server'     => $server,
+                'sync_from'  => $this->syncFrom
             ]
         );
     }
@@ -165,24 +190,28 @@ class NewsAgencyServerController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
-        $sm = $this->get('setting_repository');
-
+        $id      = $request->query->getDigits('id');
+        $sm      = $this->get('setting_repository');
         $servers = $sm->get('news_agency_config');
 
-        $server = array(
-            'id'            => $id,
-            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-            'activated'     => $request->request->getDigits('activated', 0),
-            'author'        => $request->request->getDigits('author', 0),
-        );
+        $server = [
+            'id'             => $id,
+            'name'           => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'       => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'       => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string'  => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'          => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'      => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'      => $request->request->getDigits('activated', 0),
+            'author'         => $request->request->getDigits('author', 0),
+            'source'         => $request->request->getDigits('source', 0),
+            'auto_import'    => $request->request->getDigits('auto_import', 0),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
+            'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'filters'        => $request->request->get('filters', [])
+        ];
 
         $servers[$id] = $server;
 
@@ -196,7 +225,7 @@ class NewsAgencyServerController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'backend_news_agency_server_show',
-                array('id' => $id)
+                [ 'id' => $id ]
             )
         );
     }

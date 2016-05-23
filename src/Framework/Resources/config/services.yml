@@ -269,5 +269,9 @@ services:
         class: Framework\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
 
+    news_agency.importer:
+        class:     Framework\Import\Importer\Importer
+        arguments: [ '@service_container' ]
+
     vat:
         class: Framework\VAT\VATService
