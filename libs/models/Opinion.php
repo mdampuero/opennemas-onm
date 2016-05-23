@@ -94,12 +94,14 @@ class Opinion extends Content
                             ->find($this->fk_author);
                     }
 
-                    $authorName = $author->name;
-                    if (empty($authorName)) {
+                    if (is_object($author)) {
+                        $authorName = $author->name;
+                    } else {
                         $authorName = 'author';
                     }
 
-                    if (is_array($author->meta) &&
+                    if (is_object($author)
+                        && is_array($author->meta) &&
                         array_key_exists('is_blog', $author->meta) &&
                         $author->meta['is_blog'] == 1
                     ) {
