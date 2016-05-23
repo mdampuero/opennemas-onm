@@ -33,7 +33,9 @@ class Instance extends Entity
      */
     public function getDatabaseName()
     {
-        if (array_key_exists('BD_DATABASE', $this->settings)) {
+        if (!empty($this->settings)
+            && array_key_exists('BD_DATABASE', $this->settings)
+        ) {
             return $this->settings['BD_DATABASE'];
         }
 
@@ -47,7 +49,8 @@ class Instance extends Entity
      */
     public function getMainDomain()
     {
-        if ($this->main_domain === 0
+        if (empty($this->main_domain)
+            || $this->main_domain === 0
             || !is_array($this->domains)
             || empty($this->domains)
         ) {
@@ -57,7 +60,7 @@ class Instance extends Entity
         $index = $this->main_domain;
 
         if ($index > 0 && $index <= count($this->domains)) {
-            return $this->domains[$this->main_domain - 1];
+            return $this->domains[count($this->domains) - 1];
         }
 
         return $this->domains[0];
