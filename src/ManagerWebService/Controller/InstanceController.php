@@ -274,77 +274,49 @@ class InstanceController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
 
-        if (is_array($selected) && count($selected) == 0) {
-            return new JsonResponse(
-                _('Unable to find the instances for the given criteria'),
-                404
-            );
+        unset($params['ids']);
+
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $im = $this->get('instance_manager');
+        $em   = $this->get('orm.manager');
+        $oql  = sprintf('id in [%s]', implode(',', $ids));
+        $data = $em->getConverter('Instance')->objectify($params);
 
-        $criteria = [
-            'id' => [
-                [ 'value' => $selected, 'operator' => 'IN']
-            ]
-        ];
+        $instances = $em->getRepository('Instance')->findBy($oql);
 
-        $instances = $im->findBy($criteria);
-
+        $updated = 0;
         foreach ($instances as $instance) {
             try {
-                $oldActivated = $instance->activated;
+                $old = $instance->activated;
+                $instance->merge($data);
+                $updated++;
 
-                foreach ($request->request->all() as $key => $value) {
-                    $instance->{$key} =
-                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-                }
-
-                $this->get('onm.validator.instance')->validate($instance);
-                $im->persist($instance);
-                $updated[] = $instance->id;
-
-                if ($oldActivated != $instance->activated) {
+                if ($old !== $instance->activated) {
                     dispatchEventWithParams(
                         'instance.update',
-                        array('instance' => $instance->internal_name)
+                        [ 'instance' => $instance->internal_name ]
                     );
                 }
             } catch (\Exception $e) {
-                $error[]    = $instance->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error',
-                ];
+                $msg->add($e->getMessage(), 'error', 409);
             }
         }
 
         if (count($updated) > 0) {
-            $messages[] = [
-                'message' => sprintf(
-                    _('%s instances updated successfully.'),
-                    count($updated)
-                ),
-                'type' => 'success'
-            ];
+            $msg->add(
+                sprintf(_('%s instances saved successfully'), $updated),
+                'success'
+            );
         }
 
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
