@@ -13,25 +13,47 @@ class ObjectDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->object = new Entity([ 'foo' => 'bar']);
     }
 
-    public function testFromObject()
+    public function testFromString()
     {
         $this->assertEquals(
             $this->object,
-            $this->mapper->fromObject(serialize($this->object))
+            $this->mapper->fromString(serialize($this->object))
         );
 
-        $this->assertEmpty($this->mapper->fromObject(null));
-        $this->assertEmpty($this->mapper->fromObject(''));
+        $this->assertEmpty($this->mapper->fromString(null));
+        $this->assertEmpty($this->mapper->fromString(''));
     }
 
-    public function testToObject()
+    public function testToString()
     {
         $this->assertEquals(
             serialize($this->object),
-            $this->mapper->toObject($this->object)
+            $this->mapper->toString($this->object)
         );
 
-        $this->assertEmpty($this->mapper->toObject(null));
-        $this->assertEmpty($this->mapper->toObject(''));
+        $this->assertEmpty($this->mapper->toString(null));
+        $this->assertEmpty($this->mapper->toString(''));
+    }
+
+    public function testFromText()
+    {
+        $this->assertEquals(
+            $this->object,
+            $this->mapper->fromText(serialize($this->object))
+        );
+
+        $this->assertEmpty($this->mapper->fromText(null));
+        $this->assertEmpty($this->mapper->fromText(''));
+    }
+
+    public function testToText()
+    {
+        $this->assertEquals(
+            serialize($this->object),
+            $this->mapper->toText($this->object)
+        );
+
+        $this->assertEmpty($this->mapper->toText(null));
+        $this->assertEmpty($this->mapper->toText(''));
     }
 }

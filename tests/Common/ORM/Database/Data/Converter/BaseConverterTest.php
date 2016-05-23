@@ -25,11 +25,12 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata = new Metadata([
             'properties' => [
-                'foo' => 'string',
-                'bar' => 'integer',
-                'baz' => 'array',
-                'norf' => 'boolean',
-                'wobble' => 'string'
+                'foo'    => 'string',
+                'bar'    => 'integer',
+                'baz'    => 'array',
+                'norf'   => 'boolean',
+                'wobble' => 'string',
+                'quux'   => 'integer',
             ],
             'mapping' => [
                 'columns' => [
@@ -37,6 +38,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'bar' => [ 'type' => 'integer' ],
                     'baz' => [ 'type' => 'array_json' ],
                     'norf' => [ 'type' => 'boolean' ],
+                    'quux' => [ 'type' => 'integer', 'options' => [ 'default' => null ] ],
                 ],
                 'hasMetas' => true
             ],
@@ -75,6 +77,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'bar' => 1,
                     'baz' => '["garply","gorp"]',
                     'norf' => 0,
+                    'quux' => null,
                 ],
                 [ 'wobble' => 'wubble' ],
                 [
@@ -82,6 +85,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'bar'  => \PDO::PARAM_INT,
                     'baz'  => \PDO::PARAM_STR,
                     'norf' => \PDO::PARAM_BOOL,
+                    'quux' => \PDO::PARAM_STR,
                 ]
             ],
             $this->converter->databasify([
