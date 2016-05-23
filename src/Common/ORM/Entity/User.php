@@ -9,16 +9,41 @@
  */
 namespace Common\ORM\Entity;
 
+use Common\ORM\Core\Entity;
+use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Common\ORM\Core\Entity;
 
 /**
  * The Userclass represents an Opennemas user group.
  */
-class User extends Entity implements AdvancedUserInterface, EquatableInterface
+class User extends Entity implements AdvancedUserInterface, EquatableInterface, JWTUserInterface
 {
+    /**
+     * Returns whether or not the given user is equivalent to this user.
+     *
+     * @return boolean
+     */
+    public function equals(UserInterface $user)
+    {
+        if ($user->getUsername() === $this->getUsername()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     */
+    public function eraseCredentials()
+    {
+        unset($this->data['roles']);
+        unset($this->data['password']);
+        unset($this->data['token']);
+    }
+
     /**
      * Returns the roles granted to the user.
      *
@@ -72,6 +97,16 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        $this->eraseCredentials();
+
+        return $this->getData();
+    }
+
+    /**
      * Returns the salt that was originally used to encode the password.
      *
      * @return null The salt.
@@ -89,30 +124,6 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * Returns whether or not the given user is equivalent to this user.
-     *
-     * @return boolean
-     */
-    public function equals(UserInterface $user)
-    {
-        if ($user->getUsername() === $this->getUsername()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     */
-    public function eraseCredentials()
-    {
-        unset($this->data['roles']);
-        unset($this->data['password']);
-        unset($this->data['token']);
     }
 
     /**
