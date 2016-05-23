@@ -68,7 +68,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Save{/t}</span>
                 </button>
@@ -137,53 +137,39 @@
                 </div>
               </div>
               <div ng-init="init({json_encode($advertisement->params)|clear_json})" id="ad_dimensions">
-                <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length < 1">
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Width{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" name="params_width[0]" ng-model="sizes[0].width" type="number" ng-value="[% sizes[0].width %]" ng-required="with_script != 2" min="0">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-3 col-sm-offset-1">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Height{/t}
-                      </label>
-                      <div class="controls">
-                          <input class="form-control" name="params_height[0]" ng-model="sizes[0].height" type="number" ng-value="[% sizes[0].height %]" ng-required="with_script != 2" min="0">
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <input name="params_width" ng-value="params_width" type="hidden">
+                <input name="params_height" ng-value="params_height" type="hidden">
                 <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
-                  <div class="col-sm-3">
+                  <div class="col-xs-4">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" name="params_width[[% $index %]]" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-3 col-sm-offset-1">
+                  <div class="col-xs-4">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                        <div ng-class="{ 'input-group': $index > 0 }">
-                          <input class="form-control" name="params_height[[% $index %]]" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
-                          <span class="input-group-btn" ng-show="$index > 0">
-                            <button class="btn btn-danger" ng-click="removeInput(sizes, $index )" type="button">
-                                <i class="fa fa-trash-o"></i>
-                            </button>
-                          </span>
-                        </div>
+                        <input class="form-control pull-left" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <label class="form-label">&nbsp;</label>
+                      <div class="controls">
+                        <button class="btn btn-success pull-left" ng-click="addSize();" ng-if="$index === 0" type="button">
+                          <i class="fa fa-plus"></i>
+                        </button>
+                        <button class="btn btn-danger" ng-click="removeSize($index)" ng-if="$index !== 0" type="button">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -357,7 +343,10 @@
                     <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1100}selected{/if}>{t}AMP pages{/t}</option>
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="FIA_MODULE"}
+                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
                     {/is_module_activated}
                     <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                   </select>
@@ -421,6 +410,38 @@
                               <input id="amp-inner-button1" name="type_advertisement" type="radio" value="1051" {if isset($advertisement) && $advertisement->type_advertisement == 1051}checked="checked" {/if}/>
                               <label for="amp-inner-button1">
                                 {t}AMP inner article - Button 1{/t}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/is_module_activated}
+                    {is_module_activated name="FIA_MODULE"}
+                    <div class="ng-cloak" ng-show="position == 'publi-fia'">
+                      <div class="col-md-9">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button1" name="type_advertisement" type="radio" value="1075" {if isset($advertisement) && $advertisement->type_advertisement == 1075}checked="checked" {/if}/>
+                              <label for="fia-inner-button1">
+                                {t}Instant Articles inner article - Button 1{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button2" name="type_advertisement" type="radio" value="1076" {if isset($advertisement) && $advertisement->type_advertisement == 1076}checked="checked" {/if}/>
+                              <label for="fia-inner-button2">
+                                {t}Instant Articles inner article - Button 2{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
+                              <label for="fia-inner-button4">
+                                {t}Instant Articles inner article - Button 3{/t}
                               </label>
                             </div>
                           </div>

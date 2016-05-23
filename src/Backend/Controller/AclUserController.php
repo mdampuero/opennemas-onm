@@ -194,7 +194,8 @@ class AclUserController extends Controller
             }
         }
 
-        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'acl/user/new.tpl',
@@ -674,7 +675,6 @@ class AclUserController extends Controller
                         _('Unable to send your recover password email. Please try it later.')
                     );
                 }
-
             } else {
                 $request->getSession()->getFlashBag()->add(
                     'error',
@@ -729,7 +729,6 @@ class AclUserController extends Controller
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
                 return $this->redirect($this->generateUrl('admin_login'));
-
             } elseif ($password != $passwordVerify) {
                 $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
             } else {
@@ -740,7 +739,6 @@ class AclUserController extends Controller
 
                 return $this->redirect($this->generateUrl('admin_login'));
             }
-
         }
 
         return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));

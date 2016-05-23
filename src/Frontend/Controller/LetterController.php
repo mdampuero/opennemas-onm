@@ -206,7 +206,6 @@ class LetterController extends Controller
 
             return $response;
         } else {
-
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
@@ -254,7 +253,6 @@ class LetterController extends Controller
                     $data["params"] = $params;
 
                     if ($letter->create($data)) {
-
                         $msg = "Su carta ha sido guardada y está pendiente de publicación.";
 
                         $recipient = s::get('contact_email');
@@ -274,11 +272,9 @@ class LetterController extends Controller
                             try {
                                 $mailer = $this->get('mailer');
                                 $mailer->send($text);
-
                             } catch (\Swift_SwiftException $e) {
                             }
                         }
-
                     } else {
                         $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
                             ."correctamente todos los campos.";

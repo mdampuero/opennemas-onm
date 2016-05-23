@@ -32,7 +32,7 @@ services:
         class: Framework\EventListener\VarnishCleanerListener
         arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
         tags:
-            - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100 }
 
     kernel.listener.instance_exceptions:
         class: Framework\EventListener\InstanceExceptionsListener
@@ -74,6 +74,16 @@ services:
     cache_manager:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
+
+    collector.onmbrand:
+        class: Framework\DataCollector\OpennemasBrandCollector
+        public: false
+        tags:
+            -
+                name:     data_collector
+                id:       'brand_collector'
+                template: '@OnmFramework/collector/onmbrand.html.twig'
+                priority: 2000
 
     collector.database:
         class: Framework\DataCollector\DatabaseCollector

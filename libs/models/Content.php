@@ -160,13 +160,6 @@ class Content
     public $in_home             = null;
 
     /**
-     * Ther order of this content for homepages
-     *
-     * @var int
-     **/
-    public $home_pos            = null;
-
-    /**
      * Whether if this content is available
      *
      * @var int 0|1
@@ -222,13 +215,6 @@ class Content
      * @var boolean
      **/
     public $with_comment  = null;
-
-    /**
-     * Proxy cache handler
-     *
-     * @var MethodCacheManager
-     **/
-    public $cache               = null;
 
     const AVAILABLE             = 'available';
     const TRASHED               = 'trashed';
@@ -325,17 +311,19 @@ class Content
      **/
     public static function checkExists($id)
     {
-        $exists = false;
+        if (!isset($id)) return;
 
-        $sql = 'SELECT pk_content FROM `contents` '
-             . 'WHERE pk_content = ? LIMIT 1';
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT pk_content FROM `contents` '
+                .'WHERE pk_content = ? LIMIT 1',
+                [ (int) $id ]
+            );
+        } catch (\Exception $e) {
+            return false;
+        }
 
-
-        $exists = ($rs != false);
-
-        return $exists;
+        return count($rs) >= 1;
     }
 
     /**
@@ -346,8 +334,7 @@ class Content
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name =
-                $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName($this->pk_content);
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -381,20 +368,19 @@ class Content
         $data['available']      = $data['content_status'];
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
-                $data['starttime'] = '0000-00-00 00:00:00';
+                $data['starttime'] = null;
             } else {
                 $data['starttime'] = date("Y-m-d H:i:s");
             }
         }
 
-        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
+        $data['endtime']          = (empty($data['endtime']))? null: $data['endtime'];
         $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))
                                     ? 0: intval($data['frontpage']);
-        $data['position']         = (empty($data['position']))? '2': $data['position'];
-        $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
-        $data['favorite']          = (empty($data['favorite']))? 0: $data['favorite'];
-        $data['home_pos']         = 100;
-        $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
+        $data['position']         = (empty($data['position']))? 2: intval($data['position']);
+        $data['in_home']          = (empty($data['in_home']))? 0: intval($data['in_home']);
+        $data['favorite']         = (empty($data['favorite'])) ? 0: intval($data['favorite']);
+        $data['urn_source']       = (empty($data['urn_source'])) ? null: $data['urn_source'];
         $data['params'] =
             (!isset($data['params'])
             || empty($data['params'])) ? null: serialize($data['params']);
@@ -420,8 +406,8 @@ class Content
         }
 
         $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-        $data['fk_publisher']        = $_SESSION['userid'];
+        $data['fk_user_last_editor'] = (int) $_SESSION['userid'];
+        $data['fk_publisher']        = (int) $_SESSION['userid'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
@@ -431,38 +417,37 @@ class Content
         $sql = "INSERT INTO contents
             (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
             `metadata`, `starttime`, `endtime`,
-            `created`, `changed`, `content_status`, `position`,`frontpage`,
+            `created`, `changed`, `content_status`,
+            `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `favorite`, `home_pos`,`available`, `with_comment`,
+            `in_home`, `favorite`, `available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?, ?,?,?, ?,?,?,?, ?,?,?,?)";
 
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['created'], $data['changed'], $data['content_status'],
-            $data['position'],$data['frontpage'],
-            $data['fk_author'], $data['fk_publisher'],
-            $data['fk_user_last_editor'], $data['in_home'], $data['favorite'],
-            $data['home_pos'], $data['available'], $data['with_comment'],
+            $data['created'], $data['changed'], (int) $data['content_status'],
+            (int) $data['position'], $data['frontpage'],
+            (int) $data['fk_author'], (int) $data['fk_publisher'], (int) $data['fk_user_last_editor'],
+            $data['in_home'], (int) $data['favorite'], (int) $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return false;
         }
-
         $this->id = $GLOBALS['application']->conn->Insert_ID();
         $this->category_name = $catName;
 
-        $sql = "INSERT INTO contents_categories (`pk_fk_content` ,"
-             . "`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
-        $values = array($this->id, $data['category'],$catName);
+        $sql = "INSERT INTO contents_categories (`pk_fk_content`, `pk_fk_content_category`, `catName`) VALUES (?,?,?)";
+        $values = array($this->id, (int) $data['category'], $catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
             return false;
         }
-
         $sql = "INSERT INTO content_views (`pk_fk_content` ,`views`) "
              . "VALUES (?,?)";
         $values = array($this->id, 0);
@@ -488,21 +473,24 @@ class Content
      **/
     public function read($id)
     {
-        if (empty($id)) {
-            return false;
-        }
+        if (empty($id)) return false;
 
-        $sql = 'SELECT * FROM contents, contents_categories'
-                . ' WHERE pk_content = ? AND pk_content = pk_fk_content';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents, contents_categories'
+                . ' WHERE pk_content = ? AND pk_content = pk_fk_content',
+                [ (int) $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return false;
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
         // Load object properties
-        $this->load($rs->fields);
-        $this->fk_user = $this->fk_author;
+        $this->load($rs);
 
         return $this;
     }
@@ -518,15 +506,13 @@ class Content
     {
         $this->read($data['id']);
 
-        if (array_key_exists('content_status', $data)
-            && $data['content_status'] == 1
-            && array_key_exists('starttime', $data)
-            && ($data['starttime'] =='0000-00-00 00:00:00'
-                || empty($data['starttime']))
-        ) {
-            $data['starttime'] = date("Y-m-d H:i:s");
+        if (!isset($data['starttime']) || empty($data['starttime'])) {
+            if ($data['content_status'] == 0) {
+                $data['starttime'] = null;
+            } else {
+                $data['starttime'] = date("Y-m-d H:i:s");
+            }
         }
-
         $values = array(
             'body'           => (!array_key_exists('body', $data))? '': $data['body'],
             'created'        =>
@@ -535,7 +521,7 @@ class Content
             'starttime'      =>
                 (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
             'endtime'        =>
-                (empty($data['endtime'])) ? '0000-00-00 00:00:00': $data['endtime'],
+                (empty($data['endtime'])) ? null: $data['endtime'],
             'content_status' =>
                 (!isset($data['content_status'])) ? $this->content_status: $data['content_status'],
             'content_status'      =>
@@ -612,14 +598,15 @@ class Content
         $values = array(
             $data['title'], $data['description'], $data['body'], $data['created'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['changed'], $data['in_home'], $data['favorite'], $data['frontpage'],
-            $data['available'], $data['content_status'], $data['with_comment'],
-            $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
-            $catName, $data['params'], $data['id']
+            $data['changed'], (int) $data['in_home'], (int) $data['favorite'], (int) $data['frontpage'],
+            (int) $data['available'], (int) $data['content_status'], (int) $data['with_comment'],
+            (int) $data['fk_author'], (int) $data['fk_user_last_editor'], $data['slug'],
+            $catName, $data['params'], (int) $data['id']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
+            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
 
             return false;
         }
@@ -681,7 +668,7 @@ class Content
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
 
-        $values = array(1, $changed, $lastEditor, $id);
+        $values = [1, $changed, $lastEditor, $id];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             return false;
@@ -740,14 +727,12 @@ class Content
         $this->content_status = $status;
         $this->available = $status;
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+        if (($status == 1) && ($date == '0000-00-00 00:00:00' || $date == null)) {
             $date = date("Y-m-d H:i:s");
         }
 
         $sql = 'UPDATE `contents` '
-               .'SET `available` = ?, '
-               .'`content_status` = ?, '
-               .'`starttime` = ? '
+               .'SET `available` = ?, `content_status` = ?, `starttime` = ? '
                .'WHERE `pk_content`=?';
 
         $values = array($status, $status, $date, $id);
@@ -779,22 +764,11 @@ class Content
         }
 
         $status = ($this->favorite + 1) % 2;
-        $date = $this->starttime;
-
         $this->favorite = $status;
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
-            $date = date("Y-m-d H:i:s");
-        }
+        $sql = 'UPDATE `contents` SET `favorite` = ? WHERE `pk_content`=?';
 
-        $sql = 'UPDATE `contents` '
-               .'SET `favorite` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$status, $id]);
         if ($rs === false) {
             return false;
         }
@@ -820,23 +794,11 @@ class Content
             $id = $this->id;
         }
 
-        $status = ($this->in_home + 1) % 2;
-        $date = $this->starttime;
+        $this->in_home = ($this->in_home + 1) % 2;
 
-        $this->in_home = $status;
+        $sql = 'UPDATE `contents` SET `in_home` = ? WHERE `pk_content`=?';
 
-        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
-            $date = date("Y-m-d H:i:s");
-        }
-
-        $sql = 'UPDATE `contents` '
-               .'SET `in_home` = ?, '
-               .'`starttime` = ? '
-               .'WHERE `pk_content`=?';
-
-        $values = array($status, $date, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->in_home, $id]);
         if ($rs === false) {
             return false;
         }
@@ -861,7 +823,7 @@ class Content
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
              . 'WHERE `pk_content`=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->id]);
         if ($rs === false) {
             throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
         }
@@ -913,7 +875,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-
                 return false;
             }
         }
@@ -951,7 +912,7 @@ class Content
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
-            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+            if (($status == 1) && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)) {
                 $this->starttime = date("Y-m-d H:i:s");
             }
             $values = array(
@@ -967,7 +928,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-
                 return false;
             }
         }
@@ -1184,42 +1144,6 @@ class Content
     }
 
     /**
-     * Suggest the content to be included in the general homepage
-     *
-     * @return boolean
-     **/
-    // public function suggestToHomepage()
-    // {
-    //     // OLD APPROACH
-    //     if (($this->id == null)) {
-    //         return false;
-    //     }
-
-    //     $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
-    //              `changed`=? WHERE `pk_content`=?';
-
-    //     $currentTime = new \DateTime();
-    //     $currentTime->setTimezone(new \DateTimeZone('UTC'));
-    //     $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-    //     $values = array($_SESSION['userid'], $currentTime, $this->id);
-
-    //     if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-    //         return false;
-    //     }
-
-    //     /* Notice log of this action */
-    //     logContentEvent(__METHOD__, $this);
-
-    //     // Set status for it's updated to next event
-    //     $this->in_home = 2;
-
-    //     dispatchEventWithParams('content.update', array('content' => $this));
-
-    //     return true;
-    // }
-
-    /**
      * TODO:  move to ContentCategory class
      * Loads the category name for a given content id
      *
@@ -1286,24 +1210,28 @@ class Content
                         'utf-8',
                         $propertyValue
                     );
+                } else {
+                    $this->{$propertyName} = (int) $propertyValue;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
+            foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = @iconv(
+                    $this->{$propertyName} = @iconv(
                         mb_detect_encoding($v),
                         'utf-8',
-                        $v
+                        $propertyValue
                     );
+                } else {
+                    $this->{$propertyName} = (int) $propertyValue;
                 }
             }
         }
 
         // Special properties
         if (isset($this->pk_content)) {
-            $this->id = $this->pk_content;
+            $this->id = (int) $this->pk_content;
         } else {
             $this->id = null;
         }
@@ -1312,6 +1240,14 @@ class Content
             $this->content_type = $this->fk_content_type;
         } else {
             $this->content_type = null;
+        }
+
+        if (!isset($this->starttime) || empty($this->starttime)) {
+            $this->starttime = null;
+        }
+
+        if (!isset($this->endtime) || empty($this->endtime)) {
+            $this->endtime = null;
         }
 
         if (isset($this->pk_fk_content_category)) {
@@ -1327,6 +1263,24 @@ class Content
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
+
+        $this->fk_user = $this->fk_author;
+    }
+
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     **/
+    public function isInTime($now = null)
+    {
+        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1393,6 +1347,15 @@ class Content
     */
     public function isScheduled($now = null)
     {
+        // Return false if start and end time are set to no date
+        if (is_null($this->starttime)) {
+            $this->starttime = '0000-00-00 00:00:00';
+        }
+
+        if (is_null($this->endtime)) {
+            $this->endtime = '0000-00-00 00:00:00';
+        }
+
         if (is_null($now)) {
             $actual  = new \DateTime();
         } else {
@@ -1419,68 +1382,6 @@ class Content
     }
 
     /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     **/
-    public function isInTime($now = null)
-    {
-        if ($this->isScheduled($now)) {
-            if ($this->isDued($now) || $this->isPostponed($now)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     * @param string $time      time to compare with the previous parameters
-     *
-     * @return boolean
-     **/
-    public static function isInTime2($starttime = null, $endtime = null, $time = null)
-    {
-        $start = strtotime($starttime);
-        $end   = strtotime($endtime);
-
-        if ($start == $end) {
-            return true;
-        }
-
-        if (is_null($time)) {
-            $now = time();
-        } else {
-            $now = strtotime($time);
-        }
-
-        // If $start and $end not defined then return true
-        if (empty($start) && empty($end)) {
-            return true;
-        }
-
-        // only setted $end
-        if (empty($start)) {
-            return ($now < $end);
-        }
-
-        // only setted $start
-        if (empty($end) || $end <= 0) {
-            return ($now > $start);
-        }
-
-        // $start < $now < $end
-        return (($now < $end) && ($now > $start));
-        return false;
-    }
-
-    /**
      * Check if a content start time for publishing
      * don't check Content::endtime
      *
@@ -1490,6 +1391,10 @@ class Content
     */
     public function isStarted($now = null)
     {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
+            return true;
+        }
+
         $start = new \DateTime($this->starttime);
         $now = new \DateTime($now);
 
@@ -1513,6 +1418,10 @@ class Content
      */
     public function isPostponed($now = null)
     {
+        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
+            return false;
+        }
+
         $start = new \DateTime($this->starttime);
         $now   = new \DateTime($now);
 
@@ -1535,6 +1444,9 @@ class Content
      */
     public function isDued($now = null)
     {
+        if ($this->endtime == null || $this->endtime == '0000-00-00 00:00:00') {
+            return false;
+        }
         $end = new \DateTime($this->endtime);
         $now = new \DateTime($now);
 
@@ -1779,7 +1691,6 @@ class Content
                 && $this->in_litter == 0);
     }
 
-
     /**
      * Loads all the related contents for this content
      *
@@ -1936,26 +1847,6 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         return ($rs != false && $rs->_numOfRows > 0);
-    }
-
-    /**
-     * Promotes the current content to a category frontapge given the category id
-     *
-     * @param int $categoryID the category id
-     *
-     * @return boolean  true if the content was promoted
-     **/
-    public function promoteToCategoryFrontpage($categoryID)
-    {
-        if ($categoryID == null) {
-            $categoryID = $this->category;
-        }
-        $sql = 'INSERT INTO content_positions(pk_fk_content, fk_category, position, placeholder, params, content_type) '
-              .'VALUES(?,?,?,?,?,?)';
-        $values = array($this->id, $categoryID, 0, 'placeholder_0_0', serialize(array()), 'Article');
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        return ($rs != false);
     }
 
     /**

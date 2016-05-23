@@ -115,13 +115,11 @@ EOF
         if (!$rs) {
             $output->writeln('DB problem: '. $this->originConnection->ErrorMsg());
         } else {
-
             $totalRows = count($rs->getArray());
             $current = 1;
 
             $article = new \Article();
             while (!$rs->EOF) {
-
                 $originalArticleID = $rs->fields['pk_article'];
 
                 if ($this->elementIsImported($originalArticleID, 'article')) {
@@ -149,7 +147,6 @@ EOF
                         'available'      => $rs->fields['available'],
                         'in_home'        => $rs->fields['in_home'],
                         'position'       => $rs->fields['position'],
-                        'home_pos'       => $rs->fields['home_pos'],
                         'created'        => $rs->fields['created'],
                         'changed'        => $rs->fields['changed'],
                         'starttime'      => $rs->fields['starttime'],
@@ -232,7 +229,6 @@ EOF
                         'available'      => $rs->fields['available'],
                         'in_home'        => $rs->fields['in_home'],
                         'position'       => $rs->fields['position'],
-                        'home_pos'       => $rs->fields['home_pos'],
                         'views'          => $rs->fields['views'],
                         'fk_user'        => $rs->fields['fk_author'],
                         'fk_author'      => $rs->fields['fk_author'],
@@ -276,7 +272,6 @@ EOF
         if (!$rss) {
             //$output->writeln('\n insertRefactorID: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-
     }
 
     /**
@@ -299,7 +294,6 @@ EOF
             } else {
                 return ($rss->fields['pk_content']);
             }
-
         } else {
             //$output->writeln("There is imported {$contentID} - {$contentType}\n.");
         }
@@ -324,7 +318,6 @@ EOF
             if (!$rss) {
                 //$output->writeln($GLOBALS['application']->conn->ErrorMsg());
             }
-
         } else {
             //$output->writeln("Please provide a contentID and views to update it.");
         }

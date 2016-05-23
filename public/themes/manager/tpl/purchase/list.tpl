@@ -139,17 +139,25 @@
         </div>
         <div class="col-md-3">
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
+            <label for="checkbox-payment-id">
+              {t}Payment ID{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-invoice-id" checklist-model="columns.selected" checklist-value="'invoice_id'" type="checkbox">
             <label for="checkbox-invoice-id">
               {t}Invoice ID{/t}
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
-            <label for="checkbox-payment-id">
-              {t}Payment ID{/t}
+            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instance'" type="checkbox">
+            <label for="checkbox-instance">
+              {t}Instance{/t}
             </label>
           </div>
+        </div>
+        <div class="col-md-3">
           <div class="checkbox check-default">
             <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-created">
@@ -195,6 +203,10 @@
                 {t}Invoice ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('invoice_id') == 'asc', 'fa fa-caret-down': isOrderedBy('invoice_id') == 'desc'}"></i>
               </th>
+              <th class="pointer text-center" ng-click="sort('instance_id')" ng-show="isColumnEnabled('instance')" width="120">
+                {t}Instance{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instance_id') == 'asc', 'fa fa-caret-down': isOrderedBy('instance_id') == 'desc'}"></i>
+              </th>
               <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="250">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
@@ -239,6 +251,11 @@
               <td class="text-center" ng-show="isColumnEnabled('invoice_id')">
                 <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" target="_blank">
                   [% item.invoice_id %]
+                </a>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('instance')">
+                <a ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.instance_id }) %]" target="_blank">
+                  [% extra.instances[item.instance_id]%] ([% item.instance_id %])
                 </a>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('created')">

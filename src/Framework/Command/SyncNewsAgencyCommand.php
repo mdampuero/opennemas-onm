@@ -44,6 +44,10 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // TODO: Remove ASAP
+        $_SESSION['username'] = 'console';
+        $_SESSION['userid']   = '0';
+
         $logger = $this->getContainer()->get('logger');
         $dbConn = $this->getContainer()->get('db_conn');
         $im     = $this->getContainer()->get('instance_manager');
@@ -109,12 +113,20 @@ EOF
 
                     $output->writeln("<fg=red> ==> {$synchronizer->stats['deleted']} files deleted</>");
                     $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</info>");
-                    $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</info>\n");
+                    $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</info>");
+
+                    if (array_key_exists('auto_import', $server) && $server['auto_import']) {
+                        $importer = $this->getContainer()->get('news_agency.importer');
+                        $importer->configure($server);
+
+                        $ids = $importer->importAll();
+
+                        $output->writeln("<info> ==> " . count($ids) . " contents imported</info>\n");
+                    }
 
                     $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
                     $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
                     $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
-
                 } catch (\Exception $e) {
                     $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }

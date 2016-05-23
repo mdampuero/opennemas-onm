@@ -6,8 +6,8 @@
  */
 use Onm\Settings as s;
 
-function smarty_modifier_translate_date_with_format($date,  $format = "L, j de F") {
-
+function smarty_modifier_translate_date_with_format($date, $format = "L, j de F")
+{
     $namesEN = array("/January/","/February/","/March/","/April/","/May/","/June/","/July/",
                     "/August/","/September/","/October/","/November/","/December/",
                     "/Sunday/","/Monday/","/Tuesday/","/Wednesday/","/Thursday/","/Friday/","/Saturday/",
@@ -40,16 +40,13 @@ function smarty_modifier_translate_date_with_format($date,  $format = "L, j de F
 
     $locale = s::get('site_language');
 
-    if ( $locale == 'es_ES' ) {
+    if ($locale == 'es_ES') {
         $dateR = preg_replace($namesEN, $namesES, $dateEn);
-
-    } elseif ( $locale == 'gl_ES' ) {
+    } elseif ($locale == 'gl_ES') {
         $dateR = preg_replace($namesEN, $namesGL, $dateEn);
     } else {
-        $dateR = $dateEn;
+        $dateR = preg_replace('/de/', '', $dateEn);
     }
 
     return $dateR;
-
 }
-

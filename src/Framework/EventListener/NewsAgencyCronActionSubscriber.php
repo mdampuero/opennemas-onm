@@ -66,7 +66,6 @@ class NewsAgencyCronActionSubscriber implements EventSubscriberInterface
         $instances = $rs->GetArray();
 
         foreach ($instances as $instanceData) {
-
             $instance = new \Onm\Instance\Instance();
             foreach ($instanceData as $key => $value) {
                 $instance->{$key} = $value;

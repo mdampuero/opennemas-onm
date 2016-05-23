@@ -372,6 +372,7 @@ class HooksSubscriber implements EventSubscriberInterface
             $cacheManager->delete('frontpage|home');
             $cacheManager->delete('home|RSS');
             $cacheManager->delete('last|RSS');
+            $cacheManager->delete('instantArticles|RSS');
             $cacheManager->delete(
                 'blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
             );
@@ -389,6 +390,10 @@ class HooksSubscriber implements EventSubscriberInterface
         } elseif (property_exists($content, 'pk_opinion')) {
             $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
             $cacheManager->delete('blog', 'blog_frontpage.tpl');
+        } elseif (property_exists($content, 'pk_video')) {
+            $cacheManager->delete('videos|RSS');
+        } elseif (property_exists($content, 'pk_album')) {
+            $cacheManager->delete('albums|RSS');
         }
     }
 
@@ -499,11 +504,10 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         // Clean varnish cache for frontpage
         if ($this->container->hasParameter('varnish')) {
-
             $instanceName = $this->container->get('instance')->internal_name;
 
             $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName));
+                ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName));
         }
     }
 

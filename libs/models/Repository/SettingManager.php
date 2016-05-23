@@ -48,6 +48,16 @@ class SettingManager extends BaseManager
         'time_zone'
     ];
 
+    /**
+     * Array of names of settings to auto-load for manager.
+     *
+     * @var array
+     */
+    protected $toAutoloadManager = [
+        'site_language',
+        'time_zone'
+    ];
+
     /*
      * Initializes the InstanceManager.
      *
@@ -98,7 +108,13 @@ class SettingManager extends BaseManager
             return false;
         }
 
-        if (count($this->autoloaded) < count($this->toAutoload)) {
+        $toAutoload = $this->toAutoload;
+
+        if ($this->cache->getNamespace() === 'manager') {
+            $toAutoload = $this->toAutoloadManager;
+        }
+
+        if (count($this->autoloaded) < count($toAutoload)) {
             $this->autoloadSettings();
         }
 
@@ -131,7 +147,9 @@ class SettingManager extends BaseManager
         );
 
         // Add missed settings to final results from cache
-        $results = array_merge($results, $this->cache->fetch($missed));
+        if (!empty($missed)) {
+            $results = array_merge($results, $this->cache->fetch($missed));
+        }
 
         // Fetch missed settings from database and add them to cache
         $missed = array_diff($searched, array_keys($results));
@@ -233,16 +251,22 @@ class SettingManager extends BaseManager
      */
     public function autoloadSettings()
     {
+        $toAutoload = $this->toAutoload;
+
+        if ($this->cache->getNamespace() === 'manager') {
+            $toAutoload = $this->toAutoloadManager;
+        }
+
         // Build autoload
         if (!empty($this->autoloaded)) {
             return $this;
         }
 
         // First search from cache
-        $this->autoloaded = $this->cache->fetch($this->toAutoload);
+        $this->autoloaded = $this->cache->fetch($toAutoload);
 
         // Check for missed properties
-        $missed = array_diff($this->toAutoload, array_keys($this->autoloaded));
+        $missed = array_diff($toAutoload, array_keys($this->autoloaded));
 
         if (empty($missed)) {
             return $this;

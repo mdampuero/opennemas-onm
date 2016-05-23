@@ -142,9 +142,9 @@ class ContentCategory
         $values = array(
             $data['name'],
             $data['title'],
-            $data['inmenu'],
-            $data['subcategory'],
-            $data['internal_category'],
+            (int) $data['inmenu'],
+            (int) $data['subcategory'],
+            (int) $data['internal_category'],
             $data['logo_path'],
             $data['color'],
             $data['params']
@@ -206,9 +206,9 @@ class ContentCategory
 
         $values = array(
             $data['title'],
-            $data['inmenu'],
-            $data['subcategory'],
-            $data['internal_category'],
+            (int) $data['inmenu'],
+            (int) $data['subcategory'],
+            (int) $data['internal_category'],
             $data['logo_path'],
             $data['color'],
             $data['params']

@@ -64,12 +64,12 @@ class OpinionsController extends Controller
                 'in_litter'      => [['value' => 0]],
                 'starttime' => [
                     'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS' ],
-                    [ 'value' => $date, 'operator' => '<' ]
+                    [ 'value' => $date, 'operator' => '<' ],
+                    [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 ],
                 'endtime' => [
                     'union'   => 'OR',
-                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value' => $date, 'operator' => '>' ]
                 ],
@@ -131,7 +131,6 @@ class OpinionsController extends Controller
                         'opinionsDirector' => $contents
                     ]);
                 }
-
             }
 
             $numOpinions  = $sm->get('items_per_page');
@@ -625,7 +624,6 @@ class OpinionsController extends Controller
                     'ext'        => $externalMediaUrl,
                 )
             );
-
         } // End if isCached
 
         $this->getAds();
@@ -836,7 +834,6 @@ class OpinionsController extends Controller
                         'ext'             => 1 //Used on widgets
                     )
                 );
-
             } else {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }

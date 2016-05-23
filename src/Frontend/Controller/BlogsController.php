@@ -70,7 +70,7 @@ class BlogsController extends Controller
                 ],
                 'endtime'           => [
                     'union'   => 'OR',
-                    [ 'value'  => null, 'operator'      => 'IS' ],
+                    [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value' => $date, 'operator' => '>' ]
                 ],
@@ -239,7 +239,6 @@ class BlogsController extends Controller
                     )
                 );
             }
-
         } // End if isCached
 
         return $this->render(

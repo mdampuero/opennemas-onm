@@ -429,7 +429,6 @@ class UserController extends Controller
                     _('Unable to send your recover password email. Please try it later.')
                 );
             }
-
         } else {
             $this->get('session')->getFlashBag()->add('error', _('Unable to find an user with that email.'));
         }
@@ -481,7 +480,6 @@ class UserController extends Controller
                     _('Unable to find the password reset request. Please check the url we sent you in the email.')
                 );
             }
-
         }
 
         $this->view = new \Template(TEMPLATE_USER);

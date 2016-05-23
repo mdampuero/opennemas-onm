@@ -30,7 +30,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
 
     if (isset($items) && count($items>0)) {
         foreach ($items as $i => $item) {
-            if ($item->placeholder == $placeholder && ($item->available == 1)) {
+            if ($item->placeholder == $placeholder && ($item->content_status == 1)) {
                 $filteredContents []= $item;
             }
         }

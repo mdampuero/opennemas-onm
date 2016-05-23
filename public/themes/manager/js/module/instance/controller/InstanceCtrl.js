@@ -204,6 +204,14 @@
          */
         $scope.removeDomain = function(index) {
           $scope.instance.domains.splice(index, 1);
+
+          if ($scope.instance.main_domain - 1 > index) {
+            $scope.instance.main_domain--;
+          }
+
+          if ($scope.instance.main_domain > $scope.instance.domains.length) {
+            $scope.instance.main_domain = $scope.instance.domains.length;
+          }
         };
 
         /**
@@ -214,7 +222,7 @@
          *   Creates a new instance.
          */
         $scope.save = function() {
-          if ($scope.instanceForm.$invalid) {
+          if ($scope.instanceForm.$invalid || !$scope.instance.domains[0]) {
             $scope.formValidated = 1;
 
             messenger.post({
@@ -236,8 +244,8 @@
           }
 
           http.post('manager_ws_instance_create', $scope.instance)
-            .success(function (response) {
-              messenger.post({ message: response, type: 'success' });
+            .then(function (response) {
+              messenger.post({ message: response.data, type: 'success' });
 
               if (response.status === 201) {
                 // Get new instance id
@@ -250,9 +258,9 @@
               }
 
               $scope.saving = 0;
-            }).error(function(response) {
+            }, function(response) {
               $scope.saving = 0;
-              messenger.post({ message: response, type: 'error' });
+              messenger.post({ message: response.data, type: 'error' });
             });
         };
 

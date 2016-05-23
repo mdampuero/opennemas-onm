@@ -21,9 +21,9 @@ class TranslationCoreCommand extends Command
     public $supportedLanguages = array(
         'es_ES',
         'gl_ES',
-        // 'it_IT',
-        // 'fr_FR',
-        // 'pt_PT',
+        'it_IT',
+        'fr_FR',
+        'pt_PT',
     );
 
     public $localeFolder = 'Resources/locale';

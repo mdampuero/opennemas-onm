@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for managing ads
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -20,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for managing ads
@@ -45,24 +39,24 @@ class AdsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
 
+        $timezone  = $this->get('setting_repository')->get('time_zone', 'UTC');
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
-        $this->view->assign(
-            array(
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-                'category'     => $this->category,
-                'timezone'     => $timezone->getName()
-            )
-        );
+        $timezone  = new \DateTimeZone($timezones[$timezone]);
+
+        $this->view->assign([
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData,
+            'category'     => $this->category,
+            'timezone'     => $timezone->getName()
+        ]);
     }
 
     /**
      * Lists all the available ads.
      *
-     * @return Response          The response object.
+     * @return Response The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
      *
@@ -71,14 +65,11 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->container->get('instance_manager')
-            ->current_instance->theme->getAdsPositionManager();
-        $map      = $positionManager->getAllAdsPositions();
-        $adsNames = $positionManager->getAllAdsNames();
+        $positionManager = $this->get('instance')->theme->getAdsPositionManager();
+        $map             = $positionManager->getAllAdsPositions();
+        $adsNames        = $positionManager->getAllAdsNames();
 
-        $typeAdvertisement = [
-            [ 'name' => _("All"), 'value' => -1 ],
-        ];
+        $typeAdvertisement = [ [ 'name' => _("All"), 'value' => -1 ] ];
 
         foreach ($adsNames as $key => $value) {
             $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
@@ -118,12 +109,12 @@ class AdsController extends Controller
 
         return $this->render(
             'advertisement/list.tpl',
-            array(
+            [
                 'categories'        => $categories,
                 'typeAdvertisement' => $typeAdvertisement,
                 'types'             => $types,
                 'map'               => json_encode($map)
-            )
+            ]
         );
     }
 
@@ -131,7 +122,8 @@ class AdsController extends Controller
      * Handles the form for create a new ad.
      *
      * @param  Request  $request The request object.
-     * @return Response          The response object.
+     *
+     * @return Response The response object.
      *
      * @Security("has_role('ADVERTISEMENT_CREATE')")
      *
@@ -139,17 +131,16 @@ class AdsController extends Controller
      */
     public function createAction(Request $request)
     {
-        $page = $request->request->getDigits('page', 1);
+        $page   = $request->request->getDigits('page', 1);
         $filter = $request->query->get('filter');
 
         if ('POST' == $request->getMethod()) {
-
             $advertisement = new \Advertisement();
 
-            $categories = $request->request->get('category', '', FILTER_SANITIZE_STRING);
+            $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
             $firstCategory = $categories[0];
 
-            $data = array(
+            $data = [
                 'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'category'           => $firstCategory,
@@ -171,20 +162,20 @@ class AdsController extends Controller
                 'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
                 'fk_author'          => $_SESSION['userid'],
                 'fk_publisher'       => $_SESSION['userid'],
-                'params'             => array(
-                    'width'             => $request->request->getDigits('params_width', ''),
-                    'height'            => $request->request->getDigits('params_height', ''),
+                'params'             => [
+                    'width'             => json_decode($request->request->get('params_width', '')),
+                    'height'            => json_decode($request->request->get('params_height', '')),
                     'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                     'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-                )
-            );
+                ]
+            ];
+
+            $level = 'error';
+            $message = _('Unable to create the new advertisement.');
 
             if ($advertisement->create($data)) {
                 $level = 'success';
                 $message = _('Advertisement successfully created.');
-            } else {
-                $level = 'error';
-                $message = _('Unable to create the new advertisement.');
             }
 
             $this->get('session')->getFlashBag()->add($level, $message);
@@ -192,30 +183,30 @@ class AdsController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_ad_show',
-                    array(
+                    [
                         'id'     => $advertisement->id,
                         'filter' => $filter,
                         'page'   => $page
-                    )
+                    ]
                 )
             );
         } else {
-            // Get ads server if exists
             $serverUrl = '';
-            if ($openXsettings = s::get('revive_ad_server')) {
+            if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
                 $serverUrl = $openXsettings['url'];
             }
 
-            $positionManager = $this->container->get('instance_manager')
-                                    ->current_instance->theme->getAdsPositionManager();
+            $ads = $this->get('instance')->theme->getAdsPositionManager()
+                ->getThemeAdsPositions();
+
             return $this->render(
                 'advertisement/new.tpl',
-                array(
-                    'themeAds'   => $positionManager->getThemeAdsPositions(),
+                [
+                    'themeAds'   => $ads,
                     'filter'     => $filter,
                     'page'       => $page,
                     'server_url' => $serverUrl,
-                )
+                ]
             );
         }
     }
@@ -224,7 +215,8 @@ class AdsController extends Controller
      * Shows the editing form for a advertisement given its id.
      *
      * @param  Request  $request The request object.
-     * @return Response          The response object.
+     *
+     * @return Response The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
      *
@@ -237,7 +229,7 @@ class AdsController extends Controller
         $page   = $request->query->getDigits('page', 1);
 
         $serverUrl = '';
-        if ($openXsettings = s::get('revive_ad_server')) {
+        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
         }
 
@@ -288,7 +280,8 @@ class AdsController extends Controller
      * Updates the advertisement information given data send by POST.
      *
      * @param  Request  $request The request object.
-     * @return Response          The response object.
+     *
+     * @return Response The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
      *
@@ -296,7 +289,7 @@ class AdsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id     = $request->query->getDigits('id');
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
@@ -346,8 +339,8 @@ class AdsController extends Controller
             'fk_author'          => $_SESSION['userid'],
             'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
-                'width'             => $request->request->getDigits('params_width', ''),
-                'height'            => $request->request->getDigits('params_height', ''),
+                'width'             => json_decode($request->request->get('params_width', '')),
+                'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
             )
@@ -435,6 +428,8 @@ class AdsController extends Controller
      */
     public function configAction(Request $request)
     {
+        $sm = $this->get('setting_repository');
+
         if ('POST' == $this->request->getMethod()) {
             $formValues = $request->request;
 
@@ -447,12 +442,21 @@ class AdsController extends Controller
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
-                'tradedoubler_id' => $formValues->getDigits('tradedoubler_id'),
-                'iadbox_id' => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
+                'dfp_options' => [
+                    'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                ],
+                'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
+                'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
+            if ($this->getUser()->isMaster()) {
+                $settings['header_script']     = $formValues->filter('header_script');
+                $settings['body_end_script']   = $formValues->filter('body_end_script');
+                $settings['body_start_script'] = $formValues->filter('body_start_script');
+            }
+
             foreach ($settings as $key => $value) {
-                s::set($key, $value);
+                $sm->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -465,12 +469,17 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
-            $configurationsKeys = ['ads_settings', 'revive_ad_server', 'tradedoubler_id', 'iadbox_id'];
-            $configurations = s::get($configurationsKeys);
+            $keys = [
+                'ads_settings', 'body_end_script', 'body_start_script',
+                'dfp_options', 'header_script', 'iadbox_id', 'revive_ad_server',
+                'tradedoubler_id',
+            ];
+
+            $configurations = $sm->get($keys);
 
             return $this->render(
                 'advertisement/config.tpl',
-                [ 'configs'   => $configurations ]
+                [ 'configs' => $configurations ]
             );
         }
     }

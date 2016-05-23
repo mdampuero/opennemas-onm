@@ -36,7 +36,7 @@
                 </li>
                 {acl isAllowed="PHOTO_UPDATE"}
                 <li class="quicklinks">
-                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="save-button">
                     <span class="fa fa-save"></span>
                     <span class="text">{t}Update{/t}</span>
                   </button>

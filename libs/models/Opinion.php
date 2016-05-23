@@ -164,7 +164,8 @@ class Opinion extends Content
      **/
     public function create($data)
     {
-        $data['position']   =  1;
+        $data['position'] =  1;
+        $data['category'] = 4; // force internal category name
 
         // Editorial or director
         if (!isset($data['fk_author'])) {
@@ -172,24 +173,18 @@ class Opinion extends Content
         }
 
         // Set author img to null if not exist
-        (isset($data['fk_author_img']))
-            ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
-
-
+        (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
 
         parent::create($data);
 
-        $sql = 'INSERT INTO opinions
-                    (`pk_opinion`, `fk_author`, `fk_author_img`, type_opinion)
-                VALUES
-                    (?,?,?,?)';
+        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `fk_author_img`, `type_opinion`) VALUES (?,?,?,?)';
 
-        $values = array(
+        $values = [
             $this->id,
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion']
-        );
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -224,27 +219,35 @@ class Opinion extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
-            .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
-            .'WHERE pk_opinion = ?';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, users.avatar_img_id FROM contents '
+                .'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN opinions ON pk_content = pk_opinion '
+                .'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
-        if ((int) $rs->fields['type_opinion'] == 1) {
-            $rs->fields['author'] = 'Editorial';
-        } elseif ((int) $rs->fields['type_opinion'] == 2) {
-            $rs->fields['author'] = 'Director';
+        if ((int) $rs['type_opinion'] == 1) {
+            $rs['author'] = 'Editorial';
+        } elseif ((int) $rs['type_opinion'] == 2) {
+            $rs['author'] = 'Director';
         } else {
-            $rs->fields['author'] = $rs->fields['name'];
+            $rs['author'] = $rs['name'];
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         $this->loadAllContentProperties();
 
@@ -273,10 +276,10 @@ class Opinion extends Content
              . "WHERE pk_opinion=?";
 
         $values = array(
-            $data['fk_author'],
-            $data['fk_author_img'],
+            (int) $data['fk_author'],
+            (int) $data['fk_author_img'],
             $data['type_opinion'],
-            $data['id']
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -396,7 +399,7 @@ class Opinion extends Content
         $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
-                $excludedContents []= $content->id;
+                $excludedContents []= (int) $content->id;
             }
         }
 

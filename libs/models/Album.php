@@ -104,6 +104,33 @@ class Album extends Content
     }
 
     /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return Album
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
+            $this->pk_album    = $properties['pk_album'];
+            $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
+        }
+        if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
+            $this->subtitle    = $properties['subtitle'];
+        }
+        if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
+            $this->cover_id    = $properties['cover_id'];
+            $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
+            $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
+        }
+
+        return $this;
+    }
+
+    /**
      * Creates an album from a data array and stores it in db
      *
      * @param array $data the data of the album
@@ -121,10 +148,10 @@ class Album extends Content
                 ." VALUES (?,?,?,?)";
 
         $values = array(
-            $this->id,
+            (int) $this->id,
             $data["subtitle"],
             $data["agency"],
-            $data['album_frontpage_image'],
+            (int) $data['album_frontpage_image'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -147,25 +174,24 @@ class Album extends Content
      **/
     public function read($id)
     {
-        if (is_null($id) || empty($id)) {
-            return null ;
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
         }
-        parent::read($id);
 
-        $sql = 'SELECT * FROM albums WHERE pk_album = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $id);
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->pk_album    = $rs->fields['pk_album'];
-        $this->subtitle    = $rs->fields['subtitle'];
-        $this->agency      = $rs->fields['agency'];
-        $this->cover_id    = $rs->fields['cover_id'];
-        $this->cover_image = new Photo($rs->fields['cover_id']);
-        $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
-        $this->category_title = $this->loadCategoryTitle($rs->fields['pk_album']);
+        $this->load($rs);
 
         return $this;
     }
@@ -190,8 +216,8 @@ class Album extends Content
         $values = array(
             $data['subtitle'],
             $data['agency'],
-            $data['album_frontpage_image'],
-            $data['id']
+            (int) $data['album_frontpage_image'],
+            (int) $data['id']
         );
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {

@@ -132,10 +132,10 @@ class DomainManagementController extends Controller
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
-        $primary = $instance->domains[$instance->main_domain - 1];
+        $primary = $instance->getMainDomain();
 
         $domains = [];
-        foreach ($instance->domains as $key => $value) {
+        foreach ($instance->domains as $value) {
             $domains[] = [
                 'free'   => $value === $base,
                 'name'   => $value,
@@ -201,7 +201,7 @@ class DomainManagementController extends Controller
 
             foreach ($domains as $domain) {
                 $invoice->lines[] = [
-                    'description'  => $description . $domain,
+                    'description'  => $description . $domain['description'],
                     'unit_cost'    => $price,
                     'quantity'     => 1,
                     'tax1_name'    => 'IVA',
@@ -241,8 +241,8 @@ class DomainManagementController extends Controller
 
             $this->get('orm.manager')->persist($purchase);
 
-            $this->sendEmailToCustomer($client, $domains, $purchase->id, $create);
-            $this->sendEmailToSales($client, $domains, $instance, $create);
+            $this->sendEmailToCustomer($client, $domains, $create, $purchase->id);
+            $this->sendEmailToSales($client, $domains, $create);
 
             return new JsonResponse(_('Domain added successfully'));
         } catch (\Exception $e) {
@@ -307,7 +307,13 @@ class DomainManagementController extends Controller
      */
     private function getTarget($domain)
     {
-        return gethostbyname($domain);
+        $output = dns_get_record($domain, DNS_CNAME);
+
+        if (empty($output)) {
+            return gethostbyname($domain);
+        }
+
+        return $output[0]['target'];
     }
 
     /**
@@ -315,22 +321,23 @@ class DomainManagementController extends Controller
      *
      * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $purchase The purchase id.
      * @param boolean  $create   The creation flag.
+     * @param Purchase $purchase The purchase id.
      */
-    private function sendEmailToCustomer($client, $domains, $purchase, $create)
+    private function sendEmailToCustomer($client, $domains, $create, $purchase)
     {
-        $countries = Intl::getRegionBundle()->getCountryNames();
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames(CURRENT_LANGUAGE_LONG);
 
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance = $this->get('instance');
+        $params   = $this->getParameter('manager_webservice');
 
         $subject = $create ?
             'Opennemas Domain domain registration request:' :
             'Opennemas Domain mapping request';
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain mapping request')
+            ->setSubject($subject)
             ->setFrom($params['no_reply_from'])
             ->setSender($params['no_reply_sender'])
             ->setTo($client->email)
@@ -352,6 +359,10 @@ class DomainManagementController extends Controller
                 'text/html'
             );
 
+        if ($instance->contact_mail !== $client->email) {
+            $message->setBcc($instance->contact_mail);
+        }
+
         $this->get('mailer')->send($message);
     }
 
@@ -360,15 +371,13 @@ class DomainManagementController extends Controller
      *
      * @param array    $client   The client information.
      * @param array    $domains  The requested domains.
-     * @param Instance $instance The instance.
      * @param boolean  $create   The creation flag.
      */
-    private function sendEmailToSales($client, $domains, $instance, $create)
+    private function sendEmailToSales($client, $domains, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
-
-        $params = $this->container
-            ->getParameter("manager_webservice");
+        $instance  = $this->get('instance');
+        $params    = $this->getParameter("manager_webservice");
 
         $subject = $create ?
             'Opennemas Domain domain registration request:' :

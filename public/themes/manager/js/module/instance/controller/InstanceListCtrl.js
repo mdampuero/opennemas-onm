@@ -55,15 +55,6 @@
         $scope.criteria = { epp: 25, page: 1 };
 
         /**
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   The list order.
-         *
-         * @type {Object}
-         */
-
-        /**
          * @function delete
          * @memberOf InstanceListCtrl
          *

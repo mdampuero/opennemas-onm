@@ -13,6 +13,7 @@
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Onm\Exception\UserAlreadyExistsException;
+use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
  *
  * @package    Model
  **/
-class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface
+class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface, JWTUserInterface
 {
     /**
      * The user id
@@ -187,15 +188,15 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $values = array(
             $data['username'],
             md5($data['password']),
-            $data['sessionexpire'],
+            (int) $data['sessionexpire'],
             $data['url'],
             $data['bio'],
-            $data['avatar_img_id'],
+            (int) $data['avatar_img_id'],
             $data['email'],
             $data['name'],
-            $data['type'],
+            (int) $data['type'],
             $data['token'],
-            $data['activated'],
+            (int) $data['activated'],
             $data['id_user_group']
         );
 
@@ -250,19 +251,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $this->id               = $rs->fields['id'];
+        $this->id               = (int) $rs->fields['id'];
         $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
-        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->sessionexpire    = (int) $rs->fields['sessionexpire'];
         $this->url              = $rs->fields['url'];
         $this->bio              = $rs->fields['bio'];
-        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
+        $this->avatar_img_id    = (int) $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
-        $this->type             = $rs->fields['type'];
+        $this->type             = (int) $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->activated        = $rs->fields['activated'];
+        $this->activated        = (int) $rs->fields['activated'];
         $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
 
         $database = $GLOBALS['application']->conn->connectionParams['dbname'];
@@ -298,7 +299,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
-        // Transform groups array to a string separated by comma
+        // Transform groups array to a string separated by commas
         $data['id_user_group'] = implode(',', $data['id_user_group']);
 
         if (isset($data['password'])
@@ -310,40 +311,39 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                         `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
-            $values = array(
+            $values = [
                 $data['username'],
                 md5($data['password']),
-                $data['sessionexpire'],
+                (int) $data['sessionexpire'],
                 $data['url'],
                 $data['bio'],
-                $data['avatar_img_id'],
+                (int) $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
-                $data['activated'],
+                (int) $data['activated'],
                 $data['id_user_group'],
-                $data['type'],
+                (int) $data['type'],
                 intval($data['id'])
-            );
-
+            ];
         } else {
             $sql = "UPDATE users
                     SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
                         `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
-            $values = array(
+            $values = [
                 $data['username'],
-                $data['sessionexpire'],
+                (int) $data['sessionexpire'],
                 $data['email'],
                 $data['url'],
                 $data['bio'],
-                $data['avatar_img_id'],
+                (int) $data['avatar_img_id'],
                 $data['name'],
-                $data['activated'],
+                (int) $data['activated'],
                 $data['id_user_group'],
-                $data['type'],
+                (int) $data['type'],
                 intval($data['id'])
-            );
+            ];
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -380,7 +380,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     {
         $sql = 'DELETE FROM users WHERE id=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, [intval($id)])===false) {
             return false;
         }
 
@@ -410,8 +410,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             && !is_object($this->photo)
             && $this->avatar_img_id != 0))
         ) {
-          $this->photo = $photo = getService('entity_repository')
-            ->find('Photo', $this->avatar_img_id);
+            $this->photo = $photo = getService('entity_repository')
+                ->find('Photo', $this->avatar_img_id);
         }
 
         return $photo;
@@ -450,8 +450,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     private function createAccessCategoriesDb($categoryIds)
     {
         if ($this->deleteAccessCategoriesDb()) {
-            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
-                    VALUES (?,?)";
+            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`) VALUES (?,?)";
 
             if (count($categoryIds) > 0) {
                 $values = array();
@@ -924,7 +923,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return false;
-
         }
 
         return $rs->fields['username'];
@@ -1501,9 +1499,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $relativeAuthorImagePath ="/authors/".$userName;
         $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
 
-        // Get original information of the uploaded image
+        // Get original information of the uploaded/local image
         $originalFileName = $file->getBaseName();
-        $fileExtension    = $file->getClientOriginalExtension();
+        $fileExtension    = $file->guessExtension();
 
         // Generate new file name
         $currentTime = gettimeofday();
@@ -1651,6 +1649,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return [
+            'email'    => $this->email,
+            'id'       => $this->id,
+            'name'     => $this->name,
+            'username' => $this->username
+        ];
     }
 
     /**

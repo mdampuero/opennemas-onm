@@ -115,9 +115,14 @@ class Photo extends Content
                     (?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            $this->id, $data["name"], $data["path_file"],
-            $data['size'], $data['width'], $data['height'],
-            $data['nameCat'], $data['author_name']
+            (int) $this->id,
+            $data["name"],
+            $data["path_file"],
+            $data['size'],
+            (int) $data['width'],
+            (int) $data['height'],
+            $data['nameCat'],
+            $data['author_name']
         );
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -201,25 +206,26 @@ class Photo extends Content
 
         // Building information for the photo image
         $dataPhoto = array(
-            'title'          => $originalFileName,
-            'name'           => $finalPhotoFileName,
-            'path_file'      => $dateForDirectory,
-            'fk_category'    => $data["fk_category"],
-            'category'       => $data["fk_category"],
-            'nameCat'        => $data["category_name"],
-            'created'        => $data["created"],
-            'changed'        => $data["changed"],
-            'content_status' => $data['content_status'],
-            'description'    => $data['description'],
-            'metadata'       => $data["metadata"],
-            'urn_source'     => $data['urn_source'],
-            'size'           => round($fileInformation->size/1024, 2),
-            'date'           => $dateString,
-            'width'          => $fileInformation->width,
-            'height'         => $fileInformation->height,
-            'author_name'    => isset($data['author_name']) ? $data['author_name'] : '',
-            'pk_author'      => $_SESSION['userid'],
-            'fk_publisher'   => $_SESSION['userid'],
+            'title'               => isset($data['title']) ? $data['title'] :$originalFileName,
+            'name'                => $finalPhotoFileName,
+            'path_file'           => $dateForDirectory,
+            'fk_category'         => $data["fk_category"],
+            'category'            => $data["fk_category"],
+            'nameCat'             => $data["category_name"],
+            'created'             => $data["created"],
+            'changed'             => $data["changed"],
+            'content_status'      => $data['content_status'],
+            'description'         => $data['description'],
+            'metadata'            => $data["metadata"],
+            'urn_source'          => $data['urn_source'],
+            'size'                => round($fileInformation->size/1024, 2),
+            'date'                => $dateString,
+            'width'               => $fileInformation->width,
+            'height'              => $fileInformation->height,
+            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
+            'fk_user_last_editor' => $_SESSION['userid'],
+            'fk_publisher'        => $_SESSION['userid'],
         );
 
         if ($filePathInfo['extension'] != 'swf') {
@@ -304,44 +310,65 @@ class Photo extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM photos WHERE pk_photo =?';
-        $values = array($id);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN photos ON pk_content = pk_photo WHERE pk_content=?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
-        $this->pk_photo    = $rs->fields['pk_photo'];
-        $this->name        = $rs->fields['name'];
-        $this->path_file   = $rs->fields['path_file'];
-        if (!empty($rs->fields['path_file'])) {
-            $this->path_img = $rs->fields['path_file'].DS.$rs->fields['name'];
+        $this->load($rs);
+
+        return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        $this->pk_photo    = $properties['pk_photo'];
+        $this->name        = $properties['name'];
+        $this->path_file   = $properties['path_file'];
+        if (!empty($properties['path_file'])) {
+            $this->path_img = $properties['path_file'].DS.$properties['name'];
         }
-        $this->size        = $rs->fields['size'];
-        $this->width       = $rs->fields['width'];
-        $this->height      = $rs->fields['height'];
-        $this->nameCat     = $rs->fields['nameCat'];
-        $this->author_name = $rs->fields['author_name'];
+        $this->size        = $properties['size'];
+        $this->width       = $properties['width'];
+        $this->height      = $properties['height'];
+        $this->nameCat     = $properties['nameCat'];
+        $this->author_name = $properties['author_name'];
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
-        $this->address     = $rs->fields['address'];
+        $this->address     = $properties['address'];
         $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
 
-        if (!empty($photo->address)) {
-            $positions = explode(',', $photo->address);
+        if (!empty($properties['address'])) {
+            $positions = explode(',', $properties['address']);
             if (is_array($positions)) {
-                $photo->latlong = array(
+                $this->latlong = array(
                     'lat' => $positions[0],
                     'long' => $positions[1],
                 );
             }
         }
-        return $this;
     }
-
     /**
      * Updates the photo object given an array with information
      *
@@ -351,25 +378,22 @@ class Photo extends Content
      **/
     public function update($data)
     {
-        $data['fk_author'] = $_SESSION['userid'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-
         parent::update($data);
 
         $sql = "UPDATE photos
                 SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?, `author_name`=?, `address`=?
                 WHERE pk_photo=?";
 
-        $values = array(
+        $values = [
             $this->name,
             $this->path_file,
             $this->size,
-            $this->width,
-            $this->height,
+            (int) $this->width,
+            (int) $this->height,
             $data['author_name'],
             $data['address'],
-            $data['id']
-        );
+            (int) $data['id']
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -449,7 +473,6 @@ class Photo extends Content
 
                     if (empty($exif)) {
                         $this->infor .= _("No available EXIF data");
-
                     } else {
                         if (empty($this->color)) {
                             if ($exifData['COMPUTED']['IsColor']==0) {
@@ -466,6 +489,7 @@ class Photo extends Content
                                 $this->resolution =
                                     $exifData['IFD0']['XResolution'];
                             }
+
                             if (empty($this->date)
                                 && !is_null($exifData['FILE']['FileDateTime'])
                             ) {
@@ -475,11 +499,9 @@ class Photo extends Content
                     }
 
                     if (isset($info['APP13'])) {
-
                         $iptc = iptcparse($info['APP13']);
 
                         if (is_array($iptc)) {
-
                             $errorReporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
 
@@ -532,7 +554,6 @@ class Photo extends Content
                             }
 
                             ini_set($errorReporting);
-
                         } else {
                             $this->infor .=  _("No available IPTC data");
                         }
@@ -541,7 +562,6 @@ class Photo extends Content
                 default:
                     break;
             } // endswitch;
-
         } else {
             $this->infor .=  _("Invalid image file");
         }

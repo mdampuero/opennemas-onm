@@ -48,7 +48,6 @@ class MonographsController extends Controller
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $this->category;
             $category_real_name = $this->ccm->getTitle($this->categoryName);
-
         } else {
             $category_real_name = 'Portada';
             $this->category     = 0;

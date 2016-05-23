@@ -135,8 +135,8 @@ class FormController extends Controller
                         $filename = $_FILES["image1"]["name"];
                         $type     = $_FILES["image1"]["type"];
                         $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
-
                     }
+
                     if (isset($_FILES['image2']) && !empty($_FILES['image2']["name"])) {
                         $file     = $_FILES["image2"]["tmp_name"];
                         $filename = $_FILES["image2"]["name"];

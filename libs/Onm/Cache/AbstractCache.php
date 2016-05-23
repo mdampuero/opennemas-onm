@@ -27,6 +27,13 @@ abstract class AbstractCache implements CacheInterface
     private $namespace = '';
 
     /**
+     * List of most recent used items.
+     *
+     * @var array
+     */
+    public $mru = [];
+
+    /**
      * The function call buffer.
      *
      * @var array
@@ -73,26 +80,52 @@ abstract class AbstractCache implements CacheInterface
      */
     public function fetch($id)
     {
+        $id = $this->getNamespacedId($id);
+
         if (is_array($id)) {
-            $ids = array();
-            foreach ($id as $key) {
-                $ids []= $this->getNamespacedId($key);
-            }
-            $rawValues = $this->doFetch($ids);
+            $values = array_intersect_key($this->mru, array_flip($id));
+            $id     = array_values(array_diff($id, array_keys($values)));
 
-            $this->buffer[] = [ 'method' => 'fetchMulti', 'params' => [ 'ids' => $id ] ];
-
-            $values = array();
-            foreach ($rawValues as $key => $value) {
-                $values [str_replace($this->namespace. '_', '', $key)] = $value;
+            if (!empty($values)) {
+                $this->buffer[] = [
+                    'method' => 'fetchMulti',
+                    'params' => [ 'ids' => array_keys($values) ],
+                    'mru'    => true
+                ];
             }
 
-            return $values;
+            if (!empty($id)) {
+                $this->buffer[] = [
+                    'method' => 'fetchMulti',
+                    'params' => [ 'ids' => $id ]
+                ];
+
+                $rawValues = $this->doFetch($id);
+                $values    = array_merge($values, $rawValues);
+            }
+
+            $this->mru = array_merge($this->mru, $values);
+
+            return array_combine(
+                $this->getUnNamespacedId(array_keys($values)),
+                array_values($values)
+            );
+        }
+
+        if (array_key_exists($id, $this->mru)) {
+            $this->buffer[] = [
+                'method' => 'fetch',
+                'params' => [ 'ids' => $id ],
+                'mru'    => true
+            ];
+
+            return $this->mru[$id];
         }
 
         $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
+        $this->mru[$id] = $this->doFetch($id);
 
-        return $this->doFetch($this->getNamespacedId($id));
+        return $this->mru[$id];
     }
 
     /**
@@ -121,9 +154,11 @@ abstract class AbstractCache implements CacheInterface
     public function save($id, $data = null, $lifeTime = 0)
     {
         if (is_array($id)) {
+            $this->mru = array_merge($this->mru, $id);
+
             $values = array();
             foreach ($id as $key => $value) {
-                $values [$this->getNamespacedId($key)] = $value;
+                $values[$this->getNamespacedId($key)] = $value;
             }
 
             $this->buffer[] = [ 'method' => 'saveMulti', 'params' => [ 'ids' => $id, 'values' => $data ] ];
@@ -132,6 +167,7 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->buffer[] = [ 'method' => 'save', 'params' => [ 'ids' => $id, 'values' => $data ] ];
+        $this->mru[$id] = $data;
 
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
@@ -250,13 +286,30 @@ abstract class AbstractCache implements CacheInterface
     private function getNamespacedId($id)
     {
         if (is_array($id)) {
-            foreach ($id as &$idPart) {
-                $idPart = $this->getNamespacedId($idPart);
-            }
-            return $id;
+            return array_map(function ($a) {
+                return $this->namespace . '_'. $a;
+            }, $id);
         }
 
         return $this->namespace . '_'. $id;
+    }
+
+    /**
+     * Removes the namespace from the id.
+     *
+     * @param mixed $id A namespaced id or an array of namespaced ids.
+     *
+     * @return mixed The id or ids without namespace.
+     */
+    private function getUnNamespacedId($id)
+    {
+        if (is_array($id)) {
+            return array_map(function ($a) {
+                return str_replace($this->namespace . '_', '', $a);
+            }, $id);
+        }
+
+        return str_replace($this->namespace . '_', '', $id);
     }
 
     /**

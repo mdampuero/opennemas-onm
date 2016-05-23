@@ -96,32 +96,37 @@ class Rating
      *
      * @return Rating|null the object with all the properties loaded
      **/
-    public function read($contentId)
+    public function read($id)
     {
-        $sql = 'SELECT total_votes, total_value, ips_count_rating
-                FROM ratings WHERE pk_rating =?';
-        $values = array($contentId);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        // If doesn't exists a previous rating create an empty one.
-        if ($rs->EOF) {
-            $this->pk_rating = $contentId;
-            $this->total_value = 0;
-            $this->total_votes = 0;
-            $this->ips_count_rating = array();
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM ratings WHERE pk_rating =?',
+                [ $id ]
+            );
 
-            $this->create($contentId);
+            if (!$rs) {
+                $this->pk_rating = $id;
+                $this->total_value = 0;
+                $this->total_votes = 0;
+                $this->ips_count_rating = array();
 
-            return $this;
-        }
-
-        if (!$rs) {
+                return $this;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-        $this->pk_rating = $contentId;
-        $this->total_votes = $rs->fields['total_votes'];
-        $this->total_value = $rs->fields['total_value'];
-        $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
+
+        $this->pk_rating = $id;
+        $this->total_votes = $rs['total_votes'];
+        $this->total_value = $rs['total_value'];
+        $this->ips_count_rating = unserialize($rs['ips_count_rating']);
+        if (!is_array($this->ips_count_rating)) {
+            $this->ips_count_rating = [];
+        }
 
         return $this;
     }
@@ -135,8 +140,7 @@ class Rating
      **/
     public function getValue($contentId)
     {
-        $sql = 'SELECT total_votes, total_value
-                FROM ratings WHERE pk_rating =?';
+        $sql = 'SELECT total_votes, total_value FROM ratings WHERE pk_rating =?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
@@ -162,18 +166,12 @@ class Rating
      **/
     public function update($vote_value, $ip)
     {
-        $this->ips_count_rating = $this->addCount(
-            $this->ips_count_rating,
-            $ip
-        );
-
-        if (!$this->ips_count_rating) {
-            return false;
-        }
+        $this->ips_count_rating = $this->addCount($this->ips_count_rating, $ip);
         $this->total_votes++;
         $this->total_value = $this->total_value + $vote_value;
+
         $sql = "UPDATE ratings "
-               ."SET  `total_votes`=?, `total_value`=?, `ips_count_rating`=?"
+               ."SET `total_votes`=?, `total_value`=?, `ips_count_rating`=? "
                ."WHERE pk_rating=?";
         $values = array(
             $this->total_votes,
@@ -199,18 +197,14 @@ class Rating
      **/
     public function addCount($ipsCount, $ip)
     {
-        $ips = array();
-        foreach ($ipsCount as $ipArray) {
-            $ips[] = $ipArray['ip'];
-        }
-
-        //Se busca si existe algún voto desde la ip
-        $countKIP = array_search($ip, $ips);
+        // Se busca si existe algún voto desde la ip
+        $countKIP = array_search($ip, array_map(function($ip) {
+            return $ip['ip'];
+        }, $ipsCount));
 
         if ($countKIP === false) {
             $ipsCount[] = array('ip' => $ip, 'count' => 1);
         } else {
-
             if ($ipsCount[$countKIP]['count'] == 50) {
                 return false;
             }

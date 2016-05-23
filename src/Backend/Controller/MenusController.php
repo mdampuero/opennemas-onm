@@ -89,9 +89,7 @@ class MenusController extends Controller
      **/
     public function listAction()
     {
-        $menues = \Menu::find();
-
-        return $this->render('menues/list.tpl', array('menues' => $menues,));
+        return $this->render('menues/list.tpl');
     }
 
     /**

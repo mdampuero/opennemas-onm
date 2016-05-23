@@ -110,21 +110,46 @@ class Poll extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM polls WHERE pk_poll = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
+                [ $id ]
+            );
 
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
-        $this->pk_poll       = $rs->fields['pk_poll'];
-        $this->subtitle      = $rs->fields['subtitle'];
-        $this->total_votes   = $rs->fields['total_votes'];
-        $this->visualization = $rs->fields['visualization'];
-        $this->used_ips      = unserialize($rs->fields['used_ips']);
-        $this->items         = $this->getItems($this->id);
+        $this->load($rs);
+        $this->items = $this->getItems($this->id);
+
+        return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        $this->pk_poll       = $properties['pk_poll'];
+        $this->subtitle      = $properties['subtitle'];
+        $this->total_votes   = $properties['total_votes'];
+        $this->visualization = $properties['visualization'];
+        $this->used_ips      = unserialize($properties['used_ips']);
 
         $this->status = 'opened';
         if (is_string($this->params)) {
@@ -138,8 +163,6 @@ class Poll extends Content
         ) {
             $this->status = 'closed';
         }
-
-        return $this;
     }
 
     /**
@@ -165,7 +188,7 @@ class Poll extends Content
         $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`)
                 VALUES (?,?,?,?)';
         $values = array(
-            $this->id,
+            (int) $this->id,
             $data['subtitle'],
             0,
             $data['visualization']
@@ -197,7 +220,12 @@ class Poll extends Content
                     $item->pk_item = $k + 1;
                 }
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
-                $values = array($item->pk_item, (int) $this->id, $item->item, $item->votes);
+                $values = [
+                    (int) $item->pk_item,
+                    (int) $this->id,
+                    $item->item,
+                    $item->votes
+                ];
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 $keys .= $item->pk_item.', ';
@@ -205,7 +233,7 @@ class Poll extends Content
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
-            $values = array((int)$this->id);
+            $values = [(int)$this->id];
             $GLOBALS['application']->conn->Execute($sql, $values);
         }
 

@@ -89,7 +89,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $request->get('_token')
         );
 
-        if (!$isTokenValid || $valid === false) {
+        // Check token, user type and reCaptcha
+        if (!$isTokenValid || $valid === false || $user->type != 0) {
             if (isset($_SESSION['failed_login_attempts'])) {
                 $_SESSION['failed_login_attempts']++;
             } else {
@@ -99,15 +100,22 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             if (!$isTokenValid) {
                 $this->session->getFlashBag()->add(
                     'error',
-                    'Login token is not valid. Try to autenticate again.'
+                    _('Login token is not valid. Try to authenticate again.')
                 );
             }
 
             if ($valid === false) {
                 $this->session->getFlashBag()->add(
                     'error',
-                    'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
-                    . ' again.'
+                    _('The reCAPTCHA was not entered correctly. Try to authenticate'
+                    . ' again.')
+                );
+            }
+
+            if ($user->type != 0) {
+                $this->session->getFlashBag()->add(
+                    'error',
+                    _('Your user is not allowed to access, please contact your administrator')
                 );
             }
 

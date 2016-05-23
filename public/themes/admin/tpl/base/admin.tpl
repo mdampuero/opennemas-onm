@@ -250,17 +250,21 @@
                     </a>
                     <ul  class="dropdown-menu on-left" role="menu">
                       <li>
-
-                        <a href="{url name=admin_tpl_manager}"><i class="fa fa-database"></i>Cache manager</a>
+                        <a href="{url name=admin_cache_manager}"><i class="fa fa-database"></i>Cache manager</a>
                       </li>
                       <li>
-                        <a href="{url name=admin_tpl_manager_clearcache}">
+                        <a href="{url name=admin_cache_manager_clearcache}">
                           <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
                         </a>
                       </li>
                       <li>
-                        <a href="{url name=admin_tpl_manager_clearcompiled}">
+                        <a href="{url name=admin_cache_manager_clearcompiled}">
                           <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{url name=admin_cache_manager_banvarnishcache}">
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Ban varnish caches</span>
                         </a>
                       </li>
                     </ul>

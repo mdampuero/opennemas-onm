@@ -141,7 +141,6 @@ class ArticlesController extends Controller
             );
 
             $this->view->assign('suggested', $machineSuggestedContents);
-
         } // end if $this->view->is_cached
 
         return $this->render(
@@ -219,7 +218,6 @@ class ArticlesController extends Controller
                     'ext'                   => 1,
                 )
             );
-
         } else {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }

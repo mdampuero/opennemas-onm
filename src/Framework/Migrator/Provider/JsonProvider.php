@@ -115,7 +115,6 @@ class JsonProvider extends MigrationProvider
                                 $builded[$key][$field] = $values['value'];
                             }
                         }
-
                     } else {
                         // Remove invalided items according to pre-conditions
                         unset($builded[$key]);

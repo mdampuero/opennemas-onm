@@ -29,14 +29,14 @@
             </div>
             <ul class="dropdown-menu">
               <li>
-                <button href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>
+                <a href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>
                   {t}Widget home{/t}
-                </button>
+                </a>
               </li>
               <li>
-                <button href="{url name=admin_videos}" {if $category != 'widget'}class="active"{/if}>
+                <a href="{url name=admin_videos}" {if $category != 'widget'}class="active"{/if}>
                   {t}Listing{/t}
-                </button>
+                </a>
               </li>
             </ul>
           </li>
@@ -63,7 +63,7 @@
             {/acl}
             {acl isAllowed="VIDEO_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1">
+              <a class="btn btn-primary" href="{url name=admin_videos_create}" accesskey="N" tabindex="1" id="create-button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

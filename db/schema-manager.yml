@@ -136,6 +136,147 @@ instance_meta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: instancemeta_id_instances_id
+            source_field: [ instance_id ]
+            target_table: instances
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+extension:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        uuid:
+            type:    string
+            options: { default: null, length: 100, notnull: true }
+        name:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        type:
+            type:    string
+            options: { default: null, length: 40 }
+        author:
+            type: string
+            options: { default: null, length: 140, notnull: false }
+        url:
+            type: string
+            options: { default: null, length: 140, notnull: false }
+        description:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        about:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        images:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        created:
+            type: datetime
+            options: { default: null, notnull: false }
+        updated:
+            type: datetime
+            options: { default: null, notnull: false }
+        enabled:
+            type: boolean
+            options: { default: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: type
+            columns: [ type ]
+            primary: false
+            unique: false
+            flags: { }
+extension_meta:
+    columns:
+        extension_id:
+            type:    bigint
+            options: { default: null, notnull: true }
+        meta_key:
+            type: string
+            options: { length: 255, notnull: false }
+        meta_value:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ extension_id, meta_key ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: extension_id
+            columns: [ extension_id ]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: meta_key
+            columns: [ meta_key ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: extensionmeta_extensionid_extension_id
+            source_field: [ extension_id ]
+            target_table: extension
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+
+notification:
+    columns:
+        id:
+            type:    integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        title:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        body:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        instances:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        users:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        start:
+            type: datetime
+            options: { default: null, notnull: false }
+        end:
+            type: datetime
+            options: { default: null, notnull: false }
+        creator:
+            type: string
+            options: { default: '', length: 255 }
+        style:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        fixed:
+            type: boolean
+            options: { default: 0 }
+        forced:
+            type: boolean
+            options: { default: 0 }
+        enabled:
+            type: boolean
+            options: { default: 0 }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
 settings:
     columns:
         name:
@@ -148,6 +289,36 @@ settings:
         -
             name: PRIMARY
             columns: [ name ]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups:
+    columns:
+        pk_user_group:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+    index:
+        -
+            name: PRIMARY
+            columns: [ pk_user_group ]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups_privileges:
+    columns:
+        pk_fk_user_group:
+            type: integer
+            options: { default: null, unsigned: true }
+        pk_fk_privilege:
+            type: integer
+            options: { default: null, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [ pk_fk_user_group, pk_fk_privilege ]
             primary: true
             unique: true
             flags: {  }
@@ -181,6 +352,13 @@ usermeta:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -
+            name: usermeta_userid_users_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 users:
     columns:
         id:
@@ -232,3 +410,103 @@ users:
             primary: true
             unique: true
             flags: {  }
+client:
+    columns:
+        id:
+            type: bigint
+            options: { default: null }
+        first_name:
+            type: string
+            options: { default: null, length: 100 }
+        last_name:
+            type: string
+            options: { default: null, length: 100 }
+        email:
+            type: string
+            options: { default: null, length: 255 }
+        company:
+            type: string
+            options: { default: null, length: 100, notnull: false }
+        phone:
+            type: string
+            options: { default: null, length: 50, notnull: false }
+        vat_number:
+            type: string
+            options: { default: null, length: 20, notnull: false }
+        address:
+            type: string
+            options: { default: null, length: 255 }
+        postal_code:
+            type: string
+            options: { default: null, length: 20 }
+        city:
+            type: string
+            options: { default: null, length: 100 }
+        state:
+            type: string
+            options: { default: null, length: 100 }
+        country:
+            type: string
+            options: { default: null, length: 2 }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: email
+            columns: [ email ]
+            primary: false
+            unique: true
+            flags: {  }
+
+purchase:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        client:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        details:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        method:
+            type: string
+            options: { default: null, length: 15 }
+        fee:
+            type: float
+            options: { default: 0, notnull: true }
+        total:
+            type: float
+            options: { default: 0, notnull: true }
+        instance_id:
+            type: bigint
+            options: { notnull: true }
+        client_id:
+            type: string
+            options: { default: null, length: 60 }
+        payment_id:
+            type: string
+            options: { default: null, length: 60 }
+        invoice_id:
+            type: string
+            options: { default: null, length: 60 }
+        created:
+            type: datetime
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: client_id
+            columns: [ client_id ]
+            primary: false
+            unique: false
+            flags: { fulltext: true }

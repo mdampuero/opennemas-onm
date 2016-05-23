@@ -3,9 +3,8 @@
     "description": "High performance and scalable NMS focused in journalism workflow",
     "keywords": ["nms", "newspapers", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
-    "type": "cms",
+    "type": "project",
     "license": "proprietary",
-    "version": "1.2",
     "authors": [
         {
             "name": "OpenHost developers",
@@ -24,8 +23,11 @@
             "": "src/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
-        "files": [
+        "classmap": [
             "app/AppKernel.php",
+            "app/AppCache.php"
+        ],
+        "files": [
             "libs/functions.php",
             "libs/adodb5/adodb.inc.php"
         ]
@@ -55,6 +57,7 @@
         "google/recaptcha": "1.1",
         "hwi/oauth-bundle": "0.4.*",
         "imagine/imagine": "0.6.*",
+        "jagandecapri/symfony-parallel-process": "*",
         "jeremykendall/php-domain-parser": "~2.0",
         "jdorn/sql-formatter": "1.2.16",
         "league/csv": "~8.0",
@@ -67,7 +70,7 @@
         "ronanguilloux/isocodes": "^1.2",
         "rtconner/freshbooks-api": "dev-master",
         "smarty-gettext/smarty-gettext": "@stable",
-        "smarty/smarty" : "3.1.21",
+        "smarty/smarty" : "3.1.29",
         "symfony/assetic-bundle": "dev-master"
     },
     "require-dev": {
@@ -94,9 +97,6 @@
         }
     ],
     "scripts": {
-        "post-root-package-install": [
-            "SymfonyStandard\\Composer::hookRootPackageInstall"
-        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

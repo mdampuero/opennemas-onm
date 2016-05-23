@@ -90,28 +90,6 @@ class Kiosko extends Content
     }
 
     /**
-     * Loads the kiosko data from an array into the object properties
-     *
-     * @param array $data the kiosko data
-     *
-     * @return Kiosko the kiosko object
-     **/
-    public function initialize($data)
-    {
-        $this->title     = $data['name'];
-        $this->name      = $data['name'];
-        $this->path      = $data['path'];
-        $this->date      = $data['date'];
-        $this->price     = $data['price'];
-        $this->type      = $data['type'];
-        $this->category  = $data['category'];
-        $this->available = $data['available'];
-        $this->metadata  = $data['metadata'];
-
-        return $this;
-    }
-
-    /**
      * Creates a new kiosko from a data array
      *
      * @param array $data the kiosko data
@@ -161,18 +139,43 @@ class Kiosko extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT pk_kiosko, name, path, date, price, type FROM kioskos WHERE pk_kiosko=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return null;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-        $rs->fields['thumb_url'] = str_replace('.pdf', '.jpg', $rs->fields['name']);
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        if (array_key_exists('name', $properties)) {
+            $properties['thumb_url'] = str_replace('.pdf', '.jpg', $properties['name']);
+        }
+
+        parent::load($properties);
     }
 
     /**

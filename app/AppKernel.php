@@ -68,7 +68,7 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     /**
@@ -76,7 +76,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return realpath(parent::getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
+        return realpath($this->getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
     }
 
     /**
@@ -84,6 +84,6 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return realpath(parent::getRootDir().'/../tmp/logs');
+        return realpath($this->getRootDir().'/../tmp/logs');
     }
 }

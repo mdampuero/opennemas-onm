@@ -188,7 +188,6 @@ EOF
             $input = new ArrayInput($arguments);
             $command->run($input, $this->output);
         } catch (\Exception $e) {
-
         }
     }
 

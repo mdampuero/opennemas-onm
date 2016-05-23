@@ -487,14 +487,19 @@ class UsersController extends ContentController
             $extra['photos'][$photo->id] = $photo;
         }
 
-        $extra['billing'] = [];
-        foreach ($this->get('instance')->metas as $key => $value) {
-            if (strpos($key, 'billing') !== false) {
-                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+        $id = $this->get('instance')->getClient();
+
+        if (!empty($id)) {
+            try {
+                $extra['client'] = $this->get('orm.manager')
+                    ->getRepository('manager.client', 'Database')
+                    ->find($id)->getData();
+            } catch (\Exception $e) {
             }
         }
 
-        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $extra;
     }

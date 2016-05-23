@@ -18,21 +18,21 @@
       {t}as{/t}
       <select id="type" name="type" ng-model="template.type">
         {is_module_activated name="ARTICLE_MANAGER"}
-          <option value="article">{t}Article{/t}</option>
+          <option value="Article">{t}Article{/t}</option>
         {/is_module_activated}
         {is_module_activated name="OPINION_MANAGER"}
-          <option value="opinion">{t}Opinion{/t}</option>
+          <option value="Opinion">{t}Opinion{/t}</option>
         {/is_module_activated}
       </select>
     </span>
-    <span ng-show="template.type === 'article' && texts > 0">
+    <span ng-show="template.type === 'Article' && texts > 0">
       &nbsp;{t}in{/t}&nbsp;
       <select id="category" name="category" ng-model="template.category">
         <option value="">{t}Choose a category...{/t}</option>
         <option value="[% category.value %]" ng-repeat="category in template.categories">[% category.name %]</option>
       </select>
     </span>
-    <span ng-show="template.type === 'opinion' && texts > 0">
+    <span ng-show="template.type === 'Opinion' && texts > 0">
       &nbsp;{t}by{/t}&nbsp;
       <select id="category" name="author" ng-model="template.author">
         <option value="">{t}Choose an author...{/t}</option>
@@ -52,12 +52,12 @@
   <div ng-repeat="message in template.messages">
     <p class="text-[% message.type %]" ng-bind-html="message.message"></p>
   </div>
-  <span ng-show="template.type == 'article'">
+  <span ng-show="template.type == 'Article'">
     {capture name=article_list_url}{url name=admin_articles}{/capture}
     {capture name=frontpage_list_url}{url name=admin_frontpage_list}{/capture}
     {t 1=$smarty.capture.article_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
-  <span ng-show="template.type == 'opinion'">
+  <span ng-show="template.type == 'Opinion'">
     {capture name=opinion_list_url}{url name=admin_opinions}{/capture}
     {t 1=$smarty.capture.opinion_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
@@ -69,9 +69,9 @@
 <div class="modal-footer">
   <button class="btn btn-link" ng-click="close(0)" ng-if="!imported" type="button">{t}No{/t}</button>
   <button class="btn btn-link" ng-click="close(1)" ng-if="imported" type="button">{t}Close{/t}</button>
-  <button class="btn" ng-class="{ 'btn-success': photos === template.contents.length || texts > 1, 'btn-white': photos !== template.contents.length && texts <= 1 }" ng-click="confirm()" ng-disabled="(template.type === 'article' && !template.category) || (template.type === 'opinion' && !template.author)" ng-if="!imported" type="button">
+  <button class="btn" ng-class="{ 'btn-success': photos === template.contents.length || texts > 1, 'btn-white': photos !== template.contents.length && texts <= 1 }" ng-click="confirm()" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author)" ng-if="!imported" type="button">
     <span ng-if="photos === template.contents.length">{t}Yes, import them{/t}</span>
     <span ng-if="photos !== template.contents.length">{t}Yes, import and publish{/t}</span>
   </button>
-  <button class="btn btn-success" ng-click="confirm(1)" ng-disabled="(template.type === 'article' && !template.category) || (template.type === 'opinion' && !template.author)" ng-if="texts === 1 && !imported" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
+  <button class="btn btn-success" ng-click="confirm(1)" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author)" ng-if="texts === 1 && !imported" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
 </div>

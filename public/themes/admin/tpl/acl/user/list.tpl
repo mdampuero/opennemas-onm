@@ -16,7 +16,7 @@
           <div class="all-actions pull-right">
             <ul class="quick-section">
               <li class="quicklinks">
-                <a class="btn btn-white" href="{url name=backend_ws_users_download_list}">
+                <a class="btn btn-white" href="{url name=backend_ws_users_download_list}" id="download-button">
                   <span class="fa fa-download"></span>
                   {t}Download{/t}
                 </a>
@@ -25,7 +25,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <a class="btn btn-primary" href="{url name=admin_acl_user_create}">
+                <a class="btn btn-primary" href="{url name=admin_acl_user_create}" id="create-button">
                   <i class="fa fa-plus"></i>
                   {t}Create{/t}
                 </a>
@@ -245,7 +245,11 @@
       {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-update-selected">
-      {include file="acl/user/modals/_modalBatchUpdate.tpl"}
+      {if $smarty.session._sf2_attributes.user->isMaster()}
+        {include file="common/modals/_modalBatchUpdate.tpl"}
+      {else}
+        {include file="acl/user/modals/_modalBatchUpdate.tpl"}
+      {/if}
     </script>
   </form>
 {/block}

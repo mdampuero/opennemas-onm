@@ -323,10 +323,12 @@ class Template extends Smarty
         $this->addFilter("output", "comscore");
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "generate_fb_admin_tag");
+        $this->addFilter("output", "generate_fb_pages_tag");
         $this->addFilter("output", "google_analytics");
         $this->addFilter("output", "js_includes");
         $this->addFilter("output", "ojd");
         $this->addFilter("output", "piwik");
+        $this->addFilter("output", "ads_scripts");
         $this->addFilter("output", "meta_amphtml");
     }
 }

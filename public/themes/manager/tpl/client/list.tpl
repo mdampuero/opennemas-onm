@@ -143,10 +143,16 @@
         </div>
       </div>
       <div class="col-md-3">
-        <div class="checkbox check-default">
+        <div class="checkbox check-default p-b-5">
           <input id="checkbox-country" checklist-model="columns.selected" checklist-value="'country'" type="checkbox">
           <label for="checkbox-country">
             {t}Country{/t}
+          </label>
+        </div>
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-instances" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
+          <label for="checkbox-instances">
+            {t}Instances{/t}
           </label>
         </div>
       </div>
@@ -213,6 +219,9 @@
                 {t}Country{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('country') == 'asc', 'fa fa-caret-down': isOrderedBy('country') == 'desc'}"></i>
               </th>
+              <th class="text-center" ng-show="isColumnEnabled('instances')" width="150">
+                {t}Instances{/t}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -263,6 +272,11 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('country')">
                 [% extra.countries[item.country] %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('instances')">
+                <a class="block" ng-href="[% routing.ngGenerate('manager_instance_show', { id: id }) %]" ng-repeat="id in item.instances" target="_blank">
+                  [% extra.instances[id] %] ([% id %])
+                </a>
               </td>
             </tr>
           </tbody>

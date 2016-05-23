@@ -64,7 +64,6 @@ class UtilitiesController extends Controller
                 if (isset($filtered->item(0)->nodeValue)) {
                     $json['count'] = str_replace('>', '', $filtered->item(0)->nodeValue);
                 }
-
             } elseif ($type == 'stumbleupon') {
                 $content = $this->createCurlRequest("http://www.stumbleupon.com/services/1.01/badge.getinfo?url=$url");
 
@@ -72,7 +71,6 @@ class UtilitiesController extends Controller
                 if (isset($result->result->views)) {
                     $json['count'] = $result->result->views;
                 }
-
             }
         }
 

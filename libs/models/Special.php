@@ -135,7 +135,7 @@ class Special extends Content
         $values = array(
             $this->id,
             $data['subtitle'],
-            $data['img1'],
+            (int) $data['img1'],
             $data['pdf_path']
         );
 
@@ -158,22 +158,45 @@ class Special extends Content
      */
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM specials WHERE pk_special = ?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, [intval($id)]);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN specials ON pk_content = pk_special WHERE pk_content=?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
-        $this->id         = $rs->fields['pk_special'];
-        $this->pk_special = $rs->fields['pk_special'];
-        $this->subtitle   = $rs->fields['subtitle'];
-        $this->img1       = $rs->fields['img1'];
-        $this->pdf_path   = $rs->fields['pdf_path'];
+        $this->load($rs);
 
         return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        $this->id         = $properties['pk_special'];
+        $this->pk_special = $properties['pk_special'];
+        $this->subtitle   = $properties['subtitle'];
+        $this->img1       = $properties['img1'];
+        $this->pdf_path   = $properties['pdf_path'];
     }
 
     /**
@@ -194,7 +217,7 @@ class Special extends Content
         $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=? WHERE pk_special=?";
         $values = array(
             $data['subtitle'],
-            $data['img1'],
+            (int) $data['img1'],
             $data['pdf_path'],
             intval($data['id']),
         );

@@ -152,7 +152,6 @@ class AlbumsController extends Controller
                     $this->generateUrl('admin_albums')
                 );
             }
-
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array('0' => _(' - Select one author - '));

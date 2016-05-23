@@ -133,7 +133,6 @@ class MigrationSaver
                         ),
                         $schema['translation']['name']
                     );
-
                 } catch (Exception $e) {
                     $this->stats[$name]['error']++;
                 }
@@ -182,7 +181,6 @@ class MigrationSaver
                         $target,
                         $schema['translation']['name']
                     );
-
                 } catch (Exception $e) {
                     $this->stats[$name]['error']++;
                 }
@@ -537,7 +535,6 @@ class MigrationSaver
 
                     $this->stats[$name]['already_imported']++;
                 }
-
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -688,6 +685,12 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $opinionID = $this->findContent($values['title']);
+
+                    if (!empty($opinionID)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
                     $opinion = new \Opinion();
                     $opinion->create($values);
                     $slug = array_key_exists('slug', $schema['translation']) ?
@@ -704,6 +707,17 @@ class MigrationSaver
                 } else {
                     $this->stats[$name]['already_imported']++;
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $opinionID = $this->findContent($values['title']);
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $opinionID,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -2038,14 +2052,16 @@ class MigrationSaver
      */
     private function findPhoto($title)
     {
-        $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
-        $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
+        if (!empty($tiltle)) {
+            $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
+            $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
+            $rs = $this->targetConnection->Execute($sql);
+            $rss = $rs->getArray();
 
-        if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
-            return $rss[0]['pk_content'];
+            if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
+                return $rss[0]['pk_content'];
+            }
         }
 
         return false;

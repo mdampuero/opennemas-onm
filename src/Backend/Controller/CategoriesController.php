@@ -110,7 +110,6 @@ class CategoriesController extends Controller
         $ccm = \ContentCategoryManager::get_instance();
 
         if ('POST' == $request->getMethod()) {
-
             $logoPath = '';
             if (!empty($_FILES) && isset($_FILES['logo_path'])) {
                 $nameFile = $_FILES['logo_path']['name'];
@@ -307,7 +306,6 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if ($category->pk_content_category != null) {
-
             if ($category->delete($id)) {
                 $user = new \User();
                 $user->delCategoryToUser($_SESSION['userid'], $id);
@@ -327,7 +325,6 @@ class CategoriesController extends Controller
                     _("To delete a category previously you have to empty it.")
                 );
             }
-
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -359,7 +356,6 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if ($category->pk_content_category != null) {
-
             if ($category->deleteContents()) {
                 $this->get('session')->getFlashBag()->add(
                     'success',
@@ -374,7 +370,6 @@ class CategoriesController extends Controller
                     )
                 );
             }
-
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',

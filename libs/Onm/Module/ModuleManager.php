@@ -66,19 +66,12 @@ class ModuleManager
             ->activated_modules;
 
         if (is_null(self::$activatedModules)) {
-
             if (!isset($activatedModules) or (count($activatedModules) < 1)) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } elseif (self::checkAllModulesActivated()) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } else {
-
                 self::$activatedModules = $activatedModules;
-
             }
         }
 
@@ -159,6 +152,7 @@ class ModuleManager
                 'COMMENT_MANAGER'            => _('Comments'),
                 'CONTENT_SUBSCRIPTIONS'      => _('Subscription'),
                 'CRONICAS_MODULES'           => _('Cronicas customizations'),
+                'FIA_MODULE'                 => _('Facebook Instant Articles integration'),
                 'FILE_MANAGER'               => _('Files'),
                 'FORM_MANAGER'               => _('Contact'),
                 'FRONTPAGE_MANAGER'          => _('Frontpages'),
@@ -1074,7 +1068,6 @@ class ModuleManager
             // Check if module exists
 
             return false; // Hack to avoid crashes
-            throw new ModuleException("Module '{$module} is not available");
         } else {
             // Finally return if that module is activated
             return in_array($module, self::getActivatedModules());
@@ -1117,5 +1110,6 @@ class ModuleManager
         $moduleNames = self::getAvailableModuleNames();
 
         return in_array($moduleName, $moduleNames);
+        
     }
 }

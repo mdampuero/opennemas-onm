@@ -54,7 +54,7 @@
             {acl isAllowed="POLL_WIDGET"}
             {if $category eq 'widget'}
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}" id="save_positions_button">
                 <i class="fa fa-save fa-lg"></i>
                 {t}Save positions{/t}
               </a>
@@ -66,7 +66,7 @@
             {/acl}
             {acl isAllowed="POLL_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}">
+              <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

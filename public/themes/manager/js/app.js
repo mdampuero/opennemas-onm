@@ -3,6 +3,7 @@ angular.module(
   [
     'ManagerApp.controllers',
     'angular-loading-bar',
+    'angular-jwt',
     'checklist-model',
     'colorpicker.module',
     'file-model',

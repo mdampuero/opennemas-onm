@@ -65,7 +65,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -772,6 +772,16 @@
                               <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
                             </div>
                           </div>
+                          {is_module_activated name="FIA_MODULE"}
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_instant_articles_tag">
+                              {t}Instant Articles (fb:pages meta tag){/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_instant_articles_tag" name="facebook[instant_articles_tag]" type="text" value="{$configs['facebook']['instant_articles_tag']|default:""}">
+                            </div>
+                          </div>
+                          {/is_module_activated}
                         </div>
                       </div>
                     </div>
@@ -795,6 +805,58 @@
                               <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
                               <span class="help">
                                 {t escape=off}If you also have a <strong>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#instagram">
+                            <i class="fa fa-instagram"></i>{t}Instagram{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="instagram" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="instagram_page">
+                              {t}Instagram Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="instagram_page" name="instagram_page" type="text" value="{$configs['instagram_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <strong>Instagram page</strong>, add your page url on the form.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#pinterest">
+                            <i class="fa fa-pinterest-square"></i>{t}Pinterest{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="pinterest" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="pinterest_page">
+                              {t}Pinterest Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="pinterest_page" name="pinterest_page" type="text" value="{$configs['pinterest_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <strong>Pinterest page</strong>, add your page url on the form.{/t}
                               </span>
                             </div>
                           </div>

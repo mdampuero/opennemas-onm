@@ -30,7 +30,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a href="{url name=admin_instance_sync_create}" class="btn btn-primary" title="{t}Add site to sync{/t}">
+            <a href="{url name=admin_instance_sync_create}" class="btn btn-primary" title="{t}Add site to sync{/t}" id="add-button">
               <i class="fa fa-plus"></i>
               {t}Add site{/t}
             </a>

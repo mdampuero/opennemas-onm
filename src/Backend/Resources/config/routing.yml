@@ -868,17 +868,21 @@ admin_news_agency_batch_import:
 
 # Importer XML file controller routes
 # Template cache controller routes
-admin_tpl_manager:
+admin_cache_manager:
     path:     /system/cachemanager
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
-admin_tpl_manager_clearcache:
+admin_cache_manager_clearcache:
     path:     /system/cachemanager/clearcache
     defaults: { _controller  : BackendBundle:CacheManager:clearCache }
 
-admin_tpl_manager_clearcompiled:
+admin_cache_manager_clearcompiled:
     path:     /system/cachemanager/clear-compiled-templates
     defaults: { _controller  : BackendBundle:CacheManager:clearCompiledTemplates }
+
+admin_cache_manager_banvarnishcache:
+    path:     /system/cachemanager/ban-varnish-cache
+    defaults: { _controller  : BackendBundle:CacheManager:clearVarnishCache }
 
 # User management routes
 admin_acl_user:

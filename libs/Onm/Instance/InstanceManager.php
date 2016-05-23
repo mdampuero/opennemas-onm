@@ -194,6 +194,31 @@ class InstanceManager extends BaseManager
     }
 
     /**
+     * Returns the instance ids grouped by client.
+     *
+     * @param array $ids The list of client ids.
+     *
+     * @return array The instance ids grouped by client.
+     */
+    public function findByClient($ids)
+    {
+        // Executing the SQL
+        $sql = "SELECT instance_id, meta_value FROM `instance_meta` "
+            ."WHERE meta_key = 'client' AND meta_value in ("
+            . implode(',', $ids) . ")";
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[$item['meta_value']][] = $item['instance_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
      * Finds the list of instances created in the current month.
      *
      * @return array Array of instances.
@@ -323,7 +348,7 @@ class InstanceManager extends BaseManager
             $settings = array();
             if ($rs !== false) {
                 foreach ($rs as $value) {
-                    $settings[$value['name'] ] = unserialize($value['value']);
+                    $settings[$value['name'] ] = @unserialize($value['value']);
                 }
             }
 
@@ -421,6 +446,7 @@ class InstanceManager extends BaseManager
         foreach ($ref->getProperties() as $property) {
             $properties[] = $property->name;
         }
+        $instance->created = $instance->created == '0000-00-00 00:00:00' ? '1970-01-01 00:00' : $instance->created;
 
         $values = array();
         foreach ($properties as $key) {
@@ -622,13 +648,13 @@ class InstanceManager extends BaseManager
             && isset($data['token'])
         ) {
             // Insert user into instance database
-            $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`,
+            $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`, `bio`,
                 `email`, `password`, `name`, `fk_user_group`)
-                VALUES (?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?)";
 
             $values = array(
-                $data['username'], $data['token'], 60, $data['email'],
-                md5($data['password']), $data['username'], 5
+                $data['username'], $data['token'], 60, '', $data['email'],
+                md5($data['password']), $data['username'], "3,5"
             );
 
             if (!$this->conn->executeQuery($sql, $values)) {

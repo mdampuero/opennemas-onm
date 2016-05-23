@@ -85,7 +85,6 @@ class Letter extends Content
                 if ($pos > 100) {
                     $summary = substr($summary, 0, $pos).".";
                 } else {
-
                     $summary = substr($summary, 0, strripos($summary, " "));
                 }
 
@@ -145,31 +144,50 @@ class Letter extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = "SELECT * FROM letters WHERE pk_letter = ? ";
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN letters ON pk_content = pk_letter WHERE pk_content=?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
+
+        return $this;
+    }
+
+    /**
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
+    public function load($properties)
+    {
+        parent::load($properties);
 
         if (is_array($this->params) && array_key_exists('ip', $this->params)) {
             $this->ip = $this->params['ip'];
         }
 
-        $this->loadAllContentProperties();
-
         $this->image = $this->getProperty('image');
-
         if (!empty($this->image)) {
-            $this->photo = $this->photo;
+            $this->photo = $this->image;
         }
-        $this->summary;
 
-        return $this;
+        $this->loadAllContentProperties();
     }
 
     /**

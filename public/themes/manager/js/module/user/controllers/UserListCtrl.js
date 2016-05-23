@@ -42,7 +42,7 @@
         };
 
         /**
-         * @memberOf UserGroupListCtrl
+         * @memberOf UserListCtrl
          *
          * @description
          *   The criteria to search.
@@ -52,7 +52,6 @@
         $scope.criteria = { epp: 25, page: 1 };
 
         /**
-         * @function delete
          * @memberOf UserListCtrl
          *
          * @description

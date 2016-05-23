@@ -168,7 +168,6 @@ class Article extends Content
         }
 
         return parent::__get($name);
-
     }
 
     /**
@@ -213,9 +212,9 @@ class Article extends Content
         $values = array(
             $this->id,
             $data['subtitle'], $data['agency'],  $data['summary'],
-            $data['img1'], $data['img1_footer'],
-            $data['img2'], $data['img2_footer'], $data['fk_video'],
-            $data['fk_video2'], $data['footer_video2'], $data['title_int']
+            (int) $data['img1'], $data['img1_footer'],
+            (int) $data['img2'], $data['img2_footer'], (int) $data['fk_video'],
+            (int) $data['fk_video2'], $data['footer_video2'], $data['title_int']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -262,16 +261,24 @@ class Article extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = 'SELECT * FROM articles WHERE pk_article = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
 
-        $this->load($rs->fields);
+        $this->load($rs);
 
         $this->permalink = Uri::generate(
             'article',
@@ -282,7 +289,6 @@ class Article extends Content
                 'slug'     => $this->slug,
             )
         );
-
     }
 
     /**
@@ -325,10 +331,10 @@ class Article extends Content
 
         $values = array(
             strtoupper($data['subtitle']), $data['agency'], $data['summary'],
-            $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
-            $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
+            (int) $data['img1'], $data['img1_footer'], (int) $data['img2'], $data['img2_footer'],
+            (int) $data['fk_video'], (int) $data['fk_video2'], $data['footer_video2'],
             $data['title_int'],
-            $data['id']
+            (int) $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

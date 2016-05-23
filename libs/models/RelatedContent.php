@@ -208,7 +208,7 @@ class RelatedContent
      */
     public function getRelations($contentID)
     {
-        $sql = "SELECT pk_content2 FROM related_contents ".
+        $sql = "SELECT pk_content2, position FROM related_contents ".
                "WHERE verportada=\"1\" AND pk_content1=? ".
                "ORDER BY position ASC";
 
@@ -235,7 +235,7 @@ class RelatedContent
      */
     public function getRelationsForInner($contentID)
     {
-        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+        $sql = "SELECT DISTINCT pk_content2, posinterior FROM related_contents ".
                "WHERE verinterior=\"1\" AND pk_content1=? ".
                "ORDER BY posinterior ASC";
 
@@ -262,7 +262,7 @@ class RelatedContent
      **/
     public function getHomeRelations($contentID)
     {
-        $sql = "SELECT DISTINCT pk_content2 FROM related_contents ".
+        $sql = "SELECT DISTINCT pk_content2, position FROM related_contents ".
                "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
 
         $rs = $this->dbConn->fetchAll($sql, [$contentID]);
@@ -361,5 +361,53 @@ class RelatedContent
         }
 
         return true;
+    }
+
+    /**
+     * Returns a list of related contents grouped by content id.
+     *
+     * @param array  $ids      The list of content ids.
+     * @param string $category The category name.
+     *
+     * @return array The list of related contents grouped by content id.
+     */
+    public function getRelatedContents($ids, $category = 'home')
+    {
+        $verPortada = 1;
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
+            && $category === 'home'
+        ) {
+            $verPortada = 2;
+        }
+
+        $ids = array_filter($ids, function ($id) {
+            return !is_null($id);
+        });
+
+        $sql = "SELECT pk_content1, pk_content2, position FROM related_contents "
+            . "WHERE pk_content1 in (" . implode(',', $ids)
+            . ") AND verportada=" . $verPortada . " ORDER BY position ASC";
+
+        $rs = $this->dbConn->executeQuery($sql);
+
+        if (!$rs) {
+            return [];
+        }
+
+        $related = [];
+        foreach ($rs as $key => $value) {
+            $related[$value['pk_content1']][] = $value['pk_content2'];
+        }
+
+        return $related;
     }
 }

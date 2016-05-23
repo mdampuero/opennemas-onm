@@ -54,30 +54,6 @@ class Widget extends Content
     }
 
     /**
-     * Load properties into this instance
-     *
-     * @param array $properties Array properties
-     */
-    public function load($properties)
-    {
-        if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-        $this->id = $this->pk_widget;
-    }
-
-    /**
      * Creates a new widget from a data array
      *
      * @param array $data the widget data
@@ -121,21 +97,28 @@ class Widget extends Content
      */
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $this->id = $id;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN widgets ON pk_content = pk_widget WHERE pk_content = ?',
+                [ $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT * FROM `widgets` WHERE `pk_widget`=?",
-            array($id)
-        );
-
-        if ($rs === false) {
-            return null;
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
         }
+
         $this->loadAllContentProperties();
 
-        $this->load($rs->fields);
+        $this->load($rs);
+
+        return $this;
     }
 
     /**
@@ -151,13 +134,13 @@ class Widget extends Content
 
         parent::update($data);
 
-        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
 
         if ($data['renderlet'] != 'html'  && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
+        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
@@ -175,11 +158,11 @@ class Widget extends Content
      */
     public function remove($id, $editor = null)
     {
-        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
         parent::remove($id); // Delete from database, don't use trash
 
         $values = array($id);
 
+        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
@@ -265,7 +248,7 @@ class Widget extends Content
                 $objects = scandir($path);
                 foreach ($objects as $object) {
                     if ($object != "." && $object != "..") {
-                        if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
+                        if (preg_match('@^widget_(.)*\.class\.tpl$@', $object)) {
                             $objectWords = explode('_', substr($object, 7, -10));
                             $name = '';
                             foreach ($objectWords as $word) {
@@ -345,58 +328,20 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
-        $paths = array();
-        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
-        $instanceManager = getService('instance_manager');
-        $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
+        getService('instance')->theme->loadWidget($this->content);
 
-        if (is_array($baseTheme)) {
-            foreach ($baseTheme as $theme) {
-                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl/widgets");
-                if (!empty($baseTheme) && $baseThemePath) {
-                    $paths[] = $baseThemePath;
-                }
-            }
-        } else {
-            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl/widgets");
-            if (!empty($baseTheme) && $baseThemePath) {
-                $paths[] = $baseThemePath;
-            }
-        }
-        $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
-
-        $className = 'Widget' . trim($this->content);
-        $filename = strtolower($className);
-
-        foreach ($paths as $path) {
-            if ($path != '/') {
-                ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
-                if (file_exists($path . '/' . $filename . '.class.php')) {
-                    require_once $path . '/' . $filename . '.class.php';
-                    break;
-                } else {
-                    $filename = strtolower(
-                        preg_replace('/([a-z])([A-Z])/', '$1_$2', $className)
-                    );
-
-                    if (file_exists($path . '/' . $filename . '.class.php')) {
-                        require_once $path . '/' . $filename . '.class.php';
-                        break;
-                    }
-                }
-            }
-        }
+        $class = 'Widget' . $this->content;
 
         try {
-            if (class_exists($className)) {
-                $er = getService('entity_repository');
-                $widget = $er->find('Widget', $this->id);
+            if (class_exists($class)) {
+                $widget = getService('entity_repository')
+                    ->find('Widget', $this->id);
 
-                $class = new $className($widget);
+                $class = new $class($widget);
             } else {
-                throw new Exception('', 1);
+                throw new \Exception('', 1);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return sprintf(_("Widget %s not available"), $this->content);
         }
 

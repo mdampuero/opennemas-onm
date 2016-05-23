@@ -12,6 +12,7 @@ namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 
@@ -59,5 +60,30 @@ class WidgetsController extends ContentController
                 'total'             => $total
             )
         );
+    }
+
+    /**
+     * Returns the parameters form for widgets of the given uuid.
+     *
+     * @param string $uuid The widget uuid.
+     *
+     * @return Response The response object.
+     */
+    public function getFormAction($uuid)
+    {
+        $this->get('instance')->theme->loadWidget($uuid);
+
+        $uuid = 'Widget' . $uuid;
+        if (!class_exists($uuid)) {
+            return new Response('', 400);
+        }
+
+        $widget = new $uuid(null);
+
+        if (empty($widget->getForm())) {
+            return new Response('', 400);
+        }
+
+        return new Response($widget->getForm());
     }
 }

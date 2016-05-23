@@ -38,7 +38,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <a class="btn btn-primary" href="{url name=admin_news_agency_sync}">
+                <a class="btn btn-primary" href="{url name=admin_news_agency_sync}" id="sync-button">
                   <i class="fa fa-retweet"></i>
                   <span class="hidden-xs">{t}Sync{/t}</span>
                 </a>
@@ -70,7 +70,7 @@
             <li>
               <a href="#" class="btn btn-link" ng-click="importSelected()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom">
                 <i class="fa fa-cloud-download"></i>
-                <span class="hidden-xs hidden-sm">
+                <span class="hidden-xs hidden-sm" id="import-button">
                   {t}Import{/t}
                 </span>
               </a>

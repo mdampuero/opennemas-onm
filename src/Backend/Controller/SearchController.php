@@ -138,7 +138,6 @@ class SearchController extends Controller
                         'contentType' => 'Content',
                     )
                 );
-
             } else {
                 return $this->render(
                     'search_advanced/content-provider.tpl',

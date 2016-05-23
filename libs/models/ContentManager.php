@@ -349,6 +349,7 @@ class ContentManager
                     continue;
                 }
 
+                $content = null;
                 foreach ($contentsRaw as $contentRaw) {
                     if ($element['content_id'] == $contentRaw->id) {
                         $content = $contentRaw;
@@ -358,19 +359,20 @@ class ContentManager
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
-                    $content->load(
-                        array(
-                            'placeholder' => $element['placeholder'],
-                            'position'    => $element['position'],
-                        )
-                    );
-                    if (is_array($content->params) && $content->params > 0) {
-                        $content->params = array_merge(
-                            $content->params,
-                            (array) $element['params']
-                        );
-                    } else {
-                        $content->params = $element['params'];
+                    $content->load([
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],
+                    ]);
+
+                    if (!empty($element['params'])) {
+                        if (is_array($content->params) && $content->params > 0) {
+                            $content->params = array_merge(
+                                $content->params,
+                                (array) $element['params']
+                            );
+                        } else {
+                            $content->params = $element['params'];
+                        }
                     }
 
                     $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
@@ -720,7 +722,6 @@ class ContentManager
                             $i++;
                             $j--;
                         }
-
                     } while ($i <= $j);
 
                     if ($i < $r) {
@@ -734,6 +735,29 @@ class ContentManager
         }
 
         return $array;
+    }
+
+    /**
+     * Gets the earlier starttime of scheduled contents from a contents array
+     *
+     * @param array $contents Array of Contents.
+     *
+     * @return string The minor starttime of scheduled contents or null
+     */
+    public static function getEarlierStarttimeOfScheduledContents($contents)
+    {
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contents as $content) {
+            if ($content->starttime > $current
+                && (empty($expires)
+                    || $content->starttime < $expires)
+            ) {
+                $expires = $content->starttime;
+            }
+        }
+
+        return $expires;
     }
 
     /**
@@ -827,13 +851,14 @@ class ContentManager
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
                 'union' => 'AND',
-                ['value' => $date, 'operator' => '>='],
-                ['value' => $now, 'operator' => '<']
+                [ 'value' => $date, 'operator' => '>=' ],
+                [ 'value' => $now, 'operator' => '<' ]
             ],
             'endtime'           => [
                 'union' => 'OR',
-                ['value' => '0000-00-00 00:00:00', 'operator' => '='],
-                ['value' => $now, 'operator' => '>']
+                [ 'value' => '0000-00-00 00:00:00'],
+                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ]
             ],
         ];
 
@@ -910,7 +935,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql, array($maxElements));
 
         $contents = array();
-        while (!$rs->EOF) {
+        while ($rs && !$rs->EOF) {
             $content = new $contentType();
             $content->load($rs->fields);
 
@@ -1040,7 +1065,7 @@ class ContentManager
         $em = getService('entity_repository');
 
         $now = new \DateTime();
-        $now = $now->format('Y-M-d H:i:s');
+        $now = $now->format('Y-m-d H:i:s');
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
@@ -1059,13 +1084,14 @@ class ContentManager
                     )
                 )
             ),
-            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
-            'in_litter'       => array(array('value' => 0)),
-            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
+            'fk_content_type' => [[ 'value' => array(1,3,4,7,9,11), 'operator' => 'IN' ]],
+            'in_litter'       => [[ 'value' => 0 ]],
+            'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
             'endtime'         => array(
                 'union' => 'OR',
-                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
-                array('value' => $now, 'operator' => '>')
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ],
             ),
         );
 
@@ -1129,25 +1155,55 @@ class ContentManager
     {
         $filtered = array();
         if (is_array($items)) {
-            foreach ($items as $item) {
-                if (is_object($item)) {
-                    if ($item->isInTime()) {
-                        $filtered[] = $item;
-                    }
-                } else {
-                    $starttime = (!empty($item['starttime']))
-                        ? $item['starttime']: '0000-00-00 00:00:00';
-                    $endtime   = (!empty($item['endtime']))
-                        ? $item['endtime']: '0000-00-00 00:00:00';
-
-                    if (Content::isInTime2($starttime, $endtime, $time)) {
-                        $filtered[] = $item;
+            $filtered = array_filter(
+                $items,
+                function ($item) use ($time) {
+                    if (is_object($item)) {
+                        return $item->isInTime();
+                    } else {
+                        return self::isInTime2($item['starttime'], $item['endtime'], $time);
                     }
                 }
-            }
+            );
         }
 
-        return $filtered;
+        return array_values($filtered);
+    }
+
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $starttime the initial time from it will be available
+     * @param string $endtime   the initial time until it will be available
+     * @param string $currentTime      time to compare with the previous parameters
+     *
+     * @return boolean
+     **/
+    public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
+    {
+        $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
+        $end         = ($endtime !== '0000-00-00 00:00:00' && !empty($endtime)) ? strtotime($endtime): null;
+        $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
+
+        // If $start and $end not defined or they are equals  => is in time
+        if ((empty($start) && empty($end))
+            || ($start == $end)
+        ) {
+            return true;
+        }
+
+        // only setted $end -> check endttime
+        if (empty($start)) {
+            return ($currentTime < $end);
+        }
+
+        // only setted $start -> check startime
+        if (empty($end) || $end <= 0) {
+            return ($currentTime > $start);
+        }
+
+        // $start < $currentTime < $end
+        return (($currentTime < $end) && ($currentTime > $start));
     }
 
     /**
@@ -1250,8 +1306,7 @@ class ContentManager
         $orderBy,
         $page = 1,
         $numElements = 10,
-        $offset = 0,
-        $debug = false
+        $offset = 0
     ) {
         $this->init($contentType);
 
@@ -1287,9 +1342,6 @@ class ContentManager
                  . ' '
                  . $orderBy
                  . ' LIMIT '.$limit;
-        }
-        if ($debug == true) {
-            var_dump($sql);
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1422,7 +1474,6 @@ class ContentManager
         $ccm   = ContentCategoryManager::get_instance();
         $items = array();
         while (!$rs->EOF) {
-
             if (!$frontIncluded) {
                 $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
                 $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
@@ -1666,7 +1717,6 @@ class ContentManager
             $contentTypes = \ContentManager::getContentTypes();
             foreach ($contentTypes as $types) {
                 if ($types['pk_content_type'] == $id) {
-
                     $name = ($ucfirst === true) ? ucfirst($types['name']) : $types['name'];
 
                     return $name;
@@ -1937,7 +1987,7 @@ class ContentManager
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
 
-        while (!$rs->EOF) {
+        while ($rs && !$rs->EOF) {
             $content = new \Article();
             $content->load($rs->fields);
             $content->comment        =  $rs->fields['comment_body'];
@@ -1947,8 +1997,6 @@ class ContentManager
             $contents[$content->pk_comment] = $content;
             $rs->MoveNext();
         }
-
-        $rs->Close(); # optional
 
         return $contents;
     }
@@ -1973,9 +2021,7 @@ class ContentManager
             $returnValue = false;
         } else {
             if ($rss->_numOfRows > 0) {
-
                 $returnValue =  $rss->fields['pk_content'];
-
             } else {
                 $returnValue = false;
             }
@@ -2005,7 +2051,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }
@@ -2033,7 +2078,6 @@ class ContentManager
         } else {
             if ($rss->_numOfRows > 0) {
                 $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
-
             } else {
                 $returnValue = false;
             }

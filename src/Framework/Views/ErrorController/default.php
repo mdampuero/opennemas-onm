@@ -74,13 +74,13 @@
                             <th>File</th>
                             <th>Line</th>
                         </tr>
-                        <?php foreach($backtrace as $trace_step) :
-                        ?>
+                        <?php foreach ($backtrace as $trace_step) : ?>
                         <tr>
                             <td>
                                 <a href="file://{$file}"> <?php echo $trace_step['file']; ?></a>
 
-                                <p>Class: <?= $trace_step['class']; ?>:: <?= $trace_step['function']; ?>()</p>
+                                <p>Class: <?= $trace_step['class']; ?>
+                                    :: <?= $trace_step['function']; ?>()</p>
                                 <p>
                                     Args:
                                     <?php echo print_r($trace_step['args']); ?>

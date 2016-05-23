@@ -299,6 +299,7 @@
       @Common/components/angular-checklist-model/checklist-model.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-file-model/angular-file-model.js,
+      @Common/components/angular-jwt/dist/angular-jwt.js,
       @Common/components/angular-ui-select/dist/select.min.js,
       @Common/components/angular-webstorage/angular-webstorage.min.js,
       @Common/components/angular-google-chart/ng-google-chart.js,

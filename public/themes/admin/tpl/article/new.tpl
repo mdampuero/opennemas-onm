@@ -92,7 +92,7 @@
               {if isset($article->id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Update{/t}</span>
                 </button>
@@ -101,7 +101,7 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -293,7 +293,7 @@
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled{/if}
                           {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
                           {$allcategorys[as]->title}</option>
                           {/acl}
@@ -301,7 +301,7 @@
                           {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                           {if $subcat[as][su]->internal_category eq 1}
                           <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled{/if}
                             {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
                             &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                           {/if}
@@ -325,7 +325,7 @@
                       {t}Slug{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id)}disabled{/if}>
+                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id) && $article->content_status != 0}disabled{/if}>
                       {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
                       <span class="help-block">

@@ -32,9 +32,13 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
         }
     };
 
-    /**
-     * Frees up memory before controller destroy event
-     */
+    // Changes step on client saved
+    $scope.$on('client-saved', function (event, args) {
+      $scope.client = args;
+      $scope.template.step = 2;
+    });
+
+    // Frees up memory before controller destroy event
     $scope.$on('$destroy', function() {
         $scope.template = null;
     });

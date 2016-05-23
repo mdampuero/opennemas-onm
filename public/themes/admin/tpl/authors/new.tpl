@@ -67,7 +67,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -112,6 +112,19 @@
                       <i class="fa fa-at"></i>
                     </span>
                     <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[twitter]" name="meta[twitter]" value="{$user->meta['twitter']|default:""}">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="meta[facebook]">
+                  {t}Facebook user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="fa fa-at"></i>
+                    </span>
+                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[facebook]" name="meta[facebook]" value="{$user->meta['facebook']|default:""}">
                   </div>
                 </div>
               </div>

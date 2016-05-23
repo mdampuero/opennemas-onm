@@ -134,6 +134,7 @@ class WidgetsController extends Controller
                 'content'        => $post->filter('content', ''),
                 'params'          => json_decode($post->get('parsedParams', null)),
             );
+
             if ($widgetData['renderlet'] == 'intelligentwidget') {
                 $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
             }
@@ -158,7 +159,6 @@ class WidgetsController extends Controller
             $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
-
         } else {
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
 
@@ -209,7 +209,6 @@ class WidgetsController extends Controller
             'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),
         );
-
         if (count($widgetData['params']) > 0) {
             $newParams = [];
             foreach ($widgetData['params'] as $param) {

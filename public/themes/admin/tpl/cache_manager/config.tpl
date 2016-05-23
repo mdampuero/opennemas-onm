@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_tpl_manager_config}" method="POST" ng-controller="CacheConfigCtrl" ng-init='init({json_encode($config)})'>
+<form action="{url name=admin_cache_manager_config}" method="POST" ng-controller="CacheConfigCtrl" ng-init='init({json_encode($config)})'>
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -23,7 +23,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" id="save-button">
               <i class="fa fa-save"></i>
               {t}Save{/t}
             </button>
@@ -37,11 +37,14 @@
       <h4 class="alert-heading"><i class="icon-warning-sign"></i> Dangerous action!</h4>
       <p>Clean internal template files generated for this instance by pushing buttons below. <br>These actions could take some time depending on the number of present cache/compiled files.</p>
       <div class="button-set">
-        <a href="{url name=admin_tpl_manager_clearcache}" class="btn btn-white btn-cons">
+        <a href="{url name=admin_cache_manager_clearcache}" class="btn btn-white btn-cons">
           <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove cache{/t}</span>
         </a>
-        <a href="{url name=admin_tpl_manager_clearcompiled}" class="btn btn-white btn-cons">
+        <a href="{url name=admin_cache_manager_clearcompiled}" class="btn btn-white btn-cons">
           <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove compiled templates{/t}</span>
+        </a>
+        <a href="{url name=admin_cache_manager_banvarnishcache}" class="btn btn-white btn-cons">
+          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Ban varnish cache{/t}</span>
         </a>
       </div>
     </div>

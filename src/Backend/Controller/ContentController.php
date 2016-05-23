@@ -288,7 +288,6 @@ class ContentController extends Controller
                 } else {
                     $message = sprintf('Unable to set trashed state to content with id %s', $id);
                 }
-
             } else {
                 $code = 404;
                 $message = sprintf(_('Content not available'), $id);

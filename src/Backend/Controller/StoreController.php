@@ -15,25 +15,24 @@ class StoreController extends Controller
      */
     public function checkoutAction()
     {
-        $billing = [];
+        $id     = $this->get('instance')->getClient();
+        $client = [];
 
-        $instance = $this->get('instance');
+        if (!empty($id)) {
+            $client = $this->get('orm.manager')
+                ->getRepository('manager.client', 'Database')
+                ->find($id);
 
-        if (!empty($instance->metas)) {
-            foreach ($instance->metas as $key => $value) {
-                if (strpos($key, 'billing_') !== false) {
-                    $billing[str_replace('billing_', '', $key)] = $value;
-                }
-            }
+            $client = $client->getData();
         }
 
-        $countries = array_flip(Intl::getRegionBundle()->getCountryNames());
+        $countries = Intl::getRegionBundle()->getCountryNames();
         $taxes     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'store/checkout.tpl',
             [
-                'billing'   => $billing,
+                'client'    => $client,
                 'countries' => $countries,
                 'taxes'     => $taxes
             ]
