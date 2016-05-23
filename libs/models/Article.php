@@ -330,7 +330,7 @@ class Article extends Content
                 ."WHERE pk_article=?";
 
         $values = array(
-            strtoupper($data['subtitle']), $data['agency'], $data['summary'],
+            $data['subtitle'], $data['agency'], $data['summary'],
             (int) $data['img1'], $data['img1_footer'], (int) $data['img2'], $data['img2_footer'],
             (int) $data['fk_video'], (int) $data['fk_video2'], $data['footer_video2'],
             $data['title_int'],
