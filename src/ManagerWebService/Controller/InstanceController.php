@@ -342,6 +342,12 @@ class InstanceController extends Controller
             $this->get('core.instance.checker')->check($instance);
             $em->persist($instance);
 
+            if (empty($instance->getDatabaseName())) {
+                $instance->refresh();
+                $instance->settings['BD_DATABASE'] = $instance->id;
+                $em->persist($instance);
+            }
+
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
