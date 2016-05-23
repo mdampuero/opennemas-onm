@@ -243,7 +243,7 @@
             $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
           }
 
-          http.post('manager_ws_instance_create', $scope.instance)
+          http.post('manager_ws_instance_save', $scope.instance)
             .then(function (response) {
               messenger.post({ message: response.data, type: 'success' });
 
