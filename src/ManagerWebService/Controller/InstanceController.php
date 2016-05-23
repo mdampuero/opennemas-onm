@@ -437,55 +437,35 @@ class InstanceController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $im = $this->get('instance_manager');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Instance')
+            ->objectify($request->request->all());
 
-        try {
-            $instance = $im->find($id);
-            $oldDomains = $instance->domains;
+        $instance   = $em->getRepository('Instance')->find($id);
+        $oldDomains = $instance->domains;
 
-            $keys = array_unique(array_merge(
-                array_keys($request->request->all()),
-                array_keys(get_object_vars($instance))
-            ));
+        $instance->setData($data);
 
-            foreach ($keys as $key) {
-                if ($request->request->get($key)
-                    && !is_null($request->request->get($key))
-                ) {
-                    $instance->{$key} =
-                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-                } else {
-                    $instance->{$key} = null;
-                }
-            }
+        $deletedDomains = array_diff($oldDomains, $instance->domains);
 
-            // Delete instance from cache for deleted domains
-            $cache = $this->get('cache_manager');
-
-            $deletedDomains = array_diff($oldDomains, $instance->domains);
-
+        if (!empty($deletedDomains)) {
+            $cache = $this->get('cache.manager')->getConnection('manager');
             foreach ($deletedDomains as $domain) {
                 $cache->delete($domain);
             }
-
-            $this->get('onm.validator.instance')->validate($instance);
-            $im->persist($instance);
-            $im->updateSettings($instance);
-
-            dispatchEventWithParams(
-                'instance.update',
-                array('instance' => $instance->internal_name)
-            );
-
-            return new JsonResponse(_('Instance saved successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the instance with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
         }
+
+        $em->persist($instance);
+
+        dispatchEventWithParams(
+            'instance.update',
+            [ 'instance' => $instance->internal_name ]
+        );
+
+        $msg->add(_('Instance saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
