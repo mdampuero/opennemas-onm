@@ -51,36 +51,33 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function getRoles()
     {
-        return ['ROLE_BACKEND'];
-        if (!isset($this->roles)) {
-            if (in_array('4', $this->id_user_group)
-                || in_array('5', $this->id_user_group)
-            ) {
-                $this->roles = \Privilege::getPrivilegeNames();
+        if (!empty($this->roles)) {
+            return $this->roles;
+        }
 
-                if (in_array('4', $this->id_user_group)) {
-                    $this->roles[] = 'ROLE_MASTER';
-                }
+        $this->roles = [ 'ROLE_BACKEND' ];
 
-                if (in_array('5', $this->id_user_group)) {
-                    $this->roles[] = 'ROLE_ADMIN';
-                }
-            } else {
-                $this->roles = array();
-                foreach ($this->id_user_group as $group) {
-                    $groupPrivileges = \Privilege::getPrivilegesForUserGroup($group);
-                    $this->roles = array_merge(
-                        $this->roles,
-                        $groupPrivileges
-                    );
-                }
+        if (!empty($this->type) && $this->type !== 0) {
+            $this->roles = [ 'ROLE_FRONTEND' ];
+        }
+
+        if ($this->isMaster() || $this->isAdmin()) {
+            $this->roles = array_merge($this->roles, \Privilege::getPrivilegeNames());
+
+            if ($this->isMaster()) {
+                $this->roles[] = 'ROLE_MASTER';
             }
 
-            if ((int) $this->type == 0) {
-                $this->roles[] = 'ROLE_BACKEND';
-            } else {
-                $this->roles[] = 'ROLE_FRONTEND';
+            if ($this->isAdmin()) {
+                $this->roles[] = 'ROLE_ADMIN';
             }
+
+            return $this->roles;
+        }
+
+        foreach ($this->id_user_group as $group) {
+            $roles = \Privilege::getPrivilegesForUserGroup($group);
+            $this->roles = array_merge($this->roles, $roles);
         }
 
         return $this->roles;
@@ -179,14 +176,16 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
     public function isEqualTo(UserInterface $user)
     {
         if ($user instanceof User
-            && $this->getUsername() === $this->getUsername()
+            && $user->getUsername() === $this->getUsername()
         ) {
-            $isEqual = count($this->getRoles()) == count($user->getRoles());
+            $isEqual = count($this->getRoles()) === count($user->getRoles());
+
             if ($isEqual) {
                 foreach ($this->getRoles() as $role) {
                     $isEqual = $isEqual && in_array($role, $user->getRoles());
                 }
             }
+
             return $isEqual;
         }
 
@@ -200,7 +199,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isMaster()
     {
-        if (in_array('4', $this->user_group_ids)) {
+        if (in_array('4', $this->id_user_group)) {
             return true;
         }
 
