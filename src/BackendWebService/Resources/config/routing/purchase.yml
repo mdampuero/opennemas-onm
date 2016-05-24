@@ -4,3 +4,17 @@ backend_ws_purchase_get_pdf:
     methods:  [ GET ]
     options:
         expose: true
+
+backend_ws_purchase_save:
+    path: /purchases
+    defaults: { _controller: BackendWebServiceBundle:Purchase:save }
+    methods: [ POST ]
+    options:
+        expose: true
+
+backend_ws_purchase_update:
+    path: /purchases/{id}
+    defaults: { _controller: BackendWebServiceBundle:Purchase:update }
+    methods: [ PUT ]
+    options:
+        expose: true

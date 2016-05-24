@@ -50,4 +50,100 @@ class PurchaseController extends Controller
 
         return $response;
     }
+
+    /**
+     * @api {post} /purchases Creates a new purchase
+     * @apiName CreatePurchase
+     * @apiGroup Purchase
+     */
+    public function saveAction()
+    {
+        $instance = $this->get('instance');
+        $em       = $this->get('orm.manager');
+        $client   = $instance->getClient();
+
+        if (!empty($client)) {
+            $client = $em->getRepository('manager.client', 'Database')->find($client);
+        }
+
+        $purchase = new Purchase();
+        $purchase->instance_id = $instance->id;
+        $purchase->step        = 1;
+        $purchase->created     = date('Y-m-d H:i:s');
+
+        if (!empty($client)) {
+            $purchase->client_id = $client->id;
+            $purchase->client    = $client;
+        }
+
+        $em->persist($purchase);
+
+        return new JsonResponse($purchase->id);
+    }
+
+    /**
+     * @api {put} /purchases/:id Updates a purchase
+     * @apiName UpdatePurchase
+     * @apiGroup Purchase
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em       = $this->get('orm.manager');
+        $purchase = $em->getRepository('manager.purchase')->find($id);
+
+        if (!empty($this->get('instance')->getClient())) {
+            $client = $this->get('instance')->getClient();
+            $client = $em->getRepository('manager.client', 'Database')->find($client);
+
+            if (!empty($client)) {
+                $purchase->client_id = $client->id;
+                $purchase->client    = $client;
+            }
+        }
+
+        $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
+
+        $method         = $request->request->get('method', null);
+        $subtotal       = 0;
+        $purchase->step = $request->request->get('step', 1);
+        $purchase->fee  = 0;
+
+        $ids = $request->request->get('ids', []);
+
+        if (!empty($ids)) {
+            $items = $em->getRepository('manager.extension')->findBy([
+                'id' => [ [ 'value' => $ids, 'operator' => 'in' ] ]
+            ]);
+
+            $purchase->details = [];
+            foreach ($items as $item) {
+                $subtotal    += $item->getPrice();
+                $description  = $item->name[CURRENT_LANGUAGE_SHORT];
+
+                if (!empty($request->request->get('domain'))) {
+                    $description .= ': ' . $request->request->get('domain');
+                }
+
+                $purchase->details[] = [
+                    'description'  => $description,
+                    'unit_cost'    => $item->getPrice(),
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => $vatTax
+                ];
+            }
+
+            $vat = ($vatTax/100) * $subtotal;
+
+            if (!empty($method) === 'PaypalAccount') {
+                $purchase->fee = $subtotal * 2.9 + 0.30;
+            }
+
+            $purchase->total = $subtotal + $vat + $purchase->fee;
+        }
+
+        $em->persist($purchase);
+
+        return new JsonResponse();
+    }
 }
