@@ -60,6 +60,8 @@
          *                   returns false.
          */
         $scope.isVatNumberRequired = function() {
+          $scope.validVatNumber = false;
+
           // Person or company in Spain
           if ($scope.client && $scope.client.country === 'ES') {
             return true;
@@ -70,6 +72,8 @@
               $scope.taxes[$scope.client.country]) {
             return true;
           }
+
+          $scope.validVatNumber = true;
 
           // Person in EU or company and persons outside EU
           return false;
@@ -171,10 +175,6 @@
         $scope.$watch('client.vat_number', function(nv, ov) {
           if (nv === ov) {
             return;
-          }
-
-          if ($scope.isVatNumberRequired()) {
-            $scope.validVatNumber = false;
           }
 
           if ($scope.searchTimeout) {
