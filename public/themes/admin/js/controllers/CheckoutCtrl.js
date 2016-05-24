@@ -13,8 +13,8 @@
      *   Controller to handle checkout-related actions.
      */
     .controller('CheckoutCtrl', [
-      '$rootScope', '$scope',
-      function($rootScope, $scope) {
+      '$rootScope', '$scope', 'http',
+      function($rootScope, $scope, http) {
         /**
          * @memberOf CheckoutCtrl
          *
@@ -96,6 +96,38 @@
         $scope.vatTax = 0;
 
         /**
+         * @function getPrice
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the item price.
+         *
+         * @param {Object} item  The item.
+         * @param {String} price The price type.
+         *
+         * @return {Float} The item price.
+         */
+        $scope.getPrice = function (item, type) {
+          if (!type) {
+            type = 'monthly';
+          }
+
+          if (!item.price || item.price.length === 0) {
+            return { value: 0 };
+          }
+
+          var prices = item.price.filter(function(a) {
+            return a.type === type;
+          });
+
+          if (prices.length > 0) {
+            return prices[0];
+          }
+
+          return item.price[0];
+        };
+
+        /**
          * @function next
          * @memberOf CheckoutCtrl
          *
@@ -103,7 +135,16 @@
          *   Goes to the next step.
          */
         $scope.next = function() {
-          $scope.step++;
+          var route = {
+            name: 'backend_ws_purchase_update',
+            params: { id: $scope.purchase }
+          };
+
+          var data = $scope.getData();
+
+          return http.put(route, data).then(function() {
+            $scope.step++;
+          });
         };
 
         /**
@@ -140,9 +181,12 @@
               (!nv.company && $scope.countries[nv.country]))) {
             $scope.vatTax = $scope.taxes[nv.country].value;
           }
+        }, true);
 
+        // Update tax when vatTax or subtotal change
+        $scope.$watch('[vatTax, subtotal]', function() {
           $scope.tax = Math.round($scope.subtotal * $scope.vatTax)/100;
-        });
+        }, true);
 
         // Update total when fee, subtotal or tax change
         $scope.$watch('[fee, subtotal, tax]', function () {
