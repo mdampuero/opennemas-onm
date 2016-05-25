@@ -1,86 +1,81 @@
-/**
- * Handle actions for article inner.
- */
-angular.module('BackendApp.controllers').controller('UserCtrl', [
-  '$controller', '$http', '$uibModal', '$scope', 'routing',
-  function($controller, $http, $uibModal, $scope, routing) {
-    'use strict';
+(function () {
+  'use strict';
 
-    // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+  angular.module('BackendApp.controllers')
+    /**
+     * @ngdoc controller
+     * @name  UserCtrl
+     *
+     * @requires $controller
+     * @requires $http
+     * @requires $uibModal
+     * @requires $scope
+     *
+     * @description
+     *   Check billing information when saving user.
+     */
+    .controller('UserCtrl', [
+      '$controller', '$http', '$scope', '$uibModal',
+      function($controller, $http, $scope, $uibModal) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
-    $scope.confirmUser = function(ismaster) {
-      if (
-        !ismaster &&
-        (($scope.user.activated == '1' && $scope.user.type == '0' && $scope.activated == '0') ||
-        ($scope.user.activated == '1' && $scope.user.type == '0' && $scope.type == '1'))
-      ) {
-        var modal = $uibModal.open({
-          templateUrl: 'modal-update-selected',
-          backdrop: 'static',
-          controller: 'modalCtrl',
-          resolve: {
-            template: function() {
-              return {
-                name:           $scope.user.id ? 'update' : 'create',
-                backend_access: true,
-                value:          1,
-                checkPhone:     $scope.checkPhone,
-                checkVat:       $scope.checkVat,
-                extra:          $scope.extra,
-                saveBilling:    $scope.saveBilling,
-              };
-            },
-            success: function() {
-              return null;
-            }
+        /**
+         * @memberOf UserCtrl
+         *
+         * @description
+         *  Activated changed flag
+         *
+         * @type {Boolean}
+         */
+        $scope.activatedChanged = false;
+
+        /**
+         * @function confirmUser
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Shows a modal to confirm user update.
+         */
+        $scope.confirmUser = function(isMaster) {
+          if (!isMaster && $scope.activated == '1' && $scope.activatedChanged) {
+            var modal = $uibModal.open({
+              templateUrl: 'modal-update-selected',
+              backdrop: 'static',
+              controller: 'modalCtrl',
+              resolve: {
+                template: function() {
+                  return {
+                    name:           $scope.id ? 'update' : 'create',
+                    backend_access: true,
+                    value:          1,
+                    extra:          $scope.extra,
+                  };
+                },
+                success: function() {
+                  return null;
+                }
+              }
+            });
+
+            modal.result.then(function(response) {
+              if (response) {
+                $('form').submit();
+              }
+            });
+
+            return false;
           }
-        });
 
-        modal.result.then(function(response) {
-          if (response) {
-            $('form').submit();
+          $('form').submit();
+        };
+
+        // Updates activated changed flag when activated changes
+        $scope.$watch('activated', function(nv, ov) {
+          if (ov != null && nv && nv!== ov) {
+            $scope.activatedChanged = true;
           }
-        });
-      } else {
-        $('form').submit();
+        }, true);
       }
-    };
-
-    $scope.saveBilling = function(template) {
-      var url = routing.generate('backend_ws_store_billing');
-      var data = $scope.extra.billing;
-      $http.post(url, data).success(function() {
-        template.step = 2;
-      });
-    };
-
-    $scope.checkPhone = function(t) {
-      var url = routing.generate('backend_ws_store_check_phone',
-          { country: $scope.extra.billing.country, phone: $scope.extra.billing.phone });
-
-      $http.get(url).success(function() {
-        t.validPhone = true;
-      }).error(function() {
-        t.validPhone = false;
-      });
-    };
-
-    $scope.checkVat = function(t) {
-      if (!$scope.extra.billing || !$scope.extra.billing.country ||
-          !$scope.extra.billing.phone) {
-        t.validPhone = false;
-        return;
-      }
-
-      var url = routing.generate('backend_ws_store_check_vat',
-          { country: $scope.extra.billing.country, vat: $scope.extra.billing.vat });
-
-      $http.get(url).success(function() {
-        t.validVat = true;
-      }).error(function() {
-        t.validVat = false;
-      });
-    };
-  }
-]);
+    ]);
+})();

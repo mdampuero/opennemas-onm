@@ -61,15 +61,15 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off" ng-controller="UserCtrl" ng-init="user = {json_encode($user)|clear_json};extra = {json_encode($extra)|clear_json};activated=user.activated;type=user.type">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" autocomplete="off" ng-controller="UserCtrl" ng-init="{if $user->id}id = '{$user->id}';{/if}activated = '{$user->activated}';type = '{$user->type}';extra = {json_encode($extra)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-user fa-lg"></i>
-              Users
+              <i class="fa fa-user"></i>
+              {t}Users{/t}
             </h4>
           </li>
           <li class="quicklinks hidden-xs">
@@ -92,7 +92,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" {if $smarty.session._sf2_attributes.user->isMaster()} ng-click="confirmUser(true)" {else} ng-click="confirmUser(false)" {/if} type="button" value="validate" id="save-button">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser({if $smarty.session._sf2_attributes.user->isMaster()}true{/if})" type="button" value="validate" id="save-button">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
@@ -217,7 +217,7 @@
         </div>
         {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-        <div class="grid simple" ng-if="user.type == 1">
+        <div class="grid simple" ng-if="type == 1">
           <div class="grid-title">
             <h4>{t}Additional data{/t}</h4>
           </div>
@@ -276,7 +276,7 @@
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <div class="checkbox">
-                    <input id="activated" name="activated" ng-model="user.activated" ng-true-value="'1'" ng-false-value="'0'" ng-checked="user.activated == 1" type="checkbox" value="1"/>
+                    <input id="activated" name="activated" ng-checked="activated == '1'" ng-model="activated" ng-true-value="'1'" ng-false-value="'0'" type="checkbox" value="1">
                     <label class="form-label" for="activated">
                       {t}Activated{/t}
                     </label>
@@ -287,7 +287,7 @@
                 {acl isAllowed="USER_ADMIN"}
                 <div class="form-group">
                   <div class="checkbox">
-                    <input id="type" name="type" ng-checked="user.type == 0" ng-model="user.type" ng-true-value="'0'" ng-false-value="'1'" type="checkbox" value="0"/>
+                    <input id="type" name="type" ng-checked="type == 0" ng-model="type" ng-true-value="'0'" ng-false-value="'1'" type="checkbox" value="0">
                     <label class="form-label" for="type">
                       {t}Has backend access{/t}
                     </label>
