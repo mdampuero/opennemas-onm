@@ -6,12 +6,10 @@
   {t}You have just purchased the following items:{/t}
 </p>
 
-<h4>{t}Required Domains:{/t}</h4>
-
 <ul>
- {foreach from=$domains item=domain}
-   <li>{$domain}</li>
- {/foreach}
+  {foreach from=$domains item=domain}
+    <li>{$domain['description']}</li>
+  {/foreach}
 </ul>
 
 <p>
