@@ -138,6 +138,7 @@ class Attachment extends Content
                 return false;
             }
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -166,7 +167,7 @@ class Attachment extends Content
     public function exists($path)
     {
        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
+            $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT count(*) AS total FROM attachments WHERE `path`=?',
                 [ $path ]
             );
@@ -175,6 +176,7 @@ class Attachment extends Content
                 return false;
             }
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -204,6 +206,7 @@ class Attachment extends Content
                 return;
             }
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return;
         }
 
