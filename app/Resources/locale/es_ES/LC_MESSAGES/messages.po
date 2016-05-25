@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-19 13:54+0200\n"
-"PO-Revision-Date: 2016-05-19 14:05+0200\n"
+"POT-Creation-Date: 2016-05-25 12:21+0200\n"
+"PO-Revision-Date: 2016-05-25 12:29+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -476,6 +476,24 @@ msgstr "Oups! Parece que hemos tenido un problema al ejecutar tu consulta."
 
 msgid "You must pick a file before submitting the form"
 msgstr "Debes seleccionar un fichero antes de enviar el formulario"
+
+#, php-format
+msgid "You must pick a file smaller than %d Mb"
+msgstr "Debes seleccionar un archivo más pequeño que %d Mb"
+
+#, php-format
+msgid ""
+"We are sorry, file extension %s is not allowed for upload as it could "
+"contain malicious code. Please contact with our support  or retry using a "
+"different file extension."
+msgstr ""
+"No está permitido subir archivos con extension %s ya que pueden contener "
+"contenido malicioso. Contacta con nuestro soporte o intentalo con otra "
+"extension de fichero."
+
+#, php-format
+msgid "Unable to create the directory to save the file"
+msgstr "No se pudo crear el directorio donde se guarda el fichero"
 
 msgid "There was an error while uploading the file."
 msgstr "Se ha producido un error al subir el fichero."
@@ -985,6 +1003,14 @@ msgstr "Se ha producido un error al actualizar el widget."
 
 msgid "Widget updated successfully."
 msgstr "Widget actualizado correctamente."
+
+msgid "The reCAPTCHA was not entered correctly. Try to authenticate again."
+msgstr ""
+"El código de reCAPTCHA no fue escrito correctamente. Pruebe a autenticarse "
+"de nuevo."
+
+msgid "Your user is not allowed to access, please contact your administrator"
+msgstr "Tu usuario no tiene permitido el acceso, contacta con tu administrador"
 
 msgid "Browse"
 msgstr "Explorar"
@@ -4224,11 +4250,11 @@ msgstr "Editando archivo"
 msgid "Creating file"
 msgstr "Creando archivo"
 
-msgid "File path"
-msgstr "Ruta al archivo"
-
 msgid "Download"
 msgstr "Descargar"
+
+msgid "Max allowed file size: %1 Mb"
+msgstr "Tamaño máximo de fichero permitido: %1 Mb"
 
 msgid "Files (#)"
 msgstr "Ficheros (#)"
@@ -8695,6 +8721,9 @@ msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
 
 msgid "Search by name or username"
 msgstr "Buscar por nombre o correo"
+
+#~ msgid "File path"
+#~ msgstr "Ruta al archivo"
 
 #~ msgid "Article deleted successfully."
 #~ msgstr "Artículo eliminado correctamente."
