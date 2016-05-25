@@ -23,6 +23,14 @@
         $.extend(this, $controller('CheckoutCtrl',
             { $rootScope: $rootScope, $scope: $scope }));
 
+        /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *   The name for steps.
+         *
+         * @type {Array}
+         */
         $scope.steps = [ 'cart', 'billing', 'summary', 'done' ];
 
         /**
