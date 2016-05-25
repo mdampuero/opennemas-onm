@@ -68,7 +68,7 @@ class PurchaseController extends Controller
 
         $purchase = new Purchase();
         $purchase->instance_id = $instance->id;
-        $purchase->step        = 1;
+        $purchase->step        = 'cart';
         $purchase->created     = date('Y-m-d H:i:s');
 
         if (!empty($client)) {
@@ -103,10 +103,10 @@ class PurchaseController extends Controller
 
         $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
 
-        $method         = $request->request->get('method', null);
-        $subtotal       = 0;
-        $purchase->step = $request->request->get('step', 1);
-        $purchase->fee  = 0;
+        $purchase->method = $request->request->get('method', null);
+        $subtotal         = 0;
+        $purchase->step   = $request->request->get('step', 'cart');
+        $purchase->fee    = 0;
 
         $ids = $request->request->get('ids', []);
 
@@ -116,12 +116,13 @@ class PurchaseController extends Controller
             ]);
 
             $purchase->details = [];
+            $i = 0;
             foreach ($items as $item) {
                 $subtotal    += $item->getPrice();
                 $description  = $item->name[CURRENT_LANGUAGE_SHORT];
 
-                if (!empty($request->request->get('domain'))) {
-                    $description .= ': ' . $request->request->get('domain');
+                if (!empty($request->request->get('domains'))) {
+                    $description .= ': ' . $request->request->get('domains')[$i];
                 }
 
                 $purchase->details[] = [
@@ -131,12 +132,22 @@ class PurchaseController extends Controller
                     'tax1_name'    => 'IVA',
                     'tax1_percent' => $vatTax
                 ];
+
+                $i++;
             }
 
             $vat = ($vatTax/100) * $subtotal;
 
-            if (!empty($method) === 'PaypalAccount') {
-                $purchase->fee = $subtotal * 2.9 + 0.30;
+            if ($purchase->method === 'CreditCard') {
+                $purchase->fee = $subtotal * 0.029 + 0.30;
+
+                $purchase->details[] = [
+                    'description'  => _('Pay with credit card'),
+                    'unit_cost'    => str_replace(',', '.', (string) round($purchase->fee, 2)),
+                    'quantity'     => 1,
+                    'tax1_name'    => 'IVA',
+                    'tax1_percent' => 0
+                ];
             }
 
             $purchase->total = $subtotal + $vat + $purchase->fee;
