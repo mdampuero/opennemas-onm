@@ -103,6 +103,7 @@ class Action
             if (!$rs) {
                 return [];
             }
+
             foreach ($rs as $element) {
                 $action = new \Action();
                 $action->id          = $element['id'];
