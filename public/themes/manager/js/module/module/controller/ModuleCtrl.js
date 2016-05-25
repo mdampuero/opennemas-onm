@@ -212,14 +212,16 @@
           Cleaner.clean($scope.module);
 
           for (var key in $scope.module) {
-            if (key === 'name' || key === 'description' || key === 'about' || key === 'metas') {
-              data.append(key, JSON.stringify($scope.module[key]));
-            } else if ($scope.module[key] instanceof Array) {
-              for (var i = 0; i <  $scope.module[key].length; i++) {
-                data.append(key + '[' + i + ']', $scope.module[key][i]);
+            if ($scope.module[key] !== null) {
+              if (key === 'name' || key === 'description' || key === 'about' || key === 'metas') {
+                data.append(key, JSON.stringify($scope.module[key]));
+              } else if ($scope.module[key] instanceof Array) {
+                for (var i = 0; i <  $scope.module[key].length; i++) {
+                  data.append(key + '[' + i + ']', $scope.module[key][i]);
+                }
+              } else {
+                data.append(key, $scope.module[key]);
               }
-            } else {
-              data.append(key, $scope.module[key]);
             }
           }
 
@@ -239,8 +241,7 @@
                   'manager_module_show', { id: id });
               $location.path(url);
             }
-          }).error(function(response) {
-            messenger.post({ message: response, type: 'error' });
+          }).error(function() {
             $scope.saving = 0;
           });
         };
