@@ -13,8 +13,8 @@
      *   Controller to handle checkout-related actions.
      */
     .controller('CheckoutCtrl', [
-      '$rootScope', '$scope', 'http',
-      function($rootScope, $scope, http) {
+      '$rootScope', '$scope', 'http', 'webStorage',
+      function($rootScope, $scope, http, webStorage) {
         /**
          * @memberOf CheckoutCtrl
          *
@@ -144,6 +144,10 @@
 
           return http.put(route, data).then(function() {
             $scope.step++;
+
+            if ($scope.steps[$scope.step] === 'done') {
+              webStorage.local.remove('purchase');
+            }
           });
         };
 
