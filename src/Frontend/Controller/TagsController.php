@@ -39,7 +39,7 @@ class TagsController extends Controller
         }
 
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
-        $tagName = \StringUtils::normalize($tagName);
+        $tagName = \Onm\StringUtils::normalize($tagName);
         $page    =  1; //$request->query->getDigits('page', 1);
 
         // Load config
@@ -79,7 +79,7 @@ class TagsController extends Controller
 
                 foreach ($arrayMetadatas as &$word) {
                     $word = strtolower(trim($word));
-                    $word = \StringUtils::normalize($word);
+                    $word = \Onm\StringUtils::normalize($word);
                     $word = preg_replace('/[^a-z0-9]/', '_', $word);
                 }
 

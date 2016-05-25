@@ -116,8 +116,8 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = StringUtils::getTitle(
-            StringUtils::normalizeName(strtolower($data['title']))
+        $data['name'] = \Onm\StringUtils::getTitle(
+            \Onm\StringUtils::normalizeName(strtolower($data['title']))
         );
 
         // Unserialize params

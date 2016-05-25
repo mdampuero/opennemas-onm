@@ -75,7 +75,7 @@ class Video extends Content
                 return $this->getUri();
                 break;
             case 'slug':
-                return StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':

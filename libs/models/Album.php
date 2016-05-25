@@ -80,7 +80,7 @@ class Album extends Content
 
                 break;
             case 'slug':
-                return StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':

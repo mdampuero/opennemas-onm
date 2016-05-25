@@ -259,7 +259,7 @@ class Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::getTitle($this->title);
                 }
                 break;
             case 'content_type_name':
@@ -386,9 +386,9 @@ class Content
             || empty($data['params'])) ? null: serialize($data['params']);
 
         if (!isset($data['slug']) || empty($data['slug'])) {
-            $data['slug'] = mb_strtolower(StringUtils::getTitle($data['title']));
+            $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
         } else {
-            $data['slug'] = StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
         }
 
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
@@ -555,12 +555,12 @@ class Content
         }
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = StringUtils::getTitle($this->slug);
+                $data['slug'] = \Onm\StringUtils::getTitle($this->slug);
             } else {
-                $data['slug'] = mb_strtolower(StringUtils::getTitle($data['title']));
+                $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
             }
         } else {
-            $data['slug'] = StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
         }
         if (empty($data['description']) && !isset($data['description'])) {
             $data['description']='';

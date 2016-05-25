@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\File\File;
 
 use Onm\DatabaseConnection;
 use Onm\Settings as s;
-use Onm\StringUtils;
 
 class EstrellaDigitalProvider extends JsonProvider
 {

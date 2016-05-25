@@ -152,7 +152,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::getTitle($this->title);
                 }
                 break;
             case 'author':
@@ -181,7 +181,7 @@ class Article extends Content
     public function create($data)
     {
         if (!isset($data['description'])) {
-            $data['description'] = StringUtils::getNumWords($data['body'], 50);
+            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
@@ -302,7 +302,7 @@ class Article extends Content
     {
         // Update an article
         if (!$data['description']) {
-            $data['description'] = StringUtils::getNumWords(
+            $data['description'] = \Onm\StringUtils::getNumWords(
                 $data['body'],
                 50
             );
