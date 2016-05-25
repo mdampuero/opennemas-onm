@@ -197,15 +197,13 @@ class Advertisement extends Content
                 ]
             );
 
-            if (!$rs) {
-                return false;
-            }
+            $this->load($data);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        return $this;
     }
 
     /**
@@ -321,15 +319,13 @@ class Advertisement extends Content
                 ]
             );
 
-            if (!$rs) {
-                return false;
-            }
+            $this->load($data);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        return $this;
     }
 
     /**
@@ -347,10 +343,7 @@ class Advertisement extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                'DELETE FROM advertisements WHERE pk_advertisement = ?',
-                [ $id ]
-            );
+            $rs = getService('dbal_connection')->delete("advertisements", [ 'pk_advertisement' => $id ]);
 
             if (!$rs) {
                 return false;
@@ -448,7 +441,7 @@ class Advertisement extends Content
 
         try {
             // Fetch data for the ad from the database
-            $rs = getService('dbal_connection')->fetchAssoc(
+            $rs = getService('dbal_connection')->executeUpdate(
                 'UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?',
                 [ $id ]
             );
@@ -523,12 +516,16 @@ class Advertisement extends Content
                 $catsSQL = 'AND advertisements.fk_content_categories=0 ';
             }
 
-            $sql = "SELECT pk_advertisement as id FROM advertisements "
+            try {
+                $sql = "SELECT pk_advertisement as id FROM advertisements "
                   ."WHERE advertisements.type_advertisement IN (".$types.") "
                   .$catsSQL.' ORDER BY id';
 
-            $conn = getService('dbal_connection');
-            $result = $conn->fetchAll($sql);
+                $conn = getService('dbal_connection');
+                $result = $conn->fetchAll($sql);
+            } catch (\Exception $e) {
+                return $banners;
+            }
 
             if (count($result) <= 0) {
                 return $banners;
@@ -790,42 +787,6 @@ class Advertisement extends Content
 
         $output = $params['beforeHTML'].$content.$params['afterHTML'];
 
-        // Increase number of views for this advertisement
-        // $this->setNumViews($this->pk_advertisement);
-
         return $output;
-    }
-
-    /**
-     * Fire this event when publish an advertisement and unpublished others
-     * banners where type_advertisement is equals
-     */
-    public function onPublish()
-    {
-        if (!empty($this->content_status) && (intval($this->content_status)>0)) {
-            $sql = 'UPDATE `contents` SET `content_status`=0 '
-                 . 'WHERE pk_content IN (
-                    SELECT `pk_advertisement` FROM (
-                        SELECT `advertisements`.*
-                        FROM `advertisements`, `contents`,
-                            `contents_categories`
-                        WHERE `advertisements`.`type_advertisement`=?
-                        AND `advertisements`.`pk_advertisement`<>?
-                        AND `contents_categories`.`pk_fk_content_category`=?
-                        AND `contents`.`pk_content`='
-                            .'`contents_categories`.`pk_fk_content`
-                        AND `contents`.`pk_content`='
-                            .'`advertisements`.`pk_advertisement`
-                    ) AS temp )';
-            $values = array(
-                $this->type_advertisement,
-                $this->type_advertisement,
-                $this->type_advertisement,
-            );
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                return;
-            }
-        }
     }
 }
