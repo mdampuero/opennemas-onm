@@ -127,7 +127,7 @@
     {else}
       <div class="text-right">
         <button class="btn btn-primary" ng-click="confirm()" ng-disabled="clientForm.$invalid || !validVatNumber || loading">
-          <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
+          <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
           {t}Next{/t}
         </button>
       </div>
