@@ -103,10 +103,11 @@ class PurchaseController extends Controller
 
         $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
 
-        $purchase->method = $request->request->get('method', null);
-        $subtotal         = 0;
-        $purchase->step   = $request->request->get('step', 'cart');
-        $purchase->fee    = 0;
+        $purchase->updated = date('Y-m-d H:i:s');
+        $purchase->method  = $request->request->get('method', null);
+        $subtotal          = 0;
+        $purchase->step    = $request->request->get('step', 'cart');
+        $purchase->fee     = 0;
 
         $ids = $request->request->get('ids', []);
 
