@@ -22,7 +22,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(</head>)@',
-                "\n". $settings['header_script'] . "\n" . '${1}',
+                "\n". stripslashes($settings['header_script']) . "\n" . '${1}',
                 $output
             );
         }
@@ -32,7 +32,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(<body.*>)@',
-                '${1}' . "\n". $settings['body_start_script'] . "\n",
+                '${1}' . "\n". stripslashes($settings['body_start_script']) . "\n",
                 $output
             );
         }
@@ -42,7 +42,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(</body.*>)@',
-                "\n". $settings['body_end_script'] . "\n" . '${1}',
+                "\n". stripslashes($settings['body_end_script']) . "\n" . '${1}',
                 $output
             );
         }

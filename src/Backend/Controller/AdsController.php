@@ -450,9 +450,9 @@ class AdsController extends Controller
             ];
 
             if ($this->getUser()->isMaster()) {
-                $settings['header_script']     = $formValues->filter('header_script');
-                $settings['body_end_script']   = $formValues->filter('body_end_script');
-                $settings['body_start_script'] = $formValues->filter('body_start_script');
+                $settings['header_script']     = $formValues->filter('header_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $settings['body_end_script']   = $formValues->filter('body_end_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $settings['body_start_script'] = $formValues->filter('body_start_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
             }
 
             foreach ($settings as $key => $value) {
