@@ -291,8 +291,8 @@ class RssController extends Controller
 
                 // Wrap img with figure and add caption
                 $content->body = preg_replace(
-                    '@(<img[^>]+>)@',
-                    '<figure>${1}<figcaption>'.$content->title.'</figcaption></figure>',
+                    '@(<p>)*(<img[^>]+>)@',
+                    '<figure>${2}</figure>${1}',
                     $content->body
                 );
 
