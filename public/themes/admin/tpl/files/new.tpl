@@ -102,10 +102,12 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="path" class="form-label">{t}File path{/t}</label>
+                <label for="path" class="form-label">{t}File{/t}</label>
                 <div class="controls">
                   {if !is_null($attaches)}
-                    <a class="btn btn-white" target="_blank" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}"><span class="fa fa-download"></span> {t}Download{/t}</a>
+                    <a class="btn btn-white thumbnail center" target="_blank" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">
+                      <span class="fa fa-download fa-2x"></span> <br>{t}Download{/t}
+                    </a>
                     <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
                   {else}
                     <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -119,9 +121,13 @@
                           <span class="fileinput-exists">Change</span>
                           <input type="file" id="path" name="path" />
                         </span>
-                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">{t}Remove{/t}</a>
                       </span>
                     </div>
+                    <div class="help">
+                      {t 1=$smarty.const.MAX_UPLOAD_FILE/1024/1024}Max allowed file size: %1 Mb{/t}
+                      <!-- <span class="fa fa-info-circle" uib-tooltip="{t}File types allowed{/t}: 7z avi bmp bz2 css csv doc docx eot flac flv gif gz ico jpeg jpg js mka mkv mov mp3 mp4 mpeg mpg odt odp ods odw otf ogg ogm opus pdf png ppt pptx rar rtf svg svgz swf tar tbz tgz ttf txt txz wav webm webp woff woff2 xls xlsx xml xz zip"> -->
+                    </span></div>
                   {/if}
                 </div>
               </div>

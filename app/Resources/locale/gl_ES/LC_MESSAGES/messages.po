@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-19 13:54+0200\n"
-"PO-Revision-Date: 2016-05-19 14:04+0200\n"
+"POT-Creation-Date: 2016-05-25 12:21+0200\n"
+"PO-Revision-Date: 2016-05-25 13:29+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -478,6 +478,23 @@ msgstr "Oups! Semella que tivemos algún problema ao executar a túa consulta."
 
 msgid "You must pick a file before submitting the form"
 msgstr "Selecciona un ficheiro antes de enviar o formulario"
+
+#, php-format
+msgid "You must pick a file smaller than %d Mb"
+msgstr "Debes seleccionar un ficheiro máis pequeno que %d Mb"
+
+#, php-format
+msgid ""
+"We are sorry, file extension %s is not allowed for upload as it could "
+"contain malicious code. Please contact with our support  or retry using a "
+"different file extension."
+msgstr ""
+"Non está permitido subir ficheiros con extensión %s xa que poden ter contido "
+"malicioso. Contacte co noso soporte ou tente con outra extensión de ficheiro."
+
+#, php-format
+msgid "Unable to create the directory to save the file"
+msgstr "Non foi posíbel crear o directorio onde gardar o ficheiro"
 
 msgid "There was an error while uploading the file."
 msgstr "Produciuse un erro ao actualizar o widget."
@@ -974,6 +991,13 @@ msgstr "Produciuse un erro ao actualizar o widget."
 
 msgid "Widget updated successfully."
 msgstr "Widget actualizado correctamente."
+
+msgid "The reCAPTCHA was not entered correctly. Try to authenticate again."
+msgstr ""
+"O reCAPTCHA non foi completado correctamente. Tente autenticarse de novo."
+
+msgid "Your user is not allowed to access, please contact your administrator"
+msgstr "O teu usuario non ten permitido o acceso, contacta co teu administrador"
 
 msgid "Browse"
 msgstr "Examinar"
@@ -4183,11 +4207,11 @@ msgstr "Editando ficheiro"
 msgid "Creating file"
 msgstr "Creando ficheiro"
 
-msgid "File path"
-msgstr "Ruta ao ficheiro"
-
 msgid "Download"
 msgstr "Descargar"
+
+msgid "Max allowed file size: %1 Mb"
+msgstr "Tamaño de ficheiro máximo permitido: %1 Mb"
 
 msgid "Files (#)"
 msgstr "Ficheiros (nº)"
@@ -8614,6 +8638,9 @@ msgstr "Tes certeza que queres eliminar os usuarios seleccionados?"
 msgid "Search by name or username"
 msgstr "Buscar por nome ou nome de usuario"
 
+#~ msgid "File path"
+#~ msgstr "Ruta ao ficheiro"
+
 #~ msgid "Article deleted successfully."
 #~ msgstr "Artigo eliminado correctamente."
 
@@ -11998,9 +12025,6 @@ msgstr "Buscar por nome ou nome de usuario"
 
 #~ msgid "You must assign a section for \"%s\""
 #~ msgstr "Debe asignar unha sección para \"% s\""
-
-#~ msgid "This user was deactivated. Please ask your administrator."
-#~ msgstr "Este usuario está desactivado. Pregunta ao teu administrador."
 
 #~ msgid ""
 #~ "You can't modify this book data because you don't have enought privileges."
