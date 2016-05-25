@@ -190,15 +190,16 @@ class AclUserController extends Controller
             $user->accesscategories[0]->pk_fk_content_category = 0;
         }
 
-        unset($user->password);
-        unset($user->token);
+        $user->eraseCredentials();
 
-        $extra = [ 'billing' => [] ];
+        $id = $this->get('instance')->getClient();
 
-        $extra['billing'] = [];
-        foreach ($this->get('instance')->metas as $key => $value) {
-            if (strpos($key, 'billing') !== false) {
-                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+        if (!empty($id)) {
+            try {
+                $extra['client'] = $this->get('orm.manager')
+                    ->getRepository('manager.client', 'Database')
+                    ->find($id)->getData();
+            } catch (\Exception $e) {
             }
         }
 
@@ -450,16 +451,19 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
-        $extra = [ 'billing' => [] ];
+        $id = $this->get('instance')->getClient();
 
-        $extra['billing'] = [];
-        foreach ($this->get('instance')->metas as $key => $value) {
-            if (strpos($key, 'billing') !== false) {
-                $extra['billing'][str_replace('billing_', '', $key)] = $value;
+        if (!empty($id)) {
+            try {
+                $extra['client'] = $this->get('orm.manager')
+                    ->getRepository('manager.client', 'Database')
+                    ->find($id)->getData();
+            } catch (\Exception $e) {
             }
         }
 
-        $extra['countries']= array_flip(Intl::getRegionBundle()->getCountryNames());
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $this->render(
             'acl/user/new.tpl',
