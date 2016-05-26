@@ -72,7 +72,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Deletes the selected instances.
+     * Deletes the selected notifications.
      *
      * @param Request $request The request object.
      *
@@ -90,7 +90,7 @@ class NotificationController extends Controller
             || (is_array($selected) && count($selected) == 0)
         ) {
             return new JsonResponse(
-                _('Unable to find the instances for the given criteria'),
+                _('Unable to find the notifications for the given criteria'),
                 404
             );
         }
@@ -146,7 +146,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Returns the list of instances as JSON.
+     * Returns the list of notifications as JSON.
      *
      * @param Request $request The request object.
      *
