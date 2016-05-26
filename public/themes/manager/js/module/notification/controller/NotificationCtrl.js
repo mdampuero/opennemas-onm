@@ -45,7 +45,7 @@
             es: '',
             gl: '',
           },
-          instances: [],
+          target: [],
           fixed: '0',
           style: {},
           title: {
@@ -68,15 +68,15 @@
          * @description
          *   Suggest a list of instance basing on the current query.
          *
-         * @return {Array} A list of instances
+         * @return {Array} A list of targets
          */
         $scope.autocomplete = function(query) {
           var tags = [];
 
-          for (var i = 0; i < $scope.extra.instances.length; i++) {
-            var instance = $scope.extra.instances[i];
-            if (!query || instance.name.indexOf(query.toLowerCase()) !== -1) {
-              tags.push(instance);
+          for (var i = 0; i < $scope.extra.target.length; i++) {
+            var target = $scope.extra.target[i];
+            if (!query || target.name.indexOf(query.toLowerCase()) !== -1) {
+              tags.push(target);
             }
           }
 
@@ -144,8 +144,8 @@
 
           var data = angular.copy($scope.notification);
 
-          if (data.instances) {
-            data.instances = data.instances.map(function(a) {
+          if (data.target) {
+            data.target = data.target.map(function(a) {
               return a.id;
             });
           }
@@ -202,8 +202,8 @@
 
           var data = angular.copy($scope.notification);
 
-          if (data.instances) {
-            data.instances = data.instances.map(function(a) {
+          if (data.target) {
+            data.target = data.target.map(function(a) {
               return a.id;
             });
           }
