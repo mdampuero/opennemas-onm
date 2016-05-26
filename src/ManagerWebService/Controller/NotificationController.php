@@ -175,11 +175,11 @@ class NotificationController extends Controller
 
         $ids = [];
         foreach ($notifications as &$notification) {
-            if (empty($notification->instances)) {
-                $notification->instances = [];
+            if (empty($notification->target)) {
+                $notification->target = [];
             }
 
-            $ids = array_merge($ids, $notification->instances);
+            $ids = array_merge($ids, $notification->target);
             $notification = $notification->getData();
         }
 
@@ -331,14 +331,14 @@ class NotificationController extends Controller
                 ->getRepository('manager.notification')
                 ->find($id);
 
-            if (empty($notification->instances)) {
-                $notification->instances = [];
+            if (empty($notification->target)) {
+                $notification->target = [];
             }
 
             $extra = $this->getTemplateParams();
 
             $instances = [];
-            foreach ($notification->instances as $instance) {
+            foreach ($notification->target as $instance) {
                 $name = $instance;
 
                 if ($instance == 'all') {
@@ -350,7 +350,7 @@ class NotificationController extends Controller
                 $instances[] = [ 'name' => $name, 'id' => $instance ];
             }
 
-            $notification->instances = $instances;
+            $notification->target = $instances;
 
             return new JsonResponse([
                 'extra'        => $extra,
@@ -426,7 +426,7 @@ class NotificationController extends Controller
 
         $instances = $this->get('instance_manager')->findBy([]);
 
-        $params['instances'] = [
+        $params['target'] = [
             [ 'id' => 'manager', 'name' => 'Manager' ],
             [ 'id' => 'all', 'name' => _('All') ]
         ];
@@ -438,7 +438,7 @@ class NotificationController extends Controller
         ];
 
         foreach ($instances as $instance) {
-            $params['instances'][] = [
+            $params['target'][] = [
                 'id'   => $instance->internal_name,
                 'name' => $instance->internal_name
             ];
