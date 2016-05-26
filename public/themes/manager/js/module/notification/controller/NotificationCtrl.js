@@ -71,16 +71,15 @@
          * @return {Array} A list of targets
          */
         $scope.autocomplete = function(query) {
-          var tags = [];
+          return itemService.list('manager_ws_notification_autocomplete', { query: query }).then(function(response) {
+            var tags = [];
 
-          for (var i = 0; i < $scope.extra.target.length; i++) {
-            var target = $scope.extra.target[i];
-            if (!query || target.name.indexOf(query.toLowerCase()) !== -1) {
-              tags.push(target);
+            for (var i = 0; i < response.data.target.length; i++) {
+              tags.push(response.data.target[i]);
             }
-          }
 
-          return tags;
+            return tags;
+          });
         };
 
         /**
