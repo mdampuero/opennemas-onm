@@ -113,22 +113,45 @@ class PurchaseController extends Controller
 
         if (!empty($ids)) {
             $items = $em->getRepository('manager.extension')->findBy([
-                'id' => [ [ 'value' => $ids, 'operator' => 'in' ] ]
+                'uuid' => [ [ 'value' => array_keys($ids), 'operator' => 'in' ] ]
             ]);
+
+            $themes = $this->get('orm.loader')->getPlugins();
+
+            $themes = array_filter($themes, function ($a) use ($ids) {
+                return in_array($a->uuid, array_keys($ids));
+            });
+
+            $items = array_merge($items, $themes);
 
             $purchase->details = [];
             $i = 0;
             foreach ($items as $item) {
                 $subtotal    += $item->getPrice();
-                $description  = $item->name[CURRENT_LANGUAGE_SHORT];
+                $description  = is_array($item->name) ?
+                    $item->name[CURRENT_LANGUAGE_SHORT] : $item->name;
 
                 if (!empty($request->request->get('domains'))) {
                     $description .= ': ' . $request->request->get('domains')[$i];
                 }
 
+                $price = $item->getPrice();
+
+                // Fix price for custom themes
+                if ($ids[$item->uuid]) {
+                    $description .= ' (Custom)';
+                    if ($price === 35) {
+                        // monthly
+                        $price = 350;
+                    } else {
+                        // yearly
+                        $price = 1450;
+                    }
+                }
+
                 $purchase->details[] = [
                     'description'  => $description,
-                    'unit_cost'    => $item->getPrice(),
+                    'unit_cost'    => $price,
                     'quantity'     => 1,
                     'tax1_name'    => 'IVA',
                     'tax1_percent' => $vatTax
