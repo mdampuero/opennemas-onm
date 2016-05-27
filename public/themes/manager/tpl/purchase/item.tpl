@@ -35,23 +35,23 @@
 <div class="content ng-hide" ng-show="extra">
   <form name="purchaseForm" novalidate>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="grid simple">
           <div class="grid-body">
             <h4>{t}Client{/t}</h4>
             <div class="row p-b-15">
               <div class="col-md-4">
-                <a class="btn btn-block btn-white text-uppercase" ng-href="[% routing.ngGenerate('manager_client_show', { 'id': purchase.client.id }) %]">
+                <a class="btn btn-block btn-white text-uppercase" ng-href="[% routing.ngGenerate('manager_client_show', { 'id': purchase.client.id }) %]" target="_blank" title="Opennemas">
                   <strong>Opennemas</strong>
                 </a>
               </div>
               <div class="col-md-4">
-                <a class="btn btn-block btn-white text-uppercase" ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/customers/[% purchase.client.id %]" target="_blank">
+                <a class="btn btn-block btn-white text-uppercase" ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/customers/[% purchase.client.id %]" target="_blank" title="Braintree">
                   <strong>Braintree</strong>
                 </a>
               </div>
               <div class="col-md-4">
-                <a class="btn btn-block btn-white text-uppercase text-success" ng-href="[% extra.freshbooks.url %]/showUser?userid=[% purchase.client.id %]" target="_blank">
+                <a class="btn btn-block btn-white text-uppercase text-success" ng-href="[% extra.freshbooks.url %]/showUser?userid=[% purchase.client.id %]" target="_blank" title="FreshBooks">
                   <strong>Freshbooks</strong>
                 </a>
               </div>
@@ -105,7 +105,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-7">
         <div class="grid simple">
           <div class="grid-body">
             <div class="p-l-15 p-r-15 row">
