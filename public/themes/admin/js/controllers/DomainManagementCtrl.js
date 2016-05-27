@@ -155,9 +155,10 @@
          * @return {Object} The data to send.
          */
         $scope.getData = function() {
-          var ids = $scope.cart.map(function(e) {
-            return e.id;
-          });
+          var ids = {};
+          for (var i = 0; i < $scope.cart.length; i++) {
+            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+          }
 
           var domains = $scope.cart.map(function(e) {
             return e.description;
@@ -325,6 +326,7 @@
           $http.get(url).then(function() {
             $scope.cart.push({
               id:          $scope.extension.id,
+              uuid:        $scope.extension.uuid,
               name:        $scope.extension.name + ': ' + domain,
               description: domain,
               price:       $scope.extension.metas.price

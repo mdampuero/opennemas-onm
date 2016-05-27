@@ -75,15 +75,14 @@
          * @return {Object} The data to send.
          */
         $scope.getData = function() {
-          var cart = $scope.cart.map(function(e) {
-            return e.id;
-          });
+          var ids = {};
+          for (var i = 0; i < $scope.cart.length; i++) {
+            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+          }
 
           return {
-            ids:   cart,
-            fee:   $scope.fee,
+            ids:   ids,
             step:  $scope.steps[$scope.step],
-            total: $scope.total,
           };
         };
 
