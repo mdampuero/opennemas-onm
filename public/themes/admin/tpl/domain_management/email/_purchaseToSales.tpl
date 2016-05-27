@@ -11,7 +11,7 @@
 <br>
 <ul>
  {foreach from=$domains item=domain}
-   <li>{$domain}</li>
+   <li>{$domain['description']}</li>
  {/foreach}
 </ul>
 <br>
