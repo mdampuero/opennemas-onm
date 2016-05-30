@@ -40,6 +40,11 @@
           query += this.serialize(value[i], key ? key + '[' + i + ']' : i) + '&';
         }
 
+        // Empty Array or Object
+        if (query === '') {
+          return key + '=';
+        }
+
         return query.substring(0, query.length - 1);
       };
 
