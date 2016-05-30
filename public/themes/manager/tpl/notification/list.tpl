@@ -96,9 +96,9 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
-            <label for="checkbox-instance">
-              {t}Instance{/t}
+            <input id="checkbox-target" checklist-model="columns.selected" checklist-value="'target'" type="checkbox">
+            <label for="checkbox-target">
+              {t}Target{/t}
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
@@ -162,9 +162,9 @@
                 {t}Title{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('instances')" ng-show="isColumnEnabled('instances')" width="130">
-                {t}Instance{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('instances') == 'asc', 'fa fa-caret-down': isOrderedBy('instances') == 'desc'}"></i>
+              <th class="pointer text-center" ng-click="sort('target')" ng-show="isColumnEnabled('target')" width="130">
+                {t}Target{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('target') == 'asc', 'fa fa-caret-down': isOrderedBy('target') == 'desc'}"></i>
               </th>
               <th class="text-center" width="60">
                 l10n
@@ -215,9 +215,9 @@
                   </button>
                 </div>
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <div ng-repeat="instance in item.instances track by $index">
-                  [% instance === 'all' ? '{t}All{/t}' : instance %]
+              <td class="text-center" ng-show="isColumnEnabled('target')">
+                <div ng-repeat="target in item.target track by $index">
+                  [% target === 'all' ? '{t}All{/t}' : target %]
                 </div>
               </td>
               <td class="text-center">
