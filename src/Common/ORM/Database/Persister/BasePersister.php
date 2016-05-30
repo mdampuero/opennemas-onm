@@ -72,19 +72,17 @@ class BasePersister extends Persister
         list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
         $types = array_values($types);
+        $keys  = $this->metadata->getIdKeys();
 
         $this->conn->insert($this->metadata->getTable(), $data, $types);
-
-        $keys = $this->metadata->getIdKeys();
 
         if (count($keys) === 1 && empty($entity->{$keys[0]})) {
             $entity->{$keys[0]} = $this->conn->lastInsertId();
         }
 
-        $keys = array_flip($keys);
-        $id   = array_intersect_key($entity->getData(), $keys);
-
         if ($this->metadata->hasMetas()) {
+            $id = $this->metadata->getId($entity);
+
             $this->persistMetas($id, $metas);
         }
     }
@@ -110,12 +108,11 @@ class BasePersister extends Persister
     {
         list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
-        $keys = array_flip($this->metadata->getIdKeys());
-        $id   = array_intersect_key($entity->getData(), $keys);
+        $id = $this->metadata->getId($entity);
 
         // Remove ids from data and types
-        $data  = array_diff_key($data, $keys);
-        $types = array_values(array_diff_key($types, $keys));
+        $data  = array_diff_key($data, $id);
+        $types = array_values(array_diff_key($types, $id));
 
         $this->conn->update($this->metadata->getTable(), $data, $id, $types);
 
