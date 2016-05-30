@@ -77,6 +77,18 @@ class DataObject
     }
 
     /**
+     * Unsets the value of the property in the raw data array.
+     *
+     * @param string $property The property name.
+     */
+    public function __unset($property)
+    {
+        $property = \underscore($property);
+
+        unset($this->data[$property]);
+    }
+
+    /**
      * Returns the raw data.
      *
      * @return array The raw data.
