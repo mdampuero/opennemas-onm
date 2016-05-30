@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,8 @@ abstract class Repository
      *
      * @return Entity The entity.
      *
-     * @throws EntityNotFoundException If the entity is not found.
+     * @throws EntityNotFoundException  If the entity is not found.
+     * @throws InvalidArgumentException If the given id is invalid.
      */
     abstract public function find($id);
 
@@ -49,6 +50,8 @@ abstract class Repository
      * @param string $oql The criteria.
      *
      * @return Entity The entity.
+     *
+     * @throws EntityNotFoundException If the entity is not found.
      */
     abstract public function findOneBy($oql = '');
 }
