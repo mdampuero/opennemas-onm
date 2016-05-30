@@ -264,6 +264,18 @@
 
           if (response.data.user_group) {
             $scope.user_group = angular.merge(response.data.user_group);
+
+            // Initialize selected all flags
+            for (var name in $scope.extra.modules) {
+              var module = $scope.extra.modules[name];
+              $scope.selected.all[name] = true;
+
+              for (var i = 0; i < module.length; i++) {
+                if ($scope.user_group.privileges.indexOf(module[i].pk_privilege) === -1) {
+                  $scope.selected.all[name] = false;
+                }
+              }
+            }
           }
         });
       }
