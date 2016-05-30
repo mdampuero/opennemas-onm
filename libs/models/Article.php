@@ -171,6 +171,60 @@ class Article extends Content
     }
 
     /**
+     * Load object properties
+     *
+     * @param array $properties
+     *
+     * @return void
+     **/
+    public function load($data)
+    {
+        parent::load($data);
+
+        $this->permalink = Uri::generate(
+            'article',
+            [
+                'id'       => $this->id,
+                'date'     => date('Y-m-d', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug'     => $this->slug,
+            ]
+        );
+
+        return $this;
+    }
+
+    /**
+     * Reads the data for one article given one ID
+     *
+     * @param int $id the id to get its information
+     *
+     * @return void
+     **/
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+
+        $this->load($rs);
+    }
+
+    /**
      * Creates one article from an array of properties
      *
      * @param mixed $data array of properties for the article
@@ -185,14 +239,12 @@ class Article extends Content
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['img1_footer']
-            = (!isset($data['img1_footer']) || empty($data['img1_footer']))
-                ? ''
-                : $data['img1_footer'];
-        $data['img2_footer']
-            = (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                ? ''
-                : $data['img2_footer'];
+        $data['img1_footer'] =
+            (!isset($data['img1_footer']) || empty($data['img1_footer']))
+            ? '' : $data['img1_footer'];
+        $data['img2_footer'] =
+            (!isset($data['img2_footer']) || empty($data['img2_footer']))
+            ? '' : $data['img2_footer'];
 
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
@@ -250,45 +302,6 @@ class Article extends Content
         }
 
         return $this->id;
-    }
-
-    /**
-     * Reads the data for one article given one ID
-     *
-     * @param int $id the id to get its information
-     *
-     * @return void
-     **/
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->load($rs);
-
-        $this->permalink = Uri::generate(
-            'article',
-            array(
-                'id'       => $this->id,
-                'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
-            )
-        );
     }
 
     /**
@@ -385,19 +398,29 @@ class Article extends Content
      **/
     public function remove($id)
     {
+        if ((int) $id <= 0) return false;
+
         parent::remove($id);
 
-        $sql = 'DELETE FROM articles WHERE pk_article=?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "articles",
+                [ 'pk_article' => $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            if (!$rs) {
+                return false;
+            }
+
+            // Delete related
+            getService('related_contents')->delete($id);
+
+            // Delete comments
+            self::deleteComments($id);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        // Delete related
-        getService('related_contents')->delete($id);
-
-        // Delete comments
-        self::deleteComments($id);
 
         return true;
     }
