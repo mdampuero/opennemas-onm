@@ -24,9 +24,7 @@
          *
          * @type Object
          */
-        $scope.user_group = {
-          privileges: []
-        };
+        $scope.user_group = { privileges: [] };
 
         /**
          * Privileges section
@@ -79,52 +77,64 @@
         $scope.selected = { all: {}, privileges: {}, allSelected: {} };
 
         /**
-         * Checks if all module privileges are checked.
+         * @function areAllSelected
+         * @memberOf UserGroupCtrl
          *
-         * @param string  module Module name.
+         * @description
+         *   Checks if all privileges are selected.
          *
-         * @return boolean True, if all module privileges are checked.
-         *                 Otherwise, returns false.
+         * @return {Boolean} True if all privileges are selected. Otherwise,
+         *                   returns false.
          */
-        $scope.allSelected = function(module) {
+        $scope.areAllSelected = function() {
+          if (!$scope.extra || !$scope.extra.modules) {
+            return true;
+          }
+
+          var diff = _.difference($scope.privileges, $scope.user_group.privileges);
+          var selected = diff.length === 0;
+
+          if (selected !== $scope.selected.allSelected) {
+            $scope.selected.allSelected = selected;
+          }
+
+          return selected;
+
+        };
+
+        /**
+         * @function isModuleSelected
+         * @memberOf UserGroupCtrl
+         *
+         * @description
+         *   Checks if all module privileges are checked.
+         *
+         * @param {String} module The module name.
+         *
+         * @return {Boolean} True if the module is selected. Otherwise, returns
+         *                   false.
+         */
+        $scope.isModuleSelected = function(module) {
           if (!$scope.extra || !$scope.extra.modules) {
             return;
           }
 
-          for (var key in $scope.extra.modules[module]) {
-            var id = $scope.extra.modules[module][key].id;
+          var diff = _.difference($scope.modules[module], $scope.user_group.privileges);
+          var selected = diff.length === 0;
 
-            if (!$scope.user_group.privileges ||
-                $scope.user_group.privileges.indexOf(id) === -1
-               ) {
-              $scope.selected.all[module] = 0;
-              return false;
-            }
+          if (selected !== $scope.selected.all[module]) {
+            $scope.selected.all[module] = selected;
           }
 
-          return true;
+          return selected;
         };
 
         /**
-         * Checks if a privilege is selected.
+         * @function save
+         * @memberOf UserGroupCtrl
          *
-         * @param  integer id The privilege id.
-         *
-         * @return boolean True if the privilege is selected. Otherwise, returns
-         *                 false.
-         */
-        $scope.isSelected = function(id) {
-          if (!$scope.user_group.privileges ||
-              $scope.user_group.privileges.indexOf(id) == -1
-             ) {
-            return false;
-          }
-
-          return true;
-        };
-
-        /**
-         * Saves a new user group.
+         * @description
+         *   Saves a new user group.
          */
         $scope.save = function() {
           $scope.saving = 1;
@@ -143,71 +153,58 @@
             });
         };
 
-        /**
-         * Selects/unselects all privileges for the module.
-         *
-         * @param string module The module name.
-         */
-        $scope.selectAll = function(module) {
-          if (!$scope.user_group.privileges) {
-            $scope.user_group.privileges = [];
-          }
-
-          if ($scope.selected.all[module]) {
-            for (var key in $scope.extra.modules[module]) {
-              var id = $scope.extra.modules[module][key].id;
-
-              if ($scope.user_group.privileges.indexOf(id) === -1) {
-                $scope.user_group.privileges.push(id);
-              }
-            }
-          } else {
-            for (var key in $scope.extra.modules[module]) {
-              var id = $scope.extra.modules[module][key].id;
-
-              if ($scope.user_group.privileges.indexOf(id) !== -1) {
-                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
-              }
-            }
-          }
-        };
-
-        /**
-         * Selects/unselects all privileges
-         */
-        $scope.selectAllPrivileges = function() {
-          if (!$scope.user_group.privileges) {
-            $scope.user_group.privileges = [];
-          }
-
+        $scope.selectAll = function() {
           if (!$scope.selected.allSelected) {
-            for (var module in $scope.extra.modules) {
-              if (!$scope.selected.all[module]) {
-                for (var key in $scope.extra.modules[module]) {
-                  var id = $scope.extra.modules[module][key].id;
-
-                  if ($scope.user_group.privileges.indexOf(id) == -1) {
-                    $scope.user_group.privileges.push(id);
-                  }
-                }
-                $scope.selected.allSelected = true;
-              }
-            }
-          } else {
-            $scope.selected.allSelected = false;
+            $scope.selected.all = {};
             $scope.user_group.privileges = [];
-            for (var key in $scope.extra.modules[module]) {
-              var id = $scope.extra.modules[module][key].id;
-
-              if ($scope.user_group.privileges.indexOf(id) == -1) {
-                $scope.user_group.privileges.splice($scope.user_group.privileges.indexOf(id), 1);
-              }
-            }
+            return;
           }
+
+          var ids = [];
+          for (var i in $scope.extra.modules) {
+            $scope.selected.all[$scope.extra.modules[i].name] = true;
+            var privileges = $scope.extra.modules[i].map(function(e) {
+              return e.id;
+            });
+
+            ids = _.union(ids, privileges);
+          }
+
+          $scope.user_group.privileges = ids;
         };
 
         /**
-         * Updates an user group.
+         * @function selectedModule
+         * @memberOf UserGroupCtrl
+         *
+         * @description
+         *   Selects/unselects all module privileges.
+         *
+         * @param {String} name The module name.
+         */
+        $scope.selectModule = function(name) {
+          if (!$scope.user_group.privileges) {
+            $scope.user_group.privileges = [];
+          }
+
+           // Add module privileges
+          if ($scope.selected.all[name]) {
+            $scope.user_group.privileges =
+              _.union($scope.user_group.privileges, $scope.modules[name]);
+            return;
+          }
+
+          // Remove module privileges
+          $scope.user_group.privileges =
+            _.difference($scope.user_group.privileges, $scope.modules[name]);
+        };
+
+        /**
+         * @function update
+         * @memberOf UserGroupCtrl
+         *
+         * @description
+         *   Updates the user group.
          */
         $scope.update = function() {
           $scope.saving = 1;
@@ -235,23 +232,7 @@
           $scope.extra      = null;
         });
 
-        $scope.$watch('extra', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          // Process modules
-          if ($scope.extra.modules) {
-            $scope.modules = [];
-
-            for (var module in $scope.extra.modules) {
-              for (var i = 0; i < $scope.extra.modules[module].length; i++) {
-                $scope.modules.push($scope.extra.modules[module][i]);
-              }
-            }
-          }
-        });
-
+        $scope.loading = true;
         var route = 'manager_ws_user_group_new';
 
         if ($routeParams.id) {
@@ -260,17 +241,27 @@
         }
 
         http.get(route).then(function(response) {
+          $scope.loading = false;
           $scope.extra = response.data.extra;
 
           if (response.data.user_group) {
             $scope.user_group = angular.merge(response.data.user_group);
+            $scope.privileges = [];
+            $scope.modules    = [];
 
             // Initialize selected all flags
             for (var name in $scope.extra.modules) {
+              if (!$scope.modules[name]) {
+                $scope.modules[name] = [];
+              }
+
               var module = $scope.extra.modules[name];
               $scope.selected.all[name] = true;
 
               for (var i = 0; i < module.length; i++) {
+                $scope.privileges.push(module[i].id);
+                $scope.modules[name].push(module[i].id);
+
                 if ($scope.user_group.privileges.indexOf(module[i].pk_privilege) === -1) {
                   $scope.selected.all[name] = false;
                 }

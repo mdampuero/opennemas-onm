@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-success text-uppercase" ng-click="user_group.id ? update() : save();" ng-disabled="saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="user_group.id ? update() : save();" ng-disabled="saving">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>
@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<div class="content ng-hide" ng-show="user_group">
+<div class="content ng-hide" ng-show="!loading && user_group">
   <form name="groupForm" novalidate>
     <div class="grid simple">
       <div class="grid-body">
@@ -64,8 +64,11 @@
         <h4>{t}Privileges{/t}</h4>
       </div>
       <div class="grid-body">
-        <div class="form-group">
-          <button class="btn" ng-click="selectAllPrivileges()">{t}Toggle all privileges{/t}</button>
+        <div class="checkbox check-default check-title">
+          <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
+          <label for="checkbox-all">
+            <h5>{t}Toggle all privileges{/t}</h5>
+          </label>
         </div>
         <div>
           <div ng-repeat="section in sections">
@@ -74,7 +77,7 @@
               <div class="col-sm-3" ng-repeat="name in columns">
                 <div class="col-sm-12 m-b-10">
                   <div class="checkbox check-default check-title">
-                    <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
+                    <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
                     <label for="checkbox-[% name %]">
                       <h5>[% name %]</h5>
                     </label>
