@@ -314,7 +314,7 @@ class Content
         if (!isset($id)) return;
 
         try {
-            $rs = getService('dbal_connection')->fetchAssoc(
+            $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT pk_content FROM `contents` '
                 .'WHERE pk_content = ? LIMIT 1',
                 [ (int) $id ]
@@ -626,27 +626,24 @@ class Content
     */
     public function remove($id)
     {
-        $sql = 'DELETE FROM contents WHERE pk_content=?';
+        $conn = getService('dbal_connection');
+        $conn->beginTransaction();
+        try{
+            $conn->delete('contents', [ 'pk_content' => $id ]);
+            $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
+            $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
+            $conn->commit();
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.delete', array('content' => $this));
+
+            return true;
+        } catch(Exception $e) {
+            $conn->rollBack();
+            error_log($e->getMessage());
+
             return false;
         }
-
-        $sql = 'DELETE FROM contents_categories WHERE pk_fk_content=?';
-
-        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            return false;
-        }
-
-        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
-
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            return false;
-        }
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.delete', array('content' => $this));
     }
 
     /**
@@ -661,23 +658,26 @@ class Content
      **/
     public function delete($id, $lastEditor = null)
     {
-        $changed = date("Y-m-d H:i:s");
+        try {
+            $this->setAvailable(0, $lastEditor);
 
-        $this->setAvailable(0, $lastEditor);
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'fk_user_last_editor' => $lastEditor,
+                    'in_litter' => 1,
+                    'changed' => date("Y-m-d H:i:s"),
+                ],
+                [ 'pk_content' => $id ]
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
 
-        $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
-             . '`fk_user_last_editor`=? WHERE pk_content=?';
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
 
-        $values = [1, $changed, $lastEditor, $id];
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -763,22 +763,24 @@ class Content
             $id = $this->id;
         }
 
-        $status = ($this->favorite + 1) % 2;
-        $this->favorite = $status;
+        try {
+            $this->favorite = ($this->favorite + 1) % 2;
 
-        $sql = 'UPDATE `contents` SET `favorite` = ? WHERE `pk_content`=?';
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'favorite' => $this->favorite ],
+                [ 'pk_content' => $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, [$status, $id]);
-        if ($rs === false) {
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -794,21 +796,23 @@ class Content
             $id = $this->id;
         }
 
-        $this->in_home = ($this->in_home + 1) % 2;
+        try {
+            $this->in_home = ($this->in_home + 1) % 2;
 
-        $sql = 'UPDATE `contents` SET `in_home` = ? WHERE `pk_content`=?';
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'in_home' => $this->in_home ],
+                [ 'pk_content' => $id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->in_home, $id]);
-        if ($rs === false) {
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -818,17 +822,24 @@ class Content
      **/
     public function toggleSuggested()
     {
-        logContentEvent(__METHOD__, $this);
+        var_dump($this->id);die();
+        try {
+            $this->frontpage = ($this->frontpage + 1) % 2;
 
-        $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
-             . 'WHERE `pk_content`=?';
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'frontpage' => '(`frontpage` + 1) % 2' ],
+                [ 'pk_content' => $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, [$this->id]);
-        if ($rs === false) {
-            throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return true;
     }
 
     /**
@@ -2063,7 +2074,7 @@ class Content
             return false;
         }
 
-        return Comment::deleteFromFilter("`content_id` = {$contentID}");
+        return Comment::deleteFromFilter(['content_id' => $contentID]);
     }
 
     /**
