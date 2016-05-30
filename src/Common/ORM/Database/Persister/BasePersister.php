@@ -71,6 +71,8 @@ class BasePersister extends Persister
     {
         list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
+        $types = array_values($types);
+
         $this->conn->insert($this->metadata->getTable(), $data, $types);
 
         $keys = $this->metadata->getIdKeys();
@@ -111,7 +113,7 @@ class BasePersister extends Persister
         $keys = array_flip($this->metadata->getIdKeys());
         $id   = array_intersect_key($entity->getData(), $keys);
 
-        // Remove ids from data
+        // Remove ids from data and types
         $data  = array_diff_key($data, $keys);
         $types = array_values(array_diff_key($types, $keys));
 
@@ -174,7 +176,7 @@ class BasePersister extends Persister
         $params = [];
         $types  = [];
         foreach ($id as $key => $value) {
-            $joins[]  = $keys[$key] . '= ?';
+            $joins[]  = $keys[$key] . ' = ?';
             $params[] = $value;
             $types[]  = is_string($value) ? \PDO::PARAM_STR : \PDO::PARAM_INT;
         }
