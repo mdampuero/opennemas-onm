@@ -103,6 +103,8 @@ class Privilege
             $this->{$k} = $v;
         }
 
+        $this->pk_privilege = (int) $this->pk_privilege;
+
         // Lazy setting
         $this->id = $this->pk_privilege;
 
