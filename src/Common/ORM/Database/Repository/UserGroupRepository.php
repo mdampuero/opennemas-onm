@@ -20,7 +20,11 @@ class UserGroupRepository extends BaseRepository
         $privileges = $this->getPrivileges($ids);
 
         foreach ($entities as $key => $value) {
-            $entities[$key]->privileges = $privileges[$key];
+            $entities[$key]->privileges = [];
+
+            if (array_key_exists($key, $privileges)) {
+                $entities[$key]->privileges = $privileges[$key];
+            }
         }
 
         return $entities;
@@ -46,6 +50,7 @@ class UserGroupRepository extends BaseRepository
 
         $rs = $this->conn->fetchAll($sql);
 
+        $privileges = [];
         foreach ($rs as $value) {
             $privileges[$value['user_group_id']][] = $value['privilege'];
         }
