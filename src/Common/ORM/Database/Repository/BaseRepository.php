@@ -116,7 +116,7 @@ class BaseRepository extends Repository
     public function find($id)
     {
         if (empty($id)) {
-            throw new \Exception();
+            throw new \InvalidArgumentException();
         }
 
         $entity  = null;
