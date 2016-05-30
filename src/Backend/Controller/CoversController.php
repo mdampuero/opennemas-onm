@@ -278,9 +278,23 @@ class CoversController extends Controller
         }
 
         try {
-            $_POST['fk_user_last_editor'] = $_SESSION['userid'];
-            $_POST['name'] = $cover->name;
-            $_POST['thumb_url'] = $cover->thumb_url;
+            $postReq = $request->request;
+            $data = [
+                'id'             => $postReq->getDigits('id', 0),
+                'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'price'          => (float) $postReq->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'content_status' => $postReq->getDigits('content_status', 0),
+                'type'           => $postReq->getDigits('type', 0),
+                'favorite'       => $postReq->getDigits('favorite', 0),
+                'category'       => $postReq->getDigits('category', 0),
+                'category'       => $postReq->getDigits('category', 0),
+                'name'           => $cover->name,
+                'thumb_url'      => $cover->thumb_url,
+                'fk_user_last_editor' => $_SESSION['userid'],
+            ];
 
             if (!$request->request->get('cover') && !empty($cover->name)) {
                 $coverFile = $cover->kiosko_path . $cover->path . $cover->name;
@@ -295,14 +309,14 @@ class CoversController extends Controller
                     unlink($coverThumb);
                 }
 
-                $_POST['name'] = '';
-                $_POST['thumb_url'] = '';
+                $data['name'] = '';
+                $data['thumb_url'] = '';
             }
 
             // Handle new file
             if ($request->files->get('cover')) {
-                $_POST['name'] = date('His').'-'.$_POST['category'].'.pdf';
-                $_POST['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
+                $data['name'] = date('His').'-'.$data['category'].'.pdf';
+                $data['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
                 $path = $cover->kiosko_path . $cover->path;
 
                 // Create folder if it doesn't exist
@@ -312,7 +326,7 @@ class CoversController extends Controller
                 $uploadStatus = false;
 
                 $file = $request->files->get('cover');
-                $uploadStatus = $file->isValid() && $file->move(realpath($path), $_POST['name']);
+                $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);
 
                 if (!$uploadStatus) {
                     throw new \Exception(
@@ -323,10 +337,10 @@ class CoversController extends Controller
                     );
                 }
 
-                $cover->createThumb($_POST['name'], $cover->path);
+                $cover->createThumb($data['name'], $cover->path);
             }
 
-            $cover->update($_POST);
+            $cover->update($data);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
