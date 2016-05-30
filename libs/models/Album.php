@@ -131,42 +131,6 @@ class Album extends Content
     }
 
     /**
-     * Creates an album from a data array and stores it in db
-     *
-     * @param array $data the data of the album
-     *
-     * @return bool true if the object was stored
-     */
-    public function create($data)
-    {
-        $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
-
-        parent::create($data);
-
-        try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "INSERT INTO albums (`pk_album`,`subtitle`, `agency`, `cover_id`) "
-                ." VALUES (?,?,?,?)",
-                [
-                    (int) $this->id,
-                    $data["subtitle"],
-                    $data["agency"],
-                    (int) $data['album_frontpage_image'],
-                ]
-            );
-
-            $this->saveAttachedPhotos($data);
-
-            $this->load($data);
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Fetches one Album by its id.
      *
      * @param string $id the album id to get info from.
@@ -198,6 +162,39 @@ class Album extends Content
     }
 
     /**
+     * Creates an album from a data array and stores it in db
+     *
+     * @param array $data the data of the album
+     *
+     * @return bool true if the object was stored
+     */
+    public function create($data)
+    {
+        $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
+
+        parent::create($data);
+
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'albums',
+                [
+                    'pk_album' => (int) $this->id,
+                    'subtitle' => $data["subtitle"],
+                    'agency'   => $data["agency"],
+                    'cover_id' => (int) $data['album_frontpage_image'],
+                ]
+            );
+
+            $this->saveAttachedPhotos($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Updates the information of the album given an array of key-values
      *
      * @param array $data the new data to update the album
@@ -211,19 +208,20 @@ class Album extends Content
         $data['subtitle'] = (empty($data['subtitle']))? 0 : $data['subtitle'];
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "UPDATE albums SET `subtitle`=?, `agency`=?, `cover_id`=?  "
-                ." WHERE pk_album=?",
+            $rs = getService('dbal_connection')->update(
+                'albums',
                 [
-                    $data['subtitle'],
-                    $data['agency'],
-                    (int) $data['album_frontpage_image'],
-                    (int) $data['id']
-                ]
+                    'subtitle' => $data['subtitle'],
+                    'agency' => $data['agency'],
+                    'album_frontpage_image' => (int) $data['album_frontpage_image'],
+                ],
+                [ 'pk_album' => (int) $data['id'] ]
             );
 
             $this->removeAttachedImages($data['id']);
             $this->saveAttachedPhotos($data);
+
+            $this->load($data);
 
             return $this;
         } catch (\Exception $e) {
@@ -244,7 +242,9 @@ class Album extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->delete("albums", [ 'pk_album' => $id ]);
+            $rs = getService('dbal_connection')->delete(
+                "albums", [ 'pk_album' => $id ]
+            );
 
             return $this->removeAttachedImages($id);
         } catch (\Exception $e) {
@@ -277,10 +277,10 @@ class Album extends Content
             );
             foreach ($rs as $photo) {
                 $photosAlbum []= [
-                    'id'       => $photo['pk_photo'],
-                    'position' => $photo['position'],
+                    'id'          => $photo['pk_photo'],
+                    'position'    => $photo['position'],
                     'description' => $photo['description'],
-                    'photo'    => getService('entity_repository')->find('Photo', $photo['pk_photo']),
+                    'photo'       => getService('entity_repository')->find('Photo', $photo['pk_photo']),
                 ];
             }
 
@@ -383,14 +383,21 @@ class Album extends Content
      **/
     public function removeAttachedImages($albumID)
     {
-        $sql = 'DELETE FROM albums_photos WHERE pk_album=?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'albums_photos',
+                [ 'pk_album' => (int) $albumID]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
