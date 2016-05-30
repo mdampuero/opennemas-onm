@@ -199,7 +199,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isMaster()
     {
-        if (in_array('4', $this->id_user_group)) {
+        if (in_array('4', $this->user_group_ids)) {
             return true;
         }
 
@@ -213,7 +213,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isAdmin()
     {
-        if (in_array('4', $this->id_user_group)
+        if (in_array('4', $this->user_group_ids)
             || in_array('5', $this->id_user_group)
         ) {
             return true;
