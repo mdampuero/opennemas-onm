@@ -149,61 +149,34 @@ class Advertisement extends Content
     }
 
     /**
-     * Create and save into database the ad instance from one array
+     * Load object properties
      *
-     * @param array $data the needed data for create a new ad.
+     * @param array $properties
      *
-     * @return Advertisement
+     * @return void
      **/
-    public function create($data)
+    public function load($properties)
     {
-        parent::create($data);
+        parent::load($properties);
 
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
+        // FIXME: review that this property is not used ->img
+        $this->img = $this->path;
+
+        // Initialize the categories array of this advertisement
+        if (!is_array($this->fk_content_categories)) {
+            $this->fk_content_categories = explode(',', $this->fk_content_categories);
         }
 
-        if (!isset($data['with_script'])) {
-            $data['with_script'] = 0;
+        // Check if it contains a flash element
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
+            }
         }
 
-        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
-        $data['type_medida'] =
-            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
-
-        try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "INSERT INTO advertisements"
-                ."(`pk_advertisement`, `type_advertisement`,"
-                ."`fk_content_categories`, `path`, `url`, `type_medida`,"
-                ."`num_clic`, `num_clic_count`, `num_view`, `with_script`,"
-                ."`script`, `overlap`, `timeout`)"
-                ."VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [
-                    $this->id,
-                    (int) $data['type_advertisement'],
-                    $data['categories'],
-                    $data['img'],
-                    $data['url'],
-                    $data['type_medida'],
-                    (int) $data['num_clic'],
-                    0, // num_clic_count
-                    (int) $data['num_view'],
-                    (int) $data['with_script'],
-                    $data['script'],
-                    (int) $data['overlap'],
-                    (int) $data['timeout'],
-                ]
-            );
-
-            $this->load($data);
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
+        return $this;
     }
 
     /**
@@ -248,34 +221,56 @@ class Advertisement extends Content
     }
 
     /**
-     * Load object properties
+     * Create and save into database the ad instance from one array
      *
-     * @param array $properties
+     * @param array $data the needed data for create a new ad.
      *
-     * @return void
+     * @return Advertisement
      **/
-    public function load($properties)
+    public function create($data)
     {
-        parent::load($properties);
+        parent::create($data);
 
-        // FIXME: review that this property is not used ->img
-        $this->img = $this->path;
-
-        // Initialize the categories array of this advertisement
-        if (!is_array($this->fk_content_categories)) {
-            $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        if (!empty($data['script'])) {
+            $data['script'] = base64_encode($data['script']);
         }
 
-        // Check if it contains a flash element
-        $this->is_flash = 0;
-        if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
-            if (!empty($img) && $img->type_img == "swf") {
-                $this->is_flash = 1;
-            }
+        if (!isset($data['with_script'])) {
+            $data['with_script'] = 0;
         }
 
-        return $this;
+        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
+        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
+        $data['type_medida'] =
+            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'advertisements',
+                [
+                    'pk_advertisement'      => $this->id,
+                    'type_advertisement'    => (int) $data['type_advertisement'],
+                    'fk_content_categories' => $data['categories'],
+                    'path'                  => $data['img'],
+                    'url'                   => $data['url'],
+                    'type_medida'           => $data['type_medida'],
+                    'num_clic'              => (int) $data['num_clic'],
+                    'num_clic_count'        => 0, // num_clic_count
+                    'num_view'              => (int) $data['num_view'],
+                    'with_script'           => (int) $data['with_script'],
+                    'script'                => $data['script'],
+                    'overlap'               => (int) $data['overlap'],
+                    'timeout'               => (int) $data['timeout'],
+                ]
+            );
+
+            $this->load($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -299,24 +294,22 @@ class Advertisement extends Content
         $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "UPDATE advertisements SET `type_advertisement`=?, `fk_content_categories`=?, `path`=?, `url`=?, "
-                ."`type_medida`=?, `num_clic`=?, `num_view`=?,`with_script`=?, `script`=?, "
-                ."`overlap`=?, `timeout`=? WHERE pk_advertisement=?",
+            $rs = getService('dbal_connection')->update(
+                'advertisements',
                 [
-                    (int) $data['type_advertisement'],
-                    $data['categories'],
-                    $data['img'],
-                    $data['url'],
-                    $data['type_medida'],
-                    (int) $data['num_clic'],
-                    (int) $data['num_view'],
-                    (int) $data['with_script'],
-                    $data['script'],
-                    (int) $data['overlap'],
-                    (int) $data['timeout'],
-                    (int) $data['id']
-                ]
+                    'type_advertisement'    => (int) $data['type_advertisement'],
+                    'fk_content_categories' => $data['categories'],
+                    'path'                  => $data['img'],
+                    'url'                   => $data['url'],
+                    'type_medida'           => $data['type_medida'],
+                    'num_clic'              => (int) $data['num_clic'],
+                    'num_view'              => (int) $data['num_view'],
+                    'with_script'           => (int) $data['with_script'],
+                    'script'                => $data['script'],
+                    'overlap'               => (int) $data['overlap'],
+                    'timeout'               => (int) $data['timeout'],
+                ],
+                [ 'pk_advertisement' => (int) $data['id'] ]
             );
 
             $this->load($data);
@@ -343,7 +336,9 @@ class Advertisement extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->delete("advertisements", [ 'pk_advertisement' => $id ]);
+            $rs = getService('dbal_connection')->delete(
+                "advertisements", [ 'pk_advertisement' => $id ]
+            );
 
             if (!$rs) {
                 return false;
