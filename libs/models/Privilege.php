@@ -1173,7 +1173,7 @@ class Privilege
                 'module'       => 'SYNC_MANAGER',
             ),
             180 => array(
-                'pk_privilege' => '178',
+                'pk_privilege' => '180',
                 'name'         => 'INSTANCE_SYNC_ADMIN',
                 'description'  => _('Administer instances'),
                 'module'       => 'INSTANCE_SYNC',
