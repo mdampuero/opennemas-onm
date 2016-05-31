@@ -70,12 +70,12 @@ class Newsletter
     }
 
     /**
-     * Creates one newsletter given an array of data
+     * Creates a newsletter from data.
      *
-     * @param array $data array with data for saved
+     * @param array $data The newsletter data.
      *
-     * @return Newsletter the object instance
-     **/
+     * @return mixed The Newsletter if it was stored. False otherwise.
+     */
     public function create($data)
     {
         $data['created'] = date("Y-m-d H:i:s");
@@ -84,26 +84,59 @@ class Newsletter
             $data['sent'] = 0;
         }
 
-        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`, `sent`)'
-             . ' VALUES (?,?,?,?,?,?)';
+        $conn = getService('dbal_connection');
 
-        $values = [
-            $data['title'],
-            $data['data'],
-            $data['html'],
-            $data['created'],
-            $data['created'],
-            $data['sent']
-        ];
+        try {
+            $conn->insert(
+                'newsletter_archive',
+                [
+                    'title'   => $data['title'],
+                    'data'    => $data['data'],
+                    'html'    => $data['html'],
+                    'created' => $data['created'],
+                    'updated' => $data['created'],
+                    'sent'    => $data['sent']
+                ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->id            = $conn->lastInsertId();
+            $this->pk_newsletter = $this->id;
+            $this->read($this->id);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
+    }
 
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
-        $this->read($this->id);
+    /**
+     * Loads the data for an newsletter given its id
+     *
+     * @param int $id the object id to load
+     *
+     * @return mixed The Newsletter if it was loaded. False otherwise.
+     */
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        return $this;
+        try {
+            $sql = 'SELECT * FROM `newsletter_archive` WHERE pk_newsletter=?';
+            $rs  = getService('dbal_connection')->fetchAssoc($sql, [ $id ]);
+
+            if (!$rs) {
+                return;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -112,13 +145,9 @@ class Newsletter
      * @param array $newdata array with data for update
      *
      * @return Newsletter the object instance
-     **/
+     */
     public function update($newdata)
     {
-
-        $sql = 'UPDATE `newsletter_archive` SET `title` = ?, `data` = ?, `html` = ?, `sent` = ? '
-            . ' WHERE pk_newsletter = ?';
-
         if (array_key_exists('title', $newdata) && !is_null($newdata['title'])) {
             $title = $newdata['title'];
         } else {
@@ -136,6 +165,7 @@ class Newsletter
         } else {
             $data = $this->data;
         }
+
         if (array_key_exists('sent', $newdata) && !is_null($newdata['sent'])) {
             if (!empty($this->sent)) {
                 $sent = (int)$this->sent + (int)$newdata['sent'];
@@ -146,80 +176,65 @@ class Newsletter
             $sent = $this->sent;
         }
 
-        $values = array(
-            $title,
-            $data,
-            $html,
-            $sent,
-            $this->pk_newsletter
-        );
+        try {
+            getService('dbal_connection')->update(
+                'newsletter_archive',
+                [
+                    'title'   => $title,
+                    'data'    => $data,
+                    'html'    => $html,
+                    'updated' => date("Y-m-d H:i:s"),
+                    'sent'    => $sent
+                ],
+                [ 'pk_newsletter' => $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            $this->read($this->id);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $this->read($this->id);
-
-        return $this;
     }
 
     /**
-     * Loads the data for an newsletter given its id
+     * Deletes a newsletter.
      *
-     * @param int $id the object id to load
-     *
-     * @return Newsletter the object instance loaded
-     **/
-
-    public function read($id)
-    {
-        $sql = 'SELECT * FROM `newsletter_archive` WHERE pk_newsletter=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->loadData($rs->fields);
-
-        return $this;
-    }
-
-    /**
-     * Deletes a newsletter given
-     *
-     * @return boolean
-     **/
+     * @return boolean True if the newsletter was deleted. False otherwise.
+     */
     public function delete()
     {
-        $sql = 'DELETE FROM `newsletter_archive` WHERE pk_newsletter=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($this->id)));
+        try {
+            getService('dbal_connection')->delete(
+                'newsletter_archive',
+                [ 'pk_newsletter' => $this->id ]
+            );
 
-        if (!$rs) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
-     * Loads the object properties from an array
+     * Loads the newsletter properties from an array.
      *
-     * @param Array $fields the database fields to load into the object
+     * @param Array $data The data to load.
      *
-     * @return Newsletter the object instance
-     **/
-    public function loadData($fields)
+     * @return Newsletter The current newsletter.
+     */
+    public function load($data)
     {
-        $this->id            = $fields['pk_newsletter'];
-        $this->pk_newsletter = $fields['pk_newsletter'];
-        $this->title         = $fields['title'];
-        $this->data          = $fields['data'];
-        $this->created       = $fields['created'];
-        $this->updated       = $fields['updated'];
-        $this->html          = $fields['html'];
-        $this->sent          = $fields['sent'];
+        $this->id            = $data['pk_newsletter'];
+        $this->pk_newsletter = $data['pk_newsletter'];
+        $this->title         = $data['title'];
+        $this->data          = $data['data'];
+        $this->created       = $data['created'];
+        $this->updated       = $data['updated'];
+        $this->html          = $data['html'];
+        $this->sent          = $data['sent'];
 
         return $this;
     }

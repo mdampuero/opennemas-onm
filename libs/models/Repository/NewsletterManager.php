@@ -59,7 +59,7 @@ class NewsletterManager extends BaseManager
         $newsletters = array();
         while (!$rs->EOF) {
             $obj = new \Newsletter();
-            $obj->loadData($rs->fields);
+            $obj->load($rs->fields);
 
             $newsletters[] = $obj;
 
