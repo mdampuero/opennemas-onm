@@ -89,8 +89,8 @@ class NotificationController extends Controller
         $id   = $this->get('instance')->internal_name;
         $date = date('Y-m-d H:i:s');
 
-        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
-            .  'instances LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
+        $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
+            .  'target LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!$this->getUser()->isAdmin()) {

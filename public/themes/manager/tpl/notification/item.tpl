@@ -196,6 +196,7 @@
                     <tags-input add-from-autocomplete-only="true" ng-model="notification.target" display-property="name" >
                       <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                     </tags-input>
+                    <div class="help">Instance or theme name</div>
                   </div>
                 </div>
               </div>
