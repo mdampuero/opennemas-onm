@@ -141,6 +141,7 @@ class Book extends Content
 
             return $this;
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }
@@ -174,6 +175,7 @@ class Book extends Content
 
             return $this->id;
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }
@@ -209,6 +211,7 @@ class Book extends Content
             return $this;
 
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }
@@ -239,6 +242,7 @@ class Book extends Content
 
             return true;
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }
