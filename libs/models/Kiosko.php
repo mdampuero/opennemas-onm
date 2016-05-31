@@ -127,8 +127,6 @@ class Kiosko extends Content
      * Overloads the object properties with an array of the new ones.
      *
      * @param array $properties The list of properties to load.
-     *
-     * @return Kiosko The current kiosko.
      */
     public function load($properties)
     {
@@ -138,8 +136,6 @@ class Kiosko extends Content
         }
 
         parent::load($properties);
-
-        return $this;
     }
 
     /**
@@ -186,7 +182,7 @@ class Kiosko extends Content
         parent::update($data);
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'kioskos',
                 [
                     'name'      => $data['name'],
@@ -227,7 +223,7 @@ class Kiosko extends Content
             unlink($paperImage);
             unlink($bigPaperImage);
 
-            $rs = getService('dbal_connection')
+            getService('dbal_connection')
                 ->delete('kioskos', [ 'pk_kiosko' => $id ]);
 
             return true;
