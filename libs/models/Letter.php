@@ -22,14 +22,14 @@ class Letter extends Content
      *
      * @var int
      **/
-    public $pk_letter         = null;
+    public $pk_letter = null;
 
     /**
      * The author id
      *
      * @var int
      **/
-    public $author            = null;
+    public $author = null;
 
     /**
      * Initializes Letter object instance
@@ -98,41 +98,65 @@ class Letter extends Content
     }
 
     /**
-     * Creates a new letter given an array of data
+     * Creates a new letter from data.
      *
-     * @param array $data the letter information
+     * @param array $data The letter data.
      *
-     * @return int the new letter id, if it was created
-     * @return boolean false if the letter was not created
-     **/
+     * @return mixed The letter if it was store successfully. Otherwise, returns
+     *               false.
+     */
     public function create($data)
     {
-        $data['position']   =  1;
+        $data['position'] = 1;
         $data['category'] = 0;
 
         parent::create($data);
 
-        $sql = 'INSERT INTO letters ( `pk_letter`, `author`, `email`) '.
-                    ' VALUES (?,?,?)';
+        try {
+            getService('dbal_connection')->insert(
+                'letters',
+                [
+                    'pk_letter' => $this->id,
+                    'author'    => $data['author'],
+                    'email'     => $data['email']
+                ]
+            );
 
-        $values = array(
-            $this->id,
-            $data['author'],
-            $data['email'],
-        );
+            if (array_key_exists('image', $data) && !empty($data['image'])) {
+                $this->setProperty('image', $data['image']);
+            }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (array_key_exists('url', $data) && !empty($data['url'])) {
+                $this->setProperty('url', $data['url']);
+            }
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
+    }
 
-        if (array_key_exists('image', $data) && !empty($data['image'])) {
-            $this->setProperty('image', $data['image']);
-        }
-        if (array_key_exists('url', $data) && !empty($data['url'])) {
-            $this->setProperty('url', $data['url']);
+    /**
+     * Overloads the object properties with an array of the new ones.
+     *
+     * @param array $properties The list of properties to load.
+     */
+    public function load($properties)
+    {
+        parent::load($properties);
+
+        if (is_array($this->params) && array_key_exists('ip', $this->params)) {
+            $this->ip = $this->params['ip'];
         }
 
-        return $this->id;
+        $this->image = $this->getProperty('image');
+
+        if (!empty($this->image)) {
+            $this->photo = $this->image;
+        }
+
+        $this->loadAllContentProperties();
     }
 
     /**
@@ -168,29 +192,6 @@ class Letter extends Content
     }
 
     /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     *
-     * @return void
-     **/
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        if (is_array($this->params) && array_key_exists('ip', $this->params)) {
-            $this->ip = $this->params['ip'];
-        }
-
-        $this->image = $this->getProperty('image');
-        if (!empty($this->image)) {
-            $this->photo = $this->image;
-        }
-
-        $this->loadAllContentProperties();
-    }
-
-    /**
      * Updates the letter information given an array of data
      *
      * @param array $data the data array
@@ -203,74 +204,83 @@ class Letter extends Content
         $data['category'] = 0;
 
         parent::update($data);
-        $sql = "UPDATE letters
-                SET `author`=  ?, `email`=  ?
-                WHERE pk_letter = ?";
 
-        $values = array(
-            $data['author'],
-            $data['email'],
-            $data['id']
-        );
+        try {
+            getService('dbal_connection')->update(
+                'letters',
+                [
+                    'author'    => $data['author'],
+                    'email'     => $data['email']
+                ],
+                [ 'pk_letter' => $this->id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (array_key_exists('image', $data) && !empty($data['image'])) {
+                $this->setProperty('image', $data['image']);
+            }
+
+            if (array_key_exists('url', $data) && !empty($data['url'])) {
+                $this->setProperty('url', $data['url']);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        if (array_key_exists('image', $data) && !empty($data['image'])) {
-            $this->setProperty('image', $data['image']);
-        }
-        if (array_key_exists('url', $data) && !empty($data['url'])) {
-            $this->setProperty('url', $data['url']);
-        }
-
-        return true;
     }
 
     /**
-     * Removes permanently the letter
+     * Removes permanently the letter.
      *
-     * @param int $id the letter id to delete
+     * @param integer $id The letter id.
      *
-     * @return boolean true if the letter was deleted
+     * @return boolean True if the letter was removed.
      **/
     public function remove($id)
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
+        try {
+            getService('dbal_connection')
+                ->delete('letters', [ 'pk_letter' => $id ]);
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            return;
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
     }
 
     /**
-     * Determines if the content of a comment has bad words
+     * Determines if the content of a comment has bad words.
      *
-     * @param  array $data the data from the comment
-     * @return int higher values means more bad words
-     **/
+     * @param array $data The data from the comment.
+     *
+     * @return boolean True if the letter contains bad words. Otherwise, returns
+     *                 false.
+     */
     public function hasBadWords($data)
     {
         $text = $data['title'] . ' ' . $data['body'];
 
         if (isset($data['author'])) {
-            $text.= ' ' . $data['author'];
+            $text .= ' ' . $data['author'];
         }
+
         $weight = \Onm\StringUtils::getWeightBadWords($text);
 
         return $weight > 100;
     }
 
     /**
-     * Renders the poll
+     * Renders the letter.
      *
-     * @param arrray $params parameters for rendering the content
+     * @param array $params The parameters for rendering the content
      *
-     * @return string the generated HTML
-     **/
-    public function render($params, $tpl = null)
+     * @return string The generated HTML.
+     */
+    public function render($params)
     {
         $tpl = new Template(TEMPLATE_USER);
 
