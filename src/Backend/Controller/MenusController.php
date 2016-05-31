@@ -132,7 +132,6 @@ class MenusController extends Controller
 
         // Get categories from menu
         $menu = new \Menu($id);
-        $menu->loadItems();
 
         // Fetch synchronized elements if exists
         $syncSites = [];
@@ -224,7 +223,6 @@ class MenusController extends Controller
                 }
             }
             $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title');
-            $menues = \Menu::find();
 
             // Fetch synchronized elements if exists
             $syncSites = [];
@@ -241,7 +239,6 @@ class MenusController extends Controller
                     'videoCategories' => $videoCategories,
                     'pollCategories'  => $pollCategories,
                     'staticPages'     => $staticPages,
-                    'menues'          => $menues,
                     'pages'           => $this->pages,
                     'menu_positions'  => $this->menuPositions,
                     'elements'        => $syncSites,
