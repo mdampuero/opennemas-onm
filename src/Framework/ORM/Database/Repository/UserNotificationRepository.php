@@ -130,4 +130,31 @@ class UserNotificationRepository extends DatabaseRepository
 
         $entity->refresh();
     }
+
+    /**
+     * Returns number of reads given a list of notifications.
+     *
+     * @param array $ids The notification ids.
+     *
+     * @return array The number of reads.
+     */
+    public function findTimesRead($ids)
+    {
+        $sql = 'SELECT notification_id, count(*) AS `read`'
+            . ' FROM user_notification WHERE notification_id IN (?)'
+            . ' GROUP BY notification_id';
+
+        $rs = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $values = [];
+        foreach ($rs as $value) {
+            $values[$value['notification_id']] = $value['read'];
+        }
+
+        return $values;
+    }
 }

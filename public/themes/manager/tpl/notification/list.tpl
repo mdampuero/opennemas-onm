@@ -122,6 +122,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-read" checklist-model="columns.selected" checklist-value="'read'" type="checkbox">
+            <label for="checkbox-read">
+              {t}Read{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
             <label for="checkbox-fixed">
               {t}Fixed{/t}
@@ -133,6 +139,8 @@
               {t}Forced{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
             <label for="checkbox-enabled">
@@ -166,7 +174,7 @@
                 {t}Target{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('target') == 'asc', 'fa fa-caret-down': isOrderedBy('target') == 'desc'}"></i>
               </th>
-              <th class="text-center" width="60">
+              <th class="text-center" ng-show="isColumnEnabled('l10n')" width="60">
                 l10n
               </th>
               <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
@@ -176,6 +184,10 @@
               <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="250">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
+                {t}Read{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
               </th>
               <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
                 {t}Fixed{/t}
@@ -220,7 +232,7 @@
                   [% target === 'all' ? '{t}All{/t}' : target %]
                 </div>
               </td>
-              <td class="text-center">
+              <td class="text-center" ng-show="isColumnEnabled('l10n')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" uib-tooltip="{t}Translations completed{/t}">
                   <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
                 </span>
@@ -233,6 +245,11 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('end')">
                 [% item.end %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('read')">
+                <span class="badge badge-default">
+                  <strong>[% extra.read[item.id] ? extra.read[item.id] : 0 %]</strong>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('fixed')">
                 <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
