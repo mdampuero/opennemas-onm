@@ -71,15 +71,16 @@
          * @return {Array} A list of targets
          */
         $scope.autocomplete = function(query) {
-          return itemService.list('manager_ws_notification_autocomplete', { query: query }).then(function(response) {
-            var tags = [];
+          return itemService.list('manager_ws_notification_autocomplete',
+            { query: query }).then(function(response) {
+              var tags = [];
 
-            for (var i = 0; i < response.data.target.length; i++) {
-              tags.push(response.data.target[i]);
-            }
+              for (var i = 0; i < response.data.target.length; i++) {
+                tags.push(response.data.target[i]);
+              }
 
-            return tags;
-          });
+              return tags;
+            });
         };
 
         /**
@@ -234,6 +235,23 @@
             function(response) {
               $scope.extra        = response.data.extra;
               $scope.notification = response.data.notification;
+
+              var target = [];
+
+              for (var i = 0; i < $scope.notification.target.length; i++) {
+                var id   = $scope.notification.target[i];
+                var name = id;
+
+                if (name === 'all') {
+                  name = $scope.extra.target.filter(function (e) {
+                    return e.id === id;
+                  })[0].name;
+                }
+
+                target.push({ id: id, name: name });
+              }
+
+              $scope.notification.target = target;
             }
           );
         } else {

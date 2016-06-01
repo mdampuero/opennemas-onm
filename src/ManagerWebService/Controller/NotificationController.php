@@ -26,14 +26,16 @@ class NotificationController extends Controller
     public function autocompleteAction(Request $request)
     {
         $target = [];
-        $query  = $request->query->get('query');
+        $query  = strtolower($request->query->get('query'));
 
-        if (empty($query) || strpos(_('All'), $query) !== false) {
+        if (empty($query)
+            || strpos(strtolower(_('All')), strtolower($query)) !== false
+        ) {
             $target[] = [ 'id' => 'all', 'name' => _('All') ];
         }
 
-        if (empty($query) || strpos(_('Manager'), $query) !== false) {
-            $target[] = [ 'id' => 'manager', 'name' => 'Manager' ];
+        if (empty($query) || strpos('manager', strtolower($query)) !== false) {
+            $target[] = [ 'id' => 'manager', 'name' => 'manager' ];
         }
 
         $orderBy  = [ 'internal_name' => 'asc' ];
@@ -433,7 +435,7 @@ class NotificationController extends Controller
         ];
 
         $params['target'] = [
-            [ 'id' => 'manager', 'name' => 'Manager' ],
+            [ 'id' => 'manager', 'name' => 'manager' ],
             [ 'id' => 'all', 'name' => _('All') ]
         ];
 
