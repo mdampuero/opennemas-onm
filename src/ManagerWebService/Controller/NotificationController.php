@@ -403,7 +403,6 @@ class NotificationController extends Controller
                 $notification->{$key} = $request->request->get($key);
             }
 
-
             if (empty($notification->start)) {
                 $notification->start = date('Y-m-d H:i:s');
             }
