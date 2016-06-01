@@ -104,7 +104,7 @@ EOF
             if (file_exists($themeName)) {
                 $this->updateSpecificTheme($themeName);
             } else {
-                $this->execProcess('git clone ssh://gitolite@git.openhost.es:23911/onm-theme-'.$themeName.'.git '.$themeName);
+                $this->execProcess('git clone git@bitbucket.org:opennemas/onm-theme-'.$themeName.'.git '.$themeName);
             }
         }
 
@@ -168,6 +168,7 @@ EOF
     {
         $output = $this->output;
         $process = new Process($processLine);
+        $process->setTimeout(3600);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
                 $output->write("\t<error>".$buffer. "</error>");
