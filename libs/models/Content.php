@@ -289,6 +289,7 @@ class Content
 
                 break;
             case 'comments':
+                return 0;
                 $commentRepository = getService('comment_repository');
                 return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
