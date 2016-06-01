@@ -36,7 +36,10 @@ class NotificationController extends Controller
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
-            [ 'user_id' => $this->getUser()->id ]
+            [
+                'instance_id' => $this->get('instance')->id,
+                'user_id'     => $this->getUser()->id
+            ]
         );
 
         $criteria = '(target LIKE \'%"' . $id . '"%\' OR '
@@ -138,12 +141,16 @@ class NotificationController extends Controller
         $userId = $this->getUser()->id;
 
         try {
-            $un = $em->getRepository('user_notification')->find(
-                [ 'notification_id' => $id, 'user_id' => $userId ]
-            );
+            $un = $em->getRepository('manager.UserNotification')->find([
+                'instance_id'     => $this->get('instance')->id,
+                'notification_id' => $id,
+                'user_id'         => $userId
+            ]);
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
-            $un->user_id = $userId;
+            $un->instance_id     = $this->get('instance')->id;
+            $un->user_id         = $userId;
+            $un->user            = $this->getUser();
             $un->notification_id = $id;
         }
 
@@ -167,7 +174,8 @@ class NotificationController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $ids = $request->request->get('ids');
+        $instance = $this->get('instance')->id;
+        $ids      = $request->request->get('ids');
 
         if (empty($ids) || !is_array($ids)) {
             return new JsonResponse(_('Invalid notifications'), 400);
@@ -178,11 +186,12 @@ class NotificationController extends Controller
 
         try {
             $criteria = [
+                'instance_id'     => [ [ 'value' => $instance, 'operator' => 'IN' ] ],
                 'notification_id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
-                'user_id' => [ [ 'value' => $this->getUser()->id ] ]
+                'user_id'         => [ [ 'value' => $this->getUser()->id ] ]
             ];
 
-            $notifications = $em->getRepository('user_notification')
+            $notifications = $em->getRepository('manager.UserNotification')
                 ->findBy($criteria);
 
             // Update read datetime for existing
@@ -201,6 +210,7 @@ class NotificationController extends Controller
                 $un = new UserNotification();
 
                 $un->user_id         = $this->getUser()->id;
+                $un->user            = $this->getUser();
                 $un->notification_id = $id;
                 $un->read_time       = date('Y-m-d H:i:s');
 
