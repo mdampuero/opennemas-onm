@@ -510,3 +510,28 @@ purchase:
             primary: false
             unique: false
             flags: { fulltext: true }
+
+user_notification:
+    columns:
+        instance_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        user_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        notification_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        user:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        read_time:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+    index:
+        -
+            name: PRIMARY
+            columns: [user_id, notification_id]
+            primary: true
+            unique: true
+            flags: {  }
