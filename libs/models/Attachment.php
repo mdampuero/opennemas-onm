@@ -199,19 +199,21 @@ class Attachment extends Content
     {
         parent::update($data);
 
-        $sql = "UPDATE attachments SET `title`=?, category=? "
-             . "WHERE pk_attachment=?";
-        $values = [
-            $data['title'],
-            (int) $data['category'],
-            (int) $data['id']
-        ];
+        try {
+            getService('dbal_connection')->update(
+                'attachments',
+                [
+                    'title'    => $data['title'],
+                    'category' => (int) $data['category'],
+                ],
+                [ (int) $data['id'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -224,7 +226,7 @@ class Attachment extends Content
     public function remove($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) return false;
 
         parent::remove($id);
 
@@ -262,15 +264,11 @@ class Attachment extends Content
                 [ $path ]
             );
 
-            if (!$rs) {
-                return false;
-            }
+            return intval($rs) > 0;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        return intval($rs) > 0;
     }
 
     /**
