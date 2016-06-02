@@ -70,8 +70,9 @@ class WidgetsController extends Controller
         $category = $request->query->get('category', 'home');
 
         $widget = new \Widget($id);
-        $widgetParams = [];
+
         if (is_string($widget->params) && !empty($widget->params)) {
+            $widgetParams = [];
             $widget->params = unserialize($widget->params);
 
             foreach ($widget->params as $key => $value) {
@@ -80,8 +81,9 @@ class WidgetsController extends Controller
                     'value' => $value
                 ];
             }
+            $widget->params = $widgetParams;
         }
-        $widget->params = $widgetParams;
+
         if (is_null($widget->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',

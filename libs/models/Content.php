@@ -486,14 +486,14 @@ class Content
             if (!$rs) {
                 return;
             }
+
+            // Load object properties
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             return;
         }
-
-        // Load object properties
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -823,7 +823,6 @@ class Content
      **/
     public function toggleSuggested()
     {
-        var_dump($this->id);die();
         try {
             $this->frontpage = ($this->frontpage + 1) % 2;
 

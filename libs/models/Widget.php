@@ -102,7 +102,7 @@ class Widget extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents '
                 .'LEFT JOIN widgets ON pk_content = pk_widget WHERE pk_content = ?',
                 [ $id ]
             );
@@ -110,15 +110,13 @@ class Widget extends Content
             if (!$rs) {
                 return false;
             }
+            $this->load($rs);
+            $this->loadAllContentProperties();
+
+            return $this;
         } catch (\Exception $e) {
             return false;
         }
-
-        $this->loadAllContentProperties();
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
