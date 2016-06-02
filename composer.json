@@ -69,7 +69,7 @@
         "ronanguilloux/isocodes": "^1.2",
         "rtconner/freshbooks-api": "dev-master",
         "smarty-gettext/smarty-gettext": "@stable",
-        "smarty/smarty" : "3.1.29",
+        "smarty/smarty" : "3.1.21",
         "symfony/assetic-bundle": "dev-master"
     },
     "require-dev": {
