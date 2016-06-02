@@ -239,6 +239,7 @@ class Advertisement extends Content
             $data['with_script'] = 0;
         }
 
+        $data['pk_advertisement'] = $data['id'] = $this->id;
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
         $data['type_medida'] =
@@ -248,7 +249,7 @@ class Advertisement extends Content
             $rs = getService('dbal_connection')->insert(
                 'advertisements',
                 [
-                    'pk_advertisement'      => $this->id,
+                    'pk_advertisement'      => $data['pk_advertisement'],
                     'type_advertisement'    => (int) $data['type_advertisement'],
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
@@ -264,7 +265,7 @@ class Advertisement extends Content
                 ]
             );
 
-            $this->load($data);
+            // $this->load($data);
 
             return $this;
         } catch (\Exception $e) {

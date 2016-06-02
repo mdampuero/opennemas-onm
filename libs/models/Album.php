@@ -152,13 +152,13 @@ class Album extends Content
             if (!$rs) {
                 return;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             return;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**

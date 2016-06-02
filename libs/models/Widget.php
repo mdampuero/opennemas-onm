@@ -134,7 +134,6 @@ class Widget extends Content
 
         parent::update($data);
 
-
         if ($data['renderlet'] != 'html'  && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }

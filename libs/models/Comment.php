@@ -328,7 +328,9 @@ class Comment
      */
     public function delete($id)
     {
-        if ((int) $id <= 0) throw new \Exception(_('Not valid comment id.'));
+        if ((int) $id <= 0) {
+            throw new \Exception(_('Not valid comment id.'));
+        }
 
         try {
             $rs = getService('dbal_connection')->delete(
