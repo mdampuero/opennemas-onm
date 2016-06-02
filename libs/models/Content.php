@@ -474,7 +474,9 @@ class Content
      **/
     public function read($id)
     {
-        if (empty($id)) return false;
+        if (empty($id)) {
+            return false;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(

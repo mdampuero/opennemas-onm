@@ -360,7 +360,6 @@ class Comment
                 $filter
             );
 
-            // dispatchEventWithParams('comment.delete', array('comment' => $this));
             return true;
         } catch (\Exception $e) {
             error_log('Error while deleting comments from filter:'.$e->getMessage());
@@ -388,7 +387,7 @@ class Comment
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error changing comment status: '.$e->getMessage());
             return false;
         }
     }
@@ -521,9 +520,7 @@ class Comment
         try {
             $rs = getService('dbal_connection')->update(
                 "comments",
-                [
-                  'parent_id' => $parentId
-                ],
+                [ 'parent_id' => $parentId ],
                 [ 'id' => (int) $this->id ]
             );
 

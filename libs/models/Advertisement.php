@@ -332,7 +332,9 @@ class Advertisement extends Content
      **/
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
         parent::remove($id);
 
@@ -443,15 +445,18 @@ class Advertisement extends Content
             );
 
             if (!$rs) {
-                return null;
+                return false;
             }
-        } catch (\Exception $e) {
-            return null;
-        }
 
-        // Clean entity repository cache
-        $ad = new \Advertisement($id);
-        dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
+            // Clean entity repository cache
+            $ad = new \Advertisement($id);
+            dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**

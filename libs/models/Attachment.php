@@ -109,7 +109,9 @@ class Attachment extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -121,14 +123,14 @@ class Attachment extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -226,7 +228,11 @@ class Attachment extends Content
     public function remove($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return false;
+        if (((int) $id) <= 0) {
+            return false;
+        }
+
+        $filename = MEDIA_PATH.DS.FILE_DIR.$this->path;
 
         parent::remove($id);
 
@@ -238,8 +244,6 @@ class Attachment extends Content
         } catch (\Exception $e) {
             return false;
         }
-
-        $filename = MEDIA_PATH.DS.FILE_DIR.$this->path;
 
         if (file_exists($filename)) {
             unlink($filename);

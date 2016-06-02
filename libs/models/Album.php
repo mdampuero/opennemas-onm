@@ -79,10 +79,6 @@ class Album extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
-
-                break;
             case 'content_type_name':
                 $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
@@ -140,7 +136,9 @@ class Album extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(

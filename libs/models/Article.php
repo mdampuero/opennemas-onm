@@ -204,7 +204,9 @@ class Article extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -216,12 +218,14 @@ class Article extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
     }
 
     /**
@@ -480,13 +484,10 @@ class Article extends Content
      **/
     public function getAuthor()
     {
-        if (!empty($this->author)) {
-            return $this->author;
-        } else {
-            $ur = getService('user_repository');
-            $author = $ur->find($this->fk_author);
-
-            return $author;
+        if (empty($this->author)) {
+            $this->author= getService('user_repository')->find($this->fk_author);
         }
+
+        return $this->author;
     }
 }
