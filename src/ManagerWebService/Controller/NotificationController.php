@@ -56,7 +56,7 @@ class NotificationController extends Controller
         $themes = $this->get('orm.loader')->getPlugins();
 
         foreach ($themes as $theme) {
-            if (empty($query) || strpos($theme->uuid, $query)) {
+            if (empty($query) || strpos($theme->uuid, strtolower($query)) !== false) {
                 $target[] = [ 'id' => $theme->uuid, 'name' => $theme->uuid ];
             }
         }
