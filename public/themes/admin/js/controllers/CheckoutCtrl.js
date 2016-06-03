@@ -140,12 +140,11 @@
               (!nv.company && $scope.countries[nv.country]))) {
             $scope.vatTax = $scope.taxes[nv.country].value;
           }
-
-          $scope.tax = Math.round($scope.subtotal * $scope.vatTax)/100;
         });
 
-        // Update total when fee, subtotal or tax change
-        $scope.$watch('[fee, subtotal, tax]', function () {
+        // Update total when fee, subtotal or vatTax change
+        $scope.$watch('[fee, subtotal, vatTax]', function () {
+          $scope.tax   = Math.round($scope.subtotal * $scope.vatTax)/100;
           $scope.total = $scope.subtotal + $scope.tax + $scope.fee;
         }, true);
       }
