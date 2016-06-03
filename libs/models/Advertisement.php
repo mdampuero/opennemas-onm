@@ -364,7 +364,9 @@ class Advertisement extends Content
     public function getUrl($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         // Try to minimize the database overload if this object was preloaded
         // or doesn't fit the rules
