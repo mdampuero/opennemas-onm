@@ -1,36 +1,24 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Backend\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-
-use Onm\Settings as s;
-use \Privileges;
 
 /**
  * Handler to load user data when an user logs in the system successfully.
  */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
-    /**
-     * @var ServiceContainer
-     */
-    private $container;
-
     /**
      * Constructs a new handler.
      *
@@ -39,11 +27,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     public function __construct($container)
     {
         $this->container = $container;
-
-        $this->context   = $container->get('security.token_storage');
-        $this->router    = $container->get('router');
-        $this->session   = $container->get('session');
-        $this->recaptcha = $container->get('google_recaptcha');
     }
 
     /**
@@ -54,88 +37,24 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      *
      * @return Response The response to return.
      */
-    public function onAuthenticationSuccess(
-        Request $request,
-        TokenInterface $token
-    ) {
-        $instance = $this->container->get('core.instance');
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
+        $session  = $request->getSession();
+        $attempts = $session->get('failed_login_attempts', 0);
         $user     = $token->getUser();
-        $valid    = true;
 
-        // Check reCaptcha if is set
-        $response = $request->get('g-recaptcha-response');
-        if (!is_null($response)) {
-            $recaptcha = $this->recaptcha->getOnmRecaptcha();
-            $resp = $recaptcha->verify(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-            $valid = $resp->isSuccess();
-        }
+        // TODO: Remove when Smarty can get services from service container
+        $session->set('user', $user);
 
-        // Set session array
-        $_SESSION['userid']           = $user->id;
-        $_SESSION['realname']         = $user->name;
-        $_SESSION['username']         = $user->username;
-        $_SESSION['email']            = $user->email;
-        $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
+        // TODO: Remove when removing logging actions from old data model
+        $_SESSION['userid']   = $user->id;
+        $_SESSION['username'] = $user->username;
+        //$_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
-        $this->session->set('user', $user);
-        $this->session->set('user_language', $user->user_language);
-        $this->session->set('instance', $instance);
-
-        $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
-            $this->session->get('intention'),
-            $request->get('_token')
-        );
+        $recaptchaValid = $this->isRecaptchaValid($request);
+        $csrfTokenValid = $this->isCsrfTokenValid($request);
 
         // Check token, user type and reCaptcha
-        if (!$isTokenValid || $valid === false || $user->type != 0) {
-            if (isset($_SESSION['failed_login_attempts'])) {
-                $_SESSION['failed_login_attempts']++;
-            } else {
-                $_SESSION['failed_login_attempts'] = 1;
-            }
-
-            if (!$isTokenValid) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('Login token is not valid. Try to authenticate again.')
-                );
-            }
-
-            if ($valid === false) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('The reCAPTCHA was not entered correctly. Try to authenticate'
-                    . ' again.')
-                );
-            }
-
-            if ($user->type != 0) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('Your user is not allowed to access, please contact your administrator')
-                );
-            }
-
-            $this->context->setToken(null);
-
-            return new RedirectResponse($request->headers->get('referer'));
-        } else {
-            $um    = $this->container->get('user_repository');
-            $cache = $this->container->get('cache');
-
-            $database  = $instance->getDatabaseName();
-            $namespace = $instance->internal_name;
-
-            $um->selectDatabase($database);
-            $cache->setNamespace($namespace);
-            $GLOBALS['application']->conn->selectDatabase($database);
-
-            unset($_SESSION['failed_login_attempts']);
-
-            // Set last_login date
+        if ($recaptchaValid && $csrfTokenValid && $user->type === 0) {
             $time = new \DateTime();
             $time->setTimezone(new \DateTimeZone('UTC'));
             $time = $time->format('Y-m-d H:i:s');
@@ -146,5 +65,73 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
             return new RedirectResponse($request->get('_referer'));
         }
+
+        $session->set('failed_login_attempts', $attempts + 1);
+
+        if (!$csrfTokenValid) {
+            $session->getFlashBag()->add(
+                'error',
+                _('Login token is not valid. Try to authenticate again.')
+            );
+        }
+
+        if (!$recaptchaValid) {
+            $session->getFlashBag()->add(
+                'error',
+                _('The reCAPTCHA was not entered correctly. Try to authenticate'
+                . ' again.')
+            );
+        }
+
+        if (!$user->type != 0) {
+            $session->getFlashBag()->add(
+                'error',
+                _('Your user is not allowed to access, please contact your administrator')
+            );
+        }
+
+        $container->get('security.token_storage')->setToken(null);
+
+        return new RedirectResponse($request->headers->get('referer'));
+    }
+
+    /**
+     * Checks if the CSRF token is valid basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return boolean True if the CSRF token is valid. False otherwise.
+     */
+    protected function isCsrfTokenValid(Request $request)
+    {
+        if (empty($request->get('_token'))) {
+            return false;
+        }
+
+        return $this->container->get('form.csrf_provider')->isCsrfTokenValid(
+            $request->getSession()->get('intention'),
+            $request->get('_token')
+        );
+    }
+
+    /**
+     * Checks if the recaptcha is valid basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return boolean True if the recaptcha code is valid or missing. False
+     *                 otherwise.
+     */
+    protected function isRecaptchaValid(Request $request)
+    {
+        if (empty($request->get('g-recaptcha-response'))) {
+            return true;
+        }
+
+        $ip       = $request->getClientIp();
+        $response = $request->get('g-recaptcha-response');
+
+        return $this->container->get('google_recaptcha')->getOnmRecaptcha()
+            ->verify($response, $ip)->isSuccess();
     }
 }
