@@ -154,20 +154,21 @@ abstract class AbstractCache implements CacheInterface
     public function save($id, $data = null, $lifeTime = 0)
     {
         if (is_array($id)) {
-            $this->mru = array_merge($this->mru, $id);
-
-            $values = array();
+            $values = [];
             foreach ($id as $key => $value) {
                 $values[$this->getNamespacedId($key)] = $value;
             }
+
+            $this->mru = array_merge($this->mru, $values);
 
             $this->buffer[] = [ 'method' => 'saveMulti', 'params' => [ 'ids' => $id, 'values' => $data ] ];
 
             return $this->doSave($values, $data, $lifeTime);
         }
 
+        $this->mru[$this->getNamespacedId($id)] = $data;
+
         $this->buffer[] = [ 'method' => 'save', 'params' => [ 'ids' => $id, 'values' => $data ] ];
-        $this->mru[$id] = $data;
 
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
