@@ -1,3 +1,10 @@
+manager_ws_notification_create:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:create }
+    methods:  [ POST ]
+    options:
+        expose: true
+
 manager_ws_notification_delete:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:delete }
@@ -14,19 +21,19 @@ manager_ws_notification_new:
     options:
         expose: true
 
-manager_ws_notification_save:
-    path:     /notifications
-    defaults: { _controller: ManagerWebServiceBundle:Notification:save }
-    methods:  [ POST ]
-    options:
-        expose: true
-
 manager_ws_notification_patch:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:patch }
     methods:  [ PATCH ]
     requirements:
         id: \d+
+    options:
+        expose: true
+
+manager_ws_notification_save:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:save }
+    methods:  [ POST ]
     options:
         expose: true
 
