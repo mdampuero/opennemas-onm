@@ -26,19 +26,6 @@ use Onm\Database\DbalWrapper;
  */
 class UserManager extends BaseManager
 {
-    /**
-     * Initializes the entity manager.
-     *
-     * @param DbalWrapper    $conn      The custom DBAL wrapper.
-     * @param CacheInterface $cache       The cache instance.
-     * @param string         $cachePrefix The cache prefix.
-     */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
-    {
-        $this->conn        = $conn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
 
     /**
      * Counts searched users given a criteria.
@@ -55,7 +42,7 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
 
-        $rs = $this->conn->fetchArray($sql);
+        $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -120,7 +107,7 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT id FROM `users` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $rs = $this->conn->fetchAll($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -158,7 +145,7 @@ class UserManager extends BaseManager
             . "WHERE `users`.`id`=`usermeta`.`user_id` AND $whereSQL "
             . "ORDER BY $orderSQL $limitSQL";
 
-        $rs = $this->conn->fetchAll($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -228,9 +215,9 @@ class UserManager extends BaseManager
      */
     public function delete($id)
     {
-        $this->conn->transactional(function ($em) use ($id) {
-            $em->executeQuery('DELETE FROM `users` WHERE `id`= ' . $id);
-            $em->executeQuery('DELETE FROM `usermeta` WHERE `user_id`= ' . $id);
+        $this->dbConn->transactional(function ($em) use ($id) {
+            $em->executeUpdate('DELETE FROM `users` WHERE `id`= ' . $id);
+            $em->executeUpdate('DELETE FROM `usermeta` WHERE `user_id`= ' . $id);
         });
 
         $this->cache->delete('user' . $this->cacheSeparator . $id);
