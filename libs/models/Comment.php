@@ -379,7 +379,7 @@ class Comment
             $rs = getService('dbal_connection')->update(
                 "comments",
                 $data,
-                [ 'pk_column' => (int) $this->id ]
+                [ 'id' => (int) $this->id ]
             );
 
             $this->load($data);
