@@ -118,8 +118,7 @@ class FrontpagesController extends Controller
         $lm = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
         );
-        $layoutSettings = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayout($layoutTheme);
+        $layoutSettings = $this->container->get('core.theme')->getLayout($layoutTheme);
 
         // Get contents for this home
         $cm = new \ContentManager();
@@ -156,8 +155,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $layouts = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayouts();
+        $layouts = $this->container->get('core.theme')->getLayouts();
 
         // Get last saved and check
         $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
@@ -320,7 +318,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
+        $availableLayouts = $this->container->get('core.theme')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid  = in_array($layout, $availableLayouts);

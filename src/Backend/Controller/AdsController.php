@@ -263,7 +263,7 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('core.theme')->getAdsPositionManager();
         return $this->render(
             'advertisement/new.tpl',
             array(

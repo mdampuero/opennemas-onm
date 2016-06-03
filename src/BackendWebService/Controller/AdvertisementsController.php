@@ -31,8 +31,7 @@ class AdvertisementsController extends ContentController
         $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
         $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
-        $positionManager = $this->container->get('instance_manager')
-            ->current_instance->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('core.theme')->getAdsPositionManager();
         $map = $positionManager->getAllAdsPositions();
 
         $order = null;

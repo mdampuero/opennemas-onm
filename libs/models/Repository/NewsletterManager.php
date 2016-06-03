@@ -182,7 +182,7 @@ class NewsletterManager extends BaseManager
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            getService('instance_manager')->current_instance->getMainDomain()
+            getService('core.instance')->getMainDomain()
         );
 
         $tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
