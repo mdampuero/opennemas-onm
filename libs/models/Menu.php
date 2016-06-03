@@ -150,6 +150,9 @@ class Menu
         }
     }
 
+    /**
+     * Loads the menu properties from a data array, loads menu items
+     */
     public function load($data)
     {
         $this->id       = $data['pk_menu'];
@@ -231,8 +234,8 @@ class Menu
     public function delete($id)
     {
         $conn = getService('dbal_connection');
-        $conn->beginTransaction();
 
+        $conn->beginTransaction();
         try {
             // Delete menu elements
             $this->emptyMenu($id);

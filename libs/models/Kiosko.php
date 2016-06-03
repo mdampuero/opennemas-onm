@@ -88,6 +88,55 @@ class Kiosko extends Content
     }
 
     /**
+     * Overloads the object properties with an array of the new ones.
+     *
+     * @param array $properties The list of properties to load.
+     */
+    public function load($properties)
+    {
+        if (array_key_exists('name', $properties)) {
+            $properties['thumb_url'] =
+                str_replace('.pdf', '.jpg', $properties['name']);
+        }
+
+        parent::load($properties);
+    }
+
+    /**
+     * Loads the kiosko data given an id.
+     *
+     * @param integer $id The kiosko id.
+     *
+     * @return Kiosko The current kiosko.
+     */
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return false;
+        }
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error while fetching Kiosko: '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Creates a new kiosko from data.
      *
      * @param array $data The kiosko data.
@@ -118,56 +167,9 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error while creating Kiosko: '.$e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Overloads the object properties with an array of the new ones.
-     *
-     * @param array $properties The list of properties to load.
-     */
-    public function load($properties)
-    {
-        if (array_key_exists('name', $properties)) {
-            $properties['thumb_url'] =
-                str_replace('.pdf', '.jpg', $properties['name']);
-        }
-
-        parent::load($properties);
-    }
-
-    /**
-     * Loads the kiosko data given an id.
-     *
-     * @param integer $id The kiosko id.
-     *
-     * @return Kiosko The current kiosko.
-     */
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -186,7 +188,6 @@ class Kiosko extends Content
                 'kioskos',
                 [
                     'name'      => $data['name'],
-                    'path'      => $data['path'],
                     'date'      => $data['date'],
                     'price'     => $data['price'],
                     'type'      => $data['type']
@@ -196,7 +197,7 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error while updating Kiosko: '.$e->getMessage());
             return false;
         }
     }
@@ -228,7 +229,7 @@ class Kiosko extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error while removing Kiosko: '.$e->getMessage());
             return false;
         }
     }

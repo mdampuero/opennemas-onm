@@ -98,46 +98,6 @@ class Letter extends Content
     }
 
     /**
-     * Creates a new letter from data.
-     *
-     * @param array $data The letter data.
-     *
-     * @return mixed The letter if it was store successfully. Otherwise, returns
-     *               false.
-     */
-    public function create($data)
-    {
-        $data['position'] = 1;
-        $data['category'] = 0;
-
-        parent::create($data);
-
-        try {
-            getService('dbal_connection')->insert(
-                'letters',
-                [
-                    'pk_letter' => $this->id,
-                    'author'    => $data['author'],
-                    'email'     => $data['email']
-                ]
-            );
-
-            if (array_key_exists('image', $data) && !empty($data['image'])) {
-                $this->setProperty('image', $data['image']);
-            }
-
-            if (array_key_exists('url', $data) && !empty($data['url'])) {
-                $this->setProperty('url', $data['url']);
-            }
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Overloads the object properties with an array of the new ones.
      *
      * @param array $properties The list of properties to load.
@@ -189,6 +149,46 @@ class Letter extends Content
         $this->load($rs);
 
         return $this;
+    }
+
+    /**
+     * Creates a new letter from data.
+     *
+     * @param array $data The letter data.
+     *
+     * @return mixed The letter if it was store successfully. Otherwise, returns
+     *               false.
+     */
+    public function create($data)
+    {
+        $data['position'] = 1;
+        $data['category'] = 0;
+
+        parent::create($data);
+
+        try {
+            getService('dbal_connection')->insert(
+                'letters',
+                [
+                    'pk_letter' => $this->id,
+                    'author'    => $data['author'],
+                    'email'     => $data['email']
+                ]
+            );
+
+            if (array_key_exists('image', $data) && !empty($data['image'])) {
+                $this->setProperty('image', $data['image']);
+            }
+
+            if (array_key_exists('url', $data) && !empty($data['url'])) {
+                $this->setProperty('url', $data['url']);
+            }
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error creating Letter: '.$e->getMessage());
+            return false;
+        }
     }
 
     /**
