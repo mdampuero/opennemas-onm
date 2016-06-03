@@ -10,7 +10,7 @@
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
-use Onm\DatabaseConnection;
+use Onm\Database\DbalWrapper;
 
 /**
  * Default BaseManager contains common functions to the rest of Entity Managers
