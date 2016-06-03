@@ -337,7 +337,7 @@ class Menu
             $menuItem->title     = @iconv(mb_detect_encoding($element['title']), 'utf-8', $element['title']);
             $menuItem->link      = $element['link_name'];
             $menuItem->position  = (int) $element['position'];
-            $menuItem->type      = (int) $element['type'];
+            $menuItem->type      = $element['type'];
             $menuItem->pk_father = (int) $element['pk_father'];
             $menuItem->submenu   = [];
 
