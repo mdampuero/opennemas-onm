@@ -32,10 +32,22 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
 
+    core.listener.security:
+        class:     Common\Core\EventListener\SecurityListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
     core.theme:
-        class:   Onm\ORM\Entity\Extension
-        factory: [ '@core.loader', 'getTheme' ]
+        class:     Onm\ORM\Entity\Extension
+        factory:   [ '@core.loader', 'getTheme' ]
+
+    core.security:
+        class:     Common\Core\Security\Security
+
+    core.security.user:
+        class:     Common\ORM\Entity\User
+        factory:   [ '@core.security', 'getUser' ]
 
     core.user:
-        class:   Onm\ORM\Entity\User
-        factory: [ '@core.loader', 'getUser' ]
+        alias:     'core.security.user'
