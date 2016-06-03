@@ -15,9 +15,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
- * Loads an user basing on the username.
+ * Loads an user by username.
  */
-class OnmUserProvider implements UserProviderInterface
+class UserProvider implements UserProviderInterface
 {
     /**
      * The entity manager.
@@ -37,23 +37,14 @@ class OnmUserProvider implements UserProviderInterface
     }
 
     /**
-     * Loads the user for the given username.
-     *
-     * This method must throw UsernameNotFoundException if the user is not
-     * found.
-     *
-     * @param string $username The username
-     *
-     * @return AdvancedUserInterface
-     *
-     * @throws UsernameNotFoundException if the user is not found
+     * {@inheritdoc}
      */
     public function loadUserByUsername($username)
     {
         $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
 
         try {
-            return $this->em->getRepository('User', 'instance')->findOneBy($oql);
+            return $this->em->getRepository('User')->findOneBy($oql);
         } catch (\Exception $e) {
         }
 
@@ -61,17 +52,7 @@ class OnmUserProvider implements UserProviderInterface
     }
 
     /**
-     * Refreshes the user for the account interface.
-     *
-     * It is up to the implementation if it decides to reload the user data
-     * from the database, or if it simply merges the passed User into the
-     * identity map of an entity manager.
-     *
-     * @param UserInterface $user The user to refresh.
-     *
-     * @return UserInterface The refreshed user.
-     *
-     * @throws UnsupportedUserException if the account is not supported
+     * {@inheritdoc}
      */
     public function refreshUser(UserInterface $user)
     {
@@ -79,14 +60,10 @@ class OnmUserProvider implements UserProviderInterface
     }
 
     /**
-     * Whether this provider supports the given user class.
-     *
-     * @param string  $class The class name.
-     *
-     * @return boolean True if the given class is supported.
+     * {@inheritdoc}
      */
     public function supportsClass($class)
     {
-        return $class == 'User';
+        return $class === 'User';
     }
 }

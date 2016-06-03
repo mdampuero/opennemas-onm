@@ -16,7 +16,7 @@ security:
         users.oauth:
             id: onm_oauth_user_provider
         users.instance:
-            id: onm_user_provider
+            id: backend.security.user_provider
         users.manager:
             id: manager_ws.security.user_provider
     firewalls:
