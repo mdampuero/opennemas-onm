@@ -55,7 +55,6 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
 
-        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
@@ -121,8 +120,6 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT id FROM `users` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
-
         $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
@@ -161,7 +158,6 @@ class UserManager extends BaseManager
             . "WHERE `users`.`id`=`usermeta`.`user_id` AND $whereSQL "
             . "ORDER BY $orderSQL $limitSQL";
 
-        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->conn->fetchAll($sql);
 
         $ids = array();

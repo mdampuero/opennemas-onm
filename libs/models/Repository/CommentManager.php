@@ -116,7 +116,6 @@ class CommentManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();

@@ -53,7 +53,6 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(pk_user_group) FROM `user_groups` WHERE $whereSQL";
 
-        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
@@ -114,7 +113,6 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT pk_user_group FROM `user_groups` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
