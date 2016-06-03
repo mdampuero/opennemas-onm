@@ -64,28 +64,33 @@ class Widget extends Content
     {
         $data['category'] = 0;
 
-        // Start transaction
-        $GLOBALS['application']->conn->BeginTrans();
-        parent::create($data);
-
         if ($data['renderlet'] != 'html' && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
 
-        $rs = $GLOBALS['application']->conn->Execute(
-            'INSERT INTO widgets (`pk_widget`, `content`, `renderlet`) VALUES (?, ?, ?)',
-            array($this->id, $data['content'], $data['renderlet'])
-        );
+        $conn = getService('dbal_connection');
 
-        if ($rs === false) {
-            $GLOBALS['application']->conn->RollbackTrans();
+        try {
+            $conn->beginTransaction();
+            parent::create($data);
 
+           $conn->insert(
+                'widgets',
+                [
+                    'pk_widget' => $this->id,
+                    'content' => $data['content'],
+                    'renderlet' => $data['renderlet'],
+
+                ]
+            );
+            $conn->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log($e->getMessage());
             return false;
         }
-
-        $GLOBALS['application']->conn->CommitTrans();
-
-        return true;
     }
 
     /**
@@ -130,19 +135,31 @@ class Widget extends Content
     {
         $data['category'] = 0;
 
-        parent::update($data);
-
         if ($data['renderlet'] != 'html'  && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
-        $values = array($data['content'], $data['renderlet'], $data['id']);
 
-        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $conn = getService('dbal_connection');
+        try {
+            $conn->beginTransaction();
+            parent::update($data);
+
+            $conn->update(
+                'widgets',
+                [
+                    'content'   => $data['content'],
+                    'renderlet' => $data['renderlet'],
+                ],
+                [ 'pk_widget' => $data['id'] ]
+            );
+            $conn->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -155,49 +172,18 @@ class Widget extends Content
      */
     public function remove($id, $editor = null)
     {
-        parent::remove($id); // Delete from database, don't use trash
+        try {
+            if (!parent::remove($id)) {
+                return false;
+            }
 
-        $values = array($id);
+            getService('dbal_connection')->delete('widgets', [ 'pk_widget' => $id ]);
 
-        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Read, get a specific object
-     *
-     * @param  int    $content the widget name
-     *
-     * @return Widget Return instance to chaining method
-     */
-    public function readIntelligentFromName($content)
-    {
-        $sqlSearchWidget = "SELECT * FROM `widgets` WHERE `content`=?";
-        $rs = $GLOBALS['application']->conn->Execute(
-            $sqlSearchWidget,
-            $content
-        );
-
-        if ($rs === false) {
-            return null;
-        }
-        $id = $rs->fields['pk_widget'];
-        parent::read($id);
-
-        $this->id = $id;
-        $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
-        $values   = array($id);
-        $this->loadAllContentProperties();
-
-        $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return null;
-        }
-        $this->load($rs->fields);
     }
 
     /**
