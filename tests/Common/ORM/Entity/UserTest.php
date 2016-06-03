@@ -20,7 +20,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->user = new User([
             'enabled'       => true,
-            'id_user_group' => [],
+            'user_group_ids' => [],
             'username'      => 'waldo',
             'password'      => 'glorp',
             'token'         => 'baz',
@@ -64,7 +64,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->user->eraseCredentials();
         $this->user->type = 0;
-        $this->user->id_user_group = [ '4' ];
+        $this->user->user_group_ids = [ '4' ];
 
         $this->assertTrue(in_array('ROLE_BACKEND', $this->user->getRoles()));
         $this->assertTrue(in_array('ROLE_MASTER', $this->user->getRoles()));
@@ -149,7 +149,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEqualTo()
     {
-        $user = new User([ 'username' => 'garply', 'id_user_group' =>  [] ]);
+        $user = new User([ 'username' => 'garply', 'user_group_ids' =>  [] ]);
 
         $this->assertFalse($this->user->isEqualTo($user));
 
