@@ -146,7 +146,7 @@ class CacheManagerController extends Controller
             return false;
         }
 
-        $instanceName = $this->get('instance')->internal_name;
+        $instanceName = $this->get('core.instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));

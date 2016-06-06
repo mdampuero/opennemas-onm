@@ -72,7 +72,7 @@ class NotificationSubscriber implements EventSubscriberInterface
      */
     public function getNotificationFromInstance(Event $event)
     {
-        $instance = $this->container->get('instance');
+        $instance = $this->container->get('core.instance');
         $response = $event->getResponse();
 
         if ($instance->users > 1) {

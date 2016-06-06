@@ -40,7 +40,7 @@ class GettingStartedController extends Controller
 
         $params = array();
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $database  = $instance->getDatabaseName();
         $namespace = $this->get('cache')->getNamespace();
 

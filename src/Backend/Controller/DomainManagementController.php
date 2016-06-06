@@ -40,7 +40,7 @@ class DomainManagementController extends Controller
         $tax    = 0;
         $token  = null;
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         if (array_key_exists('client', $instance->metas)
             && !empty($instance->metas['client'])

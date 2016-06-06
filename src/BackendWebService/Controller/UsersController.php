@@ -487,7 +487,7 @@ class UsersController extends ContentController
             $extra['photos'][$photo->id] = $photo;
         }
 
-        $id = $this->get('instance')->getClient();
+        $id = $this->get('core.instance')->getClient();
 
         if (!empty($id)) {
             try {

@@ -63,7 +63,7 @@ class StaticPageController extends Controller
     public function getAds()
     {
         // Get static_pages positions
-        $manager   = $this->get('instance')->theme->getAdsPositionManager();
+        $manager   = $this->get('core.theme')->getAdsPositionManager();
         $positions = $manager
             ->getAdsPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7, 9 ]);
 

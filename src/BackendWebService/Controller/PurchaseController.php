@@ -34,7 +34,7 @@ class PurchaseController extends Controller
 
         $purchase = $em->getRepository('manager.purchase')->findOneBy([
             'id'          => [ [ 'value' => $id ] ],
-            'instance_id' => [ [ 'value' => $this->get('instance')->id ] ]
+            'instance_id' => [ [ 'value' => $this->get('core.instance')->id ] ]
         ]);
 
         if (!$purchase) {

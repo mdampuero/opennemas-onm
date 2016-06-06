@@ -34,7 +34,7 @@ class ClientInformationController extends Controller
      **/
     public function defaultAction()
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $id       = $instance->getClient();
         $client   = null;
         $countries = $countries = Intl::getRegionBundle()

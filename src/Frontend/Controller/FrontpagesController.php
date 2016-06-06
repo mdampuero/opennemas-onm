@@ -290,7 +290,7 @@ class FrontpagesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get frontpage positions
-        $positions = getService('instance')->theme->getAdsPositionManager()
+        $positions = getService('core.theme')->getAdsPositionManager()
             ->getAdsPositionsForGroup('frontpage');
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);

@@ -15,7 +15,7 @@ class StoreController extends Controller
      */
     public function checkoutAction()
     {
-        $id     = $this->get('instance')->getClient();
+        $id     = $this->get('core.instance')->getClient();
         $client = [];
 
         if (!empty($id)) {

@@ -56,7 +56,7 @@ class DomainManagementController extends Controller
     {
         $domain   = $request->query->get('domain');
         $end      = substr($domain, strrpos($domain, '.') + 1);
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $expected = "{$instance->internal_name}.{$end}.opennemas.net";
 
@@ -102,7 +102,7 @@ class DomainManagementController extends Controller
      */
     public function delete($domain)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $index = array_search($instance->domains, $domain);
 
@@ -128,7 +128,7 @@ class DomainManagementController extends Controller
      */
     public function listAction()
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
@@ -166,7 +166,7 @@ class DomainManagementController extends Controller
         $nonce    = $request->request->get('nonce');
         $method   = $request->request->get('method');
         $total    = $request->request->get('total');
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $date     = new \Datetime('now');
 
         $price       = $create ? 18.00 : 12.00;
@@ -233,7 +233,7 @@ class DomainManagementController extends Controller
                 'details'     => $invoice->lines,
                 'fee'         => $fee,
                 'invoice_id'  => $invoice->invoice_id,
-                'instance_id' => $this->get('instance')->id,
+                'instance_id' => $this->get('core.instance')->id,
                 'method'      => $method,
                 'payment_id'  => $payment->payment_id,
                 'total'       => $payment->amount,
@@ -329,7 +329,7 @@ class DomainManagementController extends Controller
         $countries = Intl::getRegionBundle()
             ->getCountryNames(CURRENT_LANGUAGE_LONG);
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $params   = $this->getParameter('manager_webservice');
 
         $subject = $create ?
@@ -376,7 +376,7 @@ class DomainManagementController extends Controller
     private function sendEmailToSales($client, $domains, $create)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $params    = $this->getParameter("manager_webservice");
 
         $subject = $create ?

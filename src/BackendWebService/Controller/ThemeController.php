@@ -25,7 +25,7 @@ class ThemeController extends Controller
      */
     public function enableAction($uuid)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $themes = im::getAvailableTemplates();
 
         $theme = str_replace('es.openhost.theme.', '', $uuid);
@@ -84,11 +84,11 @@ class ThemeController extends Controller
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $purchased = [];
 
-        if (array_key_exists('purchased', $instance->metas)) {
-            $purchased = $this->get('instance')->metas['purchased'];
+        if (!empty($instance->purchased)) {
+            $purchased = $instance->purchased;
         }
 
         $active = 'es.openhost.theme.' . str_replace(

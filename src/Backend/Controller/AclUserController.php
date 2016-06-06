@@ -188,7 +188,7 @@ class AclUserController extends Controller
         $extra = [ 'billing' => [] ];
 
         $extra['billing'] = [];
-        foreach ($this->get('instance')->metas as $key => $value) {
+        foreach ($this->get('core.instance')->metas as $key => $value) {
             if (strpos($key, 'billing') !== false) {
                 $extra['billing'][str_replace('billing_', '', $key)] = $value;
             }
@@ -445,7 +445,7 @@ class AclUserController extends Controller
         $extra = [ 'billing' => [] ];
 
         $extra['billing'] = [];
-        foreach ($this->get('instance')->metas as $key => $value) {
+        foreach ($this->get('core.instance')->metas as $key => $value) {
             if (strpos($key, 'billing') !== false) {
                 $extra['billing'][str_replace('billing_', '', $key)] = $value;
             }

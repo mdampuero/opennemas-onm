@@ -235,8 +235,8 @@ class AssetController extends Controller
             array(
                 // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('instance')->internal_name.',frontpagecss',
+                'x-instance'   => $this->get('core.instance')->internal_name,
+                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
             )
         );
     }
@@ -312,8 +312,8 @@ class AssetController extends Controller
             array(
                 // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('instance')->internal_name.',customcss',
+                'x-instance'   => $this->get('core.instance')->internal_name,
+                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
             )
         );
     }

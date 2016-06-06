@@ -65,7 +65,7 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('instance')->theme->getAdsPositionManager();
+        $positionManager = $this->get('core.theme')->getAdsPositionManager();
         $map             = $positionManager->getAllAdsPositions();
         $adsNames        = $positionManager->getAllAdsNames();
 
@@ -196,7 +196,7 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('instance')->theme->getAdsPositionManager()
+            $ads = $this->get('core.theme')->getAdsPositionManager()
                 ->getThemeAdsPositions();
 
             return $this->render(
