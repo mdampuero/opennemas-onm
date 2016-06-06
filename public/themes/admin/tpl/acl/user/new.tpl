@@ -309,7 +309,9 @@
                 <div class="form-group">
                   <label class="form-label" for="id_user_group">{t}User group{/t}</label>
                   <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
+                    {acl isAllowed="USER_ADMIN"}
                     <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                    {/acl}
                   </div>
                   <div class="m-t-10 m-b-10">
                     <span class="badge m-r-5" ng-repeat="group in selectedGroups">
@@ -324,7 +326,9 @@
                   <label class="form-label" for="ids_category">{t}Categories{/t}</label>
                   <div class="help">{t}Categories that this user will have access to. Leave empty to give access to all categories{/t}</div>
                   <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
+                    {acl isAllowed="USER_ADMIN"}
                     <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                    {/acl}
                   </div>
                   <div class="m-t-10 m-b-10">
                     <span class="badge m-r-5" ng-repeat="category in selectedCategories">
