@@ -113,23 +113,22 @@ class ClientRepository extends BaseRepository
         }
 
         $data = [
-            'client_id'    => $response->id,
-            'first_name'   => $response->firstName,
-            'last_name'    => $response->lastName,
-            'email'        => $response->email,
-            'organization' => $response->company,
-            'phone'        => $response->phone,
+            'id'         => $response->id,
+            'first_name' => $response->firstName,
+            'last_name'  => $response->lastName,
+            'email'      => $response->email,
+            'company'    => $response->company,
+            'phone'      => $response->phone,
         ];
 
         if (!empty($response->addresses)) {
             $address = $response->addresses[0];
 
-            $data['p_street1'] = $address->streetAddress;
-            $data['p_street2'] = $address->extendedAddress;
-            $data['p_city']    = $address->locality;
-            $data['p_state']   = $address->region;
-            $data['p_country'] = $address->countryName;
-            $data['p_code']    = $address->postalCode;
+            $data['address']     = $address->streetAddress;
+            $data['city']        = $address->locality;
+            $data['state']       = $address->region;
+            $data['country']     = $address->countryName;
+            $data['postal_code'] = $address->postalCode;
         }
 
         return $data;

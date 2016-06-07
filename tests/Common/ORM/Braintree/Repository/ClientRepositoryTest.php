@@ -24,6 +24,24 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests countBy.
+     *
+     * @expectedException \Exception
+     */
+    public function testCountBy()
+    {
+        $factory = $this
+            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repository = new ClientRepository($factory, 'Braintree');
+        $repository->countBy();
+    }
+
+    /**
+     * Tests find when API call fails.
+     *
      * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithError()
@@ -43,15 +61,18 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository->find('1');
     }
 
+    /**
+     * Tests find when API returns a valid result.
+     */
     public function testFindWithoutError()
     {
         $response = $this->getMock('\Braintree_Customer_' . uniqid());
-        $response->id = '1';
+        $response->id        = '1';
         $response->firstName = 'John';
-        $response->lastName = 'Doe';
-        $response->email = 'johndoe@example.org';
-        $response->company = 'John Doe, Inc.';
-        $response->phone = '555-555-555';
+        $response->lastName  = 'Doe';
+        $response->email     = 'johndoe@example.org';
+        $response->company   = 'John Doe, Inc.';
+        $response->phone     = '555-555-555';
         $response->addresses = [];
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -67,13 +88,15 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new ClientRepository($factory, 'Braintree');
         $client = $repository->find('1');
-        $this->assertEquals($response->id, $client->client_id);
+        $this->assertEquals($response->id, $client->id);
         $this->assertEquals($response->firstName, $client->first_name);
         $this->assertEquals($response->lastName, $client->last_name);
     }
 
     /**
-     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
+     * Tests findBy when the search criteria is invalid.
+     *
+     * @expectedException Common\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithError()
     {
@@ -92,18 +115,21 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository->findBy();
     }
 
+    /*
+     * Tests findBy when API returns valid results.
+     */
     public function testFindByWithoutError()
     {
         $fbresponse = $this->getMock('\Braintree_ResourceCollection_' . uniqid());
         $fbresponse->_ids = [ '1' ];
 
         $fresponse = $this->getMock('\Braintree_Customer_' . uniqid());
-        $fresponse->id = '1';
+        $fresponse->id        = '1';
         $fresponse->firstName = 'John';
-        $fresponse->lastName = 'Doe';
-        $fresponse->email = 'johndoe@example.org';
-        $fresponse->company = 'John Doe, Inc.';
-        $fresponse->phone = '555-555-555';
+        $fresponse->lastName  = 'Doe';
+        $fresponse->email     = 'johndoe@example.org';
+        $fresponse->company   = 'John Doe, Inc.';
+        $fresponse->phone     = '555-555-555';
         $fresponse->addresses = [];
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -122,8 +148,25 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $clients = array_values($repository->findBy());
 
         $this->assertEquals(1, count($clients));
-        $this->assertEquals($fresponse->id, $clients[0]->client_id);
+        $this->assertEquals($fresponse->id, $clients[0]->id);
     }
+
+    /**
+     * Tests findOneBy.
+     *
+     * @expectedException \Exception
+     */
+    public function testFindOneBy()
+    {
+        $factory = $this
+            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repository = new ClientRepository($factory, 'Braintree');
+        $repository->findOneBy();
+    }
+
 
     public function testCriteriaToArrayWithEmptyCriteria()
     {
@@ -187,34 +230,33 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $address = $this->getMock('\Braintree_Address_' . uniqid());
-        $address->streetAddress = 'Fake Street, 123';
+        $address->streetAddress   = 'Fake Street, 123';
         $address->extendedAddress = '';
-        $address->locality = 'New York City';
-        $address->region = 'New York';
-        $address->countryName = 'United States';
-        $address->postalCode = '00000';
+        $address->locality        = 'New York City';
+        $address->region          = 'New York';
+        $address->countryName     = 'United States';
+        $address->postalCode      = '00000';
 
         $response = $this->getMock('\Braintree_Customer_' . uniqid());
-        $response->id = '1';
+        $response->id        = '1';
         $response->firstName = 'John';
-        $response->lastName = 'Doe';
-        $response->email = 'johndoe@example.org';
-        $response->company = 'John Doe, Inc.';
-        $response->phone = '555-555-555';
+        $response->lastName  = 'Doe';
+        $response->email     = 'johndoe@example.org';
+        $response->company   = 'John Doe, Inc.';
+        $response->phone     = '555-555-555';
         $response->addresses = [ $address ];
 
         $data = $method->invokeArgs($repository, [ $response ]);
 
-        $this->assertEquals($response->id, $data['client_id']);
+        $this->assertEquals($response->id, $data['id']);
         $this->assertEquals($response->firstName, $data['first_name']);
         $this->assertEquals($response->lastName, $data['last_name']);
         $this->assertEquals($response->email, $data['email']);
-        $this->assertEquals($response->company, $data['organization']);
-        $this->assertEquals($response->addresses[0]->streetAddress, $data['p_street1']);
-        $this->assertEquals($response->addresses[0]->extendedAddress, $data['p_street2']);
-        $this->assertEquals($response->addresses[0]->locality, $data['p_city']);
-        $this->assertEquals($response->addresses[0]->region, $data['p_state']);
-        $this->assertEquals($response->addresses[0]->countryName, $data['p_country']);
-        $this->assertEquals($response->addresses[0]->postalCode, $data['p_code']);
+        $this->assertEquals($response->company, $data['company']);
+        $this->assertEquals($response->addresses[0]->streetAddress, $data['address']);
+        $this->assertEquals($response->addresses[0]->locality, $data['city']);
+        $this->assertEquals($response->addresses[0]->region, $data['state']);
+        $this->assertEquals($response->addresses[0]->countryName, $data['country']);
+        $this->assertEquals($response->addresses[0]->postalCode, $data['postal_code']);
     }
 }
