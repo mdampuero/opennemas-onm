@@ -20,9 +20,11 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
             'name'       => 'Foobar',
             'properties' => [ 'foo' => 'string', 'baz' => 'integer' ],
             'mapping'    => [
-                'table' => 'foobar',
-                'metas' => [ 'table' => 'foobar_meta' ],
-                'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                'database' => [
+                    'table' => 'foobar',
+                    'metas' => [ 'table' => 'foobar_meta' ],
+                    'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                ]
             ]
         ]);
 

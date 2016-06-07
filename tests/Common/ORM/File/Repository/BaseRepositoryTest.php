@@ -37,25 +37,27 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
                 'wibble' => 'array',
             ],
             'mapping' => [
-                'table' => 'foobar',
-                'id'    => 'foo',
-                'metas' => [
-                    'foo' => 'flob'
-                ],
-                'columns' => [
-                    'foo' => [
-                        'type'    => 'integer',
-                        'options' => [ 'default' => null ]
+                'database' => [
+                    'table' => 'foobar',
+                    'id'    => 'foo',
+                    'metas' => [
+                        'foo' => 'flob'
                     ],
-                    'bar' => [
-                        'type'    => 'string',
-                        'options' => [ 'default' => null, 'length' => 60 ]
-                    ]
-                ],
-                'index' => [
-                    [
-                        'primary' => true,
-                        'columns' => [ 'foo' ]
+                    'columns' => [
+                        'foo' => [
+                            'type'    => 'integer',
+                            'options' => [ 'default' => null ]
+                        ],
+                        'bar' => [
+                            'type'    => 'string',
+                            'options' => [ 'default' => null, 'length' => 60 ]
+                        ]
+                    ],
+                    'index' => [
+                        [
+                            'primary' => true,
+                            'columns' => [ 'foo' ]
+                        ]
                     ]
                 ]
             ]

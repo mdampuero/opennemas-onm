@@ -45,17 +45,16 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                 'Entity' => new Metadata([
                     'name'       => 'Entity',
                     'properties' => [ 'foo' => 'string', 'bar' => 'integer' ],
-                    'mapping'    => [
-                        'converters' => [
-                            'default' => [ 'class' => 'Converter', 'arguments'  => [] ],
-                        ],
-                        'persisters' => [
-                            'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
-                        ],
-                        'repositories' => [
-                            'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
-                        ]
-                    ]
+                    'converters' => [
+                        'default' => [ 'class' => 'Converter', 'arguments'  => [] ],
+                    ],
+                    'persisters' => [
+                        'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
+                    ],
+                    'repositories' => [
+                        'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
+                    ],
+                    'mapping'    => [ ]
                 ]),
                 'Client' => new Metadata([
                     'name'       => 'Client',

@@ -37,18 +37,20 @@ class BaseConverter
      */
     public function databasify($source)
     {
-        if (!$this->metadata->mapping
-            || !array_key_exists('columns', $this->metadata->mapping)) {
+        if (empty($this->metadata->mapping)
+            || !array_key_exists('database', $this->metadata->mapping)
+            || !array_key_exists('columns', $this->metadata->mapping['database'])) {
             throw new \Exception();
         }
 
-        $data = [];
+        $mapping = $this->metadata->mapping['database'];
+        $data    = [];
         foreach ($source as $key => $value) {
             $from = $this->metadata->properties[$key];
             $to   = 'String';
 
-            if (array_key_exists($key, $this->metadata->mapping['columns'])) {
-                $to = \classify($this->metadata->mapping['columns'][$key]['type']);
+            if (array_key_exists($key, $mapping['columns'])) {
+                $to = \classify($mapping['columns'][$key]['type']);
             }
 
             $mapper = 'Common\\ORM\\Database\\Data\\Mapper\\'
@@ -68,17 +70,17 @@ class BaseConverter
         foreach ($missing as $key) {
             $data[$key] = null;
 
-            if (array_key_exists($key, $this->metadata->mapping['columns'])
-                && array_key_exists('default', $this->metadata->mapping['columns'][$key]['options'])
+            if (array_key_exists($key, $mapping['columns'])
+                && array_key_exists('default', $mapping['columns'][$key]['options'])
             ) {
-                $data[$key] = $this->metadata->mapping['columns'][$key]['options']['default'];
+                $data[$key] = $mapping['columns'][$key]['options']['default'];
             }
         }
 
         // Meta keys (unknown properties)
         $unknown = array_diff(
             array_keys($data),
-            array_keys($this->metadata->mapping['columns'])
+            array_keys($this->metadata->mapping['database']['columns'])
         );
 
         $metas = array_intersect_key($data, array_flip($unknown));
@@ -109,8 +111,9 @@ class BaseConverter
      */
     public function objectify($source, $strict = false)
     {
-        if (!$this->metadata->mapping
-            || !array_key_exists('columns', $this->metadata->mapping)
+        if (empty($this->metadata->mapping)
+            || !array_key_exists('database', $this->metadata->mapping)
+            || !array_key_exists('columns', $this->metadata->mapping['database'])
         ) {
             return $source;
         }
@@ -123,8 +126,8 @@ class BaseConverter
                 $to = \classify($this->metadata->properties[$key]);
             }
 
-            if ($strict && array_key_exists($key, $this->metadata->mapping['columns'])) {
-                $from = \classify($this->metadata->mapping['columns'][$key]['type']);
+            if ($strict && array_key_exists($key, $this->metadata->mapping['database']['columns'])) {
+                $from = \classify($this->metadata->mapping['database']['columns'][$key]['type']);
             }
 
             $data[$key] = $this->convertFrom($to, $from, $value);

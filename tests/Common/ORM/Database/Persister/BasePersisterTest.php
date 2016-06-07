@@ -33,24 +33,26 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
                 'wibble' => 'string',
             ],
             'mapping' => [
-                'id' => 'foo',
-                'metas' => [
-                    'foo' => 'flob'
-                ],
-                'columns' => [
-                    'foo' => [
-                        'type'    => 'integer',
-                        'options' => [ 'default' => null ]
+                'database' => [
+                    'id' => 'foo',
+                    'metas' => [
+                        'foo' => 'flob'
                     ],
-                    'bar' => [
-                        'type'    => 'string',
-                        'options' => [ 'default' => null, 'length' => 60 ]
-                    ]
-                ],
-                'index' => [
-                    [
-                        'primary' => true,
-                        'columns' => [ 'foo' ]
+                    'columns' => [
+                        'foo' => [
+                            'type'    => 'integer',
+                            'options' => [ 'default' => null ]
+                        ],
+                        'bar' => [
+                            'type'    => 'string',
+                            'options' => [ 'default' => null, 'length' => 60 ]
+                        ]
+                    ],
+                    'index' => [
+                        [
+                            'primary' => true,
+                            'columns' => [ 'foo' ]
+                        ]
                     ]
                 ]
             ]

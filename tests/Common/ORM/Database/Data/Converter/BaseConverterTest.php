@@ -33,14 +33,16 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'quux'   => 'integer',
             ],
             'mapping' => [
-                'columns' => [
-                    'foo' => [ 'type' => 'text' ],
-                    'bar' => [ 'type' => 'integer' ],
-                    'baz' => [ 'type' => 'array_json' ],
-                    'norf' => [ 'type' => 'boolean' ],
-                    'quux' => [ 'type' => 'integer', 'options' => [ 'default' => null ] ],
-                ],
-                'hasMetas' => true
+                'database' => [
+                    'columns' => [
+                        'foo' => [ 'type' => 'text' ],
+                        'bar' => [ 'type' => 'integer' ],
+                        'baz' => [ 'type' => 'array_json' ],
+                        'norf' => [ 'type' => 'boolean' ],
+                        'quux' => [ 'type' => 'integer', 'options' => [ 'default' => null ] ],
+                    ],
+                    'hasMetas' => true
+                ]
             ],
         ]);
 

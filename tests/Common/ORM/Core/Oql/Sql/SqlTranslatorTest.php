@@ -20,9 +20,11 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
             'name'       => 'Foobar',
             'properties' => [ 'foo' => 'string', 'baz' => 'integer' ],
             'mapping'    => [
-                'table' => 'foobar',
-                'metas' => [ 'table' => 'foobar_meta' ],
-                'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                'database' => [
+                    'table' => 'foobar',
+                    'metas' => [ 'table' => 'foobar_meta' ],
+                    'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                ]
             ]
         ]);
 
@@ -89,7 +91,7 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslateInvalidToken()
     {
-        unset($this->metadata->mapping['metas']);
+        unset($this->metadata->mapping['database']['metas']);
         $this->translator = new SqlTranslator($this->metadata);
 
         $method = new \ReflectionMethod($this->translator, 'translateToken');

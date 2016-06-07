@@ -21,46 +21,6 @@ use Common\ORM\Core\Validation\Validable;
 class Metadata extends DataObject implements Validable
 {
     /**
-     * Returns the prefixed id for an entity.
-     *
-     * @param Entity $entity The entity.
-     *
-     * @return string The prefixed id.
-     */
-    public function getPrefixedId(Entity $entity)
-    {
-        return $this->getPrefix() . implode('_', $this->getId($entity));
-    }
-
-    /**
-     * Returns the prefix for the current entity.
-     *
-     * @return string The prefix.
-     */
-    public function getPrefix()
-    {
-        if (!empty($this->prefix)) {
-            return $this->prefix . $this->getSeparator();
-        }
-
-        return \underscore($this->name) . $this->getSeparator();
-    }
-
-    /**
-     * Returns the separator for the current entity.
-     *
-     * @return string The separator.
-     */
-    public function getSeparator()
-    {
-        if (!empty($this->separator)) {
-            return $this->separator;
-        }
-
-        return '-';
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getClassName()
@@ -79,17 +39,17 @@ class Metadata extends DataObject implements Validable
      */
     public function getConverter($converter = null)
     {
-        if (!array_key_exists('converters', $this->mapping)) {
+        if (empty($this->converters)) {
             throw new InvalidConverterException($this->name, $converter);
         }
 
         if (empty($converter)) {
-            $converter = array_keys($this->mapping['converters']);
-            $converter = array_pop($converter);
+            $converter = array_keys($this->converters);
+            $converter = array_shift($converter);
         }
 
-        if (array_key_exists($converter, $this->mapping['converters'])) {
-            return $this->mapping['converters'][$converter];
+        if (array_key_exists($converter, $this->converters)) {
+            return $this->converters[$converter];
         }
 
         throw new InvalidConverterException($this->name, $converter);
@@ -119,13 +79,14 @@ class Metadata extends DataObject implements Validable
      */
     public function getIdKeys()
     {
-        if (!array_key_exists('index', $this->mapping)
-            || empty($this->mapping['index'])
+        if (!array_key_exists('database', $this->mapping)
+            || !array_key_exists('index', $this->mapping['database'])
+            || empty($this->mapping['database']['index'])
         ) {
             return [];
         }
 
-        foreach ($this->mapping['index'] as $index) {
+        foreach ($this->mapping['database']['index'] as $index) {
             if (array_key_exists('primary', $index) && $index['primary']) {
                 return $index['columns'];
             }
@@ -142,11 +103,12 @@ class Metadata extends DataObject implements Validable
      */
     public function getMetaKeys()
     {
-        if (array_key_exists('metas', $this->mapping)
-            && array_key_exists('ids', $this->mapping['metas'])
-            && !empty($this->mapping['metas']['ids'])
+        if (array_key_exists('database', $this->mapping)
+            && array_key_exists('metas', $this->mapping['database'])
+            && array_key_exists('ids', $this->mapping['database']['metas'])
+            && !empty($this->mapping['database']['metas']['ids'])
         ) {
-            return $this->mapping['metas']['ids'];
+            return $this->mapping['database']['metas']['ids'];
         }
 
         $keys = [];
@@ -165,10 +127,11 @@ class Metadata extends DataObject implements Validable
      */
     public function getMetaTable()
     {
-        if (array_key_exists('metas', $this->mapping)
-            && array_key_exists('table', $this->mapping['metas'])
+        if (array_key_exists('database', $this->mapping)
+            && array_key_exists('metas', $this->mapping['database'])
+            && array_key_exists('table', $this->mapping['database']['metas'])
         ) {
-            return $this->mapping['metas']['table'];
+            return $this->mapping['database']['metas']['table'];
         }
 
         return $this->getTable() . '_meta';
@@ -185,20 +148,60 @@ class Metadata extends DataObject implements Validable
      */
     public function getPersister($persister = null)
     {
-        if (!array_key_exists('persisters', $this->mapping)) {
+        if (empty($this->persisters)) {
             throw new InvalidPersisterException($this->name);
         }
 
         if (empty($persister)) {
-            $persister = array_keys($this->mapping['persisters']);
-            $persister = array_pop($persister);
+            $persister = array_keys($this->persisters);
+            $persister = array_shift($persister);
         }
 
-        if (array_key_exists($persister, $this->mapping['persisters'])) {
-            return $this->mapping['persisters'][$persister];
+        if (array_key_exists($persister, $this->persisters)) {
+            return $this->persisters[$persister];
         }
 
         throw new InvalidPersisterException($this->name, $persister);
+    }
+
+    /**
+     * Returns the prefix for the current entity.
+     *
+     * @return string The prefix.
+     */
+    public function getPrefix()
+    {
+        if (!empty($this->prefix)) {
+            return $this->prefix . $this->getSeparator();
+        }
+
+        return \underscore($this->name) . $this->getSeparator();
+    }
+
+    /**
+     * Returns the prefixed id for an entity.
+     *
+     * @param Entity $entity The entity.
+     *
+     * @return string The prefixed id.
+     */
+    public function getPrefixedId(Entity $entity)
+    {
+        return $this->getPrefix() . implode('_', $this->getId($entity));
+    }
+
+    /**
+     * Returns the separator for the current entity.
+     *
+     * @return string The separator.
+     */
+    public function getSeparator()
+    {
+        if (!empty($this->separator)) {
+            return $this->separator;
+        }
+
+        return '-';
     }
 
     /**
@@ -212,17 +215,17 @@ class Metadata extends DataObject implements Validable
      */
     public function getRepository($repository = null)
     {
-        if (!array_key_exists('repositories', $this->mapping)) {
+        if (empty($this->repositories)) {
             throw new InvalidRepositoryException($this->name);
         }
 
         if (empty($repository)) {
-            $repository = array_keys($this->mapping['repositories']);
-            $repository = array_pop($repository);
+            $repository = array_keys($this->repositories);
+            $repository = array_shift($repository);
         }
 
-        if (array_key_exists($repository, $this->mapping['repositories'])) {
-            return $this->mapping['repositories'][$repository];
+        if (array_key_exists($repository, $this->repositories)) {
+            return $this->repositories[$repository];
         }
 
         throw new InvalidRepositoryException($this->name, $repository);
@@ -235,8 +238,10 @@ class Metadata extends DataObject implements Validable
      */
     public function getTable()
     {
-        if (array_key_exists('table', $this->mapping)) {
-            return $this->mapping['table'];
+        if (array_key_exists('database', $this->mapping)
+            && array_key_exists('table', $this->mapping['database'])
+        ) {
+            return $this->mapping['database']['table'];
         }
 
         return \underscore($this->name);
@@ -250,8 +255,9 @@ class Metadata extends DataObject implements Validable
      */
     public function hasMetas()
     {
-        return array_key_exists('metas', $this->mapping)
-            && !empty($this->mapping['metas']);
+        return array_key_exists('database', $this->mapping)
+            && array_key_exists('metas', $this->mapping['database'])
+            && !empty($this->mapping['database']['metas']);
     }
 
     /**
