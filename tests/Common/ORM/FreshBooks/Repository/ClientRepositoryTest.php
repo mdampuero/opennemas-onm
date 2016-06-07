@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Framework\Tests\ORM\FreshBooks\Repository;
 
 use Common\ORM\Entity\Client;
@@ -25,6 +32,18 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests countBy.
+     *
+     * @expectedException \Exception
+     */
+    public function testCountBy()
+    {
+        $this->repository->countBy();
+    }
+
+    /**
+     * Tests find when API call fails.
+     *
      * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
@@ -37,6 +56,9 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->find('1');
     }
 
+    /**
+     * Tests find when API returns a valid result.
+     */
     public function testFindWithValidId()
     {
         $client = [
@@ -64,6 +86,8 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests findBy when the search criteria is invalid.
+     *
      * @expectedException Common\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
@@ -81,6 +105,9 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->findBy($criteria);
     }
 
+    /*
+     * Tests findBy when API returns multiple results.
+     */
     public function testFindByWithValidCriteriaMultipleResults()
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
@@ -129,6 +156,9 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Tests findBy when API returns one result.
+     */
     public function testFindByWithValidCriteriaOneResult()
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
@@ -163,5 +193,15 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($response));
         $response = array_pop($response);
         $this->assertEquals($clients, $response->getData());
+    }
+
+    /**
+     * Tests findOneBy.
+     *
+     * @expectedException \Exception
+     */
+    public function testFindOneBy()
+    {
+        $this->repository->findOneBy();
     }
 }
