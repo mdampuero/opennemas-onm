@@ -58,16 +58,17 @@ class Metadata extends DataObject implements Validable
     /**
      * Returns the entity id.
      *
-     * @param Entity $entity The entity.
+     * @param mixed $entity The entity object or entity data.
      *
      * @return string The entity id.
      */
-    public function getId(Entity $entity)
+    public function getId($entity)
     {
-        return array_intersect_key(
-            $entity->getData(),
-            array_flip($this->getIdKeys())
-        );
+        if (is_object($entity)) {
+            $entity = $entity->getData();
+        }
+
+        return array_intersect_key($entity, array_flip($this->getIdKeys()));
     }
 
     /**
@@ -181,11 +182,11 @@ class Metadata extends DataObject implements Validable
     /**
      * Returns the prefixed id for an entity.
      *
-     * @param Entity $entity The entity.
+     * @param mixed $entity The entity object or entity data.
      *
      * @return string The prefixed id.
      */
-    public function getPrefixedId(Entity $entity)
+    public function getPrefixedId($entity)
     {
         return $this->getPrefix() . implode('_', $this->getId($entity));
     }
