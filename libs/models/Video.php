@@ -91,33 +91,6 @@ class Video extends Content
     }
 
     /**
-     * Creates a new video from a given data array
-     *
-     * @param array $data the video data
-     *
-     * @return boolean true if the videos was created
-     **/
-    public function create($data)
-    {
-        parent::create($data);
-
-        $sql = "INSERT INTO videos
-                    (`pk_video`,`video_url`, `information`, `author_name`) " .
-                "VALUES (?,?,?,?)";
-
-        $values = array(
-            $this->id, $data['video_url'],
-            serialize($data['information']), $data['author_name']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return $this->id;
-    }
-
-    /**
      * Loads a video identified by a the given id
      *
      * @param int $id the video id to load
@@ -139,13 +112,16 @@ class Video extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+            $this->category_title = $this->loadCategoryTitle($rs['pk_video']);
+            $this->information    = unserialize($rs['information']);
+            $this->thumb          = $this->getThumb();
+
+            return $this;
         } catch (\Exception $e) {
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -165,6 +141,35 @@ class Video extends Content
     }
 
     /**
+     * Creates a new video from a given data array
+     *
+     * @param array $data the video data
+     *
+     * @return boolean true if the videos was created
+     **/
+    public function create($data)
+    {
+        try {
+            parent::create($data);
+
+            $rs = getService('dbal_connection')->insert(
+                "videos",
+                [
+                  'pk_video'    => $this->id,
+                  'video_url'   => $data['video_url'],
+                  'information' => serialize($data['information']),
+                  'author_name' => $data['author_name'],
+                ]
+            );
+
+            return $this->id;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Updates the video given an array of data
      *
      * @param array $data the new video data
@@ -173,23 +178,26 @@ class Video extends Content
      **/
     public function update($data)
     {
-        parent::update($data);
+        try {
+            parent::update($data);
 
-        $sql =  "UPDATE videos"
-                ." SET  `video_url`=?, `information`=?, `author_name`=?  "
-                ." WHERE pk_video=?";
-        $values = array(
-            $data['video_url'],
-            serialize($data['information']),
-            $data['author_name'],
-            $data['id']
-        );
+            $rs = getService('dbal_connection')->update(
+                "videos",
+                [
+                    'video_url' => $data['video_url'],
+                    'information' => serialize($data['information']),
+                    'author_name' => $data['author_name'],
+                ],
+                [ 'pk_video' => (int) $data['id'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->load($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -201,16 +209,25 @@ class Video extends Content
      **/
     public function remove($id)
     {
+        if ((int) $id <= 0) return false;
+
         parent::remove($id);
 
-        $sql = 'DELETE FROM videos WHERE pk_video=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, [$id]);
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "videos",
+                [ 'pk_video' => $id ]
+            );
 
-        if ($rs === false) {
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
 
@@ -223,48 +240,50 @@ class Video extends Content
      **/
     public static function batchDelete($arrayIds)
     {
+        if (!is_array($arrayIds)) {
+            return false;
+        }
+
         $contents = implode(', ', $arrayIds);
+        try {
+            $conn = getService('dbal_connection');
+            $rs = $conn->fetchAll(
+                "SELECT video_url, information FROM videos WHERE author_name='internal' "
+                ." AND pk_video IN (".$contents.")"
+            );
 
-        $sql = "SELECT video_url, information FROM videos WHERE author_name='internal' "
-            ." AND pk_video IN (".$contents.")";
+            if ($rs) {
+                return false;
+            }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
+            foreach ($rs as $element) {
+                $image       = MEDIA_PATH.DS . $element['video_url'];
+                $thumbs      = unserialize($element['information']);
+                if (!array_key_exists('thumbnails', $thumbs)) {
+                    continue;
+                }
+
+                $sizes = ['small', 'normal', 'big' ];
+                foreach ($sizes as $size) {
+                    if (array_key_exists($size, $thumbs['thumbnails'])) {
+                        $fileName = MEDIA_PATH.DS .$thumbs['thumbnails'][$size];
+                        if (file_exists($fileName)) {
+                            @unlink($image);
+                        }
+                    }
+                }
+            }
+
+            $result = $conn->executeUpdate('DELETE FROM videos WHERE `pk_video` IN ('.$contents.')');
+            if (!$result) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        while (!$rs->EOF) {
-            $image       = MEDIA_PATH.DS . $rs->fields['video_url'];
-            $thumbs      = unserialize($rs->fields['information']);
-            $thumbSmall  = MEDIA_PATH.DS .$thumbs['thumbnails']['small'];
-            $thumbNormal = MEDIA_PATH.DS .$thumbs['thumbnails']['normal'];
-            $thumbBig    = MEDIA_PATH.DS .$thumbs['thumbnails']['big'];
-
-            if (file_exists($image)) {
-                @unlink($image);
-            }
-            if (file_exists($thumbSmall)) {
-                @unlink($thumbSmall);
-            }
-            if (file_exists($thumbNormal)) {
-                @unlink($thumbNormal);
-            }
-            if (file_exists($thumbBig)) {
-                @unlink($thumbBig);
-            }
-
-            $rs->MoveNext();
-        }
-
-        $sql = 'DELETE FROM videos WHERE `pk_video` IN ('.$contents.')';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
-            return false;
-        }
-
-        return true;
-
     }
 
     /**
