@@ -105,7 +105,7 @@ class InvoiceRepository extends BaseRepository
      *
      * @return string The PDF content as string.
      */
-    public function getPDF($id)
+    public function getPdf($id)
     {
         $this->api->setMethod('invoice.getPDF');
         $this->api->post([ 'invoice_id' => $id ]);
