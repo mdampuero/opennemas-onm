@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\OQL\Sql;
+namespace Common\ORM\Core\Oql\Sql;
 
 use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Metadata;
