@@ -11,7 +11,7 @@ namespace Common\ORM\Core\OQL\Sql;
 
 use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Core\OQL\Tokenizer;
+use Common\ORM\Core\Oql\Tokenizer;
 
 /**
  * The SqlTranslator class translates the internal representation of an OQL
