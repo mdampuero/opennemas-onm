@@ -1,0 +1,42 @@
+entity:
+    name: UserNotification
+    required:
+        - user_id
+        - notification_id
+    properties:
+        user_id:         integer
+        notification_id: integer
+        instance_id:     integer
+        read_time:       datetime
+    converters:
+        default:
+            class:     Common\ORM\Database\Data\Converter\BaseConverter
+            arguments: [ '@orm.metadata.user_notification' ]
+    repositories:
+        instance:
+            class:     Common\ORM\Database\Repository\BaseRepository
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user_notification', '@cache.connection.instance' ]
+    persisters:
+        instance:
+            class:     Common\ORM\Database\Persister\BasePersister
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user_notification', '@cache.connection.instance' ]
+    mapping:
+        database:
+            table: user_notification
+            columns:
+                user_id:
+                    type: integer
+                    options: { default: null, unsigned: true, autoincrement: true }
+                notification_id:
+                    type: integer
+                    options: { default: null, unsigned: true, autoincrement: true }
+                read_time:
+                    type: datetime
+                    options: { default: null }
+            index:
+                -
+                    name: PRIMARY
+                    columns: [ user_id, notification_id ]
+                    primary: true
+                    unique: true
+                    flags: {}
