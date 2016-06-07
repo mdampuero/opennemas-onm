@@ -2,14 +2,14 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Database\Data\Mapper;
+namespace Common\ORM\Core\Data\Mapper;
 
-class IntegerDataMapper
+class FloatDataMapper
 {
     /**
      * Converts between database and object values if no custom conversion
@@ -21,6 +21,6 @@ class IntegerDataMapper
             return null;
         }
 
-        return (int) $params[0];
+        return (float) $params[0];
     }
 }

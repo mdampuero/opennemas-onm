@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Common\ORM\Database\Data\Mapper;
+namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Database\Data\Mapper\ObjectDataMapper;
+use Common\ORM\Core\Data\Mapper\ObjectDataMapper;
 
 class ObjectDataMapperTest extends \PHPUnit_Framework_TestCase
 {
