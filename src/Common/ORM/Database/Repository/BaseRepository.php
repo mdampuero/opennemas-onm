@@ -223,8 +223,7 @@ class BaseRepository extends Repository
     {
         // Prefix ids
         $prefixedIds = array_map(function ($a) {
-            return $this->metadata->getPrefix()
-                . implode($this->metadata->getSeparator(), $a);
+            return $this->metadata->getPrefixedId($a);
         }, $ids);
 
         $entities = [];
