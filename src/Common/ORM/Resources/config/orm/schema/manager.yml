@@ -1,7 +1,11 @@
 schema:
     name: manager
     entities:
-        - Instance
+        - Client
         - Extension
+        - Instance
         - Notification
+        - Purchase
+        - User
+        - UserNotification
         - UserGroup
