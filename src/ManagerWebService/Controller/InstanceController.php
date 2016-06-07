@@ -162,7 +162,6 @@ class InstanceController extends Controller
         $ids = $request->query->filter('ids');
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
-        $converter  = $this->get('orm.manager')->getConverter('Instance');
         $instances  = $repository->findBy($oql);
 
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
