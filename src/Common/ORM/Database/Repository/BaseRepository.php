@@ -333,7 +333,7 @@ class BaseRepository extends Repository
         $entities = [];
 
         foreach ($values as $key => $value) {
-            $entity = new $class($this->converter->objectify($value, true));
+            $entity = new $class($this->converter->objectifyStrict($value));
             $entity->refresh();
 
             $entities[$key] = $entity;
