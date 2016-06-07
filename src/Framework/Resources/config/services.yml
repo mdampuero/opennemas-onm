@@ -109,6 +109,14 @@ services:
         class: Onm\DatabaseConnection
         arguments: [  %database% ]
 
+    dbal_connection:
+        class: Onm\Database\DbalWrapper
+        arguments: [ %database%, %kernel.environment% ]
+
+    dbal_connection_manager:
+        class: Onm\Database\DbalWrapper
+        arguments: [ %database%, %kernel.environment% ]
+
     category_repository:
         class: Repository\CategoryManager
         arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]

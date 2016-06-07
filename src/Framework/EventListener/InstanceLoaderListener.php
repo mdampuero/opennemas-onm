@@ -117,6 +117,9 @@ class InstanceLoaderListener implements EventSubscriberInterface
                     ->setNamespace($namespace);
             }
 
+            // TODO: Remove when using new ORM for all models
+            $this->container->get('dbal_connection')->selectDatabase($database);
+
             // TODO: Remove when AdoDB removed from models
             $connection = $this->container->get('db_conn');
             $connection->selectDatabase($database);
