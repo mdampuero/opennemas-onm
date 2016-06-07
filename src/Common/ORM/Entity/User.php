@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * The Userclass represents an Opennemas user group.
+ * The User class represents an user.
  */
 class User extends Entity implements AdvancedUserInterface, EquatableInterface, JWTUserInterface
 {

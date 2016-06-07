@@ -1,21 +1,20 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\Entity;
 
 use Common\ORM\Core\Entity;
 
+/**
+ * The UserNotification class represents the connection between users and
+ * notifications.
+ */
 class UserNotification extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getCachedId()
-    {
-        $id = get_class($this);
-        $id = substr($id, strrpos($id, '\\') + 1);
-        $id = preg_replace('/([a-z])([A-Z])/', '$1_$2', $id);
-
-        return strtolower($id) . '-' . $this->notification_id . '-'
-            . $this->user_id;
-    }
 }

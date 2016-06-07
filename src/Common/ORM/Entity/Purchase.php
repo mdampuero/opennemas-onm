@@ -11,6 +11,9 @@ namespace Common\ORM\Entity;
 
 use Common\ORM\Core\Entity;
 
+/**
+ * The Purchase class represents a purchase done via Opennemas Store.
+ */
 class Purchase extends Entity
 {
 }

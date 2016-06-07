@@ -12,7 +12,7 @@ namespace Common\ORM\Entity;
 use Common\ORM\Core\Entity;
 
 /**
- * The Content class represents an Opennemas content.
+ * The Instance class represents an Opennemas newspaper.
  */
 class Instance extends Entity
 {
