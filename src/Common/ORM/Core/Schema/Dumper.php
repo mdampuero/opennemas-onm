@@ -148,12 +148,18 @@ class Dumper
         foreach ($this->schemas[$name]->entities as $entity) {
             $metadata = $this->metadata[$entity];
 
-            $this->validate($metadata->mapping);
+            if (!array_key_exists('database', $metadata->mapping)) {
+                throw new InvalidSchemaException(_('No mapping information'));
+            }
 
-            $table = $schema->createTable($metadata->mapping['table']);
+            $mapping = $metadata->mapping['database'];
+
+            $this->validate($mapping);
+
+            $table = $schema->createTable($mapping['table']);
 
             // Add column definitions
-            foreach ($metadata->mapping['columns'] as $field => $value) {
+            foreach ($mapping['columns'] as $field => $value) {
                 $options = [];
 
                 if (array_key_exists('options', $value)) {
@@ -164,7 +170,7 @@ class Dumper
             }
 
             // Add index definitions
-            foreach ($metadata->mapping['index'] as $field => $value) {
+            foreach ($mapping['index'] as $field => $value) {
                 if (array_key_exists('primary', $value)
                     && !empty($value['primary'])
                 ) {
@@ -192,7 +198,7 @@ class Dumper
     public function validate($data)
     {
         if (!array_key_exists('table', $data) || empty($data['table'])) {
-            throw new InvalidSchemaException(_("Empty table name"));
+            throw new InvalidSchemaException(_('Empty table name'));
         }
 
         if (!preg_match('/[a-z0-9_]+/', $data['table'], $matches)

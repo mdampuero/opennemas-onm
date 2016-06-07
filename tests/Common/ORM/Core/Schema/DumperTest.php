@@ -28,16 +28,18 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             'name' => 'Foo',
             'properties' => 'foo',
             'mapping' => [
-                'table' => 'foo',
-                'columns' => [
-                    'id'       => [ 'type' => 'integer', 'options' => [ 'autoincrement' => true ] ],
-                    'title'    => [ 'type' => 'string' ],
-                    'category' => [ 'type' => 'string' ]
-                ],
-                'index' => [
-                    [ 'name' => 'PRIMARY', 'primary' => true, 'columns' => [ 'id' ] ],
-                    [ 'name' => 'title', 'unique' => true, 'columns' => [ 'title' ] ],
-                    [ 'name' => 'category', 'columns' => [ 'category' ] ]
+                'database' => [
+                    'table' => 'foo',
+                    'columns' => [
+                        'id'       => [ 'type' => 'integer', 'options' => [ 'autoincrement' => true ] ],
+                        'title'    => [ 'type' => 'string' ],
+                        'category' => [ 'type' => 'string' ]
+                    ],
+                    'index' => [
+                        [ 'name' => 'PRIMARY', 'primary' => true, 'columns' => [ 'id' ] ],
+                        [ 'name' => 'title', 'unique' => true, 'columns' => [ 'title' ] ],
+                        [ 'name' => 'category', 'columns' => [ 'category' ] ]
+                    ]
                 ]
             ]
         ])];
