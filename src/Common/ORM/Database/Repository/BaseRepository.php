@@ -10,7 +10,7 @@
 namespace Common\ORM\Database\Repository;
 
 use Common\Cache\Core\Cache;
-use Common\ORM\Core\OQL\OQLTranslator;
+use Common\ORM\Core\Oql\Sql\SqlTranslator;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
@@ -61,7 +61,7 @@ class BaseRepository extends Repository
     /**
      * The OQL translator.
      *
-     * @var OQLTranslator
+     * @var SqlTranslator
      */
     protected $translator;
 
@@ -78,7 +78,7 @@ class BaseRepository extends Repository
         $this->conn       = $conn;
         $this->converter  = new BaseConverter($metadata);
         $this->metadata   = $metadata;
-        $this->translator = new OQLTranslator($metadata);
+        $this->translator = new SqlTranslator($metadata);
     }
 
     /**
@@ -189,7 +189,7 @@ class BaseRepository extends Repository
      *
      * @return array The list of entities.
      */
-    public function findBySQL($criteria = '', $tables = '')
+    public function findBySql($criteria = '', $tables = '')
     {
         if (empty($tables)) {
             $tables = $this->metadata->getTable();

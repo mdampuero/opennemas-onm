@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Core\OQL;
+namespace Tests\Common\ORM\Core\Oql;
 
-use Common\ORM\Core\OQL\OQLTranslator;
+use Common\ORM\Core\Oql\Sql\SqlTranslator;
 use Common\ORM\Core\Metadata;
 
-class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
+class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -26,7 +26,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->translator = new OQLTranslator($this->metadata);
+        $this->translator = new SqlTranslator($this->metadata);
     }
 
     public function testTranslate()
@@ -90,7 +90,7 @@ class OQLTanslatorTest extends \PHPUnit_Framework_TestCase
     public function testTranslateInvalidToken()
     {
         unset($this->metadata->mapping['metas']);
-        $this->translator = new OQLTranslator($this->metadata);
+        $this->translator = new SqlTranslator($this->metadata);
 
         $method = new \ReflectionMethod($this->translator, 'translateToken');
         $method->setAccessible(true);

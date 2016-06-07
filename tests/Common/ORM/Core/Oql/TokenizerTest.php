@@ -7,15 +7,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Core\OQL;
+namespace Tests\Common\ORM\Core\Oql;
 
-use Common\ORM\Core\OQL\OQLTokenizer;
+use Common\ORM\Core\Oql\Tokenizer;
 
-class OQLTokenizerTest extends \PHPUnit_Framework_TestCase
+class TokenizerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->translator = new OQLTokenizer();
+        $this->translator = new Tokenizer();
     }
 
     public function testTokenize()

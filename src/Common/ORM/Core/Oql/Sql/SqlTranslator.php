@@ -2,21 +2,22 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\OQL;
+namespace Common\ORM\Core\OQL\Sql;
 
 use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Metadata;
+use Common\ORM\Core\OQL\Tokenizer;
 
 /**
- * The OQLTranslator class translates the internal representation of an OQL
+ * The SqlTranslator class translates the internal representation of an OQL
  * query to conditions, parameters and types ready to use by SQL queries.
  */
-class OQLTranslator
+class SqlTranslator
 {
     /**
      * Flag to enable/disable ignore mode.
@@ -80,13 +81,13 @@ class OQLTranslator
     ];
 
     /**
-     * Initializes the OQLTranslator.
+     * Initializes the SqlTranslator.
      *
      * @param Metadata $metadata The entity metadata.
      */
     public function __construct(Metadata $metadata)
     {
-        $this->metadata= $metadata;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -112,11 +113,11 @@ class OQLTranslator
             return [ $this->tables, '', [], [] ];
         }
 
-        $tokenizer = new OQLTokenizer();
+        $tokenizer = new Tokenizer();
         $tokens    = $tokenizer->tokenize($oql);
 
         $i = 0;
-        while($i < count($tokens) && !$this->isIgnorable($tokens[$i][1])) {
+        while ($i < count($tokens) && !$this->isIgnorable($tokens[$i][1])) {
             $token = $tokens[$i++];
 
             list($sql, $param, $type) =
@@ -178,11 +179,11 @@ class OQLTranslator
     }
 
     /**
-     * Checks if the string is an operator.
+     * Checks if the string is a parameter.
      *
      * @param string $str The string to check.
      *
-     * @return boolean True if the string is an operator.
+     * @return boolean True if the string is a parameter.
      */
     protected function isParameter($str)
     {

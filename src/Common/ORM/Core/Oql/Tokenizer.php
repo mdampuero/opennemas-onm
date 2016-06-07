@@ -2,20 +2,20 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\OQL;
+namespace Common\ORM\Core\Oql;
 
 use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Exception\InvalidQueryException;
 
 /**
- * The OQLTokenizer class parses and splits OQL queries into tokens.
+ * The Tokenizer class parses and splits OQL queries into tokens.
  */
-class OQLTokenizer
+class Tokenizer
 {
     /**
      * Array of valid tokens.
