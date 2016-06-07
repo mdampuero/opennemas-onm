@@ -127,7 +127,7 @@ class UserGroupPersister extends BasePersister
 
             $types = array_merge(
                 $types,
-                [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
+                [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
             );
         }
 
