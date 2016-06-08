@@ -24,6 +24,6 @@ class UserNotification extends Entity
         $id = preg_replace('/([a-z])([A-Z])/', '$1_$2', $id);
 
         return strtolower($id) . '-' . $this->notification_id . '-'
-            . $this->user_id;
+            . $this->instance_id . '-' . $this->user_id;
     }
 }
