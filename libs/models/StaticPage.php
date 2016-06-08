@@ -58,19 +58,21 @@ class StaticPage extends Content
     {
         $data['category'] = 0;
 
-        parent::create($data);
+        try {
+            parent::create($data);
 
-        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`)
-                VALUES (?)";
-        $values = array(
-            'pk_static_page' => $this->id,
-        );
+            $rs = getService('dbal_connection')->insert(
+                'static_pages',
+                [
+                    'pk_static_page' => $this->id
+                ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -96,16 +98,24 @@ class StaticPage extends Content
      */
     public function remove($id)
     {
-        parent::remove($id);
+        if ((int) $id <= 0) return false;
 
-        $sql = 'DELETE FROM `static_pages` WHERE `pk_static_page`=?';
-        $values = array($id);
+        try {
+            parent::remove($id);
+            $rs = getService('dbal_connection')->delete(
+                "static_pages",
+                [ 'pk_static_page' => $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -125,7 +135,11 @@ class StaticPage extends Content
         $slug = \Onm\StringUtils::getTitle($slug, $useStopList = false);
 
         // Get titles to check unique value
-        $slugs = $this->getSlugs('pk_static_page<>"' . $id . '"');
+        $slugs = $this->getSlugs([
+            'pk_content' => (int) $id,
+            'slug'       => $slug,
+        ]);
+
         $i = 0;
         $tmp = $slug;
         while (in_array($tmp, $slugs)) {
@@ -133,32 +147,6 @@ class StaticPage extends Content
         }
 
         return $tmp;
-    }
-
-    /**
-     * Searches and returns a static page object by its slug
-     *
-     * @param string $slug the slug to search for the static page
-     *
-     * @return StaticPage the static page object
-     **/
-    public static function getPageBySlug($slug)
-    {
-        $slug = preg_replace('/\*%_\?/', '', $slug);
-        $sql = 'SELECT pk_static_page
-                FROM `static_pages`, `contents` WHERE
-                in_litter = 0 AND
-                `contents`.`pk_content`= `static_pages`.`pk_static_page` AND
-                `contents`.`slug` LIKE ?
-                ORDER BY  pk_static_page DESC';
-
-        $id = $GLOBALS['application']->conn->GetOne($sql, array($slug));
-
-        if ($id === false) {
-            return null;
-        }
-
-        return new StaticPage($id);
     }
 
     /**
@@ -170,18 +158,25 @@ class StaticPage extends Content
      **/
     public function getSlugs($filter = null)
     {
-        $titles = array();
-        $cm = new ContentManager();
-        $pages = $cm->find(
-            'Static_Page',
-            $filter,
-            'ORDER BY created DESC ',
-            'pk_content, pk_static_page, slug'
-        );
-        foreach ($pages as $p) {
-            $titles[] = $p->slug;
-        }
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT slug FROM contents WHERE pk_content <> ? AND slug LIKE ?',
+                [
+                    $filter['pk_content'],
+                    '%'.$filter['slug'].'%',
+                ]
+            );
 
-        return $titles;
+            $slugs = [];
+            foreach ($rs as $slug) {
+                $slugs [] = $slug['slug'];
+            }
+
+            return $slugs;
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
+        }
     }
 }
