@@ -32,10 +32,14 @@ class UserNotificationPersister extends DatabasePersister
     {
         $this->mconn->delete(
             'user_notification',
-            [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
+            [
+                'instance_id'     => $entity->instance_id,
+                'user_id'         => $entity->user_id,
+                'notification_id' => $entity->notification_id
+            ]
         );
 
-        $this->icache->delete($entity->getCachedId());
+        $this->mcache->delete($entity->getCachedId());
     }
 
     /**
@@ -51,9 +55,13 @@ class UserNotificationPersister extends DatabasePersister
         $this->mconn->update(
             'user_notification',
             $data,
-            [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
+            [
+                'instance_id'     => $entity->instance_id,
+                'user_id'         => $entity->user_id,
+                'notification_id' => $entity->notification_id
+            ]
         );
 
-        $this->icache->delete($entity->getCachedId());
+        $this->mcache->delete($entity->getCachedId());
     }
 }
