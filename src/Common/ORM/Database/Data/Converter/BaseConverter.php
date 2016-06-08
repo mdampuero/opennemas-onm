@@ -12,8 +12,8 @@ namespace Common\ORM\Database\Data\Converter;
 use Common\ORM\Core\Data\Converter\Converter;
 
 /**
- * The Converter class converts entity data before and after persisting them to
- * the database.
+ * The BaseConverter class converts entity data before and after persisting them
+ * to the database.
  */
 class BaseConverter extends Converter
 {
@@ -28,7 +28,8 @@ class BaseConverter extends Converter
     {
         if (empty($this->metadata->mapping)
             || !array_key_exists('database', $this->metadata->mapping)
-            || !array_key_exists('columns', $this->metadata->mapping['database'])) {
+            || !array_key_exists('columns', $this->metadata->mapping['database'])
+        ) {
             throw new \Exception();
         }
 
@@ -41,11 +42,6 @@ class BaseConverter extends Converter
             if (array_key_exists($key, $mapping['columns'])) {
                 $to = \classify($mapping['columns'][$key]['type']);
             }
-
-            $mapper = 'Common\\ORM\\Core\\Data\\Mapper\\'
-                . ucfirst(strtolower($from)) . 'DataMapper';
-
-            $mapper = new $mapper();
 
             $data[$key] = $this->convertTo($from, $to, $value);
         }
