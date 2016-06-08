@@ -115,7 +115,7 @@ class Ftp extends Server
             $localFile = $this->params['path'] . DS
                 . strtolower(basename($file['filename']));
 
-            if (!file_exists($localFile)) {
+            if (!file_exists($localFile) && !preg_match('/index\.xml$/', $localFile)) {
                 ftp_pasv($this->conn, true);
                 @ftp_get($this->conn, $localFile, $file['filename'], FTP_BINARY);
 
