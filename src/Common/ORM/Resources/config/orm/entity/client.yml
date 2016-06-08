@@ -36,11 +36,31 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
         braintree:
             class:     Common\ORM\Braintree\Persister\ClientPersister
-            arguments: [ '@comet_cult_braintree.factory' ]
+            arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.client' ]
         freshbooks:
             class:     Common\ORM\FreshBooks\Persister\ClientPersister
             arguments: [ '%freshbooks.domain%', '%freshbooks.token%' ]
     mapping:
+        braintree:
+            id:
+                name: id
+                type: string
+            first_name:
+                name: firstName
+                type: string
+            last_name:
+                name: lastName
+                type: string
+            email:
+                name: email
+                type: string
+            company:
+                name: company
+                type: string
+            phone:
+                name: phone
+                type: string
+
         database:
             table: client
             columns:
