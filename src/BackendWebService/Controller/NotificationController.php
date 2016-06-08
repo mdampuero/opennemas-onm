@@ -130,11 +130,12 @@ class NotificationController extends Controller
     /**
      * Updates some instance properties.
      *
-     * @param integer $id The notification id.
+     * @param Request $request The request object.
+     * @param integer $id      The notification id.
      *
      * @return JsonResponse The response object.
      */
-    public function patchAction($id)
+    public function patchAction(Request $request, $id)
     {
         $em     = $this->get('orm.manager');
         $un     = null;
@@ -154,7 +155,10 @@ class NotificationController extends Controller
             $un->notification_id = $id;
         }
 
-        $un->read_time = date('Y-m-d H:i:s');
+        foreach ($request->request->all() as $key => $value) {
+            $date = new \Datetime($value);
+            $un->{$key} = $date->format('Y-m-d H:i:s');
+        }
 
         try {
             $em->persist($un);
@@ -174,19 +178,26 @@ class NotificationController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
+        $params   = $request->request->all();
         $instance = $this->get('instance')->id;
         $ids      = $request->request->get('ids');
 
-        if (empty($ids) || !is_array($ids)) {
+        if (!array_key_exists('ids', $params)
+            || empty($params['ids'])
+            || !is_array($params['ids'])
+        ) {
             return new JsonResponse(_('Invalid notifications'), 400);
         }
 
         $em      = $this->get('orm.manager');
         $updated = 0;
+        $ids     = $params['ids'];
+
+        unset($params['ids']);
 
         try {
             $criteria = [
-                'instance_id'     => [ [ 'value' => $instance, 'operator' => 'IN' ] ],
+                'instance_id'     => [ [ 'value' => $instance ] ],
                 'notification_id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
                 'user_id'         => [ [ 'value' => $this->getUser()->id ] ]
             ];
@@ -197,9 +208,15 @@ class NotificationController extends Controller
             // Update read datetime for existing
             $read = [];
             foreach ($notifications as $notification) {
-                $read[] = $notification->id;
+                $read[] = $notification->notification_id;
 
-                $notification->read_time = date('Y-m-d H:i:s');
+                $notification->user = $this->getUser()->username;
+
+                foreach ($params as $key => $value) {
+                    $date = new \Datetime($value);
+                    $notification->{$key} = $date->format('Y-m-d H:i:s');
+                }
+
                 $em->persist($notification);
                 $updated++;
             }
@@ -209,21 +226,26 @@ class NotificationController extends Controller
             foreach ($missed as $id) {
                 $un = new UserNotification();
 
+                $un->instance_id     = $instance;
+                $un->user            = $this->getUser()->username;
                 $un->user_id         = $this->getUser()->id;
-                $un->user            = $this->getUser();
                 $un->notification_id = $id;
-                $un->read_time       = date('Y-m-d H:i:s');
+
+                foreach ($params as $key => $value) {
+                    $date = new \Datetime($value);
+                    $un->{$key} = $date->format('Y-m-d H:i:s');
+                }
 
                 $em->persist($un);
                 $updated++;
             }
 
             return new JsonResponse(sprintf(
-                _('%d notifications marked as read successfully'),
+                _('%d notifications marked successfully'),
                 $updated
             ));
         } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
+            return new JsonResponse($e->getMessage(), 400);
         }
     }
 
