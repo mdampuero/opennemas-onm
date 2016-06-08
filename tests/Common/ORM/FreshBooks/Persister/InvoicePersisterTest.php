@@ -1,13 +1,27 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Framework\Tests\ORM\FreshBooks\Repository;
 
+use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Persister\InvoicePersister;
 use Freshbooks\FreshBooksApi;
 
+/**
+ * Defines test cases for InvoicePersister class.
+ */
 class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->api = $this->getMockBuilder('Freshbooks\FreshBooksApi')
@@ -17,7 +31,24 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->persister = new InvoicePersister('foo', 'bar');
+        $this->metadata = new Metadata([
+            'properties' => [
+                'client_id' => 'integer',
+                'date'      => 'datetime',
+                'status'    => 'string',
+                'lines'     => 'array'
+            ],
+            'mapping' => [
+                'freshbooks' => [
+                    'client_id' => [ 'name' => 'client_id', 'type' => 'string' ],
+                    'date'      => [ 'name' => 'date', 'type' => 'datetime' ],
+                    'status'    => [ 'name' => 'status', 'type' => 'string' ],
+                    'lines'     => [ 'name' => 'lines', 'type' => 'array' ],
+                ]
+            ],
+        ]);
+
+        $this->persister = new InvoicePersister('foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->persister, 'api');
         $property->setAccessible(true);
@@ -50,6 +81,8 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests create when API returns false.
+     *
      * @expectedException \RuntimeException
      */
     public function testCreateWithError()
@@ -62,6 +95,9 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->create($this->existingInvoice);
     }
 
+    /**
+     * Test create.
+     */
     public function testCreateWithoutErrors()
     {
         $response = [
@@ -87,6 +123,8 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests remove when API returns false.
+     *
      * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
@@ -99,6 +137,9 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->remove($this->unexistingInvoice);
     }
 
+    /**
+     * Tests remove.
+     */
     public function testRemoveWithoutErrors()
     {
         $response = [ '@attributes' => [ 'status' => 'ok' ] ];
@@ -117,6 +158,8 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test update when API returns false.
+     *
      * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
@@ -129,6 +172,9 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->update($this->unexistingInvoice);
     }
 
+    /**
+     * Test update.
+     */
     public function testUpdateWithoutErrors()
     {
         $response = [ '@attributes' => [ 'status' => 'ok' ] ];
@@ -144,48 +190,5 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
 
         $r = $this->persister->update($this->existingInvoice);
         $this->assertEquals($this->persister, $r);
-    }
-
-    public function testCleanWithEmptyData()
-    {
-        $entity = new Invoice();
-
-        $this->assertEquals([], $this->persister->clean($entity));
-    }
-
-    public function testCleanWithData()
-    {
-        $data = [
-            'foo'   => 'bar',
-            'lines' => [
-                [
-                    'order'    => 1,
-                    'name'     => 'test',
-                    'cost'     => 2,
-                    'quantity' => 3
-                ]
-            ],
-            'url'   => 'http://example.org'
-        ];
-
-        $entity = new Invoice($data);
-
-        $this->assertEquals(
-            [
-                'foo'   => 'bar',
-                'lines' => [
-                    'line' => [
-                        [
-                            [
-                                'name' => 'test',
-                                'cost' => 2,
-                                'quantity' => 3
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            $this->persister->clean($entity)
-        );
     }
 }

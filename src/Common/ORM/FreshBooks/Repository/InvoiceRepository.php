@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
 /**
- * The ClientRepository class searches Invoices in FreshBooks.
+ * The InvoiceRepository class defines actions to search Invoices in FreshBooks.
  */
 class InvoiceRepository extends BaseRepository
 {
@@ -33,7 +33,7 @@ class InvoiceRepository extends BaseRepository
      *
      * @return array The invoice.
      *
-     * @throws InvoiceNotFoundException When the invoice id is invalid.
+     * @throws EntityNotFoundException When the invoice id is invalid.
      */
     public function find($id)
     {
@@ -44,10 +44,10 @@ class InvoiceRepository extends BaseRepository
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return new Invoice($response['invoice']);
+            return new Invoice($this->converter->objectify($response['invoice']));
         }
 
-        throw new EntityNotFoundException('Invoice', $id, $this->api->getError());
+        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 
     /**
@@ -74,12 +74,12 @@ class InvoiceRepository extends BaseRepository
                 && array_key_exists('invoice', $response['invoices'])
             ) {
                 if ($response['invoices']['@attributes']['total'] == 1) {
-                    $invoices[] = new Invoice($response['invoices']['invoice']);
+                    $invoices[] = new Invoice($this->converter->objectify($response['invoices']['invoice']));
                 } else {
                     $response = $response['invoices']['invoice'];
 
                     foreach ($response as $data) {
-                        $invoices[] = new Invoice($data);
+                        $invoices[] = new Invoice($this->converter->objectify($data));
                     }
                 }
             }
@@ -87,7 +87,7 @@ class InvoiceRepository extends BaseRepository
             return $invoices;
         }
 
-        throw new InvalidCriteriaException($criteria, 'FreshBooks', $this->api->getError());
+        throw new InvalidCriteriaException($criteria);
     }
 
     /**
@@ -115,6 +115,6 @@ class InvoiceRepository extends BaseRepository
             return $this->api->getResponse();
         }
 
-        throw new EntityNotFoundException('Invoice', $id, 'FreshBooks', $this->api->getError());
+        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 }

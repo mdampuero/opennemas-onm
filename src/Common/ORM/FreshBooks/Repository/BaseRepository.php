@@ -10,6 +10,7 @@
 namespace Common\ORM\FreshBooks\Repository;
 
 use Common\ORM\Core\Repository;
+use Common\ORM\FreshBooks\Data\Converter\BaseConverter;
 use Freshbooks\FreshBooksApi;
 
 /**
@@ -25,13 +26,30 @@ abstract class BaseRepository extends Repository
     protected $api;
 
     /**
+     * The entity converter.
+     *
+     * @var BaseConverter
+     */
+    protected $converter;
+
+    /**
+     * The entity metadata.
+     *
+     * @var Metadata.
+     */
+    protected $metadata;
+
+    /**
      * Initializes the FreshBooks api.
      *
-     * @param string $domain The FreshBooks domain.
-     * @param string $token  The FreshBooks auth token.
+     * @param string   $domain   The FreshBooks domain.
+     * @param string   $token    The FreshBooks auth token.
+     * @param Metadata $metadata The entity metadata.
      */
-    public function __construct($domain, $token)
+    public function __construct($domain, $token, $metadata)
     {
         $this->api = new FreshBooksApi($domain, $token);
+        $this->converter = new BaseConverter($metadata);
+        $this->metadata  = $metadata;
     }
 }

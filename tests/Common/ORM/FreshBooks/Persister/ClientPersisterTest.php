@@ -2,19 +2,26 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Tests\Framework\ORM\FreshBooks\Repository;
 
+use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Persister\ClientPersister;
 use Freshbooks\FreshBooksApi;
 
+/**
+ * Defines test cases for ClientPersister class.
+ */
 class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->api = $this->getMockBuilder('Freshbooks\FreshBooksApi')
@@ -24,7 +31,38 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->persister = new ClientPersister('foo', 'bar');
+        $this->metadata = new Metadata([
+            'properties' => [
+                'id'          => 'integer',
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'email'       => 'string',
+                'company'     => 'string',
+                'phone'       => 'string',
+                'address'     => 'string',
+                'postal_code' => 'string',
+                'city'        => 'string',
+                'state'       => 'string',
+                'country'     => 'string',
+            ],
+            'mapping' => [
+                'freshbooks' => [
+                    'id'          => [ 'name' => 'client_id', 'type' => 'string' ],
+                    'first_name'  => [ 'name' => 'first_name', 'type' => 'string' ],
+                    'last_name'   => [ 'name' => 'last_name', 'type' => 'string' ],
+                    'email'       => [ 'name' => 'email', 'type' => 'string' ],
+                    'company'     => [ 'name' => 'organization', 'type' => 'string' ],
+                    'phone'       => [ 'name' => 'work_phone', 'type' => 'string' ],
+                    'address'     => [ 'name' => 'p_street1', 'type' => 'string' ],
+                    'postal_code' => [ 'name' => 'p_code', 'type' => 'string' ],
+                    'city'        => [ 'name' => 'p_city', 'type' => 'string' ],
+                    'state'       => [ 'name' => 'p_state', 'type' => 'string' ],
+                    'country'     => [ 'name' => 'p_country', 'type' => 'string' ],
+                ]
+            ],
+        ]);
+
+        $this->persister = new ClientPersister('foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->persister, 'api');
         $property->setAccessible(true);
@@ -43,6 +81,8 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests create when API returns false.
+     *
      * @expectedException \RuntimeException
      */
     public function testCreateWithError()
@@ -55,6 +95,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->create($this->existingClient);
     }
 
+    /**
+     * Tests create.
+     */
     public function testCreateWithoutErrors()
     {
         $response = [
@@ -80,6 +123,8 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests remove when API returns false.
+     *
      * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
@@ -92,6 +137,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->remove($this->unexistingClient);
     }
 
+    /**
+     * Tests remove.
+     */
     public function testRemoveWithoutErrors()
     {
         $response = [ '@attributes' => [ 'status' => 'ok' ] ];
@@ -109,6 +157,8 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests update when API returns false.
+     *
      * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
@@ -121,6 +171,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->update($this->unexistingClient);
     }
 
+    /**
+     * Tests update.
+     */
     public function testUpdateWithoutErrors()
     {
         $response = [ '@attributes' => [ 'status' => 'ok' ] ];
@@ -135,18 +188,5 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('success');
 
         $this->persister->update($this->existingClient);
-    }
-
-    public function testClean()
-    {
-        $reflection = new \ReflectionClass(get_class($this->persister));
-        $method = $reflection->getMethod('clean');
-        $method->setAccessible(true);
-
-        $client = new Client([ 'address' => 'foo',  'country' => 'ES' ]);
-        $this->assertEquals(
-            [ 'p_street1' => 'foo', 'p_country' => 'Spain' ],
-            $method->invokeArgs($this->persister, [ $client ])
-        );
     }
 }

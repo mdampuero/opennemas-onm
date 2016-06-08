@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
 /**
- * The ClientRepository class searches Clients in FreshBooks.
+ * The ClientRepository class defines actions to search Clients in FreshBooks.
  */
 class ClientRepository extends BaseRepository
 {
@@ -44,10 +44,10 @@ class ClientRepository extends BaseRepository
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            return new Client($response['client']);
+            return new Client($this->converter->objectify($response['client']));
         }
 
-        throw new EntityNotFoundException('Client', $id, $this->api->getError());
+        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 
     /**
@@ -89,14 +89,14 @@ class ClientRepository extends BaseRepository
                 foreach ($response as $data) {
                     $id = $data['client_id'];
 
-                    $clients[$id] = new Client($data);
+                    $clients[] = new Client($this->converter->objectify($data));
                 }
             }
 
             return $clients;
         }
 
-        throw new InvalidCriteriaException($criteria, 'Braintree', $this->api->getError());
+        throw new InvalidCriteriaException($criteria);
     }
 
     /**

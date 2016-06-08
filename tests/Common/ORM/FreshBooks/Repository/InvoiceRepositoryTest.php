@@ -9,6 +9,8 @@
  */
 namespace Framework\Tests\ORM\FreshBooks\Repository;
 
+use Common\ORM\Core\Metadata;
+use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Repository\InvoiceRepository;
 use Freshbooks\FreshBooksApi;
 
@@ -23,7 +25,26 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new InvoiceRepository('foo', 'bar');
+        $this->metadata = new Metadata([
+            'properties' => [
+                'id'        => 'integer',
+                'client_id' => 'integer',
+                'date'      => 'datetime',
+                'status'    => 'string',
+                'lines'     => 'array'
+            ],
+            'mapping' => [
+                'freshbooks' => [
+                    'id'        => [ 'name' => 'invoice_id', 'type' => 'string' ],
+                    'client_id' => [ 'name' => 'client_id', 'type' => 'string' ],
+                    'date'      => [ 'name' => 'date', 'type' => 'datetime' ],
+                    'status'    => [ 'name' => 'status', 'type' => 'string' ],
+                    'lines'     => [ 'name' => 'lines', 'type' => 'array' ],
+                ]
+            ],
+        ]);
+
+        $this->repository = new InvoiceRepository('foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->repository, 'api');
         $property->setAccessible(true);
@@ -60,18 +81,21 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWithValidId()
     {
-        $invoice = [
-            'invoice_id' => '1',
-            'number'     => '1',
-            'client_id'  => '1',
-            'lines' => [
-                'line' => []
-            ]
-        ];
+        $invoice = new Invoice([
+            'id'        => 1,
+            'client_id' => 1,
+            'lines'     => []
+        ]);
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'invoice'     => $invoice,
+            'invoice'     => [
+                'invoice_id' => '1',
+                'client_id'  => '1',
+                'lines' => [
+                    'line' => []
+                ]
+            ]
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -84,7 +108,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($invoice, $this->repository->find('1')->getData());
+        $this->assertEquals($invoice, $this->repository->find('1'));
     }
 
     /**
@@ -115,36 +139,44 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
         $invoices = [
-            [
-                'invoice_id' => '1',
-                'number'     => '1',
-                'client_id'  => '1',
-                'lines' => [
-                    'line' => []
-                ]
-            ],
-            [
-                'invoice_id' => '2',
-                'number'     => '2',
-                'client_id'  => '1',
-                'lines' => [
-                    'line' => []
-                ]
-            ]
+            new Invoice([
+                'id'        => 1,
+                'client_id' => 1,
+                'lines'     => []
+            ]),
+            new Invoice([
+                'id'        => 2,
+                'client_id' => 1,
+                'lines'     => []
+            ])
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'invoices'    => [
                 '@attributes' => [ 'page' => 1, 'total' => 2 ],
-                'invoice'     => $invoices
+                'invoice'     => [
+                    [
+                        'invoice_id' => '1',
+                        'client_id'  => '1',
+                        'lines' => [
+                            'line' => []
+                        ]
+                    ],
+                    [
+                        'invoice_id' => '2',
+                        'client_id'  => '1',
+                        'lines' => [
+                            'line' => []
+                        ]
+                    ]
+                ]
             ]
 
         ];
 
         $this->api->method('success')->willReturn(true);
         $this->api->method('getResponse')->willReturn($response);
-
 
         $this->api->expects($this->once())->method('setMethod')
             ->with('invoice.list');
@@ -158,7 +190,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(count($invoices), count($response));
 
         for ($i = 0; $i < count($response); $i++) {
-            $this->assertEquals($invoices[$i], $response[$i]->getData());
+            $this->assertEquals($invoices[$i], $response[$i]);
         }
     }
 
@@ -169,20 +201,24 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $invoices = [
-            'invoice_id' => '1',
-            'number'     => '1',
-            'client_id'  => '1',
-            'lines' => [
-                'line' => []
-            ]
-        ];
+        $invoice = new Invoice([
+            'id'        => 1,
+            'client_id' => 1,
+            'lines'     => []
+        ]);
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'invoices'    => [
                 '@attributes' => [ 'page' => 1, 'total' => 1 ],
-                'invoice'     => $invoices
+                'invoice'     => [
+                    'invoice_id' => '1',
+                    'number'     => '1',
+                    'client_id'  => '1',
+                    'lines' => [
+                        'line' => []
+                    ]
+                ]
             ]
         ];
 
@@ -199,7 +235,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $response = $this->repository->findBy($criteria);
 
         $this->assertEquals(1, count($response));
-        $this->assertEquals($invoices, $response[0]->getData());
+        $this->assertEquals($invoice, $response[0]);
     }
 
     /**

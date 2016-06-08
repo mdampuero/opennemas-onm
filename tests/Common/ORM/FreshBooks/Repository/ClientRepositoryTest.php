@@ -9,12 +9,19 @@
  */
 namespace Framework\Tests\ORM\FreshBooks\Repository;
 
+use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Repository\ClientRepository;
 use Freshbooks\FreshBooksApi;
 
+/**
+ * Defines test cases for ClientRepository class.
+ */
 class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
         $this->api = $this->getMockBuilder('Freshbooks\FreshBooksApi')
@@ -24,7 +31,38 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->method('setMethod')->willReturn(true);
         $this->api->method('post')->willReturn(true);
 
-        $this->repository = new ClientRepository('foo', 'bar');
+        $this->metadata = new Metadata([
+            'properties' => [
+                'id'          => 'integer',
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'email'       => 'string',
+                'company'     => 'string',
+                'phone'       => 'string',
+                'address'     => 'string',
+                'postal_code' => 'string',
+                'city'        => 'string',
+                'state'       => 'string',
+                'country'     => 'string',
+            ],
+            'mapping' => [
+                'freshbooks' => [
+                    'id'          => [ 'name' => 'client_id', 'type' => 'string' ],
+                    'first_name'  => [ 'name' => 'first_name', 'type' => 'string' ],
+                    'last_name'   => [ 'name' => 'last_name', 'type' => 'string' ],
+                    'email'       => [ 'name' => 'email', 'type' => 'string' ],
+                    'company'     => [ 'name' => 'organization', 'type' => 'string' ],
+                    'phone'       => [ 'name' => 'work_phone', 'type' => 'string' ],
+                    'address'     => [ 'name' => 'p_street1', 'type' => 'string' ],
+                    'postal_code' => [ 'name' => 'p_code', 'type' => 'string' ],
+                    'city'        => [ 'name' => 'p_city', 'type' => 'string' ],
+                    'state'       => [ 'name' => 'p_state', 'type' => 'string' ],
+                    'country'     => [ 'name' => 'p_country', 'type' => 'string' ],
+                ]
+            ],
+        ]);
+
+        $this->repository = new ClientRepository('foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->repository, 'api');
         $property->setAccessible(true);
@@ -61,15 +99,19 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWithValidId()
     {
-        $client = [
-            'client_id'  => '1',
+        $client = new Client([
+            'id'         => 1,
             'first_name' => 'John',
             'last_name'  => 'Doe'
-        ];
+        ]);
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
-            'client'      => $client,
+            'client'      => [
+                'client_id'  => '1',
+                'first_name' => 'John',
+                'last_name'  => 'Doe'
+            ],
         ];
 
         $this->api->method('success')->willReturn(true);
@@ -82,7 +124,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('success');
         $this->api->expects($this->once())->method('getResponse');
 
-        $this->assertEquals($client, $this->repository->find('1')->getData());
+        $this->assertEquals($client, $this->repository->find('1'));
     }
 
     /**
@@ -113,26 +155,38 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
         $clients = [
-            [
-                'client_id'  => '1',
+            new Client([
+                'id'         => 1,
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
                 'email'      => 'johndoe@example.org'
-            ],
-            [
-                'client_id'  => '2',
+            ]),
+            new Client([
+                'id'         => '2',
                 'first_name' => 'Jane',
                 'last_name'  => 'Doe',
                 'email'      => 'janedoe@example.org'
-            ]
-
+            ])
         ];
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'clients'     => [
                 '@attributes' => [ 'page' => 1, 'total' => 2 ],
-                'client'      => $clients
+                'client'      => [
+                    [
+                        'client_id'  => '1',
+                        'first_name' => 'John',
+                        'last_name'  => 'Doe',
+                        'email'      => 'johndoe@example.org'
+                    ],
+                    [
+                        'client_id'  => '2',
+                        'first_name' => 'Jane',
+                        'last_name'  => 'Doe',
+                        'email'      => 'janedoe@example.org'
+                    ]
+                ]
             ]
         ];
 
@@ -152,7 +206,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $response = array_values($response);
         for ($i = 0; $i < count($response); $i++) {
-            $this->assertEquals($clients[$i], $response[$i]->getData());
+            $this->assertEquals($clients[$i], $response[$i]);
         }
     }
 
@@ -163,18 +217,23 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = [ 'email' => 'johndoe@example.org' ];
 
-        $clients = [
-            'client_id'  => '1',
+        $client = new Client([
+            'id'         => 1,
             'first_name' => 'John',
             'last_name'  => 'Doe',
             'email'      => 'johndoe@example.org'
-        ];
+        ]);
 
         $response = [
             '@attributes' => [ 'status' => 'ok' ],
             'clients'     => [
                 '@attributes' => [ 'page' => 1, 'total' => 1 ],
-                'client'      => $clients
+                'client'      => [
+                    'client_id'  => '1',
+                    'first_name' => 'John',
+                    'last_name'  => 'Doe',
+                    'email'      => 'johndoe@example.org'
+                ]
             ]
         ];
 
@@ -191,8 +250,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $response = $this->repository->findBy($criteria);
 
         $this->assertEquals(1, count($response));
-        $response = array_pop($response);
-        $this->assertEquals($clients, $response->getData());
+        $this->assertEquals($client, $response[0]);
     }
 
     /**

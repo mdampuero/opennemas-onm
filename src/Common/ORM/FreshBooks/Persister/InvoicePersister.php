@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,31 +13,11 @@ use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
- * The InvoicePersister class persists Invoices to FreshBooks.
+ * The InvoicePersister class defines actions to create, update and remove
+ * Invoices from FreshBooks.
  */
 class InvoicePersister extends BasePersister
 {
-    /**
-     * Array of invalid fields to send in requests
-     *
-     * @var array
-     */
-    protected $invalid = [
-        'auth_url',
-        'amount_outstanding',
-        'estimate_id',
-        'folder',
-        'gateways',
-        'links',
-        'order',
-        'paid',
-        'po_number',
-        'recurring_id',
-        'staff_id',
-        'updated',
-        'url'
-    ];
-
     /**
      * Saves a new invoice in FreshBooks.
      *
@@ -48,7 +28,9 @@ class InvoicePersister extends BasePersister
     public function create(Entity &$entity)
     {
         $this->api->setMethod('invoice.create');
-        $this->api->post([ 'invoice' => $this->clean($entity) ]);
+        $this->api->post([
+            'invoice' => $this->converter->freshbooksfy($entity)
+        ]);
 
         $this->api->request();
 
@@ -81,7 +63,7 @@ class InvoicePersister extends BasePersister
         }
 
         throw new EntityNotFoundException(
-            'Invoice',
+            $this->metadata->name,
             $entity->invoice_id,
             $this->api->getError()
         );
@@ -97,7 +79,10 @@ class InvoicePersister extends BasePersister
     public function update(Entity $entity)
     {
         $this->api->setMethod('invoice.update');
-        $this->api->post([ 'invoice' => $this->clean($entity) ]);
+        $this->api->post([
+            'invoice' => $this->converter->freshbooksfy($entity)
+        ]);
+
         $this->api->request();
 
         if ($this->api->success()) {
@@ -105,31 +90,9 @@ class InvoicePersister extends BasePersister
         }
 
         throw new EntityNotFoundException(
-            'Invoice',
+            $this->metadata->name,
             $entity->invoice_id,
             $this->api->getError()
         );
-    }
-
-    /**
-     * Cleans invalid fields from the invoice.
-     *
-     * @param Entity $data The data to clean.
-     *
-     * @return array The cleaned RAW data array.
-     */
-    public function clean(Entity $entity)
-    {
-        $cleaned = array_diff_key($entity->getData(), array_flip($this->invalid));
-
-        if (array_key_exists('lines', $cleaned)) {
-            foreach ($cleaned['lines'] as &$line) {
-                unset($line['order']);
-            }
-
-            $cleaned['lines'] = [ 'line' => [ $cleaned['lines'] ] ];
-        }
-
-        return $cleaned;
     }
 }

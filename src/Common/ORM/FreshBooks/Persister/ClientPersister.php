@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,10 +11,10 @@ namespace Common\ORM\FreshBooks\Persister;
 
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
-use Symfony\Component\Intl\Intl;
 
 /**
- * The ClientPersister class persists Clients to FreshBooks.
+ * The ClientPersister class defines actions to create, update and remove
+ * Clients from FreshBooks.
  */
 class ClientPersister extends BasePersister
 {
@@ -27,7 +27,7 @@ class ClientPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
-        $data = $this->clean($entity);
+        $data = $this->converter->freshbooksfy($entity);
 
         $this->api->setMethod('client.create');
         $this->api->post([ 'client' => $data ]);
@@ -62,8 +62,8 @@ class ClientPersister extends BasePersister
         }
 
         throw new EntityNotFoundException(
-            $entity->getClassName(),
-            $entity->client_id,
+            $this->metadata->name,
+            $entity->id,
             $this->api->getError()
         );
     }
@@ -77,7 +77,7 @@ class ClientPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        $data = $this->clean($entity);
+        $data = $this->converter->freshbooksfy($entity);
 
         $this->api->setMethod('client.update');
         $this->api->post([ 'client' => $data ]);
@@ -88,49 +88,9 @@ class ClientPersister extends BasePersister
         }
 
         throw new EntityNotFoundException(
-            $entity->getClassName(),
-            $entity->client_id,
+            $this->metadata->name,
+            $entity->id,
             $this->api->getError()
         );
-    }
-
-    /**
-     * Cleans the data for Freshbooks.
-     *
-     * @param Entity $entity The entity data.
-     *
-     * @return array The cleaned data.
-     */
-    protected function clean($entity)
-    {
-        $countries = Intl::getRegionBundle()->getCountryNames('en');
-
-        $map = [
-            'id'          => 'client_id',
-            'address'     => 'p_street1',
-            'city'        => 'p_city',
-            'company'     => 'organization',
-            'country'     => 'p_country',
-            'phone'       => 'work_phone',
-            'postal_code' => 'p_code',
-            'state'       => 'p_state',
-        ];
-
-        $data = [];
-        foreach ($entity->getData() as $property => $value) {
-            $key = $property;
-
-            if (array_key_exists($property, $map)) {
-                $key = $map[$property];
-            }
-
-            if ($property === 'country' && !empty($value)) {
-                $value = $countries[$value];
-            }
-
-            $data[$key] = $value;
-        }
-
-        return $data;
     }
 }
