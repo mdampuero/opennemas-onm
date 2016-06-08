@@ -92,6 +92,8 @@ class NotificationController extends Controller
         $id    = $this->get('instance')->internal_name;
         $date  = date('Y-m-d H:i:s');
         $theme = $this->get('instance')->settings['TEMPLATE_USER'];
+        $epp   = $request->query->get('epp', 10);
+        $page  = $request->query->get('page', 1);
 
         $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
             . 'target LIKE \'%"' . $theme . '"%\' OR '
@@ -106,9 +108,9 @@ class NotificationController extends Controller
             'notifications.get',
             [
                 'criteria' => $criteria,
-                'epp'      => null,
+                'epp'      => $epp,
                 'order'    => [ 'fixed' => 'desc' ],
-                'page'     => null
+                'page'     => $page
             ]
         );
 
