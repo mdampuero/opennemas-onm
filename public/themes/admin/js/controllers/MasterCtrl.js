@@ -101,8 +101,8 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     $scope.getLatest = function() {
       var url = routing.generate('backend_ws_notifications_latest');
 
-      $http.get(url).success(function(response) {
-        $scope.notifications = response.results.filter(function (a) {
+      $http.get(url).then(function(response) {
+        $scope.notifications = response.data.results.filter(function (a) {
           return !a.forced || parseInt(a.forced) !== 1;
         });
 
@@ -111,7 +111,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         $scope.bounce = true;
 
         if ($scope.force) {
-          $scope.forced = response.results.filter(function (a) {
+          $scope.forced = response.data.results.filter(function (a) {
             if (parseInt(a.forced) !== 1) {
               return false;
             }
@@ -166,15 +166,39 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      */
     $scope.markAsRead = function(index) {
       var notification = $scope.notifications[index];
+      var date = new Date();
 
       var url = routing.generate('backend_ws_notification_patch',
           { id: notification.id });
 
-      $http.patch(url).success(function() {
+      var data = { 'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss') };
+
+      $http.patch(url, data).then(function() {
         $scope.notifications.splice(index, 1);
         $scope.pulse = true;
         $timeout(function() { $scope.pulse = false; }, 1000);
       });
+    };
+
+    /**
+     * @function markAsView
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Marks a notification as view.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
+    $scope.markAllAsView = function() {
+      var url  = routing.generate('backend_ws_notifications_patch');
+      var date = new Date();
+      var ids  = $scope.notifications.map(function(e) { return e.id; });
+      var data = {
+        ids: ids,
+        'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+      };
+
+      $http.patch(url, data);
     };
 
     /**

@@ -276,7 +276,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user)}
-                  <li class="quicklinks dropdown dropdown-notifications" ng-click="markFixedAsRead()">
+                  <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
