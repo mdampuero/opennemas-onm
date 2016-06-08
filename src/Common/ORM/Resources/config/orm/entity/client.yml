@@ -60,7 +60,40 @@ entity:
             phone:
                 name: phone
                 type: string
-
+        freshbooks:
+            id:
+                name: client_id
+                type: string
+            first_name:
+                name: first_name
+                type: string
+            last_name:
+                name: last_name
+                type: string
+            email:
+                name: email
+                type: string
+            company:
+                name: organization
+                type: string
+            phone:
+                name: work_phone
+                type: string
+            address:
+                name: p_street1
+                type: string
+            postal_code:
+                name: p_code
+                type: string
+            city:
+                name: p_city
+                type: string
+            state:
+                name: p_state
+                type: string
+            country:
+                name: p_country
+                type: string
         database:
             table: client
             columns:
