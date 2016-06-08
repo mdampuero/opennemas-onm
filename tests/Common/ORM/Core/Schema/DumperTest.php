@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Core\Schema;
 
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Schema\Schema;
-use Common\ORM\Core\Entity;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for Dumper class.
@@ -23,26 +23,36 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $schemas  = [ 'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]) ];
-        $entities = [ 'Foo' => new Entity([
-            'name' => 'Foo',
-            'properties' => 'foo',
-            'mapping' => [
-                'database' => [
-                    'table' => 'foo',
-                    'columns' => [
-                        'id'       => [ 'type' => 'integer', 'options' => [ 'autoincrement' => true ] ],
-                        'title'    => [ 'type' => 'string' ],
-                        'category' => [ 'type' => 'string' ]
-                    ],
-                    'index' => [
-                        [ 'name' => 'PRIMARY', 'primary' => true, 'columns' => [ 'id' ] ],
-                        [ 'name' => 'title', 'unique' => true, 'columns' => [ 'title' ] ],
-                        [ 'name' => 'category', 'columns' => [ 'category' ] ]
+        $schemas  = [
+            'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]),
+            'Wibble' => new Schema([ 'name' => 'Wibble', 'entities' => [ 'Bar' ] ])
+        ];
+
+        $entities = [
+            'Foo' => new Metadata([
+                'name' => 'Foo',
+                'properties' => 'foo',
+                'mapping' => [
+                    'database' => [
+                        'table' => 'foo',
+                        'columns' => [
+                            'id'       => [ 'type' => 'integer', 'options' => [ 'autoincrement' => true ] ],
+                            'title'    => [ 'type' => 'string' ],
+                            'category' => [ 'type' => 'string' ]
+                        ],
+                        'index' => [
+                            [ 'name' => 'PRIMARY', 'primary' => true, 'columns' => [ 'id' ] ],
+                            [ 'name' => 'title', 'unique' => true, 'columns' => [ 'title' ] ],
+                            [ 'name' => 'category', 'columns' => [ 'category' ] ]
+                        ]
                     ]
                 ]
-            ]
-        ])];
+            ]),
+            'Bar' => new Metadata([
+                'name'    => 'Bar',
+                'mapping' => []
+            ])
+        ];
 
         $this->dumper = new Dumper($schemas, $entities);
     }
@@ -85,6 +95,16 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testDumpInvalidSchema()
     {
         $this->dumper->dump('foo');
+    }
+
+    /**
+     * Tests dump for an schema without database mapping information.
+     *
+     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     */
+    public function testDumpNoDatabaseInformation()
+    {
+        $this->dumper->dump('Wibble');
     }
 
     /**
