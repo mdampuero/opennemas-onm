@@ -131,7 +131,8 @@ class NotificationSubscriber implements EventSubscriberInterface
 
         $notifications = $repository->findBy([
             'instance_id' => [ [ 'value' => $event->getArgument('instance_id') ] ],
-            'user_id'     => [ [ 'value' => $event->getArgument('user_id') ] ]
+            'user_id'     => [ [ 'value' => $event->getArgument('user_id') ] ],
+            'read_date'   => [ [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ] ]
         ]);
 
         $response = [];
