@@ -1,11 +1,21 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\ORM\Braintree\Repository;
 
 use Common\ORM\Entity\Client;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
+/**
+ * The ClientRepository class defines actions to search Clients in Braintree.
+ */
 class ClientRepository extends BaseRepository
 {
     /**
@@ -31,14 +41,12 @@ class ClientRepository extends BaseRepository
             $cr = $this->factory->get('customer');
             $response = $cr::find($id);
 
-            $data = $this->responseToData($response);
-
-            return new Client($data);
+            return new Client($this->converter->objectify($response));
         } catch (\Exception $e) {
-            throw new EntityNotFoundException($id, $this->source, $e->getMessage());
+            throw new EntityNotFoundException($this->metadata->name, $id, $e->getMessage());
         }
 
-        throw new EntityNotFoundException($id, $this->source);
+        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 
     /**
@@ -64,10 +72,9 @@ class ClientRepository extends BaseRepository
 
             return $clients;
         } catch (\Exception $e) {
-            throw new InvalidCriteriaException($criteria, $this->source, $e->getMessage());
         }
 
-        throw new InvalidCriteriaException($criteria, $this->source);
+        throw new InvalidCriteriaException($criteria);
     }
 
     /**
@@ -85,52 +92,19 @@ class ClientRepository extends BaseRepository
      *
      * @return Braintree_CustomerSearch The Braintree criteria.
      */
-    private function arrayToCriteria($array)
+    protected function arrayToCriteria($array)
     {
         $criteria = [];
 
-        if (is_array($array)) {
-            foreach ($array as $key => $value) {
-                $key = \classify($key);
-                $criteria[] = \Braintree_CustomerSearch::{$key}()->is($value);
-            }
+        if (!is_array($array)) {
+            return $criteria;
+        }
+
+        foreach ($array as $key => $value) {
+            $key        = \classify($key);
+            $criteria[] = \Braintree_CustomerSearch::{$key}()->is($value);
         }
 
         return $criteria;
-    }
-
-    /**
-     * Transform the Braintree response to array.
-     *
-     * @param Braintree_Customer $response The response to convert.
-     *
-     * @return array The array.
-     */
-    private function responseToData($response)
-    {
-        if (empty($response)) {
-            return null;
-        }
-
-        $data = [
-            'id'         => $response->id,
-            'first_name' => $response->firstName,
-            'last_name'  => $response->lastName,
-            'email'      => $response->email,
-            'company'    => $response->company,
-            'phone'      => $response->phone,
-        ];
-
-        if (!empty($response->addresses)) {
-            $address = $response->addresses[0];
-
-            $data['address']     = $address->streetAddress;
-            $data['city']        = $address->locality;
-            $data['state']       = $address->region;
-            $data['country']     = $address->countryName;
-            $data['postal_code'] = $address->postalCode;
-        }
-
-        return $data;
     }
 }

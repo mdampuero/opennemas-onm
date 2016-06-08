@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,10 @@ namespace Common\ORM\Braintree\Persister;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
+/**
+ * The ClientPersister class defines actions to create, update and remove
+ * Clients to Braintree.
+ */
 class ClientPersister extends BasePersister
 {
     /**
@@ -24,7 +28,7 @@ class ClientPersister extends BasePersister
     public function create(Entity &$entity)
     {
         $cr   = $this->factory->get('customer');
-        $data = $this->clean($entity);
+        $data = $this->converter->braintreefy($entity->getData());
 
         $response = $cr::create($data);
 
@@ -53,7 +57,7 @@ class ClientPersister extends BasePersister
             return;
         }
 
-        throw new EntityNotFoundException('Client', $entity->id);
+        throw new EntityNotFoundException($this->metadata->name, $entity->id);
     }
 
     /**
@@ -66,7 +70,7 @@ class ClientPersister extends BasePersister
     public function update(Entity $entity)
     {
         $cr   = $this->factory->get('customer');
-        $data = $this->clean($entity);
+        $data = $this->converter->braintreefy($entity->getData());
 
         $response = $cr::update($entity->id, $data);
 
@@ -75,26 +79,5 @@ class ClientPersister extends BasePersister
         }
 
         throw new EntityNotFoundException('Client', $entity->id);
-    }
-
-    /**
-     * Converts an entity to an array to send to Braintree.
-     *
-     * @param Entity $entity The entity to convert.
-     *
-     * @return array The array.
-     */
-    private function clean($entity)
-    {
-        $data = [
-            'id'        => $entity->id,
-            'firstName' => $entity->first_name,
-            'lastName'  => $entity->last_name,
-            'email'     => $entity->email,
-            'company'   => $entity->company,
-            'phone'     => $entity->phone,
-        ];
-
-        return $data;
     }
 }

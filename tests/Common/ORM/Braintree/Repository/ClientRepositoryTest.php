@@ -1,22 +1,58 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Common\ORM\Braintree\Repository;
 
-namespace Framework\Tests\ORM\Braintree\Repository;
-
+use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\Braintree\Repository\ClientRepository;
 
+/**
+ * Defines test cases for ClientRepository class.
+ */
 class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the test environment.
+     */
     public function setUp()
     {
+        $this->metadata = new Metadata([
+            'name'       => 'Client',
+            'properties' => [
+                'id'         => 'integer',
+                'first_name' => 'string',
+                'last_name'  => 'string',
+                'email'      => 'string',
+                'company'    => 'string',
+                'phone'      => 'string',
+            ],
+            'mapping' => [
+                'braintree' => [
+                    'id'         => [ 'name' => 'id', 'type' => 'string' ],
+                    'first_name' => [ 'name' => 'firstName', 'type' => 'string' ],
+                    'last_name'  => [ 'name' => 'lastName', 'type' => 'string' ],
+                    'email'      => [ 'name' => 'email', 'type' => 'string' ],
+                    'company'    => [ 'name' => 'company', 'type' => 'string' ],
+                    'phone'      => [ 'name' => 'phone', 'type' => 'string' ],
+                ]
+            ],
+        ]);
+
         $this->clients = [
             new Client([
-                'client_id'  => 1,
+                'id'         => 1,
                 'first_name' => 'John',
                 'last_name'  => 'Doe'
             ]),
             new Client([
-                'client_id'  => 2,
+                'id'         => 2,
                 'first_name' => 'Jane',
                 'last_name'  => 'Doe'
             ])
@@ -35,7 +71,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $repository->countBy();
     }
 
@@ -57,7 +93,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $repository->find('1');
     }
 
@@ -86,7 +122,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $client = $repository->find('1');
         $this->assertEquals($response->id, $client->id);
         $this->assertEquals($response->firstName, $client->first_name);
@@ -111,7 +147,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $repository->findBy();
     }
 
@@ -144,7 +180,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->any())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $clients = array_values($repository->findBy());
 
         $this->assertEquals(1, count($clients));
@@ -163,11 +199,13 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $repository->findOneBy();
     }
 
-
+    /**
+     * Tests criteriaToArray with an empty criteria.
+     */
     public function testCriteriaToArrayWithEmptyCriteria()
     {
         $factory = $this
@@ -175,7 +213,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);
@@ -184,6 +222,9 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($criteria);
     }
 
+    /**
+     * Tests criteriaToArray with a valid criteria.
+     */
     public function testCriteriaToArrayWithValidCriteria()
     {
         $factory = $this
@@ -191,7 +232,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, 'Braintree');
+        $repository = new ClientRepository($factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);
@@ -200,63 +241,4 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $criteria = $method->invokeArgs($repository, [ $source ]);
         $this->assertEquals(count($source), count($criteria));
     }
-
-    public function testResponseToDataWithEmptyResponse()
-    {
-        $factory = $this
-            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $repository = new ClientRepository($factory, 'Braintree');
-        $reflection = new \ReflectionClass(get_class($repository));
-        $method = $reflection->getMethod('responseToData');
-        $method->setAccessible(true);
-
-        $data = $method->invokeArgs($repository, [ null ]);
-        $this->assertEmpty($data);
-    }
-
-    public function testResponseToDataWithValidResponse()
-    {
-        $factory = $this
-            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $repository = new ClientRepository($factory, 'Braintree');
-        $reflection = new \ReflectionClass(get_class($repository));
-        $method = $reflection->getMethod('responseToData');
-        $method->setAccessible(true);
-
-        $address = $this->getMock('\Braintree_Address_' . uniqid());
-        $address->streetAddress   = 'Fake Street, 123';
-        $address->extendedAddress = '';
-        $address->locality        = 'New York City';
-        $address->region          = 'New York';
-        $address->countryName     = 'United States';
-        $address->postalCode      = '00000';
-
-        $response = $this->getMock('\Braintree_Customer_' . uniqid());
-        $response->id        = '1';
-        $response->firstName = 'John';
-        $response->lastName  = 'Doe';
-        $response->email     = 'johndoe@example.org';
-        $response->company   = 'John Doe, Inc.';
-        $response->phone     = '555-555-555';
-        $response->addresses = [ $address ];
-
-        $data = $method->invokeArgs($repository, [ $response ]);
-
-        $this->assertEquals($response->id, $data['id']);
-        $this->assertEquals($response->firstName, $data['first_name']);
-        $this->assertEquals($response->lastName, $data['last_name']);
-        $this->assertEquals($response->email, $data['email']);
-        $this->assertEquals($response->company, $data['company']);
-        $this->assertEquals($response->addresses[0]->streetAddress, $data['address']);
-        $this->assertEquals($response->addresses[0]->locality, $data['city']);
-        $this->assertEquals($response->addresses[0]->region, $data['state']);
-        $this->assertEquals($response->addresses[0]->countryName, $data['country']);
-        $this->assertEquals($response->addresses[0]->postalCode, $data['postal_code']);
-    }
-}
+  }
