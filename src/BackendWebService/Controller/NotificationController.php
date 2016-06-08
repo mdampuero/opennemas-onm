@@ -89,10 +89,12 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $id   = $this->get('instance')->internal_name;
-        $date = date('Y-m-d H:i:s');
+        $id    = $this->get('instance')->internal_name;
+        $date  = date('Y-m-d H:i:s');
+        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
 
         $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
+            . 'target LIKE \'%"' . $theme . '"%\' OR '
             .  'target LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
