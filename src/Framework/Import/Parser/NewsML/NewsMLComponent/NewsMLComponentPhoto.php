@@ -222,7 +222,8 @@ class NewsMLComponentPhoto extends NewsML
 
         if (is_array($id) && !empty($id)) {
             $id = (string) $id[0]->attributes()->Duid;
-            $filename = $this->getFilename($data);
+            $file     = $this->getFile($data);
+            $filename = $this->getFilename($file);
             return md5($filename).iconv(mb_detect_encoding($id), "UTF-8", $id);
         }
 
