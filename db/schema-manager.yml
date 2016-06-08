@@ -525,9 +525,18 @@ user_notification:
         user:
             type: text
             options: { default: null, length: 65532, notnull: true }
-        read_time:
+        read_date:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP }
+            options: { default: null, notnull: false }
+        view_date:
+            type: datetime
+            options: { default: null, notnull: false }
+        open_date:
+            type: datetime
+            options: { default: null, notnull: false }
+        click_date:
+            type: datetime
+            options: { default: null, notnull: false }
     index:
         -
             name: PRIMARY
