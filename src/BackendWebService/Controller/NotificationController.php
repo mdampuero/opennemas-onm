@@ -155,9 +155,13 @@ class NotificationController extends Controller
             $un = new UserNotification();
             $un->instance_id     = $this->get('instance')->id;
             $un->user_id         = $userId;
-            $un->user            = $this->getUser();
             $un->notification_id = $id;
         }
+
+        $un->user = [
+            'username' => $this->getUser()->username,
+            'email'    => $this->getUser()->email
+        ];
 
         foreach ($request->request->all() as $key => $value) {
             $date = new \Datetime($value);
@@ -214,7 +218,10 @@ class NotificationController extends Controller
             foreach ($notifications as $notification) {
                 $read[] = $notification->notification_id;
 
-                $notification->user = $this->getUser()->username;
+                $notification->user = [
+                    'username' => $this->getUser()->username,
+                    'email'    => $this->getUser()->email
+                ];
 
                 foreach ($params as $key => $value) {
                     $date = new \Datetime($value);
@@ -231,7 +238,10 @@ class NotificationController extends Controller
                 $un = new UserNotification();
 
                 $un->instance_id     = $instance;
-                $un->user            = $this->getUser()->username;
+                $un->user = [
+                    'username' => $this->getUser()->username,
+                    'email'    => $this->getUser()->email
+                ];
                 $un->user_id         = $this->getUser()->id;
                 $un->notification_id = $id;
 
