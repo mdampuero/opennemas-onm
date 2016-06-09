@@ -46,7 +46,9 @@
             gl: '',
           },
           target: [],
+          enabled: '0',
           fixed: '0',
+          forced: '0',
           style: {},
           title: {
             en: '',
