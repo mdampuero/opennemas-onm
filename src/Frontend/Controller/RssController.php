@@ -300,8 +300,8 @@ class RssController extends Controller
 
                     // Wrap social embed and iframes
                     $patterns = [
-                        '(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+<\/blockquote>\n*<script[^>]+><\/script>)',
-                        '(<p>)*(<iframe[^>]+><\/iframe>)'
+                        '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+<\/blockquote>\n*<script[^>]+><\/script>)@',
+                        '@(<p>)*(<iframe[^>]+><\/iframe>)@'
                     ];
                     $replacements = [
                         '<figure class="op-social"><iframe>${1}</iframe></figure>',
@@ -310,7 +310,7 @@ class RssController extends Controller
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
                     // Change <br> tag to <p>
-                    $content->body = preg_replace("@<br\/?>[\s]*?\n?[\s]*@", "<\/p>\n<p>", $content->body);
+                    $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "<\/p>\n<p>", $content->body);
 
                     // Clean empty HTML tags
                     $content->body = preg_replace('@<(.*)>\s*<\/\1>@', '', $content->body);
