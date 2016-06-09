@@ -310,7 +310,7 @@ class RssController extends Controller
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
                     // Change <br> tag to <p>
-                    $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "<\/p>\n<p>", $content->body);
+                    $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "</p>\n<p>", $content->body);
 
                     // Clean empty HTML tags
                     $content->body = preg_replace('@<(.*)>\s*<\/\1>@', '', $content->body);
