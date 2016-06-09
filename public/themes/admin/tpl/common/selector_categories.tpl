@@ -1,4 +1,5 @@
-<select name="{$name|default:'category'}" id="{$name|default:'category'}">
+<select name="{$name|default:'category'}" id="{$name|default:'category'}" required="required">
+  <option value="" >{t}- Select a category -{/t}</option>
     {section name=as loop=$allcategorys}
         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
             <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
