@@ -24,7 +24,8 @@ class UserNotificationRepository extends DatabaseRepository
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT notification_id, user_id FROM `" . $this->getCachePrefix() . "` "
+        $sql = "SELECT instance_id, notification_id, user_id FROM `"
+            . $this->getCachePrefix() . "` "
             ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->conn->fetchAll($sql);
@@ -32,10 +33,11 @@ class UserNotificationRepository extends DatabaseRepository
         $ids = array();
         foreach ($rs as $item) {
             $key = 'user_notification-' . $item['notification_id'] . '-'
-                . $item['user_id'];
+                . $item['instance_id'] . '-' . $item['user_id'];
 
             $ids[$key] = [
                 'notification_id' => $item['notification_id'],
+                'instance_id'     => $item['instance_id'],
                 'user_id'         => $item['user_id']
             ];
         }
