@@ -210,8 +210,8 @@ class Album extends Content
                 'albums',
                 [
                     'subtitle' => $data['subtitle'],
-                    'agency' => $data['agency'],
-                    'album_frontpage_image' => (int) $data['album_frontpage_image'],
+                    'agency'   => $data['agency'],
+                    'cover_id' => (int) $data['album_frontpage_image'],
                 ],
                 [ 'pk_album' => (int) $data['id'] ]
             );
@@ -345,8 +345,9 @@ class Album extends Content
      **/
     public function saveAttachedPhotos($data)
     {
-        if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
-            foreach ($data['album_photos_id'] as $position => $photoID) {
+        $photoIds = $data['album_photos_id'];
+        if (isset($photoIds) && !empty($photoIds)) {
+            foreach ($photoIds as $position => $photoID) {
                 $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
 
                 try {
@@ -359,18 +360,14 @@ class Album extends Content
                             "description" => $photoFooter,
                         ]
                     );
-
-                    return $this;
                 } catch (\Exception $e) {
                     error_log($e->getMessage());
                     return false;
                 }
             }
-
-            return true;
         }
 
-        return $this;
+        return true;
     }
 
     /**
