@@ -276,6 +276,11 @@ class AclUserController extends Controller
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
+        if (false === Acl::check('USER_UPDATE')) {
+            $data['activated'] = $user->activated;
+            $data['type'] = $user->type;
+        }
+
         $file = $request->files->get('avatar');
 
         // Get max users from settings
