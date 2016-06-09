@@ -54,7 +54,11 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     $scope.sidebar = Sidebar.init();
 
     /**
-     * Disables forced notifications.
+     * @function disableForced
+     * @memberOf MasterCtrl
+     *
+     * @description
+     *   Disables forced notifications.
      */
     $scope.disableForced = function() {
       $scope.force = false;
@@ -156,6 +160,45 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     };
 
     /**
+     * @function markAllAsView
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Marks a notification as view.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
+    $scope.markAllAsView = function() {
+      var url  = routing.generate('backend_ws_notifications_patch');
+      var date = new Date();
+      var ids  = $scope.notifications.map(function(e) { return e.id; });
+      var data = {
+        ids:       ids,
+        view_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+      };
+
+      $http.patch(url, data);
+    };
+
+    /**
+     * @function markAsClicked
+     * @memberOf MasterCtrl
+     *
+     * @description
+     *   Marks a notification as clicked.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
+    $scope.markAsClicked = function(index) {
+      var id   = $scope.notifications[index].id;
+      var url  = routing.generate('backend_ws_notification_patch', { id: id });
+      var date = new Date();
+      var data = { click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss') };
+
+      $http.patch(url, data);
+    };
+
+    /**
      * @function markAsRead
      * @memberOf NotificationCtrl
      *
@@ -171,7 +214,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       var url = routing.generate('backend_ws_notification_patch',
           { id: notification.id });
 
-      var data = { 'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss') };
+      var data = { read_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss') };
 
       $http.patch(url, data).then(function() {
         $scope.notifications.splice(index, 1);
@@ -181,28 +224,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     };
 
     /**
-     * @function markAsView
-     * @memberOf NotificationCtrl
-     *
-     * @description
-     *   Marks a notification as view.
-     *
-     * @param {Integer} index The index of the notification to mark.
-     */
-    $scope.markAllAsView = function() {
-      var url  = routing.generate('backend_ws_notifications_patch');
-      var date = new Date();
-      var ids  = $scope.notifications.map(function(e) { return e.id; });
-      var data = {
-        ids: ids,
-        'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
-      };
-
-      $http.patch(url, data);
-    };
-
-    /**
-     * @function markAsRead
+     * @function markForcedAsRead
      * @memberOf NotificationCtrl
      *
      * @description
@@ -216,7 +238,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       var date         = new Date();
 
       date.setDate(date.getDate() + 1);
-      date = moment(date).format('YYYY-MM-DD HH:mm:ss');
+      date = $window.moment(date).format('YYYY-MM-DD HH:mm:ss');
       webStorage.local.set(id, date);
 
       $scope.pulse = true;
@@ -227,6 +249,19 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       }, 250);
     };
 
+    /**
+     * @function xsOnly
+     * @memberOf MasterCtrl
+     *
+     * @description
+     *   Executes an action only for small devices.
+     *
+     * @param {Object}   event    The event object.
+     * @param {Function} callback The action to execute.
+     * @param {Object}   args     The action arguments.
+     *
+     * @return {type} description
+     */
     $scope.xsOnly = function(event, callback, args) {
       if ($scope.windowWidth < 992) {
         callback(args);
@@ -330,9 +365,24 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     });
 
     // Prevent empty links to change angular route
-    $('a').bind('click', function (e) {
+    $('body').on('click', 'a', function (e) {
       if ($(this).attr('href') === '#') {
         e.preventDefault();
+      }
+    });
+
+    // Mark notifications as clicked when clicking in notification-action
+    $('body, .notification-list').on('click', '.notification-action', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      var target   = e.target.closest('li');
+      var siblings = $(target.closest('ul')).find('li');
+
+      for (var i = 0; i < siblings.length; i++) {
+        if (siblings[i] === target) {
+          $scope.markAsClicked(i);
+        }
       }
     });
   }
