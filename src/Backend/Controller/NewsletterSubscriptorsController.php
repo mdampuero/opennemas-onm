@@ -57,55 +57,47 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $user = new \Subscriptor();
-
-            $data = array(
-                'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-                'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
-                'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
-                'subscription' => $request->request->getDigits('subscription', 1),
-                'status'       => $request->request->getDigits('status', 2),
-            );
-
-            // Check for repeated e-mail
-            if ($user->existsEmail($data['email'])) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the new subscriptor. This email is already in use')
-                );
-
-                return $this->redirect(
-                    $this->generateUrl('admin_newsletter_subscriptor_create')
-                );
-            } else {
-                if ($user->create($data)) {
-                    $this->get('session')->getFlashBag()->add(
-                        'success',
-                        _('Subscription successfully created.')
-                    );
-                } else {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        sprintf(_('Unable to create the new subscriptor: %s', $user->_errors))
-                    );
-                }
-            }
-
-            $continue = $request->request->filter('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_newsletter_subscriptor_show', array('id' => $user->id))
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_newsletter_subscriptors')
-                );
-            }
-        } else {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('newsletter/subscriptions/new.tpl');
         }
+        $user = new \Subscriptor();
+
+        $data = array(
+            'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
+            'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
+            'subscription' => $request->request->getDigits('subscription', 1),
+            'status'       => $request->request->getDigits('status', 2),
+        );
+
+        // Check for repeated e-mail
+        if ($user->existsEmail($data['email'])) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to create the new subscriptor. This email is already in use')
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_newsletter_subscriptor_create')
+            );
+        } else {
+            if ($user->create($data)) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Subscription successfully created.')
+                );
+            } else {
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    sprintf(_('Unable to create the new subscriptor: %s', $user->_errors))
+                );
+            }
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_newsletter_subscriptor_show', array('id' => $user->id))
+        );
     }
 
     /**
@@ -121,43 +113,38 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function updateAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $id = $request->query->getDigits('id');
-
-            $data = array(
-                'id'           => $id,
-                'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-                'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
-                'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
-                'subscription' => $request->request->getDigits('subscription', 1),
-                'status'       => $request->request->getDigits('status', 2),
-            );
-
-            $user = new \Subscriptor();
-            if ($user->update($data, true)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Subscription successfully updated.')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to update the subscriptor information')
-                );
-            }
-
-            $continue = $request->request->filter('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_newsletter_subscriptor_show', array('id' => $user->id))
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
-            }
-        } else {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('newsletter/subscriptions/new.tpl');
         }
+
+        $id = $request->query->getDigits('id');
+
+        $data = array(
+            'id'           => $id,
+            'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
+            'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
+            'subscription' => $request->request->getDigits('subscription', 1),
+            'status'       => $request->request->getDigits('status', 2),
+        );
+
+        $user = new \Subscriptor();
+        if ($user->update($data, true)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Subscription successfully updated.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to update the subscriptor information')
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_newsletter_subscriptor_show', [ 'id' => $user->id ])
+        );
     }
 
     /**

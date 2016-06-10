@@ -68,20 +68,6 @@ class Subscriptor
     public $subscription = null;
 
     /**
-     * The list of errors
-     *
-     * @var string
-     **/
-    public $_errors = array();
-
-    /**
-     * The database table where the users are saved
-     *
-     * @var string
-     **/
-    private $tableName = '`pc_users`';
-
-    /**
      * Constructor
      *
      * @param int $id the subscriptor id
@@ -93,71 +79,6 @@ class Subscriptor
         if (!is_null($id)) {
             $this->read($id);
         }
-    }
-
-    /**
-     * Creates a new subscriptor given an array of data
-     *
-     * @param array $data the array of data
-     *
-     * @return boolean true if the subscriptor was created
-     **/
-    public function create($data)
-    {
-        $data['status'] = (!isset($data['status']))? 0: $data['status'];
-
-        // WARNING!!! By default, subscription=1
-        $data['subscription'] =
-            (isset($data['subscription']))? $data['subscription']: 1;
-
-        // By default first and last name are ""
-        $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
-        $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
-
-        $sql = 'INSERT INTO ' . $this->tableName . ' (
-                  `email`, `name`, `firstname`, `lastname`,
-                 `status`, `subscription`) VALUES
-                ( ?,?,?,?, ?,?)';
-
-        $values = [
-            $data['email'],
-            $data['name'],
-            $data['firstname'],
-            $data['lastname'],
-            $data['status'],
-            $data['subscription']
-        ];
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
-
-        dispatchEventWithParams('newsletter_subscriptor.create', array('subscriptor' => $this));
-
-        return true;
-    }
-
-    /**
-     * Loads the subscriptor instance given the subscriptor id
-     *
-     * @param int $id the subscriptor id
-     *
-     * @return Subscriptor the object instance
-     **/
-    public function read($id)
-    {
-        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE pk_pc_user = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->load($rs->fields);
-
-        return $this;
     }
 
     /**
@@ -193,6 +114,68 @@ class Subscriptor
     }
 
     /**
+     * Loads the subscriptor instance given the subscriptor id
+     *
+     * @param int $id the subscriptor id
+     *
+     * @return Subscriptor the object instance
+     **/
+    public function read($id)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM pc_users WHERE pk_pc_user = ?',
+                [ $id ]
+            );
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Creates a new subscriptor given an array of data
+     *
+     * @param array $data the array of data
+     *
+     * @return boolean true if the subscriptor was created
+     **/
+    public function create($data)
+    {
+        $data['status']       = (!isset($data['status']))? 0: $data['status'];
+        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        $data['firstname']    = (isset($data['firstname']))? $data['firstname']: "";
+        $data['lastname']     = (isset($data['lastname']))? $data['lastname']: "";
+
+        $conn = getService('dbal_connection');
+        try {
+            $rs = $conn->insert(
+                "pc_users",
+                [
+                  'email'        => $data['email'],
+                  'name'         => $data['name'],
+                  'firstname'    => $data['firstname'],
+                  'lastname'     => $data['lastname'],
+                  'status'       => $data['status'],
+                  'subscription' => $data['subscription'],
+                ]
+            );
+            $this->id = $conn->lastInsertId();
+
+            dispatchEventWithParams('newsletter_subscriptor.create', array('subscriptor' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Updates a subscriptor given an array of data
      *
      * @param array   $data      the array of data
@@ -202,101 +185,36 @@ class Subscriptor
      **/
     public function update($data, $isBackend = false)
     {
-        if ($isBackend) {
-            $sql = 'UPDATE ' . $this->tableName
-                 . ' SET `subscription`=?, `status`=?,'
-                 . ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
-        } else {
-            $sql = 'UPDATE '.$this->tableName. ' SET `subscription`= ?, `status`=?';
-        }
-
-        $sql .= ' WHERE pk_pc_user=' . intval($data['id']);
-
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
-        if (!$isBackend) {
-            $values = array($data['subscription'],$data['status']);
-        } else {
-            $values =   array(
-                $data['subscription'],
-                $data['status'],
-                $data['email'],
-                $data['name'],
-                $data['firstname'],
-                $data['lastname'],
-            );
-        }
-        $this->id = $data['id'];
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $newData = [
+            'subscription' => $data['subscription'],
+            'status'       => $data['status'],
+        ];
+        if ($isBackend) {
+            $newData = array_merge($newData, [
+                'email'        => $data['email'],
+                'name'         => $data['name'],
+                'firstname'    => $data['firstname'],
+                'lastname'     => $data['lastname'],
+            ]);
+        }
+
+        try {
+            $rs = getService('dbal_connection')->update(
+                "pc_users",
+                $newData,
+                [ 'pk_pc_user' => (int) $data['id'] ]
+            );
+
+            $this->id = $data['id'];
+            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
-
-        return true;
-    }
-
-    /**
-     * Fetches an user given an email
-     *
-     * @param string $email the user email
-     *
-     * @return Subscriptor the object instance
-     **/
-    public function getUserByEmail($email)
-    {
-        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE `email`=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
-
-        if ($rs === false) {
-            return null;
-        }
-
-        $this->load($rs->fields);
-
-        return $this;
-    }
-
-    /**
-     * Fetches all the users given an search criteria
-     *
-     * @param string $filter    the SQL WHERE clause
-     * @param int    $limit     how many users to fetch
-     * @param string $_order_by the ORDER BY clause
-     *
-     * @return boolean true if the subscriptor was created
-     **/
-    public function getUsers($filter = null, $limit = null, $_order_by = 'name')
-    {
-        $items = array();
-        $_where = '1=1';
-        if (!is_null($filter)) {
-            $_where = $filter;
-        }
-
-        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE ' . $_where;
-        $sql .= ' ORDER BY ' . $_order_by;
-
-        if (!empty($limit)) {
-            $sql .= ' LIMIT ' . $limit;
-        }
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $user = new Subscriptor();
-                $user->load($rs->fields);
-                $items[] = $user;
-
-                $rs->MoveNext();
-            }
-        } else {
-            return array();
-        }
-
-        return $items;
     }
 
     /**
@@ -308,16 +226,93 @@ class Subscriptor
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM ' . $this->tableName . ' WHERE pk_pc_user=?';
-        $values = array(intval($id));
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ((int) $id <= 0) {
             return false;
         }
 
-        dispatchEventWithParams('newsletter_subscriptor.delete', array('subscriptor' => $this));
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "pc_users",
+                [ 'pk_pc_user' => (int) $id ]
+            );
 
-        return true;
+            $this->id = $id;
+            dispatchEventWithParams('newsletter_subscriptor.delete', array('subscriptor' => $this));
+
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Fetches an user given an email
+     *
+     * @param string $email the user email
+     *
+     * @return Subscriptor the object instance
+     **/
+    public function getUserByEmail($email)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM pc_users WHERE email = ?",
+                [  $email ]
+            );
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Fetches all the users given an search criteria
+     *
+     * @param string $filter    the SQL WHERE clause
+     * @param int    $limit     how many users to fetch
+     * @param string $_order_by the ORDER BY clause
+     *
+     * @return boolean true if the subscriptor was created
+     **/
+    public function getUsers($filter = null, $limit = null, $orderBy = 'name')
+    {
+        $items = [];
+        $where = '';
+        if (!is_null($filter)) {
+            $where = ' WHERE '.$filter;
+        }
+
+        $sql = 'SELECT * FROM pc_users '.$where.' ORDER BY '.$orderBy;
+
+        if (!empty($limit)) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                $sql
+            );
+
+            foreach ($rs as $item) {
+                $user = new Subscriptor();
+                $user->load($item);
+                $items[] = $user;
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -330,16 +325,23 @@ class Subscriptor
      **/
     public function setStatus($id, $status)
     {
-        $sql = 'UPDATE ' . $this->tableName
-             . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
+        try {
+            $rs = getService('dbal_connection')->update(
+                "pc_users",
+                [
+                  'status' => $status
+                ],
+                [ 'pk_pc_user' => (int) $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            $this->id = $id;
+            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
-
-        return true;
     }
 
     /**
@@ -351,47 +353,17 @@ class Subscriptor
      **/
     public function existsEmail($email)
     {
-        $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(*) AS num FROM `pc_users` WHERE email = ?',
+                [ $email ]
+            );
 
-        if (!$rs) {
-            return;
-        }
-
-        return ($rs->fields['num'] > 0);
-    }
-
-    /**
-     * Multiple update property
-     *
-     * @param int|array $id
-     * @param string    $property
-     * @param mixed     $value
-     *
-     * @return boolean
-    */
-    public function mUpdateProperty($id, $property, $value = null)
-    {
-        $sql = 'UPDATE '.$this->tableName.' SET `'.$property.'`=? WHERE pk_pc_user=?';
-        if (!is_array($id)) {
-            $values = array($value, $id);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        } else {
-            $data = array();
-            foreach ($id as $item) {
-                $data[] = array($item['value'], $item['id']);
-            }
-
-            $rs = $GLOBALS['application']->conn->Execute($sql, $data);
-        }
-
-        // dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
-
-        if (!$rs) {
+            return (array_key_exists('num', $rs) && $rs['num'] > 0);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -403,16 +375,17 @@ class Subscriptor
      **/
     public function countUsers($where = null)
     {
-        $sql = 'SELECT count(*) FROM ' . $this->tableName;
-        if (!is_null($where)) {
+        $sql = 'SELECT count(*) as num FROM pc_users';
+        if (!empty($where)) {
             $sql .= ' WHERE ' . $where;
         }
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc($sql);
 
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
-        if ($rs === false) {
+            return $rs['num'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return 0;
         }
-
-        return $rs;
     }
 }
