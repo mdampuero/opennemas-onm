@@ -235,7 +235,7 @@
                 <span class="help m-l-5">{t}If possible, import all related contents for each content{/t}</span>
               </div>
             </div>
-            <div class="form-group" ng-init="filters = {json_encode($server['filters'])|clear_json}">
+            <div class="form-group"{if !empty($server['filters'])}ng-init="filters = {json_encode($server['filters'])|clear_json}"{/if}>
               <label class="form-label">{t}Filtering{/t}</label>
               <span class="help m-l-5">{t}Filter contents that matches one or more list of words{/t}</span>
               <div class="controls">
