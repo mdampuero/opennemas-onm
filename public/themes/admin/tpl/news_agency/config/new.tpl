@@ -115,7 +115,7 @@
                   <span class="input-group-addon">
                     https://
                   </span>
-                  <input class="form-control no-animate" id=instance" name="instance" ng-model="instance" required="required" type="text">
+                  <input class="form-control no-animate" id=instance" name="instance" ng-disabled="!type" ng-model="instance" required="required" type="text">
                   <span class="input-group-addon">
                     .opennemas.com/ws/agency
                   </span>
