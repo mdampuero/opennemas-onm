@@ -83,8 +83,12 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
             $output []= '<meta property="og:image:width" content="'.$photoFront->width.'"/>';
             $output []= '<meta property="og:image:height" content="'.$photoFront->height.'"/>';
-        } elseif (s::get('site_logo')) {
+        } elseif (array_key_exists('default_image', $params)) {
             // Default
+            $imageUrl = $params['default_image'];
+            $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+        } elseif (s::get('site_logo')) {
+            // Logo
             $imageUrl = SITE_URL.'media'.DS.MEDIA_DIR.DS.'sections'.DS.s::get('site_logo');
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         }
