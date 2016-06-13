@@ -95,37 +95,23 @@ class Book extends Content
     }
 
     /**
-     * Creates a new book given an array of information
+     * Overloads the object properties with an array of the new ones
      *
-     * @param array $data an array that contains the book information
+     * @param array $properties the list of properties to load
      *
-     * @return int the book id
-     * @return boolean false if the book was not created
+     * @return void
      **/
-    public function create($data)
+    public function load($properties)
     {
-        parent::create($data);
+        parent::load($properties);
 
-        try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "INSERT INTO books (`pk_book`, `author`, `cover_id`, `editorial`)"
-                ." VALUES (?,?,?,?)",
-                [
-                    $this->id,
-                    $data['author'],
-                    $data['cover_id'],
-                    $data['editorial'],
-                ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return false;
+        if (array_key_exists('pk_book', $properties)) {
+            $this->pk_book   = (int) $properties['pk_book'];
         }
-
-        return $this->id;
+        if (array_key_exists('cover_id', $properties)) {
+            $this->cover_id   = (int) $properties['cover_id'];
+            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
+        }
     }
 
     /**
@@ -150,32 +136,47 @@ class Book extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
-     * Overloads the object properties with an array of the new ones
+     * Creates a new book given an array of information
      *
-     * @param array $properties the list of properties to load
+     * @param array $data an array that contains the book information
      *
-     * @return void
+     * @return int the book id
+     * @return boolean false if the book was not created
      **/
-    public function load($properties)
+    public function create($data)
     {
-        parent::load($properties);
+        parent::create($data);
 
-        if (array_key_exists('pk_book', $properties)) {
-            $this->pk_book   = (int) $properties['pk_book'];
-        }
-        if (array_key_exists('cover_id', $properties)) {
-            $this->cover_id   = (int) $properties['cover_id'];
-            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'books',
+                [
+                    'pk_book'   => (int) $this->id,
+                    'author'    => $data['author'],
+                    'cover_id'  => $data['cover_id'],
+                    'editorial' => $data['editorial'],
+                ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            return $this->id;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -191,24 +192,28 @@ class Book extends Content
         parent::update($data);
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "UPDATE books SET `author`=?, `cover_id`=?, `editorial`=? WHERE pk_book=?",
+            $rs = getService('dbal_connection')->update(
+                'books',
                 [
-                    $data['author'],
-                    $data['cover_id'],
-                    $data['editorial'],
-                    intval($data['id']),
-                ]
+                    'author'    => $data['author'],
+                    'cover_id'  => $data['cover_id'],
+                    'editorial' => $data['editorial'],
+                ],
+                [ 'pk_book' => (int) $data['id'] ]
             );
 
             if (!$rs) {
                 return false;
             }
+
+            $this->load($data);
+
+            return $this;
+
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return $this->id;
     }
 
     /**
@@ -218,23 +223,27 @@ class Book extends Content
      *
      * @return boolean  true if the book was removed
      **/
-    public function remove($id)
+    public function remove($id = null)
     {
-        parent::remove($this->id);
+        if (is_null($id)) {
+            $id = $this->id;
+        }
+        parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                'DELETE FROM books WHERE pk_book=?',
-                [ $this->id ]
+            $rs = getService('dbal_connection')->delete(
+                'books',
+                [ 'pk_book' => $id ]
             );
 
             if (!$rs) {
                 return false;
             }
+
+            return true;
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 }

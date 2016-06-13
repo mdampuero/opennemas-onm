@@ -69,7 +69,9 @@
                 messenger.post(response.messages);
               }
 
-              $scope.list($scope.route);
+              for (var i = 0; i < contents.length; i++) {
+                $scope.imported.push(contents[i].urn);
+              }
             }
           });
         };

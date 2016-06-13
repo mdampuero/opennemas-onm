@@ -93,8 +93,6 @@ class Frontpage
         $data['content_status'] = 1;
         $data['position']       = 1;
 
-        parent::create($data);
-
         if (is_null($data['category'])) {
             return false;
         }

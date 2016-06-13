@@ -15,8 +15,8 @@
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$location', '$scope', 'http', 'messenger',
-      function ($location, $scope, http, messenger) {
+      '$location', '$routeParams', '$scope', 'http', 'messenger',
+      function ($location, $routeParams, $scope, http, messenger) {
         /**
          * @memberOf NotificationCtrl
          *
@@ -41,7 +41,7 @@
             es: '',
             gl: ''
           },
-          instances: [],
+          target: [],
           fixed: '0',
           style: {},
           title: {
@@ -55,6 +55,32 @@
           en: 'English',
           es: 'Spanish',
           gl: 'Galician'
+        };
+
+        /**
+         * @function autocomplete
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Suggest a list of instance basing on the current query.
+         *
+         * @return {Array} A list of targets
+         */
+        $scope.autocomplete = function(query) {
+          var route = {
+              name: 'manager_ws_notification_autocomplete',
+              params: { query: query }
+          }; 
+
+          return http.get(route).then(function(response) {
+              var tags = [];
+
+              for (var i = 0; i < response.data.target.length; i++) {
+                tags.push(response.data.target[i]);
+              }
+
+              return tags;
+            });
         };
 
         /**
@@ -96,30 +122,6 @@
         };
 
         /**
-         * @function getInstances
-         * @memberOf NotificationCtrl
-         *
-         * @description
-         *   Returns a list of instances by query.
-         *
-         * @param {String} query The instance internal name.
-         *
-         * @return {Array} The list of instances
-         */
-        $scope.getInstances = function(query) {
-          var tags = [];
-
-          for (var i = 0; i < $scope.extra.instances.length; i++) {
-            var instance = $scope.extra.instances[i];
-            if (!query || instance.name.indexOf(query.toLowerCase()) !== -1) {
-              tags.push(instance);
-            }
-          }
-
-          return tags;
-        };
-
-        /**
          * @function save
          * @memberOf NotificationCtrl
          *
@@ -131,8 +133,8 @@
 
           var data = angular.copy($scope.notification);
 
-          if (data.instances) {
-            data.instances = data.instances.map(function(a) {
+          if (data.target) {
+            data.target = data.target.map(function(a) {
               return a.id;
             });
           }
@@ -173,8 +175,8 @@
 
           var data = angular.copy($scope.notification);
 
-          if (data.instances) {
-            data.instances = data.instances.map(function(a) {
+          if (data.target) {
+            data.target = data.target.map(function(a) {
               return a.id;
             });
           }
@@ -210,6 +212,23 @@
             function(response) {
               $scope.extra        = response.data.extra;
               $scope.notification = response.data.notification;
+
+              var target = [];
+
+              for (var i = 0; i < $scope.notification.target.length; i++) {
+                var id   = $scope.notification.target[i];
+                var name = id;
+
+                if (name === 'all') {
+                  name = $scope.extra.target.filter(function (e) {
+                    return e.id === id;
+                  })[0].name;
+                }
+
+                target.push({ id: id, name: name });
+              }
+
+              $scope.notification.target = target;
             }
           );
         } else {

@@ -177,6 +177,11 @@ class BooksController extends Controller
             $book->setPosition($data['position']);
             $book = $book->read($id);
 
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                _('Book created successfully.')
+            );
+
             return $this->render('book/new.tpl', array('book' => $book));
         } else {
             $this->get('session')->getFlashBag()->add(

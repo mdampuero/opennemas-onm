@@ -718,13 +718,13 @@ class OpinionsController extends Controller
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
-                $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
+                $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
                 $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 1]] ];
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
-                $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
+                $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                 $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 2]] ];
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);

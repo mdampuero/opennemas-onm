@@ -92,12 +92,14 @@ class MenusController extends ContentController
 
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => _('Item deleted successfully')
+                    'message' => _('Item deleted successfully'),
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $messages[] = array(
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
+                    'type'    => 'error'
                 );
             }
         } else {

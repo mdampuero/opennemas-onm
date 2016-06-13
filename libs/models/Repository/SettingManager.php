@@ -12,6 +12,7 @@
 namespace Repository;
 
 use Repository\BaseManager;
+use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 
 /**
@@ -58,19 +59,6 @@ class SettingManager extends BaseManager
         'time_zone'
     ];
 
-    /*
-     * Initializes the InstanceManager.
-     *
-     * @param Connection     $dbConn The custom DBAL wrapper.
-     * @param CacheInterface $cache  The cache instance.
-     */
-    public function __construct($conn, CacheInterface $cache, $prefix)
-    {
-        $this->conn        = $conn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $prefix;
-    }
-
     /**
      * Sets a new database name and cache prefix to use in the service.
      *
@@ -79,7 +67,7 @@ class SettingManager extends BaseManager
     public function setConfig($config)
     {
         if (array_key_exists('database', $config)) {
-            $this->conn->selectDatabase($config['database']);
+            $this->dbConn->selectDatabase($config['database']);
         }
 
         if (array_key_exists('cache_prefix', $config)) {
@@ -157,7 +145,7 @@ class SettingManager extends BaseManager
             $sql = "SELECT name, value FROM `settings` WHERE name IN ('"
                 . implode("', '", $missed) . "')";
 
-            $rs = $this->conn->fetchAll($sql);
+            $rs = $this->dbConn->fetchAll($sql);
             foreach ($rs as $setting) {
                 $value = unserialize($setting['value']);
                 $results[$setting['name']] = $value;
@@ -211,7 +199,7 @@ class SettingManager extends BaseManager
                 ."VALUES ('$name', '$serialized') "
                 ."ON DUPLICATE KEY UPDATE value = '$serialized'";
 
-        $rs = $this->conn->executeQuery($sql);
+        $rs = $this->dbConn->executeUpdate($sql);
 
         if (!$rs) {
             return false;
@@ -273,7 +261,7 @@ class SettingManager extends BaseManager
         }
 
         // Second search in database
-        $rs = $this->conn->fetchAll(
+        $rs = $this->dbConn->fetchAll(
             "SELECT * FROM `settings` WHERE name IN ('"
             . implode("', '", $missed) . "')"
         );

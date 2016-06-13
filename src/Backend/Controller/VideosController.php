@@ -127,130 +127,7 @@ class VideosController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $requestPost  = $request->request;
-
-            $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
-            $page     = $requestPost->getDigits('page', 1);
-            $category = $requestPost->getDigits('category');
-
-            if ($type === 'file') {
-                // Check if the video file entry was completed
-                if (!(isset($_FILES)
-                    && array_key_exists('video_file', $_FILES)
-                    && array_key_exists('name', $_FILES["video_file"])
-                    && !empty($_FILES["video_file"]["name"]))
-                ) {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        _(
-                            'There was a problem while uploading the file. '
-                            .'Please check if you have completed all the form fields.'
-                        )
-                    );
-
-                    return $this->redirect(
-                        $this->generateUrl('admin_videos_create', array('type' => $type))
-                    );
-                }
-
-                $videoFileData = array(
-                    'file_type'      => $_FILES["video_file"]["type"],
-                    'file_path'      => $_FILES["video_file"]["tmp_name"],
-                    'category'       => $category,
-                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                    'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->get('description', ''),
-                    'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-                    'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
-                    'params'         => $request->request->get('params', []),
-                );
-
-                try {
-                    $video = new \Video();
-                    $videoId = $video->createFromLocalFile($videoFileData);
-                } catch (\Exception $e) {
-                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
-
-                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
-                }
-            } elseif ($type == 'external' || $type == 'script') {
-                $information = $requestPost->get('infor');
-                $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
-
-                $video = new \Video();
-                $videoData = array(
-                    'category'       => $category,
-                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                    'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $requestPost->get('description', ''),
-                    'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-                    'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
-                    'information'    => $information,
-                    'body'           => $requestPost->filter('body', ''),
-                    'video_url'      => $requestPost->filter('video_url', ''),
-                );
-
-                try {
-                    $videoId = $video->create($videoData);
-
-
-                    // TODO: remove cache cleaning actions
-                    $cacheManager = $this->get('template_cache_manager');
-                    $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-                    $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-                    $cacheManager->delete('home|1');
-                } catch (\Exception $e) {
-                    $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
-
-                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
-                }
-            } elseif ($type == 'web-source') {
-                if (!empty($_POST['information'])) {
-                    $video = new \Video();
-                    $_POST['information'] = json_decode($_POST['information'], true);
-                    try {
-                        $videoId = $video->create($_POST);
-
-                        // Clean cache album home and frontpage for category
-                        // TODO: remove cache cleaning actions
-                        $cacheManager = $this->get('template_cache_manager');
-                        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-                        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-                        $cacheManager->delete('home|1');
-                    } catch (\Exception $e) {
-                        $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
-
-                        return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
-                    }
-                } else {
-                    $this->get('session')->getFlashBag()->add(
-                        'notice',
-                        _('There was an error while uploading the form, not all the required data was sent.')
-                    );
-
-                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
-                }
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    _('There was an error while uploading the form, the video type is not specified.')
-                );
-
-                return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
-            }
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_video_show',
-                    array(
-                        'id' => $videoId
-                    )
-                )
-            );
-        } else {
+        if ('POST' !== $request->getMethod()) {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
@@ -271,6 +148,54 @@ class VideosController extends Controller
                 );
             }
         }
+
+        $requestPost  = $request->request;
+
+        $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
+        $page     = $requestPost->getDigits('page', 1);
+        $category = $requestPost->getDigits('category');
+
+        $videoData = [
+            'category'       => (int) $category,
+            'content_status' => (int) $requestPost->getDigits('content_status', 0),
+            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
+            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'           => $requestPost->filter('body', ''),
+            'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'description'    => $requestPost->get('description', ''),
+            'fk_author'      => $requestPost->getDigits('fk_author', 0),
+            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+            'information'    => json_decode($requestPost->get('information', ''), true),
+            'video_url'      => $requestPost->filter('video_url', ''),
+            'params'         => $request->request->get('params', []),
+        ];
+
+        if ($type == 'external' || $type == 'script') {
+            $videoData['information'] = $requestPost->get('infor', '');
+            $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
+        }
+
+        if ($type == 'web-source' && empty($videoData['information'])) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('There was an error while uploading the form, not all the required data was sent.')
+            );
+
+            return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+        }
+
+        try {
+            $video   = new \Video();
+            $videoId = $video->create($videoData);
+
+            return $this->redirect(
+                $this->generateUrl('admin_video_show', ['id' => $videoId])
+            );
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
+
+            return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+        }
     }
 
     /**
@@ -288,68 +213,62 @@ class VideosController extends Controller
         $id = $request->query->getDigits('id');
 
         $requestPost  = $request->request;
-        $continue = $requestPost->filter('continue', false, FILTER_SANITIZE_STRING);
         $category = $requestPost->getDigits('category');
         $video = new \Video($id);
 
-        if ($video->id != null) {
-            $_POST['information'] = json_decode($_POST['information'], true);
-
-            if (!Acl::isAdmin()
-                && !Acl::check('CONTENT_OTHER_UPDATE')
-                && !$video->isOwner($_SESSION['userid'])
-            ) {
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    _("You can't modify this video because you don't have enought privileges.")
-                );
-            } else {
-                if ($video->author_name == 'external' || $video->author_name == 'script') {
-                    $information = $_POST['infor'];
-                    $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
-
-                    $videoData = array(
-                        'id'             => $id,
-                        'category'       => $category,
-                        'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                        'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                        'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-                        'description'    => $requestPost->get('description', ''),
-                        'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-                        'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
-                        'information'    => $information,
-                        'body'           => $requestPost->filter('body', ''),
-                        'video_url'      => $requestPost->filter('video_url', ''),
-                        'starttime'      => $video->starttime,
-                        'params'         => $request->request->get('params', []),
-                    );
-
-                    $video->update($videoData);
-                } else {
-                    $_POST['starttime'] = $video->starttime;
-                    $_POST['id']        = $id;
-                    $_POST['params']    = $request->request->get('params');
-
-                    $video->update($_POST);
-                }
-
-                $this->get('session')->getFlashBag()->add('success', _("Video updated successfully."));
-            }
-
-            // Clean cache home and frontpage for category
-            // TODO: remove cache cleaning actions
-            $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-            $cacheManager->delete('home|1');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_video_show',
-                    array('id' => $video->id)
-                )
+        if (is_null($video->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the video with the id "%d"'), $id)
             );
+
+            return $this->redirect($this->generateUrl('admin_videos'));
         }
+
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && !$video->isOwner($_SESSION['userid'])
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _("You can't modify this video because you don't have enought privileges.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_videos'));
+        }
+
+        $videoData = [
+            'id'             => (int) $id,
+            'category'       => (int) $category,
+            'content_status' => (int) $requestPost->getDigits('content_status', 0),
+            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
+            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'body'           => $requestPost->filter('body', ''),
+            'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'description'    => $requestPost->get('description', ''),
+            'starttime'      => $video->starttime,
+            'fk_author'      => $requestPost->getDigits('fk_author', 0),
+            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+            'information'    => json_decode($requestPost->get('information', ''), true),
+            'video_url'      => $requestPost->filter('video_url', ''),
+            'params'         => $request->request->get('params', []),
+        ];
+
+        if ($video->author_name == 'external' || $video->author_name == 'script') {
+            $videoData['information'] = $requestPost->get('infor', '');
+            $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
+        }
+
+        $video->update($videoData);
+
+        $this->get('session')->getFlashBag()->add('success', _("Video updated successfully."));
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_video_show',
+                array('id' => $video->id)
+            )
+        );
     }
 
     /**
@@ -416,6 +335,10 @@ class VideosController extends Controller
         $id = $request->query->getDigits('id', null);
 
         $video = $this->get('entity_repository')->find('Video', $id);
+
+        if (is_object($video->information)) {
+            $video->information = get_object_vars($video->information);
+        }
 
         if (is_null($video->id)) {
             $this->get('session')->getFlashBag()->add(

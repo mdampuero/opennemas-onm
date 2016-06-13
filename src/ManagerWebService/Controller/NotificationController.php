@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,6 +19,51 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NotificationController extends Controller
 {
+    /**
+     * Returns a list of targets basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $target = [];
+        $query  = strtolower($request->query->get('query'));
+
+        if (empty($query)
+            || strpos(strtolower(_('All')), strtolower($query)) !== false
+        ) {
+            $target[] = [ 'id' => 'all', 'name' => _('All') ];
+        }
+
+        if (empty($query) || strpos('manager', strtolower($query)) !== false) {
+            $target[] = [ 'id' => 'manager', 'name' => 'manager' ];
+        }
+
+        $oql = 'internal_name ~ "%s" order by internal_name asc limit 10';
+        $oql = sprintf($oql, $query);
+
+        $instances = $this->get('instance_manager')->findBy($oql);
+
+        foreach ($instances as $instance) {
+            $target[] = [
+                'id'   => $instance->internal_name,
+                'name' => $instance->internal_name
+            ];
+        }
+
+        $themes = $this->get('orm.loader')->getPlugins();
+
+        foreach ($themes as $theme) {
+            if (empty($query) || strpos($theme->uuid, strtolower($query)) !== false) {
+                $target[] = [ 'id' => $theme->uuid, 'name' => $theme->uuid ];
+            }
+        }
+
+        return new JsonResponse([ 'target' => $target ]);
+    }
+
     /**
      * Deletes a notification.
      *
@@ -100,32 +145,11 @@ class NotificationController extends Controller
 
         $ids = [];
         foreach ($notifications as &$notification) {
-            if (empty($notification->instances)) {
-                $notification->instances = [];
+            if (empty($notification->target)) {
+                $notification->target = [];
             }
 
-            $ids = array_merge($ids, $notification->instances);
             $notification = $converter->responsify($notification->getData());
-        }
-
-        $ids       = array_unique(array_diff($ids, [ -1, 0 ]));
-        $instances = [];
-        if (!empty($ids)) {
-            $instances = $this->get('instance_manager')->findBy([
-                'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-            ]);
-        }
-
-        $extra['instances'] = [
-            '-1' => [ 'name' => _('Manager'), 'value' => -1 ],
-            '0'  => [ 'name' => _('All'), 'value' => 0 ]
-        ];
-
-        foreach ($instances as $instance) {
-            $extra['instances'][$instance->id] = [
-                'name'  => $instance->internal_name,
-                'value' => $instance->id,
-            ];
         }
 
         return new JsonResponse([
@@ -270,17 +294,6 @@ class NotificationController extends Controller
         $extra = $this->getTemplateParams();
         $im    = $this->get('instance_manager');
 
-        $instances = [];
-        foreach ($notification->instances as $id) {
-            if ($id == 0) {
-                $instances[] = [ 'name' => _('All'), 'id' => $id ];
-            } elseif ($id == -1) {
-                $instances[] = [ 'name' => 'Manager', 'id' => $id ];
-            } else {
-                $instances[] = [ 'name' => $im->find($id)->internal_name, 'id' => $id ];
-            }
-        }
-
         $notification->instances = $instances;
         $notification = $converter->responsify($notification->getData());
 
@@ -335,11 +348,9 @@ class NotificationController extends Controller
             ]
         ];
 
-        $instances = $this->get('instance_manager')->findBy([]);
-
-        $params['instances'] = [
-            [ 'name' => 'Manager', 'id' => -1 ],
-            [ 'name' => _('All'), 'id' => 0 ]
+        $params['target'] = [
+            [ 'id' => 'manager', 'name' => 'manager' ],
+            [ 'id' => 'all', 'name' => _('All') ]
         ];
 
         $params['languages'] = [
@@ -348,10 +359,12 @@ class NotificationController extends Controller
             'gl' => _('Galician'),
         ];
 
-        foreach ($instances as $instance) {
-            $params['instances'][] = [
-                'name'  => $instance->internal_name,
-                'id' => $instance->id
+        $themes = $this->get('orm.manager')->getRepository('Extension', 'file')->findBy();
+
+        foreach ($themes as $theme) {
+            $params['target'][] = [
+                'id'   => $theme->uuid,
+                'name' => $theme->uuid
             ];
         }
 

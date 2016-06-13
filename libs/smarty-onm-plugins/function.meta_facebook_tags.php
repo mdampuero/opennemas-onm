@@ -87,6 +87,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             // Default
             $imageUrl = $params['default_image'];
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
+        } elseif (s::get('site_logo')) {
+            // Logo
+            $imageUrl = SITE_URL.'media'.DS.MEDIA_DIR.DS.'sections'.DS.s::get('site_logo');
+            $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         }
     }
 

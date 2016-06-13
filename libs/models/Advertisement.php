@@ -149,60 +149,31 @@ class Advertisement extends Content
     }
 
     /**
-     * Create and save into database the ad instance from one array
+     * Load object properties
      *
-     * @param array $data the needed data for create a new ad.
+     * @param array $properties
      *
-     * @return Advertisement
+     * @return void
      **/
-    public function create($data)
+    public function load($properties)
     {
-        parent::create($data);
+        parent::load($properties);
 
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
+        // FIXME: review that this property is not used ->img
+        $this->img = $this->path;
+
+        // Initialize the categories array of this advertisement
+        if (!is_array($this->fk_content_categories)) {
+            $this->fk_content_categories = explode(',', $this->fk_content_categories);
         }
 
-        if (!isset($data['with_script'])) {
-            $data['with_script'] = 0;
-        }
-
-        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
-        $data['type_medida'] =
-            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
-
-        try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "INSERT INTO advertisements"
-                ."(`pk_advertisement`, `type_advertisement`,"
-                ."`fk_content_categories`, `path`, `url`, `type_medida`,"
-                ."`num_clic`, `num_clic_count`, `num_view`, `with_script`,"
-                ."`script`, `overlap`, `timeout`)"
-                ."VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [
-                    $this->id,
-                    (int) $data['type_advertisement'],
-                    $data['categories'],
-                    $data['img'],
-                    $data['url'],
-                    $data['type_medida'],
-                    (int) $data['num_clic'],
-                    0, // num_clic_count
-                    (int) $data['num_view'],
-                    (int) $data['with_script'],
-                    $data['script'],
-                    (int) $data['overlap'],
-                    (int) $data['timeout'],
-                ]
-            );
-
-            if (!$rs) {
-                return false;
+        // Check if it contains a flash element
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
             }
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
         }
 
         return $this;
@@ -250,34 +221,57 @@ class Advertisement extends Content
     }
 
     /**
-     * Load object properties
+     * Create and save into database the ad instance from one array
      *
-     * @param array $properties
+     * @param array $data the needed data for create a new ad.
      *
-     * @return void
+     * @return Advertisement
      **/
-    public function load($properties)
+    public function create($data)
     {
-        parent::load($properties);
+        parent::create($data);
 
-        // FIXME: review that this property is not used ->img
-        $this->img = $this->path;
-
-        // Initialize the categories array of this advertisement
-        if (!is_array($this->fk_content_categories)) {
-            $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        if (!empty($data['script'])) {
+            $data['script'] = base64_encode($data['script']);
         }
 
-        // Check if it contains a flash element
-        $this->is_flash = 0;
-        if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
-            if (!empty($img) && $img->type_img == "swf") {
-                $this->is_flash = 1;
-            }
+        if (!isset($data['with_script'])) {
+            $data['with_script'] = 0;
         }
 
-        return $this;
+        $data['pk_advertisement'] = $data['id'] = $this->id;
+        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
+        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
+        $data['type_medida'] =
+            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'advertisements',
+                [
+                    'pk_advertisement'      => $data['pk_advertisement'],
+                    'type_advertisement'    => (int) $data['type_advertisement'],
+                    'fk_content_categories' => $data['categories'],
+                    'path'                  => $data['img'],
+                    'url'                   => $data['url'],
+                    'type_medida'           => $data['type_medida'],
+                    'num_clic'              => (int) $data['num_clic'],
+                    'num_clic_count'        => 0, // num_clic_count
+                    'num_view'              => (int) $data['num_view'],
+                    'with_script'           => (int) $data['with_script'],
+                    'script'                => $data['script'],
+                    'overlap'               => (int) $data['overlap'],
+                    'timeout'               => (int) $data['timeout'],
+                ]
+            );
+
+            // $this->load($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -301,35 +295,31 @@ class Advertisement extends Content
         $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "UPDATE advertisements SET `type_advertisement`=?, `fk_content_categories`=?, `path`=?, `url`=?, "
-                ."`type_medida`=?, `num_clic`=?, `num_view`=?,`with_script`=?, `script`=?, "
-                ."`overlap`=?, `timeout`=? WHERE pk_advertisement=?",
+            $rs = getService('dbal_connection')->update(
+                'advertisements',
                 [
-                    (int) $data['type_advertisement'],
-                    $data['categories'],
-                    $data['img'],
-                    $data['url'],
-                    $data['type_medida'],
-                    (int) $data['num_clic'],
-                    (int) $data['num_view'],
-                    (int) $data['with_script'],
-                    $data['script'],
-                    (int) $data['overlap'],
-                    (int) $data['timeout'],
-                    (int) $data['id']
-                ]
+                    'type_advertisement'    => (int) $data['type_advertisement'],
+                    'fk_content_categories' => $data['categories'],
+                    'path'                  => $data['img'],
+                    'url'                   => $data['url'],
+                    'type_medida'           => $data['type_medida'],
+                    'num_clic'              => (int) $data['num_clic'],
+                    'num_view'              => (int) $data['num_view'],
+                    'with_script'           => (int) $data['with_script'],
+                    'script'                => $data['script'],
+                    'overlap'               => (int) $data['overlap'],
+                    'timeout'               => (int) $data['timeout'],
+                ],
+                [ 'pk_advertisement' => (int) $data['id'] ]
             );
 
-            if (!$rs) {
-                return false;
-            }
+            $this->load($data);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        return $this;
     }
 
     /**
@@ -342,14 +332,15 @@ class Advertisement extends Content
      **/
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                'DELETE FROM advertisements WHERE pk_advertisement = ?',
-                [ $id ]
+            $rs = getService('dbal_connection')->delete(
+                "advertisements", [ 'pk_advertisement' => $id ]
             );
 
             if (!$rs) {
@@ -373,7 +364,9 @@ class Advertisement extends Content
     public function getUrl($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         // Try to minimize the database overload if this object was preloaded
         // or doesn't fit the rules
@@ -448,21 +441,24 @@ class Advertisement extends Content
 
         try {
             // Fetch data for the ad from the database
-            $rs = getService('dbal_connection')->fetchAssoc(
+            $rs = getService('dbal_connection')->executeUpdate(
                 'UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?',
                 [ $id ]
             );
 
             if (!$rs) {
-                return null;
+                return false;
             }
-        } catch (\Exception $e) {
-            return null;
-        }
 
-        // Clean entity repository cache
-        $ad = new \Advertisement($id);
-        dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
+            // Clean entity repository cache
+            $ad = new \Advertisement($id);
+            dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -523,12 +519,16 @@ class Advertisement extends Content
                 $catsSQL = 'AND advertisements.fk_content_categories=0 ';
             }
 
-            $sql = "SELECT pk_advertisement as id FROM advertisements "
+            try {
+                $sql = "SELECT pk_advertisement as id FROM advertisements "
                   ."WHERE advertisements.type_advertisement IN (".$types.") "
                   .$catsSQL.' ORDER BY id';
 
-            $conn = getService('orm.manager')->getConnection('instance');
-            $result = $conn->fetchAll($sql);
+                $conn = getService('dbal_connection');
+                $result = $conn->fetchAll($sql);
+            } catch (\Exception $e) {
+                return $banners;
+            }
 
             if (count($result) <= 0) {
                 return $banners;
@@ -790,42 +790,6 @@ class Advertisement extends Content
 
         $output = $params['beforeHTML'].$content.$params['afterHTML'];
 
-        // Increase number of views for this advertisement
-        // $this->setNumViews($this->pk_advertisement);
-
         return $output;
-    }
-
-    /**
-     * Fire this event when publish an advertisement and unpublished others
-     * banners where type_advertisement is equals
-     */
-    public function onPublish()
-    {
-        if (!empty($this->content_status) && (intval($this->content_status)>0)) {
-            $sql = 'UPDATE `contents` SET `content_status`=0 '
-                 . 'WHERE pk_content IN (
-                    SELECT `pk_advertisement` FROM (
-                        SELECT `advertisements`.*
-                        FROM `advertisements`, `contents`,
-                            `contents_categories`
-                        WHERE `advertisements`.`type_advertisement`=?
-                        AND `advertisements`.`pk_advertisement`<>?
-                        AND `contents_categories`.`pk_fk_content_category`=?
-                        AND `contents`.`pk_content`='
-                            .'`contents_categories`.`pk_fk_content`
-                        AND `contents`.`pk_content`='
-                            .'`advertisements`.`pk_advertisement`
-                    ) AS temp )';
-            $values = array(
-                $this->type_advertisement,
-                $this->type_advertisement,
-                $this->type_advertisement,
-            );
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                return;
-            }
-        }
     }
 }

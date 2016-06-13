@@ -76,34 +76,30 @@ class Order
      **/
     public function create($data)
     {
-        $data['params'] = serialize($data['params']);
+        try {
+            $data['params'] = serialize($data['params']);
+            $data['created'] = $data['created']->format('Y-m-d H:i:s');
 
-        $data['created'] = $data['created']->format('Y-m-d H:i:s');
+            $rs = getService('dbal_connection')->insert(
+                "orders",
+                [
+                    'user_id'        => $data['user_id'],
+                    'content_id'     => $data['content_id'],
+                    'created'        => $data['created'],
+                    'payment_id'     => $data['payment_id'],
+                    'payment_status' => $data['payment_status'],
+                    'payment_amount' => $data['payment_amount'],
+                    'payment_method' => $data['payment_method'],
+                    'type'           => $data['type'],
+                    'params'         => $data['params'],
+                ]
+            );
 
-        $queryData = array(
-            $data['user_id'],
-            $data['content_id'],
-            $data['created'],
-            $data['payment_id'],
-            $data['payment_status'],
-            $data['payment_amount'],
-            $data['payment_method'],
-            $data['type'],
-            $data['params'],
-        );
-
-        $sql = 'INSERT INTO orders
-                    (`user_id`, `content_id`, `created`, `payment_id`,
-                    `payment_status`, `payment_amount`, `payment_method`,
-                    `type`, `params`)
-                VALUES (?,?,?,?,?,?,?,?,?)';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $queryData);
-
-        if (!$rs) {
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return $this;
     }
 
     /**
@@ -142,45 +138,45 @@ class Order
         if ($config['limit'] > 0) {
             $limit = 'LIMIT '.$config['limit'];
         }
-
-        $sql = "SELECT * FROM orders $where $order $limit";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return array();
-        }
-
-        $orders = array();
-        while (!$rs->EOF) {
-            $order = new \Order();
-
-            $order->id             = $rs->fields['id'];
-            $order->user_id        = $rs->fields['user_id'];
-            $order->content_id     = $rs->fields['content_id'];
-            $order->created        = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $rs->fields['created'],
-                new \DateTimeZone('UTC')
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM orders $where $order $limit"
             );
-            $order->payment_id     = $rs->fields['payment_id'];
-            $order->payment_status = $rs->fields['payment_status'];
-            $order->payment_amount = $rs->fields['payment_amount'];
-            $order->payment_method = $rs->fields['payment_method'];
-            $order->type           = $rs->fields['type'];
-            $order->params         = @unserialize($rs->fields['params']);
-            $order->getUser();
 
-            // Overload user info to order obj for ordering propouses
-            $order->username = $order->user->username;
-            $order->name     = $order->user->name;
+            if (!$rs) {
+                return [];
+            }
+            $orders = [];
+            foreach ($rs as $orderData) {
+                $order = new \Order();
 
-            $orders []= $order;
+                $order->id             = $orderData['id'];
+                $order->user_id        = $orderData['user_id'];
+                $order->content_id     = $orderData['content_id'];
+                $order->created        = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $orderData['created'],
+                    new \DateTimeZone('UTC')
+                );
+                $order->payment_id     = $orderData['payment_id'];
+                $order->payment_status = $orderData['payment_status'];
+                $order->payment_amount = $orderData['payment_amount'];
+                $order->payment_method = $orderData['payment_method'];
+                $order->type           = $orderData['type'];
+                $order->params         = @unserialize($orderData['params']);
+                $order->getUser();
 
-            $rs->MoveNext();
+                // Overload user info to order obj for ordering propouses
+                $order->username = $order->user->username;
+                $order->name     = $order->user->name;
+
+                $orders []= $order;
+            }
+            return $orders;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $orders;
     }
 
     /**
@@ -190,19 +186,24 @@ class Order
      **/
     public static function count($filter = '')
     {
-        $where = '';
-        if (!empty($filter)) {
-            $where = 'WHERE '.$filter;
+        try {
+            $where = '';
+            if (!empty($filter)) {
+                $where = 'WHERE '.$filter;
+            }
+
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT count(id) as count FROM orders $where"
+            );
+
+            if (!$rs) {
+                return 0;
+            }
+
+            return $rs['count'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $sql = "SELECT count(id) as count FROM orders $where";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return 0;
-        }
-
-        return $rs->fields['count'];
     }
 }

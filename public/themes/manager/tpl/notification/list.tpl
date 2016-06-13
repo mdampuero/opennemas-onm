@@ -96,9 +96,9 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
-            <input id="checkbox-instance" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
-            <label for="checkbox-instance">
-              {t}Instances{/t}
+            <input id="checkbox-target" checklist-model="columns.selected" checklist-value="'target'" type="checkbox">
+            <label for="checkbox-target">
+              {t}Target{/t}
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
@@ -160,8 +160,8 @@
               <th ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
               </th>
-              <th class="text-center" ng-show="isColumnEnabled('instances')" width="130">
-                {t}Instance{/t}
+              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="130">
+                {t}Target{/t}
               </th>
               <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')">
                 l10n
@@ -174,15 +174,15 @@
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="100">
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="100">
+              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="85">
                 {t}Forced{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="100">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="85">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
@@ -210,9 +210,9 @@
                   </button>
                 </div>
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <div ng-repeat="instance in item.instances track by $index">
-                  [% instance === 'all' ? '{t}All{/t}' : instance %]
+              <td class="text-center" ng-show="isColumnEnabled('target')">
+                <div ng-repeat="target in item.target track by $index">
+                  [% target === 'all' ? '{t}All{/t}' : target %]
                 </div>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('l10n')">

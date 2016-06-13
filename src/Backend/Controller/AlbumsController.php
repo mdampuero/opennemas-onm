@@ -122,37 +122,7 @@ class AlbumsController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $album = new \Album();
-            $album->create($request->request->all());
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Album created successfully')
-            );
-
-            // Get category name
-            $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->getName($request->request->get('category'));
-
-            // TODO: remove cache cleaning actions
-            // Clean cache album home and frontpage for category
-            $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
-            $cacheManager->delete('home|1');
-
-            // Return user to list if has no update acl
-            if (Acl::check('ALBUM_UPDATE')) {
-                return $this->redirect(
-                    $this->generateUrl('admin_album_show', array('id' => $album->id))
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_albums')
-                );
-            }
-        } else {
+        if ('POST' !== $request->getMethod()) {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -162,6 +132,51 @@ class AlbumsController extends Controller
             return $this->render(
                 'album/new.tpl',
                 array ('authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
+            );
+        }
+
+        $data = array(
+            'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'category'       => $request->request->getDigits('category'),
+            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request->get('description', ''),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
+            'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+            'album_photos_id'       => $request->request->get('album_photos_id'),
+            'album_photos_footer'   => $request->request->get('album_photos_footer'),
+            'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+            // 'starttime'             => $album->starttime,
+            'params'         => $request->request->get('params', []),
+        );
+        $album = new \Album();
+        $album->create($data);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Album created successfully')
+        );
+
+        // Get category name
+        $ccm = \ContentCategoryManager::get_instance();
+        $categoryName = $ccm->getName($request->request->get('category'));
+
+        // TODO: remove cache cleaning actions
+        // Clean cache album home and frontpage for category
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
+        $cacheManager->delete('home|1');
+
+        // Return user to list if has no update acl
+        if (Acl::check('ALBUM_UPDATE')) {
+            return $this->redirect(
+                $this->generateUrl('admin_album_show', array('id' => $album->id))
+            );
+        } else {
+            return $this->redirect(
+                $this->generateUrl('admin_albums')
             );
         }
     }

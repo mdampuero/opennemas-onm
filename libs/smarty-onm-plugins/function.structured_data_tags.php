@@ -114,8 +114,8 @@ function smarty_function_structured_data_tags($params, &$smarty)
                         "image": {
                             "@type": "ImageObject",
                             "url": "'.$imageUrl.'",
-                            "height": '.$imageWidth.',
-                            "width": '.$imageHeight.'
+                            "height": '.$imageHeight.',
+                            "width": '.$imageWidth.'
                         },';
         }
 

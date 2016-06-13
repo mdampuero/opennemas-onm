@@ -85,9 +85,12 @@
          */
         $scope.parseParams = function(params) {
           if (params === null) {
-            $scope.params = [];
-          } else {
-            $scope.params = params;
+            params = [];
+          }
+
+          $scope.params = [];
+          for (var i in params) {
+            $scope.params.push({ name: i, value: params[i] });
           }
 
           $scope.originalParams = angular.copy($scope.params);

@@ -41,6 +41,16 @@
         $scope.test = false;
 
         /**
+         * @memberOf NewsAgencyServerCtrl
+         *
+         * @description
+         *  Opennemas agency flag
+         *
+         * @type {Boolean}
+         */
+        $scope.type = false;
+
+        /**
          * @function addFilter
          * @memberOf NewsAgencyServerCtrl
          *
@@ -89,6 +99,24 @@
         $scope.removeFilter = function(index) {
           $scope.filters.splice(1, index);
         };
+
+        // Updates the URL for Opennemas News Agency the instance change
+        $scope.$watch('instance', function(nv) {
+          if (nv) {
+            $scope.url = 'https://' + nv + '.opennemas.com/ws/agency';
+          }
+        }, true);
+
+        // Initializes the instance value when the URL is initialized
+        $scope.$watch('url', function(nv) {
+          if (nv && !$scope.instance) {
+            if (/https:\/\/(.*).opennemas.com\/ws\/agency/.test(nv)) {
+              $scope.type     = true;
+              $scope.instance = nv.replace('https://', '')
+                .replace('.opennemas.com/ws/agency', '');
+            }
+          }
+        }, true);
       }
     ]);
 })();

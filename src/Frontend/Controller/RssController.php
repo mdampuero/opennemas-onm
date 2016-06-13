@@ -273,31 +273,48 @@ class RssController extends Controller
                 } elseif (isset($content->img2) && !empty($content->img2)) {
                     $contents[$key]->photo = $er->find('Photo', $content->img2);
                 }
-                // Exclude articles with external link from RSS
-                if (isset($content->params['bodyLink'])
-                    && !empty($content->params['bodyLink'])) {
+
+                // Exclude articles with external link or without body from RSS
+                if ((isset($content->params['bodyLink'])
+                    && !empty($content->params['bodyLink']))
+                    || empty($content->body)
+                ) {
                     unset($contents[$key]);
+                } else {
+                    $relationsId = getService('related_contents')->getRelationsForInner($content->id);
+                    if (count($relationsId) > 0) {
+                        $cm = new \ContentManager;
+                        $relatedContents  = $cm->getContents($relationsId);
+                        // Drop contents that are not available or not in time
+                        $relatedContents  = $cm->getInTime($relatedContents);
+                        $relatedContents  = $cm->getAvailable($relatedContents);
+                        $content->related = $relatedContents;
+                    }
+
+                    // Wrap img with figure and add caption
+                    $content->body = preg_replace(
+                        '@(<p>)*(<img[^>]+>)@',
+                        '<figure>${2}</figure>${1}',
+                        $content->body
+                    );
+
+                    // Wrap social embed and iframes
+                    $patterns = [
+                        '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+<\/blockquote>\n*<script[^>]+><\/script>)@',
+                        '@(<p>)*(<iframe[^>]+><\/iframe>)@'
+                    ];
+                    $replacements = [
+                        '<figure class="op-social"><iframe>${1}</iframe></figure>',
+                        '<figure class="op-interactive">${2}</figure>${1}'
+                    ];
+                    $content->body = preg_replace($patterns, $replacements, $content->body);
+
+                    // Change <br> tag to <p>
+                    $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "</p>\n<p>", $content->body);
+
+                    // Clean empty HTML tags
+                    $content->body = preg_replace('@<(.*)>\s*<\/\1>@', '', $content->body);
                 }
-
-                $relationsId = getService('related_contents')->getRelationsForInner($content->id);
-                if (count($relationsId) > 0) {
-                    $cm = new \ContentManager;
-                    $relatedContents  = $cm->getContents($relationsId);
-                    // Drop contents that are not available or not in time
-                    $relatedContents  = $cm->getInTime($relatedContents);
-                    $relatedContents  = $cm->getAvailable($relatedContents);
-                    $content->related = $relatedContents;
-                }
-
-                // Wrap img with figure and add caption
-                $content->body = preg_replace(
-                    '@(<img[^>]+>)@',
-                    '<figure>${1}<figcaption>'.$content->title.'</figcaption></figure>',
-                    $content->body
-                );
-
-                // Clean empty HTML tags
-                $content->body = preg_replace('@<(.*)><\/\1>@', '', $content->body);
             }
 
             $this->view->assign('contents', $contents);

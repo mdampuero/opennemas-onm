@@ -132,7 +132,6 @@ class Template extends Smarty
             );
         }
 
-
         $this->setConfigDir(realpath($this->baseCachePath).'/smarty/config');
 
         $directory = COMMON_CACHE_PATH.'/smarty/compile-'.$this->themeName;

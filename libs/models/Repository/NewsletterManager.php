@@ -12,12 +12,28 @@
 namespace Repository;
 
 use Onm\Settings as s;
+use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
 
 /**
  * Handles the operations of Newsletters.
  */
 class NewsletterManager extends BaseManager
 {
+    /**
+     * Initializes the entity manager.
+     *
+     * @param DbalWrapper    $dbConn      The database connection.
+     * @param CacheInterface $cache       The cache service.
+     * @param string         $cachePrefix The cache prefix.
+     */
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    {
+        $this->dbConn      = $dbConn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $cachePrefix;
+    }
+
     /**
      * Performs searches in newsletters
      *
@@ -44,28 +60,25 @@ class NewsletterManager extends BaseManager
             $limit = '';
         }
 
-        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        try {
+            $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
+            $rs = $this->dbConn->fetchAll($sql);
 
-        $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-        $rs  = $this->conn->Execute($sql);
+            $sql = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
+            $countNm = $this->dbConn->fetchColumn($sql);
 
-        $sql2    = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
-        $countNm = $this->conn->GetOne($sql2);
+            $newsletters = [];
+            foreach ($rs as $newsletterData) {
+                $obj = new \Newsletter();
+                $obj->load($newsletterData);
 
-        if (!$rs) {
+                $newsletters[] = $obj;
+            }
+            return array($countNm, $newsletters);
+        } catch (\Exception $e) {
+            error_log('Error fetching newsletters: '.$e->getMessage());
             return;
         }
-
-        $newsletters = array();
-        while (!$rs->EOF) {
-            $obj = new \Newsletter();
-            $obj->loadData($rs->fields);
-
-            $newsletters[] = $obj;
-
-            $rs->MoveNext();
-        }
-        return array($countNm, $newsletters);
     }
 
     /**

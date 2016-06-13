@@ -90,11 +90,36 @@
             <h4>{t}Connection{/t}</h4>
           </div>
           <div class="grid-body">
+            <div class="form-group">
+              <div class="controls">
+                <div class="radio">
+                  <input class="form-control" id="external-agency" ng-model="type" ng-value="false" type="radio"/>
+                  <label for="external-agency">
+                    {t}External agency{/t}
+                  </label>
+                </div>
+                <div class="radio">
+                  <input class="form-control" id="opennemas-agency" ng-model="type" ng-value="true" type="radio"/>
+                  <label for="opennemas-agency">
+                    {t}Opennemas News Agency{/t}
+                  </label>
+                </div>
+              </div>
+            </div>
             <div class="form-group" ng-init="url = '{$server['url']}'">
               <label for="url" class="form-label">{t}Url{/t}</label>
               <span class="help m-l-5">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
               <div class="controls">
-                <input class="form-control" id="server" name="url" ng-model="url" required="required" type="text">
+                <input class="form-control no-animate" id="url" name="url" ng-show="!type" ng-model="url" required="required" type="text">
+                <div class="input-group no-animate ng-cloak" ng-show="type">
+                  <span class="input-group-addon">
+                    https://
+                  </span>
+                  <input class="form-control no-animate" id=instance" name="instance" ng-disabled="!type" ng-model="instance" required="required" type="text">
+                  <span class="input-group-addon">
+                    .opennemas.com/ws/agency
+                  </span>
+                </div>
               </div>
             </div>
             <div class="form-group" ng-init="username = '{$server['username']}'">
@@ -210,7 +235,7 @@
                 <span class="help m-l-5">{t}If possible, import all related contents for each content{/t}</span>
               </div>
             </div>
-            <div class="form-group" ng-init="filters = {json_encode($server['filters'])|clear_json}">
+            <div class="form-group"{if !empty($server['filters'])}ng-init="filters = {json_encode($server['filters'])|clear_json}"{/if}>
               <label class="form-label">{t}Filtering{/t}</label>
               <span class="help m-l-5">{t}Filter contents that matches one or more list of words{/t}</span>
               <div class="controls">

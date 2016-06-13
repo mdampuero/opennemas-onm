@@ -107,6 +107,66 @@ class ContentCategory
     }
 
     /**
+     * Loads properties to object from one array of property names.
+     *
+     * @param array $properties the list of the properties to load.
+     **/
+    public function load($properties)
+    {
+        if (is_array($properties)) {
+            if (array_key_exists('pk_content_category', $properties)) {
+                $this->id = (int) $properties['pk_content_category'];
+            }
+
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
+        } elseif (is_object($properties)) {
+            $properties = get_object_vars($properties);
+
+            if (array_key_exists('pk_content_category', $properties)) {
+                $this->id = (int) $properties['pk_content_category'];
+            }
+
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
+        }
+    }
+
+    /**
+     * Fetches all the information of a category into the object.
+     *
+     * @param string $id the category id.
+     **/
+    public function read($id)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM content_categories WHERE pk_content_category=?',
+                [ (int) $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            if (!empty($this->params) && is_string($this->params)) {
+                $this->params = unserialize($this->params);
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Creates a category from given data.
      *
      * @param array $data the data for the category.
@@ -116,8 +176,8 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = StringUtils::getTitle(
-            StringUtils::normalizeName(strtolower($data['title']))
+        $data['name'] = \Onm\StringUtils::getTitle(
+            \Onm\StringUtils::normalizeName(strtolower($data['title']))
         );
 
         // Unserialize params
@@ -135,52 +195,29 @@ class ContentCategory
             $data['name'] = $name;
         }
 
-        $sql = "INSERT INTO content_categories
-                    (`name`, `title`,`inmenu`,`fk_content_category`,
-                    `internal_category`, `logo_path`,`color`, `params`)
-                VALUES (?,?,?,?,?,?,?,?)";
-        $values = array(
-            $data['name'],
-            $data['title'],
-            (int) $data['inmenu'],
-            (int) $data['subcategory'],
-            (int) $data['internal_category'],
-            $data['logo_path'],
-            $data['color'],
-            $data['params']
-        );
+        try {
+            getService('dbal_connection')->insert(
+                'content_categories',
+                [
+                    'name'                => $data['name'],
+                    'title'               => $data['title'],
+                    'inmenu'              => (int) $data['inmenu'],
+                    'fk_content_category' => (int) $data['subcategory'],
+                    'internal_category'   => (int) $data['internal_category'],
+                    'logo_path'           => $data['logo_path'],
+                    'color'               => $data['color'],
+                    'params'              => $data['params']
+                ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            $this->pk_content_category = getService('dbal_connection')->lastInsertId();
+
+            dispatchEventWithParams('category.create', array('category' => $this));
+
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
             return false;
-        }
-
-        $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
-
-        dispatchEventWithParams('category.create', array('category' => $this));
-
-        return true;
-    }
-
-    /**
-     * Fetches all the information of a category into the object.
-     *
-     * @param string $id the category id.
-     **/
-    public function read($id)
-    {
-        $sql = 'SELECT * FROM content_categories WHERE pk_content_category =?';
-
-        $values = $id;
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if (!$rs) {
-            return false;
-        }
-        $this->pk_content_category = ($id);
-        $this->load($rs->fields);
-        if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
         }
     }
 
@@ -197,42 +234,49 @@ class ContentCategory
         if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
         }
-        $data['color'] =
-            (isset($data['color'])) ? $data['color'] : $this->color;
-        $sql = "UPDATE content_categories SET  `title`=?, `inmenu`=?, ".
-                       " `fk_content_category`=?, `internal_category`=?, ".
-                       " `logo_path`=?,`color`=?, `params`=? ".
-                   " WHERE pk_content_category=" . ($data['id']);
+        $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
 
-        $values = array(
-            $data['title'],
-            (int) $data['inmenu'],
-            (int) $data['subcategory'],
-            (int) $data['internal_category'],
-            $data['logo_path'],
-            $data['color'],
-            $data['params']
-        );
+        $conn = getService('dbal_connection');
+        $conn->beginTransaction();
+        try {
+            $rs = $conn->update(
+                'content_categories',
+                [
+                    'title'               => $data['title'],
+                    'inmenu'              => (int) $data['inmenu'],
+                    'fk_content_category' => (int) $data['subcategory'],
+                    'internal_category'   => (int) $data['internal_category'],
+                    'logo_path'           => $data['logo_path'],
+                    'color'               => $data['color'],
+                    'params'              => $data['params']
+                ],
+                [ 'pk_content_category' => $data['id'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return;
-        }
-
-        if ($data['subcategory']) {
-            //Miramos sus subcategorias y se las añadimos a su nuevo padre
-            $sql = "UPDATE content_categories SET `fk_content_category`=?
-                    WHERE fk_content_category=" . ($data['id']);
-            $values = array($data['subcategory']);
-
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
+            if (!$rs) {
+                $conn->rollBack();
                 return false;
             }
+
+            if ($data['subcategory']) {
+                // We look at subcategories and wee add them to their parent
+                $rs = $conn->update(
+                    'content_categories',
+                    [ 'fk_content_category' => $data['subcategory'] ],
+                    [ 'fk_content_category' => $data['id'] ]
+                );
+
+            }
+
+            $conn->commit();
+            dispatchEventWithParams('category.update', array('category' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollBack();
+            error_log($e->getMessage());
+            return false;
         }
-
-        dispatchEventWithParams('category.update', array('category' => $this));
-
-        return true;
     }
 
     /**
@@ -244,10 +288,17 @@ class ContentCategory
      **/
     public function delete($id)
     {
-        if (ContentCategoryManager::isEmptyByCategoryId($id)) {
+        if (!ContentCategoryManager::isEmptyByCategoryId($id)) {
+            return false;
+        }
+
+        try {
+            getService('dbal_connection')->delete(
+                'content_categories',
+                [ 'pk_content_category' => $id ]
+            );
             $sql = 'DELETE FROM content_categories WHERE pk_content_category=?';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
             if ($rs === false) {
                 return false;
             }
@@ -255,40 +306,9 @@ class ContentCategory
             dispatchEventWithParams('category.delete', array('category' => $this));
 
             return true;
-        } else {
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
-        }
-    }
-
-    /**
-     * Loads properties to object from one array of property names.
-     *
-     * @param array $properties the list of the properties to load.
-     **/
-    public function load($properties)
-    {
-        if (is_array($properties)) {
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = $properties['pk_content_category'];
-            }
-
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = $properties['pk_content_category'];
-            }
-
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
         }
     }
 
@@ -299,74 +319,96 @@ class ContentCategory
      **/
     public function deleteContents()
     {
-        $sql = 'SELECT pk_fk_content FROM contents_categories WHERE pk_fk_content_category=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_content_category));
+        $conn = getService('dbal_connection');
 
-        if (!$rs) {
+        // Get the list of content ids in category
+        try {
+            $rs = $conn->fetchAll(
+                'SELECT pk_fk_content FROM contents_categories WHERE pk_fk_content_category=?',
+                [ $this->pk_content_category ]
+            );
+
+            $contentsArray = array_map(function($item) {
+                return $item['pk_fk_content'];
+            }, $rs);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
-        $contentsArray = array();
-        while (!$rs->EOF) {
-            $contentsArray[] = $rs->fields['pk_fk_content'];
-            $rs->MoveNext();
+        if (empty($contentsArray)) {
+            return true;
         }
 
-        if (!empty($contentsArray)) {
-            $contents = implode(', ', $contentsArray);
-            $sqls []= 'DELETE FROM contents  WHERE `pk_content` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM articles WHERE `pk_article` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM advertisements WHERE `pk_advertisement` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM albums WHERE `pk_album` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM albums_photos WHERE `pk_album` IN (' . $contents . ')  '
-                .'OR `pk_photo` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM comments WHERE `content_id` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM votes WHERE `pk_vote` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM ratings WHERE `pk_rating` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM polls WHERE `pk_poll` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM poll_items WHERE `fk_pk_poll` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM related_contents '
-                .'WHERE `pk_content1` IN (' . $contents . ') OR `pk_content2` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM kioskos WHERE `pk_kiosko` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM static_pages WHERE `pk_static_page` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM content_positions WHERE `pk_fk_content` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM contentmeta WHERE `fk_content` IN ('.$contents.')';
+        // Prepare sqls to execute
+        $contents = implode(', ', $contentsArray);
+        $sqls []= 'DELETE FROM contents  WHERE `pk_content` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM articles WHERE `pk_article` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM advertisements WHERE `pk_advertisement` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM albums WHERE `pk_album` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM albums_photos WHERE `pk_album` IN (' . $contents . ')  '
+            .'OR `pk_photo` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM comments WHERE `content_id` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM votes WHERE `pk_vote` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM ratings WHERE `pk_rating` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM polls WHERE `pk_poll` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM poll_items WHERE `fk_pk_poll` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM related_contents '
+            .'WHERE `pk_content1` IN (' . $contents . ') OR `pk_content2` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM kioskos WHERE `pk_kiosko` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM static_pages WHERE `pk_static_page` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM content_positions WHERE `pk_fk_content` IN ('.$contents.')';
+        $sqls []= 'DELETE FROM contentmeta WHERE `fk_content` IN ('.$contents.')';
 
+
+        $conn->beginTransaction();
+        try {
             foreach ($sqls as $sql) {
-                if ($GLOBALS['application']->conn->Execute($sql) === false) {
-                    return false;
-                }
+                $conn->executeUpdate($sql);
             }
 
             \Photo::batchDelete($contentsArray);
             \Video::batchDelete($contentsArray);
             \Attachment::batchDelete($contentsArray);
-        }
+            $conn->commit();
 
-        return true;
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            $conn->rollBack();
+            return false;
+        }
     }
 
     /**
-     * TODO: Change name to setAvailable and rename the db column to available
+     * TODO: Rename the db column to available
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
      **/
-    public function setInMenu($status)
+    public function setAvailable($status)
     {
         if ($this->pk_content_category == null) {
             return false;
         }
 
-        $sql = "UPDATE content_categories SET `inmenu`=? WHERE pk_content_category=?";
-        $values = array($status, $this->pk_content_category);
+        try {
+            getService('dbal_connection')->update(
+                'content_categories',
+                [ 'inmenu' => (int) $status ],
+                [ 'pk_content_category' => $this->pk_content_category ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            if ($rs === false) {
+                return false;
+            }
+
+            dispatchEventWithParams('category.update', array('category' => $this));
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('category.update', array('category' => $this));
     }
 
     /**
@@ -376,24 +418,32 @@ class ContentCategory
      **/
     public function setInRss($status)
     {
-        if (!is_array($this->params)) {
-            $this->params = array();
-        }
-        $this->params['inrss'] = $status;
-        $this->params = serialize($this->params);
-
-        $sql = "UPDATE content_categories "
-             ." SET `params`=?"
-             ." WHERE pk_content_category=?";
-
-        $values = array($this->params, $this->pk_content_category);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($this->pk_content_category == null) {
             return false;
         }
 
-        dispatchEventWithParams('category.update', array('category' => $this));
+        try {
+            if (!is_array($this->params)) {
+                $this->params = array();
+            }
+            $this->params['inrss'] = $status;
+            $this->params = serialize($this->params);
 
-        return $this;
+            getService('dbal_connection')->update(
+                'content_categories',
+                [ 'params' => $this->params ],
+                [ 'pk_content_category' => $this->pk_content_category ]
+            );
+
+            if ($rs === false) {
+                return false;
+            }
+
+            dispatchEventWithParams('category.update', array('category' => $this));
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 }

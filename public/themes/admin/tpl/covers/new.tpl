@@ -73,8 +73,6 @@
                 <div class="controls">
                   <input type="text" id="title" name="title" value="{$cover->title|default:""}" required="required" class="form-control"/>
                 </div>
-                {$cover->name}
-                {$cover->thumb_url}
               </div>
               <div class="form-group">
                 <label for="date" class="form-label">{t}Date{/t}</label>

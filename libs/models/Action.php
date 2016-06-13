@@ -58,11 +58,11 @@ class Action
     public function set($data)
     {
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                'INSERT INTO action_counters (`action_name`, `counter`) VALUES (?,?)',
+            $rs = getService('dbal_connection')->insert(
+                'action_counters',
                 [
-                    $data['action_name'],
-                    $data['counter'],
+                    "action_name" => $data['action_name'],
+                    "counter"     => $data['counter'],
                 ]
             );
 
@@ -103,6 +103,7 @@ class Action
             if (!$rs) {
                 return [];
             }
+
             foreach ($rs as $element) {
                 $action = new \Action();
                 $action->id          = $element['id'];

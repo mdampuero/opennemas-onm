@@ -198,42 +198,42 @@ class Comment
 
         $data = array_merge($defaultData, $params);
 
-        $sql = 'INSERT INTO comments
-                    (`content_id`, `author`, `author_email`, `author_url`, `author_ip`,
-                     `date`, `body`, `status`, `agent`, `type`, `parent_id`, `user_id`, `content_type_referenced`)
-                VALUES
-                    (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-
-        // Get fk_content_type from content id
-        $sql2 = "SELECT fk_content_type FROM contents WHERE pk_content=".$data['content_id'];
-        $rs2  = $GLOBALS['application']->conn->Execute($sql2);
-        if (!$rs2) {
-            throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
+        try {
+            $contentTypeID = getService('dbal_connection')->fetchColumn(
+                "SELECT fk_content_type FROM contents WHERE pk_content=?",
+                [ $data['content_id'] ]
+            );
+            $contentTypeName = \ContentManager::getContentTypeNameFromId($contentTypeID);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw new \Exception('Error creating comment: '.$e->getMessage());
         }
 
-        $contentTypeName = \ContentManager::getContentTypeNameFromId($rs2->fields['fk_content_type']);
-
-        $values = array(
-            $data['content_id'],
-            $data['author'],
-            $data['author_email'],
-            $data['author_url'],
-            $data['author_ip'],
-            $data['date'],
-            iconv(mb_detect_encoding($data['body']), "UTF-8", $data['body']),
-            $data['status'],
-            $data['agent'],
-            $data['type'],
-            $data['parent_id'],
-            $data['user_id'],
-            $contentTypeName,
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'comments',
+                [
+                    'content_id'   => $data['content_id'],
+                    'author'    => $data['author'],
+                    'author_email' => $data['author_email'],
+                    'author_url'   => $data['author_url'],
+                    'author_ip'    => $data['author_ip'],
+                    'date'         => $data['date'],
+                    'body'         => iconv(mb_detect_encoding($data['body']), "UTF-8", $data['body']),
+                    'status'       => $data['status'],
+                    'agent'        => $data['agent'],
+                    'type'         => $data['type'],
+                    'parent_id'    => $data['parent_id'],
+                    'user_id'      => $data['user_id'],
+                    'content_type_referenced' => $contentTypeName,
+                ]
+            );
+        } catch (\Exception $e) {
+            error_log('DB error creating comment: '.$e->getMessage());
+            throw new \Exception('DB Error: '.$e->getMessage());
         }
 
-        $data['id'] = $GLOBALS['application']->conn->Insert_ID();
+        $data['id'] = getService('dbal_connection')->lastInsertId();
         $this->load($data);
 
         dispatchEventWithParams('comment.create', array('comment' => $this));
@@ -265,6 +265,7 @@ class Comment
                 return false;
             }
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -284,7 +285,7 @@ class Comment
     public function update($data)
     {
         // Check id
-        if (empty($this->id)) {
+        if ((int) $this->id <= 0) {
             throw new \Exception(_('Not valid comment id.'));
         }
 
@@ -295,24 +296,18 @@ class Comment
             throw new \Exception(_("Status not valid."));
         }
 
-        // Build SQL field assignments
-        $newValues = '';
-        foreach ($data as $field => $value) {
-            if (in_array($field, $this->getValidProperties())) {
-                $newValues []= "`$field`='$value'";
-            } else {
-                throw new \Exception(sprintf(_("Field '%s' not valid"), $field));
-            }
-        }
-        $newValues = implode(', ', $newValues);
-
-        // Execute DB query and return
-        $id = $GLOBALS['application']->conn->qstr($this->id);
-        $sql = "UPDATE comments SET $newValues WHERE id=".$id;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs === false) {
-            throw new \Exception('Unknown error.');
+        try {
+            $rs = getService('dbal_connection')->update(
+                'comments',
+                [
+                    'status' => $data['status'],
+                    'body'   => $data['body'],
+                ],
+                [ 'id' => $this->id ]
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw new \Exception('Unable to update the comment information.');
         }
 
         // Load new data
@@ -333,16 +328,18 @@ class Comment
      */
     public function delete($id)
     {
-        // Check id
-        if (empty($id)) {
+        if ((int) $id <= 0) {
             throw new \Exception(_('Not valid comment id.'));
         }
 
-        // Execute DB query
-        $sql = 'DELETE FROM comments WHERE id=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            throw new \Exception(_('Database error.'));
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "comments",
+                [ 'id' => $id ]
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw new \Exception(_('Unable to delete the comment.'));
         }
 
         dispatchEventWithParams('comment.delete', array('comment' => $this));
@@ -357,15 +354,16 @@ class Comment
      **/
     public static function deleteFromFilter($filter)
     {
-        $sql = 'DELETE FROM `comments` WHERE '. $filter;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
-            return false;
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'comments',
+                $filter
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error while deleting comments from filter:'.$e->getMessage());
         }
-
-        // dispatchEventWithParams('comment.delete', array('comment' => $this));
-
-        return true;
     }
 
     /**
@@ -376,12 +374,22 @@ class Comment
      **/
     public function setStatus($statusName)
     {
-        $data = array(
-            'status' => $statusName
-        );
-        $this->update($data);
+        try {
+            $data = [ 'status' => $statusName ];
+            $rs = getService('dbal_connection')->update(
+                "comments",
+                $data,
+                [ 'id' => (int) $this->id ]
+            );
 
-        return $this;
+            $this->load($data);
+            dispatchEventWithParams('comment.update', array('comment' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error changing comment status: '.$e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -425,20 +433,23 @@ class Comment
      **/
     public function getProperty($property)
     {
-        if ($this->id == null) {
-            return false;
-        }
+        if ((int) $this->id <= 0) return false;
 
         if (isset($this->$property)) {
             return $this->$property;
         }
 
-        $sql = 'SELECT `meta_value` FROM `commentsmeta` WHERE fk_content=? AND `meta_name`=?';
-        $values = array($this->id, $property);
+        try {
+            $value = getService('dbal_connection')->fetchColumn(
+                'SELECT `meta_value` FROM `commentsmeta` WHERE fk_content=? AND `meta_name`=?',
+                [ $this->id, $property ]
+            );
 
-        $value = $GLOBALS['application']->conn->GetOne($sql, $values);
-
-        return $value;
+            return $value;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -450,16 +461,19 @@ class Comment
      **/
     public function getCommentIdFromPropertyAndValue($property, $value)
     {
-        $sql = 'SELECT `fk_content` FROM `commentsmeta` WHERE `meta_name`=? AND `meta_value`=?';
-        $values = array($property, $value);
+        try {
+            $commentId = getService('dbal_connection')->fetchColumn(
+                'SELECT `fk_content` FROM `commentsmeta` WHERE `meta_name`=? AND `meta_value`=?',
+                [ $property, $value ]
+            );
 
-        $commentId = $GLOBALS['application']->conn->GetOne($sql, $values);
+            if (!$commentId) return 0;
 
-        if (!$commentId) {
-            return 0;
+            return $commentId;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $commentId;
     }
 
     /**
@@ -476,19 +490,20 @@ class Comment
             return false;
         }
 
-        $sql = "INSERT INTO commentsmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
-        $values = array($this->id, $property, $value, $value);
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO commentsmeta (`fk_content`, `meta_name`, `meta_value`)"
+                ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                [ $this->id, $property, $value, $value ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            dispatchEventWithParams('comment.update', array('comment' => $this));
 
-        if ($rs === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('comment.update', array('comment' => $this));
-
-        return true;
     }
 
     /**
@@ -500,20 +515,21 @@ class Comment
      **/
     public function updateParentId($parentId = null)
     {
-        if (is_null($parentId)) {
+        if (is_null($parentId)) return false;
+
+        try {
+            $rs = getService('dbal_connection')->update(
+                "comments",
+                [ 'parent_id' => $parentId ],
+                [ 'id' => (int) $this->id ]
+            );
+
+            dispatchEventWithParams('comment.update', array('comment' => $this));
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $sql = "UPDATE comments SET parent_id = ? WHERE id = ?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($parentId, $this->id));
-
-        if (is_null($rs->fields['max'])) {
-            return false;
-        }
-
-        dispatchEventWithParams('comment.update', array('comment' => $this));
-
-        return $rs->fields['max'];
     }
 
     /**
@@ -523,14 +539,16 @@ class Comment
      **/
     public function getLastCommentDate()
     {
-        $sql = 'SELECT max(date) as max FROM `comments`';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        try {
+            $rs = getService('dbal_connection')->fetchColumn(
+                "SELECT max(date) as max FROM `comments"
+            );
 
-        if (is_null($rs->fields['max'])) {
+            return $rs;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return $rs->fields['max'];
     }
 
     /**
@@ -540,16 +558,20 @@ class Comment
      **/
     public function updateContentTotalComments($id)
     {
-        $sql = 'SELECT count(id) as total FROM `comments` WHERE `content_id` = ? GROUP BY `content_id`';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchColumn(
+                "SELECT count(id) as total FROM `comments` "
+                ."WHERE `content_id` = ? GROUP BY `content_id`",
+                [ $id ]
+            );
 
-        if (is_null($rs->fields['total'])) {
+            // Set number of comments for contents
+            \Content::setPropertyWithContentId($id, 'num_comments', $rs);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        // Set number of comments for contents
-        \Content::setPropertyWithContentId($id, 'num_comments', $rs->fields['total']);
-
-        return true;
     }
 }

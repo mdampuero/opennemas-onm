@@ -70,6 +70,7 @@ class NewsMLComponentText extends NewsML
         $resource = new Resource();
 
         $resource->body = $this->getBody($data);
+        $resource->urn  = $this->getUrn($data);
         $resource->type = 'text';
 
         return $resource;

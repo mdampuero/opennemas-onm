@@ -99,17 +99,16 @@ EOF
 
         $themes = explode(' ', $themes);
 
+        $this->output->writeln("<info>Installing all themes</info>");
         foreach ($themes as $themeName) {
-            chdir($this->basePath.'/public/themes/');
-            if (file_exists($themeName)) {
+            if (file_exists($this->basePath.'/public/themes/'.$themeName)) {
                 $this->updateSpecificTheme($themeName);
             } else {
-                $this->execProcess('git clone ssh://gitolite@git.openhost.es:23911/onm-theme-'.$themeName.'.git '.$themeName);
+                $this->installSpecificTheme($themeName);
             }
         }
 
         return;
-
     }
 
     /**
@@ -117,19 +116,15 @@ EOF
      **/
     public function updateThemes()
     {
-        $this->output->writeln("<info>Updating public themes</info>");
+        $this->output->writeln("<info>Updating themes</info>");
         foreach (glob($this->basePath.'/public/themes/*') as $theme) {
             // Avoid to execute pull in admin and manager themes.
             if (basename($theme) == 'admin' || basename($theme) == 'manager') {
                 continue;
             }
-            chdir($theme);
-            $this->output->writeln("\t* ".basename($theme));
-            $output = exec("git pull");
-            $this->output->writeln("\t\t".$output);
-            chdir($this->basePath);
+
+            $this->updateSpecificTheme(basename($theme));
         }
-        $this->output->writeln('');
     }
 
     /**
@@ -142,25 +137,37 @@ EOF
             return;
         }
 
-        $this->output->writeln("<info>Updating $themeName theme</info>");
         if (!realpath($this->basePath.'/public/themes/'.$themeName)) {
-            $this->output->writeln('Not available');
-            chdir($this->basePath.'/public/themes/');
-            $this->execProcess('git clone ssh://gitolite@git.openhost.es:23911/onm-theme-'.$themeName.'.git '.$themeName);
-            chdir($this->basePath);
+            $this->installSpecificTheme($themeName);
 
             return;
         }
 
+        $this->output->writeln("  <info>$themeName: Updating</info>");
         chdir($this->basePath.'/public/themes/'.$themeName);
         $this->execProcess('git pull');
         chdir($this->basePath);
+    }
 
-        $this->output->writeln('');
+    /**
+     * Installs a theme by its name
+     *
+     * @param  string $themeName The theme name that will be installed
+     *
+     * @return void
+     **/
+    public function installSpecificTheme($themeName)
+    {
+        $this->output->writeln("  <info>$themeName: Installing</info>");
+        chdir($this->basePath.'/public/themes/');
+        $this->execProcess('git clone git@bitbucket.org:opennemas/onm-theme-'.$themeName.'.git '.$themeName);
+        chdir($this->basePath);
     }
 
     /**
      * Executes in a shell the provided command line
+     *
+     * @param  string $processLine the command line that will be executed
      *
      * @return void
      **/
@@ -168,11 +175,14 @@ EOF
     {
         $output = $this->output;
         $process = new Process($processLine);
+        $process->setTimeout(3600);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
                 $output->write("\t<error>".$buffer. "</error>");
+                return Process::ERR;
             } else {
                 $output->write("\t".$buffer);
+                return 0;
             }
         });
     }

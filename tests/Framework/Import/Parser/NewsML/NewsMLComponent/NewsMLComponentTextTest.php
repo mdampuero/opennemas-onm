@@ -31,6 +31,7 @@ class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
             <ContentItem>
               <MediaType FormalName=\"Text\"/>
               <Format FormalName=\"bcNITF2.5\"/>
+              <NewsItemId>040729054956.xm61wen7</NewsItemId>
               <DataContent>
                 <p>Paragraph 1</p>
               </DataContent>
@@ -61,8 +62,12 @@ class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
+        $urn = 'urn:newsmlcomponenttext::'.date('YmdHis').
+               ':text:040729054956.xm61wen7';
+
         $resource = new Resource([
             'body' => '<p>Paragraph 1</p>',
+            'urn'  => $urn,
             'type' => 'text'
         ]);
 

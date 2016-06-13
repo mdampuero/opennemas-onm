@@ -27,22 +27,23 @@ class NotificationController extends Controller
      */
     public function listLatestAction(Request $request)
     {
-        $date = new \DateTime('now');
-        $date = $date->format('Y-m-d H:i:s');
-        $epp  = $request->query->getDigits('epp', 10);
-        $id   = $this->get('core.instance')->internal_name;
-        $page = $request->query->getDigits('page', 1);
+        $date  = new \DateTime('now');
+        $date  = $date->format('Y-m-d H:i:s');
+        $epp   = $request->query->getDigits('epp', 10);
+        $id    = $this->get('instance')->internal_name;
+        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
+        $page  = $request->query->getDigits('page', 1);
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $oql = '(instances ~ "%s" or instances ~ "all") and enabled = 1 and'
-            . ' start <= "%s" and (end = null or end > "%s")';
+        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
+            . ' and enabled = 1 and start <= "%s" and (end = null or end > "%s")';
 
         if (!empty($read)) {
-            $oql .= ' and id NOT IN (' . implode(', ', array_keys($read)) . ' )';
+            $oql .= ' and id not in [' . implode(', ', array_keys($read)) . ' ]';
         }
 
         if (!$this->getUser()->isAdmin()) {
@@ -51,7 +52,7 @@ class NotificationController extends Controller
 
         $oql .= ' order by fixed desc limit %s';
 
-        $oql = sprintf($oql, $id, $date, $date, $epp);
+        $oql = sprintf($oql, $id, $theme, $date, $date, $epp);
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
@@ -84,21 +85,23 @@ class NotificationController extends Controller
         $id   = $this->get('core.instance')->internal_name;
         $date = date('Y-m-d H:i:s');
 
-        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
-            .  'instances LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
-            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
+            .  ' or enabled = 1 and start <= "%s"'
+            .  ' and (end is null or end > "%s")';
 
         if (!$this->getUser()->isAdmin()) {
             $criteria .= ' AND users != 1';
         }
 
+        $oql = sprintf($oql, $id, $theme, $date, $date);
+
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
             [
-                'criteria' => $criteria,
-                'epp'      => null,
-                'order'    => [ 'fixed' => 'desc' ],
-                'page'     => null
+                'oql'   => $oql,
+                'epp'   => null,
+                'order' => [ 'fixed' => 'desc' ],
+                'page'  => null
             ]
         );
 
@@ -221,7 +224,8 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
+        if (!empty($notification['title'])
+            && array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
             && !empty($notification['title'][CURRENT_LANGUAGE_SHORT])
         ) {
             $notification['title'] =
@@ -230,7 +234,8 @@ class NotificationController extends Controller
             $notification['title'] = $notification['title']['en'];
         }
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
+        if (!empty($notification['body'])
+            && array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
             && !empty($notification['body'][CURRENT_LANGUAGE_SHORT])
         ) {
             $notification['body'] =

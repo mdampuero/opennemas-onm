@@ -167,7 +167,7 @@ services:
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ '@db_conn', '@cache', %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
