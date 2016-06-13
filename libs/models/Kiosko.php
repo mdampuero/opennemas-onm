@@ -75,255 +75,223 @@ class Kiosko extends Content
     public $kiosko_path = null;
 
     /**
-      * Initializes the kiosko object
+      * Initializes the Kiosko.
       *
-      * @param int $id the kiosko id to read
-      *
-      * @return Kiosko the object instance
+      * @param integer $id The kiosko id.
       */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Cover');
-        $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
+        $this->kiosko_path = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
 
         parent::__construct($id);
     }
 
     /**
-     * Loads the kiosko data from an array into the object properties
+     * Overloads the object properties with an array of the new ones.
      *
-     * @param array $data the kiosko data
-     *
-     * @return Kiosko the kiosko object
-     **/
-    public function initialize($data)
+     * @param array $properties The list of properties to load.
+     */
+    public function load($properties)
     {
-        $this->title     = $data['name'];
-        $this->name      = $data['name'];
-        $this->path      = $data['path'];
-        $this->date      = $data['date'];
-        $this->price     = $data['price'];
-        $this->type      = $data['type'];
-        $this->category  = $data['category'];
-        $this->available = $data['available'];
-        $this->metadata  = $data['metadata'];
+        if (array_key_exists('name', $properties)) {
+            $properties['thumb_url'] =
+                str_replace('.pdf', '.jpg', $properties['name']);
+        }
 
-        return $this;
+        parent::load($properties);
     }
 
     /**
-     * Creates a new kiosko from a data array
+     * Loads the kiosko data given an id.
      *
-     * @param array $data the kiosko data
+     * @param integer $id The kiosko id.
      *
-     * @return int the kiosko id
-     **/
-    public function create($data)
+     * @return Kiosko The current kiosko.
+     */
+    public function read($id)
     {
-        if ($this->exists($data['path'], $data['category'])) {
-            //  throw new \Exception(_("There's other paper in this date & this category."));
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return false;
         }
 
-        // Check price
-        if (!isset($data['price'])) {
-            $data['price'] = 0;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error while fetching Kiosko: '.$e->getMessage());
+            return false;
         }
-        //Check type
-        if (!isset($data['type'])) {
-            $data['type'] = 0;
-        }
+    }
+
+    /**
+     * Creates a new kiosko from data.
+     *
+     * @param array $data The kiosko data.
+     *
+     * @return boolean True if the object was stored.
+     */
+    public function create($data)
+    {
+        $data['price'] = isset($data['price']) ? $data['price'] : 0;
+        $data['type']  = isset($data['type']) ? $data['type'] : 0;
 
         parent::create($data);
 
-        $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date`, `price`, `type` )"
-                ." VALUES (?,?,?,?,?,?)";
+        try {
+            $this->createThumb($data['name'], $data['path']);
 
-        $this->createThumb($data['name'], $data['path']);
+            getService('dbal_connection')->insert(
+                'kioskos',
+                [
+                    'pk_kiosko' => (int) $this->id,
+                    'name'      => $data['name'],
+                    'path'      => $data['path'],
+                    'date'      => $data['date'],
+                    'price'     => $data['price'],
+                    'type'      => $data['type']
+                ]
+            );
 
-        $values = array(
-            $this->id, $data['name'], $data['path'],
-            $data['date'], $data['price'], $data['type']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            throw new \Exception(_("Unable to save the cover data."));
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error while creating Kiosko: '.$e->getMessage());
+            return false;
         }
-
-        return $this->id;
     }
 
     /**
-     * Loads the kiosko data given an id
+     * Updates the kiosko information given an array of data.
      *
-     * @param int $id the kiosko id
+     * @param array $data The new data for the kiosko.
      *
-     * @return Kiosko the object instance
-     **/
-    public function read($id)
-    {
-        parent::read($id);
-
-        $sql = 'SELECT pk_kiosko, name, path, date, price, type FROM kioskos WHERE pk_kiosko=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return null;
-        }
-        $rs->fields['thumb_url'] = str_replace('.pdf', '.jpg', $rs->fields['name']);
-
-        $this->load($rs->fields);
-
-        return $this;
-    }
-
-    /**
-     * Updates the kiosko information given an array of data
-     *
-     * @param array $data the new data for the kiosko
-     *
-     * @return boolean true if the kiosko was updated
-     **/
+     * @return boolean true If the kiosko was updated.
+     */
     public function update($data)
     {
         parent::update($data);
 
-        $sql  = "UPDATE kioskos SET `name`=?, `date`=?, `price`=? WHERE pk_kiosko=?";
-        $values = array($data['name'], $data['date'], $data['price'], $data['id']);
+        try {
+            getService('dbal_connection')->update(
+                'kioskos',
+                [
+                    'name'      => $data['name'],
+                    'date'      => $data['date'],
+                    'price'     => $data['price'],
+                    'type'      => $data['type']
+                ],
+                [ 'pk_kiosko' => (int) $data['id'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error while updating Kiosko: '.$e->getMessage());
             return false;
         }
-
-        $this->category_name = $this->loadCategoryName($this->id);
-
-        return true;
     }
 
     /**
-     * Removes permanently the kiosko and its files
+     * Removes permanently the kiosko and its files.
      *
-     * @param int $id the kiosko id to remove
+     * @param integer $id The kiosko id.
      *
-     * @return boolean true if the kiosko was removed
-     **/
+     * @return boolean True if the kiosko was removed.
+     */
     public function remove($id)
     {
         parent::remove($this->id);
 
-        $sql = 'DELETE FROM kioskos WHERE pk_kiosko='.($this->id);
+        try {
+            $paperPdf      = $this->kiosko_path . $this->path . $this->name;
+            $paperImage    = $this->kiosko_path . $this->path
+                . preg_replace("/.pdf$/", ".jpg", $this->name);
+            $bigPaperImage = $this->kiosko_path . $this->path .
+                preg_replace('/.pdf$/', '.jpg', '650-' . $this->name);
 
-        $paperPdf      = $this->kiosko_path.$this->path.$this->name;
-        $paperImage    = $this->kiosko_path.$this->path.preg_replace("/.pdf$/", ".jpg", $this->name);
-        $bigPaperImage = $this->kiosko_path."650-".$this->path.preg_replace("/.pdf$/", ".jpg", $this->name);
+            unlink($paperPdf);
+            unlink($paperImage);
+            unlink($bigPaperImage);
 
-        unlink($paperPdf);
-        unlink($paperImage);
-        unlink($bigPaperImage);
+            getService('dbal_connection')
+                ->delete('kioskos', [ 'pk_kiosko' => $id ]);
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error while removing Kiosko: '.$e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
-     * Check if already exists a kiosko
+     * Creates the PDF thumbnail for the kiosko.
      *
-     * @param  string  $path_pdf the path to the kiosko file
-     * @param  string  $category the category where is saved
-     *
-     * @return boolean
-    */
-    public function exists($path_pdf, $category)
-    {
-        $sql = 'SELECT count(`kioskos`.`pk_kiosko`) AS total
-                FROM kioskos,contents_categories
-                WHERE `contents_categories`.`pk_fk_content`=`kioskos`.`pk_kiosko`
-                AND `kioskos`.`path`=?
-                AND `contents_categories`.`pk_fk_content_category`=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($path_pdf, $category));
-
-        return intval($rs) > 0;
-    }
-
-    /**
-     * Creates the PDF thumbnail for the kiosko
-     *
-     * @param string $file_pdf the filename to the pdf file
-     * @param string $path     the path to the pdf file
-     *
-     * @return void
-     **/
+     * @param string $file_pdf The filename to the pdf file.
+     * @param string $path     The path to the pdf file.
+     */
     public function createThumb($file_pdf, $path)
     {
-        $imageFileName = basename($file_pdf, ".pdf") . '.jpg';
-        $tmpName = '/tmp/' . basename($file_pdf, ".pdf") . '.png';
+        $imageFileName = basename($file_pdf, '.pdf') . '.jpg';
+        $tmpName       = '/tmp/' . basename($file_pdf, '.pdf') . '.png';
 
         // Thumbnail first page (see [0])
-        if (file_exists($this->kiosko_path.$path. $file_pdf)) {
-            try {
-                $imagick = new \Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
-                $imagick->setImageBackgroundColor('white');
-                $imagick->thumbnailImage(650, 0);
-                $imagick = $imagick->flattenImages();
-                $imagick->setFormat('png');
-                // First, save to PNG (*.pdf => /tmp/xxx.png)
-                $imagick->writeImage($tmpName);
-                // finally, save to jpg (/tmp/xxx.png => *.jpg)
-                // to avoid problems with the image
-                $imagick = new \Imagick($tmpName);
+        if (!file_exists($this->kiosko_path . $path . $file_pdf)) {
+            return;
+        }
 
-                $imagick->writeImage($this->kiosko_path.$path.'650-'.$imageFileName);
+        try {
+            $imagick = new \Imagick($this->kiosko_path . $path . $file_pdf . '[0]');
+            $imagick->setImageBackgroundColor('white');
+            $imagick->thumbnailImage(650, 0);
 
-                $imagick->thumbnailImage(180, 0);
-                // Write the new image to a file
-                $imagick->writeImage($this->kiosko_path.$path.$imageFileName);
+            $imagick = $imagick->flattenImages();
+            $imagick->setFormat('png');
 
-                //remove temp image
-                unlink($tmpName);
-            } catch (Exception $e) {
-                // Nothing
-            }
+            // First, save to PNG (*.pdf => /tmp/xxx.png)
+            $imagick->writeImage($tmpName);
+
+            // Finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid
+            // problems with image
+            $imagick = new \Imagick($tmpName);
+            $imagick->writeImage($this->kiosko_path . $path . '650-' . $imageFileName);
+            $imagick->thumbnailImage(180, 0);
+
+            // Write the new image to a file
+            $imagick->writeImage($this->kiosko_path.$path.$imageFileName);
+
+            //remove temp image
+            unlink($tmpName);
+        } catch (\Exception $e) {
         }
     }
 
     /**
-     * Returns the list of kioskos by months
+     * Returns the list of months grouped by years.
      *
-     * @return array
-     **/
+     * @return array The list of months grouped by year.
+     */
     public function getMonthsByYears()
     {
-        $sql = "SELECT DISTINCT MONTH(date) as month, "
-               ."YEAR(date) as year FROM `kioskos` ORDER BY year DESC, month DESC";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT DISTINCT MONTH(date) as month, YEAR(date) as year'
+            .  ' FROM `kioskos` ORDER BY year DESC, month DESC';
 
-        $items = null;
-        while (!$rs->EOF) {
-            $items[$rs->fields['year']][] = $rs->fields['month'];
-            $rs->MoveNext();
+        $rs = getService('dbal_connection')->fetchAll($sql);
+
+        foreach ($rs as $value) {
+            $items[$value['year']][] = $value['month'];
         }
 
         return $items;
-    }
-
-    /**
-     * Get all subscription elements/items
-     *
-     */
-    public static function getSubscriptionItems()
-    {
-        $sql = 'SELECT `kioskos`.`pk_kiosko`, `kioskos`.`price` , `contents`.`title`
-                FROM kioskos, contents
-                WHERE `contents`.`pk_content`=`kioskos`.`pk_kiosko`
-                AND `kioskos`.`type`= 1 AND `contents`.`available` =1';
-
-        $rs = $GLOBALS['application']->conn->GetArray($sql);
-
-        if (!$rs) {
-            return false;
-        }
-
-        return $rs;
     }
 }

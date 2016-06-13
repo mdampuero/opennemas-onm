@@ -184,7 +184,7 @@ services:
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ '@db_conn', '@cache', %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
@@ -268,6 +268,10 @@ services:
     core.event_dispatcher:
         class: Framework\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
+
+    news_agency.importer:
+        class:     Framework\Import\Importer\Importer
+        arguments: [ '@service_container' ]
 
     vat:
         class: Framework\VAT\VATService

@@ -243,7 +243,7 @@ notification:
         body:
             type:    text
             options: { default: null, length: 65532, notnull: false }
-        instances:
+        target:
             type: text
             options: { default: null, length: 65532, notnull: false }
         users:

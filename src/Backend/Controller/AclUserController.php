@@ -268,13 +268,18 @@ class AclUserController extends Controller
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'activated'       => (int) $request->request->filter('activated', $user->activated, FILTER_SANITIZE_STRING),
-            'type'            => (int) $request->request->filter('type', $user->type, FILTER_SANITIZE_STRING),
+            'activated'       => (int) $request->request->filter('activated', 0, FILTER_SANITIZE_STRING),
+            'type'            => (int) $request->request->filter('type', 1, FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
             'ids_category'    => $request->request->get('ids_category'),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
+
+        if (false === Acl::check('USER_UPDATE')) {
+            $data['activated'] = $user->activated;
+            $data['type'] = $user->type;
+        }
 
         $file = $request->files->get('avatar');
 
@@ -386,8 +391,8 @@ class AclUserController extends Controller
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => $request->request->get('id_user_group', array()),
                 'ids_category'    => $request->request->get('ids_category', array()),
-                'activated'       => $request->request->filter('activated', '0', FILTER_SANITIZE_STRING),
-                'type'            => $request->request->filter('type', '1', FILTER_SANITIZE_STRING),
+                'activated'       => (int) $request->request->filter('activated', 0, FILTER_SANITIZE_STRING),
+                'type'            => (int) $request->request->filter('type', 1, FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
             );

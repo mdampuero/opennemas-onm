@@ -13,5 +13,7 @@ backend_ws_news_agency_list:
 backend_ws_news_agency_show_image:
     path:     /news-agency/{source}/{id}
     defaults: { _controller  : BackendWebServiceBundle:NewsAgency:showImage }
+    requirements:
+        id: \d+
     options:
         expose: true

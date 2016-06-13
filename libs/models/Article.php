@@ -152,7 +152,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::getTitle($this->title);
                 }
                 break;
             case 'author':
@@ -171,6 +171,64 @@ class Article extends Content
     }
 
     /**
+     * Load object properties
+     *
+     * @param array $properties
+     *
+     * @return void
+     **/
+    public function load($data)
+    {
+        parent::load($data);
+
+        $this->permalink = Uri::generate(
+            'article',
+            [
+                'id'       => $this->id,
+                'date'     => date('Y-m-d', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug'     => $this->slug,
+            ]
+        );
+
+        return $this;
+    }
+
+    /**
+     * Reads the data for one article given one ID
+     *
+     * @param int $id the id to get its information
+     *
+     * @return void
+     **/
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return;
+        }
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Creates one article from an array of properties
      *
      * @param mixed $data array of properties for the article
@@ -181,18 +239,16 @@ class Article extends Content
     public function create($data)
     {
         if (!isset($data['description'])) {
-            $data['description'] = StringUtils::getNumWords($data['body'], 50);
+            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['img1_footer']
-            = (!isset($data['img1_footer']) || empty($data['img1_footer']))
-                ? ''
-                : $data['img1_footer'];
-        $data['img2_footer']
-            = (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                ? ''
-                : $data['img2_footer'];
+        $data['img1_footer'] =
+            (!isset($data['img1_footer']) || empty($data['img1_footer']))
+            ? '' : $data['img1_footer'];
+        $data['img2_footer'] =
+            (!isset($data['img2_footer']) || empty($data['img2_footer']))
+            ? '' : $data['img2_footer'];
 
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
@@ -253,45 +309,6 @@ class Article extends Content
     }
 
     /**
-     * Reads the data for one article given one ID
-     *
-     * @param int $id the id to get its information
-     *
-     * @return void
-     **/
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM articles, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_article AND pk_content = pk_fk_content',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->load($rs);
-
-        $this->permalink = Uri::generate(
-            'article',
-            array(
-                'id'       => $this->id,
-                'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
-            )
-        );
-    }
-
-    /**
      * Updates the information for one article given an array with the new data
      *
      * @param mixed $data array of properties for the article
@@ -302,7 +319,7 @@ class Article extends Content
     {
         // Update an article
         if (!$data['description']) {
-            $data['description'] = StringUtils::getNumWords(
+            $data['description'] = \Onm\StringUtils::getNumWords(
                 $data['body'],
                 50
             );
@@ -330,7 +347,7 @@ class Article extends Content
                 ."WHERE pk_article=?";
 
         $values = array(
-            strtoupper($data['subtitle']), $data['agency'], $data['summary'],
+            $data['subtitle'], $data['agency'], $data['summary'],
             (int) $data['img1'], $data['img1_footer'], (int) $data['img2'], $data['img2_footer'],
             (int) $data['fk_video'], (int) $data['fk_video2'], $data['footer_video2'],
             $data['title_int'],
@@ -385,19 +402,29 @@ class Article extends Content
      **/
     public function remove($id)
     {
+        if ((int) $id <= 0) return false;
+
         parent::remove($id);
 
-        $sql = 'DELETE FROM articles WHERE pk_article=?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "articles",
+                [ 'pk_article' => $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            if (!$rs) {
+                return false;
+            }
+
+            // Delete related
+            getService('related_contents')->delete($id);
+
+            // Delete comments
+            self::deleteComments($id);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        // Delete related
-        getService('related_contents')->delete($id);
-
-        // Delete comments
-        self::deleteComments($id);
 
         return true;
     }
@@ -457,13 +484,10 @@ class Article extends Content
      **/
     public function getAuthor()
     {
-        if (!empty($this->author)) {
-            return $this->author;
-        } else {
-            $ur = getService('user_repository');
-            $author = $ur->find($this->fk_author);
-
-            return $author;
+        if (empty($this->author)) {
+            $this->author= getService('user_repository')->find($this->fk_author);
         }
+
+        return $this->author;
     }
 }

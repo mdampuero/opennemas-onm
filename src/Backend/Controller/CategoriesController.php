@@ -408,7 +408,7 @@ class CategoriesController extends Controller
                 sprintf(_('Unable to find a category with the id "%d"'), $id)
             );
         } else {
-            $category->setInMenu($status);
+            $category->setAvailable($status);
 
             dispatchEventWithParams('category.update', ['category' => $category]);
 

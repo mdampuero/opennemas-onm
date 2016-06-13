@@ -115,8 +115,6 @@ class CommentManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
@@ -265,13 +263,11 @@ class CommentManager extends BaseManager
      */
     public function countPendingComments()
     {
-        return $this->countBy(
-            array(
-                'status' => array(
-                    array('value' => \Comment::STATUS_PENDING)
-                )
-            )
-        );
+        return $this->countBy([
+            'status' => [
+                ['value' => \Comment::STATUS_PENDING]
+            ]
+        ]);
     }
 
     /**
@@ -295,11 +291,6 @@ class CommentManager extends BaseManager
      */
     public function delete($id)
     {
-        // $this->dbConn->transactional(function ($em) use ($id) {
-        //     $em->executeQuery('DELETE FROM `menues` WHERE `pk_menu`= ' . $id);
-        //     $em->executeQuery('DELETE FROM `menu_items` WHERE `pk_menu`= ' . $id);
-        // });
-
         $this->cache->delete('comment' . $this->cacheSeparator . $id);
     }
 }

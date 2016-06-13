@@ -26,7 +26,7 @@ DELETE FROM `content_positions` WHERE `pk_fk_content` NOT IN (SELECT `pk_content
 DELETE FROM `content_views` WHERE `pk_fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `kioskos` WHERE `pk_kiosko` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `letters` WHERE `pk_letter` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `menu_items` WHERE `pk_item` NOT IN (SELECT `pk_menu` FROM `menues`);
+DELETE FROM `menu_items` WHERE `menu_items`.`pk_menu` NOT IN (SELECT `pk_menu` FROM `menues`);
 DELETE FROM `opinions` WHERE `pk_opinion` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `polls` WHERE `pk_poll` NOT IN (SELECT `pk_content` FROM `contents`);

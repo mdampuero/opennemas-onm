@@ -27,17 +27,23 @@ class Action
      **/
     public function get($id)
     {
-        $sql = 'SELECT * FROM action_counters WHERE id = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM action_counters WHERE id = ?',
+                [ intval($id) ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return null;
+            }
+        } catch (\Exception $e) {
             return null;
         }
 
-        $this->id          = $rs->fields['id'];
-        $this->date        = $rs->fields['date'];
-        $this->counter     = $rs->fields['counter'];
-        $this->action_name = $rs->fields['action_name'];
+        $this->id          = $rs['id'];
+        $this->date        = $rs['date'];
+        $this->counter     = $rs['counter'];
+        $this->action_name = $rs['action_name'];
 
         return $this;
     }
@@ -51,17 +57,20 @@ class Action
      **/
     public function set($data)
     {
-        $queryData = array(
-            $data['action_name'],
-            $data['counter'],
-        );
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'action_counters',
+                [
+                    "action_name" => $data['action_name'],
+                    "counter"     => $data['counter'],
+                ]
+            );
 
-        $sql = 'INSERT INTO action_counters
-                    (`action_name`, `counter`)
-                VALUES (?,?)';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $queryData);
-
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -75,13 +84,9 @@ class Action
      **/
     public static function find($filter = '', $config = array())
     {
-        $defaultParams = array(
-            'order' => 'date DESC',
-        );
+        $config = array_merge(['order' => 'date DESC'], $config);
+
         $order = $where = '';
-
-        $config = array_merge($defaultParams, $config);
-
         if (!empty($filter)) {
             $where = 'WHERE '.$filter;
         }
@@ -89,34 +94,33 @@ class Action
         if (!empty($config['order'])) {
             $order = 'ORDER BY '.$config['order'];
         }
-
-        $sql = "SELECT * FROM action_counters $where $order";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return array();
-        }
-
-        $actions = array();
-        while (!$rs->EOF) {
-            $action = new \Action();
-
-            $action->id   = $rs->fields['id'];
-
-            $action->action_name = $rs->fields['action_name'];
-            $action->date        = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $rs->fields['date'],
-                new \DateTimeZone('UTC')
+        $actions = [];
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM action_counters $where $order"
             );
 
-            $actions[]= $action;
+            if (!$rs) {
+                return [];
+            }
 
-            $rs->MoveNext();
+            foreach ($rs as $element) {
+                $action = new \Action();
+                $action->id          = $element['id'];
+                $action->action_name = $element['action_name'];
+                $action->date        = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $element['date'],
+                    new \DateTimeZone('UTC')
+                );
+                $actions[] = $action;
+            }
+
+            return $actions;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
         }
-
-        return $actions;
     }
 
     /**
@@ -127,19 +131,23 @@ class Action
     public static function sum($filter = '')
     {
         $where = '';
-
         if (!empty($filter)) {
             $where = 'WHERE '.$filter;
         }
-        $sql = "SELECT sum(counter) as total FROM action_counters $where";
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT sum(counter) as total FROM action_counters $where"
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if (!$rs) {
+            if (!$rs) {
+                return 0;
+            }
+
+            return (int) $rs['total'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return 0;
         }
-
-        return $rs->fields['total'];
     }
 }

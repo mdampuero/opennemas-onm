@@ -115,7 +115,7 @@ class Opinion extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
-                        'category' => StringUtils::getTitle($authorName),
+                        'category' => \Onm\StringUtils::getTitle($authorName),
                     )
                 );
 
@@ -123,7 +123,7 @@ class Opinion extends Content
 
                 break;
             case 'slug':
-                return StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -221,21 +221,24 @@ class Opinion extends Content
      **/
     public function read($id)
     {
-        parent::read($id);
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
-                .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
-                .'WHERE pk_opinion = ?',
-                [ (int) $id ]
+                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, users.avatar_img_id FROM contents '
+                .'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN opinions ON pk_content = pk_opinion '
+                .'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
+                [ $id ]
             );
 
             if (!$rs) {
-                return;
+                return false;
             }
         } catch (\Exception $e) {
-            return;
+            error_log($e->getMessage());
+            return false;
         }
 
         if ((int) $rs['type_opinion'] == 1) {
@@ -350,7 +353,7 @@ class Opinion extends Content
             $this->author_name_slug = 'director';
         } else {
             $author = new \User($this->fk_author);
-            $this->name = StringUtils::getTitle($author->name);
+            $this->name = \Onm\StringUtils::getTitle($author->name);
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {

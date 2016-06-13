@@ -91,13 +91,15 @@ class LocalRepository
      *
      * @return array The list of resources.
      */
-    public function findBy($criteria = [], $epp = 10, $page = 1)
+    public function findBy($criteria = [], $epp = null, $page = 1)
     {
         $files = $this->filter($criteria);
 
-        $files = array_slice($files, $epp * ($page - 1), $epp);
+        if (empty($epp)) {
+            return $files;
+        }
 
-        return $files;
+        return array_slice($files, $epp * ($page - 1), $epp);
     }
 
     /**
@@ -111,15 +113,18 @@ class LocalRepository
     {
         return array_filter($this->contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
-                if (!property_exists($a, $key)
-                    || (property_exists($a, $key)
+                $filters = explode(',', $value);
+
+                foreach ($filters as $filter) {
+                    if (!property_exists($a, $key)
+                        || (property_exists($a, $key)
                         && !preg_match(
-                            '@' . strtolower($value) . '@',
+                            '@' . strtolower(trim($filter)) . '@',
                             strtolower($a->{$key})
-                        )
-                    )
-                ) {
-                    return false;
+                        ))
+                    ) {
+                        return false;
+                    }
                 }
             }
 

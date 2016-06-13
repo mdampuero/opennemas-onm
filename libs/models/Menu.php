@@ -58,7 +58,7 @@ class Menu
      *
      * @var int
      **/
-    public $pk_menu   = null;
+    public $pk_menu = null;
 
     /**
      * The menu id
@@ -72,28 +72,28 @@ class Menu
      *
      * @var string
      **/
-    public $name      = null;
+    public $name = null;
 
     /**
      * The name of the menu
      *
      * @var string
      **/
-    public $title      = null;
+    public $title = null;
 
     /**
      * Menu type. internal, external...
      *
      * @var string
      **/
-    public $type      = null;
+    public $type = null;
 
     /**
      * Misc params for this menu
      *
      * @var string
      **/
-    public $params    = null;
+    public $params = null;
 
     /**
      * Unused variable
@@ -112,6 +112,7 @@ class Menu
         if (!is_null($id)) {
             $this->read($id);
         }
+
         $this->content_type_l10n_name = _('Menu');
     }
 
@@ -120,92 +121,107 @@ class Menu
      *
      * @param array $data the menu data
      *
-     * @return bool If create in database
+     * @return mixed The menu if it was stored successfully. False otherwise.
      */
     public function create($data)
     {
-        $sql = "INSERT INTO menues ".
-               " (`name`, `params`, `type`, `position`) " .
-               " VALUES (?,?,?,?)";
+        try {
+            $conn = getService('dbal_connection');
 
-        $values = array(
-            $data["name"],
-            $data["params"],
-            'user',
-            $data['position']
-        );
+            $conn->insert(
+                'menues',
+                [
+                    'name'     => $data['name'],
+                    'params'   => $data['params'],
+                    'type'     => 'user',
+                    'position' => $data['position']
+                ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->pk_menu = $conn->lastInsertId();
+            $this->setMenuElements($this->pk_menu, $data['items']);
+
+            dispatchEventWithParams('menu.create', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $id = $GLOBALS['application']->conn->Insert_ID();
-
-        $this->read($id);
-
-        $this->setMenuElements($id, $data['items']);
-
-        dispatchEventWithParams('menu.create', array('content' => $this));
-
-        return true;
     }
 
     /**
-     * Gets the menu information from db to the object instance
-     *
-     * @param string $id The object id
-     *
-     * @return Menu the object instance
+     * Loads the menu properties from a data array, loads menu items
      */
-    public function read($id)
+    public function load($data)
     {
-        $sql = 'SELECT * FROM menues WHERE pk_menu=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        $this->id       = $rs->fields['pk_menu'];
-        $this->pk_menu  = $rs->fields['pk_menu'];
-        $this->title     = $rs->fields['name'];
-        $this->name     = $rs->fields['name'];
-        $this->position = $rs->fields['position'];
-        $this->type     = $rs->fields['type'];
-        $this->params   = unserialize($rs->fields['params']);
+        $this->id       = $data['pk_menu'];
+        $this->pk_menu  = $data['pk_menu'];
+        $this->title    = $data['name'];
+        $this->name     = $data['name'];
+        $this->position = $data['position'];
+        $this->type     = $data['type'];
+        $this->params   = unserialize($data['params']);
+        $this->items    = $this->getMenuItems($this->pk_menu);
 
         return $this;
     }
 
     /**
-     * Updates the menu information given an array of data
+     * Loads the menu data given an id.
      *
-     * @param array $data the new menu data
+     * @param integer $id The menu id.
      *
-     * @return boolean true if the action was done
-     **/
-    public function update($data)
+     * @return Menu The current menu.
+     */
+    public function read($id)
     {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
 
-        $sql = "UPDATE menues SET `name`=?, `params`=?, `position`=? "
-              ."WHERE pk_menu= ?" ;
+        try {
+            $sql = 'SELECT * FROM menues WHERE pk_menu=?';
+            $rs  = getService('dbal_connection')->fetchAssoc($sql, [ $id ]);
 
-        $values = array(
-            $data['name'],
-            $data['params'],
-            $data['position'],
-            $this->pk_menu
-        );
+            $this->load($rs);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
+    }
 
-        $saved = $this->setMenuElements($this->pk_menu, $data['items']);
+    /**
+     * Updates the menu data given an array of data.
+     *
+     * @param array $data The menu data.
+     *
+     * @return mixed The current menu if it was updated successfully. False
+     *               otherwise.
+     */
+    public function update($data)
+    {
+        try {
+            getService('dbal_connection')->update(
+                'menues',
+                [
+                    'name'     => $data['name'],
+                    'params'   => $data['params'],
+                    'type'     => 'user',
+                    'position' => $data['position']
+                ],
+                [ 'pk_menu' => $this->pk_menu ]
+            );
 
-        dispatchEventWithParams('menu.update', array('content' => $this));
+            $this->setMenuElements($this->pk_menu, $data['items']);
 
-        return $saved;
+            dispatchEventWithParams('menu.update', array('content' => $this));
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -217,63 +233,51 @@ class Menu
      */
     public function delete($id)
     {
-        $GLOBALS['application']->conn->StartTrans();
+        $conn = getService('dbal_connection');
 
-        // Delete menu elements
-        $this->emptyMenu($id);
+        $conn->beginTransaction();
+        try {
+            // Delete menu elements
+            $this->emptyMenu($id);
+            $conn->delete('menues', [ 'pk_menu' => $id ]);
+            $conn->commit();
 
-        $sql = 'DELETE FROM menues WHERE pk_menu=?';
-        $GLOBALS['application']->conn->Execute($sql, array($this->pk_menu));
+            dispatchEventWithParams('menu.delete', array('content' => $this));
 
-        $GLOBALS['application']->conn->CompleteTrans();
-
-        /* Notice log of this action */
-        // logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('menu.delete', array('content' => $this));
-
-        return true;
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollBack();
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Loads the menu items
+     * Loads a menu given a name.
      *
-     * @return array with categories order by positions
-     */
-    public function loadItems()
-    {
-        $this->items = $this->getMenuItems($this->pk_menu);
-
-        return $this;
-    }
-
-    /**
-     * Loads the menu data from name
+     * @param string $name The menu name.
      *
-     * @param string $name the menu name to load
-     *
-     * @return array with categories order by positions
+     * @return mixed The menu if it was found. False otherwise.
      */
     public function getMenu($name)
     {
-        $sql =  "SELECT * FROM menues WHERE name=?";
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM menues WHERE name=?",
+                [ $name ]
+            );
 
-        $values = array($name);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if (!$rs) {
+                return false;
+            }
 
-        if (!$rs) {
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $this->name      = $name;
-        $this->pk_menu   = $rs->fields['pk_menu'];
-        $this->params    = $rs->fields['params'];
-        $this->position  = $rs->fields['position'];
-        $this->type      = $rs->fields['type'];
-        $this->items     = $this->getMenuItems($this->pk_menu);
-
-        return $this;
-
     }
 
     /**
@@ -281,75 +285,26 @@ class Menu
      *
      * @param string $position the position of the menu
      *
-     * @return Menu the object instance
+     * @return mixed The Menu if it was found. False otherwise.
      */
     public function getMenuFromPosition($position)
     {
-        $sql =  "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1";
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1",
+                [ $position ]
+            );
 
-        $values = array($position);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if (!$rs) {
+                return false;
+            }
 
-        if (!$rs) {
-            return null;
+            $this->load($rs);
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $this->name      = $rs->fields['name'];
-        $this->pk_menu   = $rs->fields['pk_menu'];
-        $this->params    = $rs->fields['params'];
-        $this->position  = $rs->fields['position'];
-        $this->type      = $rs->fields['type'];
-        $this->items     = $this->getMenuItems($this->pk_menu);
-
-        return $this;
-
-    }
-
-    /**
-     * List menues given an SQL WHERE clause
-     *
-     * @param array $paramsConfig the list of Menu objects available
-     *
-     * @return array list of Menu objects
-     **/
-    public static function find($paramsConfig = 1)
-    {
-        $sql =  "SELECT * FROM menues WHERE {$paramsConfig}";
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return null;
-        }
-        $menues = array();
-        while (!$rs->EOF) {
-            $menu = new Menu();
-            $menu->name      = $rs->fields['name'];
-            $menu->pk_menu   = $rs->fields['pk_menu'];
-            $menu->params    = $rs->fields['params'];
-            $menu->position  = $rs->fields['position'];
-            $menu->type      = $rs->fields['type'];
-
-            $menues []= $menu;
-
-            $rs->MoveNext();
-        }
-
-        return $menues;
-    }
-
-    /**
-     * Renders a menu give its name
-     *
-     * @param array the list of Menu objects available
-     *
-     * @return string the HTML generated for the menu
-     **/
-    public static function renderMenu($name)
-    {
-        $menu = self::getMenu($name);
-
-        return $menu;
     }
 
     /**
@@ -363,25 +318,30 @@ class Menu
     {
         $menuItems = array();
 
-        $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC",
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return $menuItems;
+            }
+        } catch (\Exception $e) {
             return $menuItems;
         }
 
-        $i = 0;
-        while (!$rs->EOF) {
-            $menuItems[$rs->fields['pk_item']] = new stdClass();
-            $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];
-            $menuItems[$rs->fields['pk_item']]->title     = $rs->fields['title'];
-            $menuItems[$rs->fields['pk_item']]->link      = $rs->fields['link_name'];
-            $menuItems[$rs->fields['pk_item']]->position  = $rs->fields['position'];
-            $menuItems[$rs->fields['pk_item']]->type      = $rs->fields['type'];
-            $menuItems[$rs->fields['pk_item']]->pk_father = $rs->fields['pk_father'];
-            $menuItems[$rs->fields['pk_item']]->submenu = array();
-            $rs->MoveNext();
-            $i++;
+        foreach ($rs as $element) {
+            $menuItem = new stdClass();
+            $menuItem->pk_item   = (int) $element['pk_item'];
+            $menuItem->title     = @iconv(mb_detect_encoding($element['title']), 'utf-8', $element['title']);
+            $menuItem->link      = $element['link_name'];
+            $menuItem->position  = (int) $element['position'];
+            $menuItem->type      = $element['type'];
+            $menuItem->pk_father = (int) $element['pk_father'];
+            $menuItem->submenu   = [];
+
+            $menuItems[$element['pk_item']] = $menuItem;
         }
 
         foreach ($menuItems as $id => $element) {
@@ -409,8 +369,6 @@ class Menu
      */
     public function setMenuElements($id, $items = array(), $parentID = 0, &$elementID = 1)
     {
-        $saved = true;
-
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
@@ -421,44 +379,52 @@ class Menu
             $this->emptyMenu($id);
         }
 
-        $stmt = "INSERT INTO menu_items ".
-                " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            $position  = 1;
+            foreach ($items as $item) {
+                $title = filter_var($item->title, FILTER_SANITIZE_STRING);
+                $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
+                $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
 
-        $position  = 1;
-        foreach ($items as $item) {
-            $title = filter_var($item->title, FILTER_SANITIZE_STRING);
-            $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
-            $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
+                getService('dbal_connection')->insert(
+                    'menu_items',
+                    [
+                        'pk_item'   => $elementID,
+                        'pk_menu'   => $id,
+                        'title'     => $title,
+                        'link_name' => $link,
+                        'type'      => $type,
+                        'position'  => $position,
+                        'pk_father' => $parentID
+                    ]
+                );
 
-            $values = array($elementID, $id, $title, $link, $type, $position, $parentID);
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+                $parent = $elementID;
+                $elementID++;
+                $position++;
 
-            $parentId = $elementID;
-            $elementID++;
-            $position++;
-
-            if (!empty($item->submenu)) {
-                if (!$this->setMenuElements($id, $item->submenu, $parentId, $elementID)) {
-                    return false;
+                if (!empty($item->submenu)) {
+                    if (!$this->setMenuElements($id, $item->submenu, $parent, $elementID)) {
+                        return false;
+                    }
                 }
             }
-        }
 
-        return $saved;
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Deletes all items in a menu
+     * Deletes all items in a menu.
      *
-     * @param  integer $id
-     *
-     * @return boolean true if all went well
+     * @param integer $id The menu id.
      */
     public function emptyMenu($id)
     {
-        $sql = 'DELETE FROM menu_items WHERE pk_menu =?';
-
-        return $GLOBALS['application']->conn->Execute($sql, array($id)) !== false;
+        getService('dbal_connection')
+            ->delete('menu_items', [ 'pk_menu' => $id ]);
     }
 }

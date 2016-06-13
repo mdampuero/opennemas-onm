@@ -28,30 +28,34 @@ class Schedule extends Content
      **/
     public function getDataCalendars($limit = 8)
     {
-        $sql = "SELECT * FROM phpc_AR_calendars "
-             . "WHERE status=1 "
-             . "ORDER BY position ASC, calendar DESC LIMIT 0, $limit";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $calendars = [];
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM phpc_AR_calendars "
+               . "WHERE status=1 "
+               . "ORDER BY position ASC, calendar DESC LIMIT 0, ?",
+               [ $limit ]
+            );
 
-        $calendars = array();
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $item = new stdClass();
-                $item->id=$rs->fields['calendar'];
-                $item->calendar_title = $rs->fields['calendar_title'];
-                $item->contact_email  = $rs->fields['contact_email'];
-                $item->contact_name   = $rs->fields['contact_name'];
-                $item->bgcolor        = $rs->fields['bgcolor'];
-                $item->ensign         = $rs->fields['ensign'];
-                $item->position       = $rs->fields['position'];
-                $item->name           = \Onm\StringUtils::getTitle($rs->fields['calendar_title']);
+            foreach ($rs as $calendar) {
+                $item                 = new stdClass();
+                $item->id             = $calendar['calendar'];
+                $item->calendar_title = $calendar['calendar_title'];
+                $item->contact_email  = $calendar['contact_email'];
+                $item->contact_name   = $calendar['contact_name'];
+                $item->bgcolor        = $calendar['bgcolor'];
+                $item->ensign         = $calendar['ensign'];
+                $item->position       = $calendar['position'];
+                $item->name           = \Onm\StringUtils::getTitle($calendar['calendar_title']);
 
-                $calendars[]=$item;
-                $rs->MoveNext();
+                $calendars[] = $item;
             }
-        }
 
-        return $calendars;
+            return $calendars;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return $calendars;
+        }
     }
 
     /**
@@ -61,34 +65,37 @@ class Schedule extends Content
      *
      * @return array the list of events
      **/
-    public function getEventsByWhere($where)
+    public function getEventsByWhere($where, $limit = 8)
     {
-        $sql = 'SELECT * FROM phpc_AR_events '
+        $events = [];
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM phpc_AR_events "
                 ."WHERE ".$where
-                ." ORDER BY  starttime DESC";
+                ." ORDER BY  starttime DESC LIMIT ?",
+                [ $limit ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $events = array();
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $item= new stdClass();
-                $item->id        = $rs->fields['id'];
-                $item->title     = $rs->fields['subject'];
-                $item->calendar  = $rs->fields['calendar'];
-                $item->startdate = $rs->fields['startdate'];
-                $item->enddate   = $rs->fields['enddate'];
-                $item->section   = $rs->fields['section'];
-                $item->slug      =  \Onm\StringUtils::get_slug($rs->fields['subject']);
-                $item->name      = \Onm\StringUtils::get_slug(
-                    html_entity_decode($rs->fields['subject'], ENT_QUOTES, 'UTF-8')
+            foreach ($rs as $event) {
+                $item            = new stdClass();
+                $item->id        = $event['id'];
+                $item->title     = $event['subject'];
+                $item->calendar  = $event['calendar'];
+                $item->startdate = $event['startdate'];
+                $item->enddate   = $event['enddate'];
+                $item->section   = $event['section'];
+                $item->slug      = \Onm\StringUtils::generateSlug($event['subject']);
+                $item->name      = \Onm\StringUtils::generateSlug(
+                    html_entity_decode($event['subject'], ENT_QUOTES, 'UTF-8')
                 );
 
-                $events[]=$item;
-                $rs->MoveNext();
+                $events[] = $item;
             }
-        }
 
-        return $events;
+            return $events;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return $events;
+        }
     }
 }

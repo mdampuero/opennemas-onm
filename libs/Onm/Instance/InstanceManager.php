@@ -442,6 +442,7 @@ class InstanceManager extends BaseManager
      */
     public function persist(Instance &$instance)
     {
+        setlocale(LC_NUMERIC, 'C');
         $ref = new \ReflectionClass($instance);
         $properties = array();
         foreach ($ref->getProperties() as $property) {

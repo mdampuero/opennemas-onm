@@ -55,7 +55,6 @@ class MenuManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(pk_menu) FROM `menues` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {

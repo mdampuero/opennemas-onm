@@ -12,10 +12,11 @@ namespace BackendWebService\Controller;
 use Backend\Annotation\CheckModuleAccess;
 use Framework\Import\Compiler\Compiler;
 use Framework\Import\Repository\LocalRepository;
+use Framework\Import\ServerFactory;
+use Onm\Framework\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 
 /**
  * Handles the actions for the news agency module
@@ -55,6 +56,38 @@ class NewsAgencyServerController extends Controller
                 _('Please provide your source server configuration to start to use your Importer module')
             );
         }
+    }
+
+    /**
+     * Tries to connect to the server basing on the parameters.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkAction(Request $request)
+    {
+        $server = [
+            'password' => $request->query->get('password'),
+            'url'      => $request->query->get('url'),
+            'username' => $request->query->get('username'),
+        ];
+
+        $sf = new ServerFactory();
+
+        try {
+            $sf->get($server);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => _('Unable to connect to the server'),
+                'type'    => 'error'
+            ]);
+        }
+
+        return new JsonResponse([
+            'message' => _('Server connection success!'),
+            'type'    => 'success'
+        ]);
     }
 
     /**

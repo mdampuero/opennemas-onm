@@ -89,7 +89,7 @@ class Attachment extends Content
 
                 break;
             case 'slug':
-                return StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::getTitle($this->title);
 
                 break;
             default:
@@ -97,6 +97,40 @@ class Attachment extends Content
         }
 
         parent::__get($name);
+    }
+
+    /**
+     * Fetches information from one attachment given an id
+     *
+     * @param integer $id the id of the attachment we want to get information
+     *
+     * @return void
+     */
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return;
+        }
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN attachments ON pk_content = pk_attachment WHERE pk_content = ?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -116,23 +150,29 @@ class Attachment extends Content
         }
 
         $data['pk_author'] = $_SESSION['userid'];
+
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
 
         // now save all the specific information into the attachment table
-        $sql = "INSERT INTO attachments "
-             . "(`pk_attachment`,`title`, `path`, `category`) "
-             . "VALUES (?,?,?,?)";
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO attachments (`pk_attachment`,`title`, `path`, `category`) "
+                ." VALUES (?,?,?,?)",
+                [
+                    (int) $this->id,
+                    $data['title'],
+                    $data['path'],
+                    (int) $data['category'],
+                ]
+            );
 
-        $values = array(
-            $this->id,
-            $data['title'],
-            $data['path'],
-            (int) $data['category'],
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -151,53 +191,6 @@ class Attachment extends Content
     }
 
     /**
-     * Check if an attachment already exists
-     *
-     * @param  string  $path the path to check
-     * @param  string  $category the category where to check
-     *
-     * @return boolean
-    */
-    public function exists($path)
-    {
-        $sql = 'SELECT count(*) AS total FROM attachments WHERE `path`=? ';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($path));
-
-        return intval($rs) > 0;
-    }
-
-    /**
-     * Fetches information from one attachment given an id
-     *
-     * @param integer $id the id of the attachment we want to get information
-     *
-     * @return void
-     */
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM attachments, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_attachment AND pk_content = pk_fk_content',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->load($rs);
-
-        return $this;
-    }
-
-    /**
      * Updates the information for one attachment given an array of data
      *
      * @param array $data the array of data for the attachment
@@ -208,19 +201,21 @@ class Attachment extends Content
     {
         parent::update($data);
 
-        $sql = "UPDATE attachments SET `title`=?, category=? "
-             . "WHERE pk_attachment=?";
-        $values = [
-            $data['title'],
-            (int) $data['category'],
-            (int) $data['id']
-        ];
+        try {
+            getService('dbal_connection')->update(
+                'attachments',
+                [
+                    'title'    => $data['title'],
+                    'category' => (int) $data['category'],
+                ],
+                [ (int) $data['id'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -232,22 +227,52 @@ class Attachment extends Content
      **/
     public function remove($id)
     {
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return false;
+        }
+
         $filename = MEDIA_PATH.DS.FILE_DIR.$this->path;
+
+        parent::remove($id);
+
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'attachments',
+                [ 'pk_attachment' => $id ]
+            );
+        } catch (\Exception $e) {
+            return false;
+        }
 
         if (file_exists($filename)) {
             unlink($filename);
         }
 
-        parent::remove($id);
+        return true;
+    }
 
-        $sql = 'DELETE FROM `attachments` WHERE `pk_attachment`=?';
+    /**
+     * Check if an attachment already exists
+     *
+     * @param  string  $path the path to check
+     * @param  string  $category the category where to check
+     *
+     * @return boolean
+    */
+    public function exists($path)
+    {
+       try {
+            $rs = getService('dbal_connection')->fetchColumn(
+                'SELECT count(*) AS total FROM attachments WHERE `path`=?',
+                [ $path ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
+            return intval($rs) > 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -259,32 +284,32 @@ class Attachment extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-        $contents = implode(', ', $arrayIds);
+        try {
+            $contents = implode(', ', array_map(function($item) {
+                return (int) $item;
+            }, $arrayIds));
 
-        $sql = 'SELECT path FROM attachments WHERE pk_attachment IN ('.$contents.')';
+            $paths = getService('dbal_connection')->fetchAll(
+                'SELECT path FROM attachments WHERE pk_attachment IN ('.$contents.')'
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
-            return false;
-        }
+            $rs = getService('dbal_connection')->executeUpdate(
+                'DELETE FROM attachments WHERE `pk_attachment` IN ('.$contents.')'
+            );
 
-        while (!$rs->EOF) {
-            $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
-            if (file_exists($file)) {
-                @unlink($file);
+            foreach ($paths as $path) {
+                $file = MEDIA_PATH.DS.FILE_DIR.DS.$path['path'];
+                if (file_exists($file)) {
+                    echo $path."\n";
+                    // @unlink($file);
+                }
             }
 
-            $rs->MoveNext();
-        }
-
-        $sql = 'DELETE FROM attachments WHERE `pk_attachment` IN ('.$contents.')';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**

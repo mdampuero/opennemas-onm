@@ -79,10 +79,6 @@ class Album extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            case 'slug':
-                return StringUtils::getTitle($this->title);
-
-                break;
             case 'content_type_name':
                 $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
@@ -114,53 +110,18 @@ class Album extends Content
     {
         parent::load($properties);
 
-        if (array_key_exists('pk_album', $properties)) {
+        if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
             $this->pk_album    = $properties['pk_album'];
             $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
         }
-        if (array_key_exists('subtitle', $properties)) {
+        if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
             $this->subtitle    = $properties['subtitle'];
         }
-        if (array_key_exists('cover_id', $properties)) {
+        if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
             $this->cover_id    = $properties['cover_id'];
             $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
             $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
         }
-
-        return $this;
-    }
-
-    /**
-     * Creates an album from a data array and stores it in db
-     *
-     * @param array $data the data of the album
-     *
-     * @return bool true if the object was stored
-     */
-    public function create($data)
-    {
-        parent::create($data);
-
-        $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
-
-        $sql = "INSERT INTO albums "
-                ." (`pk_album`,`subtitle`, `agency`, `cover_id`) "
-                ." VALUES (?,?,?,?)";
-
-        $values = array(
-            (int) $this->id,
-            $data["subtitle"],
-            $data["agency"],
-            (int) $data['album_frontpage_image'],
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        $data['id'] = $this->id;
-
-        $this->saveAttachedPhotos($data);
 
         return $this;
     }
@@ -175,25 +136,60 @@ class Album extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM albums, contents, contents_categories '
-                .' WHERE pk_content = ? AND pk_content = pk_album AND pk_content = pk_fk_content',
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                .'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
                 [ $id ]
             );
 
             if (!$rs) {
                 return;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             return;
         }
+    }
 
-        $this->load($rs);
+    /**
+     * Creates an album from a data array and stores it in db
+     *
+     * @param array $data the data of the album
+     *
+     * @return bool true if the object was stored
+     */
+    public function create($data)
+    {
+        $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
 
-        return $this;
+        parent::create($data);
+
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'albums',
+                [
+                    'pk_album' => (int) $this->id,
+                    'subtitle' => $data["subtitle"],
+                    'agency'   => $data["agency"],
+                    'cover_id' => (int) $data['album_frontpage_image'],
+                ]
+            );
+
+            $this->saveAttachedPhotos($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -209,25 +205,27 @@ class Album extends Content
 
         $data['subtitle'] = (empty($data['subtitle']))? 0 : $data['subtitle'];
 
-        $sql = "UPDATE albums "
-             . "SET  `subtitle`=?, `agency`=?, `cover_id`=? "
-             ." WHERE pk_album=?";
+        try {
+            $rs = getService('dbal_connection')->update(
+                'albums',
+                [
+                    'subtitle' => $data['subtitle'],
+                    'agency'   => $data['agency'],
+                    'cover_id' => (int) $data['album_frontpage_image'],
+                ],
+                [ 'pk_album' => (int) $data['id'] ]
+            );
 
-        $values = array(
-            $data['subtitle'],
-            $data['agency'],
-            (int) $data['album_frontpage_image'],
-            (int) $data['id']
-        );
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if (!$rs) {
-            return null;
+            $this->removeAttachedImages($data['id']);
+            $this->saveAttachedPhotos($data);
+
+            $this->load($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $this->removeAttachedImages($data['id']);
-        $this->saveAttachedPhotos($data);
-
-        return $this;
     }
 
     /**
@@ -241,13 +239,16 @@ class Album extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM albums WHERE pk_album=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            return null;
-        }
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "albums", [ 'pk_album' => $id ]
+            );
 
-        return $this->removeAttachedImages($id);
+            return $this->removeAttachedImages($id);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -263,24 +264,29 @@ class Album extends Content
             return false ;
         }
 
-        $sql = 'SELECT DISTINCT pk_photo, description, position'
-               .' FROM albums_photos '
-               .' WHERE pk_album =? ORDER BY position ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
-
-        $photosAlbum = array();
-        while (!$rs->EOF) {
-            $photosAlbum []= array(
-                'id'       => $rs->fields['pk_photo'],
-                'position' => $rs->fields['position'],
-                'description' => $rs->fields['description'],
-                'photo'    => new Photo($rs->fields['pk_photo']),
+        $photosAlbum = [];
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT DISTINCT pk_photo, description, position'
+                .' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
+                [
+                    $albumID
+                ]
             );
+            foreach ($rs as $photo) {
+                $photosAlbum []= [
+                    'id'          => $photo['pk_photo'],
+                    'position'    => $photo['position'],
+                    'description' => $photo['description'],
+                    'photo'       => getService('entity_repository')->find('Photo', $photo['pk_photo']),
+                ];
+            }
 
-            $rs->MoveNext();
+            return $photosAlbum;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $photosAlbum;
     }
 
     /**
@@ -305,24 +311,29 @@ class Album extends Content
             $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
         }
 
-        $sql = 'SELECT DISTINCT pk_photo, description, position'
-               .' FROM albums_photos '
-               .' WHERE pk_album =? ORDER BY position ASC '.$limit;
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
-
-        $photosAlbum = array();
-        while (!$rs->EOF) {
-            $photosAlbum []= array(
-                'id'          => $rs->fields['pk_photo'],
-                'position'    => $rs->fields['position'],
-                'description' => $rs->fields['description'],
-                'photo'       => new Photo($rs->fields['pk_photo']),
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT DISTINCT pk_photo, description, position'
+                .' FROM albums_photos '
+                .' WHERE pk_album =? ORDER BY position ASC '.$limit,
+                [ $albumID ]
             );
 
-            $rs->MoveNext();
-        }
+            $photosAlbum = [];
+            foreach ($rs as $photo) {
+                $photosAlbum []= array(
+                    'id'          => $photo['pk_photo'],
+                    'position'    => $photo['position'],
+                    'description' => $photo['description'],
+                    'photo'       => new Photo($photo['pk_photo']),
+                );
+            }
 
-        return $photosAlbum;
+            return $photosAlbum;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -334,26 +345,29 @@ class Album extends Content
      **/
     public function saveAttachedPhotos($data)
     {
-        if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
-            foreach ($data['album_photos_id'] as $position => $photoID) {
+        $photoIds = $data['album_photos_id'];
+        if (isset($photoIds) && !empty($photoIds)) {
+            foreach ($photoIds as $position => $photoID) {
                 $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
-                $sql = "INSERT INTO albums_photos "
-                     ."(`pk_album`, `pk_photo`, `position`, `description`) "
-                     ." VALUES (?,?,?,?)";
 
-                $values = array($this->id, $photoID, $position, $photoFooter);
-
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-                if ($rs === false) {
+                try {
+                    $rs = getService('dbal_connection')->insert(
+                        "albums_photos",
+                        [
+                            "pk_album" => (int) $this->id,
+                            "pk_photo" => (int) $photoID,
+                            "position" => (int) $position,
+                            "description" => $photoFooter,
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    error_log($e->getMessage());
                     return false;
                 }
             }
-
-            return true;
         }
 
-        return $this;
+        return true;
     }
 
     /**
@@ -364,14 +378,21 @@ class Album extends Content
      **/
     public function removeAttachedImages($albumID)
     {
-        $sql = 'DELETE FROM albums_photos WHERE pk_album=?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'albums_photos',
+                [ 'pk_album' => (int) $albumID]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**

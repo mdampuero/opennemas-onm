@@ -1,3 +1,10 @@
+manager_ws_notification_autocomplete:
+    path:     /notifications/autocomplete
+    defaults: { _controller: ManagerWebServiceBundle:Notification:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_notification_create:
     path:     /notifications
     defaults: { _controller: ManagerWebServiceBundle:Notification:create }

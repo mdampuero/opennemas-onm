@@ -69,6 +69,48 @@ class Rating
     }
 
     /**
+     * Reads all the rating information for a given content id
+     *
+     * @param int $contentId the content id to load ratings from
+     *
+     * @return Rating|null the object with all the properties loaded
+     **/
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM ratings WHERE pk_rating =?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                $this->pk_rating = $id;
+                $this->total_value = 0;
+                $this->total_votes = 0;
+                $this->ips_count_rating = array();
+
+                return $this;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+
+        $this->pk_rating = $id;
+        $this->total_votes = $rs['total_votes'];
+        $this->total_value = $rs['total_value'];
+        $this->ips_count_rating = unserialize($rs['ips_count_rating']);
+        if (!is_array($this->ips_count_rating)) {
+            $this->ips_count_rating = [];
+        }
+
+        return $this;
+    }
+
+    /**
      * Creates an empty rating for a given content id
      *
      * @param int $contentId the content id to create the new rating for
@@ -77,79 +119,22 @@ class Rating
      **/
     public function create($contentId)
     {
-        $sql = "INSERT INTO ratings
-                       (`pk_rating`,`total_votes`, `total_value`, `ips_count_rating`)
-                VALUES (?,?,?,?)";
-        $values = array($contentId, 0, 0, serialize(array()));
+        try {
+            $rs = getService('dbal_connection')->insert(
+                'ratings',
+                [
+                    'pk_rating'        => $contentId,
+                    'total_votes'      => 0,
+                    'total_value'      => 0,
+                    'ips_count_rating' => serialize([]),
+                ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Reads all the rating information for a given content id
-     *
-     * @param int $contentId the content id to load ratings from
-     *
-     * @return Rating|null the object with all the properties loaded
-     **/
-    public function read($contentId)
-    {
-        $sql = 'SELECT total_votes, total_value, ips_count_rating
-                FROM ratings WHERE pk_rating =?';
-        $values = array($contentId);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        // If doesn't exists a previous rating create an empty one.
-        if ($rs->EOF) {
-            $this->pk_rating = $contentId;
-            $this->total_value = 0;
-            $this->total_votes = 0;
-            $this->ips_count_rating = array();
-
-            $this->create($contentId);
-
-            return $this;
-        }
-
-        if (!$rs) {
-            return false;
-        }
-        $this->pk_rating = $contentId;
-        $this->total_votes = $rs->fields['total_votes'];
-        $this->total_value = $rs->fields['total_value'];
-        $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
-
-        return $this;
-    }
-
-    /**
-     * Returns the current average rating for a given content id
-     *
-     * @param int $contentId the content id
-     *
-     * @return int the average rating for the content
-     **/
-    public function getValue($contentId)
-    {
-        $sql = 'SELECT total_votes, total_value
-                FROM ratings WHERE pk_rating =?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
-
-        if (!$rs) {
-            return;
-        }
-        $value = 0;
-
-        if ($rs->fields['total_votes'] != 0) {
-            $value = $rs->fields['total_value'] / $rs->fields['total_votes'];
-            $value = round($value * 100) / 100;
-        }
-
-        return $value;
     }
 
     /**
@@ -162,31 +147,58 @@ class Rating
      **/
     public function update($vote_value, $ip)
     {
-        $this->ips_count_rating = $this->addCount(
-            $this->ips_count_rating,
-            $ip
-        );
+        try {
+            $this->ips_count_rating = $this->addCount($this->ips_count_rating, $ip);
+            $this->total_votes++;
+            $this->total_value = $this->total_value + $vote_value;
 
-        if (!$this->ips_count_rating) {
+            $rs = getService('dbal_connection')->update(
+                'ratings',
+                [
+                    'total_votes'      => $this->total_votes,
+                    'total_value'      => $this->total_value,
+                    'ips_count_rating' => serialize($this->ips_count_rating),
+                ],
+                [ 'pk_rating' => $this->pk_rating ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-        $this->total_votes++;
-        $this->total_value = $this->total_value + $vote_value;
-        $sql = "UPDATE ratings "
-               ."SET  `total_votes`=?, `total_value`=?, `ips_count_rating`=?"
-               ."WHERE pk_rating=?";
-        $values = array(
-            $this->total_votes,
-            $this->total_value,
-            serialize($this->ips_count_rating),
-            $this->pk_rating,
-        );
+    }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+    /**
+     * Returns the current average rating for a given content id
+     *
+     * @param int $contentId the content id
+     *
+     * @return int the average rating for the content
+     **/
+    public function getValue($contentId)
+    {
+        $value = 0;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT total_votes, total_value FROM ratings WHERE pk_rating =?',
+                [ $contentId ]
+            );
+
+            if (!$rs) {
+                return 0;
+            }
+
+            if ($rs['total_votes'] != 0) {
+                $value = $rs['total_value'] / $rs['total_votes'];
+                $value = round($value * 100) / 100;
+            }
+
+            return $value;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -199,13 +211,10 @@ class Rating
      **/
     public function addCount($ipsCount, $ip)
     {
-        $ips = array();
-        foreach ($ipsCount as $ipArray) {
-            $ips[] = $ipArray['ip'];
-        }
-
-        //Se busca si existe algún voto desde la ip
-        $countKIP = array_search($ip, $ips);
+        // Se busca si existe algún voto desde la ip
+        $countKIP = array_search($ip, array_map(function($ip) {
+            return $ip['ip'];
+        }, $ipsCount));
 
         if ($countKIP === false) {
             $ipsCount[] = array('ip' => $ip, 'count' => 1);

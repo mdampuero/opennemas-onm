@@ -10,7 +10,6 @@
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well
@@ -24,20 +23,6 @@ use Onm\Database\DbalWrapper;
  */
 class UserGroupManager extends BaseManager
 {
-    /**
-     * Initializes the entity manager.
-     *
-     * @param DbalWrapper    $conn        The custom DBAL wrapper.
-     * @param CacheInterface $cache       The cache instance.
-     * @param string         $cachePrefix The cache prefix.
-     */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
-    {
-        $this->conn        = $conn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     /**
      * Counts searched users given a criteria.
      *
@@ -53,8 +38,7 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(pk_user_group) FROM `user_groups` WHERE $whereSQL";
 
-        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->conn->fetchArray($sql);
+        $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -114,8 +98,7 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT pk_user_group FROM `user_groups` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->conn->fetchAll($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -183,9 +166,7 @@ class UserGroupManager extends BaseManager
      */
     public function delete($id)
     {
-        $this->conn->transactional(function ($em) use ($id) {
-            $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
-        });
+        $em->delete('user_groups', ['pk_user_group' => $id ]);
 
         $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }

@@ -839,7 +839,7 @@ class ArticlesController extends Controller
             $this->ccm->getArraysMenu($this->category);
 
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 421)]);
 
         $this->view->assign(
             array(

@@ -23,13 +23,14 @@
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
     <pathconvert pathsep="," property="project.paths.php.comma-separated" refid="project.paths.php"/>
 
-    <path id="project.paths.js">
-        <pathelement path="${basedir}/public/assets/src" />
-        <pathelement path="${basedir}/public/assets/js" />
-        <pathelement path="${basedir}/public/themes/admin" />
-        <pathelement path="${basedir}/public/themes/manager" />
+    <fileset dir="${basedir}/public" id="project.paths.js">
+        <include name="assets/src/**/*.js" />
+        <include name="themes/admin/**/*.js" />
+        <include name="themes/manager/**/*.js" />
+        <exclude name="**/*charts.js" />
+        <exclude name="**/*theme-vars.js" />
         <!-- Take a look at lint target should be updated -->
-    </path>
+    </fileset>
 
     <pathconvert pathsep=" " property="project.paths.js.space-separated" refid="project.paths.js"/>
     <pathconvert pathsep="," property="project.paths.js.comma-separated" refid="project.paths.js"/>

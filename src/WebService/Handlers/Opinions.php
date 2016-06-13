@@ -39,7 +39,7 @@ class Opinions
         $opinion->author = $author;
 
         // Get author name slug
-        $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
+        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
         // Get machine related contents
         $opinion->machineRelated = $this->machineRelated($opinion->id);
@@ -416,7 +416,7 @@ class Opinions
             $element = $or->find('Opinion', $origElem['pk_content']);
             if (!empty($element->author)) {
                 $origElem['author_name'] = $element->author;
-                $origElem['author_name_slug'] = \StringUtils::getTitle($element->author);
+                $origElem['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
             } else {
                 $origElem['author_name_slug'] = "author";
             }
@@ -426,7 +426,7 @@ class Opinions
                     'id'       => $origElem['pk_content'],
                     'date'     => date('YmdHis', strtotime($origElem['created'])),
                     'category' => $origElem['author_name_slug'],
-                    'slug'     => \StringUtils::getTitle($origElem['title']),
+                    'slug'     => \Onm\StringUtils::getTitle($origElem['title']),
                 )
             );
         }
