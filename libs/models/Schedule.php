@@ -94,9 +94,6 @@ class Schedule extends Content
 
             return $events;
         } catch (\Exception $e) {
-            var_dump($e);
-            die();
-
             error_log($e->getMessage());
             return $events;
         }
