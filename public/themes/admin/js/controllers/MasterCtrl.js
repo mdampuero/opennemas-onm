@@ -193,7 +193,10 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       var id   = $scope.notifications[index].id;
       var url  = routing.generate('backend_ws_notification_patch', { id: id });
       var date = new Date();
-      var data = { click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss') };
+      var data = {
+        click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+        read_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+      };
 
       $http.patch(url, data);
     };
@@ -372,8 +375,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     });
 
     // Mark notifications as clicked when clicking in notification-action
-    $('body, .notification-list').on('click', '.notification-action', function (e) {
-      e.preventDefault();
+    $('body, .notification-list').on('click', '.notification-list-item a', function (e) {
       e.stopPropagation();
 
       var target   = e.target.closest('li');
