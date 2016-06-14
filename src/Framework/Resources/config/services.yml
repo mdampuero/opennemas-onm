@@ -275,3 +275,6 @@ services:
 
     vat:
         class: Framework\VAT\VATService
+
+    core.manager.advertisement:
+        class: AdvertisementPositions

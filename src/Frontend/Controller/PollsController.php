@@ -293,11 +293,11 @@ class PollsController extends Controller
     protected function getAds($context = 'frontpage')
     {
         // Get polls positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = getService('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('polls_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('polls_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);

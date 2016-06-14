@@ -346,8 +346,8 @@ class LetterController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions       = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = getService('core.manager.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

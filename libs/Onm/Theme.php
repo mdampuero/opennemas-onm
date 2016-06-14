@@ -143,9 +143,6 @@ class Theme
             }
         }
 
-        // Instantiate ads manager
-        $this->adsManager = new \AdvertisementPositions();
-
         // TODO:  this if was added to here in order to avoid test to pass.
         if (defined('TEMPLATE_USER_PATH')) {
             bindtextdomain('base', realpath(TEMPLATE_USER_PATH.'../base/locale/'));
@@ -371,16 +368,6 @@ class Theme
         }
 
         return false;
-    }
-
-    /**
-     * Retrieves an instace of ads manager
-     *
-     * @return $this->adsManager
-     **/
-    public function getAdsPositionManager()
-    {
-        return $this->adsManager;
     }
 
     /**

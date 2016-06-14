@@ -342,11 +342,11 @@ class BlogsController extends Controller
     private function getAds($context = '')
     {
         // Get opinion positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = getService('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, '4');

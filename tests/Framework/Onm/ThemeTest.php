@@ -408,12 +408,4 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->theme->registerParentTheme('base');
         $this->assertEquals($this->theme->getParentTheme(), 'base');
     }
-
-    /**
-     * @covers Onm\Theme::getAdsPositionManager
-     */
-    public function testGetAdsPositionManager()
-    {
-        $this->assertTrue($this->theme->getAdsPositionManager() instanceof \AdvertisementPositions);
-    }
 }
