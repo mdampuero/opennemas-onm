@@ -215,9 +215,7 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('title')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.title['en'] %]
-                </a>
+                <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
