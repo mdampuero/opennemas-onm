@@ -141,10 +141,18 @@ class Importer
      */
     public function importAll()
     {
+        $imported  = [];
         $resources = $this->getResources();
 
         foreach ($resources as $resource) {
-            $imported[] = $this->import($resource);
+            try {
+                $id = $this->import($resource);
+
+                if (!empty($id)) {
+                    $imported[] = $id;
+                }
+            } catch (\Exception $e) {
+            }
         }
 
         return $imported;
