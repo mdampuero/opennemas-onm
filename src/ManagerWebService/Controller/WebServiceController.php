@@ -136,7 +136,6 @@ class WebServiceController extends Controller
         );
 
         $errors = array();
-
         try {
             $creator = new InstanceCreator($im->getConnection());
             $im->persist($instance);
@@ -152,15 +151,13 @@ class WebServiceController extends Controller
 
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         } catch (IOException $e) {
             // Can not copy default assets
             $errors[] = $e->getMessage();
 
             $creator->deleteDatabase($instance->id);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         } catch (\Exception $e) {
             // Can not save settings in instance database
             $errors[] = $e->getMessage();
@@ -168,23 +165,24 @@ class WebServiceController extends Controller
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         }
 
         try {
-            $data = [
-                'name'          => $instance->name,
-                'internal_name' => $instance->internal_name,
-                'user_mail'     => $instance->contact_mail,
-                'user_name'     => $instance->contact_mail,
-            ];
-
-            $language = $instance->external['site_language'];
-            $plan     = $instance->plan;
-
-            $domain = $instanceCreator['base_domain'];
-            $this->sendMails($data, $companyMail, $domain, $language, $plan);
+            if (count($errors) <= 0) {
+                $this->sendMails(
+                    [
+                        'name'          => $instance->name,
+                        'internal_name' => $instance->internal_name,
+                        'user_mail'     => $instance->contact_mail,
+                        'user_name'     => $instance->contact_mail,
+                    ],
+                    $companyMail,
+                    $instance->external['site_language'],
+                    $instanceCreator['base_domain'],
+                    $instance->plan
+                );
+            }
         } catch (\Exception $e) {
             $errors['all'] = ['Unable to send emails'];
             error_log($e->getMessage());
@@ -198,8 +196,7 @@ class WebServiceController extends Controller
             [
                 'success'      => true,
                 'instance_url' => $instance->domains[0],
-                'enable_url'   => $instance->domains[0]
-                . '/admin/login?token=' . $user['token']
+                'enable_url'   => $instance->domains[0].'/admin/login?token='.$user['token']
             ],
             200
         );
@@ -230,7 +227,7 @@ class WebServiceController extends Controller
         return false;
     }
 
-    private function sendErrorMail($emails, $instance, $exception)
+    private function reportInstanceCreationError($emails, $instance, $exception)
     {
         $this->view = new \TemplateManager();
 
@@ -249,6 +246,8 @@ class WebServiceController extends Controller
                     )
                 )
             );
+
+        error_log($exception->getMessage(). '. Instance Data: '.json_encode($instance));
 
         // Send message
         $this->get('mailer')->send($message);
