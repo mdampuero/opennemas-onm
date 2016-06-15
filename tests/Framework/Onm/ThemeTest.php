@@ -360,34 +360,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\Theme::registerDisposition
-     */
-    public function testRegisterDisposition()
-    {
-        $this->theme->registerDisposition('test');
-
-        $this->assertEquals($this->theme->disposition, 'test');
-    }
-
-    /**
-     * @covers Onm\Theme::getDisposition
-     */
-    public function testGetDisposition()
-    {
-        $this->theme->registerDisposition('test');
-
-        $this->assertEquals($this->theme->getDisposition(), 'test');
-    }
-
-    /**
-     * @covers Onm\Theme::getDisposition
-     */
-    public function testGetDispositionWithoutRegisteredDisposition()
-    {
-        $this->assertEquals($this->theme->getDisposition(), false);
-    }
-
-    /**
      * @covers Onm\Theme::registerParentTheme
      */
     public function testRegisterParentThemeEmpty()

@@ -315,34 +315,6 @@ class Theme
     }
 
     /**
-     * Registers a default disposition for image in the theme
-     *
-     * @param array $disposition the menu definition
-     *
-     * @return Theme the object
-     **/
-    public function registerDisposition($disposition)
-    {
-        $this->disposition = $disposition;
-
-        return $this;
-    }
-
-    /**
-     * Returns the default disposition for images in this theme or false if it doesn't have
-     * support for translations
-     *
-     * @return string|false the default disposition defined
-     **/
-    public function getDisposition()
-    {
-        if ($this->disposition) {
-            return $this->disposition;
-        }
-        return false;
-    }
-
-    /**
      * Registers a parent theme to inheritance tpl files
      *
      * @param string $parentTheme name theme
