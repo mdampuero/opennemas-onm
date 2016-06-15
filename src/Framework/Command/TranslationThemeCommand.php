@@ -9,19 +9,25 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TranslationThemeCommand extends Command
+class TranslationThemeCommand extends ContainerAwareCommand
 {
+    /**
+     * The list of supported languages.
+     *
+     * @var array
+     */
     public $supportedLanguages = array('es_ES', 'gl_ES', 'pt_BR');
 
-    public $translationDir = '/locale';
-
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
@@ -42,31 +48,41 @@ EOF
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = APPLICATION_PATH;
-
         chdir($basePath);
 
-        $theme = $input->getArgument('theme');
+        $theme  = $input->getArgument('theme');
+        $themes = $this->getContainer()->get('orm.loader')->getPlugins();
+        $themes = array_filter($themes, function ($a) use ($theme) {
+            return str_replace('es.openhost.theme.', '', $a->uuid) === $theme;
+        });
 
-        $this->themeFolder = 'public/themes/'.$theme;
-
-        if (!file_exists($this->themeFolder)) {
+        if (empty($themes)) {
             $output->writeln("<error>Theme $theme doesn't exists</error>");
             return;
         }
 
-        $this->theme = include($this->themeFolder.'/init.php');
+        $theme = array_shift($themes);
 
-        if (!$this->theme->hasL10nSupport()) {
+        if (empty($theme->text_domain)) {
             $output->writeln('<error>This theme has no support for translations</error>');
-
-            return false;
+            return;
         }
 
-        $this->translationsDir      = $this->theme->getTranslationsDir();
-        $this->translationsDomain = $this->theme->getTranslationDomain();
+        $this->themeFolder = 'public/' . $theme->path;
+
+        $path  = $this->getContainer()->getParameter('core.paths.themes') . '/'
+            . str_replace('es.openhost.theme.', '', $theme->uuid) . '/locale';
+
+        bindtextdomain($theme->text_domain, $theme->path . '/locale');
+
+        $this->translationsDir    = $path;
+        $this->translationsDomain = $theme->text_domain;
 
         if (!file_exists($this->translationsDir)) {
             $output->writeln(" * Creating the locale folder");
@@ -80,10 +96,10 @@ EOF
     }
 
     /**
-     * Extract translations from a list of modules
+     * Extract translations from the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
@@ -132,15 +148,15 @@ EOF
     }
 
     /**
-     * Updates the translation files for the given theme
+     * Updates the translation files for the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function updateTrans($output)
     {
         $output->writeln(" * Updating translation files");
 
-        $translationsDir = $this->theme->getTranslationsDir();
+        $translationsDir = $this->translationsDir;
         foreach ($this->supportedLanguages as $language) {
             $output->writeln("\t- Language ".$language);
             $languageDir = $translationsDir.'/'.$language.'/LC_MESSAGES';
@@ -161,10 +177,10 @@ EOF
     }
 
     /**
-     * Compiles the translation files for the given theme
+     * Compiles the translation files for the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function compileTrans($output)
     {
         $output->writeln(" * Compiling translation databases");
