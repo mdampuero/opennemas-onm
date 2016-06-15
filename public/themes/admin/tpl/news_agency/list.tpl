@@ -124,7 +124,7 @@
             </li>
             <li class="quicklinks" ng-if="mode !== 'grid'">
               <button class="btn btn-link" ng-click="list('backend_ws_news_agency_list')" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-                <i class="fa fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
+                <i class="fa fa-refresh fa-lg" ng-class="{ 'fa-spin': loading }"></i>
               </button>
             </li>
           </ul>
