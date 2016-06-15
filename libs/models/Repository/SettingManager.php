@@ -199,11 +199,7 @@ class SettingManager extends BaseManager
                 ."VALUES ('$name', '$serialized') "
                 ."ON DUPLICATE KEY UPDATE value = '$serialized'";
 
-        $rs = $this->dbConn->executeUpdate($sql);
-
-        if (!$rs) {
-            return false;
-        }
+        $this->dbConn->executeUpdate($sql);
         $this->cache->save($name, $value);
 
         return true;
