@@ -1,38 +1,103 @@
 <?php
 /**
- * Defines the LayoutManager class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
- *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Onm
- * @subpackage LayoutManager
  */
 namespace Onm;
 
 /**
- * Loads an xml file and tries to generate the frontpage manager.
- *
- * @package    Onm
- * @subpackage LayoutManager
- **/
+ * Manages and renders theme layouts.
+ */
 class LayoutManager
 {
     /**
-     * Initializes the LayoutManager from a xml file
+     * The default values for a layout.
      *
-     * @param stringn $xmlFile the layout definition file
+     * @var array
      */
-    public function __construct($xmlFile)
+    protected $defaultLayout = [
+        'name' => 'Layout name',
+        'menu' => 'frontpage'
+    ];
+
+    /**
+     * The current layout document.
+     *
+     * @var array
+     */
+    protected $layoutDoc = [];
+
+    /**
+     * The list of layouts
+     *
+     * @var array
+     */
+    protected $layouts = [];
+
+    /**
+     * Adds a layout to the list of layouts.
+     *
+     * @param string $name The layout name.
+     * @param string $file The layout configuration.
+     */
+    public function addLayout($name, $layout)
     {
-        if (file_exists($xmlFile)) {
-            $this->layoutDoc = simplexml_load_file($xmlFile);
-        } else {
-            $this->layoutDoc = [];
+        $layout = array_merge($this->defaultLayout, $layout);
+
+        $this->layouts[$name] = $layout;
+    }
+
+    /**
+     * Adds a list of layouts to the list of layouts.
+     *
+     * @param string $name The layout name.
+     * @param string $file The layout configuration.
+     */
+    public function addLayouts($layouts)
+    {
+        foreach ($layouts as $name => $layout) {
+            $this->addLayout($name, $layout);
+        }
+    }
+
+    /**
+     * Returns the configuration for a layout
+     *
+     * @param string $name The layout name.
+     *
+     * @return array The layout configuration.
+     */
+    public function getLayout($name)
+    {
+        if (!array_key_exists($name, $this->layouts)) {
+            return false;
+        }
+        return $this->layouts[$name];
+    }
+
+    /**
+     * Returns the list of layouts.
+     *
+     * @return array The list of layouts.
+     */
+    public function getLayouts()
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * Loads a layout file.
+     *
+     * @param string $file The path to the file to load.
+     */
+    public function load($file)
+    {
+        if (file_exists($file)) {
+            $this->layoutDoc = simplexml_load_file($file);
         }
     }
 

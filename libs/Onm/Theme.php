@@ -56,13 +56,6 @@ class Theme
     public $author_uri = '';
 
     /**
-     * The layouts available for this theme
-     *
-     * @var array
-     **/
-    public $layouts = array();
-
-    /**
      * Registered menus in the theme
      *
      * @var array
@@ -104,16 +97,6 @@ class Theme
     );
 
     /**
-     * Default property definitions for a layout
-     *
-     * @var array
-     **/
-    private $defaultLayout = array(
-        'name'        => 'Layout name',
-        'menu'        => 'frontpage',
-    );
-
-    /**
      * Initializes the Theme instance
      *
      * @param array $settings the settings for the theme
@@ -135,47 +118,6 @@ class Theme
                 $this->{$propertyName} = $settings[$propertyName];
             }
         }
-    }
-
-    /**
-     * Adds a layout to the available layouts
-     *
-     * @param string $name the layout name
-     * @param string $file the layout file path
-     *
-     * @return boolean true if all went well
-     **/
-    public function registerLayout($name, $file)
-    {
-        $file = array_merge($this->defaultLayout, $file);
-        $this->layouts[$name] = $file;
-
-        return $this;
-    }
-
-    /**
-     * Returns a list of available layouts
-     *
-     * @return array the list of available layouts
-     **/
-    public function getLayouts()
-    {
-        return $this->layouts;
-    }
-
-    /**
-     * Returns the configuration array for a layout
-     *
-     * @param string $name the layout name
-     *
-     * @return array
-     **/
-    public function getLayout($name)
-    {
-        if (!array_key_exists($name, $this->layouts)) {
-            return false;
-        }
-        return $this->layouts[$name];
     }
 
     /**

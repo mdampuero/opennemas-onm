@@ -282,3 +282,6 @@ services:
 
     core.manager.advertisement:
         class: AdvertisementPositions
+
+    core.manager.layout:
+        class: Onm\LayoutManager

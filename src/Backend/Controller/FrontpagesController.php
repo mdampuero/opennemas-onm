@@ -23,7 +23,6 @@ use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\LayoutManager;
 
 /**
  * Handles the actions for the system information
@@ -112,11 +111,10 @@ class FrontpagesController extends Controller
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
-        $lm = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
-        );
-        $layoutSettings = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayout($layoutTheme);
+        $lm = $this->get('core.manager.layout');
+        $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
+
+        $layoutSettings = $lm->getLayout($layoutTheme);
 
         // Get contents for this home
         $cm = new \ContentManager();
@@ -153,8 +151,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $layouts = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayouts();
+        $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
         $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
@@ -317,7 +314,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
+        $availableLayouts = $this->container->get('core.manager.layout')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid  = in_array($layout, $availableLayouts);
