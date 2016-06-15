@@ -63,20 +63,6 @@ class Theme
     public $menus = array();
 
     /**
-     * Registered ads positions for this theme
-     *
-     * @var array
-     **/
-    public $adsPositions = array();
-
-    /**
-     * Default disposition defined for the theme
-     *
-     * @var string
-     **/
-    public $disposition = null;
-
-    /**
      * undocumented class variable
      *
      * @var string
@@ -84,25 +70,12 @@ class Theme
     public $parentTheme = null;
 
     /**
-     * Default property definitions for a menu
-     *
-     * @var array
-     **/
-    private $defaultMenu = array(
-        'description'  => 'A simple menu',
-        'default_menu' => 'frontpage',
-        'class'        => 'menu',
-        'before_menu'  => '<div id="%1$s" class="menu %2$s">',
-        'after_menu'   => '</div>',
-    );
-
-    /**
      * Initializes the Theme instance
      *
      * @param array $settings the settings for the theme
      *
      * @return Theme the object initialized
-     **/
+     */
     public function __construct($settings = array())
     {
         $properties = array(
@@ -118,76 +91,6 @@ class Theme
                 $this->{$propertyName} = $settings[$propertyName];
             }
         }
-    }
-
-    /**
-     * Registers a new menu in the theme
-     *
-     * @param array $menuDefinition the menu definition
-     *
-     * @return Theme the object
-     **/
-    public function registerMenu($menuDefinition)
-    {
-        if (!is_array($menuDefinition)) {
-            throw new \Exception(_('Please provide a menu definition to register it.'));
-        }
-
-        if (!array_key_exists('name', $menuDefinition)) {
-            throw new \Exception(_('Menu to register doesn\'t provide a name.'));
-        }
-
-        if (array_key_exists($menuDefinition['name'], $this->menus)) {
-            throw new \Exception(sprintf(_('Menu "%s" already registered.'), $menuDefinition['name']));
-        }
-
-        $menu = array_merge(
-            $this->defaultMenu,
-            $menuDefinition
-        );
-
-        $this->menus[$menu['name']] = $menu;
-
-        return $this;
-    }
-
-    /**
-     * Returns the menu placeholder definition
-     *
-     * @param string $name the menu name
-     *
-     * @return array the menu definitions
-     **/
-    public function getMenu($name)
-    {
-        if (!array_key_exists($name, $this->menus)) {
-            return false;
-        }
-        return $this->menus[$name];
-    }
-
-    /**
-     * Returns all the registered menus in this theme
-     *
-     * @return array the list of menu definitions
-     **/
-    public function getMenuDefinitions()
-    {
-        return $this->menus;
-    }
-
-    /**
-     * Returns all the registered menus in this theme
-     *
-     * @return array the list of menu definitions
-     **/
-    public function getMenus()
-    {
-        $definitions = array();
-        foreach ($this->menus as $name => $value) {
-            $definitions[$name] = $value['description'];
-        }
-        return $definitions;
     }
 
     /**

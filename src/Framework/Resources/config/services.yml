@@ -285,3 +285,8 @@ services:
 
     core.manager.layout:
         class: Onm\LayoutManager
+
+    # TODO: Remove arguments when new ORM repositories replace search features
+    core.manager.menu:
+        class: Repository\MenuManager
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
