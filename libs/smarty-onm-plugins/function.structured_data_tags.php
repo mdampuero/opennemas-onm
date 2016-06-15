@@ -92,14 +92,14 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $output = '<script type="application/ld+json">';
         $output .= '{
                         "@context" : "http://schema.org",
-                        "@type" : "Article",
+                        "@type" : "NewsArticle",
                         "mainEntityOfPage": {
                             "@type": "WebPage",
                             "@id": "'.$url.'"
                         },';
+                        // "name" : "'.$title.'",';
         $output .= '
-                        "headline": "'.$content->title.'",
-                        "name" : "'.$title.'",';
+                        "headline": "'.$title.'",';
         $output .= '
                         "author" : {
                             "@type" : "Person",
@@ -119,10 +119,10 @@ function smarty_function_structured_data_tags($params, &$smarty)
                         },';
         }
 
+                        // "articleSection" : "'.$category->title.'",
+                        // "keywords" : "'.$content->metadata.'",
+                        // "url" : "'.$url.'",
         $output .= '
-                        "articleSection" : "'.$category->title.'",
-                        "keywords" : "'.$content->metadata.'",
-                        "url" : "'.$url.'",
                         "publisher" : {
                             "@type" : "Organization",
                             "name" : "'.getService("setting_repository")->get("site_name").'",
