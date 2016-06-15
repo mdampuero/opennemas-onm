@@ -217,6 +217,10 @@ services:
         class: Onm\Instance\Instance
         factory: [ '@kernel.listener.instanceloader', getInstance ]
 
+    theme:
+        class: Framework\ORM\Entity\Extension
+        factory: [ '@kernel.listener.themeloader', getTheme ]
+
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ '@service_container' ]
