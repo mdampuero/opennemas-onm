@@ -85,14 +85,72 @@ class Photo extends Content
     }
 
     /**
-     * undocumented function
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
      *
      * @return void
-     * @author
      **/
-    public function __get($propertyName)
+    public function load($properties)
     {
-        parent::__get($propertyName);
+        parent::load($properties);
+
+        $this->pk_photo    = $properties['pk_photo'];
+        $this->name        = $properties['name'];
+        $this->path_file   = $properties['path_file'];
+        if (!empty($properties['path_file'])) {
+            $this->path_img = $properties['path_file'].DS.$properties['name'];
+        }
+        $this->size        = $properties['size'];
+        $this->width       = $properties['width'];
+        $this->height      = $properties['height'];
+        $this->nameCat     = $properties['nameCat'];
+        $this->author_name = $properties['author_name'];
+        $this->description = ($this->description);
+        $this->metadata    = ($this->metadata);
+        $this->address     = $properties['address'];
+        $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
+
+        if (!empty($properties['address'])) {
+            $positions = explode(',', $properties['address']);
+            if (is_array($positions)) {
+                $this->latlong = array(
+                    'lat' => $positions[0],
+                    'long' => $positions[1],
+                );
+            }
+        }
+    }
+
+    /**
+     * Returns an instance of the Photo object given a photo id
+     *
+     * @param int $id the photo id to load
+     *
+     * @return Photo the photo object
+     **/
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) return;
+
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN photos ON pk_content = pk_photo WHERE pk_content=?',
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+
+        $this->load($rs);
+
+        return $this;
     }
 
     /**
@@ -105,33 +163,31 @@ class Photo extends Content
      **/
     public function create($data)
     {
+
         $data['content_status'] = 1;
+        try {
+            parent::create($data);
 
-        parent::create($data);
+            $rs = getService('dbal_connection')->insert(
+                "photos",
+                [
+                    'pk_photo'    => (int) $this->id,
+                    'name'        => $data["name"],
+                    'path_file'   => $data["path_file"],
+                    'size'        => $data['size'],
+                    'width'       => (int) $data['width'],
+                    'height'      => (int) $data['height'],
+                    'nameCat'     => $data['nameCat'],
+                    'author_name' => $data['author_name']
+                ]
+            );
 
-        $sql = "INSERT INTO photos
-                    (`pk_photo`, `name`, `path_file`, `size`,`width`, `height`, `nameCat`, `author_name`)
-                VALUES
-                    (?,?,?, ?,?,?, ?,?)";
-
-        $values = array(
-            (int) $this->id,
-            $data["name"],
-            $data["path_file"],
-            $data['size'],
-            (int) $data['width'],
-            (int) $data['height'],
-            $data['nameCat'],
-            $data['author_name']
-        );
-
-        $execution = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if ($execution === false) {
+            return $this->id;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
-        return $this->id;
     }
 
     /**
@@ -302,74 +358,6 @@ class Photo extends Content
     }
 
     /**
-     * Returns an instance of the Photo object given a photo id
-     *
-     * @param int $id the photo id to load
-     *
-     * @return Photo the photo object
-     **/
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN photos ON pk_content = pk_photo WHERE pk_content=?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-
-        $this->load($rs);
-
-        return $this;
-    }
-
-    /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     *
-     * @return void
-     **/
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        $this->pk_photo    = $properties['pk_photo'];
-        $this->name        = $properties['name'];
-        $this->path_file   = $properties['path_file'];
-        if (!empty($properties['path_file'])) {
-            $this->path_img = $properties['path_file'].DS.$properties['name'];
-        }
-        $this->size        = $properties['size'];
-        $this->width       = $properties['width'];
-        $this->height      = $properties['height'];
-        $this->nameCat     = $properties['nameCat'];
-        $this->author_name = $properties['author_name'];
-        $this->description = ($this->description);
-        $this->metadata    = ($this->metadata);
-        $this->address     = $properties['address'];
-        $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
-
-        if (!empty($properties['address'])) {
-            $positions = explode(',', $properties['address']);
-            if (is_array($positions)) {
-                $this->latlong = array(
-                    'lat' => $positions[0],
-                    'long' => $positions[1],
-                );
-            }
-        }
-    }
-    /**
      * Updates the photo object given an array with information
      *
      * @param array $data the new photo information
@@ -378,28 +366,28 @@ class Photo extends Content
      **/
     public function update($data)
     {
-        parent::update($data);
+        try {
+            parent::update($data);
 
-        $sql = "UPDATE photos
-                SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?, `author_name`=?, `address`=?
-                WHERE pk_photo=?";
+            $rs = getService('dbal_connection')->update(
+                "photos",
+                [
+                    'name'        => $this->name,
+                    'path_file'   => $this->path_file,
+                    'size'        => $this->size,
+                    'width'       => (int) $this->width,
+                    'height'      => (int) $this->height,
+                    'author_name' => $data['author_name'],
+                    'address'     => $data['address'],
+                ],
+                [ 'pk_column' => (int) $data['id'] ]
+            );
 
-        $values = [
-            $this->name,
-            $this->path_file,
-            $this->size,
-            (int) $this->width,
-            (int) $this->height,
-            $data['author_name'],
-            $data['address'],
-            (int) $data['id']
-        ];
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -411,19 +399,28 @@ class Photo extends Content
      **/
     public function remove($id)
     {
-        parent::remove($id);
-
-        $sql = 'DELETE FROM photos WHERE pk_photo=?';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            return false;
-        }
+        if ((int) $id <= 0) return false;
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
-        if (file_exists($image)) {
-            @unlink($image);
+        if (file_exists($image) && !@unlink($image)) {
+            return false;
+        }
+
+        parent::remove($id);
+
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "photos",
+                [ 'pk_photo' => $id ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
         return true;
@@ -578,14 +575,21 @@ class Photo extends Content
      */
     public static function getPhotoPath($id)
     {
-        $sql = 'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            if (!$rs) {
+                return false;
+            }
+
+            return (string) $rs['path_file'].$rs['name'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return (string) $rs->fields['path_file'].$rs->fields['name'];
     }
 
     /**
@@ -597,33 +601,32 @@ class Photo extends Content
      **/
     public static function batchDelete($arrayIds)
     {
+        $conn = getService('dbal_connection');
+
         $contents = implode(', ', $arrayIds);
+        try {
+            $rs = $conn->fetchAssoc(
+                'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')'
+            );
 
-        $sql = 'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
-            return false;
-        }
-
-        while (!$rs->EOF) {
-            $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
-
-            if (file_exists($image)) {
-                @unlink($image);
+            if (!$rs) {
+                return false;
             }
 
-            $rs->MoveNext();
-        }
+            foreach ($rs as $item) {
+                $image = MEDIA_IMG_PATH.$item['path_file'].$item['name'];
 
-        $sql = 'DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')';
+                if (file_exists($image)) {
+                    @unlink($image);
+                }
+            }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
+            $rs = $conn->executeUpdate('DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')');
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
-
     }
 }
