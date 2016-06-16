@@ -60,6 +60,19 @@ class ThemeLoaderListener implements EventSubscriberInterface
             return;
         }
 
+        $template = $this->container->get('core.template');
+        $parents  = $this->getParents($this->theme->uuid);
+
+        $template->addActiveTheme($this->theme);
+
+        foreach ($parents as $uuid) {
+            $theme = $this->getThemeByUuid($uuid);
+
+            if (!empty($theme)) {
+                $template->addTheme($theme);
+            }
+        }
+
         foreach ($this->theme->parameters as $key => $values) {
             if (method_exists($this, 'load' . $key)) {
                 $this->{'load' . $key}($values);
@@ -129,6 +142,35 @@ class ThemeLoaderListener implements EventSubscriberInterface
         }
 
         return array_shift($themes);
+    }
+
+    /**
+     * Returns the list of parents of the current theme.
+     *
+     * @param Extension $theme The theme UUID.
+     *
+     * @return array The list of parents.
+     */
+    protected function getParents($uuid)
+    {
+        $uuids   = [];
+        $parents = [];
+        $theme   = $this->getThemeByUuid($uuid);
+
+        if (empty($theme) || !array_key_exists('parent', $theme->parameters)) {
+            return $parents;
+        }
+
+        foreach ($theme->parameters['parent'] as $parent) {
+            $uuids[]   = $parent;
+            $parents[] = $parent;
+        }
+
+        foreach ($parents as $parent) {
+            $uuids = array_merge($uuids, $this->getParents($parent));
+        }
+
+        return array_unique($uuids);
     }
 
     /**
