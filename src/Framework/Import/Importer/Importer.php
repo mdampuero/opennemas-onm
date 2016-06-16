@@ -384,7 +384,7 @@ class Importer
         }
 
         if ($this->importRelated() && !empty($resource->related)) {
-            $data = array_merge($data, $this->getRelatedData());
+            $data = array_merge($data, $this->getRelatedData($resource, $target));
         }
 
         return $data;
