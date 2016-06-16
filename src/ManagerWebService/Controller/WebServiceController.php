@@ -26,6 +26,31 @@ use Onm\Exception\DatabaseNotRestoredException;
 class WebServiceController extends Controller
 {
     /**
+     * Checks if it is an authorized request.
+     *
+     * @param  Request $request The request object.
+     * @return boolean          True if the request is authorized. Otherwise,
+     *                          returns false.
+     */
+    private function checkAuth(Request $request)
+    {
+        $this->params = $this->container
+            ->getParameter("manager_webservice");
+
+        $signature = hash_hmac(
+            'sha1',
+            $request->request->get('timestamp'),
+            $this->params["api_key"]
+        );
+
+        if ($signature === $request->request->get('signature', null)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a new instance.
      *
      * @param  Request      $request The request object.
@@ -180,8 +205,8 @@ class WebServiceController extends Controller
                         'user_name'     => $instance->contact_mail,
                     ],
                     $companyMail,
-                    $instance->external['site_language'],
                     $instanceCreator['base_domain'],
+                    $instance->external['site_language'],
                     $instance->plan
                 );
             }
@@ -204,55 +229,12 @@ class WebServiceController extends Controller
         );
     }
 
-    /**
-     * Checks if it is an authorized request.
-     *
-     * @param  Request $request The request object.
-     * @return boolean          True if the request is authorized. Otherwise,
-     *                          returns false.
-     */
-    private function checkAuth(Request $request)
+    private function sendMails($data, $companyMail, $domain, $language, $plan)
     {
-        $this->params = $this->container
-            ->getParameter("manager_webservice");
-
-        $signature = hash_hmac(
-            'sha1',
-            $request->request->get('timestamp'),
-            $this->params["api_key"]
-        );
-
-        if ($signature === $request->request->get('signature', null)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function reportInstanceCreationError($emails, $instance, $exception)
-    {
-        $this->view = new \TemplateManager();
-
-        // Prepare message
-        $message = \Swift_Message::newInstance();
-        $message->setFrom($emails['from_mail'])
-            ->setTo($emails['company_mail'])
-            ->setSender($emails['sender_mail'], "Opennemas")
-            ->setSubject(_("Error when creating a new instance"))
-            ->setBody(
-                $this->renderView(
-                    'instances/mails/instanceCreationError.tpl',
-                    array(
-                        'instance'  => $instance,
-                        'exception' => $exception
-                    )
-                )
-            );
-
-        // Send message
-        $this->get('mailer')->send($message);
-        error_log("Error while creating instance. ".$exception->getMessage()
-            .'. Instance Data: '.json_encode($instance));
+        $this->sendMailToUser($data, $companyMail, $domain);
+        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
+        // Unused var $language
+        unset($language);
     }
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
@@ -286,6 +268,16 @@ class WebServiceController extends Controller
         $this->view = new \TemplateManager();
 
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
+echo($this->renderView(
+    'instances/mails/newInstanceToUser.tpl',
+    array(
+        'data'              => $data,
+        'domain'            => $domain,
+        'companyMail'       => $companyMail['company_mail'],
+        'instance_base_url' => $instanceBaseURL,
+    )
+));
+die();
 
         // Prepare message
         $message = \Swift_Message::newInstance();
@@ -311,12 +303,30 @@ class WebServiceController extends Controller
         $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
-    private function sendMails($data, $companyMail, $domain, $language, $plan)
+    private function reportInstanceCreationError($emails, $instance, $exception)
     {
-        $this->sendMailToUser($data, $companyMail, $domain);
-        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
-        // Unused var $language
-        unset($language);
+        $this->view = new \TemplateManager();
+
+        // Prepare message
+        $message = \Swift_Message::newInstance();
+        $message->setFrom($emails['from_mail'])
+            ->setTo($emails['company_mail'])
+            ->setSender($emails['sender_mail'], "Opennemas")
+            ->setSubject(_("Error when creating a new instance"))
+            ->setBody(
+                $this->renderView(
+                    'instances/mails/instanceCreationError.tpl',
+                    array(
+                        'instance'  => $instance,
+                        'exception' => $exception
+                    )
+                )
+            );
+
+        // Send message
+        $this->get('mailer')->send($message);
+        error_log("Error while creating instance. ".$exception->getMessage()
+            .'. Instance Data: '.json_encode($instance));
     }
 
     /**
