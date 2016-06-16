@@ -589,6 +589,7 @@ class Content
 
             $rs = $GLOBALS['application']->conn->Execute($sql2, $values);
             if ($rs === false) {
+                error_log($GLOBALS['application']->conn->ErrorMsg());
                 return false;
             }
         } else {
