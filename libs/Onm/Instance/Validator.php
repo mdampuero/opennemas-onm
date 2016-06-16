@@ -144,7 +144,7 @@ class Validator
             similar_text($this->data[$field], $word, $percent);
 
             if (preg_match('/'.$word.'/i', '/'.$this->data[$field].'/', $badWords)
-                || $percent > 70 ) {
+                || $percent > 80 ) {
                 switch ($field) {
                     case 'instance_name':
                         $this->errors[$field][] = _('Your newspaper name cointains disallowed words.');
@@ -195,7 +195,7 @@ class Validator
     public function getBadWords()
     {
         return [
-            '4r5e', '5h1t', '5hit', 'God', 'a55', 'a_s_s', 'admin', 'alex',
+            '4r5e', '5h1t', '5hit', 'God', 'a55', 'a_s_s', 'admin',
             'alter', 'anal', 'anus', 'ar5e', 'arrse', 'arse', 'asdf', 'ass',
             'ass-fucker', 'asses', 'assfucker', 'assfukka', 'asshole',
             'assholes', 'asswhole', 'b!tch', 'b00bs', 'b17ch', 'b1tch',
@@ -228,7 +228,7 @@ class Validator
             'fingerfucked ', 'fingerfucker ', 'fingerfuckers', 'fingerfucking ',
             'fingerfucks ', 'fistfuck', 'fistfucked ', 'fistfucker ',
             'fistfuckers ', 'fistfucking ', 'fistfuckings ', 'fistfucks ',
-            'flange', 'fook', 'fooker', 'fran', 'fuck', 'fucka', 'fucked',
+            'flange', 'fook', 'fooker', 'fuck', 'fucka', 'fucked',
             'fucker', 'fuckers', 'fuckhead', 'fuckheads', 'fuckin', 'fucking',
             'fuckings', 'fuckingshitmotherfucker', 'fuckme ', 'fucks',
             'fuckwhit', 'fuckwit', 'fudge packer', 'fudgepacker', 'fuk',
@@ -263,8 +263,8 @@ class Validator
             'poop', 'porn', 'porno', 'pornography', 'pornos', 'prick',
             'pricks ', 'probando', 'pron', 'prueba', 'pube', 'pusse', 'pussi',
             'pussies', 'pussy', 'pussys ', 'qwert', 'rectum', 'retard',
-            'retrincos', 'rimjaw', 'rimming', 's hit', 's.o.b.', 's_h_i_t',
-            'sadist', 'sandra', 'schlong', 'screwing', 'scroat', 'scrote',
+            'retrincos', 'rimjaw', 'rimming', 'root', 's hit', 's.o.b.', 's_h_i_t',
+            'sadist', 'schlong', 'screwing', 'scroat', 'scrote',
             'scrotum', 'semen', 'sex', 'sex', 'sh!+', 'sh!t', 'sh1t', 'shag',
             'shagger', 'shaggin', 'shagging', 'shemale', 'shi+', 'shit',
             'shitdick', 'shite', 'shited', 'shitey', 'shitfuck', 'shitfull',
