@@ -25,6 +25,13 @@ use Onm\Database\DbalWrapper;
 class WidgetManager extends EntityManager
 {
     /**
+     * The array of widget paths.
+     *
+     * @var array
+     */
+    protected $paths = [];
+
+    /**
      * Searches for widgets given a criteria
      *
      * @param  array|string $criteria        The criteria used to search.
@@ -83,5 +90,38 @@ class WidgetManager extends EntityManager
         }
 
         return $rs[0];
+    }
+
+    /**
+     * Adds a path to the list of paths.
+     *
+     * @param string $path The path to add.
+     */
+    public function addPath($path)
+    {
+        $this->paths[] = $path;
+    }
+
+    /**
+     * Loads a widget given its name.
+     *
+     * @param string $widgetName The widget name.
+     */
+    public function loadWidget($widgetName)
+    {
+        $widgetName = 'Widget' . str_replace('Widget', '', $widgetName);
+        $filename   = \underscore($widgetName);
+
+        foreach ($this->paths as $path) {
+            if (file_exists($path . DS . $filename . '.class.php')) {
+                require_once $path . DS . $filename . '.class.php';
+                return;
+            }
+
+            if (file_exists($path . DS . $widgetName . '.php')) {
+                require_once $path . DS . $widgetName . '.php';
+                return;
+            }
+        }
     }
 }
