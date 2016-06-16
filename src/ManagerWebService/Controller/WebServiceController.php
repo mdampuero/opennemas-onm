@@ -65,7 +65,7 @@ class WebServiceController extends Controller
         $iv->validateInternalName($instance);
 
         if (count($errors) > 0) {
-            error_log('Error creating instance: ' . serialize($errors));
+            error_log('Instance data validation not passed: ' . json_encode($errors));
 
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
@@ -187,7 +187,7 @@ class WebServiceController extends Controller
             }
         } catch (\Exception $e) {
             $errors['all'] = ['Unable to send emails'];
-            error_log($e->getMessage());
+            error_log('Error while sending instance creation emails: '.$e->getMessage());
         }
 
         if (is_array($errors) && count($errors) > 0) {
@@ -249,10 +249,10 @@ class WebServiceController extends Controller
                 )
             );
 
-        error_log($exception->getMessage(). '. Instance Data: '.json_encode($instance));
-
         // Send message
         $this->get('mailer')->send($message);
+        error_log("Error while creating instance. ".$exception->getMessage()
+            .'. Instance Data: '.json_encode($instance));
     }
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
