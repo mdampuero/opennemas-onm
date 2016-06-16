@@ -110,9 +110,9 @@ class Photo extends Content
         parent::create($data);
 
         $sql = "INSERT INTO photos
-                    (`pk_photo`, `name`, `path_file`, `size`,`width`, `height`, `nameCat`, `author_name`)
+                    (`pk_photo`, `name`, `path_file`, `size`,`width`, `height`, `author_name`)
                 VALUES
-                    (?,?,?, ?,?,?, ?,?)";
+                    (?,?,?, ?,?, ?,?)";
 
         $values = array(
             (int) $this->id,
@@ -121,7 +121,6 @@ class Photo extends Content
             $data['size'],
             (int) $data['width'],
             (int) $data['height'],
-            $data['nameCat'],
             $data['author_name']
         );
 
@@ -209,9 +208,6 @@ class Photo extends Content
             'title'               => isset($data['title']) ? $data['title'] :$originalFileName,
             'name'                => $finalPhotoFileName,
             'path_file'           => $dateForDirectory,
-            'fk_category'         => $data["fk_category"],
-            'category'            => $data["fk_category"],
-            'nameCat'             => $data["category_name"],
             'created'             => $data["created"],
             'changed'             => $data["changed"],
             'content_status'      => $data['content_status'],
