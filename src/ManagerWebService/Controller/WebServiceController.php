@@ -268,16 +268,6 @@ class WebServiceController extends Controller
         $this->view = new \TemplateManager();
 
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
-echo($this->renderView(
-    'instances/mails/newInstanceToUser.tpl',
-    array(
-        'data'              => $data,
-        'domain'            => $domain,
-        'companyMail'       => $companyMail['company_mail'],
-        'instance_base_url' => $instanceBaseURL,
-    )
-));
-die();
 
         // Prepare message
         $message = \Swift_Message::newInstance();
