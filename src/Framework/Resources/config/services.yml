@@ -296,3 +296,7 @@ services:
     core.manager.menu:
         class: Repository\MenuManager
         arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+
+    core.template:
+        class: Template
+        arguments: [ '@service_container' ]
