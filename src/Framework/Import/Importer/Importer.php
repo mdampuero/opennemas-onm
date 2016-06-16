@@ -347,7 +347,7 @@ class Importer
             'with_comment'        => $this->getComments(),
         ];
 
-        if ($target === 'photo') {
+        if ($resource->type === 'photo' || $target === 'photo') {
             $data['local_file'] = realpath($this->repository->syncPath. DS
                 . $this->config['id'] .  DS . $resource->file_name);
             $data['original_filename'] = $resource->file_name;
