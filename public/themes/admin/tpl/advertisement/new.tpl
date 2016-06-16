@@ -412,6 +412,18 @@
                                 {t}AMP inner article - Button 1{/t}
                               </label>
                             </div>
+                            <div class="radio">
+                              <input id="amp-inner-button2" name="type_advertisement" type="radio" value="1052" {if isset($advertisement) && $advertisement->type_advertisement == 1052}checked="checked" {/if}/>
+                              <label for="amp-inner-button2">
+                                {t}AMP inner article - Button 2{/t}
+                              </label>
+                            </div>
+                            <div class="radio">
+                              <input id="amp-inner-button3" name="type_advertisement" type="radio" value="1053" {if isset($advertisement) && $advertisement->type_advertisement == 1053}checked="checked" {/if}/>
+                              <label for="amp-inner-button3">
+                                {t}AMP inner article - Button 3{/t}
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
