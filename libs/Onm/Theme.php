@@ -94,34 +94,6 @@ class Theme
     }
 
     /**
-     * Registers a parent theme to inheritance tpl files
-     *
-     * @param string $parentTheme name theme
-     *
-     * @return Theme the object
-     **/
-    public function registerParentTheme($parentTheme)
-    {
-        $this->parentTheme = $parentTheme;
-
-        return $this;
-    }
-
-    /**
-     * Returns the parent theme to inherance
-     *
-     * @return string|false the default theme defined
-     **/
-    public function getParentTheme()
-    {
-        if (isset($this->parentTheme) && !empty($this->parentTheme)) {
-            return $this->parentTheme;
-        }
-
-        return false;
-    }
-
-    /**
      * Loads a widget given its name.
      *
      * @param string $widgetName The widget name.

@@ -58,26 +58,4 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->theme->author, 'OpenHost S.L.');
         $this->assertEquals($this->theme->author_uri, 'http://www.openhost.es');
     }
-
-    /**
-     * @covers Onm\Theme::registerParentTheme
-     */
-    public function testRegisterParentThemeEmpty()
-    {
-        $this->assertEquals($this->theme->parentTheme, null);
-
-        $this->theme->registerParentTheme('base');
-        $this->assertEquals($this->theme->parentTheme, 'base');
-    }
-
-    /**
-     * @covers Onm\Theme::getParenttheme
-     */
-    public function testGetParentTheme()
-    {
-        $this->assertFalse($this->theme->getParentTheme());
-
-        $this->theme->registerParentTheme('base');
-        $this->assertEquals($this->theme->getParentTheme(), 'base');
-    }
 }
