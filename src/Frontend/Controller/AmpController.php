@@ -191,6 +191,6 @@ class AmpController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        return \Advertisement::findForPositionIdsAndCategory([1051], $category);
+        return \Advertisement::findForPositionIdsAndCategory([1051, 1052, 1053], $category);
     }
 }
