@@ -183,14 +183,14 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="auto_import === '0'">
               <div class="checkbox">
                 <input id="author" name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value="1">
                 <label class="form-label" for="author">{t}Import authors{/t}</label>
                 <span class="help m-l-5">{t}Activate this if you want to import the author of the elements if available{/t}</span>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-hide="true">
               <div class="checkbox">
                 <input id="source" name="source" {if $server['source'] != 0}checked{/if} type="checkbox" value="1">
                 <label class="form-label" for="source">{t}Link to source{/t}</label>
@@ -206,50 +206,52 @@
           <div class="grid-body">
             <div class="form-group" ng-init="auto_import = '{$server['auto_import']}'">
               <div class="checkbox">
-                <input id="auto-import" name="auto_import" ng-model="auto_import" ng-true-value="'1'" type="checkbox" value="1">
+                <input id="auto-import" name="auto_import" ng-false-value="'0'" ng-model="auto_import" ng-true-value="'1'" type="checkbox" value="1">
                 <label class="form-label" for="auto-import">{t}Enabled{/t}</label>
               </div>
             </div>
-            <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}">
-              <label class="form-label" for="category">{t}Category{/t}</label>
-              <span class="help m-l-5">{t}Category to import{/t}</span>
-              <div class="controls">
-                <select id="category" name="category" ng-disabled="!auto_import">
-                  <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
-                </select>
+            <div ng-show="auto_import === '1'">
+              <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}">
+                <label class="form-label" for="category">{t}Category{/t}</label>
+                <span class="help m-l-5">{t}Category to import{/t}</span>
+                <div class="controls">
+                  <select id="category" name="category" ng-disabled="!auto_import">
+                    <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="form-group" ng-init="author = '{$server['target_author']}'; authors = {json_encode($authors)|clear_json}">
-              <label class="form-label" for="target-author">{t}Author{/t}</label>
-              <span class="help m-l-5">{t}Author to import to{/t}</span>
-              <div class="controls">
-                <select id="target-author" name="target_author" ng-disabled="!auto_import">
-                  <option value="[% key %]" ng-repeat="(key, value) in authors" ng-selected="author === key">[% value %]</option>
-                </select>
+              <div class="form-group" ng-init="author = '{$server['target_author']}'; authors = {json_encode($authors)|clear_json}">
+                <label class="form-label" for="target-author">{t}Author{/t}</label>
+                <span class="help m-l-5">{t}Author to import to{/t}</span>
+                <div class="controls">
+                  <select id="target-author" name="target_author" ng-disabled="!auto_import">
+                    <option value="[% key %]" ng-repeat="(key, value) in authors" ng-selected="author === key">[% value %]</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <div class="checkbox">
-                <input id="import-related" {if $server['import_related'] != 0}checked{/if} name="import_related" ng-disabled="!auto_import" type="checkbox" value="1">
-                <label class="form-label" for="import-related">{t}Import related contents{/t}</label>
-                <span class="help m-l-5">{t}If possible, import all related contents for each content{/t}</span>
+              <div class="form-group">
+                <div class="checkbox">
+                  <input id="import-related" {if $server['import_related'] != 0}checked{/if} name="import_related" ng-disabled="!auto_import" type="checkbox" value="1">
+                  <label class="form-label" for="import-related">{t}Import related contents{/t}</label>
+                  <span class="help m-l-5">{t}If possible, import all related contents for each content{/t}</span>
+                </div>
               </div>
-            </div>
-            <div class="form-group"{if !empty($server['filters'])}ng-init="filters = {json_encode($server['filters'])|clear_json}"{/if}>
-              <label class="form-label">{t}Filtering{/t}</label>
-              <span class="help m-l-5">{t}Filter contents that matches one or more list of words{/t}</span>
-              <div class="controls">
-                <div class="row m-t-15" ng-repeat="filter in filters track by $index">
-                  <div class="col-md-10 col-sm-9">
-                    <input class="form-control" name="filters[]" ng-model="filter" placeholder="{t}Comma-separated list of words to match{/t}" type="text">
-                  </div>
-                  <div class="col-md-2 col-sm-3">
-                    <button class="btn btn-block btn-success" ng-click="addFilter()" ng-if="$index === 0" type="button">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFilter($index)" ng-if="$index > 0" type="button">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
+              <div class="form-group"{if !empty($server['filters'])}ng-init="filters = {json_encode($server['filters'])|clear_json}"{/if}>
+                <label class="form-label">{t}Filtering{/t}</label>
+                <span class="help m-l-5">{t}Filter contents that matches one or more list of words{/t}</span>
+                <div class="controls">
+                  <div class="row m-t-15" ng-repeat="filter in filters track by $index">
+                    <div class="col-md-10 col-sm-9">
+                      <input class="form-control" name="filters[]" ng-model="filter" placeholder="{t}Comma-separated list of words to match{/t}" type="text">
+                    </div>
+                    <div class="col-md-2 col-sm-3">
+                      <button class="btn btn-block btn-success" ng-click="addFilter()" ng-if="$index === 0" type="button">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                      <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFilter($index)" ng-if="$index > 0" type="button">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
