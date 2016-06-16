@@ -449,12 +449,13 @@ class Content
         if (array_key_exists('category', $data) && !empty($data['category'])) {
             $sql = "INSERT INTO contents_categories (`pk_fk_content`, `pk_fk_content_category`, `catName`) VALUES (?,?,?)";
             $values = array($this->id, (int) $data['category'], $catName);
+
+            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
+                return false;
+            }
         }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            getService('application.log')->error($GLOBALS['application']->conn->ErrorMsg());
-            return false;
-        }
         $sql = "INSERT INTO content_views (`pk_fk_content` ,`views`) "
              . "VALUES (?,?)";
         $values = array($this->id, 0);

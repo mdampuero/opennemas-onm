@@ -312,63 +312,6 @@ class ImagesController extends Controller
                     }
                 }
 
-
-                // if ($upload && is_array($upload['tmp_name'])) {
-                // } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
-                //     $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
-
-                //     // Check if the image has an IPTC title an use it as original title
-                //     $size = getimagesize($upload['tmp_name'], $imageInfo);
-                //     if (isset($imageInfo['APP13'])) {
-                //         $iptc = iptcparse($imageInfo["APP13"]);
-                //         if (isset($iptc['2#120'])) {
-                //             $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                //         }
-                //     }
-
-                //     $data = array(
-                //         'local_file'        => $upload['tmp_name'],
-                //         'original_filename' => $upload['name'],
-                //         'title'             => $tempName,
-                //         'description'       => $tempName,
-                //         'fk_category'       => $category,
-                //         'category'          => $category,
-                //         'category_name'     => $category_name,
-                //         'metadata'          => \Onm\StringUtils::getTags($tempName),
-                //     );
-
-                //     try {
-                //         $photo = new \Photo();
-                //         $photoId = $photo->createFromLocalFile($data);
-
-                //         $photo = new \Photo($photoId);
-
-                //         $info [] = array(
-                //             'id'            => $photo->id,
-                //             'name'          => $photo->name,
-                //             'size'          => $photo->size,
-                //             'error'         => '',
-                //             'delete_url'    => '',
-                //             "delete_type"   => "DELETE",
-                //             'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                //             'thumbnail_url' => $this->generateUrl(
-                //                 'asset_image',
-                //                 array(
-                //                     'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
-                //                     'parameters' => urlencode('thumbnail,150,150'),
-                //                 )
-                //             ),
-                //             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                //                                 ? $_SERVER['HTTP_X_FILE_TYPE']
-                //                                 : $upload['type'],
-                //         );
-                //     } catch (Exception $e) {
-                //         $info [] = array(
-                //             'error'         => $e->getMessage(),
-                //         );
-                //     }
-                // }
-
                 $json = json_encode($info);
                 $response->setContent($json);
 
