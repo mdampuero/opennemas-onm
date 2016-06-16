@@ -65,7 +65,7 @@ class WebServiceController extends Controller
         $iv->validateInternalName($instance);
 
         if (count($errors) > 0) {
-            error_log(serialize($errors));
+            error_log('Error creating instance: ' . serialize($errors));
 
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
