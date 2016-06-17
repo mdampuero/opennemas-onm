@@ -12,6 +12,7 @@
   <link rel="manifest" href="manager_manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" href="/assets/images/favicon.png">
   <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
@@ -22,7 +23,6 @@
     <title>opennemas - Manager</title>
   {/block}
 
-  <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
   {block name="header-css"}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
