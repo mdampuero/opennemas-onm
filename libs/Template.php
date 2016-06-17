@@ -87,8 +87,14 @@ class Template extends Smarty
      */
     public function setupCache()
     {
+        $instance = $this->container->get('instance');
+
+        if (empty($instance)) {
+            return;
+        }
+
         $basePath = $this->container->getParameter('core.paths.cache') . '/'
-            . $this->container->get('instance')->internal_name;
+            . $instance->internal_name;
 
         $fs   = new Filesystem();
         $path = $basePath . '/smarty/config';
