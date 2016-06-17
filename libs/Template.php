@@ -57,10 +57,19 @@ class Template extends Smarty
     public function addActiveTheme($theme)
     {
         $this->setupCompiles($theme);
-        $this->setupCache();
         $this->setupPlugins($theme);
 
         $this->addTheme($theme);
+    }
+
+    /**
+     * Configures the cache basing on the instance.
+     *
+     * @param Instance $instance The current instance.
+     */
+    public function addInstance($instance)
+    {
+        $this->setupCache($instance);
     }
 
     /**
@@ -84,11 +93,11 @@ class Template extends Smarty
 
     /**
      * Configures the smarty cache path.
+     *
+     * @param Instance $instance The current instance.
      */
-    public function setupCache()
+    protected function setupCache($instance)
     {
-        $instance = $this->container->get('instance');
-
         if (empty($instance)) {
             return;
         }
@@ -124,7 +133,7 @@ class Template extends Smarty
      *
      * @param Extension $theme The current theme.
      */
-    public function setupCompiles($theme)
+    protected function setupCompiles($theme)
     {
         $basePath = $this->container->getParameter('core.paths.cache.common');
 

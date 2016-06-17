@@ -54,6 +54,12 @@ class ThemeLoaderListener implements EventSubscriberInterface
             return;
         }
 
+        $instance = $this->container->get('instance');
+
+        $this->container->get('core.template')->addInstance($instance);
+        $this->container->get('core.template.admin')->addInstance($instance);
+        $this->container->get('core.template.manager')->addInstance($instance);
+
         $theme = $this->getThemeByUuid('es.openhost.theme.admin');
         $this->container->get('core.template.admin')->addActiveTheme($theme);
 
