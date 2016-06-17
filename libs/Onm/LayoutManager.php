@@ -39,6 +39,23 @@ class LayoutManager
     protected $layouts = [];
 
     /**
+     * The template service.
+     *
+     * @var TemplateAdmin
+     */
+    protected $tpl;
+
+    /**
+     * Initializes the LayoutManager.
+     *
+     * @param TemplateAdmin $tpl The template service.
+     */
+    public function __construct($tpl)
+    {
+        $this->tpl = $tpl;
+    }
+
+    /**
      * Adds a layout to the list of layouts.
      *
      * @param string $name The layout name.
@@ -307,14 +324,6 @@ class LayoutManager
      **/
     public function render($params = array())
     {
-        // For bost performance by sharing the same view instance througth
-        // rendering process.
-        if (array_key_exists('smarty', $params)) {
-            $this->tpl = clone $params['smarty'];
-        } else {
-            $this->tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-        }
-
         if (isset($params['contents'])) {
             $this->contents = $params['contents'];
             unset($params['contents']);

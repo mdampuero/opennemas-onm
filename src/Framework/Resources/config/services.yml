@@ -290,7 +290,8 @@ services:
         class: AdvertisementPositions
 
     core.manager.layout:
-        class: Onm\LayoutManager
+        class:     Onm\LayoutManager
+        arguments: [ '@core.template.admin' ]
 
     # TODO: Remove arguments when new ORM repositories replace search features
     core.manager.menu:
