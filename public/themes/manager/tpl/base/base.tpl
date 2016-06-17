@@ -12,11 +12,11 @@
   <link rel="manifest" href="manager_manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/launcher-icons/IOS-60@2x.png">
 
   {block name="meta"}
     <title>opennemas - Manager</title>
