@@ -249,7 +249,6 @@
                 </div>
               </div>
             </div>
-            <input type="hidden" name="_referer" value="{$referer}">
             <div class="row">
               <div class="col-md-10">
                 <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
