@@ -54,6 +54,12 @@ class ThemeLoaderListener implements EventSubscriberInterface
             return;
         }
 
+        $theme = $this->getThemeByUuid('es.openhost.theme.admin');
+        $this->container->get('core.template.admin')->addActiveTheme($theme);
+
+        $theme = $this->getThemeByUuid('es.openhost.theme.manager');
+        $this->container->get('core.template.manager')->addActiveTheme($theme);
+
         $this->theme = $this->getActiveTheme();
 
         if (empty($this->theme)) {
@@ -71,6 +77,10 @@ class ThemeLoaderListener implements EventSubscriberInterface
             if (!empty($theme)) {
                 $template->addTheme($theme);
             }
+        }
+
+        if (empty($this->theme->parameters)) {
+            return;
         }
 
         foreach ($this->theme->parameters as $key => $values) {
@@ -157,7 +167,10 @@ class ThemeLoaderListener implements EventSubscriberInterface
         $parents = [];
         $theme   = $this->getThemeByUuid($uuid);
 
-        if (empty($theme) || !array_key_exists('parent', $theme->parameters)) {
+        if (empty($theme)
+            || empty($theme->parameters)
+            || !array_key_exists('parent', $theme->parameters)
+        ) {
             return $parents;
         }
 
