@@ -389,7 +389,7 @@ class InstanceManager extends BaseManager
         $instance->activated = true;
 
         $instance->settings = array(
-            'TEMPLATE_USER' => '',
+            'TEMPLATE_USER' => 'es.openhost.theme.manager',
             'BD_DATABASE'   => 'onm-instances',
         );
 
