@@ -103,17 +103,20 @@ class Templating
     {
         if ($module == 'Manager') {
             if (!isset($this->managerTemplateEngine)) {
-                $this->managerTemplateEngine = new \TemplateManager();
+                $this->managerTemplateEngine = $this->container
+                    ->get('core.template.manager');
             }
             $template = $this->managerTemplateEngine;
         } elseif ($module == 'Backend' || $module == 'BackendWebService') {
             if (!isset($this->backendTemplateEngine)) {
-                $this->backendTemplateEngine = new \TemplateAdmin();
+                $this->backendTemplateEngine = $this->container
+                    ->get('core.template.admin');
             }
             $template = $this->backendTemplateEngine;
         } else {
             if (!isset($this->frontendTemplateEngine)) {
-                $this->frontendTemplateEngine = new \Template(TEMPLATE_USER);
+                $this->frontendTemplateEngine = $this->container
+                    ->get('core.template');
             }
             $template = $this->frontendTemplateEngine;
         }
