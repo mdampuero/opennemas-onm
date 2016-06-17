@@ -10,8 +10,8 @@
 namespace BackendWebService\Controller;
 
 use Backend\Annotation\CheckModuleAccess;
-use Framework\Import\Synchronizer\Synchronizer;
 use Framework\Import\Repository\LocalRepository;
+use Framework\Import\Synchronizer\Synchronizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -228,9 +228,12 @@ class NewsAgencyController extends Controller
     {
         $params = [];
 
+        $path = $this->getParameter('core.paths.cache') .  DS
+            . $this->get('instance')->internal_name;
+        $tpl  = $this->get('core.template.admin');
+
         // Check last synchronization
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new Synchronizer($syncParams);
+        $synchronizer        = new Synchronizer($path, $tpl);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         if ($minutesFromLastSync > 0) {

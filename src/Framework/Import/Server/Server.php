@@ -44,18 +44,27 @@ abstract class Server
     public $remoteFiles = [];
 
     /**
+     * The template service.
+     *
+     * @var TemplateAdmin
+     */
+    protected $tpl;
+
+    /**
      * Initializes a new Server.
      *
-     * @param array $params The server parameters.
+     * @param array         $params The server parameters.
+     * @param TemplateAdmin $tpl    The template service.
      *
      * @throws \Exception If the server parameters are not valid.
      */
-    public function __construct($params)
+    public function __construct($params, $tpl)
     {
         if (!$this->checkParameters($params)) {
             throw new \Exception('Invalid parameters for server');
         }
 
+        $this->tpl     = $tpl;
         $this->params  = $params;
         $this->factory = new ParserFactory();
 

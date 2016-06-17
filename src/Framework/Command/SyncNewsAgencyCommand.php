@@ -93,9 +93,19 @@ EOF
 
         $servers = $sm->get('news_agency_config');
 
-        $syncParams = array('cache_path' => CACHE_PATH);
+        $tpl  = $this->getContainer()->get('core.template.admin');
+        $themes = $this->getContainer()->get('orm.loader')->getPlugins();
+        $themes = array_filter($themes, function ($a) {
+            return $a->uuid === 'es.openhost.theme.admin';
+        });
 
-        $synchronizer = new Synchronizer($syncParams);
+        $path = $this->getContainer()->getParameter('core.paths.cache')
+            . '/' . $instance->internal_name;
+
+        $tpl->addActiveTheme($themes[0]);
+        $tpl->addInstance($instance);
+
+        $synchronizer = new Synchronizer($path, $tpl);
 
         if (!$synchronizer->isSyncEnvironmetReady()) {
             $synchronizer->setupSyncEnvironment();

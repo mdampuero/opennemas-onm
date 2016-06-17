@@ -18,13 +18,14 @@ class Ftp extends Server
     /**
      * Initializes a new FTP server and opens a conn.
      *
-     * @param array $params The server parameters.
+     * @param array         $params The server parameters.
+     * @param TemplateAdmin $tpl    The template service.
      *
      * @throws \Exception If the server parameters are not valid.
      */
-    public function __construct($params)
+    public function __construct($params, $tpl)
     {
-        parent::__construct($params);
+        parent::__construct($params, $tpl);
 
         $url = parse_url($this->params['url']);
 

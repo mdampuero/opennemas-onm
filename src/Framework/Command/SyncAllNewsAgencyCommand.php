@@ -18,8 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-use Framework\Import\Synchronizer\Synchronizer;
-
 class SyncAllNewsAgencyCommand extends ContainerAwareCommand
 {
     /**
