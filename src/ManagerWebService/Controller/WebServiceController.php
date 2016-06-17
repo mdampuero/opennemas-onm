@@ -232,7 +232,7 @@ class WebServiceController extends Controller
 
     private function sendErrorMail($emails, $instance, $exception)
     {
-        $this->view = new \TemplateManager();
+        $this->view = $this->get('core.template.manager');
 
         // Prepare message
         $message = \Swift_Message::newInstance();
@@ -256,7 +256,7 @@ class WebServiceController extends Controller
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
-        $this->view = new \TemplateManager();
+        $this->view = $this->get('core.template.manager');
 
         // Prepare message
         $message = \Swift_Message::newInstance();
@@ -282,7 +282,7 @@ class WebServiceController extends Controller
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
-        $this->view = new \TemplateManager();
+        $this->view = $this->get('core.template.manager');
 
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
 
@@ -290,7 +290,6 @@ class WebServiceController extends Controller
         $message = \Swift_Message::newInstance();
         $message->setFrom([$companyMail['from_mail'] => 'Opennemas'])
             ->setTo([$data['user_mail'] => $data['user_name']])
-            ->setBody($htmlContent, 'text/html')
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject(sprintf(_("Your newspaper is now live"), $data['name']))
             ->setBody(

@@ -311,7 +311,7 @@ class InstanceController extends Controller
             $im->getExternalInformation($instance);
         }
 
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+        $this->view = $this->get('core.template.manager');
 
         $response = $this->render(
             'instances/csv.tpl',

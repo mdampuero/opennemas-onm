@@ -22,7 +22,7 @@ class TemplateController extends Controller
      */
     public function init()
     {
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+        $this->view = $this->get('core.template.manager');
     }
 
     /**
