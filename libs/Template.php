@@ -1,13 +1,15 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 use Onm\FilesManager as fm;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Template class
- *
- * @package Onm
- * @author  Fran Dieguez <fran@openhost.es>
- **/
 class Template extends Smarty
 {
     /**
@@ -19,11 +21,7 @@ class Template extends Smarty
 
     // Private properties
     public $theme            = null;
-    public $locale_dir       = null;
-    public $css_dir          = null;
     public $image_dir        = null;
-    public $js_dir           = null;
-    public $common_asset_dir = null;
     public $js_includes      = ['header' => array(), 'footer' => []];
     public $css_includes     = ['header' => array(), 'footer' => []];
     public $metatags         = [];
@@ -96,7 +94,7 @@ class Template extends Smarty
         $path = $basePath . '/smarty/config';
 
         if (!file_exists($path)) {
-            $fs->mkdir($path, 0755);
+            $fs->mkdir($path, 0775);
         }
 
         // Copy default cache configuration
@@ -109,7 +107,7 @@ class Template extends Smarty
         $path = $basePath . '/smarty/cache';
 
         if (!file_exists($path)) {
-            $fs->mkdir($path, 0755);
+            $fs->mkdir($path, 0775);
         }
 
         $this->setCacheDir($path);
@@ -124,11 +122,12 @@ class Template extends Smarty
     {
         $basePath = $this->container->getParameter('core.paths.cache.common');
 
+        $fs    = new Filesystem();
         $path  = $basePath . '/smarty/compile-'
             . str_replace('es.openhost.theme.', '', $theme->uuid);
 
         if (!file_exists($path)) {
-            $fs->mkdir($path, 0755);
+            $fs->mkdir($path, 0775);
         }
 
         $this->setCompileDir($path);
@@ -161,29 +160,25 @@ class Template extends Smarty
     public function setTemplateVars()
     {
         $theme = $this->container->get('theme');
-        $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
+
+        if (!empty($theme)) {
+            $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
+        }
+
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         // Template variables
         $baseUrl = SITE_URL.'/themes/'.$theme.'/';
         $baseUrl = str_replace('http:', '', $baseUrl);
 
-        $this->locale_dir       = $baseUrl.'locale/';
-        $this->css_dir          = $baseUrl.'css/';
-        $this->image_dir        = $baseUrl.'images/';
-        $this->js_dir           = $baseUrl.'js/';
-        $this->common_asset_dir = SITE_URL.'assets/';
-        $this->caching          = false;
+        $this->image_dir = $baseUrl.'images/';
+        $this->caching   = false;
 
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR'       => $this->locale_dir,
-                'CSS_DIR'          => $this->css_dir,
-                'IMAGE_DIR'        => $this->image_dir,
-                'JS_DIR'           => $this->js_dir,
-                'COMMON_ASSET_DIR' => $this->common_asset_dir,
-                'THEME'            => $theme,
+                'IMAGE_DIR' => $this->image_dir,
+                'THEME'     => $theme,
             )
         );
     }
@@ -233,10 +228,8 @@ class Template extends Smarty
     }
 
     /**
-     * Registers the required smarty plugins
-     *
-     * @return void
-     **/
+     * Registers the required smarty plugins.
+     */
     public function registerCustomPlugins()
     {
         $this->addFilter("output", "ads_generator");
