@@ -155,10 +155,20 @@ class AmpController extends Controller
             }
             $this->view->assign('relationed', $relatedContents);
 
-            $pattern = ['@<img([^>]+>)@', '@style=".*"@'];
+            $pattern = [
+                '@(align|border|style)="[^\"]+\"@',
+                '@<img([^>]+>)@',
+                '@<iframe.*src=\"(.*)\".*><\/iframe>@'
+            ];
             $replacement  = [
+                '',
                 '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
-                ''
+                '<amp-iframe width=300 height=300
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+                    layout="responsive"
+                    frameborder="0"
+                    src="${1}">
+                </amp-iframe>'
             ];
             $article->body = preg_replace($pattern, $replacement, $article->body);
         } // end if $this->view->is_cached
