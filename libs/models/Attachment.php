@@ -208,7 +208,7 @@ class Attachment extends Content
                     'title'    => $data['title'],
                     'category' => (int) $data['category'],
                 ],
-                [ (int) $data['id'] ]
+                [ 'pk_attachment' => (int) $data['id'] ]
             );
 
             return true;
