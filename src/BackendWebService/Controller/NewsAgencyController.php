@@ -91,7 +91,7 @@ class NewsAgencyController extends Controller
         if ($edit) {
             $route = 'admin_article_show';
 
-            if ($type === 'opinion') {
+            if ($type === 'Opinion') {
                 $route = 'admin_opinion_show';
             }
 
