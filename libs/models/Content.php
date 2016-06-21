@@ -1611,25 +1611,27 @@ class Content
      **/
     public function dropFromAllHomePages()
     {
-        $cm = new ContentManager();
-        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'content_positions',
+                [ 'pk_fk_content' => $this->id]
+           );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+            if (!$rs) {
+                return false;
+            }
 
-        if (!$rs) {
+            /* Notice log of this action */
+            getService('logger')->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                .'action Drop from frontpage to content with ID id '.$this->id
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error on Content::dropFromAllHomePages:'.$e->getMessage());
             return false;
         }
-
-        /* Notice log of this action */
-        $logger = getService('logger');
-        $type = $cm->getContentTypeNameFromId($this->content_type, true);
-
-        $logger->notice(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
-            .'action Drop from frontpage '.$type.' with id '.$this->id
-        );
-
-        return true;
     }
 
     /**
@@ -1667,19 +1669,23 @@ class Content
         $sql = "SELECT urn_source FROM `contents` "
              . "WHERE urn_source IN (".$sqlUrns.")";
 
-        $contents = $GLOBALS['application']->conn->Execute($sql);
+        try {
+            $contents = getService('dbal_connection')->fetchAll($sql);
 
-        if (!$contents) {
+            if (!$contents) {
+                return false;
+            }
+
+            $contentsUrns = array();
+            foreach ($contents as $content) {
+                $contentsUrns[] = $content['urn_source'];
+            }
+
+            return $contentsUrns;
+        } catch (\Exception $e) {
+            error_log('Error Conntent::findByUrn'.$e->getMessage());
             return false;
         }
-
-        $contentsUrns = array();
-        while (!$contents->EOF) {
-            $contentsUrns [] = $contents->fields['urn_source'];
-            $contents->MoveNext();
-        }
-
-        return $contentsUrns;
     }
 
     /**
