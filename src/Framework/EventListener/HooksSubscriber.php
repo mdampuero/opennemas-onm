@@ -270,7 +270,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $content = $event->getArgument('content');
 
         $id = $content->id;
-        $contentType = \underscore(get_class($content));
+        if (!empty($content->content_type_name)) {
+            $contentType = $content->content_type_name;
+        } else {
+            $contentType = \underscore(get_class($content));
+        }
 
         $this->cacheHandler->delete($contentType . "-" . $id);
     }

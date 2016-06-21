@@ -836,9 +836,10 @@ class Content
         try {
             $this->frontpage = ($this->frontpage + 1) % 2;
 
-            getService('dbal_connection')->executeUpdate(
-                'UPDATE contents SET `frontpage`=(`frontpage` + 1) % 2 WHERE pk_content=?',
-                [ $this->id ]
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'frontpage'  => $this->frontpage ],
+                [ 'pk_content' => $this->id ]
             );
 
             logContentEvent(__METHOD__, $this);
