@@ -210,7 +210,7 @@ class Content
     public $favorite            = null;
 
     /**
-     * Wheter allowing comments in this content
+     * Whether allowing comments in this content
      *
      * @var boolean
      **/
@@ -409,6 +409,34 @@ class Content
         } catch (\Exception $e) {
             error_log('Error fetching content with id'.$id.': '.$e->getMessage());
             return;
+        }
+    }
+
+    /**
+     * Abstract factory method getter
+     *
+     * @param  string $contentId Content identifier
+     *
+     * @return Content Instance of an specific object in function of content type
+    */
+    public static function get($contentId)
+    {
+        try {
+            $contentTypeId = getService('dbal_connection')->fetchColumn(
+                'SELECT fk_content_type FROM `contents` WHERE pk_content=?',
+                [ $contentId ]
+            );
+            $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
+
+            if (empty($type)) {
+                return null;
+            }
+
+            $type = ucfirst($type);
+            return new $type($contentId);
+        } catch (\Exception $e) {
+            error_log('Error on Content::get (ID:'.$contentId.')'.$e->getMessage());
+            return false;
         }
     }
 
@@ -727,6 +755,41 @@ class Content
     }
 
     /**
+     * Sets the state of this content to the trash
+     *
+     * @return boolean true if all went well
+     **/
+    public function setTrashed()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'in_litter'           => 1,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s")
+                ],
+                [ 'pk_content' => $this->id ]
+            );
+
+            $this->in_litter = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setTrashed (ID:'.$id.'):'.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Make available one content, restoring it from trash
      *
      * This "restores" the content from the trash system by setting its
@@ -1006,6 +1069,147 @@ class Content
     }
 
     /**
+     * Sets the pending status for this content.
+     *
+     * This content has to be
+     *
+     * @return boolean true if all went well
+     **/
+    public function setDraft()
+    {
+        // OLD APPROACH
+        if ($this->id == null) {
+            return false;
+        }
+
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'content_status'      => 0,
+                    'available'           => 0,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s"),
+                ],
+                [ 'pk_content' => $this->id, ]
+            );
+
+            // Set status for it's updated state to next event
+            $this->available      = 0;
+            $this->content_status = 0;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error changing draft: '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Enable the favorited flag for this content
+     *
+     * @return boolean true if the operation was performed sucessfully
+     **/
+    public function setFavorited()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'favorite'   => 1 ],
+                [ 'pk_content' => $this->id ]
+            );
+
+            $this->favorite = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Define content position in a widget
+     *
+     * @param int $position the position of the content
+     *
+     * @return pk_content or false
+     */
+    public function setPosition($position)
+    {
+        if ($this->id == null
+            && !is_array($position)
+        ) {
+            return false;
+        }
+
+        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
+        $values = array($position, $this->id);
+
+        if (count($values) > 0) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if ($rs === false) {
+                return false;
+            }
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.set_positions', array('content' => $this));
+
+        return true;
+    }
+
+    /**
+     * Sets the archived status to the content
+     *
+     * @return bool
+     **/
+    public function setArchived()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'content_status'      => 1,
+                    'frontpage'           => 0,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s")
+                ],
+                [ 'pk_content' => $this->id ]
+            );
+
+            $this->content_status = 1;
+            $this->frontpage = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Returns the availability state of a content
      *
      * @return string the state of the content
@@ -1084,150 +1288,6 @@ class Content
     }
 
     /**
-     * Sets the pending status for this content.
-     *
-     * This content has to be
-     *
-     * @return boolean true if all went well
-     **/
-    public function setDraft()
-    {
-        // OLD APPROACH
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'content_status'      => 0,
-                    'available'           => 0,
-                    'fk_user_last_editor' => $_SESSION['userid'],
-                    'changed'             => date("Y-m-d H:i:s"),
-                ],
-                [ 'pk_content' => $this->id, ]
-            );
-
-            // Set status for it's updated state to next event
-            $this->available      = 0;
-            $this->content_status = 0;
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error changing draft: '.$e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Sets the state of this content to the trash
-     *
-     * @return boolean true if all went well
-     **/
-    public function setTrashed()
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'in_litter'           => 1,
-                    'fk_user_last_editor' => $_SESSION['userid'],
-                    'changed'             => date("Y-m-d H:i:s")
-                ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            $this->in_litter = 1;
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error content::setTrashed (ID:'.$id.'):'.$e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Enable the favorited flag for this content
-     *
-     * @return boolean true if the operation was performed sucessfully
-     **/
-    public function setFavorited()
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            getService('dbal_connection')->update(
-                'contents',
-                [ 'favorite'   => 1 ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            $this->favorite = 1;
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Sets the archived status to the content
-     *
-     * @return bool
-     **/
-    public function setArchived()
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'content_status'      => 1,
-                    'frontpage'           => 0,
-                    'fk_user_last_editor' => $_SESSION['userid'],
-                    'changed'             => date("Y-m-d H:i:s")
-                ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            $this->content_status = 1;
-            $this->frontpage = 1;
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * TODO:  move to ContentCategory class
      * Loads the category name for a given content id
      *
@@ -1274,22 +1334,6 @@ class Content
         }
 
         return $ccm->getTitle($this->category_name);
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     **/
-    public function isInTime($now = null)
-    {
-        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -1343,6 +1387,22 @@ class Content
         }
 
         return $state;
+    }
+
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     **/
+    public function isInTime($now = null)
+    {
+        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1468,6 +1528,21 @@ class Content
     }
 
     /**
+     * Checks if the given id is the creator's id
+     *
+     * @param  integer $userId
+     * @return boolean
+     */
+    public function isOwner($userId)
+    {
+        if ($this->fk_publisher == $userId) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns true if the content is suggested
      *
      * @return boolean true if the content is suggested
@@ -1487,32 +1562,6 @@ class Content
         $id = $this->content_type;
 
         return \ContentManager::getContentTypeNameFromId($id);
-    }
-
-    /**
-     * Abstract factory method getter
-     *
-     * @param  string $contentId Content identifier
-     *
-     * @return Content Instance of an specific object in function of content type
-    */
-    public static function get($contentId)
-    {
-        $sql  = 'SELECT fk_content_type FROM `contents` WHERE pk_content=?';
-        $contentTypeId = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
-
-        $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
-
-        if (empty($type)) {
-            return null;
-        }
-
-        $type = ucfirst($type);
-        try {
-            return new $type($contentId);
-        } catch (Exception $e) {
-            return null;
-        }
     }
 
     /**
@@ -1579,38 +1628,6 @@ class Content
             'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
             .'action Drop from frontpage '.$type.' with id '.$this->id
         );
-
-        return true;
-    }
-
-    /**
-     * Define content position in a widget
-     *
-     * @param int $position the position of the content
-     *
-     * @return pk_content or false
-     */
-    public function setPosition($position)
-    {
-        if ($this->id == null
-            && !is_array($position)
-        ) {
-            return false;
-        }
-
-        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
-        $values = array($position, $this->id);
-
-        if (count($values) > 0) {
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.set_positions', array('content' => $this));
 
         return true;
     }
@@ -1883,28 +1900,6 @@ class Content
     }
 
     /**
-     * Returns a list of metaproperty values from a list of contents
-     *
-     * @param string $property the property name to fetch
-     *
-     * @return boolean true if it is in the category
-     **/
-    public static function getMultipleProperties($propertyMap)
-    {
-        $map = $values = [];
-        foreach ($propertyMap as $property) {
-            $map []= '(fk_content=? AND `meta_name`=?)';
-            $values []= $property[0];
-            $values []= $property[1];
-        }
-
-        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
-        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
-
-        return $value;
-    }
-
-    /**
      * Sets a metaproperty for the actual content
      *
      * @param string $property the name of the property
@@ -1931,6 +1926,28 @@ class Content
         dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
+    }
+
+    /**
+     * Returns a list of metaproperty values from a list of contents
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return boolean true if it is in the category
+     **/
+    public static function getMultipleProperties($propertyMap)
+    {
+        $map = $values = [];
+        foreach ($propertyMap as $property) {
+            $map []= '(fk_content=? AND `meta_name`=?)';
+            $values []= $property[0];
+            $values []= $property[1];
+        }
+
+        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
+        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
+
+        return $value;
     }
 
     /**
@@ -2054,37 +2071,5 @@ class Content
         dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
-    }
-
-    /**
-     * Deletes all comments related with a given content id
-     * WARNING: this is very dangerous, the action can't be undone
-     *
-     * @param  int $contentID the content id to delete comments that referent to it
-     *
-     * @return boolean true if comments were deleted
-     **/
-    public static function deleteComments($contentID)
-    {
-        if (empty($contentID)) {
-            return false;
-        }
-
-        return Comment::deleteFromFilter(['content_id' => $contentID]);
-    }
-
-    /**
-     * Checks if the given id is the creator's id
-     *
-     * @param  integer $userId
-     * @return boolean
-     */
-    public function isOwner($userId)
-    {
-        if ($this->fk_publisher == $userId) {
-            return true;
-        }
-
-        return false;
     }
 }
