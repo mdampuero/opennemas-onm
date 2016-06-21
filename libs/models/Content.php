@@ -821,7 +821,7 @@ class Content
 
             getService('dbal_connection')->update(
                 'contents',
-                [ 'favorite' => $this->favorite ],
+                [ 'favorite'   => $this->favorite ],
                 [ 'pk_content' => $id ]
             );
 
@@ -830,7 +830,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error content::toggleFavorite (ID:'.$id.'):'.$e->getMessage());
             return false;
         }
     }
@@ -862,7 +862,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error content::toggleInHome (ID:'.$id.'):'.$e->getMessage());
             return false;
         }
     }
@@ -888,7 +888,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error content::toggleSuggested (ID:'.$id.'):'.$e->getMessage());
             throw $e;
         }
     }
@@ -911,48 +911,49 @@ class Content
             $lastEditor = $_SESSION['userid'];
         }
 
-        $sql = 'UPDATE contents '
-             . 'SET `available`=?, `content_status`=?, `starttime`=?, '
-             . '`fk_user_last_editor`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-        if (!is_array($status)) {
-            if ($status == 1
-                && ($this->starttime =='0000-00-00 00:00:00'
-                    || empty($this->starttime))
-            ) {
-                $this->starttime = date("Y-m-d H:i:s");
+        try {
+            if (!is_array($status)) {
+                if ($status == 1
+                    && ($this->starttime =='0000-00-00 00:00:00' || empty($this->starttime))
+                ) {
+                    $this->starttime = date("Y-m-d H:i:s");
+                }
+                $values = array(
+                    $status,
+                    $status,
+                    $this->starttime,
+                    $lastEditor,
+                    $this->id
+                );
+            } else {
+                $values = $status;
             }
-            $values = array(
-                $status,
-                $status,
-                $this->starttime,
-                $lastEditor,
-                $this->id
-            );
-        } else {
-            $values = $status;
-        }
 
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
+            if (count($values) <= 0) {
                 return false;
             }
+
+            getService('dbal_connection')->executeUpdate(
+                'UPDATE contents '
+                . 'SET `available`=?, `content_status`=?, `starttime`=?, '
+                . '`fk_user_last_editor`=? WHERE `pk_content`=?'
+            );
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            // Set status for it's updated to next event
+            if (!empty($this)) {
+                $this->available      = $status;
+                $this->content_status = $status;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error changing availability: '.$e->getMessage());
+            return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        // Set status for it's updated to next event
-        if (!empty($this)) {
-            $this->available      = $status;
-            $this->content_status = $status;
-        }
-
-        return true;
     }
 
     /**
@@ -969,37 +970,39 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents '
-             . 'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-        if (!is_array($status)) {
-            if (($status == 1) && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)) {
-                $this->starttime = date("Y-m-d H:i:s");
+        try {
+            if (!is_array($status)) {
+                if (($status == 1) && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)) {
+                    $this->starttime = date("Y-m-d H:i:s");
+                }
+                $values = array(
+                    $status,
+                    $this->starttime,
+                    $lastEditor,
+                    $this->id
+                );
+            } else {
+                $values = $status;
             }
-            $values = array(
-                $status,
-                $this->starttime,
-                $lastEditor,
-                $this->id
-            );
-        } else {
-            $values = $status;
-        }
 
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
+            if (count($values) <= 0) {
                 return false;
             }
+
+            getService('dbal_connection')->executeUpdate(
+                'UPDATE contents '
+                .'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?'
+            );
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error changing in_home: '.$e->getMessage());
+            return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -1094,30 +1097,31 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents SET `available`=0, `content_status`=0, `fk_user_last_editor`=?, '
-             . '`changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'content_status'      => 0,
+                    'available'           => 0,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s"),
+                ],
+                [ 'pk_content' => $this->id, ]
+            );
 
-        $values = array(
-            $_SESSION['userid'],
-            date("Y-m-d H:i:s"),
-            $this->id
-        );
+            // Set status for it's updated state to next event
+            $this->available      = 0;
+            $this->content_status = 0;
 
-        if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error changing draft: '.$e->getMessage());
             return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        // Set status for it's updated state to next event
-        $this->available      = 0;
-        $this->content_status = 0;
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -1131,21 +1135,28 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'in_litter'           => 1,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s")
+                ],
+                [ 'pk_content' => $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            $this->in_litter = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setTrashed (ID:'.$id.'):'.$e->getMessage());
             return false;
         }
-
-        $this->in_litter = 1;
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -1159,21 +1170,24 @@ class Content
             return false;
         }
 
-        $sql = "UPDATE contents SET `favorite`=1 WHERE pk_content=?";
-        $values = array($this->id);
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [ 'favorite'   => 1 ],
+                [ 'pk_content' => $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            $this->favorite = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
             return false;
         }
-
-        $this->favorite = 1;
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -1187,22 +1201,30 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents SET `content_status`=1, `frontpage`=0, '
-             . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
+        try {
+            getService('dbal_connection')->update(
+                'contents',
+                [
+                    'content_status'      => 1,
+                    'frontpage'           => 0,
+                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'changed'             => date("Y-m-d H:i:s")
+                ],
+                [ 'pk_content' => $this->id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->content_status = 1;
+            $this->frontpage = 1;
+
+            /* Notice log of this action */
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
             return false;
         }
-
-        // Set status for it's updated to next event
-        $this->in_litter = 2;
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
