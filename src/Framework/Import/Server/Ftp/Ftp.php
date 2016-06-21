@@ -57,7 +57,7 @@ class Ftp extends Server
                 throw new \Exception(
                     sprintf(
                         _('Can\'t login into server %s'),
-                        $this->params['server']
+                        $this->params['name']
                     )
                 );
             }
