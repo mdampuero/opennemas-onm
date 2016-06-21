@@ -487,8 +487,8 @@ class Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents, contents_categories'
-                . ' WHERE pk_content = ? AND pk_content = pk_fk_content',
+                'SELECT * FROM contents LEFT JOIN contents_categories'
+                . ' ON pk_content = pk_fk_content WHERE pk_content = ?',
                 [ (int) $id ]
             );
 
