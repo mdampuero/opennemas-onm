@@ -348,25 +348,6 @@ class Comment
     }
 
     /**
-     * Deletes comments given a SQL filter
-     *
-     * @return void
-     **/
-    public static function deleteFromFilter($filter)
-    {
-        try {
-            $rs = getService('dbal_connection')->delete(
-                'comments',
-                $filter
-            );
-
-            return true;
-        } catch (\Exception $e) {
-            error_log('Error while deleting comments from filter:'.$e->getMessage());
-        }
-    }
-
-    /**
      * Updates the status
      *
      * @return Comment the comment object instance

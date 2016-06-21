@@ -396,7 +396,7 @@ class Article extends Content
             getService('related_contents')->delete($id);
 
             // Delete comments
-            self::deleteComments($id);
+            getService('comment_repository')->deleteFromFilter(['content_id' => $id])
             $conn->commit();
 
             return true;
