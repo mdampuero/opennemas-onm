@@ -838,7 +838,7 @@ class Content
 
             getService('dbal_connection')->update(
                 'contents',
-                [ 'frontpage' => '(`frontpage` + 1) % 2' ],
+                [ 'frontpage'  => $this->frontpage ],
                 [ 'pk_content' => $this->id ]
             );
 
@@ -848,7 +848,7 @@ class Content
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
