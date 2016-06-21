@@ -156,10 +156,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if (!is_null($id)) {
             $this->read($id);
         }
-
-        if (!property_exists($this, 'cache')) {
-            $this->cache = null;
-        }
     }
 
     /**
@@ -236,6 +232,31 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
+     * Hydrates the object from an array of properties
+     *
+     * @return $this
+     **/
+    public function load($data)
+    {
+        $this->id               = (int) $data['id'];
+        $this->username         = $data['username'];
+        $this->password         = $data['password'];
+        $this->sessionexpire    = (int) $data['sessionexpire'];
+        $this->url              = $data['url'];
+        $this->bio              = $data['bio'];
+        $this->avatar_img_id    = (int) $data['avatar_img_id'];
+        $this->email            = $data['email'];
+        $this->name             = $data['name'];
+        $this->deposit          = $data['deposit'];
+        $this->type             = (int) $data['type'];
+        $this->token            = $data['token'];
+        $this->activated        = (int) $data['activated'];
+        $this->id_user_group    = explode(',', $data['fk_user_group']);
+
+        return $this;
+    }
+
+    /**
      * Loads the user information given its id
      *
      * @param int $id the user id
@@ -251,20 +272,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $this->id               = (int) $rs->fields['id'];
-        $this->username         = $rs->fields['username'];
-        $this->password         = $rs->fields['password'];
-        $this->sessionexpire    = (int) $rs->fields['sessionexpire'];
-        $this->url              = $rs->fields['url'];
-        $this->bio              = $rs->fields['bio'];
-        $this->avatar_img_id    = (int) $rs->fields['avatar_img_id'];
-        $this->email            = $rs->fields['email'];
-        $this->name             = $rs->fields['name'];
-        $this->deposit          = $rs->fields['deposit'];
-        $this->type             = (int) $rs->fields['type'];
-        $this->token            = $rs->fields['token'];
-        $this->activated        = (int) $rs->fields['activated'];
-        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
+        $this->load($rs->fields);
 
         $database = $GLOBALS['application']->conn->connectionParams['dbname'];
         if ($database != 'onm-instances') {
@@ -690,20 +698,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $this->id               = $rs->fields['id'];
-        $this->username         = $rs->fields['username'];
-        $this->password         = $rs->fields['password'];
-        $this->sessionexpire    = $rs->fields['sessionexpire'];
-        $this->url              = $rs->fields['url'];
-        $this->bio              = $rs->fields['bio'];
-        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
-        $this->email            = $rs->fields['email'];
-        $this->name             = $rs->fields['name'];
-        $this->deposit          = $rs->fields['deposit'];
-        $this->type             = $rs->fields['type'];
-        $this->token            = $rs->fields['token'];
-        $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
+        $this->load($rs->fields);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
@@ -729,20 +724,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $this->id               = $rs->fields['id'];
-        $this->username         = $rs->fields['username'];
-        $this->password         = $rs->fields['password'];
-        $this->sessionexpire    = $rs->fields['sessionexpire'];
-        $this->url              = $rs->fields['url'];
-        $this->bio              = $rs->fields['bio'];
-        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
-        $this->email            = $rs->fields['email'];
-        $this->name             = $rs->fields['name'];
-        $this->deposit          = $rs->fields['deposit'];
-        $this->type             = $rs->fields['type'];
-        $this->token            = $rs->fields['token'];
-        $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
+        $this->load($rs->fields);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
@@ -979,16 +961,44 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $filter = ' '.$filter.' AND ';
         }
 
-        $authors = getService('user_repository')->findBy(
-            ' '.$filter.' fk_user_group LIKE "%3%" ',
-            [ 'name' => 'ASC' ]
+        // Fetch authors info from users table
+        $authorInfos = getService('dbal_connection')->fetchAll(
+            'SELECT * FROM users WHERE '.$filter.' fk_user_group LIKE "%3%"'
+            .' ORDER BY name ASC'
         );
 
-        foreach ($authors as &$author) {
-            $author->params  = $author->meta;
-            if (array_key_exists('is_blog', $author->params)) {
-                $author->is_blog = $author->meta['is_blog'];
+        // Fetch user meta from previously fetched authors.
+        $authorIDs = array_map(function ($item) {
+            return $item['id'];
+        }, $authorInfos);
+        $authorMetas = [];
+        if (count($authorIDs) > 0) {
+            $authorMetas = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM usermeta WHERE user_id IN ('.implode(',', $authorIDs).')'
+            );
+        }
+
+        // Build the final array of authors from previously fetched info
+        $authors = [];
+        foreach ($authorInfos as $authorData) {
+            $authorObject = new \User();
+            $authorObject->load($authorData);
+
+            $metas = array_filter($authorMetas, function($item) use ($authorData) {
+                return $item['user_id'] == $authorData['id'];
+            });
+            $userMetas = [];
+            foreach ($metas as $meta) {
+                $userMetas[$meta['meta_key']] = $meta['meta_value'];
             }
+            $authorObject->meta = $userMetas;
+
+            $authorObject->params  = $authorObject->meta;
+            if (array_key_exists('is_blog', $authorObject->params)) {
+                $authorObject->is_blog = $authorObject->meta['is_blog'];
+            }
+
+            $authors[] = $authorObject;
         }
 
         // Order names with accents
