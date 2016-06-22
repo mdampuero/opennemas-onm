@@ -223,7 +223,7 @@ class Article extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching article (ID:'.$id.'): '$e->getMessage());
+            error_log('Error fetching article (ID:'.$id.'): '.$e->getMessage());
             return false;
         }
     }
@@ -284,7 +284,7 @@ class Article extends Content
             return $this->id;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error creating article: '$e->getMessage());
+            error_log('Error creating article: '.$e->getMessage());
             return false;
         }
     }
@@ -396,7 +396,7 @@ class Article extends Content
             getService('related_contents')->delete($id);
 
             // Delete comments
-            getService('comment_repository')->deleteFromFilter(['content_id' => $id])
+            getService('comment_repository')->deleteFromFilter(['content_id' => $id]);
             $conn->commit();
 
             return true;
