@@ -125,6 +125,12 @@ function smarty_function_structured_data_tags($params, &$smarty)
                         "dateModified": "'.$content->changed.'",';
 
         if (!empty($imageUrl)) {
+            if (empty($imageWidth)) {
+                $imageWidth = 700;
+            }
+            if (empty($imageHeight)) {
+                $imageHeight = 450;
+            }
             $output .= '
                         "image": {
                             "@type": "ImageObject",
