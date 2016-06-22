@@ -157,11 +157,13 @@ class AmpController extends Controller
 
             $pattern = [
                 '@(align|border|style)="[^\"]+\"@',
+                '@<font>((?s).*)<\/font>@',
                 '@<img([^>]+>)@',
                 '@<iframe.*src=\"(.*)\".*><\/iframe>@'
             ];
             $replacement  = [
                 '',
+                '${1}',
                 '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
                 '<amp-iframe width=300 height=300
                     sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
@@ -171,6 +173,7 @@ class AmpController extends Controller
                 </amp-iframe>'
             ];
             $article->body = preg_replace($pattern, $replacement, $article->body);
+            $article->summary = preg_replace($pattern, $replacement, $article->summary);
         } // end if $this->view->is_cached
 
         return $this->render(
