@@ -1666,8 +1666,7 @@ class Content
             throw new \InvalidArgumentException($message);
         }
 
-        $sql = "SELECT urn_source FROM `contents` "
-             . "WHERE urn_source IN (".$sqlUrns.")";
+        $sql = "SELECT urn_source FROM `contents` WHERE urn_source IN (".$sqlUrns.")";
 
         try {
             $contents = getService('dbal_connection')->fetchAll($sql);
@@ -1683,7 +1682,7 @@ class Content
 
             return $contentsUrns;
         } catch (\Exception $e) {
-            error_log('Error Conntent::findByUrn'.$e->getMessage());
+            error_log('Error Conntent::findByUrn: '.$e->getMessage());
             return false;
         }
     }
@@ -1697,18 +1696,22 @@ class Content
      **/
     public static function findByOriginaNameInUrn($originalName)
     {
-        $content = null;
-        if (is_string($originalName)) {
-            $name = $GLOBALS['application']->conn->quote('%'.$originalName.'%');
-            $sql  = "SELECT pk_content FROM `contents` WHERE urn_source LIKE {$name}";
-
-            $content = $GLOBALS['application']->conn->GetOne($sql);
-        } else {
+        if (!is_string($originalName)) {
             $message = sprintf('The param name is not valid "%s".', $originalName);
             throw new \InvalidArgumentException($message);
         }
 
-        return $content;
+        try {
+            $conn = getService('dbal_connection');
+            $content = $conn->fetchColumn(
+                "SELECT pk_content FROM `contents` WHERE urn_source LIKE ? LIMIT 1",
+                [ '%'.$originalName.'%' ]
+            );
+
+            return $content;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -1724,6 +1727,7 @@ class Content
     }
 
     /**
+     * TODO: improve performance, it uses Content::get instead of the entity service
      * Loads all the related contents for this content
      *
      * @param string $categoryName the category where fetching related contents from
