@@ -102,15 +102,15 @@ class L10nSystemListener implements EventSubscriberInterface
             \Application::$language = $language;
         }
 
+        if (!in_array(\Application::$language, array_keys($availableLanguages))) {
+            \Application::$language = 'en_US';
+        }
+
         $locale = \Application::$language.".UTF-8";
         $domain = 'messages';
 
         $languageComposed = explode('_', $locale);
         $shortLanguage = $languageComposed[0];
-
-        if (empty($shortLanguage)) {
-            $shortLanguage = 'en';
-        }
 
         if (!defined('CURRENT_LANGUAGE_LONG')) {
             define('CURRENT_LANGUAGE_LONG', \Application::$language);
