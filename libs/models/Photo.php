@@ -428,7 +428,7 @@ class Photo extends Content
      *
      * @return Photo the Photo object with all the information
      **/
-    public function getMetaData()
+    public function getPhotoMetaData()
     {
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
