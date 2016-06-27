@@ -2039,15 +2039,22 @@ class Content
                 $this->id = $id;
             }
 
-            $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-            $properties = $GLOBALS['application']->conn->GetArray($sql, array((int) $this->id));
+            $contentProperties = [];
+            try {
+                $properties = getService('dbal_connection')->fetchAll(
+                    'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
+                    [(int) $this->id ]
+                );
 
-            if (is_null($properties) || !is_array($properties)) {
-                $contentProperties = array();
-            } else {
-                foreach ($properties as $property) {
-                    $contentProperties[$property['meta_name']] = $property['meta_value'];
+
+                if (!is_null($properties) && is_array($properties)) {
+                    foreach ($properties as $property) {
+                        $contentProperties[$property['meta_name']] = $property['meta_value'];
+                    }
                 }
+
+            } catch (\Exception $e) {
+                error_log('Error on Content:loadAllContentProperties: '.$e->getMessage());
             }
 
             $cache->save('content-meta-'.$this->id, $contentProperties);
