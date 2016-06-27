@@ -469,34 +469,40 @@ purchase:
             options: { default: null, autoincrement: true }
         client:
             type: text
-            options: { default: null, length: 65532, notnull: true }
+            options: { default: null, length: 65532, notnull: false }
         details:
             type: text
-            options: { default: null, length: 65532, notnull: true }
+            options: { default: null, length: 65532, notnull: false }
         method:
             type: string
-            options: { default: null, length: 15 }
+            options: { default: null, length: 15, notnull: false }
         fee:
             type: float
             options: { default: 0, notnull: true }
         total:
             type: float
             options: { default: 0, notnull: true }
+        step:
+            type: string
+            options: { default: '', length: 10, notnull: true }
         instance_id:
             type: bigint
             options: { notnull: true }
         client_id:
             type: string
-            options: { default: null, length: 60 }
+            options: { default: null, length: 60, notnull: false }
         payment_id:
             type: string
-            options: { default: null, length: 60 }
+            options: { default: null, length: 60, notnull: false }
         invoice_id:
             type: string
-            options: { default: null, length: 60 }
+            options: { default: null, length: 60, notnull: false }
         created:
             type: datetime
-            options: { default: null }
+            options: { default: null, notnull: true }
+        updated:
+            type: datetime
+            options: { default: null, notnull: false }
     index:
         -
             name: PRIMARY

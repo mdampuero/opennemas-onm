@@ -498,6 +498,7 @@
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
+      @Common/src/angular-http/http.js,
       @Common/src/angular-history/history.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,

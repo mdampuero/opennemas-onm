@@ -131,6 +131,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-method" checklist-model="columns.selected" checklist-value="'method'" type="checkbox">
+            <label for="checkbox-method">
+              {t}Method{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
             <label for="checkbox-client_id">
               {t}Client ID{/t}
@@ -156,12 +162,24 @@
               {t}Instance{/t}
             </label>
           </div>
-        </div>
-        <div class="col-md-3">
-          <div class="checkbox check-default">
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-created">
               {t}Created{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
+            <label for="checkbox-updated">
+              {t}Updated{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-step" checklist-model="columns.selected" checklist-value="'step'" type="checkbox">
+            <label for="checkbox-step">
+              {t}Step{/t}
             </label>
           </div>
         </div>
@@ -191,6 +209,9 @@
                 {t}Total{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
               </th>
+              <th class="pointer" ng-show="isColumnEnabled('method')" width="50">
+                {t}Method{/t}
+              </th>
               <th class="pointer text-center" ng-click="sort('client_id')" ng-show="isColumnEnabled('client_id')" width="120">
                 {t}Client ID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('client_id') == 'asc', 'fa fa-caret-down': isOrderedBy('client_id') == 'desc'}"></i>
@@ -210,6 +231,13 @@
               <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="250">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('updated')" ng-show="isColumnEnabled('updated')" width="250">
+                {t}Updated{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-show="isColumnEnabled('step')" width="100">
+                {t}Step{/t}
               </th>
             </tr>
           </thead>
@@ -238,6 +266,9 @@
               <td class="text-right" ng-show="isColumnEnabled('total')">
                 [% item.total | number : 2 %] €
               </td>
+              <td class="text-right" ng-show="isColumnEnabled('method')">
+                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }"></i>
+              </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]" target="_blank">
                   [% item.client.id %]
@@ -260,6 +291,14 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('created')">
                 [% item.created %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('updated')">
+                [% item.updated %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('step')">
+                <span class="badge text-uppercase" ng-class="{ 'badge-success': item.step === 'done', 'badge-danger': item.step === 'cart' || item.step === 'billing', 'badge-warning': item.step === 'payment' || item.step === 'summary' }">
+                  <strong>[% item.step %]</strong>
+                </span>
               </td>
             </tr>
           </tbody>
