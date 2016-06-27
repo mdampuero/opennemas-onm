@@ -104,7 +104,6 @@ class Photo extends Content
         $this->size        = $properties['size'];
         $this->width       = $properties['width'];
         $this->height      = $properties['height'];
-        $this->nameCat     = $properties['nameCat'];
         $this->author_name = $properties['author_name'];
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
@@ -163,7 +162,6 @@ class Photo extends Content
      **/
     public function create($data)
     {
-
         $data['content_status'] = 1;
         try {
             parent::create($data);
@@ -177,7 +175,6 @@ class Photo extends Content
                     'size'        => $data['size'],
                     'width'       => (int) $data['width'],
                     'height'      => (int) $data['height'],
-                    'nameCat'     => $data['nameCat'],
                     'author_name' => $data['author_name']
                 ]
             );
