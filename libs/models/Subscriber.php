@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Subscriptor class
+ * Defines the Subscriber class
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -17,7 +17,7 @@
  *
  * @package    Model
  **/
-class Subscriptor
+class Subscriber
 {
     /**
      * The subscriptor id
@@ -82,11 +82,11 @@ class Subscriptor
     }
 
     /**
-     * Returns the Subscriptor object overloaded
+     * Returns the Subscriber object overloaded
      *
      * @param array $properties the list of properties to overload
      *
-     * @return Subscriptor
+     * @return Subscriber
      **/
     public function load($properties)
     {
@@ -118,7 +118,7 @@ class Subscriptor
      *
      * @param int $id the subscriptor id
      *
-     * @return Subscriptor the object instance
+     * @return Subscriber the object instance
      **/
     public function read($id)
     {
@@ -255,7 +255,7 @@ class Subscriptor
      *
      * @param string $email the user email
      *
-     * @return Subscriptor the object instance
+     * @return Subscriber the object instance
      **/
     public function getUserByEmail($email)
     {
@@ -303,7 +303,7 @@ class Subscriptor
             );
 
             foreach ($rs as $item) {
-                $user = new Subscriptor();
+                $user = new Subscriber();
                 $user->load($item);
                 $items[] = $user;
             }
@@ -330,6 +330,35 @@ class Subscriptor
                 "pc_users",
                 [
                   'status' => $status
+                ],
+                [ 'pk_pc_user' => (int) $id ]
+            );
+
+            $this->id = $id;
+            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Sets the status to a given value
+     *
+     * @param int $id the subscriptor id
+     * @param int $status the status value
+     *
+     * @return boolean true if the subscriptor status property was changed
+     **/
+    public function setSubscriptionStatus($id, $status)
+    {
+        try {
+            $rs = getService('dbal_connection')->update(
+                "pc_users",
+                [
+                  'subscription' => $status
                 ],
                 [ 'pk_pc_user' => (int) $id ]
             );
