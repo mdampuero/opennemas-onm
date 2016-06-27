@@ -244,10 +244,6 @@ class Poll extends Content
             // Save poll items
             $total = 0;
             foreach ($data['item'] as $key => &$item) {
-                if (empty($item->pk_item)) {
-                    $item->pk_item = $key + 1;
-                }
-
                 $conn->insert(
                     'poll_items',
                     [
