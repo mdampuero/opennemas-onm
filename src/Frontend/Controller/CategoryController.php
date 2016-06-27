@@ -110,7 +110,7 @@ class CategoryController extends Controller
 
                 // Get number comments for a content
                 if ($content->with_comment == 1) {
-                    $content->num_comments = $content->getProperty('num_comments');
+                    $content->num_comments = $content->getMetadata('num_comments');
                 }
 
                 // Load attached and related contents from array

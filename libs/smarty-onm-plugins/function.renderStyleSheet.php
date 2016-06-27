@@ -22,10 +22,10 @@ function smarty_function_renderStyleSheet($params, &$smarty)
     if (is_array($items)) {
         foreach ($items as $k => $item) {
             $element = 'bgcolor_'.$current;
-            $bgcolor = $item->getProperty($element);
+            $bgcolor = $item->getMetadata($element);
 
             $element = 'title'."_".$current;
-            $properties = $item->getProperty($element);
+            $properties = $item->getMetadata($element);
 
             if (!empty($properties)) {
                  $properties = json_decode($properties);

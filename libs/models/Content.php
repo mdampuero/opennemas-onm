@@ -210,6 +210,14 @@ class Content
     public $favorite            = null;
 
     /**
+     * Map of metadata which contains information that doesn't fit on normal vars.
+     * Stored in a separated table contentmeta. These values are not serialized.
+     *
+     * @var string
+     **/
+    public $metas = [];
+
+    /**
      * Whether allowing comments in this content
      *
      * @var boolean
@@ -296,6 +304,9 @@ class Content
 
                 break;
             default:
+                if (array_key_exists($name, $this->metas)) {
+                    return $this->metas[$name];
+                }
                 break;
         }
     }
@@ -1907,29 +1918,44 @@ class Content
                 [ $this->id, $categoryID ]
             );
 
+            return $rs > 0;
+        } catch (\Exception $e) {
+            error_log('Error on Content::isInFrontpageOfCategory (ID:'.$categoryID.')');
+            return false;
+        }
+    }
+
     /**
      * Returns a metaproperty value from the current content
      *
-     * @param string $property the property name to fetch
+     * @param string $metaName the property name to fetch
      *
-     * @return boolean true if it is in the category
+     * @return mixed the meta value or false if it's not available
      **/
-    public function getProperty($property)
+    public function getMetadata($metaName)
     {
         if ($this->id == null) {
             return false;
         }
 
-        if (isset($this->$property)) {
-            return $this->$property;
+        if (array_key_exists($metaName, $this->metas)) {
+            return $this->metas[$metaName];
         }
 
-        $sql = 'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?';
-        $values = array($this->id, $property);
+        try {
+            $metaValue = getService('dbal_connection')->fetchColumn(
+                'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?',
+                [ $this->id, $metaName ]
+            );
 
-        $value = $GLOBALS['application']->conn->GetOne($sql, $values);
+            $this->metas[$metaName] = $metaValue;
+            // TODO: I have to maintain this for backward compatibility
+            $this->$metaName = $metaValue;
 
-        return $value;
+            return $metaValue;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -1940,77 +1966,26 @@ class Content
      *
      * @return boolean true if the property was setted
      **/
-    public function setProperty($property, $value)
+    public function setMetadata($property, $value)
     {
         if ($this->id == null || empty($property)) {
             return false;
         }
 
-        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
-        $values = array($this->id, $property, $value, $value);
+        try {
+            $value = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+                ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                [ $this->id, $property, $value, $value ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            dispatchEventWithParams('content.update', array('content' => $this));
 
-        if ($rs === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error on Content::setMetadata (ID:'.$this->id.') .'.$property.' => '.$value);
             return false;
         }
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
-    }
-
-    /**
-     * Returns a list of metaproperty values from a list of contents
-     *
-     * @param string $property the property name to fetch
-     *
-     * @return boolean true if it is in the category
-     **/
-    public static function getMultipleProperties($propertyMap)
-    {
-        $map = $values = [];
-        foreach ($propertyMap as $property) {
-            $map []= '(fk_content=? AND `meta_name`=?)';
-            $values []= $property[0];
-            $values []= $property[1];
-        }
-
-        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
-        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
-
-        return $value;
-    }
-
-    /**
-     * Sets a metaproperty for the actual content
-     *
-     * @param string $id the id of the content
-     * @param string $property the name of the property
-     * @param mixed $value     the value of the property
-     *
-     * @return boolean true if the property was setted
-     **/
-    public static function setPropertyWithContentId($id, $property, $value)
-    {
-        if (is_null($id) || empty($property)) {
-            return false;
-        }
-
-        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
-        $values = array($id, $property, $value, $value);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if ($rs === false) {
-            return false;
-        }
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -2020,23 +1995,28 @@ class Content
      *
      * @return boolean true if the meta value was cleaned
      **/
-    public function clearProperty($property)
+    public function removeMetadata($property)
     {
         if ($this->id == null) {
             return false;
         }
 
-        $sql = "DELETE FROM contentmeta WHERE `fk_content`=? AND `meta_name`=?";
-        $values = array($this->id, $property);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            getService('dbal_connection')->delete(
+                'contentmeta',
+                [
+                    'fk_content' => $this->id,
+                    'meta_name' => $property
+                ]
+            );
 
-        if ($rs === false) {
+            dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error on Content::removeMetadata'.$e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -2076,33 +2056,8 @@ class Content
         foreach ($contentProperties as $key => $value) {
             $this->{$key} = $value;
         }
+        $this->metas = $contentProperties;
 
         return $this;
-    }
-
-    /**
-     * Update content property given the content id, property & value
-     *
-     * @param array $values the list of meta values to store
-     *
-     * @return boolean true if it is in the category
-     **/
-
-    public function updateAllContentProperties($values)
-    {
-        if ($this->id == null || count($values) < 0) {
-            return false;
-        }
-
-        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content) VALUES (?, ?, ?)";
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if ($rs === false) {
-            return false;
-        }
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 }

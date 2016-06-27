@@ -26,7 +26,7 @@ function smarty_function_getProperty($params, &$smarty)
         }
         foreach ($properties as $key => $property) {
             $prop = $property."_".$category;
-            $value = $item->getProperty($prop);
+            $value = $item->getMetadata($prop);
             if (!empty($value)) {
                 if ($property == 'bgcolor') {
                     $output .= "background-color:{$value};";
