@@ -22,9 +22,9 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="hidden-xs">
-              <a class="btn btn-white" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
+              <a class="btn btn-white" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscribers{/t}">
                 <span class="fa fa-users"></span>
-                {t}Subscriptors{/t}
+                {t}Subscriber{/t}
               </a>
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>

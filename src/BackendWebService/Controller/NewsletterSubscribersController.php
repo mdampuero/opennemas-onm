@@ -25,7 +25,7 @@ use Onm\Framework\Controller\Controller;
  *
  * @package Backend_Controllers
  **/
-class NewsletterSubscriptorsController extends Controller
+class NewsletterSubscribersController extends Controller
 {
     /**
      * Lists nwesletters and perform searches across them
@@ -47,7 +47,7 @@ class NewsletterSubscriptorsController extends Controller
         // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($search);
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
         $subscriptors = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
         $subscriptors = \Onm\StringUtils::convertToUtf8($subscriptors);
 
@@ -80,7 +80,7 @@ class NewsletterSubscriptorsController extends Controller
 
         $errors = $success = [];
         if (!empty($id)) {
-            $user = new \Subscriptor($id);
+            $user = new \Subscriber($id);
             $result = $user->delete($id);
 
             if ($user->id && $result) {
@@ -125,10 +125,10 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id   = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         $subscription = ($user->subscription + 1) % 2;
-        $toggled = $user->mUpdateProperty($user->id, 'subscription', $subscription);
+        $toggled = $user->setSubscriptionStatus($user->id, 'subscription', $subscription);
 
         if ($toggled) {
             $messages = array(
@@ -167,7 +167,7 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id   = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         $status = ($user->status == 2) ? 3: 2;
         $toggled = $user->setStatus($id, $status);
@@ -210,7 +210,7 @@ class NewsletterSubscriptorsController extends Controller
         $ids = $request->query->get('cid');
 
         if (is_array($ids) && count($ids) > 0) {
-            $user = new \Subscriptor();
+            $user = new \Subscriber();
             $count = 0;
             foreach ($ids as $id) {
                 if ($user->delete($id)) {
@@ -263,7 +263,7 @@ class NewsletterSubscriptorsController extends Controller
             ]);
         }
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         foreach ($ids as $id) {
             $data[] = array(
@@ -312,7 +312,7 @@ class NewsletterSubscriptorsController extends Controller
             ]);
         }
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         foreach ($ids as $id) {
             $data[] = array(

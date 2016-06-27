@@ -26,7 +26,7 @@ use Onm\Settings as s;
  *
  * @package Backend_Controllers
  **/
-class NewsletterSubscriptorsController extends Controller
+class NewsletterSubscribersController extends Controller
 {
     /**
      * Lists all the newsletter subscriptors
@@ -60,7 +60,7 @@ class NewsletterSubscriptorsController extends Controller
         if ('POST' !== $request->getMethod()) {
             return $this->render('newsletter/subscriptions/new.tpl');
         }
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         $data = array(
             'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
@@ -129,7 +129,7 @@ class NewsletterSubscriptorsController extends Controller
             'status'       => $request->request->getDigits('status', 2),
         );
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
         if ($user->update($data, true)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -162,7 +162,7 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         if (is_null($user->id)) {
             $this->get('session')->getFlashBag()->add(
