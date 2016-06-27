@@ -152,7 +152,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::getTitle($this->title);
                 }
                 break;
             case 'author':
@@ -171,85 +171,27 @@ class Article extends Content
     }
 
     /**
-     * Creates one article from an array of properties
+     * Load object properties
      *
-     * @param mixed $data array of properties for the article
+     * @param array $properties
      *
-     * @return null if the article was not created
-     * @return int  the id of the article
+     * @return void
      **/
-    public function create($data)
+    public function load($data)
     {
-        if (!isset($data['description'])) {
-            $data['description'] = StringUtils::getNumWords($data['body'], 50);
-        }
+        parent::load($data);
 
-        $data['subtitle']= $data['subtitle'];
-        $data['img1_footer']
-            = (!isset($data['img1_footer']) || empty($data['img1_footer']))
-                ? ''
-                : $data['img1_footer'];
-        $data['img2_footer']
-            = (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                ? ''
-                : $data['img2_footer'];
-
-        // Start transaction
-        $GLOBALS['application']->conn->BeginTrans();
-        parent::create($data);
-
-        if (empty($this->id)) {
-            $GLOBALS['application']->conn->RollbackTrans();
-            return false;
-        }
-
-        $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
-                            `summary`, `img1`, `img1_footer`,
-                            `img2`, `img2_footer`, `fk_video`, `fk_video2`,
-                            `footer_video2`, `title_int`) " .
-                        "VALUES (?,?,?, ?,?,?, ?,?,?,?, ?,?)";
-
-        $values = array(
-            $this->id,
-            $data['subtitle'], $data['agency'],  $data['summary'],
-            (int) $data['img1'], $data['img1_footer'],
-            (int) $data['img2'], $data['img2_footer'], (int) $data['fk_video'],
-            (int) $data['fk_video2'], $data['footer_video2'], $data['title_int']
+        $this->permalink = Uri::generate(
+            'article',
+            [
+                'id'       => $this->id,
+                'date'     => date('Y-m-d', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug'     => $this->slug,
+            ]
         );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            $GLOBALS['application']->conn->RollbackTrans();
-            return false;
-        }
-
-        // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
-
-        if (!empty($data['relatedFront'])) {
-            $this->saveRelated(
-                $data['relatedFront'],
-                $this->id,
-                'setRelationPosition'
-            );
-        }
-        if (!empty($data['relatedInner'])) {
-            $this->saveRelated(
-                $data['relatedInner'],
-                $this->id,
-                'setRelationPositionForInner'
-            );
-        }
-
-        if (!empty($data['relatedHome'])) {
-            $this->saveRelated(
-                $data['relatedHome'],
-                $this->id,
-                'setHomeRelations'
-            );
-        }
-
-        return $this->id;
+        return $this;
     }
 
     /**
@@ -262,7 +204,9 @@ class Article extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -272,23 +216,77 @@ class Article extends Content
             );
 
             if (!$rs) {
-                return;
+                return false;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
-            return;
+            error_log('Error fetching article (ID:'.$id.'): '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Creates one article from an array of properties
+     *
+     * @param mixed $data array of properties for the article
+     *
+     * @return null if the article was not created
+     * @return int  the id of the article
+     **/
+    public function create($data)
+    {
+        if (!isset($data['description'])) {
+            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
-        $this->load($rs);
+        $data['subtitle']= $data['subtitle'];
 
-        $this->permalink = Uri::generate(
-            'article',
-            array(
-                'id'       => $this->id,
-                'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
-            )
-        );
+        try {
+            // Start transaction
+            $conn = getService('dbal_connection');
+            $conn->beginTransaction();
+
+            parent::create($data);
+
+            $conn->insert('articles', [
+                'pk_article'    => $this->id,
+                'subtitle'      => $data['subtitle'],
+                'agency'        => $data['agency'],
+                'summary'       => $data['summary'],
+                'title_int'     => $data['title_int'],
+                'img1'          => (int) $data['img1'],
+                'img1_footer'   => (!isset($data['img1_footer']) || empty($data['img1_footer']))
+                    ? '' : $data['img1_footer'],
+                'img2'          => (int) $data['img2'],
+                'img2_footer'   => (!isset($data['img2_footer']) || empty($data['img2_footer']))
+                    ? '' : $data['img2_footer'],
+                'fk_video'      => (int) $data['fk_video'],
+                'fk_video2'     => (int) $data['fk_video2'],
+                'footer_video2' => $data['footer_video2'],
+            ]);
+
+            if (!empty($data['relatedFront'])) {
+                $this->saveRelated($data['relatedFront'], $this->id, 'setRelationPosition');
+            }
+            if (!empty($data['relatedInner'])) {
+                $this->saveRelated($data['relatedInner'], $this->id, 'setRelationPositionForInner');
+            }
+
+            if (!empty($data['relatedHome'])) {
+                $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
+            }
+
+            $conn->commit();
+
+            return $this->id;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log('Error creating article: '.$e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -302,78 +300,72 @@ class Article extends Content
     {
         // Update an article
         if (!$data['description']) {
-            $data['description'] = StringUtils::getNumWords(
-                $data['body'],
-                50
-            );
+            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
-        $data['subtitle'] = $data['subtitle'];
-        $data['img1_footer'] =
-            (!isset($data['img1_footer']) || empty($data['img1_footer']))
-            ? ''
-            : $data['img1_footer'];
-        $data['img2_footer'] =
-            (!isset($data['img2_footer']) || empty($data['img2_footer']))
-            ? ''
-            : $data['img2_footer'];
+        $contentData = [
+            'subtitle'      => $data['subtitle'],
+            'agency'        => $data['agency'],
+            'summary'       => $data['summary'],
+            'title_int'     => $data['title_int'],
+            'img1'          => (int) $data['img1'],
+            'img1_footer'   => (!isset($data['img1_footer']) || empty($data['img1_footer']))
+                ? '': $data['img1_footer'],
+            'img2'          => (int) $data['img2'],
+            'img2_footer'   => (!isset($data['img2_footer']) || empty($data['img2_footer']))
+                ? '': $data['img2_footer'],
+            'fk_video'      => (int) $data['fk_video'],
+            'fk_video2'     => (int) $data['fk_video2'],
+            'footer_video2' => $data['footer_video2'],
+        ];
 
-        // Start transaction
-        $GLOBALS['application']->conn->BeginTrans();
-        parent::update($data);
+        try {
+            // Start transaction
+            $conn = getService('dbal_connection');
+            $conn->beginTransaction();
+            parent::update($data);
 
-        $sql = "UPDATE articles "
-                ."SET `subtitle`=?, `agency`=?, `summary`=?, "
-                ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
-                ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                ."`title_int`=? "
-                ."WHERE pk_article=?";
+            $conn->update(
+                'articles',
+                $contentData,
+                [ 'pk_article' => $data['id'] ]
+            );
 
-        $values = array(
-            $data['subtitle'], $data['agency'], $data['summary'],
-            (int) $data['img1'], $data['img1_footer'], (int) $data['img2'], $data['img2_footer'],
-            (int) $data['fk_video'], (int) $data['fk_video2'], $data['footer_video2'],
-            $data['title_int'],
-            (int) $data['id']
-        );
+            // Drop related and insert new ones
+            getService('related_contents')->delete($data['id']);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $GLOBALS['application']->conn->RollbackTrans();
+            // Insert new related contents
+            if (!empty($data['relatedFront'])) {
+                $this->saveRelated(
+                    $data['relatedFront'],
+                    $data['id'],
+                    'setRelationPosition'
+                );
+            }
+            if (!empty($data['relatedInner'])) {
+                $this->saveRelated(
+                    $data['relatedInner'],
+                    $data['id'],
+                    'setRelationPositionForInner'
+                );
+            }
+
+            if (!empty($data['relatedHome'])) {
+                $this->saveRelated(
+                    $data['relatedHome'],
+                    $this->id,
+                    'setHomeRelations'
+                );
+            }
+            $conn->commit();
+            $this->category_name = $this->loadCategoryName($this->id);
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log('Error updating article (ID:'.$data['id'].': '.$e->getMessage());
             return false;
         }
-
-        // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
-
-        // Drop related and insert new ones
-        getService('related_contents')->delete($data['id']);
-
-        if (!empty($data['relatedFront'])) {
-            $this->saveRelated(
-                $data['relatedFront'],
-                $data['id'],
-                'setRelationPosition'
-            );
-        }
-        if (!empty($data['relatedInner'])) {
-            $this->saveRelated(
-                $data['relatedInner'],
-                $data['id'],
-                'setRelationPositionForInner'
-            );
-        }
-
-        if (!empty($data['relatedHome'])) {
-            $this->saveRelated(
-                $data['relatedHome'],
-                $this->id,
-                'setHomeRelations'
-            );
-        }
-
-        $this->category_name = $this->loadCategoryName($this->id);
-
-        return true;
     }
 
     /**
@@ -385,19 +377,34 @@ class Article extends Content
      **/
     public function remove($id)
     {
-        parent::remove($id);
-
-        $sql = 'DELETE FROM articles WHERE pk_article=?';
-
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+        if ((int) $id <= 0) {
             return false;
         }
 
-        // Delete related
-        getService('related_contents')->delete($id);
+        $conn = getService('dbal_connection');
+        try {
+            $conn->beginTransaction();
 
-        // Delete comments
-        self::deleteComments($id);
+            parent::remove($id);
+
+            $rs = getService('dbal_connection')->delete(
+                "articles",
+                [ 'pk_article' => $id ]
+            );
+
+            // Delete related
+            getService('related_contents')->delete($id);
+
+            // Delete comments
+            getService('comment_repository')->deleteFromFilter(['content_id' => $id]);
+            $conn->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log('Error deleting article (ID:'.$id.'): '.$e->getMessage());
+            return false;
+        }
 
         return true;
     }
@@ -457,13 +464,10 @@ class Article extends Content
      **/
     public function getAuthor()
     {
-        if (!empty($this->author)) {
-            return $this->author;
-        } else {
-            $ur = getService('user_repository');
-            $author = $ur->find($this->fk_author);
-
-            return $author;
+        if (empty($this->author)) {
+            $this->author= getService('user_repository')->find($this->fk_author);
         }
+
+        return $this->author;
     }
 }

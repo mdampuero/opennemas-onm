@@ -2,13 +2,17 @@
 <p>{t 1=$instance->name 2=$user->name 3=$smarty.capture.user_url 4=$user->email escape="off"} <a href="%3">%2</a> with email <a href="mailto:%4">%4</a> from instance <a href="http://{$instance->getMainDomain()}">"%1" ({$instance->getMainDomain()})</a> has requested a domain:{/t}</p>
 <br>
 <h4>
-  {t}Domains{/t}:
+  {if $create}
+    {t}Domains to create{/t}:
+  {else}
+    {t}Domains to redirect{/t}:
+  {/if}
 </h4>
 <br>
 <ul>
-  {foreach from=$domains item=domain}
-    <li>{$domain['description']}</li>
-  {/foreach}
+ {foreach from=$domains item=domain}
+   <li>{$domain['description']}</li>
+ {/foreach}
 </ul>
 <br>
 <h4>{t}Billing information{/t}</h4>

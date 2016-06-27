@@ -38,7 +38,10 @@ class StaticPagesController extends Controller
     {
         $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
-        $content = \StaticPage::getPageBySlug($slug);
+        $content = getService('entity_repository')->findOneBy([
+            'slug' => [[ 'value' => $slug ]],
+            'content_type_name' => [[ 'value' => 'static_page' ]]
+        ]);
 
         // if static page doesn't exist redirect to 404 error page.
         if (is_null($content) || (!$content->content_status)) {

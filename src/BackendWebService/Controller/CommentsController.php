@@ -223,14 +223,13 @@ class CommentsController extends ContentController
      */
     public function toggleStatusAction(Request $request, $id)
     {
-        $status   = null;
-        $em       = $this->get('comment_repository');
-        $messages = array();
 
+        $em       = $this->get('comment_repository');
         $comment = $em->find($id);
         $status = $request->request->get('value');
 
-        if (!is_null($id)) {
+        $messages = array();
+        if (!is_null($comment->id)) {
             try {
                 $comment->setStatus($status);
                 $em->delete($id);

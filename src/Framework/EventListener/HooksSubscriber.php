@@ -270,7 +270,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $content = $event->getArgument('content');
 
         $id = $content->id;
-        $contentType = \underscore(get_class($content));
+        if (!empty($content->content_type_name)) {
+            $contentType = $content->content_type_name;
+        } else {
+            $contentType = \underscore(get_class($content));
+        }
 
         $this->cacheHandler->delete($contentType . "-" . $id);
     }
@@ -391,6 +395,8 @@ class HooksSubscriber implements EventSubscriberInterface
             $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
             $cacheManager->delete('blog', 'blog_frontpage.tpl');
         } elseif (property_exists($content, 'pk_video')) {
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->id);
+            $cacheManager->delete('home|1');
             $cacheManager->delete('videos|RSS');
         } elseif (property_exists($content, 'pk_album')) {
             $cacheManager->delete('albums|RSS');

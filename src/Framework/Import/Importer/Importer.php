@@ -141,10 +141,18 @@ class Importer
      */
     public function importAll()
     {
+        $imported  = [];
         $resources = $this->getResources();
 
         foreach ($resources as $resource) {
-            $imported[] = $this->import($resource);
+            try {
+                $id = $this->import($resource);
+
+                if (!empty($id)) {
+                    $imported[] = $id;
+                }
+            } catch (\Exception $e) {
+            }
         }
 
         return $imported;
@@ -345,9 +353,15 @@ class Importer
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),
+            'summary'             => $resource->summary,
+            'body'                => $resource->body,
+            'img1'                => 0,
+            'img1_footer'         => '',
+            'img2'                => 0,
+            'img2_footer'         => '',
         ];
 
-        if ($target === 'photo') {
+        if ($resource->type === 'photo' || $target === 'photo') {
             $data['local_file'] = realpath($this->repository->syncPath. DS
                 . $this->config['id'] .  DS . $resource->file_name);
             $data['original_filename'] = $resource->file_name;
@@ -359,12 +373,6 @@ class Importer
             $data['title_int']     = $resource->title;
             $data['subtitle']      = $resource->pretitle;
             $data['agency']        = $this->config['agency_string'];
-            $data['summary']       = $resource->summary;
-            $data['body']          = $resource->body;
-            $data['img1']          = 0;
-            $data['img1_footer']   = '';
-            $data['img2']          = 0;
-            $data['img2_footer']   = '';
             $data['fk_video']      = 0;
             $data['footer_video']  = '';
             $data['fk_video2']     = 0;
@@ -384,7 +392,7 @@ class Importer
         }
 
         if ($this->importRelated() && !empty($resource->related)) {
-            $data = array_merge($data, $this->getRelatedData());
+            $data = array_merge($data, $this->getRelatedData($resource, $target));
         }
 
         return $data;

@@ -680,12 +680,10 @@ class ContentCategoryManager
             return;
         }
 
-        $sql = 'SELECT count(pk_content) AS number '
-            . 'FROM `contents`, `contents_categories`
-            WHERE `contents`.`fk_content_type`=1
-            AND `contents`.`in_litter`=0
-            AND `contents_categories`.`pk_fk_content_category`=?
-            AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
+        $sql = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
+            .'WHERE `contents`.`fk_content_type`=1 AND `contents`.`in_litter`=0 '
+            .'AND `contents_categories`.`pk_fk_content_category`=? '
+            .'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
         $rs = $GLOBALS['application']->conn->Execute($sql, [ $pk_category ]);
 
         if (!$rs) {
@@ -704,17 +702,15 @@ class ContentCategoryManager
      **/
     public static function isEmptyByCategoryId($category)
     {
-        $sql1 = 'SELECT count(pk_content) AS number
-            FROM `contents`, `contents_categories`
-            WHERE `fk_content_type`=1
-            AND `in_litter`=0
-            AND contents_categories.pk_fk_content_category=?
-            AND contents.pk_content=pk_fk_content';
+        $sql1 = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
+            .'WHERE `fk_content_type`=1 '
+            .'AND `in_litter`=0 '
+            .'AND contents_categories.pk_fk_content_category=? '
+            .'AND contents.pk_content=pk_fk_content';
         $rs1 = $GLOBALS['application']->conn->Execute($sql1, array($category));
 
-        $sql2 = 'SELECT count(pk_content_category) AS number
-            FROM `content_categories`
-            WHERE content_categories.fk_content_category = ?';
+        $sql2 = 'SELECT count(pk_content_category) AS number FROM `content_categories`'
+            .'WHERE content_categories.fk_content_category = ?';
 
         $rs2 = $GLOBALS['application']->conn->Execute($sql2, array($category));
 
@@ -733,11 +729,9 @@ class ContentCategoryManager
      **/
     public function countContentByType($category, $type)
     {
-        $sql = 'SELECT count(pk_content) AS number
-             FROM `contents`,`contents_categories`
-             WHERE contents.pk_content=pk_fk_content
-             AND pk_fk_content_category=?
-             AND `fk_content_type`=?';
+        $sql = 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
+             .'WHERE contents.pk_content=pk_fk_content '
+             .'AND pk_fk_content_category=? AND `fk_content_type`=?';
         $values = array($category, $type);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
@@ -764,13 +758,13 @@ class ContentCategoryManager
         if (!is_null($filter)) {
             $_where = $filter;
         }
-        $sql = 'SELECT count(contents.pk_content) AS number,
-            `contents_categories`.`pk_fk_content_category` AS cat
-            FROM `contents`,`contents_categories`
-            WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
-            AND `in_litter`=0 AND `contents`.`fk_content_type`=?
-            AND '.$_where.
-            ' GROUP BY `contents_categories`.`pk_fk_content_category`';
+        $sql = 'SELECT count(contents.pk_content) AS number,'
+            .'`contents_categories`.`pk_fk_content_category` AS cat '
+            .'FROM `contents`,`contents_categories` '
+            .'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
+            .'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
+            .'AND '.$_where
+            .' GROUP BY `contents_categories`.`pk_fk_content_category`';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($type));
 

@@ -228,21 +228,61 @@ class FilesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            return $this->render('files/new.tpl', array('category' => $this->category,));
+            return $this->render('files/new.tpl', ['category' => $this->category,]);
         }
 
         set_time_limit(0);
+        $files = $request->files->all();
 
-        if (!isset($_FILES['path']['name'])
-           || empty($_FILES['path']['name'])
+        if (!is_array($files)
+            || (is_array($files) && !array_key_exists('path', $files))
+            || (is_array($files) && array_key_exists('path', $files) && count($files['path']) <= 0)
         ) {
             $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must pick a file before submitting the form')
+                'error', _('You must pick a file before submitting the form')
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_files', array('category' => $this->category,))
+                $this->generateUrl('admin_files_create', ['category' => $this->category])
+            );
+        }
+
+        $uploadedFile = $files['path'];
+
+
+        if (!$uploadedFile->isValid()) {
+            error_log(sprintf('There was a problem uploading %s .Error Code: %s',
+                $uploadedFile->getClientOriginalName(), $uploadedFile->getError()));
+            $this->get('session')->getFlashBag()->add(
+                'error', sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE/1024/1024)
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_files_create', ['category' => $this->category])
+            );
+        }
+
+        // White list of file types that we allow
+        $regexp = '@(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz'
+            .'|ico|jpeg|jpg|js|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|odp|ods|odw'
+            .'|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz'
+            .'|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$@';
+        if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
+            error_log(sprintf(
+                'User %s tried to upload a not allowed file type %s (%s).',
+                $_SESSION['userid'],
+                $uploadedFile->getClientOriginalExtension(),
+                $uploadedFile->getClientOriginalName()
+            ));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('We are sorry, file extension %s is not allowed for upload as it could '
+                    .'contain malicious code. Please contact with our support  or retry using a '
+                    .'different file extension.'), $uploadedFile->getClientOriginalExtension())
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_files_create', ['category' => $this->category])
             );
         }
 
@@ -250,10 +290,19 @@ class FilesController extends Controller
         $directoryDate = $date->format("/Y/m/d/");
         $basePath      = $this->fileSavePath.$directoryDate;
 
-        $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
+        $fileName      = \Onm\StringUtils::cleanFileName($uploadedFile->getClientOriginalName());
         // Create folder if it doesn't exist
         if (!file_exists($basePath)) {
-            \Onm\FilesManager::createDirectory($basePath);
+            $directoryCreated = \Onm\FilesManager::createDirectory($basePath);
+            if (!$directoryCreated) {
+                $this->get('session')->getFlashBag()->add(
+                    'error', sprintf(_('Unable to create the directory to save the file'))
+                );
+
+                return $this->redirect(
+                    $this->generateUrl('admin_files_create', ['category' => $this->category])
+                );
+            }
         }
 
         $data = array(
@@ -267,27 +316,27 @@ class FilesController extends Controller
         );
 
         // Move uploaded file
-        $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
-
-        if ($uploadStatus === false) {
+        try {
+            $uploadedFile->move($basePath, $fileName);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             $this->get('session')->getFlashBag()->add(
-                'error',
-                _('There was an error while uploading the file.')
+                'error', _('There was an error while uploading the file.')
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_files_create', ['category' => $this->category])
             );
         }
 
         $attachment = new \Attachment();
         if ($attachment->create($data)) {
             $this->get('session')->getFlashBag()->add(
-                'success',
-                _("File created successfuly.")
+                'success', _("File created successfuly.")
             );
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_file_show',
-                    array('id' => $attachment->id)
-                )
+                $this->generateUrl('admin_file_show', ['id' => $attachment->id])
             );
         } else {
             $this->get('session')->getFlashBag()->add(
@@ -297,7 +346,7 @@ class FilesController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_files', array('category' => $this->category,))
+            $this->generateUrl('admin_files_create', ['category' => $this->category])
         );
     }
 
@@ -358,7 +407,7 @@ class FilesController extends Controller
             'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
-            'id'             => $id,
+            'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
             'fk_publisher'   => $_SESSION['userid'],

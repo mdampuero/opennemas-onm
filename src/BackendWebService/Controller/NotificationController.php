@@ -27,19 +27,21 @@ class NotificationController extends Controller
      */
     public function listLatestAction(Request $request)
     {
-        $date = new \DateTime('now');
-        $date = $date->format('Y-m-d H:i:s');
-        $epp  = $request->query->getDigits('epp', 10);
-        $id   = $this->get('instance')->internal_name;
-        $page = $request->query->getDigits('page', 1);
+        $date  = new \DateTime('now');
+        $date  = $date->format('Y-m-d H:i:s');
+        $epp   = $request->query->getDigits('epp', 10);
+        $id    = $this->get('instance')->internal_name;
+        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
+        $page  = $request->query->getDigits('page', 1);
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
             [ 'user_id' => $this->getUser()->id ]
         );
 
-        $criteria = '(instances LIKE \'%"' . $id . '"%\' OR '
-            .  'instances LIKE \'%"all"%\') AND enabled = 1 AND (start <= \''
+        $criteria = '(target LIKE \'%"' . $id . '"%\' OR '
+            . 'target LIKE \'%"' . $theme . '"%\' OR '
+            . 'target LIKE \'%"all"%\') AND enabled = 1 AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!empty($read)) {
@@ -87,8 +89,8 @@ class NotificationController extends Controller
         $id   = $this->get('instance')->internal_name;
         $date = date('Y-m-d H:i:s');
 
-        $criteria = 'instances LIKE \'%"' . $id . '"%\' OR '
-            .  'instances LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
+        $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
+            .  'target LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
         if (!$this->getUser()->isAdmin()) {
@@ -224,7 +226,8 @@ class NotificationController extends Controller
     {
         $notification = $notification->getData();
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
+        if (!empty($notification['title'])
+            && array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['title'])
             && !empty($notification['title'][CURRENT_LANGUAGE_SHORT])
         ) {
             $notification['title'] =
@@ -233,7 +236,8 @@ class NotificationController extends Controller
             $notification['title'] = $notification['title']['en'];
         }
 
-        if (array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
+        if (!empty($notification['body'])
+            && array_key_exists(CURRENT_LANGUAGE_SHORT, $notification['body'])
             && !empty($notification['body'][CURRENT_LANGUAGE_SHORT])
         ) {
             $notification['body'] =

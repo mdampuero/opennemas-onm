@@ -198,20 +198,26 @@ class Privilege
     {
         self::loadPrivileges();
 
-        $sql = 'SELECT pk_fk_privilege FROM users, user_groups_privileges
-                WHERE pk_fk_user_group = ? ORDER BY pk_fk_privilege';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($userGroupId)));
+        $privileges = [];
+        try {
+            $rs = getServicE('dbal_connection')->fetchAll(
+                'SELECT pk_fk_privilege FROM user_groups_privileges '
+                .'WHERE pk_fk_user_group = ? ORDER BY pk_fk_privilege',
+                [ intval($userGroupId) ]
+            );
 
-        $privileges = array();
-        while (!$rs->EOF) {
-            if (array_key_exists($rs->fields['pk_fk_privilege'], self::$privileges)) {
-                $privilege = self::$privileges[$rs->fields['pk_fk_privilege']];
-                $privileges[$privilege['pk_privilege']] = $privilege['name'];
+            foreach ($rs as $privilegeDB) {
+                if (array_key_exists($privilegeDB['pk_fk_privilege'], self::$privileges)) {
+                    $privilege = self::$privileges[$privilegeDB['pk_fk_privilege']];
+                    $privileges[$privilege['pk_privilege']] = $privilege['name'];
+                }
             }
-            $rs->MoveNext();
-        }
 
-        return $privileges;
+            return $privileges;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**

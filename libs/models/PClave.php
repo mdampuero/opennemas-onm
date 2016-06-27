@@ -62,97 +62,15 @@ class PClave
     public $cache = null;
 
     /**
-     * Read, get a specific object
-     *
-     * @param  int    $id Object ID
-     *
-     * @return PClave Return instance to chaining method
-     */
-    public function read($id)
+     * Initializes the Pclave and loads by id if provided
+     **/
+    public function __construct($id = null)
     {
-        $sql = "SELECT * FROM pclave WHERE id=?";
+        if (is_numeric($id)) {
+            $this->read($id);
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            return null;
+            return $this;
         }
-
-        $this->load($rs->fields);
-
-        return $this;
-    }
-
-    /**
-     * Create a new pclave in database
-     *
-     * @param  array  $data
-     * @return PClave
-     */
-    public function create($data)
-    {
-        $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) "
-             . "VALUES (?, ?, ?)";
-
-        $values = array(
-            $data['pclave'],
-            $data['value'],
-            $data['tipo'],
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return null;
-        }
-
-        $data['id'] = $GLOBALS['application']->conn->Insert_ID();
-        $this->load($data);
-
-        return $this;
-    }
-
-    /**
-     * Update
-     *
-     * @param  array   $data Array values
-     * @return boolean
-     */
-    public function update($data)
-    {
-        $sql = "UPDATE `pclave` "
-             . "SET `pclave`=?, `tipo`=?, `value`=? "
-             . "WHERE `id`=?";
-
-        $values = array(
-            $data['pclave'],
-            $data['tipo'],
-            $data['value'],
-            $data['id'],
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Delete
-     *
-     * @param  int     $id Identifier
-     * @return boolean
-     */
-    public function delete($id)
-    {
-        $sql = "DELETE FROM pclave WHERE id=?";
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -186,6 +104,107 @@ class PClave
     }
 
     /**
+     * Read, get a specific object
+     *
+     * @param  int    $id Object ID
+     *
+     * @return PClave Return instance to chaining method
+     */
+    public function read($id)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM pclave WHERE id=?',
+                [ $id ]
+            );
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Create a new pclave in database
+     *
+     * @param  array  $data
+     * @return PClave
+     */
+    public function create($data)
+    {
+        $conn = getService('dbal_connection');
+        try {
+            $rs = $conn->insert(
+                'pclave',
+                [
+                    'pclave' => $data['pclave'],
+                    'value'  => $data['value'],
+                    'tipo'   => $data['tipo'],
+                ]
+            );
+
+            $data['id'] = $conn->lastInsertId();
+            $this->load($data);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Update
+     *
+     * @param  array   $data Array values
+     * @return boolean
+     */
+    public function update($data)
+    {
+        $conn = getService('dbal_connection');
+        try {
+            $rs = $conn->update(
+                'pclave',
+                [
+                    'pclave' => $data['pclave'],
+                    'value'  => $data['value'],
+                    'tipo'   => $data['tipo'],
+                ],
+                [ 'id' => $data['id'] ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Delete
+     *
+     * @param  int     $id Identifier
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'pclave',
+                [ 'id' => $id ]
+            );
+
+            return $rs;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Get list of terms given a filter
      *
      * @param string $filter the SQL WHERE clause
@@ -194,26 +213,27 @@ class PClave
      */
     public function find($filter = null)
     {
-        $sql = 'SELECT * FROM `pclave`';
-        if (!empty($filter)) {
-            $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
-        }
+        try {
+            $sql = 'SELECT * FROM `pclave`';
+            if (!empty($filter)) {
+                $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
+            }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $terms = array();
-        if ($rs !== false) {
-            while (!$rs->EOF) {
+            $rs = getService('dbal_connection')->fetchAll(
+                $sql
+            );
+            foreach ($rs as $element) {
                 $obj = new PClave();
-                $obj->load($rs->fields);
+                $obj->load($element);
 
                 $terms[] = $obj;
-
-                $rs->MoveNext();
             }
-        }
 
-        return $terms;
+            return $terms;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
+        }
     }
 
     /**

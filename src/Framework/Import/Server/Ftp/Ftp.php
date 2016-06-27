@@ -57,7 +57,7 @@ class Ftp extends Server
                 throw new \Exception(
                     sprintf(
                         _('Can\'t login into server %s'),
-                        $this->params['server']
+                        $this->params['name']
                     )
                 );
             }
@@ -115,7 +115,9 @@ class Ftp extends Server
             $localFile = $this->params['path'] . DS
                 . strtolower(basename($file['filename']));
 
-            if (!file_exists($localFile)) {
+            if (!preg_match('/index\.xml$/', $localFile) &&
+                !file_exists($localFile)
+            ) {
                 ftp_pasv($this->conn, true);
                 @ftp_get($this->conn, $localFile, $file['filename'], FTP_BINARY);
 

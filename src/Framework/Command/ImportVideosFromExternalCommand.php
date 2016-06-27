@@ -201,7 +201,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                     'fk_author' => 0,
                     'video_url' => $videoUrl,
                     'title' => $title,
-                    'metadata' => \StringUtils::getTags($title),
+                    'metadata' => \Onm\StringUtils::getTags($title),
                     'description' => (string)$video->summary,
                     'author_name' => 'Youtube',
                     'information' => $information,

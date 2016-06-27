@@ -1110,6 +1110,6 @@ class ModuleManager
         $moduleNames = self::getAvailableModuleNames();
 
         return in_array($moduleName, $moduleNames);
-        
+
     }
 }

@@ -134,63 +134,7 @@ class AdsController extends Controller
         $page   = $request->request->getDigits('page', 1);
         $filter = $request->query->get('filter');
 
-        if ('POST' == $request->getMethod()) {
-            $advertisement = new \Advertisement();
-
-            $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-            $firstCategory = $categories[0];
-
-            $data = [
-                'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'category'           => $firstCategory,
-                'categories'         => implode(',', $categories),
-                'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'with_script'        => $request->request->getDigits('with_script', 0),
-                'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
-                'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
-                'num_clic'           => $request->request->filter('num_clic', '', FILTER_SANITIZE_STRING),
-                'num_view'           => $request->request->filter('num_view', '', FILTER_SANITIZE_STRING),
-                'starttime'          => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'            => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
-                'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
-                'script'             => $request->request->get('script', ''),
-                'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
-                'fk_author'          => $_SESSION['userid'],
-                'fk_publisher'       => $_SESSION['userid'],
-                'params'             => [
-                    'width'             => json_decode($request->request->get('params_width', '')),
-                    'height'            => json_decode($request->request->get('params_height', '')),
-                    'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
-                    'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-                ]
-            ];
-
-            $level = 'error';
-            $message = _('Unable to create the new advertisement.');
-
-            if ($advertisement->create($data)) {
-                $level = 'success';
-                $message = _('Advertisement successfully created.');
-            }
-
-            $this->get('session')->getFlashBag()->add($level, $message);
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_ad_show',
-                    [
-                        'id'     => $advertisement->id,
-                        'filter' => $filter,
-                        'page'   => $page
-                    ]
-                )
-            );
-        } else {
+        if ('POST' !== $request->getMethod()) {
             $serverUrl = '';
             if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
                 $serverUrl = $openXsettings['url'];
@@ -209,6 +153,61 @@ class AdsController extends Controller
                 ]
             );
         }
+
+        $advertisement = new \Advertisement();
+
+        $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
+        $firstCategory = $categories[0];
+
+        $data = [
+            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'category'           => $firstCategory,
+            'categories'         => implode(',', $categories),
+            'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'with_script'        => $request->request->getDigits('with_script', 0),
+            'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+            'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
+            'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
+            'num_clic'           => $request->request->filter('num_clic', '', FILTER_SANITIZE_STRING),
+            'num_view'           => $request->request->filter('num_view', '', FILTER_SANITIZE_STRING),
+            'starttime'          => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'endtime'            => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+            'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
+            'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
+            'script'             => $request->request->get('script', ''),
+            'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
+            'fk_author'          => $_SESSION['userid'],
+            'fk_publisher'       => $_SESSION['userid'],
+            'params'             => [
+                'width'             => json_decode($request->request->get('params_width', '')),
+                'height'            => json_decode($request->request->get('params_height', '')),
+                'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
+                'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
+            ]
+        ];
+
+        $level = 'error';
+        $message = _('Unable to create the new advertisement.');
+
+        if ($advertisement->create($data)) {
+            $level = 'success';
+            $message = _('Advertisement successfully created.');
+        }
+
+        $this->get('session')->getFlashBag()->add($level, $message);
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_ad_show',
+                [
+                    'id'     => $advertisement->id,
+                    'filter' => $filter,
+                    'page'   => $page
+                ]
+            )
+        );
     }
 
     /**
@@ -450,9 +449,9 @@ class AdsController extends Controller
             ];
 
             if ($this->getUser()->isMaster()) {
-                $settings['header_script']     = $formValues->filter('header_script');
-                $settings['body_end_script']   = $formValues->filter('body_end_script');
-                $settings['body_start_script'] = $formValues->filter('body_start_script');
+                $settings['header_script']     = $formValues->filter('header_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $settings['body_end_script']   = $formValues->filter('body_end_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $settings['body_start_script'] = $formValues->filter('body_start_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
             }
 
             foreach ($settings as $key => $value) {

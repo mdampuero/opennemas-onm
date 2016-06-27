@@ -35,12 +35,7 @@
     jQuery('#modal-category-empty a.btn.yes').on('click', function(e, ui){
         var url = jQuery("body").data("selected-for-del");
         if (url) {
-            jQuery.ajax({
-                url:  url,
-                success: function(){
-                    location.reload();
-                }
-            });
+            document.location = url;
         }
         e.preventDefault();
     });

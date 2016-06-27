@@ -26,6 +26,31 @@ use Onm\Exception\DatabaseNotRestoredException;
 class WebServiceController extends Controller
 {
     /**
+     * Checks if it is an authorized request.
+     *
+     * @param  Request $request The request object.
+     * @return boolean          True if the request is authorized. Otherwise,
+     *                          returns false.
+     */
+    private function checkAuth(Request $request)
+    {
+        $this->params = $this->container
+            ->getParameter("manager_webservice");
+
+        $signature = hash_hmac(
+            'sha1',
+            $request->request->get('timestamp'),
+            $this->params["api_key"]
+        );
+
+        if ($signature === $request->request->get('signature', null)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a new instance.
      *
      * @param  Request      $request The request object.
@@ -65,6 +90,8 @@ class WebServiceController extends Controller
         $iv->validateInternalName($instance);
 
         if (count($errors) > 0) {
+            error_log('Instance data validation not passed: ' . json_encode($errors));
+
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
 
@@ -136,7 +163,6 @@ class WebServiceController extends Controller
         );
 
         $errors = array();
-
         try {
             $creator = new InstanceCreator($im->getConnection());
             $im->persist($instance);
@@ -152,15 +178,13 @@ class WebServiceController extends Controller
 
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         } catch (IOException $e) {
             // Can not copy default assets
             $errors[] = $e->getMessage();
 
             $creator->deleteDatabase($instance->id);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         } catch (\Exception $e) {
             // Can not save settings in instance database
             $errors[] = $e->getMessage();
@@ -168,26 +192,27 @@ class WebServiceController extends Controller
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
-
-            $this->sendErrorMail($companyMail, $instance, $e);
+            $this->reportInstanceCreationError($companyMail, $instance, $e);
         }
 
         try {
-            $data = [
-                'name'          => $instance->name,
-                'internal_name' => $instance->internal_name,
-                'user_mail'     => $instance->contact_mail,
-                'user_name'     => $instance->contact_mail,
-            ];
-
-            $language = $instance->external['site_language'];
-            $plan     = $instance->plan;
-
-            $domain = $instanceCreator['base_domain'];
-            $this->sendMails($data, $companyMail, $domain, $language, $plan);
+            if (count($errors) <= 0) {
+                $this->sendMails(
+                    [
+                        'name'          => $instance->name,
+                        'internal_name' => $instance->internal_name,
+                        'user_mail'     => $instance->contact_mail,
+                        'user_name'     => $instance->contact_mail,
+                    ],
+                    $companyMail,
+                    $instanceCreator['base_domain'],
+                    $instance->external['site_language'],
+                    $instance->plan
+                );
+            }
         } catch (\Exception $e) {
             $errors['all'] = ['Unable to send emails'];
-            error_log($e->getMessage());
+            error_log('Error while sending instance creation emails: '.$e->getMessage());
         }
 
         if (is_array($errors) && count($errors) > 0) {
@@ -198,60 +223,18 @@ class WebServiceController extends Controller
             [
                 'success'      => true,
                 'instance_url' => $instance->domains[0],
-                'enable_url'   => $instance->domains[0]
-                . '/admin/login?token=' . $user['token']
+                'enable_url'   => $instance->domains[0].'/admin/login?token='.$user['token']
             ],
             200
         );
     }
 
-    /**
-     * Checks if it is an authorized request.
-     *
-     * @param  Request $request The request object.
-     * @return boolean          True if the request is authorized. Otherwise,
-     *                          returns false.
-     */
-    private function checkAuth(Request $request)
+    private function sendMails($data, $companyMail, $domain, $language, $plan)
     {
-        $this->params = $this->container
-            ->getParameter("manager_webservice");
-
-        $signature = hash_hmac(
-            'sha1',
-            $request->request->get('timestamp'),
-            $this->params["api_key"]
-        );
-
-        if ($signature === $request->request->get('signature', null)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function sendErrorMail($emails, $instance, $exception)
-    {
-        $this->view = new \TemplateManager();
-
-        // Prepare message
-        $message = \Swift_Message::newInstance();
-        $message->setFrom($emails['from_mail'])
-            ->setTo($emails['company_mail'])
-            ->setSender($emails['sender_mail'], "Opennemas")
-            ->setSubject(_("Error when creating a new instance"))
-            ->setBody(
-                $this->renderView(
-                    'instances/mails/instanceCreationError.tpl',
-                    array(
-                        'instance'  => $instance,
-                        'exception' => $exception
-                    )
-                )
-            );
-
-        // Send message
-        $this->get('mailer')->send($message);
+        $this->sendMailToUser($data, $companyMail, $domain);
+        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
+        // Unused var $language
+        unset($language);
     }
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
@@ -310,12 +293,30 @@ class WebServiceController extends Controller
         $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
-    private function sendMails($data, $companyMail, $domain, $language, $plan)
+    private function reportInstanceCreationError($emails, $instance, $exception)
     {
-        $this->sendMailToUser($data, $companyMail, $domain);
-        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
-        // Unused var $language
-        unset($language);
+        $this->view = new \TemplateManager();
+
+        // Prepare message
+        $message = \Swift_Message::newInstance();
+        $message->setFrom($emails['from_mail'])
+            ->setTo($emails['company_mail'])
+            ->setSender($emails['sender_mail'], "Opennemas")
+            ->setSubject(_("Error when creating a new instance"))
+            ->setBody(
+                $this->renderView(
+                    'instances/mails/instanceCreationError.tpl',
+                    array(
+                        'instance'  => $instance,
+                        'exception' => $exception
+                    )
+                )
+            );
+
+        // Send message
+        $this->get('mailer')->send($message);
+        error_log("Error while creating instance. ".$exception->getMessage()
+            .'. Instance Data: '.json_encode($instance));
     }
 
     /**
