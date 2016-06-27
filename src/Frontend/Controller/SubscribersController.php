@@ -24,7 +24,7 @@ use Onm\Framework\Controller\Controller;
  *
  * @package Frontend_Controllers
  **/
-class SubscriptionsController extends Controller
+class SubscribersController extends Controller
 {
     /**
      * Shows the subscription form
@@ -226,7 +226,7 @@ class SubscriptionsController extends Controller
      **/
     public function createSubscription($data)
     {
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
         if ($data['subscription'] == 'alta') {
             if ($user->existsEmail($data['email'])) {
                 $data['subscription'] = 1;

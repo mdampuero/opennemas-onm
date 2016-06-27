@@ -328,7 +328,7 @@ class NewsletterController extends Controller
 
         $accounts = array();
         if ($subscriptionType === 'create_subscriptor') {
-            $sbManager = new \Subscriptor();
+            $sbManager = new \Subscriber();
             $accounts = $sbManager->getUsers(
                 'status > 0 AND subscription = 1',
                 '',
@@ -341,7 +341,7 @@ class NewsletterController extends Controller
                 && array_key_exists('email', $configurations)
                 && !empty($configurations['email'])
             ) {
-                $subscriptor = new \Subscriptor();
+                $subscriptor = new \Subscriber();
 
                 $subscriptor->email = $configurations['email'];
                 $subscriptor->name  = $configurations['name'];

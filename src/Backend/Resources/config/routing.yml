@@ -582,21 +582,21 @@ admin_newsletter_config:
 
 admin_newsletter_subscriptors:
     path:     /newsletters/subscriptors
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:list }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:list }
 
 admin_newsletter_subscriptor_create:
     path:     /newsletters/subscriptor/create
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:create }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:create }
 
 admin_newsletter_subscriptor_show:
     path:     /newsletters/subscriptor/{id}/show
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:show }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:show }
     options:
         expose: true
 
 admin_newsletter_subscriptor_update:
     path:     /newsletters/subscriptor/{id}/update
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:update }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:update }
 
 # Keywork controller routes
 admin_keywords:
