@@ -48,8 +48,8 @@ class NewsletterSubscribersController extends Controller
         list($where, $orderBy) = $this->buildFilter($search);
 
         $user = new \Subscriber();
-        $subscriptors = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
-        $subscriptors = \Onm\StringUtils::convertToUtf8($subscriptors);
+        $subscribers = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
         $total = $user->countUsers($where);
 
@@ -57,7 +57,7 @@ class NewsletterSubscribersController extends Controller
             array(
                 'elements_per_page' => $elementsPerPage,
                 'page'              => $page,
-                'results'           => $subscriptors,
+                'results'           => $subscribers,
                 'total'             => $total,
             )
         );
@@ -98,7 +98,7 @@ class NewsletterSubscribersController extends Controller
             }
         } else {
             $errors[] = array(
-                'message' => _('You must provide an id to delete a newsletter subscriptor.'),
+                'message' => _('You must provide an id to delete a newsletter subscriber.'),
                 'type'    => 'error'
             );
         }
@@ -218,19 +218,19 @@ class NewsletterSubscribersController extends Controller
                 } else {
                     $this->get('session')->getFlashBag()->add(
                         'error',
-                        sprintf(_('Unable to delete the subscriptor with the id %d.'), $id)
+                        sprintf(_('Unable to delete the subscriber with the id %d.'), $id)
                     );
                 }
             }
 
             $this->get('session')->getFlashBag()->add(
                 'success',
-                sprintf(_('Successfully deleted %d subscriptors.'), $count)
+                sprintf(_('Successfully deleted %d subscribers.'), $count)
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _('Please specify a subscriptor id for delete it.')
+                _('Please specify a subscriber id for delete it.')
             );
         }
 
@@ -238,7 +238,7 @@ class NewsletterSubscribersController extends Controller
     }
 
     /**
-     * Deletes multiple subscriptors at once given its ids
+     * Deletes multiple subscribers at once given its ids
      *
      * @param Request $request the request object
      *
@@ -257,7 +257,7 @@ class NewsletterSubscribersController extends Controller
             return new JsonResponse([
                 'messages' => [
                     'id'      => 500,
-                    'message' => _('Please specify a subscriptor id for change its subscribed state it.'),
+                    'message' => _('Please specify a subscriber id for change its subscribed state it.'),
                     'type'    => 'error'
                 ]
             ]);
@@ -279,7 +279,7 @@ class NewsletterSubscribersController extends Controller
             'messages' => [
                 [
                     'id'      => count($ids),
-                    'message' => sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids)),
+                    'message' => sprintf(_('Successfully changed subscribed state for %d subscribers.'), count($ids)),
                     'type'    => 'success'
                 ]
             ]
@@ -306,7 +306,7 @@ class NewsletterSubscribersController extends Controller
             return new JsonResponse([
                 'messages' => [
                     'id'      => 500,
-                    'message' => _('Please specify a subscriptor id to change the activated state.'),
+                    'message' => _('Please specify a subscriber id to change the activated state.'),
                     'type'    => 'error'
                 ]
             ]);
@@ -328,7 +328,7 @@ class NewsletterSubscribersController extends Controller
             'messages' => [
                 [
                     'id'      => count($ids),
-                    'message' => sprintf(_('Successfully changed activated state for %d subscriptors.'), count($ids)),
+                    'message' => sprintf(_('Successfully changed activated state for %d subscribers.'), count($ids)),
                     'type'    => 'success'
                 ]
             ]
