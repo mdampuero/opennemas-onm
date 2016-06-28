@@ -20,21 +20,21 @@
 class Subscriber
 {
     /**
-     * The subscriptor id
+     * The subscriber id
      *
      * @var int
      **/
     public $id        = null;
 
     /**
-     * The email of the subscriptor
+     * The email of the subscriber
      *
      * @var string
      **/
     public $email     = null;
 
     /**
-     * The name of the subscriptor
+     * The name of the subscriber
      *
      * @var string
      **/
@@ -114,9 +114,9 @@ class Subscriber
     }
 
     /**
-     * Loads the subscriptor instance given the subscriptor id
+     * Loads the subscriber instance given the subscriber id
      *
-     * @param int $id the subscriptor id
+     * @param int $id the subscriber id
      *
      * @return Subscriber the object instance
      **/
@@ -138,11 +138,11 @@ class Subscriber
     }
 
     /**
-     * Creates a new subscriptor given an array of data
+     * Creates a new subscriber given an array of data
      *
      * @param array $data the array of data
      *
-     * @return boolean true if the subscriptor was created
+     * @return boolean true if the subscriber was created
      **/
     public function create($data)
     {
@@ -176,12 +176,12 @@ class Subscriber
     }
 
     /**
-     * Updates a subscriptor given an array of data
+     * Updates a subscriber given an array of data
      *
      * @param array   $data      the array of data
      * @param boolean $isBackend whether this action is called from backend
      *
-     * @return boolean true if the subscriptor was updated
+     * @return boolean true if the subscriber was updated
      **/
     public function update($data, $isBackend = false)
     {
@@ -218,11 +218,11 @@ class Subscriber
     }
 
     /**
-     * Removes permanently a subscriptor
+     * Removes permanently a subscriber
      *
-     * @param int $id the subscriptor id to delete
+     * @param int $id the subscriber id to delete
      *
-     * @return boolean true if the subscriptor was deleted
+     * @return boolean true if the subscriber was deleted
      **/
     public function delete($id)
     {
@@ -281,7 +281,7 @@ class Subscriber
      * @param int    $limit     how many users to fetch
      * @param string $_order_by the ORDER BY clause
      *
-     * @return boolean true if the subscriptor was created
+     * @return boolean true if the subscriber was created
      **/
     public function getUsers($filter = null, $limit = null, $orderBy = 'name')
     {
@@ -318,10 +318,10 @@ class Subscriber
     /**
      * Sets the status to a given value
      *
-     * @param int $id the subscriptor id
+     * @param int $id the subscriber id
      * @param int $status the status value
      *
-     * @return boolean true if the subscriptor status property was changed
+     * @return boolean true if the subscriber status property was changed
      **/
     public function setStatus($id, $status)
     {
@@ -347,10 +347,10 @@ class Subscriber
     /**
      * Sets the status to a given value
      *
-     * @param int $id the subscriptor id
+     * @param int $id the subscriber id
      * @param int $status the status value
      *
-     * @return boolean true if the subscriptor status property was changed
+     * @return boolean true if the subscriber status property was changed
      **/
     public function setSubscriptionStatus($id, $status)
     {
@@ -378,7 +378,7 @@ class Subscriber
      *
      * @param string $email the email address
      *
-     * @return boolean true if the subscriptor is already registered
+     * @return boolean true if the subscriber is already registered
      **/
     public function existsEmail($email)
     {
@@ -396,7 +396,7 @@ class Subscriber
     }
 
     /**
-     * Returns the number of subscriptors given a search criteria
+     * Returns the number of subscriber given a search criteria
      *
      * @param string $where the WHERE clause
      *

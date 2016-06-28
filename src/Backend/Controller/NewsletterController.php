@@ -341,12 +341,12 @@ class NewsletterController extends Controller
                 && array_key_exists('email', $configurations)
                 && !empty($configurations['email'])
             ) {
-                $subscriptor = new \Subscriber();
+                $subscriber = new \Subscriber();
 
-                $subscriptor->email = $configurations['email'];
-                $subscriptor->name  = $configurations['name'];
+                $subscriber->email = $configurations['email'];
+                $subscriber->name  = $configurations['name'];
 
-                $accounts[] = $subscriptor;
+                $accounts[] = $subscriber;
             }
         }
 

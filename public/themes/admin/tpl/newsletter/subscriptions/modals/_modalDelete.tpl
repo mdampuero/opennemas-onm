@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want delete the subscriptor with the mail "[% template.content.email %]"?{/t}</p>
+    <p>{t escape=off}Are you sure that do you want delete the subscriber with the mail "[% template.content.email %]"?{/t}</p>
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>
