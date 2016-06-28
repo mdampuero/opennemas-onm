@@ -90,6 +90,7 @@ class PurchaseController extends Controller
     {
         $em       = $this->get('orm.manager');
         $purchase = $em->getRepository('manager.purchase')->find($id);
+        $vatTax = null;
 
         if (!empty($this->get('instance')->getClient())) {
             $client = $this->get('instance')->getClient();
@@ -99,9 +100,9 @@ class PurchaseController extends Controller
                 $purchase->client_id = $client->id;
                 $purchase->client    = $client;
             }
-        }
 
-        $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
+            $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
+        }
 
         $purchase->updated = date('Y-m-d H:i:s');
         $purchase->method  = $request->request->get('method', null);
@@ -126,6 +127,7 @@ class PurchaseController extends Controller
 
             $purchase->details = [];
             $i = 0;
+
             foreach ($items as $item) {
                 $subtotal    += $item->getPrice();
                 $description  = is_array($item->name) ?

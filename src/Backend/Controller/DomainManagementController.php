@@ -53,20 +53,18 @@ class DomainManagementController extends Controller
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
 
-                $uuid = 'es.openhost.domain.redirect';
-
-                if ($request->query->get('create')) {
-                    $uuid = 'es.openhost.domain.create';
-                }
-
-                $extension = $em->getRepository('manager.extension')->findOneBy([
-                    'uuid' => [ [ 'value' => $uuid ] ]
-                ]);
-
-                $extension = $extension->toArray();
             } catch (\Exception $e) {
             }
         }
+
+        $uuid = 'es.openhost.domain.redirect';
+        if ($request->query->get('create')) {
+            $uuid = 'es.openhost.domain.create';
+        }
+
+        $extension = $em->getRepository('manager.extension')->findOneBy([
+            'uuid' => [ [ 'value' => $uuid ] ]
+        ])->toArray();
 
         $countries    = Intl::getRegionBundle()->getCountryNames(CURRENT_LANGUAGE_LONG);
         $taxes        = $this->get('vat')->getTaxes();
