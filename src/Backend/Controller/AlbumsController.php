@@ -147,7 +147,8 @@ class AlbumsController extends Controller
             'album_photos_id'       => $request->request->get('album_photos_id'),
             'album_photos_footer'   => $request->request->get('album_photos_footer'),
             'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            // 'starttime'             => $album->starttime,
+            'endtime'        => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
         );
         $album = new \Album();
@@ -325,21 +326,23 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
         }
 
+        $requestPost = $request->request;
         $data = array(
             'id'             => $id,
-            'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'category'       => $request->request->getDigits('category'),
-            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $request->request->get('description', ''),
-            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
-            'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
-            'album_photos_id'       => $request->request->get('album_photos_id'),
-            'album_photos_footer'   => $request->request->get('album_photos_footer'),
-            'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'starttime'             => $album->starttime,
-            'params'         => $request->request->get('params', []),
+            'content_status' => $requestPost->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
+            'title'          => $requestPost->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'category'       => $requestPost->getDigits('category'),
+            'agency'         => $requestPost->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $requestPost->get('description', ''),
+            'metadata'       => $requestPost->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
+            'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+            'album_photos_id'       => $requestPost->get('album_photos_id'),
+            'album_photos_footer'   => $requestPost->get('album_photos_footer'),
+            'fk_author'             => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
+            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'params'         => $requestPost->get('params', []),
         );
 
         $album->update($data);
