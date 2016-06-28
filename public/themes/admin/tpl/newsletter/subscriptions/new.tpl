@@ -14,18 +14,18 @@
             <h4 class="visible-xs">
               <i class="fa fa-home fa-lg"></i>
               {if !is_object($user)}
-              {t}Creating subscriptor{/t}
+              {t}Creating subscriber{/t}
               {else}
-              {t}Editing subscriptor{/t}
+              {t}Editing subscriber{/t}
               {/if}
             </h4>
           </li>
           <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
           <li class="quicklinks hidden-xs">
             <h5>{if !is_object($user)}
-              {t}Creating subscriptor{/t}
+              {t}Creating subscriber{/t}
               {else}
-              {t}Editing subscriptor{/t}
+              {t}Editing subscriber{/t}
               {/if}
             </h5>
           </li>

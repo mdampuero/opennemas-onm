@@ -21,7 +21,7 @@
       <h3>{t}Delete videos{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t escape=off}Are you sure you want to toggle subscription status for those <span>%num%</span> subscriptors?{/t}</p>
+        <p>{t escape=off}Are you sure you want to toggle subscription status for those <span>%num%</span> subscribers?{/t}</p>
 
     </div>
     <div class="modal-footer">
