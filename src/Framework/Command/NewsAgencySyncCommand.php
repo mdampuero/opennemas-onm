@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use Framework\Import\Synchronizer\Synchronizer;
 
-class SyncNewsAgencyCommand extends ContainerAwareCommand
+class NewsAgencySyncCommand extends ContainerAwareCommand
 {
     protected function configure()
     {

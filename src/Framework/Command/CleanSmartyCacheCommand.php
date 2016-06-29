@@ -20,7 +20,7 @@ class CleanSmartyCacheCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('clean:smarty-cache')
+            ->setName('cache:clean:smarty')
             ->setDescription('Cleans the smarty cache and compile files')
             ->addArgument(
                 'theme',

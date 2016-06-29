@@ -39,7 +39,6 @@ class InstancesListCommand extends ContainerAwareCommand
 The <info>instances:list</info> command shows a list with all the available instances.
 
 <info>php bin/console instances:list</info>
-
 EOF
             );
     }

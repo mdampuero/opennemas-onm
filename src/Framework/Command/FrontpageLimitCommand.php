@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Onm\DatabaseConnection;
 
-class LimitFrontpageCommand extends ContainerAwareCommand
+class FrontpageLimitCommand extends ContainerAwareCommand
 {
     protected function configure()
     {

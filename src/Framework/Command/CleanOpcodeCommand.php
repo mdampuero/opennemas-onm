@@ -20,7 +20,7 @@ class CleanOpcodeCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('clean:opcode')
+            ->setName('cache:clean:opcode')
             ->setDescription('Resets the Zend OpCache registers')
             ->setHelp(
                 <<<EOF

@@ -23,7 +23,7 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('instance:module')
+            ->setName('instance:module:add')
             ->setDescription('Updates onm-instances database counters')
             ->setHelp(
                 'Adds/removes an extension from an instance.'
