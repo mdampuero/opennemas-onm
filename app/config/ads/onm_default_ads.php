@@ -94,10 +94,7 @@ return array_map(function ($ad) {
             <ins class="adsbygoogle"
                  style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8810711294"</ins>
-                 <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
         'timeout' => '20',
         'is_flash' => 0,
@@ -356,10 +353,7 @@ return array_map(function ($ad) {
             <ins class="adsbygoogle"
                  style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8810711294"</ins>
-                 <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
         'timeout' => '20',
         'is_flash' => 0,
@@ -691,10 +685,7 @@ return array_map(function ($ad) {
             <ins class="adsbygoogle"
                  style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8810711294"</ins>
-                 <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
         'timeout' => '20',
         'is_flash' => 0,
@@ -2953,10 +2944,7 @@ return array_map(function ($ad) {
             <ins class="adsbygoogle"
                  style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8810711294"</ins>
-                 <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
         'timeout' => '20',
         'is_flash' => 0,
