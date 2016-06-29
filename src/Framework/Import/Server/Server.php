@@ -153,7 +153,10 @@ abstract class Server
         $files = array_filter(
             $files,
             function ($item) use ($maxAge) {
-                if ($item['filename'] == '..' || $item['filename'] == '.') {
+                if (!($item['date'] instanceof \DateTime) ||
+                    $item['filename'] == '..' ||
+                    $item['filename'] == '.'
+                ) {
                     return false;
                 }
 
