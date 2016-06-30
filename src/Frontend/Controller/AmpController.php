@@ -146,22 +146,26 @@ class AmpController extends Controller
                 // Get front media element and add category name
                 foreach ($relatedContents as $key => &$content) {
                     $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
-                    if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
+                    if ($content->content_type == 1 && !empty($content->img1)) {
                         $content->photo = $er->find('Photo', $content->img1);
-                    } elseif ($key == 0 && $content->content_type == 1 && !empty($content->fk_video)) {
+                    } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
                         $content->video = $er->find('Video', $content->fk_video);
                     }
                 }
             }
             $this->view->assign('relationed', $relatedContents);
 
-            $pattern = [
-                '@(align|border|style)="[^\"]+\"@',
+            $patterns = [
+                '@(align|border|style|nowrap|onclick)="[^\"]*\"@',
                 '@<font>((?s).*)<\/font>@',
                 '@<img([^>]+>)@',
-                '@<iframe.*src=\"(.*)\".*><\/iframe>@'
+                '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
+                '<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>',
+                '<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>',
+                '<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>',
+                '@<(script|embed|object|frameset|frame|iframe|link|style)[^>]*>.*?<\/\1>@'
             ];
-            $replacement  = [
+            $replacements  = [
                 '',
                 '${1}',
                 '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
@@ -169,11 +173,27 @@ class AmpController extends Controller
                     sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
                     layout="responsive"
                     frameborder="0"
-                    src="${1}">
-                </amp-iframe>'
+                    src="https:${1}">
+                </amp-iframe>',
+                '<amp-facebook width=486 height=657
+                    layout="responsive"
+                    data-embed-as="${1}"
+                    data-href="${2}">
+                </amp-facebook>',
+                '<amp-instagram
+                    data-shortcode="${2}"
+                    width="400"
+                    height="400"
+                    layout="responsive">
+                </amp-instagram>',
+                '<amp-twitter width=486 height=657
+                    layout="responsive"
+                    data-tweetid="${2}">
+                </amp-twitter>',
+                ''
             ];
-            $article->body = preg_replace($pattern, $replacement, $article->body);
-            $article->summary = preg_replace($pattern, $replacement, $article->summary);
+            $article->body = preg_replace($patterns, $replacements, $article->body);
+            $article->summary = preg_replace($patterns, $replacements, $article->summary);
         } // end if $this->view->is_cached
 
         return $this->render(
