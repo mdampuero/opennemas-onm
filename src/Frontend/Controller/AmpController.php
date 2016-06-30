@@ -163,7 +163,7 @@ class AmpController extends Controller
                 '<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>',
                 '<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>',
                 '<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>',
-                '@<(script|embed|object|frameset|frame|iframe|link|style)[^>]*>.*?<\/\1>@'
+                '@<(script|embed|object|frameset|frame|iframe|link|style|meta)[^>]*>.*?<\/\1>@'
             ];
             $replacements  = [
                 '',
