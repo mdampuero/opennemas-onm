@@ -210,6 +210,10 @@ class NewsAgencyController extends Controller
 
         $path = $repository->syncPath . DS . $source . DS . $resource->file_name;
 
+        if (!file_exists($path)) {
+            return new Response('Image not found', 404);
+        }
+
         $content = @file_get_contents($path);
 
         return new Response(
