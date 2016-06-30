@@ -299,7 +299,7 @@ class CommentManager extends BaseManager
      *
      * @return void
      **/
-    public static function deleteFromFilter($filter)
+    public function deleteFromFilter($filter)
     {
         try {
             $rs = $this->dbConn->delete(
