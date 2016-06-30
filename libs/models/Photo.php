@@ -220,10 +220,7 @@ class Photo extends Content
 
         if (is_dir($uploadDir) && !is_writable($uploadDir)) {
             throw new Exception(
-                sprintf(
-                    _('Unable to save your image file in the Opennemas storage target'),
-                    $uploadDir.$finalPhotoFileName
-                )
+                _('Unable to save your image file in the Opennemas storage target')
             );
         }
 
