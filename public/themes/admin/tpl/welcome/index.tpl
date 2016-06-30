@@ -1,5 +1,10 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+    {stylesheets src="@AdminTheme/less/_welcome.less" filters="cssrewrite,less"}{/stylesheets}
+{/block}
+
+
 {block name="content"}
 <div class="page-navbar actions-navbar">
   <div class="navbar navbar-inverse">
@@ -154,11 +159,17 @@
           <br>
           <p class="text-white">{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <uib-carousel interval="10000" active="active">
-            {foreach $youtube_videos as $videoId name=youtube_videos}
+          <uib-carousel interval="10000" active="active" class="welcome-youtube-slider">
+            {foreach $youtube_videos as $video name=youtube_videos}
             <uib-slide index="{$smarty.foreach.youtube_videos.index}">
               <div class="video-container">
-                <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" type="text/html" allowfullscreen></iframe>
+                <div class="youtube-icon">
+                  <a href="https://www.youtube.com/watch?v={$video['id']}" target="_blank"><i class="fa fa-youtube-play fa-4x"></i></a>
+                </div>
+                <img src="{$video['thumbnail']}" alt="" class="youtube-preview">
+                <div class="youtube-carousel-title">
+                  <a href="https://www.youtube.com/watch?v={$video['id']}" target="_blank">{$video['title']}</a>
+                </div>
               </div>
             </uib-slide>
             {/foreach}

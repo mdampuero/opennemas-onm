@@ -80,19 +80,27 @@ class WelcomeController extends Controller
             true
         );
 
-        $videosYoutubeIds = [];
+        $videosYoutube = [];
         if (!is_null($playlist) &&
             $playlist->items &&
             !empty($playlist->items)
         ) {
             foreach ($playlist->items as $video) {
-                $videosYoutubeIds[] = $video->snippet->resourceId->videoId;
+                if (!property_exists($video->snippet->thumbnails, 'maxres')) {
+                    continue;
+                }
+
+                $videosYoutube[] = [
+                    'id'        => $video->snippet->resourceId->videoId,
+                    'thumbnail' => $video->snippet->thumbnails->maxres->url,
+                    'title'     => $video->snippet->title,
+                ];
             }
         }
 
-        shuffle($videosYoutubeIds);
-        $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
+        shuffle($videosYoutube);
+        $videosYoutube = array_splice($videosYoutube, 0, 5);
 
-        return $videosYoutubeIds;
+        return $videosYoutube;
     }
 }
