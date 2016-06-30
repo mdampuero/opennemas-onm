@@ -116,6 +116,13 @@ class Importer
      */
     public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 1)
     {
+        $content = $this->container->get('entity_repository')
+            ->findOneBy([ 'urn_source' => [ [ 'value' => $resource->urn ] ] ]);
+
+        if (!empty($content)) {
+            throw new \Exception(_('Content already imported'));
+        }
+
         $category = $this->getCategory($category);
         $author   = $this->getAuthor($resource, $author);
 
@@ -141,6 +148,7 @@ class Importer
      */
     public function importAll()
     {
+        $ignored   = 0;
         $imported  = [];
         $resources = $this->getResources();
 
@@ -152,10 +160,11 @@ class Importer
                     $imported[] = $id;
                 }
             } catch (\Exception $e) {
+                $ignored++;
             }
         }
 
-        return $imported;
+        return [ $imported, $ignored ];
     }
 
     /**
