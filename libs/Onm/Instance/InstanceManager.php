@@ -203,7 +203,7 @@ class InstanceManager extends BaseManager
      */
     public function findByClient($ids)
     {
-        if empty($ids) {
+        if (empty($ids)) {
             return [];
         }
 
