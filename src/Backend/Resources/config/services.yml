@@ -3,8 +3,11 @@ parameters:
     onm_oauth_user_provider.class: Backend\Security\OnmOAuthUserProvider
 
 services:
-    login_success_handler:
+    backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
+        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha' ]
+    frontend_login_success_handler:
+        class:     Frontend\EventListeners\LoginSuccessHandler
         arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha' ]
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
