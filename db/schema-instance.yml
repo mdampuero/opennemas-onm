@@ -650,6 +650,7 @@ contents:
         -
             name: urn_source
             columns: [urn_source]
+            unique: true
 contents_categories:
     columns:
         pk_fk_content:
