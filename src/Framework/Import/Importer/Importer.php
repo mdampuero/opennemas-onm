@@ -412,7 +412,11 @@ class Importer
         $related    = [];
 
         foreach ($resource->related as $id) {
-            $related[] = $this->repository->find($this->config['id'], $id);
+            $r = $this->repository->find($this->config['id'], $id);
+
+            if (!empty($r)) {
+                $related[] = $r;
+            }
         }
 
         if (empty($related)) {
