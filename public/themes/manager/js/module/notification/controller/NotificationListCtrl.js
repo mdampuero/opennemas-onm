@@ -324,6 +324,10 @@
           $scope.columns = webStorage.local.get('notifications-columns');
         }
 
+        if (webStorage.local.get('token')) {
+          $scope.token = webStorage.local.get('token');
+        }
+
         $scope.list();
       }
     ]);

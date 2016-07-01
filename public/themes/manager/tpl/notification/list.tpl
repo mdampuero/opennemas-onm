@@ -14,6 +14,14 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]">
+              <i class="fa fa-download fa-lg"></i>
+            </a>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -203,15 +211,16 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('title')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.title['en'] %]
-                </a>
+                <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                  </button>
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_report', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
+                    <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
               </td>
