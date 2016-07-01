@@ -289,14 +289,13 @@ class Content
 
                 break;
             case 'ratings':
-                $rating = new Rating();
-                return $this->ratings = $rating->getValue($this->id);
+                return 0;
 
                 break;
             case 'comments':
                 return 0;
-                $commentRepository = getService('comment_repository');
-                return $this->comments = $commentRepository->countCommentsForContentId($this->id);
+                // $commentRepository = getService('comment_repository');
+                // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
                 break;
             case 'content_type_l10n_name':
