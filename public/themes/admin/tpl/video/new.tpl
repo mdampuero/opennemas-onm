@@ -156,6 +156,13 @@
                 <input data-role="tagsinput" type="text" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" value="{$video->metadata}" class="form-control" />
               </div>
             </div>
+            {if isset($video)}
+            <div class="form-group">
+              <span class="help">
+                {t}URL{/t}: <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">{t}Video{/t} <span class="fa fa-external-link"></span></a>
+              </span>
+            </div>
+            {/if}
           </div>
         </div>
         <div class="row">
