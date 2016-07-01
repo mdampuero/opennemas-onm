@@ -60,8 +60,6 @@
          *                   returns false.
          */
         $scope.isVatNumberRequired = function() {
-          $scope.validVatNumber = false;
-
           // Person or company in Spain
           if ($scope.client && $scope.client.country === 'ES') {
             return true;
@@ -72,8 +70,6 @@
               $scope.taxes[$scope.client.country]) {
             return true;
           }
-
-          $scope.validVatNumber = true;
 
           // Person in EU or company and persons outside EU
           return false;
@@ -125,7 +121,7 @@
             $scope.loading = false;
             messenger.post(response);
           });
-        }
+        };
 
         /**
          * @function update
@@ -185,9 +181,9 @@
               { country: $scope.client.country, vat: $scope.client.vat_number });
 
           $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
+            $http.get(url).then(function() {
               $scope.validVatNumber = true;
-            }).error(function() {
+            }, function() {
               $scope.validVatNumber = false;
             });
           }, 500);
