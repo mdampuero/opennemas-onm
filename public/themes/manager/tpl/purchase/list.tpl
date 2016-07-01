@@ -74,6 +74,16 @@
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
+        <li class="quicklinks">
+          <ui-select name="step" theme="select2" ng-model="criteria.step[0].value">
+            <ui-select-match>
+              <strong>{t}Step{/t}:</strong> [% $select.selected.name %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.id as item in extra.steps | filter: $select.search">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
             <ui-select-match>

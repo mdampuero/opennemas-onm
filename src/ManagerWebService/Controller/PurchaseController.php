@@ -284,6 +284,14 @@ class PurchaseController extends Controller
             'countries'  => $countries,
             'freshbooks' => [
                 'url' => $this->getparameter('freshbooks.url')
+            ],
+            'steps'      => [
+                [ 'id' => null, 'name' => _('All') ],
+                [ 'id' => 'cart', 'name' => _('Cart') ],
+                [ 'id' => 'billing', 'name' => _('Billing') ],
+                [ 'id' => 'payment', 'name' => _('Payment') ],
+                [ 'id' => 'summary', 'name' => _('Summary') ],
+                ['id' => 'done', 'name' => _('Done') ]
             ]
         ];
     }
