@@ -516,3 +516,37 @@ purchase:
             primary: false
             unique: false
             flags: { fulltext: true }
+
+user_notification:
+    columns:
+        user_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        notification_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        instance_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        user:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        read_date:
+            type: datetime
+            options: { default: null, notnull: false }
+        view_date:
+            type: datetime
+            options: { default: null, notnull: false }
+        click_date:
+            type: datetime
+            options: { default: null, notnull: false }
+        open_date:
+            type: datetime
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [notification_id, instance_id, user_id]
+            primary: true
+            unique: true
+            flags: {  }
