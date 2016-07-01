@@ -310,7 +310,6 @@
           }
 
           var domain = 'www.' + $scope.domain;
-          console.log($scope.extension.uuid)
           var create = $scope.extension.uuid === 'es.openhost.domain.create'
             ? 1 : 0;
 
