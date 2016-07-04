@@ -141,9 +141,12 @@ class NotificationController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $em     = $this->get('orm.manager');
-        $un     = null;
-        $userId = $this->getUser()->id;
+        $em           = $this->get('orm.manager');
+        $un           = null;
+        $userId       = $this->getUser()->id;
+        $notification = $this->get('orm.manager')
+            ->getRepository('manager.notification')
+            ->find($id);
 
         try {
             $un = $em->getRepository('manager.UserNotification')->find([
@@ -165,7 +168,11 @@ class NotificationController extends Controller
 
         foreach ($request->request->all() as $key => $value) {
             $date = new \Datetime($value);
-            $un->{$key} = $date->format('Y-m-d H:i:s');
+
+            // Ignore read_date for fixed notifications
+            if ($key !== 'read_date' || !$notification->fixed) {
+                $un->{$key} = $date->format('Y-m-d H:i:s');
+            }
         }
 
         try {
