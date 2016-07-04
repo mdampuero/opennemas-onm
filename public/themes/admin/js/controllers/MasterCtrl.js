@@ -154,6 +154,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
           $timeout(function() {
             $scope.bounce = false;
+            $scope.markAllForcedAsView();
           }, 1000);
         }
       });
@@ -169,6 +170,27 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markAllAsView = function() {
+      var url  = routing.generate('backend_ws_notifications_patch');
+      var date = new Date();
+      var ids  = $scope.notifications.map(function(e) { return e.id; });
+      var data = {
+        ids:       ids,
+        view_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+      };
+
+      $http.patch(url, data);
+    };
+
+    /**
+     * @function markAllForcedAsView
+     * @memberOf NotificationCtrl
+     *
+     * @description
+     *   Marks a notification as view.
+     *
+     * @param {Integer} index The index of the notification to mark.
+     */
+    $scope.markAllForcedAsView = function() {
       var url  = routing.generate('backend_ws_notifications_patch');
       var date = new Date();
       var ids  = $scope.notifications.map(function(e) { return e.id; });
