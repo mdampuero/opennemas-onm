@@ -201,7 +201,7 @@ class AmpController extends Controller
         // Get instance logo size
         $logo = getService('setting_repository')->get('site_logo');
         if (!empty($logo)) {
-            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.$logo;
+            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.rawurlencode($logo);
             $logoSize = @getimagesize($logoUrl);
             if (is_array($logoSize)) {
                 $this->view->assign([
