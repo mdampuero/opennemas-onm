@@ -96,7 +96,7 @@ return array_map(function ($ad) {
                  data-ad-client="ca-pub-7694073983816204"
                  data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -355,7 +355,7 @@ return array_map(function ($ad) {
                  data-ad-client="ca-pub-7694073983816204"
                  data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -687,7 +687,7 @@ return array_map(function ($ad) {
                  data-ad-client="ca-pub-7694073983816204"
                  data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -2946,7 +2946,7 @@ return array_map(function ($ad) {
                  data-ad-client="ca-pub-7694073983816204"
                  data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
