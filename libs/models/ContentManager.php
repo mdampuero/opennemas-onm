@@ -761,6 +761,29 @@ class ContentManager
     }
 
     /**
+     * Gets the earlier starttime of scheduled contents from a contents array
+     *
+     * @param array $contents Array of Contents.
+     *
+     * @return string The minor starttime of scheduled contents or null
+     */
+    public static function getEarlierEndtimeOfScheduledContents($contents)
+    {
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contents as $content) {
+            if ($content->endtime > $current
+                && (empty($expires)
+                    || $content->endtime < $expires)
+            ) {
+                $expires = $content->endtime;
+            }
+        }
+
+        return $expires;
+    }
+
+    /**
      * Gets the path of one file type by its ID
      *
      * @param int $contentID the id of the content we want to work with
