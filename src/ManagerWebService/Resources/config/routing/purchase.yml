@@ -9,6 +9,8 @@ manager_ws_purchase_delete:
     path:     /purchases/{id}
     defaults: { _controller: ManagerWebServiceBundle:Purchase:delete }
     methods:  [ DELETE ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -16,6 +18,8 @@ manager_ws_purchase_get_pdf:
     path:     /purchases/{id}.pdf
     defaults: { _controller: ManagerWebServiceBundle:Purchase:getPdf }
     methods:  [ GET ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -37,6 +41,8 @@ manager_ws_purchase_show:
     path:     /purchases/{id}
     defaults: { _controller: ManagerWebServiceBundle:Purchase:show }
     methods:  [ GET ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -44,6 +50,8 @@ manager_ws_purchase_update:
     path:     /purchases/{id}
     defaults: { _controller: ManagerWebServiceBundle:Purchase:update }
     methods:  [ PUT ]
+    requirements:
+        id: \d+
     options:
         expose: true
     methods:  [ GET ]
@@ -52,6 +60,27 @@ manager_ws_purchases_delete:
     path:     /purchases
     defaults: { _controller: ManagerWebServiceBundle:Purchase:deleteSelected }
     methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_purchases_export_all:
+    path:     /purchases/all.csv
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:exportAll}
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_purchases_export_completed:
+    path:     /purchases/completed.csv
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:exportCompleted }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_purchases_export_uncompleted:
+    path:     /purchases/uncompleted.csv
+    defaults: { _controller: ManagerWebServiceBundle:Purchase:exportUncompleted }
+    methods:  [ GET ]
     options:
         expose: true
 

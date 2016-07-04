@@ -11,13 +11,32 @@
           </h4>
         </li>
       </ul>
-      <div class="all-actions hidden pull-right">
+      <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
-            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_purchase_create') %]">
-              <i class="fa fa-plus m-r-5"></i>
-              {t}Create{/t}
-            </a>
+          <li class="quicklinks dropdown no-padding">
+            <span class="btn btn-link" data-toggle="dropdown">
+              <i class="fa fa-download fa-lg"></i>
+            </span>
+            <ul class="dropdown-menu dropdown-menu-right m-r-5">
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_all', { token: token }) %]" target="_blank">
+                  <i class="fa fa-circle-thin"></i>
+                  {t}All{/t}
+                </a>
+              </li>
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_completed', { token: token }) %]" target="_blank">
+                  <i class="fa fa-check text-success"></i>
+                  {t}Completed purchases{/t}
+                </a>
+              </li>
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_uncompleted', { token: token }) %]" target="_blank">
+                  <i class="fa fa-times text-danger"></i>
+                  {t}Uncompleted purchases{/t}
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -44,7 +63,7 @@
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerFrom.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -56,10 +75,10 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerTo.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -71,7 +90,7 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">

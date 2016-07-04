@@ -10,6 +10,7 @@
 namespace ManagerWebService\Controller;
 
 use Framework\ORM\Entity\Purchase;
+use League\Csv\Writer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,6 +108,62 @@ class PurchaseController extends Controller
             [ 'error' => $error, 'messages' => $messages ],
             $statusCode
         );
+    }
+
+    /**
+     * @api {get} /purchases.csv Returns the report with purchases.
+     * @apiName ExportAll
+     * @apiGroup Purchase
+     */
+    public function exportAllAction()
+    {
+        $sql = 'SELECT purchase.id, client, internal_name as instance,'
+            . ' contact_mail as instance_email, details as items,'
+            . ' purchase.created, purchase.updated, step, method'
+            . ' FROM purchase, instances'
+            . ' WHERE instances.id = purchase.instance_id';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+
+        return $this->export($data, 'all');
+    }
+
+    /**
+     * @api {get} /purchases/completed.csv Returns the report with uncompleted
+     *                                     purchases.
+     * @apiName ExportCompleted
+     * @apiGroup Purchase
+     */
+    public function exportCompletedAction()
+    {
+        $sql = 'SELECT purchase.id, client, internal_name as instance,'
+            . ' contact_mail as instance_email, details as items,'
+            . ' purchase.created, purchase.updated, step, method'
+            . ' FROM purchase, instances'
+            . ' WHERE instances.id = purchase.instance_id AND step = "done"';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+
+        return $this->export($data, 'completed');
+    }
+
+    /**
+     * @api {get} /purchases/uncompleted.csv Returns the report with uncompleted
+     *                                       purchases.
+     * @apiName ExportUncompleted
+     * @apiGroup Purchase
+     */
+    public function exportUncompletedAction()
+    {
+        $sql = 'SELECT purchase.id, client, internal_name as instance,'
+            . ' contact_mail as instance_email, details as items,'
+            . ' purchase.created, purchase.updated, step, method'
+            . ' FROM purchase, instances'
+            . ' WHERE instances.id = purchase.instance_id AND step != "done"';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+
+        return $this->export($data, 'uncompleted');
     }
 
     /**
@@ -294,5 +351,72 @@ class PurchaseController extends Controller
                 ['id' => 'done', 'name' => _('Done') ]
             ]
         ];
+    }
+
+    /**
+     * Returns a response with CSV from data.
+     *
+     * @param array  $data The data to export.
+     * @param string $name The name to use in the exported file.
+     *
+     * @return Response The response object.
+     */
+    protected function export($data, $name)
+    {
+        $data = array_map(function ($a) {
+            if (array_key_exists('client', $a) && !empty($a['client'])) {
+                $client = unserialize($a['client']);
+
+                $a['client']       = $client->lastName . ', ' . $client->firstName;
+                $a['client_email'] = $client->email;
+            }
+
+            if (array_key_exists('items', $a) && !empty($a['items'])) {
+                $items = unserialize($a['items']);
+                $items = array_map(function ($a) {
+                    return $a['description'];
+                }, $items);
+
+                if ($a['method'] === 'CreditCard') {
+                    array_pop($items);
+                }
+
+                $a['items'] = implode(', ', $items);
+            }
+
+            return [
+                'id'             => $a['id'],
+                'client'         => $a['client'],
+                'instance'       => $a['instance'],
+                'client_email'   => $a['client_email'],
+                'instance_email' => $a['instance_email'],
+                'items'          => $a['items'],
+                'created'        => $a['created'],
+                'updated'        => $a['updated'],
+                'step'           => $a['step']
+            ];
+        }, $data);
+
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne([
+            'id', 'client', 'instance', 'client_email', 'instance_email',
+            'items', 'created', 'updated', 'step'
+        ]);
+
+        $writer->insertAll($data);
+
+        $response = new Response();
+        $response->setContent($writer);
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=report-' . $name . '-purchases.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 }
