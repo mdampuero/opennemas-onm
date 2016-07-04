@@ -73,6 +73,12 @@
               </div>
             </div>
             <div class="row">
+              <div class="col-md-12 m-b-10">
+                <label><strong>{t}Email{/t}</strong></label>
+                [% purchase.client.email %]
+              </div>
+            </div>
+            <div class="row">
               <div class="col-sm-8 m-b-10">
                 <label><strong>{t}Address{/t}</strong></label> [% purchase.client.address %]
               </div>

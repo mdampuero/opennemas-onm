@@ -147,13 +147,19 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-email" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
+            <label for="checkbox-email">
+              {t}Email{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
             <label for="checkbox-client_id">
               {t}Client ID{/t}
             </label>
           </div>
-        </div>
-        <div class="col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
             <label for="checkbox-payment-id">
@@ -172,14 +178,14 @@
               {t}Instance{/t}
             </label>
           </div>
+        </div>
+        <div class="col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-created">
               {t}Created{/t}
             </label>
           </div>
-        </div>
-        <div class="col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
             <label for="checkbox-updated">
@@ -214,6 +220,9 @@
               <th class="pointer" ng-click="sort('client')" ng-show="isColumnEnabled('name')">
                 {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('client') == 'asc', 'fa fa-caret-down': isOrderedBy('client') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-show="isColumnEnabled('email')" width="250">
+                {t}Email{/t}
               </th>
               <th class="pointer" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
                 {t}Total{/t}
@@ -272,6 +281,9 @@
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('email')">
+                [% item.client.email %]
               </td>
               <td class="text-right" ng-show="isColumnEnabled('total')">
                 [% item.total | number : 2 %] €
