@@ -157,13 +157,14 @@ class AmpController extends Controller
 
             $patterns = [
                 '@(align|border|style|nowrap|onclick)="[^\"]*\"@',
-                '@<font>((?s).*)<\/font>@',
+                '@<font.*?>((?s).*)<\/font>@',
                 '@<img([^>]+>)@',
                 '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
                 '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
                 '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
                 '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
-                '@<(script|embed|object|frameset|frame|iframe|link|style|meta)[^>]*>(?s).*?<\/\1>@'
+                '@<(script|embed|object|frameset|frame|iframe|style|form)[^>]*>(?s).*?<\/\1>@',
+                '@<(link|meta|input)[^>]+>@',
             ];
             $replacements  = [
                 '',
@@ -190,11 +191,25 @@ class AmpController extends Controller
                     layout="responsive"
                     data-tweetid="${2}">
                 </amp-twitter>',
+                '',
                 ''
             ];
             $article->body = preg_replace($patterns, $replacements, $article->body);
             $article->summary = preg_replace($patterns, $replacements, $article->summary);
         } // end if $this->view->is_cached
+
+        // Get instance logo size
+        $logo = getService('setting_repository')->get('site_logo');
+        if (!empty($logo)) {
+            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.$logo;
+            $logoSize = @getimagesize($logoUrl);
+            if (is_array($logoSize)) {
+                $this->view->assign([
+                    'logoSize' => $logoSize,
+                    'logoUrl'  => $logoUrl
+                ]);
+            }
+        }
 
         return $this->render(
             "amp/article.tpl",
