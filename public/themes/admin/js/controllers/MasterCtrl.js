@@ -404,7 +404,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     });
 
     // Mark notifications as clicked when clicking in notification-action
-    $('body, .notification-list').on('click', '.notification-list-item a', function (e) {
+    $('body, .notification-list').on('click', '.notification-list-item a a', function (e) {
       e.stopPropagation();
 
       var target   = e.target.closest('li');
