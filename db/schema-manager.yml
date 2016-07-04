@@ -519,13 +519,13 @@ purchase:
 
 user_notification:
     columns:
+        instance_id:
+            type: integer
+            options: { default: null, unsigned: true }
         user_id:
             type: integer
             options: { default: null, unsigned: true }
         notification_id:
-            type: integer
-            options: { default: null, unsigned: true }
-        instance_id:
             type: integer
             options: { default: null, unsigned: true }
         user:

@@ -264,10 +264,17 @@ class NotificationController extends Controller
             $criteria['union'] = 'OR';
         }
 
-        $nr = $this->get('orm.manager')->getRepository('manager.notification');
+        $nr  = $this->get('orm.manager')->getRepository('manager.notification');
+        $unr = $this->get('orm.manager')->getRepository('manager.UserNotification');
 
         $total         = $nr->countBy($criteria);
         $notifications = $nr->findBy($criteria, $order, $epp, $page);
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $notifications);
+
+        $extra['read']= $unr->findTimesRead($ids);
 
         foreach ($notifications as &$notification) {
             if (empty($notification->target)) {
@@ -494,7 +501,6 @@ class NotificationController extends Controller
             foreach ($keys as $key) {
                 $notification->{$key} = $request->request->get($key);
             }
-
 
             if (empty($notification->start)) {
                 $notification->start = date('Y-m-d H:i:s');
