@@ -193,7 +193,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     $scope.markAllForcedAsView = function() {
       var url  = routing.generate('backend_ws_notifications_patch');
       var date = new Date();
-      var ids  = $scope.notifications.map(function(e) { return e.id; });
+      var ids  = $scope.forced.map(function(e) { return e.id; });
       var data = {
         ids:       ids,
         view_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
