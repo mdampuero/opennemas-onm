@@ -274,7 +274,7 @@ class NotificationController extends Controller
             return $a->id;
         }, $notifications);
 
-        $extra['read']= $unr->findTimesRead($ids);
+        $extra['stats']= $unr->findStats($ids);
 
         foreach ($notifications as &$notification) {
             if (empty($notification->target)) {

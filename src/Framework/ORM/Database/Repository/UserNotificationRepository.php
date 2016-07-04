@@ -134,15 +134,18 @@ class UserNotificationRepository extends DatabaseRepository
     }
 
     /**
-     * Returns number of reads given a list of notifications.
+     * Returns number of reads, views, clicks and openings for a list of
+     * notifications.
      *
      * @param array $ids The notification ids.
      *
-     * @return array The number of reads.
+     * @return array The notifications stats.
      */
-    public function findTimesRead($ids)
+    public function findStats($ids)
     {
-        $sql = 'SELECT notification_id, count(*) AS `read`'
+        $sql = 'SELECT notification_id, count(read_date) AS `read`,'
+                . ' count(view_date) as view, count(click_date) as clicked,'
+                . ' count(open_date) as opened'
             . ' FROM user_notification WHERE notification_id IN (?)'
             . ' GROUP BY notification_id';
 
@@ -154,7 +157,10 @@ class UserNotificationRepository extends DatabaseRepository
 
         $values = [];
         foreach ($rs as $value) {
-            $values[$value['notification_id']] = $value['read'];
+            $id = $value['notification_id'];
+            unset($value['notification_id']);
+
+            $values[$id] = $value;
         }
 
         return $values;

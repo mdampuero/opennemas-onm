@@ -130,9 +130,29 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-view" checklist-model="columns.selected" checklist-value="'view'" type="checkbox">
+            <label for="checkbox-view">
+              {t}View{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-read" checklist-model="columns.selected" checklist-value="'read'" type="checkbox">
             <label for="checkbox-read">
               {t}Read{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-clicked" checklist-model="columns.selected" checklist-value="'clicked'" type="checkbox">
+            <label for="checkbox-clicked">
+              {t}Clicked{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-opened" checklist-model="columns.selected" checklist-value="'opened'" type="checkbox">
+            <label for="checkbox-opened">
+              {t}Opened{/t}
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
@@ -147,8 +167,6 @@
               {t}Forced{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
             <label for="checkbox-enabled">
@@ -193,9 +211,21 @@
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
+              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="100">
+                {t}View{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('view') == 'asc', 'fa fa-caret-down': isOrderedBy('view') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
                 {t}Read{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="100">
+                {t}Clicked{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('clicked') == 'asc', 'fa fa-caret-down': isOrderedBy('clicked') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="100">
+                {t}Opened{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opened') == 'asc', 'fa fa-caret-down': isOrderedBy('opened') == 'desc'}"></i>
               </th>
               <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
                 {t}Fixed{/t}
@@ -255,9 +285,24 @@
               <td class="text-center" ng-show="isColumnEnabled('end')">
                 [% item.end %]
               </td>
+              <td class="text-center" ng-show="isColumnEnabled('view')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].view ? extra.stats[item.id].view : 0 %]</strong>
+                </span>
+              </td>
               <td class="text-center" ng-show="isColumnEnabled('read')">
                 <span class="badge badge-default">
-                  <strong>[% extra.read[item.id] ? extra.read[item.id] : 0 %]</strong>
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].read ? extra.stats[item.id].read : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('clicked')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].clicked ? extra.stats[item.id].clicked : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('opened')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].opened ? extra.stats[item.id].opened : 0 %]</strong>
                 </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('fixed')">
