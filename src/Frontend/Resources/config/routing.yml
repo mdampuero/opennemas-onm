@@ -63,15 +63,15 @@ frontend_ws_paypal_ipn:
 
 frontend_newsletter_subscribe_show:
     path: /newsletter
-    defaults: { _controller: FrontendBundle:Subscriptions:show }
+    defaults: { _controller: FrontendBundle:Subscribers:show }
 
 frontend_newsletter_subscribe_es:
     path: /boletin
-    defaults: { _controller: FrontendBundle:Subscriptions:show }
+    defaults: { _controller: FrontendBundle:Subscribers:show }
 
 frontend_newsletter_subscribe_create:
     path: /newsletter/subscription/create
-    defaults: { _controller: FrontendBundle:Subscriptions:create }
+    defaults: { _controller: FrontendBundle:Subscribers:create }
 
 frontend_auth_login:
     path: /login
