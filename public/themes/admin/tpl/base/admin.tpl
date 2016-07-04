@@ -297,7 +297,7 @@
                       </div>
                       <ul class="notification-list">
                         <scrollable>
-                          <li class="clearfix notification-list-item" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
+                          <li class="clearfix notification-list-item" id="notification-[% notification.id %]" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
                             <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
                               <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                             </span>

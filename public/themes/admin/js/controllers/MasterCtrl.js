@@ -134,7 +134,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
           if ($scope.forced.length > 0) {
             var tpl = '<ul class="notification-list notification-list-auto">' +
-              '<li class="notification-list-item" ng-class="{ \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
+              '<li class="notification-list-item" id="notification-[% notification.id %]" ng-class="{ \'notification-list-item-with-icon\': notification.style.icon }" ng-repeat="notification in forced" ng-style="{ \'background-color\': notification.style.background_color,  \'border-color\': notification.style.background_color }">' +
                 '<span class="notification-list-item-close pull-right pointer" ng-click="markForcedAsRead($index)" ng-if="notification.fixed != 1">' +
                   '<i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>' +
                 '</span>' +
@@ -170,6 +170,10 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markAllAsView = function() {
+      if (!$scope.notifications || $scope.notifications.length === 0) {
+        return;
+      }
+
       var url  = routing.generate('backend_ws_notifications_patch');
       var date = new Date();
       var ids  = $scope.notifications.map(function(e) { return e.id; });
@@ -191,6 +195,10 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markAllForcedAsView = function() {
+      if (!$scope.forced || $scope.forced.length === 0) {
+        return;
+      }
+
       var url  = routing.generate('backend_ws_notifications_patch');
       var date = new Date();
       var ids  = $scope.forced.map(function(e) { return e.id; });
@@ -211,8 +219,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @param {Integer} index The index of the notification to mark.
      */
-    $scope.markAsClicked = function(index) {
-      var id   = $scope.notifications[index].id;
+    $scope.markAsClicked = function(id) {
       var url  = routing.generate('backend_ws_notification_patch', { id: id });
       var date = new Date();
       var data = {
@@ -405,7 +412,8 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
       for (var i = 0; i < siblings.length; i++) {
         if (siblings[i] === target) {
-          $scope.markAsClicked(i);
+          var id = $(siblings[i]).attr('id').replace('notification-', '');
+          $scope.markAsClicked(id);
         }
       }
     });
