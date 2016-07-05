@@ -227,7 +227,29 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         read_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
       };
 
-      $http.patch(url, data);
+      // Find notification to remove from list
+      var notifications = $scope.notifications;
+      var notification  = notifications.filter(function(e) {
+        return parseInt(e.id) === parseInt(id);
+      });
+
+      if (notification.length === 0) {
+        notifications = $scope.forced;
+        notification  = notifications.filter(function(e) {
+          return parseInt(e.id) === parseInt(id);
+        });
+      }
+
+      if (notification.length > 0) {
+        notification = notification[0];
+      }
+
+      $http.patch(url, data).then(function () {
+        if (notification) {
+          var index = notifications.indexOf(notification);
+          notifications.splice(index, 1);
+        }
+      });
     };
 
     /**
