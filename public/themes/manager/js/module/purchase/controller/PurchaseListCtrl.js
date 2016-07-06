@@ -47,7 +47,7 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'created' ]
+          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'created', 'step' ]
         };
 
         /**

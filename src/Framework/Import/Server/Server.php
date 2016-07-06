@@ -74,13 +74,15 @@ abstract class Server
         $deleted = [];
         $files   = glob($this->params['path'] . DS . '*');
 
-        foreach ($files as $file) {
-            $modTime = filemtime($file);
-            $limit   = time() - $this->params['sync_from'];
+        if ($this->params['sync_from'] !== 'no_limits') {
+            foreach ($files as $file) {
+                $modTime = filemtime($file);
+                $limit   = time() - $this->params['sync_from'];
 
-            if (filesize($file) < 2 || $modTime < $limit) {
-                unlink($file);
-                $deleted[] = $file;
+                if (filesize($file) < 2 || $modTime < $limit) {
+                    unlink($file);
+                    $deleted[] = $file;
+                }
             }
         }
 

@@ -203,6 +203,10 @@ class InstanceManager extends BaseManager
      */
     public function findByClient($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         // Executing the SQL
         $sql = "SELECT instance_id, meta_value FROM `instance_meta` "
             ."WHERE meta_key = 'client' AND meta_value in ("

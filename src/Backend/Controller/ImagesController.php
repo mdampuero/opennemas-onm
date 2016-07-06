@@ -105,7 +105,7 @@ class ImagesController extends Controller
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
                 $photo = new \Photo($id);
-                $photo->getMetaData();
+                $photo->getPhotoMetaData();
 
                 $photos []= $photo;
             }

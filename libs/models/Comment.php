@@ -348,25 +348,6 @@ class Comment
     }
 
     /**
-     * Deletes comments given a SQL filter
-     *
-     * @return void
-     **/
-    public static function deleteFromFilter($filter)
-    {
-        try {
-            $rs = getService('dbal_connection')->delete(
-                'comments',
-                $filter
-            );
-
-            return true;
-        } catch (\Exception $e) {
-            error_log('Error while deleting comments from filter:'.$e->getMessage());
-        }
-    }
-
-    /**
      * Updates the status
      *
      * @return Comment the comment object instance
@@ -484,7 +465,7 @@ class Comment
      *
      * @return boolean true if the property was setted
      **/
-    public function setProperty($property, $value)
+    public function setMetadata($property, $value)
     {
         if ($this->id == null || empty($property)) {
             return false;
@@ -559,18 +540,18 @@ class Comment
     public function updateContentTotalComments($id)
     {
         try {
-            $rs = getService('dbal_connection')->fetchColumn(
+            $numComments = getService('dbal_connection')->fetchColumn(
                 "SELECT count(id) as total FROM `comments` "
                 ."WHERE `content_id` = ? GROUP BY `content_id`",
                 [ $id ]
             );
 
             // Set number of comments for contents
-            \Content::setPropertyWithContentId($id, 'num_comments', $rs);
+            \ContentManager::setContentMetadata($id, 'num_comments', $numComments);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error on ContentManager::updateContentTotalComments: '.$e->getMessage());
             return false;
         }
     }

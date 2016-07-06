@@ -193,20 +193,20 @@ class Opinion extends Content
         }
 
         if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-            parent::setProperty('summary', $data['summary']);
+            parent::setMetadata('summary', $data['summary']);
         }
 
         if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-            parent::setProperty('img1', $data['img1']);
+            parent::setMetadata('img1', $data['img1']);
         }
         if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-            parent::setProperty('img2', $data['img2']);
+            parent::setMetadata('img2', $data['img2']);
         }
         if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-            parent::setProperty('img1_footer', $data['img1_footer']);
+            parent::setMetadata('img1_footer', $data['img1_footer']);
         }
         if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-            parent::setProperty('img2_footer', $data['img2_footer']);
+            parent::setMetadata('img2_footer', $data['img2_footer']);
         }
 
         return $this->id;
@@ -289,30 +289,30 @@ class Opinion extends Content
         }
 
         if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-            parent::setProperty('summary', $data['summary']);
+            parent::setMetadata('summary', $data['summary']);
         } else {
-            parent::clearProperty('summary');
+            parent::removeMetadata('summary');
         }
 
         if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-            parent::setProperty('img1', $data['img1']);
+            parent::setMetadata('img1', $data['img1']);
         } else {
-            parent::clearProperty('img1');
+            parent::removeMetadata('img1');
         }
         if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-            parent::setProperty('img2', $data['img2']);
+            parent::setMetadata('img2', $data['img2']);
         } else {
-            parent::clearProperty('img2');
+            parent::removeMetadata('img2');
         }
         if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-            parent::setProperty('img1_footer', $data['img1_footer']);
+            parent::setMetadata('img1_footer', $data['img1_footer']);
         } else {
-            parent::clearProperty('img1_footer');
+            parent::removeMetadata('img1_footer');
         }
         if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-            parent::setProperty('img2_footer', $data['img2_footer']);
+            parent::setMetadata('img2_footer', $data['img2_footer']);
         } else {
-            parent::clearProperty('img2_footer');
+            parent::removeMetadata('img2_footer');
         }
 
         return true;

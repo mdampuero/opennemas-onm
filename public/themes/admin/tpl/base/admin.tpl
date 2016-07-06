@@ -276,7 +276,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 {if is_object($smarty.session._sf2_attributes.user)}
-                  <li class="quicklinks dropdown dropdown-notifications" ng-click="markFixedAsRead()">
+                  <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
                       <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
@@ -297,7 +297,7 @@
                       </div>
                       <ul class="notification-list">
                         <scrollable>
-                          <li class="clearfix notification-list-item" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
+                          <li class="clearfix notification-list-item" id="notification-[% notification.id %]" ng-class="{ 'notification-list-item-with-icon': notification.style.icon }" ng-repeat="notification in notifications" ng-style="{ 'background-color': notification.style.background_color, 'border-color': notification.style.background_color }">
                             <span class="notification-list-item-close pull-right pointer" ng-click="markAsRead($index)" ng-if="notification.fixed == 0">
                               <i class="fa fa-times" style="color: [% notification.style.font_color %] !important;"></i>
                             </span>
@@ -498,6 +498,7 @@
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
+      @Common/src/angular-http/http.js,
       @Common/src/angular-history/history.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,

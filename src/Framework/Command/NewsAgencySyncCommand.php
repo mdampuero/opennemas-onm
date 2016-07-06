@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use Framework\Import\Synchronizer\Synchronizer;
 
-class SyncNewsAgencyCommand extends ContainerAwareCommand
+class NewsAgencySyncCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -112,21 +112,29 @@ EOF
                     $synchronizer->sync($server);
 
                     $output->writeln("<fg=red> ==> {$synchronizer->stats['deleted']} files deleted</>");
-                    $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</info>");
-                    $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</info>");
+                    $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</>");
+                    $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</>");
+                    $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
+                    $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
+                    $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
 
                     if (array_key_exists('auto_import', $server) && $server['auto_import']) {
                         $importer = $this->getContainer()->get('news_agency.importer');
                         $importer->configure($server);
 
-                        $ids = $importer->importAll();
+                        $results = $importer->importAll();
 
-                        $output->writeln("<info> ==> " . count($ids) . " contents imported</info>\n");
+                        if (!empty($results[1])) {
+                            $output->writeln("<fg=yellow> ==> " . $results[1] . " contents already imported</>");
+                            $logger->info($results[1] . " contents already imported", array('cron'));
+                        }
+
+                        if (!empty(count($results[0]))) {
+                            $output->writeln("<info> ==> " . count($results[0]) . " contents imported</>\n");
+                            $logger->info(count($results[0]) . " files downloaded", array('cron'));
+                        }
                     }
 
-                    $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
-                    $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
-                    $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
                 } catch (\Exception $e) {
                     $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }

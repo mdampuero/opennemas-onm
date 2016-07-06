@@ -175,7 +175,7 @@ class AssetController extends Controller
                 $properties []= [$content->id, $bgColor];
                 $properties []= [$content->id, $titleColor];
             }
-            $properties = \Content::getMultipleProperties($properties);
+            $properties = \ContentManager::getMultipleProperties($properties);
 
             foreach ($contentsInHomepage as &$content) {
                 foreach ($properties as $property) {

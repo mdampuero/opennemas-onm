@@ -35,26 +35,36 @@ class DomainManagementController extends Controller
      */
     public function addAction(Request $request)
     {
-        $client = [];
-        $params = [];
-        $tax    = 0;
-        $token  = null;
+        $client    = [];
+        $params    = [];
+        $token     = null;
+        $extension = null;
 
         $instance = $this->get('instance');
+        $em       = $this->get('orm.manager');
 
         if (array_key_exists('client', $instance->metas)
             && !empty($instance->metas['client'])
         ) {
             try {
-                $client = $this->get('orm.manager')
-                    ->getRepository('manager.client', 'Database')
+                $client = $em->getRepository('manager.client', 'Database')
                     ->find($instance->metas['client']);
 
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
+
             } catch (\Exception $e) {
             }
         }
+
+        $uuid = 'es.openhost.domain.redirect';
+        if ($request->query->get('create')) {
+            $uuid = 'es.openhost.domain.create';
+        }
+
+        $extension = $em->getRepository('manager.extension')->findOneBy([
+            'uuid' => [ [ 'value' => $uuid ] ]
+        ])->toArray();
 
         $countries    = Intl::getRegionBundle()->getCountryNames(CURRENT_LANGUAGE_LONG);
         $taxes        = $this->get('vat')->getTaxes();
@@ -65,8 +75,7 @@ class DomainManagementController extends Controller
             'domain_management/add.tpl',
             [
                 'client'    => $client,
-                'tax'       => $tax,
-                'create'    => $request->query->get('create'),
+                'extension' => $extension,
                 'countries' => $countries,
                 'taxes'     => $taxes,
                 'token'     => $token

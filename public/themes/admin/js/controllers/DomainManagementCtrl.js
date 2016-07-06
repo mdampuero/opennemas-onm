@@ -17,8 +17,8 @@
      *   Controller to handle actions in domains.
      */
     .controller('DomainManagementCtrl', [
-      '$controller', '$http', '$rootScope', '$scope', '$window', 'messenger', 'routing',
-      function($controller, $http, $rootScope, $scope, $window, messenger, routing) {
+      '$controller', '$http', '$rootScope', '$scope', '$window', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $http, $rootScope, $scope, $window, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('CheckoutCtrl',
             { $rootScope: $rootScope, $scope: $scope }));
@@ -77,11 +77,11 @@
          * @memberOf DomainManagementCtrl
          *
          * @description
-         *   The price per module.
+         *   The name for steps.
          *
-         * @type {Integer}
+         * @type {Array}
          */
-        $scope.price = 12;
+        $scope.steps = [ 'cart', 'billing', 'payment', 'summary', 'done' ];
 
         /**
          * @memberOf DomainManagementCtrl
@@ -118,13 +118,10 @@
           $scope.loading = true;
           var url = routing.generate('backend_ws_domain_save');
           var data = {
-            client:  $scope.client,
-            create:  $scope.create,
-            domains: $scope.cart,
-            fee:     $scope.fee,
-            method:  $scope.payment.type,
-            nonce:   $scope.payment.nonce,
-            total:   $scope.total
+            domains:  $scope.cart.map(function(e) { return e.description }),
+            method:   $scope.payment.type,
+            nonce:    $scope.payment.nonce,
+            purchase: $scope.purchase,
           };
 
           $http.post(url, data).then(function() {
@@ -146,6 +143,50 @@
          */
         $scope.expand = function(index) {
           $scope.expanded[index] = !$scope.expanded[index];
+        };
+
+        /**
+         * @function getData
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Returns the data to send basing on the current purchase status.
+         *
+         * @return {Object} The data to send.
+         */
+        $scope.getData = function() {
+          var ids = {};
+          for (var i = 0; i < $scope.cart.length; i++) {
+            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+          }
+
+          var domains = $scope.cart.map(function(e) {
+            return e.description;
+          });
+
+          return {
+            ids:     ids,
+            domains: domains,
+            method:  $scope.payment.type,
+            step:    $scope.steps[$scope.step],
+          };
+        };
+
+        /**
+         * @function getPrice
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Returns the price the domain price.
+         *
+         * @return {Float} The domain price.
+         */
+        $scope.getPrice = function() {
+          for (var i = 0; i < $scope.extension.metas['price'].length; i++) {
+            if ($scope.extension.metas['price'][i].type === 'yearly') {
+              return $scope.extension.metas['price'][i].value;
+            }
+          }
         };
 
         /**
@@ -269,21 +310,25 @@
           }
 
           var domain = 'www.' + $scope.domain;
+          var create = $scope.extension.uuid === 'es.openhost.domain.create'
+            ? 1 : 0;
 
           var url = routing.generate('backend_ws_domain_check_available',
-              { domain: domain, create: $scope.create });
+              { domain: domain, create: create });
 
-          if (!$scope.create) {
+          if (!create) {
             var url = routing.generate('backend_ws_domain_check_valid',
-                { domain: domain, create: $scope.create });
+                { domain: domain, create: create });
           }
 
           $scope.loading = true;
           $http.get(url).then(function() {
             $scope.cart.push({
-              name:        $scope.description,
+              id:          $scope.extension.id,
+              uuid:        $scope.extension.uuid,
+              name:        $scope.extension.name + ': ' + domain,
               description: domain,
-              price:       [{ value:  $scope.price, type: 'yearly' }]
+              price:       $scope.extension.metas.price
             });
 
             $scope.domain  = '';
@@ -375,5 +420,16 @@
             });
           }
         });
+
+        if (webStorage.local.has('purchase')) {
+          $scope.purchase = webStorage.local.get('purchase');
+        }
+
+        if (!$scope.purchase) {
+          http.post('backend_ws_purchase_save').then(function(response) {
+            $scope.purchase = response.data;
+            webStorage.local.set('purchase', $scope.purchase);
+          });
+        }
     }]);
 })();

@@ -127,10 +127,12 @@ class NotificationSubscriber implements EventSubscriberInterface
     public function getReadNotifications(Event $event)
     {
         $repository = $this->container->get('orm.manager')
-            ->getRepository('user_notification');
+            ->getRepository('manager.UserNotification');
 
         $notifications = $repository->findBy([
-            'user_id' => [ [ 'value' => $event->getArgument('user_id') ] ]
+            'instance_id' => [ [ 'value' => $event->getArgument('instance_id') ] ],
+            'user_id'     => [ [ 'value' => $event->getArgument('user_id') ] ],
+            'read_date'   => [ [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ] ]
         ]);
 
         $response = [];

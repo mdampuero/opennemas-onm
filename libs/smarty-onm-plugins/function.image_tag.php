@@ -39,7 +39,11 @@ function smarty_function_image_tag($params, &$smarty)
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $output = "<img src=\"{$resource}\" {$properties}>";
+    if ($params['data-src'] == 'lazyload') {
+        $output = "<img src=\"/assets/images/lazy-bg.jpg\" data-src=\"{$resource}\" {$properties}>";
+    } else {
+        $output = "<img src=\"{$resource}\" {$properties}>";
+    }
 
     return $output;
 }

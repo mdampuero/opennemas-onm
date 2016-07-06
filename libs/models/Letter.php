@@ -110,7 +110,7 @@ class Letter extends Content
             $this->ip = $this->params['ip'];
         }
 
-        $this->image = $this->getProperty('image');
+        $this->image = $this->getMetadata('image');
 
         if (!empty($this->image)) {
             $this->photo = $this->image;
@@ -177,11 +177,11 @@ class Letter extends Content
             );
 
             if (array_key_exists('image', $data) && !empty($data['image'])) {
-                $this->setProperty('image', $data['image']);
+                $this->setMetadata('image', $data['image']);
             }
 
             if (array_key_exists('url', $data) && !empty($data['url'])) {
-                $this->setProperty('url', $data['url']);
+                $this->setMetadata('url', $data['url']);
             }
 
             return $this;
@@ -216,11 +216,11 @@ class Letter extends Content
             );
 
             if (array_key_exists('image', $data) && !empty($data['image'])) {
-                $this->setProperty('image', $data['image']);
+                $this->setMetadata('image', $data['image']);
             }
 
             if (array_key_exists('url', $data) && !empty($data['url'])) {
-                $this->setProperty('url', $data['url']);
+                $this->setMetadata('url', $data['url']);
             }
 
             return true;

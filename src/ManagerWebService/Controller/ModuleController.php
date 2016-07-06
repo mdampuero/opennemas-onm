@@ -85,17 +85,17 @@ class ModuleController extends Controller
         }
 
         $fs = new Filesystem();
-        if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
-            $fs->mkdir(SITE_PATH . 'media/core/modules');
+        if (!$fs->exists(SITE_PATH . 'media/core/extensions')) {
+            $fs->mkdir(SITE_PATH . 'media/core/extensions');
         }
 
         $i = 1;
         foreach ($request->files as $file) {
-            $module->images[] = '/media/core/modules/' . $module->id
+            $module->images[] = '/media/core/extensions/' . $module->id
                 . '_' . $i . '.' . $file[0]->getClientOriginalExtension();
 
             $file[0]->move(
-                SITE_PATH . '/media/core/modules',
+                SITE_PATH . '/media/core/extensions',
                 $module->id . '_' . $i . '.' . $file[0]->getClientOriginalExtension()
             );
 
@@ -433,7 +433,7 @@ class ModuleController extends Controller
 
             $imagesToDelete = [];
 
-            if (!empty($module->images)) {
+            if (is_array($module->images) && !empty($module->images)) {
                 $imagesToDelete = $module->images;
             }
 
@@ -445,13 +445,7 @@ class ModuleController extends Controller
             unset($keys[array_search('_method', $keys)]);
 
             foreach ($keys as $key) {
-                $module->{$key} = null;
-
-                if ($request->request->get($key)
-                    && !is_null($request->request->get($key))
-                ) {
-                    $module->{$key} = $request->request->filter($key);
-                }
+                $module->{$key} = $request->request->get($key);
             }
 
             $module->about       = json_decode($module->about, true);
@@ -483,7 +477,7 @@ class ModuleController extends Controller
 
             $em->persist($module);
 
-            if (!empty($module->images)) {
+            if (!empty($module->images) && is_array($module->images)) {
                 $imagesToDelete = array_diff($imagesToDelete, $module->images);
             }
 

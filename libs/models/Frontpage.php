@@ -82,61 +82,33 @@ class Frontpage
     }
 
     /**
-     * Creates a frontpage given an array of data
+     * Load properties into this instance
      *
-     * @param array $data the frontpge data
-     *
-     * @return bool If create in database
+     * @param array $properties Array properties
      */
-    public function create($data)
+    public function load($properties)
     {
-        $data['content_status'] = 1;
-        $data['position']       = 1;
-
-        if (is_null($data['category'])) {
-            return false;
-        }
-        $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
-        $category      = $data['category'];
-        $contents      = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
-        $params        = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
-        $version       = (empty($data['version']))? 0: $data['version'];
-        $promoted      = (empty($data['promoted'])) ? null : intval($data['promoted']);
-        $day_frontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
-
-        $resp = $GLOBALS['application']->conn->GetOne(
-            'SELECT pk_frontpage FROM `frontpages` WHERE category = ? AND date= ?',
-            array($category,$date)
-        );
-
-        if ($resp) {
-            $promoted = "1";
-            $sql = "UPDATE frontpages SET  `content_positions`=?,,
-                                           `version` =?,
-                                           `promoted` =?,
-                                           `day_frontpage` =?,
-                                           `params` =?
-                                            WHERE pk_frontpage = ".$resp;
-
-            $values = array($contents, $version, $promoted, $day_frontpage, $params);
-        } else {
-            $promoted = "2";
-            $sql = "INSERT INTO frontpages (`date`,`category`,`content_positions`,
-                                            `version`, `promoted`, `day_frontpage`,
-                                            `params`)
-                    VALUES (?,?,?, ?,?,?, ?)";
-            $values = array(
-                $date, $category,$contents,
-                $version, $promoted, $day_frontpage,
-                $params
-            );
+        if (is_array($properties)) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
+        } elseif (is_object($properties)) {
+            $properties = get_object_vars($properties);
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
         }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
+        $this->id = $this->pk_frontpage;
+        $this->content_positions = unserialize($this->content_positions);
+        $this->params = unserialize($this->params);
+        $this->fk_content_type = 18;
 
-        return true;
+        return $this;
     }
 
     /**
@@ -171,94 +143,79 @@ class Frontpage
     }
 
     /**
-     * Load properties into this instance
+     * Creates a frontpage given an array of data
      *
-     * @param array $properties Array properties
+     * @param array $data the frontpge data
+     *
+     * @return bool If create in database
      */
-    public function load($properties)
+    public function create($data)
     {
-        if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
+        if (is_null($data['category'])) {
+            return false;
         }
+        $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
+        $category      = $data['category'];
+        $contents     = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
+        $version      = (empty($data['version'])) ? 0: $data['version'];
+        $promoted     = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $dayFrontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
+        $params       = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
 
-        $this->id = $this->pk_frontpage;
-        $this->content_positions = unserialize($this->content_positions);
-        $this->params = unserialize($this->params);
-        $this->fk_content_type = 18;
+        $conn = getService('dbal_connection');
+        try {
+            $rs = $conn->insert(
+                'frontpages',
+                [
+                    'date'              => $date,
+                    'category'          => $category,
+                    'content_positions' => $contents,
+                    'version'           => $version,
+                    'promoted'          => 2,
+                    'day_frontpage'     => $dayFrontpage,
+                    'params'            => $params
+                ]
+            );
 
-        return $this;
+            return $conn->lastInsertId();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Read, get a specific frontpage
+     * Updates the frontpage from a data array
      *
-     * @param  int    $date     date of calendar
-     * @param  int    $category category in menu element
-     * @param  int    $version  version of the frontpage
+     * @param array $data the new data
      *
-     * @return boolean
-     */
-
-    public function getFrontpage($date, $category = 0)
+     * @return void
+     * @author
+     **/
+    public function update($data)
     {
-        // if category = 0 => home
-        if (is_null($category)
-            && is_null($date)
-        ) {
-              return false;
-        }
-
-        $sql = "SELECT * FROM `frontpages` WHERE `date`=? AND `category`=?";
-        $values = array($date, $category);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+        $contents     = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
+        $version      = (empty($data['version'])) ? 0: $data['version'];
+        $promoted     = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $dayFrontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
+        $params       = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+        try {
+            $rs = getService('dbal_connection')->update(
+                'frontpages',
+                [
+                    'content_positions' => $contents,
+                    'version'           => $version,
+                    'promoted'          => $promoted,
+                    'day_frontpage'     => $dayFrontpage,
+                    'params'            => $params
+                ],
+                [
+                    'pk_frontpage' => $resp,
+                ]
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs->fields);
-
-        return $this;
-    }
-
-     /**
-     * Read, get a specific frontpage
-     *
-     * @param  int    $date     date of calendar
-     *
-     * @return Widget Return instance to chaining method
-     */
-
-    public function getCategoriesWithFrontpage($date)
-    {
-        if (is_null($date)) {
-            return false;
-        }
-
-        $sql = "SELECT category FROM `frontpages` WHERE `date`=?";
-        $values = array($date);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return false;
-        }
-        $items = array();
-        while (!$rs->EOF) {
-            $items[] = $rs->fields['category'];
-            $rs->MoveNext();
-        }
-
-        return $items;
     }
 }

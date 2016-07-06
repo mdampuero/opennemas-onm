@@ -292,57 +292,6 @@ class ContentsController extends Controller
     }
 
     /**
-     * Adds a vote for a content
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function rateContentAction(Request $request)
-    {
-        // If is POST request perform the vote action if not render the vote
-        if ('POST' == $request->getMethod()) {
-            $ip        = getUserRealIP();
-            $contentId = $request->request->getDigits('content_id', null);
-            $voteValue = $request->request->getDigits('vote_value', null);
-
-            $content = new \Content($contentId);
-
-            if (is_null($content->id)) {
-                // Content does not exists so raise an Not Found exception
-                throw new ResourceNotFoundException();
-            } else {
-                $rating = new \Rating($content->id);
-                $rating->update($voteValue, $ip);
-
-                // Render the rating system after rating the content
-                $content = $rating->render('', 'result', 1);
-
-                // Return the content and set a cookie for avoiding multiple rates
-                $response = new Response($content, 200);
-                $response->headers->setCookie(
-                    new Cookie(
-                        "rating-" . $contentId,
-                        'true',
-                        time() + 60 * 60 * 24 * 30
-                    )
-                );
-            }
-        } else {
-            $contentId = $request->query->getDigits('content_id', null);
-            $alreadyVoted = ($request->cookies->get('rating-'.$contentId) !== null) ? 'result' : 'vote';
-
-            // Render the rating system
-            $rating   = new \Rating($contentId);
-            $content  = $rating->render('', $alreadyVoted);
-
-            $response = new Response($content, 200);
-        }
-
-        return $response;
-    }
-
-    /**
      * Increments the num views for a content given its id
      *
      * @param Request $request the request object

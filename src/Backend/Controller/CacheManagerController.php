@@ -28,6 +28,18 @@ use Onm\Settings as s;
  **/
 class CacheManagerController extends Controller
 {
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function indexAction(Request $request)
+    {
+        return $this->render('cache_manager/index.tpl');
+
+    }
     /**
      * Show the configuration form and stores its information
      *

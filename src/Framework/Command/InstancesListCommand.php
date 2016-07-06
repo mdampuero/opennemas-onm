@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListInstancesCommand extends ContainerAwareCommand
+class InstancesListCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -28,7 +28,7 @@ class ListInstancesCommand extends ContainerAwareCommand
                         'f',
                         InputOption::VALUE_OPTIONAL,
                         'Field to print (id, internal_name, name, domains, settings, '.
-                        'activated, contact_mail, BD_DATABASE)'
+                        'activated, contact_mail, BD_DATABASE, TEMPLATE_USER, activated_modules)'
                     ),
                 )
             )
@@ -39,7 +39,6 @@ class ListInstancesCommand extends ContainerAwareCommand
 The <info>instances:list</info> command shows a list with all the available instances.
 
 <info>php bin/console instances:list</info>
-
 EOF
             );
     }
@@ -61,9 +60,10 @@ EOF
                 }
             } else {
                 $output->writeln(
-                    '- INT_NAME: '.$instance['internal_name'].
-                    ', DB_NAME: '.$instance['settings']['BD_DATABASE'].
+                    'INTERNAL NAME: '.$instance['internal_name'].
+                    ', DATABASE: \''.$instance['settings']['BD_DATABASE'].'\''.
                     ', DOMAINS: \''.$instance['domains'].'\''.
+                    ', THEME: '.$instance['settings']['TEMPLATE_USER'].
                     ', ACTIVATED: '.$instance['activated']
                 );
             }

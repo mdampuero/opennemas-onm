@@ -48,6 +48,9 @@ EOF
 
         chdir($basePath);
 
+        $this->input = $input;
+        $this->output = $output;
+
         $theme = $input->getArgument('theme');
 
         $this->themeFolder = 'public/themes/'.$theme;
@@ -87,48 +90,69 @@ EOF
     private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
+        $phpBinary = trim(shell_exec('which php'));
 
-        $tplFolders = array(
+        $tplTranslationsFile = $this->translationsDir."/strings_from_tpl.pot";
+        $phpTranslationsFile = $this->translationsDir."/strings_from_php.pot";
+        $finalTranslationFile = $this->translationsDir."/".$this->translationsDomain.".pot ";
+
+        $tplFolder = [
             $this->themeFolder.'/tpl/',
-        );
+        ];
 
-        $output->writeln("\t- From templates templates");
         $command =
-            APPLICATION_PATH."/bin/tsmarty2c.php -o "
-            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
-            .implode(' ', $tplFolders);
+            $phpBinary.' '.APPLICATION_PATH."/bin/tsmarty2c.php -o "
+            .$tplTranslationsFile.' '.implode(' ', $tplFolder);
 
-        echo(exec($command));
-
-        $command = "msgattrib --no-location -o "
-            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
-            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot ";
-
-        echo(exec($command));
-
-        $output->writeln("\t- From PHP files");
-
-        if (is_dir($this->themeFolder.'/tpl/widgets/')) {
-            $phpFiles = array(
-                $this->themeFolder.'/tpl/widgets/*.php',
-            );
-
-            $command =
-                "xgettext "
-                .implode(' ', $phpFiles)
-                ." -o ".$this->translationsDir."/".$this->translationsDomain."_php.pot  --from-code=UTF-8 2>&1";
-
-            $commandOutput = shell_exec($command);
-            echo $commandOutput;
-        } else {
-            touch($this->translationsDir."/".$this->translationsDomain."_php.pot");
+        $output->writeln("\t- From templates");
+        $commandOutput = shell_exec($command);
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $this->output->writeln($command .'>> '.$commandOutput);
         }
 
-        $command = "msgcat -o ".$this->translationsDir."/".$this->translationsDomain.".pot "
-            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
-            .$this->translationsDir."/".$this->translationsDomain."_php.pot";
-
+        $command = 'msgattrib --no-location -o '.$tplTranslationsFile.' '.$tplTranslationsFile;
         $commandOutput = shell_exec($command);
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $this->output->writeln($command .'>> '.$commandOutput);
+        }
+
+        $files = glob($this->themeFolder.'/**/*.php');
+
+        if (count($files) > 0) {
+            $output->writeln("\t- From PHP files");
+            $command =
+                "xgettext "
+                .implode(' ', $files)
+                ." -o ".$phpTranslationsFile." --no-location  --from-code=UTF-8 2>&1";
+
+            $commandOutput = shell_exec($command);
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                $this->output->writeln($command .'>> '.$commandOutput);
+            }
+
+            $command = "msgattrib --no-location -o ".$phpTranslationsFile.' '.$phpTranslationsFile;
+            $commandOutput = shell_exec($command);
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                $this->output->writeln($command .'>> '.$commandOutput);
+            }
+        }
+
+        $extractedtranslationsFiles = [];
+        if (file_exists($phpTranslationsFile)) {
+            $extractedtranslationsFiles []= $phpTranslationsFile;
+        }
+
+        if (file_exists($tplTranslationsFile)) {
+            $extractedtranslationsFiles []= $tplTranslationsFile;
+        }
+
+        if (count($extractedtranslationsFiles)) {
+            $command = "msgcat -o ".$finalTranslationFile.' '.implode(' ', $extractedtranslationsFiles);
+            $commandOutput = shell_exec($command);
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                $this->output->writeln($command .'>> $commandOutput');
+            }
+        }
     }
 
     /**

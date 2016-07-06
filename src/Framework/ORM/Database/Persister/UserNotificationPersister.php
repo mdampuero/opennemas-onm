@@ -20,9 +20,9 @@ class UserNotificationPersister extends DatabasePersister
     {
         $data = $this->dbfy($entity);
 
-        $this->iconn->insert('user_notification', $data);
+        $this->mconn->insert('user_notification', $data);
 
-        $entity->id = $this->iconn->lastInsertId();
+        $entity->id = $this->mconn->lastInsertId();
     }
 
     /**
@@ -30,12 +30,16 @@ class UserNotificationPersister extends DatabasePersister
      */
     public function remove(Entity $entity)
     {
-        $this->iconn->delete(
+        $this->mconn->delete(
             'user_notification',
-            [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
+            [
+                'instance_id'     => $entity->instance_id,
+                'user_id'         => $entity->user_id,
+                'notification_id' => $entity->notification_id
+            ]
         );
 
-        $this->icache->delete($entity->getCachedId());
+        $this->mcache->delete($entity->getCachedId());
     }
 
     /**
@@ -48,12 +52,16 @@ class UserNotificationPersister extends DatabasePersister
         unset($data['notification_id']);
         unset($data['user_id']);
 
-        $this->iconn->update(
+        $this->mconn->update(
             'user_notification',
             $data,
-            [ 'user_id' => $entity->user_id, 'notification_id' => $entity->notification_id ]
+            [
+                'instance_id'     => $entity->instance_id,
+                'user_id'         => $entity->user_id,
+                'notification_id' => $entity->notification_id
+            ]
         );
 
-        $this->icache->delete($entity->getCachedId());
+        $this->mcache->delete($entity->getCachedId());
     }
 }

@@ -24,7 +24,8 @@ class UserNotificationRepository extends DatabaseRepository
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT notification_id, user_id FROM `" . $this->getCachePrefix() . "` "
+        $sql = "SELECT instance_id, notification_id, user_id FROM `"
+            . $this->getCachePrefix() . "` "
             ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->conn->fetchAll($sql);
@@ -32,10 +33,11 @@ class UserNotificationRepository extends DatabaseRepository
         $ids = array();
         foreach ($rs as $item) {
             $key = 'user_notification-' . $item['notification_id'] . '-'
-                . $item['user_id'];
+                . $item['instance_id'] . '-' . $item['user_id'];
 
             $ids[$key] = [
                 'notification_id' => $item['notification_id'],
+                'instance_id'     => $item['instance_id'],
                 'user_id'         => $item['user_id']
             ];
         }
@@ -129,5 +131,38 @@ class UserNotificationRepository extends DatabaseRepository
         }
 
         $entity->refresh();
+    }
+
+    /**
+     * Returns number of reads, views, clicks and openings for a list of
+     * notifications.
+     *
+     * @param array $ids The notification ids.
+     *
+     * @return array The notifications stats.
+     */
+    public function findStats($ids)
+    {
+        $sql = 'SELECT notification_id, count(read_date) AS `read`,'
+                . ' count(view_date) as view, count(click_date) as clicked,'
+                . ' count(open_date) as opened'
+            . ' FROM user_notification WHERE notification_id IN (?)'
+            . ' GROUP BY notification_id';
+
+        $rs = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $values = [];
+        foreach ($rs as $value) {
+            $id = $value['notification_id'];
+            unset($value['notification_id']);
+
+            $values[$id] = $value;
+        }
+
+        return $values;
     }
 }

@@ -20,7 +20,7 @@ use Symfony\Component\Process\Process;
 
 use Framework\Import\Synchronizer\Synchronizer;
 
-class SyncAllNewsAgencyCommand extends ContainerAwareCommand
+class NewsAgencySyncAllCommand extends ContainerAwareCommand
 {
     /**
      * Configures the current command.

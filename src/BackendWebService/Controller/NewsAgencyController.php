@@ -149,16 +149,27 @@ class NewsAgencyController extends Controller
 
         $related = [];
         $urns    = [];
-        foreach ($elements as $element) {
+        foreach ($elements as &$element) {
             $urns[] = $element->urn;
 
-            foreach ($element->related as $id) {
+            foreach ($element->related as &$id) {
                 if (!array_key_exists($id, $related)) {
-                    $resource     = $repository->find($element->source, $id);
-                    $related[$id] = $resource;
-                    $urns[]       = $resource->urn;
+                    $resource = $repository->find($element->source, $id);
+
+                    if (empty($resource)) {
+                        $id = null;
+                    }
+
+                    if (!empty($resource)) {
+                        $related[$id] = $resource;
+                        $urns[]       = $resource->urn;
+                    }
                 }
             }
+
+            $element->related = array_filter($element->related, function ($a) {
+                return !empty($a);
+            });
         }
 
         $imported = [];
@@ -209,6 +220,10 @@ class NewsAgencyController extends Controller
         }
 
         $path = $repository->syncPath . DS . $source . DS . $resource->file_name;
+
+        if (!file_exists($path)) {
+            return new Response('Image not found', 404);
+        }
 
         $content = @file_get_contents($path);
 

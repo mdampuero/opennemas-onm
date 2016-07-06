@@ -1,7 +1,6 @@
 {extends file="base/base.tpl"}
 
 {block name="content" append}
-
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">

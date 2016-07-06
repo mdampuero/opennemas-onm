@@ -293,4 +293,23 @@ class CommentManager extends BaseManager
     {
         $this->cache->delete('comment' . $this->cacheSeparator . $id);
     }
+
+    /**
+     * Deletes comments given a SQL filter
+     *
+     * @return void
+     **/
+    public function deleteFromFilter($filter)
+    {
+        try {
+            $rs = $this->dbConn->delete(
+                'comments',
+                $filter
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error while deleting comments from filter:'.$e->getMessage());
+        }
+    }
 }

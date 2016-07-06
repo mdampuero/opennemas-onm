@@ -893,6 +893,10 @@ admin_news_agency_batch_import:
 # Template cache controller routes
 admin_cache_manager:
     path:     /system/cachemanager
+    defaults: { _controller  : BackendBundle:CacheManager:index }
+
+admin_cache_manager_config:
+    path:     /system/cachemanager/config
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
 admin_cache_manager_clearcache:

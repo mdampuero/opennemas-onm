@@ -199,7 +199,9 @@ class DatabaseRepository extends BaseManager
 
         $cachedIds = array();
         foreach ($entities as $entity) {
-            $cachedIds[] = $entity->getCachedId();
+            if (is_object($entity)) {
+                $cachedIds[] = $entity->getCachedId();
+            }
         }
 
         $missedIds = array_diff($ids, $cachedIds);

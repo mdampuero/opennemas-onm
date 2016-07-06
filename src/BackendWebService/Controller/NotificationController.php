@@ -36,7 +36,10 @@ class NotificationController extends Controller
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
-            [ 'user_id' => $this->getUser()->id ]
+            [
+                'instance_id' => $this->get('instance')->id,
+                'user_id'     => $this->getUser()->id
+            ]
         );
 
         $criteria = '(target LIKE \'%"' . $id . '"%\' OR '
@@ -86,10 +89,14 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $id   = $this->get('instance')->internal_name;
-        $date = date('Y-m-d H:i:s');
+        $id    = $this->get('instance')->internal_name;
+        $date  = date('Y-m-d H:i:s');
+        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
+        $epp   = $request->query->get('epp', 10);
+        $page  = $request->query->get('page', 1);
 
         $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
+            . 'target LIKE \'%"' . $theme . '"%\' OR '
             .  'target LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
             . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
 
@@ -101,9 +108,9 @@ class NotificationController extends Controller
             'notifications.get',
             [
                 'criteria' => $criteria,
-                'epp'      => null,
+                'epp'      => $epp,
                 'order'    => [ 'fixed' => 'desc' ],
-                'page'     => null
+                'page'     => $page
             ]
         );
 
@@ -127,27 +134,46 @@ class NotificationController extends Controller
     /**
      * Updates some instance properties.
      *
-     * @param integer $id The notification id.
+     * @param Request $request The request object.
+     * @param integer $id      The notification id.
      *
      * @return JsonResponse The response object.
      */
-    public function patchAction($id)
+    public function patchAction(Request $request, $id)
     {
-        $em     = $this->get('orm.manager');
-        $un     = null;
-        $userId = $this->getUser()->id;
+        $em           = $this->get('orm.manager');
+        $un           = null;
+        $userId       = $this->getUser()->id;
+        $notification = $this->get('orm.manager')
+            ->getRepository('manager.notification')
+            ->find($id);
 
         try {
-            $un = $em->getRepository('user_notification')->find(
-                [ 'notification_id' => $id, 'user_id' => $userId ]
-            );
+            $un = $em->getRepository('manager.UserNotification')->find([
+                'instance_id'     => $this->get('instance')->id,
+                'notification_id' => $id,
+                'user_id'         => $userId
+            ]);
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
-            $un->user_id = $userId;
+            $un->instance_id     = $this->get('instance')->id;
+            $un->user_id         = $userId;
             $un->notification_id = $id;
         }
 
-        $un->read_time = date('Y-m-d H:i:s');
+        $un->user = [
+            'username' => $this->getUser()->username,
+            'email'    => $this->getUser()->email
+        ];
+
+        foreach ($request->request->all() as $key => $value) {
+            $date = new \Datetime($value);
+
+            // Ignore read_date for fixed notifications
+            if ($key !== 'read_date' || !$notification->fixed) {
+                $un->{$key} = $date->format('Y-m-d H:i:s');
+            }
+        }
 
         try {
             $em->persist($un);
@@ -167,30 +193,48 @@ class NotificationController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $ids = $request->request->get('ids');
+        $params   = $request->request->all();
+        $instance = $this->get('instance')->id;
+        $ids      = $request->request->get('ids');
 
-        if (empty($ids) || !is_array($ids)) {
+        if (!array_key_exists('ids', $params)
+            || empty($params['ids'])
+            || !is_array($params['ids'])
+        ) {
             return new JsonResponse(_('Invalid notifications'), 400);
         }
 
         $em      = $this->get('orm.manager');
         $updated = 0;
+        $ids     = $params['ids'];
+
+        unset($params['ids']);
 
         try {
             $criteria = [
+                'instance_id'     => [ [ 'value' => $instance ] ],
                 'notification_id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
-                'user_id' => [ [ 'value' => $this->getUser()->id ] ]
+                'user_id'         => [ [ 'value' => $this->getUser()->id ] ]
             ];
 
-            $notifications = $em->getRepository('user_notification')
+            $notifications = $em->getRepository('manager.UserNotification')
                 ->findBy($criteria);
 
             // Update read datetime for existing
             $read = [];
             foreach ($notifications as $notification) {
-                $read[] = $notification->id;
+                $read[] = $notification->notification_id;
 
-                $notification->read_time = date('Y-m-d H:i:s');
+                $notification->user = [
+                    'username' => $this->getUser()->username,
+                    'email'    => $this->getUser()->email
+                ];
+
+                foreach ($params as $key => $value) {
+                    $date = new \Datetime($value);
+                    $notification->{$key} = $date->format('Y-m-d H:i:s');
+                }
+
                 $em->persist($notification);
                 $updated++;
             }
@@ -200,20 +244,29 @@ class NotificationController extends Controller
             foreach ($missed as $id) {
                 $un = new UserNotification();
 
+                $un->instance_id     = $instance;
+                $un->user = [
+                    'username' => $this->getUser()->username,
+                    'email'    => $this->getUser()->email
+                ];
                 $un->user_id         = $this->getUser()->id;
                 $un->notification_id = $id;
-                $un->read_time       = date('Y-m-d H:i:s');
+
+                foreach ($params as $key => $value) {
+                    $date = new \Datetime($value);
+                    $un->{$key} = $date->format('Y-m-d H:i:s');
+                }
 
                 $em->persist($un);
                 $updated++;
             }
 
             return new JsonResponse(sprintf(
-                _('%d notifications marked as read successfully'),
+                _('%d notifications marked successfully'),
                 $updated
             ));
         } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
+            return new JsonResponse($e->getMessage(), 400);
         }
     }
 

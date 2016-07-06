@@ -123,15 +123,15 @@ class Poll extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+            $this->items = $this->getItems($this->id);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-        $this->items = $this->getItems($this->id);
-
-        return $this;
     }
 
     /**

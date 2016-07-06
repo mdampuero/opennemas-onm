@@ -14,8 +14,8 @@
      * @description
      *   Controller to implement common actions.
      */
-    .controller('NotificationCtrl', [ '$http', '$location', '$scope', '$timeout', 'routing', 'oqlEncoder', 'queryManager', '$anchorScroll',
-      function ($http, $location, $scope, $timeout, routing, oqlEncoder, queryManager, $anchorScroll) {
+    .controller('NotificationCtrl', [ '$http', '$location', '$scope', '$timeout', '$window', 'routing', 'oqlEncoder', 'queryManager', '$anchorScroll',
+      function ($http, $location, $scope, $timeout, $window, routing, oqlEncoder, queryManager, $anchorScroll) {
         /**
          * The notifications dropdown status.
          *
@@ -39,10 +39,32 @@
           var url = routing.generate('backend_ws_notifications_list');
 
           $http.get(url).success(function(response) {
-            $scope.loading = false;
+            $scope.loading       = false;
             $scope.notifications = response.results;
-            $scope.extra = response.extra;
+            $scope.extra         = response.extra;
+
+            $scope.markAllAsOpen();
           });
+        };
+
+        /**
+         * @function markAllAsOpen
+         * @memberOf NotificationCtrl
+         *
+         * @description
+         *   Marks all notifications as open.
+         */
+        $scope.markAllAsOpen = function() {
+          var url  = routing.generate('backend_ws_notifications_patch');
+          var date = new Date();
+          var ids  = $scope.notifications.map(function(e) { return e.id; });
+          var data = {
+            ids: ids,
+            'open_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+          };
+
+          $http.patch(url, data);
         };
 
         // Updates the notification dropdown status

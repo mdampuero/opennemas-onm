@@ -11,13 +11,32 @@
           </h4>
         </li>
       </ul>
-      <div class="all-actions hidden pull-right">
+      <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
-            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_purchase_create') %]">
-              <i class="fa fa-plus m-r-5"></i>
-              {t}Create{/t}
-            </a>
+          <li class="quicklinks dropdown no-padding">
+            <span class="btn btn-link" data-toggle="dropdown">
+              <i class="fa fa-download fa-lg"></i>
+            </span>
+            <ul class="dropdown-menu dropdown-menu-right m-r-5">
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_all', { token: token }) %]" target="_blank">
+                  <i class="fa fa-circle-thin"></i>
+                  {t}All{/t}
+                </a>
+              </li>
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_completed', { token: token }) %]" target="_blank">
+                  <i class="fa fa-check text-success"></i>
+                  {t}Completed purchases{/t}
+                </a>
+              </li>
+              <li>
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_uncompleted', { token: token }) %]" target="_blank">
+                  <i class="fa fa-times text-danger"></i>
+                  {t}Uncompleted purchases{/t}
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -44,7 +63,7 @@
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerFrom.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -56,10 +75,10 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerTo.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -71,8 +90,18 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <ui-select name="step" theme="select2" ng-model="criteria.step[0].value">
+            <ui-select-match>
+              <strong>{t}Step{/t}:</strong> [% $select.selected.name %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.id as item in extra.steps | filter: $select.search">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
           <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -131,13 +160,25 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-method" checklist-model="columns.selected" checklist-value="'method'" type="checkbox">
+            <label for="checkbox-method">
+              {t}Method{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-email" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
+            <label for="checkbox-email">
+              {t}Email{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-client_id" checklist-model="columns.selected" checklist-value="'client_id'" type="checkbox">
             <label for="checkbox-client_id">
               {t}Client ID{/t}
             </label>
           </div>
-        </div>
-        <div class="col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-payment-id" checklist-model="columns.selected" checklist-value="'payment_id'" type="checkbox">
             <label for="checkbox-payment-id">
@@ -158,10 +199,22 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="checkbox check-default">
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
             <label for="checkbox-created">
               {t}Created{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-updated" checklist-model="columns.selected" checklist-value="'updated'" type="checkbox">
+            <label for="checkbox-updated">
+              {t}Updated{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-step" checklist-model="columns.selected" checklist-value="'step'" type="checkbox">
+            <label for="checkbox-step">
+              {t}Step{/t}
             </label>
           </div>
         </div>
@@ -187,9 +240,15 @@
                 {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('client') == 'asc', 'fa fa-caret-down': isOrderedBy('client') == 'desc'}"></i>
               </th>
+              <th class="text-center" ng-show="isColumnEnabled('email')" width="250">
+                {t}Email{/t}
+              </th>
               <th class="pointer" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
                 {t}Total{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
+              </th>
+              <th class="pointer" ng-show="isColumnEnabled('method')" width="50">
+                {t}Method{/t}
               </th>
               <th class="pointer text-center" ng-click="sort('client_id')" ng-show="isColumnEnabled('client_id')" width="120">
                 {t}Client ID{/t}
@@ -210,6 +269,13 @@
               <th class="pointer text-center" ng-click="sort('created')" ng-show="isColumnEnabled('created')" width="250">
                 {t}Created{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('updated')" ng-show="isColumnEnabled('updated')" width="250">
+                {t}Updated{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-show="isColumnEnabled('step')" width="100">
+                {t}Step{/t}
               </th>
             </tr>
           </thead>
@@ -235,8 +301,14 @@
                   </button>
                 </div>
               </td>
+              <td class="text-center" ng-show="isColumnEnabled('email')">
+                [% item.client.email %]
+              </td>
               <td class="text-right" ng-show="isColumnEnabled('total')">
                 [% item.total | number : 2 %] €
+              </td>
+              <td class="text-right" ng-show="isColumnEnabled('method')">
+                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }"></i>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]" target="_blank">
@@ -260,6 +332,14 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('created')">
                 [% item.created %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('updated')">
+                [% item.updated %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('step')">
+                <span class="badge text-uppercase" ng-class="{ 'badge-success': item.step === 'done', 'badge-danger': item.step === 'cart' || item.step === 'billing', 'badge-warning': item.step === 'payment' || item.step === 'summary' }">
+                  <strong>[% item.step %]</strong>
+                </span>
               </td>
             </tr>
           </tbody>
