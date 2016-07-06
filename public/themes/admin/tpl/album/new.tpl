@@ -162,9 +162,9 @@
                       {html_options options=$authors selected=$album->fk_author}
                     </select>
                   {aclelse}
-                    {if !isset($album->fk_author)}
-                      {$smarty.session.realname}
-                      <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                  {if !isset($album->fk_author) || empty($album->fk_author)}
+                      {$smarty.session._sf2_attributes.user->name}
+                      <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
                     {else}
                       {$authors[$album->fk_author]}
                       <input type="hidden" name="fk_author" value="{$album->fk_author}">
