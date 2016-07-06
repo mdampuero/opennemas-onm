@@ -1008,7 +1008,8 @@ class Content
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
                 . 'SET `available`=?, `content_status`=?, `starttime`=?, '
-                . '`fk_user_last_editor`=? WHERE `pk_content`=?', $values
+                . '`fk_user_last_editor`=? WHERE `pk_content`=?',
+                $values
             );
 
             /* Notice log of this action */
@@ -1064,7 +1065,8 @@ class Content
 
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
-                .'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?'
+                .'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?',
+                $values
             );
 
             /* Notice log of this action */
