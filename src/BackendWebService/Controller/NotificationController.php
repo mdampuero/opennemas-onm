@@ -53,7 +53,7 @@ class NotificationController extends Controller
         }
 
         if (!$this->getUser()->isAdmin()) {
-            $criteria .= ' AND users != 1';
+            $criteria .= ' AND (users IS NULL OR users = 0)';
         }
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
