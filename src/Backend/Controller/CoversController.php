@@ -183,7 +183,7 @@ class CoversController extends Controller
             'favorite'       => (int) $postInfo->getDigits('favorite', 1),
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
-            'fk_publisher'   => (int) $_SESSION['userid'],
+            'fk_publisher'   => (int) $this->getUser()->id,
         );
 
         $dateTime = new \DateTime($coverData['date']);
@@ -265,7 +265,7 @@ class CoversController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$cover->isOwner($_SESSION['userid'])
+            && !$cover->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -293,7 +293,7 @@ class CoversController extends Controller
                 'category'       => $postReq->getDigits('category', 0),
                 'name'           => $cover->name,
                 'thumb_url'      => $cover->thumb_url,
-                'fk_user_last_editor' => $_SESSION['userid'],
+                'fk_user_last_editor' => $this->getUser()->id,
             ];
 
             if (!$request->request->get('cover') && !empty($cover->name)) {
@@ -377,7 +377,7 @@ class CoversController extends Controller
             // Delete related and relations
             getService('related_contents')->deleteAll($id);
 
-            $cover->delete($id, $_SESSION['userid']);
+            $cover->delete($id, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'successs',

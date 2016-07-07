@@ -251,7 +251,7 @@ class FrontpagesController extends Controller
             }
 
             $logger->info(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                'User '.$this->getUser()->name.' ('.$this->getUser()->id.') was failed '.$message.' to execute'
                 .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
             );
 
@@ -280,7 +280,7 @@ class FrontpagesController extends Controller
 
         // Notice log of this action
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            'User '.$this->getUser()->name.' ('.$this->getUser()->id.') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 

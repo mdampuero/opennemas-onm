@@ -436,7 +436,7 @@ class NewsAgencyController extends Controller
                             $logger->info(
                                 'User '.$authorArray['username'].
                                 ' was created from importer by user '.
-                                $_SESSION['username'].' ('.$_SESSION['userid'].')'
+                                $this->getUser()->name.' ('.$this->getUser()->id.')'
                             );
                         }
 
@@ -560,7 +560,7 @@ class NewsAgencyController extends Controller
             'body'           => $element->getBody(),
             'posic'          => 0,
             'id'             => 0,
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
             'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
             'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
             'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),

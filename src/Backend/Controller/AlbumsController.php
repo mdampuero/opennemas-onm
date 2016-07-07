@@ -209,7 +209,7 @@ class AlbumsController extends Controller
         // Delete all related and relations
         getService('related_contents')->deleteAll($id);
 
-        $album->delete($id, $_SESSION['userid']);
+        $album->delete($id, $this->getUser()->id);
 
         $this->get('session')->getFlashBag()->add(
             'success',
@@ -301,7 +301,7 @@ class AlbumsController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$album->isOwner($_SESSION['userid'])
+            && !$album->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',

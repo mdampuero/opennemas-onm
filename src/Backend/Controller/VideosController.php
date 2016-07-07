@@ -229,7 +229,7 @@ class VideosController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$video->isOwner($_SESSION['userid'])
+            && !$video->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
@@ -295,7 +295,7 @@ class VideosController extends Controller
             // Delete related and relations
             getService('related_contents')->deleteAll($id);
 
-            $video->delete($id, $_SESSION['userid']);
+            $video->delete($id, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'success',

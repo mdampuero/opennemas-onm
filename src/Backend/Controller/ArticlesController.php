@@ -381,7 +381,7 @@ class ArticlesController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$article->isOwner($_SESSION['userid'])
+            && !$article->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',

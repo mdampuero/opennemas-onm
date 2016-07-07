@@ -104,7 +104,7 @@ class StaticPagesController extends Controller
                 'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'fk_publisher'   => $_SESSION['userid'],
+                'fk_publisher'   => $this->getUser()->id,
                 'category'       => 0,
                 'id'             => 0,
             );
@@ -138,7 +138,7 @@ class StaticPagesController extends Controller
         if (!is_null($staticPage->id)) {
             if (!Acl::isAdmin()
                 && !Acl::check('CONTENT_OTHER_UPDATE')
-                && !$staticPage->isOwner($_SESSION['userid'])
+                && !$staticPage->isOwner($this->getUser()->id)
             ) {
                 $this->get('session')->getFlashBag()->add(
                     'error',
@@ -158,7 +158,7 @@ class StaticPagesController extends Controller
                     'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'fk_publisher'   => $_SESSION['userid'],
+                    'fk_publisher'   => $this->getUser()->id,
                     'id'             => $id,
                 );
 
