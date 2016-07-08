@@ -102,7 +102,7 @@ class PaypalNotifications implements EventSubscriberInterface
 
 
                 // Send mail to user notificating that subscription is activated
-                $tplMail = new \Template(TEMPLATE_USER);
+                $tplMail = getService('core.template.admin');
                 $tplMail->caching = 0;
                 $mailBody = $tplMail->fetch('paywall/emails/payment_success.tpl');
                 $email = \Swift_Message::newInstance();

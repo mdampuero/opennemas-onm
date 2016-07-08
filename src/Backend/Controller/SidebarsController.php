@@ -36,7 +36,7 @@ class SidebarsController extends Controller
      **/
     public function listAction()
     {
-        $this->view = new \TemplateAdmin();
+        $this->view = $this->get('core.template.admin');
 
         return $this->render('sidebar/list.tpl');
     }

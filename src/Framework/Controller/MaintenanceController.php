@@ -46,7 +46,7 @@ class MaintenanceController extends Controller
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
 
-        $this->view = new \TemplateAdmin($this->get('service_container'));
+        $this->view = $this->get('core.template.admin');
 
         $themes = $this->get('orm.loader')->getPlugins();
         $themes = array_filter($themes, function ($a) {

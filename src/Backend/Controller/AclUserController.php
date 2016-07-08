@@ -654,7 +654,7 @@ class AclUserController extends Controller
 
                 $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
 
-                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
+                $tplMail = $this->get('core.template.admin');
                 $tplMail->caching = 0;
 
                 $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
