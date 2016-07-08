@@ -70,22 +70,26 @@ class PaywallController extends Controller
      **/
     public function showcaseAction(Request $request)
     {
-        if (empty($_SESSION['userid'])) {
+        if (empty($this->getUser()) || !is_object($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
-        } elseif (isset($_SESSION['meta']['paywall_time_limit'])) {
+        }
+
+        $user = $this->getUser();
+
+        if (isset($user->meta['paywall_time_limit'])) {
             $currentTime = new \DateTime();
             $currentTime->setTimezone(new \DateTimeZone('UTC'));
             $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-            if ($currentTime < $_SESSION['meta']['paywall_time_limit']) {
-                $user = new \User($_SESSION['userid']);
+            if ($currentTime < $user->meta['paywall_time_limit']) {
+                $user = new \User($user->id);
                 $user->getMeta();
 
                 $this->get('session')->getFlashBag()->add(
                     'error',
                     sprintf(
                         _('You already have an active Subscription until %s'),
-                        $_SESSION['meta']['paywall_time_limit']
+                        $user->meta['paywall_time_limit']
                     )
                 );
 
@@ -94,6 +98,7 @@ class PaywallController extends Controller
                 );
             }
         }
+
         $settings = s::get('paywall_settings');
 
         $articleID = $request->query->getDigits('content_id');
@@ -119,7 +124,7 @@ class PaywallController extends Controller
      **/
     public function preparePaymentAction(Request $request)
     {
-        if (!array_key_exists('userid', $_SESSION)) {
+        if (empty($this->getUser()) || empty($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
@@ -141,9 +146,9 @@ class PaywallController extends Controller
 
         // URL to which the buyer's browser is returned after choosing to pay with PayPal
         if ($recurringPayment == '1') {
-            $returnUrl = $this->generateUrl('frontend_paywall_success_recurring_payment', array('user' => $_SESSION['userid']), true);
+            $returnUrl = $this->generateUrl('frontend_paywall_success_recurring_payment', array('user' => $this->getUser()->id), true);
         } else {
-            $returnUrl = $this->generateUrl('frontend_paywall_success_payment', array('user' => $_SESSION['userid']), true);
+            $returnUrl = $this->generateUrl('frontend_paywall_success_payment', array('user' => $this->getUser()->id), true);
         }
         $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
 
@@ -350,7 +355,7 @@ class PaywallController extends Controller
             $order = new \Order();
             $order->create(
                 array(
-                    'user_id'        => $_SESSION['userid'],
+                    'user_id'        => $this->getUser()->id,
                     'content_id'     => 0,
                     'created'        => new \DateTime(),
                     'payment_id'     => $paymentInfo->TransactionID,
@@ -370,11 +375,9 @@ class PaywallController extends Controller
             $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
             $newUserSubscriptionDate->modify("+1 {$planTime}");
 
-            $user = new \User($_SESSION['userid']);
+            $user = new \User($this->getUser()->id);
 
             $user->addSubscriptionLimit($newUserSubscriptionDate);
-
-            $_SESSION['meta'] = $user->getMeta();
             unset($_SESSION['paywall_transaction']);
 
             return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
@@ -469,7 +472,7 @@ class PaywallController extends Controller
 
         $RPProfileDetails = new RecurringPaymentsProfileDetailsType();
         $RPProfileDetails->SubscriberName = $payerName.' '.$payerLastName;
-        $RPProfileDetails->ProfileReference = $_SESSION['userid'];
+        $RPProfileDetails->ProfileReference = $this->getUser()->id;
         $RPProfileDetails->BillingStartDate = $billingStartDate;
 
         // Initial non-recurring payment amount due immediately upon profile creation. Use an initial amount for enrolment or set-up fees.
@@ -570,7 +573,7 @@ class PaywallController extends Controller
     public function cancelRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
-        $user = new \User($_SESSION['userid']);
+        $user = new \User($this->getUser()->id);
         $recurringProfileId = $user->getMeta('recurring_payment_id');
         if (!$recurringProfileId) {
             return false;
@@ -632,7 +635,7 @@ class PaywallController extends Controller
     public function activateRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
-        $user = new \User($_SESSION['userid']);
+        $user = new \User($this->getUser()->id);
         $recurringProfileId = $user->getMeta('recurring_payment_id');
         if (!$recurringProfileId) {
             return false;
@@ -697,7 +700,7 @@ class PaywallController extends Controller
             // URL to which the buyer's browser is returned after choosing to pay with PayPal
             $returnUrl = $this->generateUrl(
                 'frontend_paywall_success_recurring_payment',
-                array('user' => $_SESSION['userid'], ),
+                array('user' => $this->getUser()->id, ),
                 true
             );
             $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);

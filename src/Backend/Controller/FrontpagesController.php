@@ -47,8 +47,6 @@ class FrontpagesController extends Controller
     {
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
 
-        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', ['category' => $categoryId]);
-
         // Check if the user can access a frontpage from other category
         if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
             throw new AccessDeniedException();

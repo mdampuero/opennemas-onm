@@ -575,7 +575,6 @@ class NewsAgencyController extends Controller
 
         $article           = new \Article();
         $newArticleID      = $article->create($values);
-        $_SESSION['desde'] = 'efe_press_import';
 
         return $newArticleID;
     }

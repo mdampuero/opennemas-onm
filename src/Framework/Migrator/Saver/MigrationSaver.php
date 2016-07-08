@@ -1457,12 +1457,20 @@ class MigrationSaver
         );
 
         if (array_key_exists('user', $this->settings['migration'])) {
-            $_SESSION['userid'] = $this->settings['migration']['user']['id'];
-            $_SESSION['username'] =
-                $this->settings['migration']['user']['username'];
+            // TODO: Remove ASAP
+            getService('session')->set(
+                'user',
+                json_decode(json_encode([
+                    'id'       => $this->settings['migration']['user']['id'],
+                    'username' => $this->settings['migration']['user']['username']
+                ]))
+            );
         } else {
-            $_SESSION['userid'] = 999;
-            $_SESSION['username'] = 'ONM';
+            // TODO: Remove ASAP
+            getService('session')->set(
+                'user',
+                json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+            );
         }
     }
 

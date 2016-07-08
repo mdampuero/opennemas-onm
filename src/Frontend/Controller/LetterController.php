@@ -228,18 +228,20 @@ class LetterController extends Controller
                     }
                 }
 
-                $data['url']        = $url;
-                $data['body']       = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
-                $data['author']     = $name;
-                $data['title']      = $subject;
-                $data['email']      = $mail;
-                $_SESSION['userid'] = 0;
-                $data['content_status']  = 0; //pendding
-                $data['image']      = $this->saveImage($data);
+                $data['url']            = $url;
+                $data['body']           = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
+                $data['author']         = $name;
+                $data['title']          = $subject;
+                $data['email']          = $mail;
+                $data['content_status'] = 0; //pendding
+                $data['image']          = $this->saveImage($data);
 
                 $letter = new \Letter();
-                $_SESSION['username'] = $data['author'];
-                $_SESSION['userid'] = 'user';
+
+                $request->getSession()->set(
+                    'user',
+                    json_decode(json_encode([ 'id' => 'user', 'username' => $data['author'] ]))
+                );
 
                 // Prevent XSS attack
                 $data = array_map('strip_tags', $data);

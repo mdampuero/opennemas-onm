@@ -29,8 +29,9 @@ class AuthenticationController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $error     = null;
+        $error   = null;
         $referer = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
+        $session = $request->getSession();
 
         if (empty($referer)) {
             $referer = $this->generateUrl('frontend_frontpage');
@@ -39,7 +40,7 @@ class AuthenticationController extends Controller
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
-            $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
         if ($error) {
@@ -51,7 +52,7 @@ class AuthenticationController extends Controller
                 $msg = $error->getMessage();
             }
 
-            $this->session->getFlashBag()->add('error', $msg);
+            $session->getFlashBag()->add('error', $msg);
             $session->set('failed_login_attempts', $session->get('failed_login_attempts') + 1);
         }
 
@@ -59,12 +60,12 @@ class AuthenticationController extends Controller
         $intention = time() . rand();
         $token     = $this->get('security.csrf.token_manager')->getToken($intention);
 
-        $this->request->getSession()->set('intention', $intention);
+        $session->set('intention', $intention);
 
         return $this->render(
             'authentication/login.tpl',
             [
-                'failed_login_attempts' => $this->getSession()->get('failed_login_attempts'),
+                'failed_login_attempts' => $session->get('failed_login_attempts'),
                 'current_language'      => \Application::$language,
                 'token'                 => $token,
                 'referer'               => $referer

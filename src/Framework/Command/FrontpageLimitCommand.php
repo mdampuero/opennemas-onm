@@ -45,6 +45,11 @@ EOF
     {
         $instance = $input->getArgument('instance-name');
 
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
+
         // Initialize application
         $basePath = APPLICATION_PATH;
 
@@ -90,8 +95,6 @@ EOF
 
         $cm = new \ContentManager();
         foreach ($allcategorys as $category) {
-            $_SESSION['username'] = 'console';
-            $_SESSION['userid'] = '0';
             $cache = getService('cache');
             $cache->delete('frontpage_elements_map_' . $category->id);
 
@@ -112,9 +115,6 @@ EOF
                     'content_type' => $content->content_type_l10n_name,
                 ];
             }
-
-            $_SESSION['username'] = 'console';
-            $_SESSION['userid'] = '0';
 
             // Save contents
             $savedProperly = \ContentManager::saveContentPositionsForHomePage(

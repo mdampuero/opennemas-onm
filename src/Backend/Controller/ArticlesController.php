@@ -70,8 +70,6 @@ class ArticlesController extends Controller
             }
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_articles');
-
         return $this->render(
             'article/list.tpl',
             array(
@@ -238,9 +236,6 @@ class ArticlesController extends Controller
         if (is_string($article->params)) {
             $article->params = unserialize($article->params);
         }
-
-        // Para usar el id de articulo al borrar un comentario
-        $_SESSION['olderId'] = $id;
 
         // Photos de noticia
         if (!empty($article->img1)) {

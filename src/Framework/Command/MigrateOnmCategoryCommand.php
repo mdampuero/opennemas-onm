@@ -81,8 +81,11 @@ EOF
         );
         $this->originConnection->selectDatabase($originDatabase);
 
-        $_SESSION['username'] = 'script';
-        $_SESSION['userid'] = 11;
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
+
         // Execute functions
         $output->writeln("\t<fg=blue;bg=white>Migrating ".$originCategory.": ".$originDatabase."->". $finalCategory."-".$targetDatabase."</fg=blue;bg=white>");
         // Migrate database

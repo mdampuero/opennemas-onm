@@ -43,7 +43,6 @@ class Acl
     {
         try {
             if (!isset($categoryID) || is_null($categoryID)) {
-                $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
                 return true;
             }
 

@@ -586,7 +586,8 @@ class ContentManager
             $conn->rollback();
 
             $logger->error(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                'User '.getService('session')->get('user')->username
+                .' ('.getService('session')->get('user')->id
                 .') updated frontpage of category '.$categoryID.' with error message: '
                 .$e->getMessage()
             );
@@ -626,7 +627,8 @@ class ContentManager
             /* Notice log of this action */
             $logger = getService('application.log');
             $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                'User '.getService('session')->get('user')->username
+                .' ('.getService('session')->get('user')->id
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
             );
 
@@ -657,7 +659,8 @@ class ContentManager
 
         $logger = getService('application.log');
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+            'User '.getService('session')->get('user')->username
+            .' ('.getService('session')->get('user')->id
             .') clear contents frontpage of category '.$categoryID
         );
     }
