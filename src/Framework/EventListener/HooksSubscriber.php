@@ -216,7 +216,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for all author opinions and frontpages
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
 
         // Get the list articles for this author
         $cm = new \ContentManager();
@@ -306,7 +306,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheAll()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->container->get('core.template');
         $frontpageTemplate->clearAllCache();
     }
 
@@ -321,7 +321,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for opinion frontpages and author frontpages
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
         $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
         $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
         $cacheManager->delete('blog', 'blog_frontpage.tpl');
@@ -339,7 +339,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $category = $event->getArgument('category');
 
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
 
         // Delete smarty cache for RSS frontpage of category
         $cacheManager->delete($category->name.'|RSS');
@@ -359,7 +359,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheForContent(Event $event)
     {
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
 
         $content = $event->getArgument('content');
 
@@ -408,7 +408,7 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         // Clean smarty cache
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
 
         $category = $event->getArgument('category');
 
@@ -446,7 +446,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheGlobalCss(Event $event)
     {
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
         $cacheManager->delete('css|global');
     }
 
@@ -463,7 +463,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for opinion inner, opinion frontpages and author frontpages
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->container->get('core.template'));
 
         $authorSlug = preg_replace('/[^a-zA-Z0-9\s]+/', '', $authorSlug);
 
@@ -557,7 +557,7 @@ class HooksSubscriber implements EventSubscriberInterface
     // public function refreshFrontpage(Event $event)
     // {
     //     $cacheManager = $this->container->get('template_cache_manager');
-    //     $cacheManager->setSmarty(new \Template(TEMPLATE_USER));
+    //     $cacheManager->setSmarty($this->container->get('core.template'));
 
     //     if (isset($_REQUEST['category'])) {
     //         $ccm = \ContentCategoryManager::get_instance();

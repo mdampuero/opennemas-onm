@@ -46,7 +46,7 @@ class AmpController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->assign('site_color', $siteColor);
     }
 

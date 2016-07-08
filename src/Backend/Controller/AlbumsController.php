@@ -165,7 +165,7 @@ class AlbumsController extends Controller
         // TODO: remove cache cleaning actions
         // Clean cache album home and frontpage for category
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
         $cacheManager->delete('home|1');
 
@@ -350,7 +350,7 @@ class AlbumsController extends Controller
 
         // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
         $cacheManager->delete('home|1');
 

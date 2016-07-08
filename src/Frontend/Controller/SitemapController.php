@@ -37,7 +37,7 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', '');
 
@@ -55,7 +55,7 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'web');
 
@@ -89,7 +89,7 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'news');
 
@@ -143,7 +143,7 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'image');
 
@@ -192,7 +192,7 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'video');
 

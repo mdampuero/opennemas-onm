@@ -35,7 +35,7 @@ class OpinionsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);

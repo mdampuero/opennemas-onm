@@ -30,7 +30,7 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
@@ -201,7 +201,7 @@ class FrontpagesController extends Controller
     {
         // Fetch HTTP variables
         $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         // Setup view

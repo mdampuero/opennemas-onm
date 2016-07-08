@@ -42,7 +42,7 @@ class CacheManagerController extends Controller
     public function configAction(Request $request)
     {
         // Init template cache config manager with frontend user template
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('core.template');
         $configDir         = $frontpageTemplate ->config_dir[0];
         $configContainer   = $this->container->get('template_cache_config_manager');
         $configManager     = $configContainer->setConfigDir($configDir);
@@ -99,7 +99,7 @@ class CacheManagerController extends Controller
     public function clearCacheAction()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('core.template');
         $frontpageTemplate->clearAllCache();
 
         $this->get('session')->getFlashBag()
@@ -121,7 +121,7 @@ class CacheManagerController extends Controller
     public function clearCompiledTemplatesAction()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('core.template');
         $frontpageTemplate->clearCompiledTemplate();
 
         $this->get('session')->getFlashBag()

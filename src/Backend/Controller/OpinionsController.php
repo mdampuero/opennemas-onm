@@ -642,7 +642,7 @@ class OpinionsController extends Controller
     {
         $opinion = new \Opinion();
         $cm = new  \ContentManager();
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         $opinionContents = $request->request->filter('contents');
 

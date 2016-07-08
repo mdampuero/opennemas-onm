@@ -60,7 +60,7 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            $this->view = new \Template(TEMPLATE_USER);
+            $this->view = $this->get('core.template');
             $output = $this->renderView(
                 'comments/loader.tpl',
                 array(
@@ -111,7 +111,7 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            $this->view = new \Template(TEMPLATE_USER);
+            $this->view = $this->get('core.template');
             $contents = $this->renderView(
                 'comments/partials/comment_element.tpl',
                 array(

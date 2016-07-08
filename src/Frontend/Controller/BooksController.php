@@ -40,7 +40,7 @@ class BooksController extends Controller
         $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
 
         // Setup caching system
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('book-frontpage');
         $cacheID = $this->view->generateCacheId($categoryName, null, $this->page);
 
@@ -106,7 +106,7 @@ class BooksController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('book-inner');
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $book->id);
@@ -191,7 +191,7 @@ class BooksController extends Controller
             $book->cover_img = new \Photo($book->cover_id);
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $output = $this->renderView(
             'books/widget_books.tpl',
             array(

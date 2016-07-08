@@ -36,7 +36,7 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
@@ -169,7 +169,7 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         // Get sync params

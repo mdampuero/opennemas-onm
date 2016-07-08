@@ -58,7 +58,7 @@ class PaywallController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
     }
 
     /**

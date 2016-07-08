@@ -39,7 +39,7 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         return $this->render(
             'static_pages/form.tpl',
@@ -63,7 +63,7 @@ class FormController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');

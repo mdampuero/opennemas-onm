@@ -474,7 +474,7 @@ class VideosController extends Controller
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
             // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->setSmarty($this->get('core.template'));
             $cacheManager->delete('home|1');
         }
 

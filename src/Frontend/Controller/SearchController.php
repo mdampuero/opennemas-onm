@@ -38,7 +38,7 @@ class SearchController extends Controller
     {
         $ads = \Frontend\Controller\ArticlesController::getAds();
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         return $this->render(
             'search/search.tpl',
             array(

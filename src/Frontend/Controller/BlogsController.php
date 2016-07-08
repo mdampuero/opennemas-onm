@@ -39,7 +39,7 @@ class BlogsController extends Controller
         $page = $request->query->getDigits('page', 1);
 
         // Setup view layer
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
@@ -148,7 +148,7 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
@@ -273,7 +273,7 @@ class BlogsController extends Controller
         }
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());

@@ -42,7 +42,7 @@ class LetterController extends Controller
         }
         $page = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
@@ -121,7 +121,7 @@ class LetterController extends Controller
         }
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
@@ -165,7 +165,7 @@ class LetterController extends Controller
      **/
     public function showFormAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
@@ -181,7 +181,7 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);

@@ -36,7 +36,7 @@ class RssController extends Controller
      **/
     public function indexAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
@@ -76,7 +76,7 @@ class RssController extends Controller
         $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
         $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
@@ -185,7 +185,7 @@ class RssController extends Controller
         $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $total = 10;
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId('rss|author', '', $slug);
@@ -251,7 +251,7 @@ class RssController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $ads = $this->getAds();

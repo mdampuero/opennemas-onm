@@ -719,7 +719,7 @@ class ArticlesController extends Controller
         $articleContents = $request->request->filter('contents');
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('articles');
         $this->view->caching = 0;
 

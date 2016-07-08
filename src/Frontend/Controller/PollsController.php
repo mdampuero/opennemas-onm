@@ -37,7 +37,7 @@ class PollsController extends Controller
     public function init()
     {
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->cm   = new \ContentManager();
 
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -316,7 +316,7 @@ class PollsController extends Controller
 
         // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
 
         $cacheID      = $this->view->generateCacheId($categoryName, '', $pollID);
         $cacheManager->delete($cacheID, 'poll.tpl');

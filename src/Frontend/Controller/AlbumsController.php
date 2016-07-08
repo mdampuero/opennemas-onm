@@ -39,7 +39,7 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();

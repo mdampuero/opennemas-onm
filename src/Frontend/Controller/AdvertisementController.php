@@ -44,7 +44,7 @@ class AdvertisementController extends Controller
         }
 
         // Returns the HTML for the add and a header to varnish
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         return $this->render(
             'ads/advertisement.tpl',
             [

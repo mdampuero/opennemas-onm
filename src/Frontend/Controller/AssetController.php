@@ -34,7 +34,7 @@ class AssetController extends Controller
      **/
     public function imageAction(Request $request)
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+        $this->view = $this->get('core.template.admin');
         $parameters = $request->query->get('parameters');
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
 
@@ -250,7 +250,7 @@ class AssetController extends Controller
      **/
     public function globalCssAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         $cacheID = 'css|global';

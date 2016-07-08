@@ -43,7 +43,7 @@ class TagsController extends Controller
         $page    =  1; //$request->query->getDigits('page', 1);
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         $cacheId = "tag|$tagName";

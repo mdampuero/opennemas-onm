@@ -58,7 +58,7 @@ class ContentsController extends Controller
             $this->paywallHook($content);
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
@@ -105,7 +105,7 @@ class ContentsController extends Controller
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
@@ -208,7 +208,7 @@ class ContentsController extends Controller
                 return new Response($content, $httpCode);
             }
 
-            $tplMail = new \Template(TEMPLATE_USER);
+            $tplMail = $this->get('core.template');
             $tplMail->caching = 0;
             $tplMail->assign(
                 array(
@@ -278,7 +278,7 @@ class ContentsController extends Controller
                 $content = new \Content($contentID);
             }
 
-            $this->view = new \Template(TEMPLATE_USER);
+            $this->view = $this->get('core.template');
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(

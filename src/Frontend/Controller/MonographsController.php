@@ -35,7 +35,7 @@ class MonographsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
 
         // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();

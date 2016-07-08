@@ -35,7 +35,7 @@ class VideosController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('video');
 
         $this->page          = $this->request->query->getDigits('page', 1);

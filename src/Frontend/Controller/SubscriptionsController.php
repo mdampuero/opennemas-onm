@@ -35,7 +35,7 @@ class SubscriptionsController extends Controller
     {
         $ads = $this->getAds();
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->assign(
             [
                 'advertisements'  => $ads,
@@ -93,7 +93,7 @@ class SubscriptionsController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         return $this->render(
             'static_pages/subscription.tpl',
             [
