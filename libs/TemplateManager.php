@@ -18,12 +18,4 @@ class TemplateManager extends Template
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "canonical_url");
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTemplateVars()
-    {
-        return;
-    }
 }
