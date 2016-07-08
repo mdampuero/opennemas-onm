@@ -12,14 +12,15 @@ class TemplateAdmin extends Template
     /**
      * {@inheritdoc}
      */
-    public function registerCustomPlugins()
+    protected function registerCustomPlugins()
     {
-        $this->addFilter("output", "trimwhitespace");
-        $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "js_includes");
+        $this->addFilter('output', 'trimwhitespace');
+        $this->addFilter('output', 'canonical_url');
+        $this->addFilter('output', 'css_includes');
+        $this->addFilter('output', 'js_includes');
+
         if (php_sapi_name() != 'cli') {
-            $this->addFilter("output", "backend_analytics");
+            $this->addFilter('output', 'backend_analytics');
         }
     }
 }

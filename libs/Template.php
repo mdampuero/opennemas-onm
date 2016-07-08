@@ -41,7 +41,6 @@ class Template extends Smarty
         $this->container = $container;
 
         $this->registerCustomPlugins();
-        $this->setTemplateVars();
 
         // Fran: I have to comment this line cause templating.globals is no
         // longer available. We need to know if this don't have any drawback in
@@ -56,10 +55,26 @@ class Template extends Smarty
      */
     public function addActiveTheme($theme)
     {
+        $this->theme = $theme;
+
+        $this->setTemplateVars($theme);
         $this->setupCompiles($theme);
         $this->setupPlugins($theme);
 
         $this->addTheme($theme);
+    }
+
+    /**
+     * Adds a filter for a section.
+     *
+     * @param string $section The section name.
+     * @param string $name    The filter name.
+     */
+    public function addFilter($section, $name)
+    {
+        if (in_array($section, [ 'pre', 'post', 'output' ])) {
+            $this->filters[$section][] = $name;
+        }
     }
 
     /**
@@ -89,6 +104,102 @@ class Template extends Smarty
             . '/tpl/widgets';
 
         $wm->addPath($path);
+    }
+
+    /**
+     * Returns the cache id basing on the section, subsection and resource
+     * names.
+     *
+     * @param string $section    The section name.
+     * @param string $subsection The section name.
+     * @param string $resource   The resource name.
+     *
+     * @return string The cache id.
+     */
+    public function generateCacheId($section, $subsection = null, $resource = null)
+    {
+        $cacheId = 'home|' . $resource;
+
+        if (!empty($subsection)) {
+            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $subsection) . '|' . $resource;
+        } elseif (!empty($section)) {
+            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $section) . '|' . $resource;
+        }
+
+        $cacheId = preg_replace('@-@', '', $cacheId);
+
+        return $cacheId;
+    }
+
+    /**
+     * Configures the Smarty cache for the section.
+     *
+     * @param string $section The section.
+     */
+    public function setConfig($section)
+    {
+        // Load configuration for the given $section
+        $this->configLoad('cache.conf', $section);
+        $config = $this->getConfigVars();
+
+        // If configuration says cache is enabled forward this to smarty object
+        if (array_key_exists('caching', $config) && $config['caching'] == true) {
+            // Retain current cache lifetime for each specific display call
+            $this->setCaching(SMARTY::CACHING_LIFETIME_SAVED);
+
+            if (!array_key_exists('cache_lifetime', $config)
+                || empty($config['cache_lifetime'])
+            ) {
+                $config['cache_lifetime'] = 86400;
+            }
+
+            $this->setCacheLifetime($config['cache_lifetime']);
+        }
+    }
+
+    /**
+     * Registers the required smarty plugins.
+     */
+    protected function registerCustomPlugins()
+    {
+        $this->addFilter('output', 'ads_generator');
+        $this->addFilter('output', 'canonical_url');
+        $this->addFilter('output', 'comscore');
+        $this->addFilter('output', 'css_includes');
+        $this->addFilter('output', 'generate_fb_admin_tag');
+        $this->addFilter('output', 'generate_fb_pages_tag');
+        $this->addFilter('output', 'google_analytics');
+        $this->addFilter('output', 'js_includes');
+        $this->addFilter('output', 'ojd');
+        $this->addFilter('output', 'piwik');
+        $this->addFilter('output', 'ads_scripts');
+        $this->addFilter('output', 'meta_amphtml');
+    }
+
+    /**
+     * Sets some template paths
+     *
+     * @param string $theme The current theme.
+     */
+    protected function setTemplateVars($theme)
+    {
+        if (!empty($theme)) {
+            $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
+        }
+
+        $this->error_reporting = E_ALL & ~E_NOTICE;
+
+        // Template variables
+        $baseUrl = SITE_URL . '/themes/'.$theme.'/';
+        $baseUrl = str_replace('http:', '', $baseUrl);
+
+        $this->image_dir = $baseUrl . 'images/';
+        $this->caching   = false;
+
+        $this->assign('params', [
+            'IMAGE_DIR' => $this->image_dir,
+            'THEME'     => $theme,
+        ]);
     }
 
     /**
@@ -153,7 +264,7 @@ class Template extends Smarty
      *
      * @param Extension $theme The current theme.
      */
-    public function setupPlugins($theme)
+    protected function setupPlugins($theme)
     {
         $path = $this->container->getParameter('core.paths.themes') . '/'
             . str_replace('es.openhost.theme.', '', $theme->uuid) . '/plugins';
@@ -167,97 +278,5 @@ class Template extends Smarty
                 $this->loadFilter($filterSectionName, $filterName);
             }
         }
-    }
-
-    /**
-     * Sets some template paths
-     */
-    public function setTemplateVars()
-    {
-        $theme = $this->container->get('theme');
-
-        if (!empty($theme)) {
-            $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
-        }
-
-        $this->error_reporting = E_ALL & ~E_NOTICE;
-
-        // Template variables
-        $baseUrl = SITE_URL.'/themes/'.$theme.'/';
-        $baseUrl = str_replace('http:', '', $baseUrl);
-
-        $this->image_dir = $baseUrl.'images/';
-        $this->caching   = false;
-
-        $this->assign(
-            'params',
-            array(
-                'IMAGE_DIR' => $this->image_dir,
-                'THEME'     => $theme,
-            )
-        );
-    }
-
-    public function addFilter($filterSection, $filterName)
-    {
-        if (in_array($filterSection, array('pre', 'post', 'output'))) {
-            $this->filters [$filterSection][]= $filterName;
-        }
-    }
-
-    public function generateCacheId($seccion, $subseccion = null, $resource = null)
-    {
-        $cacheId = '';
-
-        if (!empty($subseccion)) {
-            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $subseccion).'|'.$resource);
-        } elseif (!empty($seccion)) {
-            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $seccion).'|'.$resource);
-        } else {
-            $cacheId = ('home|'.$resource);
-        }
-        $cacheId = preg_replace('@-@', '', $cacheId);
-
-        return $cacheId;
-    }
-
-    public function setConfig($section)
-    {
-        // Load configuration for the given $section
-        $this->configLoad('cache.conf', $section);
-        $config = $this->getConfigVars();
-
-        // If configuration says cache is enabled forward this to smarty object
-        if (array_key_exists('caching', $config) && $config['caching'] == true) {
-            // retain current cache lifetime for each specific display call
-            $this->setCaching(SMARTY::CACHING_LIFETIME_SAVED);
-
-            if (!array_key_exists('cache_lifetime', $config)
-                || empty($config['cache_lifetime'])
-            ) {
-                $config['cache_lifetime'] = 86400;
-            }
-
-            $this->setCacheLifetime($config['cache_lifetime']);
-        }
-    }
-
-    /**
-     * Registers the required smarty plugins.
-     */
-    public function registerCustomPlugins()
-    {
-        $this->addFilter("output", "ads_generator");
-        $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "comscore");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "generate_fb_admin_tag");
-        $this->addFilter("output", "generate_fb_pages_tag");
-        $this->addFilter("output", "google_analytics");
-        $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "ojd");
-        $this->addFilter("output", "piwik");
-        $this->addFilter("output", "ads_scripts");
-        $this->addFilter("output", "meta_amphtml");
     }
 }

@@ -12,10 +12,10 @@ class TemplateManager extends Template
     /**
      * Registers the required smarty plugins.
      */
-    public function registerCustomPlugins()
+    protected function registerCustomPlugins()
     {
-        $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "canonical_url");
+        $this->addFilter('output', 'js_includes');
+        $this->addFilter('output', 'css_includes');
+        $this->addFilter('output', 'canonical_url');
     }
 }
