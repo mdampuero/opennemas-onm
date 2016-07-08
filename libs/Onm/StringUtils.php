@@ -293,9 +293,9 @@ class StringUtils
     public static function getTitle($title, $useStopList = true, $delimiter = '-')
     {
         $titule = '';
+        $title = self::normalize($title);
         $title = self::toAscii($title);
 
-        // $title = self::normalizeName($title);
         $title = self::clearSpecialChars($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
         $title = trim($title);
