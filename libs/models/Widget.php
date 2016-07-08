@@ -291,7 +291,7 @@ class Widget extends Content
     private function renderletSmarty()
     {
         $resource = 'string:' . $this->content;
-        $wgtTpl = new Template(TEMPLATE_USER);
+        $wgtTpl = getService('core.template');
 
         // no caching
         $wgtTpl->caching = 0;

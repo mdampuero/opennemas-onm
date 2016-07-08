@@ -345,7 +345,7 @@ class Opinion extends Content
      **/
     public function render($params)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
         if ((int) $this->type_opinion == 1) {
             $this->author_name_slug = 'editorial';

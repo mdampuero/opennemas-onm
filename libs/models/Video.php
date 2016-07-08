@@ -547,9 +547,7 @@ class Video extends Content
      **/
     public function render($params)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = getService('core.template');
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
