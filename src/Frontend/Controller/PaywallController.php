@@ -208,10 +208,10 @@ class PaywallController extends Controller
             $token = $setECResponse->Token;
 
             // storing in session to use in DoExpressCheckout
-            $_SESSION['paywall_transaction']   = array(
+            $request->getSession()->set('paywall_transaction', [
                 'plan'  => $selectedPlan,
                 'token' => $token,
-            );
+            ]);
 
             $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
             return $this->redirect($paypalUrl);
@@ -248,11 +248,8 @@ class PaywallController extends Controller
         $paywallSettings = s::get('paywall_settings');
 
         // Some sanity checks before continue with the payment
-        if (is_array($_SESSION)
-            && (
-                !array_key_exists('paywall_transaction', $_SESSION)
-                || $token != $_SESSION['paywall_transaction']['token']
-            )
+        if (empty($request->getSession()->get('paywall_transaction'))
+            || $token != $request->getSession()->get('paywall_transaction')['token']
         ) {
             return $this->render(
                 'paywall/payment_error.tpl',
@@ -310,7 +307,7 @@ class PaywallController extends Controller
 
         $orderTotal = new BasicAmountType();
         $orderTotal->currencyID = $paywallSettings['money_unit'];
-        $orderTotal->value      = $_SESSION['paywall_transaction']['plan']['price'];
+        $orderTotal->value      = $request->getSession()->get('paywall_transaction')['plan']['price'];
 
         $paymentDetails = new PaymentDetailsType();
         $paymentDetails->OrderTotal = $orderTotal;
@@ -369,7 +366,7 @@ class PaywallController extends Controller
                 )
             );
 
-            $planTime = strtolower($_SESSION['paywall_transaction']['plan']['time']);
+            $planTime = strtolower($request->getSession()->get('paywall_transaction')['plan']['time']);
 
             $newUserSubscriptionDate = new \DateTime();
             $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
@@ -378,7 +375,7 @@ class PaywallController extends Controller
             $user = new \User($this->getUser()->id);
 
             $user->addSubscriptionLimit($newUserSubscriptionDate);
-            unset($_SESSION['paywall_transaction']);
+            $request->getSession()->set('paywall_transaction', null);
 
             return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
         } elseif ($DoECResponse->Errors[0]->ErrorCode == '11607') {
@@ -407,8 +404,8 @@ class PaywallController extends Controller
         $paywallSettings = s::get('paywall_settings');
 
         // Some sanity checks before continue with the payment
-        if (!array_key_exists('paywall_transaction', $_SESSION)
-            || $token != $_SESSION['paywall_transaction']['token']
+        if (empty($request->getSession()->get('paywall_transaction'))
+            || $token != $request->getSession()->get('paywall_transaction')['token']
         ) {
             return $this->render(
                 'paywall/payment_error.tpl',
@@ -451,13 +448,13 @@ class PaywallController extends Controller
         $payerName       = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->FirstName;
         $payerLastName   = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->LastName;
         $currencyID      = $paywallSettings['money_unit'];
-        $price           = $_SESSION['paywall_transaction']['plan']['price'];
-        $planDescription = $_SESSION['paywall_transaction']['plan']['description'];
-        $planPeriod      = strtolower($_SESSION['paywall_transaction']['plan']['time']);
+        $price           = $request->getSession()->get('paywall_transaction')['plan']['price'];
+        $planDescription = $request->getSession()->get('paywall_transaction')['plan']['description'];
+        $planPeriod      = strtolower($request->getSession()->get('paywall_transaction')['plan']['time']);
 
         // Check if is an activation
-        if (isset($_SESSION['paywall_transaction']['plan']['paywallTimeLimit'])) {
-            $timeLimit = $_SESSION['paywall_transaction']['plan']['paywallTimeLimit'];
+        if (isset($request->getSession()->get('paywall_transaction')['plan']['paywallTimeLimit'])) {
+            $timeLimit = $request->getSession()->get('paywall_transaction')['plan']['paywallTimeLimit'];
         } else {
             $timeLimit = false;
         }
@@ -491,7 +488,7 @@ class PaywallController extends Controller
         // Regular payment period for this schedule which takes mandatory params
         $paymentBillingPeriod =  new BillingPeriodDetailsType();
         $paymentBillingPeriod->BillingFrequency = '1';
-        $paymentBillingPeriod->BillingPeriod = $_SESSION['paywall_transaction']['plan']['time'];
+        $paymentBillingPeriod->BillingPeriod = $request->getSession()->get('paywall_transaction')['plan']['time'];
         $paymentBillingPeriod->Amount = new BasicAmountType($currencyID, $price);
 
         // Describes the recurring payments schedule, including the regular
@@ -628,11 +625,13 @@ class PaywallController extends Controller
     }
 
     /**
-     * Activate the canceled recurring payment for paywall subscription
+     * Activate the canceled recurring payment for paywall subscription.
      *
-     * @return Response the response object
-     **/
-    public function activateRecurringPaymentAction()
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function activateRecurringPaymentAction(Request $request)
     {
         // Get recurring profile ID for this user
         $user = new \User($this->getUser()->id);
@@ -758,10 +757,10 @@ class PaywallController extends Controller
             if ($setECResponse->Ack == 'Success') {
                 $token = $setECResponse->Token;
 
-                $_SESSION['paywall_transaction']   = array(
+                $request->getSession()->set('paywall_transaction', [
                     'plan'  => $selectedPlan,
                     'token' => $token,
-                );
+                ]);
 
                 $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
                 return $this->redirect($paypalUrl);
