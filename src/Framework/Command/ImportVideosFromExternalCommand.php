@@ -55,6 +55,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        throw new \Exception('I am using the old Youtube API. Please, update me.');
+
         $start = time();
 
         // Get arguments
