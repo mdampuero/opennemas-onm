@@ -1,9 +1,8 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,30 +19,9 @@ class Templating
     public $container;
 
     /**
-     * The frontend template engine
+     * Initializes the Templating.
      *
-     * @var string
-     */
-    private $frontendTemplateEngine;
-
-    /**
-     * The backend template engine
-     *
-     * @var string
-     */
-    private $backendTemplateEngine;
-
-    /**
-     * The manage template engine
-     *
-     * @var string
-     */
-    private $managerTemplateEngine;
-
-    /**
-     * Initializes the templating.
-     *
-     * @param Container $container The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
@@ -51,10 +29,10 @@ class Templating
     }
 
     /**
-     * Bridge method calls to the proper Template engine
+     * Redirects function calls to the right Template service.
      *
      * @param string $method The method name.
-     * @param array  $args   The array of method arguments.
+     * @param array  $params The method parameters.
      *
      * @return mixed The template engine response.
      */
@@ -62,16 +40,15 @@ class Templating
     {
         $bundleName = $this->getBundleName();
 
-        if ($method == 'fetch' && $this->container->has('debug.stopwatch')) {
+        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
             $stopwatch = $this->container->get('debug.stopwatch');
             $stopwatch->start("template ({$bundleName} {$params[0]})");
         }
 
         $template = $this->getTemplateObject($bundleName);
+        $response = call_user_func_array([ $template, $method ], $params);
 
-        $response = call_user_func_array(array($template, $method), $params);
-
-        if ($method == 'fetch' && $this->container->has('debug.stopwatch')) {
+        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
             $stopwatch = $this->container->get('debug.stopwatch');
             $stopwatch->stop("template ({$bundleName} {$params[0]})");
         }
@@ -80,47 +57,35 @@ class Templating
     }
 
     /**
-     * Returns the bundle name from the matched controller
+     * Returns the bundle name from the matched controller.
      *
      * @return string The bundle name.
      */
-    public function getBundleName()
+    protected function getBundleName()
     {
         $controller = $this->container->get('request')->get('_controller');
         $controllerNameParts = explode('\\', $controller);
 
-        return  $controllerNameParts[0];
+        return $controllerNameParts[0];
     }
 
     /**
-     * Returns the proper Template object for a given module name
+     * Returns the template service basing on the module name.
      *
      * @param string $module The module name.
      *
-     * @return mixed The template object.
+     * @return mixed The template service.
      */
-    public function getTemplateObject($module)
+    protected function getTemplateObject($module)
     {
-        if ($module == 'Manager') {
-            if (!isset($this->managerTemplateEngine)) {
-                $this->managerTemplateEngine = $this->container
-                    ->get('core.template.manager');
-            }
-            $template = $this->managerTemplateEngine;
-        } elseif ($module == 'Backend' || $module == 'BackendWebService') {
-            if (!isset($this->backendTemplateEngine)) {
-                $this->backendTemplateEngine = $this->container
-                    ->get('core.template.admin');
-            }
-            $template = $this->backendTemplateEngine;
-        } else {
-            if (!isset($this->frontendTemplateEngine)) {
-                $this->frontendTemplateEngine = $this->container
-                    ->get('core.template');
-            }
-            $template = $this->frontendTemplateEngine;
+        if ($module === 'Manager' || $module === 'ManagerWebService') {
+            return $this->container->get('core.template.manager');
         }
 
-        return $template;
+        if ($module === 'Backend' || $module === 'BackendWebService') {
+            return $this->container->get('core.template.admin');
+        }
+
+        return $this->container->get('core.template');
     }
 }
