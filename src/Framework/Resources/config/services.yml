@@ -309,3 +309,9 @@ services:
     core.template.manager:
         class: TemplateManager
         arguments: [ '@service_container' ]
+
+    core.listener.annotation.template:
+        class:     Framework\EventListener\TemplateAnnotationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
