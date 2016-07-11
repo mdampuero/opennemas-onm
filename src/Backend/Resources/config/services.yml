@@ -18,6 +18,6 @@ services:
         class:     %onm_user_provider.class%
         arguments: [ '@cache', '@instance_manager', '@user_repository' ]
     check_module_access:
-        class:     Backend\EventListener\AnnotationListener
+        class:     Backend\EventListener\ModuleAnnotationListener
         arguments: [ '@router', '@annotation_reader' ]
         tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]

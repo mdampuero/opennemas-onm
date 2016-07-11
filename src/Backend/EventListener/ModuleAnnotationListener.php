@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 /**
  * Initializes the controller before it handles the request.
  */
-class AnnotationListener
+class ModuleAnnotationListener
 {
     private $reader;
 
