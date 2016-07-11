@@ -83,7 +83,7 @@ class UserListener implements EventSubscriberInterface
             $token = $this->context->getToken();
             $user = $token->getUser();
 
-            $user = $this->provider->loadUserByUsername($user->getUsername());
+            $user = $this->provider->loadUserByUsername($user->email);
             $user->eraseCredentials();
             $token->setUser($user);
 
