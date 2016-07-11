@@ -55,7 +55,7 @@ function smarty_function_dynamic_image($params, &$smarty)
     }
 
     if ($params['data-src'] == 'lazyload') {
-        $output = "<img src=\"/assets/images/lazy-bg.jpg\" data-src=\"{$resource}\" {$properties}>";
+        $output = "<img class=\"lazy\" src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
     } else {
         $output = "<img src=\"{$resource}\" {$properties}>";
     }
