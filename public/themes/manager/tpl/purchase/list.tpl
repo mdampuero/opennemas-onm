@@ -291,7 +291,10 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('name')">
-                [% item.client.last_name %], [% item.client.first_name %]
+                <span ng-if="item.client">
+                  [% item.client.last_name %], [% item.client.first_name %]
+                </span>
+                <i ng-if="!item.client">{t}No information{/t}</i>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}

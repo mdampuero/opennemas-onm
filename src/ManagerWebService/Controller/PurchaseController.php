@@ -269,7 +269,9 @@ class PurchaseController extends Controller
 
         // Clean purchases
         foreach ($purchases as &$purchase) {
-            $purchase->client = $purchase->client->getData();
+            if (!empty($purchase->client)) {
+                $purchase->client = $purchase->client->getData();
+            }
 
             $ids[]    = $purchase->instance_id;
             $purchase = $purchase->getData();
