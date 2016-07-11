@@ -45,16 +45,20 @@ function smarty_function_dynamic_image($params, &$smarty)
         $resource = $params['site_url'].$resource;
     }
 
+    $lazyload = ($params['data-src'] == 'lazyload');
+
     unset($params['src']);
     unset($params['base_url']);
     unset($params['transform']);
     unset($params['site_url']);
+    unset($params['lazyload']);
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    if ($params['data-src'] == 'lazyload') {
+
+    if ($lazyload) {
         $output = "<img class=\"lazy\" src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
     } else {
         $output = "<img src=\"{$resource}\" {$properties}>";
