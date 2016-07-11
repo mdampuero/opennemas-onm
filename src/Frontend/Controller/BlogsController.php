@@ -39,12 +39,11 @@ class BlogsController extends Controller
         $page = $request->query->getDigits('page', 1);
 
         // Setup view layer
-        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
             $authors = array();
@@ -148,12 +147,11 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', $slug, $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
             $itemsPerPage = s::get('items_per_page');
@@ -273,7 +271,6 @@ class BlogsController extends Controller
         }
 
         // Setup view
-        $this->view = $this->get('core.template');
         $this->view->setConfig('opinion');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
@@ -281,7 +278,7 @@ class BlogsController extends Controller
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $blog->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
             $this->view->assign('contentId', $blog->id);

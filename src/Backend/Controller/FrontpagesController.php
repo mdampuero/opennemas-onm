@@ -396,9 +396,9 @@ class FrontpagesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $categoryName        = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->view          = $this->get('core.template');
-        $this->view->caching = false;
+        $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->view   = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $this->view->assign(
             array(

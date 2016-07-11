@@ -31,21 +31,18 @@ class AssetController extends Controller
      * Description of the action
      *
      * @return Response the response object
-     **/
+     * @Template(name="core.template.admin")
+     */
     public function imageAction(Request $request)
     {
-        $this->view = $this->get('core.template.admin');
         $parameters = $request->query->get('parameters');
-        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
-
         $parameters = explode(',', urldecode($parameters));
-
-        $method = array_shift($parameters);
+        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
+        $method     = array_shift($parameters);
 
         if (file_exists($path)) {
             $imagine = new \Imagine\Imagick\Imagine();
-
-            $image = $imagine->open($path);
+            $image   = $imagine->open($path);
 
             $imageFormat = strtolower($image->getImagick()->getImageFormat());
             $imageSize   = $image->getSize();
@@ -250,12 +247,11 @@ class AssetController extends Controller
      **/
     public function globalCssAction(Request $request)
     {
-        $this->view = $this->get('core.template');
         $this->view->setConfig('frontpages');
 
         $cacheID = 'css|global';
 
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
         ) {
             $ccm = \ContentCategoryManager::get_instance();

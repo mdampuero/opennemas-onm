@@ -39,8 +39,6 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = $this->get('core.template');
-
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
@@ -97,7 +95,7 @@ class AlbumsController extends Controller
 
         // Don't execute the action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
@@ -193,7 +191,7 @@ class AlbumsController extends Controller
         $itemsPerPage = 8;
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $album->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
             $album->with_comment = 1;

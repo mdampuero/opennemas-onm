@@ -35,7 +35,6 @@ class NewStandController extends Controller
      **/
     public function init()
     {
-        $this->view = $this->get('core.template');
         $this->view->setConfig('kiosko');
 
         $this->cm = new \ContentManager();
@@ -72,7 +71,7 @@ class NewStandController extends Controller
             $cache_date = $year.$month;
             $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
-            if (($this->view->caching == 0)
+            if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
@@ -115,7 +114,7 @@ class NewStandController extends Controller
             $cache_date = $year.$month.$day;
             $cacheID    = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko     = array();
-            if (($this->view->caching == 0)
+            if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $date = "$year-$month-$day";
@@ -135,7 +134,7 @@ class NewStandController extends Controller
             $cacheDate = $year.$month;
             $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
             $kiosko    = array();
-            if (($this->view->caching == 0)
+            if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
@@ -203,7 +202,7 @@ class NewStandController extends Controller
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaper->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
             $format_date = strtotime($epaper->date);

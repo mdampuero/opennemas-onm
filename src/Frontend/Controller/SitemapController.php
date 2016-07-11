@@ -37,7 +37,6 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', '');
 
@@ -55,11 +54,10 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'web');
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents
@@ -89,11 +87,10 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'news');
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents
@@ -143,11 +140,10 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'image');
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Set sql filters for articles with inner image
@@ -192,11 +188,10 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'video');
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents

@@ -1,23 +1,17 @@
 <?php
 /**
- * Handles the actions for searches
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for searches
@@ -26,19 +20,17 @@ use Onm\Settings as s;
  **/
 class SearchController extends Controller
 {
-
     /**
-     * Displays the search results with the google algorithm
+     * Displays the search results with the google algorithm.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function googleAction()
     {
         $ads = \Frontend\Controller\ArticlesController::getAds();
 
-        $this->view = $this->get('core.template');
         return $this->render(
             'search/search.tpl',
             array(
@@ -48,12 +40,12 @@ class SearchController extends Controller
     }
 
     /**
-     * Displays the search results with the internal algorithm
+     * Displays the search results with the internal algorithm.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function internalAction()
     {
         // TODO: Implement

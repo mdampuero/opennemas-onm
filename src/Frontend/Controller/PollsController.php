@@ -36,8 +36,6 @@ class PollsController extends Controller
      **/
     public function init()
     {
-
-        $this->view = $this->get('core.template');
         $this->cm   = new \ContentManager();
 
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -85,7 +83,7 @@ class PollsController extends Controller
 
         // Don't execute action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
             if (isset($this->category) && !empty($this->category)) {
@@ -172,7 +170,7 @@ class PollsController extends Controller
 
         $this->view->setConfig('poll-inner');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $poll->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
             $items         = $poll->items;

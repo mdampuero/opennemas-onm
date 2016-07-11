@@ -60,8 +60,7 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            $this->view = $this->get('core.template');
-            $output = $this->renderView(
+            return $this->render(
                 'comments/loader.tpl',
                 array(
                     'total'          => $total,
@@ -73,12 +72,9 @@ class CommentsController extends Controller
                     'count'          => $total,
                 )
             );
-
-            $response = new Response($output, 200);
-        } else {
-            $response = new Response('', 404);
         }
-        return $response;
+
+        return new Response('', 404);
     }
 
     /**
@@ -111,7 +107,6 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            $this->view = $this->get('core.template');
             $contents = $this->renderView(
                 'comments/partials/comment_element.tpl',
                 array(

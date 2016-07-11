@@ -35,15 +35,10 @@ class SubscriptionsController extends Controller
     {
         $ads = $this->getAds();
 
-        $this->view = $this->get('core.template');
-        $this->view->assign(
-            [
-                'advertisements'  => $ads,
-                'actual_category' => 'newsletter'
-            ]
-        );
-
-        return $this->render('static_pages/subscription.tpl');
+        return $this->render('static_pages/subscription.tpl', [
+            'advertisements'  => $ads,
+            'actual_category' => 'newsletter'
+        ]);
     }
 
     /**
@@ -93,7 +88,6 @@ class SubscriptionsController extends Controller
             }
         }
 
-        $this->view = $this->get('core.template');
         return $this->render(
             'static_pages/subscription.tpl',
             [

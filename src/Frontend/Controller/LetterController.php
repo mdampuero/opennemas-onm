@@ -42,11 +42,10 @@ class LetterController extends Controller
         }
         $page = $request->query->getDigits('page', 1);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
             $itemsPerPage = 12;
@@ -125,7 +124,7 @@ class LetterController extends Controller
         $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
             $letter->with_comment = 1;
@@ -165,7 +164,6 @@ class LetterController extends Controller
      **/
     public function showFormAction()
     {
-        $this->view = $this->get('core.template');
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
@@ -181,8 +179,6 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $this->view = $this->get('core.template');
-
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =

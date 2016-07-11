@@ -52,16 +52,6 @@ use Onm\Settings as s;
 class PaywallController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = $this->get('core.template');
-    }
-
-    /**
      * Shows the list of paywall plans available to buy
      *
      * @param Request $request the request object

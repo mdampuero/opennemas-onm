@@ -52,14 +52,13 @@ class ArchiveController extends Controller
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $page  = $request->query->getDigits('page', 1);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('newslibrary');
 
         $itemsPerPage = 20;
         $date = "{$year}-{$month}-{$day}";
 
         $cacheID = $this->view->generateCacheId($date, '', $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
             $er = getService('entity_repository');

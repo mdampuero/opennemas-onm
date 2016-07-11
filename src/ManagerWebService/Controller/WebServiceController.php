@@ -232,8 +232,6 @@ class WebServiceController extends Controller
 
     private function sendErrorMail($emails, $instance, $exception)
     {
-        $this->view = $this->get('core.template.manager');
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($emails['from_mail'])
@@ -256,8 +254,6 @@ class WebServiceController extends Controller
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
-        $this->view = $this->get('core.template.manager');
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
@@ -282,8 +278,6 @@ class WebServiceController extends Controller
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
-        $this->view = $this->get('core.template.manager');
-
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
 
         // Prepare message

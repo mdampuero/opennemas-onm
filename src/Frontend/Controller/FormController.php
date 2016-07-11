@@ -39,15 +39,10 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = $this->get('core.template');
-
-        return $this->render(
-            'static_pages/form.tpl',
-            array(
-                'advertisements' => $this->getAds(),
-                'x-tags'         => 'frontpage-form',
-            )
-        );
+        return $this->render('static_pages/form.tpl', [
+            'advertisements' => $this->getAds(),
+            'x-tags'         => 'frontpage-form',
+        ]);
     }
 
     /**
@@ -62,8 +57,6 @@ class FormController extends Controller
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
-
-        $this->view = $this->get('core.template');
 
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');

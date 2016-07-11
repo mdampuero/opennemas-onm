@@ -49,7 +49,6 @@ class StaticPagesController extends Controller
 
         $ads = $this->getAds();
 
-        $this->view = $this->get('core.template');
         return $this->render(
             'static_pages/statics.tpl',
             array(

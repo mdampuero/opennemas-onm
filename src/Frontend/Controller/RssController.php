@@ -36,13 +36,12 @@ class RssController extends Controller
      **/
     public function indexAction()
     {
-        $this->view = $this->get('core.template');
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
         \Frontend\Controller\ArticlesController::getAds();
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
             $ccm = \ContentCategoryManager::get_instance();
@@ -76,11 +75,10 @@ class RssController extends Controller
         $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
         $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Set total number of contents
@@ -185,11 +183,10 @@ class RssController extends Controller
         $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $total = 10;
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId('rss|author', '', $slug);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
@@ -251,14 +248,13 @@ class RssController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = $this->get('core.template');
         $this->view->setConfig('rss');
 
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId('instantArticles', '', 'RSS');
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/fb_instant_articles.tpl', $cacheID))
         ) {
             // Get last articles contents

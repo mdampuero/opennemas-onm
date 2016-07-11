@@ -56,7 +56,6 @@ class ArticlesController extends Controller
         }
 
         // Load config
-        $this->view = $this->get('core.template');
         $this->view->setConfig('articles');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
@@ -73,7 +72,7 @@ class ArticlesController extends Controller
         $this->view->assign('layoutFile', $layoutFile);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
             // Categories code -------------------------------------------
@@ -174,7 +173,6 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Setup view
-        $this->view = $this->get('core.template');
         $this->view->setConfig('articles');
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 

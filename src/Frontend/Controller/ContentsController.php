@@ -58,7 +58,6 @@ class ContentsController extends Controller
             $this->paywallHook($content);
         }
 
-        $this->view = $this->get('core.template');
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
@@ -104,8 +103,6 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-
-        $this->view = $this->get('core.template');
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
@@ -208,9 +205,8 @@ class ContentsController extends Controller
                 return new Response($content, $httpCode);
             }
 
-            $tplMail = $this->get('core.template');
-            $tplMail->caching = 0;
-            $tplMail->assign(
+            $this->view->setCaching(0);
+            $this->view->assign(
                 array(
                     'content'     => $content,
                     'senderName'  => $senderName,
@@ -218,8 +214,8 @@ class ContentsController extends Controller
                 )
             );
 
-            $mailBody      = $tplMail->fetch('email/send_to_friend.tpl');
-            $mailBodyPlain = $tplMail->fetch('email/send_to_friend_just_text.tpl');
+            $mailBody      = $this->renderView('email/send_to_friend.tpl');
+            $mailBodyPlain = $this->renderView('email/send_to_friend_just_text.tpl');
 
             //  Build the message
             $message = \Swift_Message::newInstance();
@@ -278,7 +274,6 @@ class ContentsController extends Controller
                 $content = new \Content($contentID);
             }
 
-            $this->view = $this->get('core.template');
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(

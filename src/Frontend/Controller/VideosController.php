@@ -35,7 +35,6 @@ class VideosController extends Controller
      **/
     public function init()
     {
-        $this->view = $this->get('core.template');
         $this->view->setConfig('video');
 
         $this->page          = $this->request->query->getDigits('page', 1);
@@ -77,7 +76,7 @@ class VideosController extends Controller
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
@@ -244,7 +243,7 @@ class VideosController extends Controller
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
@@ -327,7 +326,7 @@ class VideosController extends Controller
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $video->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
             // Load Video and categories

@@ -36,15 +36,12 @@ class AdvertisementController extends Controller
     public function getAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-
         $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
 
         if (!is_object($advertisement)) {
             throw new ResourceNotFoundException();
         }
 
-        // Returns the HTML for the add and a header to varnish
-        $this->view = $this->get('core.template');
         return $this->render(
             'ads/advertisement.tpl',
             [
