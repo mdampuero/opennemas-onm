@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var $defer, loaded = false;
+
   /**
    * @ngdoc module
    * @name  onm.editor
@@ -265,7 +267,7 @@
          * @return {Object} The current object.
          */
         this.$get = function () {
-            return this;
+          return this;
         };
       }
     ])
@@ -289,56 +291,88 @@
      * <textarea onm-editor onm-editor-preset="simple" ng-model="description">
      * </textarea>
      */
-    .directive('onmEditor', ['Editor',
-      function (Editor) {
+    .directive('onmEditor', ['Editor', '$q', '$timeout',
+      function (Editor, $q, $timeout) {
         return {
           restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-          scope: {
-            ngModel: '='
-          },
-          link: function (scope, element, attrs) {
+          scope: false,
+          require: ['ngModel', '^?form'],
+          link: function (scope, element, attrs, ctrls) {
+            var ngModel    = ctrls[0];
+            var form       = ctrls[1] || null;
+            var EMPTY_HTML = '<p></p>';
             var isTextarea = element[0].tagName.toLowerCase() === 'textarea';
-            var loaded = false;
-
-            var options = Editor.configure(attrs.onmEditorPreset);
+            var data       = [];
+            var isReady    = false;
 
             if (!isTextarea) {
               element.attr('contenteditable', true);
             }
 
             var onLoad = function () {
-              var instance = Editor.init(isTextarea, element[0], options);
-              var blocked = false;
+              var options = Editor.configure(attrs.onmEditorPreset);
+              var instance = (isTextarea) ? CKEDITOR.replace(element[0], options) : CKEDITOR.inline(element[0], options),
+              configLoaderDef = $q.defer();
 
-              if (attrs.ngModel && scope.ngModel !== 'undefined') {
-                instance.on('key', function() {
-                  instance.fire('change');
-                });
+              element.bind('$destroy', function () {
+                if (instance && CKEDITOR.instances[instance.name]) {
+                  CKEDITOR.instances[instance.name].destroy();
+                }
+              });
 
-                instance.on('change', function() {
-                  if (!blocked) {
-                    scope.ngModel = instance.getData();
-
-                    if (scope.$root.$$phase != '$apply' &&
-                        scope.$root.$$phase != '$digest') {
-                      scope.$apply();
-                    }
-                  }
-                });
-
-                // Updates the CKEditor content when model changes
-                scope.$watch('ngModel', function(nv, ov) {
-                  if (nv === ov) {
-                    return;
+              var setModelData = function (setPristine) {
+                var data = instance.getData();
+                if (data === '') {
+                  data = null;
+                }
+                $timeout(function () { // for key up event
+                  if (setPristine !== true || data !== ngModel.$viewValue) {
+                    ngModel.$setViewValue(data);
                   }
 
-                  if (nv !== instance.getData()) {
-                    blocked = true;
-                    instance.setData(nv);
-                    blocked = false;
+                  if (setPristine === true && form) {
+                    form.$setPristine();
                   }
+                }, 0);
+              };
+
+              var onUpdateModelData = function (setPristine) {
+                if (!data.length) {
+                  return;
+                }
+
+                var item = data.pop() || EMPTY_HTML;
+                isReady = false;
+                instance.setData(item, function () {
+                  setModelData(setPristine);
+                  isReady = true;
                 });
-              }
+              };
+
+              instance.on('pasteState', setModelData);
+              instance.on('change', setModelData);
+              instance.on('blur', setModelData);
+              //instance.on('key', setModelData); // for source view
+
+              instance.on('instanceReady', function () {
+                scope.$broadcast('ckeditor.ready');
+                scope.$apply(function () {
+                  onUpdateModelData(true);
+                });
+
+                instance.document.on('keyup', setModelData);
+              });
+
+              instance.on('customConfigLoaded', function () {
+                configLoaderDef.resolve();
+              });
+
+              ngModel.$render = function () {
+                data.push(ngModel.$viewValue);
+                if (isReady) {
+                  onUpdateModelData();
+                }
+              };
             };
 
             if (CKEDITOR.status === 'loaded') {
@@ -353,5 +387,28 @@
           }
         };
       }
-    ]);
+    ])
+
+    // Initialize and check CKEditor on application run.
+    .run(['$q', '$timeout', function ($q, $timeout) {
+      $defer = $q.defer();
+
+      if (angular.isUndefined(CKEDITOR)) {
+        throw new Error('CKEDITOR not found');
+      }
+
+      CKEDITOR.disableAutoInline = true;
+
+      function checkLoaded() {
+        if (CKEDITOR.status === 'loaded') {
+          loaded = true;
+          $defer.resolve();
+        } else {
+          checkLoaded();
+        }
+      }
+
+      CKEDITOR.on('loaded', checkLoaded);
+      $timeout(checkLoaded, 100);
+    }]);
 })();
