@@ -45,8 +45,10 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: Remove ASAP
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid']   = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $logger = $this->getContainer()->get('logger');
         $dbConn = $this->getContainer()->get('db_conn');

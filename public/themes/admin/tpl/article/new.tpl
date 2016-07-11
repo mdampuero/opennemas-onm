@@ -263,26 +263,30 @@
                       </div>
                     </div>
                   {/acl}
-                  {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                    <div class="form-group">
-                      <label class="form-label" for="fk_author">
-                        {t}Author{/t}
-                      </label>
-                      <div class="controls">
-                        <select id="fk_author" name="fk_author">
-                          {html_options options=$authors selected=$article->fk_author}
-                        </select>
-                      </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fk_author">
+                      {t}Author{/t}
+                    </label>
+                    <div class="controls">
+                      {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                        <div class="form-group">
+                          <div class="controls">
+                            <select id="fk_author" name="fk_author">
+                              {html_options options=$authors selected=$article->fk_author}
+                            </select>
+                          </div>
+                        </div>
+                      {aclelse}
+                        {if !isset($article->fk_author) || empty($article->fk_author)}
+                          {$smarty.session._sf2_attributes.user->name}
+                          <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
+                        {else}
+                          {$authors[$article->fk_author]}
+                          <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                        {/if}
+                      {/acl}
                     </div>
-                  {aclelse}
-                    {if !isset($article->fk_author)}
-                      {$smarty.session.realname}
-                      <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
-                    {else}
-                      {$authors[$article->fk_author]}
-                      <input type="hidden" name="fk_author" value="{$article->fk_author}">
-                    {/if}
-                  {/acl}
+                  </div>
                   <div class="form-group">
                     <label class="form-label" for="category">
                       {t}Category{/t}

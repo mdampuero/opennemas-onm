@@ -136,17 +136,17 @@
               <label for="fk_author" class="form-label">{t}Author{/t}</label>
               <div class="controls">
                 {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                <select name="fk_author" id="fk_author">
-                  {html_options options=$authors selected=$video->fk_author}
-                </select>
+                  <select name="fk_author" id="fk_author">
+                    {html_options options=$authors selected=$video->fk_author}
+                  </select>
                 {aclelse}
-                {if !isset($video->fk_author)}
-                {$smarty.session.realname}
-                <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
-                {else}
-                {$authors[$video->fk_author]}
-                <input type="hidden" name="fk_author" value="{$video->fk_author}">
-                {/if}
+                  {if !isset($video->fk_author) || empty($video->fk_author)}
+                    {$smarty.session._sf2_attributes.user->name}
+                    <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
+                  {else}
+                    {$authors[$video->fk_author]}
+                    <input type="hidden" name="fk_author" value="{$video->fk_author}">
+                  {/if}
                 {/acl}
               </div>
             </div>

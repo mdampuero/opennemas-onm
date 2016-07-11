@@ -271,8 +271,8 @@ class Photo extends Content
             'height'              => $fileInformation->height,
             'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
-            'fk_user_last_editor' => $_SESSION['userid'],
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_user_last_editor' => getService('session')->get('user')->id,
+            'fk_publisher'        => getService('session')->get('user')->id,
         );
 
         if ($filePathInfo['extension'] != 'swf') {

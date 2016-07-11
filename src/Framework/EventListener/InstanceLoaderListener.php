@@ -33,14 +33,14 @@ class InstanceLoaderListener implements EventSubscriberInterface
      *
      * @var AbstractCache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * The instance manager.
      *
      * @var InstanceManager
      */
-    private $im;
+    protected $im;
 
     /**
      * The current instance.
@@ -54,20 +54,29 @@ class InstanceLoaderListener implements EventSubscriberInterface
      *
      * @var AbstractCache
      */
-    private $mcache;
+    protected $mcache;
+
+    /**
+     * The current session.
+     *
+     * @var Session
+     */
+    protected $session;
 
     /**
      * Initializes the instance loader.
      *
-     * @param InstanceManager $im     The instance manager.
-     * @param AbstractCache   $cache  The cache service.
-     * @param AbstractCache   $mcache The cache service for manager.
+     * @param Session         $session The current session.
+     * @param InstanceManager $im      The instance manager.
+     * @param AbstractCache   $cache   The cache service.
+     * @param AbstractCache   $mcache  The cache service for manager.
      */
-    public function __construct(InstanceManager $im, AbstractCache $cache, AbstractCache $mcache)
+    public function __construct($session, InstanceManager $im, AbstractCache $cache, AbstractCache $mcache)
     {
-        $this->im    = $im;
-        $this->cache = $cache;
-        $this->mcache = $mcache;
+        $this->im      = $im;
+        $this->cache   = $cache;
+        $this->mcache  = $mcache;
+        $this->session = $session;
 
         $this->mcache->setNamespace('manager');
     }
@@ -108,6 +117,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
         }
 
         $this->im->current_instance = $this->instance;
+        $this->session->set('instance', $this->instance);
 
         if (!$this->instance && !is_object($this->instance)) {
             throw new InstanceNotRegisteredException(_('Instance not found'));

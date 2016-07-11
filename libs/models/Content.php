@@ -497,8 +497,8 @@ class Content
             'position'            => (empty($data['position']))? 2: (int) $data['position'],
             'frontpage'           => (!isset($data['frontpage']) || empty($data['frontpage'])) ? 0: intval($data['frontpage']),
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : (int) $data['fk_author'],
-            'fk_publisher'        => (int) $_SESSION['userid'],
-            'fk_user_last_editor' => (int) $_SESSION['userid'],
+            'fk_publisher'        => (int) getService('session')->get('user')->id,
+            'fk_user_last_editor' => (int) getService('session')->get('user')->id,
             'in_home'             => (empty($data['in_home']))? 0: intval($data['in_home']),
             'favorite'            => (empty($data['favorite'])) ? 0: intval($data['favorite']),
             'available'           => (int) $data['content_status'],
@@ -575,7 +575,7 @@ class Content
         if (empty($data['fk_user_last_editor'])
             && !isset($data['fk_user_last_editor'])
         ) {
-            $data['fk_user_last_editor'] = $_SESSION['userid'];
+            $data['fk_user_last_editor'] = getService('session')->get('user')->id;
         }
 
         if (!isset($data['slug']) || empty($data['slug'])) {
@@ -607,7 +607,7 @@ class Content
             'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
             'favorite'       => (!isset($data['favorite'])) ? $this->favorite: $data['favorite'],
             'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? $this->fk_author : $data['fk_author'],
-            'fk_publisher'   => (empty($data['content_status']))? '' : $_SESSION['userid'],
+            'fk_publisher'   => (empty($data['content_status']))? '' : getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
             'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage: (int) $data['frontpage'],
             'in_home'        => (!isset($data['in_home'])) ? $this->in_home: (int) $data['in_home'],
@@ -779,14 +779,14 @@ class Content
                 'contents',
                 [
                     'in_litter'           => 1,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
             );
 
             $this->in_litter           = 1;
-            $this->fk_user_last_editor = $_SESSION['userid'];
+            $this->fk_user_last_editor = getService('session')->get('user')->id;
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -980,7 +980,7 @@ class Content
         }
 
         if ($lastEditor == null) {
-            $lastEditor = $_SESSION['userid'];
+            $lastEditor = getService('session')->get('user')->id;
         }
 
         try {
@@ -1100,7 +1100,7 @@ class Content
                 [
                     'content_status'      => 0,
                     'available'           => 0,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $this->id, ]
@@ -1208,7 +1208,7 @@ class Content
                 [
                     'content_status'      => $this->content_status,
                     'frontpage'           => $this->frontpage,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
@@ -1633,7 +1633,7 @@ class Content
 
             /* Notice log of this action */
             getService('logger')->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+                'User '.getService('session')->get('user')->username.' ('.getService('session')->get('user')->id.') has executed'
                 .' action Content::dropFromHomePageOfCategory '.$categoryName
                 .' an '.$this->content_type_name.' Id '.$pkContent
             );
@@ -1659,7 +1659,8 @@ class Content
             );
 
             getService('logger')->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                'User '.getService('session')->get('user')->username
+                .' ('.getService('session')->get('user')->id.') has executed '
                 .'action Drop from frontpage to content with ID id '.$this->id
             );
 

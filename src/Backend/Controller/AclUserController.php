@@ -93,31 +93,27 @@ class AclUserController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $session = $request->getSession();
-        $session->set(
+        $request->getSession()->set(
             '_security.backend.target_path',
             $this->generateUrl('admin_login_callback')
         );
 
         // User can modify his data
-        $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        if ($idRAW === 'me') {
-            $id = $_SESSION['userid'];
-        } else {
-            $id = $request->query->getDigits('id');
+        $id = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+
+        if ($id === 'me') {
+            $id = $this->getUser()->id;
         }
 
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editing other user information.
-        if (array_key_exists('userid', $_SESSION) && $id != $_SESSION['userid']) {
-            if (false === Acl::check('USER_UPDATE')) {
-                throw new AccessDeniedException();
-            }
+        if ($this->getUser()->id != $id && Acl::check('USER_UPDATE') === false) {
+            throw new AccessDeniedException();
         }
 
-        $ccm = new \ContentCategoryManager();
-
+        $ccm  = new \ContentCategoryManager();
         $user = $this->get('user_repository')->find($id);
+
         if (is_null($user->id)) {
             $request->getSession()->getFlashBag()->add(
                 'error',
@@ -242,7 +238,7 @@ class AclUserController extends Controller
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-        if ($userId != $_SESSION['userid']) {
+        if ($userId != $this->getUser()->id) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
@@ -318,9 +314,8 @@ class AclUserController extends Controller
                         $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                     }
 
-                    if ($user->id == $_SESSION['userid']) {
-                        $session = $request->getSession();
-                        $session->set('user_language', $meta['user_language']);
+                    if ($user->id == $this->getUser()->id) {
+                        $request->getSession()->set('user_language', $meta['user_language']);
                     }
 
                     // Clear caches
@@ -571,7 +566,7 @@ class AclUserController extends Controller
      **/
     public function setMetaAction(Request $request)
     {
-        $user = new \User($_SESSION['userid']);
+        $user = new \User($this->getUser()->id);
 
         foreach (array_keys($request->query) as $key) {
             if (!preg_match('@^_@', $key)) {

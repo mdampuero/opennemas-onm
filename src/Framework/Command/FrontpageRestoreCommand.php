@@ -45,8 +45,10 @@ EOF
         $databaseName = $input->getArgument('database');
         $category     = $input->getOption('category');
 
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $this->connection = $this->getContainer()->get('db_conn');
         $this->connection->selectDatabase($databaseName);

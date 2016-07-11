@@ -1075,30 +1075,6 @@ class ModuleManager
     }
 
     /**
-     * Returns true if a given module is activated or
-     * forward  if is not activated
-     *
-     * @param string $module the module canonical name.
-     *
-     * @return boolean true if module is activated, otherwise false
-     *
-     * @throws <b>ModuleException</b> If module is not available.
-     */
-    public static function checkActivatedOrForward($module = '')
-    {
-        try {
-            // Check if module exists
-            if (self::isActivated($module)) {
-                return true;
-            }
-        } catch (ModuleException $e) {
-            $_SESSION['error'] = $e->getMessage();
-            throw new AccessDeniedException();
-        }
-
-    }
-
-    /**
      * Check if a given module exists.
      *
      * @param string $moduleName the name of the module to check.

@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for the user profile
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -21,31 +16,22 @@ use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the user profile
- *
- * @package Frontend_Controllers
- **/
+ * Handles the actions for the user profile.
+ */
 class UserController extends Controller
 {
     /**
-     * Shows the user information
+     * Shows the user information.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function showAction()
     {
-        if (!is_array($_SESSION)
-            || (is_array($_SESSION) && !array_key_exists('userid', $_SESSION))
-            && (
-                is_array($_SESSION)
-                && !array_key_exists('userid', $_SESSION)
-                && empty($_SESSION['userid'])
-            )
-        ) {
+        if (empty($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        $user = new \User($_SESSION['userid']);
+        $user = new \User($this->getUser()->id);
         $user->getMeta();
 
         // Get current time
@@ -53,10 +39,10 @@ class UserController extends Controller
 
         // Get user orders
         $order = new \Order();
-        $userOrders = $order->find('user_id = '.$_SESSION['userid']);
+        $userOrders = $order->find('user_id = ' . $user->id);
 
         // Fetch paywall settings
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
         $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
@@ -73,15 +59,16 @@ class UserController extends Controller
 
 
     /**
-     * Handles the registration of a new user in frontend
+     * Handles the registration of a new user in frontend.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function registerAction(Request $request)
     {
         $this->view = new \Template(TEMPLATE_USER);
+        $sm = $this->get('setting_repository');
 
         $errors = [];
         if ('POST' == $request->getMethod()) {
@@ -146,7 +133,7 @@ class UserController extends Controller
 
                 $tplMail = new \Template(TEMPLATE_USER);
                 $tplMail->caching = 0;
-                $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
+                $mailSubject = sprintf(_('New user account in %s'), $sm->get('site_title'));
                 $mailBody = $tplMail->fetch(
                     'user/emails/register.tpl',
                     array(
@@ -168,7 +155,7 @@ class UserController extends Controller
                             ->setSubject($mailSubject)
                             ->setBody($mailBody, 'text/plain')
                             ->setTo($data['email'])
-                            ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                            ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
@@ -205,28 +192,28 @@ class UserController extends Controller
     }
 
     /**
-     * Updates the user data
+     * Updates the user data.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function updateAction(Request $request)
     {
-        if (!isset($_SESSION['userid'])) {
+        if (empty($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
         // Fetch user data and update
-        $user = $this->get('user_repository')->find($_SESSION['userid']);
+        $user = $this->get('user_repository')->find($this->getUser()->id);
 
         // Get variables from the user FORM an set some manually
-        $data['id']              = $_SESSION['userid'];
+        $data['id']              = $user->id;
         $data['username']        = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
         $data['name']            = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
         $data['email']           = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
         $data['password']        = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
-        $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
+        $data['passwordconfirm'] = $request->request->filter('password_verify', '', FILTER_SANITIZE_STRING);
         $data['sessionexpire']   = $user->sessionexpire;
         $data['type']            = $user->type;
         $data['activated']       = $user->activated;
@@ -266,12 +253,12 @@ class UserController extends Controller
     }
 
     /**
-     * Activates an user account given an token
+     * Activates an user account given an token.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function activateAction(Request $request)
     {
         // When user confirms registration from email
@@ -279,6 +266,7 @@ class UserController extends Controller
         $captcha  = '';
         $user     = new \User();
         $userData = $user->findByToken($token);
+        $sm       = $this->get('setting_repository');
 
         if ($userData) {
             $user->activateUser($userData->id);
@@ -292,12 +280,6 @@ class UserController extends Controller
 
                 // Set token to null
                 $user->updateUserToken($user->id, null);
-
-                $_SESSION['userid']           = $user->id;
-                $_SESSION['realname']         = $user->name;
-                $_SESSION['username']         = $user->username;
-                $_SESSION['email']            = $user->email;
-                $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
 
                 $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
                 $session = $request->getSession();
@@ -313,7 +295,7 @@ class UserController extends Controller
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
 
-            $mailSubject      = sprintf(_('Welcome to %s'), s::get('site_name'));
+            $mailSubject      = sprintf(_('Welcome to %s'), $sm->get('site_name'));
 
             $tplMail          = new \Template(TEMPLATE_USER);
             $mailBody         = $tplMail->fetch(
@@ -330,7 +312,7 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
 
             try {
@@ -360,13 +342,13 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the form for recovering the pass of a user and
-     * sends the mail to the user
+     * Shows the form for recovering the pass of a user and send the mail to the
+     * user.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function recoverPasswordAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
@@ -374,10 +356,12 @@ class UserController extends Controller
         }
 
         $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $sm    = $this->get('setting_repository');
 
         // Get user by email
         $user = new \User();
         $user->findByEmail($email);
+
 
         // If e-mail exists in DB
         if (!is_null($user->id)) {
@@ -390,7 +374,7 @@ class UserController extends Controller
             $tplMail = new \Template(TEMPLATE_USER);
             $tplMail->caching = 0;
 
-            $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
+            $mailSubject = sprintf(_('Password reminder for %s'), $sm->get('site_title'));
             $mailBody = $tplMail->fetch(
                 'user/emails/recoverpassword.tpl',
                 array(
@@ -405,7 +389,7 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
             try {
                 $mailer = $this->get('mailer');
@@ -438,12 +422,12 @@ class UserController extends Controller
     }
 
     /**
-     * Regenerates the pass for a user
+     * Regenerates the pass for a user.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function regeneratePasswordAction(Request $request)
     {
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -487,11 +471,10 @@ class UserController extends Controller
     }
 
     /**
-     * Generates the HTML for the user menu by ajax
+     * Generates the HTML for the user menu by ajax.
      *
-     *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function getUserMenuAction()
     {
         $this->view = new \Template(TEMPLATE_USER);
@@ -499,12 +482,12 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the author frontpage
+     * Shows the author frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function authorFrontpageAction(Request $request)
     {
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
@@ -595,12 +578,12 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the author frontpage from external source
+     * Shows the author frontpage from external source.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function extAuthorFrontpageAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -608,7 +591,7 @@ class UserController extends Controller
 
         // Get sync params
         $wsUrl = '';
-        $syncParams = s::get('sync_params');
+        $syncParams = $this->get('setting_repository')->get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
                 if (in_array($categoryName, $values['categories'])) {
@@ -625,12 +608,12 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the author frontpage
+     * Shows the author frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function frontpageAuthorsAction(Request $request)
     {
         $page         = $request->query->getDigits('page', 1);
@@ -700,12 +683,12 @@ class UserController extends Controller
     }
 
     /**
-     * Fetches advertisements for article inner
+     * Fetches advertisements for article inner.
      *
-     * @param string category the category identifier
+     * @param string category The category identifier.
      *
-     * @return void
-     **/
+     * @return The list of advertisement from positions ids.
+     */
     public static function getInnerAds($category = 0)
     {
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);

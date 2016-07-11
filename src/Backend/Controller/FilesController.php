@@ -270,7 +270,7 @@ class FilesController extends Controller
         if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
             error_log(sprintf(
                 'User %s tried to upload a not allowed file type %s (%s).',
-                $_SESSION['userid'],
+                $this->getUser()->id,
                 $uploadedFile->getClientOriginalExtension(),
                 $uploadedFile->getClientOriginalName()
             ));
@@ -312,7 +312,7 @@ class FilesController extends Controller
             'content_status' => 1,
             'description'    => $request->request->get('description', ''),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
         );
 
         // Move uploaded file
@@ -410,7 +410,7 @@ class FilesController extends Controller
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
         );
 
         if ($file->update($data)) {

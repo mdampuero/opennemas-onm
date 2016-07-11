@@ -47,8 +47,6 @@ class FrontpagesController extends Controller
     {
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
 
-        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', ['category' => $categoryId]);
-
         // Check if the user can access a frontpage from other category
         if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
             throw new AccessDeniedException();
@@ -251,7 +249,7 @@ class FrontpagesController extends Controller
             }
 
             $logger->info(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                'User '.$this->getUser()->name.' ('.$this->getUser()->id.') was failed '.$message.' to execute'
                 .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
             );
 
@@ -280,7 +278,7 @@ class FrontpagesController extends Controller
 
         // Notice log of this action
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            'User '.$this->getUser()->name.' ('.$this->getUser()->id.') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 

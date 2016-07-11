@@ -149,7 +149,7 @@ class Attachment extends Content
             return false;
         }
 
-        $data['pk_author'] = $_SESSION['userid'];
+        $data['pk_author'] = getService('session')->get('user')->id;
 
         // all the data is ready to save into the database,
         // so create the general entry for this content

@@ -81,7 +81,7 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
   {block name="body"}
     <div class="overlay"></div>
     <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
@@ -362,10 +362,10 @@
                     {/if}
                     <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
-                      {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
+                      {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$params.IMAGE_DIR image=true size="25"}
                     </div>
                     <span class="title">
-                      {$smarty.session.realname}
+                      {$smarty.session._sf2_attributes.user->name}
                     </span>
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
@@ -385,7 +385,7 @@
                     </li>
                     <li>
                       {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session.userid}/show" target="_blank">
+                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session._sf2_attributes.user->id}/show" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>

@@ -209,7 +209,7 @@ class ImagesController extends Controller
             return $this->redirect($this->generateUrl('admin_images'));
         }
         // $contents = $photo->isUsed($id);
-        $photo->delete($id, $_SESSION['userid']);
+        $photo->delete($id, $this->getUser()->id);
 
         return $this->redirect(
             $this->generateUrl(
