@@ -260,11 +260,6 @@ class NewsletterController extends Controller
     {
         $id         = (int) $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
-        $sessionId  = 'data-recipients-' . $newsletter->id;
-
-        if (!empty($request->getSession()->get($sessionId))) {
-            $request->getSession()->set($sessionId, []);
-        }
 
         return $this->render(
             'newsletter/steps/2-preview.tpl',
@@ -362,13 +357,6 @@ class NewsletterController extends Controller
         }
 
         $recipients = [];
-        $sessionId  = 'data-recipients-' . $newsletter->id;
-
-        if (!empty($request->getSession()->get($id))
-            && is_string($request->getSession()->get($sessionId))
-        ) {
-            $recipients = json_decode($request->getSession()->get($sessionId));
-        }
 
         return $this->render(
             'newsletter/steps/3-pick-recipients.tpl',
@@ -401,18 +389,6 @@ class NewsletterController extends Controller
 
         $sentResult = array();
         $newsletter = new \Newsletter($id);
-        $sessionId  = 'data-recipients-' . $newsletter->id;
-
-        if (!empty($request->getSession()->get($sessionId))) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Sorry, newsletter "%d" was been sent previously'), $newsletter->id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
-
-        $request->getSession()->set($sessionId, $recipients);
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
