@@ -453,7 +453,7 @@ class PaywallController extends Controller
         $planPeriod      = strtolower($request->getSession()->get('paywall_transaction')['plan']['time']);
 
         // Check if is an activation
-        if (isset($request->getSession()->get('paywall_transaction')['plan']['paywallTimeLimit'])) {
+        if (!empty($request->getSession()->get('paywall_transaction')['plan']['paywallTimeLimit'])) {
             $timeLimit = $request->getSession()->get('paywall_transaction')['plan']['paywallTimeLimit'];
         } else {
             $timeLimit = false;
