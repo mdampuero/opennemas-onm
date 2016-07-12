@@ -12,7 +12,7 @@ class TemplateAdmin extends Template
     /**
      * {@inheritdoc}
      */
-    protected function registerCustomPlugins()
+    protected function registerPlugins($plugins)
     {
         $this->addFilter('output', 'trimwhitespace');
         $this->addFilter('output', 'canonical_url');

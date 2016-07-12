@@ -4,7 +4,26 @@ imports:
     - { resource: services/subscriber.yml }
 
 parameters:
-#    onm_test.example.class: Onm\TestBundle\Example
+    core.template.plugins:
+        output:
+            - ads_generator
+            - ads_scripts
+            - canonical_url
+            - comscore
+            - css_includes
+            - generate_fb_admin_tag
+            - generate_fb_pages_tag
+            - google_analytics
+            - js_includes
+            - meta_amphtml
+            - ojd
+            - piwik
+    core.template.admin.plugins:
+    core.template.manager.plugins:
+        output:
+            - canonical_url
+            - css_includes
+            - js_includes
 
 services:
     kernel.listener.maintenance_mode:
@@ -300,15 +319,15 @@ services:
 
     core.template:
         class: Template
-        arguments: [ '@service_container' ]
+        arguments: [ '@service_container', '%core.template.plugins%' ]
 
     core.template.admin:
         class: TemplateAdmin
-        arguments: [ '@service_container' ]
+        arguments: [ '@service_container', '%core.template.admin.plugins%' ]
 
     core.template.manager:
-        class: TemplateManager
-        arguments: [ '@service_container' ]
+        class: Template
+        arguments: [ '@service_container', '%core.template.manager.plugins%' ]
 
     core.listener.annotation.template:
         class:     Framework\EventListener\TemplateAnnotationListener

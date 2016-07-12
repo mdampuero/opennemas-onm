@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\FilesManager as fm;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Template extends Smarty
@@ -34,13 +33,13 @@ class Template extends Smarty
      *
      * @param Extension $theme The current theme.
      */
-    public function __construct($container)
+    public function __construct($container, $plugins)
     {
         parent::__construct();
 
         $this->container = $container;
 
-        $this->registerCustomPlugins();
+        $this->registerPlugins($plugins);
 
         // Fran: I have to comment this line cause templating.globals is no
         // longer available. We need to know if this don't have any drawback in
@@ -159,21 +158,20 @@ class Template extends Smarty
 
     /**
      * Registers the required smarty plugins.
+     *
+     * @param array $plugins The list of plugins.
      */
-    protected function registerCustomPlugins()
+    protected function registerPlugins($plugins)
     {
-        $this->addFilter('output', 'ads_generator');
-        $this->addFilter('output', 'canonical_url');
-        $this->addFilter('output', 'comscore');
-        $this->addFilter('output', 'css_includes');
-        $this->addFilter('output', 'generate_fb_admin_tag');
-        $this->addFilter('output', 'generate_fb_pages_tag');
-        $this->addFilter('output', 'google_analytics');
-        $this->addFilter('output', 'js_includes');
-        $this->addFilter('output', 'ojd');
-        $this->addFilter('output', 'piwik');
-        $this->addFilter('output', 'ads_scripts');
-        $this->addFilter('output', 'meta_amphtml');
+        if (empty($plugins)) {
+            return;
+        }
+
+        foreach ($plugins as $section => $p) {
+            foreach ($p as $plugin) {
+                $this->addFilter($section, $plugin);
+            }
+        }
     }
 
     /**
