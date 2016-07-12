@@ -133,7 +133,7 @@ EOF
             mkdir($commonCachepath, 0755, true);
         }
 
-        $this->tpl = new \TemplateAdmin($this->getContainer());
+        $this->tpl = new \TemplateAdmin($this->getContainer(), []);
         $this->tpl->addInstance($instance);
         $theme = $this->getThemeByUuid('es.openhost.theme.admin');
         $this->tpl->addActiveTheme($theme);

@@ -292,8 +292,6 @@ class WebServiceController extends Controller
 
     private function reportInstanceCreationError($emails, $instance, $exception)
     {
-        $this->view = new \TemplateManager();
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($emails['from_mail'])
