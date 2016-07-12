@@ -24,7 +24,7 @@ use Onm\Framework\Controller\Controller;
  *
  * @package Frontend_Controllers
  **/
-class SubscriptionsController extends Controller
+class SubscribersController extends Controller
 {
     /**
      * Shows the subscription form
@@ -35,15 +35,10 @@ class SubscriptionsController extends Controller
     {
         $ads = $this->getAds();
 
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->assign(
-            [
-                'advertisements'  => $ads,
-                'actual_category' => 'newsletter'
-            ]
-        );
-
-        return $this->render('static_pages/subscription.tpl');
+        return $this->render('static_pages/subscription.tpl', [
+            'advertisements'  => $ads,
+            'actual_category' => 'newsletter'
+        ]);
     }
 
     /**
@@ -93,7 +88,6 @@ class SubscriptionsController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/subscription.tpl',
             [
@@ -226,7 +220,7 @@ class SubscriptionsController extends Controller
      **/
     public function createSubscription($data)
     {
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
         if ($data['subscription'] == 'alta') {
             if ($user->existsEmail($data['email'])) {
                 $data['subscription'] = 1;
@@ -300,8 +294,8 @@ class SubscriptionsController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

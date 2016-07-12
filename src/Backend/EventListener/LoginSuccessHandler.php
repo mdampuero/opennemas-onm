@@ -20,6 +20,13 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
+     * The service container.
+     * 
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * Constructs a new handler.
      *
      * @param ServiceContainer $container The service container.
@@ -42,16 +49,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $attempts = $session->get('failed_login_attempts', 0);
         $user     = $token->getUser();
 
-        // TODO: Remove when Smarty can get services from service container
-        $session->set('user', $user);
-
-        // TODO: Remove when removing logging actions from old data model
-        $_SESSION['userid']   = $user->id;
-        $_SESSION['username'] = $user->username;
-        //$_SESSION['accesscategories'] = $user->getAccessCategoryIds();
-
         $recaptchaValid = $this->isRecaptchaValid($request);
         $csrfTokenValid = $this->isCsrfTokenValid($request);
+
+        // TODO: Remove when Smarty can get services from service container
+        $session->set('user', $user);      
 
         // Check token, user type and reCaptcha
         if ($recaptchaValid && $csrfTokenValid && $user->type === 0) {
@@ -60,7 +62,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $time = $time->format('Y-m-d H:i:s');
 
             if (!$user->isMaster()) {
-                s::set('last_login', $time);
+                $this->container->get('setting_repository')
+                    ->set('last_login', $time);
             }
 
             return new RedirectResponse($request->get('_referer'));

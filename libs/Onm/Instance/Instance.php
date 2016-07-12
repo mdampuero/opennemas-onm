@@ -269,10 +269,6 @@ class Instance
         }
 
         $this->initInternalConstants();
-
-        if ($this->internal_name !== 'manager') {
-            $this->initTheme();
-        }
     }
 
     /**

@@ -25,6 +25,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class InstanceLoaderListener implements EventSubscriberInterface
 {
     /**
+     * The service container.
+     *
+     * @param ServiceContainer
+     */
+     protected $container;
+
+    /**
      * Initializes the instance loader.
      *
      * @param ServiceContainer $container The service container.

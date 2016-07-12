@@ -14,6 +14,14 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]">
+              <i class="fa fa-download fa-lg"></i>
+            </a>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -122,6 +130,32 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-view" checklist-model="columns.selected" checklist-value="'view'" type="checkbox">
+            <label for="checkbox-view">
+              {t}View{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-read" checklist-model="columns.selected" checklist-value="'read'" type="checkbox">
+            <label for="checkbox-read">
+              {t}Read{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-clicked" checklist-model="columns.selected" checklist-value="'clicked'" type="checkbox">
+            <label for="checkbox-clicked">
+              {t}Clicked{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-opened" checklist-model="columns.selected" checklist-value="'opened'" type="checkbox">
+            <label for="checkbox-opened">
+              {t}Opened{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
             <label for="checkbox-fixed">
               {t}Fixed{/t}
@@ -174,6 +208,22 @@
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
+              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="100">
+                {t}View{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('view') == 'asc', 'fa fa-caret-down': isOrderedBy('view') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
+                {t}Read{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="100">
+                {t}Clicked{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('clicked') == 'asc', 'fa fa-caret-down': isOrderedBy('clicked') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="100">
+                {t}Opened{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opened') == 'asc', 'fa fa-caret-down': isOrderedBy('opened') == 'desc'}"></i>
+              </th>
               <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
@@ -200,13 +250,16 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('title')">
-                <span ng-bind-html="item.title['en']"></span>
+                <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                  </button>
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_report', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
+                    <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
               </td>
@@ -228,6 +281,26 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('end')">
                 [% item.end %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('view')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].view ? extra.stats[item.id].view : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('read')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].read ? extra.stats[item.id].read : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('clicked')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].clicked ? extra.stats[item.id].clicked : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('opened')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].opened ? extra.stats[item.id].opened : 0 %]</strong>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('fixed')">
                 <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">

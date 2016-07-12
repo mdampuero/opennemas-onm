@@ -109,9 +109,9 @@ class DisqusSync
                     $comment->create($data);
 
                     // Set contentmeta for comment
-                    $comment->setProperty('disqus_post_id', $post->id);
-                    $comment->setProperty('disqus_thread_id', $post->thread);
-                    $comment->setProperty('disqus_thread_link', $threadDetails->link);
+                    $comment->setMetadata('disqus_post_id', $post->id);
+                    $comment->setMetadata('disqus_thread_id', $post->thread);
+                    $comment->setMetadata('disqus_thread_link', $threadDetails->link);
                 }
 
                 if (!empty($posts)) {

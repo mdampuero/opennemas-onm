@@ -30,16 +30,23 @@ function smarty_function_image_tag($params, &$smarty)
     $resource = $baseUrl.$src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
+    $lazyload = ($params['data-src'] == 'lazyload');
+
     unset($params['src']);
     unset($params['base_url']);
     unset($params['common']);
     unset($params['bundle']);
+    unset($params['lazyload']);
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $output = "<img src=\"{$resource}\" {$properties}>";
+    if ($lazyload) {
+        $output = "<img class=\"lazy\" src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
+    } else {
+        $output = "<img src=\"{$resource}\" {$properties}>";
+    }
 
     return $output;
 }

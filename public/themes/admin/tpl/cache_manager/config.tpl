@@ -22,6 +22,12 @@
       </div>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
+          <li>
+            <a href="{url name=admin_cache_manager}" class="btn btn-link" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+              <span class="fa fa-reply"></span>
+            </a>
+          </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
             <button type="submit" class="btn btn-primary" id="save-button">
               <i class="fa fa-save"></i>
@@ -33,26 +39,10 @@
     </div>
   </div>
   <div class="content">
-    <div class="alert alert-block alert-error fade in">
-      <h4 class="alert-heading"><i class="icon-warning-sign"></i> Dangerous action!</h4>
-      <p>Clean internal template files generated for this instance by pushing buttons below. <br>These actions could take some time depending on the number of present cache/compiled files.</p>
-      <div class="button-set">
-        <a href="{url name=admin_cache_manager_clearcache}" class="btn btn-white btn-cons">
-          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove cache{/t}</span>
-        </a>
-        <a href="{url name=admin_cache_manager_clearcompiled}" class="btn btn-white btn-cons">
-          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove compiled templates{/t}</span>
-        </a>
-        <a href="{url name=admin_cache_manager_banvarnishcache}" class="btn btn-white btn-cons">
-          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Ban varnish cache{/t}</span>
-        </a>
-      </div>
-    </div>
-        <p>Activate/deactivate internal caches by section:</p>
+    <p>Activate/deactivate internal caches by section:</p>
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="table-wrapper ng-cloak">
-
           <table class="table table-hover table-condensed">
             <thead>
               <tr>

@@ -202,6 +202,10 @@ class InstanceManager extends BaseManager
      */
     public function findByClient($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         // Executing the SQL
         $sql = "SELECT instance_id, meta_value FROM `instance_meta` "
             ."WHERE meta_key = 'client' AND meta_value in ("
@@ -388,7 +392,7 @@ class InstanceManager extends BaseManager
         $instance->activated = true;
 
         $instance->settings = array(
-            'TEMPLATE_USER' => '',
+            'TEMPLATE_USER' => 'es.openhost.theme.manager',
             'BD_DATABASE'   => 'onm-instances',
         );
 

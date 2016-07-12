@@ -23,7 +23,6 @@ use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\LayoutManager;
 
 /**
  * Handles the actions for the system information
@@ -46,8 +45,6 @@ class FrontpagesController extends Controller
     public function showAction(Request $request)
     {
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
-
-        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', ['category' => $categoryId]);
 
         // Check if the user can access a frontpage from other category
         if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
@@ -112,10 +109,10 @@ class FrontpagesController extends Controller
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
-        $lm = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
-        );
-        $layoutSettings = $this->container->get('core.theme')->getLayout($layoutTheme);
+        $lm = $this->get('core.manager.layout');
+        $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
+
+        $layoutSettings = $lm->getLayout($layoutTheme);
 
         // Get contents for this home
         $cm = new \ContentManager();
@@ -152,7 +149,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $layouts = $this->container->get('core.theme')->getLayouts();
+        $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
         $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
@@ -249,7 +246,7 @@ class FrontpagesController extends Controller
             }
 
             $logger->info(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                'User '.$this->getUser()->name.' ('.$this->getUser()->id.') was failed '.$message.' to execute'
                 .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
             );
 
@@ -278,7 +275,7 @@ class FrontpagesController extends Controller
 
         // Notice log of this action
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            'User '.$this->getUser()->name.' ('.$this->getUser()->id.') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 
@@ -315,7 +312,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->get('core.theme')->getLayouts();
+        $availableLayouts = $this->container->get('core.manager.layout')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid  = in_array($layout, $availableLayouts);
@@ -397,9 +394,9 @@ class FrontpagesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $categoryName        = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->view          = new \Template(TEMPLATE_USER);
-        $this->view->caching = false;
+        $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->view   = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $this->view->assign(
             array(

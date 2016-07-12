@@ -148,9 +148,10 @@
             resolve: {
               template: function() {
                 return {
-                  content: content,
-                  related: related,
-                  routing: routing
+                  content:  content,
+                  imported: $scope.imported.indexOf(content.urn) !== -1,
+                  related:  related,
+                  routing:  routing
                 };
               },
               success: function() {

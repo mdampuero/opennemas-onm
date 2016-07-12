@@ -44,7 +44,6 @@ class ErrorController extends Controller
         $name = join('', array_slice(explode('\\', $error->getClass()), -1));
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
-        $this->view = new \Template(TEMPLATE_USER);
         switch ($name) {
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':

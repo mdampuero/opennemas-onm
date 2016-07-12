@@ -16,6 +16,86 @@ namespace Onm\Templating\Cache;
 class Config
 {
     /**
+     * Default cache values.
+     *
+     * @var array
+     */
+    protected $default = [
+        'frontpages' => [
+            'caching'        => 1,
+            'cache_lifetime' => 600
+        ],
+        'frontpage-mobile'   => [
+            'caching'        => 1,
+            'cache_lifetime' => 600
+        ],
+        'articles' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'articles-mobile' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'opinion' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'video' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'video-inner' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'gallery-frontpage' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'gallery-inner' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'poll-frontpage' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'poll-inner' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'letter-frontpage' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'letter-inner' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'kiosko' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'newslibrary' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'specials' => [
+            'caching'        => 1,
+            'cache_lifetime' => 86400
+        ],
+        'sitemap' => [
+            'caching'        => 1,
+            'cache_lifetime' => 300
+        ],
+        'rss' => [
+            'caching'        => 1,
+            'cache_lifetime' => 600
+        ]
+    ];
+
+    /**
      * Initializes the Config class
      *
      * @param string $configDir the config dir where the config.ini file is located in
@@ -142,7 +222,7 @@ class Config
      **/
     public function save($config)
     {
-        $filename = $this->configDir . 'cache.conf';
+        $filename = $this->configDir . '/cache.conf';
 
         $iniContents = '';
         foreach ($config as $section => $entry) {
@@ -158,5 +238,13 @@ class Config
         } else {
             return false;
         }
+    }
+
+    /**
+     * Saves the default cache configuration.
+     */
+    public function saveDefault()
+    {
+        $this->save($this->default);
     }
 }

@@ -46,7 +46,6 @@ class AmpController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->assign('site_color', $siteColor);
     }
 
@@ -95,7 +94,7 @@ class AmpController extends Controller
         $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached("amp/article.tpl", $cacheID)
         ) {
             // Categories code -------------------------------------------
@@ -146,22 +145,70 @@ class AmpController extends Controller
                 // Get front media element and add category name
                 foreach ($relatedContents as $key => &$content) {
                     $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
-                    if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
+                    if ($content->content_type == 1 && !empty($content->img1)) {
                         $content->photo = $er->find('Photo', $content->img1);
-                    } elseif ($key == 0 && $content->content_type == 1 && !empty($content->fk_video)) {
+                    } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
                         $content->video = $er->find('Video', $content->fk_video);
                     }
                 }
             }
             $this->view->assign('relationed', $relatedContents);
 
-            $pattern = ['@<img([^>]+>)@', '@style=".*"@'];
-            $replacement  = [
+            $patterns = [
+                '@(align|border|style|nowrap|onclick)="[^\"]*\"@',
+                '@<font.*?>((?s).*)<\/font>@',
+                '@<img([^>]+>)@',
+                '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
+                '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
+                '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
+                '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
+                '@<(script|embed|object|frameset|frame|iframe|style|form)[^>]*>(?s).*?<\/\1>@',
+                '@<(link|meta|input)[^>]+>@',
+            ];
+            $replacements  = [
+                '',
+                '${1}',
                 '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
+                '<amp-iframe width=300 height=300
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+                    layout="responsive"
+                    frameborder="0"
+                    src="https:${1}">
+                </amp-iframe>',
+                '<amp-facebook width=486 height=657
+                    layout="responsive"
+                    data-embed-as="${1}"
+                    data-href="${2}">
+                </amp-facebook>',
+                '<amp-instagram
+                    data-shortcode="${2}"
+                    width="400"
+                    height="400"
+                    layout="responsive">
+                </amp-instagram>',
+                '<amp-twitter width=486 height=657
+                    layout="responsive"
+                    data-tweetid="${2}">
+                </amp-twitter>',
+                '',
                 ''
             ];
-            $article->body = preg_replace($pattern, $replacement, $article->body);
+            $article->body = preg_replace($patterns, $replacements, $article->body);
+            $article->summary = preg_replace($patterns, $replacements, $article->summary);
         } // end if $this->view->is_cached
+
+        // Get instance logo size
+        $logo = getService('setting_repository')->get('site_logo');
+        if (!empty($logo)) {
+            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.rawurlencode($logo);
+            $logoSize = @getimagesize($logoUrl);
+            if (is_array($logoSize)) {
+                $this->view->assign([
+                    'logoSize' => $logoSize,
+                    'logoUrl'  => $logoUrl
+                ]);
+            }
+        }
 
         return $this->render(
             "amp/article.tpl",
@@ -191,6 +238,6 @@ class AmpController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        return \Advertisement::findForPositionIdsAndCategory([1051], $category);
+        return \Advertisement::findForPositionIdsAndCategory([1051, 1052, 1053], $category);
     }
 }

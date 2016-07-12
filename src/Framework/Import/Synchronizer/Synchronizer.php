@@ -19,6 +19,13 @@ use Framework\Import\ServerFactory;
 class Synchronizer
 {
     /**
+     * The service container.
+     *
+     * @var Template
+     */
+    protected $tpl;
+
+    /**
      * The array of synchronization statistics.
      *
      * @var array
@@ -42,17 +49,18 @@ class Synchronizer
     /**
      * Initializes the object and initializes configuration
      *
-     * @param array $params The synchronizer parameters.
+     * @param string   $path The path to synchronized files.
+     * @param Template $tpl  The template service.
      */
-    public function __construct($params = [])
+    public function __construct($path, $tpl)
     {
-        $this->syncPath     = $params['cache_path'] . DS .'importers';
+        $this->syncPath     = $path . DS .'importers';
         $this->syncFilePath = $this->syncPath . DS . '.sync';
         $this->lockFilePath = $this->syncPath . DS . '.lock';
 
         $this->compiler      = new Compiler($this->syncPath);
-        $this->serverFactory = new ServerFactory();
         $this->parserFactory = new ParserFactory();
+        $this->serverFactory = new ServerFactory($tpl);
     }
 
     /**
@@ -200,21 +208,27 @@ class Synchronizer
         $source = $this->serverFactory->get($server);
         $source->downloadFiles();
 
-        $contents = $this->parseFiles($source->localFiles, $server['id']);
+        $data = $this->parseFiles($source->localFiles, $server['id']);
 
         // Check for missing files (photos, videos, ...)
-        $missing = $this->getMissingFiles($contents, $server['path']);
+        $missing = $this->getMissingFiles($data, $server['path']);
 
         if (!empty($missing)) {
             $source->downloadFiles($missing);
         }
 
-        foreach ($contents as $content) {
+        $contents = [];
+        foreach ($data as $content) {
+            if ($content->type !== 'photo') {
+                $contents[] = $content;
+            }
+
             if ($content->type === 'photo') {
                 $path = $this->syncPath . DS . $server['id'] . DS . $content->file_name;
 
                 if (file_exists($path)) {
                     $content->size = sprintf('%.2f', filesize($path) / 1024);
+                    $contents[]    = $content;
                 }
             }
         }

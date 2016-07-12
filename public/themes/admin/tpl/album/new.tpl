@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
       $(document).ready(function($){
         $('#title').on('change', function(e, ui) {
@@ -12,6 +12,18 @@
             var tags = $('#title').val();
             fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
           }
+        });
+
+        $('#starttime, #endtime').datetimepicker({
+          format: 'YYYY-MM-DD HH:mm:ss',
+          useCurrent: false
+        });
+
+        $("#starttime").on("dp.change",function (e) {
+          $('#endtime').data("DateTimePicker").minDate(e.date);
+        });
+        $("#endtime").on("dp.change",function (e) {
+          $('#starttime').data("DateTimePicker").maxDate(e.date);
         });
       });
     </script>
@@ -150,9 +162,9 @@
                       {html_options options=$authors selected=$album->fk_author}
                     </select>
                   {aclelse}
-                    {if !isset($album->fk_author)}
-                      {$smarty.session.realname}
-                      <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                  {if !isset($album->fk_author) || empty($album->fk_author)}
+                      {$smarty.session._sf2_attributes.user->name}
+                      <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
                     {else}
                       {$authors[$album->fk_author]}
                       <input type="hidden" name="fk_author" value="{$album->fk_author}">
@@ -263,6 +275,42 @@
                         </div>
                       </div>
                     </dynamic-image>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid simple">
+            <div class="grid-title">
+              <h4>{t}Schedule{/t}</h4>
+            </div>
+            <div class="grid-body">
+              <div class="form-group">
+                <label class="form-label" for="starttime">
+                  {t}Publication start date{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $album->starttime neq '0000-00-00 00:00:00'}{$album->starttime}{/if}">
+                    <span class="input-group-addon add-on">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                  <span class="help-block">
+                    {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="endtime">
+                  {t}Publication end date{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $album->endtime neq '0000-00-00 00:00:00'}{$album->endtime}{/if}">
+                    <span class="input-group-addon add-on">
+                      <span class="fa fa-calendar"></span>
+                    </span>
                   </div>
                 </div>
               </div>

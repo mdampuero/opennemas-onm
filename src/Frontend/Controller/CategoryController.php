@@ -36,7 +36,6 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
@@ -110,7 +109,7 @@ class CategoryController extends Controller
 
                 // Get number comments for a content
                 if ($content->with_comment == 1) {
-                    $content->num_comments = $content->getProperty('num_comments');
+                    $content->num_comments = $content->getMetadata('num_comments');
                 }
 
                 // Load attached and related contents from array
@@ -169,7 +168,6 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         // Get sync params
@@ -246,8 +244,8 @@ class CategoryController extends Controller
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

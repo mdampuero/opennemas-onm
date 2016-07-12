@@ -56,7 +56,6 @@ class ArticlesController extends Controller
         }
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
@@ -73,7 +72,7 @@ class ArticlesController extends Controller
         $this->view->assign('layoutFile', $layoutFile);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
             // Categories code -------------------------------------------
@@ -261,8 +260,8 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

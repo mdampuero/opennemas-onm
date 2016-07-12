@@ -218,7 +218,7 @@
                     <span ng-show="notificationForm.name.$invalid">*</span>
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && notificationForm.title[language].$invalid }">
-                    <input class="form-control" id="name" name="name" ng-model="notification.title[language]" required type="text">
+                    <textarea class="form-control" onm-editor onm-editor-preset="standard" id="title" name="title" ng-model="notification.title[language]" rows="2"></textarea>
                   </div>
                   <span class="error" ng-show="formValidated && notificationForm.name.$invalid">
                     <label for="name" class="error">{t}This field is required{/t}</label>
@@ -256,7 +256,7 @@
                       <i class="fa fa-[% notification.style.icon %]"></i>
                     </div>
                     <div class="notification-body" ng-style="{ 'color': notification.style.font_color }">
-                      <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.notification.body[language]"></div>
+                      <div ng-bind-html="notification.title[language] ? notification.title[language] : notification.body[language]"></div>
                     </div>
                   </a>
                 </li>

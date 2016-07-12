@@ -30,7 +30,6 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
@@ -55,7 +54,14 @@ class FrontpagesController extends Controller
 
         $cm       = new \ContentManager;
         $contents = $cm->getContentsForHomepageOfCategory($categoryId);
-        $expires  = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+        $expiresStarttime = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+        $expiresEndtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($contents);
+
+
+        $expires = ($expiresStarttime < $expiresEndtime)? $expiresStarttime : $expiresEndtime;
+        if (is_null($expiresStarttime)) {
+            $expires = $expiresEndtime;
+        }
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
@@ -71,7 +77,7 @@ class FrontpagesController extends Controller
         $ads = $this->getAds($categoryId, $contents);
         $this->view->assign('advertisements', $ads);
 
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
             // If no home category name
@@ -200,8 +206,7 @@ class FrontpagesController extends Controller
     public function extShowAction(Request $request)
     {
         // Fetch HTTP variables
-        $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $this->view = new \Template(TEMPLATE_USER);
+        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $this->view->setConfig('frontpages');
 
         // Setup view
@@ -226,7 +231,7 @@ class FrontpagesController extends Controller
         $this->view->assign('advertisements', $ads);
 
         // Avoid to run the entire app logic if is available a cache for this page
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
             $ccm = \ContentCategoryManager::get_instance();
@@ -290,8 +295,8 @@ class FrontpagesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get frontpage positions
-        $positions = getService('core.theme')->getAdsPositionManager()
-            ->getAdsPositionsForGroup('frontpage');
+        $positions = $this->get('core.manager.advertisement')
+            ->getPositionsForGroup('frontpage');
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 

@@ -1,49 +1,41 @@
 <?php
 /*
+ * Smarty plugin
  * -------------------------------------------------------------
- * File:     	function.script_tag.php
- * Comprueba el tipo y escribe el nombre o la imag
+ * File:     function.script_tag.php
+ * Type:     function
+ * Name:     script_tag
+ * Purpose:  Returns the URL for a script.
+ * -------------------------------------------------------------
  */
-
 function smarty_function_script_tag($params, &$smarty)
 {
-    $output = "";
-
     if (empty($params['src'])) {
         trigger_error("[plugin] script_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
-    $src = $params['src'];
-    $mtime = DEPLOYED_AT;
+    $output = '';
+    $src    = $params['src'];
+    $mtime  = DEPLOYED_AT;
     $server = '';
+    $type   = "type=\"text/javascript\"";
+    $escape = false;
+
     //Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
-        $basepath = $params["basepath"] ?: SS."js";
-        if (array_key_exists('common', $params) && $params['common']=="1") {
-            $file = SITE_PATH.SS."assets".SS."js".SS.$href;
-            $serverUrl = SS."assets".SS;
-        } elseif (array_key_exists('bundle', $params)) {
-            $file = SITE_PATH."bundles".SS.$params['bundle'].SS.$basepath.SS.$src;
-            $serverUrl = SS."bundles".SS.$params['bundle'].SS;
-        } else {
-            $file = SITE_PATH.SS."themes".SS.$smarty->theme.SS.$basepath.$href;
-            $serverUrl = SS."themes".SS.$smarty->theme.SS;
-        }
+        $server = DS . 'assets' . DS . 'js' . DS;
 
-        if (file_exists($file)) {
-            $server = $serverUrl.$basepath;
+        if (!array_key_exists('common', $params)) {
+            $basepath = $params['basepath'] ? : DS . 'js';
+            $server   = DS . $smarty->theme->path . DS . $basepath;
         }
     }
 
-    //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
-    } else {
-        $type = "type=\"text/javascript\"";
     }
 
-    //Comprobar si tiene type definido
     if (isset($params['escape'])) {
         $escape = true;
     }
@@ -53,24 +45,18 @@ function smarty_function_script_tag($params, &$smarty)
     unset($params['type']);
     unset($params['escape']);
     unset($params['basepath']);
+
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
-    //Comprobar si es external
-    if ($server == '') {
-        $resource = $src;
-    } else {
-        $resource = $server.SS.$src;
-    }
 
-    if ($params['external'] != 1 || $server != '') {
-        $resource = str_replace(SS.SS, SS, $resource);
-        $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
-    }
+    $resource = empty($server) ? $src : $server . DS . $src;
 
-    // $resource = preg_replace('/(\/+)/','/',$resource);
-    // $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    if ($params['external'] != 1) {
+        $resource = preg_replace('/(\/+)/', '/', $resource);
+        $resource = str_replace('.js', '.' . $mtime . '.js', $resource);
+    }
 
     $output = "<script {$type} src=\"{$resource}\" {$properties} ></script>";
 

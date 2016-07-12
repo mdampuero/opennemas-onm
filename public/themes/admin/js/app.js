@@ -14,6 +14,7 @@ angular.module(
     'onm.editor',
     'onm.dynamicImage',
     'onm.flyToCart',
+    'onm.http',
     'onm.item',
     'onm.messenger',
     'onm.oqlEncoder',

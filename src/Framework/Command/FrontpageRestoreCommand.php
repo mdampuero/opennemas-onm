@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class RestoreFrontpageCommand extends ContainerAwareCommand
+class FrontpageRestoreCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -45,8 +45,10 @@ EOF
         $databaseName = $input->getArgument('database');
         $category     = $input->getOption('category');
 
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $this->connection = $this->getContainer()->get('db_conn');
         $this->connection->selectDatabase($databaseName);

@@ -70,8 +70,6 @@ class ArticlesController extends Controller
             }
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_articles');
-
         return $this->render(
             'article/list.tpl',
             array(
@@ -239,9 +237,6 @@ class ArticlesController extends Controller
             $article->params = unserialize($article->params);
         }
 
-        // Para usar el id de articulo al borrar un comentario
-        $_SESSION['olderId'] = $id;
-
         // Photos de noticia
         if (!empty($article->img1)) {
             $photo1 = new \Photo($article->img1);
@@ -381,7 +376,7 @@ class ArticlesController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$article->isOwner($_SESSION['userid'])
+            && !$article->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -719,9 +714,9 @@ class ArticlesController extends Controller
         $articleContents = $request->request->filter('contents');
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('articles');
-        $this->view->caching = 0;
+        $this->view->setCaching(0);
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {

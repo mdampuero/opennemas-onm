@@ -80,6 +80,7 @@
                   <div class="controls">
                     <select id="type" name="type" ng-model="module.type">
                       <option value="">{t}Select a type...{/t}</option>
+                      <option value="domain">{t}Domain{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="theme">{t}Theme{/t}</option>
                       <option value="theme-addon">{t}Theme addon{/t}</option>
@@ -96,6 +97,7 @@
                   <div class="controls">
                     <select id="category" name="category" ng-model="module.category">
                       <option value="">{t}Select a category...{/t}</option>
+                      <option value="domain">{t}Domain{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="pack">{t}Pack{/t}</option>
                       <option value="partner">{t}Partner{/t}</option>

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 11:14+0000\n"
-"PO-Revision-Date: 2016-06-03 13:15+0200\n"
+"POT-Creation-Date: 2016-07-11 10:05+0000\n"
+"PO-Revision-Date: 2016-07-11 12:09+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -281,6 +281,9 @@ msgstr "Non se puido actualizar o autor coa información fornecida"
 #, php-format
 msgid "You must put %d books in the HOME widget"
 msgstr "Débense ter %d libros para o Widget de portada"
+
+msgid "Book created successfully."
+msgstr "Libro creado correctamente."
 
 msgid "Unable to create the new book."
 msgstr "Non se puido crear o novo libro."
@@ -761,20 +764,20 @@ msgstr ""
 msgid "You have reached the maximum of emails allowed to send"
 msgstr "Alcanzouse o numero máximo de envios de correo-e permitidos"
 
-msgid "Unable to create the new subscriptor. This email is already in use"
+msgid "Unable to create the new subscriber. This email is already in use"
 msgstr "Non se pode crear o novo subscriptor. Este correo xa está en uso"
 
 msgid "Subscription successfully created."
 msgstr "Subscrición creada correctamente."
 
 #, php-format
-msgid "Unable to create the new subscriptor: %s"
+msgid "Unable to create the new subscriber: %s"
 msgstr "Non se puido crear o novo subscritor: %s"
 
 msgid "Subscription successfully updated."
 msgstr "Subscrición actualizada correctamente."
 
-msgid "Unable to update the subscriptor information"
+msgid "Unable to update the subscriber information"
 msgstr "Non se puido actualizar a información da subscrición"
 
 #, php-format
@@ -938,24 +941,15 @@ msgstr ""
 "ao tamaño."
 
 msgid ""
-"There was a problem while uploading the file. Please check if you have "
-"completed all the form fields."
-msgstr ""
-"Produciuse un erro ao subir o ficheiro. Comprobe que completara todos os "
-"campos do formulario."
-
-msgid ""
 "There was an error while uploading the form, not all the required data was "
 "sent."
 msgstr ""
 "Produciuse un erro ao subir o formulario, non se enviaron todos os datos "
 "requiridos."
 
-msgid ""
-"There was an error while uploading the form, the video type is not specified."
-msgstr ""
-"Produciuse un erro ao actualizar o formulario, non se especificou o tipo de "
-"vídeo."
+#, php-format
+msgid "Unable to find the video with the id \"%d\""
+msgstr "Non se puido atopar o vídeo co identificador «%d»"
 
 msgid "You can't modify this video because you don't have enought privileges."
 msgstr "Non tes permisos dabondo para modificar este vídeo."
@@ -965,10 +959,6 @@ msgstr "Video creado correctamente."
 
 msgid "You must give an id to delete the video."
 msgstr "Debes fornecer un identificador para eliminar un vídeo."
-
-#, php-format
-msgid "Unable to find the video with the id \"%d\""
-msgstr "Non se puido atopar o vídeo co identificador «%d»"
 
 msgid "Can't get video information. Check the url"
 msgstr "Non se puido obter información do vídeo. Comproba o enderezo."
@@ -1284,15 +1274,6 @@ msgstr "Dominio eliminado correctamente"
 msgid "Unable to delete the domain %s"
 msgstr "Non foi posíbel eliminar o dominio %s"
 
-msgid "Domain + redirection: "
-msgstr "Dominio + redirección:"
-
-msgid "Redirection: "
-msgstr "Redirección:"
-
-msgid "Pay with credit card"
-msgstr "Pagar con tarxeta de crédito"
-
 msgid "Domain added successfully"
 msgstr "Datos engaddo correctamente"
 
@@ -1310,13 +1291,11 @@ msgstr "Texto"
 msgid "Photo"
 msgstr "Foto"
 
-#, fuzzy
 msgid "Unable to connect to the server"
-msgstr "Non foi posíbel crear un servidor"
+msgstr "Non foi posible crear un servidor"
 
-#, fuzzy
 msgid "Server connection success!"
-msgstr "Servidor actualizado correctamente."
+msgstr "¡Conexión ao servidor realizada correctamente!"
 
 #, php-format
 msgid "Source identifier \"%d\" not valid"
@@ -1335,36 +1314,37 @@ msgstr "Servidor de axencia de novas eliminado."
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
 
-msgid "You must provide an id to delete a newsletter subscriptor."
-msgstr "Debe fornecer un identificador para eliminar un subscritor de boletín."
+msgid "You must provide an id to delete a newsletter subscriber."
+msgstr ""
+"Debes proporcionar un identificador para eliminar un subscritor de boletín."
 
 #, php-format
-msgid "Unable to delete the subscriptor with the id %d."
+msgid "Unable to delete the subscriber with the id %d."
 msgstr "Non se puido eliminar a subscrición co identificador %d."
 
 #, php-format
-msgid "Successfully deleted %d subscriptors."
-msgstr "Elimináronse %d subscricións correctamente"
+msgid "Successfully deleted %d subscribers."
+msgstr "Elimináronse %d subscricións correctamente."
 
-msgid "Please specify a subscriptor id for delete it."
+msgid "Please specify a subscriber id for delete it."
 msgstr "Especifique un identificador dun subscritor para eliminalo."
 
-msgid "Please specify a subscriptor id for change its subscribed state it."
+msgid "Please specify a subscriber id for change its subscribed state it."
 msgstr ""
 "Especifique o identificador dun subscritor para cambiar o estado da súa "
 "subscrición."
 
 #, php-format
-msgid "Successfully changed subscribed state for %d subscriptors."
+msgid "Successfully changed subscribed state for %d subscribers."
 msgstr "Estado de subscrición cambiado correctamente para %d subscritores."
 
-msgid "Please specify a subscriptor id to change the activated state."
+msgid "Please specify a subscriber id to change the activated state."
 msgstr ""
 "Especifique o identificador dun subscritor para cambiar o seu estado de "
-"activado."
+"activación."
 
 #, php-format
-msgid "Successfully changed activated state for %d subscriptors."
+msgid "Successfully changed activated state for %d subscribers."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
 
 msgid "Newsletter deleted successfully."
@@ -1384,8 +1364,8 @@ msgid "Invalid notifications"
 msgstr "Notificacións non válidas"
 
 #, php-format
-msgid "%d notifications marked as read successfully"
-msgstr "%d notificacións marcadas como lidas correctamente"
+msgid "%d notifications marked successfully"
+msgstr "%d notificacións marcadas correctamente"
 
 msgid "Yesterday"
 msgstr "Onte"
@@ -1462,6 +1442,9 @@ msgstr ""
 
 msgid "Unable to find the purchase"
 msgstr "Non se puido atopar a compra"
+
+msgid "Pay with credit card"
+msgstr "Pagar con tarxeta de crédito"
 
 msgid "Your request could not been registered"
 msgstr "A túa solicitude non foi enviada"
@@ -1899,6 +1882,21 @@ msgstr "Non se puido atopar a compra co identificador «%s»"
 msgid "%d purchases deleted successfully."
 msgstr "%d compras eliminadas correctamente."
 
+msgid "Cart"
+msgstr "Carro"
+
+msgid "Billing"
+msgstr "Facturación"
+
+msgid "Payment"
+msgstr "Pago"
+
+msgid "Summary"
+msgstr "Resumo"
+
+msgid "Done"
+msgstr "Completadas"
+
 msgid "Instances not used in last month"
 msgstr "Instancias non usadas no último mes"
 
@@ -2006,15 +2004,15 @@ msgstr "%s grupos de usuarios eliminados correctamente."
 msgid "User group updated successfully"
 msgstr "Grupo de usuario actualizado correctamente"
 
-msgid "Error when creating a new instance"
-msgstr "Erro ao crear unha nova instancia"
-
 msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
 
 #, php-format
 msgid "Your newspaper is now live"
 msgstr "O teu xornal xa está en liña"
+
+msgid "Error when creating a new instance"
+msgstr "Erro ao crear unha nova instancia"
 
 msgid "First"
 msgstr "Primeira"
@@ -2027,6 +2025,9 @@ msgstr "Seguinte"
 
 msgid "Previous"
 msgstr "Anterior"
+
+msgid "Content already imported"
+msgstr "Contido xa importado"
 
 #, php-format
 msgid "The client with id '%d' was not found in %s"
@@ -2082,9 +2083,8 @@ msgstr "Non é un id de comentario válido."
 msgid "Status not valid."
 msgstr "Estado non válido."
 
-#, fuzzy
 msgid "Unable to delete the comment."
-msgstr "Non foi posíbel eliminar o dominio %s"
+msgstr "Non foi posible eliminar o comentario."
 
 msgid "trashed"
 msgstr "en lixo"
@@ -2160,7 +2160,6 @@ msgstr "Busca interna"
 msgid "Image data not valid"
 msgstr "Os datos enviados da instancia non son válidos."
 
-#, php-format
 msgid "Unable to save your image file in the Opennemas storage target"
 msgstr "Non se puido gardar o ficheiro de imaxe no almacenamento de Opennemas"
 
@@ -3493,6 +3492,18 @@ msgstr "Actualizando"
 msgid "Update"
 msgstr "Actualizar"
 
+msgid "Schedule"
+msgstr "Planificación"
+
+msgid "Publication start date"
+msgstr "Data de inicio de publicación"
+
+msgid "Server hour:"
+msgstr "Hora do servidor:"
+
+msgid "Publication end date"
+msgstr "Data de final de publicación"
+
 msgid "Image assigned"
 msgstr "Imaxe asignada"
 
@@ -3730,8 +3741,11 @@ msgstr "Enviar"
 msgid "Config newsletter module"
 msgstr "Configuración do módulo de boletin de novas"
 
-msgid "Subscriptors"
+msgid "Subscribers"
 msgstr "Subscritores"
+
+msgid "Subscriber"
+msgstr "Subscritor"
 
 msgid "Search by subject"
 msgstr "Buscar por asunto"
@@ -3771,10 +3785,10 @@ msgid "Yes, remove them all"
 msgstr "Si, eliminalos todos"
 
 msgid ""
-"Are you sure that do you want delete the subscriptor with the mail \"[% "
+"Are you sure that do you want delete the subscriber with the mail \"[% "
 "template.content.email %]\"?"
 msgstr ""
-"Tes certeza que queres eliminar o subscritor co correo electrónico \"[% "
+"¿Estás seguro de querer eliminar o subscritor co correo electrónico \"[% "
 "template.content.email %]\"?"
 
 msgid "Yes, delete"
@@ -3798,9 +3812,9 @@ msgstr "Eliminar vídeos"
 
 msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
-"span> subscriptors?"
+"span> subscribers?"
 msgstr ""
-"Tes certeza que queres cambiar o estado de subscrición para <span>%num%</"
+"¿Estás segudo de querer cambiar o estado de subscrición para <span>%num%</"
 "span> subscritores?"
 
 msgid "You must select some elements."
@@ -3836,8 +3850,8 @@ msgstr "Subscrito"
 msgid "No subscribed"
 msgstr "Non subscrito"
 
-msgid "No available subscriptors."
-msgstr "Non hai subscritores dispoñíbeis."
+msgid "No available subscribers."
+msgstr "Non hai subscritores dispoñibles."
 
 msgid "Edit user"
 msgstr "Editar usuario"
@@ -3857,10 +3871,10 @@ msgstr "Aceptado polo administrador"
 msgid "Disabled by administrator"
 msgstr "Desactivado polo administrador"
 
-msgid "Creating subscriptor"
+msgid "Creating subscriber"
 msgstr "Crear subscritor"
 
-msgid "Editing subscriptor"
+msgid "Editing subscriber"
 msgstr "Editando subscritor"
 
 msgid "Surname"
@@ -4076,7 +4090,7 @@ msgid "Value"
 msgstr "Valor"
 
 msgid "Unit price"
-msgstr "Prezo de unidade"
+msgstr "Prezo unitario"
 
 msgid "Total"
 msgstr "Total"
@@ -4215,18 +4229,8 @@ msgstr "Rexistro e redirección de dominio"
 msgid "Domain mapping"
 msgstr "Redirección de dominio"
 
-msgid "Payment"
-msgstr "Pago"
-
 msgid "Check"
 msgstr "Comprobar"
-
-msgid ""
-"I do not have my own domain and I want to create one and redirect it to my "
-"Opennemas digital newspaper"
-msgstr ""
-"NON teño un dominio propio, quero crealo e redirixilo ao meu xornal dixital "
-"en Opennemas."
 
 msgid "Enter a domain"
 msgstr "Escriba un dominio"
@@ -4283,7 +4287,7 @@ msgstr ""
 "periódico cos teus amigos"
 
 msgid "Have a wonderful day!"
-msgstr "Que teñas un bo día!"
+msgstr "¡Que teñas un bo día!"
 
 msgid "Delete letter"
 msgstr "Eliminar carta"
@@ -4553,9 +4557,6 @@ msgstr "Editando opinión"
 msgid "Creating opinion"
 msgstr "Creando opinión"
 
-msgid "Summary"
-msgstr "Resumo"
-
 msgid "Insert image"
 msgstr "Inserir imaxe"
 
@@ -4573,18 +4574,6 @@ msgstr "Opinión de editorial"
 
 msgid "Director's letter"
 msgstr "Carta do director"
-
-msgid "Schedule"
-msgstr "Planificación"
-
-msgid "Publication start date"
-msgstr "Data de inicio de publicación"
-
-msgid "Server hour:"
-msgstr "Hora do servidor:"
-
-msgid "Publication end date"
-msgstr "Data de final de publicación"
 
 msgid "Director opinions in Opinion frontpage"
 msgstr "Número de artigos do director a mostrar na portada de opinión"
@@ -4634,9 +4623,6 @@ msgstr "Exclusivo"
 
 msgid "My themes"
 msgstr "Os meus temas"
-
-msgid "Cart"
-msgstr "Carro"
 
 msgid "Your shopping cart is empty"
 msgstr "O teu carro de compra está baleiro"
@@ -5389,14 +5375,17 @@ msgstr ""
 msgid "Cache Manager"
 msgstr "Xestor de caché"
 
-msgid "Remove cache"
-msgstr "Eliminar caché"
+msgid "Remove smarty cache"
+msgstr "Eliminar caché Smarty"
 
-msgid "Remove compiled templates"
-msgstr "Eliminar plantills compiladas"
+msgid "Remove smarty compiles"
+msgstr "Eliminar Smarty compiles"
 
-msgid "Ban varnish cache"
+msgid "Remove varnish cache"
 msgstr "Ban de cache de varnish"
+
+msgid "Remove redis cache"
+msgstr "Eliminar caché Redis"
 
 msgid "Cache group"
 msgstr "Grupo de caché"
@@ -5667,9 +5656,8 @@ msgstr "Creando ficheiro"
 msgid "Max allowed file size: %1 Mb"
 msgstr "Tamaño de ficheiro máximo permitido: %1 Mb"
 
-#, fuzzy
 msgid "File types allowed"
-msgstr "Tipo de ficheiro non permitido"
+msgstr "Tipos de ficheiro permitidos"
 
 msgid "Files (#)"
 msgstr "Ficheiros (nº)"
@@ -6013,6 +6001,9 @@ msgid ""
 "Are you sure that do you want send to the trash \"[% template.content.title "
 "%]\"?"
 msgstr "Tes certeza que queres enviar ao lixo «[% template.content.title %]»?"
+
+msgid "Deleting"
+msgstr "Eliminando"
 
 msgid "Restore selected items"
 msgstr "Restaurar os elementos seleccionados"
@@ -6837,6 +6828,9 @@ msgstr "Nome do ficheiro orixinal:"
 msgid "Resolution:"
 msgstr "Resolución:"
 
+msgid "Date:"
+msgstr "Data:"
+
 msgid "Used for searches and automated suggestions."
 msgstr "Usado para as buscas e suxestións automáticas."
 
@@ -6917,9 +6911,6 @@ msgstr "Clics:"
 
 msgid "Viewed:"
 msgstr "Visto:"
-
-msgid "Date:"
-msgstr "Data:"
 
 msgid "Advertisment"
 msgstr "Publicidade"
@@ -7072,6 +7063,12 @@ msgstr "e na posición"
 
 msgid "AMP inner article - Button 1"
 msgstr "Artigo interior AMP - Botón 1"
+
+msgid "AMP inner article - Button 2"
+msgstr "Artigo interior AMP - Botón 2"
+
+msgid "AMP inner article - Button 3"
+msgstr "Artigo interior AMP - Botón 3"
 
 msgid "Instant Articles inner article - Button 1"
 msgstr "Artigo interior Instant Articles - Botón 1"
@@ -7330,15 +7327,14 @@ msgstr "Cor para distinguir entre as distintas axencias de novas"
 msgid "Connection"
 msgstr "Conexión"
 
-#, fuzzy
 msgid "External agency"
-msgstr "Envio externo"
+msgstr "Axencia externa"
 
 msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
 
 msgid "Test"
-msgstr ""
+msgstr "Probar"
 
 msgid "Sync parameters"
 msgstr "Parámetros de sincronización"
@@ -7365,49 +7361,41 @@ msgstr ""
 "Activa esta opción se queres importar o autor dos elementos, se está "
 "dispoñible"
 
-#, fuzzy
 msgid "Link to source"
-msgstr "Sincronizando desde as orixes"
+msgstr "Enlazar a orixe"
 
-#, fuzzy
 msgid ""
 "Activate this if you want to add the link to the source at the end of the "
 "body"
 msgstr ""
-"Activa esta opción se queres importar o autor dos elementos, se está "
-"dispoñible"
+"Activa esta opción se queres engadir o enlaze á orixe ao final do corpo"
 
-#, fuzzy
 msgid "Automatic import"
-msgstr "Importar en lote"
+msgstr "Importación automática"
 
 msgid "Enabled"
 msgstr "Activada"
 
-#, fuzzy
 msgid "Category to import"
-msgstr "Logo da categoría"
+msgstr "Importar a categoría"
 
-#, fuzzy
 msgid "Author to import to"
-msgstr "Fotos do autor"
+msgstr "Importar con autor"
 
-#, fuzzy
 msgid "Import related contents"
-msgstr "Contidos relacionados"
+msgstr "Importar contidos relacionados"
 
 msgid "If possible, import all related contents for each content"
-msgstr ""
+msgstr "Se é posible, importa todos os contidos relacionados para cada contido"
 
-#, fuzzy
 msgid "Filtering"
-msgstr "Filtrar"
+msgstr "Filtrado"
 
 msgid "Filter contents that matches one or more list of words"
-msgstr ""
+msgstr "Filtrar contidos que conteñen unha ou máis listas de palabras"
 
 msgid "Comma-separated list of words to match"
-msgstr ""
+msgstr "Lista de palabras separadas por comas"
 
 msgid "Importing element"
 msgstr "Importando elemento"
@@ -7727,6 +7715,9 @@ msgstr "Este non é unha cidade válida"
 msgid "This is not a valid state"
 msgstr "Este non é un estado válido"
 
+msgid "State/Province"
+msgstr "Provincia/Estado"
+
 msgid "Sign into open<strong>nemas</strong>"
 msgstr "Entrar en openn<strong>nemas</strong>"
 
@@ -7991,7 +7982,7 @@ msgid "Select one of the listed payment methods or add a new payment method."
 msgstr "Seleccione un dos métodos de pago mostrados ou engada un novo."
 
 msgid "Return to <a href=\"%1\">store</a> and try again"
-msgstr "Volve á <a href=\"%1\">tenda</a> e proba de novo"
+msgstr "Volver á <a href=\"%1\">tenda</a> e intentalo de novo"
 
 msgid ""
 "I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
@@ -8003,7 +7994,7 @@ msgstr ""
 "Opennemas\">Termos de uso en Opennemas</a>"
 
 msgid "Thank you for your purchase request!"
-msgstr "Grazas pola túa solicitude de compra!"
+msgstr "¡Grazas pola túa solicitude de compra!"
 
 msgid ""
 "In the next 24 hours you will receive an email with payment instructions and "
@@ -8023,11 +8014,20 @@ msgstr ""
 "\">nosa axuda</a> ou comprobar os <a href=\"http://youtube.com/opennemas"
 "\">nosos vídeos</a> para ver o fácil que é usar Opennemas."
 
+msgid "Completed purchases"
+msgstr "Compras completadas"
+
+msgid "Uncompleted purchases"
+msgstr "Compras non completadas"
+
 msgid "Search by client"
 msgstr "Buscar por cliente"
 
 msgid "To"
 msgstr "Ate"
+
+msgid "Step"
+msgstr "Paso"
 
 msgid "Reset filters"
 msgstr "Reiniciar filtros"
@@ -8037,6 +8037,9 @@ msgstr "Nada que ver aquí, raparigo."
 
 msgid "Columns"
 msgstr "Columnas"
+
+msgid "Method"
+msgstr "Método"
 
 msgid "Client ID"
 msgstr "ID de cliente"
@@ -8053,6 +8056,9 @@ msgstr "Instancia"
 msgid "#"
 msgstr "#"
 
+msgid "No information"
+msgstr "Sen información"
+
 msgid "New purchase"
 msgstr "Nova compra"
 
@@ -8061,9 +8067,6 @@ msgstr "Editar usuario"
 
 msgid "Client"
 msgstr "Cliente"
-
-msgid "View on"
-msgstr "Ver en"
 
 msgid "Invoice"
 msgstr "Factura"
@@ -8184,6 +8187,9 @@ msgstr "Este UUID é válido"
 msgid "Select a type..."
 msgstr "Seleccione unha tipo…"
 
+msgid "Domain"
+msgstr "Dominio"
+
 msgid "Theme"
 msgstr "Tema"
 
@@ -8218,7 +8224,7 @@ msgid "Search"
 msgstr "Buscar"
 
 msgid "Domain expire"
-msgstr "Expiración do dominio:"
+msgstr "Expiración do dominio"
 
 msgid "Last activity"
 msgstr "Última actividade"
@@ -8356,9 +8362,6 @@ msgstr "Os dominios da instancia non poden quedar valeiros."
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
 
-msgid "Billing"
-msgstr "Facturación"
-
 msgid "Support"
 msgstr "Asistencia técnica"
 
@@ -8430,7 +8433,7 @@ msgid "Do you want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Target"
-msgstr ""
+msgstr "Obxectivo"
 
 msgid "L10n"
 msgstr "L10n"
@@ -8441,11 +8444,26 @@ msgstr "Iniciar"
 msgid "End"
 msgstr "Fin"
 
+msgid "Read"
+msgstr "Lidas"
+
+msgid "Clicked"
+msgstr "Clickadas"
+
+msgid "Opened"
+msgstr "Abertas"
+
 msgid "Fixed"
 msgstr "Fixa"
 
 msgid "Forced"
 msgstr "Forzado"
+
+msgid "Download report"
+msgstr "Descargar informe"
+
+msgid "Report"
+msgstr "Informe"
 
 msgid "New notification"
 msgstr "Nova notificación"
@@ -8678,17 +8696,50 @@ msgstr "Novo cliente"
 msgid "Edit client"
 msgstr "Editar cliente"
 
+msgid "View on"
+msgstr "Ver en"
+
 msgid "Do you want to delete the client?"
 msgstr "Desexas eliminar o cliente?"
 
 msgid "Do you want to delete the selected clients?"
 msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 
-msgid "Report"
-msgstr "Informe"
-
 msgid "Action"
 msgstr "Acción"
+
+#~ msgid "Domain + redirection: "
+#~ msgstr "Dominio + redirección:"
+
+#~ msgid "Redirection: "
+#~ msgstr "Redirección:"
+
+#~ msgid "Remove compiled templates"
+#~ msgstr "Eliminar plantills compiladas"
+
+#~ msgid ""
+#~ "I do not have my own domain and I want to create one and redirect it to "
+#~ "my Opennemas digital newspaper"
+#~ msgstr ""
+#~ "NON teño un dominio propio, quero crealo e redirixilo ao meu xornal "
+#~ "dixital en Opennemas."
+
+#~ msgid ""
+#~ "There was a problem while uploading the file. Please check if you have "
+#~ "completed all the form fields."
+#~ msgstr ""
+#~ "Produciuse un erro ao subir o ficheiro. Comprobe que completara todos os "
+#~ "campos do formulario."
+
+#~ msgid ""
+#~ "There was an error while uploading the form, the video type is not "
+#~ "specified."
+#~ msgstr ""
+#~ "Produciuse un erro ao actualizar o formulario, non se especificou o tipo "
+#~ "de vídeo."
+
+#~ msgid "Subscriptors"
+#~ msgstr "Subscritores"
 
 #~ msgid "Field '%s' not valid"
 #~ msgstr "Campo «%s» non válido"
@@ -10278,9 +10329,6 @@ msgstr "Acción"
 #~ msgid "WELCOME TO OPENNEMAS"
 #~ msgstr "BENVIDO A OPENNEMAS"
 
-#~ msgid "Already imported"
-#~ msgstr "Xa importado"
-
 #~ msgid "Editar"
 #~ msgstr "Editar"
 
@@ -10486,9 +10534,6 @@ msgstr "Acción"
 #~ msgstr ""
 #~ "Non hai ningunha imaxe dispoñíbel que coincida co teu criterio de busca"
 
-#~ msgid "Clicks"
-#~ msgstr "Clics"
-
 #~ msgid "Media flash"
 #~ msgstr "Multimedia FLASH"
 
@@ -10660,9 +10705,6 @@ msgstr "Acción"
 
 #~ msgid "FLV"
 #~ msgstr "FLV"
-
-#~ msgid "Download Url"
-#~ msgstr "Url de descarga"
 
 #~ msgid "Suggest element to frontpage"
 #~ msgstr "Suxerir elemento á portada"

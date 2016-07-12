@@ -16,6 +16,23 @@ namespace Framework\Import;
 class ServerFactory
 {
     /**
+     * The template service.
+     *
+     * @var TemplateAdmin
+     */
+    protected $tpl;
+
+    /**
+     * Initializes the ServierFactory.
+     *
+     * @param TemplateAdmin $tpl The template service.
+     */
+    public function __construct($tpl)
+    {
+        $this->tpl = $tpl;
+    }
+
+    /**
      * Returns an instance of the server where to sync from
      *
      * @param array $params The server paramameters.
@@ -32,7 +49,7 @@ class ServerFactory
                 . str_replace([$directory, DS ], [ '', '\\'], $name);
 
             try {
-                return new $class($params);
+                return new $class($params, $this->tpl);
             } catch (\Exception $e) {
             }
         }

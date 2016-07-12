@@ -52,14 +52,13 @@ class ArchiveController extends Controller
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $page  = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('newslibrary');
 
         $itemsPerPage = 20;
         $date = "{$year}-{$month}-{$day}";
 
         $cacheID = $this->view->generateCacheId($date, '', $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
             $er = getService('entity_repository');
@@ -186,8 +185,8 @@ class ArchiveController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

@@ -142,8 +142,12 @@ EOF
 
         // Initializa media path and session
         define('MEDIA_PATH', SITE_PATH."media".DS.$instance);
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+
+        // TODO: Remove ASAP
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         // Initialize script
         $output->writeln("\tStart importing images from articles");

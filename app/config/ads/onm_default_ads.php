@@ -90,14 +90,13 @@ return array_map(function ($ad) {
         'num_view' => '0',
         'overlap' => '0',
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm_Responsive_AutomaticSize -->
+            <!-- ONM-Interstitial-300x250 -->
             <ins class="adsbygoogle"
-                 style="display:block"
+                 style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="1495938492"
-                 data-ad-format="auto"></ins>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -350,14 +349,13 @@ return array_map(function ($ad) {
         'num_view' => '0',
         'overlap' => '0',
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm_Responsive_AutomaticSize -->
+            <!-- ONM-Interstitial-300x250 -->
             <ins class="adsbygoogle"
-                 style="display:block"
+                 style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="1495938492"
-                 data-ad-format="auto"></ins>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -683,14 +681,13 @@ return array_map(function ($ad) {
         'num_view' => '0',
         'overlap' => '0',
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm_Responsive_AutomaticSize -->
+            <!-- ONM-Interstitial-300x250 -->
             <ins class="adsbygoogle"
-                 style="display:block"
+                 style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="1495938492"
-                 data-ad-format="auto"></ins>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',
@@ -2943,14 +2940,13 @@ return array_map(function ($ad) {
         'num_view' => '0',
         'overlap' => '0',
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm_Responsive_AutomaticSize -->
+            <!-- ONM-Interstitial-300x250 -->
             <ins class="adsbygoogle"
-                 style="display:block"
+                 style="display:inline-block;width:300px;height:250px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="1495938492"
-                 data-ad-format="auto"></ins>',
+                 data-ad-slot="8810711294"></ins>',
         'with_script' => '1',
-        'timeout' => '20',
+        'timeout' => '10',
         'is_flash' => 0,
         'id' => '129',
         'content_type' => '2',

@@ -290,7 +290,7 @@ class Widget extends Content
     private function renderletSmarty()
     {
         $resource = 'string:' . $this->content;
-        $wgtTpl = new Template(TEMPLATE_USER);
+        $wgtTpl = getService('core.template');
 
         // no caching
         $wgtTpl->caching = 0;
@@ -310,7 +310,7 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
-        getService('core.theme')->loadWidget($this->content);
+        getService('widget_repository')->loadWidget($this->content);
 
         $class = 'Widget' . $this->content;
 

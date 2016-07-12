@@ -93,6 +93,12 @@ class NewsML extends Parser
             return $date;
         }
 
+        $date = $this->getFromBag('created_time');
+
+        if (!empty($date)) {
+            return new \Datetime($date);
+        }
+
         return new \DateTime('now');
     }
 

@@ -23,6 +23,11 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
         $this->setDefinition(
             [
                 new InputArgument(
+                    'source',
+                    InputArgument::REQUIRED,
+                    'Source from where to get the videos'
+                ),
+                new InputArgument(
                     'instance-name',
                     InputArgument::REQUIRED,
                     'Instance to import videos'
@@ -39,11 +44,10 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                     'Channel to get the videos'
                 ),
                 new InputOption(
-                    'source',
-                    false,
+                    'file',
+                    'f',
                     InputOption::VALUE_REQUIRED,
-                    'Source from where to get the videos',
-                    'youtube'
+                    'Csv file to get the videos'
                 ),
             ]
         )
@@ -55,13 +59,16 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        throw new \Exception('I am using the old Youtube API. Please, update me.');
+
         $start = time();
 
         // Get arguments
         $instance       = $input->getArgument('instance-name');
-        $source         = $input->getOption('source');
+        $source         = $input->getArgument('source');
         $this->category = $input->getArgument('category-id');
         $this->channel  = $input->getOption('channel');
+        $csv            = $input->getOption('file');
 
         $this->input  = $input;
         $this->output = $output;
@@ -103,8 +110,10 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
         define('CACHE_PREFIX', '');
 
         // Set session variable
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
         if (!file_exists($commonCachepath)) {
@@ -127,6 +136,19 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 }
 
                 $this->importYoutubeVideos();
+
+                $end = time();
+                $this->displayFinalInfo($end - $start);
+                break;
+
+            case 'csv':
+                $videos = array_map('str_getcsv', @file($csv));
+
+                if (!is_array($videos) || empty($videos)) {
+                    throw new \Exception("Invalid csv file");
+                }
+
+                $this->importHTMLVideosFromCsv($videos);
 
                 $end = time();
                 $this->displayFinalInfo($end - $start);
@@ -242,14 +264,84 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     }
 
     /**
+     * Import Videos from a csv file
+     *
+     * csv order: title,body,date,thumbnail
+     *
+     * @param string csv file path
+     */
+    public function importHTMLVideosFromCsv($videos)
+    {
+        $this->output->writeln(
+            "<fg=yellow>*** Importing count($videos) videos from csv ".
+            "<info>$file</info> ***</fg=yellow>\n"
+        );
+
+        $importedVideos = $notImportedVideos = $alreadyImported = 0;
+        foreach ($videos as $item) {
+            $starttime = new \DateTime((string)$item[2]);
+            $date = date_format($starttime, 'Y-m-d H:i:s');
+            $thumbnail = $item[3];
+
+            if ($this->isAlreadyImported($date.$item[0].'csv')) {
+                $alreadyImported++;
+                continue;
+            }
+
+            $data = [
+                'author_name'    => 'script',
+                'body'           => $item[1],
+                'category'       => $this->category,
+                'content_status' => 1,
+                'fk_author'      => 0,
+                'metadata'       => \Onm\StringUtils::getTags($item[0]),
+                'params'         => [],
+                'description'    => $item[0],
+                'endtime'        => '',
+                'starttime'      => $date,
+                'created'        => $date,
+                'changed'        => $date,
+                'title'          => $item[0],
+                'video_url'      => $date.$item[0].'csv',
+                'with_comment'   => 1,
+                'information'    => [ 'thumbnail' =>  $thumbnail ],
+            ];
+
+            $video = new \Video();
+
+            // Generate stats for imported videos
+            if ($video->create($data)) {
+                $importedVideos++;
+            } else {
+                $notImportedVideos++;
+                array_push($failedVideosUrl, $data['title']);
+            }
+        }
+
+        $this->output->writeln(
+            'Imported videos: '. $importedVideos ."\n".
+            'Already imported videos: '. $alreadyImported ."\n".
+            'Failed imported videos:' . $notImportedVideos ."\n"
+        );
+
+        if (!empty($failedVideosUrl)) {
+            foreach ($failedVideosUrl as $fail) {
+                $this->output->writeln(
+                    $fail."\n"
+                );
+            }
+        }
+    }
+
+    /**
      * Check if the video is already imported
      *
      * @param string Video url
      */
-    protected function isAlreadyImported($video)
+    protected function isAlreadyImported($url)
     {
         $sql = "SELECT count(pk_video) as total FROM contents, videos WHERE ".
-               "video_url='".$video."' AND pk_content=pk_video";
+               "video_url='".$url."' AND pk_content=pk_video";
         $rs  = $this->connection->Execute($sql);
 
         return (bool)($rs->fields['total']);

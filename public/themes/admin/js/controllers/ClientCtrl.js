@@ -121,7 +121,7 @@
             $scope.loading = false;
             messenger.post(response);
           });
-        }
+        };
 
         /**
          * @function update
@@ -173,10 +173,6 @@
             return;
           }
 
-          if ($scope.isVatNumberRequired()) {
-            $scope.validVatNumber = false;
-          }
-
           if ($scope.searchTimeout) {
             $timeout.cancel($scope.searchTimeout);
           }
@@ -185,9 +181,9 @@
               { country: $scope.client.country, vat: $scope.client.vat_number });
 
           $scope.searchTimeout = $timeout(function() {
-            $http.get(url).success(function() {
+            $http.get(url).then(function() {
               $scope.validVatNumber = true;
-            }).error(function() {
+            }, function() {
               $scope.validVatNumber = false;
             });
           }, 500);

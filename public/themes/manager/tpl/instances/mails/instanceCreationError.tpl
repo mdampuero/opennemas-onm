@@ -6,4 +6,6 @@
 {t}Instance domains{/t}: {implode(', ', $instance->domains)}
 
 {t}Error{/t}:
+Message: {$exception->getMessage()}:
+Trace:
 {$exception->getTraceAsString()}

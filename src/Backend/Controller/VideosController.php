@@ -156,18 +156,20 @@ class VideosController extends Controller
         $category = $requestPost->getDigits('category');
 
         $videoData = [
+            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+            'body'           => $requestPost->filter('body', ''),
             'category'       => (int) $category,
             'content_status' => (int) $requestPost->getDigits('content_status', 0),
-            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $requestPost->filter('body', ''),
-            'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'description'    => $requestPost->get('description', ''),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
-            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
             'information'    => json_decode($requestPost->get('information', ''), true),
-            'video_url'      => $requestPost->filter('video_url', ''),
+            'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
             'params'         => $request->request->get('params', []),
+            'description'    => $requestPost->get('description', ''),
+            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'video_url'      => $requestPost->filter('video_url', ''),
+            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
         ];
 
         if ($type == 'external' || $type == 'script') {
@@ -227,7 +229,7 @@ class VideosController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$video->isOwner($_SESSION['userid'])
+            && !$video->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
@@ -246,8 +248,9 @@ class VideosController extends Controller
             'body'           => $requestPost->filter('body', ''),
             'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'    => $requestPost->get('description', ''),
-            'starttime'      => $video->starttime,
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
+            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
             'information'    => json_decode($requestPost->get('information', ''), true),
             'video_url'      => $requestPost->filter('video_url', ''),
@@ -292,7 +295,7 @@ class VideosController extends Controller
             // Delete related and relations
             getService('related_contents')->deleteAll($id);
 
-            $video->delete($id, $_SESSION['userid']);
+            $video->delete($id, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -335,7 +338,7 @@ class VideosController extends Controller
         $id = $request->query->getDigits('id', null);
 
         $video = $this->get('entity_repository')->find('Video', $id);
-
+        // $video = new \Video($id);
         if (is_object($video->information)) {
             $video->information = get_object_vars($video->information);
         }
@@ -474,7 +477,7 @@ class VideosController extends Controller
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
             // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->setSmarty($this->get('core.template'));
             $cacheManager->delete('home|1');
         }
 

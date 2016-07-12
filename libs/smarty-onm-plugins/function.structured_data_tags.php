@@ -35,6 +35,21 @@ function smarty_function_structured_data_tags($params, &$smarty)
             $imageWidth = $photoInt->width;
             $imageHeight = $photoInt->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
+        } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
+            // Articles with inner video
+            $videoInt = $smarty->tpl_vars['videoInt']->value;
+            if (!empty($videoInt) && strpos($videoInt->thumb, 'http')  === false) {
+                $videoInt->thumb = SITE_URL.$videoInt->thumb;
+            }
+            $imageUrl = $videoInt->thumb;
+            $imageSize = @getimagesize($imageUrl);
+            if (is_array($imageSize) &&
+                array_key_exists(0, $imageSize)
+                && array_key_exists(1, $imageSize)
+            ) {
+                $imageWidth = $imageSize[0];
+                $imageHeight = $imageSize[1];
+            }
         } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
             // Opinions
             $photo = $smarty->tpl_vars['photo']->value;
@@ -92,14 +107,14 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $output = '<script type="application/ld+json">';
         $output .= '{
                         "@context" : "http://schema.org",
-                        "@type" : "Article",
+                        "@type" : "NewsArticle",
                         "mainEntityOfPage": {
                             "@type": "WebPage",
                             "@id": "'.$url.'"
                         },';
+                        // "name" : "'.$title.'",';
         $output .= '
-                        "headline": "'.$content->title.'",
-                        "name" : "'.$title.'",';
+                        "headline": "'.$title.'",';
         $output .= '
                         "author" : {
                             "@type" : "Person",
@@ -110,6 +125,12 @@ function smarty_function_structured_data_tags($params, &$smarty)
                         "dateModified": "'.$content->changed.'",';
 
         if (!empty($imageUrl)) {
+            if (empty($imageWidth)) {
+                $imageWidth = 700;
+            }
+            if (empty($imageHeight)) {
+                $imageHeight = 450;
+            }
             $output .= '
                         "image": {
                             "@type": "ImageObject",
@@ -119,10 +140,10 @@ function smarty_function_structured_data_tags($params, &$smarty)
                         },';
         }
 
+                        // "articleSection" : "'.$category->title.'",
+                        // "keywords" : "'.$content->metadata.'",
+                        // "url" : "'.$url.'",
         $output .= '
-                        "articleSection" : "'.$category->title.'",
-                        "keywords" : "'.$content->metadata.'",
-                        "url" : "'.$url.'",
                         "publisher" : {
                             "@type" : "Organization",
                             "name" : "'.getService("setting_repository")->get("site_name").'",

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListInstancesCommand extends ContainerAwareCommand
 {
     /**
-     * Configures the current command.
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -44,10 +44,7 @@ EOF
     }
 
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance.
-     * @param OutputInterface $output An OutputInterface instance.
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

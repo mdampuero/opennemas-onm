@@ -123,15 +123,15 @@ class Poll extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+            $this->items = $this->getItems($this->id);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-        $this->items = $this->getItems($this->id);
-
-        return $this;
     }
 
     /**
@@ -145,11 +145,21 @@ class Poll extends Content
     {
         parent::load($properties);
 
-        $this->pk_poll       = $properties['pk_poll'];
-        $this->subtitle      = $properties['subtitle'];
-        $this->total_votes   = $properties['total_votes'];
-        $this->visualization = $properties['visualization'];
-        $this->used_ips      = unserialize($properties['used_ips']);
+        if (array_key_exists('pk_poll', $properties)) {
+            $this->pk_poll = $properties['pk_poll'];
+        }
+        if (array_key_exists('subtitle', $properties)) {
+            $this->subtitle = $properties['subtitle'];
+        }
+        if (array_key_exists('total_votes', $properties)) {
+            $this->total_votes = $properties['total_votes'];
+        }
+        if (array_key_exists('visualization', $properties)) {
+            $this->visualization = $properties['visualization'];
+        }
+        if (array_key_exists('used_ips', $properties)) {
+            $this->used_ips      = unserialize($properties['used_ips']);
+        }
 
         $this->status = 'opened';
         if (is_string($this->params)) {
@@ -176,29 +186,37 @@ class Poll extends Content
     {
         parent::create($data);
 
-        if ($data['item']) {
-            foreach ($data['item'] as $item) {
-                $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = \Onm\StringUtils::getTags($item->item);
-                $values = array($this->id,$item->item, $tags);
-
-                $GLOBALS['application']->conn->Execute($sql, $values);
+        $conn = getService('dbal_connection');
+        try {
+            // Save poll items
+            if (is_array($data['item']) && !empty($data['item'])) {
+                foreach ($data['item'] as $item) {
+                    $conn->insert(
+                        'poll_items',
+                        [
+                            'fk_pk_poll' => $this->id,
+                            'item'       => $item->item,
+                            'metadata'   => \Onm\StringUtils::getTags($item->item)
+                        ]
+                    );
+                }
             }
-        }
-        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`)
-                VALUES (?,?,?,?)';
-        $values = array(
-            (int) $this->id,
-            $data['subtitle'],
-            0,
-            $data['visualization']
-        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $conn->insert(
+                'polls',
+                [
+                    'pk_poll'       => (int) $this->id,
+                    'subtitle'      => $data['subtitle'],
+                    'total_votes'   => 0,
+                    'visualization' => $data['visualization'],
+                ]
+            );
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return $this;
     }
 
     /**
@@ -211,48 +229,52 @@ class Poll extends Content
     public function update($data)
     {
         parent::update($data);
-        $total = 0;
-        if ($data['item']) {
-            // Insertamos
-            $keys =  '';
-            foreach ($data['item'] as $k => $item) {
-                if (!isset($item->pk_item)) {
-                    $item->pk_item = $k + 1;
-                }
-                $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
-                $values = [
-                    (int) $item->pk_item,
-                    (int) $this->id,
-                    $item->item,
-                    $item->votes
-                ];
 
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-                $keys .= $item->pk_item.', ';
+        $conn = getService('dbal_connection');
+        try {
+            if (!$data['item']) {
+                $data['item'] = [];
+            }
+
+            $conn->executeUpdate(
+                "DELETE FROM poll_items WHERE fk_pk_poll =?",
+                [ (int) $this->id ]
+            );
+
+            // Save poll items
+            $total = 0;
+            foreach ($data['item'] as $key => &$item) {
+                $conn->insert(
+                    'poll_items',
+                    [
+                        'pk_item'    => (int) $item->pk_item,
+                        'fk_pk_poll' => (int) $this->id,
+                        'item'       => $item->item,
+                        'votes'      => $item->votes,
+                    ]
+                );
                 $total += $item->votes;
             }
 
-            $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
-            $values = [(int)$this->id];
-            $GLOBALS['application']->conn->Execute($sql, $values);
-        }
+            // Update the poll info
+            $conn->update(
+                'polls',
+                [
+                    'subtitle'      => $data['subtitle'],
+                    'visualization' => $data['visualization'],
+                    'total_votes'   => $total,
+                ],
+                [ 'pk_poll' => $data['id'] ]
+            );
 
-        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=? WHERE pk_poll= ?";
+            $this->total   = $total;
+            $this->pk_poll = $data['id'];
 
-        $values = array(
-            $data['subtitle'],
-            $data['visualization'],
-            $total,
-            $data['id']
-        );
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $this->total   = $total;
-        $this->pk_poll = $data['id'];
-
-        return $this;
     }
 
     /**
@@ -266,17 +288,21 @@ class Poll extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM polls WHERE pk_poll=?';
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+        try {
+            $rs = getService('dbal_connection')->delete(
+                'polls',
+                [ 'pk_poll' => $id ]
+            );
+
+            $rs = getService('dbal_connection')->delete(
+                'poll_items',
+                [ 'fk_pk_poll' => $id ]
+            );
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $sql = 'DELETE FROM poll_items WHERE fk_pk_poll=?';
-        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -289,27 +315,26 @@ class Poll extends Content
 
     public function getItems($pkPoll)
     {
-        $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, '
-             . 'poll_items.metadata '
-             . ' FROM poll_items WHERE fk_pk_poll =?'
-             . ' ORDER BY poll_items.pk_item';
-        $values = array($pkPoll);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        $i=0;
-        $total=0;
-        $items = array();
-        while (!$rs->EOF) {
-            $items[$i]['pk_item']  = $rs->fields['pk_item'];
-            $items[$i]['item']     = $rs->fields['item'];
-            $items[$i]['votes']    = isset($rs->fields['votes']) ? $rs->fields['votes'] : 0;
-            $items[$i]['metadata'] = $rs->fields['metadata'];
-            $total                 += $items[$i]['votes'];
-            $rs->MoveNext();
-            $i++;
-        }
+        $items = [];
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM poll_items WHERE fk_pk_poll =? ORDER BY pk_item',
+                [ $pkPoll ]
+            );
 
-        //TODO: improvement calc percents
-        if (!empty($items)) {
+            $i     = 0;
+            $total = 0;
+            foreach ($rs as $item) {
+                $items[] = [
+                    'pk_item'  => $item['pk_item'],
+                    'item'     => $item['item'],
+                    'votes'    => isset($item['votes']) ? $item['votes'] : 0,
+                    'metadata' => $item['metadata']
+                ];
+
+                $total += $item['votes'];
+            }
+
             foreach ($items as &$item) {
                 $item['percent'] = 0;
                 if (!empty($item['votes'])) {
@@ -319,9 +344,12 @@ class Poll extends Content
                     );
                 }
             }
-        }
 
-        return $items;
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -341,27 +369,27 @@ class Poll extends Content
 
         $this->total_votes++;
 
-        $sql = "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=? ";
-        $values = array($pkItem);
+        $conn = getService('dbal_connection');
+        try {
+            $conn->executeUpdate(
+                "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=?",
+                [ $pkItem ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            $rs = $conn->executeUpdate(
+                "UPDATE polls SET `total_votes`=?, `used_ips`=? WHERE pk_poll=?",
+                [
+                    $this->total_votes,
+                    serialize($this->used_ips),
+                    $this->id
+                ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        $sql = "UPDATE polls SET `total_votes`=?, `used_ips`=?
-                WHERE pk_poll=?";
-
-        $values = array(
-            $this->total_votes,
-            serialize($this->used_ips),
-            $this->id
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -405,7 +433,7 @@ class Poll extends Content
      **/
     public function render($params)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);

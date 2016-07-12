@@ -10,8 +10,8 @@
 namespace BackendWebService\Controller;
 
 use Backend\Annotation\CheckModuleAccess;
-use Framework\Import\Synchronizer\Synchronizer;
 use Framework\Import\Repository\LocalRepository;
+use Framework\Import\Synchronizer\Synchronizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -91,7 +91,7 @@ class NewsAgencyController extends Controller
         if ($edit) {
             $route = 'admin_article_show';
 
-            if ($type === 'opinion') {
+            if ($type === 'Opinion') {
                 $route = 'admin_opinion_show';
             }
 
@@ -149,16 +149,27 @@ class NewsAgencyController extends Controller
 
         $related = [];
         $urns    = [];
-        foreach ($elements as $element) {
+        foreach ($elements as &$element) {
             $urns[] = $element->urn;
 
-            foreach ($element->related as $id) {
+            foreach ($element->related as &$id) {
                 if (!array_key_exists($id, $related)) {
-                    $resource     = $repository->find($element->source, $id);
-                    $related[$id] = $resource;
-                    $urns[]       = $resource->urn;
+                    $resource = $repository->find($element->source, $id);
+
+                    if (empty($resource)) {
+                        $id = null;
+                    }
+
+                    if (!empty($resource)) {
+                        $related[$id] = $resource;
+                        $urns[]       = $resource->urn;
+                    }
                 }
             }
+
+            $element->related = array_filter($element->related, function ($a) {
+                return !empty($a);
+            });
         }
 
         $imported = [];
@@ -210,6 +221,10 @@ class NewsAgencyController extends Controller
 
         $path = $repository->syncPath . DS . $source . DS . $resource->file_name;
 
+        if (!file_exists($path)) {
+            return new Response('Image not found', 404);
+        }
+
         $content = @file_get_contents($path);
 
         return new Response(
@@ -228,9 +243,12 @@ class NewsAgencyController extends Controller
     {
         $params = [];
 
+        $path = $this->getParameter('core.paths.cache') .  DS
+            . $this->get('instance')->internal_name;
+        $tpl  = $this->get('core.template.admin');
+
         // Check last synchronization
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new Synchronizer($syncParams);
+        $synchronizer        = new Synchronizer($path, $tpl);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         if ($minutesFromLastSync > 0) {

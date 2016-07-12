@@ -586,7 +586,8 @@ class ContentManager
             $conn->rollback();
 
             $logger->error(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                'User '.getService('session')->get('user')->username
+                .' ('.getService('session')->get('user')->id
                 .') updated frontpage of category '.$categoryID.' with error message: '
                 .$e->getMessage()
             );
@@ -626,7 +627,8 @@ class ContentManager
             /* Notice log of this action */
             $logger = getService('application.log');
             $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                'User '.getService('session')->get('user')->username
+                .' ('.getService('session')->get('user')->id
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
             );
 
@@ -657,7 +659,8 @@ class ContentManager
 
         $logger = getService('application.log');
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+            'User '.getService('session')->get('user')->username
+            .' ('.getService('session')->get('user')->id
             .') clear contents frontpage of category '.$categoryID
         );
     }
@@ -754,6 +757,29 @@ class ContentManager
                     || $content->starttime < $expires)
             ) {
                 $expires = $content->starttime;
+            }
+        }
+
+        return $expires;
+    }
+
+    /**
+     * Gets the earlier starttime of scheduled contents from a contents array
+     *
+     * @param array $contents Array of Contents.
+     *
+     * @return string The minor starttime of scheduled contents or null
+     */
+    public static function getEarlierEndtimeOfScheduledContents($contents)
+    {
+        $current = date('Y-m-d H:i:s');
+        $expires = null;
+        foreach ($contents as $content) {
+            if ($content->endtime > $current
+                && (empty($expires)
+                    || $content->endtime < $expires)
+            ) {
+                $expires = $content->endtime;
             }
         }
 
@@ -2145,5 +2171,57 @@ class ContentManager
         }
 
         return $contentIds;
+    }
+
+    /**
+     * Returns a list of metaproperty values from a list of contents
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return boolean true if it is in the category
+     **/
+    public static function getMultipleProperties($propertyMap)
+    {
+        $map = $values = [];
+        foreach ($propertyMap as $property) {
+            $map []= '(fk_content=? AND `meta_name`=?)';
+            $values []= $property[0];
+            $values []= $property[1];
+        }
+
+        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
+        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
+
+        return $value;
+    }
+
+    /**
+     * Sets a metaproperty for the actual content
+     *
+     * @param string $id the id of the content
+     * @param string $property the name of the property
+     * @param mixed $value     the value of the property
+     *
+     * @return boolean true if the property was setted
+     **/
+    public static function setContentMetadata($id, $property, $value)
+    {
+        if (is_null($id) || empty($property)) {
+            return false;
+        }
+
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, $property, $value, $value);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        return true;
     }
 }

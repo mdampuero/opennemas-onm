@@ -15,7 +15,10 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         // Generate canonical url
         $url = SITE_URL.substr(strtok($_SERVER["REQUEST_URI"], '?'), 1);
 
-        // Create tag <link> with the canonical url
+        // Create tag <link> with the canonical url and check for amp
+        if (preg_match('/amp.html/', $url)) {
+            $url = preg_replace('/amp.html/', 'html', $url);
+        }
         $canonical = '<link rel="canonical" href="'.$url.'"/>';
 
         // Change output html

@@ -35,7 +35,6 @@ class OpinionsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
         $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
@@ -55,7 +54,7 @@ class OpinionsController extends Controller
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
 
         // Don't execute the app logic if there are caches available
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             $date = date('Y-m-d H:i:s');
@@ -247,7 +246,7 @@ class OpinionsController extends Controller
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
 
         // Don't execute the app logic if there are caches available
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             // Get sync params
@@ -372,7 +371,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
@@ -516,7 +515,7 @@ class OpinionsController extends Controller
         // Author frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $page);
         // Don't execute the app logic if there are caches available
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get sync params
@@ -661,7 +660,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         $cacheId = $this->view->generateCacheId($this->category_name, '', $opinion->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
             $author = $this->get('user_repository')->find($opinion->fk_author);
@@ -801,7 +800,7 @@ class OpinionsController extends Controller
 
         $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
@@ -857,11 +856,11 @@ class OpinionsController extends Controller
     public static function getAds($context = '')
     {
         // Get opinion positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
+        $positionManager = $this->('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, '4');

@@ -137,8 +137,7 @@ class CategoriesController extends Controller
 
             if ($category->create($data)) {
                 $user = new \User();
-                $user->addCategoryToUser($_SESSION['userid'], $category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
+                $user->addCategoryToUser($this->getUser()->id, $category->pk_content_category);
 
                 dispatchEventWithParams('category.create', ['category' => $category]);
 
@@ -308,10 +307,7 @@ class CategoriesController extends Controller
         if ($category->pk_content_category != null) {
             if ($category->delete($id)) {
                 $user = new \User();
-                $user->delCategoryToUser($_SESSION['userid'], $id);
-
-                $_SESSION['accesscategories'] =
-                    $user->getAccessCategoryIds($_SESSION['userid']);
+                $user->delCategoryToUser($this->getUser()->id, $id);
 
                 dispatchEventWithParams('category.delete', ['category' => $category]);
 

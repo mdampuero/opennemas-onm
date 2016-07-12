@@ -65,9 +65,9 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('core.theme')->getAdsPositionManager();
-        $map             = $positionManager->getAllAdsPositions();
-        $adsNames        = $positionManager->getAllAdsNames();
+        $positionManager = $this->get('core.manager.advertisement');
+        $map             = $positionManager->getPositions();
+        $adsNames        = $positionManager->getPositionNames();
 
         $typeAdvertisement = [ [ 'name' => _("All"), 'value' => -1 ] ];
 
@@ -140,8 +140,7 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('core.theme')->getAdsPositionManager()
-                ->getThemeAdsPositions();
+            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
             return $this->render(
                 'advertisement/new.tpl',
@@ -179,8 +178,8 @@ class AdsController extends Controller
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
-            'fk_author'          => $_SESSION['userid'],
-            'fk_publisher'       => $_SESSION['userid'],
+            'fk_author'          => $this->getUser()->id,
+            'fk_publisher'       => $this->getUser()->id,
             'params'             => [
                 'width'             => json_decode($request->request->get('params_width', '')),
                 'height'            => json_decode($request->request->get('params_height', '')),
@@ -241,7 +240,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if ($ad->fk_publisher != $_SESSION['userid']
+        if ($ad->fk_publisher != $this->getUser()->id
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -262,12 +261,12 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('core.theme')->getAdsPositionManager();
+        $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
             'advertisement/new.tpl',
             array(
                 'advertisement' => $ad,
-                'themeAds'      => $positionManager->getThemeAdsPositions(),
+                'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,
                 'page'          => $page,
                 'server_url'    => $serverUrl,
@@ -301,7 +300,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if (!$ad->isOwner($_SESSION['userid'])
+        if (!$ad->isOwner($this->getUser()->id)
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -335,8 +334,8 @@ class AdsController extends Controller
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
-            'fk_author'          => $_SESSION['userid'],
-            'fk_publisher'       => $_SESSION['userid'],
+            'fk_author'          => $this->getUser()->id,
+            'fk_publisher'       => $this->getUser()->id,
             'params'             => array(
                 'width'             => json_decode($request->request->get('params_width', '')),
                 'height'            => json_decode($request->request->get('params_height', '')),

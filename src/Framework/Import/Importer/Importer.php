@@ -116,6 +116,13 @@ class Importer
      */
     public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 1)
     {
+        $content = $this->container->get('entity_repository')
+            ->findOneBy([ 'urn_source' => [ [ 'value' => $resource->urn ] ] ]);
+
+        if (!empty($content)) {
+            throw new \Exception(_('Content already imported'));
+        }
+
         $category = $this->getCategory($category);
         $author   = $this->getAuthor($resource, $author);
 
@@ -141,13 +148,23 @@ class Importer
      */
     public function importAll()
     {
+        $ignored   = 0;
+        $imported  = [];
         $resources = $this->getResources();
 
         foreach ($resources as $resource) {
-            $imported[] = $this->import($resource);
+            try {
+                $id = $this->import($resource);
+
+                if (!empty($id)) {
+                    $imported[] = $id;
+                }
+            } catch (\Exception $e) {
+                $ignored++;
+            }
         }
 
-        return $imported;
+        return [ $imported, $ignored ];
     }
 
     /**
@@ -215,7 +232,8 @@ class Importer
         $logger = $this->get('application.log');
         $logger->info(
             'User ' . $data['username'] . ' was created from importer by user '
-            . $_SESSION['username'] . ' (' . $_SESSION['userid'] . ')'
+            . $this->container->get('session')->get('user')->username
+            . ' (' . $this->container->get('session')->get('user')->id . ')'
         );
 
         // Set user meta if exists
@@ -345,9 +363,15 @@ class Importer
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),
+            'summary'             => $resource->summary,
+            'body'                => $resource->body,
+            'img1'                => 0,
+            'img1_footer'         => '',
+            'img2'                => 0,
+            'img2_footer'         => '',
         ];
 
-        if ($target === 'photo') {
+        if ($resource->type === 'photo' || $target === 'photo') {
             $data['local_file'] = realpath($this->repository->syncPath. DS
                 . $this->config['id'] .  DS . $resource->file_name);
             $data['original_filename'] = $resource->file_name;
@@ -359,12 +383,6 @@ class Importer
             $data['title_int']     = $resource->title;
             $data['subtitle']      = $resource->pretitle;
             $data['agency']        = $this->config['agency_string'];
-            $data['summary']       = $resource->summary;
-            $data['body']          = $resource->body;
-            $data['img1']          = 0;
-            $data['img1_footer']   = '';
-            $data['img2']          = 0;
-            $data['img2_footer']   = '';
             $data['fk_video']      = 0;
             $data['footer_video']  = '';
             $data['fk_video2']     = 0;
@@ -384,7 +402,7 @@ class Importer
         }
 
         if ($this->importRelated() && !empty($resource->related)) {
-            $data = array_merge($data, $this->getRelatedData());
+            $data = array_merge($data, $this->getRelatedData($resource, $target));
         }
 
         return $data;
@@ -404,7 +422,11 @@ class Importer
         $related    = [];
 
         foreach ($resource->related as $id) {
-            $related[] = $this->repository->find($this->config['id'], $id);
+            $r = $this->repository->find($this->config['id'], $id);
+
+            if (!empty($r)) {
+                $related[] = $r;
+            }
         }
 
         if (empty($related)) {

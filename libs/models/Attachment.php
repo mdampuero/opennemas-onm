@@ -149,7 +149,7 @@ class Attachment extends Content
             return false;
         }
 
-        $data['pk_author'] = $_SESSION['userid'];
+        $data['pk_author'] = getService('session')->get('user')->id;
 
         // all the data is ready to save into the database,
         // so create the general entry for this content
@@ -208,7 +208,7 @@ class Attachment extends Content
                     'title'    => $data['title'],
                     'category' => (int) $data['category'],
                 ],
-                [ (int) $data['id'] ]
+                [ 'pk_attachment' => (int) $data['id'] ]
             );
 
             return true;
@@ -322,9 +322,7 @@ class Attachment extends Content
      **/
     public function render($params, $tpl = null)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = getService('core.template');
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);

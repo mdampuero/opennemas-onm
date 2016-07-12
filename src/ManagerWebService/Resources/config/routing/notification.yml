@@ -37,6 +37,13 @@ manager_ws_notification_save:
     options:
         expose: true
 
+manager_ws_notification_report:
+    path:     /notifications/{id}/report
+    defaults: { _controller: ManagerWebServiceBundle:Notification:report }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_notification_show:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:show }
@@ -52,6 +59,13 @@ manager_ws_notification_update:
     methods:  [ PUT ]
     requirements:
         id: \d+
+    options:
+        expose: true
+
+manager_ws_notifications_csv:
+    path:     /notifications.csv
+    defaults: { _controller: ManagerWebServiceBundle:Notification:export }
+    methods:  [ GET ]
     options:
         expose: true
 

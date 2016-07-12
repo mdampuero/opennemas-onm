@@ -212,7 +212,7 @@ class OpinionsController extends Controller
         // Check if you can see others opinions
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && $opinion->fk_author != $_SESSION['userid']
+            && $opinion->fk_author != $this->getUser()->id
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -297,7 +297,7 @@ class OpinionsController extends Controller
             'endtime'             => $request->request->get('endtime', ''),
             'fk_author'           => $request->request->getDigits('fk_author'),
             'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_publisher'        => $this->getUser()->id,
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'img1'                => $request->request->getDigits('img1', ''),
             'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -364,7 +364,7 @@ class OpinionsController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$opinion->isOwner($_SESSION['userid'])
+            && !$opinion->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -395,7 +395,7 @@ class OpinionsController extends Controller
             'endtime'             => $request->request->get('endtime', ''),
             'fk_author'           => $request->request->getDigits('fk_author'),
             'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_publisher'        => $this->getUser()->id,
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'id'                  => $id,
             'img1'                => $request->request->getDigits('img1', ''),
@@ -469,7 +469,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find an opinion with the id "%d"'), $id)
             );
         } else {
-            $opinion->setInHome($status, $_SESSION['userid']);
+            $opinion->setInHome($status, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -642,7 +642,8 @@ class OpinionsController extends Controller
     {
         $opinion = new \Opinion();
         $cm = new  \ContentManager();
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $opinionContents = $request->request->filter('contents');
 
@@ -716,8 +717,6 @@ class OpinionsController extends Controller
             $otOpinion->author_name_slug = $opinion->author_name_slug;
             $otOpinion->uri              = $otOpinion->uri;
         }
-
-        $this->view->caching = 0;
 
         $session = $this->get('session');
 

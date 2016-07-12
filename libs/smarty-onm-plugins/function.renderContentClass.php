@@ -19,7 +19,7 @@ function smarty_function_renderContentClass($params, &$smarty) {
     $item = $params['item'];
 
     $element = 'format_'.$category;
-    $properties = $item->getProperty($element);
+    $properties = $item->getMetadata($element);
 
     return  "type-{$item->content_type} category-{$item->category} $properties";
 }

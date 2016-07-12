@@ -39,15 +39,10 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-
-        return $this->render(
-            'static_pages/form.tpl',
-            array(
-                'advertisements' => $this->getAds(),
-                'x-tags'         => 'frontpage-form',
-            )
-        );
+        return $this->render('static_pages/form.tpl', [
+            'advertisements' => $this->getAds(),
+            'x-tags'         => 'frontpage-form',
+        ]);
     }
 
     /**
@@ -62,8 +57,6 @@ class FormController extends Controller
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
-
-        $this->view = new \Template(TEMPLATE_USER);
 
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
@@ -187,8 +180,8 @@ class FormController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('core.theme')->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

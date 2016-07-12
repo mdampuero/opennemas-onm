@@ -342,7 +342,7 @@
             </div>
           </div>
         </div>
-        {if isset($user->id) && $user->id == $smarty.session.userid}
+        {if isset($user->id) && $user->id == $smarty.session._sf2_attributes.user->id}
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">

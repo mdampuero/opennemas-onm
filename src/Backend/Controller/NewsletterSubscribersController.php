@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for the newsletter subscriptors
+ * Handles the actions for the newsletter subscribers
  *
  * @package Backend_Controllers
  **/
@@ -22,14 +22,14 @@ use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the newsletter subscriptors
+ * Handles the actions for the newsletter subscribers
  *
  * @package Backend_Controllers
  **/
-class NewsletterSubscriptorsController extends Controller
+class NewsletterSubscribersController extends Controller
 {
     /**
-     * Lists all the newsletter subscriptors
+     * Lists all the newsletter subscribers
      *
      * @param Request $request the request object
      *
@@ -60,7 +60,7 @@ class NewsletterSubscriptorsController extends Controller
         if ('POST' !== $request->getMethod()) {
             return $this->render('newsletter/subscriptions/new.tpl');
         }
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         $data = array(
             'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
@@ -75,7 +75,7 @@ class NewsletterSubscriptorsController extends Controller
         if ($user->existsEmail($data['email'])) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _('Unable to create the new subscriptor. This email is already in use')
+                _('Unable to create the new subscriber. This email is already in use')
             );
 
             return $this->redirect(
@@ -90,7 +90,7 @@ class NewsletterSubscriptorsController extends Controller
             } else {
                 $this->get('session')->getFlashBag()->add(
                     'error',
-                    sprintf(_('Unable to create the new subscriptor: %s', $user->_errors))
+                    sprintf(_('Unable to create the new subscriber: %s', $user->_errors))
                 );
             }
         }
@@ -129,7 +129,7 @@ class NewsletterSubscriptorsController extends Controller
             'status'       => $request->request->getDigits('status', 2),
         );
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
         if ($user->update($data, true)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -138,7 +138,7 @@ class NewsletterSubscriptorsController extends Controller
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _('Unable to update the subscriptor information')
+                _('Unable to update the subscriber information')
             );
         }
 
@@ -162,7 +162,7 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         if (is_null($user->id)) {
             $this->get('session')->getFlashBag()->add(

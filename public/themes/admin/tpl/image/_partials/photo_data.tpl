@@ -20,6 +20,7 @@
       <div><strong>{t}Original filename:{/t}</strong> {$photo->title}</div>
       <div><strong>{t}Resolution:{/t}</strong> {$photo->width}px x {$photo->height}px</div>
       <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
+      <div><strong>{t}Date:{/t}</strong> {$photo->created}</div>
     </div>
   </div>
   <div class="photo-basic-information col-md-8">
@@ -34,17 +35,6 @@
       <div class="controls">
         <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" placeholder="{t}Write a tag and press Enter...{/t}" required="required" value="{$photo->metadata|strip}" class="form-control" />
         <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="date-{$photo->id}" class="form-label">{t}Date{/t}</label>
-      <div class="controls">
-        <div class="input-group">
-          <input class="form-control date" type="datetime" id="date-{$photo->id}" name="date[{$photo->id}]" value='{$photo->created}'/>
-          <span class="input-group-addon add-on">
-            <span class="fa fa-calendar"></span>
-          </span>
-        </div>
       </div>
     </div>
     <div class="form-group">
@@ -116,7 +106,7 @@
       </div><!-- /additional-info -->
     </div>
     <input type="hidden" name="resolution[{$photo->id}]" value="{$photo->resolution}" />
-    <input type="hidden" name="title[{$photo->id}]" value="{$photo->name}" />
+    <input type="hidden" name="title[{$photo->id}]" value="{$photo->title}" />
     <input type="hidden" name="category[{$photo->id}]" value="{$photo->category}" />
   </div><!-- /photo-{$rnf} -->
 </div>

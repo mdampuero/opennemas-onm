@@ -559,21 +559,21 @@ admin_newsletter_config:
 
 admin_newsletter_subscriptors:
     path:     /newsletters/subscriptors
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:list }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:list }
 
 admin_newsletter_subscriptor_create:
     path:     /newsletters/subscriptor/create
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:create }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:create }
 
 admin_newsletter_subscriptor_show:
     path:     /newsletters/subscriptor/{id}/show
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:show }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:show }
     options:
         expose: true
 
 admin_newsletter_subscriptor_update:
     path:     /newsletters/subscriptor/{id}/update
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:update }
+    defaults: { _controller  : BackendBundle:NewsletterSubscribers:update }
 
 # Keywork controller routes
 admin_keywords:
@@ -870,6 +870,10 @@ admin_news_agency_batch_import:
 # Template cache controller routes
 admin_cache_manager:
     path:     /system/cachemanager
+    defaults: { _controller  : BackendBundle:CacheManager:index }
+
+admin_cache_manager_config:
+    path:     /system/cachemanager/config
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
 admin_cache_manager_clearcache:

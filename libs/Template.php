@@ -1,22 +1,26 @@
 <?php
-use Onm\FilesManager as fm;
-
 /**
- * Template class
+ * This file is part of the Onm package.
  *
- * @package Onm
- * @author  Fran Dieguez <fran@openhost.es>
- **/
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+use Symfony\Component\Filesystem\Filesystem;
+
 class Template extends Smarty
 {
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
     // Private properties
     public $theme            = null;
-    public $themeName        = null;
-    public $locale_dir       = null;
-    public $css_dir          = null;
     public $image_dir        = null;
-    public $js_dir           = null;
-    public $common_asset_dir = null;
     public $js_includes      = ['header' => array(), 'footer' => []];
     public $css_includes     = ['header' => array(), 'footer' => []];
     public $metatags         = [];
@@ -27,268 +31,111 @@ class Template extends Smarty
     /**
      * Initializes the Template class
      *
-     * @param string $theme the theme to use
-     * @param array  $filters the list of filters to load
-     *
-     * @return void
-     **/
-    public function __construct($theme, $filters = array())
+     * @param ServiceContainer $container The service container.
+     * @param array            $plugins   The list of plugins.
+     */
+    public function __construct($container, $plugins)
     {
-        // Call the parent constructor
         parent::__construct();
 
-        $this->themeName = $theme;
+        $this->container = $container;
 
-        $this->setBaseCachePath();
-
-        $this->setBasePaths($theme);
-
-        $this->setPluginLoadPaths();
-
-        $this->registerCustomPlugins();
-
-        $this->setTemplateVars($theme);
+        $this->registerPlugins($plugins);
 
         // Fran: I have to comment this line cause templating.globals is no
         // longer available. We need to know if this don't have any drawback in
         // current template files.
         // $this->assign('app', getService('templating.globals'));
-
-        // Load filters
-        foreach ($this->filters as $filterSectionName => $filters) {
-            foreach ($filters as $filterName) {
-                $this->loadFilter($filterSectionName, $filterName);
-            }
-        }
     }
 
     /**
-     * Sets the template base path
+     * Sets the active theme.
      *
-     * @param string $theme the theme to use
-     *
-     * @return void
-     **/
-    public function setBasePaths($theme)
+     * @param Extension $theme The current theme.
+     */
+    public function addActiveTheme($theme)
     {
-        // Parent variables
-        $this->templateBaseDir = realpath(SITE_PATH.'/themes/'.$theme);
-        $this->setTemplateDir(realpath($this->templateBaseDir.'/tpl/'));
-
-        $theme     = getService('core.theme');
-        $baseTheme = '';
-        if (!empty($theme)) {
-            $baseTheme = $theme->getParentTheme();
-            if (is_array($baseTheme)) {
-                foreach ($baseTheme as $theme) {
-                    $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl");
-                    if (!empty($baseTheme) && $baseThemePath) {
-                        $this->addTemplateDir(realpath(SITE_PATH."/themes/{$theme}/tpl"));
-                    }
-                }
-            } else {
-                if (!empty($baseTheme)) {
-                    $this->addTemplateDir(realpath(SITE_PATH."/themes/{$baseTheme}/tpl"));
-                }
-            }
-        }
-        $this->setupCachePath($baseTheme);
-
-        $this->addTemplateDir(realpath(SITE_PATH.'/themes/base/tpl'));
-    }
-
-    /**
-     * Sets the cache base path
-     *
-     * @return void
-     **/
-    public function setBaseCachePath()
-    {
-        $this->baseCachePath = CACHE_PATH;
-    }
-
-    /**
-     * Sets the cache environment path and copy cache configurations
-     *
-     * @return void
-     **/
-    public function setupCachePath($themeName)
-    {
-        if (!file_exists($this->baseCachePath.'/smarty')) {
-            mkdir($this->baseCachePath.'/smarty', 0775, true);
-        }
-
-        $cachePath          = $this->baseCachePath.'/smarty/config/';
-        $cacheFilePath      = $cachePath.'cache.conf';
-        $templateConfigPath = $this->templateBaseDir.'/config';
-
-        // If config dir exists copy it to cache directory to make instance aware.
-        if (!is_file($cacheFilePath)
-            && is_dir($templateConfigPath)
-        ) {
-            fm::recursiveCopy(
-                $templateConfigPath,
-                $cachePath
-            );
-        }
-
-        $this->setConfigDir(realpath($this->baseCachePath).'/smarty/config');
-
-        $directory = COMMON_CACHE_PATH.'/smarty/compile-'.$this->themeName;
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-        $this->compile_dir = realpath($directory).'/';
-
-        $directory = $this->baseCachePath.'/smarty/cache';
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-        $this->cache_dir = realpath($directory).'/';
-    }
-
-    /**
-     * Sets the path where plugins are loaded from
-     *
-     * @return void
-     **/
-    public function setPluginLoadPaths()
-    {
-        $this->addPluginsDir($this->templateBaseDir.'/plugins/');
-        $this->addPluginsDir(SITE_LIBS_PATH.'/smarty-onm-plugins/');
-    }
-
-    /**
-     * Sets some template paths
-     *
-     * @param string $theme the theme to use
-     *
-     * @return void
-     **/
-    public function setTemplateVars($theme)
-    {
-        $this->error_reporting = E_ALL & ~E_NOTICE;
-
         $this->theme = $theme;
-        $this->assign('THEME', $theme);
 
-        // Template variables
-        $baseUrl = SITE_URL.'/themes/'.$theme.'/';
-        $baseUrl = str_replace('http:', '', $baseUrl);
+        $this->setTemplateVars($theme);
+        $this->setupCompiles($theme);
+        $this->setupPlugins($theme);
 
-        $this->locale_dir       = $baseUrl.'locale/';
-        $this->css_dir          = $baseUrl.'css/';
-        $this->image_dir        = $baseUrl.'images/';
-        $this->js_dir           = $baseUrl.'js/';
-        $this->common_asset_dir = SITE_URL.'assets/';
-
-        $this->caching          = false;
-
-        $this->assign(
-            'params',
-            array(
-                'LOCALE_DIR'       => $this->locale_dir,
-                'CSS_DIR'          => $this->css_dir,
-                'IMAGE_DIR'        => $this->image_dir,
-                'JS_DIR'           => $this->js_dir,
-                'COMMON_ASSET_DIR' => $this->common_asset_dir,
-                'THEME'            => $theme,
-            )
-        );
+        $this->addTheme($theme);
     }
 
-    public function addFilter($filterSection, $filterName)
+    /**
+     * Adds a filter for a section.
+     *
+     * @param string $section The section name.
+     * @param string $name    The filter name.
+     */
+    public function addFilter($section, $name)
     {
-        if (in_array($filterSection, array('pre', 'post', 'output'))) {
-            $this->filters [$filterSection][]= $filterName;
+        if (in_array($section, [ 'pre', 'post', 'output' ])) {
+            $this->filters[$section][] = $name;
         }
     }
 
-    public function generateCacheId($seccion, $subseccion = null, $resource = null)
+    /**
+     * Configures the cache basing on the instance.
+     *
+     * @param Instance $instance The current instance.
+     */
+    public function addInstance($instance)
     {
-        $cacheId = '';
+        $this->setupCache($instance);
+    }
 
-        if (!empty($subseccion)) {
-            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $subseccion).'|'.$resource);
-        } elseif (!empty($seccion)) {
-            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $seccion).'|'.$resource);
-        } else {
-            $cacheId = ('home|'.$resource);
+    /**
+     * Sets the path to template basing on the theme.
+     *
+     * @param Extension $theme The theme to add.
+     */
+    public function addTheme($theme)
+    {
+        $basePath = $this->container->getParameter('core.paths.themes');
+        $wm       = $this->container->get('widget_repository');
+
+        $path = str_replace('/themes', '', $basePath) . $theme->path . '/tpl';
+        $this->addTemplateDir($path);
+
+        $path = str_replace('/themes', '', $basePath) . $theme->path
+            . '/tpl/widgets';
+
+        $wm->addPath($path);
+    }
+
+    /**
+     * Returns the cache id basing on the section, subsection and resource
+     * names.
+     *
+     * @param string $section    The section name.
+     * @param string $subsection The section name.
+     * @param string $resource   The resource name.
+     *
+     * @return string The cache id.
+     */
+    public function generateCacheId($section, $subsection = null, $resource = null)
+    {
+        $cacheId = 'home|' . $resource;
+
+        if (!empty($subsection)) {
+            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $subsection) . '|' . $resource;
+        } elseif (!empty($section)) {
+            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $section) . '|' . $resource;
         }
+
         $cacheId = preg_replace('@-@', '', $cacheId);
 
         return $cacheId;
     }
 
-
-    public function saveConfig($data, $configFile)
-    {
-        $filename = $this->config_dir . $configFile;
-        if (file_exists($filename)) {
-            $fp = fopen($filename, 'w');
-            foreach ($data as $sectionName => $vars) {
-                fwrite($fp, '[' . $sectionName . ']' . "\n");
-                foreach ($vars as $k => $v) {
-                    fwrite($fp, $k . '=' . $v . "\n");
-                }
-            }
-            fclose($fp);
-            clearstatcache();
-        }
-    }
-
-    public function readConfig($filename)
-    {
-        $vars = parse_ini_file($this->config_dir . $filename, true);
-        return $vars;
-    }
-
-    public function readKeyConfig($filename, $key, $iniSection = 'default')
-    {
-        $vars = parse_ini_file($this->config_dir . $filename, true);
-        if (isset($vars[$iniSection][$key])) {
-            return $vars[$iniSection][$key];
-        } elseif (($iniSection!='default') && (isset($vars['default'][$key]))) {
-            return $vars['default'][$key];
-        }
-
-        return null;
-    }
-
     /**
-     * Try load a section of a config file, otherwise use default section
-     * Default section must exists
+     * Configures the Smarty cache for the section.
      *
-     * @param string $configFile This value will be concat with $this->config_dir
-     * @param string $section Load this section if it's possible
-     * @param string $defaultSection If $section don't exists then use $defaultSection
-     *
-     * @return void
+     * @param string $section The section.
      */
-    public function loadConfigOrDefault($configFile, $section, $defaultSection = 'default')
-    {
-        $configFile = $this->config_dir . $configFile;
-        if ($this->existsConfigSection($configFile, $section)) {
-            $this->configLoad($configFile, $section);
-        } else {
-            $this->configLoad($configFile, $defaultSection);
-        }
-    }
-
-    /**
-     * Check if a section exist into a file configuration
-     *
-     * @param string $configFile Absolute path to configuration dir
-     * @param string $section
-     *
-     * @return boolean
-     */
-    public function existsConfigSection($configFile, $section)
-    {
-        $content = file_get_contents($configFile);
-        return preg_match('/\[' . $section . '\]/', $content);
-    }
-
     public function setConfig($section)
     {
         // Load configuration for the given $section
@@ -297,7 +144,7 @@ class Template extends Smarty
 
         // If configuration says cache is enabled forward this to smarty object
         if (array_key_exists('caching', $config) && $config['caching'] == true) {
-            // retain current cache lifetime for each specific display call
+            // Retain current cache lifetime for each specific display call
             $this->setCaching(SMARTY::CACHING_LIFETIME_SAVED);
 
             if (!array_key_exists('cache_lifetime', $config)
@@ -311,23 +158,124 @@ class Template extends Smarty
     }
 
     /**
-     * Registers the required smarty plugins
+     * Registers the required smarty plugins.
      *
-     * @return void
-     **/
-    public function registerCustomPlugins()
+     * @param array $plugins The list of plugins.
+     */
+    protected function registerPlugins($plugins)
     {
-        $this->addFilter("output", "ads_generator");
-        $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "comscore");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "generate_fb_admin_tag");
-        $this->addFilter("output", "generate_fb_pages_tag");
-        $this->addFilter("output", "google_analytics");
-        $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "ojd");
-        $this->addFilter("output", "piwik");
-        $this->addFilter("output", "ads_scripts");
-        $this->addFilter("output", "meta_amphtml");
+        if (empty($plugins)) {
+            return;
+        }
+
+        foreach ($plugins as $section => $p) {
+            foreach ($p as $plugin) {
+                $this->addFilter($section, $plugin);
+            }
+        }
+    }
+
+    /**
+     * Sets some template paths
+     *
+     * @param string $theme The current theme.
+     */
+    protected function setTemplateVars($theme)
+    {
+        if (!empty($theme)) {
+            $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
+        }
+
+        $this->error_reporting = E_ALL & ~E_NOTICE;
+
+        // Template variables
+        $baseUrl = SITE_URL . '/themes/'.$theme.'/';
+        $baseUrl = str_replace('http:', '', $baseUrl);
+
+        $this->image_dir = $baseUrl . 'images/';
+        $this->caching   = false;
+
+        $this->assign('params', [
+            'IMAGE_DIR' => $this->image_dir,
+            'THEME'     => $theme,
+        ]);
+    }
+
+    /**
+     * Configures the smarty cache path.
+     *
+     * @param Instance $instance The current instance.
+     */
+    protected function setupCache($instance)
+    {
+        if (empty($instance)) {
+            return;
+        }
+
+        $basePath = $this->container->getParameter('core.paths.cache') . '/'
+            . $instance->internal_name;
+
+        $fs   = new Filesystem();
+        $path = $basePath . '/smarty/config';
+
+        if (!file_exists($path)) {
+            $fs->mkdir($path, 0775);
+        }
+
+        // Copy default cache configuration
+        $cm = $this->container->get('template_cache_config_manager');
+        $cm->setConfigDir($path);
+        $cm->saveDefault();
+
+        $this->setConfigDir($path);
+
+        $path = $basePath . '/smarty/cache';
+
+        if (!file_exists($path)) {
+            $fs->mkdir($path, 0775);
+        }
+
+        $this->setCacheDir($path);
+    }
+
+    /**
+     * Configures the smarty compiles path.
+     *
+     * @param Extension $theme The current theme.
+     */
+    protected function setupCompiles($theme)
+    {
+        $basePath = $this->container->getParameter('core.paths.cache.common');
+
+        $fs    = new Filesystem();
+        $path  = $basePath . '/smarty/compile-'
+            . str_replace('es.openhost.theme.', '', $theme->uuid);
+
+        if (!file_exists($path)) {
+            $fs->mkdir($path, 0775);
+        }
+
+        $this->setCompileDir($path);
+    }
+
+    /**
+     * Configures the smarty plugins path.
+     *
+     * @param Extension $theme The current theme.
+     */
+    protected function setupPlugins($theme)
+    {
+        $path = $this->container->getParameter('core.paths.themes') . '/'
+            . str_replace('es.openhost.theme.', '', $theme->uuid) . '/plugins';
+
+        $this->addPluginsDir($path);
+        $this->addPluginsDir(SITE_LIBS_PATH.'/smarty-onm-plugins/');
+
+        // Load filters
+        foreach ($this->filters as $filterSectionName => $filters) {
+            foreach ($filters as $filterName) {
+                $this->loadFilter($filterSectionName, $filterName);
+            }
+        }
     }
 }

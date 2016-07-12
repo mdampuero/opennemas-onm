@@ -25,7 +25,7 @@ use Onm\Framework\Controller\Controller;
  *
  * @package Backend_Controllers
  **/
-class NewsletterSubscriptorsController extends Controller
+class NewsletterSubscribersController extends Controller
 {
     /**
      * Lists nwesletters and perform searches across them
@@ -47,9 +47,9 @@ class NewsletterSubscriptorsController extends Controller
         // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($search);
 
-        $user = new \Subscriptor();
-        $subscriptors = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
-        $subscriptors = \Onm\StringUtils::convertToUtf8($subscriptors);
+        $user = new \Subscriber();
+        $subscribers = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
         $total = $user->countUsers($where);
 
@@ -57,7 +57,7 @@ class NewsletterSubscriptorsController extends Controller
             array(
                 'elements_per_page' => $elementsPerPage,
                 'page'              => $page,
-                'results'           => $subscriptors,
+                'results'           => $subscribers,
                 'total'             => $total,
             )
         );
@@ -80,7 +80,7 @@ class NewsletterSubscriptorsController extends Controller
 
         $errors = $success = [];
         if (!empty($id)) {
-            $user = new \Subscriptor($id);
+            $user = new \Subscriber($id);
             $result = $user->delete($id);
 
             if ($user->id && $result) {
@@ -98,7 +98,7 @@ class NewsletterSubscriptorsController extends Controller
             }
         } else {
             $errors[] = array(
-                'message' => _('You must provide an id to delete a newsletter subscriptor.'),
+                'message' => _('You must provide an id to delete a newsletter subscriber.'),
                 'type'    => 'error'
             );
         }
@@ -125,10 +125,10 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id   = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         $subscription = ($user->subscription + 1) % 2;
-        $toggled = $user->mUpdateProperty($user->id, 'subscription', $subscription);
+        $toggled = $user->setSubscriptionStatus($user->id, 'subscription', $subscription);
 
         if ($toggled) {
             $messages = array(
@@ -167,7 +167,7 @@ class NewsletterSubscriptorsController extends Controller
     {
         $id   = $request->query->getDigits('id', null);
 
-        $user = new \Subscriptor($id);
+        $user = new \Subscriber($id);
 
         $status = ($user->status == 2) ? 3: 2;
         $toggled = $user->setStatus($id, $status);
@@ -210,7 +210,7 @@ class NewsletterSubscriptorsController extends Controller
         $ids = $request->query->get('cid');
 
         if (is_array($ids) && count($ids) > 0) {
-            $user = new \Subscriptor();
+            $user = new \Subscriber();
             $count = 0;
             foreach ($ids as $id) {
                 if ($user->delete($id)) {
@@ -218,19 +218,19 @@ class NewsletterSubscriptorsController extends Controller
                 } else {
                     $this->get('session')->getFlashBag()->add(
                         'error',
-                        sprintf(_('Unable to delete the subscriptor with the id %d.'), $id)
+                        sprintf(_('Unable to delete the subscriber with the id %d.'), $id)
                     );
                 }
             }
 
             $this->get('session')->getFlashBag()->add(
                 'success',
-                sprintf(_('Successfully deleted %d subscriptors.'), $count)
+                sprintf(_('Successfully deleted %d subscribers.'), $count)
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _('Please specify a subscriptor id for delete it.')
+                _('Please specify a subscriber id for delete it.')
             );
         }
 
@@ -238,7 +238,7 @@ class NewsletterSubscriptorsController extends Controller
     }
 
     /**
-     * Deletes multiple subscriptors at once given its ids
+     * Deletes multiple subscribers at once given its ids
      *
      * @param Request $request the request object
      *
@@ -257,13 +257,13 @@ class NewsletterSubscriptorsController extends Controller
             return new JsonResponse([
                 'messages' => [
                     'id'      => 500,
-                    'message' => _('Please specify a subscriptor id for change its subscribed state it.'),
+                    'message' => _('Please specify a subscriber id for change its subscribed state it.'),
                     'type'    => 'error'
                 ]
             ]);
         }
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         foreach ($ids as $id) {
             $data[] = array(
@@ -279,7 +279,7 @@ class NewsletterSubscriptorsController extends Controller
             'messages' => [
                 [
                     'id'      => count($ids),
-                    'message' => sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids)),
+                    'message' => sprintf(_('Successfully changed subscribed state for %d subscribers.'), count($ids)),
                     'type'    => 'success'
                 ]
             ]
@@ -306,13 +306,13 @@ class NewsletterSubscriptorsController extends Controller
             return new JsonResponse([
                 'messages' => [
                     'id'      => 500,
-                    'message' => _('Please specify a subscriptor id to change the activated state.'),
+                    'message' => _('Please specify a subscriber id to change the activated state.'),
                     'type'    => 'error'
                 ]
             ]);
         }
 
-        $user = new \Subscriptor();
+        $user = new \Subscriber();
 
         foreach ($ids as $id) {
             $data[] = array(
@@ -328,7 +328,7 @@ class NewsletterSubscriptorsController extends Controller
             'messages' => [
                 [
                     'id'      => count($ids),
-                    'message' => sprintf(_('Successfully changed activated state for %d subscriptors.'), count($ids)),
+                    'message' => sprintf(_('Successfully changed activated state for %d subscribers.'), count($ids)),
                     'type'    => 'success'
                 ]
             ]

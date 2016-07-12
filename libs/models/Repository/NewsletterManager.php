@@ -26,12 +26,14 @@ class NewsletterManager extends BaseManager
      * @param DbalWrapper    $dbConn      The database connection.
      * @param CacheInterface $cache       The cache service.
      * @param string         $cachePrefix The cache prefix.
+     * @pram  Template       $template    The template service.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix, $tpl)
     {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
+        $this->tpl         = $tpl;
     }
 
     /**
@@ -90,7 +92,6 @@ class NewsletterManager extends BaseManager
      */
     public function render($contents)
     {
-        $tpl = new \Template(TEMPLATE_USER);
         $cm  = new \ContentManager();
 
         $newsletterContent = $contents;
@@ -158,16 +159,16 @@ class NewsletterManager extends BaseManager
             }
         }
 
-        $tpl->assign('newsletterContent', $newsletterContent);
+        $this->tpl->assign('newsletterContent', $newsletterContent);
 
         // render menu
         $menuManager = new \Menu();
         $menuFrontpage= $menuManager->getMenu('frontpage');
-        $tpl->assign('menuFrontpage', $menuFrontpage->items);
+        $this->tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         // render ads
         $ads = \Advertisement::findForPositionIdsAndCategory(array(1001, 1009), 0);
-        $tpl->assign('advertisements', $ads);
+        $this->tpl->assign('advertisements', $ads);
 
          // VIERNES 4 DE SEPTIEMBRE 2009
         $days = array(
@@ -190,7 +191,7 @@ class NewsletterManager extends BaseManager
                        $months[(int) $time->format('n')].' '.
                        $time->format('Y');
 
-        $tpl->assign('current_date', $currentDate);
+        $this->tpl->assign('current_date', $currentDate);
 
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
@@ -198,15 +199,15 @@ class NewsletterManager extends BaseManager
             getService('core.instance')->getMainDomain()
         );
 
-        $tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
+        $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
         $configurations = s::get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);
 
-        $tpl->assign('conf', $configurations);
-        $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
+        $this->tpl->assign('conf', $configurations);
+        $htmlContent = $this->tpl->fetch('newsletter/newNewsletter.tpl');
 
         return $htmlContent;
     }

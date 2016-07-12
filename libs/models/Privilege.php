@@ -1232,6 +1232,12 @@ class Privilege
                 'description'  => _('Edit user own profile'),
                 'module'       => 'USER',
             ),
+            189 => array(
+                'pk_privilege' => '189',
+                'name'         => 'ADVERTISEMENT_SETTINGS',
+                'description'  => _('Manage module settings'),
+                'module'       => 'ADVERTISEMENT',
+            ),
         );
 
         return self::$privileges;

@@ -80,8 +80,10 @@ EOF
         \Application::load();
         \Application::initDatabase($dbConn);
 
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $yaml = new Parser();
         $ads  = $yaml->parse(file_get_contents($ads));

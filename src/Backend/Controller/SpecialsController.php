@@ -310,7 +310,7 @@ class SpecialsController extends Controller
         if (!empty($id)) {
             $special = new \Special($id);
 
-            $special->delete($id, $_SESSION['userid']);
+            $special->delete($id, $this->getUser()->id);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Special deleted successfully.")
@@ -368,7 +368,7 @@ class SpecialsController extends Controller
 
             // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+            $cacheManager->setSmarty($this->get('core.template'));
             $cacheManager->delete('home|0');
         }
 

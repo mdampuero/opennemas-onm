@@ -20,7 +20,7 @@ class VarnishCleanerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('clean:varnish')
+            ->setName('varnish:clean')
             ->setDefinition(
                 array(
                     new InputArgument('request', InputArgument::REQUIRED, ''),

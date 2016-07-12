@@ -86,8 +86,6 @@ class WidgetsController extends Controller
 
         $allInteligentWidgets = \Widget::getAllInteligentWidgets();
 
-        $_SESSION['from'] = $request->server->get("HTTP_REFERER").'?'.$request->getQueryString();
-
         return $this->render(
             'widget/new.tpl',
             array(

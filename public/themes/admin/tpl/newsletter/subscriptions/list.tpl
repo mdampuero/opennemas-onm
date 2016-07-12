@@ -177,7 +177,7 @@
               </thead>
               <tbody>
                 <tr ng-if="contents.length == 0">
-                  <td class="empty" colspan="10">{t}No available subscriptors.{/t}</td>
+                  <td class="empty" colspan="10">{t}No available subscribers.{/t}</td>
                 </tr>
                 <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                   <td class="checkbox-cell">

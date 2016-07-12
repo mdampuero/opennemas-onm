@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateInstancesCommand extends ContainerAwareCommand
+class InstancesUpdateCommand extends ContainerAwareCommand
 {
     /**
      * If true, debug messages will be shown during importing.

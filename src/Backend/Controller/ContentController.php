@@ -324,9 +324,9 @@ class ContentController extends Controller
             if ($content->id != null && $properties != null) {
                 foreach ($properties as $name => $value) {
                     if (!empty($value)) {
-                        $content->setProperty($name, $value);
+                        $content->setMetadata($name, $value);
                     } else {
-                        $content->clearProperty($name);
+                        $content->removeMetadata($name);
                     }
                 }
 
