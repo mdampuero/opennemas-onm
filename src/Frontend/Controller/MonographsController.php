@@ -35,8 +35,6 @@ class MonographsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
-
         // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
@@ -82,7 +80,7 @@ class MonographsController extends Controller
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
         // Don't execute the action logic if was cached before
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('special/special_frontpage.tpl', $cacheID))
         ) {
             if (isset($this->category) && !empty($this->category)) {
@@ -147,7 +145,7 @@ class MonographsController extends Controller
         }
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $special->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
             $contents = $special->getContents($special->id);

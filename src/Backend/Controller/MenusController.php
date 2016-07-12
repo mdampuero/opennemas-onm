@@ -68,12 +68,11 @@ class MenusController extends Controller
             array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
         }
 
-        $this->menuPositions = array('' => _('Without position'));
-
         $this->menuPositions = array_merge(
-            $this->menuPositions,
-            $this->container->get('instance_manager')->current_instance->theme->getMenus()
+            [ '' => _('Without position') ],
+            $this->container->get('core.manager.menu')->getMenus()
         );
+
         $this->view->assign('menu_positions', $this->menuPositions);
 
     }

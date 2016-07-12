@@ -642,7 +642,8 @@ class OpinionsController extends Controller
     {
         $opinion = new \Opinion();
         $cm = new  \ContentManager();
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $opinionContents = $request->request->filter('contents');
 
@@ -716,8 +717,6 @@ class OpinionsController extends Controller
             $otOpinion->author_name_slug = $opinion->author_name_slug;
             $otOpinion->uri              = $otOpinion->uri;
         }
-
-        $this->view->caching = 0;
 
         $session = $this->get('session');
 

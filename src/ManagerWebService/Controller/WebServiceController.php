@@ -163,6 +163,7 @@ class WebServiceController extends Controller
         );
 
         $errors = array();
+
         try {
             $creator = new InstanceCreator($im->getConnection());
             $im->persist($instance);
@@ -239,8 +240,6 @@ class WebServiceController extends Controller
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
-        $this->view = new \TemplateManager();
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
@@ -265,8 +264,6 @@ class WebServiceController extends Controller
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
-        $this->view = new \TemplateManager();
-
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
 
         // Prepare message

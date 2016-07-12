@@ -44,7 +44,6 @@ class UserController extends Controller
         // Fetch paywall settings
         $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'user/show.tpl',
             array(
@@ -56,8 +55,6 @@ class UserController extends Controller
         );
     }
 
-
-
     /**
      * Handles the registration of a new user in frontend.
      *
@@ -67,7 +64,6 @@ class UserController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $sm = $this->get('setting_repository');
 
         $errors = [];
@@ -131,10 +127,10 @@ class UserController extends Controller
             if (count($errors) <= 0) {
                 $url = $this->generateUrl('frontend_user_activate', array('token' => $data['token']), true);
 
-                $tplMail = new \Template(TEMPLATE_USER);
-                $tplMail->caching = 0;
-                $mailSubject = sprintf(_('New user account in %s'), $sm->get('site_title'));
-                $mailBody = $tplMail->fetch(
+                $this->view->setCaching(0);
+
+                $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
+                $mailBody    = $this->renderView(
                     'user/emails/register.tpl',
                     array(
                         'name' => $data['name'],
@@ -247,8 +243,6 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-
         return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
@@ -295,10 +289,8 @@ class UserController extends Controller
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
 
-            $mailSubject      = sprintf(_('Welcome to %s'), $sm->get('site_name'));
-
-            $tplMail          = new \Template(TEMPLATE_USER);
-            $mailBody         = $tplMail->fetch(
+            $mailSubject = sprintf(_('Welcome to %s'), $sm->get('site_name'));
+            $mailBody    = $this->renderView(
                 'user/emails/welcome.tpl',
                 array(
                     'name' => $user->name,
@@ -362,7 +354,6 @@ class UserController extends Controller
         $user = new \User();
         $user->findByEmail($email);
 
-
         // If e-mail exists in DB
         if (!is_null($user->id)) {
             // Generate and update user with new token
@@ -371,11 +362,10 @@ class UserController extends Controller
 
             $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
 
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
+            $this->view->setCaching(0);
 
             $mailSubject = sprintf(_('Password reminder for %s'), $sm->get('site_title'));
-            $mailBody = $tplMail->fetch(
+            $mailBody = $this->renderView(
                 'user/emails/recoverpassword.tpl',
                 array(
                     'user' => $user,
@@ -466,8 +456,10 @@ class UserController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-        return $this->render('user/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+        return $this->render('user/regenerate_pass.tpl', [
+            'token' => $token,
+            'user'  => $user
+        ]);
     }
 
     /**
@@ -477,7 +469,6 @@ class UserController extends Controller
      */
     public function getUserMenuAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render('user/menu.tpl');
     }
 
@@ -494,10 +485,9 @@ class UserController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
             // Get user by slug
@@ -619,10 +609,9 @@ class UserController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 16;
 
-        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/frontpage_author.tpl', $cacheID))
         ) {
             $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "

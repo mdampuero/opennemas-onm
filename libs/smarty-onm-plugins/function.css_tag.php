@@ -1,46 +1,38 @@
 <?php
 /*
+ * Smarty plugin
  * -------------------------------------------------------------
- * File:     	function.script_tag.php
- * Comprueba el tipo y escribe el nombre o la imag
+ * File:     function.css_tag.php
+ * Type:     function
+ * Name:     css_tag
+ * Purpose:  Returns the URL for a stylesheet.
+ * -------------------------------------------------------------
  */
-
 function smarty_function_css_tag($params, &$smarty)
 {
-    $output = "";
-
     if (empty($params['href'])) {
         trigger_error("[plugin] css_tag parameter 'href' cannot be empty", E_USER_NOTICE);
         return;
     }
 
-    $href = $params['href'];
+    $output = '';
+    $href   = $params['href'];
+    $server = DS . 'assets' . DS . 'css' . DS;
+    $mtime  = DEPLOYED_AT;
+    $type   = 'type="text/css"';
+    $rel    = 'rel="stylesheet"';
 
-    $server = '';
-    $file = '';
-    if (array_key_exists('common', $params)) {
-        $file = SITE_PATH.SS."assets".SS."css".SS.$href;
-        $server = SS."assets".SS."css".SS;
-    } else {
-        $basepath = $params["basepath"] ?: SS."css";
-        $file = SITE_PATH.SS."themes".SS.$smarty->theme.SS.$basepath.$href;
-        $server = SS."themes".SS.$smarty->theme.SS.$basepath;
+    if (!array_key_exists('common', $params)) {
+        $basepath = $params['basepath'] ? : DS . 'css';
+        $server   = DS . $smarty->theme->path . DS . $basepath;
     }
 
-    $mtime = DEPLOYED_AT;
-
-    //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
-    } else {
-        $type = "type=\"text/css\"";
     }
 
-    //Comprobar si tiene rel definido
     if (isset($params['rel'])) {
         $rel = "rel=\"{$params['rel']}\"";
-    } else {
-        $rel = "rel=\"stylesheet\"";
     }
 
     unset($params['rel']);
@@ -48,15 +40,16 @@ function smarty_function_css_tag($params, &$smarty)
     unset($params['type']);
     unset($params['basepath']);
     unset($params['common']);
+
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $resource = preg_replace('/(\/+)/', '/', $server.SS.$href);
-    $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    $resource = $server . DS . $href;
 
     if ($params['external'] != 1) {
+        $resource = preg_replace('/(\/+)/', '/', $resource);
         $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
     }
 

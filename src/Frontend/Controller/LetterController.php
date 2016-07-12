@@ -42,11 +42,10 @@ class LetterController extends Controller
         }
         $page = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
             $itemsPerPage = 12;
@@ -121,11 +120,11 @@ class LetterController extends Controller
         }
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
             $letter->with_comment = 1;
@@ -165,7 +164,6 @@ class LetterController extends Controller
      **/
     public function showFormAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
@@ -181,8 +179,6 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
-
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =
@@ -348,8 +344,8 @@ class LetterController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions       = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = getService('core.manager.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

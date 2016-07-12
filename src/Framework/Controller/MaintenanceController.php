@@ -2,11 +2,11 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
-*
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Controller;
 
 use Onm\Framework\Controller\Controller;
@@ -14,26 +14,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Handles all the request for Maintenance mode actions
- *
- * @package Framework_Controllers
- **/
+ * Displays a page when maintenance mode is enabled
+ */
 class MaintenanceController extends Controller
 {
     /**
-     * Shows the maintenance mode page
+     * Shows the maintenance mode page.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return string the response string
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
     public function defaultAction(Request $request)
     {
-        $preferedLanguage = $request->getPreferredLanguage();
+        $preferedLanguage   = $request->getPreferredLanguage();
+        $availableLanguages = $this->getParameter('available_languages');
+        $locale             = '';
 
-        global $kernel;
-        $availableLanguages = $kernel->getContainer()->getParameter('available_languages');
-
-        $locale = '';
         foreach (array_keys($availableLanguages) as $lang) {
             if (strpos($lang, $preferedLanguage) === 0) {
                 $locale = $lang.'.UTF-8';
@@ -41,17 +38,23 @@ class MaintenanceController extends Controller
             }
         }
 
-        $localeDir = realpath(APP_PATH.'/Resources/locale/');
-        $domain = 'messages';
+        $localeDir = realpath(APP_PATH . '/Resources/locale/');
+        $domain    = 'messages';
 
         putenv("LC_MESSAGES=$locale");
         setlocale(LC_ALL, $locale);
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
 
-        $this->view = new \TemplateAdmin();
-        $output = $this->renderView('maintenance/index.tpl');
+        $this->view = $this->get('core.template.admin');
 
-        return new Response($output, 503);
+        $themes = $this->get('orm.loader')->getPlugins();
+        $themes = array_filter($themes, function ($a) {
+            return $a->uuid === 'es.openhost.theme.admin';
+        });
+
+        $this->view->addActiveTheme($themes[0]);
+
+        return new Response($this->renderView('maintenance/index.tpl'), 503);
     }
 }

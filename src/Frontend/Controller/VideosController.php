@@ -35,7 +35,6 @@ class VideosController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
         $this->page          = $this->request->query->getDigits('page', 1);
@@ -77,7 +76,7 @@ class VideosController extends Controller
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
@@ -244,7 +243,7 @@ class VideosController extends Controller
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
                 || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
@@ -327,7 +326,7 @@ class VideosController extends Controller
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $video->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
             // Load Video and categories
@@ -541,11 +540,11 @@ class VideosController extends Controller
         $category = $ccm->get_id($categoryName);
 
         // Get video positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = getService('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('video_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('video_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

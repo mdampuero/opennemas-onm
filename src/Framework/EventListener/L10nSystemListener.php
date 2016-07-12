@@ -137,6 +137,8 @@ class L10nSystemListener implements EventSubscriberInterface
         setlocale(LC_NUMERIC, 'C');
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
+
+        $this->addTextDomainForTheme();
     }
 
     /**
@@ -149,5 +151,26 @@ class L10nSystemListener implements EventSubscriberInterface
         return array(
             SymfonyKernelEvents::REQUEST => array(array('onKernelRequest', 0)),
         );
+    }
+
+    /**
+     * Adds text domain for theme.
+     */
+    public function addTextDomainForTheme()
+    {
+        $theme = $this->container->get('theme');
+
+        if (empty($theme)) {
+            return;
+        }
+
+        $path  = $this->container->getParameter('core.paths.themes') . '/'
+            . str_replace('es.openhost.theme.', '', $theme->uuid) . '/locale';
+
+        if (empty($theme) || empty($theme->text_domain) || !is_dir($path)) {
+            return;
+        }
+
+        bindtextdomain($theme->text_domain, $theme->path . '/locale');
     }
 }

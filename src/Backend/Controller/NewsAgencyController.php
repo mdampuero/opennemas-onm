@@ -10,7 +10,6 @@
 namespace Backend\Controller;
 
 use Backend\Annotation\CheckModuleAccess;
-use Framework\Import\Synchronizer\Synchronizer;
 use Framework\Import\Repository\LocalRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -280,12 +279,8 @@ class NewsAgencyController extends Controller
      */
     public function syncAction(Request $request)
     {
-        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
-
-        $servers = s::get('news_agency_config');
-
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new Synchronizer($syncParams);
+        $servers      = s::get('news_agency_config');
+        $synchronizer = $this->get('core.agency.synchronizer');
 
         try {
             $synchronizer->syncMultiple($servers);
@@ -293,9 +288,7 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_news_agency', array('page' => $page))
-        );
+        return $this->redirect($this->generateUrl('admin_news_agency'));
     }
 
     /**

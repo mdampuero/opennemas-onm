@@ -1,14 +1,12 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -22,10 +20,30 @@ use Onm\Database\DbalWrapper;
  * write their own repositories with business-specific methods to locate
  * entities.
  *
- * @package Repository
+ * TODO: When new ORM is merged, keep this class only to manage the different
+ *       menu positions.
  */
 class MenuManager extends BaseManager
 {
+    /**
+     * The default values for menu.
+     *
+     * @var array
+     */
+    protected $defaultMenu = [
+        'description'  => 'A simple menu',
+        'default_menu' => 'frontpage',
+        'class'        => 'menu',
+        'template'     => '<div id="%1$s" class="menu %2$s">[menu]</div>',
+    ];
+
+    /**
+     * The list of menus.
+     *
+     * @var array
+     */
+    protected $menus = [];
+
     /**
      * Initializes the menu manager.
      *
@@ -178,17 +196,70 @@ class MenuManager extends BaseManager
     }
 
     /**
+     * Adds a new menu to the list of menus.
+     *
+     * @param array $menu The menu definition.
+     */
+    public function addMenu($menu)
+    {
+        if (!is_array($menu)
+            || !array_key_exists('name', $menu)
+            || array_key_exists($menu['name'], $this->menus)
+        ) {
+            throw new \Exception(_('Unable to register the menu'));
+        }
+
+        $this->menus[$menu['name']] = array_merge($this->defaultMenu, $menu);
+    }
+
+    /**
+     * Adds a list of menus to the list of menus.
+     *
+     * @param string $name The menu name.
+     * @param string $file The menu configuration.
+     */
+    public function addMenus($menus)
+    {
+        foreach ($menus as $menu) {
+            $this->addMenu($menu);
+        }
+    }
+
+    /**
+     * Returns the menu definition
+     *
+     * @param string $name The menu name.
+     *
+     * @return mixed The menu definition if it exists. False otherwise.
+     */
+    public function getMenu($name)
+    {
+        if (!array_key_exists($name, $this->menus)) {
+            return false;
+        }
+
+        return $this->menus[$name];
+    }
+
+    /**
+     * Returns the list of menu names.
+     *
+     * @return array The list of menus.
+     */
+    public function getMenus()
+    {
+        return array_map(function ($a) {
+            return $a['name'];
+        }, $this->menus);
+    }
+
+    /**
      * Deletes a menu from cache.
      *
      * @param integer $id Menu id.
      */
     public function delete($id)
     {
-        // $this->dbConn->transactional(function ($em) use ($id) {
-        //     $em->executeQuery('DELETE FROM `menues` WHERE `pk_menu`= ' . $id);
-        //     $em->executeQuery('DELETE FROM `menu_items` WHERE `pk_menu`= ' . $id);
-        // });
-
         $this->cache->delete('menu' . $this->cacheSeparator . $id);
     }
 }

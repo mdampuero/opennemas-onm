@@ -65,9 +65,9 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('instance')->theme->getAdsPositionManager();
-        $map             = $positionManager->getAllAdsPositions();
-        $adsNames        = $positionManager->getAllAdsNames();
+        $positionManager = $this->get('core.manager.advertisement');
+        $map             = $positionManager->getPositions();
+        $adsNames        = $positionManager->getPositionNames();
 
         $typeAdvertisement = [ [ 'name' => _("All"), 'value' => -1 ] ];
 
@@ -140,8 +140,7 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('instance')->theme->getAdsPositionManager()
-                ->getThemeAdsPositions();
+            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
             return $this->render(
                 'advertisement/new.tpl',
@@ -262,12 +261,12 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
             'advertisement/new.tpl',
             array(
                 'advertisement' => $ad,
-                'themeAds'      => $positionManager->getThemeAdsPositions(),
+                'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,
                 'page'          => $page,
                 'server_url'    => $serverUrl,

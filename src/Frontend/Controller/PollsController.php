@@ -36,8 +36,6 @@ class PollsController extends Controller
      **/
     public function init()
     {
-
-        $this->view = new \Template(TEMPLATE_USER);
         $this->cm   = new \ContentManager();
 
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -85,7 +83,7 @@ class PollsController extends Controller
 
         // Don't execute action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
             if (isset($this->category) && !empty($this->category)) {
@@ -172,7 +170,7 @@ class PollsController extends Controller
 
         $this->view->setConfig('poll-inner');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $poll->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
             $items         = $poll->items;
@@ -293,11 +291,11 @@ class PollsController extends Controller
     protected function getAds($context = 'frontpage')
     {
         // Get polls positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = getService('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('polls_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('polls_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
@@ -316,7 +314,7 @@ class PollsController extends Controller
 
         // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
 
         $cacheID      = $this->view->generateCacheId($categoryName, '', $pollID);
         $cacheManager->delete($cacheID, 'poll.tpl');

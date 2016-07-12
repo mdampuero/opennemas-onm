@@ -311,14 +311,9 @@ class InstanceController extends Controller
             $im->getExternalInformation($instance);
         }
 
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
-        $response = $this->render(
-            'instances/csv.tpl',
-            array(
-                'instances' => $instances
-            )
-        );
+        $response = $this->render('instances/csv.tpl', [
+            'instances' => $instances
+        ]);
 
         if (!empty($search) && $search != '*') {
             $fileNameFilter = '-'.\Onm\StringUtils::getTitle($search);

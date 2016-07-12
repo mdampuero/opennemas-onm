@@ -19,13 +19,14 @@ abstract class Http extends Server
     /**
      * Opens an HTTP connection basing on the server parameters.
      *
-     * @param array $params The server parameters.
+     * @param array         $params The server parameters.
+     * @param TemplateAdmin $tpl    The template service.
      *
      * @throws \Exception If the server parameters are not valid.
      */
-    public function __construct($params = null)
+    public function __construct($params, $tpl)
     {
-        parent::__construct($params);
+        parent::__construct($params, $tpl);
 
         $this->getRemoteFiles();
     }

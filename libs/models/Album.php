@@ -405,7 +405,7 @@ class Album extends Content
      **/
     public function render($params, $tpl = null)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
