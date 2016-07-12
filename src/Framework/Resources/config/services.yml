@@ -1,5 +1,4 @@
 imports:
-    - { resource: services/orm.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
 

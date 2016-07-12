@@ -10,9 +10,11 @@
 namespace ManagerWebService\Controller;
 
 use Common\ORM\Entity\Notification;
+use League\Csv\Writer;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Returns, saves, modifies and removes notifications.
@@ -41,10 +43,15 @@ class NotificationController extends Controller
             $target[] = [ 'id' => 'manager', 'name' => 'manager' ];
         }
 
-        $oql = 'internal_name ~ "%s" order by internal_name asc limit 10';
-        $oql = sprintf($oql, $query);
+        $oql = 'order by internal_name asc limit 10';
 
-        $instances = $this->get('instance_manager')->findBy($oql);
+        if (!empty($query)) {
+            $oql .= 'internal_name ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        $instances = $this->get('orm.manager')->getRepository('instance')
+            ->findBy($oql);
 
         foreach ($instances as $instance) {
             $target[] = [
@@ -53,12 +60,21 @@ class NotificationController extends Controller
             ];
         }
 
-        $themes = $this->get('orm.loader')->getPlugins();
+        $oql = 'order by uuid asc limit 10';
+
+        if (!empty($query)) {
+            $oql .= 'uuid ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        $themes = $this->get('orm.manager')->getRepository('extension', 'file')
+            ->findBy($oql);
 
         foreach ($themes as $theme) {
-            if (empty($query) || strpos($theme->uuid, strtolower($query)) !== false) {
-                $target[] = [ 'id' => $theme->uuid, 'name' => $theme->uuid ];
-            }
+            $target[] = [
+                'id'   => $theme->uuid,
+                'name' => $theme->uuid
+            ];
         }
 
         return new JsonResponse([ 'target' => $target ]);
@@ -127,6 +143,51 @@ class NotificationController extends Controller
     }
 
     /**
+     * Returns the report with information about how many times any notification
+     * has been read, view, clicked and opened.
+     *
+     * @return Response The response object
+     */
+    public function exportAction()
+    {
+        $sql = 'SELECT notification_id, title, count(read_date) as "read",'
+            . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
+            . ' COUNT(open_date) as "opened"'
+            . ' FROM user_notification, notification'
+            . ' WHERE notification_id = id group by notification_id';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = array_map(function ($a) {
+            $title = unserialize($a['title']);
+
+            if (!empty($title) && is_array($title)) {
+                $a['title'] = array_shift($title);
+            }
+
+            return $a;
+        }, $data);
+
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne([ 'id', 'title', 'read', 'view', 'clicked', 'opened' ]);
+
+        $writer->insertAll($data);
+
+        $response = new Response();
+        $response->setContent($writer);
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=report-notifications.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
      * Returns the list of notifications.
      *
      * @param Request $request The request object.
@@ -153,7 +214,7 @@ class NotificationController extends Controller
         }
 
         return new JsonResponse([
-            'extra'   => $extra,
+            'extra'   => $this->getTemplateParams(),
             'results' => $notifications,
             'total'   => $total,
         ]);
@@ -243,6 +304,56 @@ class NotificationController extends Controller
     }
 
     /**
+     * Returns the report about the number of times a notification has been
+     * read, view, clicked and opened.
+     *
+     * @param integer $id The notification id.
+     *
+     * @return Response The response object
+     */
+    public function reportAction($id)
+    {
+        $sql = 'SELECT notification_id, title, instance_id, internal_name,'
+                . 'contact_mail, count(read_date) as "read", count(view_date) as "view",'
+                . ' count(click_date) as "clicked", count(open_date) as "opened"'
+            . ' FROM user_notification, notification, instances'
+            . ' WHERE notification_id = notification.id'
+                . ' AND notification_id = ? AND instance_id = instances.id'
+            . ' GROUP BY notification_id, instance_id';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql, [ $id ]);
+        $data = array_map(function ($a) {
+            $title = unserialize($a['title']);
+
+            if (!empty($title) && is_array($title)) {
+                $a['title'] = array_shift($title);
+            }
+
+            return $a;
+        }, $data);
+
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne([ 'id', 'title', 'instance_id', 'instance',
+            'contact', 'read', 'view', 'clicked', 'opened' ]);
+
+        $writer->insertAll($data);
+
+        $response = new Response();
+        $response->setContent($writer);
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=report-notification-' . $id . '.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
      * Creates a new notification from the request.
      *
      * @param Request $request The request object.
@@ -294,7 +405,6 @@ class NotificationController extends Controller
         $extra = $this->getTemplateParams();
         $im    = $this->get('instance_manager');
 
-        $notification->instances = $instances;
         $notification = $converter->responsify($notification->getData());
 
         return new JsonResponse([

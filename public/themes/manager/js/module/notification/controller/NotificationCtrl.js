@@ -72,7 +72,7 @@
           var route = {
               name: 'manager_ws_notification_autocomplete',
               params: { query: query }
-          }; 
+          };
 
           return http.get(route).then(function(response) {
               var tags = [];
@@ -148,7 +148,7 @@
           if (data.end && angular.isObject(data.end)) {
             data.end = data.end.toString();
           }
-          
+
           http.post('manager_ws_notification_save', $scope.notification)
             .then(function(response) {
               messenger.post(response.data);
@@ -209,37 +209,38 @@
           $scope.notification = null;
         });
 
+        var route =  'manager_ws_notification_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_notification_show', $routeParams.id).then(
-            function(response) {
-              $scope.extra        = response.data.extra;
-              $scope.notification = response.data.notification;
+          route = {
+            name:   'manager_ws_notification_show',
+            params: { id: $routeParams.id }
+          }
+        }
 
-              var target = [];
+        http.get(route).then(function(response) {
+          $scope.extra = response.data.extra;
 
-              for (var i = 0; i < $scope.notification.target.length; i++) {
-                var id   = $scope.notification.target[i];
-                var name = id;
+          if (response.data.notification) {
+            $scope.notification = response.data.notification;
+            var target = [];
 
-                if (name === 'all') {
-                  name = $scope.extra.target.filter(function (e) {
-                    return e.id === id;
-                  })[0].name;
-                }
+            for (var i = 0; i < $scope.notification.target.length; i++) {
+              var id   = $scope.notification.target[i];
+              var name = id;
 
-                target.push({ id: id, name: name });
+              if (name === 'all') {
+                name = $scope.extra.target.filter(function (e) {
+                  return e.id === id;
+                })[0].name;
               }
 
-              $scope.notification.target = target;
+              target.push({ id: id, name: name });
             }
-          );
-        } else {
-          itemService.new('manager_ws_notification_new').then(
-            function(response) {
-              $scope.extra = response.data.extra;
-            }
-          );
-        }
+
+            $scope.notification.target = target;
+          }
+        });
       }
     ]);
 })();

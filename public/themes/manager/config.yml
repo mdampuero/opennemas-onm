@@ -1,8 +1,9 @@
-name: Manager
-version: 1.0
-type: theme
-text_domain: manager-theme
-uuid: es.openhost.theme.manager
-exclusive: true
-author: Openhost, S.L.
-url: http://www.openhost.es
+extension:
+    name: Manager
+    version: 1.0
+    type: theme
+    text_domain: manager-theme
+    uuid: es.openhost.theme.manager
+    exclusive: true
+    author: Openhost, S.L.
+    url: http://www.openhost.es

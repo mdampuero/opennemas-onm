@@ -205,7 +205,7 @@ class NotificationController extends Controller
         unset($params['ids']);
 
         try {
-            $oql = 'instance = "%s" and notification_id in [%s] and user_id = "%s";
+            $oql = 'instance = "%s" and notification_id in [%s] and user_id = "%s"';
             $oql = sprintf($oql, $instance, implode(', ', $ids), $this->getUser()->id);
 
             $notifications = $em->getRepository('user_notification')
