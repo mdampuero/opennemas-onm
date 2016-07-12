@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the frontend controller for the dynamic assets
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -21,17 +16,14 @@ use Onm\Settings as s;
 use Imagine\Image\ImageInterface;
 
 /**
- * Handles the actions for assets
- *
- * @package Backend_Controllers
- **/
+ * Handles the actions for assets.
+ */
 class AssetController extends Controller
 {
     /**
-     * Description of the action
+     * Description of the action.
      *
-     * @return Response the response object
-     * @Template(name="core.template.admin")
+     * @return Response The response object.
      */
     public function imageAction(Request $request)
     {
