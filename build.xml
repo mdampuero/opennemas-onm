@@ -58,14 +58,15 @@
         <delete dir="${basedir}/build/pdepend"/>
     </target>
 
-    <!-- <target name="prepare" depends="clean,phpab" -->
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
-        <antcall target="composer" />
-        <antcall target="npm" />
-        <antcall target="bower" />
+        <parallel>
+            <antcall target="composer" />
+            <antcall target="npm" />
+            <antcall target="bower" />
+        </parallel>
     </target>
 
     <target name="composer" description="Installing composer dependencies">
