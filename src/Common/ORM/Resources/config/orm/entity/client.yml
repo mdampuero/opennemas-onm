@@ -39,7 +39,7 @@ entity:
             arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.client' ]
         freshbooks:
             class:     Common\ORM\FreshBooks\Persister\ClientPersister
-            arguments: [ '%freshbooks.domain%', '%freshbooks.token%' ]
+            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
     mapping:
         braintree:
             id:
