@@ -9,6 +9,7 @@
  */
 namespace Common\ORM\File\Repository;
 
+use Common\Cache\Core\Cache;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Oql\Php\PhpTranslator;
 use Common\ORM\Core\Exception\EntityNotFoundException;
@@ -50,7 +51,7 @@ class BaseRepository extends Repository
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($container, $paths, Metadata $metadata)
+    public function __construct($container, $paths, Metadata $metadata, Cache $cache)
     {
         if (empty($paths)) {
             throw new \InvalidArgumentException(
@@ -59,6 +60,7 @@ class BaseRepository extends Repository
         }
 
         $this->container = $container;
+        $this->cache     = $cache;
         $this->converter = new BaseConverter($metadata);
         $this->metadata  = $metadata;
         $this->paths     = $paths;
@@ -334,6 +336,13 @@ class BaseRepository extends Repository
      */
     protected function load()
     {
+        $cacheId        = \underscore($this->metadata->name) . '.' . DEPLOYED_AT;
+        $this->entities = $this->cache->get($cacheId);
+
+        if (!empty($this->entities)) {
+            return;
+        }
+
         $finder = new Finder();
 
         foreach ($this->paths as $path) {
@@ -346,6 +355,8 @@ class BaseRepository extends Repository
                 $this->loadEntity($file->getRealPath());
             }
         }
+
+        $this->cache->set($cacheId, $this->entities);
     }
 
     /**
