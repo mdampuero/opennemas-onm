@@ -63,7 +63,7 @@
          */
         var itemTpl = '<li ng-class="{\'active open\': [urls]}"[click]>' +
           '<a ng-href="#">' +
-            '<i class="fa[icon-class]"[spinner]></i>' +
+            '<i class="fa[icon-class]"></i>' +
             '<span class="title">[name]</span>' +
             '[arrow]' +
           '</a>' +
@@ -232,8 +232,7 @@
           };
 
           /**
-           * Clears history for the given route and shows a spinner on route
-           * change on item click.
+           * Clears history for the given route on item click.
            *
            * @param string route The section route name.
            */
@@ -299,7 +298,6 @@
             var click     = '';
             var iconClass = '';
             var li        = itemTpl;
-            var spinner   = '';
             var submenu   = '';
             var urls      = [];
 
@@ -334,13 +332,6 @@
               iconClass = ' ' + item.icon;
             }
 
-            // Spinner
-            if (item.route) {
-              spinner = ' ng-class="{ \'fa-spin fa-circle-o-notch\': ngModel.isChanging(\'' +
-                item.route + '\'), \'' + item.icon + '\': !ngModel.isChanging(\'' +
-                item.route + '\') }"';
-            }
-
             // Arrow & sub-menu
             if (item.items && item.items.length > 0) {
               arrow = '<span class="arrow" ng-class="{ \'open\':' + urls +
@@ -358,7 +349,6 @@
             li = li.replace('[urls]', urls);
             li = li.replace('[click]', click);
             li = li.replace('[icon-class]', iconClass);
-            li = li.replace('[spinner]', spinner);
             li = li.replace('[name]', item.name);
             li = li.replace('[arrow]', arrow);
             li = li.replace('[submenu]', submenu);
