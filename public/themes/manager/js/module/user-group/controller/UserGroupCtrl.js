@@ -20,13 +20,28 @@
        '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
       function ($location, $routeParams, $scope, http, routing, messenger) {
         /**
-         * List of available groups.
+         * @memberOf UserGroupCtrl
          *
-         * @type Object
+         * @description
+         *  List of privileges grouped by extension.
+         *
+         * @type {Array}
          */
-        $scope.user_group = { privileges: [] };
+        $scope.modules = [];
 
         /**
+         * @memberOf UserGroupCtrl
+         *
+         * @description
+         *  List of privileges.
+         *
+         * @type {type}
+         */
+        $scope.privileges = [];
+
+        /**
+         * @memberOf UserGroupCtrl
+         *
          * Privileges section
          *
          * @type array
@@ -70,11 +85,22 @@
         ];
 
         /**
+         * @memberOf UserGroupCtrl
+         *
          * Selected privileges and flags
          *
          * @type Object
          */
         $scope.selected = { all: {}, privileges: {}, allSelected: {} };
+
+        /**
+         * @memberOf UserGroupCtrl
+         *
+         * List of available groups.
+         *
+         * @type Object
+         */
+        $scope.user_group = { privileges: [] };
 
         /**
          * @function areAllSelected
@@ -115,7 +141,8 @@
          *                   false.
          */
         $scope.isModuleSelected = function(module) {
-          if (!$scope.extra || !$scope.extra.modules) {
+          if (!$scope.extra || !$scope.extra.modules || !$scope.modules ||
+              !$scope.modules[module]) {
             return;
           }
 
@@ -247,24 +274,23 @@
           if (response.data.user_group) {
             $scope.user_group = angular.merge(response.data.user_group);
             $scope.privileges = [];
-            $scope.modules    = [];
+          }
 
-            // Initialize selected all flags
-            for (var name in $scope.extra.modules) {
-              if (!$scope.modules[name]) {
-                $scope.modules[name] = [];
-              }
+          // Initialize selected all flags
+          for (var name in $scope.extra.modules) {
+            if (!$scope.modules[name]) {
+              $scope.modules[name] = [];
+            }
 
-              var module = $scope.extra.modules[name];
-              $scope.selected.all[name] = true;
+            var module = $scope.extra.modules[name];
+            $scope.selected.all[name] = true;
 
-              for (var i = 0; i < module.length; i++) {
-                $scope.privileges.push(module[i].id);
-                $scope.modules[name].push(module[i].id);
+            for (var i = 0; i < module.length; i++) {
+              $scope.privileges.push(module[i].id);
+              $scope.modules[name].push(module[i].id);
 
-                if ($scope.user_group.privileges.indexOf(module[i].pk_privilege) === -1) {
-                  $scope.selected.all[name] = false;
-                }
+              if ($scope.user_group.privileges.indexOf(module[i].pk_privilege) === -1) {
+                $scope.selected.all[name] = false;
               }
             }
           }
