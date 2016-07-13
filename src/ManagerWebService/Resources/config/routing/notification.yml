@@ -5,6 +5,13 @@ manager_ws_notification_autocomplete:
     options:
         expose: true
 
+manager_ws_notification_csv:
+    path:     /notifications/{id}.csv
+    defaults: { _controller: ManagerWebServiceBundle:Notification:export }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_notification_delete:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:delete }
@@ -37,13 +44,6 @@ manager_ws_notification_save:
     options:
         expose: true
 
-manager_ws_notification_report:
-    path:     /notifications/{id}/report
-    defaults: { _controller: ManagerWebServiceBundle:Notification:report }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 manager_ws_notification_show:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:show }
@@ -64,7 +64,7 @@ manager_ws_notification_update:
 
 manager_ws_notifications_csv:
     path:     /notifications.csv
-    defaults: { _controller: ManagerWebServiceBundle:Notification:export }
+    defaults: { _controller: ManagerWebServiceBundle:Notification:exportAll }
     methods:  [ GET ]
     options:
         expose: true

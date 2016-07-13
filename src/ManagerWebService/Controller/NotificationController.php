@@ -143,12 +143,62 @@ class NotificationController extends Controller
     }
 
     /**
+     * Returns the report about the number of times a notification has been
+     * read, view, clicked and opened.
+     *
+     * @param integer $id The notification id.
+     *
+     * @return Response The response object
+     */
+    public function exportAction($id)
+    {
+        $sql = 'SELECT notification_id, title, instance_id, internal_name,'
+                . 'contact_mail, count(read_date) as "read", count(view_date) as "view",'
+                . ' count(click_date) as "clicked", count(open_date) as "opened"'
+            . ' FROM user_notification, notification, instances'
+            . ' WHERE notification_id = notification.id'
+                . ' AND notification_id = ? AND instance_id = instances.id'
+            . ' GROUP BY notification_id, instance_id';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql, [ $id ]);
+        $data = array_map(function ($a) {
+            $title = unserialize($a['title']);
+
+            if (!empty($title) && is_array($title)) {
+                $a['title'] = array_shift($title);
+            }
+
+            return $a;
+        }, $data);
+
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne([ 'id', 'title', 'instance_id', 'instance',
+            'contact', 'read', 'view', 'clicked', 'opened' ]);
+
+        $writer->insertAll($data);
+
+        $response = new Response();
+        $response->setContent($writer);
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=report-notification-' . $id . '.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
      * Returns the report with information about how many times any notification
      * has been read, view, clicked and opened.
      *
      * @return Response The response object
      */
-    public function exportAction()
+    public function exportAllAction()
     {
         $sql = 'SELECT notification_id, title, count(read_date) as "read",'
             . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
@@ -301,56 +351,6 @@ class NotificationController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns the report about the number of times a notification has been
-     * read, view, clicked and opened.
-     *
-     * @param integer $id The notification id.
-     *
-     * @return Response The response object
-     */
-    public function reportAction($id)
-    {
-        $sql = 'SELECT notification_id, title, instance_id, internal_name,'
-                . 'contact_mail, count(read_date) as "read", count(view_date) as "view",'
-                . ' count(click_date) as "clicked", count(open_date) as "opened"'
-            . ' FROM user_notification, notification, instances'
-            . ' WHERE notification_id = notification.id'
-                . ' AND notification_id = ? AND instance_id = instances.id'
-            . ' GROUP BY notification_id, instance_id';
-
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql, [ $id ]);
-        $data = array_map(function ($a) {
-            $title = unserialize($a['title']);
-
-            if (!empty($title) && is_array($title)) {
-                $a['title'] = array_shift($title);
-            }
-
-            return $a;
-        }, $data);
-
-        $writer = Writer::createFromFileObject(new \SplTempFileObject());
-        $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
-        $writer->insertOne([ 'id', 'title', 'instance_id', 'instance',
-            'contact', 'read', 'view', 'clicked', 'opened' ]);
-
-        $writer->insertAll($data);
-
-        $response = new Response();
-        $response->setContent($writer);
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename=report-notification-' . $id . '.csv');
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
     }
 
     /**

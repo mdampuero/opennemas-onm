@@ -14,7 +14,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]" target="_blank">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
@@ -258,7 +258,7 @@
                   <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
-                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_report', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
                     <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
