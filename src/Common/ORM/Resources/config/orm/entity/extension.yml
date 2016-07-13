@@ -40,7 +40,7 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.extension',  '@cache.connection.manager' ]
         file:
             class:     Common\ORM\File\Repository\BaseRepository
-            arguments: [ '@service_container', ['public/themes'], '@orm.metadata.extension' ]
+            arguments: [ '@service_container', ['public/themes'], '@orm.metadata.extension', '@cache.connection.manager' ]
     persisters:
         database:
             class:     Common\ORM\Database\Persister\BasePersister
