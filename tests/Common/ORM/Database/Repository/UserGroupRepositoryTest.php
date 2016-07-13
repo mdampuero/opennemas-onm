@@ -73,8 +73,8 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
             [ 'id' => 2, 'name' => 'thud' ]
         ]);
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'user_group_id' => 1, 'privilege' => '1' ],
-            [ 'user_group_id' => 2, 'privilege' => '2' ]
+            [ 'user_group_id' => 1, 'privilege_id' => '1' ],
+            [ 'user_group_id' => 2, 'privilege_id' => '2' ]
         ]);
 
         $method = new \ReflectionMethod($this->repository, 'refresh');

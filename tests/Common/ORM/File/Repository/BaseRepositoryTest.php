@@ -20,6 +20,11 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'exists', 'get', 'set' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'getParameter' ])
             ->getMock();
@@ -64,7 +69,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->repository =
-            new BaseRepository($this->container, $this->paths, $this->metadata);
+            new BaseRepository($this->container, $this->paths, $this->metadata, $this->cache);
 
         $this->repository->entities = [
             new Entity([ 'foo' => 'thud', 'bar' => 'flob' ]),
@@ -79,7 +84,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorWithEmptyPaths()
     {
-        new BaseRepository($this->container, [], $this->metadata);
+        new BaseRepository($this->container, [], $this->metadata, $this->cache);
     }
 
     /**
@@ -290,6 +295,21 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($method->invokeArgs($this->repository, [ 'foo', 'bar' ]));
         $this->assertFalse($method->invokeArgs($this->repository, [ 'foo', 'fo' ]));
+    }
+
+    /**
+     * Tests load method when entities are stored in cache.
+     */
+    public function testLoadWhenEntitiesInCache()
+    {
+        $entities = [ new Entity([ 'foo' => 'qux' ]) ];
+
+        $method = new \ReflectionMethod($this->repository, 'load');
+        $method->setAccessible(true);
+
+        $this->cache->expects($this->once())->method('get')->willReturn($entities);
+
+        new BaseRepository($this->container, $this->paths, $this->metadata, $this->cache);
     }
 
     /**
