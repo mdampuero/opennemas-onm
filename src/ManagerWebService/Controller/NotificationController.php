@@ -402,9 +402,7 @@ class NotificationController extends Controller
         $converter    = $em->getConverter('Notification');
         $notification = $em->getRepository('Notification')->find($id);
 
-        $extra = $this->getTemplateParams();
-        $im    = $this->get('instance_manager');
-
+        $extra        = $this->getTemplateParams();
         $notification = $converter->responsify($notification->getData());
 
         return new JsonResponse([
