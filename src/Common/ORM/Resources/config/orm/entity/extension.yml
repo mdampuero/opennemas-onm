@@ -102,3 +102,9 @@ entity:
                     primary: false
                     unique: false
                     flags: { }
+                -
+                    name: uuid
+                    columns: [ uuid ]
+                    primary: false
+                    unique: true
+                    flags: { }
