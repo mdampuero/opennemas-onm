@@ -48,6 +48,77 @@ class Loader
         if ($this->container->has('orm.manager')) {
             $this->container->get('orm.manager');
         }
+
+        // Initialize template with admin theme
+        $theme = $this->container->get('orm.manager')
+            ->getRepository('extension', 'file')
+            ->findOneBy('uuid = "es.openhost.theme.admin"');
+
+        $this->container->get('core.template.admin')->addActiveTheme($theme);
+
+        // Initialize template with manager theme
+        $theme = $this->container->get('orm.manager')
+            ->getRepository('extension', 'file')
+            ->findOneBy('uuid = "es.openhost.theme.manager"');
+
+        $this->container->get('core.template.manager')->addActiveTheme($theme);
+    }
+
+    /**
+     * Configures the core basing on the instance.
+     *
+     * @param Instance $instance The instance.
+     */
+    public function configureInstance($instance)
+    {
+        $this->container->get('core.template')->addInstance($instance);
+        $this->container->get('core.template.admin')->addInstance($instance);
+        $this->container->get('core.template.manager')->addInstance($instance);
+
+        // Change database for `instance` database connection
+        if ($this->container->has('orm.manager')) {
+            $this->container->get('orm.manager')->getConnection('instance')
+                ->selectDatabase($instance->getDatabaseName());
+        }
+
+        // Change namespace for `instance` cache connection
+        if ($this->container->has('cache.manager')) {
+            $this->container->get('cache.connection.instance')
+                ->setNamespace($instance->internal_name);
+        }
+    }
+
+    /**
+     * Configures the core basing on the theme.
+     *
+     * @param Extension $theme The theme.
+     */
+    public function configureTheme($theme)
+    {
+        $template = $this->container->get('core.template');
+        $parents  = $this->getParents($theme);
+
+        $template->addActiveTheme($this->theme);
+
+        foreach ($parents as $uuid) {
+            $t = $this->container->get('orm.manager')
+                ->getRepository('extension', 'file')
+                ->findOneBy(sprintf('uuid = "%s"', $uuid));
+
+            if (!empty($t)) {
+                $template->addTheme($t);
+            }
+        }
+
+        if (empty($theme->parameters)) {
+            return;
+        }
+
+        foreach ($theme->parameters as $key => $values) {
+            if (method_exists($this, 'load' . $key)) {
+                $this->{'load' . $key}($values);
+            }
+        }
     }
 
     /**
@@ -86,7 +157,10 @@ class Loader
         }
 
         $this->initInternalConstants();
-        $this->loadTheme();
+
+        if ($this->instance->internal_name !== 'manager') {
+            $this->loadThemeFromUuid($this->instance->settings['TEMPLATE_USER']);
+        }
     }
 
     /**
@@ -104,20 +178,6 @@ class Loader
         $oql = 'internal_name = "%s"';
 
         return $this->loadInstanceFromOql(sprintf($oql, $internalName));
-    }
-
-    /**
-     * Loads an instance basing on an QOL query.
-     *
-     * @param string $oql The OQL query.
-     */
-    public function loadInstanceFromOql($oql)
-    {
-        $this->instance = $this->container->get('orm.manager')
-            ->getRepository('Instance')
-            ->findOneBy($oql);
-
-        return $this->instance;
     }
 
     /**
@@ -140,6 +200,8 @@ class Loader
                 ->getConnection('manager')->get($host);
 
             if (!empty($this->instance)) {
+                $this->configureInstance($this->instance);
+
                 return $this->instance;
             }
         }
@@ -153,7 +215,56 @@ class Loader
                 ->set($host, $this->instance);
         }
 
+        $this->configureInstance($this->instance);
+
         return $this->instance;
+    }
+
+    /**
+     * Loads a theme basing on a theme UUID.
+     *
+     * @param string $uuid The theme UUID.
+     */
+    public function loadThemeFromUuid($uuid)
+    {
+        $oql = sprintf('uuid = "%s"', $uuid);
+
+        return $this->loadThemeFromOql($oql);
+    }
+
+    /**
+     * Returns the list of parents of the current theme.
+     *
+     * @param Extension $theme The theme.
+     *
+     * @return array The list of parents.
+     */
+    protected function getParents($theme)
+    {
+        $uuids   = [];
+        $parents = [];
+
+        if (empty($theme)
+            || empty($theme->parameters)
+            || !array_key_exists('parent', $theme->parameters)
+        ) {
+            return $parents;
+        }
+
+        foreach ($theme->parameters['parent'] as $parent) {
+            $uuids[]   = $parent;
+            $parents[] = $parent;
+        }
+
+        foreach ($parents as $uuid) {
+            $parent = $this->container->get('orm.manager')
+                ->getRepository('extension', 'file')
+                ->findOneBy(sprintf('uuid = "%s"', $uuid));
+
+            $uuids = array_merge($uuids, $this->getParents($parent));
+        }
+
+        return array_unique($uuids);
     }
 
     /**
@@ -210,6 +321,52 @@ class Loader
     }
 
     /**
+     * Loads an instance basing on an QOL query.
+     *
+     * @param string $oql The OQL query.
+     */
+    protected function loadInstanceFromOql($oql)
+    {
+        $this->instance = $this->container->get('orm.manager')
+            ->getRepository('Instance')
+            ->findOneBy($oql);
+
+        return $this->instance;
+    }
+
+    /**
+     * Adds advertisement positions defined by theme to the advertisement
+     * manager.
+     *
+     * @param array $positions The list of positions.
+     */
+    protected function loadAdvertisements($positions)
+    {
+        $this->container->get('core.manager.advertisement')
+            ->addPositions($positions);
+    }
+
+    /**
+     * Adds layouts defined by theme to the layout manager.
+     *
+     * @param array $positions The list of positions.
+     */
+    protected function loadLayouts($layouts)
+    {
+        $this->container->get('core.manager.layout')->addLayouts($layouts);
+    }
+
+    /**
+     * Adds menu positions defined by theme to the menu manager.
+     *
+     * @param array $menus The list of menu positions.
+     */
+    protected function loadMenus($menus)
+    {
+        $this->container->get('core.manager.menu')->addMenus($menus);
+    }
+
+    /**
      * Loads the manager instance.
      */
     protected function loadManagerInstance()
@@ -225,16 +382,18 @@ class Loader
     }
 
     /**
-     * Loads the theme for the instance.
+     * Loads a theme basing on an QOL query.
+     *
+     * @param string $oql The OQL query.
      */
-    protected function loadTheme()
+    protected function loadThemeFromOql($oql)
     {
-        if ($this->instance->internal_name === 'manager') {
-            return;
-        }
+        $this->theme = $this->container->get('orm.manager')
+            ->getRepository('extension', 'file')
+            ->findOneBy($oql);
 
-        $path = SITE_PATH . DS . 'themes' . DS . TEMPLATE_USER . DS . 'init.php';
+        $this->configureTheme($this->theme);
 
-        $this->theme = include_once($path);
+        return $this->theme;
     }
 }

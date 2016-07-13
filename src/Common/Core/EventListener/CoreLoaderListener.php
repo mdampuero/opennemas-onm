@@ -1,18 +1,15 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Framework\EventListener;
+namespace Common\Core\EventListener;
 
 use Common\Core\Exception\InstanceNotActivatedException;
-use Onm\Cache\AbstractCache;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -20,16 +17,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Loads and initializes an instance from the request object.
+ * The CoreLoaderListener class configures the core with an instance and a theme
+ * basing on the request.
  */
-class InstanceLoaderListener implements EventSubscriberInterface
+class CoreLoaderListener implements EventSubscriberInterface
 {
     /**
      * The service container.
      *
      * @param ServiceContainer
      */
-     protected $container;
+    protected $container;
 
     /**
      * Initializes the instance loader.
@@ -108,22 +106,13 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $database  = $instance->getDatabaseName();
         $namespace = $instance->internal_name;
 
+        // TODO: Remove when everyone use new cache.manager service
         $this->container->get('cache')->setNamespace($namespace);
 
         // Initialize the instance database connection
         $connection = $this->container->get('db_conn_manager');
 
         if ($namespace != 'manager') {
-            // Change database for `instance` database connection
-            $this->container->get('orm.manager')->getConnection('instance')
-                ->selectDatabase($database);
-
-            // Change namespace for `instance` cache connection
-            if ($this->container->has('cache.manager')) {
-                $this->container->get('cache.connection.instance')
-                    ->setNamespace($namespace);
-            }
-
             // TODO: Remove when using new ORM for all models
             $this->container->get('dbal_connection')->selectDatabase($database);
 
