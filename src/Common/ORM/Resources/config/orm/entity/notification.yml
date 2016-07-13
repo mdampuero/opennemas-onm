@@ -1,18 +1,18 @@
 entity:
     name: Notification
     properties:
-        body:      array
-        creator:   string
-        enabled:   boolean
-        end:       datetime
-        fixed:     boolean
-        forced:    boolean
-        id:        integer
-        instances: array
-        start:     datetime
-        style:     array
-        title:     array
-        users:     array
+        body:    array
+        creator: string
+        enabled: boolean
+        end:     datetime
+        fixed:   boolean
+        forced:  boolean
+        id:      integer
+        target:  array
+        start:   datetime
+        style:   array
+        title:   array
+        users:   array
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -38,7 +38,7 @@ entity:
                 body:
                     type:    text
                     options: { default: null, length: 65532, notnull: false }
-                instances:
+                target:
                     type: text
                     options: { default: null, length: 65532, notnull: false }
                 users:
