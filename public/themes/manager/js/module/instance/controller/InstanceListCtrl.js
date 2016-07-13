@@ -65,7 +65,7 @@
          */
         $scope.delete = function(id) {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/instance:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -107,7 +107,7 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/instances:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/instance:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {

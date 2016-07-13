@@ -167,7 +167,7 @@ class InstanceController extends Controller
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         $response = $this->render(
-            'instances/csv.tpl',
+            'instance/csv.tpl',
             [ 'instances' => $instances ]
         );
 

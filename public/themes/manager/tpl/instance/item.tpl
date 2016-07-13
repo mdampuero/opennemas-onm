@@ -62,8 +62,8 @@
                     <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
                   </dt>
                   <dd>
-                    <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
-                    <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
+                    <span ng-if="settings.contact_ip">[% settings.contact_ip %]</span>
+                    <span ng-if="!settings.contact_ip">{t}Not defined{/t}</span>
                   </dd>
                   <dt>
                     <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
@@ -75,13 +75,13 @@
                     <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.languages[instance.external.site_language] %]
+                    [% template.languages[settings.site_language] %]
                   </dd>
                   <dt>
                     <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.timezones[instance.external.time_zone] %]
+                    [% template.timezones[settings.time_zone] %]
                   </dd>
                 </dl>
               </div>
@@ -102,7 +102,7 @@
                 <div class="form-group">
                   <label class="form-label" for="template">{t}Template{/t}</label>
                   <div class="controls">
-                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
+                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="value.uuid as value.name for (key,value) in template.themes"></select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -241,7 +241,7 @@
               </div>
               <div class="row p-t-30">
                 <div class="col-sm-4 col-sm-offset-4">
-                  <button class="btn btn-danger btn-block" ng-click="instance.metas.client = null">
+                  <button class="btn btn-danger btn-block" ng-click="instance.client = null">
                     <h4 class="text-white">
                       <i class="fa fa-times"></i>
                       {t}Remove{/t}
@@ -272,14 +272,14 @@
                 <div class="checkbox check-default check-title">
                   <input id="checkbox-[% puuid %]" ng-model="selected.plan[puuid]" ng-change="togglePlan(puuid)" type="checkbox">
                   <label for="checkbox-[% puuid %]">
-                    <h5>[% template.modules[map[puuid]] ? template.modules[map[puuid]].name : '{t}Other{/t}' %]</h5>
+                    <h5>[% template.extensions[map[puuid]] ? template.extensions[map[puuid]].name : '{t}Other{/t}' %]</h5>
                   </label>
                 </div>
                 <div class="m-b-5" ng-repeat="muuid in modulesByPack[puuid]">
                   <div class="checkbox check-default">
                     <input id="checkbox-[% muuid %]" checklist-model="instance.activated_modules" checklist-value="muuid" type="checkbox">
                     <label for="checkbox-[% muuid %]">
-                      [% template.modules[map[muuid]].name %]
+                      [% template.extensions[map[muuid]].name %]
                     </label>
                   </div>
                 </div>
@@ -297,7 +297,7 @@
             <div class="row">
               <div class="col-md-2 col-sm-3 col-xs-2 m-b-5" ng-repeat="theme in template.themes">
                 <div class="checkbox check-default">
-                  <input id="checkbox-[% theme.uuid %]" ng-click="toggleChanges(theme)" checklist-model="instance.metas.purchased" checklist-value="theme.uuid" type="checkbox">
+                  <input id="checkbox-[% theme.uuid %]" ng-click="toggleChanges(theme)" checklist-model="instance.purchased" checklist-value="theme.uuid" type="checkbox">
                   <label for="checkbox-[% theme.uuid %]">
                     [% theme.name %]
                   </label>
@@ -307,7 +307,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
+      <div class="col-xlg-3 col-lg-4 col-md-5 col-sm-5 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -324,14 +324,14 @@
               <div class="radio" ng-init="initializeSupportPlan()">
                 <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
                 <label for="[% uuid %]">
-                  [% template.modules[map[uuid]].name %]
+                  [% template.extensions[map[uuid]].name %]
                 </label>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+      <div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Internal settings{/t}</h4>
@@ -357,16 +357,9 @@
               </span>
             </div>
             <div class="form-group">
-              <label class="form-label" for="activated">{t}Maximun activated users{/t}</label>
-              <span class="help">{t}0 for unlimited users{/t}</span>
-              <div class="controls">
-                <input type="number" id="max_users" ng-model="instance.external.max_users" min="0">
-              </div>
-            </div>
-            <div class="form-group">
               <label class="form-label" for="template">{t}Minimum password level{/t}</label>
               <div class="controls">
-                <select ng-model="instance.external.pass_level">
+                <select ng-model="settings.pass_level">
                   <option value="-1" >{t}Default{/t}</option>
                   <option value="0" >{t}Weak{/t}</option>
                   <option value="1" >{t}Good{/t}</option>
@@ -377,13 +370,13 @@
             <div class="form-group">
               <label for="max-mailing" class="form-label">{t}Maximun number of emails sent by month{/t}</label>
               <div class="controls">
-                <input type="number" id="max-mailing" ng-model="instance.external.max_mailing">
+                <input type="number" id="max-mailing" ng-model="settings.max_mailing">
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-4 col-sm-122 col-xs-12">
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>External services</h4>
@@ -392,7 +385,7 @@
             <div class="form-group">
               <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
               <div class="controls">
-                <input class="form-control" id="piwik-page-id" ng-model="instance.external.piwik.page_id" type="text">
+                <input class="form-control" id="piwik-page-id" ng-model="settings.piwik.page_id" type="text">
                 <div class="help-block">
                   {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
                 </div>
@@ -401,7 +394,7 @@
             <div class="form-group">
               <label class="form-label" for="piwik-server-url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
               <div class="controls">
-                <input class="form-control" id="piwik-server-url" ng-model="instance.external.piwik.server_url" type="text">
+                <input class="form-control" id="piwik-server-url" ng-model="settings.piwik.server_url" type="text">
               </div>
             </div>
           </div>
