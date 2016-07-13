@@ -166,6 +166,11 @@ class Dumper
                     $options = $value['options'];
                 }
 
+                // Use datetime to prevent changes when no changes required
+                if ($value['type'] === 'datetimetz') {
+                    $value['type'] = 'datetime';
+                }
+
                 $table->addColumn($field, $value['type'], $options);
             }
 
