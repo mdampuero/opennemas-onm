@@ -27,7 +27,7 @@ class ClientPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
-        $data = $this->converter->freshbooksfy($entity);
+        $data = $this->converter->freshbooksfy($entity->getData());
 
         $this->api->setMethod('client.create');
         $this->api->post([ 'client' => $data ]);
@@ -77,7 +77,7 @@ class ClientPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        $data = $this->converter->freshbooksfy($entity);
+        $data = $this->converter->freshbooksfy($entity->getData());
 
         $this->api->setMethod('client.update');
         $this->api->post([ 'client' => $data ]);
