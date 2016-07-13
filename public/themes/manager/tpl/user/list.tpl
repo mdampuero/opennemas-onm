@@ -125,6 +125,7 @@
     </div>
     <div class="grid-body no-padding">
       <div class="table-wrapper">
+        <div class="grid-overlay" ng-if="loading"></div>
         <table class="table no-margin">
           <thead>
             <tr>
