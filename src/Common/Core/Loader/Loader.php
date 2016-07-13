@@ -49,19 +49,19 @@ class Loader
             $this->container->get('orm.manager');
         }
 
-        // Initialize template with admin theme
-        $theme = $this->container->get('orm.manager')
-            ->getRepository('extension', 'file')
-            ->findOneBy('uuid = "es.openhost.theme.admin"');
-
-        $this->container->get('core.template.admin')->addActiveTheme($theme);
-
         // Initialize template with manager theme
         $theme = $this->container->get('orm.manager')
             ->getRepository('extension', 'file')
             ->findOneBy('uuid = "es.openhost.theme.manager"');
 
         $this->container->get('core.template.manager')->addActiveTheme($theme);
+
+        // Initialize template with admin theme
+        $theme = $this->container->get('orm.manager')
+            ->getRepository('extension', 'file')
+            ->findOneBy('uuid = "es.openhost.theme.admin"');
+
+        $this->container->get('core.template.admin')->addActiveTheme($theme);
     }
 
     /**
