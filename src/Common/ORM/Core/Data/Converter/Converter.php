@@ -46,13 +46,16 @@ class Converter
 
         $data = [];
         foreach ($source as $key => $value) {
-            $from = \classify(strtolower(gettype($value)));
-            $to   = 'String';
+            $from   = \classify(strtolower(gettype($value)));
+            $to     = 'String';
+            $params = [];
+
             if (array_key_exists($key, $this->metadata->properties)) {
-                $to = \classify($this->metadata->properties[$key]);
+                $params = explode('::', $this->metadata->properties[$key]);
+                $to     = \classify(array_shift($params));
             }
 
-            $data[$key] = $this->convertFrom($to, $from, $value);
+            $data[$key] = $this->convertFrom($to, $from, $value, $params);
         }
 
         return $data;
@@ -93,17 +96,18 @@ class Converter
      * @param string $mapper The data mapper name.
      * @param string $method The method to use to convert the value.
      * @param mixed  $value  The value to convert.
+     * @param mixed  $params The parameters for conversion.
      *
      * @return type Description
      */
-    protected function convert($mapper, $method, $value)
+    protected function convert($mapper, $method, $value, $params = [])
     {
         $mapper = 'Common\\ORM\\Core\\Data\\Mapper\\'
             . ucfirst(strtolower($mapper)) . 'DataMapper';
 
         $mapper = new $mapper($this->metadata);
 
-        return $mapper->{$method}($value);
+        return $mapper->{$method}($value, $params);
     }
 
     /**
@@ -112,14 +116,15 @@ class Converter
      * @param string $mapper The data mapper name.
      * @param string $type   The type to convert from.
      * @param mixed  $value  The value to convert.
+     * @param mixed  $params The parameters for conversion.
      *
      * @return mixed The converted value.
      */
-    protected function convertFrom($mapper, $type, $value)
+    protected function convertFrom($mapper, $type, $value, $params = [])
     {
         $method = 'from' . ucfirst($type);
 
-        return $this->convert($mapper, $method, $value);
+        return $this->convert($mapper, $method, $value, $params);
     }
 
     /**
@@ -128,13 +133,14 @@ class Converter
      * @param string $mapper The data mapper name.
      * @param string $type   The type to convert to.
      * @param mixed  $value  The value to convert.
+     * @param mixed  $params The parameters for conversion.
      *
      * @return mixed The converted value.
      */
-    protected function convertTo($mapper, $type, $value)
+    protected function convertTo($mapper, $type, $value, $params = [])
     {
         $method = 'to' . ucfirst($type);
 
-        return $this->convert($mapper, $method, $value);
+        return $this->convert($mapper, $method, $value, $params);
     }
 }

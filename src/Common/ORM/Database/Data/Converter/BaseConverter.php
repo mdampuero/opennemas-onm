@@ -36,14 +36,15 @@ class BaseConverter extends Converter
         $mapping = $this->metadata->mapping['database'];
         $data    = [];
         foreach ($source as $key => $value) {
-            $from = $this->metadata->properties[$key];
-            $to   = 'String';
+            $params = explode('::', $this->metadata->properties[$key]);
+            $from   = array_shift($params);
+            $to     = 'String';
 
             if (array_key_exists($key, $mapping['columns'])) {
                 $to = \classify($mapping['columns'][$key]['type']);
             }
 
-            $data[$key] = $this->convertTo($from, $to, $value);
+            $data[$key] = $this->convertTo($from, $to, $value, $params);
         }
 
         // Null non-present values
@@ -103,17 +104,20 @@ class BaseConverter extends Converter
 
         $data = [];
         foreach ($source as $key => $value) {
-            $from = \classify(strtolower(gettype($value)));
-            $to   = 'String';
+            $from   = \classify(strtolower(gettype($value)));
+            $to     = 'String';
+            $params = [];
+
             if (array_key_exists($key, $this->metadata->properties)) {
-                $to = \classify($this->metadata->properties[$key]);
+                $params = explode('::', $this->metadata->properties[$key]);
+                $to     = \classify(array_shift($params));
             }
 
             if (array_key_exists($key, $this->metadata->mapping['database']['columns'])) {
                 $from = \classify($this->metadata->mapping['database']['columns'][$key]['type']);
             }
 
-            $data[$key] = $this->convertFrom($to, $from, $value);
+            $data[$key] = $this->convertFrom($to, $from, $value, $params);
         }
 
         return $data;
