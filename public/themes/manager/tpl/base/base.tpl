@@ -163,7 +163,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: 'me' }) %]">
+                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }) %]">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
                   </a>
