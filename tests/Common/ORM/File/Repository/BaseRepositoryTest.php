@@ -215,10 +215,10 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->repository, 'isInArray');
         $method->setAccessible(true);
 
-        $this->assertTrue($method->invokeArgs($this->repository, [ [ 1, 2 ], 1 ]));
-        $this->assertFalse($method->invokeArgs($this->repository, [ null, 1 ]));
-        $this->assertFalse($method->invokeArgs($this->repository, [ '', 1 ]));
-        $this->assertFalse($method->invokeArgs($this->repository, [ [ 1 ], 2 ]));
+        $this->assertTrue($method->invokeArgs($this->repository, [ 1, [ 1, 2 ] ]));
+        $this->assertFalse($method->invokeArgs($this->repository, [ 1, null ]));
+        $this->assertFalse($method->invokeArgs($this->repository, [ 1, '' ]));
+        $this->assertFalse($method->invokeArgs($this->repository, [ 2, [ 1 ] ]));
     }
 
     /**
@@ -279,10 +279,10 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->repository, 'isNotInArray');
         $method->setAccessible(true);
 
-        $this->assertFalse($method->invokeArgs($this->repository, [ [ 1, 2 ], 1 ]));
-        $this->assertTrue($method->invokeArgs($this->repository, [ null, 1 ]));
-        $this->assertTrue($method->invokeArgs($this->repository, [ '', 1 ]));
-        $this->assertTrue($method->invokeArgs($this->repository, [ [ 1 ], 2 ]));
+        $this->assertFalse($method->invokeArgs($this->repository, [ 1, [ 1, 2 ] ]));
+        $this->assertTrue($method->invokeArgs($this->repository, [ 1, null ]));
+        $this->assertTrue($method->invokeArgs($this->repository, [ 1, '' ]));
+        $this->assertTrue($method->invokeArgs($this->repository, [ 2, [ 1 ] ]));
     }
 
     /**

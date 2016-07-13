@@ -182,7 +182,7 @@ class BaseRepository extends Repository
             return false;
         }
 
-        return  $this->{$method}($entity->{$property}, $value);
+        return $this->{$method}($entity->{$property}, $value);
     }
 
     /**
@@ -231,19 +231,19 @@ class BaseRepository extends Repository
     /**
      * Checks if the expected value is in the current array of values.
      *
-     * @param mixed $current  The current value.
-     * @param mixed $expected The expected value.
+     * @param mixed $needle   The value to check in the array.
+     * @param mixed $haystack The array.
      *
      * @return boolean True if the expected value is in the current array of
      *                 False otherwise.
      */
-    protected function isInArray($current, $expected)
+    protected function isInArray($needle, $haystack)
     {
-        if (!is_array($current)) {
+        if (!is_array($haystack)) {
             return false;
         }
 
-        return in_array($expected, $current);
+        return in_array($needle, $haystack);
     }
 
     /**
@@ -306,15 +306,15 @@ class BaseRepository extends Repository
     /**
      * Checks if the expected value is not in the current array of values.
      *
-     * @param mixed $current  The current value.
-     * @param mixed $expected The expected value.
+     * @param mixed $needle   The value to check in the array.
+     * @param mixed $haystack The array.
      *
      * @return boolean True if the expected value is not in the current array of
      *                 False otherwise.
      */
-    protected function isNotInArray($current, $expected)
+    protected function isNotInArray($needle, $haystack)
     {
-        return !$this->isInArray($current, $expected);
+        return !$this->isInArray($needle, $haystack);
     }
 
     /**
