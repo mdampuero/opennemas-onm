@@ -12,10 +12,10 @@ entity:
         - payment_id
         - total
     properties:
-        client:      object
+        client:      entity::client
         client_id:   integer
         created:     datetime
-        details:     string
+        details:     array
         fee:         float
         id:          integer
         instance_id: integer

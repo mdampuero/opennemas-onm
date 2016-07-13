@@ -78,7 +78,7 @@ class PurchaseController extends Controller
 
         if ($deleted > 0) {
             $msg->add(
-                sprintf(_('%s users deleted successfully'), $deleted),
+                sprintf(_('%s purchases deleted successfully'), $deleted),
                 'success'
             );
         }
@@ -195,7 +195,7 @@ class PurchaseController extends Controller
 
         // Find instances by ids
         if (!empty($ids)) {
-            $oql = sprintf('id in %s', $ids);
+            $oql = sprintf('id in [%s]', implode(',', $ids));
 
             $items = $this->get('orm.manager')
                 ->getRepository('Instance')
@@ -203,7 +203,7 @@ class PurchaseController extends Controller
 
             $extra['instances'] = [];
             foreach ($items as $item) {
-                $extra['instances'][$item[$id]] = $item->internal_name;
+                $extra['instances'][$item->id] = $item->internal_name;
             }
         }
 
