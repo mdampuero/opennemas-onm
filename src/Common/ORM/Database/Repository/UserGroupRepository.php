@@ -45,14 +45,14 @@ class UserGroupRepository extends BaseRepository
             $filters[] = 'user_group_id=' . $id['id'];
         }
 
-        $sql = 'select * from user_group_privileges where '
+        $sql = 'select * from user_group_privilege where '
             . implode(' or ', $filters);
 
         $rs = $this->conn->fetchAll($sql);
 
         $privileges = [];
         foreach ($rs as $value) {
-            $privileges[$value['user_group_id']][] = $value['privilege'];
+            $privileges[$value['user_group_id']][] = (int) $value['privilege_id'];
         }
 
         return $privileges;

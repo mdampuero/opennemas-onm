@@ -34,8 +34,8 @@ entity:
                     options: { default: null, notnull: false, length: 50 }
             index:
                 -
-                    name: PRIMARY
+                    name:    PRIMARY
                     columns: [ id ]
                     primary: true
-                    unique: true
-                    flags: {  }
+                    unique:  true
+                    flags:   {}

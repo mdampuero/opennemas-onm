@@ -51,37 +51,37 @@ entity:
                     options: { default: null, unsigned: true, autoincrement: true }
                 username:
                     type: string
-                    options: { default: null, length: 100 }
+                    options: { default: null, length: 100, notnull: false }
                 password:
                     type: string
-                    options: { default: null, length: 50 }
+                    options: { default: null, length: 50, notnull: false }
                 url:
                     type: string
-                    options: { default: '', length: 255 }
+                    options: { default: '', length: 255, notnull: false }
                 bio:
                     type: text
-                    options: { default: null, length: 65532 }
+                    options: { default: null, length: 65532, notnull: false }
                 avatar_id:
                     type: bigint
-                    options: { default: '0', unsigned: true }
+                    options: { default: null, unsigned: true, notnull: false }
                 email:
                     type: string
-                    options: { default: null, length: 255 }
+                    options: { default: null, length: 255, notnull: false }
                 name:
                     type: string
-                    options: { default: null, length: 100 }
+                    options: { default: null, length: 100, notnull: false }
                 type:
                     type: integer
-                    options: { default: '0', comment: '0-backend, 1-frontend' }
+                    options: { default: '0', comment: '0 backend - 1 frontend', notnull: true }
                 token:
                     type: string
-                    options: { default: null, length: 50 }
+                    options: { default: null, length: 32, notnull: false }
                 enabled:
                     type: boolean
-                    options: { default: true, comment: '1 activated - 0 deactivated' }
+                    options: { default: true, comment: '1 enabled - 0 disabled', notnull: true }
                 user_group_ids:
                     type: simple_array
-                    options: { default: null, length: 100 }
+                    options: { default: null, length: 65532, notnull: false }
             index:
                 -
                     name: PRIMARY

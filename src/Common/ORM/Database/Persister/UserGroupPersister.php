@@ -84,13 +84,13 @@ class UserGroupPersister extends BasePersister
      */
     protected function removePrivileges($id, $keep)
     {
-        $sql      = "delete from user_group_privileges where user_group_id = ?";
+        $sql      = "delete from user_group_privilege where user_group_id = ?";
         $params[] = $id['id'];
         $types[]  = is_string($id['id']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
 
         if (!empty($keep)) {
-            $sql .= " and privilege not in (?)";
+            $sql .= " and privilege_id not in (?)";
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }
@@ -110,7 +110,7 @@ class UserGroupPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into user_group_privileges values "
+        $sql = "replace into user_group_privilege values "
             . str_repeat(
                 '(?,?),',
                 count($privileges)
