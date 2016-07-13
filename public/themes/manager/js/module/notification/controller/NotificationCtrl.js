@@ -149,7 +149,7 @@
             data.end = data.end.toString();
           }
 
-          http.post('manager_ws_notification_save', $scope.notification)
+          http.post('manager_ws_notification_save', data)
             .then(function(response) {
               messenger.post(response.data);
 
@@ -196,7 +196,7 @@
             params: { id:  $scope.notification.id }
           };
 
-          http.put(route, $scope.notification).then(function(response) {
+          http.put(route, data).then(function(response) {
             messenger.post(response.data);
             $scope.saving = 0;
           }, function(response) {
