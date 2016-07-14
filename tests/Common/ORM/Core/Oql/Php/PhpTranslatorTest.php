@@ -248,7 +248,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests translateOperator.
      */
-    public function testTranslateToken()
+    public function testTranslateOperator()
     {
         $method = new \ReflectionMethod($this->translator, 'translateOperator');
         $method->setAccessible(true);
@@ -256,5 +256,22 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(' && ', $method->invokeArgs($this->translator, [ 'C_AND' ]));
         $this->assertEquals('isLess', $method->invokeArgs($this->translator, [ 'O_LESS' ]));
         $this->assertEquals('order by', $method->invokeArgs($this->translator, [ 'M_ORDER' ]));
+    }
+
+    /**
+     * Tests translateParameter.
+     */
+    public function testTranslateParameter()
+    {
+        $date     = new \DateTime();
+        $current  = "'" . $date->format('Y-m-d H:i:s') . "'";
+        $expected = $date->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+
+        $method = new \ReflectionMethod($this->translator, 'translateParameter');
+        $method->setAccessible(true);
+
+        $this->assertEquals('waldo', $method->invokeArgs($this->translator, [ '"waldo"', 'T_STRING' ]));
+        $this->assertEquals(123, $method->invokeArgs($this->translator, [ 123, 'T_INTEGER' ]));
+        $this->assertEquals($expected, $method->invokeArgs($this->translator, [ $current, 'T_DATETIME' ]));
     }
 }

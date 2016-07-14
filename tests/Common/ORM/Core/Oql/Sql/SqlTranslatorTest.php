@@ -78,11 +78,16 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testTranslateToken()
     {
+        $date     = new \DateTime();
+        $current  = "'" . $date->format('Y-m-d H:i:s') . "'";
+        $expected = $date->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+
         $method = new \ReflectionMethod($this->translator, 'translateToken');
         $method->setAccessible(true);
 
         $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', false ]));
         $this->assertEquals([ '?', '%foo%', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', true ]));
+        $this->assertEquals([ '?', $expected, \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ $current, 'T_DATETIME', false ]));
         $this->assertEquals([ '!=', null, null ], $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ]));
     }
 

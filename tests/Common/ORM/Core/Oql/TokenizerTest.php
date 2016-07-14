@@ -123,6 +123,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('T_FIELD', $method->invokeArgs($this->translator, [ 'foobar' ]));
         $this->assertEquals('T_STRING', $method->invokeArgs($this->translator, [ '"foobar"' ]));
+        $this->assertEquals('T_DATETIME', $method->invokeArgs($this->translator, [ '"2016-07-14 10:00:00"' ]));
         $this->assertEquals('G_OBRACKET', $method->invokeArgs($this->translator, [ '[' ]));
 
         $this->assertFalse($method->invokeArgs($this->translator, [ 'foo*bar' ]));

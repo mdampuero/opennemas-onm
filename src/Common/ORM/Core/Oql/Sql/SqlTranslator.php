@@ -73,11 +73,12 @@ class SqlTranslator
      * @var array
      */
     protected $pdoParams = [
-        'T_BOOL'    => \PDO::PARAM_BOOL,
-        'T_FLOAT'   => \PDO::PARAM_STR,
-        'T_INTEGER' => \PDO::PARAM_INT,
-        'T_NULL'    => \PDO::PARAM_NULL,
-        'T_STRING'  => \PDO::PARAM_STR,
+        'T_BOOL'     => \PDO::PARAM_BOOL,
+        'T_FLOAT'    => \PDO::PARAM_STR,
+        'T_INTEGER'  => \PDO::PARAM_INT,
+        'T_NULL'     => \PDO::PARAM_NULL,
+        'T_STRING'   => \PDO::PARAM_STR,
+        'T_DATETIME' => \PDO::PARAM_STR,
     ];
 
     /**
@@ -260,9 +261,19 @@ class SqlTranslator
      */
     protected function translateParameter($str, $type, $previousLike)
     {
-        // Remove quotes for strings
-        if ($type === 'T_STRING' && ($str[0] === '"' || $str[0] === "'")) {
+        // Remove quotes for strings and datetimes
+        if (($type === 'T_STRING' || $type === 'T_DATETIME')
+            && ($str[0] === '"' || $str[0] === "'")
+        ) {
             $str = str_replace($str[0], '', $str);
+        }
+
+        // Change datetime to UTC
+        if ($type === 'T_DATETIME') {
+            $date = new \DateTime($str);
+            $date->setTimezone(new \DateTimeZone('UTC'));
+
+            $str = $date->format('Y-m-d H:i:s');
         }
 
         // Surround with %

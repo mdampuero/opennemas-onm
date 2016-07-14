@@ -131,7 +131,10 @@ class PhpTranslator
 
             // Field or value
             if (!$this->isArray($token[1]) && !$this->isTranslatable($token[1])) {
-                $this->params[] = [ 'value' => $token[0], 'type' => $token[1] ];
+                $this->params[] = [
+                    'value' => $this->translateParameter($token[0], $token[1]),
+                    'type'  => $token[1]
+                ];
             }
 
             // Operator, connector or grouper
@@ -447,5 +450,35 @@ class PhpTranslator
     protected function translateOperator($type)
     {
         return $this->translations[$type];
+    }
+
+    /**
+     * Translates a parameter.
+     *
+     * @param string  $str          The parameter to translate.
+     * @param string  $type         The parameter type.
+     * @param boolean $previousLike Whether the previous translation was a
+     *                              like/not like operator.
+     *
+     * @return string The translated string.
+     */
+    protected function translateParameter($str, $type)
+    {
+        // Remove quotes for strings and datetimes
+        if (($type === 'T_STRING' || $type === 'T_DATETIME')
+            && ($str[0] === '"' || $str[0] === "'")
+        ) {
+            $str = str_replace($str[0], '', $str);
+        }
+
+        // Change datetime to UTC
+        if ($type === 'T_DATETIME') {
+            $date = new \DateTime($str);
+            $date->setTimezone(new \DateTimeZone('UTC'));
+
+            $str = $date->format('Y-m-d H:i:s');
+        }
+
+        return $str;
     }
 }
