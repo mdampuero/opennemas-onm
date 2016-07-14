@@ -813,8 +813,8 @@ class Content
             $rs = getService('dbal_connection')->update(
                 'contents',
                 [
-                    'in_littter' => 0,
-                    'changed'    => $date("Y-m-d H:i:s"),
+                    'in_litter' => 0,
+                    'changed'    => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $this->id ]
             );
@@ -826,7 +826,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error removing content (ID:'.$this->id.'):'.$e->getMessage());
             return false;
         }
     }
