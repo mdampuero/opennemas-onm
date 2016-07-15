@@ -49,11 +49,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Router          $router    The router service.
      * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
-    public function __construct($context, $router, $recaptcha)
+    public function __construct($context, $router, $recaptcha, $logger)
     {
         $this->context   = $context;
         $this->router    = $router;
         $this->recaptcha = $recaptcha;
+        $this->logger    = $logger;
     }
 
     /**
@@ -101,6 +102,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Login token is not valid. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
             }
 
             if ($valid === false) {
@@ -109,6 +111,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     _('The reCAPTCHA was not entered correctly. Try to authenticate'
                     . ' again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
             }
 
             $this->context->setToken(null);
@@ -117,6 +120,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         }
 
         $session->set('failed_login_attempts', 0);
+        $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
+
 
         return new RedirectResponse($request->get('_referer'));
     }

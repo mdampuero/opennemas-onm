@@ -57,12 +57,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Recaptcha       $recaptcha The Google Recaptcha.
      * @param SettingManager  $sm        The setting repository.
      */
-    public function __construct($context, $router, $recaptcha, $sm)
+    public function __construct($context, $router, $recaptcha, $sm, $logger)
     {
         $this->context   = $context;
         $this->router    = $router;
         $this->recaptcha = $recaptcha;
         $this->sm        = $sm;
+        $this->logger    = $logger;
     }
 
     /**
@@ -110,6 +111,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Login token is not valid. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
             }
 
             if ($valid) {
@@ -117,6 +119,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('The reCAPTCHA was not entered correctly. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
             }
 
             if ($user->type != 0) {
@@ -124,6 +127,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Your user is not allowed to access, please contact your administrator')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Not enought privileges to access backend.");
             }
 
             $this->context->setToken(null);
@@ -141,6 +145,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if (!$user->isMaster()) {
             $this->sm->set('last_login', $time);
         }
+
+            $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
+
 
         return new RedirectResponse($request->get('_referer'));
     }
