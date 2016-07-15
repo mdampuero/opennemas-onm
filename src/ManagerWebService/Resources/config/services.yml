@@ -4,4 +4,4 @@ parameters:
 services:
     manager_ws_login_success_handler:
         class:     ManagerWebService\EventListener\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@router', '@session' ]
+        arguments: [ '@security.token_storage', '@router', '@session', '@application.log' ]

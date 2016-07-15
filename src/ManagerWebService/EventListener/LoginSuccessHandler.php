@@ -49,11 +49,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Router          $router   The router service.
      * @param Session         $session The session.
      */
-    public function __construct($context, $router, $session)
+    public function __construct($context, $router, $session, $logger)
     {
         $this->context = $context;
         $this->router  = $router;
         $this->session = $session;
+        $this->logger  = $logger;
     }
 
     /**
@@ -106,6 +107,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     'Login token is not valid. Try to authenticate again.'
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
             }
 
             if (!$valid) {
@@ -114,6 +116,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
                     . ' again.'
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
             }
 
             $this->session->set('failed_login_attempts', $attempts);
@@ -138,6 +141,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             if (!$user->isMaster()) {
                 s::set('last_login', $time);
             }
+            $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
             return new JsonResponse(
                 array(

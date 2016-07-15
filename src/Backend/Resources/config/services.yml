@@ -5,10 +5,10 @@ parameters:
 services:
     backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha' ]
+        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha', '@application.log' ]
     frontend_login_success_handler:
         class:     Frontend\EventListeners\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha' ]
+        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha', '@application.log' ]
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
         arguments: [ '@security.token_storage', '@router', '@session' ]

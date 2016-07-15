@@ -55,13 +55,14 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Session         $session   The session.
      * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
-    public function __construct($context, $instance, $router, $session, $recaptcha)
+    public function __construct($context, $instance, $router, $session, $recaptcha, $logger)
     {
         $this->context   = $context;
         $this->instance  = $instance;
         $this->router    = $router;
         $this->session   = $session;
         $this->recaptcha = $recaptcha;
+        $this->logger    = $logger;
     }
 
     /**
@@ -119,14 +120,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Login token is not valid. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
             }
 
             if ($valid === false) {
                 $this->session->getFlashBag()->add(
                     'error',
-                    _('The reCAPTCHA was not entered correctly. Try to authenticate'
-                    . ' again.')
+                    _('The reCAPTCHA was not entered correctly. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
             }
 
             if ($user->type != 0) {
@@ -134,6 +136,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Your user is not allowed to access, please contact your administrator')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Not enought privileges to access backend.");
             }
 
             $this->context->setToken(null);
@@ -161,6 +164,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             if (!$user->isMaster()) {
                 s::set('last_login', $time);
             }
+
+            $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
             return new RedirectResponse($request->get('_referer'));
         }

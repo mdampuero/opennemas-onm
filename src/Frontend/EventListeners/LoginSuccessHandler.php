@@ -55,13 +55,14 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Session         $session   The session.
      * @param Recaptcha       $recaptcha The Google Recaptcha.
      */
-    public function __construct($context, $instance, $router, $session, $recaptcha)
+    public function __construct($context, $instance, $router, $session, $recaptcha, $logger)
     {
         $this->context   = $context;
         $this->instance  = $instance;
         $this->router    = $router;
         $this->session   = $session;
         $this->recaptcha = $recaptcha;
+        $this->logger    = $logger;
     }
 
     /**
@@ -118,14 +119,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     'error',
                     _('Login token is not valid. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
             }
 
             if ($valid === false) {
                 $this->session->getFlashBag()->add(
                     'error',
-                    _('The reCAPTCHA was not entered correctly. Try to authenticate'
-                    . ' again.')
+                    _('The reCAPTCHA was not entered correctly. Try to authenticate again.')
                 );
+                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
             }
 
             $this->context->setToken(null);
@@ -144,6 +146,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $GLOBALS['application']->conn->selectDatabase($database);
 
             unset($_SESSION['failed_login_attempts']);
+
+            $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
             return new RedirectResponse($request->get('_referer'));
         }
