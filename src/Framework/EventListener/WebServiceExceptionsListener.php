@@ -62,6 +62,8 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         if (!($exception instanceof AuthenticationException)
             && strpos($uri, '/managerws') !== false
         ) {
+            error_log($exception->getMessage());
+
             $this->msg->add($exception->getMessage(), 'error');
 
             $event->setResponse(new JsonResponse(

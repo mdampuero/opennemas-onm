@@ -46,6 +46,7 @@ class UserProvider implements UserProviderInterface
         try {
             return $this->em->getRepository('User', 'manager')->findOneBy($oql);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
         }
 
         throw new UsernameNotFoundException();
