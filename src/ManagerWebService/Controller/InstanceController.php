@@ -159,12 +159,9 @@ class InstanceController extends Controller
     public function exportAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
-        $ids = $request->query->filter('ids');
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $instances  = $repository->findBy($oql);
-
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         $response = $this->render(
             'instance/csv.tpl',
