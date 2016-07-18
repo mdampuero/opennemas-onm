@@ -58,6 +58,8 @@ class RedirectorsController extends Controller
             }
         } elseif ($type == 'opinion') {
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
+        } elseif ($type === 'photo-inline'){
+            $content = new \Photo($newContentID);
         } else {
             $content = new \Content($newContentID);
         }
@@ -65,7 +67,11 @@ class RedirectorsController extends Controller
         if (!isset($content) || is_null($content->id)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
         $url =  SITE_URL . $content->uri;
+        if ($content->content_type_name === 'photo') {
+            $url = SITE_URL . '/media/example/images' . $content->path_img;
+        }
 
         return new RedirectResponse($url, 301);
     }
