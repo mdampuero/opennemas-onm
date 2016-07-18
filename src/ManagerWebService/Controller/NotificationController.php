@@ -46,7 +46,7 @@ class NotificationController extends Controller
         $oql = 'order by internal_name asc limit 10';
 
         if (!empty($query)) {
-            $oql .= 'internal_name ~ "%s" ' . $oql;
+            $oql = 'internal_name ~ "%s" ' . $oql;
             $oql  = sprintf($oql, $query);
         }
 
@@ -63,7 +63,7 @@ class NotificationController extends Controller
         $oql = 'order by uuid asc limit 10';
 
         if (!empty($query)) {
-            $oql .= 'uuid ~ "%s" ' . $oql;
+            $oql = 'uuid ~ "%s" ' . $oql;
             $oql  = sprintf($oql, $query);
         }
 
