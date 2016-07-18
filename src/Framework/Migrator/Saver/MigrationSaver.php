@@ -946,7 +946,7 @@ class MigrationSaver
             } else {
                 $info  = pathinfo($values['original_filename']);
                 $value = array_merge($values, [
-                    'local_file'        => $values['path'] . $fileName,
+                    'local_file'        => $values['path'] . $values['local_file'],
                     'extension'         => $info['extension'],
                     'original_filename' => $info['basename']
                 ]);
