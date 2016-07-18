@@ -94,22 +94,30 @@
                 <textarea class="form-control" id="bio" name="bio" ng-model="user.bio" rows="3"></textarea>
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid">
+            <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid }">
               <label class="control-label" for="password">{t}Password{/t}</label>
-              <div class="controls input-with-icon">
-                <i class="icon fa fa-lock"></i>
-                <input class="form-control" id="password" name="password" ng-model="user.password" maxlength="20" type="password"/>
+              <div class="controls">
+                <div class="input-group">
+                  <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
+                    <i class="fa fa-lock" ng-class="{ 'fa-unlock': passwordUnlocked }"></i>
+                  </span>
+                  <input class="form-control no-animate" id="password" name="password" ng-model="user.password" maxlength="20" type="[% !passwordUnlocked ? 'password' : 'text' %]">
+                </div>
               </div>
             </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.password.$valid && user.password && user.password !== rpassword }">
               <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
-              <div class="controls input-with-icon">
-                <i class="icon fa fa-lock"></i>
-                <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" type="password"/>
-                <span class="icon right">
-                  <span class="fa fa-check text-success" ng-if="userForm.password.$dirty && user.password === rpassword"></span>
-                  <span class="fa fa-times text-error" ng-if="userForm.password.$valid && user.password && user.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
-                </span>
+              <div class="controls">
+                <div class="input-group input-group-transparent">
+                  <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
+                    <i class="fa fa-lock" ng-class="{ 'fa-unlock': rpasswordUnlocked }"></i>
+                  </span>
+                  <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" maxlength="20" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
+                  <span class="input-group-addon input-group-addon-transparent">
+                    <span class="fa fa-check text-success" ng-if="userForm.password.$dirty && user.password === rpassword"></span>
+                    <span class="fa fa-times text-error" ng-if="userForm.password.$valid && user.password && user.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
