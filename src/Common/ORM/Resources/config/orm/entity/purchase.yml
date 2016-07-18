@@ -55,10 +55,10 @@ entity:
                     options: { default: null, length: 15, notnull: false }
                 fee:
                     type: float
-                    options: { default: 0, notnull: true }
+                    options: { default: 0, notnull: false }
                 total:
                     type: float
-                    options: { default: 0, notnull: true }
+                    options: { default: 0, notnull: false }
                 instance_id:
                     type: bigint
                     options: { notnull: true }
