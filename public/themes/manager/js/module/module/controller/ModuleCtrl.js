@@ -240,7 +240,7 @@
             $scope.saving = 0;
 
             if (response.status === 201) {
-              var url = response.headers().location.replace('/manager', '');
+              var url = response.headers().location.replace('/managerws', '');
               $location.path(url);
             }
           }, function(response) {

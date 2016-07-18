@@ -227,7 +227,7 @@ class UserController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_user_show',
+                'manager_ws_user_show',
                 [ 'id' => $user->id ]
             )
         );

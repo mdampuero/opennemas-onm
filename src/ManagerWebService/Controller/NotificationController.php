@@ -381,7 +381,7 @@ class NotificationController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_notification_show',
+                'manager_ws_notification_show',
                 [ 'id' => $notification->id ]
             )
         );

@@ -184,7 +184,7 @@ class ClientController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_client_show',
+                'manager_ws_client_show',
                 [ 'id' => $client->id ]
             )
         );

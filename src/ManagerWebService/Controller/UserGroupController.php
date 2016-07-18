@@ -141,7 +141,7 @@ class UserGroupController extends Controller
         $response->headers->set(
             'Location',
             $this->generateUrl(
-                'manager_user_group_show',
+                'manager_ws_user_group_show',
                 [ 'id' => $userGroup->id ]
             )
         );
