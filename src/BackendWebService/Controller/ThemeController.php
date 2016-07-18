@@ -26,11 +26,13 @@ class ThemeController extends Controller
     public function enableAction($uuid)
     {
         $instance = $this->get('instance');
-        $themes = im::getAvailableTemplates();
+        $themes   = $this->get('orm.loader')->getPlugins();
 
-        $theme = str_replace('es.openhost.theme.', '', $uuid);
+        $theme = array_filter($themes, function ($a) use ($uuid) {
+            return strpos($a->uuid, $uuid) !== false;
+        });
 
-        if (!in_array($theme, $themes)) {
+        if (empty($theme) && array_pop($theme)->uuid === $uuid) {
             return new JsonResponse(_('Invalid theme'), 400);
         }
 
@@ -102,7 +104,7 @@ class ThemeController extends Controller
                 'active'    => $active,
                 'addons'    => $addons,
                 'exclusive' => $exclusive,
-                'purchased' => $purchased,
+                'purchased' => array_values($purchased),
                 'themes'    => $themes
             ]
         );
