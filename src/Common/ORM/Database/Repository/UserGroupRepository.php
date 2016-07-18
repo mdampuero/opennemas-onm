@@ -45,7 +45,7 @@ class UserGroupRepository extends BaseRepository
             $filters[] = 'user_group_id=' . $id['id'];
         }
 
-        $sql = 'select * from user_group_privilege where '
+        $sql = 'select * from user_group_privileges where '
             . implode(' or ', $filters);
 
         $rs = $this->conn->fetchAll($sql);

@@ -84,7 +84,7 @@ class UserGroupPersister extends BasePersister
      */
     protected function removePrivileges($id, $keep)
     {
-        $sql      = "delete from user_group_privilege where user_group_id = ?";
+        $sql      = "delete from user_group_privileges where user_group_id = ?";
         $params[] = $id['id'];
         $types[]  = is_string($id['id']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
@@ -110,7 +110,7 @@ class UserGroupPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into user_group_privilege values "
+        $sql = "replace into user_group_privileges values "
             . str_repeat(
                 '(?,?),',
                 count($privileges)

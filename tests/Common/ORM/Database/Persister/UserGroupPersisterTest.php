@@ -77,12 +77,12 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_STR, \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'replace into user_group_privilege values (?,?),(?,?)',
+            'replace into user_group_privileges values (?,?),(?,?)',
             [ 1, 1, 1, 2 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'delete from user_group_privilege where user_group_id = ? and privilege_id not in (?)',
+            'delete from user_group_privileges where user_group_id = ? and privilege_id not in (?)',
             [ 1, [ 1, 2 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
@@ -109,12 +109,12 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(1))->method('executeQuery')->with(
-            'replace into user_group_privilege values (?,?)',
+            'replace into user_group_privileges values (?,?)',
             [ 1, 1 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'delete from user_group_privilege where user_group_id = ? and privilege_id not in (?)',
+            'delete from user_group_privileges where user_group_id = ? and privilege_id not in (?)',
             [ 1, [ 1 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
