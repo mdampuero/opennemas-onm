@@ -1,0 +1,19 @@
+entity:
+    name: UserGroupPrivileges
+    mapping:
+        database:
+            table: user_group_privileges
+            columns:
+                user_group_id:
+                    type:    integer
+                    options: { default: null, unsigned: true, notnull: false }
+                privilege_id:
+                    type:    string
+                    options: { default: null, unsigned: true, notnull: false }
+            index:
+                -
+                    name:    PRIMARY
+                    columns: [ user_group_id, privilege_id ]
+                    primary: true
+                    unique:  true
+                    flags:   {  }
