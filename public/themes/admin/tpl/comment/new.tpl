@@ -83,7 +83,7 @@
           <div class="form-group">
             <label class="form-label" for="body">{t}Body{/t}</label>
             <div class="controls">
-              <textarea onm-editor onm-editor-preset="simple" name="body" id="body" class="form-control">{$comment->body|clearslash}</textarea>
+              <textarea onm-editor onm-editor-preset="simple" name="body" id="body" ng-model="body" class="form-control">{$comment->body|clearslash}</textarea>
             </div>
           </div>
         </div>
