@@ -55,105 +55,105 @@ entity:
                     id: instance_id
             columns:
                 id:
-                    type: bigint
+                    type:    bigint
                     options: { default: null, autoincrement: true }
                 internal_name:
-                    type: string
-                    options: { default: null, length: 100 }
+                    type:    string
+                    options: { default: null, length: 100, notnull: true }
                 name:
-                    type: string
-                    options: { default: null, length: 255 }
+                    type:    string
+                    options: { default: null, length: 255, notnull: true }
                 domains:
-                    type: simple_array
-                    options: { default: null, length: 500 }
+                    type:    simple_array
+                    options: { default: null, length: 500, notnull: true }
                 domain_expire:
-                    type: datetime
+                    type:    datetime
                     options: { default: null, notnull: false }
                 main_domain:
-                    type: string
-                    options: { default: null, length: 255 }
+                    type:    integer
+                    options: { default: 0, length: 1, notnull: true }
                 created:
-                    type: datetimetz
-                    options: { default: null }
+                    type:    datetimetz
+                    options: { default: null, notnull: true }
                 last_login:
-                    type: datetimetz
+                    type:    datetimetz
                     options: { default: null, notnull: false }
                 settings:
-                    type: text
+                    type:    text
                     options: { default: null, length: 65532, notnull: false }
                 activated_modules:
-                    type: text
+                    type:    text
                     options: { default: null, length: 65532, notnull: false }
                 activated:
-                    type: boolean
-                    options: { default: null }
+                    type:    boolean
+                    options: { default: null, notnull: true }
                 contact_mail:
-                    type: string
-                    options: { default: null, length: 255 }
+                    type:    string
+                    options: { default: null, length: 255, notnull: true }
                 contents:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 attachments:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 articles:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 opinions:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 advertisements:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 albums:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 letters:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 polls:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 photos:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 videos:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 widgets:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 static_pages:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 media_size:
-                    type: float
-                    options: { default: 0 }
+                    type:    float
+                    options: { default: 0, notnull: false, notnull: false }
                 alexa:
-                    type: integer
-                    options: { default: 1000000, unsigned: true }
+                    type:    integer
+                    options: { default: 1000000, unsigned: true, notnull: false }
                 page_views:
-                    type: bigint
-                    options: { default: 0, unsigned: true }
+                    type:    bigint
+                    options: { default: 0, unsigned: true, notnull: false }
                 emails:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 users:
-                    type: integer
-                    options: { default: 0, unsigned: true }
+                    type:    integer
+                    options: { default: 0, unsigned: true, notnull: false }
                 support_plan:
-                    type: string
-                    options: { default: null, length: 255 }
+                    type:    string
+                    options: { default: null, length: 255, notnull: false }
             index:
                 -
-                    name: PRIMARY
+                    name:    PRIMARY
                     columns: [ id ]
                     primary: true
-                    unique: true
-                    flags: {}
+                    unique:  true
+                    flags:   {}
                 -
-                    name: internal_name
+                    name:    internal_name
                     columns: [ internal_name ]
                     primary: false
-                    unique: true
-                    flags: {}
+                    unique:  true
+                    flags:   {}
