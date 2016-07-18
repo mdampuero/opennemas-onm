@@ -1,0 +1,19 @@
+entity:
+    name: Settings
+    mapping:
+        database:
+            table: settings
+            columns:
+                name:
+                    type:    string
+                    options: { length: 128, notnull: true }
+                value:
+                    type:    text
+                    options: { length: 65532, notnull: true }
+            index:
+                -
+                    name:    PRIMARY
+                    columns: [ name ]
+                    primary: true
+                    unique:  true
+                    flags:   {  }
