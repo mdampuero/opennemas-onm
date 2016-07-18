@@ -930,90 +930,117 @@ class MigrationSaver
 
             $values = $this->merge($values, $item, $schema);
 
+            $items = [];
+            if (is_array($values['local_file'])) { // Inline photos
+                foreach ($values['local_file'] as $fileName) {
+                    $info  = pathinfo($fileName);
+                    $value = array_merge($values, [
+                        'local_file'        => $values['path'] . $fileName,
+                        'extension'         => $info['extension'],
+                        'original_filename' => $info['basename']
+                    ]);
+
+                    unset($value['article']);
+                    $items[] = $value;
+                }
+            } else {
+                $info  = pathinfo($values['original_filename']);
+                $value = array_merge($values, [
+                    'local_file'        => $values['path'] . $fileName,
+                    'extension'         => $info['extension'],
+                    'original_filename' => $info['basename']
+                ]);
+
+                $items[] = $values;
+            }
+
             try {
-                $photo = new \Photo();
-                $id = null;
+                // Inline images
+                foreach ($items as $i) {
+                    $photo = new \Photo();
+                    $id = null;
 
-                if ($this->matchTranslation(
-                    $values[$schema['translation']['field']],
-                    $schema['translation']['name']
-                ) === false
-                ) {
-                    $id = $this->findPhoto($values['title']);
+                    if ($this->matchTranslation(
+                        $i[$schema['translation']['field']],
+                        $schema['translation']['name']
+                    ) === false
+                    ) {
+                        $id = $this->findPhoto($i['title']);
 
-                    if ($id !== false) {
-                        throw new UserAlreadyExistsException();
-                    }
-
-                    if (is_file($values['local_file'])) {
-                        $id = $photo->createFromLocalFile(
-                            $values,
-                            $values['directory']
-                        );
-                        $slug = array_key_exists('slug', $schema['translation'])
-                            ? $values[$schema['translation']['slug']] : '';
-
-                        // Update article img3 and img2_footer
-                        if (isset($values['article'])
-                            && $values['article'] !== false
-                            && array_key_exists('img2_footer', $values)
-                        ) {
-                            $this->updateArticlePhoto(
-                                $values['article'],
-                                $id,
-                                $values['img2_footer']
-                            );
+                        if ($id !== false) {
+                            throw new UserAlreadyExistsException();
                         }
 
-                        // Update article img1 and img1_footer
-                        if (isset($values['article'])
-                            && $values['article'] !== false
-                            && array_key_exists('img1_footer', $values)
-                        ) {
-                            $this->updateArticleFrontpagePhoto(
-                                $values['article'],
-                                $id,
-                                $values['img1_footer']
+                        if (is_file($i['local_file'])) {
+                            $id = $photo->createFromLocalFile(
+                                $i,
+                                $i['directory']
                             );
-                        }
+                            $slug = array_key_exists('slug', $schema['translation'])
+                                ? $i[$schema['translation']['slug']] : '';
 
-                        // Update opinion img2 and img2_footer
-                        if (isset($values['opinion'])
-                            && $values['opinion'] !== false
-                            && array_key_exists('img2_footer', $values)
-                        ) {
-                            $this->updateOpinionPhoto(
-                                $values['opinion'],
+                            // Update article img3 and img2_footer
+                            if (isset($i['article'])
+                                && $i['article'] !== false
+                                && array_key_exists('img2_footer', $i)
+                            ) {
+                                $this->updateArticlePhoto(
+                                    $i['article'],
+                                    $id,
+                                    $i['img2_footer']
+                                );
+                            }
+
+                            // Update article img1 and img1_footer
+                            if (isset($i['article'])
+                                && $i['article'] !== false
+                                && array_key_exists('img1_footer', $i)
+                            ) {
+                                $this->updateArticleFrontpagePhoto(
+                                    $i['article'],
+                                    $id,
+                                    $i['img1_footer']
+                                );
+                            }
+
+                            // Update opinion img2 and img2_footer
+                            if (isset($i['opinion'])
+                                && $i['opinion'] !== false
+                                && array_key_exists('img2_footer', $i)
+                            ) {
+                                $this->updateOpinionPhoto(
+                                    $i['opinion'],
+                                    $id,
+                                    $i['img2_footer']
+                                );
+                            }
+
+                            // Update opinion img1 and img1_footer
+                            if (isset($i['opinion'])
+                                && $i['opinion'] !== false
+                                && array_key_exists('img1_footer', $i)
+                            ) {
+                                $this->updateOpinionFrontpagePhoto(
+                                    $i['opinion'],
+                                    $id,
+                                    $i['img1_footer']
+                                );
+                            }
+
+                            $this->createTranslation(
+                                $i[$schema['translation']['field']],
                                 $id,
-                                $values['img2_footer']
+                                $schema['translation']['name'],
+                                $slug
                             );
+
+                            $this->stats[$name]['imported']++;
+                        } else {
+                            $this->stats[$name]['not_found']++;
                         }
-
-                        // Update opinion img1 and img1_footer
-                        if (isset($values['opinion'])
-                            && $values['opinion'] !== false
-                            && array_key_exists('img1_footer', $values)
-                        ) {
-                            $this->updateOpinionFrontpagePhoto(
-                                $values['opinion'],
-                                $id,
-                                $values['img1_footer']
-                            );
-                        }
-
-                        $this->createTranslation(
-                            $values[$schema['translation']['field']],
-                            $id,
-                            $schema['translation']['name'],
-                            $slug
-                        );
-
-                        $this->stats[$name]['imported']++;
                     } else {
-                        $this->stats[$name]['not_found']++;
+                        $this->stats[$name]['already_imported']++;
                     }
-                } else {
-                    $this->stats[$name]['already_imported']++;
                 }
             } catch (UserAlreadyExistsException $e) {
                 $id = $this->findPhoto($values['title']);
@@ -1686,6 +1713,11 @@ class MigrationSaver
                     break;
                 case 'html':
                     $field = htmlentities($field, ENT_IGNORE, 'UTF-8');
+                    break;
+                case 'preg_match_all':
+                    preg_match_all($params['pattern'], $field, $matches);
+
+                    $field = $matches[0];
                     break;
                 case 'map':
                     $field = $this->convertToMap($field, $params['map']);
