@@ -114,8 +114,7 @@ security:
                 default_target_path:            frontend_user_show
                 target_path_parameter:          _referer
                 use_referer:                    true
-                # success_handler:                frontend_login_success_handler
-                success_handler:                backend_login_success_handler
+                success_handler:                frontend_login_success_handler
             logout:
                 path:   frontend_auth_logout
                 target: frontend_auth_login
