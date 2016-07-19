@@ -8,7 +8,7 @@ manager_ws_auth:
     prefix: /
 
 manager_ws_client:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/client.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/client.yml'
     prefix:   /
 
 manager_ws_command:
@@ -32,7 +32,7 @@ manager_ws_opcache:
     prefix:   /
 
 manager_ws_purchase:
-    resource: @ManagerWebServiceBundle/Resources/config/routing/purchase.yml
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/purchase.yml'
     prefix:   /
 
 manager_ws_report:
