@@ -38,6 +38,9 @@ class Redis extends AbstractCache
             if (array_key_exists('auth', $options)) {
                 $redis->auth($options['auth']);
             }
+            if (array_key_exists('database', $options)) {
+               $redis->select($options['database']);
+            }
             $this->setRedis($redis);
         }
 
