@@ -1,5 +1,12 @@
 entity:
     name: Settings
+    datasets:
+        instance:
+            class:     Common\ORM\Database\DataSet\BaseDataSet
+            arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\DataSet\BaseDataSet
+            arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.instance' ]
     mapping:
         database:
             table: settings
