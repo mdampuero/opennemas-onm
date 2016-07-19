@@ -149,6 +149,7 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 
+        $dataset->set([]);
         $dataset->set('foo', 'bar');
         $dataset->set([ 'foo' => 'bar' ]);
     }

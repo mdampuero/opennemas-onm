@@ -158,6 +158,10 @@ class BaseDataSet extends DataSet
      */
     public function set($key, $value = null)
     {
+        if (empty($key)) {
+            return;
+        }
+
         if (is_array($key)) {
             foreach ($key as $k => $v) {
                 $this->set($k, $v);
