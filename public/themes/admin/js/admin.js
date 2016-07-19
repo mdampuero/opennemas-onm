@@ -75,7 +75,7 @@ $(document).ready(function() {
       var unsaved = true;
       // Check for CKEditor changes
       for (var i in CKEDITOR.instances) {
-        CKEDITOR.instances[i].on('change', function() {
+        CKEDITOR.instances[i].on('key', function() {
           ov = null;
         });
       }
