@@ -48,6 +48,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                     'converters' => [
                         'default' => [ 'class' => 'Converter', 'arguments'  => [] ],
                     ],
+                    'datasets' => [
+                        'default' => [ 'class' => 'DataSet', 'arguments'  => [] ],
+                    ],
                     'persisters' => [
                         'Entity' => [ 'class' => 'Persister', 'arguments'  => [] ],
                     ],
@@ -69,6 +72,12 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->converter = $this->getMockBuilder('MockConverter')
             ->setMockClassName('Converter')
+            ->disableOriginalConstructor()
+            ->setMethods([ '__construct' ])
+            ->getMock();
+
+        $this->dataset = $this->getMockBuilder('MockDataset')
+            ->setMockClassName('Dataset')
             ->disableOriginalConstructor()
             ->setMethods([ '__construct' ])
             ->getMock();
@@ -161,6 +170,35 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotEmpty($this->em->getConverter('Entity'));
         $this->assertNotEmpty($this->em->getConverter('Entity', 'default'));
+    }
+
+    /**
+     * Tests getDataSet when the requested dataset is not defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidDataSetException
+     */
+    public function testGetDataSetInvalidName()
+    {
+        $this->em->getDataSet('Entity', 'foo');
+    }
+
+    /**
+     * Tests getDataSet when no datasets defined.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidDataSetException
+     */
+    public function testGetDataSetNoDataSets()
+    {
+        $this->em->getDataSet('Client');
+    }
+
+    /**
+     * Tests getDataSet for a valid entity and dataset.
+     */
+    public function testGetDataSetValid()
+    {
+        $this->assertNotEmpty($this->em->getDataSet('Entity'));
+        $this->assertNotEmpty($this->em->getDataSet('Entity', 'default'));
     }
 
     /**

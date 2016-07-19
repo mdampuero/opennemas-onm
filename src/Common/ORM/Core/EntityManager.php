@@ -65,7 +65,28 @@ class EntityManager
     }
 
     /**
-     * Returns a converted configured for the entity.
+     * Returns a converter configured for the entity.
+     *
+     * @param string $entity    The entity name.
+     * @param string $persister The converter name.
+     *
+     * @return DataSet The dataset.
+     */
+    public function getDataSet($entity, $dataset = null)
+    {
+        $entity   = \classify($entity);
+        $metadata = $this->getMetadata($entity);
+        $dataset  = $metadata->getDataSet($dataset);
+
+        $class = '\\' . $dataset['class'];
+        $args  = $this->parseArgs($dataset['arguments']);
+        $class = new \ReflectionClass($class);
+
+        return $class->newInstanceArgs($args);
+    }
+
+    /**
+     * Returns a data set configured for the entity.
      *
      * @param string $entity    The entity.
      * @param string $persister The converter name.
