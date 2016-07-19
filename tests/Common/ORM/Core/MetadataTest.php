@@ -24,6 +24,12 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
                     'arguments' => [ '@orm.metadata.norf' ]
                 ]
             ],
+            'datasets' => [
+                'wibble' => [
+                    'class'     => 'Glorp',
+                    'arguments' => [ '@orm.metadata.norf' ]
+                ]
+            ],
             'persisters' => [
                 'grault' => [
                     'class'     => 'Fred',
@@ -70,7 +76,72 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConverterValidName()
     {
+        $this->metadata->getConverter();
         $this->metadata->getConverter('frog');
+    }
+
+    /**
+     * Tests getDataSetKey with valid and empty values in metadata.
+     */
+    public function testGetDataSetKey()
+    {
+        $this->metadata->mapping['database'] = [];
+        $this->assertEquals('name', $this->metadata->getDataSetKey());
+
+        $this->metadata->mapping['database'] = [ 'dataset' => [] ];
+        $this->assertEquals('name', $this->metadata->getDataSetKey());
+
+        $this->metadata->mapping['database'] = [
+            'dataset' => [ 'key' => 'qux', 'value' => 'wobble' ]
+        ];
+        $this->assertEquals('qux', $this->metadata->getDataSetKey());
+    }
+
+    /**
+     * Tests getDataSetValue with valid and empty values in metadata.
+     */
+    public function testGetDataSetValue()
+    {
+        $this->metadata->mapping['database'] = [];
+        $this->assertEquals('value', $this->metadata->getDataSetValue());
+
+        $this->metadata->mapping['database'] = [ 'dataset' => [] ];
+        $this->assertEquals('value', $this->metadata->getDataSetValue());
+
+        $this->metadata->mapping['database'] = [
+            'dataset' => [ 'key' => 'qux', 'value' => 'wobble' ]
+        ];
+        $this->assertEquals('wobble', $this->metadata->getDataSetValue());
+    }
+
+    /**
+     * Tests getDataSet with invalid name.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidDataSetException
+     */
+    public function testGetDataSetWhenEmpty()
+    {
+        $metadata = new Metadata([]);
+        $metadata->getDataSet();
+    }
+
+    /**
+     * Tests getDataSet with invalid name.
+     *
+     * @expectedException \Common\ORM\Core\Exception\InvalidDataSetException
+     */
+    public function testGetDataSetInvalidName()
+    {
+        $this->metadata->getDataSet('flob');
+    }
+
+    /**
+     * Tests getDataSet with invalid name.
+     */
+    public function testGetDataSetValidName()
+    {
+        $this->metadata->getDataSet();
+        $this->metadata->getDataSet('wibble');
     }
 
     /**
@@ -162,6 +233,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPersisterValidName()
     {
+        $this->metadata->getPersister();
         $this->metadata->getPersister('grault');
     }
 
@@ -222,6 +294,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRepositoryValidName()
     {
+        $this->metadata->getRepository();
         $this->metadata->getRepository('garply');
     }
 

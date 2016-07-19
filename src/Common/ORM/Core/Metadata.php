@@ -11,6 +11,7 @@ namespace Common\ORM\Core;
 
 use Framework\Component\Data\DataObject;
 use Common\ORM\Core\Exception\InvalidConverterException;
+use Common\ORM\Core\Exception\InvalidDataSetException;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 use Common\ORM\Core\Exception\InvalidRepositoryException;
 use Common\ORM\Core\Validation\Validable;
@@ -53,6 +54,69 @@ class Metadata extends DataObject implements Validable
         }
 
         throw new InvalidConverterException($this->name, $converter);
+    }
+
+    /**
+     * Returns the configuration for dataset.
+     *
+     * @param string $dataset The dataset name.
+     *
+     * @return array The dataset configuration.
+     *
+     * @throws InvalidDataSetException If the dataset does not exists.
+     */
+    public function getDataSet($dataset = null)
+    {
+        if (empty($this->datasets)) {
+            throw new InvalidDataSetException($this->name);
+        }
+
+        if (empty($dataset)) {
+            $dataset = array_keys($this->datasets);
+            $dataset = array_shift($dataset);
+        }
+
+        if (array_key_exists($dataset, $this->datasets)) {
+            return $this->datasets[$dataset];
+        }
+
+        throw new InvalidDataSetException($this->name, $dataset);
+    }
+
+    /**
+     * Returns the key name for the data set.
+     *
+     * @return string The key name.
+     */
+    public function getDataSetKey()
+    {
+        if (!array_key_exists('database', $this->mapping)
+            || !array_key_exists('dataset', $this->mapping['database'])
+            || !array_key_exists('key', $this->mapping['database']['dataset'])
+            || empty($this->mapping['database']['dataset']['key'])
+        ) {
+            return 'name';
+        }
+
+        return $this->mapping['database']['dataset']['key'];
+    }
+
+    /**
+     * Returns the value name for the data set.
+     *
+     * @return string The value name.
+     */
+    public function getDataSetvalue()
+    {
+        if (!array_key_exists('database', $this->mapping)
+            || !array_key_exists('dataset', $this->mapping['database'])
+            || !array_key_exists('value', $this->mapping['database']['dataset'])
+            || empty($this->mapping['database']['dataset']['value'])
+        ) {
+            return 'value';
+        }
+
+        return $this->mapping['database']['dataset']['value'];
     }
 
     /**
