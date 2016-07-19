@@ -324,10 +324,11 @@ class InstanceController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $em   = $this->get('orm.manager');
-        $msg  = $this->get('core.messenger');
-        $data = $em->getConverter('Instance')
-            ->objectify($request->request->all());
+        $em       = $this->get('orm.manager');
+        $msg      = $this->get('core.messenger');
+        $settings = $request->request->get('settings');
+        $data     = $em->getConverter('Instance')
+            ->objectify($request->request->get('instance'));
 
         $instance = new Instance($data);
         $creator  = new InstanceCreator($em->getConnection('manager'));
@@ -347,7 +348,10 @@ class InstanceController extends Controller
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
-            //$im->configureInstance($instance);
+            $em->getConnection('instance')
+                ->selectDatabase($instance->getDatabaseName());
+
+            $em->getDataSet('Settings', 'instance')->set($settings);
 
             $msg->add(_('Instance saved successfully'), 'success', 201);
 
@@ -376,6 +380,7 @@ class InstanceController extends Controller
                 409
             );
         } catch (\Exception $e) {
+            var_dump($e->getMessage());die();
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $em->remove($instance);
@@ -397,30 +402,35 @@ class InstanceController extends Controller
     public function showAction($id)
     {
         $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('Instance');
         $instance  = $em->getRepository('Instance')->find($id);
+        $converter = $em->getConverter('Instance');
+        $ds        = $em->getDataSet('Settings', 'instance');
 
         $instance->settings['TEMPLATE_USER'] = 'es.openhost.theme.'
             . str_replace('es.openhost.theme.', '', $instance->settings['TEMPLATE_USER']);
 
-        $extra = $this->getExtraData();
+        $em->getConnection('instance')
+            ->selectDatabase($instance->getDatabaseName());
 
-        //$im->getExternalInformation($instance);
+        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik' ]);
+        $template = $this->getTemplateParams();
+
         if (!empty($instance->getClient())) {
             try {
                 $client = $this->get('orm.manager')
                     ->getRepository('Client')
                     ->find($instance->getClient());
 
-                $extra['client']    = $client->getData();
-                $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+                $template['client']    = $client->getData();
+                $template['countries'] = Intl::getRegionBundle()->getCountryNames();
             } catch (\Exception $e) {
             }
         }
 
         return new JsonResponse([
-            'extra'    => $extra,
-            'instance' => $converter->responsify($instance->getData())
+            'template' => $template,
+            'instance' => $converter->responsify($instance->getData()),
+            'settings' => $settings
         ]);
     }
 
@@ -433,10 +443,11 @@ class InstanceController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em   = $this->get('orm.manager');
-        $msg  = $this->get('core.messenger');
-        $data = $em->getConverter('Instance')
-            ->objectify($request->request->all());
+        $em       = $this->get('orm.manager');
+        $msg      = $this->get('core.messenger');
+        $settings = $request->request->get('settings');
+        $data     = $em->getConverter('Instance')
+            ->objectify($request->request->get('instance'));
 
         $instance   = $em->getRepository('Instance')->find($id);
         $oldDomains = $instance->domains;
@@ -447,12 +458,18 @@ class InstanceController extends Controller
 
         if (!empty($deletedDomains)) {
             $cache = $this->get('cache.manager')->getConnection('manager');
+
             foreach ($deletedDomains as $domain) {
                 $cache->delete($domain);
             }
         }
 
         $em->persist($instance);
+
+        // Update settings for instance
+        $em->getConnection('instance')
+            ->selectDatabase($instance->getDatabaseName());
+        $em->getDataSet('Settings', 'instance')->set($settings);
 
         dispatchEventWithParams(
             'instance.update',
@@ -469,15 +486,14 @@ class InstanceController extends Controller
      *
      * @return array Array of template parameters.
      */
-    private function getExtraData()
+    private function getTemplateParams()
     {
         $lang    = $this->get('core.locale')->getLocaleShort();
-        //$themes  = $this->get('orm.loader')->getPlugins();
-        $modules = $this->get('orm.manager')->getRepository('Extension')
+        $modules = $this->get('orm.manager')->getRepository('extension')
             ->findBy('type = "module" or type = "theme-addon" limit 10');
+        $themes = $this->get('orm.manager')->getRepository('extension', 'file')
+            ->findBy();
 
-        //$modules = [];
-        $themes = [];
         $modules = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
                 if (!empty($a->{$key})) {
@@ -496,9 +512,23 @@ class InstanceController extends Controller
             return $a->getData();
         }, $modules);
 
-        foreach ($themes as &$theme) {
-            $theme = $theme->getData();
-        }
+        $themes = array_map(function (&$a) {
+            foreach ([ 'about', 'description', 'name' ] as $key) {
+                if (is_array($a->{$key}) && !empty($a->{$key})) {
+                    $lang = $a->{$key}['en'];
+
+                    if (array_key_exists($lang, $a->{$key})
+                        && !empty($a->{$key}[$lang])
+                    ) {
+                        $lang = $a->{$key}[$lang];
+                    }
+
+                    $a->{$key} = $lang;
+                }
+            }
+
+            return $a->getData();
+        }, $themes);
 
         return [
             'languages' => [

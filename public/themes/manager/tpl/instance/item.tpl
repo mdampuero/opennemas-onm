@@ -102,7 +102,7 @@
                 <div class="form-group">
                   <label class="form-label" for="template">{t}Template{/t}</label>
                   <div class="controls">
-                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="value.uuid as value.name for (key,value) in template.themes"></select>
+                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="value.uuid as value.name for (key,value) in template.themes | orderBy: 'name'"></select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -192,7 +192,7 @@
                 <span class="input-group-addon">
                   <i class="fa" ng-class="{ 'fa-search': !loading, 'fa-circle-o-notch fa-spin': loading }"></i>
                 </span>
-                <input class="form-control" ng-model="search" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
+                <input class="form-control" ng-model="criteria.name" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
               </div>
             </div>
             <div ng-if="client">
@@ -295,7 +295,7 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-2 col-sm-3 col-xs-2 m-b-5" ng-repeat="theme in template.themes">
+              <div class="col-md-2 col-sm-3 col-xs-2 m-b-5" ng-repeat="theme in template.themes | orderBy: 'name'">
                 <div class="checkbox check-default">
                   <input id="checkbox-[% theme.uuid %]" ng-click="toggleChanges(theme)" checklist-model="instance.purchased" checklist-value="theme.uuid" type="checkbox">
                   <label for="checkbox-[% theme.uuid %]">
@@ -360,17 +360,17 @@
               <label class="form-label" for="template">{t}Minimum password level{/t}</label>
               <div class="controls">
                 <select ng-model="settings.pass_level">
-                  <option value="-1" >{t}Default{/t}</option>
-                  <option value="0" >{t}Weak{/t}</option>
-                  <option value="1" >{t}Good{/t}</option>
-                  <option value="2" >{t}Strong{/t}</option>
+                  <option value="-1">{t}Default{/t}</option>
+                  <option value="0">{t}Weak{/t}</option>
+                  <option value="1">{t}Good{/t}</option>
+                  <option value="2">{t}Strong{/t}</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
               <label for="max-mailing" class="form-label">{t}Maximun number of emails sent by month{/t}</label>
               <div class="controls">
-                <input type="number" id="max-mailing" ng-model="settings.max_mailing">
+                <input id="max-mailing" ng-model="settings.max_mailing" type="text">
               </div>
             </div>
           </div>
