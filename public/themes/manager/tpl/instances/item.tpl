@@ -102,7 +102,7 @@
                 <div class="form-group">
                   <label class="form-label" for="template">{t}Template{/t}</label>
                   <div class="controls">
-                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
+                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="value.uuid as value.name for (key, value) in template.themes"></select>
                   </div>
                 </div>
                 <div class="form-group">
