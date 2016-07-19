@@ -113,7 +113,7 @@
                         {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
                       </span>
                       <div class="controls">
-                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
+                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" ng-model="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
                       </div>
                     </div>
                   </div>
