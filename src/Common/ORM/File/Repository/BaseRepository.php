@@ -369,19 +369,20 @@ class BaseRepository extends Repository
         $config = Yaml::parse(file_get_contents($path));
         $path   = str_replace(basename($path), '', $path);
 
-        // TODO: Find another solution to include current theme path for themes
-        $config['extension']['path'] = substr($path, strpos($path, '/public') + 7);
-
         if (empty($config)) {
             return;
         }
 
-        $name  = array_keys($config)[0];
-        $class = 'Common\\ORM\\Entity\\' . \classify($name);
+        $class = 'Common\\ORM\\Entity\\' . \classify($this->metadata->name);
+
+        if (array_keys($config)[0] === \underscore($this->metadata->name)) {
+            $config = $config[\underscore($this->metadata->name)];
+        }
 
         try {
             if (class_exists($class)) {
-                $entity = new $class($this->converter->objectify($config[$name]));
+                $entity = new $class($this->converter->objectify($config));
+                $entity->path = substr($path, strpos($path, '/public') + 7);
 
                 $this->entities[] = $entity;
             }
