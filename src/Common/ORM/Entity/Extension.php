@@ -17,4 +17,27 @@ use Common\ORM\Core\Entity;
  */
 class Extension extends Entity
 {
+    /**
+     * Returns the extension price.
+     *
+     * @param string $type The price type.
+     *
+     * @return float The extension price.
+     */
+    public function getPrice($type = 'monthly')
+    {
+        if (empty($this->price)) {
+            return 0;
+        }
+
+        $prices = array_filter($this->price, function ($a) use ($type) {
+            return $a['type'] === $type;
+        });
+
+        if (count($prices)) {
+            return (float) $prices[0]['value'];
+        }
+
+        return (float) $this->price[0]['value'];
+    }
 }
