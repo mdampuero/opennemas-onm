@@ -467,7 +467,7 @@ class NotificationController extends Controller
             'gl' => _('Galician'),
         ];
 
-        $themes = $this->get('orm.manager')->getRepository('Extension', 'file')->findBy();
+        $themes = $this->get('orm.manager')->getRepository('Theme')->findBy();
 
         foreach ($themes as $theme) {
             $params['target'][] = [
