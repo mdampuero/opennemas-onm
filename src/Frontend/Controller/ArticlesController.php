@@ -173,6 +173,7 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Setup view
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
@@ -259,7 +260,7 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = $this->get('core.manager.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);

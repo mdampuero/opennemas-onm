@@ -5,10 +5,10 @@ manager_ws_notification_autocomplete:
     options:
         expose: true
 
-manager_ws_notification_create:
-    path:     /notifications
-    defaults: { _controller: ManagerWebServiceBundle:Notification:create }
-    methods:  [ POST ]
+manager_ws_notification_csv:
+    path:     /notifications/{id}.csv
+    defaults: { _controller: ManagerWebServiceBundle:Notification:export }
+    methods:  [ GET ]
     options:
         expose: true
 
@@ -16,6 +16,8 @@ manager_ws_notification_delete:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:delete }
     methods:  [ DELETE ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -30,13 +32,15 @@ manager_ws_notification_patch:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:patch }
     methods:  [ PATCH ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
-manager_ws_notification_report:
-    path:     /notifications/{id}/report
-    defaults: { _controller: ManagerWebServiceBundle:Notification:report }
-    methods:  [ GET ]
+manager_ws_notification_save:
+    path:     /notifications
+    defaults: { _controller: ManagerWebServiceBundle:Notification:save }
+    methods:  [ POST ]
     options:
         expose: true
 
@@ -44,6 +48,8 @@ manager_ws_notification_show:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:show }
     methods:  [ GET ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -51,13 +57,14 @@ manager_ws_notification_update:
     path:     /notifications/{id}
     defaults: { _controller: ManagerWebServiceBundle:Notification:update }
     methods:  [ PUT ]
+    requirements:
+        id: \d+
     options:
         expose: true
-    methods:  [ GET ]
 
 manager_ws_notifications_csv:
     path:     /notifications.csv
-    defaults: { _controller: ManagerWebServiceBundle:Notification:export }
+    defaults: { _controller: ManagerWebServiceBundle:Notification:exportAll }
     methods:  [ GET ]
     options:
         expose: true

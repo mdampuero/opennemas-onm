@@ -493,7 +493,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $instanceName = $this->container->get('instance')->internal_name;
+        $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
@@ -510,7 +510,7 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         // Clean varnish cache for frontpage
         if ($this->container->hasParameter('varnish')) {
-            $instanceName = $this->container->get('instance')->internal_name;
+            $instanceName = $this->container->get('core.instance')->internal_name;
 
             $this->container->get('varnish_ban_message_exchanger')
                 ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName));
@@ -528,7 +528,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $instanceName = $this->container->get('instance')->internal_name;
+        $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName));

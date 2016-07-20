@@ -16,8 +16,53 @@ select.form-control {
   }
 }
 
+.form-control:focus {
+  border-color: #faf5f7;
+}
+
 .form-group .tooltip .tooltip-inner {
   white-space: nowrap;
+}
+
+.has-error .input-group-addon {
+  border-color: @error-color;
+}
+
+.input-group-transparent {
+  input {
+    border-right: 0;
+  }
+
+  .input-group-addon-transparent {
+    background: none;
+  }
+
+  input:focus + .input-group-addon-transparent {
+    background: #f4f5f7;
+    border-color: #f4f5f7;
+  }
+}
+
+.input-with-icon {
+  .icon {
+    bottom: 0;
+    color: @default-color;
+    display: block;
+    font-size: 16px;
+    height: auto;
+    left: 0;
+    margin: 11px 2px 4px 10px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 16px;
+
+    &.right {
+      left: auto;
+      margin: 7px 10px;
+      right: 0;
+    }
+  }
 }
 
 .has-error {

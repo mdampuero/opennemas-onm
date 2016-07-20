@@ -34,8 +34,8 @@
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid_like[0].value }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid_like[0].value" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.uuid_like[0].value = null" ng-show="criteria.uuid_like[0].value">
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.uuid = null" ng-show="criteria.uuid">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -44,7 +44,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -69,7 +69,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -183,7 +183,7 @@
             <tr>
               <th width="15">
                 <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                   <label for="select-all"></label>
                 </div>
               </th>
@@ -201,7 +201,7 @@
                 {t}UUID{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('uuid') == 'asc', 'fa fa-caret-down': isOrderedBy('uuid') == 'desc'}"></i>
               </th>
-              <th ng-show="isColumnEnabled('category')" width="150">
+              <th class="text-center" ng-show="isColumnEnabled('category')" width="150">
                 {t}Category{/t}
               </th>
               <th class="text-center" ng-show="isColumnEnabled('translations')" width="60">
@@ -250,7 +250,7 @@
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_module_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash- m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -258,11 +258,11 @@
               <td ng-show="isColumnEnabled('uuid')">
                 [% item.uuid %]
               </td>
-              <td ng-show="isColumnEnabled('category')">
-                <span ng-if="item.metas.category === 'module'">{t}Module{/t}</span>
-                <span ng-if="item.metas.category === 'pack'">{t}Pack{/t}</span>
-                <span ng-if="item.metas.category === 'partner'">{t}Partner{/t}</span>
-                <span ng-if="item.metas.category === 'service'">{t}Service{/t}</span>
+              <td class="text-center" ng-show="isColumnEnabled('category')">
+                <span ng-if="item.category === 'module'">{t}Module{/t}</span>
+                <span ng-if="item.category === 'pack'">{t}Pack{/t}</span>
+                <span ng-if="item.category === 'partner'">{t}Partner{/t}</span>
+                <span ng-if="item.category === 'service'">{t}Service{/t}</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('translations')">
                 <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" uib-tooltip="{t}Translations completed{/t}">
@@ -276,9 +276,8 @@
                 [% item.author %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('price')">
-                <div ng-repeat="price in item.metas.price">
+                <div ng-repeat="price in item.price">
                   [% price.value ? price.value : 0 %] €<span ng-if="price.type === 'monthly'">/{t}month{/t}</span><span ng-if="price.type === 'yearly'">/{t}year{/t}</span><span ng-if="price.type === 'item'">/{t}item{/t}</span>
-
                 </div>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('created')">
@@ -288,8 +287,8 @@
                 [% item.updated %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('enabled')">
-                <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.enabled == '1' ? '0' : '1')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.enabled == '1', 'fa-times text-error': !item.loading && item.enabled == '0' }"></i>
+                <button class="btn btn-white" type="button" ng-click="patch(item, 'enabled', item.enabled == '1' ? '0' : '1')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading &&item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                 </button>
               </td>
             </tr>
@@ -299,7 +298,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

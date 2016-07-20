@@ -55,7 +55,7 @@ class StoreController extends Controller
             $availableItems[$theme->uuid] = $theme->name;
         }
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $client = $this->get('orm.manager')
             ->getRepository('manager.client', 'Database')
             ->find($instance->getClient());
@@ -145,7 +145,7 @@ class StoreController extends Controller
                 'type'    => [ [ 'value' => 'module' ] ]
             ]);
 
-        $activated = $this->get('instance')->activated_modules;
+        $activated = $this->get('core.instance')->activated_modules;
 
         if (in_array('ALBUM_MANAGER', $activated)
             && in_array('VIDEO_MANAGER', $activated)
@@ -188,7 +188,7 @@ class StoreController extends Controller
      */
     private function sendEmailToCustomer($client, $modules)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()
@@ -222,7 +222,7 @@ class StoreController extends Controller
      */
     private function sendEmailToSales($client, $modules)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $params   = $this->getParameter('manager_webservice');
 
         $message = \Swift_Message::newInstance()

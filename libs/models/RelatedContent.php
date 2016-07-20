@@ -11,7 +11,6 @@
  * @package    Model
  */
 use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 use Repository\EntityManager;
 
 /**
@@ -80,13 +79,13 @@ class RelatedContent
     /**
      * Initializes the RelatedContent.
      *
-     * @param DbalWrapper    $databaseConnection The database connection.
+     * @param Connection     $databaseConnection The database connection.
      * @param EntityManager  $entityManager      The entity manager.
      * @param CacheInterface $cacheHandler       The cache service.
      * @param string         $cachePrefix        The cache prefix.
      */
     public function __construct(
-        DbalWrapper $databaseConnection,
+        $databaseConnection,
         EntityManager $entityManager,
         CacheInterface $cacheHandler,
         $cachePrefix

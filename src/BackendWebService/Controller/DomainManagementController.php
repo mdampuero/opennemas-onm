@@ -56,7 +56,7 @@ class DomainManagementController extends Controller
     {
         $domain   = $request->query->get('domain');
         $end      = substr($domain, strrpos($domain, '.') + 1);
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $expected = "{$instance->internal_name}.{$end}.opennemas.net";
 
@@ -102,7 +102,7 @@ class DomainManagementController extends Controller
      */
     public function delete($domain)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $index = array_search($instance->domains, $domain);
 
@@ -128,7 +128,7 @@ class DomainManagementController extends Controller
      */
     public function listAction()
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
@@ -162,7 +162,7 @@ class DomainManagementController extends Controller
     {
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $date      = new \Datetime('now');
 
         $em = $this->get('orm.manager');
@@ -300,7 +300,7 @@ class DomainManagementController extends Controller
      */
     private function sendEmailToCustomer($client, $domains, $purchase)
     {
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $params    = $this->getParameter('manager_webservice');
         $countries = Intl::getRegionBundle()
             ->getCountryNames(CURRENT_LANGUAGE_LONG);
@@ -343,7 +343,7 @@ class DomainManagementController extends Controller
     private function sendEmailToSales($client, $domains)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $params    = $this->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()

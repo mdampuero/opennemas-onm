@@ -120,7 +120,6 @@ class LetterController extends Controller
         }
 
         // Setup view
-        $this->view = $this->get('core.template');
         $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
@@ -344,7 +343,7 @@ class LetterController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = $this->get('core.manager.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

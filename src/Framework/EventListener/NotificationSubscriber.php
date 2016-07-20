@@ -11,7 +11,7 @@ namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Framework\Component\EventDispatcher\Event;
-use Framework\ORM\Entity\Notification;
+use Common\ORM\Entity\Notification;
 
 class NotificationSubscriber implements EventSubscriberInterface
 {
@@ -72,7 +72,7 @@ class NotificationSubscriber implements EventSubscriberInterface
      */
     public function getNotificationFromInstance(Event $event)
     {
-        $instance = $this->container->get('instance');
+        $instance = $this->container->get('core.instance');
         $response = $event->getResponse();
 
         if ($instance->users > 1) {
@@ -100,10 +100,7 @@ class NotificationSubscriber implements EventSubscriberInterface
      */
     public function getNotifications(Event $event)
     {
-        $criteria = $event->getArgument('criteria');
-        $order    = $event->getArgument('order');
-        $epp      = $event->getArgument('epp');
-        $page     = $event->getArgument('page');
+        $oql = $event->getArgument('oql');
 
         $response = $event->getResponse();
         if (!is_array($response)) {
@@ -112,8 +109,7 @@ class NotificationSubscriber implements EventSubscriberInterface
 
         $response = array_merge(
             $response,
-            $this->container->get('core.service.notification')
-                ->getList($criteria, $order, $epp, $page)
+            $this->container->get('core.service.notification')->getList($oql)
         );
 
         $event->setResponse($response);
@@ -127,13 +123,9 @@ class NotificationSubscriber implements EventSubscriberInterface
     public function getReadNotifications(Event $event)
     {
         $repository = $this->container->get('orm.manager')
-            ->getRepository('manager.UserNotification');
+            ->getRepository('user_notification');
 
-        $notifications = $repository->findBy([
-            'instance_id' => [ [ 'value' => $event->getArgument('instance_id') ] ],
-            'user_id'     => [ [ 'value' => $event->getArgument('user_id') ] ],
-            'read_date'   => [ [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ] ]
-        ]);
+        $notifications = $repository->findBy($event->getArgument('oql'));
 
         $response = [];
         foreach ($notifications as $notification) {

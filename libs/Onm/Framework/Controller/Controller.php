@@ -126,7 +126,7 @@ class Controller extends SymfonyController
                 && $parameters['x-cacheable'] !== false)
             )
         ) {
-            $instanceName = getService('instance_manager')->current_instance->internal_name;
+            $instanceName = getService('core.instance')->internal_name;
 
             $response->headers->set('x-tags', 'instance-'.$instanceName.','.$parameters['x-tags']);
             $response->headers->set('x-instance', $instanceName);

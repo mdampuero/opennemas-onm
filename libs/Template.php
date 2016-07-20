@@ -31,7 +31,8 @@ class Template extends Smarty
     /**
      * Initializes the Template class
      *
-     * @param Extension $theme The current theme.
+     * @param ServiceContainer $container The service container.
+     * @param array            $plugins   The list of plugins.
      */
     public function __construct($container, $plugins)
     {
@@ -39,12 +40,8 @@ class Template extends Smarty
 
         $this->container = $container;
 
+        $this->assign('container', $container);
         $this->registerPlugins($plugins);
-
-        // Fran: I have to comment this line cause templating.globals is no
-        // longer available. We need to know if this don't have any drawback in
-        // current template files.
-        // $this->assign('app', getService('templating.globals'));
     }
 
     /**

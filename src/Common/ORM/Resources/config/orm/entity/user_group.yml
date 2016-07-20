@@ -1,0 +1,41 @@
+entity:
+    name: UserGroup
+    properties:
+        id:         integer
+        name:       string
+        privileges: array
+    converters:
+        default:
+            class:     Common\ORM\Database\Data\Converter\BaseConverter
+            arguments: [ '@orm.metadata.user_group' ]
+    repositories:
+        instance:
+            class:     Common\ORM\Database\Repository\UserGroupRepository
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\Repository\UserGroupRepository
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager' ]
+    persisters:
+        instance:
+            class:     Common\ORM\Database\Persister\UserGroupPersister
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\Persister\UserGroupPersister
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager' ]
+    mapping:
+        database:
+            table: user_group
+            columns:
+                id:
+                    type: integer
+                    options: { default: null, unsigned: true, autoincrement: true }
+                name:
+                    type: string
+                    options: { default: null, notnull: false, length: 50 }
+            index:
+                -
+                    name:    PRIMARY
+                    columns: [ id ]
+                    primary: true
+                    unique:  true
+                    flags:   {}

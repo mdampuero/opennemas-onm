@@ -24,23 +24,24 @@
         </testsuite>
     </testsuites>
 
-    <!--
     <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
+        <server name="KERNEL_DIR" value="app" />
     </php>
-    -->
     <filter>
         <whitelist>
             <directory>./libs/models</directory>
             <directory>./libs/Onm</directory>
             <directory>./src/</directory>
             <exclude>
+                <directory>./src/*/*/DependencyInjection</directory>
+                <directory>./src/*/*/Resources</directory>
+                <directory>./src/*/*/Tests</directory>
+                <directory>./src/*Bundle/DependencyInjection</directory>
                 <directory>./src/*Bundle/Resources</directory>
                 <directory>./src/*Bundle/Tests</directory>
+                <directory>./src/*/*Bundle/DependencyInjection</directory>
                 <directory>./src/*/*Bundle/Resources</directory>
                 <directory>./src/*/*Bundle/Tests</directory>
-                <directory>./src/*/Bundle/*Bundle/Resources</directory>
-                <directory>./src/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
         <blacklist>

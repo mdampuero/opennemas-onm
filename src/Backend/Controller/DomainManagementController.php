@@ -40,7 +40,7 @@ class DomainManagementController extends Controller
         $token     = null;
         $extension = null;
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $em       = $this->get('orm.manager');
 
         if (array_key_exists('client', $instance->metas)
@@ -52,7 +52,6 @@ class DomainManagementController extends Controller
 
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
-
             } catch (\Exception $e) {
             }
         }

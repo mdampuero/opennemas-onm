@@ -34,7 +34,7 @@ class PurchaseController extends Controller
 
         $purchase = $em->getRepository('manager.purchase')->findOneBy([
             'id'          => [ [ 'value' => $id ] ],
-            'instance_id' => [ [ 'value' => $this->get('instance')->id ] ]
+            'instance_id' => [ [ 'value' => $this->get('core.instance')->id ] ]
         ]);
 
         if (!$purchase) {
@@ -58,7 +58,7 @@ class PurchaseController extends Controller
      */
     public function saveAction()
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $em       = $this->get('orm.manager');
         $client   = $instance->getClient();
 
@@ -92,8 +92,8 @@ class PurchaseController extends Controller
         $purchase = $em->getRepository('manager.purchase')->find($id);
         $vatTax = null;
 
-        if (!empty($this->get('instance')->getClient())) {
-            $client = $this->get('instance')->getClient();
+        if (!empty($this->get('core.instance')->getClient())) {
+            $client = $this->get('core.instance')->getClient();
             $client = $em->getRepository('manager.client', 'Database')->find($client);
 
             if (!empty($client)) {

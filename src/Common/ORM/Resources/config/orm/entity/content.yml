@@ -1,0 +1,197 @@
+entity:
+    name: Content
+    enum:
+        content_type_name: [ static_page ]
+    properties:
+        available:           boolean
+        body:                string
+        category_name:       string
+        changed:             datetime
+        content_status:      integer
+        content_type_name:   enum
+        created:             datetime
+        description:         string
+        endtime:             datetime
+        favorite:            boolean
+        fk_author:           integer
+        fk_content_type:     integer
+        fk_publisher:        integer
+        fk_user_last_editor: integer
+        frontpage:           integer
+        home_pos:            integer
+        in_home:             boolean
+        in_litter:           boolean
+        metadata:            string
+        params:              string
+        pk_content:          integer
+        position:            integer
+        slug:                string
+        starttime:           datetime
+        title:               string
+        urn_source:          string
+        with_comment:        boolean
+    converters:
+        default:
+            class:     Common\ORM\Database\Data\Converter\BaseConverter
+            arguments: [ '@orm.metadata.content' ]
+    repositories:
+        database:
+            class:     Common\ORM\Database\Repository\BaseRepository
+            arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
+    persisters:
+        database:
+            class:     Common\ORM\Database\Persister\BasePersister
+            arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
+    mapping:
+        database:
+            table: contents
+            metas:
+                table: contentmeta
+                ids:
+                    pk_content: fk_content
+            columns:
+                pk_content:
+                    type: bigint
+                    options: { default: null, unsigned: true, autoincrement: true }
+                fk_content_type:
+                    type: integer
+                    options: { default: null, unsigned: true }
+                content_type_name:
+                    type: string
+                    options: { default: null, length: 20 }
+                title:
+                    type: string
+                    options: { default: null, notnull: false, length: 255 }
+                description:
+                    type: text
+                    options: { default: null, length: 65532, notnull: false }
+                body:
+                    type: text
+                    options: { default: null, length: 65532 }
+                metadata:
+                    type: string
+                    options: { default: null, notnull: false, length: 255 }
+                starttime:
+                    type: datetimetz
+                    options: { default: null, notnull: false }
+                endtime:
+                    type: datetimetz
+                    options: { default: null, notnull: false }
+                created:
+                    type: datetimetz
+                    options: { default: null, notnull: false }
+                changed:
+                    type: datetimetz
+                    options: { default: null, notnull: false }
+                content_status:
+                    type: integer
+                    options: { default: '0', notnull: false, unsigned: true }
+                fk_author:
+                    type: integer
+                    options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+                fk_publisher:
+                    type: integer
+                    options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+                fk_user_last_editor:
+                    type: integer
+                    options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+                position:
+                    type: integer
+                    options: { default: '100', notnull: false, unsigned: true }
+                frontpage:
+                    type: boolean
+                    options: { default: '1', notnull: false }
+                in_litter:
+                    type: boolean
+                    options: { default: '0', notnull: false, comment: '0publicado 1papelera' }
+                in_home:
+                    type: boolean
+                    options: { default: '0', notnull: false }
+                home_pos:
+                    type: integer
+                    options: { default: '100', notnull: false, comment: '10' }
+                slug:
+                    type: string
+                    options: { default: null, notnull: false, length: 255 }
+                available:
+                    type: boolean
+                    options: { default: '1', notnull: false }
+                with_comment:
+                    type: boolean
+                    options: { default: '1', notnull: false }
+                params:
+                    type: text
+                    options: { default: null, length: 65532, notnull: false }
+                category_name:
+                    type: string
+                    options: { default: null, length: 255 }
+                favorite:
+                    type: boolean
+                    options: { default: null, notnull: false }
+                urn_source:
+                    type: string
+                    options: { default: null, notnull: false, length: 255 }
+            index:
+                -
+                    name: PRIMARY
+                    columns: [ pk_content ]
+                    primary: true
+                    unique: true
+                    flags: {  }
+                -
+                    name: fk_content_type
+                    columns: [fk_content_type]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: in_litter
+                    columns: [in_litter]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: content_status
+                    columns: [content_status]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: in_home
+                    columns: [in_home]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: frontpage
+                    columns: [frontpage]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: available
+                    columns: [available]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: starttime
+                    columns: [starttime, endtime]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: created
+                    columns: [created]
+                    primary: false
+                    unique: false
+                    flags: {  }
+                -
+                    name: metadata
+                    columns: [metadata]
+                    primary: false
+                    unique: false
+                    flags: { fulltext: true }
+                -
+                    name: urn_source
+                    columns: [urn_source]

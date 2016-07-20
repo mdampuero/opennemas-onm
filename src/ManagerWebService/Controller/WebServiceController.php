@@ -248,7 +248,7 @@ class WebServiceController extends Controller
             ->setSubject(_("A new opennemas instance has been created"))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/newInstanceToCompany.tpl',
+                    'instance/emails/newInstanceToCompany.tpl',
                     array(
                         'data'        => $data,
                         'domain'      => $domain,
@@ -275,7 +275,7 @@ class WebServiceController extends Controller
             ->setSubject(sprintf(_("Your newspaper is now live"), $data['name']))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/newInstanceToUser.tpl',
+                    'instance/emails/newInstanceToUser.tpl',
                     array(
                         'data'              => $data,
                         'domain'            => $domain,
@@ -300,7 +300,7 @@ class WebServiceController extends Controller
             ->setSubject(_("Error when creating a new instance"))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/instanceCreationError.tpl',
+                    'instance/emails/instanceCreationError.tpl',
                     array(
                         'instance'  => $instance,
                         'exception' => $exception

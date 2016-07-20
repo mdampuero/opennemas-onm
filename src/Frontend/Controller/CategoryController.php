@@ -244,7 +244,7 @@ class CategoryController extends Controller
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = $this->get('core.manager.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

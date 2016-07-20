@@ -52,7 +52,7 @@ EOF
         // Get database connection
         $databaseConnection = getService('db_conn');
         $databaseConnection->selectDatabase($databaseName);
-        $conn = getService('dbal_connection');
+        $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($databaseName);
 
         // Load application and initialize Database

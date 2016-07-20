@@ -227,22 +227,23 @@ div[ng-view].ng-leave-active .selected-navbar {
   max-height: 250px;
   margin: 0;
   overflow: hidden;
-  padding: 5px 15px 15px;
+  padding: 0 15px 15px;
   transition: all .5s;
+
+  h5 {
+    transition: all .5s;
+    margin: 15px 0;
+  }
 
   &.collapsed {
     border-bottom: 0 solid @border-color;
     border-top: 0 solid @border-color;
     padding: 0 15px;
     max-height: 0;
-  }
 
-  .column {
-    padding: 7px 31px;
-  }
-
-  .title {
-    padding: 0px 30px;
+    h5 {
+      margin: 0;
+    }
   }
 }
 .column-filters-toggle {

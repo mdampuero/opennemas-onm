@@ -47,23 +47,30 @@
       <div class="col-md-4">
         <div class="grid simple">
           <div class="grid-body module-form">
-            <div class="form-group" ng-class="{ 'has-error': moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid), 'has-success': moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid }">
-              <label class="form-label" for="uuid">
-                {t}UUID{/t}
-                <span class="text-danger">*</span>
-              </label>
+            <div class="form-group" ng-class="{ 'has-error': !checking && moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid), 'has-success': !checking && moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid }">
+              <div class="clearfix">
+                <label class="form-label pull-left" for="uuid">
+                  {t}UUID{/t}
+                  <span class="text-danger">*</span>
+                </label>
+              </div>
               <div class="controls">
                 <div class="input-with-icon right">
-                  <i class="fa fa-check text-success" ng-if="moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
-                  <i class="fa fa-times text-danger" ng-if="moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
-                  <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required typeahead="uuid for uuid in extra.uuids | filter: $viewValue" typeahead-min-length="3" placeholder="es.openhost.module.example" type="text">
+                  <i class="fa fa-circle-o-notch fa-spin" ng-show="checking"></i>
+                  <i class="fa fa-check text-success" ng-show="!checking && moduleForm.uuid.$dirty && moduleForm.uuid.$valid && uuidValid"></i>
+                  <i class="fa fa-times text-danger" ng-show="!checking && moduleForm.uuid.$dirty && (moduleForm.uuid.$invalid || !uuidValid)" uib-tooltip="{t}This UUID is invalid{/t}"></i>
+                  <input autocomplete="off" class="form-control no-animate" id="uuid" name="uuid" ng-model="module.uuid" required uib-typeahead="uuid for uuid in extra.uuids | filter: $viewValue" typeahead-min-length="3" placeholder="es.openhost.module.example" type="text">
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <div class="checkbox">
-                <input id="enabled" name="enabled" ng-model="module.enabled" ng-false-value="0" ng-true-value="1" type="checkbox">
-                <label class="form-label" for="enabled">{t}Enabled{/t}</label>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <input id="enabled" ng-false-value="0" ng-model="module.enabled" ng-true-value="1" type="checkbox">
+                    <label for="enabled">{t}Enabled{/t}</label>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -77,7 +84,7 @@
                       <option value="module">{t}Module{/t}</option>
                       <option value="theme">{t}Theme{/t}</option>
                       <option value="theme-addon">{t}Theme addon{/t}</option>
-                      <option value="Widget">{t}Widget{/t}</option>
+                      <option value="widget">{t}Widget{/t}</option>
                     </select>
                   </div>
                 </div>
@@ -88,9 +95,9 @@
                 <div class="form-group">
                   <label class="form-label" for="category">{t}Category{/t}</label>
                   <div class="controls">
-                    <select id="category" name="category" ng-model="module.metas.category">
+                    <select id="category" name="category" ng-model="module.category">
                       <option value="">{t}Select a category...{/t}</option>
-                      <option value=domain">{t}Domain{/t}</option>
+                      <option value="domain">{t}Domain{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="pack">{t}Pack{/t}</option>
                       <option value="partner">{t}Partner{/t}</option>
@@ -107,9 +114,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="author_url">{t}URL{/t}</label>
+              <label class="form-label" for="url">{t}URL{/t}</label>
               <div class="controls">
-                <input class="form-control" id="author_url" ng-model="module.url" placeholder="http://www.openhost.es" type="text">
+                <input class="form-control" id="url" ng-model="module.url" placeholder="http://www.openhost.es" type="text">
               </div>
             </div>
             <div class="form-group">
@@ -118,7 +125,7 @@
                 <span class="text-danger">*</span>
               </label>
               <div class="controls">
-                <div class="m-b-15 row" ng-repeat="price in module.metas.price">
+                <div class="m-b-15 row" ng-repeat="price in module.price">
                   <div class="form-group" ng-class="{ 'has-error': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index], 'has-success': moduleForm['price_' + $index].$dirty && moduleForm['price_' + $index].$valid }">
                     <div class="col-xs-3">
                       <div class="input-with-icon left">
@@ -151,7 +158,7 @@
                 <label class="form-label" for="uuid">{t}Modules included{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.metas.modules_included">
+                <tags-input ng-model="module.modules_included">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
@@ -161,7 +168,7 @@
                 <label class="form-label" for="uuid">{t}Modules in conflict{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.metas.modules_in_conflict">
+                <tags-input ng-model="module.modules_in_conflict">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>

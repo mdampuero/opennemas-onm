@@ -6,11 +6,10 @@
      * @ngdoc controller
      * @name  UserCtrl
      *
-     * @requires $filter
      * @requires $location
      * @requires $routeParams
      * @requires $scope
-     * @requires itemService
+     * @requires http
      * @requires routing
      * @requires messenger
      *
@@ -18,105 +17,136 @@
      *   Handles all actions in users listing.
      */
     .controller('UserCtrl', [
-      '$filter', '$location', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($filter, $location, $routeParams, $scope, itemService, routing, messenger) {
+      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, http, routing, messenger) {
         /**
-         * Creates a new user.
+         * @memberOf UserCtrl
+         *
+         * @description
+         *  The user object.
+         *
+         * @type {Object}
          */
-        $scope.save = function() {
-          if ($scope.userForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
-          $scope.saving = 1;
-
-          if ($scope.user.meta.paywall_time_limit) {
-            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
-          }
-
-          itemService.save('manager_ws_user_create', $scope.user)
-            .then(function (response) {
-              messenger.post({
-                message: response.data,
-                type: response.status === 201  ? 'success' : 'error'
-              });
-
-              if (response.status === 201) {
-                // Get new user id
-                var url = response.headers()['location'];
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                    'manager_user_show', { id: id });
-                $location.path(url);
-              }
-
-              $scope.saving = 0;
-            });
+        $scope.user = {
+          enabled:        true,
+          password:       null,
+          type:           0,
+          user_group_ids: [],
+          user_language: 'default',
         };
 
         /**
-         * Updates an user.
+         * @function autocomplete
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Adds a new price to the list.
          */
-        $scope.update = function() {
-          if ($scope.userForm.$invalid) {
-            $scope.formValidated = 1;
+        $scope.autocomplete = function(query) {
+          var tags = [];
 
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
+          for (var i = 0; i < $scope.extra.user_groups.length;  i++) {
+            var name = $scope.extra.user_groups[i].name.toLowerCase();
+            if (name.indexOf(query.toLowerCase()) !== -1) {
+              tags.push($scope.extra.user_groups[i]);
+            }
           }
 
+          return tags;
+        };
+
+
+        /**
+         * @function save
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Saves a new user.
+         */
+        $scope.save = function() {
           $scope.saving = 1;
 
-          if ($scope.user.meta.paywall_time_limit) {
-            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+          var data  = angular.copy($scope.user);
+
+          if (data.user_group_ids) {
+            data.user_group_ids = data.user_group_ids
+              .map(function(e) { return e.id; });
           }
 
-          itemService.update('manager_ws_user_update', $scope.user.id,
-              $scope.user).then(function (response) {
-            messenger.post({
-              message: response.data,
-              type: response.status === 200 ? 'success' : 'error'
-            });
+          http.post('manager_ws_user_save', data).then(function (response) {
+            messenger.post(response.data);
 
+            if (response.status === 201) {
+              var url = response.headers().location.replace('/managerws', '');
+              $location.path(url);
+            }
+          }, function(response) {
+            messenger.post(response.data);
             $scope.saving = 0;
           });
         };
 
+        /**
+         * @function update
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Updates an user.
+         */
+        $scope.update = function() {
+          $scope.saving = 1;
+
+          var data  = angular.copy($scope.user);
+          var route = {
+            name: 'manager_ws_user_update',
+            params: { id: $scope.user.id }
+          };
+
+          if (data.user_group_ids) {
+            data.user_group_ids = data.user_group_ids
+              .map(function(e) { return e.id; });
+          }
+
+          http.put(route, data).then(function (response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          });
+        };
+
+        // Frees up memory on destroy event
         $scope.$on('$destroy', function() {
           $scope.user  = null;
           $scope.extra = null;
         });
 
-        //  Initialize user
-        if ($routeParams.id) {
-          itemService.show('manager_ws_user_show', $routeParams.id).then(
-            function(response) {
-              $scope.user = response.data.user;
-              $scope.extra = response.data.extra;
+        var route = 'manager_ws_user_new';
 
-              if (!angular.isArray($scope.user.meta)) {
-                $scope.user.meta = { user_language: 'default' };
-              }
-            }
-          );
-        } else {
-          itemService.new('manager_ws_user_new').then(function(response) {
-            $scope.extra = response.data.extra;
-            $scope.user = { meta: { user_language: 'default' } };
-          });
+        if ($routeParams.id) {
+          route = {
+            name:   'manager_ws_user_show',
+            params: { id:  $routeParams.id }
+          };
         }
+
+        http.get(route).then(function(response) {
+          $scope.extra  = response.data.extra;
+
+          if (response.data.user) {
+            $scope.user = angular.merge($scope.user, response.data.user);
+
+            $scope.user.user_group_ids = $scope.user.user_group_ids
+              .map(function (e) {
+                for (var i = 0; i < $scope.extra.user_groups.length; i++) {
+                  if ($scope.extra.user_groups[i].id === parseInt(e)) {
+                    return $scope.extra.user_groups[i];
+                  }
+                }
+              });
+          }
+        });
       }
   ]);
 })();

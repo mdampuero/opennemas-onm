@@ -180,7 +180,7 @@ class FormController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = $this->get('core.manager.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

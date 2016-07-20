@@ -195,8 +195,7 @@ class Widget extends Content
     {
         $paths = array();
         $paths = [];
-        $instanceManager = getService('instance_manager');
-        $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
+        $baseTheme = getService('core.theme')->getParentTheme();
 
         // Add current theme widgets/ path
         $baseThemePath = realpath(TEMPLATE_USER_PATH . '/tpl/widgets');

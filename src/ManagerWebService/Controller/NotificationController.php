@@ -2,20 +2,23 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace ManagerWebService\Controller;
 
-use Framework\ORM\Entity\Notification;
+use Common\ORM\Entity\Notification;
 use League\Csv\Writer;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Returns, saves, modifies and removes notifications.
+ */
 class NotificationController extends Controller
 {
     /**
@@ -40,13 +43,15 @@ class NotificationController extends Controller
             $target[] = [ 'id' => 'manager', 'name' => 'manager' ];
         }
 
-        $orderBy  = [ 'internal_name' => 'asc' ];
-        $criteria = [
-            'internal_name' => [ [ 'value' => "%$query%", 'operator' => 'like' ] ]
-        ];
+        $oql = 'order by internal_name asc limit 10';
 
-        $instances = $this->get('instance_manager')
-            ->findBy($criteria, $orderBy, 10, 1);
+        if (!empty($query)) {
+            $oql = 'internal_name ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        $instances = $this->get('orm.manager')->getRepository('instance')
+            ->findBy($oql);
 
         foreach ($instances as $instance) {
             $target[] = [
@@ -55,53 +60,24 @@ class NotificationController extends Controller
             ];
         }
 
-        $themes = $this->get('orm.loader')->getPlugins();
+        $oql = 'order by uuid asc limit 10';
+
+        if (!empty($query)) {
+            $oql = 'uuid ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        $themes = $this->get('orm.manager')->getRepository('theme')
+            ->findBy($oql);
 
         foreach ($themes as $theme) {
-            if (empty($query) || strpos($theme->uuid, strtolower($query)) !== false) {
-                $target[] = [ 'id' => $theme->uuid, 'name' => $theme->uuid ];
-            }
+            $target[] = [
+                'id'   => $theme->uuid,
+                'name' => $theme->uuid
+            ];
         }
 
         return new JsonResponse([ 'target' => $target ]);
-    }
-
-    /**
-     * Creates a new notification from the request.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function createAction(Request $request)
-    {
-        $notification = new Notification();
-
-        foreach ($request->request as $key => $value) {
-            if (!is_null($value)) {
-                $notification->{$key} =
-                    $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-            }
-        }
-
-        if (empty($notification->start)) {
-            $notification->start = date('Y-m-d H:i:s');
-        }
-
-        $this->get('orm.manager')->persist($notification);
-
-        $response = new JsonResponse(_('Notification saved successfully'), 201);
-
-        // Add permanent URL for the current notification
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'manager_ws_notification_show',
-                [ 'id' => $notification->id ]
-            )
-        );
-
-        return $response;
     }
 
     /**
@@ -114,14 +90,17 @@ class NotificationController extends Controller
     public function deleteAction($id)
     {
         $em = $this->get('orm.manager');
-        $notification = $em->getRepository('manager.notification')->find($id);
+        $msg = $this->get('core.messenger');
+
+        $notification = $em->getRepository('Notification')->find($id);
 
         $em->remove($notification);
+        $msg->add(_('Notification deleted successfully.'), 'success');
 
-        return new JsonResponse(_('Notification deleted successfully.'));
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
-   /**
+    /**
      * Deletes the selected notifications.
      *
      * @param Request $request The request object.
@@ -130,270 +109,37 @@ class NotificationController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!is_array($selected)
-            || (is_array($selected) && count($selected) == 0)
-        ) {
-            return new JsonResponse(
-                _('Unable to find the notifications for the given criteria'),
-                404
-            );
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
         $em = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        $criteria = [
-            'id' => [
-                [ 'value' => $selected, 'operator' => 'IN']
-            ]
-        ];
+        $notifications = $em->getRepository('Notification')->findBy($oql);
 
-        $notifications = $em->getRepository('manager.notification')
-            ->findBy($criteria);
-
+        $deleted = 0;
         foreach ($notifications as $notification) {
             try {
                 $em->remove($notification);
-                $updated++;
-            } catch (EntityNotFoundException $e) {
-                $error[]    = $id;
-                $messages[] = [
-                    'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                    'type'    => 'error'
-                ];
+                $deleted++;
             } catch (\Exception $e) {
-                $error[]    = $id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error'
-                ];
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if (count($updated) > 0) {
-            $messages = [
-                'message' => sprintf(_('%s notifications deleted successfully.'), count($updated)),
-                'type'    => 'success'
-            ];
-        }
-
-        // Return the proper status code
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages ],
-            $statusCode
-        );
-    }
-
-    /**
-     * Returns the report with information about how many times any notification
-     * has been read, view, clicked and opened.
-     *
-     * @return Response The response object
-     */
-    public function exportAction()
-    {
-        $sql = 'SELECT notification_id, title, count(read_date) as "read",'
-            . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
-            . ' COUNT(open_date) as "opened"'
-            . ' FROM user_notification, notification'
-            . ' WHERE notification_id = id group by notification_id';
-
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
-        $data = array_map(function ($a) {
-            $title = unserialize($a['title']);
-
-            if (!empty($title) && is_array($title)) {
-                $a['title'] = array_shift($title);
-            }
-
-            return $a;
-        }, $data);
-
-        $writer = Writer::createFromFileObject(new \SplTempFileObject());
-        $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
-        $writer->insertOne([ 'id', 'title', 'read', 'view', 'clicked', 'opened' ]);
-
-        $writer->insertAll($data);
-
-        $response = new Response();
-        $response->setContent($writer);
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename=report-notifications.csv');
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
-    }
-
-    /**
-     * Returns the list of notifications as JSON.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function listAction(Request $request)
-    {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : [];
-        $orderBy  = $request->query->filter('orderBy') ? : [];
-        $extra    = $this->getTemplateParams();
-
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
-
-        if (!empty($criteria)) {
-            $criteria['union'] = 'OR';
-        }
-
-        $nr  = $this->get('orm.manager')->getRepository('manager.notification');
-        $unr = $this->get('orm.manager')->getRepository('manager.UserNotification');
-
-        $total         = $nr->countBy($criteria);
-        $notifications = $nr->findBy($criteria, $order, $epp, $page);
-
-        $ids = array_map(function ($a) {
-            return $a->id;
-        }, $notifications);
-
-        $extra['stats']= $unr->findStats($ids);
-
-        foreach ($notifications as &$notification) {
-            if (empty($notification->target)) {
-                $notification->target = [];
-            }
-
-            $notification = $notification->getData();
-        }
-
-        return new JsonResponse([
-            'epp'     => $epp,
-            'extra'   => $extra,
-            'page'    => $page,
-            'results' => $notifications,
-            'total'   => $total,
-        ]);
-    }
-
-    /**
-     * Returns the data to create a new notification.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function newAction()
-    {
-        $extra = $this->getTemplateParams();
-
-        return new JsonResponse([ 'extra' => $extra ]);
-    }
-
-    /**
-     * Updates some instance properties.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function patchAction(Request $request, $id)
-    {
-        $em           = $this->get('orm.manager');
-        $params       = $request->request->all();
-        $notification = $em->getRepository('manager.notification')->find($id);
-
-        foreach ($params as $key => $value) {
-            $notification->{$key} = $value;
-        }
-
-        $em->persist($notification);
-
-        return new JsonResponse(_('Notification saved successfully'));
-    }
-
-    /**
-     * Set the activated flag for instances in batch.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
-
-        if (is_array($selected) && count($selected) == 0) {
-            return new JsonResponse(
-                _('Unable to find the notifications for the given criteria'),
-                404
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s notifications deleted successfully'), $deleted),
+                'success'
             );
         }
 
-        $em = $this->get('orm.manager');
-
-        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
-
-        $notifications = $em->getRepository('manager.notification')->findBy($criteria);
-
-        foreach ($notifications as $notification) {
-            try {
-                foreach ($request->request->all() as $key => $value) {
-                    if ($key !== 'selected') {
-                        $notification->{$key} = $request->request->get($key);
-                    }
-                }
-
-                $em->persist($notification);
-                $updated[] = $notification->id;
-            } catch (\Exception $e) {
-                $error[]    = $notification->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error',
-                ];
-            }
-        }
-
-        if (count($updated) > 0) {
-            $messages[] = [
-                'message' => sprintf(
-                    _('%s notifications updated successfully.'),
-                    count($updated)
-                ),
-                'type' => 'success'
-            ];
-        }
-
-        if (count($error) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -404,7 +150,7 @@ class NotificationController extends Controller
      *
      * @return Response The response object
      */
-    public function reportAction($id)
+    public function exportAction($id)
     {
         $sql = 'SELECT notification_id, title, instance_id, internal_name,'
                 . 'contact_mail, count(read_date) as "read", count(view_date) as "view",'
@@ -447,6 +193,203 @@ class NotificationController extends Controller
     }
 
     /**
+     * Returns the report with information about how many times any notification
+     * has been read, view, clicked and opened.
+     *
+     * @return Response The response object
+     */
+    public function exportAllAction()
+    {
+        $sql = 'SELECT notification_id, title, count(read_date) as "read",'
+            . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
+            . ' COUNT(open_date) as "opened"'
+            . ' FROM user_notification, notification'
+            . ' WHERE notification_id = id group by notification_id';
+
+        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = array_map(function ($a) {
+            $title = unserialize($a['title']);
+
+            if (!empty($title) && is_array($title)) {
+                $a['title'] = array_shift($title);
+            }
+
+            return $a;
+        }, $data);
+
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne([ 'id', 'title', 'read', 'view', 'clicked', 'opened' ]);
+
+        $writer->insertAll($data);
+
+        $response = new Response();
+        $response->setContent($writer);
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename=report-notifications.csv');
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
+     * Returns the list of notifications.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listAction(Request $request)
+    {
+        $oql = $request->query->get('oql', '');
+
+        $repository = $this->get('orm.manager')->getRepository('Notification');
+        $converter = $this->get('orm.manager')->getConverter('Notification');
+
+        $total         = $repository->countBy($oql);
+        $notifications = $repository->findBy($oql);
+
+        $ids = [];
+        foreach ($notifications as &$notification) {
+            if (empty($notification->target)) {
+                $notification->target = [];
+            }
+
+            $notification = $converter->responsify($notification->getData());
+        }
+
+        return new JsonResponse([
+            'extra'   => $this->getTemplateParams(),
+            'results' => $notifications,
+            'total'   => $total,
+        ]);
+    }
+
+    /**
+     * Returns the data to create a new notification.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function newAction()
+    {
+        return new JsonResponse([
+            'extra' => $this->getTemplateParams()
+        ]);
+    }
+
+    /**
+     * Updates some notification properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchAction(Request $request, $id)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Notification')
+            ->objectify($request->request->all());
+
+        $notification = $em->getRepository('Notification')->find($id);
+        $notification->merge($data);
+
+        $em->persist($notification);
+
+        $msg->add(_('Notification saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Set the activated flag for instances in batch.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        $em   = $this->get('orm.manager');
+        $oql  = sprintf('id in [%s]', implode(',', $ids));
+        $data = $em->getConverter('Notification')->objectify($params);
+
+        $notifications = $em->getRepository('Notification')->findBy($oql);
+
+        $updated = 0;
+        foreach ($notifications as $notification) {
+            try {
+                $notification->merge($data);
+                $em->persist($notification);
+                $updated++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error', 409);
+            }
+        }
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s notifications saved successfully'), $updated),
+                'success'
+            );
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Creates a new notification from the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Notification')
+            ->objectify($request->request->all());
+
+        $notification = new Notification($data);
+
+        if (empty($notification->start)) {
+            $notification->start = new \Datetime('now');
+        }
+
+        $em->persist($notification);
+        $msg->add(_('Notification saved successfully'), 'success', 201);
+
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_notification_show',
+                [ 'id' => $notification->id ]
+            )
+        );
+
+        return $response;
+    }
+
+    /**
      * Returns an instance as JSON.
      *
      * @param integer  $id The instance id.
@@ -455,29 +398,17 @@ class NotificationController extends Controller
      */
     public function showAction($id)
     {
-        try {
-            $notification = $this->get('orm.manager')
-                ->getRepository('manager.notification')
-                ->find($id);
+        $em           = $this->get('orm.manager');
+        $converter    = $em->getConverter('Notification');
+        $notification = $em->getRepository('Notification')->find($id);
 
-            if (empty($notification->target)) {
-                $notification->target = [];
-            }
+        $extra        = $this->getTemplateParams();
+        $notification = $converter->responsify($notification->getData());
 
-            $extra = $this->getTemplateParams();
-
-            return new JsonResponse([
-                'extra'        => $extra,
-                'notification' => $notification->getData()
-            ]);
-        } catch (EntityNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the entity with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
-        }
+        return new JsonResponse([
+            'extra'        => $extra,
+            'notification' => $notification
+        ]);
     }
 
     /**
@@ -489,34 +420,22 @@ class NotificationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        try {
-            $em = $this->get('orm.manager');
-            $notification = $em->getRepository('manager.notification')->find($id);
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Notification')
+            ->objectify($request->request->all());
 
-            $keys = array_unique(array_merge(
-                array_keys($request->request->all()),
-                array_keys($notification->getData())
-            ));
+        $notification = $em->getRepository('Notification')->find($id);
+        $notification->merge($data);
 
-            foreach ($keys as $key) {
-                $notification->{$key} = $request->request->get($key);
-            }
-
-            if (empty($notification->start)) {
-                $notification->start = date('Y-m-d H:i:s');
-            }
-
-            $em->persist($notification);
-
-            return new JsonResponse(_('Notification saved successfully'));
-        } catch (InstanceNotFoundException $e) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the instance with id "%s"'), $id),
-                404
-            );
-        } catch (\Exception $e) {
-            return new JsonResponse(_($e->getMessage()), 400);
+        if (empty($notification->start)) {
+            $notification->start = date('Y-m-d H:i:s');
         }
+
+        $em->persist($notification);
+        $msg->add(_('Notification saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -548,7 +467,7 @@ class NotificationController extends Controller
             'gl' => _('Galician'),
         ];
 
-        $themes = $this->get('orm.loader')->getPlugins();
+        $themes = $this->get('orm.manager')->getRepository('Extension', 'file')->findBy();
 
         foreach ($themes as $theme) {
             $params['target'][] = [

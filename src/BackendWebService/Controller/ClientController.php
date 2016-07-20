@@ -28,7 +28,7 @@ class ClientController extends Controller
      */
     public function showAction($id)
     {
-        if ($this->get('instance')->getClient() !== $id) {
+        if ($this->get('core.instance')->getClient() !== $id) {
             return JsonResponse('', 400);
         }
 
@@ -54,7 +54,7 @@ class ClientController extends Controller
         $this->get('orm.manager')->persist($client, 'Braintree');
         $this->get('orm.manager')->persist($client, 'Database');
 
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
         $instance->metas['client'] = $client->id;
         $this->get('instance_manager')->persist($instance);
 

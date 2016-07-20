@@ -62,8 +62,7 @@ class ModuleManager
     {
         //global $activatedModules;
 
-        $activatedModules = getService('instance_manager')->current_instance
-            ->activated_modules;
+        $activatedModules = getService('core.instance')->activated_modules;
 
         if (is_null(self::$activatedModules)) {
             if (!isset($activatedModules) or (count($activatedModules) < 1)) {
@@ -85,8 +84,7 @@ class ModuleManager
      */
     public static function getChangesInModules()
     {
-        $changesInModules = getService('instance_manager')->current_instance
-            ->changes_in_modules;
+        $changesInModules = getService('core.instance')->changes_in_modules;
 
         return $changesInModules;
     }
@@ -1031,8 +1029,7 @@ class ModuleManager
      */
     public static function checkAllModulesActivated()
     {
-        $activatedModules = getService('instance_manager')->current_instance
-            ->activated_modules;
+        $activatedModules = getService('core.instance')->activated_modules;
 
         if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
@@ -1086,6 +1083,5 @@ class ModuleManager
         $moduleNames = self::getAvailableModuleNames();
 
         return in_array($moduleName, $moduleNames);
-
     }
 }

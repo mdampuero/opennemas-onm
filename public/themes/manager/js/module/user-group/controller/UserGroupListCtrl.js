@@ -7,19 +7,21 @@
      * @name  UserGroupListCtrl
      *
      * @requires $controller
-     * @requires $uibModal
+     * @requires $location
      * @requires $scope
      * @requires $timeout
-     * @requires itemService
-     * @requires routing
+     * @requires $uibModal
+     * @requires http
      * @requires messenger
+     * @requires oqlBuilder
+     * @requires webStorage
      *
      * @description
      *   Handles all actions in user groups list.
      */
     .controller('UserGroupListCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage',
-      function ($controller, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
+      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -38,6 +40,7 @@
           collapsed: 1,
           selected:  [ 'name' ]
         };
+
         /**
          * @memberOf UserGroupListCtrl
          *
@@ -46,19 +49,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = {
-          name_like: [ { value: '', operator: 'like' } ]
-        };
-
-        /**
-         * @memberOf UserGroupListCtrl
-         *
-         * @description
-         *   The list order.
-         *
-         * @type {Object}
-         */
-        $scope.orderBy = [ { name: 'name', value: 'asc' } ];
+        $scope.criteria = { epp: 25, page: 1 };
 
         /**
          * @function delete
@@ -67,9 +58,9 @@
          * @description
          *   Confirm delete action.
          *
-         * @param {Object} group The group to delete.
+         * @param {Integer} id The group id.
          */
-        $scope.delete = function(group) {
+        $scope.delete = function(id) {
           var modal = $uibModal.open({
             templateUrl: '/managerws/template/user_group:modal.' + appVersion + '.tpl',
             backdrop: 'static',
@@ -79,21 +70,28 @@
                 return { };
               },
               success: function() {
-                return function(modalInstance) {
-                  return itemService.delete('manager_ws_user_group_delete', group.id)
-                    .success(function(response) {
-                      modalInstance.close({ message: response, type: 'success'});
-                    }).error(function(response) {
-                      modalInstance.close({ message: response, type: 'error'});
-                    });
+                return function(modalWindow) {
+                  var route = {
+                    name: 'manager_ws_user_group_delete',
+                    params: { id: id }
+                  };
+
+                  http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function (response) {
-            messenger.post(response);
-            $scope.list();
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
           });
         };
 
@@ -114,34 +112,33 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalInstance) {
-                  return itemService.deleteSelected('manager_ws_user_groups_delete',
-                      $scope.selected.items).success(function(response) {
-                        modalInstance.close(response);
-                    }).error(function(response) {
-                        modalInstance.close(response);
-                    });
+                return function(modalWindow) {
+                  var route = 'manager_ws_user_groups_delete';
+                  var data  = { ids: $scope.selected.items };
+
+                  http.delete(route, data).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function (response) {
-            if (response.messages) {
-              messenger.post(response.messages);
+            messenger.post(response.data);
 
+            if (response.success) {
               $scope.selected = { all: false, items: [] };
-            } else {
-              messenger.post(response);
+              $scope.list();
             }
-
-            $scope.list();
           });
         };
 
         /**
          * @function list
-         * @memberOf InstanceListCtrl
+         * @memberOf UserGroupListCtrl
          *
          * @description
          *   Reloads the list.
@@ -149,28 +146,36 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          var cleaned = itemService.cleanFilters($scope.criteria);
+          oqlBuilder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
 
-          var data = {
-            criteria: cleaned,
-            orderBy:  $scope.orderBy,
-            epp:      $scope.pagination.epp,
-            page:     $scope.pagination.page
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_user_groups_list',
+            params: { oql: oql }
           };
 
-          itemService.encodeFilters($scope.criteria, $scope.orderBy,
-              $scope.epp, $scope.pagination.page);
+          $location.search('oql', oql);
 
-          itemService.list('manager_ws_user_groups_list', data).then(
-            function (response) {
-              $scope.items           = response.data.results;
-              $scope.pagination.total = response.data.total;
-              $scope.loading          = 0;
+          http.get(route).then(function (response) {
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
 
-              // Scroll top
-              $('body').animate({ scrollTop: '0px' }, 1000);
-            }
-          );
+            // Scroll top
+            $('body').animate({ scrollTop: '0px' }, 1000);
+          });
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { epp: 25, page: 1 };
         };
 
         // Updates the columns stored in localStorage.
@@ -179,12 +184,6 @@
             webStorage.local.set('user-groups-columns', nv);
           }
         }, true);
-
-        // Initialize filters from URL
-        var filters = itemService.decodeFilters();
-        for(var name in filters) {
-          $scope[name] = filters[name];
-        }
 
         // Get enabled columns from localStorage
         if (webStorage.local.get('user-groups-columns')) {

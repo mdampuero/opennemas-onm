@@ -1,0 +1,91 @@
+entity:
+    name: User
+    required:
+        - enabled
+        - email
+        - name
+        - type
+        - username
+    properties:
+        enabled:        boolean
+        avatar_id:      integer
+        bio:            string
+        email:          string
+        id:             integer
+        name:           string
+        password:       string
+        type:           integer
+        token:          string
+        url:            string
+        username:       string
+        user_language:  string
+        user_group_ids: array
+    converters:
+        default:
+            class:     Common\ORM\Database\Data\Converter\BaseConverter
+            arguments: [ '@orm.metadata.user' ]
+    repositories:
+        instance:
+            class:     Common\ORM\Database\Repository\BaseRepository
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\Repository\BaseRepository
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
+    persisters:
+        instance:
+            class:     Common\ORM\Database\Persister\BasePersister
+            arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\Persister\BasePersister
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
+    mapping:
+        database:
+            table: user
+            metas:
+                table: user_meta
+                ids:
+                    id: user_id
+            columns:
+                id:
+                    type: integer
+                    options: { default: null, unsigned: true, autoincrement: true }
+                username:
+                    type: string
+                    options: { default: null, length: 100, notnull: false }
+                password:
+                    type: string
+                    options: { default: null, length: 50, notnull: false }
+                url:
+                    type: string
+                    options: { default: '', length: 255, notnull: false }
+                bio:
+                    type: text
+                    options: { default: null, length: 65532, notnull: false }
+                avatar_id:
+                    type: bigint
+                    options: { default: null, unsigned: true, notnull: false }
+                email:
+                    type: string
+                    options: { default: null, length: 255, notnull: false }
+                name:
+                    type: string
+                    options: { default: null, length: 100, notnull: false }
+                type:
+                    type: integer
+                    options: { default: '0', comment: '0 backend - 1 frontend', notnull: true }
+                token:
+                    type: string
+                    options: { default: null, length: 32, notnull: false }
+                enabled:
+                    type: boolean
+                    options: { default: true, comment: '1 enabled - 0 disabled', notnull: true }
+                user_group_ids:
+                    type: simple_array
+                    options: { default: null, length: 65532, notnull: false }
+            index:
+                -
+                    name: PRIMARY
+                    columns: [ id ]
+                    primary: true
+                    unique: true
+                    flags: {  }

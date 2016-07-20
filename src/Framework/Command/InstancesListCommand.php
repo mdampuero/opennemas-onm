@@ -2,11 +2,11 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -18,20 +18,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InstancesListCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputOption(
-                        'field',
-                        'f',
-                        InputOption::VALUE_OPTIONAL,
-                        'Field to print (id, internal_name, name, domains, settings, '.
-                        'activated, contact_mail, BD_DATABASE, TEMPLATE_USER, activated_modules)'
-                    ),
-                )
-            )
             ->setName('instances:list')
             ->setDescription('Lists all the available instances')
             ->setHelp(
@@ -39,34 +31,50 @@ class InstancesListCommand extends ContainerAwareCommand
 The <info>instances:list</info> command shows a list with all the available instances.
 
 <info>php bin/console instances:list</info>
+
 EOF
+            )
+            ->addOption(
+                'field',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'Field to print (id, internal_name, name, domains, settings, '.
+                'activated, contact_mail, BD_DATABASE)'
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dbConn = $this->getContainer()->get('db_conn_manager');
-        $rs = $dbConn->GetArray('SELECT * FROM instances ORDER BY id');
-
         $field = $input->getOption('field');
-        foreach ($rs as $instance) {
-            $instance['settings'] = unserialize($instance['settings']);
 
-            if (!is_null($field)) {
-                if (array_key_exists($field, $instance)) {
-                    $output->writeln($instance[$field]);
-                } else {
-                    $output->writeln($instance['settings'][$field]);
+        $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName('manager');
+
+        $instances = $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy();
+
+        foreach ($instances as $instance) {
+            $str = 'Name: ' . $instance->internal_name
+                . ', database: ' . $instance->getDatabaseName()
+                . ', domains: [ ' . implode(', ', $instance->domains) . ' ]'
+                . ', activated: ' . $instance->activated;
+
+            if (!empty($field)) {
+                $str = 'Name: ' . $instance->internal_name;
+
+                if (!empty($instance->$field)) {
+                    $str .= ", $field: {$instance->$field}";
                 }
-            } else {
-                $output->writeln(
-                    'INTERNAL NAME: '.$instance['internal_name'].
-                    ', DATABASE: \''.$instance['settings']['BD_DATABASE'].'\''.
-                    ', DOMAINS: \''.$instance['domains'].'\''.
-                    ', THEME: '.$instance['settings']['TEMPLATE_USER'].
-                    ', ACTIVATED: '.$instance['activated']
-                );
+
+                if (array_key_exists($field, $instance->settings)) {
+                    $str .= ", settings.$field: {$instance->settings[$field]}";
+                }
             }
+
+            $output->writeln($str);
         }
     }
 }

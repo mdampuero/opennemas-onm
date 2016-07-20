@@ -1,59 +1,24 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c)  OpenHost S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace ManagerWebService\Controller;
 
+use Common\ORM\Entity\UserGroup;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Onm\Framework\Controller\Controller;
-
+/**
+ * Displays, saves, modifies and removes user groups.
+ */
 class UserGroupController extends Controller
 {
-    /**
-     * Creates a new user group.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function createAction(Request $request)
-    {
-        $userGroup = new \UserGroup();
-
-        $data = array(
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        );
-
-        if (!$data['name']) {
-            return new JsonResponse(_('User group name cannot be empty'), 400);
-        }
-
-        if (!$userGroup->create($data)) {
-            return new JsonResponse(_('Unable to create a new usergroup'), 409);
-        }
-
-        $response =  new JsonResponse(_('User group saved successfully'), 201);
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'manager_ws_user_group_show',
-                [ 'id' =>$userGroup->id ]
-            )
-        );
-
-        return $response;
-    }
-
     /**
      * Deletes an user group.
      *
@@ -63,15 +28,15 @@ class UserGroupController extends Controller
      */
     public function deleteAction($id)
     {
-        $userGroup = new \UserGroup();
-        if (!$userGroup->delete($id)) {
-            return new JsonResponse(
-                sprintf(_('Unable to delete the user group with id "%d"'), $id),
-                409
-            );
-        }
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
 
-        return new JsonResponse(_('User group deleted successfully.'));
+        $userGroup = $em->getRepository('UserGroup')->find($id);
+
+        $em->remove($userGroup);
+        $msg->add(_('User group deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -83,55 +48,41 @@ class UserGroupController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $messages   = [ 'errors' => [], 'success' => [] ];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!is_array($selected)
-            || (is_array($selected) && count($selected) == 0)
-        ) {
-            return new JsonResponse(
-                _('Unable to find user groups for the given criteria'),
-                409
-            );
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $userGroup = new \UserGroup();
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        foreach ($selected as $id) {
-            if ($userGroup->delete($id)) {
-                $updated[] = $id;
-            } else {
-                $messages['errors'][] = [
-                    'type' => 'success',
-                    'text' => sprintf(
-                        _('Unable to delete the user group with id "%d"'),
-                        $id
-                    )
-                ];
+        $userGroups = $em->getRepository('UserGroup')->findBy($oql);
+
+        $deleted = 0;
+        foreach ($userGroups as $userGroup) {
+            try {
+                $em->remove($userGroup);
+                $deleted++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if (count($updated) > 0) {
-            $messages['success'] = [
-                'ids' => $updated,
-                'message' => sprintf(_('%s user groups deleted successfully.'), count($updated)),
-            ];
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s user groups deleted successfully'), $deleted),
+                'success'
+            );
         }
 
-        // Return the proper status code
-        if (count($messages['errors']) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($messages['errors']) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse($messages, $statusCode);
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns the list of users as JSON.
+     * Returns the list of user groups.
      *
      * @param Request $request The request object.
      *
@@ -139,47 +90,67 @@ class UserGroupController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : array();
-        $orderBy  = $request->query->filter('orderBy') ? : array();
+        $oql = $request->query->get('oql', '');
 
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $repository = $this->get('orm.manager')->getRepository('UserGroup');
+        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
 
-        $um     = $this->get('usergroup_repository');
-        $groups = $um->findBy($criteria, $order, $epp, $page);
-        $total  = $um->countBy($criteria);
+        $total      = $repository->countBy($oql);
+        $userGroups = $repository->findBy($oql);
 
-        return new JsonResponse(
-            array(
-                'epp'     => $epp,
-                'page'    => $page,
-                'results' => $groups,
-                'total'   => $total,
-            )
-        );
+        $userGroups = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $userGroups);
+
+        return new JsonResponse([
+            'results' => $userGroups,
+            'total'   => $total,
+        ]);
     }
 
     /**
-     * Returns the data to create a new group.
+     * Returns the data to create a new user group.
      *
      * @return JsonResponse The response object.
      */
     public function newAction()
     {
-        return new JsonResponse(
-            array(
-                'group' => null,
-                'extra' => $this->templateParams()
-            )
-        );
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
-     * Returns a group as JSON.
+     * Saves a new user group.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('UserGroup')
+            ->objectify($request->request->all());
+
+        $userGroup = new UserGroup($data);
+
+        $em->persist($userGroup);
+        $msg->add(_('User group saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_user_group_show',
+                [ 'id' => $userGroup->id ]
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * Returns an user group.
      *
      * @param integer $id The group id.
      *
@@ -187,14 +158,14 @@ class UserGroupController extends Controller
      */
     public function showAction($id)
     {
-        $group = $this->get('usergroup_repository')->find($id);
+        $group = $this->get('orm.manager')
+            ->getRepository('UserGroup')
+            ->find($id);
 
-        return new JsonResponse(
-            array(
-                'group' => $group,
-                'extra' => $this->templateParams()
-            )
-        );
+        return new JsonResponse([
+            'user_group' => $group->getData(),
+            'extra'      => $this->getExtraData()
+        ]);
     }
 
     /**
@@ -206,38 +177,30 @@ class UserGroupController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $data = array(
-            'id'         => $id,
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        );
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('UserGroup')
+            ->objectify($request->request->all());
 
-        if (!$data['name']) {
-            return new JsonResponse(_('User group name cannot be empty'), 400);
-        }
+        $userGroup = $em->getRepository('UserGroup')->find($id);
+        $userGroup->setData($data);
 
-        $userGroup = new \UserGroup();
-        if ($userGroup->update($data)) {
-            $this->get('usergroup_repository')->deleteCache($id);
+        $em->persist($userGroup);
 
-            return new JsonResponse(_('User group updated successfully'));
-        } else {
-            return new JsonResponse(
-                sprintf(_('Unable to update the user group with id "%d"'), $id),
-                409
-            );
-        }
+        $msg->add(_('User group saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns a list of parameters for the template.
+     * Returns a list of extra data.
      *
-     * @return array Array of template parameters.
+     * @return array The extra data.
      */
-    private function templateParams()
+    private function getExtraData()
     {
         $privilege = new \Privilege();
 
-        return array('modules' => $privilege->getPrivilegesByModules());
+        return [ 'modules' => $privilege->getPrivilegesByModules() ];
     }
 }

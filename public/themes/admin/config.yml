@@ -1,7 +1,7 @@
 name: Admin
 version: 1.0
 type: theme
-text-domain: admin-theme
+text_domain: admin-theme
 uuid: es.openhost.theme.admin
 exclusive: true
 author: Openhost, S.L.

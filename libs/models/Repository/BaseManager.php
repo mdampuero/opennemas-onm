@@ -40,7 +40,7 @@ abstract class BaseManager
      * @param CacheInterface     $cache       The cache instance.
      * @param string             $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct($dbConn, $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;

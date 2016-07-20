@@ -151,15 +151,7 @@ class AclUserController extends Controller
         array_unshift($allcategorys, $frontpage);
 
         // Get available languages
-        // $languages    = $this->container->getParameter('available_languages');
-        $languages = array(
-            'en_US' => _("English"),
-            'es_ES' => _("Spanish"),
-            'gl_ES' => _("Galician"),
-            // 'it_IT' => _("Italian"),
-            // 'pt_PT' => _("Portuguesse"),
-            // 'fr_FR' => _("French"),
-        );
+        $languages    = $this->container->getParameter('core.locale.available');
         $languages    = array_merge(array('default' => _('Default system language')), $languages);
 
         // Get minimum password level
@@ -188,7 +180,7 @@ class AclUserController extends Controller
 
         $user->eraseCredentials();
 
-        $id = $this->get('instance')->getClient();
+        $id = $this->get('core.instance')->getClient();
 
         if (!empty($id)) {
             try {
@@ -455,7 +447,7 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
-        $id = $this->get('instance')->getClient();
+        $id = $this->get('core.instance')->getClient();
 
         if (!empty($id)) {
             try {
@@ -629,7 +621,7 @@ class AclUserController extends Controller
     {
         // Setup view
         $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 
         if ('POST' != $request->getMethod()) {
@@ -713,7 +705,7 @@ class AclUserController extends Controller
     {
         // Setup view
         $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);

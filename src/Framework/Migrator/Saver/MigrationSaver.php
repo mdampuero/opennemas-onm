@@ -1474,7 +1474,7 @@ class MigrationSaver
             $this->settings['migration']['target']
         );
 
-        getService('dbal_connection')
+        getService('orm.manager')->getConnection('instance')
             ->selectDatabase($this->settings['migration']['target']);
 
         \Application::load();

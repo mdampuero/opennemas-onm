@@ -1,7 +1,7 @@
 name: Manager
 version: 1.0
 type: theme
-text-domain: manager-theme
+text_domain: manager-theme
 uuid: es.openhost.theme.manager
 exclusive: true
 author: Openhost, S.L.

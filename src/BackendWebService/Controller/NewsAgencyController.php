@@ -244,7 +244,7 @@ class NewsAgencyController extends Controller
         $params = [];
 
         $path = $this->getParameter('core.paths.cache') .  DS
-            . $this->get('instance')->internal_name;
+            . $this->get('core.instance')->internal_name;
         $tpl  = $this->get('core.template.admin');
 
         // Check last synchronization

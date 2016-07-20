@@ -103,7 +103,7 @@ class AuthenticationController extends Controller
                 'current_language'      => \Application::$language,
                 'token'                 => $token,
                 'referer'               => $referer,
-                'languages'             => $this->container->getParameter('available_languages')
+                'languages'             => $this->get('core.locale')->getLocales()
             ]
         );
     }

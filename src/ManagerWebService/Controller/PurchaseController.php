@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
 
 /**
- * Handles the Purchase resource.
+ * Displays, saves, modifies and removes purchases.
  */
 class PurchaseController extends Controller
 {
@@ -31,83 +31,59 @@ class PurchaseController extends Controller
      */
     public function deleteAction($id)
     {
-        $purchase = $this->get('orm.manager')
-            ->getRepository('purchase', 'Database')
-            ->find($id);
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
 
-        $this->get('orm.manager')->remove($purchase, 'Database');
+        $purchase = $em->getRepository('Purchase')->find($id);
 
-        return new JsonResponse(_('Purchased removed successfully'));
+        $em->remove($purchase);
+        $msg->add(_('Purchase deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * @api {delete} /purchases/ Delete selected purchases
+     * @api {delete} /purchases Delete selected purchases
      * @apiName DeletePuchases
      * @apiGroup Purchase
      *
-     * @apiParam {Integer} selected The clients ids.
+     * @apiParam {Integer} ids The clients ids.
      *
-     * @apiSuccess {String} message The success message.
+     * @apiSuccess {Object} The success message.
      */
     public function deleteSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = 0;
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (empty($selected) || !is_array($selected)) {
-            $msg->add(
-                _('Unable to find the instances for the given criteria'),
-                'error',
-                400
-            );
-
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em       = $this->get('orm.manager');
-        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
-        $purchases  = $em->getRepository('purchase', 'Database')->findBy($criteria);
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
+        $purchases = $em->getRepository('Purchase')->findBy($oql);
+
+        $deleted = 0;
         foreach ($purchases as $purchase) {
             try {
-                $em->remove($purchase, 'Database');
-                $updated++;
-            } catch (EntityNotFoundException $e) {
-                $error[]    = $purchase->id;
-                $messages[] = [
-                    'message' => sprintf(_('Unable to find the purchase with id "%s"'), $client->id),
-                    'type'    => 'error'
-                ];
+                $em->remove($purchase);
+                $deleted++;
             } catch (\Exception $e) {
-                $error[]    = $purchase->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error'
-                ];
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if ($updated > 0) {
-            $messages = [
-                'message' => sprintf(_('%d purchases deleted successfully.'), $updated),
-                'type'    => 'success'
-            ];
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s purchases deleted successfully'), $deleted),
+                'success'
+            );
         }
 
-        // Return the proper status code
-        if (count($error) > 0 && $updated > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -194,104 +170,45 @@ class PurchaseController extends Controller
      * @apiName GetPurchases
      * @apiGroup Purchase
      *
-     * @apiParam {String} client  The client's name or email.
-     * @apiParam {String} from    The start date.
-     * @apiParam {String} to      The finish date.
-     * @apiParam {String} orderBy The values to sort by.
-     * @apiParam {Number} epp     The number of elements per page.
-     * @apiParam {Number} page    The current page.
+     * @apiParam {String} oql The OQL query.
      *
-     * @apiSuccess {Integer} epp     The number of elements per page.
-     * @apiSuccess {Integer} page    The current page.
      * @apiSuccess {Integer} total   The total number of elements.
      * @apiSuccess {Array}   results The list of purchases.
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : [];
-        $orderBy  = $request->query->filter('orderBy') ? : [];
-        $extra    = $this->getTemplateParams();
+        $oql = $request->query->get('oql', '');
 
-        unset($extra['countries']);
+        $repository = $this->get('orm.manager')->getRepository('Purchase');
+        $converter  = $this->get('orm.manager')->getConverter('Purchase');
 
-        $order = [];
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $total     = $repository->countBy($oql);
+        $purchases = $repository->findBy($oql);
 
-        $repository = $this->get('orm.manager')
-            ->getRepository('manager.purchase');
+        $purchases = array_map(function ($a) use ($converter, &$ids) {
+            $ids[] = $a->instance_id;
 
-        if (array_key_exists('client', $criteria)) {
-            $value = $criteria['client'][0]['value'];
+            return $converter->responsify($a->getData());
+        }, $purchases);
 
-            $criteria['client_id'] =
-                $criteria['payment_id'] =
-                $criteria['invoice_id'] = [
-                    [ 'value' => $value, 'operator' => 'like' ]
-                ];
-
-            $criteria['union'] = 'OR';
-
-            unset($criteria['name']);
-        }
-
-        if (array_key_exists('from', $criteria)) {
-            $criteria['created'][] = [
-                'value' => $criteria['from'][0]['value'] . ' 00:00:00',
-                'operator' => '>='
-            ];
-
-            unset($criteria['from']);
-        }
-
-        if (array_key_exists('to', $criteria)) {
-            $criteria['created'][] =
-                [
-                    'value' => $criteria['to'][0]['value'] . ' 23:59:59',
-                    'operator' => '<='
-                ];
-
-            unset($criteria['to']);
-        }
-
-        if (array_key_exists('from', $criteria)
-            && array_key_exists('to', $criteria)
-        ) {
-            $criteria['created']['union'] = 'AND';
-        }
-
-        $ids       = [];
-        $purchases = $repository->findBy($criteria, $order, $epp, $page);
-        $total     = $repository->countBy($criteria);
-
-        // Clean purchases
-        foreach ($purchases as &$purchase) {
-            if (!empty($purchase->client)) {
-                $purchase->client = $purchase->client->getData();
-            }
-
-            $ids[]    = $purchase->instance_id;
-            $purchase = $purchase->getData();
-        }
+        $extra = $this->getExtraData();
 
         // Find instances by ids
         if (!empty($ids)) {
-            $instances = $this->get('instance_manager')->findBy([
-                'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-            ]);
+            $oql = sprintf('id in [%s]', implode(',', $ids));
 
-            foreach ($instances as $instance) {
-                $extra['instances'][$instance->id] = $instance->internal_name;
+            $items = $this->get('orm.manager')
+                ->getRepository('Instance')
+                ->findBy($oql);
+
+            $extra['instances'] = [];
+            foreach ($items as $item) {
+                $extra['instances'][$item->id] = $item->internal_name;
             }
         }
 
         return new JsonResponse([
-            'epp'     => $epp,
             'extra'   => $extra,
-            'page'    => $page,
             'results' => $purchases,
             'total'   => $total,
         ]);
@@ -302,15 +219,13 @@ class PurchaseController extends Controller
      * @apiName GetPurchase
      * @apiGroup Purchase
      *
-     * @apiSuccess {Array} purchase The purchases.
+     * @apiSuccess {Array} The purchases.
      */
     public function showAction($id)
     {
-        $purchase = $this->get('orm.manager')
-            ->getRepository('manager.purchase', 'Database')
-            ->find($id);
-
-        $purchase->client = $purchase->client->getData();
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('Purchase');
+        $purchase  = $em->getRepository('Purchase', 'manager')->find($id);
 
         // Remove payment line from purchase
         if ($purchase->method === 'CreditCard') {
@@ -318,8 +233,8 @@ class PurchaseController extends Controller
         }
 
         return new JsonResponse([
-            'purchase' => $purchase->getData(),
-            'extra'    => $this->getTemplateParams()
+            'purchase' => $converter->responsify($purchase->getData()),
+            'extra'    => $this->getExtraData()
         ]);
     }
 
@@ -328,10 +243,10 @@ class PurchaseController extends Controller
      *
      * @return array Array of extra parameters for template.
      */
-    protected function getTemplateParams()
+    protected function getExtraData()
     {
         $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
         asort($countries);
 

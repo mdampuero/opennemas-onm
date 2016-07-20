@@ -9,9 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Exception\EntityNotFoundException;
-use Framework\ORM\Entity\Notification;
-use Framework\ORM\Entity\UserNotification;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Entity\Notification;
+use Common\ORM\Entity\UserNotification;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,43 +27,43 @@ class NotificationController extends Controller
      */
     public function listLatestAction(Request $request)
     {
-        $date  = new \DateTime('now');
-        $date  = $date->format('Y-m-d H:i:s');
-        $epp   = $request->query->getDigits('epp', 10);
-        $id    = $this->get('instance')->internal_name;
-        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
-        $page  = $request->query->getDigits('page', 1);
+        $date     = new \DateTime('now');
+        $date     = $date->format('Y-m-d H:i:s');
+        $epp      = $request->query->getDigits('epp', 10);
+        $instance = $this->get('core.instance');
+        $id       = $instance->internal_name;
+        $theme    = $instance->settings['TEMPLATE_USER'];
+        $page     = $request->query->getDigits('page', 1);
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
             [
-                'instance_id' => $this->get('instance')->id,
-                'user_id'     => $this->getUser()->id
+                'oql' => sprintf(
+                    'instance_id = %s and user_id = %s',
+                    $instance->id,
+                    $this->getUser()->id
+                )
             ]
         );
 
-        $criteria = '(target LIKE \'%"' . $id . '"%\' OR '
-            . 'target LIKE \'%"' . $theme . '"%\' OR '
-            . 'target LIKE \'%"all"%\') AND enabled = 1 AND (start <= \''
-            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
+            . ' and enabled = 1 and start <= "%s" and (end is null or end > "%s")';
 
         if (!empty($read)) {
-            $criteria .= ' AND id NOT IN ( ' . implode(', ', array_keys($read))
-                . ' )';
+            $oql .= ' and id not in [' . implode(', ', array_keys($read)) . ' ]';
         }
 
         if (!$this->getUser()->isAdmin()) {
-            $criteria .= ' AND (users IS NULL OR users = 0)';
+            $oql .= ' and (users is null or users = 0)';
         }
+
+        $oql .= ' order by fixed desc limit %s';
+
+        $oql = sprintf($oql, $id, $theme, $date, $date, $epp);
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
-            [
-                'criteria' => $criteria,
-                'epp'      => $epp,
-                'order'    => [ 'fixed' => 'desc' ],
-                'page'     => $page
-            ]
+            [ 'oql' => $oql ]
         );
 
         if (is_array($notifications)) {
@@ -89,28 +89,27 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $id    = $this->get('instance')->internal_name;
+        $id    = $this->get('core.instance')->internal_name;
+        $theme = $this->get('core.instance')->settings['TEMPLATE_USER'];
         $date  = date('Y-m-d H:i:s');
-        $theme = $this->get('instance')->settings['TEMPLATE_USER'];
-        $epp   = $request->query->get('epp', 10);
-        $page  = $request->query->get('page', 1);
 
-        $criteria = 'target LIKE \'%"' . $id . '"%\' OR '
-            . 'target LIKE \'%"' . $theme . '"%\' OR '
-            .  'target LIKE \'%"all"%\' AND enabled = 1 AND (start <= \''
-            . $date . '\') AND (end IS NULL OR end > \'' . $date . '\')';
+        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
+            .  ' or enabled = 1 and start <= "%s"'
+            .  ' and (end is null or end > "%s")';
 
         if (!$this->getUser()->isAdmin()) {
-            $criteria .= ' AND users != 1';
+            $criteria .= ' and (users is null or users = 0)';
         }
+
+        $oql = sprintf($oql, $id, $theme, $date, $date);
 
         $notifications = $this->get('core.event_dispatcher')->dispatch(
             'notifications.get',
             [
-                'criteria' => $criteria,
-                'epp'      => $epp,
-                'order'    => [ 'fixed' => 'desc' ],
-                'page'     => $page
+                'oql'   => $oql,
+                'epp'   => null,
+                'order' => [ 'fixed' => 'desc' ],
+                'page'  => null
             ]
         );
 
@@ -149,14 +148,14 @@ class NotificationController extends Controller
             ->find($id);
 
         try {
-            $un = $em->getRepository('manager.UserNotification')->find([
-                'instance_id'     => $this->get('instance')->id,
+            $un = $em->getRepository('user_notification')->find([
+                'instance_id'     => $this->get('core.instance')->id,
                 'notification_id' => $id,
                 'user_id'         => $userId
             ]);
         } catch (EntityNotFoundException $e) {
             $un = new UserNotification();
-            $un->instance_id     = $this->get('instance')->id;
+            $un->instance_id     = $this->get('core.instance')->id;
             $un->user_id         = $userId;
             $un->notification_id = $id;
         }
@@ -171,7 +170,7 @@ class NotificationController extends Controller
 
             // Ignore read_date for fixed notifications
             if ($key !== 'read_date' || !$notification->fixed) {
-                $un->{$key} = $date->format('Y-m-d H:i:s');
+                $un->{$key} = $date;
             }
         }
 
@@ -194,8 +193,7 @@ class NotificationController extends Controller
     public function patchSelectedAction(Request $request)
     {
         $params   = $request->request->all();
-        $instance = $this->get('instance')->id;
-        $ids      = $request->request->get('ids');
+        $instance = $this->get('core.instance')->id;
 
         if (!array_key_exists('ids', $params)
             || empty($params['ids'])
@@ -211,14 +209,11 @@ class NotificationController extends Controller
         unset($params['ids']);
 
         try {
-            $criteria = [
-                'instance_id'     => [ [ 'value' => $instance ] ],
-                'notification_id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
-                'user_id'         => [ [ 'value' => $this->getUser()->id ] ]
-            ];
+            $oql = 'instance = "%s" and notification_id in [%s] and user_id = "%s"';
+            $oql = sprintf($oql, $instance, implode(', ', $ids), $this->getUser()->id);
 
-            $notifications = $em->getRepository('manager.UserNotification')
-                ->findBy($criteria);
+            $notifications = $em->getRepository('user_notification')
+                ->findBy($oql);
 
             // Update read datetime for existing
             $read = [];

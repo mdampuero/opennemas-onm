@@ -163,7 +163,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: 'me' }) %]">
+                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }) %]">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
                   </a>
@@ -325,9 +325,12 @@
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-history/history.js,
       @Common/src/angular-http-interceptor/http-interceptor.js,
+      @Common/src/angular-http/http.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,
+      @Common/src/angular-oql/*,
+      @Common/src/angular-serializer/serializer.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
       @Common/src/sidebar/js/sidebar.js,

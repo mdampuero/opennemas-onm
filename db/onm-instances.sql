@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Linux (x86_64)
 --
 -- Host: localhost    Database: onm-instances
 -- ------------------------------------------------------
--- Server version	5.5.41-0ubuntu0.14.04.1
+-- Server version	5.7.12
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,126 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `client`
+--
+
+DROP TABLE IF EXISTS `client`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `client` (
+  `id` bigint(20) NOT NULL,
+  `first_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `company` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vat_number` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `postal_code` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `state` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `country` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `client`
+--
+
+LOCK TABLES `client` WRITE;
+/*!40000 ALTER TABLE `client` DISABLE KEYS */;
+/*!40000 ALTER TABLE `client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extension`
+--
+
+DROP TABLE IF EXISTS `extension`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `extension` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `name` text COLLATE utf8_unicode_ci,
+  `type` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `author` varchar(140) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url` varchar(140) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `about` text COLLATE utf8_unicode_ci,
+  `images` text COLLATE utf8_unicode_ci,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extension`
+--
+
+LOCK TABLES `extension` WRITE;
+/*!40000 ALTER TABLE `extension` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extension` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extension_meta`
+--
+
+DROP TABLE IF EXISTS `extension_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `extension_meta` (
+  `extension_id` bigint(20) NOT NULL,
+  `meta_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `meta_value` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`extension_id`,`meta_key`),
+  KEY `extension_id` (`extension_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extension_meta`
+--
+
+LOCK TABLES `extension_meta` WRITE;
+/*!40000 ALTER TABLE `extension_meta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extension_meta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `instance_meta`
+--
+
+DROP TABLE IF EXISTS `instance_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `instance_meta` (
+  `instance_id` bigint(20) NOT NULL,
+  `meta_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `meta_value` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`instance_id`,`meta_key`),
+  KEY `instance_id` (`instance_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `instance_meta`
+--
+
+LOCK TABLES `instance_meta` WRITE;
+/*!40000 ALTER TABLE `instance_meta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `instance_meta` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `instances`
@@ -67,6 +187,74 @@ LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
 INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.onm','','a:7:{s:13:\"TEMPLATE_USER\";s:5:\"admin\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'0000-00-00 00:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,NULL,'');
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci,
+  `body` text COLLATE utf8_unicode_ci,
+  `target` text COLLATE utf8_unicode_ci,
+  `users` text COLLATE utf8_unicode_ci,
+  `start` datetime DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
+  `creator` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `style` text COLLATE utf8_unicode_ci,
+  `fixed` tinyint(1) NOT NULL DEFAULT '0',
+  `forced` tinyint(1) NOT NULL DEFAULT '0',
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification`
+--
+
+LOCK TABLES `notification` WRITE;
+/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `purchase`
+--
+
+DROP TABLE IF EXISTS `purchase`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `purchase` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `client` text COLLATE utf8_unicode_ci,
+  `details` text COLLATE utf8_unicode_ci,
+  `method` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fee` double NOT NULL DEFAULT '0',
+  `total` double NOT NULL DEFAULT '0',
+  `step` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `instance_id` bigint(20) NOT NULL,
+  `client_id` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `payment_id` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `invoice_id` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `client_id` (`client_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `purchase`
+--
+
+LOCK TABLES `purchase` WRITE;
+/*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
+/*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -141,6 +329,35 @@ LOCK TABLES `user_groups_privileges` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_notification`
+--
+
+DROP TABLE IF EXISTS `user_notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_notification` (
+  `notification_id` int(10) unsigned NOT NULL,
+  `instance_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `user` text COLLATE utf8_unicode_ci NOT NULL,
+  `read_date` datetime DEFAULT NULL,
+  `view_date` datetime DEFAULT NULL,
+  `click_date` datetime DEFAULT NULL,
+  `open_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`notification_id`,`instance_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_notification`
+--
+
+LOCK TABLES `user_notification` WRITE;
+/*!40000 ALTER TABLE `user_notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `usermeta`
 --
 
@@ -211,4 +428,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-06 18:38:45
+-- Dump completed on 2016-07-18 17:05:42

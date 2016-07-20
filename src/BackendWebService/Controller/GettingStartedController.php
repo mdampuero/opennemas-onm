@@ -52,7 +52,7 @@ class GettingStartedController extends Controller
         $billing = $request->request->get('billing');
 
         if (!empty($billing)) {
-            $instance = $this->get('instance');
+            $instance = $this->get('core.instance');
             $instance->metas['billing'] = $billing;
             $this->get('instance_manager')->persist($instance);
         }

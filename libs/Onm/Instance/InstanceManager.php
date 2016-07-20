@@ -12,7 +12,6 @@
 namespace Onm\Instance;
 
 use Repository\BaseManager;
-use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 use Onm\Instance\Instance;
 use Onm\Exception\AssetsNotRestoredException;
@@ -69,10 +68,10 @@ class InstanceManager extends BaseManager
     /**
      * Initializes the InstanceManager.
      *
-     * @param DbalWrapper    $dbConn The custom DBAL wrapper.
+     * @param Connection     $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
      */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache, SettingManager $sm)
+    public function __construct($conn, CacheInterface $cache, SettingManager $sm)
     {
         $this->conn  = $conn;
         $this->cache = $cache;

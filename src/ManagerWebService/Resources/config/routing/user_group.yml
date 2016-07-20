@@ -1,0 +1,54 @@
+manager_ws_user_group_delete:
+    path:     /user-groups/{id}
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:delete }
+    methods:  [ DELETE ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_user_group_new:
+    path:     /user-groups/new
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_user_group_save:
+    path:     /user-groups
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_user_group_show:
+    path:     /user-groups/{id}
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:show }
+    methods:  [ GET ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_user_group_update:
+    path:     /user-groups/{id}
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:update }
+    methods:  [ PUT ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_user_groups_delete:
+    path:     /user-groups
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_user_groups_list:
+    path:     /user-groups
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:list }
+    methods:  [ GET ]
+    options:
+        expose: true

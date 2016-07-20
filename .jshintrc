@@ -1,7 +1,7 @@
 {
   "bitwise"  : true,
   "browser"  : true,
-  "camelcase": true,
+  "camelcase": false,
   "curly"    : true,
   "eqeqeq"   : true,
   "es5"      : true,
@@ -23,6 +23,7 @@
   "unused"   : true,
   "white"    : false,
   "globals"   : {
+    "_"                    : false,
     "$"                    : false,
     "angular"              : false,
     "browser"              : false,

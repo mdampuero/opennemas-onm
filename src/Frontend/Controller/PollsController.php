@@ -291,7 +291,7 @@ class PollsController extends Controller
     protected function getAds($context = 'frontpage')
     {
         // Get polls positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = $this->get('core.manager.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('polls_inner', array(7, 9));
         } else {
