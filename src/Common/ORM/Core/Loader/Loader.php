@@ -9,6 +9,7 @@
  */
 namespace Common\ORM\Core\Loader;
 
+use Common\Cache\Core\CacheManager;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Schema\Schema;
@@ -20,6 +21,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Loader
 {
+    /**
+     * The cache service.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
     /**
      * The default data.
      *
@@ -50,11 +58,15 @@ class Loader
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($path, $env, $default = [])
+    public function __construct($path, $env, $default = [], CacheManager $cm = null)
     {
         $this->default = $default;
         $this->env     = $env;
         $this->path    = $path;
+
+        if (!empty($cm)) {
+            $this->cache = $cm->getConnection('manager');
+        }
     }
 
     /**
@@ -62,6 +74,14 @@ class Loader
      */
     public function load()
     {
+        if ($this->hasCache()) {
+            $loaded = $this->cache->get('orm_' . DEPLOYED_AT);
+
+            if (!empty($loaded)) {
+                return $loaded;
+            }
+        }
+
         $finder = new Finder();
         $loaded = [];
 
@@ -90,7 +110,10 @@ class Loader
                     $this->mergeItems($item, $items[$parent]);
                 }
             }
+        }
 
+        if ($this->hasCache()) {
+            $this->cache->set('orm_' . DEPLOYED_AT, $loaded);
         }
 
         return $loaded;
@@ -169,6 +192,15 @@ class Loader
         return new Schema($data['schema']);
     }
 
+    /**
+     * Checks if the current loader has cache.
+     *
+     * @return boolean True if the repository has cache. False, otherwise.
+     */
+    protected function hasCache()
+    {
+       return !empty($this->cache);
+    }
 
     /**
      * Merges a item with their parents.

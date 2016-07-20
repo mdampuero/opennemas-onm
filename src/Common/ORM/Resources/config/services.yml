@@ -4,7 +4,7 @@ parameters:
 services:
     orm.loader:
         class: Common\ORM\Core\Loader\Loader
-        arguments: [ '%orm.config_path%', '%kernel.environment%', '%orm.default%' ]
+        arguments: [ '%orm.config_path%', '%kernel.environment%', '%orm.default%', '@cache.manager' ]
 
     orm.manager:
         class: Common\ORM\Core\EntityManager
