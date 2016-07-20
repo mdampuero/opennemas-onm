@@ -410,7 +410,7 @@ class UsersController extends ContentController
      * @param  string  $contentType Content type name.
      * @return boolean              [description]
      */
-    protected function hasRoles($action)
+    protected function hasRoles($action, $contentType = null)
     {
         $required = array();
         $roles    = $this->getUser()->getRoles();
