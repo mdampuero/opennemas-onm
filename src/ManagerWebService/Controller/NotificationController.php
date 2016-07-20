@@ -67,7 +67,7 @@ class NotificationController extends Controller
             $oql  = sprintf($oql, $query);
         }
 
-        $themes = $this->get('orm.manager')->getRepository('extension', 'file')
+        $themes = $this->get('orm.manager')->getRepository('theme')
             ->findBy($oql);
 
         foreach ($themes as $theme) {

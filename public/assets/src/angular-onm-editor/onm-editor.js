@@ -337,7 +337,10 @@
               };
 
               var onUpdateModelData = function (setPristine) {
-                if (!data.length) {
+                if (!data.length ||
+                    typeof data[0] === 'undefined' ||
+                    !data[0].trim()
+                ) {
                   return;
                 }
 

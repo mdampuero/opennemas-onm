@@ -26,11 +26,13 @@ class ThemeController extends Controller
     public function enableAction($uuid)
     {
         $instance = $this->get('core.instance');
-        $themes = im::getAvailableTemplates();
+        $themes   = $this->get('orm.loader')->getPlugins();
 
-        $theme = str_replace('es.openhost.theme.', '', $uuid);
+        $theme = array_filter($themes, function ($a) use ($uuid) {
+            return strpos($a->uuid, $uuid) !== false;
+        });
 
-        if (!in_array($theme, $themes)) {
+        if (empty($theme) && array_pop($theme)->uuid === $uuid) {
             return new JsonResponse(_('Invalid theme'), 400);
         }
 
@@ -50,18 +52,17 @@ class ThemeController extends Controller
      */
     public function listAction()
     {
-        $themes = $this->get('orm.loader')->get();
+        $themes = $this->get('orm.manager')->getRepository('theme', 'file')
+            ->findBy();
 
         foreach ($themes as &$theme) {
             $theme = $theme->getData();
             $theme['description'] = null;
         }
 
-        $addons = $this->get('orm.manager')->getRepository('manager.extension')
-            ->findBy([
-                'enabled' => [ [ 'value' => 1 ] ],
-                'type'    => [ [ 'value' => 'theme-addon'] ]
-            ]);
+        $addons = $this->get('orm.manager')
+            ->getRepository('extension', 'database')
+            ->findBy('enabled = 1 and type = "theme-addon"');
 
         foreach ($addons as &$addon) {
             $addon->about       = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->about)
@@ -84,14 +85,8 @@ class ThemeController extends Controller
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
-        $instance  = $this->get('core.instance');
-        $purchased = [];
-
-        if (!empty($instance->purchased)) {
-            $purchased = $instance->purchased;
-        }
-
-        $active = 'es.openhost.theme.' . str_replace(
+        $instance = $this->get('core.instance');
+        $active   = 'es.openhost.theme.' . str_replace(
             'es.openhost.theme.',
             '',
             $instance->settings['TEMPLATE_USER']
@@ -102,7 +97,7 @@ class ThemeController extends Controller
                 'active'    => $active,
                 'addons'    => $addons,
                 'exclusive' => $exclusive,
-                'purchased' => $purchased,
+                'purchased' => empty($instance->purchased) ? [] : $instance->purchased,
                 'themes'    => $themes
             ]
         );

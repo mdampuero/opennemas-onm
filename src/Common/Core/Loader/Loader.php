@@ -51,14 +51,14 @@ class Loader
 
         // Initialize template with manager theme
         $theme = $this->container->get('orm.manager')
-            ->getRepository('extension', 'file')
+            ->getRepository('theme', 'file')
             ->findOneBy('uuid = "es.openhost.theme.manager"');
 
         $this->container->get('core.template.manager')->addActiveTheme($theme);
 
         // Initialize template with admin theme
         $theme = $this->container->get('orm.manager')
-            ->getRepository('extension', 'file')
+            ->getRepository('theme', 'file')
             ->findOneBy('uuid = "es.openhost.theme.admin"');
 
         $this->container->get('core.template.admin')->addActiveTheme($theme);
@@ -102,7 +102,7 @@ class Loader
 
         foreach ($parents as $uuid) {
             $t = $this->container->get('orm.manager')
-                ->getRepository('extension', 'file')
+                ->getRepository('theme', 'file')
                 ->findOneBy(sprintf('uuid = "%s"', $uuid));
 
             if (!empty($t)) {
@@ -258,7 +258,7 @@ class Loader
 
         foreach ($parents as $uuid) {
             $parent = $this->container->get('orm.manager')
-                ->getRepository('extension', 'file')
+                ->getRepository('theme', 'file')
                 ->findOneBy(sprintf('uuid = "%s"', $uuid));
 
             $uuids = array_merge($uuids, $this->getParents($parent));
@@ -389,7 +389,7 @@ class Loader
     protected function loadThemeFromOql($oql)
     {
         $this->theme = $this->container->get('orm.manager')
-            ->getRepository('extension', 'file')
+            ->getRepository('theme', 'file')
             ->findOneBy($oql);
 
         $this->configureTheme($this->theme);

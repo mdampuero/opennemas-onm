@@ -64,7 +64,8 @@ class SqlTranslator
         'O_NOT_IS'       => 'is not',
         'O_NOT_LIKE'     => 'not like',
         'O_NOT_REGEXP'   => 'not regexp',
-        'O_REGEXP'       => 'regexp ',
+        'O_REGEXP'       => 'regexp',
+        'T_NULL'         => 'null'
     ];
 
     /**
@@ -76,7 +77,6 @@ class SqlTranslator
         'T_BOOL'     => \PDO::PARAM_BOOL,
         'T_FLOAT'    => \PDO::PARAM_STR,
         'T_INTEGER'  => \PDO::PARAM_INT,
-        'T_NULL'     => \PDO::PARAM_NULL,
         'T_STRING'   => \PDO::PARAM_STR,
         'T_DATETIME' => \PDO::PARAM_STR,
     ];

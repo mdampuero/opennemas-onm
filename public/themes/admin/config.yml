@@ -1,9 +1,8 @@
-extension:
-    name: Admin
-    version: 1.0
-    type: theme
-    text_domain: admin-theme
-    uuid: es.openhost.theme.admin
-    exclusive: true
-    author: Openhost, S.L.
-    url: http://www.openhost.es
+name: Admin
+version: 1.0
+type: theme
+text_domain: admin-theme
+uuid: es.openhost.theme.admin
+exclusive: true
+author: Openhost, S.L.
+url: http://www.openhost.es

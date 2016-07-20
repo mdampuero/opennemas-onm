@@ -84,10 +84,6 @@ class Vote
      **/
     public function create($votePK, $vote, $ip)
     {
-        $sql = "INSERT INTO votes
-                    (`pk_vote`,`value_pos`, `value_neg`, `karma`, `ips_count_vote`)
-                VALUES (?,?,?,?,?)";
-
         // En contra
         if ($vote == '2') {
             $negValue = 1;
@@ -100,11 +96,22 @@ class Vote
             $negValue = 0;
         }
         $ipsCountVote[] = array('ip' => $ip, 'count' => 1);
-        $values = array(
-            $votePK, $posValue, $negValue, $karma, serialize($ipsCountVote)
-        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        try {
+            $rs = getService('dbal_connection')->insert(
+                "votes",
+                [
+                    'pk_vote'       => $votePK,
+                    'value_pos'     => $posValue,
+                    'value_neg'     => $negValue,
+                    'karma'         => $karma,
+                    'ips_count_vote => serialize($ipsCountVote)'
+                ]
+            );
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
 
@@ -120,36 +127,49 @@ class Vote
      **/
     public function read($votePK)
     {
-        $sql = 'SELECT value_pos, value_neg, ips_count_vote
-                FROM votes WHERE pk_vote =' . $votePK;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs->EOF) {
-            //Si no existe un votacion pinta 0
-            $sql = "INSERT INTO votes (`pk_vote`,`value_pos`,
-                                       `value_neg`, `karma`, `ips_count_vote`)
-                    VALUES (?,?,?,?,?)";
-            $values = array($votePK, 0, 0, 100, serialize(array()));
-
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if (!$rs) {
-                return false;
-            }
-            $this->pk_vote = $votePK;
-            $this->value_pos = 0;
-            $this->value_neg = 0;
-            $this->karma = 100;
-            $this->ips_count_vote = array();
-        } else {
-            $this->pk_vote = $votePK;
-            $this->value_pos = $rs->fields['value_pos'];
-            $this->value_neg = $rs->fields['value_neg'];
-
-            //       $this->karma = $rs->fields['karma'];
-            $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT value_pos, value_neg, ips_count_vote, karma FROM votes WHERE pk_vote=?",
+                [ $votePK ]
+            );
+        } catch (\Exception $e) {
+            error_log('Error on Vote::read: '.$e->getMessage());
+            return false;
         }
 
-        return true;
+
+        if (!$rs) {
+            try {
+                $rs = getService('dbal_connection')->insert(
+                    "votes",
+                    [
+                      'pk_vote'        => $votePK,
+                      'value_pos'      => 0,
+                      'value_neg'      => 0,
+                      'karma'          => 100,
+                      'ips_count_vote' => serialize(array()),
+                    ]
+                );
+
+                return $this;
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
+            }
+            $this->pk_vote        = $votePK;
+            $this->value_pos      = 0;
+            $this->value_neg      = 0;
+            $this->karma          = 100;
+            $this->ips_count_vote = array();
+        } else {
+            $this->pk_vote        = $votePK;
+            $this->value_pos      = $rs['value_pos'];
+            $this->value_neg      = $rs['value_neg'];
+            $this->karma          = $rs['karma'];
+            $this->ips_count_vote = unserialize($rs['ips_count_vote']);
+        }
+
+        return $this;
     }
 
     /**
@@ -169,17 +189,27 @@ class Vote
         }
 
         if ($vote == '2') {
-            $value = ++$this->value_neg;
+            $values = [
+                'value_neg'      => ++$this->value_neg,
+                'ips_count_vote' => serialize($this->ips_count_vote)
+            ];
             $sql = "UPDATE votes SET  `value_neg`=?,  `ips_count_vote`=?
                     WHERE pk_vote=" . $this->pk_vote;
         } else {
-            $value = ++$this->value_pos;
-            $sql = "UPDATE votes SET  `value_pos`=?,  `ips_count_vote`=?
-                    WHERE pk_vote=" . $this->pk_vote;
+            $values = [
+                'value_pos'      => ++$this->value_pos,
+                'ips_count_vote' => serialize($this->ips_count_vote)
+            ];
         }
-        $values = array($value, serialize($this->ips_count_vote));
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        try {
+            $rs = getService('dbal_connection')->update(
+                "votes",
+                $values,
+                [ 'pk_vote' => (int) $this->pk_vote ]
+            );
+        } catch (\Exception $e) {
+            error_log('Error on Vote:update: '.$e->getMessage());
             return false;
         }
 

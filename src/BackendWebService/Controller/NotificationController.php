@@ -27,18 +27,22 @@ class NotificationController extends Controller
      */
     public function listLatestAction(Request $request)
     {
-        $date  = new \DateTime('now');
-        $date  = $date->format('Y-m-d H:i:s');
-        $epp   = $request->query->getDigits('epp', 10);
-        $id    = $this->get('core.instance')->internal_name;
-        $theme = $this->get('core.instance')->settings['TEMPLATE_USER'];
-        $page  = $request->query->getDigits('page', 1);
+        $date     = new \DateTime('now');
+        $date     = $date->format('Y-m-d H:i:s');
+        $epp      = $request->query->getDigits('epp', 10);
+        $instance = $this->get('core.instance');
+        $id       = $instance->internal_name;
+        $theme    = $instance->settings['TEMPLATE_USER'];
+        $page     = $request->query->getDigits('page', 1);
 
         $read = $this->get('core.event_dispatcher')->dispatch(
             'notifications.getRead',
             [
-                'instance_id' => $this->get('instance')->id,
-                'user_id'     => $this->getUser()->id
+                'oql' => sprintf(
+                    'instance_id = %s and user_id = %s',
+                    $instance->id,
+                    $this->getUser()->id
+                )
             ]
         );
 
@@ -189,7 +193,7 @@ class NotificationController extends Controller
     public function patchSelectedAction(Request $request)
     {
         $params   = $request->request->all();
-        $instance = $this->get('instance')->id;
+        $instance = $this->get('core.instance')->id;
 
         if (!array_key_exists('ids', $params)
             || empty($params['ids'])

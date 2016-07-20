@@ -206,9 +206,13 @@ class EntityManager extends BaseManager
      **/
     public function populateContentMetasInContents(&$contentMap)
     {
-        foreach ($contentMap as $content) {
-            $searchMap []= 'content-meta-'.$content->id;
+        if (empty($contentMap)) {
+            return [];
         }
+
+        $searchMap = array_map(function ($a) {
+            return 'content-meta-' . $a->id;
+        }, $contentMap);
 
         // Fetch all content metas in one request
         $contentMetaMap = $this->cache->fetch($searchMap);

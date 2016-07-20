@@ -1,5 +1,5 @@
 entity:
-    name: Extension
+    name: Theme
     enum:
         type: [ domain, module, theme, theme-addon, widget ]
 
@@ -21,9 +21,7 @@ entity:
         enabled:             boolean
         id:                  integer
         images:              array
-        modules_in_conflict: array
-        modules_included:    array
-        name:                array
+        name:                string
         parameters:          array
         price:               array
         type:                enum
@@ -33,22 +31,18 @@ entity:
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.extension' ]
+            arguments: [ '@orm.metadata.theme' ]
     repositories:
-        database:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.extension',  '@cache.connection.manager' ]
+        file:
+            class:     Common\ORM\File\Repository\BaseRepository
+            arguments: [ '@service_container', ['public/themes'], '@orm.metadata.theme', '@cache.connection.manager' ]
     persisters:
         database:
             class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.extension', '@cache.connection.manager' ]
+            arguments: [ '@orm.connection.manager', '@orm.metadata.theme', '@cache.connection.manager' ]
     mapping:
         database:
-            table: extension
-            metas:
-                table: extension_meta
-                ids:
-                    id: extension_id
+            table: theme
             columns:
                 id:
                     type: bigint
@@ -77,31 +71,3 @@ entity:
                 images:
                     type:    text
                     options: { default: null, length: 65532, notnull: false }
-                created:
-                    type: datetimetz
-                    options: { default: null, notnull: false }
-                updated:
-                    type: datetimetz
-                    options: { default: null, notnull: false }
-                enabled:
-                    type: boolean
-                    options: { default: false }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ id ]
-                    primary: true
-                    unique: true
-                    flags: {  }
-                -
-                    name: type
-                    columns: [ type ]
-                    primary: false
-                    unique: false
-                    flags: { }
-                -
-                    name: uuid
-                    columns: [ uuid ]
-                    primary: false
-                    unique: true
-                    flags: { }

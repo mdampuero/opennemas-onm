@@ -180,7 +180,7 @@ class AclUserController extends Controller
 
         $user->eraseCredentials();
 
-        $id = $this->get('instance')->getClient();
+        $id = $this->get('core.instance')->getClient();
 
         if (!empty($id)) {
             try {
@@ -447,7 +447,7 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
-        $id = $this->get('instance')->getClient();
+        $id = $this->get('core.instance')->getClient();
 
         if (!empty($id)) {
             try {

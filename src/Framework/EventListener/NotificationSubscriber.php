@@ -125,9 +125,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $repository = $this->container->get('orm.manager')
             ->getRepository('user_notification');
 
-        $oql = sprintf('user_id = %s', $event->getArgument('user_id'));
-
-        $notifications = $repository->findBy($oql);
+        $notifications = $repository->findBy($event->getArgument('oql'));
 
         $response = [];
         foreach ($notifications as $notification) {

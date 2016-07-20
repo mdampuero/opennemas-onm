@@ -15,11 +15,11 @@ entity:
     repositories:
         instance:
             class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.instance', '@orm.metadata.user_notification', '@cache.connection.instance' ]
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
     persisters:
         instance:
             class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.instance', '@orm.metadata.user_notification', '@cache.connection.instance' ]
+            arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
     mapping:
         database:
             table: user_notification

@@ -2,13 +2,18 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Common\ORM\Entity;
 
-class Theme extends Extension
+use Common\ORM\Core\Entity;
+
+/**
+ * The Theme class represents themes that change the Opennemas templates.
+ */
+class Theme extends Entity
 {
 }

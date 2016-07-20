@@ -162,7 +162,7 @@ class DomainManagementController extends Controller
     {
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $date      = new \Datetime('now');
 
         $em = $this->get('orm.manager');
