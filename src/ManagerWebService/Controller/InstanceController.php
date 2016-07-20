@@ -380,7 +380,6 @@ class InstanceController extends Controller
                 409
             );
         } catch (\Exception $e) {
-            var_dump($e->getMessage());die();
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
             $em->remove($instance);
