@@ -9,7 +9,7 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Entity\Purchase;
+use Common\ORM\Entity\Purchase;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,13 +63,14 @@ class PurchaseController extends Controller
         $client   = $instance->getClient();
 
         if (!empty($client)) {
-            $client = $em->getRepository('manager.client', 'Database')->find($client);
+            $client = $em->getRepository('client')->find($client);
         }
 
         $purchase = new Purchase();
         $purchase->instance_id = $instance->id;
         $purchase->step        = 'cart';
-        $purchase->created     = date('Y-m-d H:i:s');
+        $purchase->created     = new \DateTime();
+        $purchase->updated     = new \DateTime();
 
         if (!empty($client)) {
             $purchase->client_id = $client->id;
