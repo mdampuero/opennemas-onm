@@ -32,7 +32,7 @@ class PurchaseController extends Controller
     {
         $em = $this->get('orm.manager');
 
-        $purchase = $em->getRepository('manager.purchase')->findOneBy([
+        $purchase = $em->getRepository('Purchase')->findOneBy([
             'id'          => [ [ 'value' => $id ] ],
             'instance_id' => [ [ 'value' => $this->get('core.instance')->id ] ]
         ]);
@@ -90,12 +90,12 @@ class PurchaseController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em       = $this->get('orm.manager');
-        $purchase = $em->getRepository('manager.purchase')->find($id);
+        $purchase = $em->getRepository('Purchase')->find($id);
         $vatTax = null;
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $this->get('core.instance')->getClient();
-            $client = $em->getRepository('manager.client', 'Database')->find($client);
+            $client = $em->getRepository('Client')->find($client);
 
             if (!empty($client)) {
                 $purchase->client_id = $client->id;
@@ -105,7 +105,7 @@ class PurchaseController extends Controller
             $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
         }
 
-        $purchase->updated = date('Y-m-d H:i:s');
+        $purchase->updated = new \DateTime();
         $purchase->method  = $request->request->get('method', null);
         $subtotal          = 0;
         $purchase->step    = $request->request->get('step', 'cart');
@@ -114,15 +114,13 @@ class PurchaseController extends Controller
         $ids = $request->request->get('ids', []);
 
         if (!empty($ids)) {
-            $items = $em->getRepository('manager.extension')->findBy([
-                'uuid' => [ [ 'value' => array_keys($ids), 'operator' => 'in' ] ]
-            ]);
+            $items = $em->getRepository('Extension')->findBy(
+                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
+            );
 
-            $themes = $this->get('orm.loader')->getPlugins();
-
-            $themes = array_filter($themes, function ($a) use ($ids) {
-                return in_array($a->uuid, array_keys($ids));
-            });
+            $themes = $em->getRepository('Theme')->findBy(
+                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
+            );
 
             $items = array_merge($items, $themes);
 
