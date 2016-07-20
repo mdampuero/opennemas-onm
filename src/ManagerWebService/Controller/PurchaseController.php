@@ -186,7 +186,9 @@ class PurchaseController extends Controller
         $purchases = $repository->findBy($oql);
 
         $purchases = array_map(function ($a) use ($converter, &$ids) {
-            $ids[] = $a->instance_id;
+            if (!empty($a->instance_id)) {
+                $ids[] = $a->instance_id;
+            }
 
             return $converter->responsify($a->getData());
         }, $purchases);
@@ -195,7 +197,7 @@ class PurchaseController extends Controller
 
         // Find instances by ids
         if (!empty($ids)) {
-            $oql = sprintf('id in [%s]', implode(',', $ids));
+            $oql = sprintf('id in [%s]', implode(',', array_unique($ids)));
 
             $items = $this->get('orm.manager')
                 ->getRepository('Instance')
