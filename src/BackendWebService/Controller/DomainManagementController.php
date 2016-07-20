@@ -2,10 +2,10 @@
 
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Entity\Client;
-use Framework\ORM\Entity\Invoice;
-use Framework\ORM\Entity\Payment;
-use Framework\ORM\Entity\Purchase;
+use Common\ORM\Entity\Client;
+use Common\ORM\Entity\Invoice;
+use Common\ORM\Entity\Payment;
+use Common\ORM\Entity\Purchase;
 use Onm\Framework\Controller\Controller;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
@@ -168,16 +168,14 @@ class DomainManagementController extends Controller
         $em = $this->get('orm.manager');
 
         try {
-            $client = $em->getRepository('manager.client', 'Database')
-                ->find($instance->getClient());
+            $client = $em->getRepository('Client')->find($instance->getClient());
 
-            $purchase = $em->getRepository('manager.purchase', 'Database')
-                ->find($purchase);
+            $purchase = $em->getRepository('Purchase')->find($purchase);
 
             $payment = new Payment([
                 'client_id' => $client->id,
-                'amount'    => str_replace(',', '.', (string) round($purchase->total, 2)),
-                'date'      => $date->format('Y-m-d'),
+                'amount'    => round($purchase->total, 2),
+                'date'      => $date,
                 'type'      => 'Check'
             ]);
 
@@ -185,7 +183,7 @@ class DomainManagementController extends Controller
                 $payment->nonce = $nonce;
             }
 
-            $em->persist($payment, 'Braintree');
+            $em->persist($payment, 'braintree');
 
             $invoice = new Invoice([
                 'client_id' => $client->id,
@@ -194,7 +192,7 @@ class DomainManagementController extends Controller
                 'lines'     => $purchase->details
             ]);
 
-            $em->persist($invoice, 'FreshBooks');
+            $em->persist($invoice, 'freshBooks');
 
             $payment->invoice_id = $invoice->invoice_id;
             $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
