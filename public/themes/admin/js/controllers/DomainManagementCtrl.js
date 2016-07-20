@@ -182,9 +182,9 @@
          * @return {Float} The domain price.
          */
         $scope.getPrice = function() {
-          for (var i = 0; i < $scope.extension.metas['price'].length; i++) {
-            if ($scope.extension.metas['price'][i].type === 'yearly') {
-              return $scope.extension.metas['price'][i].value;
+          for (var i = 0; i < $scope.extension.price.length; i++) {
+            if ($scope.extension.price[i].type === 'yearly') {
+              return $scope.extension.price[i].value;
             }
           }
         };
@@ -328,7 +328,7 @@
               uuid:        $scope.extension.uuid,
               name:        $scope.extension.name + ': ' + domain,
               description: domain,
-              price:       $scope.extension.metas.price
+              price:       $scope.extension.price
             });
 
             $scope.domain  = '';
