@@ -50,7 +50,7 @@ class DatetimeDataMapper
 
     /**
      * Returns a DateTime from a date string in format Y-m-d H:i:s in UTC
-     * format.
+     * timezone.
      *
      * @param string $value The date string.
      *
@@ -75,7 +75,7 @@ class DatetimeDataMapper
 
     /**
      * Returns a DateTime from a date string in format Y-m-d H:i:s in the
-     * current timezone.
+     * UTC timezone.
      *
      * @param string $value The date string.
      *
@@ -83,7 +83,7 @@ class DatetimeDataMapper
      */
     public function fromString($value)
     {
-        return $this->fromDatetime($value);
+        return $this->fromDatetimetz($value);
     }
 
     /**
@@ -136,7 +136,8 @@ class DatetimeDataMapper
     }
 
     /**
-     * Converts a DateTime to a date string in format Y-m-d H:i:s in UTC format.
+     * Converts a DateTime to a date string in format Y-m-d H:i:s in UTC
+     * timezone.
      *
      * @param array $value The datetime to convert.
      *
@@ -167,5 +168,18 @@ class DatetimeDataMapper
         }
 
         return $value->format('H:i:s');
+    }
+
+    /**
+     * Converts a DateTime to a date string in format Y-m-d H:i:s in UTC
+     * timezone.
+     *
+     * @param array $value The datetime to convert.
+     *
+     * @return string The date string.
+     */
+    public function toString($value)
+    {
+        return $this->toDatetimetz($value);
     }
 }

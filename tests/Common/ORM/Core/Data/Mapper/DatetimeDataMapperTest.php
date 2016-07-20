@@ -29,6 +29,11 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
             $this->mapper->fromDatetime(new \DateTime('2000-01-01 10:00:10'))
         );
 
+        $this->assertEquals(
+            new \DateTime('2000-01-01 10:00:10'),
+            $this->mapper->fromDatetime('2000-01-01 10:00:10')
+        );
+
         $this->assertEmpty($this->mapper->fromDatetime(null));
         $this->assertEmpty($this->mapper->fromDatetime(''));
     }
@@ -46,10 +51,10 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testFromString()
     {
-        $this->assertEquals(
-            new \DateTime('2000-01-01 10:00:10'),
-            $this->mapper->fromString('2000-01-01 10:00:10')
-        );
+        $expected = new \DateTime('2000-01-01 10:00:10', new \DateTimeZone('UTC'));
+        $expected->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+
+        $this->assertEquals($expected, $this->mapper->fromString('2000-01-01 10:00:10'));
     }
 
     public function testFromTime()
@@ -108,5 +113,16 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->toTime(null));
         $this->assertEmpty($this->mapper->toTime(''));
+    }
+
+    public function testToString()
+    {
+        $expected = new \Datetime('2000-01-01 10:00:10');
+        $expected->setTimeZone(new \DateTimeZone('UTC'));
+
+        $this->assertEquals(
+            $expected->format('Y-m-d H:i:s'),
+            $this->mapper->toString(new \DateTime('2000-01-01 10:00:10'))
+        );
     }
 }
