@@ -314,11 +314,11 @@
             ? 1 : 0;
 
           var url = routing.generate('backend_ws_domain_check_available',
-              { domain: domain, create: create });
+              { create: create, domain: domain });
 
           if (!create) {
             var url = routing.generate('backend_ws_domain_check_valid',
-                { domain: domain, create: create });
+                { create: create, domain: domain });
           }
 
           $scope.loading = true;
