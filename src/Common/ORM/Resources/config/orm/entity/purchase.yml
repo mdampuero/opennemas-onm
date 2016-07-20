@@ -1,16 +1,10 @@
 entity:
     name: Purchase
     required:
-        - client
-        - client_id
         - created
-        - details
-        - fee
         - instance_id
-        - invoice_id
-        - method
-        - payment_id
-        - total
+        - step
+        - updated
     properties:
         client:      entity::client
         client_id:   integer
