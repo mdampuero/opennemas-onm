@@ -32,7 +32,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->container->expects($this->any())->method('getParameter')
             ->willReturn(__DIR__ . DS . '..' . DS . '..' . DS . '..' . DS . '..');
 
-        $this->paths = [ 'public/themes/base' ];
+        $this->paths = [];
 
         $this->metadata = new Metadata([
             'name' => 'Extension',
@@ -75,16 +75,6 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             new Entity([ 'foo' => 'thud', 'bar' => 'flob' ]),
             new Entity([ 'foo' => 'mumble', 'bar' => 'flob' ])
         ];
-    }
-
-    /**
-     * Tests constructor with empty paths.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testConstructorWithEmptyPaths()
-    {
-        new BaseRepository($this->container, [], $this->metadata, $this->cache);
     }
 
     /**
@@ -295,21 +285,6 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($method->invokeArgs($this->repository, [ 'foo', 'bar' ]));
         $this->assertFalse($method->invokeArgs($this->repository, [ 'foo', 'fo' ]));
-    }
-
-    /**
-     * Tests load method when entities are stored in cache.
-     */
-    public function testLoadWhenEntitiesInCache()
-    {
-        $entities = [ new Entity([ 'foo' => 'qux' ]) ];
-
-        $method = new \ReflectionMethod($this->repository, 'load');
-        $method->setAccessible(true);
-
-        $this->cache->expects($this->once())->method('get')->willReturn($entities);
-
-        new BaseRepository($this->container, $this->paths, $this->metadata, $this->cache);
     }
 
     /**

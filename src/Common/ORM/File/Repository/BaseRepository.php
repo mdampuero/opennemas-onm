@@ -53,12 +53,6 @@ class BaseRepository extends Repository
      */
     public function __construct($container, $paths, Metadata $metadata, Cache $cache)
     {
-        if (empty($paths)) {
-            throw new \InvalidArgumentException(
-                _('Unable to initialize the file repository. No folder specified.')
-            );
-        }
-
         $this->container = $container;
         $this->cache     = $cache;
         $this->converter = new BaseConverter($metadata);
@@ -66,7 +60,9 @@ class BaseRepository extends Repository
         $this->paths     = $paths;
         $this->translator = new PhpTranslator($metadata);
 
-        $this->load();
+        if (!empty($paths)) {
+            $this->load();
+        }
     }
 
     /**
