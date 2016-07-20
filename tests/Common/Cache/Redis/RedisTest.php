@@ -20,12 +20,23 @@ class RedisTest extends KernelTestCase
 {
     public function setUp()
     {
-        $this->redis = new Redis([
-            'name'   => 'bar',
-            'server' => '127.0.0.1',
-            'port'   => '6379',
-            'auth'   => 'gorp'
-        ]);
+        $this->baseRedis = $this->getMockBuilder('Redis')
+            ->setMethods([ 'auth', 'delete', 'exists', 'expire', 'get', 'mGet', 'mSet', 'pconnect', 'set' ])
+            ->getMock();
+
+        $this->redis = $this->getMockBuilder('Common\Cache\Redis\Redis')
+            ->setMethods([ 'getRedis' ])
+            ->setConstructorArgs([
+                [
+                    'name'   => 'bar',
+                    'server' => '127.0.0.1',
+                    'port'   => '6379',
+                    'auth'   => 'gorp'
+                ]
+            ])->getMock();
+
+        $this->redis->expects($this->any())->method('getRedis')
+            ->willReturn($this->baseRedis);
     }
 
     /**
@@ -36,17 +47,6 @@ class RedisTest extends KernelTestCase
     public function testInvalidConfiguration()
     {
         new Redis([]);
-    }
-
-    /**
-     * Tests getRedis.
-     */
-    public function testGetRedis()
-    {
-        $method = new \ReflectionMethod($this->redis, 'getRedis');
-        $method->setAccessible(true);
-
-        $this->assertInstanceOf('Redis', $method->invokeArgs($this->redis, []));
     }
 
     /**
@@ -63,13 +63,20 @@ class RedisTest extends KernelTestCase
      */
     public function testWithSingleValues()
     {
+        $object = json_decode(json_encode(['foo' => 'bar']));
+
+        $this->baseRedis->expects($this->at(2))->method('exists')
+            ->willReturn(true);
+        $this->baseRedis->expects($this->at(3))->method('get')
+            ->with('_foo')->willReturn('s:3:"bar";');
+        $this->baseRedis->expects($this->at(7))->method('get')
+            ->with('_flob')->willReturn(serialize($object));
+
         $this->redis->set('foo', 'bar', 60);
         $this->assertTrue($this->redis->exists('foo'));
         $this->assertEquals('bar', $this->redis->get('foo'));
         $this->redis->delete('foo');
         $this->assertEmpty($this->redis->get('foo'));
-
-        $object = json_decode(json_encode(['foo' => 'bar']));
 
         $this->redis->set('flob', $object);
         $this->assertEquals($object, $this->redis->get('flob'));
@@ -82,6 +89,15 @@ class RedisTest extends KernelTestCase
      */
     public function testWithMultipleValues()
     {
+        $this->baseRedis->expects($this->at(1))->method('exists')
+            ->willReturn(true);
+        $this->baseRedis->expects($this->at(2))->method('mGet')
+            ->with([ '_foo', '_fred' ])->willReturn([ serialize('bar'), serialize('wibble') ]);
+        $this->baseRedis->expects($this->at(3))->method('mGet')
+            ->with([ '_garply' ])->willReturn([ null ]);
+        $this->baseRedis->expects($this->at(5))->method('mGet')
+            ->with(['_foo', '_fred'])->willReturn([ null, null ]);
+
         $this->redis->set([ 'foo' => 'bar', 'fred' => 'wibble' ]);
 
         $this->assertTrue($this->redis->exists('foo'));

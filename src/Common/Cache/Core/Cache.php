@@ -80,7 +80,7 @@ abstract class Cache extends DataBuffer
             $values = array_intersect_key($this->mru, array_flip($id));
 
             // Missed ids in MRU data
-            $id = array_diff($id, array_keys($values));
+            $id = array_values(array_diff($id, array_keys($values)));
 
             if (!empty($id)) {
                 $cacheId = $this->getNamespacedId($id);
@@ -168,9 +168,23 @@ abstract class Cache extends DataBuffer
             return $id;
         }
 
-        $prefix = $this->namespace . '_';
+        $namespace = $this->getPrefix() . $this->namespace . '_';
 
-        return $prefix . str_replace($prefix, '', $id);
+        return $namespace . str_replace($namespace, '', $id);
+    }
+
+    /**
+     * Returns the cache prefix.
+     *
+     * @return string The cache prefix.
+     */
+    protected function getPrefix()
+    {
+        if (!empty($this->prefix)) {
+            return $this->prefix . '_';
+        }
+
+        return '';
     }
 
     /**
@@ -188,7 +202,9 @@ abstract class Cache extends DataBuffer
             return $id;
         }
 
-        return preg_replace('/^' . $this->namespace . '_/', '', $id);
+        $namespace = $this->getPrefix() . $this->namespace . '_';
+
+        return preg_replace('/^' . $namespace . '/', '', $id);
     }
 
     /**
