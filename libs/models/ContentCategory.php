@@ -392,7 +392,7 @@ class ContentCategory
         }
 
         try {
-            getService('dbal_connection')->update(
+            $rs = getService('dbal_connection')->update(
                 'content_categories',
                 [ 'inmenu' => (int) $status ],
                 [ 'pk_content_category' => $this->pk_content_category ]

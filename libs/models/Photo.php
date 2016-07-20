@@ -112,7 +112,10 @@ class Photo extends Content
 
         if (!empty($properties['address'])) {
             $positions = explode(',', $properties['address']);
-            if (is_array($positions)) {
+            if (is_array($positions)
+                && array_key_exists(0, $positions)
+                && array_key_exists(1, $positions)
+            ) {
                 $this->latlong = array(
                     'lat' => $positions[0],
                     'long' => $positions[1],
