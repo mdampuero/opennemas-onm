@@ -43,12 +43,10 @@ class DomainManagementController extends Controller
         $instance = $this->get('core.instance');
         $em       = $this->get('orm.manager');
 
-        if (array_key_exists('client', $instance->metas)
-            && !empty($instance->metas['client'])
-        ) {
+        if (!empty($instance->client)) {
             try {
-                $client = $em->getRepository('manager.client', 'Database')
-                    ->find($instance->metas['client']);
+                $client = $em->getRepository('client')
+                    ->find($instance->client);
 
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
@@ -61,9 +59,19 @@ class DomainManagementController extends Controller
             $uuid = 'es.openhost.domain.create';
         }
 
-        $extension = $em->getRepository('manager.extension')->findOneBy([
-            'uuid' => [ [ 'value' => $uuid ] ]
-        ])->toArray();
+        $converter = $em->getConverter('Extension');
+        $extension = $em->getRepository('extension')
+            ->findOneBy(sprintf('uuid = "%s"', $uuid));
+        $extension = $converter->responsify($extension->getData());
+
+        $lang = $this->get('core.locale')->getLocaleShort();
+
+        $extension['name'] = array_key_exists($lang, $extension['name']) ?
+            $extension['name'][$lang] : $extension['name']['en'];
+        $extension['about'] = array_key_exists($lang, $extension['about']) ?
+            $extension['about'][$lang] : $extension['about']['en'];
+        $extension['description'] = array_key_exists($lang, $extension['description']) ?
+            $extension['description'][$lang] : $extension['description']['en'];
 
         $countries    = Intl::getRegionBundle()->getCountryNames(CURRENT_LANGUAGE_LONG);
         $taxes        = $this->get('vat')->getTaxes();
