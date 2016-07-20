@@ -606,7 +606,7 @@ class Content
             'description'    => (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
             'favorite'       => (!isset($data['favorite'])) ? $this->favorite: $data['favorite'],
-            'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? $this->fk_author : $data['fk_author'],
+            'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? (int) $this->fk_author : (int) $data['fk_author'],
             'fk_publisher'   => (empty($data['content_status']))? '' : getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
             'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage: (int) $data['frontpage'],
