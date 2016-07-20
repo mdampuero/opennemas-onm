@@ -490,7 +490,7 @@ class InstanceController extends Controller
         $lang    = $this->get('core.locale')->getLocaleShort();
         $modules = $this->get('orm.manager')->getRepository('extension')
             ->findBy('type = "module" or type = "theme-addon" limit 10');
-        $themes = $this->get('orm.manager')->getRepository('extension', 'file')
+        $themes = $this->get('orm.manager')->getRepository('theme')
             ->findBy();
 
         $modules = array_map(function (&$a) {
