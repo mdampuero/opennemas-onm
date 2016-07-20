@@ -607,7 +607,7 @@ class Content
             'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
             'favorite'       => (!isset($data['favorite'])) ? $this->favorite: $data['favorite'],
             'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? (int) $this->fk_author : (int) $data['fk_author'],
-            'fk_publisher'   => (empty($data['content_status']))? '' : $_SESSION['userid'],
+            'fk_publisher'   => (empty($data['content_status']))? null : (int) $_SESSION['userid'],
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
             'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage: (int) $data['frontpage'],
             'in_home'        => (!isset($data['in_home'])) ? $this->in_home: (int) $data['in_home'],
