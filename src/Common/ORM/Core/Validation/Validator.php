@@ -9,8 +9,9 @@
  */
 namespace Common\ORM\Core\Validation;
 
-use Common\ORM\Core\Validation\Validable;
+use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\InvalidEntityException;
+use Common\ORM\Core\Validation\Validable;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -165,9 +166,23 @@ class Validator
     }
 
     /**
-     * Checks if the value is valid basing on the defined enumerations.
+     * Checks if the value is an Entity.
      *
      * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is an Entity. Otherwise, return false.
+     */
+    protected function isEntity($value)
+    {
+        return $value instanceof Entity;
+    }
+
+    /**
+     * Checks if the value is valid basing on the defined enumerations.
+     *
+     * @param mixed  $value    The value to check.
+     * @param string $ruleset  The ruleset name.
+     * @param string $property The property name.
      *
      * @return boolean True if the value is valid. Otherwise, return false.
      */
@@ -192,7 +207,7 @@ class Validator
      */
     protected function isFloat($value)
     {
-        return is_double($value);
+        return is_integer($value) || is_double($value);
     }
 
     /**
@@ -293,6 +308,10 @@ class Validator
         }
 
         foreach ($types as $type) {
+            if (preg_match_all('/entity\:\:.+/', $type)) {
+                $type = 'entity';
+            }
+
             $checkType = 'is' . ucfirst($type);
 
             if (method_exists($this, $checkType)
