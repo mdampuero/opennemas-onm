@@ -78,6 +78,22 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests constructor when paths are not empty.
+     */
+    public function testConstructor()
+    {
+        $repository = $this->getMockBuilder('Common\ORM\File\Repository\BaseRepository')
+            ->setMethods([ 'load' ])
+            ->setConstructorArgs([ $this->container, [ 'foo' ], $this->metadata, $this->cache ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($repository, 'load');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($repository, []);
+    }
+
+    /**
      * Tests countBy with valid and invalid results.
      */
     public function testCountBy()
