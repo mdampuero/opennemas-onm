@@ -20,23 +20,29 @@ class GettingStartedController extends Controller
      */
     public function acceptTermsAction(Request $request)
     {
-        $user = $this->getUser();
+        $em   = $this->get('orm.manager');
+        $user = $em->getRepository('User', 'instance')
+            ->find($this->getUser()->id);
 
-        if ($user->isMaster()) {
-            $GLOBALS['application']->conn->selectDatabase('onm-instances');
+        if (empty($user)) {
+            $user = $em->getRepository('User', 'manager')
+                ->find($this->getUser()->id);
         }
 
         if ($request->get('accept') && $request->get('accept') === 'true') {
-            $date = new \DateTime(null, new \DateTimeZone('UTC'));
-
-            $newMeta = array('terms_accepted' => $date->format('Y-m-d H:i:s'));
-            $user->setMeta($newMeta);
-
-            $user->meta = array_merge($user->meta, $newMeta);
+            $user->terms_accepted =
+                new \DateTime(null, new \DateTimeZone('UTC'));
         } else {
+            $user->terms_accepted = null;
             $user->deleteMetaKey($user->id, 'terms_accepted');
         }
 
+        if ($user->isMaster()) {
+            $em->persist($user, 'manager');
+            return new JsonResponse();
+        }
+
+        $em->persist($user, 'instance');
         return new JsonResponse();
     }
 

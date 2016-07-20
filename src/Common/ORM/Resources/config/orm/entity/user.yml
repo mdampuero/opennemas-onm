@@ -17,6 +17,7 @@ entity:
         type:           integer
         token:          string
         url:            string
+        terms_accepted: datetime
         username:       string
         user_language:  string
         user_group_ids: array
@@ -57,7 +58,7 @@ entity:
                     options: { default: null, length: 50, notnull: false }
                 url:
                     type: string
-                    options: { default: '', length: 255, notnull: false }
+                    options: { default: null, length: 255, notnull: false }
                 bio:
                     type: text
                     options: { default: null, length: 65532, notnull: false }

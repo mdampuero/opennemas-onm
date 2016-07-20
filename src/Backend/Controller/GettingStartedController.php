@@ -44,18 +44,22 @@ class GettingStartedController extends Controller
         $database  = $instance->getDatabaseName();
         $namespace = $this->get('cache')->getNamespace();
 
-        $user = $this->get('onm_user_provider')->loadUserByUsername(
-            $this->getUser()->getUsername()
-        );
+        $user = $this->get('orm.manager')->getRepository('User', 'instance')
+            ->find($this->getUser()->id);
+
+        if (empty($user)) {
+            $user = $this->get('orm.manager')->getRepository('User', 'manager')
+                ->find($this->getUser()->id);
+        }
 
         $this->get('orm.manager')->getConnection('instance')->selectDatabase($database);
         $this->get('cache')->setNamespace($namespace);
 
-        if ($user->getMeta('facebook_id')) {
+        if ($user->facebook_id) {
             $params['facebook'] = true;
         }
 
-        if ($user->getMeta('twitter_id')) {
+        if ($user->twitter_id) {
             $params['twitter'] = true;
         }
 

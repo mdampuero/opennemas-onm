@@ -21,6 +21,28 @@ use Onm\Settings as s;
 class UsersController extends ContentController
 {
     /**
+     * Deletes a user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("has_role('USER_DELETE')")
+     */
+    public function deleteAction($id)
+    {
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+
+        $user = $em->getRepository('User', 'instance')->find($id);
+
+        $em->remove($user);
+        $msg->add(_('User deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Deletes multiple users at once give them ids
      *
      * @param  Request      $request     The request object.
@@ -31,23 +53,10 @@ class UsersController extends ContentController
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
         if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
+            $roles = implode(',', $required);
+            $msg->add(sprintf(_('Access denied (%s)'), $roles), 'error', 403);
 
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
         $em      = $this->get('user_repository');
@@ -191,68 +200,6 @@ class UsersController extends ContentController
     }
 
     /**
-     * Deletes a user.
-     *
-     * @param  Request      $request     The request object.
-     * @return JsonResponse              The response object.
-     */
-    public function deleteAction($id)
-    {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
-
-        $em       = $this->get('user_repository');
-        $messages = array();
-
-        $user = $em->find($id);
-
-        if (!is_null($id)) {
-            try {
-                $user->delete($id);
-
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => _('Item deleted successfully'),
-                    'type'    => 'success'
-                );
-            } catch (Exception $e) {
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Unable to delete the item with the id "%d"'), $id),
-                    'type'    => 'error'
-                );
-            }
-        } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the item with the id "%d"'), $id),
-                'type'    => 'error'
-            );
-        }
-
-        return new JsonResponse(array('messages'  => $messages));
-    }
-
-    /**
      * Returns a list of contents in JSON format.
      *
      * @param  Request      $request     The request object.
@@ -261,55 +208,32 @@ class UsersController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
-        $order           = null;
-
-        $em = $this->get('user_repository');
-
-        unset($search['content_type_name']);
-
-        if ($search && array_key_exists('fk_user_group', $search)) {
-            foreach ($search['fk_user_group'] as $key => $value) {
-                if ($value['value'] == 'empty') {
-                    $filter['value'] = '';
-                } else {
-                    $filter = array('operator' => 'regexp');
-                    $filter['value'] = '^' . $value['value'] . ',|^'
-                        . $value['value'] . '$|,' . $value['value']
-                        . ',|,' . $value['value'] . '$';
-                }
-                $search['fk_user_group'][$key] = $filter;
-            }
-        }
+        $oql = $request->query->get('oql', '');
 
         if (!$this->getUser()->isMaster()) {
-            $search['fk_user_group'][] = array(
-                'value' => '^4,|^4$|,4,|,4$',
-                'operator' => 'not regexp'
-            );
+            $oql .= 'fk_user_group !regexp "^4,|^4$|,4,|,4$"';
         }
 
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
+        $repository = $this->get('orm.manager')->getRepository('User');
+        $converter  = $this->get('orm.manager')->getConverter('User');
 
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total  = $repository->countBy($oql);
+        $users  = $repository->findBy($oql);
+        $groups = [];
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'page'              => $page,
-                'results'           => $results,
-                'extra'             => $this->loadExtraData($results),
-                'total'             => $total
-            )
-        );
+        $users = array_map(function ($a) use ($converter, &$groups) {
+            $groups = array_unique(array_merge($groups, $a->user_group_ids));
+
+            $a->eraseCredentials();
+
+            return $converter->responsify($a->getData());
+        }, $users);
+
+        return new JsonResponse([
+            'results' => $users,
+            'total'   => $total,
+            //'extra'   => $this->getExtraData($users),
+        ]);
     }
 
     /**
