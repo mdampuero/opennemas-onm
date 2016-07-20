@@ -17,6 +17,7 @@ use Onm\Exception\UserAlreadyExistsException;
 use Onm\Settings as s;
 use Onm\StringUtils;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
 
 class MigrationSaver
 {
@@ -452,6 +453,9 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
+                    $fs = new Filesystem();
+                    $fs->copy($values['source_path'], $values['target_path']);
+
                     $attachment = new \Attachment();
                     $attachment->create($values);
                     $slug = array_key_exists('slug', $schema['translation']) ?
