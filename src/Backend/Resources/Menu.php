@@ -376,14 +376,14 @@ $menuXml = [
         "title"       => _("Themes"),
         "icon"        => "fa fa-magic",
         "link"        => url('backend_theme_list'),
-        "privilege"   => "USER_ADMIN",
+        "privilege"   => "ROLE_ADMIN",
     ],
     [
         "id"          => "domain_manager",
         "title"       => _("Domains"),
         "icon"        => "fa fa-server",
         "link"        => url('admin_domain_management'),
-        "privilege"   => "USER_ADMIN",
+        "privilege"   => "ROLE_ADMIN",
     ],
     [
         'id'      => 'faq_and_support',
