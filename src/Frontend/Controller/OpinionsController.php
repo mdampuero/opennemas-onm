@@ -852,11 +852,13 @@ class OpinionsController extends Controller
      * Fetches the advertisement
      *
      * @param string $context the context to fetch ads from
+     *
+     * TODO: Make this function non-static
      */
     public static function getAds($context = '')
     {
-        // Get opinion positions
-        $positionManager = $this->get('core.manager.advertisement');
+        // TODO: Use $this->get when the function changes to non-static
+        $positionManager = getService('core.manager.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
         } else {

@@ -254,13 +254,15 @@ class ArticlesController extends Controller
      * @param string category the category identifier
      *
      * @return array the list of advertisements for this page
+     *
+     * TODO: Make this function non-static
      **/
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // Get article_inner positions
-        $positionManager = $this->get('core.manager.advertisement');
+        // TODO: Use $this->get when the function changes to non-static
+        $positionManager = getService('core.manager.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);

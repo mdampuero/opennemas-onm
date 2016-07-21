@@ -289,13 +289,15 @@ class FrontpagesController extends Controller
      * @param array  $contents The list of contents that are in the frontpage.
      *
      * @return array The list of advertisement objects.
+     *
+     * TODO: Make this function non-static
      */
     public static function getAds($category, $contents)
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // Get frontpage positions
-        $positions = $this->get('core.manager.advertisement')
+        // TODO: Use $this->get when the function changes to non-static
+        $positions = getService('core.manager.advertisement')
             ->getPositionsForGroup('frontpage');
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
