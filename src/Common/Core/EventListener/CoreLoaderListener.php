@@ -169,12 +169,18 @@ class CoreLoaderListener implements EventSubscriberInterface
      */
     protected function getOriginalUri($request)
     {
+        $host   = $request->getHost();
+        $port   = $request->getPort();
         $scheme = $request->getScheme();
+        $uri    = $request->getRequestUri();
+
+        $port = in_array($port, [ 80, 443 ]) ?  '' : ':' . $port;
+        $uri  = $scheme . '://' . $host . $port . $uri;
 
         if (!empty($request->headers->get('x-forwarded-proto'))) {
             $scheme = $request->headers->get('x-forwarded-proto');
         }
 
-        return str_replace($request->getScheme(), $scheme, $request->getUri());
+        return str_replace($request->getScheme(), $scheme, $uri);
     }
 }
