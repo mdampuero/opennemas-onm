@@ -296,14 +296,9 @@ class NotificationController extends Controller
 
         $notification['read']  = 0;
 
-        $date = \DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $notification['start']
-        );
+        $time = $notification['start']->getTimeStamp();
 
-        $time = $date->getTimeStamp();
-
-        $notification['day'] = $date->format('M, d');
+        $notification['day'] = $notification['start']->format('M, d');
         if (time() - $time < 172800) {
             $notification['day'] = _('Yesterday');
         }
@@ -312,7 +307,7 @@ class NotificationController extends Controller
             $notification['day'] = _('Today');
         }
 
-        $notification['time'] = $date->format('H:i');
-        $notification['am'] = $date->format('a');
+        $notification['time'] = $notification['start']->format('H:i');
+        $notification['am'] = $notification['start']->format('a');
     }
 }
