@@ -30,7 +30,7 @@ define('SMARTY_DIR', SITE_VENDOR_PATH.'smarty/smarty/libs/');
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
-    require APPLICATION_PATH.'/.deploy.php';
+    include_once APPLICATION_PATH.'/.deploy.php';
 }
 
 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
