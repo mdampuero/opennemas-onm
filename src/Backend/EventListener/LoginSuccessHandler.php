@@ -21,7 +21,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
      * The service container.
-     * 
+     *
      * @var ServiceContainer
      */
     protected $container;
@@ -53,7 +53,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $csrfTokenValid = $this->isCsrfTokenValid($request);
 
         // TODO: Remove when Smarty can get services from service container
-        $session->set('user', $user);      
+        $session->set('user', $user);
 
         // Check token, user type and reCaptcha
         if ($recaptchaValid && $csrfTokenValid && $user->type === 0) {
@@ -93,7 +93,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             );
         }
 
-        $container->get('security.token_storage')->setToken(null);
+        $this->container->get('security.token_storage')->setToken(null);
 
         return new RedirectResponse($request->headers->get('referer'));
     }
