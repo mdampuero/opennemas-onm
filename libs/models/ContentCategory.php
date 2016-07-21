@@ -293,11 +293,10 @@ class ContentCategory
         }
 
         try {
-            getService('dbal_connection')->delete(
+            $rs = getService('dbal_connection')->delete(
                 'content_categories',
                 [ 'pk_content_category' => $id ]
             );
-            $sql = 'DELETE FROM content_categories WHERE pk_content_category=?';
 
             if ($rs === false) {
                 return false;
