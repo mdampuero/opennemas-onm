@@ -152,12 +152,13 @@ class FrontpagesController extends Controller
         $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
-        $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
+        $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_'.$categoryId);
+        // $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
         if ($lastSaved == false) {
             // Save the actual date for
             $date = new \Datetime("now");
             $dateForDB = $date->format(\DateTime::ISO8601);
-            s::set('frontpage_'.$categoryId.'_last_saved', $dateForDB);
+            $this->get('cache')->save('frontpage_last_saved_'.$categoryId, $dateForDB);
             $lastSaved = $dateForDB;
         }
 
@@ -284,7 +285,7 @@ class FrontpagesController extends Controller
         // Save the actual date for fronpage
         $date = new \Datetime("now");
         $dateForDB = $date->format(\DateTime::ISO8601);
-        s::set('frontpage_'.$category.'_last_saved', $dateForDB);
+        $this->get('cache')->fetch('frontpage_last_saved_'.$category, $dateForDB);
 
         return new JsonResponse([
             'message' => _("Content positions saved properly"),
@@ -369,10 +370,10 @@ class FrontpagesController extends Controller
                 $category = 0;
             }
 
-            $date = s::get('frontpage_'.$category.'_last_saved');
+            $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_'.$category);
 
-            $frontpageVersion = new \DateTime($date);
-            $requestVersion = new \DateTime($dateRequest);
+            $frontpageVersion = \DateTime::createFromFormat(\DateTime::ISO8601, $lastSaved);
+            $requestVersion = \DateTime::createFromFormat(\DateTime::ISO8601, $dateRequest);
 
             $newVersionAvailable = $frontpageVersion > $requestVersion;
         }
