@@ -59,7 +59,7 @@
     </script>
   {/block}
 </head>
-<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
+<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
   <div class="application-loading" ng-hide="loaded">
     <div class="loading-message">
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -67,6 +67,63 @@
       <h5>{$loading_message}</h5>
     </div>
   </div>
+  <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-class="{ 'hidden': auth.status }" ng-submit="login()" novalidate form-autofill-fix>
+    <div class="container">
+      <div class="row login-container animated fadeInUp">
+        <div class="col-md-6 col-md-offset-3 tiles white no-padding">
+          <div class="p-t-30 p-b-10 xs-p-t-10 xs-p-l-10 xs-p-b-10">
+            <h2 class="normal center">
+              <i class="fa fa-rebel fa-3x"></i>
+              <div class="p-t-15">{t}Welcome, Master{/t}</div>
+            </h2>
+          </div>
+          <div class="tiles grey p-b-20 p-l-30 p-r-30 p-t-20 text-black">
+            <!-- Hack to allow web browsers to remember credentials with AngularJS -->
+            <iframe class="hidden" id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-user"></i>
+                </span>
+                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-lock"></i>
+                </span>
+                <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+              </div>
+            </div>
+            <div class="form-group col-md-10" ng-if="attempts > 2">
+              <label class="form-label"></label>
+              <div class="controls">
+                <div class="control-group clearfix">
+                  <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
+                [% message.text %]
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <button class="btn btn-block btn-loading btn-success" ng-disabled="loginLoading" type="submit">
+                  <i class="fa fa-absolute fa-circle-o-notch fa-spin m-l-15 m-t-15" ng-if="loginLoading"></i>
+                  <h4 class="text-uppercase text-white">
+                    {t}Login{/t}
+                  </h4>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
   <div class="nocss hidden">
     {t}Your browser was unable to load all of Opennemas's resources. They may have been blocked by your firewall, proxy or browser configuration.{/t}
     <br>
@@ -170,7 +227,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a href="#" ng-click="logout();" tabindex="-1">
+                  <a href="#" ng-click="logout()" tabindex="-1">
                     <i class="fa fa-power-off m-r-10"></i>
                     {t}Log out{/t}
                   </a>
@@ -193,77 +250,11 @@
     </div>
     <!-- END PAGE CONTAINER -->
   </div>
-  <div class="login-container-wrapper ng-cloak" ng-class="{ 'hidden': auth.status }">
-    <div class="container">
-      <div class="row login-container column-seperation">
-        <div class="col-md-5 col-md-offset-1">
-          <h2>{t}Opennemas manager{/t}</h2>
-          <p>{t}Use manager account to sign in.{/t}<br>
-          <br>
-          <!--<button class="btn btn-block btn-info col-md-8" type="button">
-              <span class="pull-left"><i class="icon-facebook"></i></span>
-              <span class="bold">Login with Facebook</span> </button>
-          <button class="btn btn-block btn-success col-md-8" type="button">
-              <span class="pull-left"><i class="icon-twitter"></i></span>
-              <span class="bold">Login with Twitter</span>
-          </button>-->
-        </div>
-        <div class="col-md-5 "><br>
-          <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
-            <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-            <iframe class="hidden" id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
-            <div class="row">
-              <div class="form-group col-md-10">
-                <label class="form-label">{t}Username{/t}</label>
-                <div class="controls">
-                  <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-10">
-                <label class="form-label">{t}Password{/t}</label>
-                <span class="help"></span>
-                <div class="controls">
-                  <div class="input-with-icon right">
-                    <i class=""></i>
-                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row" ng-if="attempts > 2">
-              <div class="form-group col-md-10">
-                <label class="form-label"></label>
-                <div class="controls">
-                  <div class="control-group clearfix">
-                    <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-10">
-                <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
-                  [% message.text %]
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-10">
-                <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
-                  {t}Login{/t}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
   <script type="text/ng-template" id="modal-login">
     {include file="login/modal_login.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-logout">
+    {include file="login/modal_logout.tpl"}
   </script>
   <script type="text/ng-template" id="modal-upgrade">
     {include file="common/modal_application_upgrade.tpl"}
