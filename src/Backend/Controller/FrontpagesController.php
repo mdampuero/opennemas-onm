@@ -290,7 +290,7 @@ class FrontpagesController extends Controller
         // Save the actual date for fronpage
         $date = new \Datetime("now");
         $dateForDB = $date->format(\DateTime::ISO8601);
-        $this->get('cache')->fetch('frontpage_last_saved_'.$category, $dateForDB);
+        $this->get('cache')->save('frontpage_last_saved_'.$category, $dateForDB);
 
         return new JsonResponse([
             'message' => _("Content positions saved properly"),
