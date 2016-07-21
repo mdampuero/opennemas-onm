@@ -222,7 +222,7 @@ class UsersController extends ContentController
         $groups = [];
 
         $users = array_map(function ($a) use ($converter, &$groups) {
-            $groups = array_unique(array_merge($groups, $a->user_group_ids));
+            $groups = array_unique(array_merge($groups, $a->fk_user_group));
 
             $a->eraseCredentials();
 

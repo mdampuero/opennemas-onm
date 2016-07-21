@@ -238,7 +238,7 @@
 
           var route = {
             name: 'manager_ws_user_group_update',
-            params: { id: $scope.user_group.id }
+            params: { id: $scope.user_group.pk_user_group }
           };
 
           http.put(route, $scope.user_group)

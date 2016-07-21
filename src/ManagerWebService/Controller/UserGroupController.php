@@ -57,7 +57,7 @@ class UserGroupController extends Controller
         }
 
         $em  = $this->get('orm.manager');
-        $oql = sprintf('id in [%s]', implode(',', $ids));
+        $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
         $userGroups = $em->getRepository('UserGroup')->findBy($oql);
 
@@ -142,7 +142,7 @@ class UserGroupController extends Controller
             'Location',
             $this->generateUrl(
                 'manager_ws_user_group_show',
-                [ 'id' => $userGroup->id ]
+                [ 'id' => $userGroup->pk_user_group ]
             )
         );
 

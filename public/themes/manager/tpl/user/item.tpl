@@ -135,7 +135,7 @@
                   {t}User groups{/t}
                 </label>
                 <div class="controls">
-                  <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.user_group_ids">
+                  <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.fk_user_group">
                     <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                   </tags-input>
                 </div>

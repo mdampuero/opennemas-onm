@@ -178,6 +178,23 @@
           $scope.criteria = { epp: 25, page: 1 };
         };
 
+        /**
+         * @function toggleAll
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Toggles all items selection.
+         */
+        $scope.toggleAll = function() {
+          if ($scope.selected.all) {
+            $scope.selected.items = $scope.items.map(function(item) {
+              return item.pk_user_group;
+            });
+          } else {
+            $scope.selected.items = [];
+          }
+        };
+
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(nv, ov) {
           if (nv !== ov) {

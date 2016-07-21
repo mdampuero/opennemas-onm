@@ -15,8 +15,8 @@
         </li>
         <li class="quicklinks">
           <h5>
-            <span ng-if="!user_group.id">{t}New user group{/t}</span>
-            <span ng-if="user_group.id">{t}Edit user group{/t}</span>
+            <span ng-if="!user_group.pk_user_group">{t}New user group{/t}</span>
+            <span ng-if="user_group.pk_user_group">{t}Edit user group{/t}</span>
           </h5>
         </li>
       </ul>
@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="user_group.id ? update() : save();" ng-disabled="saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="user_group.pk_user_group ? update() : save();" ng-disabled="saving">
               <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </button>

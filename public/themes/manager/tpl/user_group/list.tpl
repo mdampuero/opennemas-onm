@@ -107,9 +107,9 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" ng-click="sort('id')" width="50">
+              <th class="pointer" ng-click="sort('pk_user_group')" width="50">
                 #
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('pk_user_group') == 'asc', 'fa fa-caret-down': isOrderedBy('pk_user_group') == 'desc'}"></i>
               </th>
               <th class="pointer" ng-click="sort('name')" ng-if="isColumnEnabled('name')">
                 {t}Group name{/t}
@@ -118,23 +118,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
               <td>
                 <div class="checkbox check-default">
-                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
+                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
               </td>
               <td>
-                [% item.id %]
+                [% item.pk_user_group %]
               </td>
               <td ng-if="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.id }); %]" title="{t}Edit group{/t}">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" title="{t}Edit group{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.id)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>

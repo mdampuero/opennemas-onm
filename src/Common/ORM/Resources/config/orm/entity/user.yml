@@ -1,26 +1,27 @@
 entity:
     name: User
     required:
-        - enabled
         - email
         - name
         - type
         - username
     properties:
-        enabled:        boolean
-        avatar_id:      integer
+        activated:      boolean
+        avatar_img_id:  integer
         bio:            string
+        deposit:        float
         email:          string
+        fk_user_group:  array
         id:             integer
         name:           string
         password:       string
-        type:           integer
-        token:          string
-        url:            string
+        sessionexpire:  integer
         terms_accepted: datetime
-        username:       string
+        token:          string
+        type:           integer
+        url:            string
         user_language:  string
-        user_group_ids: array
+        username:       string
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -41,9 +42,9 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     mapping:
         database:
-            table: user
+            table: users
             metas:
-                table: user_meta
+                table: usermeta
                 ids:
                     id: user_id
             columns:
@@ -62,9 +63,9 @@ entity:
                 bio:
                     type: text
                     options: { default: null, length: 65532, notnull: false }
-                avatar_id:
+                avatar_img_id:
                     type: bigint
-                    options: { default: null, unsigned: true, notnull: false }
+                    options: { default: 0, unsigned: true, notnull: false }
                 email:
                     type: string
                     options: { default: null, length: 255, notnull: false }
@@ -77,12 +78,18 @@ entity:
                 token:
                     type: string
                     options: { default: null, length: 32, notnull: false }
-                enabled:
+                activated:
                     type: boolean
-                    options: { default: true, comment: '1 enabled - 0 disabled', notnull: true }
-                user_group_ids:
+                    options: { default: true, comment: '1 activated - 0 disabled', notnull: true }
+                fk_user_group:
                     type: simple_array
                     options: { default: null, length: 65532, notnull: false }
+                deposit:
+                    type:    float
+                    options: { default: 0, length: 10, notnull: false }
+                sessionexpire:
+                    type:    integer
+                    options: { default: 0, length: 2, notnull: false }
             index:
                 -
                     name: PRIMARY

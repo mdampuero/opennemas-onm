@@ -44,11 +44,11 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <ui-select ng-model="criteria.user_group_ids" theme="select2" >
+          <ui-select ng-model="criteria.fk_user_group" theme="select2" >
             <ui-select-match>
               <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
-            <ui-select-choices repeat="item.id as item in extra.user_groups">
+            <ui-select-choices repeat="item.pk_user_group as item in extra.user_groups">
               <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
@@ -180,14 +180,14 @@
               </td>
               <td ng-if="isColumnEnabled('usergroups')">
                 <ul class="no-style">
-                  <li ng-repeat="id in item.user_group_ids">
+                  <li ng-repeat="id in item.fk_user_group">
                     [% getUserGroup(id) %]
                   </li>
                 </ul>
               </td>
               <td class="text-center" ng-if="isColumnEnabled('enabled')">
-                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == '1' ? '0' : '1')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated== '1', 'fa-times text-error': !item.activatedLoading && item.activated== '0' }"></i>
                 </button>
               </td>
             </tr>

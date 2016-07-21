@@ -28,14 +28,14 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->metadata = new Metadata([
             'name' => 'UserGroup',
             'properties' => [
-                'id'   => 'integer',
-                'name' => 'string',
+                'pk_user_group' => 'integer',
+                'name'          => 'string',
             ],
             'mapping' => [
                 'database' => [
-                    'table' => 'user_group',
+                    'table' => 'user_groups',
                     'columns' => [
-                        'id' => [
+                        'pk_user_group' => [
                             'type'    => 'integer',
                             'options' => [ 'default' => null ]
                         ],
@@ -47,7 +47,7 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
                     'index' => [
                         [
                             'primary' => true,
-                            'columns' => [ 'id' ]
+                            'columns' => [ 'pk_user_group' ]
                         ]
                     ]
                 ]
@@ -69,17 +69,17 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testRefresh()
     {
         $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
-            [ 'id' => 1, 'name' => 'glork' ],
-            [ 'id' => 2, 'name' => 'thud' ]
+            [ 'pk_user_group' => 1, 'name' => 'glork' ],
+            [ 'pk_user_group' => 2, 'name' => 'thud' ]
         ]);
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'user_group_id' => 1, 'privilege_id' => '1' ],
-            [ 'user_group_id' => 2, 'privilege_id' => '2' ]
+            [ 'pk_fk_user_group' => 1, 'pk_fk_privilege' => '1' ],
+            [ 'pk_fk_user_group' => 2, 'pk_fk_privilege' => '2' ]
         ]);
 
         $method = new \ReflectionMethod($this->repository, 'refresh');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
+        $method->invokeArgs($this->repository, [ [ [ 'pk_user_group' => 1 ] , [ 'pk_user_group' => 2 ] ] ]);
     }
 }

@@ -148,7 +148,7 @@
          */
         $scope.getUserGroup = function (id) {
           for (var i = 0; i < $scope.extra.user_groups.length; i++) {
-            if ($scope.extra.user_groups[i].id === parseInt(id)) {
+            if ($scope.extra.user_groups[i].pk_user_group === parseInt(id)) {
               return $scope.extra.user_groups[i].name;
             }
           }
@@ -167,7 +167,7 @@
           oqlBuilder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',
-              user_group_ids: '[key] in [[value]]'
+              fk_user_group: '[key] in [[value]]'
             }
           });
 

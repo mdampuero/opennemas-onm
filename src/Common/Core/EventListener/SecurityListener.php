@@ -133,11 +133,11 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function getPermissions(UserInterface $user)
     {
-        if (empty($user->user_group_ids)) {
+        if (empty($user->fk_user_group)) {
             return [];
         }
 
-        $oql = sprintf('id in [%s]', implode($user->user_group_ids));
+        $oql = sprintf('pk_user_group in [%s]', implode($user->fk_user_group));
 
         $userGroups = $this->container->get('orm.manager')
             ->getRepository('UserGroup')

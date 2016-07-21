@@ -75,7 +75,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
             return $this->roles;
         }
 
-        foreach ($this->user_group_ids as $group) {
+        foreach ($this->fk_user_group as $group) {
             $roles = \Privilege::getPrivilegesForUserGroup($group);
             $this->roles = array_merge($this->roles, $roles);
         }
@@ -199,7 +199,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isMaster()
     {
-        if (in_array('4', $this->user_group_ids)) {
+        if (in_array('4', $this->fk_user_group)) {
             return true;
         }
 
@@ -213,8 +213,8 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isAdmin()
     {
-        if (in_array('4', $this->user_group_ids)
-            || in_array('5', $this->user_group_ids)
+        if (in_array('4', $this->fk_user_group)
+            || in_array('5', $this->fk_user_group)
         ) {
             return true;
         }

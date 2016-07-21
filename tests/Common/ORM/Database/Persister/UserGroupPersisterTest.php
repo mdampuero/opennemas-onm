@@ -28,15 +28,15 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
         $this->metadata = new Metadata([
             'name' => 'UserGroup',
             'properties' => [
-                'id'         => 'integer',
-                'name'       => 'string',
-                'privileges' => 'array'
+                'pk_user_group' => 'integer',
+                'name'          => 'string',
+                'privileges'    => 'array'
             ],
             'mapping' => [
                 'database' => [
-                    'table' => 'user_group',
+                    'table' => 'user_groups',
                     'columns' => [
-                        'id' => [
+                        'pk_user_group' => [
                             'type'    => 'integer',
                             'options' => [ 'default' => null ]
                         ],
@@ -48,7 +48,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
                     'index' => [
                         [
                             'primary' => true,
-                            'columns' => [ 'id' ]
+                            'columns' => [ 'pk_user_group' ]
                         ]
                     ]
                 ]
@@ -72,23 +72,23 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
-            'user_group',
-            [ 'id' => null, 'name' => 'xyzzy' ],
+            'user_groups',
+            [ 'pk_user_group' => null, 'name' => 'xyzzy' ],
             [ \PDO::PARAM_STR, \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'replace into user_group_privileges values (?,?),(?,?)',
+            'replace into user_groups_privileges values (?,?),(?,?)',
             [ 1, 1, 1, 2 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'delete from user_group_privileges where user_group_id = ? and privilege_id not in (?)',
+            'delete from user_groups_privileges where pk_fk_user_group = ? and pk_fk_privilege not in (?)',
             [ 1, [ 1, 2 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
         $this->persister->create($entity);
-        $this->assertEquals(1, $entity->id);
+        $this->assertEquals(1, $entity->pk_user_group);
     }
 
     /**
@@ -97,24 +97,24 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $entity = new UserGroup([
-            'id'         => 1,
-            'name'       => 'garply',
-            'privileges' => [ 1 ],
+            'pk_user_group' => 1,
+            'name'          => 'garply',
+            'privileges'    => [ 1 ],
         ]);
 
         $this->conn->expects($this->once())->method('update')->with(
-            'user_group',
+            'user_groups',
             [ 'name' => 'garply' ],
-            [ 'id' => 1 ],
+            [ 'pk_user_group' => 1 ],
             [ \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(1))->method('executeQuery')->with(
-            'replace into user_group_privileges values (?,?)',
+            'replace into user_groups_privileges values (?,?)',
             [ 1, 1 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'delete from user_group_privileges where user_group_id = ? and privilege_id not in (?)',
+            'delete from user_groups_privileges where pk_fk_user_group = ? and pk_fk_privilege not in (?)',
             [ 1, [ 1 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );

@@ -105,7 +105,7 @@ class UserController extends Controller
         $groups = [];
 
         $users = array_map(function ($a) use ($converter, &$groups) {
-            $groups = array_unique(array_merge($groups, $a->user_group_ids));
+            $groups = array_unique(array_merge($groups, $a->fk_user_group));
 
             $a->eraseCredentials();
 
@@ -314,7 +314,7 @@ class UserController extends Controller
         }, $userGroups);
 
         $extra['user_groups'] = array_merge(
-            [[ 'id' => null, 'name' => _('All') ]],
+            [[ 'pk_user_group' => null, 'name' => _('All') ]],
             $extra['user_groups']
         );
 

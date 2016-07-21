@@ -42,17 +42,17 @@ class UserGroupRepository extends BaseRepository
         $filters  = [];
 
         foreach ($ids as $id) {
-            $filters[] = 'user_group_id=' . $id['id'];
+            $filters[] = 'pk_fk_user_group=' . $id['pk_user_group'];
         }
 
-        $sql = 'select * from user_group_privileges where '
+        $sql = 'select * from user_groups_privileges where '
             . implode(' or ', $filters);
 
         $rs = $this->conn->fetchAll($sql);
 
         $privileges = [];
         foreach ($rs as $value) {
-            $privileges[$value['user_group_id']][] = (int) $value['privilege_id'];
+            $privileges[$value['pk_fk_user_group']][] = (int) $value['pk_fk_privilege'];
         }
 
         return $privileges;

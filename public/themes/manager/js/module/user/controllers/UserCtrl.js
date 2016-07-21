@@ -28,10 +28,10 @@
          * @type {Object}
          */
         $scope.user = {
-          enabled:        true,
-          password:       null,
-          type:           0,
-          user_group_ids: [],
+          activated:     true,
+          password:      null,
+          type:          0,
+          fk_user_group: [],
           user_language: 'default',
         };
 
@@ -68,9 +68,9 @@
 
           var data  = angular.copy($scope.user);
 
-          if (data.user_group_ids) {
-            data.user_group_ids = data.user_group_ids
-              .map(function(e) { return e.id; });
+          if (data.fk_user_group) {
+            data.fk_user_group = data.fk_user_group
+              .map(function(e) { return e.pk_user_group; });
           }
 
           http.post('manager_ws_user_save', data).then(function (response) {
@@ -102,9 +102,9 @@
             params: { id: $scope.user.id }
           };
 
-          if (data.user_group_ids) {
-            data.user_group_ids = data.user_group_ids
-              .map(function(e) { return e.id; });
+          if (data.fk_user_group) {
+            data.fk_user_group = data.fk_user_group
+              .map(function(e) { return e.pk_user_group; });
           }
 
           http.put(route, data).then(function (response) {
@@ -137,10 +137,10 @@
           if (response.data.user) {
             $scope.user = angular.merge($scope.user, response.data.user);
 
-            $scope.user.user_group_ids = $scope.user.user_group_ids
+            $scope.user.fk_user_group = $scope.user.fk_user_group
               .map(function (e) {
                 for (var i = 0; i < $scope.extra.user_groups.length; i++) {
-                  if ($scope.extra.user_groups[i].id === parseInt(e)) {
+                  if ($scope.extra.user_groups[i].pk_user_group === parseInt(e)) {
                     return $scope.extra.user_groups[i];
                   }
                 }

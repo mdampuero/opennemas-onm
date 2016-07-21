@@ -34,11 +34,11 @@ class AuthenticationSuccessListener
         // $data['token'] contains the JWT
 
         $data['user'] = array(
-            'id'        => $user->id,
-            'avatar_id' => $user->avatar_id,
-            'email'     => $user->email,
-            'name'      => $user->name,
-            'username'  => $user->username,
+            'id'            => $user->id,
+            'avatar_img_id' => $user->avatar_img_id,
+            'email'         => $user->email,
+            'name'          => $user->name,
+            'username'      => $user->username,
         );
 
         $event->setData($data);

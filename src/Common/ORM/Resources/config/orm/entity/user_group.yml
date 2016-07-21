@@ -1,9 +1,9 @@
 entity:
     name: UserGroup
     properties:
-        id:         integer
-        name:       string
-        privileges: array
+        pk_user_group: integer
+        name:          string
+        privileges:    array
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -24,9 +24,9 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager' ]
     mapping:
         database:
-            table: user_group
+            table: user_groups
             columns:
-                id:
+                pk_user_group:
                     type: integer
                     options: { default: null, unsigned: true, autoincrement: true }
                 name:
@@ -35,7 +35,7 @@ entity:
             index:
                 -
                     name:    PRIMARY
-                    columns: [ id ]
+                    columns: [ pk_user_group ]
                     primary: true
                     unique:  true
                     flags:   {}
