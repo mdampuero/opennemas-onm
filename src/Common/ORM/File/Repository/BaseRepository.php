@@ -345,7 +345,7 @@ class BaseRepository extends Repository
             $path = $this->container->getParameter('kernel.root_dir')
                 . DS . '..' . DS . $path . DS;
 
-            $finder->files()->in($path)->name('*.yml');
+            $finder->followLinks()->files()->in($path)->name('*.yml');
 
             foreach ($finder as $file) {
                 $this->loadEntity($file->getRealPath());
