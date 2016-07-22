@@ -71,7 +71,7 @@ class WidgetsController extends ContentController
      */
     public function getFormAction($uuid)
     {
-        $this->get('core.theme')->loadWidget($uuid);
+        $this->get('widget_repository')->loadWidget($uuid);
 
         $uuid = 'Widget' . $uuid;
         if (!class_exists($uuid)) {

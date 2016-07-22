@@ -187,68 +187,6 @@ class Widget extends Content
     }
 
     /**
-     * Returns the list of all the available widgets
-     *
-     * @return array the list of available widgets
-     **/
-    public static function getAllInteligentWidgets()
-    {
-        $paths = array();
-        $paths = [];
-        $baseTheme = getService('core.theme')->getParentTheme();
-
-        // Add current theme widgets/ path
-        $baseThemePath = realpath(TEMPLATE_USER_PATH . '/tpl/widgets');
-        if (!empty($baseThemePath)) {
-            $paths[] = $baseThemePath;
-        }
-
-        // If Theme has parents add their widgets/ path
-        if (is_array($baseTheme)) {
-            foreach ($baseTheme as $theme) {
-                $baseThemePath = realpath(SITE_PATH."/themes/{$theme}/tpl/widgets");
-                if (!empty($baseTheme) && $baseThemePath) {
-                    $paths[] = $baseThemePath;
-                }
-            }
-        } else {
-            $baseThemePath = realpath(SITE_PATH."/themes/{$baseTheme}/tpl/widgets");
-            if (!empty($baseTheme) && $baseThemePath) {
-                $paths[] = $baseThemePath;
-            }
-        }
-
-        // Add base theme widgets/ path
-        $baseThemePath = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
-        if (!empty($baseThemePath)) {
-            $paths[] = $baseThemePath;
-        }
-
-        $allWidgets = array();
-        foreach ($paths as $path) {
-            if (is_dir($path) && $path != '/') {
-                $objects = scandir($path);
-                foreach ($objects as $object) {
-                    if ($object != "." && $object != "..") {
-                        if (preg_match('@^widget_(.)*\.class\.tpl$@', $object)) {
-                            $objectWords = explode('_', substr($object, 7, -10));
-                            $name = '';
-                            foreach ($objectWords as $word) {
-                                $name .= ucfirst($word);
-                            }
-                            if (!in_array($name, $allWidgets)) {
-                                $allWidgets[] .=  $name;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $allWidgets;
-    }
-
-    /**
      * Renders the widget given a set of params
      *
      * @param array $params a list of params to pass to the widget rendering

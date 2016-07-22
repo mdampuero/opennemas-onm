@@ -34,7 +34,7 @@ class WidgetsController extends Controller
      */
     public function listAction()
     {
-        $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+        $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
         $allInteligentWidgetsContents = [];
         foreach ($allInteligentWidgets as $type) {
@@ -84,7 +84,7 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widgets'));
         }
 
-        $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+        $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
         return $this->render(
             'widget/new.tpl',
@@ -151,7 +151,7 @@ class WidgetsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
         } else {
-            $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+            $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
             return $this->render(
                 'widget/new.tpl',
