@@ -84,7 +84,7 @@ class ErrorController extends Controller
                     $errorMessage = $error->getMessage();
                 }
 
-                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()."\n".$error->getTraceAsString());
+                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()."\n".json_encode($error->getTrace()));
 
                 // Dummy content while testing this feature
                 $page = new \stdClass();
