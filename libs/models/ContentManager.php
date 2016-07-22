@@ -2182,6 +2182,10 @@ class ContentManager
      **/
     public static function getMultipleProperties($propertyMap)
     {
+        if (empty($propertyMap)) {
+            return [];
+        }
+
         $map = $values = [];
         foreach ($propertyMap as $property) {
             $map []= '(fk_content=? AND `meta_name`=?)';
