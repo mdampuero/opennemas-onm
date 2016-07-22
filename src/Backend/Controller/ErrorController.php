@@ -155,7 +155,7 @@ class ErrorController extends Controller
                     $errorMessage = $error->getMessage();
                 }
 
-                error_log('Unknown error. ERROR_ID: '.$errorID.' - '.$error->getMessage());
+                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()."\n".$error->getTraceAsString());
 
                 $content = $this->renderView(
                     'error/404.tpl',
