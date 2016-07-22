@@ -47,7 +47,7 @@
                     </a>
                     <a href="#" class="text-white created-at col-xs-12 col-md-6">
                       <i class="fa fa-calendar"></i>
-                      <span uib-tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
+                      <span uib-tooltip="{t 1=$instance->created->format('Y-m-d H:i:s')}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created->format('Y-m-d H:i:s')}</span>
                     </a>
                   </div>
                 </div>
