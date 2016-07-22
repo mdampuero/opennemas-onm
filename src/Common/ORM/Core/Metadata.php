@@ -252,7 +252,8 @@ class Metadata extends DataObject implements Validable
      */
     public function getPrefixedId($entity)
     {
-        return $this->getPrefix() . implode('_', $this->getId($entity));
+        return $this->getPrefix()
+            . implode($this->getSeparator(), $this->getId($entity));
     }
 
     /**
