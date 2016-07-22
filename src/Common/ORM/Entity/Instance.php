@@ -49,11 +49,7 @@ class Instance extends Entity
      */
     public function getMainDomain()
     {
-        if (empty($this->main_domain)
-            || $this->main_domain === 0
-            || !is_array($this->domains)
-            || empty($this->domains)
-        ) {
+        if (!is_array($this->domains) || empty($this->domains)) {
             return null;
         }
 
