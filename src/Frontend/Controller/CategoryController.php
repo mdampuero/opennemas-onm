@@ -218,7 +218,6 @@ class CategoryController extends Controller
             );
         }
 
-        //$this->getInnerAds();
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
 
@@ -239,7 +238,7 @@ class CategoryController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category = 'home')
+    public function getInnerAds($category = 'home')
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
