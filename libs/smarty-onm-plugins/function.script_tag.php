@@ -28,7 +28,7 @@ function smarty_function_script_tag($params, &$smarty)
 
         if (!array_key_exists('common', $params)) {
             $basepath = $params['basepath'] ? : DS . 'js';
-            $server   = DS . $smarty->theme->path . DS . $basepath;
+            $server   = DS . $smarty->getTheme()->path . DS . $basepath;
         }
     }
 

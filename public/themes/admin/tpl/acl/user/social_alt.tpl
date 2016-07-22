@@ -25,7 +25,7 @@
         {if $user->photo->name}
             <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
         {else}
-            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="100"}
+          {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="100"}
         {/if}
       </div>
       <h5>

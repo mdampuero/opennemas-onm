@@ -144,7 +144,7 @@
                   </div>
                   {else}
                   <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                    {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                    {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="150"}
                   </div>
                   {/if}
                   <div>

@@ -71,7 +71,7 @@
           </div>
           {else}
           <div style="width: 40px; height: 40px;">
-            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="40"}
+            {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="40"}
           </div>
           {/if}
         </li>

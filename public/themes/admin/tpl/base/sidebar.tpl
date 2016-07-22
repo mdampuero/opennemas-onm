@@ -26,7 +26,7 @@
         </span>
         <div class="user-action no-padding" ng-click="mode = 'profile'">
           <div class="profile-pic">
-            {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$params.IMAGE_DIR image=true size="35"}
+            {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="35"}
           </div>
         </div>
       </div>

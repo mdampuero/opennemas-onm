@@ -18,8 +18,16 @@ class Template extends Smarty
      */
     protected $container;
 
+    /**
+     * The active theme.
+     *
+     * @var Theme
+     *
+     * TODO: Make this variable protected
+     */
+    public $theme;
+
     // Private properties
-    public $theme            = null;
     public $image_dir        = null;
     public $js_includes      = ['header' => array(), 'footer' => []];
     public $css_includes     = ['header' => array(), 'footer' => []];
@@ -47,7 +55,7 @@ class Template extends Smarty
     /**
      * Sets the active theme.
      *
-     * @param Extension $theme The current theme.
+     * @param Theme $theme The current theme.
      */
     public function addActiveTheme($theme)
     {
@@ -86,7 +94,7 @@ class Template extends Smarty
     /**
      * Sets the path to template basing on the theme.
      *
-     * @param Extension $theme The theme to add.
+     * @param Theme $theme The theme to add.
      */
     public function addTheme($theme)
     {
@@ -125,6 +133,41 @@ class Template extends Smarty
         $cacheId = preg_replace('@-@', '', $cacheId);
 
         return $cacheId;
+    }
+
+    /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Returns the path to image folder for the active theme.
+     *
+     * @return string The path to image folder for the active theme.
+     */
+    public function getImageDir()
+    {
+        if (!$this->container->isScopeActive('request')) {
+            return false;
+        }
+
+        return $this->container->get('request')->getSchemeAndHttpHost()
+            . $this->theme->path . 'images/';
+    }
+
+    /**
+     * Returns the active theme.
+     *
+     * @return Theme The active theme.
+     */
+    public function getTheme()
+    {
+        return $this->theme;
     }
 
     /**
@@ -182,18 +225,15 @@ class Template extends Smarty
             $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
         }
 
+        // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
-        // Template variables
-        $baseUrl = SITE_URL . '/themes/'.$theme.'/';
-        $baseUrl = str_replace('http:', '', $baseUrl);
+        $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
+            . $this->theme->path . 'images/';
 
-        $this->image_dir = $baseUrl . 'images/';
-        $this->caching   = false;
-
-        $this->assign('params', [
-            'IMAGE_DIR' => $this->image_dir,
-            'THEME'     => $theme,
+        $this->assign([
+            '_template' => $this,
+            'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
         ]);
     }
 
@@ -237,7 +277,7 @@ class Template extends Smarty
     /**
      * Configures the smarty compiles path.
      *
-     * @param Extension $theme The current theme.
+     * @param Theme $theme The current theme.
      */
     protected function setupCompiles($theme)
     {
@@ -257,7 +297,7 @@ class Template extends Smarty
     /**
      * Configures the smarty plugins path.
      *
-     * @param Extension $theme The current theme.
+     * @param Theme $theme The current theme.
      */
     protected function setupPlugins($theme)
     {

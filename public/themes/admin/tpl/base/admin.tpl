@@ -362,7 +362,7 @@
                     {/if}
                     <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
-                      {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$params.IMAGE_DIR image=true size="25"}
+                      {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="25"}
                     </div>
                     <span class="title">
                       {$smarty.session._sf2_attributes.user->name}

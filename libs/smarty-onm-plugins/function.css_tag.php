@@ -24,7 +24,7 @@ function smarty_function_css_tag($params, &$smarty)
 
     if (!array_key_exists('common', $params)) {
         $basepath = $params['basepath'] ? : DS . 'css';
-        $server   = DS . $smarty->theme->path . DS . $basepath;
+        $server   = DS . $smarty->getTheme()->path . DS . $basepath;
     }
 
     if (isset($params['type'])) {
