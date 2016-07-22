@@ -12,27 +12,27 @@ namespace Common\ORM\Database\Persister;
 use Common\ORM\Core\Entity;
 
 /**
- * The UserGroupPersister class defines actions to persist UserGroups.
+ * The BasePersister class defines actions to persist User.
  */
-class UserGroupPersister extends BasePersister
+class UserPersister extends BasePersister
 {
     /**
      * {@inheritdoc}
      */
     public function create(Entity &$entity)
     {
-        $privileges = [];
+        $categories = [];
 
-        if (!empty($entity->privileges)) {
-            $privileges = $entity->privileges;
-            unset($entity->privileges);
+        if (!empty($entity->categories)) {
+            $categories = $entity->categories;
+            unset($entity->categories);
         }
 
         parent::create($entity);
 
         $id = $this->metadata->getId($entity);
 
-        $this->persistPrivileges($id, $privileges);
+        $this->persistCategories($id, $categories);
     }
 
     /**
@@ -40,57 +40,57 @@ class UserGroupPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        $privileges = [];
+        $categories = [];
 
-        if (!empty($entity->privileges)) {
-            $privileges = $entity->privileges;
-            unset($entity->privileges);
+        if (!empty($entity->categories)) {
+            $categories = $entity->categories;
+            unset($entity->categories);
         }
 
         parent::update($entity);
 
         $id = $this->metadata->getId($entity);
 
-        $this->persistPrivileges($id, $privileges);
+        $this->persistCategories($id, $categories);
     }
 
     /**
-     * Persits the user group privileges.
+     * Persits the user group categories.
      *
      * @param integer $id         The entity id.
-     * @param array   $privileges The user group privileges.
+     * @param array   $categories The user group categories.
      */
-    protected function persistPrivileges($id, $privileges)
+    protected function persistCategories($id, $categories)
     {
         // Ignore metas with value = null
-        if (!empty($privileges)) {
-            $privileges = array_filter($privileges, function ($a) {
+        if (!empty($categories)) {
+            $categories = array_filter($categories, function ($a) {
                 return !is_null($a);
             });
         }
 
-        // Update privileges
-        $this->savePrivileges($id, $privileges);
+        // Update categories
+        $this->saveCategories($id, $categories);
 
-        // Remove old privileges
-        $this->removePrivileges($id, array_values($privileges));
+        // Remove old categories
+        $this->removeCategories($id, array_values($categories));
     }
 
     /**
-     * Deletes old privileges.
+     * Deletes old categories.
      *
      * @param array $id         The entity id.
-     * @param array $privileges The privileges keys to keep.
+     * @param array $categories The categories keys to keep.
      */
-    protected function removePrivileges($id, $keep)
+    protected function removeCategories($id, $keep)
     {
-        $sql      = "delete from user_groups_privileges where pk_fk_user_group = ?";
-        $params[] = $id['pk_user_group'];
-        $types[]  = is_string($id['pk_user_group']) ?
+        $sql      = "delete from users_content_categories where pk_fk_user = ?";
+        $params[] = $id['id'];
+        $types[]  = is_string($id['id']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
 
         if (!empty($keep)) {
-            $sql .= " and pk_fk_privilege not in (?)";
+            $sql .= " and pk_fk_content_category not in (?)";
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }
@@ -99,27 +99,27 @@ class UserGroupPersister extends BasePersister
     }
 
     /**
-     * Saves new privileges.
+     * Saves new categories.
      *
      * @param array $id         The entity id.
-     * @param array $privileges The privileges to save.
+     * @param array $categories The categories to save.
      */
-    protected function savePrivileges($id, $privileges)
+    protected function saveCategories($id, $categories)
     {
-        if (empty($privileges)) {
+        if (empty($categories)) {
             return;
         }
 
-        $sql = "replace into user_groups_privileges values "
+        $sql = "replace into users_content_categories values "
             . str_repeat(
                 '(?,?),',
-                count($privileges)
+                count($categories)
             );
 
         $sql    = rtrim($sql, ',');
         $params = [];
         $types  = [];
-        foreach ($privileges as $value) {
+        foreach ($categories as $value) {
             $params = array_merge(
                 $params,
                 array_merge(array_values($id), [ $value ])

@@ -10,9 +10,9 @@
 namespace tests\Common\ORM\File\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\UserGroupRepository;
+use Common\ORM\Database\Repository\UserRepository;
 
-class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the test environment.
@@ -25,16 +25,16 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->metadata = new Metadata([
-            'name' => 'UserGroup',
+            'name' => 'User',
             'properties' => [
-                'pk_user_group' => 'integer',
-                'name'          => 'string',
+                'id'   => 'integer',
+                'name' => 'string',
             ],
             'mapping' => [
                 'database' => [
-                    'table' => 'user_groups',
+                    'table' => 'user',
                     'columns' => [
-                        'pk_user_group' => [
+                        'id' => [
                             'type'    => 'integer',
                             'options' => [ 'default' => null ]
                         ],
@@ -46,7 +46,7 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
                     'index' => [
                         [
                             'primary' => true,
-                            'columns' => [ 'pk_user_group' ]
+                            'columns' => [ 'id' ]
                         ]
                     ]
                 ]
@@ -59,36 +59,36 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository =
-            new UserGroupRepository($this->conn, $this->metadata, $this->cache);
+            new UserRepository($this->conn, $this->metadata, $this->cache);
     }
 
     /**
-     * Tests refresh and getPrivileges.
+     * Tests refresh and getCategories.
      */
     public function testRefresh()
     {
         $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
-            [ 'pk_user_group' => 1, 'name' => 'glork' ],
-            [ 'pk_user_group' => 2, 'name' => 'thud' ]
+            [ 'id' => 1, 'name' => 'glork' ],
+            [ 'id' => 2, 'name' => 'thud' ]
         ]);
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'pk_fk_user_group' => 1, 'pk_fk_privilege' => 1 ],
-            [ 'pk_fk_user_group' => 2, 'pk_fk_privilege' => 2 ]
+            [ 'pk_fk_user' => 1, 'pk_fk_content_category' => '1' ],
+            [ 'pk_fk_user' => 2, 'pk_fk_content_category' => '2' ]
         ]);
 
         $method = new \ReflectionMethod($this->repository, 'refresh');
         $method->setAccessible(true);
 
-        $userGroups = $method->invokeArgs($this->repository, [ [ [ 'pk_user_group' => 1 ] , [ 'pk_user_group' => 2 ] ] ]);
+        $users = $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
 
         $this->assertEquals(
-            [ 'pk_user_group' => 1, 'name' => 'glork', 'privileges' => [ 1 ] ],
-            $userGroups[1]->getData()
+            [ 'id' => 1, 'name' => 'glork', 'categories' => [ 1 ] ],
+            $users[1]->getData()
         );
 
         $this->assertEquals(
-            [ 'pk_user_group' => 2, 'name' => 'thud', 'privileges' => [ 2 ] ],
-            $userGroups[2]->getData()
+            [ 'id' => 2, 'name' => 'thud', 'categories' => [ 2 ] ],
+            $users[2]->getData()
         );
     }
 }
