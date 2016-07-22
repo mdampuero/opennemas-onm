@@ -7,7 +7,11 @@ entity:
         user_id:         integer
         notification_id: integer
         instance_id:     integer
-        read_time:       datetime
+        read_date:       datetime
+        view_date:       datetime
+        clicked_date:    datetime
+        opened_date:     datetime
+
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter

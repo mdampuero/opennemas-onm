@@ -39,7 +39,7 @@ class NotificationController extends Controller
             'notifications.getRead',
             [
                 'oql' => sprintf(
-                    'instance_id = %s and user_id = %s',
+                    'instance_id = %s and user_id = %s and read_date !is null',
                     $instance->id,
                     $this->getUser()->id
                 )
@@ -50,7 +50,7 @@ class NotificationController extends Controller
             . ' and enabled = 1 and start <= "%s" and (end is null or end > "%s")';
 
         if (!empty($read)) {
-            $oql .= ' and id not in [' . implode(', ', array_keys($read)) . ' ]';
+            $oql .= ' and id !in [' . implode(', ', array_keys($read)) . ']';
         }
 
         if (!$this->getUser()->isAdmin()) {

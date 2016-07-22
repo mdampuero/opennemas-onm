@@ -308,7 +308,12 @@ class BaseRepository extends Repository
 
         $values = [];
         foreach ($rs as $data) {
-            $values[$data[$key]] = $data;
+            $key = implode(
+                $this->metadata->getSeparator(),
+                $this->metadata->getId($data)
+            );
+
+            $values[$key] = $data;
         }
 
         if ($this->metadata->hasMetas() && !empty($values)) {

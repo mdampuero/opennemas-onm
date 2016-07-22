@@ -130,7 +130,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $response = [];
         foreach ($notifications as $notification) {
             $response[$notification->notification_id] =
-                $notification->read_time;
+                $notification->read_date;
         }
 
         $event->setResponse($response);
