@@ -164,7 +164,9 @@ class WidgetManager extends EntityManager
     {
         $name = preg_replace('/(.class)?\.(php|tpl)/', '', $name);
         $name = preg_replace('/[wW]idget/', '', $name);
-        $name = ucfirst(preg_replace('/_([a-z])/e', 'ucfirst("$1")', $name));
+        $name = ucfirst(preg_replace_callback('/_([a-z])/', function ($matches) {
+            return ucfirst($matches[1]);
+        }, $name));
 
         return $name;
     }
