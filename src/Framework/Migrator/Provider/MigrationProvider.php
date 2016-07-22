@@ -161,10 +161,15 @@ abstract class MigrationProvider
             . "' AND TABLE_NAME = 'translation_ids' AND COLUMN_NAME = 'slug'";
         $rss = $conn->Execute($sql);
 
+        $sql = "ALTER TABLE `translation_ids` CHANGE `pk_content_old`"
+            . " `pk_content_old` VARCHAR(50) NOT NULL, "
+            . " CHANGE `pk_content` `pk_content` VARCHAR(50) NOT NULL;";
+
         if ($rss && count($rss->getArray()) == 0) {
-            $sql = "ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT"
+            $sql .= "ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT"
                 . " '' AFTER `type`;";
-            $rss = $this->targetConnection->Execute($sql);
         }
+
+        $rss = $this->targetConnection->Execute($sql);
     }
 }

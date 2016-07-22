@@ -936,12 +936,14 @@ class MigrationSaver
 
             $items = [];
             if (is_array($values['local_file'])) { // Inline photos
-                foreach ($values['local_file'] as $fileName) {
+                foreach ($values['local_file'] as $key => $fileName) {
                     $info  = pathinfo($fileName);
                     $value = array_merge($values, [
                         'local_file'        => $values['path'] . $fileName,
                         'extension'         => $info['extension'],
-                        'original_filename' => $info['basename']
+                        'original_filename' => $info['basename'],
+                        'title'             => $values['title'].' - '.$info['basename'],
+                        'id'                => $values['id'].'-'.$key
                     ]);
 
                     unset($value['article']);
@@ -952,7 +954,8 @@ class MigrationSaver
                 $value = array_merge($values, [
                     'local_file'        => $values['path'] . $values['local_file'],
                     'extension'         => $info['extension'],
-                    'original_filename' => $info['basename']
+                    'original_filename' => $info['basename'],
+                    'title'             => $values['title'].' - '.$info['basename']
                 ]);
 
                 $items[] = $values;
@@ -960,7 +963,7 @@ class MigrationSaver
 
             try {
                 // Inline images
-                foreach ($items as $i) {
+                foreach ($items as $key => $i) {
                     $photo = new \Photo();
                     $id = null;
 
@@ -1033,7 +1036,7 @@ class MigrationSaver
 
                             $this->createTranslation(
                                 $i[$schema['translation']['field']],
-                                $id,
+                                $id.'-'.$key,
                                 $schema['translation']['name'],
                                 $slug
                             );
@@ -1682,9 +1685,9 @@ class MigrationSaver
                             "/([\n]{2,})/i",
                             "/([\n]{2,})/i",
                             "/(\n)/i",
-                            "/\[caption[a-zA-ZÀ-ÿ0-9\(\)\?\@\&\;\,\:\"\'\=\/<>\.\_\-\s\]]*\[\/caption\]/"
+                            "/\[caption.*?\].*?(<img.*?\/?>).*?\[\/caption\]/"
                         ),
-                        array('</p><p>', '</p><p>', '<br>', '<br>', ''),
+                        array('</p><p>', '</p><p>', '<br>', '<br>', '${1}'),
                         $field
                     ) . '</p>';
                     break;
