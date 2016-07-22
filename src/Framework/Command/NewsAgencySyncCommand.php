@@ -95,16 +95,15 @@ EOF
 
         $servers = $sm->get('news_agency_config');
 
-        $tpl  = $this->getContainer()->get('core.template.admin');
-        $themes = $this->getContainer()->get('orm.loader')->getPlugins();
-        $themes = array_filter($themes, function ($a) {
-            return $a->uuid === 'es.openhost.theme.admin';
-        });
+        $tpl   = $this->getContainer()->get('core.template.admin');
+        $theme = $this->getContainer()->get('orm.manager')
+            ->getRepository('Theme')
+            ->findOneBy('uuid = "es.openhost.theme.admin"');
 
         $path = $this->getContainer()->getParameter('core.paths.cache')
             . '/' . $instance->internal_name;
 
-        $tpl->addActiveTheme($themes[0]);
+        $tpl->addActiveTheme($theme);
         $tpl->addInstance($instance);
 
         $synchronizer = new Synchronizer($path, $tpl);
