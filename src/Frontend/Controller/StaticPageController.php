@@ -41,7 +41,6 @@ class StaticPageController extends Controller
         // TODO: Remove when pk_content column renamed to id
         $content->id = $content->pk_content;
 
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/statics.tpl',
             [
@@ -63,9 +62,9 @@ class StaticPageController extends Controller
     public function getAds()
     {
         // Get static_pages positions
-        $manager   = $this->get('core.theme')->getAdsPositionManager();
-        $positions = $manager
-            ->getAdsPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7, 9 ]);
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager
+            ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7, 9 ]);
 
         return \Advertisement::findForPositionIdsAndCategory($positions, 0);
     }
