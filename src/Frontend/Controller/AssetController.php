@@ -42,7 +42,7 @@ class AssetController extends Controller
 
         $method = array_shift($parameters);
 
-        if (file_exists($path)) {
+        if (file_exists($path) && is_file($path)) {
             $imagine = new \Imagine\Imagick\Imagine();
 
             $image = $imagine->open($path);
