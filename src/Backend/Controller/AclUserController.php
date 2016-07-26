@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the system users
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,59 +20,19 @@ use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
-/**
- * Handles the system users
- *
- * @package Backend_Controllers
- **/
 class AclUserController extends Controller
 {
     /**
-     * Show a paginated list of backend users
+     * Show a paginated list of backend users.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("has_role('USER_ADMIN')")
-     *
      * @CheckModuleAccess(module="USER_MANAGER")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
-        $userGroup = new \UserGroup();
-        $groups    = $userGroup->find();
-
-        $groupsOptions = array();
-        foreach ($groups as $cat) {
-            $groupsOptions[] = [ 'name' => $cat->name, 'value' => $cat->id];
-        }
-
-        // Get max users from settings
-        $maxUsers = s::get('max_users');
-        // Check total allowed users before creating new one
-        $createEnabled = true;
-        if ($maxUsers > 0) {
-            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
-        }
-
-        if (!$createEnabled) {
-            $request->getSession()->getFlashBag()->add(
-                'notice',
-                _('You have reach the maximum users allowed. If you want to create more users, please contact us.')
-            );
-        }
-
-        array_unshift($groupsOptions, [ 'name' => _('Not assigned'), 'value' => 'empty' ]);
-        array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
-
-        return $this->render(
-            'acl/user/list.tpl',
-            array(
-                'groups'        => $groupsOptions,
-                'createEnabled' => $createEnabled,
-            )
-        );
+        return $this->render('acl/user/list.tpl');
     }
 
     /**
