@@ -32,7 +32,7 @@ class AssetController extends Controller
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
         $method     = array_shift($parameters);
 
-        if (file_exists($path)) {
+        if (file_exists($path) && is_file($path)) {
             $imagine = new \Imagine\Imagick\Imagine();
             $image   = $imagine->open($path);
 
