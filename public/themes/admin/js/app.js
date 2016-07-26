@@ -17,6 +17,7 @@ angular.module(
     'onm.http',
     'onm.item',
     'onm.messenger',
+    'onm.oql',
     'onm.oqlEncoder',
     'onm.queryManager',
     'onm.picker',
