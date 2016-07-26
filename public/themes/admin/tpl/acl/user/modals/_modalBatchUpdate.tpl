@@ -23,8 +23,8 @@
       <p ng-if="template.value == 1 && template.backend_access">{t}Activate the access to Backend means to add a User to your platform and has a cost of 12€/month.{/t} {t escape=off}If you have questions please have a look to our help article and/or contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a>{/t}</p>
       <p ng-if="template.name == 'create'">{t escape=off}Are you sure you want to create a new user?{/t}</p>
       <p ng-if="template.name == 'update'">{t escape=off}Are you sure you want to update the user?{/t}</p>
-      <p ng-if="template.name == 'activated' && template.value == 0">{t escape=off}Are you sure you want to disable [% template.selected.contents.length %] user(s)?{/t}</p>
-      <p ng-if="template.name == 'activated' && template.value == 1">{t escape=off}Are you sure you want to enable [% template.selected.contents.length %] user(s)?{/t}</p>
+      <p ng-if="template.name == 'activated' && template.value == 0">{t escape=off}Are you sure you want to disable [% template.selected.items.length %] user(s)?{/t}</p>
+      <p ng-if="template.name == 'activated' && template.value == 1">{t escape=off}Are you sure you want to enable [% template.selected.items.length %] user(s)?{/t}</p>
       <p class="text-danger" ng-show="template.name == 'activated' && template.value == 1">
 
       <div class="checkbox" ng-show="template.value == 1 && template.backend_access">

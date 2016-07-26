@@ -28,6 +28,7 @@ class UsersController extends ContentController
      * @return JsonResponse The response object.
      *
      * @Security("has_role('USER_DELETE')")
+     * @CheckModuleAccess(module="USER_MANAGER")
      */
     public function deleteAction($id)
     {
@@ -48,7 +49,7 @@ class UsersController extends ContentController
      * @param  Request      $request     The request object.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request)
+    public function deleteSelectedAction(Request $request)
     {
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
@@ -111,92 +112,40 @@ class UsersController extends ContentController
      *
      * @param  Request      $request The request object.
      * @return JsonResponse          The response object.
+     *
+     * @Security("has_role('USER_ADMIN') and has_role('USER_UPDATE')")
      */
-    public function batchSetEnabledAction(Request $request)
+    public function patchSelectedAction(Request $request)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
+        $params = $request->request->all();
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $oql  = sprintf('id in [%s]', implode(',', $params[ 'ids' ]));
 
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
+        unset($params['ids']);
+
+        $data    = $em->getConverter('User')->objectify($params);
+        $users   = $em->getRepository('User')->findBy($oql);
+        $updated = 0;
+
+        foreach ($users as $user) {
+            try {
+                $user->merge($data);
+                $em->persist($user);
+                $updated++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error', 409);
             }
-            $roles = rtrim($roles, ',');
+        }
 
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s users saved successfully'), $updated),
+                'success'
             );
         }
 
-        $enabled = $request->request->getDigits('value');
-        $ids     = $request->request->get('ids');
-        $errors  = array();
-        $success = array();
-        $updated = array();
-
-        // Get max users from settings
-        $maxUsers = s::get('max_users');
-        // Check total activated users before creating new one
-        if ($maxUsers > 0 && $enabled) {
-            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
-            if ($createEnabled < count($ids)) {
-                return new JsonResponse(
-                    array(
-                        'messages'  => array(
-                            array(
-                                'id'      => '500',
-                                'type'    => 'error',
-                                'message' => _(
-                                    'Unable to change user backend access. You have reach the maximum allowed'
-                                ),
-                            )
-                        )
-                    )
-                );
-            }
-        }
-
-        foreach ($ids as $id) {
-            if (!is_null($id)) {
-                $user = new \User($id);
-                if ($enabled) {
-                    $user->activateUser($id);
-                } else {
-                    $user->deactivateUser($id);
-                }
-
-                $updated[] = $id;
-            } else {
-                $errors[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                    'type'    => 'error'
-                );
-            }
-        }
-
-        if (count($updated) > 0) {
-            $success[] = array(
-                'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
-                'type'    => 'success'
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'activated' => $enabled,
-                'messages'  => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -232,7 +181,7 @@ class UsersController extends ContentController
         return new JsonResponse([
             'results' => $users,
             'total'   => $total,
-            //'extra'   => $this->getExtraData($users),
+            'extra'   => $this->getExtraData(),
         ]);
     }
 
@@ -242,7 +191,7 @@ class UsersController extends ContentController
      * @param  Request      $request The request object.
      * @return JsonResponse          The response object.
      */
-    public function setEnabledAction(Request $request, $id)
+    public function patchAction(Request $request, $id)
     {
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
@@ -328,37 +277,6 @@ class UsersController extends ContentController
     }
 
     /**
-     * Checks if the current user has roles to execute the required action.
-     *
-     * @param  string  $action      Required action.
-     * @param  string  $contentType Content type name.
-     * @return boolean              [description]
-     */
-    protected function hasRoles($action, $contentType = null)
-    {
-        $required = array();
-        $roles    = $this->getUser()->getRoles();
-
-        $required[] = 'USER_ADMIN';
-
-        switch ($action) {
-            case 'batchDeleteAction':
-            case 'deleteAction':
-                $required[] = 'USER_DELETE';
-                break;
-            case 'batchSetContentStatusAction':
-            case 'setContentStatusAction':
-                $required[] = 'USER_AVAILABLE';
-                break;
-        }
-
-        return array(
-            empty(array_diff($required, $roles)),
-            array_diff($required, $roles)
-        );
-    }
-
-    /**
      * Loads extra data related to the given users.
      *
      * @param  array $contents Array of users.
@@ -434,7 +352,7 @@ class UsersController extends ContentController
      * @param  Request  $request The request object.
      * @return Response          The response object.
      */
-    public function downloadListAction(Request $request)
+    public function exportAction(Request $request)
     {
         $users = $this->get('user_repository')->findBy('', null);
 
@@ -445,8 +363,8 @@ class UsersController extends ContentController
         $output = implode(",", $csvHeaders);
 
         foreach ($users as &$user) {
-            if (array_key_exists('gender', $user->meta)) {
-                switch ($user->meta['gender']) {
+            if (!empty($user->gender)) {
+                switch ($user->gender) {
                     case 'male':
                         $gender = _('Male');
                         break;
@@ -468,9 +386,9 @@ class UsersController extends ContentController
                 $user->activated,
                 $user->email,
                 $gender,
-                array_key_exists('birth_date', $user->meta) ? $user->meta['birth_date'] : '',
-                array_key_exists('postal_code', $user->meta) ? $user->meta['postal_code'] : '',
-                array_key_exists('register_date', $user->meta) ? $user->meta['register_date'] : '',
+                !empty($user->birth_date) ? $user->birth_date : '',
+                !empty($user->postal_code) ? $user->postal_code : '',
+                !empty($user->register_date) ? $user->register_date : '',
             ];
             $output .= "\n".implode(",", $row);
         }
@@ -488,5 +406,36 @@ class UsersController extends ContentController
         $response->headers->set('Expires', '0');
 
         return $response;
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function getExtraData()
+    {
+        $extra = [
+            'languages' => array_merge(
+                [ 'default' => _('Default system language') ],
+                $this->get('core.locale')->getLocales()
+            )
+        ];
+
+        $repository = $this->get('orm.manager')->getRepository('UserGroup');
+        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
+
+        $userGroups = $repository->findBy();
+
+        $extra['user_groups'] = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $userGroups);
+
+        $extra['user_groups'] = array_merge(
+            [[ 'pk_user_group' => null, 'name' => _('All') ]],
+            $extra['user_groups']
+        );
+
+        return $extra;
     }
 }
