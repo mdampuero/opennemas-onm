@@ -9,7 +9,7 @@ function smarty_function_image_tag($params, &$smarty)
     $output = "";
 
     if (empty($params['src'])) {
-        trigger_error("[plugin] image_tag parameter 'src' cannot be empty", E_USER_NOTICE);
+        // trigger_error("[plugin] image_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
