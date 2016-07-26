@@ -6,22 +6,25 @@ entity:
         - type
         - username
     properties:
-        activated:      boolean
-        avatar_img_id:  integer
-        bio:            string
-        deposit:        float
-        email:          string
-        fk_user_group:  array
-        id:             integer
-        name:           string
-        password:       string
-        sessionexpire:  integer
-        terms_accepted: datetime
-        token:          string
-        type:           integer
-        url:            string
-        user_language:  string
-        username:       string
+        activated:          boolean
+        avatar_img_id:      integer
+        bio:                string
+        bio_description:    string
+        categories:         array
+        deposit:            float
+        email:              string
+        fk_user_group:      array
+        id:                 integer
+        name:               string
+        password:           string
+        paywall_time_limit: datetime
+        sessionexpire:      integer
+        terms_accepted:     datetime
+        token:              string
+        type:               integer
+        url:                string
+        user_language:      string
+        username:           string
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
