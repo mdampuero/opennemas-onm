@@ -155,7 +155,7 @@ class ErrorController extends Controller
                     $errorMessage = $error->getMessage();
                 }
 
-                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()."\n".json_encode($error->getTrace()));
+                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()." ".json_encode($error->getTrace()));
 
                 $content = $this->renderView(
                     'error/404.tpl',
