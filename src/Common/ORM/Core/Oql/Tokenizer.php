@@ -40,7 +40,7 @@ class Tokenizer
         'O_NOT_EQUALS'   => '/\s*!=\s*/',
         'O_NOT_IN'       => '/\s*!in\s*/',
         'O_NOT_LIKE'     => '/\s*!~\s*/',
-        'O_NOT_REGEXP'   => '/\s*!in\s*/',
+        'O_NOT_REGEXP'   => '/\s*!^\s*/',
         'O_EQUALS'       => '/\s*=\s*/',
         'O_GREAT'        => '/\s*>\s*/',
         'O_IN'           => '/\s*in\s*/',
