@@ -28,19 +28,12 @@ select.form-control {
   border-color: @error-color;
 }
 
-.input-group-transparent {
-  input {
-    border-right: 0;
-  }
-
-  .input-group-addon-transparent {
-    background: none;
-  }
-
-  input:focus + .input-group-addon-transparent {
-    background: #f4f5f7;
-    border-color: #f4f5f7;
-  }
+.input-group-status {
+  padding: 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
 }
 
 .input-with-icon {
