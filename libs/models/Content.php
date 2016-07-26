@@ -488,7 +488,7 @@ class Content
             'title'               => $data['title'],
             'description'         => (empty($data['description']) && !isset($data['description'])) ? '' :$data['description'],
             'body'                => (!array_key_exists('body', $data))? '': $data['body'],
-            'metadata'            => $data['metadata'],
+            'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
             'starttime'           => $data['starttime'],
             'endtime'             => (empty($data['endtime']))? null: $data['endtime'],
             'created'             => (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'],
