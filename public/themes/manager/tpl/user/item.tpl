@@ -108,16 +108,16 @@
             <div class="form-group" ng-class="{ 'has-error': userForm.password.$valid && user.password && user.password !== rpassword }">
               <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
               <div class="controls">
-                <div class="input-group input-group-transparent">
+                <div class="input-group">
                   <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
                     <i class="fa fa-lock" ng-class="{ 'fa-unlock': rpasswordUnlocked }"></i>
                   </span>
                   <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" maxlength="20" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
-                  <span class="input-group-addon input-group-addon-transparent">
-                    <span class="fa fa-check text-success" ng-if="userForm.password.$dirty && user.password === rpassword"></span>
-                    <span class="fa fa-times text-error" ng-if="userForm.password.$valid && user.password && user.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
-                  </span>
                 </div>
+                <span class="input-group-status">
+                  <span class="fa fa-check text-success" ng-if="userForm.password.$dirty && user.password === rpassword"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.password.$valid && user.password && user.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
+                </span>
               </div>
             </div>
           </div>
