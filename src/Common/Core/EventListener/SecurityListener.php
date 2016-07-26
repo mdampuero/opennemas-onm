@@ -109,11 +109,11 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function getCategories(UserInterface $user)
     {
-        if (empty($user->category_ids)) {
+        if (empty($user->categories)) {
             return [];
         }
 
-        $oql = sprintf('id in [%s]', implode($user->category_ids));
+        $oql = sprintf('id in [%s]', implode($user->categories));
 
         $categories = $this->container->get('orm.manager')
             ->getRepository('Category')
