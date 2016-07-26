@@ -21,37 +21,44 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     /**
      * Flag to enable/disable forced notifications.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     $scope.force = true;
 
     /**
      * Array of forced notifications
      *
-     * @type Array
+     * @type {Array}
      */
     $scope.forced = [];
 
     /**
      * The current language.
      *
-     * @type String
+     * @type {String}
      */
     $scope.lang = 'en';
 
     /**
      * The routing service.
      *
-     * @type Object
+     * @type {Object}
      */
     $scope.routing = routing;
 
     /**
      * The current sidebar.
      *
-     * @type Object
+     * @type {Object}
      */
     $scope.sidebar = Sidebar.init();
+
+    /**
+     * The available elements per page
+     *
+     * @type {Array}
+     */
+    $scope.views = [ 10, 25, 50, 100 ];
 
     /**
      * @function disableForced
