@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Common\ORM\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -22,6 +23,72 @@ use Onm\Settings as s;
 
 class AclUserController extends Controller
 {
+    /**
+     * Shows the form to create a new user.
+     */
+    public function createAction()
+    {
+        $em = $this->get('orm.manager');
+
+        $userGroups = $em->getRepository('UserGroup')->findBy();
+        $categories = $this->get('category_repository')->findBy(
+            'internal_category <> 0',
+            'name ASC'
+        );
+
+        $extra['user_groups'] = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        $extra['categories'] = array_map(function ($a) {
+            return [ 'id' => $a->id, 'title' => $a->title ];
+        }, $categories);
+
+        array_unshift($extra['categories'], [ 'id' => 0, 'title' => _('Frontpage') ]);
+
+        // Get available languages
+        $languages = array_merge(
+            [ 'default' => _('Default system language') ],
+            $this->container->get('core.locale')->getLocales()
+        );
+
+        // Get minimum password level
+        $defaultLevel  = $this->container->getParameter('password_min_level');
+        $instanceLevel = s::get('pass_level');
+        $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
+
+
+        $id = $this->get('core.instance')->getClient();
+
+        if (!empty($id)) {
+            try {
+                $extra['client'] = $em->getRepository('Client')
+                    ->find($id)->getData();
+            } catch (\Exception $e) {
+            }
+        }
+
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
+
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'extra'          => $extra,
+                'user_groups'    => $userGroups,
+                'languages'      => $languages,
+                'categories'     => $categories,
+                'min_pass_level' => $minPassLevel,
+                'gender_options' => [
+                    ''       => _('Undefined'),
+                    'male'   => _('Male'),
+                    'female' => _('Female'),
+                    'other'  => _('Other')
+                ],
+            )
+        );
+    }
+
     /**
      * Show a paginated list of backend users.
      *
@@ -295,137 +362,59 @@ class AclUserController extends Controller
     }
 
     /**
-     * Creates an user give some information
+     * Creates an user give some information.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("has_role('USER_CREATE')")
-     *
      * @CheckModuleAccess(module="USER_MANAGER")
-     **/
-    public function createAction(Request $request)
+     */
+    public function saveAction(Request $request)
     {
-        $user = new \User();
+        $data      = $request->request->all();
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
 
-        // Get max users from settings
-        $maxUsers = s::get('max_users');
-        // Check total allowed users before creating new one
-        $createEnabled = true;
-        if ($maxUsers > 0) {
-            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+        // Encode password if present
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = md5($data['password']);
         }
 
-        if (!$createEnabled) {
-            return $this->redirect($this->generateUrl('admin_acl_user'));
-        }
+        $user = new User($converter->objectify($data));
 
-        if ($request->getMethod() == 'POST') {
-            $data = array(
-                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
-                'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-                'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-                'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
-                'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-                'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
-                'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'id_user_group'   => $request->request->get('id_user_group', array()),
-                'ids_category'    => $request->request->get('ids_category', array()),
-                'activated'       => (int) $request->request->filter('activated', 0, FILTER_SANITIZE_STRING),
-                'type'            => (int) $request->request->filter('type', 1, FILTER_SANITIZE_STRING),
-                'deposit'         => 0,
-                'token'           => null,
-            );
-
+        try {
             $file = $request->files->get('avatar');
 
-            try {
-                // Upload user avatar if exists
-                if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
-                    $data['avatar_img_id'] = $photoId;
-                } else {
-                    $data['avatar_img_id'] = 0;
-                }
-
-                if ($user->create($data)) {
-                    // Set all usermeta information (twitter, rss, language)
-                    $meta = $request->request->get('meta');
-                    foreach ($meta as $key => $value) {
-                        $user->setMeta(array($key => $value));
-                    }
-
-                    // Set usermeta paywall time limit
-                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                    if (!empty($paywallTimeLimit)) {
-                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                        $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                    }
-
-                    $request->getSession()->getFlashBag()->add(
-                        'success',
-                        _('User created successfully.')
-                    );
-
-                    return $this->redirect(
-                        $this->generateUrl(
-                            'admin_acl_user_show',
-                            array('id' => $user->id)
-                        )
-                    );
-                } else {
-                    $request->getSession()->getFlashBag()->add(
-                        'error',
-                        _('Unable to create the user with that information')
-                    );
-                }
-            } catch (\Exception $e) {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    $e->getMessage()
-                );
+            // Upload user avatar if exists
+            if (!empty($file)) {
+                $photoId = $user->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+                $user->avatar_img_id = $photoId;
             }
+
+            $em->persist($user);
+
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                _('User created successfully.')
+            );
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_acl_user_show',
+                    array('id' => $user->id)
+                )
+            );
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                $e->getMessage()
+            );
         }
 
-        $userGroup = new \UserGroup();
-
-        // Get all categories
-        $allcategorys = $this->get('category_repository')->findBy(
-            'internal_category <> 0',
-            'name ASC'
-        );
-
-        $languages = $this->container->getParameter('available_languages');
-        $languages = array_merge(array('default' => _('Default system language')), $languages);
-
-        $id = $this->get('core.instance')->getClient();
-
-        if (!empty($id)) {
-            try {
-                $extra['client'] = $this->get('orm.manager')
-                    ->getRepository('manager.client', 'Database')
-                    ->find($id)->getData();
-            } catch (\Exception $e) {
-            }
-        }
-
-        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
-        $extra['taxes']     = $this->get('vat')->getTaxes();
-
-        return $this->render(
-            'acl/user/new.tpl',
-            array(
-                'extra'                     => $extra,
-                'user'                      => $user,
-                'user_groups'               => $userGroup->find(),
-                'languages'                 => $languages,
-                'content_categories'        => $allcategorys,
-                'content_categories_select' => $user->getAccessCategoryIds(),
-            )
+        return $this->redirect(
+            $this->generateUrl('admin_acl_user_show', [ 'id' => $user->id ])
         );
     }
 

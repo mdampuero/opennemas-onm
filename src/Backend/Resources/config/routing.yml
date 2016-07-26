@@ -897,6 +897,10 @@ admin_acl_user_create:
     path:     /acl/users/create
     defaults: { _controller  : BackendBundle:AclUser:create }
 
+admin_acl_user_save:
+    path:     /acl/users/save
+    defaults: { _controller  : BackendBundle:AclUser:save }
+
 admin_acl_user_show:
     path:     /acl/users/{id}/show
     defaults: { _controller  : BackendBundle:AclUser:show }
