@@ -128,7 +128,7 @@ class SqlTranslator
                 $this->sqls[] = $sql;
             }
 
-            if (!empty($param)) {
+            if (!is_null($param)) {
                 $this->params[] = $param;
             }
 
