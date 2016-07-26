@@ -50,6 +50,7 @@ class ErrorController extends Controller
 
         $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
 
+        $this->view = $this->get('core.template.admin');
         $this->view->assign('preview', $preview);
 
         switch ($exceptionName) {
