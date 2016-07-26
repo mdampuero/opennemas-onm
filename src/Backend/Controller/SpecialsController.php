@@ -194,6 +194,7 @@ class SpecialsController extends Controller
         }
 
         $contents = $special->getContents($id);
+
         if (!empty($special->img1)) {
             $photo1 = new \Photo($special->img1);
             $this->view->assign('photo1', $photo1);
@@ -265,8 +266,8 @@ class SpecialsController extends Controller
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
+                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             );
 
             if ($special->update($data)) {
