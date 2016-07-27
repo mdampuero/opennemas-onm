@@ -16,7 +16,8 @@
       jQuery(document).ready(function($){
         // Password strength checker
         var strength = $('#password').passStrength({
-          userid: '#login'
+          baseStyle: 'input-group-status',
+          userid:    '#username',
         });
 
         // Password and confirm password match
@@ -26,14 +27,10 @@
           var password2 = $("#passwordconfirm").val();
 
           if(password1 == password2) {
-            $(".checker").html(
-              '<div class="alert-pass  alert-success"><strong>Valid</strong></div>'
-              );
+            $(".checker").html('<i class="fa fa-check text-success"></i>');
           }
           else {
-            $(".checker").html(
-              '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
-              );
+            $(".checker").html('<i class="fa fa-times text-danger"></i>');
           }
         }
 
@@ -209,7 +206,7 @@
                   </span>
                   <input class="form-control validate-password-confirm" data-password-equals="password" id="passwordconfirm" maxlength="20" minlength="6" type="password">
                 </div>
-                <span class="checker"></span>
+                <span class="input-group-status checker"></span>
               </div>
             </div>
           </div>
