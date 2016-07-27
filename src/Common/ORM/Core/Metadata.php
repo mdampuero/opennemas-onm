@@ -291,7 +291,10 @@ class Metadata extends DataObject implements Validable
         }
 
         if (array_key_exists($repository, $this->repositories)) {
-            return $this->repositories[$repository];
+            return array_merge(
+                [ 'name' => $repository ],
+                $this->repositories[$repository]
+            );
         }
 
         throw new InvalidRepositoryException($this->name, $repository);
