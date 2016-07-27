@@ -112,41 +112,6 @@ class Special extends Content
     }
 
     /**
-     * Creates an special from a data array and stores it in db
-     *
-     * @param array $data the data of the special
-     *
-     * @return bool true if the object was stored
-     */
-    public function create($data)
-    {
-        parent::create($data);
-
-        if (!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path'] = '';
-        }
-
-        try {
-            $rs = getService('dbal_connection')->insert(
-                "specials",
-                [
-                    'pk_special' => (int) $this->id,
-                    'subtitle'   => $data['subtitle'],
-                    'img1'       => (int) $data['img1'],
-                    'pdf_path'   => $data['pdf_path']
-                ]
-            );
-
-            $this->saveItems($data);
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Loads a special information given its special id
      *
      * @param int $id the special id
@@ -156,7 +121,9 @@ class Special extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -168,14 +135,13 @@ class Special extends Content
             if (!$rs) {
                 return false;
             }
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -197,6 +163,46 @@ class Special extends Content
     }
 
     /**
+     * Creates an special from a data array and stores it in db
+     *
+     * @param array $data the data of the special
+     *
+     * @return bool true if the object was stored
+     */
+    public function create($data)
+    {
+        try {
+            if (parent::create($data)) {
+                return false;
+            }
+
+            $data['id'] = $this->id;
+
+            if (!array_key_exists('pdf_path', $data)) {
+                $data['pdf_path'] = '';
+            }
+
+            getService('dbal_connection')->insert(
+                'specials',
+                [
+                    'pk_special' => $this->id,
+                    'subtitle'   => $data['subtitle'],
+                    'img1'       => (int) $data['img1'],
+                    'pdf_path'   => $data['pdf_path']
+                ]
+            );
+
+            $this->saveItems($data);
+            $this->read($this->id);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error on Special::create: '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Updates an special from a data array
      *
      * @param array $data the data of the special
@@ -205,28 +211,32 @@ class Special extends Content
      */
     public function update($data)
     {
-        parent::update($data);
-
-        if (!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path'] = '';
-        }
-
         try {
+            parent::update($data);
+
+            if (!array_key_exists('pdf_path', $data)) {
+                $data['pdf_path'] = '';
+            }
+
             $rs = getService('dbal_connection')->update(
-                "specials",
+                'specials',
                 [
-                    'subtitle'   => $data['subtitle'],
-                    'img1'       => (int) $data['img1'],
-                    'pdf_path'   => $data['pdf_path']
+                    'subtitle' => $data['subtitle'],
+                    'img1' => (int) $data['img1'],
+                    'pdf_path' => $data['pdf_path'],
                 ],
-                [ 'pk_special' => (int) $data['id'] ]
+                [ 'pk_special' => intval($data['id']) ]
             );
+
+            if (!$rs) {
+                return false;
+            }
 
             $this->saveItems($data);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error on Special::update: '.$e->getMessage());
             return false;
         }
     }
@@ -255,17 +265,20 @@ class Special extends Content
                 return false;
             }
 
-            if (!$this->deleteAllContents($id)) {
+            $rs = getService('dbal_connection')->delete(
+                'special_contents',
+                [ 'fk_special' => intval($id) ]
+            );
+
+            if (!$rs) {
                 return false;
             }
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            error_log('Error on Special:'.$e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
