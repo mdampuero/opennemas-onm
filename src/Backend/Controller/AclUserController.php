@@ -9,17 +9,15 @@
  */
 namespace Backend\Controller;
 
-use Common\ORM\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
-use Onm\Security\Acl;
 use Backend\Annotation\CheckModuleAccess;
+use Common\ORM\Entity\User;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Intl\Intl;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AclUserController extends Controller
 {
@@ -54,7 +52,7 @@ class AclUserController extends Controller
 
         // Get minimum password level
         $defaultLevel  = $this->container->getParameter('password_min_level');
-        $instanceLevel = s::get('pass_level');
+        $instanceLevel = $this->get('setting_repository')->get('pass_level');
         $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
 
 
@@ -90,6 +88,45 @@ class AclUserController extends Controller
     }
 
     /**
+     * Disconnects from social account accounts.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The user's id.
+     *
+     * @return Response The response object.
+     */
+    public function disconnectAction(Request $request, $id, $resource)
+    {
+        $em   = $this->get('orm.manager');
+        $user = $this->getRepository('User')->find($id);
+
+        if (!$user) {
+            return new Response();
+        }
+
+        unset($user->{$resource . '_id'});
+        unset($user->{$resource . '_id'});
+        unset($user->{$resource . '_email'});
+        unset($user->{$resource . '_token'});
+        unset($user->{$resource . '_realname'});
+
+        $em->persist($user);
+
+        $this->dispatchEvent('social.connect', array('user' => $user));
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_acl_user_social',
+                [
+                    'id'       => $id,
+                    'resource' => $resource,
+                    'style'    => $request->get('style')
+                ]
+            )
+        );
+    }
+
+    /**
      * Show a paginated list of backend users.
      *
      * @return Response The response object.
@@ -103,186 +140,151 @@ class AclUserController extends Controller
     }
 
     /**
-     * Shows the user information given its id
-     *
-     * This action is not mapped with CheckModuleAccess annotation because it's
-     * used in edit profile action that should be available to all users with
-     * or without having users module activated.
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function showAction(Request $request, $id)
-    {
-        $request->getSession()->set(
-            '_security.backend.target_path',
-            $this->generateUrl('admin_login_callback')
-        );
-
-        $em = $this->get('orm.manager');
-
-        if ($id === 'me') {
-            $id = $this->getUser()->id;
-        }
-
-        // Check if the user is the same as the one that we want edit or
-        // if we have permissions for editing other user information.
-        if ($this->getUser()->id != $id && Acl::check('USER_UPDATE') === false) {
-            throw new AccessDeniedException();
-        }
-
-        $user = $em->getRepository('User')->find($id);
-        $user->eraseCredentials();
-
-        // Fetch user photo if exists
-        if (!empty($user->avatar_img_id)) {
-            $user->photo = $this->get('entity_repository')
-                ->find('Photo', $user->avatar_img_id);
-        }
-
-        $userGroups = $em->getRepository('UserGroup')->findBy();
-        $categories = $this->get('category_repository')->findBy(
-            'internal_category <> 0',
-            'name ASC'
-        );
-
-        $extra['user_groups'] = array_map(function ($a) {
-            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
-        }, $userGroups);
-
-        $extra['categories'] = array_map(function ($a) {
-            return [ 'id' => $a->id, 'title' => $a->title ];
-        }, $categories);
-
-        array_unshift($extra['categories'], [ 'id' => 0, 'title' => _('Frontpage') ]);
-
-        $selected = [
-            'categories' => array_filter($extra['categories'], function ($a) use ($user) {
-                return in_array($a['id'], $user->categories);
-            }),
-            'user_groups' => array_filter($extra['user_groups'], function ($a) use ($user) {
-                return in_array($a['id'], $user->fk_user_group);
-            }),
-        ];
-
-        // Get available languages
-        $languages = array_merge(
-            [ 'default' => _('Default system language') ],
-            $this->container->get('core.locale')->getLocales()
-        );
-
-        // Get minimum password level
-        $defaultLevel  = $this->container->getParameter('password_min_level');
-        $instanceLevel = s::get('pass_level');
-        $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
-
-
-        $id = $this->get('core.instance')->getClient();
-
-        if (!empty($id)) {
-            try {
-                $extra['client'] = $em->getRepository('Client')
-                    ->find($id)->getData();
-            } catch (\Exception $e) {
-            }
-        }
-
-        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
-        $extra['taxes']     = $this->get('vat')->getTaxes();
-
-        return $this->render(
-            'acl/user/new.tpl',
-            array(
-                'extra'          => $extra,
-                'user'           => $user,
-                'user_groups'    => $userGroups,
-                'languages'      => $languages,
-                'categories'     => $categories,
-                'selected'       => $selected,
-                'min_pass_level' => $minPassLevel,
-                'gender_options'            => [
-                    ''       => _('Undefined'),
-                    'male'   => _('Male'),
-                    'female' => _('Female'),
-                    'other'  => _('Other')
-                ],
-            )
-        );
-    }
-
-    /**
-     * Handles the update action for a user given its id.
-     *
-     * This action is not mapped with CheckModuleAccess annotation because it's
-     * used in edit profile action that should be available to all users with
-     * or without having users module activated.
+     * Shows the form for recovering the pass of a user and sends the mail to
+     * the user.
      *
      * @param Request $request The request object.
      *
      * @return Response The response object.
      */
-    public function updateAction(Request $request, $id)
+    public function recoverPasswordAction(Request $request)
     {
-        if ($id != $this->getUser()->id
-            && !$this->get('core.security')->isGranted('USER_UPDATE')
-        ) {
-            throw new AccessDeniedException();
-        }
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
+        $this->view->assign('current_language', \Application::$language);
 
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("The data send by the user is not valid.")
-            );
+        if ('POST' != $request->getMethod()) {
+            return $this->render('login/recover_pass.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+            $token = '';
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
 
-            return $this->redirect(
-                $this->generateUrl('admin_acl_user_show', [ 'id' => $userId ])
-            );
-        }
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
 
-        $data      = $request->request->all();
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('User');
-        $user      = $em->getRepository('User')->find($id);
+                $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
 
-        // Encode password if present
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = md5($data['password']);
-        }
+                $this->view->setCaching(0);
 
-        // TODO: Remove when data supports empty values (when using SPA)
-        $user->categories    = [];
-        $user->fk_user_group = [];
+                $mailSubject = sprintf(
+                    _('Password reminder for %s'),
+                    $this->get('setting_repository')->get('site_title')
+                );
 
-        $user->merge($converter->objectify($data));
+                $mailBody = $this->renderView(
+                    'login/emails/recoverpassword.tpl',
+                    array(
+                        'user' => $user,
+                        'url'  => $url,
+                    )
+                );
 
-        try {
-            $file = $request->files->get('avatar');
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom([
+                        'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
+                    ]);
 
-            if (!empty($file)) {
-                $user->avatar_img_id =
-                    $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('application.log')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to send your recover password email. Please try it later.')
+                    );
+                }
+            } else {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find an user with that email.')
+                );
             }
 
-            $em->persist($user);
+            // Display form
+            return $this->render('login/recover_pass.tpl', array('token' => $token));
+        }
+    }
 
-            // Clear caches
-            $this->dispatchEvent('user.update', array('user' => $user));
+    /**
+     * Regenerates the pass for a user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function regeneratePasswordAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
+        $this->view->assign('current_language', \Application::$language);
 
-            // Check if is an author and delete caches
-            if (in_array('3', $user->fk_user_group)) {
-                $this->dispatchEvent('author.update', array('id' => $userId));
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+
+        $user = new \User();
+        $user = $user->findByToken($token);
+
+        if ('POST' !== $request->getMethod()) {
+            if (empty($user->id)) {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
+                );
+
+                $this->view->assign('userNotValid', true);
+                return $this->redirect($this->generateUrl('admin_login'));
             }
 
-            $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
-        } catch (\Exception $e) {
-            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
+            $this->view->assign('user', $user);
+        } else {
+            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
+
+            if ($password == $passwordVerify && !empty($password) && !is_null($user)) {
+                $user->updateUserPassword($user->id, $password);
+                $user->updateUserToken($user->id, null);
+
+                $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
+
+                return $this->redirect($this->generateUrl('admin_login'));
+            } elseif ($password != $passwordVerify) {
+                $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
+            } else {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
+                );
+
+                return $this->redirect($this->generateUrl('admin_login'));
+            }
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_acl_user_show', array('id' => $userId))
-        );
+        return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
     }
 
     /**
@@ -346,153 +348,115 @@ class AclUserController extends Controller
     }
 
     /**
-     * Shows the form for recovering the pass of a user and
-     * sends the mail to the user
+     * Shows the user information given its id
      *
-     * @param Request $request the request object
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
      *
-     * @return Response the response object
-     **/
-    public function recoverPasswordAction(Request $request)
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function showAction($id)
     {
-        // Setup view
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
-        $this->view->assign('current_language', \Application::$language);
+        $em = $this->get('orm.manager');
 
-        if ('POST' != $request->getMethod()) {
-            return $this->render('login/recover_pass.tpl');
-        } else {
-            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-            $token = '';
-            // Get user by email
-            $user = new \User();
-            $user->findByEmail($email);
-
-            // If e-mail exists in DB
-            if (!is_null($user->id)) {
-                // Generate and update user with new token
-                $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($user->id, $token);
-
-                $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
-
-                $this->view->setCaching(0);
-
-                $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
-                $mailBody = $this->renderView(
-                    'login/emails/recoverpassword.tpl',
-                    array(
-                        'user' => $user,
-                        'url'  => $url,
-                    )
-                );
-
-                //  Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($user->email)
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-                try {
-                    $mailer = $this->get('mailer');
-                    $mailer->send($message);
-
-                    $this->view->assign(
-                        array(
-                            'mailSent' => true,
-                            'user' => $user
-                        )
-                    );
-                } catch (\Exception $e) {
-                    // Log this error
-                    $this->get('application.log')->notice(
-                        "Unable to send the recover password email for the "
-                        ."user {$user->id}: ".$e->getMessage()
-                    );
-
-                    $request->getSession()->getFlashBag()->add(
-                        'error',
-                        _('Unable to send your recover password email. Please try it later.')
-                    );
-                }
-            } else {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to find an user with that email.')
-                );
-            }
-
-            // Display form
-            return $this->render('login/recover_pass.tpl', array('token' => $token));
+        if ($id === 'me') {
+            $id = $this->getUser()->id;
         }
-    }
 
-    /**
-     * Regenerates the pass for a user
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function regeneratePasswordAction(Request $request)
-    {
-        // Setup view
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
-        $this->view->assign('current_language', \Application::$language);
+        if ($this->getUser()->id != $id
+            && $this->get('core.security')->isGranted('USER_UPDATE')
+        ) {
+            throw new AccessDeniedException();
+        }
 
-        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+        $user = $em->getRepository('User')->find($id);
+        $user->eraseCredentials();
 
-        $user = new \User();
-        $user = $user->findByToken($token);
+        // Fetch user photo if exists
+        if (!empty($user->avatar_img_id)) {
+            $user->photo = $this->get('entity_repository')
+                ->find('Photo', $user->avatar_img_id);
+        }
 
-        if ('POST' !== $request->getMethod()) {
-            if (empty($user->id)) {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
-                );
+        $userGroups = $em->getRepository('UserGroup')->findBy();
+        $categories = $this->get('category_repository')->findBy(
+            'internal_category <> 0',
+            'name ASC'
+        );
 
-                $this->view->assign('userNotValid', true);
-                return $this->redirect($this->generateUrl('admin_login'));
-            }
+        $extra['user_groups'] = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
 
-            $this->view->assign('user', $user);
-        } else {
-            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
-            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
+        $extra['categories'] = array_map(function ($a) {
+            return [ 'id' => $a->id, 'title' => $a->title ];
+        }, $categories);
 
-            if ($password == $passwordVerify && !empty($password) && !is_null($user)) {
-                $user->updateUserPassword($user->id, $password);
-                $user->updateUserToken($user->id, null);
+        array_unshift($extra['categories'], [ 'id' => 0, 'title' => _('Frontpage') ]);
 
-                $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
+        $selected = [
+            'categories' => array_filter($extra['categories'], function ($a) use ($user) {
+                return in_array($a['id'], $user->categories);
+            }),
+            'user_groups' => array_filter($extra['user_groups'], function ($a) use ($user) {
+                return in_array($a['id'], $user->fk_user_group);
+            }),
+        ];
 
-                return $this->redirect($this->generateUrl('admin_login'));
-            } elseif ($password != $passwordVerify) {
-                $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
-            } else {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
-                );
+        // Get available languages
+        $languages = array_merge(
+            [ 'default' => _('Default system language') ],
+            $this->container->get('core.locale')->getLocales()
+        );
 
-                return $this->redirect($this->generateUrl('admin_login'));
+        // Get minimum password level
+        $defaultLevel  = $this->getParameter('password_min_level');
+        $instanceLevel = $this->get('setting_repository')->get('pass_level');
+        $minPassLevel  = $instanceLevel ? $instanceLevel : $defaultLevel;
+
+        $id = $this->get('core.instance')->getClient();
+
+        if (!empty($id)) {
+            try {
+                $extra['client'] = $em->getRepository('Client')
+                    ->find($id)->getData();
+            } catch (\Exception $e) {
             }
         }
 
-        return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
+
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'extra'          => $extra,
+                'user'           => $user,
+                'user_groups'    => $userGroups,
+                'languages'      => $languages,
+                'categories'     => $categories,
+                'selected'       => $selected,
+                'min_pass_level' => $minPassLevel,
+                'gender_options' => [
+                    ''       => _('Undefined'),
+                    'male'   => _('Male'),
+                    'female' => _('Female'),
+                    'other'  => _('Other')
+                ],
+            )
+        );
     }
 
     /**
      * Displays the facebook iframe to connect accounts.
      *
-     * @param  Request  $request The request object.
-     * @param  integer  $id      The user's id.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     * @param integer $id      The user's id.
+     *
+     * @return Response The response object.
      */
     public function socialAction(Request $request, $id, $resource)
     {
@@ -542,40 +506,65 @@ class AclUserController extends Controller
     }
 
     /**
-     * Disconnects from social account accounts.
+     * Handles the update action for a user given its id.
      *
-     * @param  Request  $request The request object.
-     * @param  integer  $id      The user's id.
-     * @return Response          The response object.
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
-    public function disconnectAction(Request $request, $id, $resource)
+    public function updateAction(Request $request, $id)
     {
-        $em   = $this->get('orm.manager');
-        $user = $this->getRepository('User')->find($id);
-
-        if (!$user) {
-            return new Response();
+        if ($id != $this->getUser()->id
+            && !$this->get('core.security')->isGranted('USER_UPDATE')
+        ) {
+            throw new AccessDeniedException();
         }
 
-        unset($user->{$resource . '_id'});
-        unset($user->{$resource . '_id'});
-        unset($user->{$resource . '_email'});
-        unset($user->{$resource . '_token'});
-        unset($user->{$resource . '_realname'});
+        $data      = $request->request->all();
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
+        $user      = $em->getRepository('User')->find($id);
 
-        $em->persist($user);
+        // Encode password if present
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = md5($data['password']);
+        }
 
-        $this->dispatchEvent('social.connect', array('user' => $user));
+        // TODO: Remove when data supports empty values (when using SPA)
+        $user->categories    = [];
+        $user->fk_user_group = [];
+
+        $user->merge($converter->objectify($data));
+
+        try {
+            $file = $request->files->get('avatar');
+
+            if (!empty($file)) {
+                $user->avatar_img_id =
+                    $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+            }
+
+            $em->persist($user);
+
+            // Clear caches
+            $this->dispatchEvent('user.update', array('user' => $user));
+
+            // Check if is an author and delete caches
+            if (in_array('3', $user->fk_user_group)) {
+                $this->dispatchEvent('author.update', array('id' => $userId));
+            }
+
+            $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
+        }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_acl_user_social',
-                [
-                    'id'       => $id,
-                    'resource' => $resource,
-                    'style'    => $request->get('style')
-                ]
-            )
+            $this->generateUrl('admin_acl_user_show', array('id' => $userId))
         );
     }
 
