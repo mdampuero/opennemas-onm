@@ -605,7 +605,7 @@ class Content
             'created'        => (!isset($data['created'])) ? $this->created: $data['created'],
             'description'    => (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
-            'favorite'       => (!isset($data['favorite'])) ? $this->favorite: $data['favorite'],
+            'favorite'       => (!isset($data['favorite'])) ? (int) $this->favorite: (int) $data['favorite'],
             'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? (int) $this->fk_author : (int) $data['fk_author'],
             'fk_publisher'   => (empty($data['content_status']))? null : (int) $_SESSION['userid'],
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
