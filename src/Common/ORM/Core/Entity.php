@@ -15,11 +15,18 @@ use Common\ORM\Core\Validation\Validable;
 class Entity extends DataObject implements Validable
 {
     /**
-     * The existence flag
+     * The entity origin.
+     *
+     * @var string
+     */
+    protected $origin;
+
+    /**
+     * The existence flag.
      *
      * @var boolean
      */
-    private $in_db = false;
+    private $stored = false;
 
     /**
      * Checks if the entity already exists in FreshBooks.
@@ -29,7 +36,7 @@ class Entity extends DataObject implements Validable
      */
     public function exists()
     {
-        return $this->in_db;
+        return $this->stored;
     }
 
     /**
@@ -57,6 +64,16 @@ class Entity extends DataObject implements Validable
     }
 
     /**
+     * Returns the entity origin.
+     *
+     * @return string The entity origin.
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
      * Merge the current entity data with the given data.
      */
     public function merge($data)
@@ -73,10 +90,20 @@ class Entity extends DataObject implements Validable
     }
 
     /**
-     * Sets the in_db flat to true.
+     * Sets the stored flat to true.
      */
     public function refresh()
     {
-        $this->in_db = true;
+        $this->stored = true;
+    }
+
+    /**
+     * Changes the origin for the user.
+     *
+     * @param string $origin The user's origin.
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
     }
 }

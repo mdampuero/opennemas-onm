@@ -35,6 +35,14 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Entity', $entity->getClassName());
     }
 
+    public function testGetOrigin()
+    {
+        $entity = new Entity();
+        $entity->setOrigin('thud');
+
+        $this->assertEquals('thud', $entity->getOrigin());
+    }
+
     public function testMerge()
     {
         $data   = [ 'foo' => 'bar' ];
