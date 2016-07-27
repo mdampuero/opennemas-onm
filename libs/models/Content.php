@@ -1632,7 +1632,7 @@ class Content
             );
 
             /* Notice log of this action */
-            getService('logger')->notice(
+            getService('application.log')->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                 .' action Content::dropFromHomePageOfCategory '.$categoryName
                 .' an '.$this->content_type_name.' Id '.$pkContent
@@ -1658,7 +1658,7 @@ class Content
                 [ 'pk_fk_content' => $this->id ]
             );
 
-            getService('logger')->notice(
+            getService('application.log')->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
                 .'action Drop from frontpage to content with ID id '.$this->id
             );

@@ -242,9 +242,10 @@ class Special extends Content
     {
         if ((int) $id <= 0) return false;
 
-        parent::remove($id);
-
         try {
+            if (!parent::remove($id)) {
+                return false;
+            }
             $rs = getService('dbal_connection')->delete(
                 "specials",
                 [ 'pk_special' => (int) $id ]

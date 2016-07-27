@@ -259,7 +259,7 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
+        $this->get('application.log')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
@@ -287,7 +287,7 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
+        $this->get('application.log')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
     private function reportInstanceCreationError($emails, $instance, $exception)

@@ -304,7 +304,7 @@ class Photo extends Content
                     );
                 }
             } catch (\RuntimeException $e) {
-                $logger = getService('logger');
+                $logger = getService('application.log');
                 $logger->notice(
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
@@ -321,7 +321,7 @@ class Photo extends Content
             );
 
             if (!$fileCopied) {
-                $logger = getService('logger');
+                $logger = getService('application.log');
                 $logger->notice(
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
@@ -337,7 +337,7 @@ class Photo extends Content
         $photoID = $photo->create($dataPhoto);
 
         if (!$photoID) {
-            $logger = getService('logger');
+            $logger = getService('application.log');
             $logger->notice(
                 sprintf(
                     'Unable to save the image object %s (destination: %s).',
