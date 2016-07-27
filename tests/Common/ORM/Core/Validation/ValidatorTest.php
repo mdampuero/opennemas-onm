@@ -34,7 +34,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     'foo'    => 'string',
                     'baz'    => [ 'string' ],
                     'garply' => 'enum',
-                    'corge'  => 'integer',
+                    'corge'  => 'entity::client',
                 ],
                 'enum' => [
                     'garply' => [ 'grault' ]
@@ -56,6 +56,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->methods['isBoolean']        = $reflection->getMethod('isBoolean');
         $this->methods['isDateinterval']   = $reflection->getMethod('isDateinterval');
         $this->methods['isDatetime']       = $reflection->getMethod('isDatetime');
+        $this->methods['isEntity']         = $reflection->getMethod('isEntity');
         $this->methods['isEnum']           = $reflection->getMethod('isEnum');
         $this->methods['isFloat']          = $reflection->getMethod('isFloat');
         $this->methods['isInteger']        = $reflection->getMethod('isInteger');
@@ -169,6 +170,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests isEntity with valid and invalid data.
+     */
+    public function testIsEntity()
+    {
+        $this->assertTrue($this->methods['isEntity']->invokeArgs($this->validator, [ new Entity([]) ]));
+        $this->assertFalse($this->methods['isEntity']->invokeArgs($this->validator, [ 'norf' ]));
+    }
+
+    /**
      * Tests isEnum with valid and invalid data.
      */
     public function testIsEnum()
@@ -235,6 +245,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'foo', 1 ]));
         $this->assertTrue($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'woomble', 'wumble' ]));
+        $this->assertFalse($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'foo', 1 ]));
     }
 
     /**

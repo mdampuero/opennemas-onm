@@ -38,7 +38,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                         'columns' => [
                             'id'       => [ 'type' => 'integer', 'options' => [ 'autoincrement' => true ] ],
                             'title'    => [ 'type' => 'string' ],
-                            'category' => [ 'type' => 'string' ]
+                            'category' => [ 'type' => 'string' ],
+                            'date'     => [ 'type' => 'datetimetz' ]
                         ],
                         'index' => [
                             [ 'name' => 'PRIMARY', 'primary' => true, 'columns' => [ 'id' ] ],
