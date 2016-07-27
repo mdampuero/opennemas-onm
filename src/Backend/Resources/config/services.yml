@@ -18,8 +18,3 @@ services:
         arguments: [ '@service_container' ]
     onm_password_encoder:
         class:     Backend\Security\OnmPasswordEncoder
-    check_module_access:
-        class:     Backend\EventListener\ModuleAnnotationListener
-        arguments: [ '@router', '@annotation_reader' ]
-        tags: 
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

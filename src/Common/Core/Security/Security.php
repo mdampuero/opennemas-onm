@@ -50,6 +50,61 @@ class Security
     }
 
     /**
+     * Checks if the category is allowed.
+     *
+     * @param string $category The category to check.
+     *
+     * @return boolean True if the category is allowed. False otherwise.
+     */
+    public function hasCategory($category)
+    {
+        if ($this->user->getOrigin() === 'manager') {
+            return true;
+        }
+
+        if (empty($this->categories)) {
+            return false;
+        }
+
+        return in_array($category, $this->categories);
+    }
+    /**
+     * Checks if the extension is enabled.
+     *
+     * @param string $uuid The extension to check.
+     *
+     * @return boolean True if the extension is enabled. False otherwise.
+     */
+    public function hasExtension($uuid)
+    {
+        if ($this->user->getOrigin() === 'manager') {
+            return true;
+        }
+
+        return in_array($uuid, $this->instance->activated_modules);
+    }
+
+    /**
+     * Checks if the permission is granted.
+     *
+     * @param string $permission The permission to check.
+     *
+     * @return boolean True if the permission is granted. False otherwise.
+     */
+    public function hasPermission($permission)
+    {
+        if ($this->user->getOrigin() === 'manager') {
+            return true;
+        }
+
+        if (empty($this->user->privileges)) {
+            return false;
+        }
+
+        return in_array($permission, $this->user->privileges);
+    }
+
+    /**
      * Checks if the current user has the role.
      *
      * @param string $role The role to check.
@@ -63,34 +118,6 @@ class Security
         }
 
         return in_array($role, $this->user->getRoles());
-    }
-
-    /**
-     * Checks if the extension is enabled.
-     *
-     * @param string $uuid The extension UUID.
-     *
-     * @return boolean True if the extension is enabled. False otherwise.
-     */
-    public function isExtensionEnabled($uuid)
-    {
-        return in_array($uuid, $this->instance->activated_modules);
-    }
-
-    /**
-     * Checks if the permission is granted.
-     *
-     * @param string $permission The permission to check.
-     *
-     * @return boolean True if the permission is granted. False otherwise.
-     */
-    public function isGranted($permission)
-    {
-        if (empty($this->user->privileges)) {
-            return false;
-        }
-
-        return in_array($permission, $this->user->privileges);
     }
 
     /**
