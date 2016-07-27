@@ -384,21 +384,12 @@ class ModuleController extends Controller
      */
     private function getExtraData()
     {
-        $modules = $this->get('orm.manager')
-            ->getRepository('Extension')
-            ->findBy();
-
-        $uuids = array_map(function ($a) {
-            return $a->uuid;
-        }, $modules);
-
         $params = [
             'languages' => [
                 'en' => _('English'),
                 'es' => _('Spanish'),
                 'gl' => _('Galician'),
-            ],
-            'uuids' => $uuids
+            ]
         ];
 
         return $params;
