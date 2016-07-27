@@ -62,7 +62,7 @@ class SecurityListener implements EventSubscriberInterface
 
         $instance    = $this->container->get('core.instance');
         $user        = $this->context->getToken()->getUser();
-        $permissions = $this->getPermissions($user);
+        $permissions = $user->getRoles();
         $categories  = $this->getCategories($user);
 
         $this->security->setInstance($instance);
