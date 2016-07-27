@@ -31,7 +31,6 @@
         $scope.instance = {
           domains: [],
           activated_modules: [],
-          changes_in_modules: [],
           support_plan: 'SUPPORT_NONE',
           settings: {
             TEMPLATE_USER: 'base'
@@ -461,7 +460,6 @@
 
         $scope.$on('$destroy', function() {
           $scope.instance = null;
-          $scope.changed_modules = null;
           $scope.template = null;
           $scope.selected = null;
         });

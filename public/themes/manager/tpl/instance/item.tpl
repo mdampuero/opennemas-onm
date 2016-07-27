@@ -272,14 +272,14 @@
                 <div class="checkbox check-default check-title">
                   <input id="checkbox-[% puuid %]" ng-model="selected.plan[puuid]" ng-change="togglePlan(puuid)" type="checkbox">
                   <label for="checkbox-[% puuid %]">
-                    <h5>[% template.extensions[map[puuid]] ? template.extensions[map[puuid]].name : '{t}Other{/t}' %]</h5>
+                    <h5>[% template.modules[map[puuid]] ? template.modules[map[puuid]].name : '{t}Other{/t}' %]</h5>
                   </label>
                 </div>
                 <div class="m-b-5" ng-repeat="muuid in modulesByPack[puuid]">
                   <div class="checkbox check-default">
                     <input id="checkbox-[% muuid %]" checklist-model="instance.activated_modules" checklist-value="muuid" type="checkbox">
                     <label for="checkbox-[% muuid %]">
-                      [% template.extensions[map[muuid]].name %]
+                      [% template.modules[map[muuid]].name %]
                     </label>
                   </div>
                 </div>
@@ -320,11 +320,19 @@
             </h4>
           </div>
           <div class="grid-body support-list">
+            <div class="form-group">
+              <div class="radio">
+                <input id="SUPPORT_NONE" ng-model="instance.support_plan" type="radio" value="SUPPORT_NONE">
+                <label for="SUPPORT_NONE">
+                  {t}No support{/t}
+                </label>
+              </div>
+            </div>
             <div class="form-group" ng-repeat="uuid in supportModules">
               <div class="radio" ng-init="initializeSupportPlan()">
                 <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
                 <label for="[% uuid %]">
-                  [% template.extensions[map[uuid]].name %]
+                  [% template.modules[map[uuid]].name %]
                 </label>
               </div>
             </div>

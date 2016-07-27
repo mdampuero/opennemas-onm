@@ -328,7 +328,7 @@ class InstanceController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = $request->request->get('settings');
         $data     = $em->getConverter('Instance')
-            ->objectify($request->request->get('core.instance'));
+            ->objectify($request->request->get('instance'));
 
         $instance = new Instance($data);
         $creator  = new InstanceCreator($em->getConnection('manager'));
@@ -446,7 +446,7 @@ class InstanceController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = $request->request->get('settings');
         $data     = $em->getConverter('Instance')
-            ->objectify($request->request->get('core.instance'));
+            ->objectify($request->request->get('instance'));
 
         $instance   = $em->getRepository('Instance')->find($id);
         $oldDomains = $instance->domains;
@@ -489,7 +489,7 @@ class InstanceController extends Controller
     {
         $lang    = $this->get('core.locale')->getLocaleShort();
         $modules = $this->get('orm.manager')->getRepository('extension')
-            ->findBy('type = "module" or type = "theme-addon" limit 10');
+            ->findBy('type = "module" or type = "theme-addon"');
         $themes = $this->get('orm.manager')->getRepository('theme')
             ->findBy();
 
