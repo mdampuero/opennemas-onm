@@ -367,7 +367,7 @@ class AclUserController extends Controller
         }
 
         if ($this->getUser()->id != $id
-            && $this->get('core.security')->isGranted('USER_UPDATE')
+            && !$this->get('core.security')->isGranted('USER_UPDATE')
         ) {
             throw new AccessDeniedException();
         }
@@ -555,7 +555,7 @@ class AclUserController extends Controller
 
             // Check if is an author and delete caches
             if (in_array('3', $user->fk_user_group)) {
-                $this->dispatchEvent('author.update', array('id' => $userId));
+                $this->dispatchEvent('author.update', array('id' => $user->id));
             }
 
             $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
@@ -564,7 +564,7 @@ class AclUserController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_acl_user_show', array('id' => $userId))
+            $this->generateUrl('admin_acl_user_show', array('id' => $user->id))
         );
     }
 
