@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,28 +32,25 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        $user = new \User($this->getUser()->id);
-        $user->getMeta();
+        $user = $this->get('orm.manager')->getRepository('User')
+            ->find($this->getUser()->id);
 
         // Get current time
         $currentTime = new \DateTime();
 
         // Get user orders
-        $order = new \Order();
+        $order      = new \Order();
         $userOrders = $order->find('user_id = ' . $user->id);
 
         // Fetch paywall settings
         $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
-        return $this->render(
-            'user/show.tpl',
-            array(
-                'user'             => $user,
-                'current_time'     => $currentTime,
-                'paywall_settings' => $paywallSettings,
-                'user_orders'      => $userOrders
-            )
-        );
+        return $this->render( 'user/show.tpl', [
+            'user'             => $user,
+            'current_time'     => $currentTime,
+            'paywall_settings' => $paywallSettings,
+            'user_orders'      => $userOrders
+        ]);
     }
 
     /**
@@ -200,47 +198,44 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        // Fetch user data and update
-        $user = $this->get('user_repository')->find($this->getUser()->id);
+        $data = $request->request->all();
 
-        // Get variables from the user FORM an set some manually
-        $data['id']              = $user->id;
-        $data['username']        = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
-        $data['name']            = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
-        $data['email']           = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-        $data['password']        = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
-        $data['passwordconfirm'] = $request->request->filter('password_verify', '', FILTER_SANITIZE_STRING);
-        $data['sessionexpire']   = $user->sessionexpire;
-        $data['type']            = $user->type;
-        $data['activated']       = $user->activated;
-        $data['bio']             = $user->bio;
-        $data['url']             = $user->url;
-        $data['avatar_img_id']   = $user->avatar_img_id;
-
-        if ($data['password'] != $data['passwordconfirm']) {
+        if ($data['password'] !== $data['password-verify']) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('Password and confirmation must be equal.')
             );
+
             return $this->redirect($this->generateUrl('frontend_user_show'));
         }
 
-        if (!is_null($user) && $user->id > 0) {
-            if ($user->update($data)) {
-                // Set usermeta information
-                $meta = $request->request->get('meta');
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-                // Clear caches
-                $this->dispatchEvent('author.update', array('id' => $data['id']));
+        // Remove to prevent password changes when empty
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
 
-                $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            } else {
-                $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
+        unset($data['password-verify']);
+
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
+
+        try {
+            $user = $em->getRepository('User')->find($this->getUser()->id);
+
+            if (!empty($data['password'])) {
+                $encoder = $this->get('security.password_encoder');
+                $data['password'] = $encoder->encodePassword($user, $data['password']);
             }
-        } else {
+
+            $user->merge($converter->objectify($data));
+            $em->persist($user);
+
+            $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
+            $this->dispatchEvent('author.update', array('id' => $user->id));
+        } catch (EntityNotFoundException $e) {
             $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
         }
 
         return $this->redirect($this->generateUrl('frontend_user_show'));
@@ -257,32 +252,28 @@ class UserController extends Controller
     {
         // When user confirms registration from email
         $token    = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $captcha  = '';
-        $user     = new \User();
-        $userData = $user->findByToken($token);
-        $sm       = $this->get('setting_repository');
+        $em       = $this->get('orm.manager');
+        $oql      = sprintf('token = "%s"', $token);
 
-        if ($userData) {
-            $user->activateUser($userData->id);
+        try {
+            $user = $em->getRepository('User')->findOneBy($oql);
 
-            if ($user->login($userData->username, $userData->password, $userData->token, $captcha)) {
-                // Increase security by regenerating the id
-                $request->getSession()->migrate();
+            $user->activated  = 1;
+            $user->last_login = new \DateTime('now');
+            $user->token      = null;
 
-                // Set last login date
-                $user->setLastLoginDate();
+            $em->persist($user);
 
-                // Set token to null
-                $user->updateUserToken($user->id, null);
+            $sm = $this->get('setting_repository');
+            $request->getSession()->migrate();
 
-                $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
-                $session = $request->getSession();
+            $token   = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
+            $session = $request->getSession();
 
-                $securityContext = $this->get('security.token_storage');
-                $securityContext->setToken($token);
-                $session->set('user', $user);
-                $session->set('_security_frontend', serialize($token));
-            }
+            $securityContext = $this->get('security.token_storage');
+            $securityContext->setToken($token);
+            $session->set('user', $user);
+            $session->set('_security_frontend', serialize($token));
 
             $session->getFlashBag()->add('success', _('Log in succesful.'));
 
@@ -306,7 +297,6 @@ class UserController extends Controller
                 ->setTo($user->email)
                 ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
-
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
@@ -321,9 +311,7 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
             }
-
-            return $this->redirect($this->generateUrl('frontend_frontpage'));
-        } else {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while creating your user account.')
@@ -331,6 +319,8 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
+
+        return $this->redirect($this->generateUrl('frontend_frontpage'));
     }
 
     /**
