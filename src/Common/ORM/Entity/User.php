@@ -160,7 +160,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isEnabled()
     {
-        return $this->isMaster() || $this->enabled;
+        return $this->isMaster() || $this->activated;
     }
 
     /**

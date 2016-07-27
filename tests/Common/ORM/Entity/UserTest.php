@@ -19,7 +19,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->user = new User([
-            'enabled'       => true,
+            'activated'     => true,
             'fk_user_group' => [],
             'username'      => 'waldo',
             'password'      => 'glorp',
@@ -140,7 +140,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->user->isEnabled());
 
-        $this->user->enabled = false;
+        $this->user->activated = false;
         $this->assertFalse($this->user->isEnabled());
     }
 
