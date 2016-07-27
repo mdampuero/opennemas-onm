@@ -72,7 +72,6 @@ class CategoriesController extends Controller
                     }
 
                     //Unserialize subcategory param field
-                    $category->params = unserialize($category->params);
                     $j++;
                 }
                 $subcategorys[$i]=$resul;
