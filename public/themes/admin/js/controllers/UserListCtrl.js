@@ -67,7 +67,6 @@
             resolve: {
               template: function() {
                 return { content: $scope.items.filter(function (e) {
-                  console.log(id, e.id);
                   return e.id == id;
                 })[0] };
               },
