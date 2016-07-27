@@ -181,8 +181,10 @@ class EntityManager
         $repository = $metadata->getRepository($repository);
 
         $class = '\\' . $repository['class'];
-        $args  = $this->parseArgs($repository['arguments']);
         $class = new \ReflectionClass($class);
+        $args  = $this->parseArgs($repository['arguments']);
+
+        array_unshift($args, $repository['name']);
 
         return $class->newInstanceArgs($args);
     }
