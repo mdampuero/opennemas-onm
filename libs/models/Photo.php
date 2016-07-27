@@ -374,7 +374,7 @@ class Photo extends Content
                     'author_name' => $data['author_name'],
                     'address'     => $data['address'],
                 ],
-                [ 'pk_column' => (int) $data['id'] ]
+                [ 'pk_photo' => (int) $data['id'] ]
             );
 
             return true;
