@@ -85,50 +85,6 @@ frontend_auth_logout:
     path: /logout
     defaults: { _controller: FrontendBundle:Authentication:logout }
 
-frontend_user_register:
-    path: /user/register
-    defaults: { _controller: FrontendBundle:User:register }
-
-frontend_user_show:
-    path: /user/me
-    defaults: { _controller: FrontendBundle:User:show }
-
-frontend_user_update:
-    path: /user/update
-    defaults: { _controller: FrontendBundle:User:update }
-
-frontend_user_recoverpass:
-    path: /user/recover-pass
-    defaults: { _controller: FrontendBundle:User:recoverPassword }
-
-frontend_user_resetpass:
-    path: /user/reset-pass/{token}
-    defaults: { _controller: FrontendBundle:User:regeneratePassword }
-
-frontend_user_activate:
-    path: /user/activate/{token}
-    defaults: { _controller: FrontendBundle:User:activate }
-
-frontend_user_menu:
-    path: /user/get/menu
-    defaults: { _controller: FrontendBundle:User:getUserMenu }
-
-frontend_author_frontpage:
-    path: /author/{slug}
-    defaults: { _controller: FrontendBundle:User:authorFrontpage }
-    requirements:
-        slug: '[A-Za-z\d-.]+'
-
-frontend_frontpage_authors:
-    path: /authors
-    defaults: { _controller: FrontendBundle:User:frontpageAuthors }
-
-frontend_external_author_frontpage:
-    path: /extauthor/{slug}
-    defaults: { _controller: FrontendBundle:User:extAuthorFrontpage }
-    requirements:
-        slug: '[A-Za-z\d-]+'
-
 # Common content management routes
 frontend_ad_get:
     path: /ads/get/{id}.{_format}
@@ -685,10 +641,18 @@ frontend_externalfrontpage_category:
     requirements:
         category : '[a-z0-9\-]+'
 
+frontend_author:
+    resource: '@FrontendBundle/Resources/config/routing/author.yml'
+    prefix: /
+
 frontend_framework:
     resource: '@FrontendBundle/Resources/config/routing/framework.yml'
     prefix: /
 
 frontend_static_page:
     resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
+    prefix: /
+
+frontend_user:
+    resource: '@FrontendBundle/Resources/config/routing/user.yml'
     prefix: /
