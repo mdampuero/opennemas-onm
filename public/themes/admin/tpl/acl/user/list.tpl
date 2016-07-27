@@ -195,7 +195,7 @@
                     <span ng-repeat="group in item.fk_user_group" class="visible-xs">{t}Group{/t}: [% extra.groups[group].name %][% $last ? '' : ', ' %]</span>
 
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% edit(item.id, 'admin_acl_user_show') %]" title="{t}Edit user{/t}">
+                      <a class="link" href="[% routing.generate('admin_acl_user_show', { id: item.id }) %]" title="{t}Edit user{/t}">
                         <i class="fa fa-pencil"></i> {t}Edit{/t}
                       </a>
                       <button class="link link-danger" ng-click="delete(item.id)" type="button">
