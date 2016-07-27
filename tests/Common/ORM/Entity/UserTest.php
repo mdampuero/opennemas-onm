@@ -60,15 +60,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testGetRoles()
     {
         $this->user->type = 1;
-        $this->assertEquals([ 'ROLE_FRONTEND' ], $this->user->getRoles());
+        $this->assertTrue(in_array('ROLE_FRONTEND', $this->user->getRoles()));
+        $this->assertFalse(in_array('ROLE_BACKEND', $this->user->getRoles()));
 
-        $this->user->eraseCredentials();
         $this->user->type = 0;
-        $this->user->fk_user_group = [ '4' ];
-
         $this->assertTrue(in_array('ROLE_BACKEND', $this->user->getRoles()));
-        $this->assertTrue(in_array('ROLE_MASTER', $this->user->getRoles()));
-        $this->assertTrue(in_array('ROLE_ADMIN', $this->user->getRoles()));
+        $this->assertFalse(in_array('ROLE_MANAGER', $this->user->getRoles()));
+
+        $this->user->setOrigin('manager');
+        $this->assertTrue(in_array('ROLE_MANAGER', $this->user->getRoles()));
     }
 
     /**

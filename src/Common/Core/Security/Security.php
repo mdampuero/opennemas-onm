@@ -23,7 +23,7 @@ class Security
      *
      * @var array
      */
-    protected $categories;
+    protected $categories = [];
 
     /**
      * The current instance.
@@ -31,13 +31,6 @@ class Security
      * @var Instance
      */
     protected $instance;
-
-    /**
-     * The list of permissions.
-     *
-     * @var array
-     */
-    protected $permissions;
 
     /**
      * The current authorized user.
@@ -57,14 +50,19 @@ class Security
     }
 
     /**
-     * Checks if the current user is an administrator.
+     * Checks if the current user has the role.
      *
-     * @return boolean True if the current user is an administrator. False
-     *                 otherwise.
+     * @param string $role The role to check.
+     *
+     * @return boolean True if the current user has the role. False otherwise.
      */
-    public function isAdmin()
+    public function hasRole($role)
     {
-        return $this->user->isAdmin();
+        if (empty($this->user->getRoles())) {
+            return false;
+        }
+
+        return in_array($role, $this->user->getRoles());
     }
 
     /**
@@ -80,17 +78,6 @@ class Security
     }
 
     /**
-     * Checks if the current user is a master user.
-     *
-     * @return boolean True if the current user is a administrator. False
-     *                 otherwise.
-     */
-    public function isMaster()
-    {
-        return $this->user->isMaster();
-    }
-
-    /**
      * Checks if the permission is granted.
      *
      * @param string $permission The permission to check.
@@ -99,7 +86,11 @@ class Security
      */
     public function isGranted($permission)
     {
-        return in_array($permission, $this->permissions);
+        if (empty($this->user->privileges)) {
+            return false;
+        }
+
+        return in_array($permission, $this->user->privileges);
     }
 
     /**
@@ -109,6 +100,10 @@ class Security
      */
     public function setCategories($categories)
     {
+        if (is_null($categories)) {
+            $categories = [];
+        }
+
         $this->categories = $categories;
     }
 
@@ -120,16 +115,6 @@ class Security
     public function setInstance(Instance $instance)
     {
         $this->instance = $instance;
-    }
-
-    /**
-     * Changes the current permissions for the user.
-     *
-     * @param array $permissions The list of permissions.
-     */
-    public function setPermissions($permissions)
-    {
-        $this->permissions = $permissions;
     }
 
     /**

@@ -53,24 +53,22 @@ class SecurityListener implements EventSubscriberInterface
         $uri = $event->getRequest()->getRequestUri();
 
         if (preg_match('@^/_.*@', $uri)
-            || !$this->context->getToken()
-            || !$this->context->getToken()->getUser()
+            || empty($this->context->getToken())
+            || empty($this->context->getToken()->getUser())
             || $this->context->getToken()->getUser() === 'anon.'
         ) {
             return;
         }
 
-        $instance    = $this->container->get('core.instance');
-        $user        = $this->context->getToken()->getUser();
-        $permissions = $user->getRoles();
-        $categories  = $this->getCategories($user);
+        $instance   = $this->container->get('core.instance');
+        $user       = $this->context->getToken()->getUser();
+        $categories = $this->getCategories($user);
 
         $this->security->setInstance($instance);
         $this->security->setUser($user);
-        $this->security->setPermissions($permissions);
         $this->security->setCategories($categories);
 
-        if ($user->isMaster() || $user->isEnabled()) {
+        if ($this->security->hasRole('ROLE_MANAGER') || $user->isEnabled()) {
             return;
         }
 

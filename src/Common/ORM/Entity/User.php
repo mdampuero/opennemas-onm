@@ -39,7 +39,6 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function eraseCredentials()
     {
-        unset($this->data['roles']);
         unset($this->data['password']);
         unset($this->data['token']);
     }
@@ -51,36 +50,15 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function getRoles()
     {
-        if (!empty($this->roles)) {
-            return $this->roles;
+        $roles = [];
+
+        if ($this->getOrigin() === 'manager') {
+            $roles[] = 'ROLE_MANAGER';
         }
 
-        $this->roles = [ 'ROLE_BACKEND' ];
+        $roles[] = $this->type === 0 ? 'ROLE_BACKEND' : 'ROLE_FRONTEND';
 
-        if (!empty($this->type) && $this->type !== 0) {
-            $this->roles = [ 'ROLE_FRONTEND' ];
-        }
-
-        if ($this->isMaster() || $this->isAdmin()) {
-            $this->roles = array_merge($this->roles, \Privilege::getPrivilegeNames());
-
-            if ($this->isMaster()) {
-                $this->roles[] = 'ROLE_MASTER';
-            }
-
-            if ($this->isAdmin()) {
-                $this->roles[] = 'ROLE_ADMIN';
-            }
-
-            return $this->roles;
-        }
-
-        foreach ($this->fk_user_group as $group) {
-            $roles = \Privilege::getPrivilegesForUserGroup($group);
-            $this->roles = array_merge($this->roles, $roles);
-        }
-
-        return $this->roles;
+        return array_unique($roles);
     }
 
     /**
