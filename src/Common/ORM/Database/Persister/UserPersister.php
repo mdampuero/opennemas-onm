@@ -32,10 +32,7 @@ class UserPersister extends BasePersister
 
         $id = $this->metadata->getId($entity);
 
-        try {
-            $this->persistCategories($id, $categories);
-        } catch (\Exception $e) {
-        }
+        $this->persistCategories($id, $categories);
     }
 
     /**

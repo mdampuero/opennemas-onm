@@ -45,19 +45,21 @@ class BaseRepository extends Repository
     /**
      * Initializes the Loader.
      *
-     * @param ServiceContainer $cache The service container.
-     * @param string           $paths The path to folders to load from.
+     * @param string           $name     The repository name.
+     * @param ServiceContainer $cache    The service container.
+     * @param string           $paths    The path to folders to load from.
      * @param Metadata         $metadata The entity metadata.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($container, $paths, Metadata $metadata, Cache $cache)
+    public function __construct($name, $container, $paths, Metadata $metadata, Cache $cache)
     {
-        $this->container = $container;
-        $this->cache     = $cache;
-        $this->converter = new BaseConverter($metadata);
-        $this->metadata  = $metadata;
-        $this->paths     = $paths;
+        $this->cache      = $cache;
+        $this->container  = $container;
+        $this->converter  = new BaseConverter($metadata);
+        $this->metadata   = $metadata;
+        $this->name       = $name;
+        $this->paths      = $paths;
         $this->translator = new PhpTranslator($metadata);
 
         if (!empty($paths)) {

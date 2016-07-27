@@ -15,6 +15,13 @@ namespace Common\ORM\Core;
 abstract class Repository
 {
     /**
+     * The repository name.
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Counts the number of entities that match the criteria.
      *
      * @param strign $oql The criteria.

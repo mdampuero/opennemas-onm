@@ -71,7 +71,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $repository->countBy();
     }
 
@@ -93,7 +93,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $repository->find('1');
     }
 
@@ -122,7 +122,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $client = $repository->find('1');
         $this->assertEquals($response->id, $client->id);
         $this->assertEquals($response->firstName, $client->first_name);
@@ -147,7 +147,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $repository->findBy();
     }
 
@@ -180,7 +180,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
         $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->any())->method('get')->with('customer');
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $clients = array_values($repository->findBy());
 
         $this->assertEquals(1, count($clients));
@@ -199,7 +199,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $repository->findOneBy();
     }
 
@@ -213,7 +213,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);
@@ -232,7 +232,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = new ClientRepository($factory, $this->metadata);
+        $repository = new ClientRepository('foo', $factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);

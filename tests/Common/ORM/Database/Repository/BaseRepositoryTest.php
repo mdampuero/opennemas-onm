@@ -63,7 +63,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'exists', 'get', 'set' ])
             ->getMock();
 
-        $this->repository = new BaseRepository($this->conn, $this->metadata, $this->cache);
+        $this->repository = new BaseRepository('foo', $this->conn, $this->metadata, $this->cache);
     }
 
     /**
@@ -232,8 +232,8 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
         $this->assertTrue($method->invokeArgs($this->repository, []));
 
-        $repository = new Baserepository($this->conn, $this->metadata);
-        $method    = new \ReflectionMethod($repository, 'hasCache');
+        $repository = new Baserepository('foo', $this->conn, $this->metadata);
+        $method     = new \ReflectionMethod($repository, 'hasCache');
         $method->setAccessible(true);
         $this->assertFalse($method->invokeArgs($repository, []));
     }

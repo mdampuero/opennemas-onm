@@ -59,7 +59,7 @@ class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository =
-            new UserGroupRepository($this->conn, $this->metadata, $this->cache);
+            new UserGroupRepository('foo', $this->conn, $this->metadata, $this->cache);
     }
 
     /**

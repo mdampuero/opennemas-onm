@@ -62,7 +62,7 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->repository = new ClientRepository('foo', 'bar', $this->metadata);
+        $this->repository = new ClientRepository('flob', 'foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->repository, 'api');
         $property->setAccessible(true);

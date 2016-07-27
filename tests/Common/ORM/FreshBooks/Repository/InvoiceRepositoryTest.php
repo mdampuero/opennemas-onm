@@ -44,7 +44,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->repository = new InvoiceRepository('foo', 'bar', $this->metadata);
+        $this->repository = new InvoiceRepository('flob', 'foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->repository, 'api');
         $property->setAccessible(true);

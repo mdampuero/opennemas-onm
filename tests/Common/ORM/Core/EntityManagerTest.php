@@ -302,7 +302,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entity     = new Entity([ 'id' => 1 ]);
         $reflection = new \ReflectionClass($entity);
-        $property   = $reflection->getProperty('in_db');
+        $property   = $reflection->getProperty('stored');
 
         $property->setAccessible(true);
         $property->setValue($entity, [ true ]);

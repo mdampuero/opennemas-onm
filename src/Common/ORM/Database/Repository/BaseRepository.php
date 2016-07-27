@@ -68,16 +68,18 @@ class BaseRepository extends Repository
     /**
      * Initializes a new DatabaseRepository.
      *
+     * @param string     $name     The repository name.
      * @param Connection $conn     The database connection.
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
      */
-    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null)
+    public function __construct($name, Connection $conn, Metadata $metadata, Cache $cache = null)
     {
         $this->cache      = $cache;
         $this->conn       = $conn;
         $this->converter  = new BaseConverter($metadata);
         $this->metadata   = $metadata;
+        $this->name       = $name;
         $this->translator = new SqlTranslator($metadata);
     }
 
@@ -338,6 +340,7 @@ class BaseRepository extends Repository
         foreach ($values as $key => $value) {
             $entity = new $class($this->converter->objectifyStrict($value));
             $entity->refresh();
+            $entity->setOrigin($this->name);
 
             $entities[$key] = $entity;
         }

@@ -41,13 +41,15 @@ abstract class BaseRepository extends Repository
     /**
      * Initializes the Braintree factory.
      *
+     * @param string         $name     The repository name.
      * @param Braintree_Base $factory  The Braintree factory.
      * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct($factory, $metadata)
+    public function __construct($name, $factory, $metadata)
     {
         $this->converter = new BaseConverter($metadata);
         $this->factory   = $factory;
-        $this->metadata   = $metadata;
+        $this->metadata  = $metadata;
+        $this->name      = $name;
     }
 }

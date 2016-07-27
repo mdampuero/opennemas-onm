@@ -42,14 +42,16 @@ abstract class BaseRepository extends Repository
     /**
      * Initializes the FreshBooks api.
      *
+     * @param string   $name     The repository name.
      * @param string   $domain   The FreshBooks domain.
      * @param string   $token    The FreshBooks auth token.
      * @param Metadata $metadata The entity metadata.
      */
-    public function __construct($domain, $token, $metadata)
+    public function __construct($name, $domain, $token, $metadata)
     {
-        $this->api = new FreshBooksApi($domain, $token);
+        $this->api       = new FreshBooksApi($domain, $token);
         $this->converter = new BaseConverter($metadata);
         $this->metadata  = $metadata;
+        $this->name      = $name;
     }
 }

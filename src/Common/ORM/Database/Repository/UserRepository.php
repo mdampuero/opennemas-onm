@@ -17,18 +17,14 @@ class UserRepository extends BaseRepository
     protected function refresh($ids)
     {
         $entities   = parent::refresh($ids);
+        $categories = $this->getCategories($ids);
 
-        try {
-            $categories = $this->getCategories($ids);
+        foreach ($entities as $key => &$value) {
+            $value->categories = [];
 
-            foreach ($entities as $key => &$value) {
-                $value->categories = [];
-
-                if (array_key_exists($key, $categories)) {
-                    $value->categories = $categories[$key];
-                }
+            if (array_key_exists($key, $categories)) {
+                $value->categories = $categories[$key];
             }
-        } catch (\Exception $e) {
         }
 
         return $entities;
