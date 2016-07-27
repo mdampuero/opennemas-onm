@@ -63,20 +63,30 @@ class SubscribersController extends Controller
             'subscription' => $request->request->filter('subscription', '', FILTER_SANITIZE_STRING),
         ];
 
+
         // Set default values to return
         $message = null;
         $class   = '';
 
         // Check verify for bots
-        if (empty($verify)) {
+        if (!empty($verify)) {
+            $rs = [
+                'message' => _(
+                    _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
+                ),
+                'class' => 'error'
+            ];
+        } else {
             // Check reCaptcha
-            $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
-            $class = 'error';
             if ($this->checkRecaptcha($request)) {
-                $message = _(
-                    "Sorry, we were unable to complete your request.\n"
-                    ."Check the form and try again"
-                );
+                $rs = [
+                    'message' => _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    ),
+                    'class' => 'error'
+                ];
+            } else {
                 // Check name and email
                 if (!empty($data['email']) && !empty($data['name'])) {
                     if ($action == 'create_subscriptor') {
@@ -84,6 +94,11 @@ class SubscribersController extends Controller
                     } elseif ($action == 'submit') {
                         $rs = $this->sendSubscriptionMail($request, $data);
                     }
+                } else {
+                    $rs = [
+                        'message' => _("Check the form and try again"),
+                        'class' => 'error'
+                    ];
                 }
             }
         }
