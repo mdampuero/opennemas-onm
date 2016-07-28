@@ -69,8 +69,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    kernel.listener.news_agency:
-        class: Framework\EventListener\NewsAgencyCronActionSubscriber
+    kernel.listener.cron_actions:
+        class: Framework\EventListener\CronActionSubscriber
         tags:
             - {name: kernel.event_subscriber}
 
