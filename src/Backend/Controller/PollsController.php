@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -64,8 +63,8 @@ class PollsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('POLL_ADMIN')")
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_ADMIN')")
      */
     public function listAction()
     {
@@ -96,8 +95,8 @@ class PollsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('POLL_ADMIN')")
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_ADMIN')")
      */
     public function widgetAction()
     {
@@ -124,8 +123,8 @@ class PollsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('POLL_CREATE')")
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -177,9 +176,8 @@ class PollsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('POLL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -214,9 +212,8 @@ class PollsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('POLL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -279,9 +276,8 @@ class PollsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('POLL_DELETE')")
-     *
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_DELETE')")
      */
     public function deleteAction(Request $request)
     {
@@ -324,7 +320,7 @@ class PollsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -373,7 +369,7 @@ class PollsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -426,8 +422,8 @@ class PollsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('POLL_SETTINGS')")
-     * @CheckModuleAccess(module="POLL_MANAGER")
+     * @Security("hasExtension('POLL_MANAGER')
+     *     and hasPermission('POLL_SETTINGS')")
      */
     public function configAction(Request $request)
     {

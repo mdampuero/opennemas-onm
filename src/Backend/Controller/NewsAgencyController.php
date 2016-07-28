@@ -9,9 +9,8 @@
  */
 namespace Backend\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Framework\Import\Repository\LocalRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,8 +66,8 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function listAction()
     {
@@ -82,10 +81,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function importAction(Request $request)
     {
         $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -138,10 +136,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function batchImportAction(Request $request)
     {
         $selected = $request->request->get('ids', null);
@@ -177,10 +174,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function selectCategoryWhereToImportAction(Request $request)
     {
         $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -235,10 +231,9 @@ class NewsAgencyController extends Controller
      *
      * @return int Category id
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function getSimilarCategoryIdForElement($element)
     {
         $finalCategory = 0;
@@ -274,8 +269,8 @@ class NewsAgencyController extends Controller
      *
      * @return Response The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function syncAction(Request $request)
     {

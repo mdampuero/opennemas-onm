@@ -14,13 +14,12 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,12 +33,7 @@ class AuthorsController extends Controller
     /**
      * Show a list of opinion authors.
      *
-     * This action is not mapped with CheckModuleAccess annotation because there
-     * is no module for authors actions and cannot be dependent of opinon module
-     *
-     * @return void
-     *
-     * @Security("has_role('AUTHOR_ADMIN')")
+     * @Security("hasPermission('AUTHOR_ADMIN')")
      */
     public function listAction()
     {
@@ -49,13 +43,10 @@ class AuthorsController extends Controller
     /**
      * Shows the author information given its id.
      *
-     * This action is not mapped with CheckModuleAccess annotation because there
-     * is no module for authors actions and cannot be dependent of opinon module
-     *
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('AUTHOR_UPDATE')")
+     * @Security("hasPermission('AUTHOR_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -89,13 +80,10 @@ class AuthorsController extends Controller
     /**
      * Creates an author give some information.
      *
-     * This action is not mapped with CheckModuleAccess annotation because there
-     * is no module for authors actions and cannot be dependent of opinon module
-     *
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('AUTHOR_CREATE')")
+     * @Security("hasPermission('AUTHOR_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -168,13 +156,10 @@ class AuthorsController extends Controller
     /**
      * Handles the update action for an author given its id.
      *
-     * This action is not mapped with CheckModuleAccess annotation because there
-     * is no module for authors actions and cannot be dependent of opinon module
-     *
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('AUTHOR_UPDATE')")
+     * @Security("hasPermission('AUTHOR_UPDATE')")
      */
     public function updateAction(Request $request)
     {

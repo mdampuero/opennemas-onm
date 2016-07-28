@@ -14,10 +14,9 @@
  **/
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -34,9 +33,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return string the string response
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -70,9 +68,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function deleteAction(Request $request)
     {
@@ -117,9 +114,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function toggleSubscriptionAction(Request $request)
     {
@@ -159,9 +155,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function toggleActivatedAction(Request $request)
     {
@@ -201,10 +196,9 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function batchDeleteAction(Request $request)
     {
         $ids = $request->query->get('cid');
@@ -244,9 +238,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function batchSubscribeAction(Request $request)
     {
@@ -293,9 +286,8 @@ class NewsletterSubscribersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function batchActivatedAction(Request $request)
     {

@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 
@@ -58,9 +57,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_ADMIN')")
      */
     public function listAction()
     {
@@ -125,9 +123,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_CREATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -216,9 +213,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -281,9 +277,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -374,7 +369,7 @@ class AdsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -420,9 +415,8 @@ class AdsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_ADMIN')")
      */
     public function configAction(Request $request)
     {

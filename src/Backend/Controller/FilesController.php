@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -66,9 +65,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function listAction()
     {
@@ -99,9 +97,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function widgetAction()
     {
@@ -118,9 +115,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function statisticsAction()
     {
@@ -221,9 +217,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_CREATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -356,9 +351,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -394,9 +388,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -434,9 +427,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function savePositionsAction(Request $request)
     {
@@ -478,7 +470,7 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {

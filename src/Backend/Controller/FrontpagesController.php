@@ -14,12 +14,11 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -38,10 +37,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function showAction(Request $request)
     {
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
@@ -183,10 +181,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function savePositionsAction(Request $request)
     {
         $savedProperly         = false;
@@ -300,10 +297,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function pickLayoutAction(Request $request)
     {
         $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
@@ -355,10 +351,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response instance
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function lastVersionAction(Request $request)
     {
         $dateRequest = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
@@ -389,10 +384,9 @@ class FrontpagesController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function previewAction(Request $request)
     {
         $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
@@ -477,10 +471,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function getPreviewAction()
     {
         $session = $this->get('session');

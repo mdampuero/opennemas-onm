@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\User;
 use Onm\Framework\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -131,8 +130,8 @@ class AclUserController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('USER_ADMIN')")
-     * @CheckModuleAccess(module="USER_MANAGER")
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_ADMIN')")
      */
     public function listAction()
     {
@@ -294,8 +293,8 @@ class AclUserController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('USER_CREATE')")
-     * @CheckModuleAccess(module="USER_MANAGER")
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -350,7 +349,7 @@ class AclUserController extends Controller
     /**
      * Shows the user information given its id
      *
-     * This action is not mapped with CheckModuleAccess annotation because it's
+     * This action is not mapped with Security annotation because it's
      * used in edit profile action that should be available to all users with
      * or without having users module activated.
      *
@@ -508,7 +507,7 @@ class AclUserController extends Controller
     /**
      * Handles the update action for a user given its id.
      *
-     * This action is not mapped with CheckModuleAccess annotation because it's
+     * This action is not mapped with Security annotation because it's
      * used in edit profile action that should be available to all users with
      * or without having users module activated.
      *

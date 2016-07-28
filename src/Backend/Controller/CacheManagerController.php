@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -47,10 +46,9 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         // Init template cache config manager with frontend user template
@@ -104,10 +102,9 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearCacheAction()
     {
         // Initialization of the frontend template object
@@ -126,10 +123,9 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearCompiledTemplatesAction()
     {
         // Initialization of the frontend template object
@@ -147,10 +143,9 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearVarnishCacheAction()
     {
         // Initialization of the frontend template object

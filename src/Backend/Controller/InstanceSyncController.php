@@ -14,11 +14,10 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Handles the actions for the instance synchronization manager
@@ -32,10 +31,9 @@ class InstanceSyncController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SYNC_MANAGER")
-     **/
+     * @Security("hasExtension('SYNC_MANAGER')
+     *     and hasPermission('INSTANCE_SYNC_ADMIN')")
+     */
     public function listAction()
     {
         $allSites = s::get('sync_params');
@@ -55,10 +53,9 @@ class InstanceSyncController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SYNC_MANAGER")
-     **/
+     * @Security("hasExtension('SYNC_MANAGER')
+     *     and hasPermission('INSTANCE_SYNC_ADMIN')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -109,10 +106,9 @@ class InstanceSyncController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SYNC_MANAGER")
-     **/
+     * @Security("hasExtension('SYNC_MANAGER')
+     *     and hasPermission('INSTANCE_SYNC_ADMIN')")
+     */
     public function fetchCategoriesAction(Request $request)
     {
         $siteUrl  = $request->request->filter('site_url', '', FILTER_VALIDATE_URL);
@@ -162,10 +158,9 @@ class InstanceSyncController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SYNC_MANAGER")
-     **/
+     * @Security("hasExtension('SYNC_MANAGER')
+     *     and hasPermission('INSTANCE_SYNC_ADMIN')")
+     */
     public function showAction(Request $request)
     {
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
@@ -213,10 +208,9 @@ class InstanceSyncController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SYNC_MANAGER")
-     **/
+     * @Security("hasExtension('SYNC_MANAGER')
+     *     and hasPermission('INSTANCE_SYNC_ADMIN')")
+     */
     public function deleteAction(Request $request)
     {
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);

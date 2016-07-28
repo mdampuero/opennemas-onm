@@ -9,10 +9,10 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,9 +28,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_ADMIN')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_ADMIN')")
      */
     public function listAction()
     {
@@ -58,9 +57,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_UPDATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -105,9 +103,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_CREATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -170,9 +167,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_UPDATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -242,7 +238,7 @@ class WidgetsController extends Controller
      * @param  Request  $request the request object
      * @return Response          the response object
      *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {

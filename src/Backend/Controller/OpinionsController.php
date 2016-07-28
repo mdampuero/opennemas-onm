@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +34,8 @@ class OpinionsController extends Controller
      * @param  $blog      Blog flag for listing
      * @return Response   The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function listAction($blog)
     {
@@ -83,9 +81,8 @@ class OpinionsController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @Security("has_role('OPINION_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_FRONTPAGE')")
      */
     public function frontpageAction(Request $request)
     {
@@ -189,9 +186,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_UPDATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -262,9 +258,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_CREATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -342,9 +337,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_UPDATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -450,9 +444,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_HOME')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_HOME')")
      */
     public function toggleInHomeAction(Request $request)
     {
@@ -498,7 +491,7 @@ class OpinionsController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -546,7 +539,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -588,9 +581,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_SETTINGS')")
      */
     public function configAction(Request $request)
     {
@@ -634,9 +626,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function previewAction(Request $request)
     {
@@ -743,9 +734,8 @@ class OpinionsController extends Controller
      *
      * @return Response  The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function getPreviewAction()
     {

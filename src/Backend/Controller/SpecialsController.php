@@ -14,12 +14,11 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the specials
@@ -62,10 +61,9 @@ class SpecialsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function listAction()
     {
         $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
@@ -95,10 +93,9 @@ class SpecialsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function widgetAction()
     {
         if (isset($configurations['total_widget'])
@@ -125,10 +122,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_CREATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -175,10 +171,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -235,10 +230,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -298,10 +292,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_DELETE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id       = $request->query->getDigits('id');
@@ -345,10 +338,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->get('positions');
@@ -389,10 +381,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_SETTINGS')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

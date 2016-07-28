@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Common\ORM\Entity\Content;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
@@ -61,8 +60,8 @@ class StaticPageController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('STATIC_PAGE_UPDATE')")
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_UPDATE')")
      */
     public function createAction()
     {
@@ -72,8 +71,8 @@ class StaticPageController extends Controller
     /**
      * Shows a list of the static pages
      *
-     * @Security("has_role('STATIC_PAGE_ADMIN')")
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_ADMIN')")
      */
     public function listAction()
     {
@@ -87,8 +86,8 @@ class StaticPageController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_PAGE_CREATE')")
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -118,8 +117,8 @@ class StaticPageController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('STATIC_PAGE_UPDATE')")
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_UPDATE')")
      */
     public function showAction($id)
     {
@@ -139,8 +138,8 @@ class StaticPageController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('STATIC_PAGE_UPDATE')")
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {

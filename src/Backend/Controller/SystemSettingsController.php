@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -32,10 +31,9 @@ class SystemSettingsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('ONM_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SETTINGS_MANAGER")
-     **/
+     * @Security("hasExtension('SETTINGS_MANAGER')
+     *     and hasPermission('ONM_SETTINGS')")
+     */
     public function defaultAction()
     {
         $keys = [
@@ -90,10 +88,9 @@ class SystemSettingsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ONM_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SETTINGS_MANAGER")
-     **/
+     * @Security("hasExtension('SETTINGS_MANAGER')
+     *     and hasPermission('ONM_SETTINGS')")
+     */
     public function saveAction(Request $request)
     {
         // Get files from symfony request

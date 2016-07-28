@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,10 +34,9 @@ class StaticPagesController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('STATIC_PAGE_ADMIN')")
-     *
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
-     **/
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_ADMIN')")
+     */
     public function listAction()
     {
         return $this->render('static_pages/list.tpl');
@@ -51,10 +49,9 @@ class StaticPagesController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_PAGE_UPDATE')")
-     *
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
-     **/
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -87,10 +84,9 @@ class StaticPagesController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_PAGE_CREATE')")
-     *
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
-     **/
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
@@ -126,10 +122,9 @@ class StaticPagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('STATIC_PAGE_UPDATE')")
-     *
-     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
-     **/
+     * @Security("hasExtension('STATIC_PAGES_MANAGER')
+     *     and hasPermission('STATIC_PAGE_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id         = $request->query->getDigits('id');

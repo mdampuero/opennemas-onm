@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,10 +32,9 @@ class AclUserGroupsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('GROUP_ADMIN')")
-     *
-     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
-     **/
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_ADMIN')")
+     */
     public function listAction()
     {
         return $this->render('acl/user_group/list.tpl');
@@ -49,10 +47,9 @@ class AclUserGroupsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('GROUP_UPDATE')")
-     *
-     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
-     **/
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->filter('id', FILTER_VALIDATE_INT);
@@ -98,10 +95,9 @@ class AclUserGroupsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('GROUP_CREATE')")
-     *
-     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
-     **/
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_CREATE')")
+     */
     public function createAction(Request $request)
     {
         $userGroup = new \UserGroup();
@@ -154,10 +150,9 @@ class AclUserGroupsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('GROUP_UPDATE')")
-     *
-     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
-     **/
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $userGroup = new \UserGroup();
@@ -193,10 +188,9 @@ class AclUserGroupsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('GROUP_DELETE')")
-     *
-     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
-     **/
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id = $request->query->getDigits('id');

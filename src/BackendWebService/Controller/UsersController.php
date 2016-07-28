@@ -10,7 +10,7 @@
 
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +27,8 @@ class UsersController extends ContentController
      *
      * @return JsonResponse The response object.
      *
-     * @Security("has_role('USER_DELETE')")
-     * @CheckModuleAccess(module="USER_MANAGER")
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -48,6 +48,9 @@ class UsersController extends ContentController
      *
      * @param  Request      $request     The request object.
      * @return JsonResponse              The response object.
+     *
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -113,7 +116,8 @@ class UsersController extends ContentController
      * @param  Request      $request The request object.
      * @return JsonResponse          The response object.
      *
-     * @Security("has_role('USER_ADMIN') and has_role('USER_UPDATE')")
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -154,6 +158,9 @@ class UsersController extends ContentController
      * @param  Request      $request     The request object.
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
+     *
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_ADMIN')")
      */
     public function listAction(Request $request, $contentType = null)
     {
@@ -190,6 +197,9 @@ class UsersController extends ContentController
      *
      * @param  Request      $request The request object.
      * @return JsonResponse          The response object.
+     *
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {

@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -67,10 +66,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function listAction()
     {
         $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
@@ -103,10 +101,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function widgetAction()
     {
         $category = 'widget';
@@ -127,10 +124,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -162,10 +158,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_CREATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -241,10 +236,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -362,10 +356,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_DELETE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id   = $request->query->getDigits('id');
@@ -408,10 +401,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->query->get('positions');
@@ -446,10 +438,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {

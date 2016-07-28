@@ -9,10 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Framework\Import\Repository\LocalRepository;
 use Framework\Import\Synchronizer\Synchronizer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +29,8 @@ class NewsAgencyController extends Controller
      *
      * @return Response The response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function importAction(Request $request)
     {
@@ -115,7 +114,7 @@ class NewsAgencyController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')")
      */
     public function listAction(Request $request)
     {
