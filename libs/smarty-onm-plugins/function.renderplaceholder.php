@@ -34,8 +34,10 @@ function smarty_function_renderplaceholder($params, &$smarty) {
                 $filteredContents []= $item;
             }
         }
+        $count=0;
         $filteredContents = \Onm\LayoutManager::orderContents($filteredContents, $order);
         foreach ($filteredContents as $content) {
+            $content->render_position = $count++;
             $outputHTML .= $content->render($params, $smarty);
         }
     }

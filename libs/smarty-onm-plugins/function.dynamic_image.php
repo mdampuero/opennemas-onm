@@ -51,7 +51,7 @@ function smarty_function_dynamic_image($params, &$smarty)
     unset($params['base_url']);
     unset($params['transform']);
     unset($params['site_url']);
-    unset($params['lazyload']);
+    unset($params['data-src']);
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
