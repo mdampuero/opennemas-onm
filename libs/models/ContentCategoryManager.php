@@ -80,37 +80,45 @@ class ContentCategoryManager
      */
     public function findAll()
     {
+        if (count($this->categories) > 0) {
+            return $this->categories;
+        }
+
         $cache = getService('cache');
-
-        $cacheKey = CACHE_PREFIX.'_content_categories';
+        $cacheKey = 'content_categories';
         $categories = $cache->fetch($cacheKey);
+        $categories = null;
 
-        if (!$categories) {
-            $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
-            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($categories) {
+            $this->categories = $categories;
+
+            return $this->categories;
+        }
+
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM content_categories ORDER BY posmenu ASC'
+            );
 
             if (!$rs) {
                 return false;
             }
 
-            $categories = array();
-            if ($rs != false) {
-                $data = $rs->getArray();
-
-                foreach ($data as $catData) {
-                    $category = new \ContentCategory();
-                    $category->load($catData);
-                    $categories[$category->id] = $category;
-                }
+            foreach ($rs as $row) {
+                $category = new \ContentCategory();
+                $category->load($row);
+                $categories[$category->id] = $category;
             }
 
             $cache->save($cacheKey, $categories, 300);
+
+            $this->categories = $categories;
+
+            return $this->categories;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $this->categories = $categories;
-
-        return $this->categories;
     }
 
     /**
@@ -145,30 +153,32 @@ class ContentCategoryManager
      *
      * @return array List of ContentCategory objects
      */
-    public function find($filter = null, $orderBy = 'ORDER BY 1')
+    public function find($filter = null, $orderBy = '')
     {
-        $items = array();
-        $where = '1=1';
+        $items = [];
 
+        $where = '';
         if (!is_null($filter)) {
-            $where = $filter;
+            $where = ' AND '.$filter;
         }
 
-        $sql = 'SELECT * FROM content_categories ' .
-                'WHERE internal_category<>0 AND '.$where.' '.$orderBy;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs !== false) {
-            while (!$rs->EOF) {
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM content_categories ' .
+                'WHERE internal_category<>0 '.$where.' '.$orderBy
+            );
+            foreach ($rs as $row) {
                 $obj = new ContentCategory();
-                $obj->load($rs->fields);
+                $obj->load($row);
 
                 $items[] = $obj;
-                $rs->MoveNext();
             }
-        }
 
-        return $items;
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -182,16 +192,24 @@ class ContentCategoryManager
     public function getName($id)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT name FROM content_categories '
-                 . 'WHERE pk_content_category = ?';
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT name FROM content_categories '
+                    . 'WHERE pk_content_category = ?',
+                    [ (int) $id ]
+                );
 
-            if (!$rs) {
+                if (!$rs) {
+                    return false;
+                }
+
+                return $rs['name'];
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
                 return false;
             }
-
-            return $rs->fields['name'];
         }
+
         if (isset($this->categories[$id]->name)) {
             return $this->categories[$id]->name;
         } else {
@@ -204,20 +222,26 @@ class ContentCategoryManager
      *
      * @param string $categoryName the category name
      *
-     * @return int the category id
+     * @return int the category id, 0 if not found
      **/
     public function get_id($categoryName)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT pk_content_category '
-                 . 'FROM content_categories WHERE name = ?';
-            $rs  = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT pk_content_category FROM content_categories WHERE name = ?',
+                    [ $categoryName ]
+                );
 
-            if (!$rs) {
+                if (!$rs) {
+                    return false;
+                }
+
+                return $rs['pk_content_category'];
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
                 return false;
             }
-
-            return $rs->fields['pk_content_category'];
         }
 
         // Singleton version
@@ -231,43 +255,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Return first category data in the menu of type
-     *
-     * @param int $categoryType content_type.
-     *
-     * @return array with category data
-     *
-     * @throws <b>Exception</b> Explanation of exception.
-     */
-    public function getFirstCategory($categoryType)
-    {
-        if (is_null($this->categories)) {
-            $sql = 'SELECT * FROM content_categories '
-                   .'WHERE inmenu=1 AND internal_category=?'
-                   .' ORDER BY posmenu LIMIT 1';
-
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryType));
-
-            if (!$rs) {
-                return false;
-            }
-
-            return $rs->fields;
-        }
-
-        // Singleton version
-        $categories = $this->orderByPosmenu($this->categories);
-
-        foreach ($categories as $category) {
-            if (($category->internal_category == $categoryType)
-                && ($category->inmenu==1)
-            ) {
-                return $category->name;
-            }
-        }
-    }
-
-    /**
      * Returns the title "Human readablle name" of a category given its name
      *
      * @param string $categoryName the category name
@@ -277,15 +264,21 @@ class ContentCategoryManager
     public function getTitle($categoryName)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT title FROM content_categories WHERE name = ?';
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT title FROM content_categories WHERE name = ?',
+                    [ $categoryName ]
+                );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
+                if (!$rs) {
+                    return false;
+                }
 
-            if (!$rs) {
-                return;
+                return $rs['title'];
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
-
-            return $rs->fields['title'];
         }
 
         // Singleton version
@@ -308,15 +301,24 @@ class ContentCategoryManager
     public function getByName($categoryName)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT title FROM content_categories WHERE name = ?';
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT * FROM content_categories WHERE name = ?',
+                    [ $categoryName ]
+                );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
+                if (!$rs) {
+                    return false;
+                }
 
-            if (!$rs) {
-                return null;
+                $category = new \ContentCategory();
+                $category->load($rs);
+
+                return $category;
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
-
-            return $rs->fields;
         }
 
         // Singleton version
@@ -339,23 +341,29 @@ class ContentCategoryManager
      **/
     public function getAllSubcategories($id)
     {
-        if (is_null($this->categories)) {
-            $sql = 'SELECT name,title,internal_category '
-                 . 'FROM content_categories WHERE internal_category<>0 '
-                 .' AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu';
+        if (true|| is_null($this->categories)) {
+            try {
+                $rs = getService('dbal_connection')->fetchAll(
+                    'SELECT name,title,internal_category '
+                    .'FROM content_categories WHERE internal_category<>0 '
+                    .'AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu',
+                    [ $id ]
+                );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+                if (!$rs) {
+                    return null;
+                }
 
-            if (!$rs) {
-                return null;
-            }
+                $items = [];
+                foreach ($rs as $row) {
+                    $items[$row['name']]['title']             = $row['title'];
+                    $items[$row['name']]['internal_category'] = $row['internal_category'];
+                }
 
-            $items = array ();
-            while (!$rs->EOF) {
-                $items[$rs->fields['name']]['title'] = $rs->fields['title'];
-                $items[$rs->fields['name']]['internal_category'] =
-                    $rs->fields['title'];
-                $rs->MoveNext();
+                return $items;
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
         }
 
@@ -450,7 +458,7 @@ class ContentCategoryManager
      **/
     public function getCategoriesTree()
     {
-        $tree = array();
+        $tree = [];
 
         $categories = $this->orderByPosmenu($this->categories);
 
@@ -563,18 +571,23 @@ class ContentCategoryManager
     public function getFirstSubcategory($categoryId)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT name FROM content_categories
-                    WHERE inmenu=1 AND fk_content_category=?
-                    AND internal_category<>0
-                    ORDER BY posmenu LIMIT 0,1';
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT name FROM content_categories '
+                    .'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
+                    .'ORDER BY posmenu LIMIT 1',
+                    [ $categoryId ]
+                );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryId));
+                if (!$rs) {
+                    return null;
+                }
 
-            if (!$rs) {
-                return null;
+                return $rs['name'];
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
-
-            return $rs->fields['name'];
         }
 
         // Singleton version
@@ -597,29 +610,33 @@ class ContentCategoryManager
      *
      * @return string the parent category name
      **/
-    public function getFather($category_name)
+    public function getFather($categoryName)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT content2.name '
-                .'FROM `content_categories` as content1, '
-                .'`content_categories` as content2 '
-                .'WHERE content1.name=? '
-                .'AND content1.fk_content_category='
-                .'content2.pk_content_category';
+            try {
+                $rs = getService('dbal_connection')->fetchAll(
+                    'SELECT content2.name '
+                    .'FROM `content_categories` as content1, `content_categories` as content2 '
+                    .'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
+                    [ $categoryName ]
+                );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($category_name));
-            if (!$rs) {
-                return null;
+                if (!$rs) {
+                    return null;
+                }
+
+                return $rs[0]['name'];
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
-
-            return $rs->fields['name'];
         }
 
         // Singleton version
         $fk_content_category = '';
         // Search fk_content_category
         foreach ($this->categories as $category) {
-            if ($category->name == $category_name) {
+            if ($category->name == $categoryName) {
                 $fk_content_category = $category->fk_content_category;
                 break;
             }
@@ -642,20 +659,26 @@ class ContentCategoryManager
      *
      * @return boolean true if the category exists
      **/
-    public function exists($category_name)
+    public function exists($categoryName)
     {
         if (is_null($this->categories)) {
-            $sql = 'SELECT count(*) AS total '
-                 . 'FROM content_categories WHERE name = ?';
-            $rs  = $GLOBALS['application']->conn->GetOne($sql, $category_name);
+            try {
+                $rs = getService('dbal_connection')->fetchAssoc(
+                    'SELECT count(*) AS total FROM content_categories WHERE name=?',
+                    [ $categoryName ]
+                );
 
-            return $rs || $rs > 0;
+                return intval($rs['total']) > 0;
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
+            }
         }
 
         // Singleton version
         // searches within the interal categories array ($this->categories)
         foreach ($this->categories as $category) {
-            if ($category->name == $category_name) {
+            if ($category->name == $categoryName) {
                 return true;
             }
         }
@@ -672,25 +695,27 @@ class ContentCategoryManager
      **/
     public function isEmpty($categoryName)
     {
-        $pk_category = $this->get_id($categoryName);
-        $sql = 'SELECT count(*) FROM `content_positions` WHERE `fk_category`=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql1, [$pk_category]);
+        $pkCategory = $this->get_id($categoryName);
 
-        if (!$rs) {
-            return;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(*) as content_count FROM `content_positions` WHERE `fk_category`=?',
+                [ $pkCategory ]
+            );
+
+            $rs2 = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(pk_content) as content_count FROM `contents`, `contents_categories` '
+                .'WHERE`contents_categories`.`pk_fk_content_category`=? '
+                .'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
+                [ $pkCategory ]
+            );
+
+            return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $sql = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
-            .'WHERE `contents`.`fk_content_type`=1 AND `contents`.`in_litter`=0 '
-            .'AND `contents_categories`.`pk_fk_content_category`=? '
-            .'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
-        $rs = $GLOBALS['application']->conn->Execute($sql, [ $pk_category ]);
-
-        if (!$rs) {
-            return;
-        }
-
-        return $rs->fields['number'] == 0 && $rs1->fields[0] == 0;
     }
 
     /**
@@ -702,21 +727,21 @@ class ContentCategoryManager
      **/
     public static function isEmptyByCategoryId($category)
     {
-        $sql1 = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
-            .'WHERE `fk_content_type`=1 '
-            .'AND `in_litter`=0 '
-            .'AND contents_categories.pk_fk_content_category=? '
-            .'AND contents.pk_content=pk_fk_content';
-        $rs1 = $GLOBALS['application']->conn->Execute($sql1, array($category));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
+                .'WHERE `fk_content_type`=1 '
+                .'AND `in_litter`=0 '
+                .'AND contents_categories.pk_fk_content_category=? '
+                .'AND contents.pk_content=pk_fk_content',
+                [ $category ]
+            );
 
-        $sql2 = 'SELECT count(pk_content_category) AS number FROM `content_categories`'
-            .'WHERE content_categories.fk_content_category = ?';
-
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2, array($category));
-
-        $number = $rs1->fields['number'] + $rs2->fields['number'];
-
-        return $number == 0;
+            return ($rs['number'] + $rs2['number']) == 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -729,16 +754,22 @@ class ContentCategoryManager
      **/
     public function countContentByType($category, $type)
     {
-        $sql = 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
-             .'WHERE contents.pk_content=pk_fk_content '
-             .'AND pk_fk_content_category=? AND `fk_content_type`=?';
-        $values = array($category, $type);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
+                 .'WHERE contents.pk_content=pk_fk_content '
+                 .'AND pk_fk_content_category=? AND `fk_content_type`=?',
+                [ $category, $type ]
+            );
 
-        if ($rs->fields['number']) {
-            return $rs->fields['number'];
-        } else {
-            return 0;
+            if (array_key_exists('number', $rs) && $rs['number']) {
+                return $rs['number'];
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -754,66 +785,32 @@ class ContentCategoryManager
      **/
     public function countContentsByGroupType($type, $filter = null)
     {
-        $_where = '1=1';
+        $where= '';
         if (!is_null($filter)) {
-            $_where = $filter;
+            $where = ' AND '.$filter;
         }
-        $sql = 'SELECT count(contents.pk_content) AS number,'
-            .'`contents_categories`.`pk_fk_content_category` AS cat '
-            .'FROM `contents`,`contents_categories` '
-            .'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
-            .'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
-            .'AND '.$_where
-            .' GROUP BY `contents_categories`.`pk_fk_content_category`';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($type));
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT count(contents.pk_content) AS number,'
+                .'`contents_categories`.`pk_fk_content_category` AS cat '
+                .'FROM `contents`,`contents_categories` '
+                .'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
+                .'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
+                .$where.' GROUP BY `contents_categories`.`pk_fk_content_category`',
+                [ $type ]
+            );
 
-        $groups = array();
-
-        if ($rs!==false) {
-            while (!$rs->EOF) {
-                $groups[$rs->fields['cat']] = $rs->fields['number'];
-                $rs->MoveNext();
+            $groups = [];
+            foreach ($rs as $row) {
+                $groups[$row['cat']] = $row['number'];
             }
+
+            return $groups;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $groups;
-    }
-
-    /**
-     * Counts the media elements from a group type
-     *
-     * @param string $filter the WHERE clause to filter the contents with
-     *
-     * @return the counters for all the group types
-     **/
-    public function countMediaByTypeGroup($filter = null)
-    {
-        $_where = '1=1';
-        if (!is_null($filter)) {
-            $_where = $filter;
-        }
-        $sql = 'SELECT count(photos.pk_photo) AS number,
-            `contents_categories`.`pk_fk_content_category` AS cat
-            FROM `contents_categories`,`photos`,`contents`
-            WHERE `photos`.`pk_photo`=`contents`.`pk_content`
-            AND `photos`.`pk_photo`=`contents_categories`.`pk_fk_content`
-            AND contents.`in_litter`=0
-            AND '.$_where.
-            ' GROUP BY `contents_categories`.`pk_fk_content_category`';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $groups = array();
-
-        if ($rs!==false) {
-            while (!$rs->EOF) {
-                $groups[$rs->fields['cat']] = $rs->fields['number'];
-                $rs->MoveNext();
-            }
-        }
-
-        return $groups;
     }
 
     /**
@@ -909,14 +906,20 @@ class ContentCategoryManager
         if (!is_numeric($id)) {
             return null;
         }
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT catName FROM contents_categories WHERE pk_fk_content=?',
+                [ $id ]
+            );
 
-        $sql = 'SELECT catName FROM contents_categories WHERE pk_fk_content=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+            if (!$rs) {
+                return null;
+            }
 
-        if (!$rs) {
-            return null;
+            return $rs['catName'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $rs->fields['catName'];
     }
 }
