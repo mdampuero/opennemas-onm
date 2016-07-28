@@ -79,7 +79,7 @@ $memoryLimit        = (int) (ini_get('memory_limit'));
 $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
 define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
 
-$commonCachepath = APPLICATION_PATH.'/tmp/instances/common';
+$commonCachepath = APPLICATION_PATH.'/tmp/compiles';
 if (!file_exists($commonCachepath)) {
     mkdir($commonCachepath, 0755, true);
 }
