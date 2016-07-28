@@ -213,9 +213,9 @@ EOF
      **/
     public function cleanOpcodeCache()
     {
-        $command = $this->getApplication()->find('clean:opcode');
+        $command = $this->getApplication()->find('cache:clean:opcode');
         $arguments = array(
-            'command' => 'clean:opcode',
+            'command' => 'cache:clean:opcode',
         );
 
         $input = new ArrayInput($arguments);
