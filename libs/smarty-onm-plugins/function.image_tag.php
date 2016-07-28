@@ -36,7 +36,7 @@ function smarty_function_image_tag($params, &$smarty)
     unset($params['base_url']);
     unset($params['common']);
     unset($params['bundle']);
-    unset($params['lazyload']);
+    unset($params['data-src']);
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
