@@ -364,7 +364,7 @@ class UsersController extends ContentController
      */
     public function exportAction(Request $request)
     {
-        $users = $this->get('user_repository')->findBy('', null);
+        $users = $this->get('orm.manager')->getRepository('User')->findBy();
 
         $csvHeaders = [
             _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
