@@ -1,0 +1,26 @@
+entity:
+    name: Payment
+    required:
+        - client_id
+        - amount
+        - date
+        - type
+    properties:
+        client_id:  integer
+        amount:     float
+        date:       datetime
+        type:       string
+        invoice_id: string
+        notes:      string
+    converters:
+        default:
+            class:     Common\ORM\Database\Data\Converter\BaseConverter
+            arguments: [ '@orm.metadata.payment' ]
+    persisters:
+        braintree:
+            class:     Common\ORM\Braintree\Persister\PaymentPersister
+            arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.payment' ]
+        freshbooks:
+            class:     Common\ORM\FreshBooks\Persister\PaymentPersister
+            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
+    mapping:
