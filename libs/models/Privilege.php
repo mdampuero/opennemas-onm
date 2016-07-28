@@ -185,6 +185,8 @@ class Privilege
             $groupedPrivileges[$privilegeData['module']] []= $privilege;
         }
 
+        ksort($groupedPrivileges);
+
         return $groupedPrivileges;
     }
 

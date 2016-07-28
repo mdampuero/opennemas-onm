@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
+use Common\ORM\Entity\UserGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -41,51 +42,26 @@ class AclUserGroupsController extends Controller
     }
 
     /**
-     * Shows the form for editting a user group
+     * Shows the form for editting a user group.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('USER_GROUP_MANAGER')
      *     and hasPermission('GROUP_UPDATE')")
      */
-    public function showAction(Request $request)
+    public function showAction($id)
     {
-        $id = $request->query->filter('id', FILTER_VALIDATE_INT);
+        $userGroup = $this->get('orm.manager')->getRepository('UserGroup')
+            ->find($id);
 
-        // Check if user group exists
-        $userGroup = new \UserGroup($id);
-        if (is_null($userGroup->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_("Unable to find user group with id '%d'"), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_acl_usergroups'));
-        }
-
-        // Get all privileges groupd by module
         $privilege = new \Privilege();
-        $allPrivilegesByModules = $privilege->getPrivilegesByModules();
-        $totalPrivilegesByModule = [];
-        foreach ($allPrivilegesByModules as $module => $elements) {
-            $totalPrivilegesByModule[$module] = 0;
-            foreach ($elements as $element) {
-                if (is_array($userGroup) && in_array($element->id, $userGroup->privileges)) {
-                    $totalPrivilegesByModule[$module]++;
-                }
-            }
-        }
 
-        return $this->render(
-            'acl/user_group/new.tpl',
-            array(
-                'user_group'      => $userGroup,
-                'modules'         => $allPrivilegesByModules,
-                'total_activated' => $totalPrivilegesByModule,
-            )
-        );
+        return $this->render('acl/user_group/new.tpl', [
+            'user_group' => $userGroup,
+            'modules'    => $privilege->getPrivilegesByModules(),
+        ]);
     }
 
     /**
@@ -100,47 +76,56 @@ class AclUserGroupsController extends Controller
      */
     public function createAction(Request $request)
     {
-        $userGroup = new \UserGroup();
         $privilege = new \Privilege();
 
-        $data = array(
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        );
+        return $this->render('acl/user_group/new.tpl', [
+            'modules' => $privilege->getPrivilegesByModules(),
+        ]);
+    }
 
-        if ($this->request->getMethod() == 'POST') {
-            // Try to save the new privilege
-            if ($userGroup->create($data)) {
-                $level = 'success';
-                $message = _('User group created successfully.');
-            } else {
-                $level = 'error';
-                $message = _('Unable to create the new user group');
-            }
+    /**
+     * Saves a new user group.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('USER_GROUP_MANAGER')
+     *     and hasPermission('GROUP_CREATE')")
+     */
+    public function saveAction(Request $request)
+    {
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('UserGroup');
+        $data      = $request->request->all();
 
-            $this->get('session')->getFlashBag()->add(
-                $level,
-                $message
-            );
-
-            // If user group was saved successfully show again the form
-            if ($level == 'success') {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_acl_usergroup_show',
-                        array('id' => $userGroup->id)
-                    )
-                );
-            }
+        // TODO: Remove when using SPA
+        if (!empty($data['privileges'])) {
+            $data['privileges'] = explode(',', $data['privileges']);
         }
 
-        return $this->render(
-            'acl/user_group/new.tpl',
-            array(
-                'user_group' => $userGroup,
-                'modules'    => $privilege->getPrivilegesByModules(),
-            )
-        );
+        $userGroup = new UserGroup($converter->objectify($data));
+
+        try {
+            $em->persist($userGroup);
+
+            $level = 'success';
+            $message = _('User group created successfully.');
+        } catch (\Exception $e) {
+            $level = 'error';
+            $message = _('Unable to create the new user group');
+        }
+
+        $this->get('session')->getFlashBag()->add($level, $message);
+
+        if ($level == 'success') {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_acl_usergroup_show',
+                    [ 'id' => $userGroup->pk_user_group ]
+                )
+            );
+        }
     }
 
     /**
@@ -153,62 +138,36 @@ class AclUserGroupsController extends Controller
      * @Security("hasExtension('USER_GROUP_MANAGER')
      *     and hasPermission('GROUP_UPDATE')")
      */
-    public function updateAction(Request $request)
+    public function updateAction(Request $request, $id)
     {
-        $userGroup = new \UserGroup();
+        $em        = $this->get('orm.manager');
+        $userGroup = $em->getRepository('UserGroup')->find($id);
+        $data      = $request->request->all();
 
-        $data = [
-            'id'         => $request->query->getDigits('id'),
-            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'privileges' => $request->request->get('privileges'),
-        ];
+        // TODO: Remove when using SPA
+        if (!empty($data['privileges'])) {
+            $data['privileges'] = explode(',', $data['privileges']);
+        }
 
-        if ($userGroup->update($data)) {
+        $userGroup->setData($em->getConverter('UserGroup')->objectify($data));
+
+        try {
+            $em->persist($userGroup);
+
             $level = 'success';
             $message = _('User group updated successfully.');
-        } else {
+        } catch (\Exception $e) {
             $level = 'error';
             $message = sprintf(_('Unable to update the user group with id "%d"'), $data['id']);
         }
 
-        $this->get('session')->getFlashBag()->add(
-            $level,
-            $message
-        );
+        $request->getSession()->getFlashBag()->add($level, $message);
 
         return $this->redirect(
-            $this->generateUrl('admin_acl_usergroup_show', array('id' => $userGroup->id))
+            $this->generateUrl(
+                'admin_acl_usergroup_show',
+                [ 'id' => $userGroup->pk_user_group ]
+            )
         );
-    }
-
-    /**
-     * Deletes a user group given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('USER_GROUP_MANAGER')
-     *     and hasPermission('GROUP_DELETE')")
-     */
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $userGroup = new \UserGroup();
-        $deleted = $userGroup->delete($id);
-        if ($deleted) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('User group deleted successfully.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to delete the user group with id "%d"'), $id)
-            );
-        }
-
-        return $this->redirect($this->generateUrl('admin_acl_usergroups'));
     }
 }

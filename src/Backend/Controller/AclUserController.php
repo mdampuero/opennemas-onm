@@ -366,7 +366,7 @@ class AclUserController extends Controller
         }
 
         if ($this->getUser()->id != $id
-            && !$this->get('core.security')->isGranted('USER_UPDATE')
+            && !$this->get('core.security')->hasPermission('USER_UPDATE')
         ) {
             throw new AccessDeniedException();
         }
@@ -518,7 +518,7 @@ class AclUserController extends Controller
     public function updateAction(Request $request, $id)
     {
         if ($id != $this->getUser()->id
-            && !$this->get('core.security')->isGranted('USER_UPDATE')
+            && !$this->get('core.security')->hasPermission('USER_UPDATE')
         ) {
             throw new AccessDeniedException();
         }

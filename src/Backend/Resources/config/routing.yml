@@ -944,10 +944,13 @@ admin_acl_usergroups_create:
     path:     /acl/usergroups/create
     defaults: { _controller  : BackendBundle:AclUserGroups:create }
 
+admin_acl_usergroups_save:
+    path:     /acl/usergroup/save
+    defaults: { _controller  : BackendBundle:AclUserGroups:save }
+
 admin_acl_usergroups_update:
     path:     /acl/usergroup/{id}/update
     defaults: { _controller  : BackendBundle:AclUserGroups:update }
-
 # System settings routes
 admin_system_settings:
     path:     /system/settings

@@ -1,35 +1,48 @@
-backend_ws_usergroup_create:
-    path:     /user/create
+backend_ws_user_group_create:
+    path:     /user-groups/create
     defaults: { _controller: BackendWebServiceBundle:UserGroups:create }
+    methods:  [ GET ]
     options:
         expose: true
 
-backend_ws_usergroup_delete:
-    path:     /usergroups/{id}/delete
+backend_ws_user_group_delete:
+    path:     /user-groups/{id}
     defaults: { _controller: BackendWebServiceBundle:UserGroups:delete }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-backend_ws_usergroup_show:
-    path:     /usergroups/{id}/show
+backend_ws_user_group_save:
+    path:     /user-groups/
+    defaults: { _controller: BackendWebServiceBundle:UserGroups:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+backend_ws_user_group_show:
+    path:     /user-groups/{id}
     defaults: { _controller: BackendWebServiceBundle:UserGroups:show }
+    methods:  [ GET ]
     options:
         expose: true
 
-backend_ws_usergroup_update:
-    path:     /usergroups/{id}/update
+backend_ws_user_group_update:
+    path:     /user-groups/{id}
     defaults: { _controller: BackendWebServiceBundle:UserGroups:update }
+    methods:  [ PUT ]
     options:
         expose: true
 
-backend_ws_usergroups_batch_delete:
-    path:     /usergroups/batch-delete
-    defaults: { _controller: BackendWebServiceBundle:UserGroups:batchDelete }
+backend_ws_user_groups_delete:
+    path:     /user-groups
+    defaults: { _controller: BackendWebServiceBundle:UserGroups:deleteSelected }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-backend_ws_usergroups_list:
-    path:     /usergroups
+backend_ws_user_groups_list:
+    path:     /user-groups
     defaults: { _controller: BackendWebServiceBundle:UserGroups:list }
+    methods:  [ GET ]
     options:
         expose: true

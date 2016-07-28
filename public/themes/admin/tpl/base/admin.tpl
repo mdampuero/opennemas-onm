@@ -458,6 +458,7 @@
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/ckeditor/ckeditor.js,
       @Common/components/fastclick/lib/fastclick.js,
+      @Common/components/lodash/dist/lodash.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
