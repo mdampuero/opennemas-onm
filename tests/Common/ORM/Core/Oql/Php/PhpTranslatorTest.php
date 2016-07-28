@@ -93,7 +93,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'consumeOrder');
         $method->setAccessible(true);
 
-        $this->translator->operators = [ 'M_ORDER', 'M_ASC', 'COMMA', 'M_DESC' ];
+        $this->translator->operators = [ 'M_ORDER', 'M_BY', 'M_ASC', 'COMMA', 'M_DESC' ];
         $this->translator->params    = [
             [ 'value' => 'foo', 'type' => 'T_FIELD' ],
             [ 'value' => 'bar', 'type' => 'T_FIELD' ],
@@ -255,7 +255,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(' && ', $method->invokeArgs($this->translator, [ 'C_AND' ]));
         $this->assertEquals('isLess', $method->invokeArgs($this->translator, [ 'O_LESS' ]));
-        $this->assertEquals('order by', $method->invokeArgs($this->translator, [ 'M_ORDER' ]));
+        $this->assertEquals('order', $method->invokeArgs($this->translator, [ 'M_ORDER' ]));
     }
 
     /**

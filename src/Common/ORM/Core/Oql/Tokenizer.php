@@ -24,17 +24,18 @@ class Tokenizer
      */
     protected $tokens = [
         'COMMA'          => '/\s*,\s*/',
-        'C_AND'          => '/\s*and\s*/',
-        'C_OR'           => '/\s*or\s*/',
+        'C_AND'          => '/\s+and\s+/',
+        'C_OR'           => '/\s+or\s+/',
         'G_CPARENTHESIS' => '/\)/',
         'G_CBRACKET'     => '/\]/',
         'G_OBRACKET'     => '/\[/',
         'G_OPARENTHESIS' => '/\(/',
         'M_ASC'          => '/\s*asc\s*/',
         'M_DESC'         => '/\s*desc\s*/',
-        'M_LIMIT'        => '/\s*limit\s*/',
+        'M_LIMIT'        => '/\s*limit\s+/',
         'M_OFFSET'       => '/\s*offset\s*/',
-        'M_ORDER'        => '/\s*order by\s*/',
+        'M_ORDER'        => '/\s*order\s*/',
+        'M_BY'           => '/\s*by\s*/',
         'O_GREAT_EQUALS' => '/\s*>=\s*/',
         'O_LESS_EQUALS'  => '/\s*<=\s*/',
         'O_NOT_EQUALS'   => '/\s*!=\s*/',
@@ -66,11 +67,11 @@ class Tokenizer
     protected $sentences = [
         'T_CONNECTOR' => '/C_AND|C_OR/',
         'T_OPERATOR'  => '/O_GREAT_EQUALS|O_LESS_EQUALS|O_EQUALS|O_GREAT|O_IN|O_IS|O_LESS|O_LIKE|O_NOT_EQUALS|O_NOT_IN|O_NOT_IS|O_NOT_LIKE|O_NOT_REGEXP|O_REGEXP/',
-        'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_DATETIME|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
-        'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL\s*)*\s*G_CBRACKET/',
         'S_LIMIT'     => '/M_LIMIT T_INTEGER/',
         'S_OFFSET'    => '/M_OFFSET T_INTEGER/',
-        'S_ORDER'     => '/M_ORDER\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
+        'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_DATETIME|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
+        'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL\s*)*\s*G_CBRACKET/',
+        'S_ORDER'     => '/M_ORDER\s*M_BY\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
         'S_MODIFIER'  => '/S_ORDER(\s*S_LIMIT\s*(S_OFFSET)?)?|(S_ORDER)?\s*S_LIMIT(\s*S_OFFSET)?/',
         'S_CONDITION' => '/T_FIELD\s*T_OPERATOR\s*(T_FIELD|T_LITERAL)|T_LITERAL\s*T_OPERATOR\s*T_FIELD|G_OPARENTHESIS\s*S_CONDITION\s*G_CPARENTHESIS|S_CONDITION(\s*T_CONNECTOR\s*S_CONDITION)+/',
         'OQL'         => '/G_OPARENTHESIS\s*OQL\s*G_CPARENTHESIS|OQL(\s*T_CONNECTOR\s*OQL)+|S_CONDITION(\s*S_MODIFIER|OQL)*|OQL\s*S_MODIFIER|OQL\s*OQL|^S_MODIFIER$/',
@@ -110,15 +111,23 @@ class Tokenizer
      */
     protected function checkOQL($tokens)
     {
-        while ((count($tokens) > 1 || $tokens[0] !== 'OQL')) {
-            $sentence = $this->sentenize($tokens);
+        $query      = implode(' ', $tokens);
+        $translated = '';
+        $i = 0;
 
-            // Can't build sentence from tokens
-            if ($sentence === $tokens) {
-                throw new InvalidQueryException($tokens[0]);
+        while ($query !== 'OQL' && $query !== $translated) {
+            $translated = $query;
+
+            foreach ($this->sentences as $key => $sentence) {
+                $translated = preg_replace($sentence, $key, $translated);
             }
 
-            $tokens = $sentence;
+            if ($query === $translated) {
+                throw new InvalidQueryException($query);
+            }
+
+            $query      = $translated;
+            $translated = '';
         }
     }
 
@@ -134,25 +143,31 @@ class Tokenizer
      */
     protected function getTokens($query)
     {
-        $end    = strlen($query);
         $tokens = [];
+        $i      = 0;
+        $prev   = '';
+        $index  = 0;
+        $token  = '';
 
-        while ($query !== '' && $end > 0) {
-            $token = substr($query, 0, $end--);
-
-            if ($this->isToken($token)) {
-                $query = substr($query, strlen($token));
-                $end   = strlen($query);
-
-                $tokens[] = trim($token);
+        while ($index < strlen($query)) {
+            if ($this->isToken($token . $query[$index]) || !$this->isToken($token)) {
+                $token = $token . $query[$index];
+            } elseif ($this->isToken($token)) {
+                $tokens[] = $token;
+                $token    = $query[$index];
             }
+
+            $index++;
         }
 
-        if (!empty($query)) {
-            throw new InvalidTokenException($query);
+        if ($this->isToken($token)) {
+            $tokens[] = $token;
+
+            return $tokens;
         }
 
-        return $tokens;
+
+        throw new InvalidTokenException($token);
     }
 
     /**
@@ -201,39 +216,6 @@ class Tokenizer
         }
 
         return false;
-    }
-
-    /**
-     * Returns the internal representation of an OQL sentence built with the
-     * given tokens.
-     *
-     * @param string $tokens The list of tokens.
-     *
-     * @return array The sentence.
-     */
-    protected function sentenize($tokens)
-    {
-        $end        = count($tokens);
-        $translated = [];
-
-        while (!empty($tokens)) {
-            $token      = implode(' ', array_slice($tokens, 0, $end--));
-            $isSentence = $this->isSentence($token);
-
-            // Translate token if it is a sentence
-            if ($isSentence) {
-                $token = $this->translateSentence($token);
-            }
-
-            // Remove from list if sentence or end of the list of tokens
-            if ($isSentence || $end === 0) {
-                $translated[] = $token;
-                $tokens       = array_slice($tokens, $end + 1);
-                $end          = count($tokens);
-            }
-        }
-
-        return $translated;
     }
 
     /**

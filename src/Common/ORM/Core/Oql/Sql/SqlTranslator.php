@@ -31,7 +31,7 @@ class SqlTranslator
      *
      * @var array
      */
-    protected $ignorable = [ 'M_LIMIT',  'M_OFFSET', 'M_ORDER' ];
+    protected $ignorable = [ 'M_BY', 'M_LIMIT',  'M_OFFSET', 'M_ORDER' ];
 
     /**
      * List of operators.
@@ -47,8 +47,9 @@ class SqlTranslator
         'G_OPARENTHESIS' => '(',
         'G_CPARENTHESIS' => ')',
         'M_ASC'          => 'asc',
+        'M_BY'           => 'by',
         'M_DESC'         => 'desc',
-        'M_ORDER'        => 'order by',
+        'M_ORDER'        => 'order',
         'M_LIMIT'        => 'limit',
         'M_OFFSET'       => 'offset',
         'O_EQUALS'       => '=',

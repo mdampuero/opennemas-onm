@@ -24,24 +24,25 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
             [ 'foo', 'T_FIELD' ],
             [ '=', 'O_EQUALS' ],
             [ '"bar"', 'T_STRING' ],
-            [ 'and', 'C_AND' ],
+            [ ' and ', 'C_AND' ],
             [ '(', 'G_OPARENTHESIS' ],
             [ 'baz', 'T_FIELD' ],
             [ '!=', 'O_NOT_EQUALS' ],
             [ '"qux"', 'T_STRING' ],
-            [ 'or', 'C_OR' ],
+            [ ' or ', 'C_OR' ],
             [ 'baz', 'T_FIELD' ],
-            [ 'in', 'O_IN' ],
+            [ ' in ', 'O_IN' ],
             [ '[', 'G_OBRACKET' ],
             [ '1', 'T_INTEGER' ],
             [ ',', 'COMMA' ],
             [ '2', 'T_INTEGER' ],
             [ ']', 'G_CBRACKET' ],
             [ ')', 'G_CPARENTHESIS' ],
-            [ 'order by', 'M_ORDER' ],
+            [ ' order ', 'M_ORDER' ],
+            [ 'by ', 'M_BY' ],
             [ 'foo', 'T_FIELD' ],
-            [ 'asc', 'M_ASC' ],
-            [ 'limit', 'M_LIMIT' ],
+            [ ' asc ', 'M_ASC' ],
+            [ 'limit ', 'M_LIMIT' ],
             [ '20', 'T_INTEGER' ],
         ];
 
@@ -66,7 +67,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'getTokens');
         $method->setAccessible(true);
 
-        $tokens = [ 'foo', '=', '"bar"', 'and', '(', 'baz', '!=', '"qux"', 'or', 'baz' ,'in', '[', '1', ',' ,'2', ']', ')' ];
+        $tokens = [ 'foo', '=', '"bar"', ' and ', '(', 'baz', '!=', '"qux"', ' or ', 'baz' ,' in ', '[', '1', ',' ,'2', ']', ')' ];
         $oql    = 'foo="bar" and (baz!="qux" or baz in [1,2])';
 
         $this->assertEquals($tokens, $method->invokeArgs($this->translator, [ $oql ]));

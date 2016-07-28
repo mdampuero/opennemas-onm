@@ -74,7 +74,8 @@ class PhpTranslator
         'G_CPARENTHESIS' => ')',
         'M_ASC'          => 'asc',
         'M_DESC'         => 'desc',
-        'M_ORDER'        => 'order by',
+        'M_ORDER'        => 'order',
+        'M_BY'           => 'by',
         'M_LIMIT'        => 'limit',
         'M_OFFSET'       => 'offset',
         'O_EQUALS'       => 'isEquals',
@@ -225,8 +226,13 @@ class PhpTranslator
      */
     protected function consumeOrder()
     {
+        // Consume order
         $operator = array_shift($this->operators);
         $key      = $this->translateOperator($operator);
+
+        // Consume by
+        $operator = array_shift($this->operators);
+        $key     .= ' ' . $this->translateOperator($operator);
 
         // Consume field and direction
         $params[] = array_shift($this->params)['value'];
