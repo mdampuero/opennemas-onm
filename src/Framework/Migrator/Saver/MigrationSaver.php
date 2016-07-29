@@ -543,6 +543,9 @@ class MigrationSaver
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Reload category array cache
+        $this->reloadCategoryArray();
     }
 
     /**
@@ -1178,14 +1181,16 @@ class MigrationSaver
             if (array_key_exists('id_user_group', $item)) {
                 $item['id_user_group'] = explode(',', $item['id_user_group']);
 
-                foreach ($item['id_user_group'] as $key => $group) {
-                    $newGroup = $this->matchTranslation(
-                        $group,
-                        $schema['fields']['id_user_group']['params']['translation']
-                    );
+                if (array_key_exists('params', $schema['fields']['id_user_group'])) {
+                    foreach ($item['id_user_group'] as $key => $group) {
+                        $newGroup = $this->matchTranslation(
+                            $group,
+                            $schema['fields']['id_user_group']['params']['translation']
+                        );
 
-                    if (!empty($newGroup)) {
-                        $item['id_user_group'][$key] = $newGroup;
+                        if (!empty($newGroup)) {
+                            $item['id_user_group'][$key] = $newGroup;
+                        }
                     }
                 }
             }
@@ -1459,17 +1464,26 @@ class MigrationSaver
      */
     protected function configure()
     {
-        define('CACHE_PREFIX', $this->settings['migration']['instance']);
-        define('INSTANCE_UNIQUE_NAME', $this->settings['migration']['instance']);
+        if (!defined('CACHE_PREFIX')) {
+            define('CACHE_PREFIX', $this->settings['migration']['instance']);
+        }
 
-        define(
-            'MEDIA_IMG_PATH',
-            SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
-            . DIRECTORY_SEPARATOR . "images"
-        );
+        if (!defined('INSTANCE_UNIQUE_NAME')) {
+            define('INSTANCE_UNIQUE_NAME', $this->settings['migration']['instance']);
+        }
 
-        define('MEDIA_PATH', SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
-                . DIRECTORY_SEPARATOR);
+        if (!defined('MEDIA_IMG_PATH')) {
+            define(
+                'MEDIA_IMG_PATH',
+                SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
+                . DIRECTORY_SEPARATOR . "images"
+            );
+        }
+
+        if (!defined('MEDIA_PATH')) {
+            define('MEDIA_PATH', SITE_PATH . "media" . DIRECTORY_SEPARATOR
+                . INSTANCE_UNIQUE_NAME . DIRECTORY_SEPARATOR);
+        }
 
         // Initialize target database
         $this->targetConnection = getService('db_conn');
@@ -2089,6 +2103,39 @@ class MigrationSaver
         }
 
         return false;
+    }
+
+
+    /**
+     * Reloads categories array.
+     *
+     * @param  string  $name Category name.
+     * @return integer       Category id.
+     */
+    private function reloadCategoryArray()
+    {
+        $cache = getService('cache');
+
+        $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            return false;
+        }
+
+        $categories = array();
+        if ($rs != false) {
+            $data = $rs->getArray();
+
+            foreach ($data as $catData) {
+                $category = new \ContentCategory();
+                $category->load($catData);
+                $categories[$category->id] = $category;
+            }
+        }
+
+        $cache->save(CACHE_PREFIX.'_content_categories', $categories, 300);
     }
 
     /**
