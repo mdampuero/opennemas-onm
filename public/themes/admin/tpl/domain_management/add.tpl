@@ -83,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 1">
+        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
           <div class="grid-body clearfix">
             <div>
               <h4 class="semi-bold" ng-bind-html="extension.description"></h4>
@@ -132,7 +132,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 2">
+        <div class="grid simple ng-hide" ng-show="step == 2 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
@@ -168,7 +168,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 3">
+        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Payment{/t}</h4>
             <p class="m-t-15">
@@ -203,7 +203,7 @@
             </form>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4">
+        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
@@ -242,7 +242,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 5">
+        <div class="grid simple ng-hide" ng-show="step == 5 && !error">
           <div class="grid-body">
             <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>
@@ -273,6 +273,20 @@
               <h4 class="m-t-30">
                 {t}Have a wonderful day!{/t}
               </h4>
+            </div>
+          </div>
+        </div>
+        <div class="grid simple ng-hide" ng-show="error">
+          <div class="grid-body text-center">
+            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
+              <i class="fa fa-thumbs-o-down fa-3x"></i>
+              <h3 class="p-b-30">{t}Something unexpected has happened!{/t}</h3>
+              <p class="p-b-15">
+              {t}There were some errors while trying to purchase.{/t}
+              </p>
+              <p class="p-b-15">
+              {t escape=off}To prevent non-desired charges in your account, please, do not retry the checkout process and contact our <a href="javascript:UserVoice.showPopupWidget();">support team</a>.{/t}
+              </p>
             </div>
           </div>
         </div>

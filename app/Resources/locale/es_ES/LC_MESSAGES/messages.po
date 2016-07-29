@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-11 10:05+0000\n"
-"PO-Revision-Date: 2016-07-11 12:09+0200\n"
+"POT-Creation-Date: 2016-07-29 16:09+0000\n"
+"PO-Revision-Date: 2016-07-29 18:14+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -1688,6 +1688,9 @@ msgstr "Últimos vídeos"
 
 msgid "Latest Albums"
 msgstr "Últimos álbums"
+
+msgid "Check the form and try again"
+msgstr ""
 
 msgid "You have been subscribed to the newsletter."
 msgstr "Te has suscrito al boletín de noticias."
@@ -4329,6 +4332,21 @@ msgstr ""
 
 msgid "Have a wonderful day!"
 msgstr "¡Que tengas un buen día!"
+
+msgid "Something unexpected has happened!"
+msgstr "¡Ha pasado algo inesperado!"
+
+msgid "There were some errors while trying to purchase."
+msgstr "Se ha producido un error durante o proceso de compra."
+
+msgid ""
+"To prevent non-desired charges in your account, please, do not retry the "
+"checkout process and contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Para evitar cargos indeseados en tu cuenta, por favor, no reintentes el "
+"proceso de compra y contacta con nuestro <a href=\""
+"javascript:UserVoice.showPopupWidget();\">equipo de soporte</a>."
 
 msgid "Delete letter"
 msgstr "Eliminar carta"
