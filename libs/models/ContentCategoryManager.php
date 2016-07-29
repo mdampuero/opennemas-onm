@@ -87,7 +87,6 @@ class ContentCategoryManager
         $cache = getService('cache');
         $cacheKey = 'content_categories';
         $categories = $cache->fetch($cacheKey);
-        $categories = null;
 
         if ($categories) {
             $this->categories = $categories;
@@ -447,80 +446,6 @@ class ContentCategoryManager
         });
 
         return $categories;
-    }
-
-    /**
-     * Get a tree with categories and subcategories
-     *
-     * TODO: To do work recursive for varios nested levels
-     *
-     * @return array Tree structure
-     **/
-    public function getCategoriesTree()
-    {
-        $tree = [];
-
-        $categories = $this->orderByPosmenu($this->categories);
-
-        // First loop categories
-        foreach ($categories as $category) {
-            if ($category->fk_content_category == 0
-                && $category->internal_category != 0
-            ) {
-                $tree[$category->pk_content_category] = $category;
-                $tree[$category->pk_content_category]->childNodes = array();
-            }
-        }
-
-        // Loop on subcategories
-        foreach ($categories as $category) {
-            if ($category->fk_content_category != 0
-                && $category->internal_category != 0
-                && isset($tree[$category->fk_content_category])
-            ) {
-                $tree[$category->fk_content_category]
-                    ->childNodes[$category->pk_content_category] = $category;
-            }
-        }
-
-        return $tree;
-    }
-
-     /**
-     * Get a tree   categories and subcategories and render for select
-     *
-     * TODO:  To render a select form with categories
-     *
-     * @return array unidimensional structure for select form
-     **/
-    public function renderCategoriesTree()
-    {
-        $categories = $this->getCategoriesTreeMenu();
-        $i=0;
-        $tree =array();
-        foreach ($categories as $category) {
-            if ($category->fk_content_category == 0
-                && $category->internal_category != 0
-                && ($category->pk_content_category != 4)
-            ) {
-                $tree[$i] = new stdClass();
-                $tree[$i]->pk_content_category = $category->pk_content_category;
-                $tree[$i]->title = ' '. $category->title;
-                $i++;
-                if (!empty($category->childNodes)) {
-                    //subcategorys
-                    foreach ($category->childNodes as $subcat) {
-                        $tree[$i] = new stdClass();
-                        $tree[$i]->pk_content_category = $subcat->pk_content_category;
-                        $tree[$i]->title = '      ⇒ '.$subcat->title;
-
-                        $i++;
-                    }
-                }
-            }
-        }
-
-        return $tree;
     }
 
     /**
