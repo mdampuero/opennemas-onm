@@ -152,12 +152,12 @@ class Template extends Smarty
      */
     public function getImageDir()
     {
-        if (!$this->container->isScopeActive('request')) {
+        if (empty($this->container->get('request_stack')->getCurrentRequest())) {
             return false;
         }
 
-        return $this->container->get('request')->getSchemeAndHttpHost()
-            . $this->theme->path . 'images/';
+        return $this->container->get('request_stack')->getCurrentRequest()
+            ->getSchemeAndHttpHost() . $this->theme->path . 'images/';
     }
 
     /**

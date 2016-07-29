@@ -33,7 +33,8 @@ class FilesController extends Controller
     public function init()
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
-        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
