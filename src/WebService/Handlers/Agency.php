@@ -58,7 +58,7 @@ class Agency
 
         $articles = $er->findBy($criteria, 'created DESC');
 
-        $tpl = getService('core.template.admin');
+        $tpl = getService('view')->getTemplateBackend();
 
         $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
 
@@ -89,7 +89,7 @@ class Agency
             throw new RestException(400, 'parameter is not valid');
         }
 
-        $tpl = getService('core.template.admin');
+        $tpl = getService('view')->getTemplateBackend();
 
         // Load category related information
         $article->category_name  = $article->loadCategoryName($article->id);

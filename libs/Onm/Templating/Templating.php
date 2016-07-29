@@ -12,11 +12,11 @@ namespace Onm\Templating;
 class Templating
 {
     /**
-     * The container that this class will use to fetch services
+     * The service container.
      *
-     * @var string
+     * @var ServiceContainer
      */
-    public $container;
+    protected $container;
 
     /**
      * Initializes the Templating.
@@ -45,7 +45,7 @@ class Templating
             $stopwatch->start("template ({$bundleName} {$params[0]})");
         }
 
-        $template = $this->getTemplateObject($bundleName);
+        $template = $this->getTemplate($bundleName);
         $response = call_user_func_array([ $template, $method ], $params);
 
         if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
@@ -54,6 +54,46 @@ class Templating
         }
 
         return $response;
+    }
+
+    /**
+     * Returns the template service for backend.
+     *
+     * @return Template The template service.
+     */
+    public function getBackendTemplate()
+    {
+        $template =  $this->container->get('core.template.admin');
+
+        if (empty($template->getTheme())) {
+            $theme = $this->container->get('orm.manager')
+                ->getRepository('theme', 'file')
+                ->findOneBy('uuid = "es.openhost.theme.admin"');
+
+            $template->addActiveTheme($theme);
+        }
+
+        return $template;
+    }
+
+    /**
+     * Returns the template service for manager.
+     *
+     * @return Template The template service.
+     */
+    public function getManagerTemplate()
+    {
+        $template = $this->container->get('core.template.manager');
+
+        if (empty($template->getTheme())) {
+            $theme = $this->container->get('orm.manager')
+                ->getRepository('theme', 'file')
+                ->findOneBy('uuid = "es.openhost.theme.manager"');
+
+            $template->addActiveTheme($theme);
+        }
+
+        return $template;
     }
 
     /**
@@ -76,16 +116,21 @@ class Templating
      *
      * @return mixed The template service.
      */
-    protected function getTemplateObject($module)
+    protected function getTemplate($module)
     {
         if ($module === 'Manager' || $module === 'ManagerWebService') {
-            return $this->container->get('core.template.manager');
+            return $this->getManagerTemplate();
         }
 
         if ($module === 'Backend' || $module === 'BackendWebService') {
-            return $this->container->get('core.template.admin');
+            return $this->getBackendTemplate();
         }
 
-        return $this->container->get('core.template');
+        $theme    = $this->continer->get('core.theme');
+        $template = $this->container->get('core.template');
+
+        $template->addActiveTheme($theme);
+
+        return $template;
     }
 }
