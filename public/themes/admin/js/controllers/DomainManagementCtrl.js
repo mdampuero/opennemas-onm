@@ -129,8 +129,9 @@
             $scope.loading = false;
             $scope.cart = [];
           }, function(response) {
+            $scope.error   = true;
             $scope.loading = false;
-            messenger.post(response.data);
+            webStorage.local.remove('purchase');
           });
         };
 

@@ -187,6 +187,9 @@ class DomainManagementController extends Controller
 
             $em->persist($payment, 'Braintree');
 
+            $purchase->payment_id = $payment->payment_id;
+            $em->persist($purchase);
+
             $invoice = new Invoice([
                 'client_id' => $client->id,
                 'date'      => date('Y-m-d'),
@@ -202,10 +205,7 @@ class DomainManagementController extends Controller
             $em->persist($payment, 'FreshBooks');
 
             $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->payment_id = $payment->payment_id;
-
-            $purchase->created = $date->format('Y-m-d H:i:s');
+            $purchase->updated    = $date->format('Y-m-d H:i:s');
 
             $em->persist($purchase);
 
@@ -221,6 +221,8 @@ class DomainManagementController extends Controller
 
             return new JsonResponse(_('Domain added successfully'));
         } catch (\Exception $e) {
+            error_log($e->getMessage());
+
             return new JsonResponse([
                 'message' => $e->getMessage(),
                 'type' => 'error'
