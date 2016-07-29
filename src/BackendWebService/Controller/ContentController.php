@@ -1206,7 +1206,8 @@ class ContentController extends Controller
             unset($ids[$key]);
         }
 
-        $users = $this->get('user_repository')->findMulti($ids);
+        $users = $this->get('orm.manager')->getRepository('User')
+            ->findBy(sprintf('id in [%s]', implode(',', $ids)));
 
         $extra['authors'] = array();
         foreach ($users as $user) {
