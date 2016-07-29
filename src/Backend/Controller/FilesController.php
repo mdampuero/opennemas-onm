@@ -433,8 +433,6 @@ class FilesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
-        $request = $this->get('request');
-
         $positions = $request->request->get('positions');
 
         $result = true;
