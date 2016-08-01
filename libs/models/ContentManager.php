@@ -121,29 +121,30 @@ class ContentManager
         $orderBy = 'ORDER BY 1',
         $fields = '*'
     ) {
-        $this->init($contentType);
-        $items = array();
+        $table       = tableize($contentType);
+        $contentType = underscore($contentType);
 
-        $_where = '`contents`.`in_litter`=0';
-
+        $where = '`contents`.`in_litter`=0';
         if (!is_null($filter)) {
             // se busca desde la litter.php
             if ($filter == 'in_litter=1') {
-                $_where = $filter;
+                $where = $filter;
             } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
+                $where = ' `contents`.`in_litter`=0 AND '.$filter;
             }
         }
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT $fields FROM contents LEFT JOIN $table ON pk_content = pk_$contentType"
+                ." WHERE ".$where .' '.$orderBy
+            );
 
-        $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` '
-             . 'WHERE `contents`.`pk_content`= `'.$this->table. '`.`pk_'.$this->content_type.'`'
-             .' AND '.$_where
-             .' '.$orderBy;
+            return $this->loadObject($rs, $contentType);
+        } catch (\Exception $e) {
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->loadObject($rs, $contentType);
-
-        return $items;
+            error_log($e->getMessage());
+            return [];
+        }
     }
 
     /**
