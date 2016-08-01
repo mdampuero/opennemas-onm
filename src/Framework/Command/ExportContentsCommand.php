@@ -65,9 +65,9 @@ EOF
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('db_conn_manager');
+        $dbConn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
-        $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
+        $rs = $dbConn->fetchAll('SELECT internal_name, settings FROM instances');
 
         $instances = array();
         foreach ($rs as $database) {
@@ -107,23 +107,10 @@ EOF
         }
 
         $output->writeln("Exporting contents from instance $instance");
+        $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
 
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
-
-
-        $instance = $this->getContainer()->get('instance_manager')->findOneBy([
-            'internal_name' => [ [ 'value' => $instance ] ]
-        ]);
-
-        // Initialize database connection
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($instance->getDatabaseName());
-
-        // Initialize application
-        $GLOBALS['application'] = new \Application();
-        \Application::load();
-        \Application::initDatabase($this->connection);
 
         // Initialize the template system
         define('CACHE_PREFIX', '');
@@ -133,13 +120,7 @@ EOF
             mkdir($commonCachepath, 0755, true);
         }
 
-        $this->tpl = new \TemplateAdmin($this->getContainer(), []);
-        $this->tpl->addInstance($instance);
-        $theme = $this->getThemeByUuid('es.openhost.theme.admin');
-        $this->tpl->addActiveTheme($theme);
-
-        $conn = $this->getContainer()->get('dbal_connection');
-        $conn->selectDatabase($instance->getDatabaseName());
+        $this->tpl = $this->getContainer()->get('view')->getBackendTemplate();
 
         // Set media
         $this->mediaPath = APPLICATION_PATH.DS.'public'.DS.'media'.DS.$instance->internal_name;
@@ -496,32 +477,5 @@ EOF
             // Save xml file
             $this->storeContentFile($content, $newsMLString, $this->targetDir);
         }
-    }
-
-    /**
-     * TODO: Remove when new ORM is merged or search by uuid is allowed in the
-     *       theme repository.
-     *
-     * Returns a theme given an UUID.
-     *
-     * @param string $uuid The theme UUID.
-     *
-     * @return mixed The theme if it exists. False otherwise.
-     */
-    protected function getThemeByUuid($uuid)
-    {
-        $themes = $this->getContainer()->get('orm.loader')->getPlugins();
-        $themes = array_filter($themes, function ($a) use ($uuid) {
-            $uuid = 'es.openhost.theme.'
-                . str_replace('es.openhost.theme.', '', $uuid);
-
-            return $a->uuid === $uuid;
-        });
-
-        if (empty($themes)) {
-            return false;
-        }
-
-        return array_shift($themes);
     }
 }

@@ -9,14 +9,14 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Onm\Settings as s;
 
-class DisqusSyncCommand extends Command
+class DisqusSyncCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -50,14 +50,8 @@ EOF
         $databaseName = $input->getArgument('database');
 
         // Get database connection
-        $databaseConnection = getService('db_conn');
-        $databaseConnection->selectDatabase($databaseName);
-        $conn = getService('orm.manager')->getConnection('instance');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $conn->selectDatabase($databaseName);
-
-        // Load application and initialize Database
-        \Application::load();
-        \Application::initDatabase($databaseConnection);
 
         // Initialize script
         $output->writeln("\tStart disqus comments import");

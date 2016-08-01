@@ -43,7 +43,7 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        throw new \Exception('Not updated to the new model, please reimplement. This command uses ContentManager::getContentsIdsForHomepageOfCategory was deleted on July 29th 2016.');
+        throw new \Exception('Not updated to the new model, please reimplement. This command uses ContentManager::getContentsIdsForHomepageOfCategory, it was deleted on July 29th 2016.');
 
         $instance = $input->getArgument('instance-name');
 
@@ -57,9 +57,8 @@ EOF
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('db_conn_manager');
-
-        $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
 
         $instances = array();
         foreach ($rs as $database) {
@@ -77,15 +76,8 @@ EOF
         define('INSTANCE_UNIQUE_NAME', $instance);
 
         // Initialize database connection
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
         $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
-
-        // Initialize application
-        $GLOBALS['application'] = new \Application();
-        \Application::load();
-        \Application::initDatabase($this->connection);
 
         define('CACHE_PREFIX', $instance);
 

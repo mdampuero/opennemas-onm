@@ -50,26 +50,16 @@ EOF
             json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
         );
 
-        $logger = $this->getContainer()->get('logger');
-        $dbConn = $this->getContainer()->get('db_conn');
-        $im     = $this->getContainer()->get('instance_manager');
-
+        $logger       = $this->getContainer()->get('logger');
         $instanceName = $input->getArgument('instance');
 
-        $instance = $im->findOneBy(
-            ['internal_name' => [ ['value' => $instanceName] ] ]
-        );
-
-        if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
-        }
+        $instance = $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($instanceName);
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
             throw new \Onm\Instance\NotActivatedException($message);
         }
-
-        $instance->boot();
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
@@ -78,33 +68,16 @@ EOF
         $cache->setNamespace($instance->internal_name);
 
         $database = $instance->settings['BD_DATABASE'];
-        $dbConn->selectDatabase($database);
 
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
 
-        // CRAP: take this out, Workaround
-        \Application::load();
-        \Application::initDatabase($dbConn);
+        $servers = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')->get('news_agency_config');
 
-        $sm = $this->getContainer()->get('setting_repository');
-        $sm->setConfig([
-            'database' => $database,
-            'cache_prefix' => $instance->internal_name
-        ]);
-
-        $servers = $sm->get('news_agency_config');
-
-        $tpl   = $this->getContainer()->get('core.template.admin');
-        $theme = $this->getContainer()->get('orm.manager')
-            ->getRepository('Theme')
-            ->findOneBy('uuid = "es.openhost.theme.admin"');
-
+        $tpl  = $this->getContainer()->get('view')->getBackendTemplate();
         $path = $this->getContainer()->getParameter('core.paths.cache')
             . '/' . $instance->internal_name;
-
-        $tpl->addActiveTheme($theme);
-        $tpl->addInstance($instance);
 
         $synchronizer = new Synchronizer($path, $tpl);
 

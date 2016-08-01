@@ -78,9 +78,9 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('db_conn_manager');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
-        $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
+        $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
 
         $instances = array();
         foreach ($rs as $database) {
@@ -96,15 +96,6 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
-
-        // Initialize database connection
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
-
-        // Initialize application
-        $GLOBALS['application'] = new \Application();
-        \Application::load();
-        \Application::initDatabase($this->connection);
 
         // Initialize the template system
         define('CACHE_PREFIX', '');
