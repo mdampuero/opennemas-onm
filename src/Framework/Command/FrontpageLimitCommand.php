@@ -43,6 +43,8 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        throw new \Exception('Not updated to the new model, please reimplement. This command uses ContentManager::getContentsIdsForHomepageOfCategory was deleted on July 29th 2016.');
+
         $instance = $input->getArgument('instance-name');
 
         $this->getContainer()->get('session')->set(
