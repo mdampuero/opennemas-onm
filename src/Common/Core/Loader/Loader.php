@@ -163,7 +163,11 @@ class Loader
 
         $oql = 'internal_name = "%s"';
 
-        return $this->loadInstanceFromOql(sprintf($oql, $internalName));
+        $this->instance = $this->loadInstanceFromOql(sprintf($oql, $internalName));
+
+        $this->configureInstance($this->instance);
+
+        return $this->instance;
     }
 
     /**
