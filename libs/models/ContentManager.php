@@ -2107,10 +2107,18 @@ class ContentManager
             $values []= $property[1];
         }
 
-        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
-        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT `fk_content`, `meta_name`, `meta_value` '
+                .'FROM `contentmeta` WHERE ('.implode(' OR ', $map).')',
+                $values
+            );
 
-        return $value;
+            return $rs;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
