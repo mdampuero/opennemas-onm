@@ -2,24 +2,21 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Migrator\Provider;
 
-use Onm\DatabaseConnection;
+use Onm\Database\DbalWrapper;
 
 abstract class MigrationProvider
 {
     /**
      * Database connection to use while getting data from source.
      *
-     * @var Onm\DatabaseConnection
+     * @var Onm\Database\DbalWrapper
      */
     protected $connection;
 
@@ -100,13 +97,10 @@ abstract class MigrationProvider
     public function configure()
     {
         // Initialize target database
-        $this->targetConnection = getService('db_conn');
+        $this->targetConnection = getService('dbal_connection');
         $this->targetConnection->selectDatabase(
             $this->settings['migration']['target']
         );
-
-        \Application::load();
-        \Application::initDatabase($this->targetConnection);
 
         $this->configureTranslations();
         $this->loadTranslations();
@@ -138,8 +132,7 @@ abstract class MigrationProvider
         $sql = 'SELECT * FROM translation_ids';
         $this->translations = array();
 
-        $rs = $this->targetConnection->Execute($sql);
-        $translations = $rs->GetArray();
+        $translations = $this->targetConnection->fetchAll($sql);
 
         foreach ($translations as $translation) {
             $this->translations[$translation['type']]
@@ -153,23 +146,23 @@ abstract class MigrationProvider
     private function configureTranslations()
     {
         // Initialize target database
-        $conn = new DatabaseConnection(getContainerParameter('database'));
+        $conn = new DbalWrapper(getContainerParameter('database'), getContainerParameter('environment'));
         $conn->selectDatabase('information_schema');
 
-        $sql = "SELECT *  FROM information_schema.COLUMNS"
+        $sql = "SELECT * FROM information_schema.COLUMNS"
             . " WHERE TABLE_SCHEMA = '" . $this->settings['migration']['target']
             . "' AND TABLE_NAME = 'translation_ids' AND COLUMN_NAME = 'slug'";
-        $rss = $conn->Execute($sql);
+        $rss = $conn->fetchAll($sql);
 
         $sql = "ALTER TABLE `translation_ids` CHANGE `pk_content_old`"
             . " `pk_content_old` VARCHAR(50) NOT NULL, "
             . " CHANGE `pk_content` `pk_content` VARCHAR(50) NOT NULL;";
 
-        if ($rss && count($rss->getArray()) == 0) {
+        if ($rss && count($rss) == 0) {
             $sql .= "ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT"
                 . " '' AFTER `type`;";
         }
 
-        $rss = $this->targetConnection->Execute($sql);
+        $rss = $this->targetConnection->executeQuery($sql);
     }
 }
