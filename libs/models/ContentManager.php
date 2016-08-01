@@ -91,20 +91,15 @@ class ContentManager
      *
      * @return array the content objects with all the information completed
      **/
-    public function loadObject($rs, $contentType)
+    public function loadObject($contentsData, $contentType)
     {
-        $items = array();
+        $items = [];
+        foreach ($contentsData as $contentData) {
+            $contentType = classify($contentType);
+            $obj = new $contentType();
+            $obj->load($contentData);
 
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $contentType = classify($contentType);
-                $obj = new $contentType();
-                $obj->load($rs->fields);
-
-                $items[] = $obj;
-
-                $rs->MoveNext();
-            }
+            $items[] = $obj;
         }
 
         return $items;
