@@ -1910,39 +1910,38 @@ class ContentManager
      **/
     public function getLatestComments($count = 6)
     {
-        $contents = array();
+        $contents = [];
 
-        $sql = 'SELECT DISTINCT comments.content_id,
-                       contents.*,
-                       comments.body as comment_body, comments.author as comment_author, comments.id as comment_id
-                FROM  contents, comments
-                WHERE contents.fk_content_type = 1
-                  AND contents.in_litter <> 1
-                  AND comments.status = ?
-                  AND contents.pk_content = comments.content_id
-                GROUP BY contents.pk_content
-                ORDER BY comments.date DESC
-                LIMIT ?';
+        $sql = 'SELECT DISTINCT(comments.content_id), comments.date as comment_date, comments.body as comment_body, comments.author as comment_author, comments.id as comment_id, contents.* FROM comments, contents '
+                .'WHERE contents.pk_content = comments.content_id '
+                .'AND contents.fk_content_type = 1 AND contents.in_litter <> 1 '
+                .'AND comments.status = ? ORDER BY comments.date DESC LIMIT ?';
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                $sql,
+                [ \Comment::STATUS_ACCEPTED, $count ]
+            );
 
-        while ($rs && !$rs->EOF) {
-            $content = new \Article();
-            $content->load($rs->fields);
-            $content->comment        =  $rs->fields['comment_body'];
-            $content->pk_comment     =  $rs->fields['comment_id'];
-            $content->comment_author =  $rs->fields['comment_author'];
+            foreach ($rs as $contentData) {
+                $content = new \Article();
+                $content->load($contentData);
+                $content->comment        =  $contentData['comment_body'];
+                $content->pk_comment     =  $contentData['comment_id'];
+                $content->comment_author =  $contentData['comment_author'];
 
-            $contents[$content->pk_comment] = $content;
-            $rs->MoveNext();
+                $contents[$content->pk_comment] = $content;
+            }
+
+            return $contents;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
         }
-
-        return $contents;
     }
 
     /**
-     * Helper function to check existance one element in translation_ids table
+     * Helper function to check existence one element in translation_ids table
      *
      * @param string $content_type the content type to search for
      * @param string $content_id the content id to get
