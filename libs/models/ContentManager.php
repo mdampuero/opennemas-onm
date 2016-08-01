@@ -1572,15 +1572,21 @@ class ContentManager
      **/
     public function getCategoryNameByContentId($contentId)
     {
-        $sql = 'SELECT pk_fk_content_category, catName FROM `contents_categories` '
-             . 'WHERE pk_fk_content = ?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT pk_fk_content_category, catName FROM `contents_categories` WHERE pk_fk_content = ?',
+                [ $contentId ]
+            );
 
-        if (!$rs) {
+            if (array_key_exists('catName', $rs)) {
+                return $rs['catName'];
+            }
+
+            return '';
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return $rs->fields['catName'];
     }
 
     /**
