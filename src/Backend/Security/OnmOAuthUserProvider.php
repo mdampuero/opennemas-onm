@@ -93,45 +93,39 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         $realname = $response->getRealName();
         $token    = $response->getAccessToken();
         $resource = $response->getResourceOwner()->getName();
+        $em       = $this->container->get('orm.manager');
 
-        $user = null;
-        if ($this->container->get('security.token_storage')->getToken() &&
-            $this->container->get('security.token_storage')->getToken()->getUser()
-        ) {
-            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        try {
+            // If user logged in then connect accounts
+            if ($this->container->get('security.token_storage')->getToken() &&
+                $this->container->get('security.token_storage')->getToken()->getUser()
+            ) {
+                $id   = $this->container->get('security.token_storage')->getToken()->getUser()->id;
+                $user = $em->getRepository('User', $user->getOrigin())->find($id);
 
-            // Connect accounts
-            $user->setMeta(array($resource . '_email' => $email));
-            $user->setMeta(array($resource . '_id' => $userId));
-            $user->setMeta(array($resource . '_realname' => $realname));
-            $user->setMeta(array($resource . '_token' => $token));
-        } else {
-            // Log in
-            $user = $this->container->get('user_repository')->findByUserMeta(
-                array(
-                    'meta_key' => array(
-                        array('value' => $resource . '_id')
-                    ),
-                    'meta_value' => array(
-                        array('value' => $userId)
-                    )
-                ),
-                array('username' => 'asc'),
-                1,
-                0
-            );
+                // Connect accounts
+                $user->{$resource . '_email'}    = $email;
+                $user->{$resource . '_id'}       = $userId;
+                $user->{$resource . '_realname'} = $realname;
+                $user->{$resource . '_token'}    = $token;
 
-            $user = array_pop($user);
-        }
+                $em->persist($user);
 
-        if (is_null($user) || empty($user)) {
+                return $user;
+            }
+
+            return $this->get('orm.manager')
+                ->getRepository('User', $user->getOrigin())
+                ->findOneBy(sprintf('%s_id = "%s"', $resource, $userId));
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
             throw new UsernameNotFoundException(_(
                 'Unable to find an associated user to that social account.'
                 .' Notice that first you have to associated it from your Opennemas user account.'
             ));
         }
-
-        return $user;
     }
 
     /**
