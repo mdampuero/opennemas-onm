@@ -1358,11 +1358,11 @@ class ContentManager
         $filter = null,
         $orderBy = 'ORDER BY 1'
     ) {
-        $items = [];
-
         $whereSQL = 'in_litter=0';
-        if (!empty($filter) || $filter == 'in_litter=1') {
+        if (!is_null($filter) && $filter == 'in_litter=1') {
             $whereSQL = $filter;
+        } elseif (!is_null($filter)) {
+            $whereSQL = $filter . ' AND in_litter=0';
         }
 
         try {
@@ -1386,7 +1386,7 @@ class ContentManager
             return $rs;
         } catch (\Exception $e) {
             error_log($e->getMessage());
-            return false;
+            return [];
         }
     }
 
