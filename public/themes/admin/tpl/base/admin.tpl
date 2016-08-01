@@ -99,7 +99,7 @@
               <ul class="nav quick-section">
                 {acl isAllowed="ROLE_ADMIN"}
                   <li class="quicklinks">
-                    <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                    <a href="{url name=backend_account_show}" title="{t}Instance information{/t}">
                       <i class="fa fa-bullseye"></i>
                       {t}My newspaper{/t}
                     </a>
