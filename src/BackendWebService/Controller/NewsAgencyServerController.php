@@ -72,7 +72,7 @@ class NewsAgencyServerController extends Controller
             'username' => $request->query->get('username'),
         ];
 
-        $sf = new ServerFactory();
+        $sf = new ServerFactory($this->get('view')->getBackendTemplate());
 
         try {
             $sf->get($server);
