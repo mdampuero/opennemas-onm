@@ -1240,43 +1240,44 @@ class ContentManager
     public function findHeadlines()
     {
         $sql =
-        'SELECT `contents`.`title`, `contents`.`pk_content` ,
-               `contents`.`created` ,  `contents`.`slug` ,
-               `contents`.`starttime` , `contents`.`endtime` ,
-               `contents_categories`.`pk_fk_content_category` AS `category_id`
-        FROM `contents`
-        LEFT JOIN contents_categories
-            ON (`contents`.`pk_content`=`contents_categories`.`pk_fk_content`)
-        WHERE `contents`.`content_status` =1
-            AND `contents`.`frontpage` =1
-            AND `contents`.`fk_content_type` =1
-            AND `contents`.`in_litter` =0
-        ORDER BY `starttime` DESC ';
+        'SELECT `contents`.`title`, `contents`.`pk_content` ,'
+        .'       `contents`.`created` ,  `contents`.`slug` ,'
+        .'       `contents`.`starttime` , `contents`.`endtime`,'
+        .'       `contents_categories`.`pk_fk_content_category` AS `category_id`'
+        .' FROM `contents`'
+        .' LEFT JOIN contents_categories '
+        .'     ON (`contents`.`pk_content`=`contents_categories`.`pk_fk_content`)'
+        .' WHERE `contents`.`content_status` =1'
+        .'    AND `contents`.`frontpage` =1'
+        .'    AND `contents`.`fk_content_type` =1'
+        .'    AND `contents`.`in_litter` =0'
+        .' ORDER BY `starttime` DESC ';
 
-        $rs    = $GLOBALS['application']->conn->Execute($sql);
-        $ccm   = ContentCategoryManager::get_instance();
-        $items = array();
-        while (!$rs->EOF) {
-            $items[] = array(
-                'title'          => $rs->fields['title'],
-                'catName'        => $ccm->getName($rs->fields['category_id']),
-                'slug'           => $rs->fields['slug'],
-                'created'        => $rs->fields['created'],
-                'category_title' =>
-                    $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
-                'id'             => $rs->fields['pk_content'],
+        try {
+            $rs = getService('dbal_connection')->fetchAll($sql);
 
-                /* to filter in getInTime() */
-                'starttime'      => $rs->fields['starttime'],
-                'endtime'        => $rs->fields['endtime']
-            );
+            $ccm = ContentCategoryManager::get_instance();
+            foreach ($rs as $row) {
+                $items[] = array(
+                    'title'          => $row['title'],
+                    'catName'        => $ccm->getName($row['category_id']),
+                    'slug'           => $row['slug'],
+                    'created'        => $row['created'],
+                    'category_title' => $ccm->getTitle($ccm->getName($row['category_id'])),
+                    'id'             => $row['pk_content'],
+                    /* to filter in getInTime() */
+                    'starttime'      => $row['starttime'],
+                    'endtime'        => $row['endtime']
+                );
+            }
 
-            $rs->MoveNext();
+            $items = $this->getInTime($items);
+
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $items = $this->getInTime($items);
-
-        return $items;
     }
 
     /**
