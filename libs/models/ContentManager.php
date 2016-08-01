@@ -1951,24 +1951,21 @@ class ContentManager
      */
     public static function getOriginalIDForContentTypeAndID($content_type, $content_id)
     {
-        $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1',
+                [ $content_id, $content_type ]
+            );
 
-        $_values = array($content_id, $content_type);
-        $_sql = $GLOBALS['application']->conn->Prepare($sql);
-        $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
-
-        if (!$rss) {
-            $returnValue = false;
-        } else {
-            if ($rss->_numOfRows > 0) {
-                $returnValue =  $rss->fields['pk_content'];
-            } else {
-                $returnValue = false;
+            if (is_null($rs)) {
+                return false;
             }
+
+            return $rs['pk_content'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $returnValue;
-
     }
 
     /**
