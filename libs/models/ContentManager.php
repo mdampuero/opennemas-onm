@@ -859,43 +859,40 @@ class ContentManager
         $maxElements = 9,
         $all = false
     ) {
-        $this->init($contentType);
-
-        $sql = "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
                 FROM contents, comments, articles
                 WHERE contents.pk_content = comments.content_id
                 AND contents.pk_content = articles.pk_article
                 AND contents.content_status=1
-                AND starttime >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
+                AND starttime >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
                 GROUP BY contents.pk_content
                 ORDER BY num_comments DESC, contents.starttime DESC
-                LIMIT ?";
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($maxElements));
-
-        $contents = array();
-        while ($rs && !$rs->EOF) {
-            $content = new $contentType();
-            $content->load($rs->fields);
-
-            $contents []= $content;
-
-            $rs->MoveNext();
-        }
-
-        $contentsArray = array();
-        foreach ($contents as $item) {
-            $contentsArray[$item->pk_content] = array(
-                'pk_content' => $item->pk_content,
-                'num'        => $item->num_comments,
-                'title'      => $item->title,
-                'permalink'  => $item->slug,
-                'uri'        => $item->uri
+                LIMIT ?",
+                [ $days, $maxElements ]
             );
-        }
 
-        return $contentsArray;
+            $contentsArray = [];
+            foreach ($rs as $row) {
+                $content = new $contentType();
+                $content->load($row);
+                $contents []= $content;
+
+                $contentsArray[$content->pk_content] = array(
+                    'pk_content' => $content->pk_content,
+                    'num'        => $content->num_comments,
+                    'title'      => $content->title,
+                    'permalink'  => $content->slug,
+                    'uri'        => $content->uri
+                );
+            }
+
+            return $contentsArray;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
