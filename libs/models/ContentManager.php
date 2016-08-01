@@ -2128,18 +2128,17 @@ class ContentManager
             return false;
         }
 
-        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
-        $values = array($id, $property, $value, $value);
+        try {
+            $rs = getService('dbal_connection')->executeUpdate(
+                "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+                ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                [ $id, $property, $value, $value ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if ($rs === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 }
