@@ -9,6 +9,7 @@
  **/
 namespace Framework\Command;
 
+use Onm\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,29 +58,13 @@ EOF
             throw new \Exception("Can't access the ads file or doesn't exists");
         }
 
-        $im = $this->getContainer()->get('instance_manager');
-        $instance = $im->findOneBy(
-            [ 'internal_name' => [ [ 'value' => $instanceName ] ] ]
-        );
+        $loader = $this->getContainer()->get('core.loader');
+        $loader->loadInstanceFromInternalName($instanceName);
 
-        if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
-        }
+        $instance = $loader->getInstance();
+        $database = $instance->getDatabaseName();
 
-        $instance->boot();
-        $this->getContainer()->get('kernel.listener.instanceloader')->instance = $instance;
-
-        // Initialize database connection
-        $dbConn = $this->getContainer()->get('db_conn');
-        $database = $instance->settings['BD_DATABASE'];
-        $dbConn->selectDatabase($database);
-        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $conn->selectDatabase($database);
-
-        // Initialize application
-        \Application::load();
-        \Application::initDatabase($dbConn);
-
+        $this->getContainer()->get('dbal_connection')->selectDatabase($database);
         $this->getContainer()->get('session')->set(
             'user',
             json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
@@ -121,7 +106,7 @@ EOF
         foreach ($ads as $ad) {
             $data = [
                 'title' => $ad['title'],
-                'metadata' => \StringUtils::getTags($ad['title']),
+                'metadata' => StringUtils::getTags($ad['title']),
                 'category' => '0',
                 'categories' => $ad['categories'],
                 'available' => '1',
@@ -244,7 +229,7 @@ EOF
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,
-                    'metadata'           => \StringUtils::getTags($title),
+                    'metadata'           => StringUtils::getTags($title),
                     'category'           => '0',
                     'categories'         => $categories,
                     'available'          => '1',
