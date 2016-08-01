@@ -126,7 +126,7 @@ class Templating
             return $this->getBackendTemplate();
         }
 
-        $theme    = $this->continer->get('core.theme');
+        $theme    = $this->container->get('core.theme');
         $template = $this->container->get('core.template');
 
         $template->addActiveTheme($theme);
