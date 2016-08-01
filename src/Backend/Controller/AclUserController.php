@@ -97,7 +97,7 @@ class AclUserController extends Controller
     public function disconnectAction(Request $request, $id, $resource)
     {
         $em   = $this->get('orm.manager');
-        $user = $this->getRepository('User')->find($id);
+        $user = $em->getRepository('User')->find($id);
 
         if (!$user) {
             return new Response();
@@ -111,7 +111,7 @@ class AclUserController extends Controller
 
         $em->persist($user);
 
-        $this->dispatchEvent('social.connect', array('user' => $user));
+        $this->dispatchEvent('social.disconnect', array('user' => $user));
 
         return $this->redirect(
             $this->generateUrl(
@@ -460,7 +460,13 @@ class AclUserController extends Controller
     public function socialAction(Request $request, $id, $resource)
     {
         $template = 'acl/user/social.tpl';
-        $user     = $this->get('user_repository')->find($id);
+        try {
+            $user = $this->get('orm.manager')->getRepository('User')->find($id);
+        } catch (\Exception $e) {
+            $user = $this->get('orm.manager')->getRepository('User', 'manager')
+                ->find($id);
+        }
+
         $session  = $request->getSession();
 
         $session->set(
@@ -479,29 +485,26 @@ class AclUserController extends Controller
             $connected = true;
         }
 
+        $resourceName = 'Twitter';
+
         if ($resource == 'facebook') {
             $resourceName = 'Facebook';
-        } else {
-            $resourceName = 'Twitter';
         }
 
         if ($request->get('style') && $request->get('style') == 'orb') {
             $template = 'acl/user/social_alt.tpl';
         }
 
-        $this->dispatchEvent('social.disconnect', array('user' => $user));
+        $this->dispatchEvent('social.connect', array('user' => $user));
 
-        return $this->render(
-            $template,
-            array(
-                'current_user_id' => $this->getUser()->id,
-                'connected'       => $connected,
-                'resource_id'     => $resourceId,
-                'resource'        => $resource,
-                'resource_name'   => $resourceName,
-                'user'            => $user,
-            )
-        );
+        return $this->render($template, [
+            'current_user_id' => $user->id,
+            'connected'       => $connected,
+            'resource_id'     => $resourceId,
+            'resource'        => $resource,
+            'resource_name'   => $resourceName,
+            'user'            => $user,
+        ]);
     }
 
     /**

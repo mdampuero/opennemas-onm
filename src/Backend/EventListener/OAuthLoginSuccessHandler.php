@@ -62,12 +62,11 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $referer    = $this->router->generate('admin_welcome');
-        $user       = $token->getUser();
+        $referer = $this->router->generate('admin_welcome');
+        $user    = $token->getUser();
 
         // Set session array
         $request->getSession()->set('user', $user);
-        $request->getSession()->set('user_language', $user->getMeta('user_language'));
 
         if ($request->getSession()->get('_security.backend.target_path')) {
             $referer = $request->getSession()->get('_security.backend.target_path');

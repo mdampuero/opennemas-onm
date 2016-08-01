@@ -95,13 +95,13 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         $resource = $response->getResourceOwner()->getName();
         $em       = $this->container->get('orm.manager');
 
+        $user = $this->container->get('session')->get('user');
+
         try {
             // If user logged in then connect accounts
-            if ($this->container->get('security.token_storage')->getToken() &&
-                $this->container->get('security.token_storage')->getToken()->getUser()
-            ) {
-                $id   = $this->container->get('security.token_storage')->getToken()->getUser()->id;
-                $user = $em->getRepository('User', $user->getOrigin())->find($id);
+            if (!empty($user)) {
+                $user = $em->getRepository('User', $user->getOrigin())
+                    ->find($user->id);
 
                 // Connect accounts
                 $user->{$resource . '_email'}    = $email;
@@ -114,8 +114,8 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
                 return $user;
             }
 
-            return $this->get('orm.manager')
-                ->getRepository('User', $user->getOrigin())
+            return $this->container->get('orm.manager')
+                ->getRepository('User')
                 ->findOneBy(sprintf('%s_id = "%s"', $resource, $userId));
 
         } catch (\Exception $e) {

@@ -46,12 +46,14 @@ class GettingStartedController extends Controller
         $database  = $instance->getDatabaseName();
         $namespace = $this->get('cache')->getNamespace();
 
-        $user = $this->get('orm.manager')->getRepository('User', 'instance')
-            ->find($this->getUser()->id);
-
-        if (empty($user)) {
-            $user = $this->get('orm.manager')->getRepository('User', 'manager')
+        try {
+            $user = $this->get('orm.manager')->getRepository('User', 'instance')
                 ->find($this->getUser()->id);
+        } catch (\Exception $e) {
+            if (empty($user)) {
+                $user = $this->get('orm.manager')->getRepository('User', 'manager')
+                    ->find($this->getUser()->id);
+            }
         }
 
         $this->get('orm.manager')->getConnection('instance')->selectDatabase($database);

@@ -80,7 +80,7 @@
           <div class="btn btn-social btn-{$resource}">
             <i class="fa fa-{$resource}"></i>
             {assign var="meta" value="{$resource}_realname"}
-            {$user->meta[$meta]}
+            {$user->{$meta}}
           </div>
         </li>
       </ul>
