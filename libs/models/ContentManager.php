@@ -1271,9 +1271,7 @@ class ContentManager
                 );
             }
 
-            $items = $this->getInTime($items);
-
-            return $items;
+            return $this->getInTime($items);
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -1289,50 +1287,63 @@ class ContentManager
      **/
     public function findHeadlinesWithImage($frontIncluded = false)
     {
-        $sql =
-        'SELECT `contents`.`title`, `contents`.`pk_content` ,
-               `contents`.`created` ,  `contents`.`slug` ,
-               `contents`.`starttime` , `contents`.`endtime` ,
-               `articles`.`img1` , `articles`.`img2` ,
-               `contents_categories`.`pk_fk_content_category` AS `category_id`
-        FROM `contents`, contents_categories, articles
-        WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
-            AND `contents`.`pk_content`=`articles`.`pk_article`
-            AND `contents`.`content_status` =1
-            AND `contents`.`fk_content_type` =1
-            AND `contents`.`in_litter` =0
-        ORDER BY `created` DESC LIMIT 400 ';
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT `contents`.`title`, `contents`.`pk_content` ,
+                       `contents`.`created` ,  `contents`.`slug` ,
+                       `contents`.`starttime` , `contents`.`endtime` ,
+                       `articles`.`img1` , `articles`.`img2` ,
+                       `contents_categories`.`pk_fk_content_category` AS `category_id`
+                FROM `contents`, contents_categories, articles
+                WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
+                    AND `contents`.`pk_content`=`articles`.`pk_article`
+                    AND `contents`.`content_status` =1
+                    AND `contents`.`fk_content_type` =1
+                    AND `contents`.`in_litter` =0
+                ORDER BY `created` DESC LIMIT 400'
+            );
+            $ccm   = ContentCategoryManager::get_instance();
 
-        $rs    = $GLOBALS['application']->conn->Execute($sql);
-        $ccm   = ContentCategoryManager::get_instance();
-        $items = array();
-        while (!$rs->EOF) {
-            if (!$frontIncluded) {
-                $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
-                $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
-            }
-            if ($rsAux->fields['num'] <= 0 || $frontIncluded) {
-                $items[] = array(
-                    'title'          => $rs->fields['title'],
-                    'catName'        => $ccm->getName($rs->fields['category_id']),
-                    'slug'           => $rs->fields['slug'],
-                    'created'        => $rs->fields['created'],
-                    'category_title' => $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
-                    'id'             => $rs->fields['pk_content'],
-                    'starttime'      => $rs->fields['starttime'],
-                    'endtime'        => $rs->fields['endtime'],
-                    'img1'           => $rs->fields['img1'],
-                    'img2'           => $rs->fields['img2'],
+            $contentIdsInFrontpage = [];
+            if ($frontIncluded) {
+                $ids = array_map(function ($item) {
+                    return $item['pk_content'];
+                }, $rs);
+
+                $contentIds = implode(', ', $ids);
+                $contentIdsInFrontpage  = getService('dbal_connection')->fetchAll(
+                    'SELECT pk_fk_content FROM content_positions WHERE pk_fk_content IN ('.$contentIds.') AND fk_category=0'
                 );
+                $contentIdsInFrontpage = array_map(function ($item) {
+                    return $item['pk_fk_content'];
+                }, $contentIdsInFrontpage);
             }
 
 
-            $rs->MoveNext();
+            $items = [];
+            foreach ($rs as $row) {
+                if (!$frontIncluded || ($frontIncluded && in_array($row['pk_content'], $contentIdsInFrontpage))) {
+                    $items[] = [
+                        'title'          => $row['title'],
+                        'catName'        => $ccm->getName($row['category_id']),
+                        'slug'           => $row['slug'],
+                        'created'        => $row['created'],
+                        'category_title' => $ccm->getTitle($ccm->getName($row['category_id'])),
+                        'id'             => $row['pk_content'],
+                        'starttime'      => $row['starttime'],
+                        'endtime'        => $row['endtime'],
+                        'img1'           => $row['img1'],
+                        'img2'           => $row['img2'],
+                    ];
+                }
+            }
+
+            $items = $this->getInTime($items);
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $items = $this->getInTime($items);
-
-        return $items;
     }
 
     /**
