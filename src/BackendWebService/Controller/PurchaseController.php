@@ -61,6 +61,9 @@ class PurchaseController extends Controller
         $instance = $this->get('instance');
         $em       = $this->get('orm.manager');
         $client   = $instance->getClient();
+        $date     = new \DateTime();
+
+        $date->setTimeZone(new \DateTimeZone('UTC'));
 
         if (!empty($client)) {
             $client = $em->getRepository('manager.client', 'Database')->find($client);
@@ -69,7 +72,8 @@ class PurchaseController extends Controller
         $purchase = new Purchase();
         $purchase->instance_id = $instance->id;
         $purchase->step        = 'cart';
-        $purchase->created     = date('Y-m-d H:i:s');
+        $purchase->created     = $date->format('Y-m-d H:i:s');
+        $purchase->updated     = $date->format('Y-m-d H:i:s');
 
         if (!empty($client)) {
             $purchase->client_id = $client->id;
@@ -90,7 +94,10 @@ class PurchaseController extends Controller
     {
         $em       = $this->get('orm.manager');
         $purchase = $em->getRepository('manager.purchase')->find($id);
-        $vatTax = null;
+        $vatTax   = null;
+        $date     = new \DateTime();
+
+        $date->setTimeZone(new \DateTimeZone('UTC'));
 
         if (!empty($this->get('instance')->getClient())) {
             $client = $this->get('instance')->getClient();
@@ -104,7 +111,7 @@ class PurchaseController extends Controller
             $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
         }
 
-        $purchase->updated = date('Y-m-d H:i:s');
+        $purchase->updated = $date->format('Y-m-d H:i:s');
         $purchase->method  = $request->request->get('method', null);
         $subtotal          = 0;
         $purchase->step    = $request->request->get('step', 'cart');

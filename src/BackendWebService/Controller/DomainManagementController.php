@@ -163,7 +163,9 @@ class DomainManagementController extends Controller
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
         $instance  = $this->get('instance');
-        $date      = new \Datetime('now');
+        $date      = new \DateTime();
+
+        $date->setTimeZone(new \DateTimeZone('UTC'));
 
         $em = $this->get('orm.manager');
 
