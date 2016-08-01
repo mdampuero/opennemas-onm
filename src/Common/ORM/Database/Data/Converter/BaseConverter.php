@@ -36,9 +36,14 @@ class BaseConverter extends Converter
         $mapping = $this->metadata->mapping['database'];
         $data    = [];
         foreach ($source as $key => $value) {
-            $params = explode('::', $this->metadata->properties[$key]);
-            $from   = array_shift($params);
+            $from   = gettype($value);
             $to     = 'String';
+            $params = [];
+
+            if (array_key_exists($key, $this->metadata->properties)) {
+                $params = explode('::', $this->metadata->properties[$key]);
+                $from   = array_shift($params);
+            }
 
             if (array_key_exists($key, $mapping['columns'])) {
                 $to = \classify($mapping['columns'][$key]['type']);
