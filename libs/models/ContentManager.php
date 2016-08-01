@@ -392,50 +392,6 @@ class ContentManager
     }
 
     /**
-     * Fetches all the contents (articles, widgets, etc) for one specific
-     * category with its placeholder and position
-     *
-     * This is used for HomePages, fetches all the contents assigned for it
-     * and allows to render an entire homepage
-     *
-     * @param int $categoryID the id of the category we want to get contents from
-     *
-     * @return mixed array of contents
-     **/
-    public function getContentsIdsForHomepageOfCategory($categoryID)
-    {
-        // Initialization of variables
-        $contents = array();
-        if (empty($categoryID)) {
-            $categoryID = 0;
-        }
-
-        $sql = 'SELECT * FROM content_positions '
-              .'WHERE `fk_category`='.$categoryID.' '
-              .'ORDER BY position ASC ';
-
-        // Fetch the id, placeholder, position, and content_type
-        // in this category's frontpage
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs !== false) {
-            // iterate over all found contents and initialize them
-            while (!$rs->EOF) {
-                if (!class_exists($rs->fields['content_type'])) {
-                    $rs->MoveNext();
-                    continue;
-                }
-                $contents []= $rs->fields['pk_fk_content'];
-
-                $rs->MoveNext();
-            }
-        }
-
-        // Return all the objects of contents initialized
-        return $contents;
-    }
-
-    /**
      * Save the content positions for elements in a given category
      *
      * @param int $categoryID the id of the category we want to save positions into
