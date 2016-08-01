@@ -158,7 +158,7 @@ class PickerController extends Controller
 
             $years[$date->format('Y')]['name'] = $date->format('Y');
             $years[$date->format('Y')]['months'][]= array(
-                'name' => $fmt->format($date),
+                'name'  => ucfirst($fmt->format($date)),
                 'value' => $value['date_month']
             );
         }

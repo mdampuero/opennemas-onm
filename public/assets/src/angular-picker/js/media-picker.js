@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('onm.picker', [ 'onm.datetimepicker' ])
+angular.module('onm.picker', [])
   /**
    * @ngdoc directive
    * @name  mediaPicker
@@ -40,7 +40,7 @@ angular.module('onm.picker', [ 'onm.datetimepicker' ])
                         <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
                           <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
-                            [% month.name %]\
+                            [% month.name %] ([% year.name %])\
                           </option>\
                         </optgroup>\
                       </select>\
@@ -53,34 +53,6 @@ angular.module('onm.picker', [ 'onm.datetimepicker' ])
                           </span>\
                           <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
                         </div>\
-                      </div>\
-                    </li>\
-                    <li class=\"hidden-xs\">\
-                      <div class=\"controls\">\
-                        <div class=\"input-group input-group-animated\">\
-                          <span class=\"input-group-addon cursor-pointer\" ng-click=\"pickerFrom.toggle()\">\
-                            <i class=\"fa fa-calendar m-r-5\"></i>\
-                            [% picker.params.explore.from %]\
-                          </span>\
-                          <input class=\"input-110\" datetime-picker=\"pickerFrom\" datetime-picker-format=\"YYYY-MM-DD\" name=\"from\" ng-class=\"{ 'dirty': $parent.from }\" ng-model=\"$parent.from\" type=\"text\">\
-                        </div>\
-                        <span class=\"input-group-status pointer\" ng-class=\"{ 'dirty': $parent.from }\" ng-click=\"$parent.from = null\" ng-show=\"$parent.from\">\
-                          <i class=\"fa fa-times\"></i>\
-                        </span>\
-                      </div>\
-                    </li>\
-                    <li class=\"hidden-xs\">\
-                      <div class=\"controls\">\
-                        <div class=\"input-group input-group-animated\">\
-                          <span class=\"input-group-addon cursor-pointer\" ng-click=\"pickerTo.toggle()\">\
-                            <i class=\"fa fa-calendar m-r-5\"></i>\
-                            [% picker.params.explore.to %]\
-                          </span>\
-                          <input class=\"input-110\" datetime-picker=\"pickerTo\" datetime-picker-format=\"YYYY-MM-DD\" name=\"to\" ng-class=\"{ 'dirty': $parent.to }\" ng-model=\"$parent.to\" type=\"text\">\
-                        </div>\
-                        <span class=\"input-group-status pointer\" ng-class=\"{ 'dirty': $parent.to }\" ng-click=\"$parent.to = null\" ng-show=\"$parent.to\">\
-                          <i class=\"fa fa-times\"></i>\
-                        </span>\
                       </div>\
                     </li>\
                     <li class=\"hidden-xs\" ng-if=\"picker.isTypeEnabled('video')\">\
