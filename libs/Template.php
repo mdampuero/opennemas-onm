@@ -46,6 +46,10 @@ class Template extends Smarty
     {
         parent::__construct();
 
+        // Make compile and cache files writable by group
+        $this->_file_perms = 0664;
+        $this->_dir_perms  = 0771;
+
         $this->container = $container;
 
         $this->assign('container', $container);
