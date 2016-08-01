@@ -48,11 +48,11 @@ class LayoutManager
     /**
      * Initializes the LayoutManager.
      *
-     * @param TemplateAdmin $tpl The template service.
+     * @param Templating $templating The templating service.
      */
-    public function __construct($tpl)
+    public function __construct($templating)
     {
-        $this->tpl = $tpl;
+        $this->tpl = $templating->getBackendTemplate();
     }
 
     /**
@@ -311,7 +311,7 @@ class LayoutManager
 
             return $this->tpl->fetch($contentName.'/content-provider/'.$contentName.".tpl")."\n";
         } catch (\SmartyException $e) {
-            return '';
+            error_log($e->getMessage());
         }
     }
 

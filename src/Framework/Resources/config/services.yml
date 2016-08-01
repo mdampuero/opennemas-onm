@@ -272,7 +272,7 @@ services:
 
     core.manager.layout:
         class:     Onm\LayoutManager
-        arguments: [ '@core.template.admin' ]
+        arguments: [ '@onm_templating' ]
 
     # TODO: Remove arguments when new ORM repositories replace search features
     core.manager.menu:
