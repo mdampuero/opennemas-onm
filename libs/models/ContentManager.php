@@ -1192,41 +1192,44 @@ class ContentManager
      **/
     public function find_by_category(
         $contentType,
-        $pkFkContentCategory,
+        $categoryID,
         $filter = null,
         $orderBy = 'ORDER BY 1'
     ) {
-        $this->init($contentType);
-
-        $items = array();
-        $_where = 'AND in_litter=0';
-
-        if (!is_null($filter)) {
-            //se busca desde la litter.php
-            if ($filter == 'in_litter=1') {
-                $_where = $filter;
-            } else {
-                $_where = ' in_litter=0 AND '.$filter;
-            }
+        if ($categoryID <= 0) {
+            return [];
         }
 
-        if (intval($pkFkContentCategory) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  '
-                 . 'WHERE '.$_where
-                 . ' AND `contents_categories`.`pk_fk_content_category`='
-                 . $pkFkContentCategory
-                 . ' AND `contents`.`pk_content`=`' . $this->table . '`.`pk_'.$this->content_type
-                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+        $table       = tableize($contentType);
+        $contentType = underscore($contentType);
+
+        $whereSQL = 'AND in_litter=0';
+
+        if (!is_null($filter) && $filter == 'in_litter=1') {
+            $whereSQL = $filter;
+        } elseif(!is_null($filter)) {
+            $whereSQL = ' in_litter=0 AND '.$filter;
+        }
+
+        if (intval($categoryID) > 0) {
+            $sql = 'SELECT * FROM contents_categories, contents, '.$table.'  '
+                 . 'WHERE '.$whereSQL
+                 . ' AND `contents_categories`.`pk_fk_content_category`='. $categoryID
+                 . ' AND `contents`.`pk_content`=`' . $table . '`.`pk_'.$contentType.'` '
+                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $orderBy;
         } else {
             return $items ;
         }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        try {
+            $rs = getService('dbal_connection')->fetchAll($sql);
 
-        $items=$this->loadObject($rs, $contentType);
-
-        return $items;
+            return $this->loadObject($rs, $contentType);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
