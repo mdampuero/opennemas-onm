@@ -1358,44 +1358,36 @@ class ContentManager
         $filter = null,
         $orderBy = 'ORDER BY 1'
     ) {
-        $items = array();
-        $where = '1=1  AND in_litter=0';
+        $items = [];
 
-        if (!is_null($filter)) {
-            if ($filter == 'in_litter=1') {
-                //se busca desde la litter.php
-                $where = $filter;
-            }
-
-            $where = $filter.' AND in_litter=0';
-        }
-        // METER TB LEFT JOIN
-        //necesita el as id para paginacion
-
-        $sql =
-            'SELECT contents.pk_content, contents.position, users.avatar_img_id,
-                opinions.pk_opinion as id, users.name, users.bio, contents.title,
-                contents.slug, opinions.type_opinion, contents.body,
-                contents.changed, contents.created, contents.with_comment,
-                contents.starttime, contents.endtime
-            FROM contents, opinions
-            LEFT JOIN users ON (users.id=opinions.fk_author)
-            WHERE `contents`.`fk_content_type`=4
-            AND contents.pk_content=opinions.pk_opinion
-            AND '.$where.' '.$orderBy;
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = null;
-        if (!empty($rs)) {
-            $items = $rs->GetArray();
-            foreach ($items as &$item) {
-                $item['path_img'] = \Photo::getPhotoPath($item['avatar_img_id']);
-            }
+        $whereSQL = 'in_litter=0';
+        if (!empty($filter) || $filter == 'in_litter=1') {
+            $whereSQL = $filter;
         }
 
-        return $items ;
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT contents.pk_content, contents.position, users.avatar_img_id,
+                    opinions.pk_opinion as id, users.name, users.bio, contents.title,
+                    contents.slug, opinions.type_opinion, contents.body,
+                    contents.changed, contents.created, contents.with_comment,
+                    contents.starttime, contents.endtime
+                FROM contents, opinions
+                LEFT JOIN users ON (users.id=opinions.fk_author)
+                WHERE `contents`.`fk_content_type`=4
+                AND contents.pk_content=opinions.pk_opinion
+                AND '.$whereSQL.' '.$orderBy
+            );
+
+            foreach ($rs as &$row) {
+                $row['path_img'] = \Photo::getPhotoPath($row['avatar_img_id']);
+            }
+
+            return $rs;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
