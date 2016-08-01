@@ -104,9 +104,9 @@ class Templating
     protected function getBundleName()
     {
         $controller = $this->container->get('request')->get('_controller');
-        $controllerNameParts = explode('\\', $controller);
+        $controller = explode('\\', $controller);
 
-        return $controllerNameParts[0];
+        return $controller[0];
     }
 
     /**
