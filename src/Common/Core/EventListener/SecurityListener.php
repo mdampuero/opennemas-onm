@@ -60,13 +60,15 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $instance   = $this->container->get('core.instance');
-        $user       = $this->context->getToken()->getUser();
-        $categories = $this->getCategories($user);
+        $instance    = $this->container->get('core.instance');
+        $user        = $this->context->getToken()->getUser();
+        $categories  = $this->getCategories($user);
+        $permissions = $this->getPermissions($user);
 
         $this->security->setInstance($instance);
         $this->security->setUser($user);
         $this->security->setCategories($categories);
+        $this->security->setPermissions($permissions);
 
         if ($this->security->hasRole('ROLE_MANAGER') || $user->isEnabled()) {
             return;
@@ -135,7 +137,7 @@ class SecurityListener implements EventSubscriberInterface
             return [];
         }
 
-        $oql = sprintf('pk_user_group in [%s]', implode($user->fk_user_group));
+        $oql = sprintf('pk_user_group in [%s]', implode(',', $user->fk_user_group));
 
         $userGroups = $this->container->get('orm.manager')
             ->getRepository('UserGroup')

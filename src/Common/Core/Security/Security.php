@@ -33,6 +33,13 @@ class Security
     protected $instance;
 
     /**
+     * The list of permissions.
+     *
+     * @var array
+     */
+    protected $permissions = [];
+
+    /**
      * The current authorized user.
      *
      * @var UserInterface
@@ -97,11 +104,11 @@ class Security
             return true;
         }
 
-        if (empty($this->user->privileges)) {
+        if (empty($this->permissions)) {
             return false;
         }
 
-        return in_array($permission, $this->user->privileges);
+        return in_array($permission, $this->permissions);
     }
 
     /**
@@ -142,6 +149,20 @@ class Security
     public function setInstance(Instance $instance)
     {
         $this->instance = $instance;
+    }
+
+    /**
+     * Changes the current permissions.
+     *
+     * @param array $permissions The list of permissions.
+     */
+    public function setPermissions($permissions)
+    {
+        if (is_null($permissions)) {
+            $permissions = [];
+        }
+
+        $this->permissions = $permissions;
     }
 
     /**
