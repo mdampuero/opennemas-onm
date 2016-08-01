@@ -37,6 +37,10 @@ class Template extends Smarty
         // Call the parent constructor
         parent::__construct();
 
+        // Make compile and cache files writable by group
+        $this->_file_perms = 0664;
+        $this->_dir_perms  = 0771;
+
         $this->themeName = $theme;
 
         $this->setBaseCachePath();
