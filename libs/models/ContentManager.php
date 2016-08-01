@@ -1186,109 +1186,42 @@ class ContentManager
     public function count(
         $contentType,
         $filter = null,
-        $pk_fk_content_category = null
+        $categoryID = null
     ) {
-        $this->init($contentType);
+        $table       = tableize($contentType);
+        $contentType = underscore($contentType);
 
-        $_where = '';
+        $whereSQL = '';
         if (!is_null($filter)) {
-            if (($filter == ' `contents`.`in_litter`=1')
-                || ($filter == 'in_litter=1')
-            ) {
-                $_where = ' AND '.$filter;
-            } else {
-                $_where .= ' AND '.$filter;
-            }
+            $whereSQL = ' AND '.$filter;
         } else {
-            $_where = 'AND in_litter=0';
+            $whereSQL = 'AND in_litter=0';
         }
 
-        if (intval($pk_fk_content_category) > 0) {
+        if (intval($categoryID) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
-                 . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`='. $pk_fk_content_category
-                 . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
+                 . 'FROM `contents_categories`, `contents`, ' . $table . '  '
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='. $categoryID
+                 . '  AND pk_content=`'.$table. '`.`pk_'.$contentType
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
-                 . $_where;
+                 . $whereSQL;
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
-                . 'FROM `contents`, `'.$this->table.'` '
-                . 'WHERE `contents`.`pk_content`=`'.$this->table
-                . '`.`pk_'.$this->content_type.'` '
-                . $_where;
+                . 'FROM `contents`, `'.$table.'` '
+                . 'WHERE `contents`.`pk_content`=`'.$table . '`.`pk_'.$contentType.'` '
+                . $whereSQL;
         }
 
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc($sql);
+
+            return (is_array($rs) && array_key_exists('total', $rs)) ? (int) $rs['total'] : 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
 
         return $rs;
-    }
-
-    /**
-     * Returns a tuple with the total count of contents that matches a filter and
-     * and slice of that contents from one offset and with the number of elements
-     * requested
-     *
-     * @param string $contentType the content type to search
-     * @param int $categoryId the category id where to search the contents.
-     *                        if null is provided it will search in all the categories
-     * @param string $filter the SQL WHERE sentence to filter the contents
-     * @param string $orderBy the ORDER By sentence
-     * @param int $page the offset page where to start the slice
-     * @param int $numElements the number of elements that the slice must have
-     * @param boolean $debug if true the function will halt and print down the result
-     *
-     * @return  array a tuple with the count of contents that match the search and the slice
-     **/
-    public function getCountAndSlice(
-        $contentType,
-        $categoryId,
-        $filter,
-        $orderBy,
-        $page = 1,
-        $numElements = 10,
-        $offset = 0
-    ) {
-        $this->init($contentType);
-
-        if (empty($filter)) {
-            $filterCount = ' contents.in_litter<>1';
-            $filter = ' AND '. $filterCount;
-        } else {
-            $filterCount = $filter;
-            $filter = ' AND '. $filter;
-        }
-
-        $countContents = $this->count($contentType, $filterCount, $categoryId);
-
-        if ($page == 1) {
-            $limit = $offset.', '.$numElements;
-        } else {
-            $limit = $offset+(($page-1)*$numElements).', '.$numElements;
-        }
-
-        if (intval($categoryId)>0) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.' '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`='.$categoryId
-                 . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
-                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
-                 . $filter
-                 . ' '
-                 . $orderBy
-                 . ' LIMIT '.$limit;
-        } else {
-            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
-                 . ' WHERE `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
-                 . $filter
-                 . ' '
-                 . $orderBy
-                 . ' LIMIT '.$limit;
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = $this->loadObject($rs, $contentType);
-
-        return array($countContents, $items);
     }
 
     /**
