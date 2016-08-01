@@ -41,8 +41,6 @@ class CronActionSubscriber implements EventSubscriberInterface
      */
     public function updateNewsAgency(Event $event)
     {
-        var_dump($this);
-
         return false;
     }
 }
