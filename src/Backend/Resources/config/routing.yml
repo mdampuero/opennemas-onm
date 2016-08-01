@@ -1023,16 +1023,11 @@ admin_menu_sidebar_get:
     options:
         expose: true
 
-# Client info page routes
-admin_client_info_page:
-    path:     /my-account
-    defaults: { _controller  : BackendBundle:ClientInformation:default }
-
-admin_client_send_upgrade_mail:
-    path:     /my-account/upgrade-instance
-    defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
-
 # Routing refactoring starts here
+backend_account:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/account.yml'
+
 backend_domain_mapping:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain_management.yml'

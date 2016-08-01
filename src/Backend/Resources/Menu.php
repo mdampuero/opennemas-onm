@@ -21,7 +21,7 @@ $menuXml = [
     [
         'id'      => 'my-newspaper',
         'class'   => 'visible-xs',
-        'link'    => url('admin_client_info_page'),
+        'link'    => url('backend_account_show'),
         'title'   => _("My newspaper"),
         'icon'    => 'fa fa-bullseye',
     ],
