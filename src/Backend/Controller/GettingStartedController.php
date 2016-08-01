@@ -18,7 +18,9 @@ class GettingStartedController extends Controller
     public function finishWizardAction()
     {
         $user = $this->getUser();
-        $user->updateUserToken($user->id, null);
+
+        $user->token = null;
+        $this->get('orm.manager')->persist($user);
 
         return $this->redirect($this->generateUrl('admin_welcome'));
     }
