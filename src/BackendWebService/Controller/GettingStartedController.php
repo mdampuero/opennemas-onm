@@ -37,12 +37,8 @@ class GettingStartedController extends Controller
             $user->deleteMetaKey($user->id, 'terms_accepted');
         }
 
-        if ($user->isMaster()) {
-            $em->persist($user, 'manager');
-            return new JsonResponse();
-        }
+        $em->persist($user, $user->getOrigin());
 
-        $em->persist($user, 'instance');
         return new JsonResponse();
     }
 
