@@ -931,53 +931,60 @@ class ContentManager
         $num = 8,
         $all = false
     ) {
-        $this->init($contentType);
-        $items = array();
+        // TODO: Review algorithm
+        $table = tableize($contentType);
 
-        $_tables = '`contents`, `' . $this->table . '`, `ratings` ';
-        $_fields = ' * ';
-        $_where = '`contents`.in_litter=0 ';
+        $fields = ' * ';
+        $tables = '`contents`, `' . $table . '`, `ratings` ';
+        $whereSQL = '`contents`.in_litter=0 ';
         if (!$all) {
-            $_where .= ' AND `contents`.`content_status`=1 ';
+            $whereSQL .= ' AND `contents`.`content_status`=1 ';
         }
 
-        $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_tables_relations = ' AND `contents`.pk_content=`' . $this->table . '`.pk_' . strtolower($contentType) .
+        $daysFilterSQL = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $tablesRelationSQL = ' AND `contents`.pk_content=`' . $table . '`.pk_' . strtolower($contentType) .
                              ' AND `ratings`.pk_rating=`contents`.pk_content ';
-        $_order_by = 'ORDER BY `contents`.`content_status` DESC, `ratings`.total_votes DESC ';
-        $_limit = 'LIMIT '.$num;
+        $orderBySQL = ' ORDER BY `contents`.`content_status` DESC, `ratings`.total_votes DESC ';
+        $limitSQL = 'LIMIT '.$num;
 
         if (isset($author) && !is_null($author) && intval($author) > 0) {
             if ($contentType=='Opinion') {
-                $_where .= 'AND `opinions`.fk_author='.$author.' ';
+                $whereSQL .= 'AND `opinions`.fk_author='.$author.' ';
             } else {
-                $_where .= 'AND `contents`.fk_author='.$author.' ';
+                $whereSQL .= 'AND `contents`.fk_author='.$author.' ';
             }
         }
 
         if (intval($category)>0) {
-            $_tables .= ', `contents_categories` ';
-            $_tables_relations .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content ' .
+            $tables .= ', `contents_categories` ';
+            $tablesRelationSQL .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content ' .
                                   'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
         }
 
-        $sql = 'SELECT ' . $_fields
-             . ' FROM ' . $_tables
-             . ' WHERE ' . $_where.$_days.$_tables_relations
-             . $_order_by . $_limit;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT *  FROM '.$tables
+             .' WHERE ' . $whereSQL.$daysFilterSQL.$tablesRelationSQL
+             . $orderBySQL . $limitSQL;
 
-        if ($rs->_numOfRows<=($num-3) && $notEmpty) {
-            $sql = 'SELECT ' . $_fields
-                 . ' FROM ' . $_tables
-                 . ' WHERE ' . $_where . $_tables_relations
-                 . $_order_by . $_limit;
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        try {
+            $rs = getService('dbal_connection')->fetchAll($sql);
+
+            if (is_null($rs) || count($rs) < 4) {
+                $rs = getService('dbal_connection')->fetchAll(
+                    'SELECT * FROM '.$tables
+                    .' WHERE ' . $whereSQL . $tablesRelationSQL
+                    .$orderBySQL.$limitSQL
+                );
+            }
+
+            if (!is_array()) {
+                return [];
+            }
+
+            return $this->loadObject($rs, $contentType);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $items = $this->loadObject($rs, $contentType);
-
-        return $items;
     }
 
      /**
