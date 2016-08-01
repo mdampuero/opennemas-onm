@@ -140,7 +140,12 @@ class SqlTranslator
             $isLike = $token[1] === 'O_LIKE' || $token[1] === 'O_NOT_LIKE';
         }
 
-        return [ $this->tables, implode(' ', $this->sqls), $this->params, $this->types ];
+        return [
+            array_unique($this->tables),
+            implode(' ', $this->sqls),
+            $this->params,
+            $this->types
+        ];
     }
 
     /**
@@ -213,8 +218,11 @@ class SqlTranslator
      */
     protected function translateField($str)
     {
+        // Recognized columns
+        $columns = array_keys($this->metadata->mapping['database']['columns']);
+
         // Seach by meta_key
-        if (!array_key_exists($str, $this->metadata->properties)) {
+        if (!in_array($str, $columns)) {
             if ($this->metadata->hasMetas()) {
                 $this->tables[] = $this->metadata->getMetaTable();
 
