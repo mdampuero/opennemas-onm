@@ -2035,11 +2035,21 @@ class ContentManager
     */
     public static function searchContentID($oldID)
     {
-        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ?";
-        $value     = array($oldID);
-        $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT pk_content FROM `contents` WHERE pk_content = ?",
+                [ $oldID ]
+            );
 
-        return $contentID;
+            if (is_null($rs)) {
+                return false;
+            }
+
+            return $rs['pk_content'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
