@@ -61,6 +61,7 @@ class PurchaseController extends Controller
         $instance = $this->get('core.instance');
         $em       = $this->get('orm.manager');
         $client   = $instance->getClient();
+        $date     = new \DateTime();
 
         if (!empty($client)) {
             $client = $em->getRepository('client')->find($client);
@@ -69,8 +70,8 @@ class PurchaseController extends Controller
         $purchase = new Purchase();
         $purchase->instance_id = $instance->id;
         $purchase->step        = 'cart';
-        $purchase->created     = new \DateTime();
-        $purchase->updated     = new \DateTime();
+        $purchase->created     = $date;
+        $purchase->updated     = $date;
 
         if (!empty($client)) {
             $purchase->client_id = $client->id;
@@ -91,7 +92,7 @@ class PurchaseController extends Controller
     {
         $em       = $this->get('orm.manager');
         $purchase = $em->getRepository('Purchase')->find($id);
-        $vatTax = null;
+        $vatTax   = null;
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $this->get('core.instance')->getClient();

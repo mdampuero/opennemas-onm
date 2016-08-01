@@ -163,7 +163,7 @@ class DomainManagementController extends Controller
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
         $instance  = $this->get('core.instance');
-        $date      = new \Datetime('now');
+        $date      = new \DateTime();
 
         $em = $this->get('orm.manager');
 
@@ -203,7 +203,7 @@ class DomainManagementController extends Controller
             $em->persist($payment, 'FreshBooks');
 
             $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->updated    = $date->format('Y-m-d H:i:s');
+            $purchase->updated    = $date;
 
             $em->persist($purchase);
 
