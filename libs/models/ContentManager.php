@@ -163,13 +163,12 @@ class ContentManager
         $orderBy = 'ORDER BY 1',
         $fields = '*'
     ) {
-        $this->init($contentType);
-        $items = array();
+        $table       = tableize($contentType);
+        $contentType = underscore($contentType);
 
         $where = '`contents`.`in_litter`=0';
-
         if (!is_null($filter)) {
-            //se busca desde la litter.php
+            // se busca desde la litter.php
             if ($filter == 'in_litter=1') {
                 $where = $filter;
             } else {
@@ -177,101 +176,20 @@ class ContentManager
             }
         }
 
-        $sql = 'SELECT '.$fields
-             . ' FROM `contents`, `'.$this->table.'`, `contents_categories` '
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT '.$fields
+             . ' FROM `contents`, `'.$table.'`, `contents_categories` '
              . ' WHERE '.$where
-             . ' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type.'` '
-             . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$orderBy;
+             . ' AND `contents`.`pk_content`= `'.$table.'`.`pk_'.$contentType.'` '
+             . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$orderBy
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->loadObject($rs, $contentType);
-
-        return $items;
-    }
-
-    /**
-     * Searches for contents given a criteria
-     *
-     * @param array $params parameters to filter contents with
-     *
-     * @return array list of contents that matched the criteria
-     **/
-    public static function search($params = array())
-    {
-        $defaultParams = array(
-            'text'                   => '',
-            'content_types_selected' => 'all',
-            'page'                   => 1,
-            'elements_per_page'      => 20,
-            'order'                  => 'contents.created DESC '
-        );
-
-        $params = array_merge($defaultParams, $params);
-
-        // Return empty array if the search text is empty
-        if (empty($params['text'])) {
-            return array();
+            return $this->loadObject($rs, $contentType);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return [];
         }
-
-        // Preparing the search SQL
-        $searchSQL = " AND (contents.title LIKE '%{$params['text']}%'"
-                    ." OR contents.description LIKE '%{$params['text']}%'"
-                    ." OR contents.metadata LIKE '%{$params['text']}%')";
-
-        // Preparing limit
-        $limitSQL = '';
-        if ($params['page'] <= 1) {
-            $limitSQL = ' LIMIT '. $params['elements_per_page'];
-        } else {
-            $limitSQL = ' LIMIT '.($params['page']-1)*$params['elements_per_page'].', '.$params['elements_per_page'];
-        }
-
-        // Preparing the order SQL
-        $orderBySQL = ' ORDER BY '.$params['order'];
-
-
-        // Preparing filter for content types
-        $contentTypesFilterSQL = '';
-        if ($params['content_types_selected'] != 'all'
-            && !empty($params['content_types_selected'])
-        ) {
-            if (is_string($params['content_types_selected'])) {
-                $contentTypesFilterSQL = ' AND `fk_content_type` = '.$params['content_types_selected']. " ";
-            } else {
-                $contentTypesFilterSQL =
-                    ' AND `fk_content_type` IN ('.implode(', ', $params['content_types_selected']). ") ";
-            }
-        }
-
-        $sql = "SELECT  contents.*,
-                        `contents_categories`.`pk_fk_content_category` as category_id,
-                        `contents_categories`.`catName`  as category_name "
-               ."FROM `contents`, `contents_categories` "
-               ."WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` "
-               .$contentTypesFilterSQL
-               .$searchSQL
-               .$orderBySQL
-               .$limitSQL;
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs === false) {
-            return array();
-        }
-
-        $contents = array();
-        $contentsData = $rs->getArray();
-        foreach ($contentsData as $data) {
-            $contenType = self::getContentTypeNameFromId($data['fk_content_type']);
-            $contentTypeClass = classify($contenType);
-            $content = new $contentTypeClass();
-            $content->load($data);
-
-            $contents []= $content;
-        }
-
-        return $contents;
     }
 
     /**
