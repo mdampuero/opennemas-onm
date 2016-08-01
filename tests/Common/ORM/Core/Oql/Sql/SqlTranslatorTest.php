@@ -21,9 +21,13 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
             'properties' => [ 'foo' => 'string', 'baz' => 'integer' ],
             'mapping'    => [
                 'database' => [
-                    'table' => 'foobar',
-                    'metas' => [ 'table' => 'foobar_meta' ],
-                    'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                    'table'   => 'foobar',
+                    'columns' => [
+                        'foo' => [],
+                        'baz' => [],
+                    ],
+                    'metas'   => [ 'table' => 'foobar_meta' ],
+                    'index'   => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
                 ]
             ]
         ]);
