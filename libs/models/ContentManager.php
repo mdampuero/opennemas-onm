@@ -206,7 +206,7 @@ class ContentManager
     public function getContentsForHomepageOfCategory($categoryID)
     {
         // Initialization of variables
-        $contents = array();
+        $contents = [];
 
         $cache      = getService('cache');
         $contentIds = $cache->fetch('frontpage_elements_map_'.$categoryID);
@@ -716,24 +716,20 @@ class ContentManager
             // this raises an error cause the contentID is 'Widget'
             // throw new InvalidArgumentException('getContentTypeNameFromId
             // function only accepts integers. Input was: '.$int);
-            $returnValue = ($ucfirst === true)
-                ? ucfirst($contentID) : strtolower($contentID);
-        } else {
-            // retrieve the name for this id
-            $sql = "SELECT path FROM attachments "
-                 . "WHERE `pk_attachment`=$contentID";
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            if ($rs->_numOfRows < 1) {
-                $returnValue = false;
-            } else {
-                $returnValue = ($ucfirst === true)
-                    ? ucfirst($rs->fields['path']) : $rs->fields['path'];
-            }
+            return ($ucfirst === true) ? ucfirst($contentID) : strtolower($contentID);
         }
 
-        return $returnValue;
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT path FROM attachments WHERE `pk_attachment`=?",
+                [ $contentID ]
+            );
 
+            return ($ucfirst === true) ? ucfirst($rs['path']) : $rs['path'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
