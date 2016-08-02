@@ -113,7 +113,7 @@ class NotificationController extends Controller
             ]
         );
 
-        if (is_array($notifications)) {
+        if (is_array($notifications) && !empty($notifications)) {
             foreach ($notifications as &$notification) {
                 $this->convertNotification($notification);
             }
@@ -209,7 +209,7 @@ class NotificationController extends Controller
         unset($params['ids']);
 
         try {
-            $oql = 'instance = "%s" and notification_id in [%s] and user_id = "%s"';
+            $oql = 'instance_id = "%s" and notification_id in [%s] and user_id = "%s"';
             $oql = sprintf($oql, $instance, implode(', ', $ids), $this->getUser()->id);
 
             $notifications = $em->getRepository('user_notification')
@@ -245,11 +245,11 @@ class NotificationController extends Controller
                     'email'    => $this->getUser()->email
                 ];
                 $un->user_id         = $this->getUser()->id;
-                $un->notification_id = $id;
+                $un->notification_id = (int) $id;
 
                 foreach ($params as $key => $value) {
                     $date = new \Datetime($value);
-                    $un->{$key} = $date->format('Y-m-d H:i:s');
+                    $un->{$key} = $date;
                 }
 
                 $em->persist($un);
