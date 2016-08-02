@@ -172,7 +172,7 @@ class Special extends Content
     public function create($data)
     {
         try {
-            if (parent::create($data)) {
+            if (!parent::create($data)) {
                 return false;
             }
 
@@ -212,7 +212,9 @@ class Special extends Content
     public function update($data)
     {
         try {
-            parent::update($data);
+            if (!parent::update($data)) {
+                return false;
+            }
 
             if (!array_key_exists('pdf_path', $data)) {
                 $data['pdf_path'] = '';
@@ -222,15 +224,11 @@ class Special extends Content
                 'specials',
                 [
                     'subtitle' => $data['subtitle'],
-                    'img1' => (int) $data['img1'],
+                    'img1'     => (int) $data['img1'],
                     'pdf_path' => $data['pdf_path'],
                 ],
                 [ 'pk_special' => intval($data['id']) ]
             );
-
-            if (!$rs) {
-                return false;
-            }
 
             $this->saveItems($data);
 

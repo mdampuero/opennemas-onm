@@ -516,10 +516,10 @@ class Content
             // Insert into contents table
             $conn->insert('contents', $contentData);
 
-            $this->id            = $conn->lastInsertId();
+            $this->id           = $conn->lastInsertId();
+            $this->pk_content   = $this->id;
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
-            $this->pk_content    = $this->id;
 
             self::load($contentData);
 
@@ -567,9 +567,12 @@ class Content
                 $data['starttime'] = date("Y-m-d H:i:s");
             }
         }
+
         if ($data['category'] != $this->category) {
             $ccm     = ContentCategoryManager::get_instance();
             $catName = $ccm->getName($data['category']);
+        } else {
+            $catName = $this->category_name;
         }
 
         if (empty($data['fk_user_last_editor'])
@@ -586,13 +589,6 @@ class Content
             }
         } else {
             $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
-        }
-
-        if ($data['category'] != $this->category) {
-            $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->getName($data['category']);
-        } else {
-            $catName = $this->category_name;
         }
 
         $contentData = [
@@ -642,6 +638,8 @@ class Content
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
         } catch (\Exception $e) {
             error_log('Error updating content (ID:'.$data['id'].'):'.$e->getMessage());
             return false;

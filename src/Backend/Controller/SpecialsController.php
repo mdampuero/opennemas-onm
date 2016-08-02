@@ -152,16 +152,15 @@ class SpecialsController extends Controller
                 'success',
                 _('Special successfully created.')
             );
+
+            return $this->redirect(
+                $this->generateUrl('admin_special_show', ['id' => $special->id])
+            );
         } else {
             $this->get('session')->getFlashBag()->add('error', _('Unable to create the new special.'));
-        }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_special_show',
-                array('id' => $special->id)
-            )
-        );
+            return $this->redirect($this->generateUrl('admin_special_create'));
+        }
     }
 
     /**
