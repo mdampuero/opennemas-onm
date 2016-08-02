@@ -887,7 +887,7 @@ class ContentController extends Controller
         $security = $this->get('core.security');
         foreach ($permissions as $permission) {
             if (!$security->hasPermission($permission)) {
-                $messenger->add(sprintf(_('Access denied (%s)'), $permission), 'error', 500);
+                $msg->add(sprintf(_('Access denied (%s)'), $permission), 'error', 500);
 
                 return new JsonResponse($msg->getMessages(), $msg->getCode());
             }
