@@ -140,7 +140,6 @@
                 </th>
                 <th style="width: 100px;" class="text-center hidden-xs">{t}Image{/t}</th>
                 <th>{t}Title{/t}</th>
-                <th style="width: 110px;" class="left hidden-xs">{t}Author{/t}</th>
                 {acl isAllowed="LETTER_AVAILABLE"}
                 <th class="center" style="width:10px;">{t}Published{/t}</th>
                 {/acl}
@@ -167,6 +166,9 @@
                   <div class="small-text">
                     <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
+                  <div class="small-text">
+                    <strong>{t}Author{/t}:</strong> [% content.author %] ([% content.email %])
+                  </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="LETTER_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_letter_show') %]">
@@ -189,9 +191,6 @@
                     </button>
                     {/acl}
                   </div>
-                </td>
-                <td class="center nowrap hidden-xs">
-                  [% content.author %] ([% content.email %])
                 </td>
                 <td class="right">
                   {acl isAllowed="LETTER_AVAILABLE"}
