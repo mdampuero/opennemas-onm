@@ -96,10 +96,9 @@ class AclUserController extends Controller
      */
     public function disconnectAction(Request $request, $id, $resource)
     {
-        $em   = $this->get('orm.manager');
-        $user = $em->getRepository('User')->find($id);
+        $user = $this->get('core.user');
 
-        if (!$user) {
+        if (empty($user)) {
             return new Response();
         }
 
@@ -109,7 +108,7 @@ class AclUserController extends Controller
         unset($user->{$resource . '_token'});
         unset($user->{$resource . '_realname'});
 
-        $em->persist($user);
+        $this->get('orm.manager')->persist($user);
 
         $this->dispatchEvent('social.disconnect', array('user' => $user));
 

@@ -17,7 +17,7 @@ class GettingStartedController extends Controller
      */
     public function finishWizardAction()
     {
-        $user = $this->getUser();
+        $user = $this->get('core.user');
 
         $user->token = null;
         $this->get('orm.manager')->persist($user);
