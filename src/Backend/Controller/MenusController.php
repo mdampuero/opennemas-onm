@@ -227,7 +227,17 @@ class MenusController extends Controller
                     $pollCategories[] = $category;
                 }
             }
-            $staticPages = $cm->find('StaticPage', null, 'ORDER BY created DESC ', 'title');
+
+            $em        = $this->get('orm.manager');
+            $converter = $em->getConverter('Content');
+
+            $oql = 'content_type_name = "static_page" and in_litter = 0'
+               . ' order by created desc';
+
+            $staticPages = $em->getRepository('Content')->findBy($oql);
+            $staticPages = array_map(function ($a) use ($converter) {
+                return $converter->responsify($a->getData());
+            }, $staticPages);
 
             // Fetch synchronized elements if exists
             $syncSites = [];
