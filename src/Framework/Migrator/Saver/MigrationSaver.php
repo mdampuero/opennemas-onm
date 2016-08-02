@@ -981,10 +981,16 @@ class MigrationSaver
                             throw new UserAlreadyExistsException();
                         }
 
+                        $uploadPath = null;
+                        if (array_key_exists('upload_images_path', $i)) {
+                            $uploadPath = $i['upload_images_path'];
+                        }
+
                         if (is_file($i['local_file'])) {
                             $id = $photo->createFromLocalFile(
                                 $i,
-                                $i['directory']
+                                $i['directory'],
+                                $uploadPath
                             );
                             $slug = array_key_exists('slug', $schema['translation'])
                                 ? $i[$schema['translation']['slug']] : '';

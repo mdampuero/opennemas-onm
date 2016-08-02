@@ -200,7 +200,7 @@ class Photo extends Content
      * @return int the id of the photo created
      * @return boolean false if the photo was not created
      **/
-    public function createFromLocalFile($data, $dateForDirectory = null)
+    public function createFromLocalFile($data, $dateForDirectory = null, $uploadPath = null)
     {
         $filePath         = $data["local_file"];
         $originalFileName = $data['original_filename'];
@@ -215,7 +215,11 @@ class Photo extends Content
         if (empty($dateForDirectory)) {
             $dateForDirectory = $date->format("/Y/m/d/");
         }
+
         $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+        if (!is_null($uploadPath)) {
+            $uploadDir = $uploadPath;
+        }
 
         if (!is_dir($uploadDir)) {
             \Onm\FilesManager::createDirectory($uploadDir);
