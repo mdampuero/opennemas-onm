@@ -35,9 +35,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'mapping' => [
                 'database' => [
                     'columns' => [
-                        'foo' => [ 'type' => 'text' ],
-                        'bar' => [ 'type' => 'integer' ],
-                        'baz' => [ 'type' => 'array_json' ],
+                        'foo'  => [ 'type' => 'text' ],
+                        'bar'  => [ 'type' => 'integer' ],
+                        'baz'  => [ 'type' => 'array_json' ],
                         'norf' => [ 'type' => 'boolean' ],
                         'quux' => [ 'type' => 'integer', 'options' => [ 'default' => null ] ],
                     ],
@@ -69,10 +69,27 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'norf' => false
             ],
             $this->converter->objectify([
-                'foo' => 'foobar',
-                'bar' => '1',
-                'baz' => [ 'garply', 'gorp' ],
+                'foo'  => 'foobar',
+                'bar'  => '1',
+                'baz'  => serialize([ 'garply', 'gorp' ]),
                 'norf' => '0'
+            ])
+        );
+    }
+
+    /**
+     * Tests objectify with an array of enitty data.
+     */
+    public function testObjectifyWithArray()
+    {
+        $this->assertEquals(
+            [
+                [ 'foo' => 'fred' ],
+                [ 'norf' => true ],
+            ],
+            $this->converter->objectify([
+                [ 'foo' => 'fred' ],
+                [ 'norf' => 1 ]
             ])
         );
     }
@@ -103,6 +120,23 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'foo' => new \DateTime('2000-01-01 10:00:00'),
                 'bar' => new Entity([ 'gorp' => 'norf' ]),
                 'baz' => true
+            ])
+        );
+    }
+
+    /**
+     * Tests responsify with an array of enitty data.
+     */
+    public function testResponsifyWithArray()
+    {
+        $this->assertEquals(
+            [
+                [ 'foo' => '2000-01-01 10:00:00' ],
+                [ 'baz' => true ],
+            ],
+            $this->converter->responsify([
+                new Entity([ 'foo' => new \DateTime('2000-01-01 10:00:00') ]),
+                [ 'baz' => true ]
             ])
         );
     }

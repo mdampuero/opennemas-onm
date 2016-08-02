@@ -18,13 +18,80 @@ use Common\ORM\Core\Data\Converter\Converter;
 class BaseConverter extends Converter
 {
     /**
+     * Converts entity data or an array of entities data to valid database
+     * values.
+     *
+     * @param mixed $data The data to convert.
+     *
+     * @return array The converted data.
+     */
+    public function databasify($source)
+    {
+        if ($this->isArray($source)) {
+            return $this->mDatabasify($source);
+        }
+
+        return $this->sDatabasify($source);
+    }
+
+    /**
+     * Converts database values or an array of database values to valid entity
+     * values basing on mapping information.
+     *
+     * @param mixed $data The data to convert.
+     *
+     * @return array The converted data.
+     */
+    public function objectifyStrict($source)
+    {
+        if ($this->isArray($source)) {
+            return $this->mObjectifyStrict($source);
+        }
+
+        return $this->sObjectifyStrict($source);
+    }
+
+    /**
+     * Converts an array of entities data to array of database values.
+     *
+     * @param array $items The items to convert.
+     *
+     * @return array The converted items.
+     */
+    protected function mDatabasify($items)
+    {
+        foreach ($items as &$item) {
+            $item = $this->sDatabasify($item);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Converts an array of database values to an array of entity values basing
+     * on mapping information.
+     *
+     * @param array $items The items to convert.
+     *
+     * @return array The converted items.
+     */
+    protected function mObjectifyStrict($items)
+    {
+        foreach ($items as &$item) {
+            $item = $this->sObjectifyStrict($item);
+        }
+
+        return $items;
+    }
+
+    /**
      * Convert entity data to valid database values.
      *
      * @param array $source The entity data.
      *
      * @return array The converted data and metas.
      */
-    public function databasify($source)
+    protected function sDatabasify($source)
     {
         if (empty($this->metadata->mapping)
             || !array_key_exists('database', $this->metadata->mapping)
@@ -62,6 +129,7 @@ class BaseConverter extends Converter
             $data[$key] = null;
 
             if (array_key_exists($key, $mapping['columns'])
+                && array_key_exists('options', $mapping['columns'][$key])
                 && array_key_exists('default', $mapping['columns'][$key]['options'])
             ) {
                 $data[$key] = $mapping['columns'][$key]['options']['default'];
@@ -98,7 +166,7 @@ class BaseConverter extends Converter
      *
      * @return array The converted data.
      */
-    public function objectifyStrict($source)
+    protected function sObjectifyStrict($source)
     {
         if (empty($this->metadata->mapping)
             || !array_key_exists('database', $this->metadata->mapping)

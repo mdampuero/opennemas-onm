@@ -94,6 +94,55 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests databasify when valid metadata provided.
+     */
+    public function testDatabasifyValidWithArray()
+    {
+        $this->assertEquals(
+            [
+                [
+                    [
+                        'foo'  => 'foobar',
+                        'bar'  => null,
+                        'baz'  => null,
+                        'norf' => null,
+                        'quux' => null,
+                    ],
+                    [ 'wobble' => null ],
+                    [
+                        'foo'  => \PDO::PARAM_STR,
+                        'bar'  => \PDO::PARAM_STR,
+                        'baz'  => \PDO::PARAM_STR,
+                        'norf' => \PDO::PARAM_STR,
+                        'quux' => \PDO::PARAM_STR,
+                    ]
+                ],
+                [
+                    [
+                        'foo'  => null,
+                        'bar'  => 1,
+                        'baz'  => null,
+                        'norf' => null,
+                        'quux' => null,
+                    ],
+                    [ 'wobble' => null ],
+                    [
+                        'foo'  => \PDO::PARAM_STR,
+                        'bar'  => \PDO::PARAM_INT,
+                        'baz'  => \PDO::PARAM_STR,
+                        'norf' => \PDO::PARAM_STR,
+                        'quux' => \PDO::PARAM_STR,
+                    ]
+                ]
+            ],
+            $this->converter->databasify([
+                [ 'foo' => 'foobar' ],
+                [ 'bar' => 1 ],
+            ])
+        );
+    }
+
+    /**
      * Tests objectify for data from database.
      */
     public function testObjectifyStrict()
@@ -110,6 +159,23 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'bar' => 1,
                 'baz' => '["garply","gorp"]',
                 'norf' => 0
+            ], true)
+        );
+    }
+
+    /**
+     * Tests objectify for an array of data from database.
+     */
+    public function testObjectifyStrictWithArray()
+    {
+        $this->assertEquals(
+            [
+                [ 'foo' => 'foobar' ],
+                [ 'bar' => 1 ],
+            ],
+            $this->converter->objectifyStrict([
+                [ 'foo' => 'foobar' ],
+                [ 'bar' => 1 ],
             ], true)
         );
     }

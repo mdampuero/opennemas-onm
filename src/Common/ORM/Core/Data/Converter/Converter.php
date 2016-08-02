@@ -29,65 +29,35 @@ class Converter
     }
 
     /**
-     * Convert database values to valid entity values.
+     * Converts data or an array of data to valid entity values.
      *
-     * @param array $source The data from database.
+     * @param mixed $data The data to convert.
      *
      * @return array The converted data.
      */
     public function objectify($source)
     {
-        if (empty($this->metadata->mapping)
-            || !array_key_exists('database', $this->metadata->mapping)
-            || !array_key_exists('columns', $this->metadata->mapping['database'])
-        ) {
-            return $source;
+        if ($this->isArray($source)) {
+            return $this->mObjectify($source);
         }
 
-        $data = [];
-        foreach ($source as $key => $value) {
-            $from   = \classify(strtolower(gettype($value)));
-            $to     = 'String';
-            $params = [];
-
-            if (array_key_exists($key, $this->metadata->properties)) {
-                $params = explode('::', $this->metadata->properties[$key]);
-                $to     = \classify(array_shift($params));
-            }
-
-            $data[$key] = $this->convertFrom($to, $from, $value, $params);
-        }
-
-        return $data;
+        return $this->sObjectify($source);
     }
 
     /**
-     * Converts object values to response values.
+     * Converts an entity or an array of entities to response values.
      *
-     * @param array $data The data from object.
+     * @param mixed $data The data to convert.
      *
      * @return array The converted data.
      */
     public function responsify($source)
     {
-        $data = [];
-        foreach ($source as $key => $value) {
-            $data[$key] = $value;
-
-            if ($value instanceof Entity) {
-                $data[$key] = $value->getData();
-            }
-
-            if ($value instanceof \Datetime) {
-                $data[$key] = $value->format('Y-m-d H:i:s');
-            }
-
-            if (is_bool($value)) {
-                $data[$key] = $value ? 1 : 0;
-            }
+        if ($this->isArray($source)) {
+            return $this->mResponsify($source);
         }
 
-        return $data;
+        return $this->sResponsify($source);
     }
 
     /**
@@ -142,5 +112,130 @@ class Converter
         $method = 'to' . ucfirst($type);
 
         return $this->convert($mapper, $method, $value, $params);
+    }
+
+    /**
+     * Checks if the data are an array of entities.
+     *
+     * @param mixed $data The data to check.
+     *
+     * @return boolean True if the data are an array. False, otherwise.
+     */
+    protected function isArray($data)
+    {
+        if (is_object($data)
+            || !is_array($data)
+            || empty($this->metadata->properties)
+        ) {
+            return false;
+        }
+
+        $keys       = array_keys($data);
+        $properties = array_keys($this->metadata->properties);
+
+        // Some properties are recognized
+        if (count(array_diff($properties, $keys)) < count($properties)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Converts an array database values to an array of entity values.
+     *
+     * @param array $items The items to convert.
+     *
+     * @return array The converted items.
+     */
+    protected function mObjectify($items)
+    {
+        foreach ($items as &$item) {
+            $item = $this->sObjectify($item);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Converts an array of entities to response values.
+     *
+     * @param array $items The items to convert.
+     *
+     * @return array The converted items.
+     */
+    protected function mResponsify($items)
+    {
+        foreach ($items as &$item) {
+            $item = $this->sResponsify($item);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Convert database values to valid entity values.
+     *
+     * @param array $source The data from database.
+     *
+     * @return array The converted data.
+     */
+    protected function sObjectify($source)
+    {
+        if (empty($this->metadata->mapping)
+            || !array_key_exists('database', $this->metadata->mapping)
+            || !array_key_exists('columns', $this->metadata->mapping['database'])
+        ) {
+            return $source;
+        }
+
+        $data = [];
+        foreach ($source as $key => $value) {
+            $from   = \classify(strtolower(gettype($value)));
+            $to     = 'String';
+            $params = [];
+
+            if (array_key_exists($key, $this->metadata->properties)) {
+                $params = explode('::', $this->metadata->properties[$key]);
+                $to     = \classify(array_shift($params));
+            }
+
+            $data[$key] = $this->convertFrom($to, $from, $value, $params);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Converts entity values to response values.
+     *
+     * @param array $data The data from entity.
+     *
+     * @return array The converted data.
+     */
+    protected function sResponsify($source)
+    {
+        if ($source instanceof Entity) {
+            $source = $source->getData();
+        }
+
+        $data = [];
+        foreach ($source as $key => $value) {
+            $data[$key] = $value;
+
+            if ($value instanceof Entity) {
+                $data[$key] = $value->getData();
+            }
+
+            if ($value instanceof \Datetime) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+            }
+
+            if (is_bool($value)) {
+                $data[$key] = $value ? 1 : 0;
+            }
+        }
+
+        return $data;
     }
 }
