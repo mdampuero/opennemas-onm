@@ -40,24 +40,7 @@ class GettingStartedController extends Controller
             $this->generateUrl('admin_login_callback')
         );
 
-        $params = array();
-
-        $instance = $this->get('core.instance');
-        $database  = $instance->getDatabaseName();
-        $namespace = $this->get('cache')->getNamespace();
-
-        try {
-            $user = $this->get('orm.manager')->getRepository('User', 'instance')
-                ->find($this->getUser()->id);
-        } catch (\Exception $e) {
-            if (empty($user)) {
-                $user = $this->get('orm.manager')->getRepository('User', 'manager')
-                    ->find($this->getUser()->id);
-            }
-        }
-
-        $this->get('orm.manager')->getConnection('instance')->selectDatabase($database);
-        $this->get('cache')->setNamespace($namespace);
+        $user = $this->get('core.user');
 
         if ($user->facebook_id) {
             $params['facebook'] = true;
@@ -68,15 +51,6 @@ class GettingStartedController extends Controller
         }
 
         $params['user'] = $this->getUser();
-        $params['master'] = $this->getUser()->isMaster();
-
-        $params['billing'] = [];
-
-        if (!empty($instance->metas)
-            && array_key_exists('billing', $instance->metas)
-        ) {
-            $params['billing'] = $instance->metas['billing'];
-        }
 
         return $this->render('gstarted/getting_started.tpl', $params);
     }
