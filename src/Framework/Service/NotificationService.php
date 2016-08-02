@@ -65,9 +65,10 @@ class NotificationService
             'font_color'       => '#ffffff',
             'icon'             => 'comment'
         ];
-        $notification->type        = 'comment';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->type  = 'comment';
+        $notification->start = new \DateTime();
+        $notification->end   = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT => sprintf(
@@ -100,17 +101,17 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'media';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = 'danger';
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->id        = 'media';
+        $notification->instances = [ $instance->id ];
+        $notification->creator   = 'cron.update_instances';
+        $notification->fixed     = 0;
+        $notification->forced    = 1;
+        $notification->generated = 1;
+        $notification->read      = 0;
+        $notification->style     = 'danger';
+        $notification->type      = 'info';
+        $notification->start     = new \DateTime();
+        $notification->end       = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
@@ -138,21 +139,21 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'users';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = [
+        $notification->id         = 'users';
+        $notification->instances  = [ $instance->id ];
+        $notification->creator    = 'cron.update_instances';
+        $notification->fixed      = 0;
+        $notification->forced     = 1;
+        $notification->generated  = 1;
+        $notification->read       = 0;
+        $notification->style      = [
             'background_color' => '#f35958',
             'font_color'       => '#ffffff',
             'icon'             => 'user'
         ];
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->type       = 'info';
+        $notification->start      = new \DateTime();
+        $notification->end        = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
@@ -180,17 +181,17 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'views';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = 'danger';
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->id        = 'views';
+        $notification->instances = [ $instance->id ];
+        $notification->creator   = 'cron.update_instances';
+        $notification->fixed     = 0;
+        $notification->forced    = 1;
+        $notification->generated = 1;
+        $notification->read      = 0;
+        $notification->style     = 'danger';
+        $notification->type      = 'info';
+        $notification->start     = new \DateTime();
+        $notification->end       = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
