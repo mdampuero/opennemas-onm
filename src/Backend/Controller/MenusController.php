@@ -132,9 +132,7 @@ class MenusController extends Controller
            . ' order by created desc';
 
         $staticPages = $em->getRepository('Content')->findBy($oql);
-        $staticPages = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
-        }, $staticPages);
+        $staticPages = $converter->responsify($staticPages);
 
         // Get categories from menu
         $menu = new \Menu($id);
@@ -235,9 +233,7 @@ class MenusController extends Controller
                . ' order by created desc';
 
             $staticPages = $em->getRepository('Content')->findBy($oql);
-            $staticPages = array_map(function ($a) use ($converter) {
-                return $converter->responsify($a->getData());
-            }, $staticPages);
+            $staticPages = $converter->responsify($staticPages);
 
             // Fetch synchronized elements if exists
             $syncSites = [];
