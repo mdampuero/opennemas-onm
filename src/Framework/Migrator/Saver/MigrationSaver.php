@@ -1051,6 +1051,8 @@ class MigrationSaver
                     } else {
                         $this->stats[$name]['already_imported']++;
                     }
+                    unset($photo);
+                    gc_collect_cycles();
                 }
             } catch (UserAlreadyExistsException $e) {
                 $id = $this->findPhoto($values['title']);
@@ -2107,6 +2109,7 @@ class MigrationSaver
     private function reloadCategoryArray()
     {
         $cache = getService('cache');
+        $cache->delete(CACHE_PREFIX.'_content_categories');
 
         $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -2128,6 +2131,8 @@ class MigrationSaver
         }
 
         $cache->save(CACHE_PREFIX.'_content_categories', $categories, 300);
+        $ccm = \ContentCategoryManager::get_instance();
+        $ccm->findAll();
     }
 
     /**
