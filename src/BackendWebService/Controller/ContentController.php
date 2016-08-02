@@ -902,6 +902,10 @@ class ContentController extends Controller
      */
     protected function loadExtraData($contents)
     {
+        if (empty($contents)) {
+            return [];
+        }
+
         $extra      = [];
         $ids        = [];
         $contentIds = [];
