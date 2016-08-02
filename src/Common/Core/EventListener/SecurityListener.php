@@ -65,6 +65,10 @@ class SecurityListener implements EventSubscriberInterface
         $categories  = $this->getCategories($user);
         $permissions = $this->getPermissions($user);
 
+        $user = $this->container->get('orm.manager')
+            ->getRepository('User', $user->getOrigin())
+            ->find($user->id);
+
         $this->security->setInstance($instance);
         $this->security->setUser($user);
         $this->security->setCategories($categories);
