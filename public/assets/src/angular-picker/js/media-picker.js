@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('onm.picker', [])
+angular.module('onm.picker')
   /**
    * @ngdoc directive
    * @name  mediaPicker
