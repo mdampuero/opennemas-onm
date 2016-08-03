@@ -35,7 +35,7 @@ class NotificationController extends Controller
         $theme    = $instance->settings['TEMPLATE_USER'];
         $page     = $request->query->getDigits('page', 1);
 
-        $read = $this->get('core.event_dispatcher')->dispatch(
+        $read = $this->get('core.dispatcher')->dispatch(
             'notifications.getRead',
             [
                 'oql' => sprintf(
@@ -61,7 +61,7 @@ class NotificationController extends Controller
 
         $oql = sprintf($oql, $id, $theme, $date, $date, $epp);
 
-        $notifications = $this->get('core.event_dispatcher')->dispatch(
+        $notifications = $this->get('core.dispatcher')->dispatch(
             'notifications.get',
             [ 'oql' => $oql ]
         );
@@ -103,7 +103,7 @@ class NotificationController extends Controller
 
         $oql = sprintf($oql, $id, $theme, $date, $date);
 
-        $notifications = $this->get('core.event_dispatcher')->dispatch(
+        $notifications = $this->get('core.dispatcher')->dispatch(
             'notifications.get',
             [
                 'oql'   => $oql,
@@ -119,7 +119,7 @@ class NotificationController extends Controller
             }
         }
 
-        $total = $this->get('core.event_dispatcher')
+        $total = $this->get('core.dispatcher')
             ->dispatch('notifications.count', [ 'criteria' => $criteria ]);
 
         return new JsonResponse([

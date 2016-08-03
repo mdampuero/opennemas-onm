@@ -10,7 +10,7 @@
 namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Framework\Component\EventDispatcher\Event;
+use Common\Core\Component\EventDispatcher\Event;
 use Common\ORM\Entity\Notification;
 
 class NotificationSubscriber implements EventSubscriberInterface

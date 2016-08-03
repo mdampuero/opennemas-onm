@@ -235,10 +235,6 @@ services:
         class: RelatedContent
         arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
 
-    core.event_dispatcher:
-        class: Framework\Component\EventDispatcher\EventDispatcher
-        arguments: [ '@event_dispatcher' ]
-
     core.messenger:
         class: Framework\Messenger\Messenger
 

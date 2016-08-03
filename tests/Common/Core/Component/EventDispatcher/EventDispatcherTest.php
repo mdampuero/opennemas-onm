@@ -2,14 +2,14 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Component\EventDispatcher;
+namespace Tests\Common\Core\Component\EventDispatcher;
 
-use Framework\Component\EventDispatcher\EventDispatcher;
+use Common\Core\Component\EventDispatcher\EventDispatcher;
 
 class EventDispatcherTest extends \PHPUnit_Framework_TestCase
 {
