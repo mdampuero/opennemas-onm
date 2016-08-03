@@ -9,7 +9,7 @@
  */
 namespace Common\Core\EventListener;
 
-use Common\Core\Exception\InstanceNotActivatedException;
+use Common\Core\Component\Exception\InstanceNotActivatedException;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;

@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Exception;
+namespace Common\Core\Component\Exception;
 
 /**
  * Exception thrown when the current instance is not activated.
