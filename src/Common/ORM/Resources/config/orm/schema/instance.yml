@@ -1,0 +1,7 @@
+schema:
+    name: instance
+    entities:
+        - Content
+        - User
+        - UserGroup
+        - UserGroupPrivileges
