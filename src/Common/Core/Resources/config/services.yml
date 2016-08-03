@@ -88,7 +88,7 @@ services:
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
 
     core.security:
-        class:     Common\Core\Security\Security
+        class:     Common\Core\Component\Security\Security
 
     core.security.user:
         class:     Common\ORM\Entity\User

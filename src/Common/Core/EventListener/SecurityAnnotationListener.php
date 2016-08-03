@@ -10,7 +10,7 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Annotation\Security as SecurityAnnotation;
-use Common\Core\Security\Security as SecurityService;
+use Common\Core\Component\Security\Security as SecurityService;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
