@@ -9,3 +9,4 @@ schema:
         - User
         - UserNotification
         - UserGroup
+        - UserGroupPrivileges
