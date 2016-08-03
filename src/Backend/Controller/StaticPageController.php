@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,13 +10,10 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\ORM\Entity\Content;
-use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
-use Onm\StringUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for static pages.
@@ -95,12 +92,21 @@ class StaticPageController extends Controller
         $converter = $em->getConverter('Content');
 
         $entity = new Content($converter->objectify($request->request->all()));
-        $entity->contentTypeName = 'static_page';
+        $entity->contentTypeName     = 'static_page';
+        $entity->fk_content_type     = 13;
+        $entity->fk_author           = $this->get('core.user')->id;
+        $entity->fk_publisher        = $entity->fk_author;
+        $entity->fk_user_last_editor = $entity->fk_author;
 
-        $this->get('orm.manager')->persist($entity);
+        try {
+            $em->persist($entity);
 
-        $this->get('session')->getFlashBag()
-            ->add('success', _('Static page created successfully.'));
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Content saved successfully.'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()
+                ->add('success', _('There were errors while creating the content.'));
+        }
 
         return $this->redirect(
             $this->generateUrl(
@@ -146,25 +152,38 @@ class StaticPageController extends Controller
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('Content');
         $entity    = $em->getRepository('Content')->find($id);
+        $security  = $this->get('core.security');
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$staticPage->isOwner($this->getUser()->id)
+        $url = $this->generateUrl('backend_static_page_show', [ 'id' => $id ]);
+
+        // TODO: Remove isAdmin after fixing permissions in database
+        if (!$this->get('core.user')->isAdmin()
+            && !$security->hasPermission('CONTENT_OTHER_UPDATE')
+            && $entity->fk_publisher !== $this->get('core.user')->id
         ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this static page because you don't have enough privileges.")
-            );
-        } else {
-            $entity->setData($converter->objectify($request->request->all()));
+            $this->get('session')->getFlashBag()
+                ->add('error', _('You don\'t have enough privileges to modify this content.'));
+
+            return $this->redirect($url);
+        }
+
+        $entity->setData($converter->objectify($request->request->all()));
+
+        // TODO: Remove after fixing database definition
+        $entity->category_name = ' ';
+
+        try {
             $em->persist($entity);
 
             $this->get('session')->getFlashBag()
-                ->add('success', _("Static page updated successfully."));
+                ->add('success', _('Content updated successfully.'));
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('There were errors while updating the content'));
         }
 
-        return $this->redirect(
-            $this->generateUrl('backend_static_page_show', [ 'id' => $id ])
-        );
+        return $this->redirect($url);
     }
 }

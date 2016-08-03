@@ -120,8 +120,7 @@
           </div>
         </div>
       </div>
-      <input type="hidden" name="filter[title]" value="{$smarty.request.filter.title|default:""}" />
-      <input type="hidden" name="id" id="id" value="{$page->pk_content|default:""}" />
+      <input type="hidden" name="pk_content" id="pk_content" value="{$page->pk_content|default:""}" />
   </form>
   {/block}
   {block name="footer-js" append}
