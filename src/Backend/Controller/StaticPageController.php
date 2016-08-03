@@ -103,6 +103,9 @@ class StaticPageController extends Controller
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Content saved successfully.'));
+
+            $this->get('core.dispatcher')
+                ->dispatch('content.create', [ 'id' => $entity->pk_content ]);
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()
                 ->add('success', _('There were errors while creating the content.'));
@@ -177,6 +180,9 @@ class StaticPageController extends Controller
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Content updated successfully.'));
+
+            $this->get('core.dispatcher')
+                ->dispatch('content.update', [ 'id' => $entity->pk_content ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
