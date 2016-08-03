@@ -96,6 +96,9 @@ class BasePersister extends Persister
 
         $this->conn->delete($this->metadata->getTable(), $id);
 
+        // TODO: Remove when using foreign keys
+        $this->removeMetas($id);
+
         if ($this->hasCache()) {
             $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
@@ -161,10 +164,10 @@ class BasePersister extends Persister
     /**
      * Deletes old metas.
      *
-     * @param array $id    The entity id.
-     * @param array $metas The meta keys to keep.
+     * @param array $id   The entity id.
+     * @param array $keep The meta keys to keep.
      */
-    protected function removeMetas($id, $keep)
+    protected function removeMetas($id, $keep = [])
     {
         $sql  = "delete from {$this->metadata->getMetaTable()} where ";
         $keys = $this->metadata->getMetaKeys();
@@ -181,7 +184,7 @@ class BasePersister extends Persister
         $sql .= implode(' and ', $joins);
 
         if (!empty($keep)) {
-            $sql .= " and meta_key not in (?)";
+            $sql .= " and {$this->metadata->getMetaKeyName()} not in (?)";
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }

@@ -357,10 +357,12 @@ class BaseRepository extends Repository
      */
     protected function getMetas($ids)
     {
-        $filters  = [];
-        $metas    = [];
-        $metaKeys = $this->metadata->getMetaKeys();
-        $metaId   = array_pop($metaKeys);
+        $filters   = [];
+        $metas     = [];
+        $metaKeys  = $this->metadata->getMetaKeys();
+        $metaKey   = $this->metadata->getMetaKeyName();
+        $metaValue = $this->metadata->getMetaValueName();
+        $metaId    = array_pop($metaKeys);
 
         foreach ($ids as $id) {
             $filters[] = $metaId . '=' . $id;
@@ -372,7 +374,7 @@ class BaseRepository extends Repository
         $rs = $this->conn->fetchAll($sql);
 
         foreach ($rs as $value) {
-            $metas[$value[$metaId]][$value['meta_key']] = $value['meta_value'];
+            $metas[$value[$metaId]][$value[$metaKey]] = $value[$metaValue];
         }
 
         return $metas;
