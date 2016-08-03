@@ -105,18 +105,22 @@ class StaticPageController extends Controller
                 ->add('success', _('Content saved successfully.'));
 
             $this->get('core.dispatcher')
-                ->dispatch('content.create', [ 'id' => $entity->pk_content ]);
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()
-                ->add('success', _('There were errors while creating the content.'));
-        }
+                ->dispatch('content.create', [ 'content' => $entity ]);
 
-        return $this->redirect(
-            $this->generateUrl(
-                'backend_static_page_show',
-                [ 'id' => $entity->pk_content ]
-            )
-        );
+            return $this->redirect(
+                $this->generateUrl(
+                    'backend_static_page_show',
+                    [ 'id' => $entity->pk_content ]
+                )
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('There were errors while creating the content.'));
+
+            return $this->redirect($this->generateUrl('backend_static_page_create'));
+        }
     }
 
     /**
@@ -182,7 +186,7 @@ class StaticPageController extends Controller
                 ->add('success', _('Content updated successfully.'));
 
             $this->get('core.dispatcher')
-                ->dispatch('content.update', [ 'id' => $entity->pk_content ]);
+                ->dispatch('content.update', [ 'content' => $entity ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
