@@ -24,6 +24,22 @@ class Template extends \Smarty
     protected $container;
 
     /**
+     * The list of filters.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * The path to image directory.
+     *
+     * @var string
+     *
+     * TODO: Make this variable protected
+     */
+    public $image_dir = null;
+
+    /**
      * The active theme.
      *
      * @var Theme
@@ -31,15 +47,6 @@ class Template extends \Smarty
      * TODO: Make this variable protected
      */
     public $theme;
-
-    // Private properties
-    public $image_dir        = null;
-    public $js_includes      = ['header' => array(), 'footer' => []];
-    public $css_includes     = ['header' => array(), 'footer' => []];
-    public $metatags         = [];
-    public $filters          = [];
-    public $baseCachePath    = '';
-    public $templateBaseDir;
 
     /**
      * Initializes the Template class
