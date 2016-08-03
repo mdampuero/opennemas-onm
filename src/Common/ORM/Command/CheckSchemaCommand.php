@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckSchemaCommand extends ContainerAwareCommand
 {
     /**
-     * Configures the command.
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -51,10 +51,7 @@ class CheckSchemaCommand extends ContainerAwareCommand
     }
 
     /**
-     * Executes the command.
-     *
-     * @param InputInterface  $input  The input object.
-     * @param OutputInterface $output The output object.
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
