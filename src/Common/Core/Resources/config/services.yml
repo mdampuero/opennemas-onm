@@ -80,7 +80,7 @@ services:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     core.loader:
-        class:     Common\Core\Loader\Loader
+        class:     Common\Core\Component\Loader\Loader
         arguments: [ '@service_container' ]
 
     core.locale:
