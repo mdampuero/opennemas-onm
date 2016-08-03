@@ -97,7 +97,9 @@ class BasePersister extends Persister
         $this->conn->delete($this->metadata->getTable(), $id);
 
         // TODO: Remove when using foreign keys
-        $this->removeMetas($id);
+        if ($this->metadata->hasMetas()) {
+            $this->removeMetas($id);
+        }
 
         if ($this->hasCache()) {
             $this->cache->delete($this->metadata->getPrefixedId($entity));
