@@ -346,7 +346,7 @@ class UsersController extends ContentController
         if (!empty($id)) {
             try {
                 $extra['client'] = $this->get('orm.manager')
-                    ->getRepository('manager.client', 'Database')
+                    ->getRepository('Client', 'database')
                     ->find($id)->getData();
             } catch (\Exception $e) {
             }

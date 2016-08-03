@@ -57,7 +57,7 @@ class StoreController extends Controller
 
         $instance = $this->get('core.instance');
         $client = $this->get('orm.manager')
-            ->getRepository('manager.client', 'Database')
+            ->getRepository('Client', 'database')
             ->find($instance->getClient());
 
         // Get names for filtered modules to use in template
