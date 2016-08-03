@@ -34,8 +34,6 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'getConnection' ])
             ->getMock();
 
-        $this->cache->expects($this->once())->method('delete');
-
         $this->container->expects($this->once())->method('get')
             ->with('cache.manager')->willReturn($this->cacheManager);
 
@@ -48,6 +46,8 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
+        $this->cache->expects($this->once())->method('delete');
+
         $application = new Application();
         $application->add(new ClearConfigCommand());
 
@@ -60,5 +60,27 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertContains('[OK]', $output);
+    }
+
+    /**
+     * Tests execute when an exception is thrown.
+     */
+    public function testExecuteWithError()
+    {
+        $this->cache->expects($this->once())->method('delete')
+            ->will($this->throwException(new \Exception));
+
+        $application = new Application();
+        $application->add(new ClearConfigCommand());
+
+        $command = $application->find('orm:config:clear');
+        $command->setContainer($this->container);
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([ 'command' => $command->getName() ]);
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertContains('[FAIL]', $output);
     }
 }
