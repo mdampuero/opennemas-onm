@@ -40,7 +40,7 @@ services:
         factory:   [ '@core.loader', 'getInstance' ]
 
     core.instance.checker:
-        class:     Common\Core\Instance\Checker
+        class:     Common\Core\Component\Instance\Checker
         arguments: [ '@orm.manager' ]
 
     core.listener.core:
