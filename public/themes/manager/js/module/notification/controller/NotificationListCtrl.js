@@ -174,7 +174,7 @@
 
           oqlBuilder.configure({
             placeholder: {
-              title: 'title ^ \'"[^"]*[value][^"]*";\' or body ^ \'"[^"]*[value][^"]*";\''
+              title: 'title regexp \'"[^"]*[value][^"]*";\' or body regexp \'"[^"]*[value][^"]*";\''
             }
           });
 

@@ -169,7 +169,7 @@
           oqlBuilder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',
-              fk_user_group: '[key] ^ "^[value],|^[value]$|,[value],|,[value]$"'
+              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"'
             }
           });
 

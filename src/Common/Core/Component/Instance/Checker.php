@@ -59,7 +59,7 @@ class Checker
 
         $instance->internal_name = strtolower($instance->internal_name);
 
-        $oql = sprintf('internal_name ^ "^%s[0-9]*$"', $instance->internal_name);
+        $oql = sprintf('internal_name regexp "^%s[0-9]*$"', $instance->internal_name);
 
         if (!empty($instance->id)) {
             $oql .= sprintf(' and id != "%s"', $instance->id);
@@ -85,7 +85,7 @@ class Checker
             );
         }
 
-        $placeholder = 'domains ^ "^%s|,\s*%s\s*,|,\s*%s$"';
+        $placeholder = 'domains regexp "^%s|,\s*%s\s*,|,\s*%s$"';
         $oql         = [];
 
         foreach ($instance->domains as $domain) {
