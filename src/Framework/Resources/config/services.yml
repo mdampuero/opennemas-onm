@@ -180,7 +180,7 @@ services:
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, @core.template ]
 
     automatic_contents:
         class: Onm\MachineSearcher
