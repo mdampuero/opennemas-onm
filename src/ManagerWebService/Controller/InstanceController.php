@@ -542,7 +542,6 @@ class InstanceController extends Controller
                 'EXPERT',
                 'OTHER',
             ],
-            //'templates' => im::getAvailableTemplates(),
             'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $modules,
