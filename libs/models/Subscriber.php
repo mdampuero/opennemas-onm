@@ -298,9 +298,7 @@ class Subscriber
         }
 
         try {
-            $rs = getService('dbal_connection')->fetchAll(
-                $sql
-            );
+            $rs = getService('dbal_connection')->fetchAll($sql);
 
             foreach ($rs as $item) {
                 $user = new Subscriber();

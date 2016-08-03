@@ -259,13 +259,8 @@ class NewsletterSubscribersController extends Controller
         $user = new \Subscriber();
 
         foreach ($ids as $id) {
-            $data[] = array(
-                'id'    => $id,
-                'value' => $state
-            );
+            $user->setSubscriptionStatus($id, $state);
         }
-
-        $user->mUpdateProperty($data, 'subscription');
 
         return new JsonResponse([
             'subscribed' => $state,
@@ -307,13 +302,8 @@ class NewsletterSubscribersController extends Controller
         $user = new \Subscriber();
 
         foreach ($ids as $id) {
-            $data[] = array(
-                'id'    => $id,
-                'value' => $state
-            );
+            $user->setStatus($id, $state);
         }
-
-        $user->mUpdateProperty($data, 'status');
 
         return new JsonResponse([
             'status' => $state,
