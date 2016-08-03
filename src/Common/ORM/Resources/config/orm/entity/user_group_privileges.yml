@@ -2,18 +2,18 @@ entity:
     name: UserGroupPrivileges
     mapping:
         database:
-            table: user_group_privileges
+            table: user_groups_privileges
             columns:
-                user_group_id:
+                pk_fk_user_group:
                     type:    integer
                     options: { default: null, unsigned: true, notnull: false }
-                privilege_id:
-                    type:    string
+                pk_fk_privilege:
+                    type:    integer
                     options: { default: null, unsigned: true, notnull: false }
             index:
                 -
                     name:    PRIMARY
-                    columns: [ user_group_id, privilege_id ]
+                    columns: [ pk_fk_user_group, pk_fk_privilege ]
                     primary: true
                     unique:  true
                     flags:   {  }
