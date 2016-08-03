@@ -11,12 +11,11 @@
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Intl\Intl;
 
 class UsersController extends ContentController
 {
@@ -232,9 +231,8 @@ class UsersController extends ContentController
         $user->merge($data);
 
         // TODO: Remove after check and update database schema
-        if (empty($user->url)) {
-            $user->url = ' ';
-        }
+        $user->url = empty($user->url) ? ' ' : $user->url;
+        $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         $em->persist($user);
 
@@ -270,9 +268,8 @@ class UsersController extends ContentController
                 $user->merge($data);
 
                 // TODO: Remove after check and update database schema
-                if (empty($user->url)) {
-                    $user->url = ' ';
-                }
+                $user->url = empty($user->url) ? ' ' : $user->url;
+                $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
                 $em->persist($user);
                 $updated++;

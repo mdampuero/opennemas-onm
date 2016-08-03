@@ -302,21 +302,22 @@ class AclUserController extends Controller
         $converter = $em->getConverter('User');
 
         // Encode password if present
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = md5($data['password']);
+        if (array_key_exists('password', $data)) {
+            if (empty($data['password'])) {
+                unset($data['password']);
+            }
+
+            if (!empty($data['password'])) {
+                $data['password'] = md5($data['password']);
+            }
         }
 
         $user = new User($converter->objectify($data));
 
         // TODO: Remove when data supports empty values (when using SPA)
-        if (empty($user->type)) {
-            $user->type = 0;
-        }
-
-        // TODO: Remove after check and update database schema
-        if (empty($user->url)) {
-            $user->url = ' ';
-        }
+        $user->type = empty($user->type) ? 0 : $user->type;
+        $user->url = empty($user->url) ? ' ' : $user->url;
+        $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         try {
             $file = $request->files->get('avatar');
@@ -536,8 +537,14 @@ class AclUserController extends Controller
         $user      = $em->getRepository('User')->find($id);
 
         // Encode password if present
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = md5($data['password']);
+        if (array_key_exists('password', $data)) {
+            if (empty($data['password'])) {
+                unset($data['password']);
+            }
+
+            if (!empty($data['password'])) {
+                $data['password'] = md5($data['password']);
+            }
         }
 
         // TODO: Remove when data supports empty values (when using SPA)
@@ -547,9 +554,9 @@ class AclUserController extends Controller
         $user->merge($converter->objectify($data));
 
         // TODO: Remove after check and update database schema
-        if (empty($user->url)) {
-            $user->url = ' ';
-        }
+        $user->type = empty($user->type) ? 0 : $user->type;
+        $user->url = empty($user->url) ? ' ' : $user->url;
+        $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         try {
             $file = $request->files->get('avatar');
