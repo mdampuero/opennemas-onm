@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Locale;
+namespace Common\Core\Component\Locale;
 
 /**
  * The Locale class manages the system locale and timezone.
