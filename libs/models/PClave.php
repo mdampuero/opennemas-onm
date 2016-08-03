@@ -219,9 +219,8 @@ class PClave
                 $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
             }
 
-            $rs = getService('dbal_connection')->fetchAll(
-                $sql
-            );
+            $rs = getService('dbal_connection')->fetchAll($sql);
+            $terms = [];
             foreach ($rs as $element) {
                 $obj = new PClave();
                 $obj->load($element);
