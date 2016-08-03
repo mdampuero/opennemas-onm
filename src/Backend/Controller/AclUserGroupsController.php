@@ -101,7 +101,9 @@ class AclUserGroupsController extends Controller
 
         // TODO: Remove when using SPA
         if (!empty($data['privileges'])) {
-            $data['privileges'] = explode(',', $data['privileges']);
+            $data['privileges'] = array_map(function ($a) {
+                return (int) $a;
+            }, explode(',', $data['privileges']));
         }
 
         $userGroup = new UserGroup($converter->objectify($data));
@@ -146,7 +148,9 @@ class AclUserGroupsController extends Controller
 
         // TODO: Remove when using SPA
         if (!empty($data['privileges'])) {
-            $data['privileges'] = explode(',', $data['privileges']);
+            $data['privileges'] = array_map(function ($a) {
+                return (int) $a;
+            }, explode(',', $data['privileges']));
         }
 
         $userGroup->setData($em->getConverter('UserGroup')->objectify($data));
