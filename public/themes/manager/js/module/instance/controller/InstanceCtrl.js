@@ -84,7 +84,7 @@
          * @memberOf InstanceCtrl
          *
          * @description
-         *  The instance settings.
+         *   The instance settings.
          *
          * @type {Object}
          */
@@ -456,7 +456,7 @@
           $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
           $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
               $scope.instance.activated_modules) == 0;
-        }
+        };
 
         $scope.$on('$destroy', function() {
           $scope.instance = null;
