@@ -95,15 +95,15 @@ services:
         factory:   [ '@core.security', 'getUser' ]
 
     core.template:
-        class:     Common\Core\Template\Template
+        class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.filters%' ]
 
     core.template.admin:
-        class:     Common\Core\Template\Template
+        class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.admin.filters%' ]
 
     core.template.manager:
-        class:     Common\Core\Template\Template
+        class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.manager.filters%' ]
 
     core.theme:
