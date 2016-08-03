@@ -313,6 +313,11 @@ class AclUserController extends Controller
             $user->type = 0;
         }
 
+        // TODO: Remove after check and update database schema
+        if (empty($user->url)) {
+            $user->url = ' ';
+        }
+
         try {
             $file = $request->files->get('avatar');
 
@@ -540,6 +545,11 @@ class AclUserController extends Controller
         $user->fk_user_group = [];
 
         $user->merge($converter->objectify($data));
+
+        // TODO: Remove after check and update database schema
+        if (empty($user->url)) {
+            $user->url = ' ';
+        }
 
         try {
             $file = $request->files->get('avatar');

@@ -111,45 +111,65 @@ class UsersController extends ContentController
     }
 
     /**
-     * Updated the users activation status.
+     * Downloads the list of users with metas.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
-     *
-     * @Security("hasExtension('USER_MANAGER')
-     *     and hasPermission('USER_UPDATE')")
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      */
-    public function patchSelectedAction(Request $request)
+    public function exportAction(Request $request)
     {
-        $params = $request->request->all();
-        $em   = $this->get('orm.manager');
-        $msg  = $this->get('core.messenger');
-        $oql  = sprintf('id in [%s]', implode(',', $params[ 'ids' ]));
+        $users = $this->get('orm.manager')->getRepository('User')->findBy();
 
-        unset($params['ids']);
+        $csvHeaders = [
+            _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
+            _('Date Birth'),  _('Postal Code'),  _('Registration date'),
+        ];
+        $output = implode(",", $csvHeaders);
 
-        $data    = $em->getConverter('User')->objectify($params);
-        $users   = $em->getRepository('User')->findBy($oql);
-        $updated = 0;
+        foreach ($users as &$user) {
+            if (!empty($user->gender)) {
+                switch ($user->gender) {
+                    case 'male':
+                        $gender = _('Male');
+                        break;
+                    case 'female':
+                        $gender = _('Female');
+                        break;
 
-        foreach ($users as $user) {
-            try {
-                $user->merge($data);
-                $em->persist($user);
-                $updated++;
-            } catch (\Exception $e) {
-                $msg->add($e->getMessage(), 'error', 409);
+                    default:
+                        $gender = _('Other');
+                        break;
+                }
+            } else {
+                $gender = _('Not defined');
             }
+
+            $row = [
+                $user->name,
+                $user->username,
+                $user->activated,
+                $user->email,
+                $gender,
+                !empty($user->birth_date) ? $user->birth_date : '',
+                !empty($user->postal_code) ? $user->postal_code : '',
+                !empty($user->register_date) ? $user->register_date : '',
+            ];
+            $output .= "\n".implode(",", $row);
         }
 
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s users saved successfully'), $updated),
-                'success'
-            );
-        }
+        $response = new Response($output, 200);
 
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        $fileName = 'users_export-'.date('Y-m-d').'.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'User list Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 
     /**
@@ -203,87 +223,72 @@ class UsersController extends ContentController
      */
     public function patchAction(Request $request, $id)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+        $data = $em->getConverter('User')
+            ->objectify($request->request->all());
 
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
+        $user = $em->getRepository('User')->find($id);
+        $user->merge($data);
 
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
+        // TODO: Remove after check and update database schema
+        if (empty($user->url)) {
+            $user->url = ' ';
         }
 
-        if (is_null($id)) {
-            return new JsonResponse(
-                [
-                    'messages' => array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type'    => 'error'
-                    )
-                ],
-                404
-            );
-        }
+        $em->persist($user);
 
-        $enabled  = $request->request->getDigits('value');
-        $messages = array();
+        $msg->add(_('User saved successfully'), 'success');
 
-        $user = new \User($id);
-        // Get max users from settings
-        $maxUsers = s::get('max_users');
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 
-        // Check total activated users before creating new one
-        if (!$user->isMaster() && $maxUsers > 0 && $enabled) {
-            if (!\User::getTotalActivatedUsersRemaining($maxUsers)) {
-                return new JsonResponse(
-                    [
-                        'messages'  => [
-                            [
-                                'id'      => '500',
-                                'type'    => 'error',
-                                'message' => _(
-                                    'Unable to change user backend access. You have reach the maximum allowed'
-                                ),
-                            ]
-                        ]
-                    ],
-                    403
-                );
+    /**
+     * Updated the users activation status.
+     *
+     * @param  Request      $request The request object.
+     * @return JsonResponse          The response object.
+     *
+     * @Security("hasExtension('USER_MANAGER')
+     *     and hasPermission('USER_UPDATE')")
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $oql  = sprintf('id in [%s]', implode(',', $params[ 'ids' ]));
+
+        unset($params['ids']);
+
+        $data    = $em->getConverter('User')->objectify($params);
+        $users   = $em->getRepository('User')->findBy($oql);
+        $updated = 0;
+
+        foreach ($users as $user) {
+            try {
+                $user->merge($data);
+
+                // TODO: Remove after check and update database schema
+                if (empty($user->url)) {
+                    $user->url = ' ';
+                }
+
+                $em->persist($user);
+                $updated++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error', 409);
             }
         }
 
-        $user = new \User($id);
-        if ($enabled) {
-            $user->activateUser($id);
-        } else {
-            $user->deactivateUser($id);
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s users saved successfully'), $updated),
+                'success'
+            );
         }
 
-        return new JsonResponse(
-            [
-                'activated' => $enabled,
-                'messages'  => [
-                    [
-                        'id'      => $id,
-                        'message' => _('Item updated successfully'),
-                        'type'    => 'success'
-                    ]
-                ]
-            ]
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -354,68 +359,6 @@ class UsersController extends ContentController
         $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $extra;
-    }
-
-    /**
-     * Downloads the list of users with metas.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function exportAction(Request $request)
-    {
-        $users = $this->get('orm.manager')->getRepository('User')->findBy();
-
-        $csvHeaders = [
-            _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
-            _('Date Birth'),  _('Postal Code'),  _('Registration date'),
-        ];
-        $output = implode(",", $csvHeaders);
-
-        foreach ($users as &$user) {
-            if (!empty($user->gender)) {
-                switch ($user->gender) {
-                    case 'male':
-                        $gender = _('Male');
-                        break;
-                    case 'female':
-                        $gender = _('Female');
-                        break;
-
-                    default:
-                        $gender = _('Other');
-                        break;
-                }
-            } else {
-                $gender = _('Not defined');
-            }
-
-            $row = [
-                $user->name,
-                $user->username,
-                $user->activated,
-                $user->email,
-                $gender,
-                !empty($user->birth_date) ? $user->birth_date : '',
-                !empty($user->postal_code) ? $user->postal_code : '',
-                !empty($user->register_date) ? $user->register_date : '',
-            ];
-            $output .= "\n".implode(",", $row);
-        }
-
-        $response = new Response($output, 200);
-
-        $fileName = 'users_export-'.date('Y-m-d').'.csv';
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'User list Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
     }
 
     /**
