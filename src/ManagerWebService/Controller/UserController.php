@@ -31,7 +31,7 @@ class UserController extends Controller
         $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $user = $em->getRepository('User')->find($id);
+        $user = $em->getRepository('User', 'manager')->find($id);
 
         $em->remove($user);
         $msg->add(_('User deleted successfully'), 'success');
@@ -61,7 +61,7 @@ class UserController extends Controller
         $em  = $this->get('orm.manager');
         $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        $users = $em->getRepository('User')->findBy($oql);
+        $users = $em->getRepository('User', 'manager')->findBy($oql);
 
         $deleted = 0;
         foreach ($users as $user) {
@@ -97,7 +97,7 @@ class UserController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
-        $repository = $this->get('orm.manager')->getRepository('User');
+        $repository = $this->get('orm.manager')->getRepository('User', 'manager');
         $converter  = $this->get('orm.manager')->getConverter('User');
 
         $total  = $repository->countBy($oql);
@@ -150,7 +150,7 @@ class UserController extends Controller
         $user = $em->getRepository('User', 'manager')->find($id);
         $user->merge($data);
 
-        $em->persist($user);
+        $em->persist($user, 'manager');
 
         $msg->add(_('User saved successfully'), 'success');
 
@@ -187,7 +187,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             try {
                 $user->merge($data);
-                $em->persist($user);
+                $em->persist($user, 'manager');
                 $updated++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error', 409);
@@ -220,7 +220,7 @@ class UserController extends Controller
 
         $user = new User($data);
 
-        $em->persist($user);
+        $em->persist($user, 'manager');
         $msg->add(_('User saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -283,7 +283,7 @@ class UserController extends Controller
             $user->password = $password;
         }
 
-        $em->persist($user);
+        $em->persist($user, 'manager');
 
         $msg->add(_('User saved successfully'), 'success');
 
