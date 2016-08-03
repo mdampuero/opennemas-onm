@@ -20,7 +20,7 @@ class GettingStartedController extends Controller
         $user = $this->get('core.user');
 
         $user->token = null;
-        $this->get('orm.manager')->persist($user);
+        $this->get('orm.manager')->persist($user, $user->getOrigin());
 
         return $this->redirect($this->generateUrl('admin_welcome'));
     }
