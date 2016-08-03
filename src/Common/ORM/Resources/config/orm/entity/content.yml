@@ -18,7 +18,6 @@ entity:
         fk_publisher:        integer
         fk_user_last_editor: integer
         frontpage:           integer
-        home_pos:            integer
         in_home:             boolean
         in_litter:           boolean
         metadata:            string
@@ -49,6 +48,7 @@ entity:
                 table: contentmeta
                 ids:
                     pk_content: fk_content
+                key: meta_name
             columns:
                 pk_content:
                     type: bigint
@@ -67,7 +67,7 @@ entity:
                     options: { default: null, length: 65532, notnull: false }
                 body:
                     type: text
-                    options: { default: null, length: 65532 }
+                    options: { default: '', length: 65532, notnull: false }
                 metadata:
                     type: string
                     options: { default: null, notnull: false, length: 255 }
@@ -107,9 +107,6 @@ entity:
                 in_home:
                     type: boolean
                     options: { default: '0', notnull: false }
-                home_pos:
-                    type: integer
-                    options: { default: '100', notnull: false, comment: '10' }
                 slug:
                     type: string
                     options: { default: null, notnull: false, length: 255 }
@@ -124,7 +121,7 @@ entity:
                     options: { default: null, length: 65532, notnull: false }
                 category_name:
                     type: string
-                    options: { default: null, length: 255 }
+                    options: { default: '', length: 255, notnull: false }
                 favorite:
                     type: boolean
                     options: { default: null, notnull: false }
