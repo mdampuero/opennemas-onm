@@ -328,39 +328,6 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Counts total contents in for an instance.
-     *
-     * @param array $settings The instance settings.
-     */
-    public function getExternalInformation(Instance &$instance)
-    {
-        if (empty($instance->getDatabaseName())) {
-            return false;
-        }
-
-        $cacheId = 'instance' . $this->cacheSeparator . $instance->id
-            . $this->cacheSeparator . 'information';
-
-        $instance->external = $this->cache->fetch($cacheId);
-
-        if (!$instance->external) {
-            $this->conn->selectDatabase($instance->getDatabaseName());
-            $sql = "SELECT * FROM `settings`";
-
-            $rs = $this->conn->executeQuery($sql);
-
-            $settings = array();
-            if ($rs !== false) {
-                foreach ($rs as $value) {
-                    $settings[$value['name'] ] = @unserialize($value['value']);
-                }
-            }
-
-            $instance->external = $settings;
-        }
-    }
-
-    /**
      * Check if an instance already exists.
      *
      * @param string $name The instance internal name.
