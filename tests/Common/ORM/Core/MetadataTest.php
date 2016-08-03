@@ -175,6 +175,26 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getMetaKeyName with empty and non-empty meta definition in Metadata.
+     */
+    public function testGetMetaKeyName()
+    {
+        $this->metadata->mapping['database'] = [
+            'index' => [
+                [ 'name' => 'id', 'columns' => [ 'id' ], 'primary' => true ]
+            ]
+        ];
+
+        $this->assertEquals('meta_key', $this->metadata->getMetaKeyName());
+
+        $this->metadata->mapping['database'] = [
+            'metas' => ['ids' => [ 'id' => 'bar' ], 'key' => 'baz' ]
+        ];
+
+        $this->assertEquals('baz', $this->metadata->getMetaKeyName());
+    }
+
+    /**
      * Tests getMetaKeys with empty and non-empty meta definition in Metadata.
      */
     public function testGetMetaKeys()
@@ -205,6 +225,26 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
             'metas' => ['table' => 'foo_table_meta' ]
         ];
         $this->assertEquals('foo_table_meta', $this->metadata->getMetaTable());
+    }
+
+    /**
+     * Tests getMetaValueName with empty and non-empty meta definition in Metadata.
+     */
+    public function testGetMetaValueName()
+    {
+        $this->metadata->mapping['database'] = [
+            'index' => [
+                [ 'name' => 'id', 'columns' => [ 'id' ], 'primary' => true ]
+            ]
+        ];
+
+        $this->assertEquals('meta_value', $this->metadata->getMetaValueName());
+
+        $this->metadata->mapping['database'] = [
+            'metas' => ['ids' => [ 'id' => 'bar' ], 'value' => 'baz' ]
+        ];
+
+        $this->assertEquals('baz', $this->metadata->getMetaValueName());
     }
 
     /**

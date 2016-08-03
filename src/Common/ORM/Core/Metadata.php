@@ -161,6 +161,22 @@ class Metadata extends DataObject implements Validable
     }
 
     /**
+     * Returns the meta key name.
+     *
+     * @return string The meta key name.
+     */
+    public function getMetaKeyName()
+    {
+        if ($this->hasMetas()
+            && array_key_exists('key', $this->mapping['database']['metas'])
+        ) {
+            return $this->mapping['database']['metas']['key'];
+        }
+
+        return 'meta_key';
+    }
+
+    /**
      * Returns an array with the correspondence between the keys of the entity
      * table and the keys of the table of metas.
      *
@@ -168,10 +184,8 @@ class Metadata extends DataObject implements Validable
      */
     public function getMetaKeys()
     {
-        if (array_key_exists('database', $this->mapping)
-            && array_key_exists('metas', $this->mapping['database'])
+        if ($this->hasMetas()
             && array_key_exists('ids', $this->mapping['database']['metas'])
-            && !empty($this->mapping['database']['metas']['ids'])
         ) {
             return $this->mapping['database']['metas']['ids'];
         }
@@ -192,14 +206,29 @@ class Metadata extends DataObject implements Validable
      */
     public function getMetaTable()
     {
-        if (array_key_exists('database', $this->mapping)
-            && array_key_exists('metas', $this->mapping['database'])
+        if ($this->hasMetas()
             && array_key_exists('table', $this->mapping['database']['metas'])
         ) {
             return $this->mapping['database']['metas']['table'];
         }
 
         return $this->getTable() . '_meta';
+    }
+
+    /**
+     * Returns the meta value name.
+     *
+     * @return string The meta value name.
+     */
+    public function getMetaValueName()
+    {
+        if ($this->hasMetas()
+            && array_key_exists('value', $this->mapping['database']['metas'])
+        ) {
+            return $this->mapping['database']['metas']['value'];
+        }
+
+        return 'meta_value';
     }
 
     /**
