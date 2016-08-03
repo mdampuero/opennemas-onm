@@ -708,7 +708,7 @@ class ContentCategoryManager
      *
      * @see ContentCategoryManager::countContentByType
      **/
-    public function countContentsByGroupType($type, $filter = null)
+    public static function countContentsByGroupType($type, $filter = null)
     {
         $where= '';
         if (!is_null($filter)) {

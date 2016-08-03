@@ -37,55 +37,14 @@ class CategoriesController extends Controller
      */
     public function listAction()
     {
-        $ccm = \ContentCategoryManager::get_instance();
-
-        // Get contents by group
-        $groups['articles']       = $ccm->countContentsByGroupType(1);
-
-        $allcategorys  = $this->get('category_repository')->findBy(null, 'name ASC');
-
-        $categorygorys = $subcategorys =array();
-        $contentsCount =  $subContentsCount = array();
-
-        $i = 0;
-        foreach ($allcategorys as $category) {
-            if ($category->fk_content_category == 0) {
-                if (isset($groups['articles'][$category->pk_content_category])) {
-                    $contentsCount[$i]['articles'] =
-                        $groups['articles'][$category->pk_content_category];
-                } else {
-                    $contentsCount[$i]['articles'] = 0;
-                }
-
-                //Unserialize category param field
-                $categorygorys[$i] = $category;
-
-                $resul = $ccm->getSubcategories($category->pk_content_category);
-                $j=0;
-                foreach ($resul as $category) {
-                    if (isset($groups['articles'][$category->pk_content_category])) {
-                        $subContentsCount[$i][$j]['articles'] = $groups['articles'][$category->pk_content_category];
-                    } else {
-                        $subContentsCount[$i][$j]['articles'] = 0;
-                    }
-
-                    //Unserialize subcategory param field
-                    $j++;
-                }
-                $subcategorys[$i]=$resul;
-                    $i++;
-            }
-        }
+        $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
+        $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
         return $this->render(
             'category/list.tpl',
             array(
-                'categorys'        => $categorygorys,
-                'num_contents'     => $contentsCount,
-                'num_sub_contents' => $subContentsCount,
-                'subcategorys'     => $subcategorys,
-                'ordercategorys'   => $allcategorys,
-                'allcategorys'     => $allcategorys
+                'categories'    => $categories,
+                'contents_count' => $contentsCount,
             )
         );
     }
