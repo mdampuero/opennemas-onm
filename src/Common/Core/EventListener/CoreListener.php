@@ -17,10 +17,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * The CoreLoaderListener class configures the core with an instance and a theme
+ * The CoreListener class configures the core with an instance and a theme
  * basing on the request.
  */
-class CoreLoaderListener implements EventSubscriberInterface
+class CoreListener implements EventSubscriberInterface
 {
     /**
      * The service container.
