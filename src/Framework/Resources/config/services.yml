@@ -2,28 +2,6 @@ imports:
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
 
-parameters:
-    core.template.plugins:
-        output:
-            - ads_generator
-            - ads_scripts
-            - canonical_url
-            - comscore
-            - css_includes
-            - generate_fb_admin_tag
-            - generate_fb_pages_tag
-            - google_analytics
-            - js_includes
-            - meta_amphtml
-            - ojd
-            - piwik
-    core.template.admin.plugins:
-    core.template.manager.plugins:
-        output:
-            - canonical_url
-            - css_includes
-            - js_includes
-
 services:
     kernel.listener.application_listener:
         class: Framework\EventListener\ApplicationListener
@@ -278,21 +256,3 @@ services:
     core.manager.menu:
         class: Repository\MenuManager
         arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
-
-    core.template:
-        class: Template
-        arguments: [ '@service_container', '%core.template.plugins%' ]
-
-    core.template.admin:
-        class: TemplateAdmin
-        arguments: [ '@service_container', '%core.template.admin.plugins%' ]
-
-    core.template.manager:
-        class: Template
-        arguments: [ '@service_container', '%core.template.manager.plugins%' ]
-
-    core.listener.annotation.template:
-        class:     Framework\EventListener\TemplateAnnotationListener
-        arguments: [ '@service_container' ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

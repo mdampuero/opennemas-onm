@@ -2,7 +2,34 @@ parameters:
     core.locale.available: [ 'en_US', 'es_ES', 'gl_ES' ]
     core.locale.path:      '%kernel.root_dir%/Resources/locale'
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'
-
+    core.template.filters:
+        output:
+            - ads_generator
+            - ads_scripts
+            - canonical_url
+            - comscore
+            - css_includes
+            - generate_fb_admin_tag
+            - generate_fb_pages_tag
+            - google_analytics
+            - js_includes
+            - meta_amphtml
+            - ojd
+            - piwik
+    core.template.admin.filters:
+        output:
+            - backend_analytics
+            - canonical_url
+            - css_includes
+            - js_includes
+            - trimwhitespace
+        ignore_cli:
+            - backend_analytics
+    core.template.manager.filters:
+        output:
+            - canonical_url
+            - css_includes
+            - js_includes
 services:
     core.instance:
         class:   Common\ORM\Entity\Instance
@@ -42,6 +69,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
+    core.listener.template.annotation:
+        class:     Common\Core\EventListener\TemplateAnnotationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
     core.loader:
         class:     Common\Core\Loader\Loader
         arguments: [ '@service_container' ]
@@ -50,16 +83,28 @@ services:
         class:     Common\Core\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
 
-    core.theme:
-        class:     Common\ORM\Entity\Extension
-        factory:   [ '@core.loader', 'getTheme' ]
-
     core.security:
         class:     Common\Core\Security\Security
 
     core.security.user:
         class:     Common\ORM\Entity\User
         factory:   [ '@core.security', 'getUser' ]
+
+    core.template:
+        class: Common\Core\Template\Template
+        arguments: [ '@service_container', '%core.template.filters%' ]
+
+    core.template.admin:
+        class: Common\Core\Template\Template
+        arguments: [ '@service_container', '%core.template.admin.filters%' ]
+
+    core.template.manager:
+        class: Common\Core\Template\Template
+        arguments: [ '@service_container', '%core.template.manager.filters%' ]
+
+    core.theme:
+        class:     Common\ORM\Entity\Extension
+        factory:   [ '@core.loader', 'getTheme' ]
 
     core.user:
         alias:     'core.security.user'

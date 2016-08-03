@@ -7,9 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Common\Core\Template;
+
 use Symfony\Component\Filesystem\Filesystem;
 
-class Template extends Smarty
+/**
+ * The Template class extends Smarty to add theme support.
+ */
+class Template extends \Smarty
 {
     /**
      * The service container.
@@ -40,9 +45,9 @@ class Template extends Smarty
      * Initializes the Template class
      *
      * @param ServiceContainer $container The service container.
-     * @param array            $plugins   The list of plugins.
+     * @param array            $filters   The list of filters.
      */
-    public function __construct($container, $plugins)
+    public function __construct($container, $filters)
     {
         parent::__construct();
 
@@ -53,7 +58,7 @@ class Template extends Smarty
         $this->container = $container;
 
         $this->assign('container', $container);
-        $this->registerPlugins($plugins);
+        $this->registerFilters($filters);
     }
 
     /**
@@ -188,7 +193,7 @@ class Template extends Smarty
         // If configuration says cache is enabled forward this to smarty object
         if (array_key_exists('caching', $config) && $config['caching'] == true) {
             // Retain current cache lifetime for each specific display call
-            $this->setCaching(SMARTY::CACHING_LIFETIME_SAVED);
+            $this->setCaching(\Smarty::CACHING_LIFETIME_SAVED);
 
             if (!array_key_exists('cache_lifetime', $config)
                 || empty($config['cache_lifetime'])
@@ -201,19 +206,30 @@ class Template extends Smarty
     }
 
     /**
-     * Registers the required smarty plugins.
+     * Registers the required smarty filters.
      *
-     * @param array $plugins The list of plugins.
+     * @param array $filters The list of filters.
      */
-    protected function registerPlugins($plugins)
+    protected function registerFilters($filters)
     {
-        if (empty($plugins)) {
+        if (empty($filters)) {
             return;
         }
 
-        foreach ($plugins as $section => $p) {
-            foreach ($p as $plugin) {
-                $this->addFilter($section, $plugin);
+        $ignoreCli = [];
+
+        if (array_key_exists('ignore_cli', $filters)) {
+            $ignoreCli = $filters['ignore_cli'];
+            unset($filters['ignore_cli']);
+        }
+
+        foreach ($filters as $section => $f) {
+            if (php_sapi_name() === 'cli') {
+                $f = array_diff($f, $ignoreCli);
+            }
+
+            foreach ($f as $filter) {
+                $this->addFilter($section, $filter);
             }
         }
     }
