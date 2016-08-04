@@ -33,7 +33,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -55,7 +54,7 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="AUTHOR_DELETE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deleteSelected('backend_ws_users_batch_delete')" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="deleteSelected(item.id)" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -149,7 +148,7 @@
                     </a>
                     {/acl}
                     {acl isAllowed="AUTHOR_DELETE"}
-                    <button class="link link-danger" ng-click="delete(item, 'backend_ws_user_delete')" type="button">
+                    <button class="link link-danger" ng-click="delete(item.id)" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
