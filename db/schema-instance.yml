@@ -1513,7 +1513,7 @@ users:
             type: string
             options: { default: null, notnull: false, length: 50 }
         activated:
-            type: boolean
+            type: integer
             options: { default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
         fk_user_group:
             type: string
