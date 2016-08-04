@@ -57,10 +57,6 @@ class Loader
      */
     public function configureInstance($instance)
     {
-        $this->container->get('core.template')->addInstance($instance);
-        $this->container->get('core.template.admin')->addInstance($instance);
-        $this->container->get('core.template.manager')->addInstance($instance);
-
         // Change database for `instance` database connection
         if ($this->container->has('orm.manager')) {
             $this->container->get('orm.manager')->getConnection('instance')
