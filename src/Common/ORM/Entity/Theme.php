@@ -14,6 +14,6 @@ use Common\ORM\Core\Entity;
 /**
  * The Theme class represents themes that change the Opennemas templates.
  */
-class Theme extends Entity
+class Theme extends Extension
 {
 }
