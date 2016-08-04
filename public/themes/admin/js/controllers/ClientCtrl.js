@@ -72,6 +72,7 @@
           }
 
           // Person in EU or company and persons outside EU
+          $scope.client.vat_number = null;
           return false;
         };
 
@@ -87,7 +88,6 @@
             $rootScope.$broadcast('client-saved', $scope.client);
             return;
           }
-
 
           if ($scope.client.id) {
             $scope.update();
@@ -119,7 +119,7 @@
             $rootScope.$broadcast('client-saved', $scope.client);
           }, function(response) {
             $scope.loading = false;
-            messenger.post(response);
+            messenger.post(response.data);
           });
         };
 
@@ -141,7 +141,7 @@
             $rootScope.$broadcast('client-saved', $scope.client);
           }, function(response) {
             $scope.loading = false;
-            messenger.post(response);
+            messenger.post(response.data);
           });
         };
 
@@ -164,7 +164,10 @@
           if ($scope.billing.company && $scope.billing.country === 'ES' &&
               $scope.taxes[$scope.billing.country]) {
             $scope.vatTax = $scope.taxes[$scope.billing.country].value;
+            return;
           }
+
+          $scope.validVatNumber = true;
         }, true);
 
         // Updates the edit flag when billing changes.

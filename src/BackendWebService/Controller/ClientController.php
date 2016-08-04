@@ -9,7 +9,7 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Entity\Client;
+use Common\ORM\Entity\Client;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,15 +48,16 @@ class ClientController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $em     = $this->get('orm.manager');
         $client = new Client($request->request->all());
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'database');
 
         $instance = $this->get('core.instance');
-        $instance->metas['client'] = $client->id;
-        $this->get('instance_manager')->persist($instance);
+        $instance->client = $client->id;
+        $em->persist($instance);
 
         return new JsonResponse($client->id);
     }
@@ -70,15 +71,14 @@ class ClientController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $client = $this->get('orm.manager')
-            ->getRepository('Client', 'database')
-            ->find($id);
+        $em     = $this->get('orm.manager');
+        $client = $em->getRepository('Client', 'database')->find($id);
 
         $client->merge($request->request->all());
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $em->persist($client, 'FreshBooks');
+        $em->persist($client, 'Braintree');
+        $em->persist($client, 'Database');
 
         return new JsonResponse();
     }
