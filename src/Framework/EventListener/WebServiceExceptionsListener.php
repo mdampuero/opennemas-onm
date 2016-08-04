@@ -60,7 +60,8 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         $uri = $event->getRequest()->getRequestUri();
 
         if (!($exception instanceof AuthenticationException)
-            && strpos($uri, '/managerws') !== false
+            && (strpos($uri, '/managerws') !== false
+            || strpos($uri, '/entityws') !== false)
         ) {
             error_log($exception->getMessage());
 
