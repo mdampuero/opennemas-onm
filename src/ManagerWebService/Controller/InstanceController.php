@@ -455,12 +455,9 @@ class InstanceController extends Controller
 
         $deletedDomains = array_diff($oldDomains, $instance->domains);
 
+        $cache = $this->get('cache.manager')->getConnection('manager');
         if (!empty($deletedDomains)) {
-            $cache = $this->get('cache.manager')->getConnection('manager');
-
-            foreach ($deletedDomains as $domain) {
-                $cache->delete($domain);
-            }
+            $cache->delete($deletedDomains);
         }
 
         $em->persist($instance);
@@ -472,7 +469,7 @@ class InstanceController extends Controller
 
         dispatchEventWithParams(
             'instance.update',
-            [ 'instance' => $instance->internal_name ]
+            [ 'instance' => $instance ]
         );
 
         $msg->add(_('Instance saved successfully'), 'success');

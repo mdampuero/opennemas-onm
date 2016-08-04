@@ -95,7 +95,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'content.set_positions' => [
                 ['mockHookAction', 0],
-                // ['refreshFrontpage', 10], //This seems old code and the functions stinks
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
@@ -111,6 +110,8 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // Instance hooks
             'instance.update' => [
+                ['removeCacheForInstance', 5],
+                ['removeSmartyForInstance', 5],
                 ['removeVarnishInstanceCacheUsingInstance', 5],
             ],
             'theme.change' => [
@@ -545,35 +546,37 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $instanceName = $event->getArgument('instance');
+        $instanceName = $event->getArgument('instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName));
     }
 
     /**
-     * Deletes the category frontpage when content positions are updated.
+     * Removes the instance from cache.
      *
-     * @param Event $event The event to handle.
-     *
-     * @todo  this code stinks!!!!!!!!!!!!!!!!!!!!!!!!!!1
+     * @param Event $event The event object.
      */
-    // public function refreshFrontpage(Event $event)
-    // {
-    //     $cacheManager = $this->container->get('template_cache_manager');
-    //     $cacheManager->setSmarty($this->container->get('core.template'));
+    public function removeCacheForInstance(Event $event)
+    {
+        $instance = $event->getArgument('instance');
 
-    //     if (isset($_REQUEST['category'])) {
-    //         $ccm = \ContentCategoryManager::get_instance();
-    //         $categoryName = $ccm->getName($_REQUEST['category']);
-    //         $cacheManager->delete(
-    //             preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
-    //         );
-    //         $cacheManager->delete(
-    //             'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName)
-    //         );
+        $this->container->get('cache.manager')->getConnection('manager')
+            ->delete($instance->domains);
+    }
 
-    //         $this->cleanOpcode();
-    //     }
-    // }
+    /**
+     * Removes the Smarty cache for an instance.
+     *
+     * @param Event $event The event object.
+     */
+    public function removeSmartyForInstance(Event $event)
+    {
+        $instance = $event->getArgument('instance');
+
+        $tpl = $this->container->get('core.template');
+        $tpl->addInstance($instance);
+
+        $tpl->clearAllCache();
+    }
 }
