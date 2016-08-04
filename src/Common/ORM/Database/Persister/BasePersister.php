@@ -111,7 +111,7 @@ class BasePersister extends Persister
      */
     public function update(Entity $entity)
     {
-        list($data, $metas, $types) = $this->converter->databasify($entity->getData());
+        list($data, $metas, $types) = $this->converter->databasify($entity);
 
         $id = $this->metadata->getId($entity);
 
@@ -119,13 +119,22 @@ class BasePersister extends Persister
         $data  = array_diff_key($data, $id);
         $types = array_values(array_diff_key($types, $id));
 
-        $this->conn->update($this->metadata->getTable(), $data, $id, $types);
+        // Ignore non-changed data
+        if (!empty($entity->getChanges())) {
+            $data  = array_intersect_key($data, array_flip($entity->getChanges()));
+            $types = array_intersect_key($types, array_flip($entity->getChanges()));
+            $metas = array_intersect_key($metas, array_flip($entity->getChanges()));
+        }
 
-        if ($this->metadata->hasMetas()) {
+        if (!empty($data)) {
+            $this->conn->update($this->metadata->getTable(), $data, $id, $types);
+        }
+
+        if ($this->metadata->hasMetas() && !empty($metas)) {
             $this->persistMetas($id, $metas);
         }
 
-        if ($this->hasCache()) {
+        if ($this->hasCache() && (!empty($data) || !empty($metas))) {
             $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
     }
@@ -149,28 +158,37 @@ class BasePersister extends Persister
      */
     protected function persistMetas($id, $metas)
     {
-        // Ignore metas with value = null
-        if (!empty($metas)) {
-            $metas = array_filter($metas, function ($a) {
-                return !is_null($a);
-            });
+        if (empty($metas)) {
+            return;
         }
 
+        $toSave = array_filter($metas, function ($a) {
+            return !is_null($a);
+        });
+
+        $toDelete = array_filter($metas, function ($a) {
+            return is_null($a);
+        });
+
         // Update metas
-        $this->saveMetas($id, $metas);
+        $this->saveMetas($id, $toSave);
 
         // Remove old metas
-        $this->removeMetas($id, array_keys($metas));
+        $this->removeMetas($id, array_keys($toDelete));
     }
 
     /**
      * Deletes old metas.
      *
      * @param array $id   The entity id.
-     * @param array $keep The meta keys to keep.
+     * @param array $keep The meta keys to remove.
      */
-    protected function removeMetas($id, $keep = [])
+    protected function removeMetas($id, $metas = [])
     {
+        if (empty($metas)) {
+            return;
+        }
+
         $sql  = "delete from {$this->metadata->getMetaTable()} where ";
         $keys = $this->metadata->getMetaKeys();
 
@@ -185,11 +203,9 @@ class BasePersister extends Persister
 
         $sql .= implode(' and ', $joins);
 
-        if (!empty($keep)) {
-            $sql .= " and {$this->metadata->getMetaKeyName()} not in (?)";
-            $params[] = $keep;
-            $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
-        }
+        $sql      .= " and {$this->metadata->getMetaKeyName()} in (?)";
+        $params[]  = $metas;
+        $types[]   = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
 
         $this->conn->executeQuery($sql, $params, $types);
     }
