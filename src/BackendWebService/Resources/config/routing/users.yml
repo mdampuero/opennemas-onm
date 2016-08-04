@@ -1,41 +1,41 @@
 backend_ws_user_delete:
     path:     /users/{id}/delete
-    defaults: { _controller: BackendWebServiceBundle:Users:delete }
+    defaults: { _controller: BackendWebServiceBundle:User:delete }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_user_patch:
     path:     /users/{id}
-    defaults: { _controller: BackendWebServiceBundle:Users:patch }
+    defaults: { _controller: BackendWebServiceBundle:User:patch }
     methods:   [ PATCH ]
     options:
         expose: true
 
 backend_ws_users_delete:
     path:     /users
-    defaults: { _controller: BackendWebServiceBundle:Users:deleteSelected }
+    defaults: { _controller: BackendWebServiceBundle:User:deleteSelected }
     methods:  [ DELETE ]
     options:
         expose: true
 
 backend_ws_users_export:
     path:     /users.csv
-    defaults: { _controller: BackendWebServiceBundle:Users:export }
+    defaults: { _controller: BackendWebServiceBundle:User:export }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_users_list:
     path:     /users
-    defaults: { _controller: BackendWebServiceBundle:Users:list }
+    defaults: { _controller: BackendWebServiceBundle:User:list }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_users_patch:
     path:     /users
-    defaults: { _controller: BackendWebServiceBundle:Users:patchSelected }
+    defaults: { _controller: BackendWebServiceBundle:User:patchSelected }
     methods:  [ PATCH ]
     options:
         expose: true

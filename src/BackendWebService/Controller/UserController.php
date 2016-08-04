@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * Deletes a user.
