@@ -83,9 +83,7 @@ class Entity extends DataObject implements Validable
         }
 
         foreach ($data as $key => $value) {
-            $property = \underscore($key);
-
-            $this->data[$property] = $value;
+            $this->{$key} = $value;
         }
     }
 
@@ -94,7 +92,8 @@ class Entity extends DataObject implements Validable
      */
     public function refresh()
     {
-        $this->stored = true;
+        $this->stored  = true;
+        $this->changed = [];
     }
 
     /**
