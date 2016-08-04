@@ -42,10 +42,14 @@ class UserPersister extends BasePersister
     {
         $categories = [];
 
+        // Categories change
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
-            unset($entity->categories);
         }
+
+        // Ignore categories, persist them later
+        unset($entity->categories);
+        $entity->setNotChanged('categories');
 
         parent::update($entity);
 
