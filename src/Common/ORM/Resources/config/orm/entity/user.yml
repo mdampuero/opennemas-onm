@@ -82,7 +82,7 @@ entity:
                     type: string
                     options: { default: null, length: 32, notnull: false }
                 activated:
-                    type: boolean
+                    type: integer
                     options: { default: true, comment: '1 activated - 0 disabled', notnull: true }
                 fk_user_group:
                     type: simple_array
