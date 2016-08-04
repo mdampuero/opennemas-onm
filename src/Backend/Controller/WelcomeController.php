@@ -36,13 +36,7 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
-        try {
-            $user = $this->get('orm.manager')->getRepository('User', 'instance')
-                ->find($this->getUser()->id);
-        } catch (\Exception $e) {
-            $user = $this->get('orm.manager')->getRepository('User', 'manager')
-                ->find($this->getUser()->id);
-        }
+        $user = $this->get('core.user');
 
         if (empty($user->terms_accepted)
             //|| $termsAccepted && $termsAccepted < '2015-07-23 15:24:15')
