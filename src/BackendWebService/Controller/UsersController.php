@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 
-class UsersController extends ContentController
+class UsersController extends Controller
 {
     /**
      * Deletes a user.
@@ -112,10 +112,11 @@ class UsersController extends ContentController
     /**
      * Downloads the list of users with metas.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
-    public function exportAction(Request $request)
+    public function exportAction()
     {
         $users = $this->get('orm.manager')->getRepository('User')->findBy();
 
@@ -181,12 +182,13 @@ class UsersController extends ContentController
      * @Security("hasExtension('USER_MANAGER')
      *     and hasPermission('USER_ADMIN')")
      */
-    public function listAction(Request $request, $contentType = null)
+    public function listAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
 
         if (!$this->getUser()->isMaster()) {
-            $oql .= 'fk_user_group !regexp "^4,|^4$|,4,|,4$"';
+            $oql = 'fk_user_group !regexp "^4,|^4$|,4,|,4$"'
+                . empty($oql) ? '' : ' and ' . $oql;
         }
 
         $repository = $this->get('orm.manager')->getRepository('User');
@@ -222,8 +224,8 @@ class UsersController extends ContentController
      */
     public function patchAction(Request $request, $id)
     {
-        $em  = $this->get('orm.manager');
-        $msg = $this->get('core.messenger');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
         $data = $em->getConverter('User')
             ->objectify($request->request->all());
 
