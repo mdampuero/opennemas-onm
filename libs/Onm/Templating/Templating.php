@@ -70,6 +70,7 @@ class Templating
                 ->getRepository('theme', 'file')
                 ->findOneBy('uuid = "es.openhost.theme.admin"');
 
+            $template->addInstance($this->container->get('core.instance'));
             $template->addActiveTheme($theme);
         }
 
@@ -90,8 +91,34 @@ class Templating
                 ->getRepository('theme', 'file')
                 ->findOneBy('uuid = "es.openhost.theme.manager"');
 
+            $template->addInstance($this->container->get('core.instance'));
             $template->addActiveTheme($theme);
         }
+
+        return $template;
+    }
+
+    /**
+     * Returns the template service basing on the module name.
+     *
+     * @param string $module The module name.
+     *
+     * @return mixed The template service.
+     */
+    public function getTemplate($module = null)
+    {
+        if ($module === 'Manager' || $module === 'ManagerWebService') {
+            return $this->getManagerTemplate();
+        }
+
+        if ($module === 'Backend' || $module === 'BackendWebService') {
+            return $this->getBackendTemplate();
+        }
+
+        $template = $this->container->get('core.template');
+
+        $template->addInstance($this->container->get('core.instance'));
+        $template->addActiveTheme($this->container->get('core.theme'));
 
         return $template;
     }
@@ -107,30 +134,5 @@ class Templating
         $controller = explode('\\', $controller);
 
         return $controller[0];
-    }
-
-    /**
-     * Returns the template service basing on the module name.
-     *
-     * @param string $module The module name.
-     *
-     * @return mixed The template service.
-     */
-    protected function getTemplate($module)
-    {
-        if ($module === 'Manager' || $module === 'ManagerWebService') {
-            return $this->getManagerTemplate();
-        }
-
-        if ($module === 'Backend' || $module === 'BackendWebService') {
-            return $this->getBackendTemplate();
-        }
-
-        $theme    = $this->container->get('core.theme');
-        $template = $this->container->get('core.template');
-
-        $template->addActiveTheme($theme);
-
-        return $template;
     }
 }
