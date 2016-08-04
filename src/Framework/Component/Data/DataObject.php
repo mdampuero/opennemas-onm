@@ -16,7 +16,7 @@ class DataObject
      *
      * @var array
      */
-    protected $changed;
+    protected $changed = [];
 
     /**
      * The array of raw data.
