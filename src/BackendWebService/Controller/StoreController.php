@@ -31,12 +31,11 @@ class StoreController extends Controller
 
         // Fetch information about modules
         $availableItems = [];
-        $modules   = $this->get('orm.manager')
-            ->getRepository('manager.extension')
-            ->findBy([
-                'enabled' => [ [ 'value' => 1 ] ],
-                'type'    => [ 'union' => 'OR', [ 'value' => 'module' ], [ 'value' => 'theme-addon' ] ]
-            ]);
+
+        $oql     = 'enabled = 1 and (type = "module" or type = "theme-addon")';
+        $modules = $this->get('orm.manager')
+            ->getRepository('Extension')
+            ->findBy($oql);
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
         $themes    = $this->get('orm.loader')->getPlugins();
 
@@ -119,7 +118,9 @@ class StoreController extends Controller
         $vatNumber = $request->query->get('vat');
 
         try {
-            if (!$vat->validate($country, $vatNumber)) {
+            if (!$vat->validate($country, $vatNumber)
+                && array_key_exists($country, $vat->getTaxes())
+            ) {
                 $code = 400;
             }
         } catch (\Exception $e) {
@@ -138,12 +139,10 @@ class StoreController extends Controller
      */
     public function listAction()
     {
-        $modules   = $this->get('orm.manager')
-            ->getRepository('manager.extension')
-            ->findBy([
-                'enabled' => [ [ 'value' => 1 ] ],
-                'type'    => [ [ 'value' => 'module' ] ]
-            ]);
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('Extension');
+        $modules   = $em->getRepository('Extension')
+            ->findBy('enabled = 1 and type = "module"');
 
         $activated = $this->get('core.instance')->activated_modules;
 
@@ -153,26 +152,24 @@ class StoreController extends Controller
             $activated[] = 'MEDIA_MANAGER';
         }
 
+        $modules = $converter->responsify($modules);
+
         $modules = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
-                if (!empty($a->{$key})) {
-                    $lang = $a->{$key}['en'];
+                if (!empty($a[$key])) {
+                    $lang = $a[$key]['en'];
 
-                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a->{$key})
-                        && !empty($a->{$key}[CURRENT_LANGUAGE_SHORT])
+                    if (array_key_exists(CURRENT_LANGUAGE_SHORT, $a[$key])
+                        && !empty($a[$key][CURRENT_LANGUAGE_SHORT])
                     ) {
-                        $lang = $a->{$key}[CURRENT_LANGUAGE_SHORT];
+                        $lang = $a[$key][CURRENT_LANGUAGE_SHORT];
                     }
 
-                    $a->{$key} = $lang;
+                    $a[$key] = $lang;
                 }
             }
 
-            if (array_key_exists('price', $a->metas)) {
-                $a->price = $a->metas['price'];
-            }
-
-            return $a->getData();
+            return $a;
         }, $modules);
 
         return new JsonResponse(
