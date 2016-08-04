@@ -1499,7 +1499,7 @@ users:
             options: { default: null, notnull: false, length: 65532 }
         avatar_img_id:
             type: bigint
-            options: { default: '0', notnull: false, unsigned: true }
+            options: { default: null, notnull: false, unsigned: true }
         email:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -1508,13 +1508,13 @@ users:
             options: { default: null, notnull: false, length: 100 }
         type:
             type: integer
-            options: { default: 0, notnull: true, comment: '0-backend, 1-frontend' }
+            options: { default: 1, notnull: true, comment: '0 backend - 1 frontend' }
         token:
             type: string
             options: { default: null, notnull: false, length: 50 }
         activated:
             type: boolean
-            options: { default: '1', notnull: true, comment: '1 activated - 0 deactivated' }
+            options: { default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
         fk_user_group:
             type: string
             options: { default: null, notnull: false, length: 100 }
