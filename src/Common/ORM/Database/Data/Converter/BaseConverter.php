@@ -10,6 +10,7 @@
 namespace Common\ORM\Database\Data\Converter;
 
 use Common\ORM\Core\Data\Converter\Converter;
+use Common\ORM\Core\Entity;
 
 /**
  * The BaseConverter class converts entity data before and after persisting them
@@ -87,7 +88,7 @@ class BaseConverter extends Converter
     /**
      * Convert entity data to valid database values.
      *
-     * @param array $source The entity data.
+     * @param mixed $source The entity or entity data.
      *
      * @return array The converted data and metas.
      */
@@ -98,6 +99,10 @@ class BaseConverter extends Converter
             || !array_key_exists('columns', $this->metadata->mapping['database'])
         ) {
             throw new \Exception();
+        }
+
+        if ($source instanceof Entity) {
+            $source = $source->getData();
         }
 
         $mapping = $this->metadata->mapping['database'];
