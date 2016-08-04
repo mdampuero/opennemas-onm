@@ -33,7 +33,7 @@ class TranslationThemeCommand extends ContainerAwareCommand
         $this
             ->setDefinition(
                 array(
-                    new InputArgument('theme', InputArgument::REQUIRED, 'theme'),
+                    new InputArgument('uuid', InputArgument::REQUIRED, 'The theme UUID in format es.openhost.theme.name'),
                 )
             )
             ->setName('translation:theme')
@@ -56,23 +56,17 @@ EOF
         $basePath = APPLICATION_PATH;
         chdir($basePath);
 
-        $theme  = $input->getArgument('theme');
-        $themes = $this->getContainer()->get('orm.loader')->getPlugins();
-        $themes = array_filter($themes, function ($a) use ($theme) {
-            return str_replace('es.openhost.theme.', '', $a->uuid) === $theme;
-        });
+        $uuid = 'es.openhost.theme.' . str_replace('es.openhost.theme.', '', $input->getArgument('uuid'));
 
-        if (empty($themes)) {
-            $output->writeln("<error>Theme $theme doesn't exists</error>");
-            return;
-        }
-
-        $theme = array_shift($themes);
+        $theme = $this->getContainer()->get('orm.manager')
+            ->getRepository('Theme')->findOneBy(sprintf('uuid = "%s"', $uuid));
 
         if (empty($theme->text_domain)) {
-            $output->writeln('<error>This theme has no support for translations</error>');
+            $output->writeln("<error>[FAIL] Theme $uuid has no translation support</error>");
             return;
         }
+
+        $output->writeln("Translating <info>$uuid</> theme...");
 
         $this->themeFolder = 'public/' . $theme->path;
 
