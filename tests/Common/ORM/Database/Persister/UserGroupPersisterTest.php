@@ -74,7 +74,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->once())->method('insert')->with(
             'user_groups',
             [ 'pk_user_group' => null, 'name' => 'xyzzy' ],
-            [ \PDO::PARAM_STR, \PDO::PARAM_STR ]
+            [ 'pk_user_group' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'replace into user_groups_privileges values (?,?),(?,?)',
@@ -106,7 +106,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             'user_groups',
             [ 'name' => 'garply' ],
             [ 'pk_user_group' => 1 ],
-            [ \PDO::PARAM_STR ]
+            [ 'name' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(1))->method('executeQuery')->with(
             'replace into user_groups_privileges values (?,?)',

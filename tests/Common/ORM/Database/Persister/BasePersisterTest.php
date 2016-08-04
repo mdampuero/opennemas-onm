@@ -71,13 +71,17 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $entity = new Entity([ 'bar' => 'fubar', 'wibble' => 'xyzzy' ]);
+        $entity = new Entity([ 'bar' => 'fubar', 'wibble' => 'xyzzy', 'mumble' => null ]);
+
+        $property = new \ReflectionProperty($entity, 'changed');
+        $property->setAccessible(true);
+        $property->setValue($entity, [ 'bar', 'wibble', 'mumble' ]);
 
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'foobar',
             [ 'foo' => null, 'bar' => 'fubar' ],
-            [ \PDO::PARAM_STR, \PDO::PARAM_STR ]
+            [ 'foo' => \PDO::PARAM_STR, 'bar' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'replace into foobar_meta values (?,?,?)',
@@ -85,8 +89,8 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'delete from foobar_meta where foobar_foo = ? and meta_key not in (?)',
-            [ 1, [ 'wibble' ] ],
+            'delete from foobar_meta where foobar_foo = ? and meta_key in (?)',
+            [ 1, [ 'mumble' ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
@@ -119,21 +123,20 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
             'wibble' => 'xyzzy',
         ]);
 
+        $property = new \ReflectionProperty($entity, 'changed');
+        $property->setAccessible(true);
+        $property->setValue($entity, [ 'bar', 'wibble' ]);
+
         $this->conn->expects($this->once())->method('update')->with(
             'foobar',
             [ 'bar' => 'garply' ],
             [ 'foo' => 1 ],
-            [ \PDO::PARAM_STR ]
+            [ 'bar' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(1))->method('executeQuery')->with(
             'replace into foobar_meta values (?,?,?)',
             [ 1, 'wibble', 'xyzzy' ],
             [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
-        );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'delete from foobar_meta where foobar_foo = ? and meta_key not in (?)',
-            [ 1, [ 'wibble' ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
         $this->cache->expects($this->once())->method('delete');

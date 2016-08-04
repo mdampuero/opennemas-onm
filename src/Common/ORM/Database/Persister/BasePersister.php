@@ -71,7 +71,7 @@ class BasePersister extends Persister
     {
         list($data, $metas, $types) = $this->converter->databasify($entity->getData());
 
-        $types = array_values($types);
+        $types = $types;
         $keys  = $this->metadata->getIdKeys();
 
         $this->conn->insert($this->metadata->getTable(), $data, $types);
@@ -117,7 +117,7 @@ class BasePersister extends Persister
 
         // Remove ids from data and types
         $data  = array_diff_key($data, $id);
-        $types = array_values(array_diff_key($types, $id));
+        $types = array_diff_key($types, $id);
 
         // Ignore non-changed data
         if (!empty($entity->getChanges())) {
@@ -158,16 +158,12 @@ class BasePersister extends Persister
      */
     protected function persistMetas($id, $metas)
     {
-        if (empty($metas)) {
-            return;
-        }
-
         $toSave = array_filter($metas, function ($a) {
-            return !is_null($a);
+            return !empty($a);
         });
 
         $toDelete = array_filter($metas, function ($a) {
-            return is_null($a);
+            return empty($a);
         });
 
         // Update metas
