@@ -186,11 +186,6 @@ class UsersController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
-        if (!$this->getUser()->isMaster()) {
-            $oql = 'fk_user_group !regexp "^4,|^4$|,4,|,4$"'
-                . empty($oql) ? '' : ' and ' . $oql;
-        }
-
         $repository = $this->get('orm.manager')->getRepository('User');
         $converter  = $this->get('orm.manager')->getConverter('User');
 
