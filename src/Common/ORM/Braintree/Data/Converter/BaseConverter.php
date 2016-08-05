@@ -10,6 +10,7 @@
 namespace Common\ORM\Braintree\Data\Converter;
 
 use Common\ORM\Core\Data\Converter\Converter;
+use Common\ORM\Core\Entity;
 
 /**
  * The BaseConverter class converts entity data before and after persisting them
@@ -30,6 +31,10 @@ class BaseConverter extends Converter
             || !array_key_exists('braintree', $this->metadata->mapping)
         ) {
             throw new \Exception();
+        }
+
+        if ($source instanceof Entity) {
+            $source = $source->getData();
         }
 
         $mapping = $this->metadata->mapping['braintree'];

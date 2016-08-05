@@ -63,24 +63,26 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBraintreefyValid()
     {
-        $this->assertEquals(
-            [
-                'id'        => 1,
-                'firstName' => 'John',
-                'lastName'  => 'Doe',
-                'email'     => 'johndoe@example.org',
-                'company'   => 'John Doe, Inc.',
-                'phone'     => '555-555-555',
-            ],
-            $this->converter->braintreefy([
-                'id'        => 1,
-                'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'email'     => 'johndoe@example.org',
-                'company'   => 'John Doe, Inc.',
-                'phone'     => '555-555-555',
-            ])
-        );
+        $original = [
+            'id'        => 1,
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'     => 'johndoe@example.org',
+            'company'   => 'John Doe, Inc.',
+            'phone'     => '555-555-555',
+        ];
+
+        $converted = [
+            'id'        => 1,
+            'firstName' => 'John',
+            'lastName'  => 'Doe',
+            'email'     => 'johndoe@example.org',
+            'company'   => 'John Doe, Inc.',
+            'phone'     => '555-555-555',
+        ];
+
+        $this->assertEquals($converted, $this->converter->braintreefy($original));
+        $this->assertEquals($converted, $this->converter->braintreefy(new Client($original)));
     }
 
     /**

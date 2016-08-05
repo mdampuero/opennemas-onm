@@ -10,6 +10,7 @@
 namespace Common\ORM\FreshBooks\Data\Converter;
 
 use Common\ORM\Core\Data\Converter\Converter;
+use Common\ORM\Core\Entity;
 use Symfony\Component\Intl\Intl;
 
 /**
@@ -31,6 +32,10 @@ class BaseConverter extends Converter
             || !array_key_exists('freshbooks', $this->metadata->mapping)
         ) {
             throw new \Exception();
+        }
+
+        if ($source instanceof Entity) {
+            $source = $source->getData();
         }
 
         $mapping = $this->metadata->mapping['freshbooks'];
