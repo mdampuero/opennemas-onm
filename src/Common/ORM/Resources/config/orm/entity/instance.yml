@@ -33,7 +33,7 @@ entity:
         emails:             integer
         users:              integer
         support_plan:       string
-        client:             string
+        client:             integer
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
