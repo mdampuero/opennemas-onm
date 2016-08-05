@@ -37,7 +37,7 @@ class InvoicePersister extends BasePersister
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            $entity->invoice_id = $response['invoice_id'];
+            $entity->invoice_id = (int) $response['invoice_id'];
 
             return $this;
         }
