@@ -27,7 +27,6 @@ class StoreController extends Controller
 
         // Fetch user data
         $modulesRequested = $request->request->get('modules');
-        $billing          = $request->request->get('billing');
 
         // Fetch information about modules
         $availableItems = [];
@@ -37,7 +36,8 @@ class StoreController extends Controller
             ->getRepository('Extension')
             ->findBy($oql);
         $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes    = $this->get('orm.loader')->getPlugins();
+        $themes    = $this->get('orm.manager')->getRepository('Theme')
+            ->findBy();
 
         foreach ($modules as $module) {
             $availableItems[$module->uuid] =
