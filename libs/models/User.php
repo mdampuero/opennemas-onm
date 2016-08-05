@@ -166,7 +166,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             "INSERT INTO users "
             ."(`username`, `password`, `url`, `bio`, `avatar_img_id`, "
             ."`email`, `name`, `type`, `token`, `activated`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['username'],
             md5($data['password']),
