@@ -117,11 +117,6 @@ class AlbumsController extends Controller
 
             if ($orderBy == 'favorite') {
                 $order = array('favorite' => 'DESC', 'created' => 'DESC');
-            } elseif ($orderBy == 'views') {
-                $order = array('views' => 'DESC', 'created' => 'DESC');
-
-                $date = strtotime("-$days day");
-                $filters['created'] = array(array('value' => date('Y-m-d H:i:s', $date), 'operator' => '>=' ));
             } else {
                 $order = array('created' => 'DESC');
             }
