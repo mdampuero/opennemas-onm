@@ -25,22 +25,17 @@ class ThemeController extends Controller
      */
     public function enableAction($uuid)
     {
+        $em       = $this->get('orm.manager');
         $instance = $this->get('core.instance');
-        $themes   = $this->get('orm.loader')->getPlugins();
 
-        $theme = array_filter($themes, function ($a) use ($uuid) {
-            return strpos($a->uuid, $uuid) !== false;
-        });
-
-        if (empty($theme) && array_pop($theme)->uuid === $uuid) {
-            return new JsonResponse(_('Invalid theme'), 400);
-        }
+        // Check if theme exists
+        $em->getRepository('Theme')->findOneBy('uuid = ' . $uuid);
 
         $instance->settings['TEMPLATE_USER'] = $uuid;
 
-        $this->get('instance_manager')->persist($instance);
-
-        dispatchEventWithParams('theme.change');
+        $em->persist($instance);
+        $this->get('core.dispatcher')
+            ->dispatch('instance.update', [ 'instance' => $instance ]);
 
         return new JsonResponse();
     }
