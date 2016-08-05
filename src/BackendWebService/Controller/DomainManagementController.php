@@ -168,8 +168,7 @@ class DomainManagementController extends Controller
         $em = $this->get('orm.manager');
 
         try {
-            $client = $em->getRepository('Client')->find($instance->getClient());
-
+            $client   = $em->getRepository('Client')->find($instance->getClient());
             $purchase = $em->getRepository('Purchase')->find($purchase);
 
             $payment = new Payment([
@@ -186,33 +185,35 @@ class DomainManagementController extends Controller
             $em->persist($payment, 'braintree');
 
             $purchase->payment_id = $payment->payment_id;
+
             $em->persist($purchase);
 
             $invoice = new Invoice([
                 'client_id' => $client->id,
-                'date'      => date('Y-m-d'),
+                'date'      => new \DateTime(),
                 'status'    => 'sent',
                 'lines'     => $purchase->details
             ]);
 
-            $em->persist($invoice, 'freshBooks');
+            $em->persist($invoice, 'freshbooks');
 
             $payment->invoice_id = $invoice->invoice_id;
-            $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
+            $payment->notes      = 'Braintree Transaction Id: '
+                . $payment->payment_id;
 
-            $em->persist($payment, 'FreshBooks');
+            $em->persist($payment, 'freshbooks');
 
             $purchase->invoice_id = $invoice->invoice_id;
             $purchase->updated    = $date;
-
-            $em->persist($purchase);
-
-            $domains = $purchase->details;
 
             // Remove payment method line from details
             if ($purchase->method === 'CreditCard') {
                 array_pop($domains);
             }
+
+            $em->persist($purchase);
+
+            $domains = $purchase->details;
 
             $this->sendEmailToCustomer($client, $domains, $purchase->id);
             $this->sendEmailToSales($client, $domains);
