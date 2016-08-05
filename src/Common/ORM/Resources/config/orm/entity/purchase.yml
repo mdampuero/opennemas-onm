@@ -16,7 +16,7 @@ entity:
         instance_id: integer
         invoice_id:  integer
         method:      string
-        payment_id:  integer
+        payment_id:  string
         total:       float
         step:        string
     converters:

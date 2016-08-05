@@ -6,12 +6,13 @@ entity:
         - date
         - type
     properties:
-        client_id:  integer
         amount:     float
+        client_id:  integer
         date:       datetime
-        type:       string
-        invoice_id: string
+        invoice_id: integer
+        nonce:      string
         notes:      string
+        type:       string
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -22,5 +23,31 @@ entity:
             arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.payment' ]
         freshbooks:
             class:     Common\ORM\FreshBooks\Persister\PaymentPersister
-            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
+            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.payment' ]
     mapping:
+        braintree:
+            client_id:
+                name: customerId
+                type: string
+            amount:
+                name: amount
+                type: string
+            nonce:
+                name: paymentMethodNonce
+                type: string
+        freshbooks:
+            client_id:
+                name: client_id
+                type: string
+            invoice_id:
+                name: invoice_id
+                type: integer
+            date:
+                name: date
+                type: string
+            notes:
+                name: notes
+                type: string
+            type:
+                name: type
+                type: string
