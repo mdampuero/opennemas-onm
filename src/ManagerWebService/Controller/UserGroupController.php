@@ -31,7 +31,7 @@ class UserGroupController extends Controller
         $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $userGroup = $em->getRepository('UserGroup')->find($id);
+        $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
 
         $em->remove($userGroup);
         $msg->add(_('User group deleted successfully'), 'success');
@@ -59,7 +59,7 @@ class UserGroupController extends Controller
         $em  = $this->get('orm.manager');
         $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
-        $userGroups = $em->getRepository('UserGroup')->findBy($oql);
+        $userGroups = $em->getRepository('UserGroup', 'manager')->findBy($oql);
 
         $deleted = 0;
         foreach ($userGroups as $userGroup) {
@@ -92,7 +92,7 @@ class UserGroupController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
-        $repository = $this->get('orm.manager')->getRepository('UserGroup');
+        $repository = $this->get('orm.manager')->getRepository('UserGroup', 'manager');
         $converter  = $this->get('orm.manager')->getConverter('UserGroup');
 
         $total      = $repository->countBy($oql);
@@ -159,7 +159,7 @@ class UserGroupController extends Controller
     public function showAction($id)
     {
         $group = $this->get('orm.manager')
-            ->getRepository('UserGroup')
+            ->getRepository('UserGroup', 'manager')
             ->find($id);
 
         return new JsonResponse([
@@ -182,7 +182,7 @@ class UserGroupController extends Controller
         $data = $em->getConverter('UserGroup')
             ->objectify($request->request->all());
 
-        $userGroup = $em->getRepository('UserGroup')->find($id);
+        $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
         $userGroup->setData($data);
 
         $em->persist($userGroup);

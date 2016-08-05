@@ -275,7 +275,7 @@ class UserController extends Controller
         $data = $em->getConverter('User')
             ->objectify($request->request->all());
 
-        $user     = $em->getRepository('User')->find($id);
+        $user     = $em->getRepository('User', 'manager')->find($id);
         $password = $user->password;
         $user->setData($data);
 
