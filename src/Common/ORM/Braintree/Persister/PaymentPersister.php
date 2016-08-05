@@ -10,7 +10,7 @@
 namespace Common\ORM\Braintree\Persister;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Exception\EntityNotFoundException;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class PaymentPersister extends BasePersister
 {
@@ -32,10 +32,10 @@ class PaymentPersister extends BasePersister
         $response = $cr::sale($data);
 
         if (!$response->success) {
-            throw new \RuntimeException($response);
+            throw new \RuntimeException();
         }
 
-        $entity->payment_id = $response->transaction->id;
+        $entity->id = $response->transaction->id;
     }
 
     /**
@@ -51,11 +51,7 @@ class PaymentPersister extends BasePersister
         $response = $cr::void($entity->payment_id);
 
         if (!$response->success) {
-            throw new EntityNotFoundException(
-                $this->metadata->name,
-                $entity->id,
-                $this->api->getError()
-            );
+            throw new EntityNotFoundException($this->metadata->name, $entity->id);
         }
     }
 }

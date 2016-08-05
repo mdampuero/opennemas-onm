@@ -32,13 +32,11 @@ class ClientPersister extends BasePersister
 
         $response = $cr::create($data);
 
-        if ($response->success) {
-            $entity->id = (int) $response->customer->id;
-
-            return;
+        if (!$response->success) {
+            throw new \RuntimeException();
         }
 
-        throw new \RuntimeException();
+        $entity->id = (int) $response->customer->id;
     }
 
     /**
@@ -74,10 +72,8 @@ class ClientPersister extends BasePersister
 
         $response = $cr::update($entity->id, $data);
 
-        if ($response->success) {
-            return;
+        if (!$response->success) {
+            throw new EntityNotFoundException($this->metadata->name, $entity->id);
         }
-
-        throw new EntityNotFoundException('Client', $entity->id);
     }
 }
