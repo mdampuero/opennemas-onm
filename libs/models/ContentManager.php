@@ -487,9 +487,6 @@ class ContentManager
             $sql = 'UPDATE contents '
                  . 'SET `frontpage`=0, `changed`=? '
                  . 'WHERE `pk_content` IN ('.$contentIdsSQL.')';
-            $values = array(date("Y-m-d H:i:s"));
-            // $stmt = $conn->prepare($sql);
-
             if ($conn->executeUpdate($sql, $values) === false) {
                 return false;
             }
