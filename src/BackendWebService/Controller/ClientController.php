@@ -53,7 +53,7 @@ class ClientController extends Controller
 
         $em->persist($client, 'freshbooks');
         $em->persist($client, 'braintree');
-        $em->persist($client, 'database');
+        $em->persist($client, 'manager');
 
         $instance = $this->get('core.instance');
         $instance->client = $client->id;
@@ -76,9 +76,9 @@ class ClientController extends Controller
 
         $client->merge($request->request->all());
 
-        $em->persist($client, 'FreshBooks');
-        $em->persist($client, 'Braintree');
-        $em->persist($client, 'Database');
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'manager');
 
         return new JsonResponse();
     }
