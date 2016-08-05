@@ -188,6 +188,16 @@ class Poll extends Content
 
         $conn = getService('dbal_connection');
         try {
+            $conn->insert(
+                'polls',
+                [
+                    'pk_poll'       => (int) $this->id,
+                    'subtitle'      => $data['subtitle'],
+                    'total_votes'   => 0,
+                    'visualization' => $data['visualization'],
+                ]
+            );
+
             // Save poll items
             if (is_array($data['item']) && !empty($data['item'])) {
                 foreach ($data['item'] as $item) {
@@ -201,16 +211,6 @@ class Poll extends Content
                     );
                 }
             }
-
-            $conn->insert(
-                'polls',
-                [
-                    'pk_poll'       => (int) $this->id,
-                    'subtitle'      => $data['subtitle'],
-                    'total_votes'   => 0,
-                    'visualization' => $data['visualization'],
-                ]
-            );
 
             return $this;
         } catch (\Exception $e) {
