@@ -236,23 +236,8 @@ class Poll extends Content
                 $data['item'] = [];
             }
 
-            $conn->executeUpdate(
-                "DELETE FROM poll_items WHERE fk_pk_poll =?",
-                [ (int) $this->id ]
-            );
-
-            // Save poll items
             $total = 0;
             foreach ($data['item'] as $key => &$item) {
-                $conn->insert(
-                    'poll_items',
-                    [
-                        'pk_item'    => (int) $item->pk_item,
-                        'fk_pk_poll' => (int) $this->id,
-                        'item'       => $item->item,
-                        'votes'      => $item->votes,
-                    ]
-                );
                 $total += $item->votes;
             }
 
@@ -269,6 +254,25 @@ class Poll extends Content
 
             $this->total   = $total;
             $this->pk_poll = $data['id'];
+
+            $conn->executeUpdate(
+                "DELETE FROM poll_items WHERE fk_pk_poll =?",
+                [ (int) $this->id ]
+            );
+
+            // Save poll items
+            foreach ($data['item'] as $key => &$item) {
+                $conn->insert(
+                    'poll_items',
+                    [
+                        'pk_item'    => (int) $item->pk_item,
+                        'fk_pk_poll' => (int) $this->id,
+                        'item'       => $item->item,
+                        'votes'      => $item->votes,
+                    ]
+                );
+                $total += $item->votes;
+            }
 
             return true;
         } catch (\Exception $e) {
