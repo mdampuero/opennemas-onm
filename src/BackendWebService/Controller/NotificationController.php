@@ -144,7 +144,7 @@ class NotificationController extends Controller
         $un           = null;
         $userId       = $this->getUser()->id;
         $notification = $this->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->find($id);
 
         try {

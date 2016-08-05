@@ -153,7 +153,7 @@ class PurchaseController extends Controller
     {
         $em = $this->get('orm.manager');
 
-        $purchase = $em->getRepository('manager.purchase')->find($id);
+        $purchase = $em->getRepository('Purchase')->find($id);
 
         $pdf = $em->getRepository('invoice', 'FreshBooks')
             ->getPDF($purchase->invoice_id);

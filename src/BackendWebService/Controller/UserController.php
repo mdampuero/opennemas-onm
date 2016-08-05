@@ -343,7 +343,7 @@ class UserController extends Controller
         if (!empty($id)) {
             try {
                 $extra['client'] = $this->get('orm.manager')
-                    ->getRepository('Client', 'database')
+                    ->getRepository('Client', 'manager')
                     ->find($id)->getData();
             } catch (\Exception $e) {
             }

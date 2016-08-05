@@ -59,7 +59,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $criteria = $event->getArgument('criteria');
 
         $response = $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->countBy($criteria);
 
         $event->setResponse($response);

@@ -40,7 +40,7 @@ class NotificationService
     public function count($criteria)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->countBy($criteria);
     }
 

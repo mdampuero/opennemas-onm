@@ -20,7 +20,7 @@ class StoreController extends Controller
 
         if (!empty($id)) {
             $client = $this->get('orm.manager')
-                ->getRepository('Client', 'database')
+                ->getRepository('Client', 'manager')
                 ->find($id);
 
             $client = $client->getData();

@@ -33,7 +33,7 @@ class ClientController extends Controller
         }
 
         $client = $this->get('orm.manager')
-            ->getRepository('Client', 'database')
+            ->getRepository('Client', 'manager')
             ->find($id);
 
         return new JsonResponse($client->getData());
@@ -72,7 +72,7 @@ class ClientController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em     = $this->get('orm.manager');
-        $client = $em->getRepository('Client', 'database')->find($id);
+        $client = $em->getRepository('Client', 'manager')->find($id);
 
         $client->merge($request->request->all());
 
