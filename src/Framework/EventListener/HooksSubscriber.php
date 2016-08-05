@@ -114,6 +114,10 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyForInstance', 5],
                 ['removeVarnishInstanceCacheUsingInstance', 5],
             ],
+            // Instance hooks
+            'instance.client.update' => [
+                ['removeCacheForInstance', 5],
+            ],
             'theme.change' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
@@ -411,9 +415,14 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheForFrontpageOfCategory(Event $event)
     {
+        $instance = $this->container->get('core.instance');
+        $tpl      = $this->container->get('core.template');
+
+        $tpl->addInstance($instance);
+
         // Clean smarty cache
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($tpl);
 
         $category = $event->getArgument('category');
 
