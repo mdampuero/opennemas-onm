@@ -14,7 +14,7 @@ use Common\ORM\Core\Connection;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Schema\Schema;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * Loads ORM configuration files.
@@ -29,6 +29,13 @@ class Loader
     protected $cache;
 
     /**
+     * The file Finder.
+     *
+     * @var Finder
+     */
+    protected $finder;
+
+    /**
      * The default data.
      *
      * @var array
@@ -41,6 +48,13 @@ class Loader
      * @var string
      */
     protected $env;
+
+    /**
+     * The YAML parser.
+     *
+     * @var Parser
+     */
+    protected $parser;
 
     /**
      * Path to the ORM configuration.
@@ -62,6 +76,8 @@ class Loader
     {
         $this->default = $default;
         $this->env     = $env;
+        $this->finder  = new Finder();
+        $this->parser  = new Parser();
         $this->path    = $path;
 
         if (!empty($cm)) {
@@ -82,13 +98,11 @@ class Loader
             }
         }
 
-        $finder = new Finder();
         $loaded = [];
-
-        $finder->files()->in($this->path)->name('*.yml');
+        $this->finder->files()->in($this->path)->name('*.yml');
 
         // Load items
-        foreach ($finder as $file) {
+        foreach ($this->finder as $file) {
             $item = $this->loadItem($file->getRealPath());
 
             if (!empty($item)) {
@@ -126,7 +140,7 @@ class Loader
      */
     public function loadItem($path)
     {
-        $data = Yaml::parse(file_get_contents($path));
+        $data = $this->parser->parse(file_get_contents($path));
 
         if (empty($data)) {
             return false;
@@ -199,7 +213,7 @@ class Loader
      */
     protected function hasCache()
     {
-       return !empty($this->cache);
+        return !empty($this->cache);
     }
 
     /**
