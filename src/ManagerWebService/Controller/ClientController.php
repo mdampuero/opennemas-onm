@@ -167,7 +167,7 @@ class ClientController extends Controller
     {
         $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
-        $data = $em->getConverter('UserGroup')
+        $data = $em->getConverter('Client')
             ->objectify($request->request->all());
 
         $client = new Client($data);
@@ -237,7 +237,7 @@ class ClientController extends Controller
     {
         $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
-        $data = $em->getConverter('UserGroup')
+        $data = $em->getConverter('Client')
             ->objectify($request->request->all());
 
         $client = $em->getRepository('client')->find($id);
