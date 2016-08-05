@@ -59,6 +59,9 @@ class ClientController extends Controller
         $instance->client = $client->id;
         $em->persist($instance);
 
+        $this->get('core.dispatcher')
+            ->dispatch('instance.client.update', [ 'instance' => $instance ]);
+
         return new JsonResponse($client->id);
     }
 
