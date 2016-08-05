@@ -114,7 +114,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
       $http.get(url).then(function(response) {
         $scope.notifications = response.data.results.filter(function (a) {
-          return !a.forced || parseInt(a.forced) !== 1;
+          return !a.forced;
         });
 
         anTinycon.setBubble($scope.notifications.length);
@@ -123,7 +123,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         if ($scope.force) {
           $scope.forced = response.data.results.filter(function (a) {
-            if (parseInt(a.forced) !== 1) {
+            if (!a.forced) {
               return false;
             }
 
@@ -133,8 +133,8 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
               return true;
             }
 
-            var now = moment();
-            expire = moment(expire);
+            var now = $window.moment();
+            expire  = $window.moment(expire);
 
             return now.unix() > expire.unix();
           });
