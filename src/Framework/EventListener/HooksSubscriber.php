@@ -221,7 +221,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for all author opinions and frontpages
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
 
         // Get the list articles for this author
         $cm = new \ContentManager();
@@ -250,7 +250,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheCategoriesArray()
     {
-        $this->cacheHandler->delete(CACHE_PREFIX.'_content_categories');
+        $this->cacheHandler->delete('content_categories');
     }
 
     /**
@@ -315,7 +315,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheAll()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = $this->container->get('core.template');
+        $frontpageTemplate = $this->container->get('view')->getTemplate();
         $frontpageTemplate->clearAllCache();
     }
 
@@ -330,7 +330,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for opinion frontpages and author frontpages
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+
         $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
         $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
         $cacheManager->delete('blog', 'blog_frontpage.tpl');
@@ -348,7 +349,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $category = $event->getArgument('category');
 
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
 
         // Delete smarty cache for RSS frontpage of category
         $cacheManager->delete($category->name.'|RSS');
@@ -368,7 +369,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheForContent(Event $event)
     {
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
 
         $content = $event->getArgument('content');
 
@@ -416,13 +417,10 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheForFrontpageOfCategory(Event $event)
     {
         $instance = $this->container->get('core.instance');
-        $tpl      = $this->container->get('core.template');
-
-        $tpl->addInstance($instance);
 
         // Clean smarty cache
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($tpl);
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
 
         $category = $event->getArgument('category');
 
@@ -460,7 +458,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheGlobalCss(Event $event)
     {
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
         $cacheManager->delete('css|global');
     }
 
