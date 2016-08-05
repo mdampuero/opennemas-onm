@@ -2,15 +2,15 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\ORM\Braintree\Persister;
+namespace Common\ORM\Braintree\Persister;
 
-use Framework\ORM\Entity\Entity;
-use Framework\ORM\Exception\PaymentNotFoundException;
+use Common\ORM\Core\Entity;
+use Common\ORM\Exception\EntityNotFoundException;
 
 class PaymentPersister extends BasePersister
 {
@@ -23,8 +23,11 @@ class PaymentPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
+        // Force submit for settlement
+        $entity->options = [ 'submitForSettlement' => true ];
+
         $cr   = $this->factory->get('transaction');
-        $data = $this->clean($entity);
+        $data = $this->converter->braintreefy($entity);
 
         $response = $cr::sale($data);
 
@@ -40,7 +43,7 @@ class PaymentPersister extends BasePersister
      *
      * @param Entity $entity The payment to void.
      *
-     * @throws PaymentNotFoundException If the payment does not exist.
+     * @throws EntityNotFoundException If the payment does not exist.
      */
     public function remove(Entity $entity)
     {
@@ -48,31 +51,11 @@ class PaymentPersister extends BasePersister
         $response = $cr::void($entity->payment_id);
 
         if (!$response->success) {
-            throw new PaymentNotFoundException($entity->payment_id, $this->source);
+            throw new EntityNotFoundException(
+                $this->metadata->name,
+                $entity->id,
+                $this->api->getError()
+            );
         }
-    }
-
-    /**
-     * Converts an entity to an array to send to Braintree.
-     *
-     * @param Entity $entity The entity to convert.
-     *
-     * @return array The array.
-     */
-    private function clean($entity)
-    {
-        $data = [
-            'customerId' => $entity->client_id,
-            'amount'     => str_replace(',', '.', (string) $entity->amount),
-            'options'    => [
-                'submitForSettlement' => true
-            ]
-        ];
-
-        if ($entity->nonce) {
-            $data['paymentMethodNonce'] = $entity->nonce;
-        }
-
-        return $data;
     }
 }
