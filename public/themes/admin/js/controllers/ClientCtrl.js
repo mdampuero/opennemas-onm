@@ -72,7 +72,10 @@
           }
 
           // Person in EU or company and persons outside EU
-          $scope.client.vat_number = null;
+          if ($scope.client) {
+            $scope.client.vat_number = null;
+          }
+
           return false;
         };
 
