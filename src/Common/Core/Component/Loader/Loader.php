@@ -213,6 +213,10 @@ class Loader
      */
     public function loadThemeFromUuid($uuid)
     {
+        // TODO: Remove when using UUID format in production
+        $uuid = 'es.openhost.theme.'
+            . str_replace('es.openhost.theme.', '', $uuid);
+
         $oql = sprintf('uuid = "%s"', $uuid);
 
         return $this->loadThemeFromOql($oql);
