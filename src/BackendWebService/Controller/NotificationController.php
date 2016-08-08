@@ -226,8 +226,7 @@ class NotificationController extends Controller
                 ];
 
                 foreach ($params as $key => $value) {
-                    $date = new \Datetime($value);
-                    $notification->{$key} = $date->format('Y-m-d H:i:s');
+                    $notification->{$key} = new \Datetime($value);
                 }
 
                 $em->persist($notification);
