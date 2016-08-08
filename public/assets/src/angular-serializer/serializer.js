@@ -29,7 +29,7 @@
           var query = key + '=';
 
           if (value !== 'undefined' && value !== null) {
-            query += value;
+            query += encodeURIComponent(value);
           }
 
           return query;
