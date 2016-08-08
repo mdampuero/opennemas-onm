@@ -10,6 +10,7 @@ angular.module('onm.oqlEncoder', [])
         var cleaned = {};
 
         for (var name in criteria) {
+          console.log(name);
           if (typeof criteria[name] != 'undefined'
             && criteria[name] != -1
             && criteria[name] !== ''
@@ -19,8 +20,6 @@ angular.module('onm.oqlEncoder', [])
               operator: operator,
               value:    criteria[name]
             }];
-
-            cleaned[name] = [];
 
             if (name.indexOf('_like') !== -1 ) {
               var values = criteria[name].split(' ');
@@ -48,6 +47,7 @@ angular.module('onm.oqlEncoder', [])
 
             cleaned[name] = value;
           }
+          console.log(cleaned);
         };
 
         return cleaned;
