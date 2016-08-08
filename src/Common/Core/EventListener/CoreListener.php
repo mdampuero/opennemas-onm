@@ -10,11 +10,12 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Component\Exception\InstanceNotActivatedException;
+use Common\Core\Component\Exception\InstanceNotRegisteredException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * The CoreListener class configures the core with an instance and a theme
@@ -57,7 +58,11 @@ class CoreListener implements EventSubscriberInterface
         $uri     = $request->getRequestUri();
         $loader  = $this->container->get('core.loader');
 
-        $instance = $loader->loadInstanceFromUri($host, $uri);
+        try {
+            $instance = $loader->loadInstanceFromUri($host, $uri);
+        } catch (\Exception $e) {
+            throw new InstanceNotRegisteredException(_('Instance not found'));
+        }
 
         // If this instance is not activated throw an exception
         if (!$instance->activated) {
