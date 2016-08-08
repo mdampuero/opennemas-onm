@@ -54,7 +54,6 @@ class CommentManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `comments` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {

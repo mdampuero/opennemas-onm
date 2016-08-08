@@ -132,7 +132,6 @@ class MenuManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT pk_menu FROM `menues` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
