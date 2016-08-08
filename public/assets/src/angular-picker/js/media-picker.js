@@ -35,16 +35,6 @@ angular.module('onm.picker')
               <div class=\"picker-panel-body\">\
                 <div class=\"picker-panel-topbar\">\
                   <ul>\
-                    <li ng-if=\"picker.isTypeEnabled('photo')\">\
-                      <select name=\"month\" ng-model=\"$parent.$parent.date\">\
-                        <option value=\"\">[% picker.params.explore.allMonths %]</option>\
-                        <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
-                          <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
-                            [% month.name %] ([% year.name %])\
-                          </option>\
-                        </optgroup>\
-                      </select>\
-                    </li>\
                     <li>\
                       <div class=\"controls\">\
                         <div class=\"input-group\">\
@@ -54,6 +44,16 @@ angular.module('onm.picker')
                           <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
                         </div>\
                       </div>\
+                    </li>\
+                    <li ng-if=\"picker.isTypeEnabled('photo')\">\
+                      <select name=\"month\" ng-model=\"$parent.$parent.date\">\
+                        <option value=\"\">[% picker.params.explore.allMonths %]</option>\
+                        <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
+                          <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
+                            [% month.name %] ([% year.name %])\
+                          </option>\
+                        </optgroup>\
+                      </select>\
                     </li>\
                     <li class=\"hidden-xs\" ng-if=\"picker.isTypeEnabled('video')\">\
                       <select name=\"category\" ng-model=\"$parent.category\">\
