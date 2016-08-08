@@ -46,7 +46,7 @@ class SystemSettingsController extends Controller
             'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
             'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
             'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-            'section_settings', 'site_agency', 'site_color',
+            'section_settings', 'site_agency', 'site_color', 'site_color_secondary',
             'site_description', 'site_footer', 'site_footer', 'site_keywords',
             'site_language', 'site_logo', 'site_name', 'site_title',
             'time_zone', 'twitter_page', 'vimeo_page', 'webmastertools_bing',
