@@ -56,11 +56,11 @@ class NotificationSubscriber implements EventSubscriberInterface
      */
     public function countNotifications(Event $event)
     {
-        $criteria = $event->getArgument('criteria');
+        $oql = $event->getArgument('oql');
 
         $response = $this->container->get('orm.manager')
             ->getRepository('Notification')
-            ->countBy($criteria);
+            ->countBy($oql);
 
         $event->setResponse($response);
     }

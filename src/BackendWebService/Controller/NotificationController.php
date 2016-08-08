@@ -98,7 +98,7 @@ class NotificationController extends Controller
             .  ' and (end is null or end > "%s")';
 
         if (!$this->getUser()->isAdmin()) {
-            $criteria .= ' and (users is null or users = 0)';
+            $oql .= ' and (users is null or users = 0)';
         }
 
         $oql = sprintf($oql, $id, $theme, $date, $date);
@@ -120,7 +120,7 @@ class NotificationController extends Controller
         }
 
         $total = $this->get('core.dispatcher')
-            ->dispatch('notifications.count', [ 'criteria' => $criteria ]);
+            ->dispatch('notifications.count', [ 'oql' => $oql ]);
 
         return new JsonResponse([
             'epp'     => $total,
