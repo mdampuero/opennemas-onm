@@ -238,9 +238,6 @@ services:
     core.messenger:
         class: Framework\Messenger\Messenger
 
-    vat:
-        class: Framework\VAT\VATService
-
     core.manager.advertisement:
         class: AdvertisementPositions
 
@@ -252,3 +249,10 @@ services:
     core.manager.menu:
         class: Repository\MenuManager
         arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
+
+    news_agency.importer:
+        class:     Framework\Import\Importer\Importer
+        arguments: [ '@service_container' ]
+
+    vat:
+        class: Framework\VAT\VATService
