@@ -22,21 +22,21 @@ class Entity extends DataObject implements Validable
     protected $origin;
 
     /**
-     * The existence flag.
+     * The data stored in data source.
      *
-     * @var boolean
+     * @var array
      */
-    private $stored = false;
+    private $stored = [];
 
     /**
-     * Checks if the entity already exists in FreshBooks.
+     * Checks if the entity already exists in data source.
      *
-     * @return boolean True if the entity exists in FreshBooks. Otherwise,
-     *                 returns false.
+     * @return boolean True if the entity exists in data source. False
+     *                 otherwise.
      */
     public function exists()
     {
-        return $this->stored;
+        return !empty($this->stored);
     }
 
     /**
@@ -51,6 +51,33 @@ class Entity extends DataObject implements Validable
         $id = preg_replace('/([a-z])([A-Z])/', '$1_$2', $id);
 
         return strtolower($id) . '-' . $this->id;
+    }
+
+    /**
+     * Returns the data with changes.
+     *
+     * @return array The data with changes.
+     */
+    public function getChanges()
+    {
+        $changes = [];
+        $keys    = array_unique(array_merge(
+            array_keys($this->stored),
+            array_keys($this->data)
+        ));
+
+        foreach ($keys as $key) {
+            if ((!array_key_exists($key, $this->data)
+                    && array_key_exists($key, $this->stored))
+                || (array_key_exists($key, $this->data)
+                    && !array_key_exists($key, $this->stored))
+                || $this->stored[$key] != $this->data[$key]
+            ) {
+                $changes[$key] = $this->data[$key];
+            }
+        }
+
+        return $changes;
     }
 
     /**
@@ -88,12 +115,21 @@ class Entity extends DataObject implements Validable
     }
 
     /**
-     * Sets the stored flat to true.
+     * Initializes stored data to the current entity values.
      */
     public function refresh()
     {
-        $this->stored  = true;
-        $this->changed = [];
+        $this->stored  = $this->data;
+    }
+
+    /**
+     * Removes a property from the list of changed properties.
+     *
+     * @param string $property The property to remove.
+     */
+    public function setNotStored($property)
+    {
+        $this->stored = array_diff($this->stored, [ $property ]);
     }
 
     /**

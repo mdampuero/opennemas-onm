@@ -16,7 +16,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 {
     public function testExists()
     {
-        $entity = new Entity();
+        $entity = new Entity([ 'bar' => 'glork' ]);
         $this->assertFalse($entity->exists());
 
         $entity->refresh();

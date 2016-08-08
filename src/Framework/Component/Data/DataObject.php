@@ -12,13 +12,6 @@ namespace Framework\Component\Data;
 class DataObject
 {
     /**
-     * The list of changed keys.
-     *
-     * @var array
-     */
-    protected $changed = [];
-
-    /**
      * The array of raw data.
      *
      * @var array
@@ -80,12 +73,6 @@ class DataObject
     {
         $property = \underscore($property);
 
-        if (!array_key_exists($property, $this->data)
-            || $this->data[$property] !== $value
-        ) {
-            $this->changed[] = $property;
-        }
-
         $this->data[$property] = $value;
     }
 
@@ -99,16 +86,6 @@ class DataObject
         $property = \underscore($property);
 
         unset($this->data[$property]);
-    }
-
-    /**
-     * Returns the data with changes.
-     *
-     * @return array The data with changes.
-     */
-    public function getChanges()
-    {
-        return array_unique($this->changed);
     }
 
     /**
@@ -129,15 +106,5 @@ class DataObject
     public function setData($data)
     {
         $this->data = array_merge($this->data, $data);
-    }
-
-    /**
-     * Removes a property from the list of changed properties.
-     *
-     * @param string $property The property to remove.
-     */
-    public function setNotChanged($property)
-    {
-        $this->changed = array_diff($this->changed, [ $property ]);
     }
 }
