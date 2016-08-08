@@ -248,24 +248,32 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE id = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        try {
+            $conn = getService('dbal_connection');
+            $rs = $conn->fetchAll(
+                'SELECT * FROM users WHERE id = ?',
+                [ intval($id) ]
+            );
 
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return null;
+            }
+
+            $this->load($rs->fields);
+
+            $database = $conn->connectionParams['dbname'];
+            if ($database != 'onm-instances') {
+                $this->accesscategories = $this->readAccessCategories();
+            }
+
+            // Get user meta information
+            $this->meta = $this->getMeta();
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $this->load($rs->fields);
-
-        $database = $GLOBALS['application']->conn->connectionParams['dbname'];
-        if ($database != 'onm-instances') {
-            $this->accesscategories = $this->readAccessCategories();
-        }
-
-        // Get user meta information
-        $this->meta = $this->getMeta();
-
-        return $this;
     }
 
     /**
