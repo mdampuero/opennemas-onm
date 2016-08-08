@@ -53,60 +53,37 @@ class UserController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!$hasRoles) {
-            $roles = implode(',', $required);
-            $msg->add(sprintf(_('Access denied (%s)'), $roles), 'error', 403);
-
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em      = $this->get('user_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        $ids = $request->request->get('ids');
+        $users = $em->getRepository('User', 'instance')->findBy($oql);
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find($id);
-
-                if (!is_null($content->id)) {
-                    try {
-                        $content->delete($id);
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type'    => 'error'
-                    );
-                }
+        $deleted = 0;
+        foreach ($users as $user) {
+            try {
+                $em->remove($user);
+                $deleted++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if (count($updated) > 0) {
-            $success[] = array(
-                'id'      => $updated,
-                'message' => _('Selected items deleted successfully'),
-                'type'    => 'success'
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s users deleted successfully'), $deleted),
+                'success'
             );
         }
 
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

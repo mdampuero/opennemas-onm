@@ -71,17 +71,13 @@
                 })[0] };
               },
               success: function() {
-                return function(modalWindow) {
+                return function() {
                   var route = {
                     name: 'backend_ws_user_delete',
                     params: { id: id }
                   };
 
-                  http.delete(route).then(function(response) {
-                    modalWindow.close({ data: response.data, success: true });
-                  }, function(response) {
-                    modalWindow.close({ data: response.data, success: false });
-                  });
+                  return http.delete(route);
                 };
               }
             }
@@ -113,15 +109,11 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalWindow) {
+                return function() {
                   var route = 'backend_ws_users_delete';
                   var data  = { ids: $scope.selected.items };
 
-                  http.delete(route, data).then(function(response) {
-                    modalWindow.close({ data: response.data, success: true });
-                  }, function(response) {
-                    modalWindow.close({ data: response.data, success: false });
-                  });
+                  return http.delete(route, data);
                 };
               }
             }
