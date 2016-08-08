@@ -201,9 +201,10 @@ class NotificationController extends Controller
             return new JsonResponse(_('Invalid notifications'), 400);
         }
 
-        $em      = $this->get('orm.manager');
-        $updated = 0;
-        $ids     = $params['ids'];
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('UserNotification');
+        $updated   = 0;
+        $ids       = $params['ids'];
 
         unset($params['ids']);
 
@@ -224,9 +225,7 @@ class NotificationController extends Controller
                     'email'    => $this->getUser()->email
                 ];
 
-                foreach ($params as $key => $value) {
-                    $notification->{$key} = new \Datetime($value);
-                }
+                $notification->merge($converter->objectify($params));
 
                 $em->persist($notification);
                 $updated++;
@@ -244,11 +243,7 @@ class NotificationController extends Controller
                 ];
                 $un->user_id         = $this->getUser()->id;
                 $un->notification_id = (int) $id;
-
-                foreach ($params as $key => $value) {
-                    $date = new \Datetime($value);
-                    $un->{$key} = $date;
-                }
+                $un->merge($converter->objectify($params));
 
                 $em->persist($un);
                 $updated++;

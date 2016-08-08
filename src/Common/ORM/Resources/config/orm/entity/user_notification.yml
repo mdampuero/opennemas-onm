@@ -10,7 +10,7 @@ entity:
         read_date:       datetime
         view_date:       datetime
         clicked_date:    datetime
-        opened_date:     datetime
+        open_date:       datetime
 
     converters:
         default:
@@ -50,7 +50,7 @@ entity:
                     type:    datetimetz
                     options: { default: null, notnull: false }
                 open_date:
-                    type: datetimetz
+                    type:    datetimetz
                     options: { default: null, notnull: false }
             index:
                 -
