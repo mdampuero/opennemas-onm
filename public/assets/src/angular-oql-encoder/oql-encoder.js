@@ -10,7 +10,6 @@ angular.module('onm.oqlEncoder', [])
         var cleaned = {};
 
         for (var name in criteria) {
-          console.log(name);
           if (typeof criteria[name] != 'undefined'
             && criteria[name] != -1
             && criteria[name] !== ''
@@ -47,7 +46,6 @@ angular.module('onm.oqlEncoder', [])
 
             cleaned[name] = value;
           }
-          console.log(cleaned);
         };
 
         return cleaned;
