@@ -40,16 +40,17 @@ class UserPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
+        $changes    = $entity->getChanges();
         $categories = [];
 
         // Categories change
-        if (!empty($entity->categories)) {
-            $categories = $entity->categories;
+        if (array_key_exists('categories', $changes)) {
+            $categories = $changes['categories'];
         }
 
         // Ignore categories, persist them later
         unset($entity->categories);
-        $entity->setNotChanged('categories');
+        $entity->setNotStored('categories');
 
         parent::update($entity);
 

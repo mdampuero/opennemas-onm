@@ -73,10 +73,6 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity([ 'bar' => 'fubar', 'wibble' => 'xyzzy', 'mumble' => null ]);
 
-        $property = new \ReflectionProperty($entity, 'changed');
-        $property->setAccessible(true);
-        $property->setValue($entity, [ 'bar', 'wibble', 'mumble' ]);
-
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'foobar',
@@ -123,10 +119,6 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
             'wibble' => 'xyzzy',
         ]);
 
-        $property = new \ReflectionProperty($entity, 'changed');
-        $property->setAccessible(true);
-        $property->setValue($entity, [ 'bar', 'wibble' ]);
-
         $this->conn->expects($this->once())->method('update')->with(
             'foobar',
             [ 'bar' => 'garply' ],
@@ -140,6 +132,24 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cache->expects($this->once())->method('delete');
+        $this->persister->update($entity);
+    }
+
+    /**
+     * Tests update for an entity with one meta.
+     */
+    public function testUpdateWithNoChanges()
+    {
+        $entity = new Entity([
+            'foo'    => 1,
+            'bar'    => 'garply',
+            'wibble' => 'xyzzy',
+        ]);
+
+        $entity->refresh();
+
+        $this->conn->expects($this->never())->method($this->anything());
+        $this->cache->expects($this->never())->method($this->anything());
         $this->persister->update($entity);
     }
 

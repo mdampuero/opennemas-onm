@@ -28,6 +28,10 @@ class BaseConverter extends Converter
      */
     public function databasify($source)
     {
+        if (empty($source)) {
+            return [ [], [], [] ];
+        }
+
         if ($this->isArray($source)) {
             return $this->mDatabasify($source);
         }

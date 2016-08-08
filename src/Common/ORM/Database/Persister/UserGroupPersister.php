@@ -21,12 +21,22 @@ class UserGroupPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
+        $changes    = $entity->getChanges();
         $privileges = [];
+
+        // Privileges change
+        if (array_key_exists('privileges', $changes)) {
+            $privileges = $changes['privileges'];
+        }
 
         if (!empty($entity->privileges)) {
             $privileges = $entity->privileges;
             unset($entity->privileges);
         }
+
+        // Ignore privileges, persist them later
+        unset($entity->privileges);
+        $entity->setNotStored('privileges');
 
         parent::create($entity);
 

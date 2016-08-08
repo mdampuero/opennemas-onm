@@ -50,6 +50,13 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests databasify when empty values provided.
+     */
+    public function testDatabasifyEmpty()
+    {
+        $this->assertEquals([ [], [], [] ], $this->converter->databasify([]));
+    }
+    /**
      * Tests databasify when empty metadata provided.
      *
      * @expectedException \Exception
@@ -57,7 +64,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     public function testDatabasifyInvalid()
     {
         $converter = new BaseConverter(new Metadata([]));
-        $converter->databasify([]);
+        $converter->databasify([ 'foo' => 'glorp' ]);
     }
 
     /**
