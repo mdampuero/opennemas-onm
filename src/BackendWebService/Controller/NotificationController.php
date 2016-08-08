@@ -83,11 +83,9 @@ class NotificationController extends Controller
     /**
      * Returns the list of instances as JSON.
      *
-     * @param Request $request The request object.
-     *
      * @return JsonResponse The response object.
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $id    = $this->get('core.instance')->internal_name;
         $theme = $this->get('core.instance')->settings['TEMPLATE_USER'];
@@ -101,7 +99,8 @@ class NotificationController extends Controller
             $oql .= ' and (users is null or users = 0)';
         }
 
-        $oql = sprintf($oql, $id, $theme, $date, $date);
+        $oql .= 'order by start desc';
+        $oql  = sprintf($oql, $id, $theme, $date, $date);
 
         $notifications = $this->get('core.dispatcher')->dispatch(
             'notifications.get',
