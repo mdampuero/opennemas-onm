@@ -517,6 +517,7 @@
       @Common/src/angular-routing/routing.js,
       @Common/src/angular-scroll/angular-scroll.js,
       @Common/src/angular-oql/*,
+      @Common/src/angular-serializer/serializer.js,
       @Common/src/sidebar/js/sidebar.js,
       @Common/js/onm/md5.min.js,
       @Common/js/routes.js,

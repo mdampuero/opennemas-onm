@@ -4,53 +4,26 @@
   angular.module('BackendApp')
   .config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[%').endSymbol('%]');
-  }]).config(['$httpProvider', function ($httpProvider) {
-    // Use x-www-form-urlencoded Content-Type
-    $httpProvider.defaults.headers.put['X-Requested-With']  = 'XMLHttpRequest';
+  }]).config(['$httpProvider', 'serializerProvider', function ($httpProvider, serializerProvider) {
+    $httpProvider.defaults.headers.common['X-App-Version'] = appVersion;
+
+    // Use x-www-form-urlencoded as Content-Type
+    $httpProvider.defaults.headers.post['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.defaults.headers.put['Content-Type']   = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.defaults.headers.patch['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+
+    // Add header for XHR request
+    $httpProvider.defaults.headers.put['X-Requested-With']   = 'XMLHttpRequest';
     $httpProvider.defaults.headers.post['X-Requested-With']  = 'XMLHttpRequest';
-    $httpProvider.defaults.headers.patch['X-Requested-With']  = 'XMLHttpRequest';
-    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
-    $httpProvider.defaults.headers.patch['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
-
-    /**
-    * The workhorse; converts an object to x-www-form-urlencoded serialization.
-    * @param {Object} obj
-    * @return {String}
-    */
-    var param = function(obj) {
-      var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
-
-      for (name in obj) {
-        value = obj[name];
-
-        if (value instanceof Array) {
-          for(i=0; i<value.length; ++i) {
-            subValue = value[i];
-            fullSubName = name + '[' + i + ']';
-            innerObj = {};
-            innerObj[fullSubName] = subValue;
-            query += param(innerObj) + '&';
-          }
-        } else if (value instanceof Object) {
-          for (subName in value) {
-            subValue = value[subName];
-            fullSubName = name + '[' + subName + ']';
-            innerObj = {};
-            innerObj[fullSubName] = subValue;
-            query += param(innerObj) + '&';
-          }
-        } else if(value !== undefined && value !== null) {
-          query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
-        }
-      }
-
-      return query.length ? query.substr(0, query.length - 1) : query;
-    };
+    $httpProvider.defaults.headers.patch['X-Requested-With'] = 'XMLHttpRequest';
 
     // Override $http service's default transformRequest
     $httpProvider.defaults.transformRequest = [function(data) {
-      return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+      if (angular.isObject(data) && String(data) !== '[object File]') {
+          return serializerProvider.serialize(data);
+        }
+
+        return data;
     }];
   }]).config(['$translateProvider', function ($translateProvider) {
     $translateProvider.preferredLanguage('en');

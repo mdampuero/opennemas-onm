@@ -26,6 +26,7 @@ angular.module(
     'onm.scroll',
     'onm.pagination',
     'onm.resizable',
+    'onm.serializer',
     'onm.sidebar',
     'pascalprecht.translate',
     'sun.scrollable',
