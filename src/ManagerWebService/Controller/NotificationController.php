@@ -429,7 +429,7 @@ class NotificationController extends Controller
         $notification->merge($data);
 
         if (empty($notification->start)) {
-            $notification->start = date('Y-m-d H:i:s');
+            $notification->start = new \DateTime();
         }
 
         $em->persist($notification);
