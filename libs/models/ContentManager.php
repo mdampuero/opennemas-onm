@@ -483,6 +483,7 @@ class ContentManager
 
         if (is_array($contentIds) && (count($contentIds) > 0)) {
             $contentIdsSQL = implode(', ', $contentIds);
+            $values = [ date("Y-m-d H:i:s") ];
 
             $sql = 'UPDATE contents '
                  . 'SET `frontpage`=0, `changed`=? '
