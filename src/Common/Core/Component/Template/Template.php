@@ -285,10 +285,12 @@ class Template extends \Smarty
             $fs->mkdir($path, 0775);
         }
 
-        // Copy default cache configuration
-        $cm = $this->container->get('template_cache_config_manager');
-        $cm->setConfigDir($path);
-        $cm->saveDefault();
+        // Copy default cache configuration if it doesnt exists
+        if (!file_exists($path.'/cache.conf')) {
+            $cm = $this->container->get('template_cache_config_manager');
+            $cm->setConfigDir($path);
+            $cm->saveDefault();
+        }
 
         $this->setConfigDir($path);
 
