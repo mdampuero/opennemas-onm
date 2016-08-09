@@ -62,10 +62,10 @@ entity:
                     options: { default: null, length: 50, notnull: false }
                 url:
                     type: string
-                    options: { default: null, length: 255, notnull: false }
+                    options: { default: ' ', length: 255, notnull: false }
                 bio:
                     type: text
-                    options: { default: null, length: 65532, notnull: false }
+                    options: { default: ' ', length: 65532, notnull: false }
                 avatar_img_id:
                     type: bigint
                     options: { default: 0, unsigned: true, notnull: false }

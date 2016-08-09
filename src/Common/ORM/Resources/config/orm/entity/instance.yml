@@ -6,7 +6,7 @@ entity:
         name:               string
         domains:            array
         domain_expire:      datetime
-        main_domain:        string
+        main_domain:        integer
         created:            datetime
         last_login:         datetime
         settings:           array
@@ -85,7 +85,7 @@ entity:
                     type:    text
                     options: { default: null, length: 65532, notnull: false }
                 activated:
-                    type:    boolean
+                    type:    integer
                     options: { default: null, notnull: true }
                 contact_mail:
                     type:    string
