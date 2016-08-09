@@ -1,198 +1,76 @@
 <?php
-
-/*
- * This file is part of the onm package.
- * (c) 2009-2012 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
  *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Instance;
+namespace Common\Core\Component\Instance;
 
-/**
- * Conect with the intance manager to create an instance from the opennemas webpage
- *
- * @package    Oh
- * @subpackage WebPage
- * @author     Toni Martínez <toni@openhost.es>
- **/
 class Validator
 {
-    public $errors               = array();
-
-    private $validateRules       = array();
-    private $data                = array();
-    private $defaultErrorMessage = "The {field} is not valid";
+    /**
+     * The list of errors.
+     *
+     * @var array
+     */
+    protected $errors = [];
 
     /**
-     * class constructor
+     * Initializes the validator
+     *
+     * @param type variable Description
+     *
+     * @return type Description
      */
-    public function __construct($data, $instanceManager)
+    public function __construct($em)
     {
-        $this->data = $data;
-        $this->instanceManager = $instanceManager;
-
-        $this->validateRules = array(
-            'instance_name' => array(
-                'validator'=>'required, regex, badWords',
-                'params' => array(
-                    'regex' => array(
-                        'pattern' => '/^[a-zñA-ZÑ0-9 ]{5,}$/',
-                        'message' => _('Name of the newspaper must be longer than 5 characters')
-                    )
-                ),
-            ),
-            'subdomain' => array(
-                'validator'=>'required, regex, badWords, InstanceNameInUse',
-                'params' => array(
-                    'regex' => array(
-                        'pattern'=> '/^[a-zA-Z0-9\.]{4,}$/',
-                        'message'=> _(
-                            'Url must be longer than 4 characters and only must content characters and numbers'
-                        )
-                    ),
-                    'checkService' => array(
-                        'client'   => $this,
-                        'function' => 'instances/checkinstancename',
-                        'message'  => _('The url that you entered is already in use')
-                    )
-                ),
-                'message' => _('Please enter a valid url')
-            ),
-            'user_email' => array(
-                'validator'=>'required, regex, checkMailInUse',
-                'params' => array(
-                    'regex' => array(
-                        'pattern'=>'/^([a-z0-9_\.\-\+]+)@([\da-z\.\-]+)\.([a-z\.]{2,6})$/',
-                    )
-                ),
-                'message' => _('Please enter a valid email address')
-            )
-        );
+        $this->em = $em;
     }
 
-    private function getMessage($field)
+    /**
+     * Returns the list of errors.
+     *
+     * @return array The list of errors.
+     */
+    public function getErrors()
     {
-        if (isset($this->validateRules[$field]['message'])) {
-            return $this->validateRules[$field]['message'];
-        }
-        return preg_replace('/{field}/', $field, $this->defaultErrorMessage);
-    }
-
-    public function validate()
-    {
-        foreach ($this->validateRules as $field => $rules) {
-            if (count($rules['validator'])>0) {
-                $validators = preg_split('/[\s,]+/', $rules['validator'], -1, PREG_SPLIT_NO_EMPTY);
-                foreach ($validators as $validator) {
-                    $function = "validate".ucfirst($validator);
-                    $params = isset($rules['params'][$validator])?$rules['params'][$validator]:array();
-                    // $t = time();
-                    $this->$function($field,$params);
-                }
-            }
-        }
-
         return $this->errors;
     }
 
-    public function validateRequired($field, $params)
+    /**
+     * Checks if the validator detected errors while validating an instance.
+     *
+     * @return boolean True if the validator detected errors while validating
+     *                 the instance. False, otherwise.
+     */
+    public function hasErrors()
     {
-        if (!isset($this->data[$field])) {
-            if (isset($params['message'])) {
-                $this->errors[$field][] = $params['message'];
-            } else {
-                $this->errors[$field][] = $this->getMessage($field);
-            }
-            return false;
-        }
-        return true;
+        return !empty($this->errors);
     }
 
-    public function validateRegex($field, $params)
+    /**
+     * Validates an instance.
+     *
+     * @param Instance $instance The instance to validate.
+     */
+    public function validate($instance)
     {
-        if (!preg_match($params['pattern'], $this->data[$field])) {
-            if (isset($params['message'])) {
-                $this->errors[$field][] = $params['message'];
-            } else {
-                $this->errors[$field][] = $this->getMessage($field);
-            }
-            return false;
-        }
-        return true;
+        $this->validateInternalName($instance->internal_name);
+        $this->validateInternalNameInUse($instance->internal_name);
+        $this->validateDomains($instance->domains);
+        $this->validateEmail($instance->contact_mail);
+        $this->validateEmailInUse($instance->contact_mail);
     }
 
-    public function validateEqual($field, $params)
-    {
-        if (isset($params['field']) && $this->data[$field]!=$this->data[$params['field']]) {
-            if (isset($params['message'])) {
-                $this->errors[$field][] = $params['message'];
-            } else {
-                $this->errors[$field][] = $this->getMessage($field);
-            }
-            return false;
-        }
-        return true;
-    }
-
-    public function validateBadWords($field, $params)
-    {
-        $badWords  = $this->getBadWords();
-
-        foreach ($badWords as $word) {
-            similar_text($this->data[$field], $word, $percent);
-
-            if (preg_match('/'.$word.'/i', '/'.$this->data[$field].'/', $badWords)
-                || $percent > 80 ) {
-                switch ($field) {
-                    case 'instance_name':
-                        $this->errors[$field][] = _('Your newspaper name cointains disallowed words.');
-                        break;
-
-                    case 'subdomain':
-                        $this->errors[$field][] = _('Your desired address contains disallowed words.');
-                        break;
-
-                    case 'user_email':
-                        $this->errors[$field][] = _('Your user name contains disallowed words.');
-                        break;
-
-                    default:
-                        $this->errors[$field][] = _('There was an error while validating your data against disallowed words.');
-                        break;
-                }
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function validateCheckMailInUse($field, $params)
-    {
-        $exists = $this->instanceManager->emailExists($this->data[$field]);
-
-        if ($exists) {
-            $this->errors['user_email'][] = _('The email that you entered is already in use');
-            return false;
-        }
-
-        return true;
-    }
-
-    public function validateInstanceNameInUse($field, $params)
-    {
-        $exists = $this->instanceManager->instanceExists($this->data[$field]);
-
-        if ($exists) {
-            $this->errors['subdomain'][] = _('The url that you entered is already in use');
-            return false;
-        }
-
-        return true;
-    }
-
-    public function getBadWords()
+    /**
+     * Returns the list of bad words.
+     *
+     * @return array The list of bad words.
+     */
+    protected function getBadWords()
     {
         return [
             '4r5e', '5h1t', '5hit', 'God', 'a55', 'a_s_s', 'admin',
@@ -280,5 +158,108 @@ class Validator
             'wanker', 'wanky', 'whoar', 'whore', 'willies', 'willy', 'xrated',
             'xxx',
         ];
+    }
+
+    /**
+     * Validates the instance domains.
+     *
+     * @param array The instance domains.
+     */
+    protected function validateDomains($domains)
+    {
+        foreach ($domains as $domain) {
+            if (empty($domain) || !preg_match('/^[a-zA-Z0-9\.]{4,}$/', $domain)) {
+                $this->errors['domain'][] =
+                    _('Url must be longer than 4 characters and only must content characters and numbers');
+            }
+        }
+    }
+
+    /**
+     * Validates the instance email.
+     *
+     * @param string $email The instance email.
+     */
+    protected function validateEmail($email)
+    {
+        if (empty($email) || !preg_match('/^([a-z0-9_\.\-\+]+)@([\da-z\.\-]+)\.([a-z\.]{2,6})$/', $email)) {
+            $this->errors['email'][] = _('Please enter a valid email address');
+        }
+    }
+
+    /**
+     * Checks if the instance email is already in use.
+     *
+     * @param string $email The instance email.
+     */
+    protected function validateEmailInUse($email)
+    {
+        try {
+            $this->em->getRepository('Instance')
+                ->findOneBy(sprintf('contact_mail = "%s"', $email));
+
+            $this->errors['email'][] =
+                _('The email that you entered is already in use');
+        } catch (\Exception $e) {
+        }
+    }
+
+    /**
+     * Validates the instance internal name.
+     *
+     * @param string $name The instance internal name.
+     */
+    protected function validateInternalName($name)
+    {
+        if (empty($name) || !preg_match('/^[a-zñA-ZÑ0-9 ]{5,}$/', $name)) {
+            $this->errors['internal_name'][] =
+                _('Name of the newspaper must be longer than 5 characters');
+        }
+
+        if (!$this->validateBadWords('internal_name', $name)) {
+            $this->errors['internal_name'][] =
+                _('Your newspaper name cointains disallowed words.');
+        }
+    }
+
+    /**
+     * Checks if the instance internal name is already in use.
+     *
+     * @param string $name The instance internal name.
+     */
+    protected function validateInternalNameInUse($name)
+    {
+        try {
+            $this->em->getRepository('Instance')
+                ->findOneBy(sprintf('internal_name = "%s"', $name));
+
+
+            $this->errors['internal_name'][] = _('The url that you entered is already in use');
+        } catch (\Exception $e) {
+        }
+    }
+
+    /**
+     * Validates if a field has an invalid value from the list of bad words.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return boolean True if the value is valid. False, otherwise.
+     */
+    protected function validateBadWords($value)
+    {
+        $badWords  = $this->getBadWords();
+
+        foreach ($badWords as $word) {
+            similar_text($value, $word, $percent);
+
+            if (preg_match('/' . $word . '/i', '/' . $value . '/', $badWords)
+                || $percent > 80
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

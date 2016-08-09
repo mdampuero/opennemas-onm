@@ -43,6 +43,10 @@ services:
         class:     Common\Core\Component\Instance\Checker
         arguments: [ '@orm.manager' ]
 
+    core.instance.validator:
+        class:     Common\Core\Component\Instance\Validator
+        arguments: [ '@orm.manager' ]
+
     core.listener.core:
         class:     Common\Core\EventListener\CoreListener
         arguments: [ '@service_container' ]
