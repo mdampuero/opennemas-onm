@@ -662,15 +662,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
-
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.selected = { all: false, contents: [] };
+          $scope.list($scope.route);
         }
       });
     };
@@ -700,12 +696,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route, true);
         }
       });
     };
@@ -1047,12 +1041,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data);
 
-          if (response.status === 200) {
-            $scope.list($scope.route, true);
-          }
+        if (response.success) {
+          $scope.list($scope.route, true);
         }
       });
     };
@@ -1088,15 +1080,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
-
-          if (response.status === 200) {
-            $scope.list($scope.route, true);
-          }
+        if (response.success) {
+          $scope.selected = { all: false, contents: [] };
+          $scope.list($scope.route, true);
         }
       });
     };
