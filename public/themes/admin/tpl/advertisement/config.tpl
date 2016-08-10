@@ -106,7 +106,7 @@
                   <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
                 </label>
                 <div class="controls">
-                  <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|stripslashes|default:""}</textarea>
+                  <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|escape:'html'|stripslashes|default:""}</textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -115,7 +115,7 @@
                   <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
                 </label>
                 <div class="controls">
-                  <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|stripslashes|default:""}</textarea>
+                  <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|escape:'html'|stripslashes|default:""}</textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -124,7 +124,7 @@
                   <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
                 </label>
                 <div class="controls">
-                  <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|stripslashes|default:""}</textarea>
+                  <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|escape:'html'|stripslashes|default:""}</textarea>
                 </div>
               </div>
             </div>
