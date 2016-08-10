@@ -129,7 +129,7 @@ class Entity extends DataObject implements Validable
      */
     public function setNotStored($property)
     {
-        $this->stored = array_diff($this->stored, [ $property ]);
+        unset($this->stored[$property]);
     }
 
     /**
