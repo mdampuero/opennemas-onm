@@ -6,15 +6,12 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $filteredContents = array();
 
     // get all the parameters passed to the function
-    $items         = $params['items'];
-    $tpl           = $params['tpl'];
-    $placeholder   = $params['placeholder'];
-    $cssclass      = $params['cssclass'];
-    $order         = (array_key_exists('order', $params))? $params['order'] : 'normal';
-    $templateVars  = $smarty->getTemplateVars();
-    foreach ($templateVars as $key => $value) {
-        $params[$key] = $value;
-    }
+    $items       = $params['items'];
+    $tpl         = $params['tpl'];
+    $placeholder = $params['placeholder'];
+    $cssclass    = $params['cssclass'];
+    $order       = (array_key_exists('order', $params))? $params['order'] : 'normal';
+    $params      = array_merge($smarty->getTemplateVars(), $params);
     unset($params['items']);
     $category_name = $smarty->getTemplateVars('category_name');
     $varname       = (!isset($params['varname']))? 'item': $params['varname'];
