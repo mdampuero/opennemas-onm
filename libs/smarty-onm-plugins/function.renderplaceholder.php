@@ -21,8 +21,10 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     }
 
     // Iterate over all the items and try to get its html representation
-    $caching         = $smarty->caching;
-    $smarty->caching = 0;
+    $tpl     = getService('core.template');
+    $caching = $tpl->getCaching();
+
+    $tpl->setCaching(\Smarty::CACHING_OFF);
 
     if (isset($items) && count($items>0)) {
         foreach ($items as $i => $item) {
@@ -38,7 +40,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
         }
     }
 
-    $smarty->caching = $caching;
+    $tpl->caching = $caching;
 
     // return all the html collected
     return $outputHTML;
