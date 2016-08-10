@@ -324,11 +324,10 @@ class Attachment extends Content
     {
         $tpl = getService('core.template');
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
 
         try {
-            $html = $tpl->fetch($params['tpl']);
+            $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
             $html = _('File not available');
         }

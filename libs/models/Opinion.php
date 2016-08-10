@@ -376,24 +376,24 @@ class Opinion extends Content
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
-                $tpl->assign('item', $this);
+                $params['item'] = $this;
                 $template = 'frontpage/contents/_blog.tpl';
                 if ($params['custom'] == 1) {
                     $template = $params['tpl'];
                 }
-                return $tpl->fetch($template);
+                return $tpl->fetch($template, $params);
             }
         }
 
-        $tpl->assign('item', $this);
-        $tpl->assign('actual_category', $params['actual_category']);
-        $tpl->assign('actual_category_id', $params['actual_category_id']);
-        $tpl->assign('cssclass', 'opinion');
-        $template = 'frontpage/contents/_opinion.tpl';
+        $params['item']     = $this;
+        $params['cssclass'] = 'opinion';
+        $template           = 'frontpage/contents/_opinion.tpl';
+
         if ($params['custom'] == 1) {
             $template = $params['tpl'];
         }
-        return $tpl->fetch($template);
+
+        return $tpl->fetch($template, $params);
     }
 
     /**

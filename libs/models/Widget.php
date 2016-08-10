@@ -233,8 +233,7 @@ class Widget extends Content
         // no caching
         $wgtTpl->caching = 0;
         $wgtTpl->force_compile = true;
-        $wgtTpl->assign('widget', $this->content);
-        $output = $wgtTpl->fetch($resource);
+        $output = $wgtTpl->fetch($resource, [ 'widget' => $this->content ]);
 
         return $output;
     }
