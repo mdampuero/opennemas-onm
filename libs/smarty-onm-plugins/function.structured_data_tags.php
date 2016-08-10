@@ -121,8 +121,8 @@ function smarty_function_structured_data_tags($params, &$smarty)
                             "name" : "'.$author.'"
                         },';
         $output .= '
-                        "datePublished" : "'.$content->created.'",
-                        "dateModified": "'.$content->changed.'",';
+                        "datePublished" : "'.$content->created->format('Y-m-d H:i:s').'",
+                        "dateModified": "'.$content->changed->format('Y-m-d H:i:s').'",';
 
         if (!empty($imageUrl)) {
             if (empty($imageWidth)) {
