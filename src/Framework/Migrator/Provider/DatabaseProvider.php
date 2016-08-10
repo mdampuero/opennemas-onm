@@ -57,7 +57,7 @@ class DatabaseProvider extends MigrationProvider
             $this->translations
         )) {
             foreach (array_keys($this->translations[$schema['translation']['name']]) as $oldId) {
-                $translations .= $oldId . ', ';
+                $translations .= '\''.$oldId . '\', ';
             }
         }
 
@@ -151,8 +151,8 @@ class DatabaseProvider extends MigrationProvider
                         . (isset($schema['source']['alias']) ?
                             $schema['source']['alias'] :
                             $schema['source']['table']) . '.'
-                        . $schema['source']['id'] . '='
-                        . $id[$schema['source']['id']] . ')';
+                        . $schema['source']['id'] . '=\''
+                        . $id[$schema['source']['id']] . '\')';
 
                 if (isset($schema['relations'])
                         && count($schema['relations']) > 0) {
