@@ -100,7 +100,9 @@ class Security
      */
     public function hasPermission($permission)
     {
-        if ($this->user->getOrigin() === 'manager') {
+        if ($this->user->getOrigin() === 'manager'
+            || $this->user->isAdmin()
+        ) {
             return true;
         }
 
