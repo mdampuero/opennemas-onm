@@ -208,7 +208,7 @@ class Importer
         $data = get_object_vars($author);
 
         if (array_key_exists('email', $data)) {
-            $um = $this->get('user_repository');
+            $um = $this->container->get('user_repository');
             $user = $um->findOneBy();
 
             if (empty($user)) {
@@ -229,7 +229,7 @@ class Importer
         }
 
         // Write in log
-        $logger = $this->get('application.log');
+        $logger = $this->container->get('application.log');
         $logger->info(
             'User ' . $data['username'] . ' was created from importer by user '
             . $this->container->get('session')->get('user')->username
