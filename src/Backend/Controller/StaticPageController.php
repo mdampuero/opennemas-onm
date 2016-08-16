@@ -102,7 +102,7 @@ class StaticPageController extends Controller
             $em->persist($entity);
 
             $this->get('session')->getFlashBag()
-                ->add('success', _('Content saved successfully.'));
+                ->add('success', _('Content saved successfully'));
 
             $this->get('core.dispatcher')
                 ->dispatch('content.create', [ 'content' => $entity ]);
@@ -117,7 +117,7 @@ class StaticPageController extends Controller
             error_log($e->getMessage());
 
             $this->get('session')->getFlashBag()
-                ->add('error', _('There were errors while creating the content.'));
+                ->add('error', _('There were errors while creating the content'));
 
             return $this->redirect($this->generateUrl('backend_static_page_create'));
         }
@@ -169,7 +169,7 @@ class StaticPageController extends Controller
             && $entity->fk_publisher !== $this->get('core.user')->id
         ) {
             $this->get('session')->getFlashBag()
-                ->add('error', _('You don\'t have enough privileges to modify this content.'));
+                ->add('error', _('You don\'t have enough privileges to execute this action'));
 
             return $this->redirect($url);
         }
@@ -183,7 +183,7 @@ class StaticPageController extends Controller
             $em->persist($entity);
 
             $this->get('session')->getFlashBag()
-                ->add('success', _('Content updated successfully.'));
+                ->add('success', _('Content updated successfully'));
 
             $this->get('core.dispatcher')
                 ->dispatch('content.update', [ 'content' => $entity ]);
