@@ -1,6 +1,7 @@
 schema:
     name: instance
     entities:
+        - Category
         - Content
         - User
         - UserGroup
