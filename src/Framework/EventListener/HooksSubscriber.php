@@ -109,12 +109,14 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheForFrontpageOfCategory', 5],
             ],
             // Instance hooks
+            'instance.delete' => [
+                ['removeCacheForInstance', 5],
+            ],
             'instance.update' => [
                 ['removeCacheForInstance', 5],
                 ['removeSmartyForInstance', 5],
                 ['removeVarnishInstanceCacheUsingInstance', 5],
             ],
-            // Instance hooks
             'instance.client.update' => [
                 ['removeCacheForInstance', 5],
             ],

@@ -46,6 +46,9 @@ class InstanceController extends Controller
             $em->remove($instance);
             $msg->add(_('Instance deleted successfully'), 'success');
 
+            $this->get('core.dispatcher')
+                ->dispatch('instance.delete', [ 'instance' => $instance ]);
+
             $creator->setBackupPath($backupPath);
             $creator->backupAssets($assetFolder);
             $creator->backupDatabase($database);
@@ -111,6 +114,9 @@ class InstanceController extends Controller
 
                 $em->remove($instance);
                 $deleted++;
+
+                $this->get('core.dispatcher')
+                    ->dispatch('instance.delete', [ 'instance' => $instance ]);
 
                 $creator->setBackupPath($backupPath);
                 $creator->backupAssets($assetFolder);
@@ -249,10 +255,8 @@ class InstanceController extends Controller
         $em->persist($instance);
 
         if ($old != $instance->activated) {
-            dispatchEventWithParams(
-                'instance.update',
-                [ 'instance' => $instance->internal_name ]
-            );
+            $this->get('core.dispatcher')
+                ->dispatch('instance.update', [ 'instance' => $instance ]);
         }
 
         $msg->add(_('Instance saved successfully'), 'success');
@@ -294,10 +298,8 @@ class InstanceController extends Controller
                 $updated++;
 
                 if ($old !== $instance->activated) {
-                    dispatchEventWithParams(
-                        'instance.update',
-                        [ 'instance' => $instance->internal_name ]
-                    );
+                    $this->get('core.dispatcher')
+                        ->dispatch('instance.update', [ 'instance' => $instance ]);
                 }
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error', 409);
@@ -466,10 +468,8 @@ class InstanceController extends Controller
             ->selectDatabase($instance->getDatabaseName());
         $em->getDataSet('Settings', 'instance')->set($settings);
 
-        dispatchEventWithParams(
-            'instance.update',
-            [ 'instance' => $instance ]
-        );
+        $this->get('core.dispatcher')
+            ->dispatch('instance.update', [ 'instance' => $instance ]);
 
         $msg->add(_('Instance saved successfully'), 'success');
 
