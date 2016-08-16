@@ -117,7 +117,7 @@ class SecurityListener implements EventSubscriberInterface
             return [];
         }
 
-        $oql = sprintf('id in [%s]', implode($user->categories));
+        $oql = sprintf('pk_content_category in [%s]', implode($user->categories));
 
         $categories = $this->container->get('orm.manager')
             ->getRepository('Category')
