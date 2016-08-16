@@ -123,12 +123,14 @@ class WebServiceController extends Controller
         ];
 
         $user = new User($converter->objectify([
-            'email'    => $instance->contact_mail,
-            'name'     => $instance->contact_mail,
-            'password' => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
-            'token'    => md5(uniqid(mt_rand(), true)),
-            'type'     => 0,
-            'username' => $instance->contact_mail
+            'activated'     => true,
+            'email'         => $instance->contact_mail,
+            'fk_user_group' => [ 5 ],
+            'name'          => $instance->contact_mail,
+            'password'      => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+            'token'         => md5(uniqid(mt_rand(), true)),
+            'type'          => 0,
+            'username'      => $instance->contact_mail
         ]));
 
         try {
