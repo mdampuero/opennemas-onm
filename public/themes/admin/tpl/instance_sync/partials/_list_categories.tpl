@@ -10,7 +10,7 @@
     {foreach $all_categories as $category}
       <div class="col-sm-4">
         <div class="checkbox check-default">
-          <input id="checkbox_{$category@index}" type="checkbox" name="categories[]" value="{$category->link}" {if array_key_exists('categories', $site) && in_array($category->link, $site['categories'])}checked="checked"{/if} />
+          <input id="checkbox_{$category@index}" type="checkbox" name="categories[]" value="{$category->link}" {if array_key_exists('categories', $site) && is_array($site['categories']) && in_array($category->link, $site['categories'])}checked="checked"{/if} />
           <label for="checkbox_{$category@index}">
             {$category->title|ucfirst}
           </label>
