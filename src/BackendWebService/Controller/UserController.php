@@ -181,7 +181,7 @@ class UserController extends Controller
         return new JsonResponse([
             'results' => $users,
             'total'   => $total,
-            'extra'   => $this->getExtraData(),
+            'extra'   => $this->getExtraData($groups),
         ]);
     }
 
@@ -263,82 +263,14 @@ class UserController extends Controller
     }
 
     /**
-     * Loads extra data related to the given users.
-     *
-     * @param  array $contents Array of users.
-     * @return array           Array of extra data.
-     */
-    protected function loadExtraData($results)
-    {
-        $extra = array();
-
-        // Load groups information
-        $ids = array();
-        foreach ($results as $user) {
-            $user->eraseCredentials();
-            $ids = array_unique(array_merge($ids, $user->id_user_group));
-        }
-
-        if (($key = array_search('', $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        if (($key = array_search(0, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        $groups = $this->get('usergroup_repository')->findMulti($ids);
-        $extra['groups'] = array();
-        foreach ($groups as $group) {
-            $extra['groups'][$group->id] = $group;
-        }
-
-        // Load groups information
-        $ids = array();
-        foreach ($results as $user) {
-            $ids[] = $user->avatar_img_id;
-        }
-        $ids = array_unique($ids);
-
-        if (($key = array_search(0, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        $contentIds = array();
-        foreach ($ids as $photo) {
-            $contentIds[] = array('photo', $photo);
-        }
-
-        $photos = $this->get('entity_repository')->findMulti($contentIds);
-        $extra['photos'] = array();
-        foreach ($photos as $photo) {
-            $extra['photos'][$photo->id] = $photo;
-        }
-
-        $id = $this->get('core.instance')->getClient();
-
-        if (!empty($id)) {
-            try {
-                $extra['client'] = $this->get('orm.manager')
-                    ->getRepository('Client', 'manager')
-                    ->find($id)->getData();
-            } catch (\Exception $e) {
-            }
-        }
-
-        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
-        $extra['taxes']     = $this->get('vat')->getTaxes();
-
-        return $extra;
-    }
-
-    /**
      * Returns a list of parameters for the template.
      *
      * @return array Array of template parameters.
      */
-    private function getExtraData()
+    private function getExtraData($groups = [])
     {
+        $em = $this->get('orm.manager');
+
         $extra = [
             'languages' => array_merge(
                 [ 'default' => _('Default system language') ],
@@ -346,19 +278,31 @@ class UserController extends Controller
             )
         ];
 
-        $repository = $this->get('orm.manager')->getRepository('UserGroup');
-        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
+        $repository = $em->getRepository('UserGroup');
+        $converter  = $em->getConverter('UserGroup');
 
-        $userGroups = $repository->findBy();
+        $oql = '';
+        if (!empty($groups)) {
+            $oql = sprintf('pk_user_group in [%s]', implode(',', $groups));
+        }
 
-        $extra['user_groups'] = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
-        }, $userGroups);
+        $userGroups = $repository->findBy($oql);
 
+        $extra['user_groups'] = $converter->responsify($userGroups);
         $extra['user_groups'] = array_merge(
             [[ 'pk_user_group' => null, 'name' => _('All') ]],
             $extra['user_groups']
         );
+
+        if (!empty($this->get('core.instance')->getClient())) {
+            $client = $em->getRepository('Client')
+                ->find($this->get('core.instance')->getClient());
+
+            $extra['client'] = $em->getConverter('Client')->responsify($client);
+        }
+
+        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
+        $extra['taxes']     = $this->get('vat')->getTaxes();
 
         return $extra;
     }

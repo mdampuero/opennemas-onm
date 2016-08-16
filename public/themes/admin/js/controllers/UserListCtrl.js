@@ -262,14 +262,13 @@
                   checkVat:    $scope.checkVat,
                   extra:       $scope.extra,
                   name:        property,
-                  saveBilling: $scope.saveBilling,
                   selected:    $scope.selected,
                   value:       value,
                   backend_access: backend_access
                 };
               },
               success: function() {
-                return function() {
+                return function(modalWindow) {
                   for (var i = 0; i < $scope.items.length; i++) {
                     var id = $scope.items[i].id;
                     if ($scope.selected.items.indexOf(id) !== -1) {
@@ -284,11 +283,13 @@
                     return $scope.list().then(function() {
                       messenger.post(response.data);
                       $scope.selected = { all: false, items: [] };
+                      modalWindow.close(true);
                     });
                   }, function(response) {
                     return $scope.list().then(function() {
                       messenger.post(response.data);
                       $scope.selected = { all: false, items: [] };
+                      modalWindow.close(false);
                     });
                   });
                 };
