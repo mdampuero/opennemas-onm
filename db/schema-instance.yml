@@ -771,10 +771,10 @@ kioskos:
             options: { default: null }
         type:
             type: boolean
-            options: { default: '0', comment: '0-item, 1-subscription' }
+            options: { default: 0, comment: '0 item - 1 subscription' }
         price:
-            type: decimal
-            options: { default: '0' }
+            type: float
+            options: { default: 0 }
     index:
         -
             name: PRIMARY
