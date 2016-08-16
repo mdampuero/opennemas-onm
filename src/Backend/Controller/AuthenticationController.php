@@ -38,16 +38,18 @@ class AuthenticationController extends Controller
 
         // Login from URL token
         if (!empty($token)) {
-            $user = $this->get('user_repository')->findOneBy(
-                [ 'token' => [ [ 'value' => $token ] ] ]
-            );
+            $em = $this->get('orm.manager');
 
-            if (!$user) {
+            try {
+                $user = $em->getRepository('User')
+                    ->findOneBy(sprintf('token = "%s"', $token));
+            } catch (\Exception $e) {
                 $session->getFlashBag()->add('error', _('Invalid token'));
                 return $this->redirect($this->generateUrl('admin_login'));
             }
 
-            $user->updateUserToken($user->id, null);
+            $user->token = null;
+            $em->persist($user);
             $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
 
             $securityContext = $this->get('security.token_storage');
