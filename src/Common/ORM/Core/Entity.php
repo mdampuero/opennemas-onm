@@ -119,7 +119,7 @@ class Entity extends DataObject implements Validable
      */
     public function refresh()
     {
-        $this->stored  = $this->data;
+        $this->stored = $this->data;
     }
 
     /**

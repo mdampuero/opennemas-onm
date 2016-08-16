@@ -43,16 +43,15 @@ class InstanceController extends Controller
 
             $database = $instance->getDatabaseName();
 
+            $em->remove($instance);
+            $msg->add(_('Instance deleted successfully'), 'success');
+
             $creator->setBackupPath($backupPath);
             $creator->backupAssets($assetFolder);
             $creator->backupDatabase($database);
             $creator->backupInstance($instance->id);
             $creator->deleteDatabase($database);
             $creator->deleteAssets($instance->internal_name);
-
-            $em->remove($instance);
-
-            $msg->add(_('Instance deleted successfully'), 'success');
         } catch (BackupException $e) {
             $creator->deleteBackup($backupPath);
             $msg->add($e->getMessage(), 'error', 400);
@@ -110,6 +109,9 @@ class InstanceController extends Controller
 
                 $database = $instance->getDatabaseName();
 
+                $em->remove($instance);
+                $deleted++;
+
                 $creator->setBackupPath($backupPath);
                 $creator->backupAssets($assetFolder);
                 $creator->backupDatabase($database);
@@ -117,9 +119,6 @@ class InstanceController extends Controller
 
                 $creator->deleteAssets($instance->internal_name);
                 $creator->deleteDatabase($database);
-                $em->remove($instance);
-
-                $deleted++;
             } catch (BackupException $e) {
                 $creator->deleteBackup($backupPath);
                 $msg->add($e->getMessage(), 'error', 400);

@@ -111,8 +111,7 @@ class BasePersister extends Persister
      */
     public function update(Entity $entity)
     {
-        list($data, $metas, $types) =
-            $this->converter->databasify($entity->getChanges());
+        list($data, $metas, $types) = $this->converter->databasify($entity);
 
         $id = $this->metadata->getId($entity);
 
@@ -123,11 +122,9 @@ class BasePersister extends Persister
         $changes = $entity->getChanges();
 
         // Ignore non-changed data
-        if (!empty($changes)) {
-            $data  = array_intersect_key($data, $changes);
-            $types = array_intersect_key($types, $changes);
-            $metas = array_intersect_key($metas, $changes);
-        }
+        $data  = array_intersect_key($data, $changes);
+        $types = array_intersect_key($types, $changes);
+        $metas = array_intersect_key($metas, $changes);
 
         if (!empty($data)) {
             $this->conn->update($this->metadata->getTable(), $data, $id, $types);

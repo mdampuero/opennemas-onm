@@ -141,8 +141,8 @@ class WebServiceController extends Controller
             );
 
             $em->persist($instance);
-            $instance->settings['BD_DATABASE'] = $instance->id;
             $instance->refresh();
+            $instance->settings['BD_DATABASE'] = $instance->id;
             $em->persist($instance);
 
             // Create instance database and media files

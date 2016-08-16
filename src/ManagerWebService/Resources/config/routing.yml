@@ -1,7 +1,7 @@
 managerwebservice_instance_create:
-    path: '/instances/create'
+    path:     '/instances/create'
     defaults: { _controller: ManagerWebServiceBundle:WebService:create }
-    methods:  [POST]
+    methods:  [ POST ]
 
 manager_ws_auth:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/auth.yml'
