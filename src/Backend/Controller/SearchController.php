@@ -93,7 +93,7 @@ class SearchController extends Controller
 
             // Complete where clause
             $criteria = ' in_litter = 0 AND content_status = 1 '.
-                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 10, 11, 12)'.
+                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'.
                         ' AND '.$search;
 
             $order    = [ 'starttime' => 'desc' ];
