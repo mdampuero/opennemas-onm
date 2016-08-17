@@ -140,6 +140,13 @@ class ContentsController extends Controller
             //     throw new ResourceNotFoundException();
             // }
 
+            $recaptcha = $this->recaptcha->getOnmRecaptcha();
+            $resp = $recaptcha->verify(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
+            );
+            $valid = $resp->isSuccess();
+
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
             $ext       = $request->request->getDigits('ext', 0);
