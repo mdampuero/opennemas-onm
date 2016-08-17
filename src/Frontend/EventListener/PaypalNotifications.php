@@ -1,18 +1,13 @@
 <?php
 /**
- * Handles all the events after content updates
- *
- * @package Framework_EventListeners
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
-namespace Frontend\EventListeners;
+ */
+namespace Frontend\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
